@@ -1,7 +1,7 @@
 [submodule "src/pyart"]
 	path = src/pyart
-	url = https://github.com/jfigui/pyart.git
+	url = https://github.com/MeteoSwiss/pyart.git
 	branch = master
 [submodule "src/PyTDA"]
 	path = src/PyTDA
-	url = https://github.com/jfigui/PyTDA
+	url = https://github.com/MeteoSwiss/PyTDA
