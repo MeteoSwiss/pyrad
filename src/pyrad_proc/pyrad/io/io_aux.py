@@ -33,6 +33,7 @@ Auxiliary functions for reading/writing files
     find_cosmo_file
     find_hzt_file
     find_iso0_file
+    find_iso0_grib_file
     find_rad4alpcosmo_file
     find_pyradcosmo_file
     _get_datetime
@@ -3021,6 +3022,53 @@ def find_iso0_file(voltime, cfg, ind_rad=0):
     return fname[0]
 
 
+def find_iso0_grib_file(voltime, cfg, ind_rad=0):
+    """
+    Search an ISO-0 degree file in text format
+
+    Parameters
+    ----------
+    voltime : datetime object
+        volume scan time
+    cfg : dictionary of dictionaries
+        configuration info to figure out where the data is
+    ind_rad : int
+        radar index
+
+    Returns
+    -------
+    fname : str
+        Name of iso0 file if it exists. None otherwise
+
+    """
+    # initial run time to look for
+    runhour0 = int(voltime.hour/cfg['CosmoRunFreq'])*cfg['CosmoRunFreq']
+    runtime0 = voltime.replace(hour=runhour0, minute=0, second=0)
+
+    # look for file
+    found = False
+    nruns_to_check = int((cfg['CosmoForecasted'])/cfg['CosmoRunFreq'])
+    for i in range(nruns_to_check):
+        runtime = runtime0-datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
+        target_hour = int((voltime - runtime).total_seconds() / 3600.)
+        runtimestr = runtime.strftime('%Y%m%d%H0000')
+
+        datapath = cfg['cosmopath'][ind_rad]
+        search_name = datapath+'ISO_T_PAROME_'+runtimestr+'.grib'
+
+        print('Looking for file: '+search_name)
+        fname = glob.glob(search_name)
+        if fname:
+            found = True
+            break
+
+    if not found:
+        warn('WARNING: Unable to find iso0 file')
+        return None
+
+    return fname[0]
+    
+    
 def find_rad4alpcosmo_file(voltime, datatype, cfg, scanid, ind_rad=0):
     """
     Search a COSMO file
