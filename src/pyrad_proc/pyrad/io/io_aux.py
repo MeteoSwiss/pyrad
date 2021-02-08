@@ -1162,6 +1162,9 @@ def get_fieldname_pyart(datatype):
     elif datatype == 'rcs_v':
         field_name = 'radar_cross_section_vv'
 
+    elif datatype == 'sigma_zh':
+        field_name = 'sigma_zh'
+
     elif datatype == 'ZDR':
         field_name = 'differential_reflectivity'
     elif datatype == 'ZDRu':
@@ -2266,6 +2269,21 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     datapath+dayinfo+'*'+datatype+termination)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
+            elif datagroup == 'MFCFRADIAL':
+                try:
+                    fpath_strf = dataset[
+                        dataset.find("D")+2:dataset.find("F")-2]
+                except AttributeError:
+                    warn('Unknown directory and/or date ' +
+                         'convention, check product config file')
+                daydir = (
+                    starttime+datetime.timedelta(days=i)).strftime(
+                        fpath_strf)
+                datapath = (cfg['datapath'][ind_rad]+daydir+'/')
+                dayfilelist = glob.glob(datapath+'*'+scan+'*')
+
+                for filename in dayfilelist:
+                    t_filelist.append(filename)
             elif datagroup == 'MXPOL':
                 if scan is None:
                     warn('Unknown scan name')
@@ -2622,7 +2640,8 @@ def get_datatype_fields(datadescriptor):
                 datatype = descrfields[2]
                 dataset = None
                 product = None
-            elif datagroup in ('ODIM', 'CFRADIAL2', 'CF1', 'NEXRADII'):
+            elif datagroup in ('ODIM', 'MFCFRADIAL', 'CFRADIAL2', 'CF1',
+                               'NEXRADII'):
                 descrfields2 = descrfields[2].split(',')
                 datatype = descrfields2[0]
                 product = None
@@ -2651,7 +2670,8 @@ def get_datatype_fields(datadescriptor):
             datatype = descrfields[1]
             dataset = None
             product = None
-        elif datagroup in ('ODIM', 'CFRADIAL2', 'CF1', 'NEXRADII'):
+        elif datagroup in ('ODIM', 'MFCFRADIAL', 'CFRADIAL2', 'CF1',
+                           'NEXRADII'):
             descrfields2 = descrfields[1].split(',')
             # warn(" descrfields2:  '%s'" % descrfields2[1])
             if len(descrfields2) == 2:
@@ -3067,8 +3087,8 @@ def find_iso0_grib_file(voltime, cfg, ind_rad=0):
         return None
 
     return fname[0]
-    
-    
+
+
 def find_rad4alpcosmo_file(voltime, datatype, cfg, scanid, ind_rad=0):
     """
     Search a COSMO file
@@ -3162,7 +3182,7 @@ def _get_datetime(fname, datagroup, ftime_format=None):
         else:
             fdatetime = datetime.datetime.strptime(
                 datestr, '%y%j')+datetime.timedelta(days=1)
-    elif datagroup in ('ODIM', 'CFRADIAL2', 'CF1', 'NEXRADII'):
+    elif datagroup in ('ODIM', 'MFCFRADIAL', 'CFRADIAL2', 'CF1', 'NEXRADII'):
         if ftime_format is None:
             # we assume is rad4alp format
             datetimestr = bfile[3:12]

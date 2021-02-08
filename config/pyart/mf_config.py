@@ -89,6 +89,7 @@ noise_pos_v = 'noise_pos_v'
 stat_test_lag1 = 'stat_test_lag1'
 stat_test_lag2 = 'stat_test_lag2'
 wide_band_noise = 'wide_band_noise'
+sigma_zh = 'sigma_zh'
 
 fields_difference = 'fields_difference'
 field_mask = 'field_mask'
@@ -553,6 +554,7 @@ DEFAULT_FIELD_NAMES = {
     'fields_difference': fields_difference,
     'field_mask': field_mask,
     'field_texture': field_texture,
+    'sigma_zh': sigma_zh,
     'stat_test_lag1': stat_test_lag1,
     'stat_test_lag2': stat_test_lag2,
     'mean_phase': mean_phase,
@@ -1351,6 +1353,12 @@ DEFAULT_METADATA = {
         'standard_name': 'sun_est_differential_reflectivity',
         'long_name': 'estimated sun differential reflectivity',
         'coordinates': 'elevation azimuth'},
+
+    sigma_zh: {
+        'units': 'dB',
+        'standard_name': 'sigma_zh',
+        'long_name': 'standard deviation of the horizontal reflectivity',
+        'coordinates': 'elevation azimuth range'},
 
     stat_test_lag1: {
         'units': 'dB',
@@ -2324,7 +2332,7 @@ DEFAULT_METADATA = {
     # PRECIP (int)32
 
     # NO DATA (int)255
-    
+
     radar_echo_classification_MF: {
         'units': '-',
         'standard_name': 'radar_echo_classification_MF',
@@ -3610,6 +3618,7 @@ DEFAULT_FIELD_COLORMAP = {
 
     noisedBZ_hh: 'pyart_NWSRef',
     noisedBZ_vv: 'pyart_NWSRef',
+    sigma_zh: 'pyart_NWSRef',
     stat_test_lag1: 'pyart_NWSRef',
     stat_test_lag2: 'pyart_NWSRef',
     wide_band_noise: 'pyart_NWSRef',
@@ -3851,6 +3860,7 @@ DEFAULT_FIELD_LIMITS = {
     bird_density: (0., 400.),
     radar_cross_section_hh: (-50., 55.),
     radar_cross_section_vv: (-50., 55.),
+    sigma_zh: (0., 10.),
     stat_test_lag1: (0., 10.),
     stat_test_lag2: (0., 10.),
     wide_band_noise: (0., 25.),

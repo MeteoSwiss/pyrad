@@ -4,8 +4,8 @@
 # List of datasets to generate.
 # The detailed specification of each dataset is given below.
 dataSetList STRARR 2
-	l0:H_ISO0_GRIB
-	l1:hydro_semisupervised_2d_iso
+	l0:hydroMF_semisupervised
+	l0:hydro_fromMF_semisupervised
 
 #    l0:dBuZ
 #    l0:dBZ
@@ -413,6 +413,74 @@ hydroMF STRUCT 3
             AziTol FLOAT 0.5
 
 hydro_fromMF STRUCT 3
+    type STRING hydroMF_to_hydro
+    datatype STRING ODIM:hydroMF,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+    products STRUCT 7
+        PPI_EL00 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydro
+            anglenr INT 0
+		PPI_EL01 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydro
+            anglenr INT 1
+		PPI_EL02 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydro
+            anglenr INT 2
+		PPI_EL03 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydro
+            anglenr INT 3
+		PPI_EL04 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydro
+            anglenr INT 4
+		PPI_EL05 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydro
+            anglenr INT 5
+        RHI STRUCT 4
+            type STRING PSEUDORHI_IMAGE
+            voltype STRING hydro
+            angle FLOAT 90.
+            AziTol FLOAT 0.5
+            
+hydroMF_semisupervised STRUCT 3
+    type STRING RAW
+    datatype STRING ODIM:hydroMF,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+    products STRUCT 7
+        PPI_EL00 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydroMF
+            anglenr INT 0
+		PPI_EL01 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydroMF
+            anglenr INT 1
+		PPI_EL02 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydroMF
+            anglenr INT 2
+		PPI_EL03 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydroMF
+            anglenr INT 3
+		PPI_EL04 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydroMF
+            anglenr INT 4
+		PPI_EL05 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydroMF
+            anglenr INT 5
+        RHI STRUCT 4
+            type STRING PSEUDORHI_IMAGE
+            voltype STRING hydroMF
+            angle FLOAT 90.
+            AziTol FLOAT 0.5
+            
+hydro_fromMF_semisupervised STRUCT 3
     type STRING hydroMF_to_hydro
     datatype STRING ODIM:hydroMF,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
     products STRUCT 7
