@@ -8,7 +8,7 @@
   Filename:         psr_header.c
   Author:           Andreas Leuenberger
   Creation date:    2012-10-25
-  Last update:      2013-02-21
+  Last update:      2020-03-03 by Zaira Schauwecker (header_table line numbers adjusted)
 
   Copyright:        MeteoSwiss
 
@@ -56,28 +56,28 @@ static const struct {
   {PSR_HEADER_DATASTOPTIME,  sizeof(PSR_HEADER_DATASTOPTIME)-1,  STRING,  offsetof(PSRHDR, datastoptime),       1<< 3,   5},
   {PSR_HEADER_ITEMCOUNT,     sizeof(PSR_HEADER_ITEMCOUNT)-1,     ULONG,   offsetof(PSRHDR, itemcount),          1<< 4,   6},
   {PSR_HEADER_ITEMTYPEPSR,   sizeof(PSR_HEADER_ITEMTYPEPSR)-1,   ULONG,   offsetof(PSRHDR, itemtypepsr),        1<< 5,   7},
-  {PSR_HEADER_MFLOSS,        sizeof(PSR_HEADER_MFLOSS)-1,        FLTARR4, offsetof(PSRHDR, mfloss),             1<< 6,  54},
-  {PSR_HEADER_MFBANDWIDTH,   sizeof(PSR_HEADER_MFBANDWIDTH)-1,   FLTARR4, offsetof(PSRHDR, mfbandwidth),        1<< 7,  59},
-  {PSR_HEADER_PATHATT,       sizeof(PSR_HEADER_PATHATT)-1,       FLOAT,   offsetof(PSRHDR, pathatt),            1<< 8, 129},
-  {PSR_HEADER_RADCONST_H,    sizeof(PSR_HEADER_RADCONST_H)-1,    FLTARR4, offsetof(PSRHDR, radconst_h),         1<< 9, 135},
-  {PSR_HEADER_NOISEPWR_V,    sizeof(PSR_HEADER_NOISEPWR_V)-1,    FLTARR4, offsetof(PSRHDR, noisepwr_v),         1<<10, 136},
-  {PSR_HEADER_RADCONST_V,    sizeof(PSR_HEADER_RADCONST_V)-1,    FLTARR4, offsetof(PSRHDR, radconst_v),         1<<11, 139},
-  {PSR_HEADER_NOISEPWR_H,    sizeof(PSR_HEADER_NOISEPWR_H)-1,    FLTARR4, offsetof(PSRHDR, noisepwr_h),         1<<12, 146},
-  {PSR_HEADER_RSPPWIDTH,     sizeof(PSR_HEADER_RSPPWIDTH)-1,     ULONG,   offsetof(PSRHDR, pwidth_id),          1<<13, 160},
-  {PSR_HEADER_RSPSTART,      sizeof(PSR_HEADER_RSPSTART)-1,      FLOAT,   offsetof(PSRHDR, rspstart),           1<<14, 164},
-  {PSR_HEADER_RSPSTEP,       sizeof(PSR_HEADER_RSPSTEP)-1,       FLOAT,   offsetof(PSRHDR, rspstep),            1<<15, 165},
-  {PSR_HEADER_RSPSTOP,       sizeof(PSR_HEADER_RSPSTOP)-1,       FLOAT,   offsetof(PSRHDR, rspstop),            1<<16, 166},
-  {PSR_HEADER_ADU2DBMOFFSET_H,sizeof(PSR_HEADER_ADU2DBMOFFSET_H)-1, FLTARR4, offsetof(PSRHDR, adu2dbmoffset_h), 1<<17, 312},
-  {PSR_HEADER_TXPOWFAC_H,    sizeof(PSR_HEADER_TXPOWFAC_H)-1,    FLOAT,   offsetof(PSRHDR, txpowerfact_h),      1<<18, 322},
-  {PSR_HEADER_ADU2DBMOFFSET_V,sizeof(PSR_HEADER_ADU2DBMOFFSET_V)-1, FLTARR4, offsetof(PSRHDR, adu2dbmoffset_v), 1<<19, 332},
-  {PSR_HEADER_TXPOWFAC_V,    sizeof(PSR_HEADER_TXPOWFAC_V)-1,    FLOAT,   offsetof(PSRHDR, txpowerfact_v),      1<<20, 345},
-  {PSR_HEADER_RXLOSS_V,      sizeof(PSR_HEADER_RXLOSS_V)-1,      FLOAT,   offsetof(PSRHDR, rxloss_v),           1<<21, 348},
-  {PSR_HEADER_TXLOSS_V,      sizeof(PSR_HEADER_TXLOSS_V)-1,      FLOAT,   offsetof(PSRHDR, txloss_v),           1<<22, 351},
-  {PSR_HEADER_RADOMELOSS,    sizeof(PSR_HEADER_RADOMELOSS)-1,    FLOAT,   offsetof(PSRHDR, radomeloss),         1<<23, 453},
-  {PSR_HEADER_RXLOSS_H,      sizeof(PSR_HEADER_RXLOSS_H)-1,      FLOAT,   offsetof(PSRHDR, rxloss_h),           1<<24, 476},
-  {PSR_HEADER_TXLOSS_H,      sizeof(PSR_HEADER_TXLOSS_H)-1,      FLOAT,   offsetof(PSRHDR, txloss_h),           1<<25, 506},
-  {PSR_HEADER_TXPOWNORM,     sizeof(PSR_HEADER_TXPOWNORM)-1,     FLTARR4, offsetof(PSRHDR, txnormpower),        1<<26, 512}, /* old format */
-  {PSR_HEADER_STOP,          sizeof(PSR_HEADER_STOP)-1,          END,     offsetof(PSRHDR, headerlen),          1<<27, 623}, /* 619 */
+  {PSR_HEADER_TXPOWNORM,     sizeof(PSR_HEADER_TXPOWNORM)-1,     FLTARR4, offsetof(PSRHDR, txnormpower),        1<< 6,  45}, /* since SP update on October 2019 state gdrxmaxpwrkwpw is used instead of spbtxpowkw */
+  {PSR_HEADER_MFLOSS,        sizeof(PSR_HEADER_MFLOSS)-1,        FLTARR4, offsetof(PSRHDR, mfloss),             1<< 7,  54},
+  {PSR_HEADER_MFBANDWIDTH,   sizeof(PSR_HEADER_MFBANDWIDTH)-1,   FLTARR4, offsetof(PSRHDR, mfbandwidth),        1<< 8,  59},
+  {PSR_HEADER_PATHATT,       sizeof(PSR_HEADER_PATHATT)-1,       FLOAT,   offsetof(PSRHDR, pathatt),            1<< 9, 129},
+  {PSR_HEADER_RADCONST_H,    sizeof(PSR_HEADER_RADCONST_H)-1,    FLTARR4, offsetof(PSRHDR, radconst_h),         1<<10, 135},
+  {PSR_HEADER_NOISEPWR_V,    sizeof(PSR_HEADER_NOISEPWR_V)-1,    FLTARR4, offsetof(PSRHDR, noisepwr_v),         1<<11, 136},
+  {PSR_HEADER_RADCONST_V,    sizeof(PSR_HEADER_RADCONST_V)-1,    FLTARR4, offsetof(PSRHDR, radconst_v),         1<<12, 139},
+  {PSR_HEADER_NOISEPWR_H,    sizeof(PSR_HEADER_NOISEPWR_H)-1,    FLTARR4, offsetof(PSRHDR, noisepwr_h),         1<<13, 146},
+  {PSR_HEADER_RSPPWIDTH,     sizeof(PSR_HEADER_RSPPWIDTH)-1,     ULONG,   offsetof(PSRHDR, pwidth_id),          1<<14, 160},
+  {PSR_HEADER_RSPSTART,      sizeof(PSR_HEADER_RSPSTART)-1,      FLOAT,   offsetof(PSRHDR, rspstart),           1<<15, 164},
+  {PSR_HEADER_RSPSTEP,       sizeof(PSR_HEADER_RSPSTEP)-1,       FLOAT,   offsetof(PSRHDR, rspstep),            1<<16, 165},
+  {PSR_HEADER_RSPSTOP,       sizeof(PSR_HEADER_RSPSTOP)-1,       FLOAT,   offsetof(PSRHDR, rspstop),            1<<17, 166},
+  {PSR_HEADER_ADU2DBMOFFSET_H,sizeof(PSR_HEADER_ADU2DBMOFFSET_H)-1, FLTARR4, offsetof(PSRHDR, adu2dbmoffset_h), 1<<18, 386},
+  {PSR_HEADER_TXPOWFAC_H,    sizeof(PSR_HEADER_TXPOWFAC_H)-1,    FLOAT,   offsetof(PSRHDR, txpowerfact_h),      1<<19, 401},
+  {PSR_HEADER_ADU2DBMOFFSET_V,sizeof(PSR_HEADER_ADU2DBMOFFSET_V)-1, FLTARR4, offsetof(PSRHDR, adu2dbmoffset_v), 1<<20, 411},
+  {PSR_HEADER_TXPOWFAC_V,    sizeof(PSR_HEADER_TXPOWFAC_V)-1,    FLOAT,   offsetof(PSRHDR, txpowerfact_v),      1<<21, 431},
+  {PSR_HEADER_RXLOSS_V,      sizeof(PSR_HEADER_RXLOSS_V)-1,      FLOAT,   offsetof(PSRHDR, rxloss_v),           1<<22, 435},
+  {PSR_HEADER_TXLOSS_V,      sizeof(PSR_HEADER_TXLOSS_V)-1,      FLOAT,   offsetof(PSRHDR, txloss_v),           1<<23, 441},
+  {PSR_HEADER_RADOMELOSS,    sizeof(PSR_HEADER_RADOMELOSS)-1,    FLOAT,   offsetof(PSRHDR, radomeloss),         1<<24, 567},
+  {PSR_HEADER_RXLOSS_H,      sizeof(PSR_HEADER_RXLOSS_H)-1,      FLOAT,   offsetof(PSRHDR, rxloss_h),           1<<25, 602},
+  {PSR_HEADER_TXLOSS_H,      sizeof(PSR_HEADER_TXLOSS_H)-1,      FLOAT,   offsetof(PSRHDR, txloss_h),           1<<26, 647},
+  {PSR_HEADER_STOP,          sizeof(PSR_HEADER_STOP)-1,          END,     offsetof(PSRHDR, headerlen),          1<<27, 804},
 };
 #define NUM_HEADER_INFOS (sizeof(header_table) / sizeof(header_table[0]))
 #define ALL_HEADER_INFO_FLAGS ((1<<NUM_HEADER_INFOS) -1)

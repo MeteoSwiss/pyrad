@@ -114,7 +114,7 @@ def profiler(level=1):
             args, kwargs : arguments
                 The arguments of the function
 
-            Returns
+            Returns_initialize_datasets
             -------
             func : function
                 The original function if no profiling has to be performed or
@@ -324,7 +324,7 @@ def _initialize_datasets(dataset_levels, cfg, traj=None, infostr=None):
                 dataset, cfg, dscfg[dataset], proc_status=0,
                 radar_list=None, voltime=None, trajectory=traj,
                 runinfo=infostr)
-
+            
             gc.collect()
 
     # manual garbage collection after initial processing
@@ -815,33 +815,40 @@ def _generate_dataset(dsname, cfg, dscfg, proc_status=0, radar_list=None,
     if new_dataset is None:
         return None, None, dsname, dscfg
 
-    try:
-        prod_func = get_prodgen_func(
+  
+    if type(dsformat) != list:
+        dsformat = [dsformat]
+        new_dataset = [new_dataset]
+    
+    # Handles the case of hybrid e.g. GRID/VOL proc
+    for dset, dsformat in zip(new_dataset, dsformat):
+        try:
+            prod_func = get_prodgen_func(
             dsformat, dscfg['dsname'], dscfg['type'])
-    except Exception as inst:
-        warn(str(inst))
-        raise
+        except Exception as inst:
+            warn(str(inst))
+            raise
 
-    # create the data set products
-    if 'products' in dscfg:
-        if MULTIPROCESSING_PROD:
-            jobs = []
-            for product in dscfg['products']:
-                # delay the data hashing
-                new_dataset = dask.delayed(new_dataset)
-                jobs.append(dask.delayed(_generate_prod)(
-                    new_dataset, cfg, product, prod_func, dscfg['dsname'],
-                    voltime, runinfo=runinfo))
-
-            dask.compute(*jobs)
-
-        else:
-            for product in dscfg['products']:
-                _generate_prod(
-                    new_dataset, cfg, product, prod_func, dscfg['dsname'],
-                    voltime, runinfo=runinfo)
-
-                gc.collect()
+        # create the data set products
+        if 'products' in dscfg:
+            if MULTIPROCESSING_PROD:
+                jobs = []
+                for product in dscfg['products']:
+                    # delay the data hashing
+                    new_dataset = dask.delayed(dset)
+                    jobs.append(dask.delayed(_generate_prod)(
+                        new_dataset, cfg, product, prod_func, dscfg['dsname'],
+                        voltime, runinfo=runinfo))
+    
+                dask.compute(*jobs)
+    
+            else:
+                for product in dscfg['products']:
+                    _generate_prod(
+                        dset, cfg, product, prod_func, dscfg['dsname'],
+                        voltime, runinfo=runinfo)
+    
+                    gc.collect()
     return new_dataset, ind_rad, dsname, dscfg
 
 
@@ -1016,7 +1023,7 @@ def _create_cfg_dict(cfgfile):
         'pulse_width', 'nyquist_velocity', 'AntennaGainH', 'AntennaGainV',
         'dBADUtodBmh', 'dBADUtodBmv', 'mflossh', 'mflossv', 'radconsth',
         'radconstv', 'txpwrh', 'txpwrv', 'attg', 'lradomeh', 'lradomev',
-        'lrxh', 'lrxv', 'ltxh', 'ltxv']
+        'lrxh', 'lrxv', 'ltxh', 'ltxv','mosotti_factor','refcorr','AzimTol']
     for param in fltarr_list:
         if param in cfg and isinstance(cfg[param], float):
             cfg[param] = [cfg[param]]
@@ -1112,7 +1119,17 @@ def _create_datacfg_dict(cfg):
         datacfg.update({'AntennaGainH': cfg['AntennaGainH']})
     if 'AntennaGainV' in cfg:
         datacfg.update({'AntennaGainV': cfg['AntennaGainV']})
-
+    if 'AntennaGainV' in cfg:
+        datacfg.update({'AntennaGainV': cfg['AntennaGainV']})
+    if 'AntennaGainV' in cfg:
+        datacfg.update({'AntennaGainV': cfg['AntennaGainV']})
+    if 'altitude' in cfg:
+        datacfg.update({'altitude': cfg['altitude']})
+    if 'latitude' in cfg:
+        datacfg.update({'latitude': cfg['latitude']})
+    if 'longitude' in cfg:
+        datacfg.update({'longitude': cfg['longitude']})
+        
     # Radar calibration parameters
     if 'dBADUtodBmh' in cfg:
         datacfg.update({'dBADUtodBmh': cfg['dBADUtodBmh']})
@@ -1132,7 +1149,14 @@ def _create_datacfg_dict(cfg):
         datacfg.update({'txpwrv': cfg['txpwrv']})
     if 'attg' in cfg:
         datacfg.update({'attg': cfg['attg']})
-
+    if 'attg' in cfg:
+        datacfg.update({'attg': cfg['attg']})
+    if 'mosotti_factor' in cfg:
+        datacfg.update({'mosotti_factor': cfg['mosotti_factor']})
+    if 'refcorr' in cfg:
+        datacfg.update({'refcorr': cfg['refcorr']})      
+    if 'AzimTol' in cfg:
+        datacfg.update({'AzimTol': cfg['AzimTol']})              
     return datacfg
 
 
@@ -1182,6 +1206,7 @@ def _create_dscfg_dict(cfg, dataset):
     dscfg.update({'ltxv': cfg['ltxv']})
     dscfg.update({'lradomeh': cfg['lradomeh']})
     dscfg.update({'lradomev': cfg['lradomev']})
+
 
     # PAR and ASR variable
     if 'par_azimuth_antenna' in cfg:
@@ -1389,6 +1414,7 @@ def _get_masterfile_list(datatypesdescr, starttimes, endtimes, datacfg,
         the master data type descriptor
 
     """
+   
     masterdatatypedescr = None
     masterscan = None
     for datatypedescr in datatypesdescr:

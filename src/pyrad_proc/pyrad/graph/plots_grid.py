@@ -131,6 +131,14 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
                 fig=fig)
         else:
             resolution = prdcfg['gridMapImageConfig'].get('mapres', '110m')
+            # Map from basemap to cartopy notation
+            if resolution == 'l':
+                resolution = '110m'
+            elif resolution == 'i':
+                resolution = '50m'
+            elif resolution == 'h':
+                resolution = '10m'
+    
             if resolution not in ('110m', '50m', '10m'):
                 warn('Unknown map resolution: '+resolution)
                 resolution = '110m'
@@ -145,6 +153,7 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
                 lon_lines=lon_lines,
                 maps_list=prdcfg['gridMapImageConfig']['maps'],
                 vmin=vmin, vmax=vmax, alpha=alpha, title=titl, ax=ax, fig=fig)
+            ax.set_extent([min_lon, max_lon, min_lat, max_lat])
             # display.plot_crosshairs(lon=lon, lat=lat)
     else:
         if use_basemap:
@@ -279,6 +288,13 @@ def plot_surface_contour(grid, field_name, level, prdcfg, fname_list,
             ax.set_title(display.generate_grid_title(field_name, level))
         else:
             resolution = prdcfg['gridMapImageConfig'].get('mapres', '110m')
+            # Map from basemap to cartopy notation
+            if resolution == 'l':
+                resolution = '110m'
+            elif resolution == 'i':
+                resolution = '50m'
+            elif resolution == 'h':
+                resolution = '10m'
             if resolution not in ('110m', '50m', '10m'):
                 warn('Unknown map resolution: '+resolution)
                 resolution = '110m'
@@ -308,7 +324,8 @@ def plot_surface_contour(grid, field_name, level, prdcfg, fname_list,
             ax.contour(
                 lons, lats, data, contour_values, colors=colors,
                 linewidths=linewidths, transform=cartopy.crs.PlateCarree())
-
+            ax.set_extent([min_lon, max_lon, min_lat, max_lat])
+            
     if save_fig:
         for fname in fname_list:
             fig.savefig(fname, dpi=dpi)

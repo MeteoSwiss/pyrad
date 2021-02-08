@@ -1,0 +1,65 @@
+# DX50 SUNSCAN processing with Pyrad
+# Product generation configuration
+
+# List of standard SUNSCAN datasets to generate.
+# The detailed specification of each dataset is given below.
+dataSetList STRARR 3
+   noise_h
+   noise_v
+   txpower
+
+noise_h STRUCT 10
+   type     STRING SUNSCAN
+   datatype STRING PSR:NdBmh
+   sun_hit_method STRING PSR
+   elmin FLOAT 5.0
+   n_noise_bins INT 8
+   noise_threshold FLOAT 1.5
+   max_fit_stddev FLOAT 0.8
+   do_second_noise_est STRING Yes
+   n_indfar_bins INT 10
+   products STRUCT 3
+      SUNLOG STRUCT 1
+         type STRING WRITE_SUNSCAN
+      AZ_EL STRUCT 3
+         type  STRING PLOT_SUNSCAN
+         vmin FLOAT -108
+		 vmax FLOAT -102
+	  SAVESTATE STRUCT 2
+         type STRING SAVESTATE
+		 voltype STRING dBZ
+	 
+noise_v STRUCT 10
+   type     STRING SUNSCAN
+   datatype STRING PSR:NdBmv
+   sun_hit_method STRING PSR
+   elmin FLOAT 5.0
+   n_noise_bins INT 8
+   noise_threshold FLOAT 1.5
+   max_fit_stddev FLOAT 0.8
+   do_second_noise_est STRING Yes
+   n_indfar_bins INT 10
+   products STRUCT 2
+      SUNLOG STRUCT 1
+         type STRING WRITE_SUNSCAN
+      AZ_EL STRUCT 3
+         type  STRING PLOT_SUNSCAN
+		 vmin FLOAT -108.
+         vmax FLOAT -102.
+			
+txpower STRUCT 3
+   type     STRING RAW
+   datatype STRING PSR:TXh
+   products STRUCT 2
+      AZ_EL STRUCT 1
+         type STRING PLOT_TXH
+	  TXMEAN STRUCT 8
+         type STRING WRITE_MEAN
+		 voltype STRING TXh
+		 ele_min FLOAT 0.0
+		 ele_max FLOAT 90.0
+		 azi_min FLOAT 0.0
+		 azi_max FLOAT 360.0
+		 rmin FLOAT 0.
+		 rmax FLOAT 50.
+		 

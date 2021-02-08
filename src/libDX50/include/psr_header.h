@@ -8,7 +8,7 @@
   Filename:         psr_header.h
   Author:           Andreas Leuenberger
   Creation date:    2012-10-25
-  Last update:      2013-02-21
+  Last update:      2020-02-25 by Zaira Schauwecker
 
   Copyright:        MeteoSwiss
 
@@ -67,7 +67,7 @@
 #define PSR_HEADER_MFBANDWIDTH   "states.gdrxmfwidth="
 #define PSR_HEADER_TXPOWFAC_H    "states.spbdphrelpowtx="
 #define PSR_HEADER_TXPOWFAC_V    "states.spbdpvrelpowtx="
-#define PSR_HEADER_TXPOWNORM     "states.spbtxpowkw="
+#define PSR_HEADER_TXPOWNORM     "states.gdrxmaxpowerkwpw=" /* since SP update on October 2019 state gdrxmaxpwrkwpw is used instead of spbtxpowkw */
 
 
 #define NUM_PW 4  /* number of pulse widths*/

@@ -1,0 +1,53 @@
+# This is the configuration file for DX50 vertically pointing data quality evaluation
+# in Torny
+# created 12.01.2018 (fvj) 
+
+# Name of this configuration:
+# Will be used in product generation save path
+name STRING gva_cloud_radar
+
+# ---------------------------------------------------------
+#  Raw data pathes
+# ---------------------------------------------------------
+
+# Base path of the raw data.
+# Note: Must have a trailing '/'
+# ('<datapath>/<scanname>/<YYYY-MM-DD>/<YYYYMMDDHHMMSS00datatype>.<ext>')
+# datapath STRING /store/msrad/radar/GENEVA/cloud_radar/
+datapath STRING $HOME/cloud_radar/
+path_convention STRING ODIM
+
+psrpath STRING /store/msrad/radar/DX50/psr/
+
+# Base path for cosmo data
+cosmopath STRING /store/msrad/cosmo/
+
+# Loading of saved datasets
+loadbasepath STRING /store/msrad/radar/pyrad_products/
+loadname STRING gva_cloud_radar
+
+# ------------------------------------------------
+#  Auxiliary data pathes
+# ------------------------------------------------
+
+# Base path for swissmetnet data
+# smnpath STRING /data/meteo_products/SMNRetrieve/
+
+# --------------------------------------------
+# Output data
+# -----------------------------------------------
+saveimgbasepath STRING /store/msrad/radar/pyrad_products/
+imgformat       STRING png
+
+# --------------------------------------------------------
+# configuration files pathes
+# --------------------------------------------------------
+
+# Base path of configuration files
+configpath STRING $HOME/pyrad/config/
+
+# Configuration of the radar location and approach direction
+locationConfigFile STRING $HOME/pyrad/config/processing/gva_cloud_radar_loc.txt
+
+# Configuration of the product generation
+productConfigFile STRING $HOME/pyrad/config/processing/gva_cloud_radar_prod.txt

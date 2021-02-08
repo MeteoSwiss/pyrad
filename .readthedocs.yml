@@ -1,42 +1,20 @@
+# .readthedocs.yml
 # Read the Docs configuration file
-# This schema uses https://github.com/23andMe/Yamale
-# for the validation.
-# Default values are indicated with a comment (``Default: ...``).
-# Some values are default to the project config (settings from the web panel).
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
 
-# The version of the spec to be use
+# Required
 version: 2
 
-# Formats of the documentation to be built
-# Default: []
-formats:
-   - htmlzip
-
-# Configuration for the documentation build process
-build:
-   image: latest
-
-# Configuration of the Python environment to be used
-python:
-   version: 3
-   install:
-      - method: setuptools
-        path: src/pyart/
-      - method: setuptools
-        path: src/pyrad/
-
-conda:
-   # The path to the Conda environment file from the root of the project
-   environment: src/pyrad_proc/continuous_integration/conda_environment-basic.yml
-
-build:
-   image: latest
-
+# Build documentation in the doc/ directory with Sphinx
 sphinx:
-   builder: html
-   configuration: doc/pyrad/library_reference_users/source/conf.py
-   fail_on_warning: false
+   configuration: doc/source/conf.py
 
-submodules:
-   include: all
-   recursive: true
+# Optionally build your docs in additional formats such as PDF
+formats:
+   - pdf
+
+# Optionally set the version of Python and requirements required to build your docs
+python:
+   version: 3.7
+   install:
+   - requirements: doc/requirements.txt

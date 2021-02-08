@@ -80,6 +80,7 @@ def get_process_func(dataset_type, dsname):
                 'FIELDS_DIFF': process_fields_diff
                 'FIXED_RNG': process_fixed_rng
                 'FIXED_RNG_SPAN': process_fixed_rng_span
+                'GECSX' : process_gecsx
                 'hydroMF_to_hydro': process_hydro_mf_to_hydro
                 'HYDROCLASS': process_hydroclass
                 'HZT': process_hzt
@@ -169,6 +170,7 @@ def get_process_func(dataset_type, dsname):
                 'COSMO2RADAR': process_cosmo_to_radar
             'GRID' format output:
                 'RAW_GRID': process_raw_grid
+                'GECSX' : process_gecsx
                 'GRID': process_grid
                 'GRID_FIELDS_DIFF': process_grid_fields_diff
                 'GRID_MASK': process_grid_mask
@@ -202,6 +204,8 @@ def get_process_func(dataset_type, dsname):
                 'ZDR_COLUMN': process_zdr_column
             'SUN_HITS' format output:
                 'SUN_HITS': process_sun_hits
+            'SUNSCAN' format output:
+                'SUNSCAN': process_sunscan
             'TIMEAVG' format output:
                 'FLAG_TIME_AVG': process_time_avg_flag
                 'TIME_AVG': process_time_avg
@@ -238,6 +242,9 @@ def get_process_func(dataset_type, dsname):
         func_name = 'process_radar_resampling'
     elif dataset_type == 'CCOR':
         func_name = 'process_ccor'
+    elif dataset_type == 'GECSX':
+        func_name = 'process_gecsx'
+        dsformat = ['GRID','VOL']
     elif dataset_type == 'GRID':
         func_name = 'process_grid'
         dsformat = 'GRID'
@@ -549,6 +556,9 @@ def get_process_func(dataset_type, dsname):
         dsformat = 'OCCURRENCE'
     elif dataset_type == 'SUN_HITS':
         func_name = 'process_sun_hits'
+        dsformat = 'SUN_HITS'
+    elif dataset_type == 'SUNSCAN':
+        func_name = 'process_sunscan'
         dsformat = 'SUN_HITS'
     elif dataset_type == 'POINT_MEASUREMENT':
         func_name = 'process_point_measurement'
@@ -1596,10 +1606,14 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
                 # average field
                 target_radar.fields['avg_'+field_name]['data'][
                     trad_ind_ray, trad_ind_rng] = avg
+                                                                               
+                                
 
                 # npoints field
                 target_radar.fields['npoints_'+field_name]['data'][
                     trad_ind_ray, trad_ind_rng] = nvals_valid
+                                                                               
+                                        
 
                 # quantile fields
                 for quant, val in zip(tadict['quantiles'], qvals):
@@ -1610,6 +1624,8 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
                         field_name)
                     target_radar.fields[quant_field]['data'][
                         trad_ind_ray, trad_ind_rng] = val
+                                   
+                                                                             
         else:
             # ================================================================
             # Radar and scanning antenna are NOT at the same place
@@ -1652,10 +1668,15 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
                 # average field
                 target_radar.fields['avg_'+field_name]['data'][
                     trad_ind_ray, trad_ind_rng] = avg
+                                                                               
+                                
 
                 # npoints field
                 target_radar.fields['npoints_'+field_name]['data'][
                     trad_ind_ray, trad_ind_rng] = nvals_valid
+                               
+                                                                       
+                                        
 
                 # quantile fields
                 for quant, val in zip(tadict['quantiles'], qvals):

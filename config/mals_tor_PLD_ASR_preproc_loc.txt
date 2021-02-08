@@ -1,0 +1,111 @@
+#
+# Configuration for MALSPLUS tests in Torny
+
+# rad4alp radar name
+RadarName STRARR 1
+	D
+
+# rad4alp radar range resolution L:Low H:High
+RadarRes STRARR 1
+	L
+    
+rmax FLOAT 180000.
+
+# Names of the radar scans in the specified sector
+ScanList STRARR 20
+	  001  # masterscan: first scan of a volume
+	  002
+	  003
+	  004
+	  005
+	  006
+	  007
+	  008
+	  009
+	  010
+	  011
+	  012
+	  013
+	  014
+	  015
+	  016
+	  017
+	  018
+	  019
+	  020
+
+# angles from 001 to 020
+# ['-0.2', '0.4',  '1.0',  '1.6',  '2.5',  '3.5',  '4.5',  '5.5',  '6.5',  '7.5',
+#   '8.5', '9.5', '11.0', '13.0', '16.0', '20.0', '25.0', '30.0', '35.0', '40.0']
+
+# Radar coordinates:
+# Altitude 1682 m
+# Latitude 46.425113 deg
+# Longitude 6.099415 deg
+
+# CHY 497057 m
+# CHX 142408 m
+
+      
+# Repetition time of the scans [min]
+ScanPeriod INT 5
+
+# Frequency of cosmo run [h]
+CosmoRunFreq INT 1
+
+# hours forecasted in cosmo run [h]
+CosmoForecasted INT 9
+
+# dry radome losses [dB]
+lradomeh FLOAT 0.3
+lradomev FLOAT 0.3
+
+# matched filter losses [dB]
+mflossh FLOAT 1.
+mflossv FLOAT 1.
+
+# gas attenuation coefficient (1-way attenuation)
+# the coefficient is actually that of S-band but this is the one used operationally for rad4alp radars
+attg FLOAT 0.008
+
+# radar beamwidth
+RadarBeamwidth FLOAT 1.
+
+# Image config
+ppiImageConfig STRUCT 6
+   xsize      FLOAT  10.      # image size [inches] (default dots per inch (dpi):72)
+   ysize      FLOAT   8.      # image size [inches] (default dots per inch (dpi):72)
+   xmin       FLOAT -34.0   # Min distance on horizontal axis [km]
+   xmax       FLOAT  166.0   # Max distance on horizontal axis [km]
+   ymin       FLOAT -62.0   # Min distance on vertical axis [km]
+   ymax       FLOAT  138.0   # Max distance on vertical axis [km]
+
+# Image config
+rhiImageConfig STRUCT 6
+   xsize      FLOAT  10.     # image size [inches]
+   ysize      FLOAT   5.     # image size [inches]
+   xmin       FLOAT -50.0   # Min distance on horizontal axis [km]
+   xmax       FLOAT  50.0   # Max distance on horizontal axis [km]
+   ymin       FLOAT   0.0   # Min distance on vertical axis [km]
+   ymax       FLOAT   7.5   # Max distance on vertical axis [km]
+
+# ASR position
+target_radar_pos STRUCT 3
+    latitude FLOAT 46.769615 # WGS84 [deg]
+    longitude FLOAT 6.954204 # WGS84 [deg]
+    altitude FLOAT 745.9     # m MSL (795.5 m WGS84)
+    
+# ASR position in Swiss coordinates:
+# CHY (East) 562997.986 m
+# CHX (North) 179941.019 m 
+
+# ASR antenna pattern
+asr_highbeam_antenna STRUCT 3
+   azPatternFile STRING ASR_HighBeamAzimuthPattern.csv
+   elPatternFile STRING ASR_HighBeamElevationPattern.csv
+   fixed_angle FLOAT 2.7    # elevation angle [deg]
+
+asr_lowbeam_antenna STRUCT 3
+   azPatternFile STRING ASR_LowBeamAzimuthPattern.csv
+   elPatternFile STRING ASR_LowBeamElevationPattern.csv
+   fixed_angle FLOAT 2.7    # elevation angle [deg]

@@ -174,7 +174,11 @@ def generate_grid_products(dataset, prdcfg):
                 datatypes: list of str or None
                     The list of data types to save. If it is None, all fields
                     in the radar object will be saved
+        'SAVEALL_GRID' : Same as before but can be used in a mixed GRID/VOL
+            dataset, as there is no ambiguity with SAVEALL for VOL datasets
         'SAVEVOL': Saves on field of a gridded data object in a netcdf file.
+        'SAVEVOL_GRID' : Same as before but can be used in a mixed GRID/VOL
+            dataset, as there is no ambiguity with SAVEVOL for VOL datasets
         'STATS': Computes statistics over the whole images and stores them in
             a file.
             User defined parameters:
@@ -658,8 +662,9 @@ def generate_grid_products(dataset, prdcfg):
             return fname
 
         return fname_list
-
-    if prdcfg['type'] == 'SAVEVOL':
+    
+    
+    if prdcfg['type'] == 'SAVEVOL' or prdcfg['type'] == 'SAVEVOL_GRID':
         field_name = get_fieldname_pyart(prdcfg['voltype'])
         if field_name not in dataset['radar_out'].fields:
             warn(
@@ -688,8 +693,8 @@ def generate_grid_products(dataset, prdcfg):
         print('saved file: '+fname)
 
         return fname
-
-    if prdcfg['type'] == 'SAVEALL':
+        
+    if prdcfg['type'] == 'SAVEALL' or prdcfg['type'] == 'SAVEALL_GRID':
         datatypes = prdcfg.get('datatypes', None)
 
         savedir = get_save_dir(

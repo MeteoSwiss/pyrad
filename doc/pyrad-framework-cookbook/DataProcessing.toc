@@ -11,76 +11,47 @@
 \contentsline {section}{\numberline {3}Configuration}{7}{section.3}
 \contentsline {subsection}{\numberline {3.1}Main Configuration File}{7}{subsection.3.1}
 \contentsline {subsection}{\numberline {3.2}Location Configuration File}{8}{subsection.3.2}
-\contentsline {section}{\numberline {4}Product Generation Configuration}{12}{section.4}
-\contentsline {subsection}{\numberline {4.1}Basic Concept}{12}{subsection.4.1}
-\contentsline {subsection}{\numberline {4.2}The concept of processing level}{12}{subsection.4.2}
-\contentsline {subsection}{\numberline {4.3}Input Volume Datatypes}{12}{subsection.4.3}
-\contentsline {subsection}{\numberline {4.4}Product Configuration File}{14}{subsection.4.4}
-\contentsline {paragraph}{Example:}{15}{section*.9}
-\contentsline {subsection}{\numberline {4.5}Input- and DataSet-Processing}{20}{subsection.4.5}
-\contentsline {section}{\numberline {5}Datasets}{21}{section.5}
-\contentsline {subsection}{\numberline {5.1}VOL Datasets}{26}{subsection.5.1}
-\contentsline {subsubsection}{\numberline {5.1.1}SAN}{26}{subsubsection.5.1.1}
-\contentsline {subsubsection}{\numberline {5.1.2}RAW}{27}{subsubsection.5.1.2}
-\contentsline {subsubsection}{\numberline {5.1.3}WINDSHEAR}{28}{subsubsection.5.1.3}
-\contentsline {subsubsection}{\numberline {5.1.4}RAINRATE}{28}{subsubsection.5.1.4}
-\contentsline {subsubsection}{\numberline {5.1.5}BACKSCATTER}{28}{subsubsection.5.1.5}
-\contentsline {subsubsection}{\numberline {5.1.6}SPEC\_QUALITY}{28}{subsubsection.5.1.6}
-\contentsline {subsubsection}{\numberline {5.1.7}SPHERECALIBRATION}{28}{subsubsection.5.1.7}
-\contentsline {subsubsection}{\numberline {5.1.8}IQ\_RHOHV}{28}{subsubsection.5.1.8}
-\contentsline {subsubsection}{\numberline {5.1.9}IQ\_ZDR}{28}{subsubsection.5.1.9}
-\contentsline {subsection}{\numberline {5.2}RAY Datasets}{28}{subsection.5.2}
-\contentsline {subsubsection}{\numberline {5.2.1}RAINEXTENSION}{28}{subsubsection.5.2.1}
-\contentsline {subsection}{\numberline {5.3}TIMESERIES Datasets}{29}{subsection.5.3}
-\contentsline {subsubsection}{\numberline {5.3.1}TRAJ\_ATPLANE}{29}{subsubsection.5.3.1}
-\contentsline {subsubsection}{\numberline {5.3.2}TRAJ\_ANTENNA\_PATTERN}{29}{subsubsection.5.3.2}
-\contentsline {subsubsection}{\numberline {5.3.3}POINT\_MEASUREMENT}{30}{subsubsection.5.3.3}
-\contentsline {subsection}{\numberline {5.4}TIMEARRAY Datasets}{30}{subsection.5.4}
-\contentsline {subsubsection}{\numberline {5.4.1}TIME\_HEIGHT}{30}{subsubsection.5.4.1}
-\contentsline {subsubsection}{\numberline {5.4.2}TIME\_VECTOR}{30}{subsubsection.5.4.2}
-\contentsline {subsubsection}{\numberline {5.4.3}QVP}{30}{subsubsection.5.4.3}
-\contentsline {subsection}{\numberline {5.5}TIMEARRAY\_ARRAY Datasets}{30}{subsection.5.5}
-\contentsline {subsubsection}{\numberline {5.5.1}TIME\_SUMMARY\_HEIGHT}{30}{subsubsection.5.5.1}
-\contentsline {subsection}{\numberline {5.6}TRAJ\_ONLY Datasets}{30}{subsection.5.6}
-\contentsline {subsubsection}{\numberline {5.6.1}TRAJ}{30}{subsubsection.5.6.1}
-\contentsline {subsubsection}{\numberline {5.6.2}TRAJ\_PLANEHITS}{31}{subsubsection.5.6.2}
-\contentsline {subsection}{\numberline {5.7}TRAJ\_VOL\_COMPOSITE Datasets}{31}{subsection.5.7}
-\contentsline {subsubsection}{\numberline {5.7.1}TRAJ\_VOL}{31}{subsubsection.5.7.1}
-\contentsline {subsection}{\numberline {5.8}VOLUMEGROUP Datasets}{31}{subsection.5.8}
-\contentsline {subsubsection}{\numberline {5.8.1}QUANTILE}{31}{subsubsection.5.8.1}
-\contentsline {subsection}{\numberline {5.9}PSR Datasets}{31}{subsection.5.9}
-\contentsline {subsubsection}{\numberline {5.9.1}PSR\_RAW}{31}{subsubsection.5.9.1}
-\contentsline {subsubsection}{\numberline {5.9.2}PSR\_MERGE}{31}{subsubsection.5.9.2}
-\contentsline {subsubsection}{\numberline {5.9.3}PSR\_VERTICAL}{31}{subsubsection.5.9.3}
-\contentsline {subsubsection}{\numberline {5.9.4}PSR\_SZH}{31}{subsubsection.5.9.4}
-\contentsline {subsubsection}{\numberline {5.9.5}PSR\_SZV}{31}{subsubsection.5.9.5}
-\contentsline {subsubsection}{\numberline {5.9.6}PSR\_SZDR}{31}{subsubsection.5.9.6}
-\contentsline {subsubsection}{\numberline {5.9.7}PSR\_SZDR\_TEXT}{31}{subsubsection.5.9.7}
-\contentsline {subsubsection}{\numberline {5.9.8}PSR\_SRHOHV}{31}{subsubsection.5.9.8}
-\contentsline {subsubsection}{\numberline {5.9.9}PSR\_SPHIDP}{31}{subsubsection.5.9.9}
-\contentsline {subsubsection}{\numberline {5.9.10}PSR\_SPHIDP\_TEXT}{31}{subsubsection.5.9.10}
-\contentsline {subsubsection}{\numberline {5.9.11}PSR\_DSD}{31}{subsubsection.5.9.11}
-\contentsline {subsection}{\numberline {5.10}ARRAY\_PSR Datasets}{31}{subsection.5.10}
-\contentsline {subsubsection}{\numberline {5.10.1}PSR\_FILTER}{31}{subsubsection.5.10.1}
-\contentsline {subsubsection}{\numberline {5.10.2}PREPROC\_PSR}{31}{subsubsection.5.10.2}
-\contentsline {subsection}{\numberline {5.11}MONITORING Datasets}{31}{subsection.5.11}
-\contentsline {subsubsection}{\numberline {5.11.1}MONITORING}{31}{subsubsection.5.11.1}
-\contentsline {subsection}{\numberline {5.12}ARRAY\_VOL Datasets}{32}{subsection.5.12}
-\contentsline {subsubsection}{\numberline {5.12.1}PREPROCESSING}{32}{subsubsection.5.12.1}
-\contentsline {subsubsection}{\numberline {5.12.2}MEANZ}{34}{subsubsection.5.12.2}
-\contentsline {subsubsection}{\numberline {5.12.3}XVSC\_POSITION}{34}{subsubsection.5.12.3}
-\contentsline {subsubsection}{\numberline {5.12.4}ATTENUATION}{34}{subsubsection.5.12.4}
-\contentsline {subsubsection}{\numberline {5.12.5}HYDROCLASS}{34}{subsubsection.5.12.5}
-\contentsline {subsubsection}{\numberline {5.12.6}PHIDP\_KDP}{34}{subsubsection.5.12.6}
-\contentsline {subsection}{\numberline {5.13}SUN\_MONITORING Datasets}{35}{subsection.5.13}
-\contentsline {subsubsection}{\numberline {5.13.1}SUN\_MONITORING}{35}{subsubsection.5.13.1}
-\contentsline {subsection}{\numberline {5.14}XVSC Datasets}{35}{subsection.5.14}
-\contentsline {subsubsection}{\numberline {5.14.1}XVSC}{35}{subsubsection.5.14.1}
-\contentsline {subsection}{\numberline {5.15}INTERCOMP Datasets}{35}{subsection.5.15}
-\contentsline {subsubsection}{\numberline {5.15.1}INTERCOMP}{35}{subsubsection.5.15.1}
-\contentsline {subsubsection}{\numberline {5.15.2}INTERCOMP\_TIME\_AVG}{35}{subsubsection.5.15.2}
-\contentsline {subsection}{\numberline {5.16}HISTOGRAM Datasets}{35}{subsection.5.16}
-\contentsline {subsubsection}{\numberline {5.16.1}HISTOGRAM}{35}{subsubsection.5.16.1}
-\contentsline {subsection}{\numberline {5.17}COMPOSITE\_VOLUME datasets}{36}{subsection.5.17}
-\contentsline {section}{\numberline {6}Products}{37}{section.6}
-\contentsline {subsection}{\numberline {6.1}VOL Products}{43}{subsection.6.1}
+\contentsline {section}{\numberline {4}Product Generation Configuration}{11}{section.4}
+\contentsline {subsection}{\numberline {4.1}Basic Concept}{11}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Input Volume Datatypes}{11}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}Product Configuration File}{13}{subsection.4.3}
+\contentsline {paragraph}{Example:}{14}{section*.9}
+\contentsline {subsection}{\numberline {4.4}The concept of processing level}{19}{subsection.4.4}
+\contentsline {section}{\numberline {5}Datasets}{20}{section.5}
+\contentsline {subsection}{\numberline {5.1}Dataset type and format}{20}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}Datasets and configuration parameters}{21}{subsection.5.2}
+\contentsline {section}{\numberline {6}Products}{22}{section.6}
+\contentsline {subsection}{\numberline {6.1}VOL products}{22}{subsection.6.1}
+\contentsline {subsubsection}{\numberline {6.1.1}PPI\_IMAGE}{22}{subsubsection.6.1.1}
+\contentsline {subsubsection}{\numberline {6.1.2}PPI\_MAP}{22}{subsubsection.6.1.2}
+\contentsline {subsubsection}{\numberline {6.1.3}PSEUDOPPI\_IMAGE}{23}{subsubsection.6.1.3}
+\contentsline {subsubsection}{\numberline {6.1.4}PSEUDOPPI\_MAP}{23}{subsubsection.6.1.4}
+\contentsline {subsubsection}{\numberline {6.1.5}PSEUDORHI\_IMAGE}{23}{subsubsection.6.1.5}
+\contentsline {subsubsection}{\numberline {6.1.6}RHI\_PROFILE}{23}{subsubsection.6.1.6}
+\contentsline {subsubsection}{\numberline {6.1.7}CAPPI\_IMAGE}{24}{subsubsection.6.1.7}
+\contentsline {subsubsection}{\numberline {6.1.8}PLOT\_ALONG\_COORD}{24}{subsubsection.6.1.8}
+\contentsline {subsubsection}{\numberline {6.1.9}BSCOPE\_IMAGE}{25}{subsubsection.6.1.9}
+\contentsline {subsubsection}{\numberline {6.1.10}TIME\_RANGE}{25}{subsubsection.6.1.10}
+\contentsline {subsubsection}{\numberline {6.1.11}HISTOGRAM}{25}{subsubsection.6.1.11}
+\contentsline {subsubsection}{\numberline {6.1.12}QUANTILES}{25}{subsubsection.6.1.12}
+\contentsline {subsubsection}{\numberline {6.1.13}FIELD\_COVERAGE}{25}{subsubsection.6.1.13}
+\contentsline {subsubsection}{\numberline {6.1.14}CDF}{26}{subsubsection.6.1.14}
+\contentsline {subsubsection}{\numberline {6.1.15}SAVEVOL}{26}{subsubsection.6.1.15}
+\contentsline {subsubsection}{\numberline {6.1.16}SAVESTATE}{26}{subsubsection.6.1.16}
+\contentsline {subsubsection}{\numberline {6.1.17}SAVEALL}{27}{subsubsection.6.1.17}
+\contentsline {subsection}{\numberline {6.2}Timeseries products}{28}{subsection.6.2}
+\contentsline {subsection}{\numberline {6.3}Grid products}{28}{subsection.6.3}
+\contentsline {subsection}{\numberline {6.4}TIMEAVG products}{28}{subsection.6.4}
+\contentsline {subsection}{\numberline {6.5}SUN\_HITS products}{28}{subsection.6.5}
+\contentsline {subsection}{\numberline {6.6}MONITORING products}{29}{subsection.6.6}
+\contentsline {subsection}{\numberline {6.7}OCCURRENCE products}{29}{subsection.6.7}
+\contentsline {subsection}{\numberline {6.8}INTERCOMP products}{29}{subsection.6.8}
+\contentsline {subsection}{\numberline {6.9}TRAJ\_ONLY products}{29}{subsection.6.9}
+\contentsline {subsection}{\numberline {6.10}COLOCATED\_GATES}{30}{subsection.6.10}
+\contentsline {subsection}{\numberline {6.11}COSMO\_COORD products}{30}{subsection.6.11}
+\contentsline {subsection}{\numberline {6.12}QVP products}{30}{subsection.6.12}
+\contentsline {section}{\numberline {7}GECSX interface}{31}{section.7}
+\contentsline {subsection}{\numberline {7.1}GECSX parameters in the main configuration file}{32}{subsection.7.1}
+\contentsline {subsection}{\numberline {7.2}In the local configuration file}{33}{subsection.7.2}
+\contentsline {subsection}{\numberline {7.3}In the product configuration file}{33}{subsection.7.3}
+\contentsline {subsection}{\numberline {7.4}GECSX outputs}{35}{subsection.7.4}

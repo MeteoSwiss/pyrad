@@ -14,6 +14,7 @@ Functions for writing pyrad output data
     write_alarm_msg
     write_last_state
     write_smn
+   *write_timeseries_point
     write_trt_info
     write_trt_cell_data
     write_trt_thundertracking_data
@@ -44,18 +45,22 @@ Functions for writing pyrad output data
 from __future__ import print_function
 import glob
 import csv
+import os
+
 from warnings import warn
 import smtplib
 from email.message import EmailMessage
 import fcntl
 import errno
 import time
+from datetime import datetime as dt
 
 import numpy as np
 
 from pyart.config import get_fillvalue
 
 from .io_aux import generate_field_name_str
+
 
 
 def write_proc_periods(start_times, end_times, fname):
@@ -384,6 +389,92 @@ def write_smn(datetime_vec, value_avg_vec, value_std_vec, fname):
                 'std': value_std_vec[i]})
 
         csvfile.close()
+
+    return fname
+
+
+def write_timeseries_point(fname, data, dstype, text, timeformat=None, timeinfo=None):
+    """
+    Write one timesample of a time series to a file
+
+    Parameters
+    ----------
+    data      : time series structure with the fields:
+      time    : Time sample in Julian calendar format.
+      label[] : Header of each value column
+      value[] : Data value of each column
+    dataType  : Type of the data
+    cfginfo   : Information string describing the kind of data
+                in the text file. This string is part of the
+                generated file name.
+    text      : Text with description of the data in the
+                file. Must be a string array. Each string
+                is written to a new line an the comment symbol
+                is set at the beginning.
+
+    Keywords
+    --------
+    timeformat: If set, the date time column is set according to the
+                time format number. If not set, the time format
+                is 'YYYY-MM-DD, <seconds of day>'
+    timeinfo  : Used for the time stamp of the output file. If not set,
+                data.time is used to generate it.
+
+    """
+
+    datatime = data['time'].strftime("%Y-%m-%d %H:%M:%S")
+    datavalue = data['value']
+    datatypename = dstype
+    unit = data['unit']
+
+    print("----- Write timeseries ", fname)
+
+    if os.path.isfile(fname) == False:
+        #File does not exist. Open it and fill in header info.
+        with open(fname, 'w', newline='') as csvfile:
+            csvfile.write("# Weather radar timeseries data file\n")
+            csvfile.write("# Project: MALSplus\n")
+            csvfile.write("# Data/Unit : " +  datatypename + " [" + unit + "]\n")
+            csvfile.write("# Start : " + datatime + " UTC\n")
+            csvfile.write("# Header lines with comments are preceded by '#'\n")
+            for line in text:
+                csvfile.write("# " + line +'\n')
+            csvfile.write("#\n")
+
+            if timeformat is None:
+                label_str = "# Date [YYYY-MM-DD hh:mm:ss]"
+                tformat = "%Y-%m-%d %H:%M:%S"
+                time_str_old = dt.strptime(datatime, tformat)
+                time_str = time_str_old.strftime(tformat)
+            else:
+                label_str = "# Date ["+ timeformat +"]"
+                tformat = timeformat
+                time_str = datatime.strftime(tformat)
+
+            for label in data['label']:
+                label_str = label_str + ", " + label
+            csvfile.write(label_str + '\n')
+
+            for value in data['value']:
+                time_str = time_str + ", " + ('%.4f'% value)
+            csvfile.write(time_str + '\n')
+
+    else:
+        if timeformat is None:
+            tformat = "%Y-%m-%d %H:%M:%S"
+            time_str_old = dt.strptime(datatime, tformat)
+            time_str = time_str_old.strftime(tformat)
+        else:
+            tformat = timeformat
+            time_str = datatime.strftime(tformat)
+
+        with open(fname, 'a', newline='') as csvfile:
+
+            for value in data['value']:
+                time_str = time_str + ", " + ('%.4f'% value)
+            csvfile.write(time_str + '\n')
+
+    csvfile.close()
 
     return fname
 

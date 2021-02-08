@@ -14,15 +14,26 @@ Functions for monitoring data quality and correct bias and noise effects
     process_time_avg_std
     process_occurrence_period
     process_sun_hits
+   *process_sunscan
 
 """
 
 from copy import deepcopy
 from warnings import warn
 import numpy as np
+import sys
+
+from scipy.constants import c as c_speed
+from netCDF4 import num2date
+from datetime import datetime as dt
+
+try:
+    import pysolar
+    _PYSOLAR_AVAILABLE = True
+except ImportError:
+    _PYSOLAR_AVAILABLE = False
 
 import pyart
-
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from ..io.read_data_sun import read_sun_hits_multiple_days, read_solar_flux
 from ..io.read_data_other import read_excess_gates
@@ -1110,6 +1121,7 @@ def process_sun_hits(procstatus, dscfg, radar_list=None):
 
     """
 
+
     if procstatus == 0:
         return None, None
 
@@ -1240,6 +1252,7 @@ def process_sun_hits(procstatus, dscfg, radar_list=None):
                 pwrv_field=pwrv_field, zdr_field=zdr_field)
         else:
             npulses_ray = dscfg.get('npulses_ray', 30)
+
             nbins_min = dscfg.get('nbins_min', 800)
             iterations = dscfg.get('iterations', 10)
 
@@ -1249,6 +1262,7 @@ def process_sun_hits(procstatus, dscfg, radar_list=None):
                 iterations=iterations, attg=attg, max_std_zdr=max_std_zdr,
                 sun_position=sun_position, pwrh_field=pwrh_field,
                 pwrv_field=pwrv_field, zdr_field=zdr_field)
+
 
         if sun_hits is None:
             return None, None
@@ -1491,3 +1505,747 @@ def process_sun_hits(procstatus, dscfg, radar_list=None):
             {'timeinfo': dscfg['global_data']['timeinfo']})
 
         return sun_hits_dataset, ind_rad
+
+
+def process_sunscan(procstatus, dscfg, radar_list=None):
+    """
+    Processing of automatic sun scans for monitoring purposes of the radar system.
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration. Accepted Configuration Keywords::
+
+        datatype : list of string. Dataset keyword
+            The input data types
+        delev_max : float. Dataset keyword
+            maximum elevation distance from nominal radar elevation where to
+            look for a sun hit signal [deg]. Default 1.5
+        dazim_max : float. Dataset keyword
+            maximum azimuth distance from nominal radar elevation where to
+            look for a sun hit signal [deg]. Default 1.5
+        elmin : float. Dataset keyword
+            minimum radar elevation where to look for sun hits [deg].
+            Default 1.
+        attg : float. Dataset keyword
+            gaseous attenuation. Default None
+        sun_position : string. Datset keyword
+            The function to compute the sun position to use. Can be 'MF' or
+            'pysolar'
+        sun_hit_method : str. Dataset keyword
+            Method used to estimate the power of the sun hit. Should be PSR. HS
+            (Hildebrand and Sekhon 1974) or Ivic (Ivic 2013) are implemented but not tested.
+        n_noise_bins : int. Dataset keyword
+            Number of bins to use for noise estimation
+        noise_threshold : float. Dataset keyword
+            Distance over the noise level in [dBm]
+        min_num_samples : int. Dataset keyword
+            Minimal number of samples above the noise level
+        max_fit_stddev : float. Dataset keyword
+            Maximal allowed standard deviation for a valid sun fit [dBm]
+        do_second_noise_est : string ('Yes' or 'No'). Dataset keyword
+            Used to trigger a second noise estimation based on the first fit
+            Requires another dataset keyword: n_indfar_bins
+        n_indfar_bins : int. Dataset keyword
+            Number of samples most remote from the sun center
+        az_width_co : float. Dataset keyword
+            co-polar antenna azimuth width (convoluted with sun width) [deg].
+            Default None
+        el_width_co : float. Dataset keyword
+            co-polar antenna elevation width (convoluted with sun width)
+            [deg]. Default None
+        az_width_cross : float. Dataset keyword
+            cross-polar antenna azimuth width (convoluted with sun width)
+            [deg]. Default None
+        el_width_cross : float. Dataset keyword
+            cross-polar antenna elevation width (convoluted with sun width)
+            [deg]. Default None
+        rmin : float. Dataset keyword
+            minimum range where to look for a sun hit signal [m]. Used in HS
+            method. Default 50000.
+        hmin : float. Dataset keyword
+            minimum altitude where to look for a sun hit signal [m MSL].
+            Default 10000. The actual range from which a sun hit signal will
+            be search will be the minimum between rmin and the range from
+            which the altitude is higher than hmin. Used in HS method. Default
+            10000.
+        nbins_min : int. Dataset keyword.
+            minimum number of range bins that have to contain signal to
+            consider the ray a potential sun hit. Default 20 for HS and 8000
+            for Ivic.
+        npulses_ray : int
+            Default number of pulses used in the computation of the ray. If the
+            number of pulses is not in radar.instrument_parameters this will be
+            used instead. Used in Ivic method. Default 30
+        flat_reg_wlen : int
+            Length of the flat region window [m]. Used in Ivic method. Default
+            8000.
+        iterations: int
+            number of iterations in step 7 of Ivic method. Default 10.
+        max_std_pwr : float. Dataset keyword
+            maximum standard deviation of the signal power to consider the
+            data a sun hit [dB]. Default 2. Used in HS method
+        max_std_zdr : float. Dataset keyword
+            maximum standard deviation of the ZDR to consider the
+            data a sun hit [dB]. Default 2.
+        ndays : int. Dataset keyword
+            number of days used in sun retrieval. Default 1
+        coeff_band : float. Dataset keyword
+            multiplicate coefficient to transform pulse width into receiver
+            bandwidth
+        frequency : float. Dataset keyword
+            the radar frequency [Hz]. If None that of the key
+            frequency in attribute instrument_parameters of the radar
+            object will be used. If the key or the attribute are not present
+            frequency dependent parameters will not be computed
+        beamwidth : float. Dataset keyword
+            the antenna beamwidth [deg]. If None that of the keys
+            radar_beam_width_h or radar_beam_width_v in attribute
+            instrument_parameters of the radar object will be used. If the key
+            or the attribute are not present the beamwidth dependent
+            parameters will not be computed
+        pulse_width : float. Dataset keyword
+            the pulse width [s]. If None that of the key
+            pulse_width in attribute instrument_parameters of the radar
+            object will be used. If the key or the attribute are not present
+            the pulse width dependent parameters will not be computed
+        ray_angle_res : float. Dataset keyword
+            the ray angle resolution [deg]. If None that of the key
+            ray_angle_res in attribute instrument_parameters of the radar
+            object will be used. If the key or the attribute are not present
+            the ray angle resolution parameters will not be computed
+        AntennaGainH, AntennaGainV : float. Dataset keyword
+            the horizontal (vertical) polarization antenna gain [dB].
+            If None that of the attribute instrument_parameters of the radar
+            object will be used. If the key or the attribute are not present
+            the ray angle resolution parameters will not be computed
+    radar_list : list of Radar objects
+        Optional. list of radar objects
+
+
+
+    Returns
+    -------
+    sunscan_dataset : dict
+        dictionary containing a radar object, a sun_hits dict, a
+        sun_retrieval dictionary, field_name and timeinfo
+    ind_rad : int
+        radar index
+
+    """
+
+    if procstatus != 1:
+        return None, None
+
+    pwrh_field = None
+    pwrv_field = None
+    zdr_field = None
+
+    sun_hit_method = dscfg.get('sun_hit_method', 'PSR')
+    sun_position = dscfg.get('sun_position', 'MF')
+    n_noise_bins = dscfg.get('n_noise_bins', 8)
+    noise_threshold = dscfg.get('noise_threshold', 1.5)
+    min_num_samples = dscfg.get('min_num_samples', 60)
+    max_fit_stddev = dscfg.get('max_fit_stddev', 0.8)
+    do_second_noise_est = dscfg.get('do_second_noise_est', 'Yes')
+    n_indfar_bins = dscfg.get('n_indfar_bins', 10)
+
+    az_width_co = dscfg.get('az_width_co', None)
+    el_width_co = dscfg.get('el_width_co', None)
+    az_width_cross = dscfg.get('az_width_cross', None)
+    el_width_cross = dscfg.get('el_width_cross', None)
+
+    delev_max = dscfg.get('delev_max', 3.0)
+    dazim_max = dscfg.get('dazim_max', 3.0)
+    elmin = dscfg.get('elmin', 5.)
+    attg = dscfg.get('attg', None)
+
+    for datatypedescr in dscfg['datatype']:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        if sun_hit_method == "PSR":
+            if datatype == 'NdBmh':
+                pwrh_field = get_fieldname_pyart(datatype)
+            elif datatype == 'NdBmv':
+                pwrv_field = get_fieldname_pyart(datatype)
+            elif datatype == 'ZDR':
+                zdr_field = get_fieldname_pyart(datatype)
+            else:
+                warn('ERROR: No valid datatype')
+        else:
+            if datatype == 'dBm':
+                pwrh_field = 'signal_power_hh'
+            if datatype == 'dBmv':
+                pwrv_field = 'signal_power_vv'
+            if datatype == 'ZDRu':
+                zdr_field = 'unfiltered_differential_reflectivity'
+            if datatype == 'ZDRuc':
+                zdr_field = 'corrected_unfiltered_differential_reflectivity'
+            if datatype == 'ZDR':
+                zdr_field = 'differential_reflectivity'
+
+    ind_rad = int(radarnr[5:8])-1
+    if (radar_list is None) or (radar_list[ind_rad] is None):
+        warn('ERROR: No valid radar')
+        return None, None
+
+    radar = radar_list[ind_rad]
+
+    if ((pwrh_field not in radar.fields) and
+            (pwrv_field not in radar.fields) and
+            (zdr_field not in radar.fields)):
+        warn('Unable to process sunscan. Missing data')
+        return None, None
+
+    # initialize dataset
+    if dscfg['initialized'] == 0:
+        radar_par = dict()
+
+        freq = dscfg.get('frequency', None)
+        if freq is None:
+            if (radar.instrument_parameters is not None and
+                    'frequency' in radar.instrument_parameters):
+                freq = radar.instrument_parameters['frequency']['data'][0]
+        if freq is None:
+            warn('Radar frequency unknown.')
+        else:
+            radar_par.update({'wavelen': 3e8/freq})
+
+        beamwidth = dscfg.get('beamwidth', None)
+        if beamwidth is None:
+            if radar.instrument_parameters is not None:
+                if 'radar_beam_width_h' in radar.instrument_parameters:
+                    beamwidth = radar.instrument_parameters[
+                        'radar_beam_width_h']['data'][0]
+                elif 'radar_beam_width_v' in radar.instrument_parameters:
+                    beamwidth = radar.instrument_parameters[
+                        'radar_beam_width_v']['data'][0]
+        if beamwidth is None:
+            warn('Antenna beam width unknown.')
+        else:
+            radar_par.update({'beamwidth': beamwidth})
+
+        pulse_width = dscfg.get('pulse_width', None)
+        if pulse_width is None:
+            if (radar.instrument_parameters is not None and
+                    'pulse_width' in radar.instrument_parameters):
+                pulse_width = radar.instrument_parameters['pulse_width'][
+                    'data'][0]
+        if pulse_width is None:
+            warn('Pulse width unknown.')
+        else:
+            radar_par.update({'pulse_width': pulse_width})
+
+        ray_angle_res = dscfg.get('ray_angle_res', None)
+        if ray_angle_res is None:
+            if radar.ray_angle_res is not None:
+                ray_angle_res = radar.ray_angle_res['data'][0]
+        if ray_angle_res is None:
+            warn('Angular resolution unknown.')
+        else:
+            radar_par.update({'angle_step': ray_angle_res})
+
+        antenna_gain_h = dscfg.get('AntennaGainH', None)
+        if antenna_gain_h is None:
+            if (radar.instrument_parameters is not None and
+                    'radar_antenna_gain_h' in radar.instrument_parameters):
+                antenna_gain_h = (
+                    radar.instrument_parameters['radar_antenna_gain_h'][
+                        'data'][0])
+        if antenna_gain_h is None:
+            warn('Horizontal antenna gain unknown.')
+        else:
+            radar_par.update({'antenna_gain_h': antenna_gain_h})
+
+        antenna_gain_v = dscfg.get('AntennaGainV', None)
+        if antenna_gain_v is None:
+            if (radar.instrument_parameters is not None and
+                    'radar_antenna_gain_v' in radar.instrument_parameters):
+                antenna_gain_v = (
+                    radar.instrument_parameters['radar_antenna_gain_v'][
+                        'data'][0])
+        if antenna_gain_v is None:
+            warn('Vertical antenna gain unknown.')
+        else:
+            radar_par.update({'antenna_gain_v': antenna_gain_v})
+
+        radar_par.update({'timeinfo': dscfg['timeinfo']})
+        dscfg['global_data'] = radar_par
+        dscfg['initialized'] = 1
+
+    dscfg['global_data']['timeinfo'] = dscfg['timeinfo']
+
+    # get time for sunscan
+    time = num2date(radar.time['data'], radar.time['units'],
+                    radar.time['calendar'])
+    center_index = int(len(time) / 2.)
+    sunscan_time = time[center_index]
+
+    if sun_hit_method == 'PSR':
+        if datatype == 'NdBmh':
+            sunvol = radar.fields[pwrh_field]['data'][:, 0]
+        elif datatype == 'NdBmv':
+            sunvol = radar.fields[pwrv_field]['data'][:, 0]
+        else:
+            warn('ERROR: No valid datatype')
+
+        indsorted = np.ma.argsort(sunvol)
+        valsorted = sunvol[indsorted]
+        valmax = np.ma.max(valsorted)
+        noise_level1 = np.mean(valsorted[0:n_noise_bins-1])
+        noise_thres = noise_level1 + noise_threshold
+        indval = np.ma.where(sunvol > noise_thres)
+        nval = np.ma.size(indval)
+
+        if nval < min_num_samples:
+            warn('WARNING: Sun scan processing failed! Not enough valid samples')
+            return None, None
+
+        sun_hits = pyart.correct.get_sun_hits_psr(
+            radar, delev_max=delev_max, dazim_max=dazim_max, elmin=elmin,
+            noise_thres=noise_thres, attg=attg, sun_position=sun_position,
+            pwrh_field=pwrh_field, pwrv_field=pwrv_field)
+
+    elif sun_hit_method == 'HS':
+        rmin = dscfg.get('rmin', 50000.)
+        hmin = dscfg.get('hmin', 10000.)
+        nbins_min = dscfg.get('nbins_min', 20)
+        max_std_zdr = dscfg.get('max_std_zdr', 2.)
+        max_std_pwr = dscfg.get('max_std_pwr', 2.)
+
+        sun_hits, new_radar = pyart.correct.get_sun_hits(
+            radar, delev_max=delev_max, dazim_max=dazim_max, elmin=elmin,
+            rmin=rmin, hmin=hmin, nbins_min=nbins_min,
+            max_std_pwr=max_std_pwr, max_std_zdr=max_std_zdr,
+            attg=attg, sun_position=sun_position, pwrh_field=pwrh_field,
+            pwrv_field=pwrv_field, zdr_field=zdr_field)
+
+    elif sun_hit_method == 'IVIC':
+        npulses_ray = dscfg.get('npulses_ray', 30)
+        flat_reg_wlen_rng = dscfg.get('flat_reg_wlen', 8000.)
+        nbins_min = dscfg.get('nbins_min', 800)
+        iterations = dscfg.get('iterations', 10)
+        max_std_zdr = dscfg.get('max_std_zdr', 2.)
+
+        r_res = radar.range['data'][1]-radar.range['data'][0]
+        flat_reg_wlen = int(flat_reg_wlen_rng/r_res)
+
+        sun_hits, new_radar = pyart.correct.get_sun_hits_ivic(
+            radar, delev_max=delev_max, dazim_max=dazim_max, elmin=elmin,
+            npulses_ray=npulses_ray, flat_reg_wlen=flat_reg_wlen,
+            nbins_min=nbins_min, iterations=iterations, attg=attg,
+            max_std_zdr=max_std_zdr, sun_position=sun_position,
+            pwrh_field=pwrh_field, pwrv_field=pwrv_field,
+            zdr_field=zdr_field)
+    else:
+        warn('Warning: No valid sun_hit_method specified.')
+
+    if sun_hits is None:
+        return None, None
+
+    sun_pwr_h = sun_hits['dBm_sun_hit']
+    sun_pwr_v = sun_hits['dBmv_sun_hit']
+
+    #Substraction of noise
+    vals_lin_h = 10. ** (sun_pwr_h / 10.)
+    vals_lin_v = 10. ** (sun_pwr_v / 10.)
+    noise_lin = 10. ** (noise_level1 / 10.)
+    vals_nonoise_lin_h = vals_lin_h - noise_lin
+    vals_nonoise_lin_v = vals_lin_v - noise_lin
+
+    indnotval_h = np.ma.where(vals_nonoise_lin_h <= 1e-37)
+    indnotval_v = np.ma.where(vals_nonoise_lin_v <= 1e-37)
+
+    if np.ma.size(indnotval_h) > 0:
+        warn('WARNING: SunScan: Too small linear values!')
+        vals_nonoise_lin_h[indnotval_h] = np.ma.masked
+    if np.ma.size(indnotval_v) > 0:
+        warn('WARNING: SunScan: Too small linear values!')
+        vals_nonoise_lin_v[indnotval_v] = np.ma.masked
+
+    if pwrh_field is not None:
+        vals_nonoise_db = 10. * np.ma.log10(vals_nonoise_lin_h)
+
+    if pwrv_field is not None:
+        vals_nonoise_db = 10. * np.ma.log10(vals_nonoise_lin_v)
+
+    valmax_nonoise = np.ma.max(vals_nonoise_db)
+
+    # get DRAO reference
+    sf_ref = np.ma.asarray(np.ma.masked)
+    ref_time = None
+    if 'wavelen' in dscfg['global_data']:
+
+        flx_dt, flx_val = read_solar_flux(
+            dscfg['solarfluxpath']+'fluxtable.txt')
+
+        if flx_dt is not None:
+            flx_dt_closest, flx_val_closest = get_closest_solar_flux(
+                sun_hits['time'], flx_dt, flx_val)
+
+            # flux at radar wavelength
+            sf_radar = pyart.correct.solar_flux_lookup(
+                flx_val_closest, dscfg['global_data']['wavelen'])
+
+            sf_ref = np.ma.asarray(sf_radar[-1])
+            ref_time = flx_dt_closest[-1]
+
+            # scaling of the power to account for solar flux variations.
+            # The last sun hit is the reference. The scale factor is in dB
+            scale_factor = -10.*np.log10(sf_radar/sf_ref)
+            if sun_hit_method == 'PSR':
+                vals_nonoise_db += scale_factor
+            else:
+                sun_pwr_h += scale_factor
+                sun_pwr_v += scale_factor
+        else:
+            warn('Unable to compute solar power reference. ' +
+                 'Missing DRAO data')
+    else:
+        warn('Unable to compute solar power reference. ' +
+             'Missing radar wavelength')
+
+    sun_retrieval_h = None
+    sun_retrieval_v = None
+
+    if sun_hit_method == 'PSR':
+        if pwrh_field is not None:
+            sun_retrieval_h = pyart.correct.sun_retrieval(
+                sun_hits['rad_az'], sun_hits['sun_az'], sun_hits['rad_el'], sun_hits['sun_el'],
+                vals_nonoise_db, sun_hits['std(dBm_sun_hit)'],
+                az_width_co=az_width_co, el_width_co=el_width_co,
+                az_width_cross=az_width_cross, el_width_cross=el_width_cross,
+                is_zdr=False)
+
+            azoff = np.ma.asarray(sun_retrieval_h[2])
+            eloff = np.ma.asarray(sun_retrieval_h[3])
+            par = np.ma.asarray(sun_retrieval_h[7])
+            fit_stddev = np.ma.asarray(sun_retrieval_h[1])
+            if fit_stddev >= max_fit_stddev:
+                return None, None
+
+        if pwrv_field is not None:
+            sun_retrieval_v = pyart.correct.sun_retrieval(
+                sun_hits['rad_az'], sun_hits['sun_az'], sun_hits['rad_el'], sun_hits['sun_el'],
+                vals_nonoise_db, sun_hits['std(dBmv_sun_hit)'],
+                az_width_co=az_width_co, el_width_co=el_width_co,
+                az_width_cross=az_width_cross, el_width_cross=el_width_cross,
+                is_zdr=False)
+
+            azoff = np.ma.asarray(sun_retrieval_v[2])
+            eloff = np.ma.asarray(sun_retrieval_v[3])
+            par = np.ma.asarray(sun_retrieval_v[7])
+            fit_stddev = np.ma.asarray(sun_retrieval_v[1])
+            if fit_stddev >= max_fit_stddev:
+                return None, None
+
+        sundist = np.zeros_like(sunvol)
+        sunpwrmat = np.zeros_like(sunvol)
+        sunvalmat = np.zeros_like(sunvol)
+        sunpos_el = np.zeros_like(sunvol)
+        sunpos_az = np.zeros_like(sunvol)
+
+        # get time at each ray
+        time = num2date(radar.time['data'], radar.time['units'],
+                        radar.time['calendar'])
+
+        for ray in range(radar.nrays):
+            if _PYSOLAR_AVAILABLE and sun_position == 'pysolar':
+                elev_sun, azim_sun = pyart.correct.sun_position_pysolar(
+                    time[ray], radar.latitude['data'][0],
+                    radar.longitude['data'][0])
+            else:
+                elev_sun, azim_sun = pyart.correct.sun_position_mfr(
+                    time[ray], radar.latitude['data'][0],
+                    radar.longitude['data'][0], refraction=True)
+
+            #azshift?
+            delev = np.ma.abs(radar.elevation['data'][ray]-elev_sun)
+            dazim = np.ma.abs(
+                (radar.azimuth['data'][ray]-azim_sun) *
+                np.ma.cos(elev_sun*np.pi/180.))
+            if dazim > 360.:
+                dazim -= 360.
+
+            sundist[ray] = np.sqrt((dazim - azoff)**2 + (delev - eloff)**2)
+            sunpwrmat[ray] = (par[0] + par[1] * dazim + par[2] * delev +
+                              par[3] * dazim**2 + par[4] * delev**2)
+            sunvalmat[ray] = sunvol[ray]
+            sunpos_el[ray] = elev_sun
+            sunpos_az[ray] = azim_sun
+
+        #Second noise estimation: removal of sunpower influence
+        if do_second_noise_est == 'Yes':
+            #Find the samples most remote from the sun center
+            inddistsorted = np.argsort(sundist)[::-1]
+            indfar = inddistsorted[0:n_indfar_bins-1]
+            noise_far_lin = 10. ** (sunvalmat[indfar] / 10.) - 10. ** (sunpwrmat[indfar] / 10.)
+            noise_level2 = 10. * np.log10(np.mean(noise_far_lin))
+            noise_thres2 = noise_level2 + noise_threshold
+
+            sun_hits = pyart.correct.get_sun_hits_psr(
+                radar, delev_max=delev_max, dazim_max=dazim_max, elmin=elmin,
+                noise_thres=noise_thres2, attg=attg, sun_position=sun_position,
+                pwrh_field=pwrh_field, pwrv_field=pwrv_field)
+
+            if sun_hits is None:
+                return None
+
+            sun_pwr_h = sun_hits['dBm_sun_hit']
+            sun_pwr_v = sun_hits['dBmv_sun_hit']
+
+            #Substraction of noise
+            vals_lin_h = 10. ** (sun_pwr_h / 10.)
+            vals_lin_v = 10. ** (sun_pwr_v / 10.)
+            noise_lin = 10. ** (noise_level2 / 10.)
+            vals_nonoise_lin_h = vals_lin_h - noise_lin
+            vals_nonoise_lin_v = vals_lin_v - noise_lin
+
+            indnotval_h = np.ma.where(vals_nonoise_lin_h <= 1e-37)
+            indnotval_v = np.ma.where(vals_nonoise_lin_v <= 1e-37)
+
+            if np.ma.size(indnotval_h) > 0:
+                warn('WARNING: SunScan: Too small linear values!')
+                vals_nonoise_lin_h[indnotval_h] = np.ma.masked
+            if np.ma.size(indnotval_v) > 0:
+                warn('WARNING: SunScan: Too small linear values!')
+                vals_nonoise_lin_v[indnotval_v] = np.ma.masked
+
+            if pwrh_field is not None:
+                vals_nonoise_db = 10. * np.ma.log10(vals_nonoise_lin_h)
+
+            if pwrv_field is not None:
+                vals_nonoise_db = 10. * np.ma.log10(vals_nonoise_lin_v)
+
+            valmax_nonoise = np.ma.max(vals_nonoise_db)
+
+            # get DRAO reference
+            sf_ref = np.ma.asarray(np.ma.masked)
+            ref_time = None
+            if 'wavelen' in dscfg['global_data']:
+
+                flx_dt, flx_val = read_solar_flux(
+                    dscfg['solarfluxpath']+'fluxtable.txt')
+
+                if flx_dt is not None:
+                    flx_dt_closest, flx_val_closest = get_closest_solar_flux(
+                        sun_hits['time'], flx_dt, flx_val)
+
+                    # flux at radar wavelength
+                    sf_radar = pyart.correct.solar_flux_lookup(
+                        flx_val_closest, dscfg['global_data']['wavelen'])
+
+                    sf_ref = np.ma.asarray(sf_radar[-1])
+                    ref_time = flx_dt_closest[-1]
+
+                    # scaling of the power to account for solar flux variations.
+                    # The last sun hit is the reference. The scale factor is in dB
+                    scale_factor = -10.*np.log10(sf_radar/sf_ref)
+                    vals_nonoise_db += scale_factor
+                else:
+                    warn('Unable to compute solar power reference. ' +
+                         'Missing DRAO data')
+            else:
+                warn('Unable to compute solar power reference. ' +
+                     'Missing radar wavelength')
+
+            sun_retrieval_h = None
+            sun_retrieval_v = None
+
+            if pwrh_field is not None:
+                sun_retrieval_h = pyart.correct.sun_retrieval(
+                    sun_hits['rad_az'], sun_hits['sun_az'], sun_hits['rad_el'], sun_hits['sun_el'],
+                    vals_nonoise_db, sun_hits['std(dBm_sun_hit)'],
+                    az_width_co=az_width_co, el_width_co=el_width_co,
+                    az_width_cross=az_width_cross, el_width_cross=el_width_cross,
+                    is_zdr=False)
+
+            if pwrv_field is not None:
+                sun_retrieval_v = pyart.correct.sun_retrieval(
+                    sun_hits['rad_az'], sun_hits['sun_az'], sun_hits['rad_el'], sun_hits['sun_el'],
+                    vals_nonoise_db, sun_hits['std(dBmv_sun_hit)'],
+                    az_width_co=az_width_co, el_width_co=el_width_co,
+                    az_width_cross=az_width_cross, el_width_cross=el_width_cross,
+                    is_zdr=False)
+
+    else:
+        sun_retrieval_h = pyart.correct.sun_retrieval(
+            sun_hits[4], sun_hits[6], sun_hits[3], sun_hits[5],
+            sun_pwr_h, sun_hits[8],
+            az_width_co=az_width_co, el_width_co=el_width_co,
+            az_width_cross=az_width_cross, el_width_cross=el_width_cross,
+            is_zdr=False)
+
+        sun_retrieval_v = pyart.correct.sun_retrieval(
+            sun_hits[4], sun_hits[6], sun_hits[3], sun_hits[5],
+            sun_pwr_v, sun_hits[12],
+            az_width_co=az_width_co, el_width_co=el_width_co,
+            az_width_cross=az_width_cross, el_width_cross=el_width_cross,
+            is_zdr=False)
+
+        sun_retrieval_zdr = pyart.correct.sun_retrieval(
+            sun_hits[4], sun_hits[6], sun_hits[3], sun_hits[5],
+            sun_hits[15], sun_hits[16],
+            az_width_co=az_width_co, el_width_co=el_width_co,
+            az_width_cross=az_width_cross, el_width_cross=el_width_cross,
+            is_zdr=True)
+
+    sun_retrieval_dict = {
+        'first_hit_time': sun_hits['time'][0],
+        'sunscan_time': sunscan_time,
+        'last_hit_time': sun_hits['time'][-1],
+        'sunpos_el': sunpos_el[center_index],
+        'sunpos_az': sunpos_az[center_index],
+        'sun_maxpwr_noise': np.ma.asarray(np.ma.masked),
+        'sun_maxpwr_nonoise': np.ma.asarray(np.ma.masked),
+        'noise_pwr': np.ma.asarray(np.ma.masked),
+        'dBm_sun_est': np.ma.asarray(np.ma.masked),
+        'dBm_sun_est_toa': np.ma.asarray(np.ma.masked),
+        'std(dBm_sun_est)': np.ma.asarray(np.ma.masked),
+        'sf_h': np.ma.asarray(np.ma.masked),
+        'az_bias_h': np.ma.asarray(np.ma.masked),
+        'el_bias_h': np.ma.asarray(np.ma.masked),
+        'az_width_h': np.ma.asarray(np.ma.masked),
+        'el_width_h': np.ma.asarray(np.ma.masked),
+        'nhits_h': 0,
+        'par_h': None,
+        'dBmv_sun_est': np.ma.asarray(np.ma.masked),
+        'dBmv_sun_est_toa': np.ma.asarray(np.ma.masked),
+        'std(dBmv_sun_est)': np.ma.asarray(np.ma.masked),
+        'sf_v': np.ma.asarray(np.ma.masked),
+        'az_bias_v': np.ma.asarray(np.ma.masked),
+        'el_bias_v': np.ma.asarray(np.ma.masked),
+        'az_width_v': np.ma.asarray(np.ma.masked),
+        'el_width_v': np.ma.asarray(np.ma.masked),
+        'nhits_v': 0,
+        'par_v': None,
+        'ZDR_sun_est': np.ma.asarray(np.ma.masked),
+        'std(ZDR_sun_est)': np.ma.asarray(np.ma.masked),
+        'az_bias_zdr': np.ma.asarray(np.ma.masked),
+        'el_bias_zdr': np.ma.asarray(np.ma.masked),
+        'nhits_zdr': 0,
+        'par_zdr': None,
+        'sf_ref': np.ma.asarray(sf_ref),
+        'ref_time': ref_time,
+        'lant': np.ma.asarray(np.ma.masked)}
+
+    if sun_retrieval_h is not None:
+        # correct for scanning losses and the aneotenna polarization
+        if (('angle_step' in dscfg['global_data']) and
+                ('beamwidth' in dscfg['global_data'])):
+            lant = pyart.correct.scanning_losses(
+                dscfg['global_data']['angle_step'],
+                dscfg['global_data']['beamwidth'])
+        else:
+            warn('Unable to estimate scanning losses. ' +
+                 'Missing radar parameters. ' +
+                 'Antenna losses will be neglected')
+            lant = 0.
+        ptoa_h = sun_retrieval_h[0]+lant+3.
+
+        # compute observed solar flux
+        if (('pulse_width' in dscfg['global_data']) and
+                ('wavelen' in dscfg['global_data']) and
+                ('antenna_gain_h' in dscfg['global_data'])):
+            sf_h = pyart.correct.ptoa_to_sf(
+                ptoa_h, dscfg['global_data']['pulse_width'],
+                dscfg['global_data']['wavelen'],
+                dscfg['global_data']['antenna_gain_h'])
+        else:
+            warn('Unable to estimate observed solar flux. ' +
+                 'Missing radar parameters')
+            sf_h = np.ma.asarray(np.ma.masked)
+
+        sun_retrieval_dict['sun_maxpwr_noise'] = np.ma.asarray(valmax)
+        sun_retrieval_dict['sun_maxpwr_nonoise'] = np.ma.asarray(valmax_nonoise)
+        if do_second_noise_est == 'Yes':
+            sun_retrieval_dict['noise_pwr'] = np.ma.asarray(noise_level2)
+        else:
+            sun_retrieval_dict['noise_pwr'] = np.ma.asarray(noise_level1)
+        sun_retrieval_dict['dBm_sun_est'] = np.ma.asarray(sun_retrieval_h[0])
+        sun_retrieval_dict['dBm_sun_est_toa'] = np.ma.asarray(ptoa_h)
+        sun_retrieval_dict['std(dBm_sun_est)'] = np.ma.asarray(
+            sun_retrieval_h[1])
+        sun_retrieval_dict['sf_h'] = np.ma.asarray(sf_h)
+        sun_retrieval_dict['az_bias_h'] = np.ma.asarray(
+            sun_retrieval_h[2])
+        sun_retrieval_dict['el_bias_h'] = np.ma.asarray(
+            sun_retrieval_h[3])
+        sun_retrieval_dict['az_width_h'] = np.ma.asarray(
+            sun_retrieval_h[4])
+        sun_retrieval_dict['el_width_h'] = np.ma.asarray(
+            sun_retrieval_h[5])
+        sun_retrieval_dict['nhits_h'] = np.asarray(sun_retrieval_h[6])
+        sun_retrieval_dict['par_h'] = np.ma.asarray(sun_retrieval_h[7])
+        sun_retrieval_dict['lant'] = np.ma.asarray(lant)
+
+    if sun_retrieval_v is not None:
+        # correct for scanning losses and the polarization of the antenna
+        if (('angle_step' in dscfg['global_data']) and
+                ('beamwidth' in dscfg['global_data'])):
+            lant = pyart.correct.scanning_losses(
+                dscfg['global_data']['angle_step'],
+                dscfg['global_data']['beamwidth'])
+        else:
+            lant = 0.
+            warn('Unable to estimate scanning losses. ' +
+                 'Missing radar parameters. ' +
+                 'Antenna losses will be neglected')
+        ptoa_v = sun_retrieval_v[0]+lant+3.
+
+        # compute observed solar flux
+        if (('pulse_width' in dscfg['global_data']) and
+                ('wavelen' in dscfg['global_data']) and
+                ('antenna_gain_v' in dscfg['global_data'])):
+            sf_v = pyart.correct.ptoa_to_sf(
+                ptoa_v, dscfg['global_data']['pulse_width'],
+                dscfg['global_data']['wavelen'],
+                dscfg['global_data']['antenna_gain_v'])
+        else:
+            warn('Unable to estimate observed solar flux. ' +
+                 'Missing radar parameters')
+            sf_v = np.ma.asarray(np.ma.masked)
+
+        sun_retrieval_dict['sun_maxpwr_noise'] = np.ma.asarray(valmax)
+        sun_retrieval_dict['sun_maxpwr_nonoise'] = np.ma.asarray(valmax_nonoise)
+        if do_second_noise_est == 'Yes':
+            sun_retrieval_dict['noise_pwr'] = np.ma.asarray(noise_level2)
+        else:
+            sun_retrieval_dict['noise_pwr'] = np.ma.asarray(noise_level1)
+        sun_retrieval_dict['dBmv_sun_est'] = np.ma.asarray(sun_retrieval_v[0])
+        sun_retrieval_dict['dBmv_sun_est_toa'] = np.ma.asarray(ptoa_v)
+        sun_retrieval_dict['std(dBmv_sun_est)'] = np.ma.asarray(
+            sun_retrieval_v[1])
+        sun_retrieval_dict['sf_v'] = np.ma.asarray(sf_v)
+        sun_retrieval_dict['az_bias_v'] = np.ma.asarray(
+            sun_retrieval_v[2])
+        sun_retrieval_dict['el_bias_v'] = np.ma.asarray(
+            sun_retrieval_v[3])
+        sun_retrieval_dict['az_width_v'] = np.ma.asarray(
+            sun_retrieval_v[4])
+        sun_retrieval_dict['el_width_v'] = np.ma.asarray(
+            sun_retrieval_v[5])
+        sun_retrieval_dict['nhits_v'] = np.ma.asarray(sun_retrieval_v[6])
+        sun_retrieval_dict['par_v'] = np.ma.asarray(sun_retrieval_v[7])
+        sun_retrieval_dict['lant'] = np.ma.asarray(lant)
+
+    sun_hits_dict = {
+        'time': sun_hits['time'],
+        'ray': sun_hits['ray'],
+        'NPrng': sun_hits['NPrng'],
+        'nhits': sun_hits['nhits'],
+        'rad_el': sun_hits['rad_el'],
+        'rad_az': sun_hits['rad_az'],
+        'sun_el': sun_hits['sun_el'],
+        'sun_az': sun_hits['sun_az']}
+
+    sunscan_dataset = dict()
+    sunscan_dataset.update({'sun_hits': sun_hits_dict})
+    sunscan_dataset.update({'sun_retrieval': sun_retrieval_dict})
+    sunscan_dataset.update({'field_name': get_fieldname_pyart(datatype)})
+    sunscan_dataset.update({'radar_out': radar})
+    sunscan_dataset.update({'timeinfo': dscfg['global_data']['timeinfo']})
+
+    return sunscan_dataset, ind_rad

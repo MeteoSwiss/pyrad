@@ -1361,12 +1361,36 @@ def get_fieldname_pyart(datatype):
     elif datatype == 'ml':
         field_name = 'melting_layer'
 
-    elif datatype == 'VIS':
+    elif datatype == 'vis':
         field_name = 'visibility'
-    elif datatype == 'minvisel':
-        field_name = 'minimum_visible_elevation'
-    elif datatype == 'minvisalt':
-        field_name = 'minimum_visible_altitude'
+    elif datatype == 'visibility':
+        field_name = 'visibility'    
+    elif datatype == 'visibility_polar':
+        field_name = 'visibility_polar'       
+    elif datatype == 'terrain_altitude':
+        field_name = 'terrain_altitude'    
+    elif datatype == 'bent_terrain_altitude':
+        field_name = 'bent_terrain_altitude'    
+    elif datatype == 'terrain_slope':
+        field_name = 'terrain_slope'    
+    elif datatype == 'terrain_aspect':
+        field_name = 'terrain_aspect'    
+    elif datatype == 'elevation_angle':
+        field_name = 'elevation_angle'            
+    elif datatype == 'min_vis_elevation':
+        field_name = 'min_vis_elevation'     
+    elif datatype == 'min_vis_altitude':
+        field_name = 'min_vis_altitude'     
+    elif datatype == 'incident_angle':
+        field_name = 'incident_angle'     
+    elif datatype == 'sigma_0':
+        field_name = 'sigma_0'             
+    elif datatype == 'effective_area':
+        field_name = 'effective_area'  
+    elif datatype == 'dBm_clutter':
+        field_name = 'dBm_clutter'  
+    elif datatype == 'dBZ_clutter':
+        field_name = 'dBZ_clutter'  
 
     elif datatype == 'echoID':
         field_name = 'radar_echo_id'

@@ -1,0 +1,35 @@
+#DX50 SUNSCAN
+# Name of this configuration:
+# Will be used in product generation save path
+name STRING sunscan
+
+# Base path of the raw data.
+# Note: Must have a trailing '/'
+# ('<datapath>/<scanname>/<YYYY-MM-DD>/<YYYYMMDDHHMMSS00datatype>.<ext>')
+#datapath STRING /data/DX50/rawdata/  # zueub242
+datapath STRING /store/msrad/radar/DX50/rawdata/ # tsa
+
+psrpath STRING /store/msrad/radar/DX50/psr/
+
+solarfluxpath STRING /store/msrad/radar/solar_flux/
+
+# Base path of configuration files
+configpath STRING $HOME/pyrad/config/
+
+# Base path for cosmo data
+#cosmopath STRING /data/cosmo/  # zueub242
+
+saveimg         INT 1
+saveimgbasepath STRING /scratch/mlainer/pyrad_products/ # tsa
+imgformat       STRING png
+#convertimage    INT 1
+#convertformat   STRING png
+
+# Configuration of the radar location and approach direction
+locationConfigFile STRING $HOME/pyrad_prod/pyrad/config/processing/sunscan_loc.txt
+
+# Configuration of the product generation
+productConfigFile STRING $HOME/pyrad_prod/pyrad/config/processing/sunscan_prod.txt
+
+# State after last run
+lastStateFile STRING /scratch/mlainer/sunscan_lastState.txt

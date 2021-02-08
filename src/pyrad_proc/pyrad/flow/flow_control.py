@@ -11,19 +11,20 @@ functions to control the Pyrad data processing flow
     main_rt
     main_cosmo
     main_cosmo_rt
-
+    main_gecsx
 """
 from __future__ import print_function
 import warnings
 from warnings import warn
-import sys
 import traceback
 import os
 from datetime import datetime
 from datetime import timedelta
 import gc
+import subprocess
 import queue
 import time
+from pathlib import Path
 
 from pyart import version as pyart_version
 from pyrad import version as pyrad_version
@@ -829,3 +830,149 @@ def main_cosmo_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
     print('- This is the end my friend! See you soon!')
 
     return end_proc
+
+
+
+def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
+               gather_plots = True):
+    """
+    Main flow control. Processes radar data off-line over a period of time
+    given either by the user, a trajectory file, or determined by the last
+    volume processed and the current time. Multiple radars can be processed
+    simultaneously
+
+    Parameters
+    ----------
+    cfgfile : str
+        path of the main config file
+    time, endtime : datetime object
+        start and end time of the radar data to be used as reference for
+        gecsx
+    infostr : str
+        Information string about the actual data processing
+        (e.g. 'RUN57'). This string is added to product files.
+    """
+    GECSX_MANDATORY = ['frequency', 'radar_beam_width_h','pulse_width',
+                       'txpwrh', 'AntennaGainH', 'mflossh', 'lrxh']
+
+    GECSX_OPTIONAL = ['attg', 'AzimTol', 'mosotti_factor', 'refcorr']
+
+    print("- PYRAD version: {} (compiled {} by {})".format(
+        pyrad_version.version, pyrad_version.compile_date_time,
+        pyrad_version.username))
+    print("- PYART version: {}".format(pyart_version.version))
+
+    # Define behaviour of warnings
+    warnings.simplefilter('always')  # always print matching warnings
+    # warnings.simplefilter('error')  # turn matching warnings into exceptions
+    warnings.formatwarning = _warning_format  # define format
+
+    cfg = _create_cfg_dict(cfgfile)
+    datacfg = _create_datacfg_dict(cfg)
+
+    if starttime is None:
+        starttime = datetime.now()
+        endtime = starttime
+    if endtime is None:
+        endtime = datetime.now()
+
+    if infostr:
+        print('- Info string : {}'.format(infostr))
+
+    if cfg['datapath'] is not None:
+        starttimes, endtimes, traj = _get_times_and_traj(
+            None, starttime, endtime, cfg['ScanPeriod'],
+            last_state_file=cfg['lastStateFile'], trajtype='proc_periods')
+
+    # get data types and levels
+    datatypesdescr_list = list()
+    for i in range(1, cfg['NumRadars']+1):
+        datatypesdescr_list.append(
+            _get_datatype_list(cfg, radarnr='RADAR'+'{:03d}'.format(i)))
+
+    dataset_levels = _get_datasets_list(cfg)
+
+    if cfg['datapath'] is not None:
+        masterfilelist, masterdatatypedescr, _ = _get_masterfile_list(
+            datatypesdescr_list[0], starttimes, endtimes, datacfg,
+            datacfg['ScanList'])
+
+        nvolumes = len(masterfilelist)
+        if nvolumes == 0:
+            warn("WARNING: Could not find any valid radar data between "
+                "{} and {}".format(
+                    starttimes[0].strftime('%Y-%m-%d %H:%M:%S'),
+                    endtimes[-1].strftime('%Y-%m-%d %H:%M:%S')))
+            warn('WARNING: Proceeding without radar reference')
+        print('- Number of volumes to process: {}'.format(nvolumes))
+        print('- Start time: {}'.format(
+            starttimes[0].strftime("%Y-%m-%d %H:%M:%S")))
+        print('- end time: {}'.format(endtimes[-1].
+                                      strftime("%Y-%m-%d %H:%M:%S")))
+    else:
+        masterfilelist = []
+    # For GECSX we treat only one master file, since the method does not
+    # depend on time
+    if len(masterfilelist) != 0:
+        masterfile = masterfilelist[0]
+        master_voltime = get_datetime(masterfile, masterdatatypedescr)
+
+        # get data of master radar
+        radar_list = _get_radars_data(
+            master_voltime, datatypesdescr_list, datacfg)
+    else:
+        radar_list = []
+
+    # initial processing of the datasets
+    print('\n\n- Initializing datasets:')
+    dscfg, _ = _initialize_datasets(
+        dataset_levels, cfg, infostr=infostr)
+
+    # For GECSX we copy some keys from the datacfg dict to the dataset dict
+    for dset in dscfg.values():
+        for k in GECSX_MANDATORY:
+            if k in dset.keys():
+                continue
+            try:
+                dset[k] = datacfg[k]
+            except:
+                msg = 'Mandatory GECSX key {:s} is missing from loc file'.format(k)
+                raise ValueError(msg)
+        for k in GECSX_OPTIONAL:
+            if k in datacfg.keys():
+                dset[k] = datacfg[k]
+
+        if len(radar_list) == 0:
+            valid_radarpos = False
+            if 'RadarPosition' in datacfg:
+
+                if ('latitude' in datacfg['RadarPosition'] and
+                    'longitude' in datacfg['RadarPosition'] and
+                    'altitude' in datacfg['RadarPosition']):
+                        valid_radarpos = True
+            if not valid_radarpos:
+                raise ValueError('When no radar data is provided, the structure ' +
+                         '"RadarPosition" with field "altitude", "latitude" '
+                         + 'and "longitude" must be provided in the loc file')
+
+            dset['RadarPosition'] = datacfg['RadarPosition']
+
+    # process all data sets
+    dscfg, _ = _process_datasets(
+        dataset_levels, cfg, dscfg, radar_list, None, None,
+        infostr=infostr)
+
+    gc.collect()
+
+    if gather_plots:
+        img_ext = cfg['imgformat']
+        for dset in dscfg:
+            gather_dir = str(Path(cfg['saveimgbasepath'], cfg['name'], dset))
+            print('Copying all generated figures into dir {:s}...'.format(
+                gather_dir))
+            for ex in img_ext:
+                cmd = ('cd {:s}; mkdir -p ALL_FIGURES; find . -type f -name "*.{:s}" '.format(gather_dir,
+                                   ex) + '-exec cp {} ALL_FIGURES \\;')
+                subprocess.call(cmd, shell = True)
+
+    print('- This is the end my friend! See you soon!')

@@ -50,11 +50,9 @@ To install Pyrad and its submodules please have a look at the [Pyrad user manual
 # Use
 Before using it have a look at the [cookbook (pdf)](./doc/pyrad-framework-cookbook/DataProcessing.pdf).
 
-For details on the implemented functions check the [pyrad library reference for users](https://meteoswiss-mdr.github.io/pyrad/). Downloadable copies can be found in the repository: 
+For details on the implemented functions check the [pyrad library reference for users](https://pyrad-mch.readthedocs.io/en/latest/). Downloadable copies can be found in the repository: 
 
-[For users (pdf)](./doc/pyrad_library_reference_users.pdf)
-
-[For developers (pdf)](./doc/pyrad_library_reference_dev.pdf)
+[For users (pdf)](https://media.readthedocs.org/pdf/pyrad-mch/latest/pyrad-mch.pdf)
 
 
 Example configuration files can be found in the repository directory [pyrad/config/processing/](./config/processing).

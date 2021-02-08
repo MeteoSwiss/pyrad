@@ -1,0 +1,16 @@
+#
+# Product generation configuration
+#
+
+# List of datasets to generate.
+# The detailed specification of each dataset is given below.
+dataSetList STRARR 1
+    l0:W
+
+W STRUCT 3
+   type     STRING RAW
+   datatype STRING RAD4ALP:W
+   products STRUCT 1
+      Doppler_width STRUCT 2
+            type  STRING SAVEVOL            
+            voltype STRING W	

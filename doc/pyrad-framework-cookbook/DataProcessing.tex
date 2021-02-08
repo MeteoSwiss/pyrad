@@ -22,6 +22,7 @@
 \usepackage{caption}
 \usepackage{tabularx}
 \usepackage{longtable}
+\usepackage{natbib}
 \usepackage{booktabs}
 \usepackage[table]{xcolor}
 \usepackage{xspace}   % \xspace
@@ -172,7 +173,10 @@ Date: October, 18, 2017
 
   0.2.0         & J.~Grazioli    & 2017-08-23  & Creation begun \\ \hline
   0.3.0         & J.~Grazioli    & 2017-10-18  & check products section \\ \hline
-  0.4.0         & J.~Grazioli, J.~Figueras i Ventura & 2017-11-28 & Review and structural modification \\ \hline 
+  0.4.0         & J.~Grazioli, J.~Figueras i Ventura & 2017-11-28 & Review and structural modification \\ 
+  0.5.0         & D.~Wolfensberger & 2021-01-12 & Added section on GECSX \\ 
+  
+  \hline 
  
 \end{longtable}
 
@@ -2910,6 +2914,186 @@ QVP (quasi-vertical-profiles) products are a part of VOL products, although gene
 
 \newpage
 
+\section{GECSX interface}
+
+Pyrad provides a wrapper to the GECSX algorithm. GECSX is a radar visibility estimation method originally designed by \citep{Gabella_JAOT_1998}. 
+GECSX allows to estimate the radar visibility as well as the ground clutter radar signal with a digital elevation model. GECSX can be run using the \textit{main\_process\_gecsx} script.
+
+This is an extraction of the script docstring.
+\begin{verbatim}
+    ================================================
+Pyrad: The MeteoSwiss Radar Processing framework
+================================================
+To run the processing framework type:
+    python main_process_data.py \
+[config_file] --starttime [process_start_time] --endtime [process_end_time] \
+--cfgpath [cfgpath] --gatherplots
+
+cfgpath is an optional argument with default: \
+'$HOME/pyrad/config/processing/'
+
+if gatherplots is set to 1, all generated figures will be copied into a
+new directory called "ALL_FIGURES" located in the output folder. This is
+convenient since GECSX can generate many figures and they are placed by Pyrad
+in separate folders.
+
+There are two ways to use this program:
+    1. By providing it with a set of valid radar scans, in this case the
+    "datapath" entry in the main config file must be defined and a valid radar
+    scan must be located in '<datapath>/<scanname>/<YYYY-MM-DD>/
+    <YYYYMMDDHHMMSS00datatype>.<ext>', <scanname> can be any name, and datatype
+    must correspond to the datatype entry for the GECSX dataset in the prod
+    config file. You also need to provide starttime and endtime that include
+    the timestamp of the radar scan
+    2. Without radar data, by providing the following entries in the prod
+    file for the GECSX dataset (you can choose any value, these are examples)
+     rmax         FLOAT 50000.    # [m] maximum range
+     azmin        FLOAT 0.        # [deg] minimum azimuth angle
+     azmax        FLOAT 360.      # [deg] maximum azimuth angle
+     anglestep    FLOAT 1.       # [deg] azimuth angle step
+     range_resolution FLOAT 50. # [deg] range resolution
+     antenna_elevations FLTARR 2 # deg
+            0.7
+            3.0
+    as well as the following entries in the loc file (again choose any value)
+    RadarPosition STRUCT 3
+        latitude FLOAT 46.842473
+        longitude FLOAT 6.918370
+        altitude FLOAT 449.5
+
+See the two examples pay_main_DX50.txt and pay_main_norad.txt in
+$HOME/pyrad/config/gecsx/
+
+Example:
+    python main_process_gecsx.py pay_main_norad.txt
+--cfgpath $HOME/pyrad/config/gecsx/ --gatherplots 1
+
+    python main_process_gecsx.py pay_main_DX50.txt --starttime \
+'20160101000000' --endtime '20170101001000' --cfgpath $HOME/pyrad/config/gecsx/
+--gatherplots 1
+
+\end{verbatim}
+
+There are two ways to use GECSX:
+
+\begin{itemize}
+ \item With real radar data, by providing the path to proper radar data in the configuration files. Note that at the moment only one timestep and one radar will be used by the GECSX routine (the first one). If you want to process several radars I would suggest to create a new configuration file for each radar. To see an example of GECSX processing with real radar data check the files \textit{pay\_main\_DX50.txt}, \textit{pay\_loc\_DX50.txt} and \textit{pay\_prod\_DX50.txt} in the folder \textit{\$HOME/pyrad/config/gecsx/}.
+ 
+ An example of use in this case would be :
+ \begin{verbatim}
+python $HOME/pyrad/src/pyrad_proc/scripts/main_process_gecsx pay_main_DX50.txt 
+--starttime 20160101000000 --endtime 20170101001000
+--cfgpath $HOME/pyrad/config/gecsx/ --gatherplots 1
+\end{verbatim} 
+ \item Without radar data by entering the properties of a virtual radar in the loc and prod files. To see an example of GECSX processing with a virtual radar check the files \textit{pay\_main\_norad.txt}, \textit{pay\_loc\_norad.txt} and \textit{pay\_prod\_norad.txt} in the folder
+ 
+ \textit{\$HOME/pyrad/config/gecsx/}.
+ 
+ An example of use in this case would be :
+ \begin{verbatim}
+python $HOME/pyrad/src/pyrad_proc/scripts/main_process_gecsx pay_main_norad.txt 
+--cfgpath $HOME/pyrad/config/gecsx/ --gatherplots 1
+\end{verbatim} 
+Note the --gatherplots option, which copies all generate figures into a new directory located in the root directory of the GECSX outputs. This can be helpful since GECSX produces many products, which are all stored in separate folders by Pyrad.
+\end{itemize}
+
+The following Pyrad configuration parameters are particularly relevant for GECSX. Optional parameters are shown in italic.
+
+\subsection{GECSX parameters in the main configuration file}
+
+\begin{table}[h!]
+\caption{GECSX parameters of the main configuration file}
+\begin{tabular}{p{0.2\textwidth}p{0.10\textwidth}p{0.7\textwidth}}
+\bf{Name}          & \bf{Type} & \bf{Description}\\
+\hline
+dempath & STRING & Path where the DEM data is stored\\
+\textit{datapath} & STRING & Path where the radar data is stored, if not provided or empty, a virtual radar object will be created using the parameters given in the loc and prod files.\\
+\end{tabular}
+\end{table}                                 
+    
+    \newpage
+\subsection{In the local configuration file}
+
+\begin{table}[h!]
+\caption{GECSX parameters of the local configuration file}
+\begin{tabular}{p{0.23\textwidth}p{0.10\textwidth}p{0.57\textwidth}}
+\bf{Name}          & \bf{Type} & \bf{Description}\\
+\hline
+\textit{ScanList} & STRING & Subfolder within <datapath> where the radar files are stored, if not provided or empty, a virtual radar object will be created using the parameters given in the loc and prod files.\\ 
+frequency & FLOAT & Radar transmit frequency in GHz \\
+radar\_beam\_width\_h & FLOAT & Radar half power beam width in degrees \\
+pulse\_width & FLOAT & Radar pulsewidth in seconds \\
+txpwrh & FLOAT & Transmit power in W \\
+AntennaGainH & FLOAT & Antenna gain along beam axis in dB \\
+mflossh & FLOAT  & matching filter losses in dB \\
+lrxh & FLOAT &  receiver losses from antenna feed to reference point  in dB \\
+\textit{RadarPosition} & STRUCT &  Structure containing the radar position in WGS84, its 3 keys are defined below. If not provided will use the position defined in the radar scan (as long as radar data is effectively provided). \\
+    latitude &FLOAT & Radar latitude in degrees \\
+    longitude & FLOAT & Radar longitude in degrees \\
+    altitude & FLOAT & Radar altitude in meters \\
+\textit{attg} & FLOAT & Gas attenuation coefficient in dB/km 1-way attenuation), if not provided will default to 0.012
+\textit{AzimTol} & FLOAT & Azimuth convolution window for moving antenna, if not provided, no convolution will be performed \\
+\textit{mosotti\_factor} & FLOAT & Clausius-Mosotti factor K, will default to 0.9644, as for water under standard temperature.\\
+\textit{refcorr} & FLOAT &  Effect of atmospheric refraction to the earth bending radius, will default to 4/3.\\
+
+\end{tabular}
+\end{table}                                 
+    
+    
+\subsection{In the product configuration file}
+
+
+\begin{longtable}{p{0.23\textwidth}p{0.10\textwidth}p{0.57\textwidth}}
+\bf{Name}          & \bf{Type} & \bf{Description}\\
+\hline
+type & STRING & Must be GECSX, so that Pyrad understands that this is a GECSX product \\
+\textit{datatype} & STRING & Is used to find radar data. Indeed, the radar data must be stored under the name <datapath>/<ScanList>/<\%Y-\%m-\%d/\%Y\%m\%d\%H\%M\%s00<datatype>.extension, where extension must be readable by Pyrad. If no file can be found a virtual radar object will be created using the parameters given in the loc and prod files.\\
+    demfile & STRING & Name of the DEM file which must be stored in the <dempath> folder. Currently geotiff, IDRISI files and ASCII DEMs are supported. \\
+    \textit{demproj} & STRING & Either a EPSG code, a OGC WKT or Proj4 string, which define the projection of the DEM. It is required if projection is not available in demfile metadata. Check the webpage \url{https://spatialreference.org/ref/epsg/} for a list. \\
+    \textit{az\_discretization}  &  FLOAT & Numerical step in azimuth in Cartesian visibility estimation in degrees. The lower the better but it will increase the computation time. If not provided a step of 0.2$^{\circ}$ will be used. \\
+    \textit{range\_discretization} & FLOAT & numerical step in range in meters in the Cartesian visibility estimation. If not provided a step of 100 m will be used. \\
+    \textit{do\_range\_weighting} & INT & if set to 1, weight the backscattering cross sections of each cell according to their range offset using the radar pulse length. If not provided will be set to 1. \\
+    \textit{raster\_oversampling} & INT & The raster resolution of the DEM should be smaller than
+        the range resolution of the radar (defined by the pulse length). If this is not the case, this keyword can be set to increase the raster resolution. If set to 0, no oversampling is done, if set to 1, oversampling is done, the factor N is automatically calculated   such that 2*dx/N < pulse length, if set to 2 or larger, oversampling is done with this value as N. If not provided, will be set to 1 (automatic oversampling).  \\
+    \textit{verbose} & INT & if set to 1, info about the current processing state will be displayed, will be activated by default. \\
+    \textit{clip} & INT & if set to 1, the input DEM will be clipped to the domain covered by the radar. This decreases a lot the computation speed and is generally recommended. If not provided, will be activated by default. \\
+    \textit{sigma0\_method} & STRING & Which method to use to compute $sigma_0$, i.e. the factor that relates backscattering area to backscattering cross-section of the ground clutter. Can be either ``Gabella'' \citep{Gabella_JAOT_1998} or ``Delrieu'' \citep{Delrieu_JAOT_1995}. If not provided,  ``Gabella'' will be used as default.\\
+     \textit{rmax}  &  FLOAT & maximum range of the virtual radar. Is required if no radar data is provided.\\
+    \textit{azmin}   & FLOAT & minimum azimuth angle of the virtual radar. Is required if no radar data is provided.\\
+    \textit{azmax}    &    FLOAT & maximum azimuth angle of the virtual radar. Is required if no radar data is provided.\\
+    \textit{anglestep}  &  FLOAT 2.  & azimuth angle step of the virtual radar. Is required if no radar data is provided.\\
+    \textit{range\_resolution} & FLOAT & range resolution of the virtual radar. Is required if no radar data is provided.\\
+    \textit{antenna\_elevations} & FLTARR & list of elevations operated by the virtual radar. The radar visibility and clutter signal will be computed separately for all elevations. It is required if no radar data is provided. If radar data is provided and this parameter is defined in the config file, GECSX will only compute the elevation angles defined in this parameters, as long as they are available in the radar file (this can be used to process only a subset of the elevation angles operated by a real radar).\\
+\end{longtable} 
+
+\subsection{GECSX outputs}
+
+The GECSX produces the following outputs, which can all be used to generate Pyrad products.
+
+\begin{longtable}{p{0.23\textwidth}p{0.10\textwidth}p{0.57\textwidth}}
+\bf{Name}          & \bf{Coords} & \bf{Description}\\
+\hline
+terrain\_altitude & CART & Altitude of the terrain, as obtained from the DEM [m]\\
+bent\_terrain\_altitude & CART & Altitude of the terrain, corrected for atmospheric refraction [m] \\
+terrain\_slope & CART & Terrain slope [deg] \\
+terrain\_aspect & CART & Terrain orientation (to the north) [deg]\\
+elevation\_angle & CART & Radar elevation angle at topography level [deg] \\
+visibility & CART & Visibility of every Cartesian pixel in the DEM map. 0 if not visible, 1 if visible.\\
+min\_vis\_elevation & CART & Minimum visible elevation angle [deg] \\
+min\_vis\_altitude & CART & Minimum visible altitude [m] \\
+min\_vis\_altitude & CART & Minimum visible altitude [m] \\
+sigma\_0 & CART & Ratio between clutter rcs and effective backscattering area [-] \\
+incident\_angle\_field & CART & Angle of incidence of the radar beam with the topography [deg] \\
+effective\_area & CART & Effective backscattering area [m$^2$] \\
+rcs\_clutter & POL & Backscattering cross-section of the ground clutter [m$^2$], at every considered elevation angle\\
+dBm\_clutter & POL & Power signal of the ground clutter [dBm], at every considered elevation angle\\
+dBm\_clutter & POL & Reflectivity of the ground clutter [dBZ], at every considered elevation angle\\
+visibility\_polar & POLAR & Visibility at every polar gate [\%], at every considered elevation angle\\
+\end{longtable} 
+
+CART indicates Cartesian fields which have the dimensions of the (possibly clipped) DEM, POL indicates polar fields which have the dimensions of the either real or virtual radar provided as input to GECSX. 
+The typical Pyrad graph product type for CART outputs is SURFACE\_IMAGE, and for POL outputs, PPI\_IMAGE. The product type SAVEALL\_VOL can be used to save all POL outputs to a single netCDF file, the product type SAVEALL\_GRID can be used to save all GRID outputs to a single netCDF file. Avoid using the product type SAVEALL when using GECSX, as GECSX provides both Cartesian and polar fields and they need to be stored in separate files. Please see the examples provided in the prod config files in \textit{\$HOME/pyrad/config/gecsx/} for an exhaustive list of GECSX Pyrad products.
+
 % ----------------------------------------------------------------------------
 % Configuration File Format
 % ----------------------------------------------------------------------------
@@ -2925,4 +3109,6 @@ QVP (quasi-vertical-profiles) products are a part of VOL products, although gene
 
 % XXX to be done
 
+\bibliography{References.bib}
+\bibliographystyle{plain}
 \end{document}

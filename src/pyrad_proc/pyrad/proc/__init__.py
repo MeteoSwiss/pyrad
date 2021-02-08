@@ -58,6 +58,7 @@ Spectral data functions
     process_spectral_differential_reflectivity
     process_spectral_differential_phase
     process_spectral_rhohv
+    process_sunscan
     process_pol_variables
     process_noise_power
     process_reflectivity
@@ -244,7 +245,7 @@ DEM data
 
     process_dem
     process_visibility
-
+    process_gecsx
 """
 
 from .process_aux import get_process_func, process_raw, process_save_radar
@@ -311,6 +312,7 @@ from .process_calib import process_correct_bias, process_correct_noise_rhohv
 from .process_calib import process_occurrence, process_occurrence_period
 from .process_calib import process_gc_monitoring, process_sun_hits
 from .process_calib import process_time_avg_std
+from .process_calib import process_sunscan
 
 from .process_intercomp import process_time_avg, process_weighted_time_avg
 from .process_intercomp import process_time_avg_flag, process_time_stats
@@ -343,6 +345,6 @@ from .process_cosmo import process_cosmo_coord, process_hzt, process_iso0_mf
 from .process_cosmo import process_hzt_lookup_table, process_hzt_coord
 from .process_cosmo import process_cosmo_to_radar, process_iso0_grib
 
-from .process_dem import process_dem, process_visibility
+from .process_dem import process_dem, process_visibility, process_gecsx
 
 __all__ = [s for s in dir() if not s.startswith('_')]

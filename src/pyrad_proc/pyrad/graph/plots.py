@@ -20,6 +20,7 @@ Functions to plot Pyrad datasets
     plot_selfconsistency_instrument2
     plot_scatter_comp
     plot_sun_hits
+    _plot_sunscan
     _plot_time_range
 
 """
@@ -1402,6 +1403,109 @@ def plot_sun_hits(field, field_name, fname_list, prdcfg):
 
     return fname_list
 
+
+def _plot_sunscan(rad_az, rad_el, rad_data, sun_hits, field_name, fname_list,
+                  titl='AZ-EL sunscan plot', xlabel='Azimuth (deg)',
+                  ylabel='Elevation (deg)', clabel=None, vmin=None, vmax=None,
+                  figsize=[10, 8], save_fig=True, dpi=72):
+    """
+    plots a AZ-EL plot of a sunscan
+
+    Parameters
+    ----------
+    rad_time : 1D array
+        array containing the x dimension (typically time)
+    rad_range : 1D array
+        array containing the y dimension (typically range)
+    rad_data : 2D array
+        array containing the data to plot
+    sun_hits : dict
+        dictionary containing the sun hits data
+    field_name : str or None
+        field name. Used to define plot characteristics
+    fname_list : list of str
+        list of names of the files where to store the plot
+    titl : str
+        Plot title
+    xlabel, ylabel : str
+        x- and y-axis labels
+    clabel : str or None
+        colorbar label
+    vmin, vmax : float
+        min and max values of the color bar
+    figsize : list
+        figure size [xsize, ysize]
+    save_fig : bool
+        If true the figure is saved in files fname_list. Otherwise the fig and
+        ax is returned
+    dpi : int
+        dpi
+
+    Returns
+    -------
+    fname_list : list of str
+        list of names of the created plots or
+    fig, ax : object
+        handles to fig and ax objects
+
+    """
+    # display data
+    norm = None
+    cmap = None
+    ticks = None
+    ticklabs = None
+    if field_name is not None:
+        field_dict = pyart.config.get_metadata(field_name)
+        if clabel is None:
+            clabel = get_colobar_label(field_dict, field_name)
+
+        cmap = pyart.config.get_field_colormap(field_name)
+
+        norm, ticks, ticklabs = get_norm(field_name)
+        if vmin is None or vmax is None:
+            vmin = vmax = None
+            if norm is None:  # if norm is set do not override with vmin/vmax
+                vmin, vmax = pyart.config.get_field_limits(field_name)
+        else:
+            norm = None
+    else:
+        if clabel is None:
+            clabel = 'value'
+        if vmin is None:
+            vmin = np.ma.min(rad_data)
+        if vmax is None:
+            vmax = np.ma.max(rad_data)
+
+    fig = plt.figure(figsize=figsize, dpi=dpi)
+    ax = fig.add_subplot(111)
+
+    T, R = np.meshgrid(rad_az, rad_el)
+    cax = ax.pcolormesh(
+        T, R, np.ma.transpose(rad_data), cmap=cmap, vmin=vmin, vmax=vmax,
+        norm=norm)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    ax.set_title(titl)
+
+    # Add scatter points of detected sun hits location
+    ax.scatter(sun_hits['rad_az'], sun_hits['rad_el'], s=7., c='red')
+
+    cb = fig.colorbar(cax)
+    if ticks is not None:
+        cb.set_ticks(ticks)
+    if ticklabs:
+        cb.set_ticklabels(ticklabs)
+    cb.set_label(clabel)
+
+    # Make a tight layout
+    fig.tight_layout()
+
+    if save_fig:
+        for fname in fname_list:
+            fig.savefig(fname, dpi=dpi)
+        plt.close(fig)
+
+        return fname_list
 
 def _plot_time_range(rad_time, rad_range, rad_data, field_name, fname_list,
                      titl='Time-Range plot',

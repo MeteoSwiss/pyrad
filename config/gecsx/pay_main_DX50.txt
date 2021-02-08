@@ -1,0 +1,39 @@
+# Name of this configuration:
+# Will be used in product generation save path
+name STRING gecsx_pay_DX50
+
+# ---------------------------------------------------------
+#  Raw data pathes
+# ---------------------------------------------------------
+
+# Base path of the raw radar data.
+# Note: Must have a trailing '/'
+# ('<datapath>/<scanname>/<YYYY-MM-DD>/<YYYYMMDDHHMMSS00datatype>.<ext>')
+datapath STRING $HOME/Documents/MALS/radarfiles/
+
+# ------------------------------------------------------------
+# Auxiliary data pathes
+# ------------------------------------------------------------
+# Base path for dem data
+dempath STRING $HOME/Documents/MALS/dem/
+
+# --------------------------------------------
+# Output data
+# --------------------------------------------
+saveimgbasepath STRING $HOME/Documents/MALS/outputs/
+# Supported formats: eps, jpeg, jpg, pdf, pgf, png, ps, raw, rgba, svg, svgz, tif, tiff
+imgformat STRING png
+
+# --------------------------------------------------------
+# configuration files pathes
+# --------------------------------------------------------
+
+# Base path of configuration files
+configpath STRING $HOME/pyrad/config/
+
+# Configuration of the radar location and approach direction
+locationConfigFile STRING $HOME/pyrad/config/gecsx/pay_loc_DX50.txt
+
+# Configuration of the product generation
+productConfigFile STRING $HOME/pyrad/config/gecsx/pay_prod_DX50.txt
+

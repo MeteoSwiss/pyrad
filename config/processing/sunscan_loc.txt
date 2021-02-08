@@ -1,0 +1,106 @@
+# DX50 SUNSCAN processing with Pyrad
+# Configuration
+
+# Coordinates of the radar (not needed to define here, just as info)
+# Payerne
+#RadarPosition STRUCT 3
+#              latitude  FLOAT 46.84249   # WGS84 latitude [deg]
+#              longitude FLOAT 6.91836    # WGS84 longitude [deg]
+#              altitude  FLOAT 450.0      # altitude [m] (NOT WGS84!!)
+# Emmen
+#RadarPosition STRUCT 3
+#              latitude  FLOAT 47.089858   # WGS84 latitude [deg]
+#              longitude FLOAT 8.298947    # WGS84 longitude [deg]
+#              altitude  FLOAT 423.8      # altitude [m] (NOT WGS84!!)
+# Meiringen
+#RadarPosition STRUCT 3
+#              latitude  FLOAT 46.74337   # WGS84 latitude [deg]
+#              longitude FLOAT 8.10971    # WGS84 longitude [deg]
+#              altitude  FLOAT 580.2      # altitude [m] (NOT WGS84!!)
+# Locarno
+#RadarPosition STRUCT 3
+#              latitude  FLOAT 46.1663898110  # WGS84 latitude [deg]
+#              longitude FLOAT 8.8792195004    # WGS84 longitude [deg]
+#              altitude  FLOAT 197.684      # altitude [m] (NOT WGS84!!)
+# Torny
+#RadarPosition STRUCT 3
+#              latitude  FLOAT 46.7697  # WGS84 latitude [deg]
+#              longitude FLOAT 6.9539   # WGS84 longitude [deg]
+#              altitude  FLOAT 731      # altitude [m] (NOT WGS84!!)
+# Buchthalen SH
+#RadarPosition STRUCT 3
+#              latitude  FLOAT 47.6995  # WGS84 latitude [deg]
+#              longitude FLOAT 8.6665   # WGS84 longitude [deg]
+#              altitude  FLOAT 455      # altitude [m] (NOT WGS84!!)
+#Sion
+#RadarPosition STRUCT 3
+#              latitude  FLOAT 46.2205  # WGS84 latitude [deg]
+#              longitude FLOAT 7.3412   # WGS84 longitude [deg] 
+#              altitude  FLOAT 493      # altitude [m] (NOT WGS84!!)
+
+# Names of the radar scans in the specified sector
+# NOTE: Must have a trailing '/'
+ScanList STRARR 1
+    SunScan.vol/  # masterscan: first scan of a volume
+
+# Correction for volume slice angles
+RAINBOW_PPI_SECTORMERGE INT 1
+
+# Repetition time of the scans [min]
+ScanPeriod INT 10
+
+# Frequency of cosmo run [h]
+CosmoRunFreq INT 3
+
+# hours forecasted in cosmo run [h]
+CosmoForecasted INT 7
+
+# only if text files are used
+# Coordinates for the zero temperature altitude
+iso0setup STRUCT 2
+   xcoord  STRING 185
+   ycoord  STRING 560
+
+# radar beam width
+RADARBEAMWIDTH FLOAT 1.35
+
+# Antenna gain
+AntennaGainH FLOAT 42.2
+AntennaGainV FLOAT 42.2
+
+ang_tol FLOAT 0.03 # 0.03
+
+# Clutter map
+clutterMap STRING cluttermaps_RHI_payerne_east_q75.sav
+
+# Kalmann config
+RcovFile STRING Rcov_2gatesV2.txt
+PcovFile STRING Pcov_2gatesV3.txt
+
+# Image config
+ppiImageConfig STRUCT 6
+   xsize      INT   10     # size of the cartesian grid [pixels]
+   ysize      INT   5     # size of the cartesian grid [pixels]
+   xmin       FLOAT -20.0   # Min distance on horizontal axis [km]
+   xmax       FLOAT  20.0   # Max distance on horizontal axis [km]
+   ymin       FLOAT -40.0   # Min distance on vertical axis [km]
+   ymax       FLOAT   0.0   # Max distance on vertical axis [km]
+
+rhiImageConfig STRUCT 6
+   xsize      INT   1000    # size of the cartesian grid [pixels]
+   ysize      INT   200     # size of the cartesian grid [pixels]
+   xmin       FLOAT   0.0   # Min distance on horizontal axis [km]
+   xmax       FLOAT  40.0   # Max distance on horizontal axis [km]
+   ymin       FLOAT   0.0   # Min distance on vertical axis [km]
+   ymax       FLOAT   7.5   # Max distance on vertical axis [km]
+
+# PAR antenna pattern (only for postprocessing)
+par_azimuth_antenna STRUCT 3
+   azPatternFile STRING PAR_AzAntenna_AzimuthPattern.csv
+   elPatternFile STRING PAR_AzAntenna_ElevationPattern.csv
+   fixed_angle FLOAT 9.5    # elevation angle of azimuth [deg]
+
+par_elevation_antenna STRUCT 3
+   azPatternFile STRING PAR_ElAntenna_AzimuthPattern.csv
+   elPatternFile STRING PAR_ElAntenna_ElevationPattern.csv
+   fixed_angle FLOAT 49.0    # azimuth angle of azimuth [deg]
