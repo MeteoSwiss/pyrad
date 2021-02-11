@@ -1411,12 +1411,6 @@ def merge_scans_mfcfradial(basepath, scan_list, voltime, datatype_list,
     else:
         radar = pyart.io.read_cfradial(filename[0], field_names=field_names)
 
-    # scale cannot be boolean: convert to int
-    if 'scale' in radar.range:
-        radar.range['scale'] = int(radar.range['scale'])
-    if 'scale' in radar.azimuth:
-        radar.azimuth['scale'] = int(radar.azimuth['scale'])
-
     if len(scan_list) == 1:
         if radar is None:
             return radar
