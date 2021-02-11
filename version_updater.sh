@@ -52,6 +52,10 @@ echo "Should it be a test package or a final (official) package? test/final"
 read pkgtype
 if [[ $pkgtype == "test" ]]; then
 python -m twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+echo "You can now install pkg with pip install --index-url https://test.pypi.org/simple/ --no-deps pyart-mch"
+echo "Install a fresh virtual env to test it with"
+echo "python –m venv pyart_testing"
+echo "source pyart_testing/bin/activate"
 fi
 if [[ $pkgtype == "final" ]]; then
 python -m twine upload dist/*
@@ -106,6 +110,10 @@ echo "Should it be a test package or a final (official) package? test/final"
 read pkgtype
 if [[ $pkgtype == "test" ]]; then
 python -m twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+echo "You can now install pkg with pip install --index-url https://test.pypi.org/simple/ --no-deps pyrad-mch"
+echo "Install a fresh virtual env to test it with"
+echo "python –m venv pyrad_testing"
+echo "source pyrad_testing/bin/activate"
 fi
 if [[ $pkgtype == "final" ]]; then
 python -m twine upload dist/*
