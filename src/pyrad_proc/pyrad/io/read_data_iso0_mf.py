@@ -2,22 +2,33 @@
 pyrad.io.read_data_iso0_mf
 ==========================
 
-Functions for reading HZT data
+Functions for reading iso-0 data from MétéoFrance models
 
 .. autosummary::
     :toctree: generated/
 
     iso2radar_data
+    grib2radar_data
     get_iso0_ref
     read_iso0_mf_data
+    read_iso0_grib_data
 
 """
 from warnings import warn
 import datetime
 import numpy as np
+from scipy.interpolate import interp1d
+from scipy.interpolate import NearestNDInterpolator
 
 from pyart.core import geographic_to_cartesian_aeqd
 from pyart.config import get_metadata
+
+# check existence of pygrib library
+try:
+    import pygrib
+    _PYGRIB_AVAILABLE = True
+except ImportError:
+    _PYGRIB_AVAILABLE = False
 
 
 def iso2radar_data(radar, iso0_data, time_info, iso0_statistic='avg_by_dist',
@@ -86,6 +97,89 @@ def iso2radar_data(radar, iso0_data, time_info, iso0_statistic='avg_by_dist',
     # put field
     field_dict = get_metadata(field_name)
     field_dict['data'] = radar.gate_altitude['data']-iso0_ref
+
+    return field_dict
+
+
+def grib2radar_data(radar, iso0_data, time_info, time_interp=True,
+                    field_name='height_over_iso0'):
+    """
+    get the iso0 value corresponding to each radar gate
+
+    Parameters
+    ----------
+    radar : Radar
+        the radar object containing the information on the position of the
+        radar gates
+    iso0_data : dict
+        dictionary containing the iso0 data and metadata from the model
+    time_info : datetime object
+        reference time of current radar volume
+    iso0_statistic : str
+        The statistic used to weight the iso0 points. Can be avg_by_dist,
+        avg, min, max
+    field_name : str
+        name of HZT fields to convert (default height_over_iso0)
+
+    Returns
+    -------
+    field_dict : dict
+        dictionary containing the iso0 data in radar coordinates and the
+        metadata
+
+    """
+    time_index = np.argmin(abs(iso0_data['fcst_time']-time_info))
+
+    if time_interp:
+        # get the relevant time indices for interpolation in time
+        if time_info > iso0_data['fcst_time'][time_index]:
+            time_index_future = time_index+1
+            time_index_past = time_index
+        else:
+            time_index_future = time_index
+            time_index_past = time_index-1
+
+        # interpolate the iso0 ref in time
+        if time_index_past == -1:
+            # no interpolation: use data from time_index_future
+            iso0_ref = iso0_data['values'][time_index_future, :, :]
+        elif time_index_future > iso0_data['fcst_time'].size:
+            # no interpolation: use data from time_index_past
+            iso0_ref = iso0_data['values'][time_index_past, :, :]
+        else:
+            # put time in seconds from past forecast
+            time_info_s = (
+                time_info-iso0_data['fcst_time'][time_index_past]).total_seconds()
+            fcst_time_s = (
+                iso0_data['fcst_time'][time_index_future] -
+                iso0_data['fcst_time'][time_index_past]).total_seconds()
+
+            # interpolate between two time steps
+            fcst_time = np.array([0, fcst_time_s])
+            values = iso0_data['fcst_time'][
+                time_index_past:time_index_future+1, :, :]
+            f = interp1d(fcst_time, values, axis=0, assume_sorted=True)
+
+            iso0_ref = f(time_info_s)
+    else:
+        iso0_ref = iso0_data['values'][time_index, :, :]
+
+    x_iso, y_iso = geographic_to_cartesian_aeqd(
+        iso0_data['lons'], iso0_data['lats'], radar.longitude['data'][0],
+        radar.latitude['data'][0])
+
+    # find interpolation function
+    interp_func = NearestNDInterpolator(
+        list(zip(x_iso.flatten(), y_iso.flatten())), iso0_ref.flatten())
+
+    # interpolate
+    data_interp = interp_func(
+        (radar.gate_x['data'].flatten(), radar.gate_y['data'].flatten()))
+    data_interp = data_interp.reshape((radar.nrays, radar.ngates))
+
+    # put field
+    field_dict = get_metadata(field_name)
+    field_dict['data'] = radar.gate_altitude['data']-data_interp
 
     return field_dict
 
@@ -236,6 +330,45 @@ def read_iso0_mf_data(fname):
         'lon_points': lon_points,
         'lat_points': lat_points,
         'iso0_points': iso0_points
+    }
+
+    return iso0_data
+
+
+def read_iso0_grib_data(fname):
+    """
+    Reads a 2D field of iso-0 degree data from a MF NWP in GRIB format
+
+    Parameters
+    ----------
+    fname : str
+        name of the file to read
+
+    Returns
+    -------
+    iso0_data : dictionary
+        dictionary with the data and metadata
+
+    """
+    if not _PYGRIB_AVAILABLE:
+        warn('Unable to read file '+fname+'. Pygrib library not available')
+        return None
+
+    values = []
+    date_fcst = []
+    grbs = pygrib.open(fname)
+    for grb in grbs:
+        lats, lons = grb.latlons()
+        values.append(grb.values)
+        date_analysis = grb.analDate
+        date_fcst.append(grb.analDate+datetime.timedelta(hours=grb['startStep']))
+
+    iso0_data = {
+        'values': np.array(values),
+        'run_time':  date_analysis,
+        'fcst_time': np.array(date_fcst),
+        'lons': lons,
+        'lats': lats
     }
 
     return iso0_data
