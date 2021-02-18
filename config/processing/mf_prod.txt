@@ -4,8 +4,8 @@
 # List of datasets to generate.
 # The detailed specification of each dataset is given below.
 dataSetList STRARR 2
-	l0:H_ISO0
-	l1:hydro_semisupervised
+	l0:hydroMF_semisupervised
+	l0:hydro_fromMF_semisupervised
 
 #    l0:dBuZ
 #    l0:dBZ
@@ -339,6 +339,42 @@ H_ISO0 STRUCT 5
             AziTol FLOAT 0.5
 
 
+H_ISO0_GRIB STRUCT 4
+    type STRING ISO0_GRIB
+    datatype STRING ODIM:dBZ,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+	MAKE_GLOBAL INT 1
+    products STRUCT 7
+        PPI_EL00 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING H_ISO0
+            anglenr INT 0
+		PPI_EL01 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING H_ISO0
+            anglenr INT 1
+		PPI_EL02 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING H_ISO0
+            anglenr INT 2
+		PPI_EL03 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING H_ISO0
+            anglenr INT 3
+		PPI_EL04 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING H_ISO0
+            anglenr INT 4
+		PPI_EL05 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING H_ISO0
+            anglenr INT 5
+        RHI STRUCT 4
+            type STRING PSEUDORHI_IMAGE
+            voltype STRING H_ISO0
+            angle FLOAT 90.
+            AziTol FLOAT 0.5
+
+
 # ==========================================================================================
 #                 hydrometeor classification products
 # ==========================================================================================
@@ -377,6 +413,74 @@ hydroMF STRUCT 3
             AziTol FLOAT 0.5
 
 hydro_fromMF STRUCT 3
+    type STRING hydroMF_to_hydro
+    datatype STRING ODIM:hydroMF,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+    products STRUCT 7
+        PPI_EL00 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydro
+            anglenr INT 0
+		PPI_EL01 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydro
+            anglenr INT 1
+		PPI_EL02 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydro
+            anglenr INT 2
+		PPI_EL03 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydro
+            anglenr INT 3
+		PPI_EL04 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydro
+            anglenr INT 4
+		PPI_EL05 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydro
+            anglenr INT 5
+        RHI STRUCT 4
+            type STRING PSEUDORHI_IMAGE
+            voltype STRING hydro
+            angle FLOAT 90.
+            AziTol FLOAT 0.5
+            
+hydroMF_semisupervised STRUCT 3
+    type STRING RAW
+    datatype STRING ODIM:hydroMF,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+    products STRUCT 7
+        PPI_EL00 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydroMF
+            anglenr INT 0
+		PPI_EL01 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydroMF
+            anglenr INT 1
+		PPI_EL02 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydroMF
+            anglenr INT 2
+		PPI_EL03 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydroMF
+            anglenr INT 3
+		PPI_EL04 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydroMF
+            anglenr INT 4
+		PPI_EL05 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydroMF
+            anglenr INT 5
+        RHI STRUCT 4
+            type STRING PSEUDORHI_IMAGE
+            voltype STRING hydroMF
+            angle FLOAT 90.
+            AziTol FLOAT 0.5
+            
+hydro_fromMF_semisupervised STRUCT 3
     type STRING hydroMF_to_hydro
     datatype STRING ODIM:hydroMF,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
     products STRUCT 7
@@ -454,6 +558,52 @@ hydro_semisupervised STRUCT 9
             voltype STRING hydro
             angle FLOAT 90.
             AziTol FLOAT 0.5
+
+hydro_semisupervised_2d_iso STRUCT 9
+    type STRING HYDROCLASS
+    datatype STRARR 5
+        ODIM:dBZ,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+        ODIM:ZDR,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+        ODIM:RhoHV,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+        ODIM:KDP,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+        PROC:H_ISO0
+    HYDRO_METHOD STRING SEMISUPERVISED
+    RADARCENTROIDS STRING D
+    compute_entropy INT 0
+    output_distances INT 0
+	vectorize INT 1
+    MAKE_GLOBAL INT 0
+	products STRUCT 7
+        PPI_EL00 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydro
+            anglenr INT 0
+		PPI_EL01 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydro
+            anglenr INT 1
+		PPI_EL02 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydro
+            anglenr INT 2
+		PPI_EL03 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydro
+            anglenr INT 3
+		PPI_EL04 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydro
+            anglenr INT 4
+		PPI_EL05 STRUCT 3
+            type STRING PPI_IMAGE
+            voltype STRING hydro
+            anglenr INT 5
+        RHI STRUCT 4
+            type STRING PSEUDORHI_IMAGE
+            voltype STRING hydro
+            angle FLOAT 90.
+            AziTol FLOAT 0.5
+
 
 # ============================================================================
 #               Save data

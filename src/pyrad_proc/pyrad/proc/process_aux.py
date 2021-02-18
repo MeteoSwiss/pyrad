@@ -85,6 +85,7 @@ def get_process_func(dataset_type, dsname):
                 'HYDROCLASS': process_hydroclass
                 'HZT': process_hzt
                 'HZT_LOOKUP': process_hzt_lookup_table
+                'ISO0_GRIB': process_iso0_grib
                 'ISO0_MF': process_iso0_mf
                 'KDP_LEASTSQUARE_1W': process_kdp_leastsquare_single_window
                 'KDP_LEASTSQUARE_2W': process_kdp_leastsquare_double_window
@@ -497,6 +498,8 @@ def get_process_func(dataset_type, dsname):
         func_name = 'process_hzt'
     elif dataset_type == 'ISO0_MF':
         func_name = 'process_iso0_mf'
+    elif dataset_type == 'ISO0_GRIB':
+        func_name = 'process_iso0_grib'
     elif dataset_type == 'HZT_LOOKUP':
         func_name = 'process_hzt_lookup_table'
     elif dataset_type == 'DEM':

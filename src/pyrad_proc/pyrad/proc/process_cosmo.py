@@ -10,6 +10,7 @@ Functions to manage COSMO data
     process_cosmo
     process_hzt
     process_iso0_mf
+    process_iso0_grib
     process_cosmo_lookup_table
     process_hzt_lookup_table
     process_cosmo_to_radar
@@ -29,14 +30,16 @@ from netCDF4 import num2date
 import pyart
 
 from ..io.io_aux import get_datatype_fields, find_raw_cosmo_file
-from ..io.io_aux import find_hzt_file, find_iso0_file, get_fieldname_pyart
+from ..io.io_aux import find_hzt_file, find_iso0_file, find_iso0_grib_file
+from ..io.io_aux import get_fieldname_pyart
 from ..io.read_data_cosmo import read_cosmo_data, read_cosmo_coord
 from ..io.read_data_cosmo import cosmo2radar_data, cosmo2radar_coord
 from ..io.read_data_cosmo import get_cosmo_fields
 from ..io.read_data_radar import interpol_field
 from ..io.read_data_hzt import read_hzt_data, hzt2radar_data, hzt2radar_coord
 from ..io.read_data_hzt import get_iso0_field
-from ..io.read_data_iso0_mf import read_iso0_mf_data, iso2radar_data
+from ..io.read_data_iso0_mf import read_iso0_mf_data, read_iso0_grib_data
+from ..io.read_data_iso0_mf import iso2radar_data, grib2radar_data
 
 # from memory_profiler import profile
 
@@ -418,6 +421,83 @@ def process_iso0_mf(procstatus, dscfg, radar_list=None):
     time_index = np.argmin(abs(iso0_data['fcst_time']-dscfg['timeinfo']))
     iso0_field = iso2radar_data(
         radar, iso0_data, dscfg['timeinfo'], iso0_statistic=iso0_statistic)
+    if iso0_field is None:
+        warn('Unable to obtain iso0 fields')
+        return None, None
+
+    # prepare for exit
+    new_dataset = {'radar_out': deepcopy(radar)}
+    new_dataset['radar_out'].fields = dict()
+    new_dataset['radar_out'].add_field('height_over_iso0', iso0_field)
+
+    return new_dataset, ind_rad
+
+
+def process_iso0_grib(procstatus, dscfg, radar_list=None):
+    """
+    Gets iso0 degree data in text format and put it in radar coordinates.
+    This function is meant to process data received from the MeteoFrance NWP
+    model. The model provides a maximum of 9 points at 0.5 degree lat/lon
+    spacing surrounding a given radar. If a point is not provided it means
+    that the iso0 for that point is at or below the ground level. Out of these
+    points a single reference iso-0 is obtained according to the user defined
+    iso0 statistic.
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration. Accepted Configuration Keywords::
+
+        datatype : string. Dataset keyword
+            arbitrary data type
+        iso0_statistic : str. Dataset keyword
+            The statistic used to weight the iso0 points. Can be avg_by_dist,
+            avg, min, max
+
+    radar_list : list of Radar objects
+        Optional. list of radar objects
+
+    Returns
+    -------
+    new_dataset : dict
+        dictionary containing the output
+    ind_rad : int
+        radar index
+
+    """
+    if procstatus != 1:
+        return None, None
+
+    # debugging
+    # start_time = time.time()
+
+    for datatypedescr in dscfg['datatype']:
+        radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
+        break
+
+    ind_rad = int(radarnr[5:8])-1
+    if radar_list[ind_rad] is None:
+        warn('No valid radar')
+        return None, None
+    radar = radar_list[ind_rad]
+
+    time_interp = dscfg.get('time_interp', True)
+
+    fname = find_iso0_grib_file(dscfg['timeinfo'], dscfg, ind_rad=ind_rad)
+    if fname is None:
+        return None, None
+
+    iso0_data = read_iso0_grib_data(fname)
+    if iso0_data is None:
+        warn('iso0 data not found')
+        return None, None
+
+    time_index = np.argmin(abs(iso0_data['fcst_time']-dscfg['timeinfo']))
+    iso0_field = grib2radar_data(
+        radar, iso0_data, dscfg['timeinfo'], time_interp=time_interp)
     if iso0_field is None:
         warn('Unable to obtain iso0 fields')
         return None, None

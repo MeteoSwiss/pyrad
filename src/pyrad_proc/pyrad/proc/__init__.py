@@ -233,6 +233,7 @@ COSMO data
     process_hzt_lookup_table
     process_hzt_coord
     process_iso0_mf
+    process_iso0_grib
     process_cosmo_to_radar
 
 
@@ -342,7 +343,7 @@ from .process_Doppler import process_vad, process_turbulence
 from .process_cosmo import process_cosmo, process_cosmo_lookup_table
 from .process_cosmo import process_cosmo_coord, process_hzt, process_iso0_mf
 from .process_cosmo import process_hzt_lookup_table, process_hzt_coord
-from .process_cosmo import process_cosmo_to_radar
+from .process_cosmo import process_cosmo_to_radar, process_iso0_grib
 
 from .process_dem import process_dem, process_visibility, process_gecsx
 
