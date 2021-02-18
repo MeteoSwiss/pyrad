@@ -238,16 +238,16 @@ def plot_surface_contour(grid, field_name, level, prdcfg, fname_list,
 
     dpi = prdcfg['gridMapImageConfig'].get('dpi', 72)
 
-    if fig is None:
-        xsize = prdcfg['gridMapImageConfig']['xsize']
-        ysize = prdcfg['gridMapImageConfig']['ysize']
-        lonstep = prdcfg['gridMapImageConfig'].get('lonstep', 0.5)
-        latstep = prdcfg['gridMapImageConfig'].get('latstep', 0.5)
-        min_lon = prdcfg['gridMapImageConfig'].get('lonmin', 2.5)
-        max_lon = prdcfg['gridMapImageConfig'].get('lonmax', 12.5)
-        min_lat = prdcfg['gridMapImageConfig'].get('latmin', 43.5)
-        max_lat = prdcfg['gridMapImageConfig'].get('latmax', 49.5)
+    xsize = prdcfg['gridMapImageConfig']['xsize']
+    ysize = prdcfg['gridMapImageConfig']['ysize']
+    lonstep = prdcfg['gridMapImageConfig'].get('lonstep', 0.5)
+    latstep = prdcfg['gridMapImageConfig'].get('latstep', 0.5)
+    min_lon = prdcfg['gridMapImageConfig'].get('lonmin', 2.5)
+    max_lon = prdcfg['gridMapImageConfig'].get('lonmax', 12.5)
+    min_lat = prdcfg['gridMapImageConfig'].get('latmin', 43.5)
+    max_lat = prdcfg['gridMapImageConfig'].get('latmax', 49.5)
 
+    if fig is None:
         lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon)+1, lonstep)
         lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat)+1, latstep)
 
