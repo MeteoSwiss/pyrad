@@ -38,8 +38,8 @@ git push origin master
 echo "Do you want to push the new tag on github? y/n"
 read pushtag
 if [[ $pushtag == "y" ]]; then
-git tag "v${major}.${minor}"
-git push origin "v${major}.${minor}"
+git tag "v${major}.${minor}.${micro}"
+git push origin "v${major}.${minor}.${micro}"
 fi
 echo "Done!"
 
@@ -97,8 +97,8 @@ echo "Done!"
 echo "Do you want to push the new tag on github? y/n"
 read pushtag
 if [[ $pushtag == "y" ]]; then
-git tag "v${major}.${minor}"
-git push origin "v${major}.${minor}"
+git tag "v${major}.${minor}.${micro}"
+git push origin "v${major}.${minor}.${micro}"
 fi
 
 echo "Do you want to create a new PyPI (pip) package? y/n"
