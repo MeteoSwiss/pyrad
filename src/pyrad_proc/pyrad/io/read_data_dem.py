@@ -179,10 +179,7 @@ def read_dem(fname, field_name = 'terrain_altitude', fill_value=None,
 
     if projparams is None:
         projparams = _get_lv1903_wkt()
-    # THe following format is required by pyart grid functions
-    projparams = CRS(projparams).to_dict()
-    projparams['no_defs'] = 0
-
+    
     time = get_metadata('grid_time')
     time['data'] = np.array([0.0])
     time['units'] = 'seconds since 2000-01-01T00:00:00Z'
@@ -502,4 +499,9 @@ def _prepare_for_interpolation(x_radar, y_radar, dem_coord, slice_xy=True):
 def _get_lv1903_wkt():
     lv1903 = osr.SpatialReference( )
     lv1903.ImportFromEPSG(21781)
-    return lv1903.ExportToWkt()
+    lv1903 = lv1903.ExportToProj4()
+    # Convert proj4 string to dict
+    lv1903 = dict(item.split("=") for item in lv1903.strip(' ').split("+") if len(item.split('=')) == 2) 
+    if 'no_defs' not in lv1903.keys():
+        lv1903['no_defs'] = 0
+    return lv1903

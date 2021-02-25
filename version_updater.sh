@@ -51,7 +51,7 @@ echo "Done!"
 echo "Do you want to create a new PyPI (pip) package? y/n"
 read releasepypi
 if [[ $releasepypi == "y" ]]; then
-
+rm -r dist
 python setup.py sdist
 echo "Should it be a test package or a final (official) package? test/final"
 read pkgtype
@@ -114,6 +114,7 @@ echo "Do you want to create a new PyPI (pip) package? y/n"
 read releasepypi
 if [[ $releasepypi == "y" ]]; then
 cd $dir/src/pyrad_proc/
+rm -r dist
 python setup.py sdist
 echo "Should it be a test package or a final (official) package? test/final"
 read pkgtype

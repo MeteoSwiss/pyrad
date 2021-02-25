@@ -6,6 +6,8 @@
 Welcome to pyrad's documentation!
 =================================
 
+Please subscribe on the following :ref:`page <newsletter_subscribe>`  if you would like to receive information about the latest updates regarding pyrad.
+
 Contents:
 
 .. toctree::
