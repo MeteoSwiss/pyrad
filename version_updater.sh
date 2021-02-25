@@ -85,13 +85,13 @@ read minor
 echo "What is the micro version?"
 read micro
 
-cd $dir/
+cd $dir
 
 echo "Version number is $major.$minor.$micro"
 echo "Updating setup.py"
-sed -i "/MAJOR =/c\MAJOR = $major" $dir/src/pyrad_proc/setup.py
-sed -i "/MINOR =/c\MINOR = $minor" $dir/src/pyrad_proc/setup.py
-sed -i "/MICRO =/c\MICRO = $micro" $dir/src/pyrad_proc/setup.py
+sed -i "/MAJOR =/c\MAJOR = $major" ./src/pyrad_proc/setup.py
+sed -i "/MINOR =/c\MINOR = $minor" ./src/pyrad_proc/setup.py
+sed -i "/MICRO =/c\MICRO = $micro" ./src/pyrad_proc/setup.py
 
 echo "Updating /doc/source/conf.py"
 sed -i "/version = u/c\version = u'$major.$minor'" ./doc/source/conf.py
