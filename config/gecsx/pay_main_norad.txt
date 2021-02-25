@@ -12,12 +12,12 @@ name STRING gecsx_pay_norad
 # Auxiliary data pathes
 # ------------------------------------------------------------
 # Base path for dem data
-dempath STRING $HOME/Documents/MALS/dem/
+dempath STRING /store/msrad/radar/DEM/raw/
 
 # --------------------------------------------
 # Output data
 # --------------------------------------------
-saveimgbasepath STRING $HOME/Documents/MALS/outputs/
+saveimgbasepath STRING $HOME/gecsx_outputs/
 # Supported formats: eps, jpeg, jpg, pdf, pgf, png, ps, raw, rgba, svg, svgz, tif, tiff
 imgformat STRING png
 

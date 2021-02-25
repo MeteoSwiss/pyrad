@@ -969,10 +969,11 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
         for dset in dscfg:
             gather_dir = str(Path(cfg['saveimgbasepath'], cfg['name'], dset))
             print('Copying all generated figures into dir {:s}...'.format(
-                gather_dir))
+                gather_dir + '/ALL_FIGURES/'))
             for ex in img_ext:
-                cmd = ('cd {:s}; mkdir -p ALL_FIGURES; find . -type f -name "*.{:s}" '.format(gather_dir,
-                                   ex) + '-exec cp {} ALL_FIGURES \\;')
-                subprocess.call(cmd, shell = True)
+                if os.path.exists(gather_dir):
+                    cmd = ('cd {:s}; mkdir -p ALL_FIGURES; find . -type f -name "*.{:s}" '.format(gather_dir,
+                                       ex) + '-exec cp {} ALL_FIGURES \\;')
+                    subprocess.call(cmd, shell = True)
 
     print('- This is the end my friend! See you soon!')

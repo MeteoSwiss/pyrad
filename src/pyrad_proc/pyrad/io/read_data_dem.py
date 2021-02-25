@@ -33,7 +33,6 @@ except ImportError:
         _GDAL_AVAILABLE = False
 
 import pyart
-
 from pyart.config import get_metadata
 from ..io.read_data_cosmo import _put_radar_in_swiss_coord
 
@@ -123,8 +122,8 @@ def read_dem(fname, field_name = 'terrain_altitude', fill_value=None,
     fill_value : float
         The fill value, if not provided will be infered from metadata
         if possible
-    projparams : projection transform as can be used by pyproj, either a
-        OGC WKT or Proj4 string, see epsg.io for a list, if not provided
+    projparams : projection transform as can be used by gdal either a  Proj4 
+        string, see epsg.io for a list, or a EPSG number, if not provided
         will be infered from the file, or for ASCII, LV1903 will be used
 
     Returns
@@ -138,8 +137,10 @@ def read_dem(fname, field_name = 'terrain_altitude', fill_value=None,
     if isinstance(projparams, int): # Retrieve Wkt code from EPSG number
         proj = osr.SpatialReference()
         proj.ImportFromEPSG(projparams)
-        projparams = proj.ExportToWkt()
-
+        projparams = proj.ExportToProj4()
+    
+    projparams = _proj4_str_to_dict(projparams) 
+    
     if extension in ['.tif','.tiff','.gtif']:
         metadata, rasterarray =   read_geotiff_data(fname, fill_value)
     elif extension in ['.asc','.dem','.txt']:
@@ -496,14 +497,19 @@ def _prepare_for_interpolation(x_radar, y_radar, dem_coord, slice_xy=True):
 
     return (x_dem, y_dem, ind_xmin, ind_ymin, ind_xmax, ind_ymax)
 
-def _get_lv1903_wkt():
+def _proj4_str_to_dict(proj4str):
+    # COnverts proj4 string to dict as can be used by part
+    return dict(item.split("=") for item in proj4str.strip(' ').split("+")
+            if len(item.split('=')) == 2) 
+    
+def _get_lv1903_proj4():
+    # Gets proj4 dict for Swiss LV1903 coordinates
     if _GDAL_AVAILABLE:
         lv1903 = osr.SpatialReference( )
         lv1903.ImportFromEPSG(21781)
         lv1903 = lv1903.ExportToProj4()
         # Convert proj4 string to dict
-        lv1903 = dict(item.split("=") for item in lv1903.strip(' ').split("+")
-            if len(item.split('=')) == 2) 
+        lv1903 = _proj4_str_to_dict(lv1903)
         if 'no_defs' not in lv1903.keys():
             lv1903['no_defs'] = 0
     else:
