@@ -31,7 +31,7 @@ except ImportError:
         _GDAL_AVAILABLE = True
     except ImportError:
         _GDAL_AVAILABLE = False
-from pyproj import CRS
+
 import pyart
 
 from pyart.config import get_metadata
@@ -497,11 +497,26 @@ def _prepare_for_interpolation(x_radar, y_radar, dem_coord, slice_xy=True):
     return (x_dem, y_dem, ind_xmin, ind_ymin, ind_xmax, ind_ymax)
 
 def _get_lv1903_wkt():
-    lv1903 = osr.SpatialReference( )
-    lv1903.ImportFromEPSG(21781)
-    lv1903 = lv1903.ExportToProj4()
-    # Convert proj4 string to dict
-    lv1903 = dict(item.split("=") for item in lv1903.strip(' ').split("+") if len(item.split('=')) == 2) 
-    if 'no_defs' not in lv1903.keys():
-        lv1903['no_defs'] = 0
+    if _GDAL_AVAILABLE:
+        lv1903 = osr.SpatialReference( )
+        lv1903.ImportFromEPSG(21781)
+        lv1903 = lv1903.ExportToProj4()
+        # Convert proj4 string to dict
+        lv1903 = dict(item.split("=") for item in lv1903.strip(' ').split("+")
+            if len(item.split('=')) == 2) 
+        if 'no_defs' not in lv1903.keys():
+            lv1903['no_defs'] = 0
+    else:
+        # Hardcoded version
+        lv1903 = {'proj': 'somerc',
+                 'lat_0': 46.9524055555556,
+                 'lon_0': 7.43958333333333,
+                 'k_0': 1,
+                 'x_0': 600000,
+                 'y_0': 200000,
+                 'ellps': 'bessel',
+                 'units': 'm',
+                 'no_defs': 0,
+                 'type': 'crs'}
+        
     return lv1903
