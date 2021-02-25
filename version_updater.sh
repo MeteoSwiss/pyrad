@@ -5,6 +5,10 @@ echo "Please confirm that you are on master branch and you have added and commit
 echo "Type enter to continue"
 read continue
 
+#####################################################
+# PyART
+#####################################################
+
 dir=$(dirname "$0")
 echo Do you want to release a new pyART version y/n?
 read updatepyart
@@ -21,14 +25,15 @@ cd $dir
 
 echo "Version number is $major.$minor.$micro"
 echo "Updating setup.py"
-sed -i "/MAJOR =/c\MAJOR = $major" $dir/src/pyrad_proc/setup.py
-sed -i "/MINOR =/c\MINOR = $minor" $dir/src/pyrad_proc/setup.py
-sed -i "/MICRO =/c\MICRO = $micro" $dir/src/pyrad_proc/setup.py
+sed -i "/MAJOR =/c\MAJOR = $major" $dir/src/pyart/setup.py
+sed -i "/MINOR =/c\MINOR = $minor" $dir/src/pyart/setup.py
+sed -i "/MICRO =/c\MICRO = $micro" $dir/src/pyart/setup.py
 
 echo "Updating /doc/source/conf.py"
-sed -i "/version = u/c\version = u'$major.$minor'" $dir/doc/source/conf.py
-sed -i "/release = u/c\release = u'$major.$minor.$micro'" $dir/doc/source/conf.py
+sed -i "/version = u/c\version = u'$major.$minor'" $dir/src/pyart/doc/source/conf.py
+sed -i "/release = u/c\release = u'$major.$minor.$micro'" $dir/src/pyart/doc/source/conf.py
 
+cd $dir/src/pyart/
 echo "Done!"
 echo "We will now push the version number updated on github"
 git add --all
@@ -46,7 +51,7 @@ echo "Done!"
 echo "Do you want to create a new PyPI (pip) package? y/n"
 read releasepypi
 if [[ $releasepypi == "y" ]]; then
-cd $dir/src/pyart/
+
 python setup.py sdist
 echo "Should it be a test package or a final (official) package? test/final"
 read pkgtype
@@ -63,6 +68,10 @@ fi
 fi
 echo "Done!"
 fi
+
+#####################################################
+# PyRAD
+#####################################################
 
 
 echo Do you want to release a new pyRAD version y/n?
@@ -122,4 +131,3 @@ fi
 
 fi
 
-fi
