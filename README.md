@@ -2,8 +2,8 @@
 
 [![Ref doc](https://img.shields.io/badge/docs-users-4088b8.svg)](https://meteoswiss-mdr.github.io/pyrad/)
 
-[![Anaconda-Server Badge](https://img.shields.io/badge/Anaconda%20Cloud-0.5.0-blue.svg?style=flat-square)](https://anaconda.org/conda-forge/pyrad_mch)
-[![Anaconda-Server Badge](https://img.shields.io/badge/Last%20updated-09%20Dec%202020-blue.svg?style=flat-square)](https://anaconda.org/conda-forge/pyrad_mch)
+[![Anaconda-Server Badge](https://img.shields.io/badge/Anaconda%20Cloud-0.6.2-blue.svg?style=flat-square)](https://anaconda.org/conda-forge/pyrad_mch)
+[![Anaconda-Server Badge](https://img.shields.io/badge/Last%20updated-01%20Mar%202021-blue.svg?style=flat-square)](https://anaconda.org/conda-forge/pyrad_mch)
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/pyrad_mch/badges/downloads.svg)](https://anaconda.org/conda-forge/pyrad_mch)
 
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/pyrad_mch/badges/platforms.svg)](https://anaconda.org/conda-forge/pyrad_mch)
@@ -13,7 +13,7 @@
 Python Radar Data Processing
 
 # What is Pyrad?
-Pyrad is a real-time data processing framework developed by MeteoSwiss. The framework is
+Pyrad is a real-time data processing framework developed by MeteoSwiss and MeteoFrance. The framework is
 aimed at processing and visualizing polar data from individual weather radars as well as composite
 Cartesian products both off-line and in real time. It is written in the Python language. The
 framework is version controlled and automatic documentation is generated based on doc-strings.
@@ -58,6 +58,10 @@ For details on the implemented functions check the [pyrad library reference for 
 Example configuration files can be found in the repository directory [pyrad/config/processing/](./config/processing).
 
 To use Pyrad for data quality monitoring check the report [pyrad_monitoring_fvj.pdf](./doc/pyrad_monitoring_fvj.pdf).
+
+# Newsletter
+
+If you would like to be informed about the addition of major features in Pyrad as well as the release of new Pyrad versions, you can subscribe to our [mailing list](https://pyrad-mch.readthedocs.io/en/latest/newsletter_subscribe.html), where we will periodically publish a newsletter. Note that we do not sell, communicate or divulge your email address to anyone, and you can unsubscribe at any time via a link provided in every newsletter.
 
 # Development
 We welcome contributions, suggestions of developments and bug reports.
