@@ -184,7 +184,9 @@ html_theme = 'sphinxdoc'
 # directly to the root of the documentation.
 #
 html_extra_path = ['_extra']
-
+html_css_files = [
+    'css/form.css',
+]
 # If not None, a 'Last updated on:' timestamp is inserted at every page
 # bottom, using the given strftime format.
 # The empty string is equivalent to '%b %d, %Y'.
