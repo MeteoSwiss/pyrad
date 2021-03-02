@@ -880,7 +880,7 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
         print('- Info string : {}'.format(infostr))
 
     if cfg['datapath'] is not None:
-        starttimes, endtimes, traj = _get_times_and_traj(
+        starttimes, endtimes, _ = _get_times_and_traj(
             None, starttime, endtime, cfg['ScanPeriod'],
             last_state_file=cfg['lastStateFile'], trajtype='proc_periods')
 
@@ -945,11 +945,10 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
         if len(radar_list) == 0:
             valid_radarpos = False
             if 'RadarPosition' in datacfg:
-
                 if ('latitude' in datacfg['RadarPosition'] and
                     'longitude' in datacfg['RadarPosition'] and
                     'altitude' in datacfg['RadarPosition']):
-                        valid_radarpos = True
+                    valid_radarpos = True
             if not valid_radarpos:
                 raise ValueError('When no radar data is provided, the structure ' +
                          '"RadarPosition" with field "altitude", "latitude" '

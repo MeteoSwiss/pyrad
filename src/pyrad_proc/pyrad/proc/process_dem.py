@@ -9,6 +9,7 @@ Functions to manage DEM data
 
     process_dem
     process_visibility
+    process_gecsx
 
 """
 
@@ -190,9 +191,6 @@ def process_visibility(procstatus, dscfg, radar_list=None):
     return new_dataset, ind_rad
 
 
-
-
-
 def process_gecsx(procstatus, dscfg, radar_list=None):
     """
     Computes ground clutter RCS, radar visibility and many others using the
@@ -214,8 +212,9 @@ def process_gecsx(procstatus, dscfg, radar_list=None):
 
     Returns
     -------
-    new_dataset : dict
-        dictionary containing the output
+    new_dataset : list of dict
+        list of dictionaries containing the polar data output and the
+        Cartesian data output in this order
     ind_rad : int
         radar index
 
@@ -316,6 +315,6 @@ def process_gecsx(procstatus, dscfg, radar_list=None):
                                        clip = clip,
                                        return_pyart_objects = True,
                                        verbose = verbose)
-    new_dataset = [{'radar_out' : gecsx_grid}, {'radar_out' : gecsx_radar}]
+    new_dataset = [{'radar_out' : gecsx_radar}, {'radar_out' : gecsx_grid}]
 
     return new_dataset, ind_rad

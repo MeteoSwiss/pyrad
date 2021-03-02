@@ -324,7 +324,7 @@ def _initialize_datasets(dataset_levels, cfg, traj=None, infostr=None):
                 dataset, cfg, dscfg[dataset], proc_status=0,
                 radar_list=None, voltime=None, trajectory=traj,
                 runinfo=infostr)
-            
+
             gc.collect()
 
     # manual garbage collection after initial processing
@@ -406,7 +406,7 @@ def _process_datasets(dataset_levels, cfg, dscfg, radar_list, master_voltime,
                 for i, job in enumerate(jobs):
                     dscfg[job[2]] = job[3]
                     _add_dataset(
-                        job[0], radar_list, job[1],
+                        job[0][0], radar_list, job[1],
                         make_global=make_global_list[i],
                         substitute_object=substitute_object_list[i],
                         fields_to_remove=fields_to_remove_list[i])
@@ -426,8 +426,12 @@ def _process_datasets(dataset_levels, cfg, dscfg, radar_list, master_voltime,
                             trajectory=traj, runinfo=infostr,
                             MULTIPROCESSING_PROD=MULTIPROCESSING_PROD))
 
+                    # adds the first dataset generated to the object. Typically
+                    # only one dataset is generated but gecsx generates two:
+                    # The first one is a radar object and the second is a grid
+                    # object.
                     _add_dataset(
-                        new_dataset, radar_list, ind_rad,
+                        new_dataset[0], radar_list, ind_rad,
                         make_global=dscfg[dataset]['MAKE_GLOBAL'],
                         substitute_object=dscfg[dataset]['SUBSTITUTE_OBJECT'],
                         fields_to_remove=dscfg[dataset]['FIELDS_TO_REMOVE'])
@@ -605,8 +609,7 @@ def _wait_for_files(nowtime, datacfg, datatype_list, last_processed=None):
                 filelist_vol = []
                 found_all = False
                 break
-            else:
-                filelist_vol.append(filelist[0])
+            filelist_vol.append(filelist[0])
             found_all = True
         if found_all:
             if nrainbow < 2:
@@ -754,7 +757,7 @@ def _generate_dataset(dsname, cfg, dscfg, proc_status=0, radar_list=None,
                       voltime=None, trajectory=None, runinfo=None,
                       MULTIPROCESSING_PROD=False):
     """
-    generates a new dataset
+    generates new datasets
 
     Parameters
     ----------
@@ -780,8 +783,8 @@ def _generate_dataset(dsname, cfg, dscfg, proc_status=0, radar_list=None,
 
     Returns
     -------
-    new_dataset : dataset object
-        The new dataset generated. None otherwise
+    new_dataset : list
+        The list of new datasets generated. None otherwise
     ind_rad : int
         the index to the reference radar object
     dsname : str
@@ -815,11 +818,11 @@ def _generate_dataset(dsname, cfg, dscfg, proc_status=0, radar_list=None,
     if new_dataset is None:
         return None, None, dsname, dscfg
 
-  
-    if type(dsformat) != list:
+
+    if not isinstance(dsformat, list):
         dsformat = [dsformat]
         new_dataset = [new_dataset]
-    
+
     # Handles the case of hybrid e.g. GRID/VOL proc
     for dset, dsformat in zip(new_dataset, dsformat):
         try:
@@ -839,15 +842,15 @@ def _generate_dataset(dsname, cfg, dscfg, proc_status=0, radar_list=None,
                     jobs.append(dask.delayed(_generate_prod)(
                         new_dataset, cfg, product, prod_func, dscfg['dsname'],
                         voltime, runinfo=runinfo))
-    
+
                 dask.compute(*jobs)
-    
+
             else:
                 for product in dscfg['products']:
                     _generate_prod(
                         dset, cfg, product, prod_func, dscfg['dsname'],
                         voltime, runinfo=runinfo)
-    
+
                     gc.collect()
     return new_dataset, ind_rad, dsname, dscfg
 
@@ -1129,7 +1132,7 @@ def _create_datacfg_dict(cfg):
         datacfg.update({'latitude': cfg['latitude']})
     if 'longitude' in cfg:
         datacfg.update({'longitude': cfg['longitude']})
-        
+
     # Radar calibration parameters
     if 'dBADUtodBmh' in cfg:
         datacfg.update({'dBADUtodBmh': cfg['dBADUtodBmh']})
@@ -1154,9 +1157,9 @@ def _create_datacfg_dict(cfg):
     if 'mosotti_factor' in cfg:
         datacfg.update({'mosotti_factor': cfg['mosotti_factor']})
     if 'refcorr' in cfg:
-        datacfg.update({'refcorr': cfg['refcorr']})      
+        datacfg.update({'refcorr': cfg['refcorr']})
     if 'AzimTol' in cfg:
-        datacfg.update({'AzimTol': cfg['AzimTol']})              
+        datacfg.update({'AzimTol': cfg['AzimTol']})
     return datacfg
 
 
@@ -1414,7 +1417,7 @@ def _get_masterfile_list(datatypesdescr, starttimes, endtimes, datacfg,
         the master data type descriptor
 
     """
-   
+
     masterdatatypedescr = None
     masterscan = None
     for datatypedescr in datatypesdescr:
@@ -1437,7 +1440,7 @@ def _get_masterfile_list(datatypesdescr, starttimes, endtimes, datacfg,
                 if scan_list is not None:
                     masterscan = scan_list[int(radarnr[5:8])-1][0]
                 break
-            elif (datagroup in (
+            if (datagroup in (
                     'RAD4ALPCOSMO', 'RAD4ALPDEM', 'RAD4ALPHYDRO',
                     'RAD4ALPDOPPLER', 'RAD4ALPIQ')):
                 masterdatatypedescr = radarnr+':RAD4ALP:dBZ'
@@ -1491,6 +1494,7 @@ def _add_dataset(new_dataset, radar_list, ind_rad, make_global=True,
         return None
 
     if 'radar_out' not in new_dataset:
+        print('No radar_out field in new_dataset')
         return None
 
     if substitute_object:
