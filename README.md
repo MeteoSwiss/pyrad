@@ -55,7 +55,7 @@ For details on the implemented functions check the [pyrad library reference for 
 [For users (pdf)](https://media.readthedocs.org/pdf/pyrad-mch/stable/pyrad-mch.pdf)
 
 
-Example configuration files can be found in the repository directory [pyrad/config/processing/](./config/processing).
+Example configuration files can be found in the repository directory [pyrad/config/processing/](./config/processing) and in the dedicated [examples repository](https://github.com/MeteoSwiss/pyrad-examples). 
 
 To use Pyrad for data quality monitoring check the report [pyrad_monitoring_fvj.pdf](./doc/pyrad_monitoring_fvj.pdf).
 
