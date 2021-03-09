@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/meteoswiss-mdr/pyrad.svg?branch=master)](https://travis-ci.org/meteoswiss-mdr/pyrad)
 
-[![Ref doc](https://img.shields.io/badge/docs-users-4088b8.svg)](https://meteoswiss-mdr.github.io/pyrad/)
+[![Ref doc](https://img.shields.io/badge/docs-users-4088b8.svg)](https://pyrad-mch.readthedocs.io/en/stable/)
 
 [![Anaconda-Server Badge](https://img.shields.io/badge/Anaconda%20Cloud-0.6.2-blue.svg?style=flat-square)](https://anaconda.org/conda-forge/pyrad_mch)
 [![Anaconda-Server Badge](https://img.shields.io/badge/Last%20updated-01%20Mar%202021-blue.svg?style=flat-square)](https://anaconda.org/conda-forge/pyrad_mch)
@@ -55,7 +55,7 @@ For details on the implemented functions check the [pyrad library reference for 
 [For users (pdf)](https://media.readthedocs.org/pdf/pyrad-mch/stable/pyrad-mch.pdf)
 
 
-Example configuration files can be found in the repository directory [pyrad/config/processing/](./config/processing).
+Example configuration files can be found in the repository directory [pyrad/config/processing/](./config/processing) and in the dedicated [examples repository](https://github.com/MeteoSwiss/pyrad-examples). 
 
 To use Pyrad for data quality monitoring check the report [pyrad_monitoring_fvj.pdf](./doc/pyrad_monitoring_fvj.pdf).
 
