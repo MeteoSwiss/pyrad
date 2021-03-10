@@ -1228,9 +1228,9 @@ def get_fieldname_pyart(datatype):
     elif datatype == 'SNRv':
         field_name = 'signal_to_noise_ratio_vv'
 
-    elif datatype == 'uSNRh':
+    elif datatype == 'SNRhu':
         field_name = 'unfiltered_signal_to_noise_ratio_hh'
-    elif datatype == 'uSNRv':
+    elif datatype == 'SNRvu':
         field_name = 'unfiltered_signal_to_noise_ratio_vv'
 
     elif datatype == 'CCORh':
