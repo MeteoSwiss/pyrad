@@ -30,7 +30,7 @@ try:
     if platform.system() == 'Linux':
         METRANET_LIB = pyart.aux_io.get_library(momentms=True)
     _METRANETLIB_AVAILABLE = True
-except (SystemExit, AttributeError):
+except:
     _METRANETLIB_AVAILABLE = False
 
 from ..io.read_data_cosmo import _put_radar_in_swiss_coord

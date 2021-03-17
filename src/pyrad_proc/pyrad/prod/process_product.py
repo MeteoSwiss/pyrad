@@ -32,11 +32,12 @@ from ..io.io_aux import get_save_dir, make_filename
 from ..io.read_data_sun import read_sun_retrieval
 from ..io.read_data_other import read_ml_ts
 
-from ..io.write_data import write_sun_hits, write_sun_retrieval
+from ..io.write_data import write_sun_hits, write_sun_retrieval, write_timeseries_point
 from ..io.write_data import write_excess_gates, write_ts_ml
 
 from ..graph.plots import plot_sun_hits
 from ..graph.plots_timeseries import plot_sun_retrieval_ts, plot_ml_ts
+from ..graph.plots_vol import plot_fixed_rng, plot_fixed_rng_sun
 
 from ..util.radar_utils import create_sun_hits_field
 from ..util.radar_utils import create_sun_retrieval_field
@@ -337,6 +338,8 @@ def generate_sun_hits_products(dataset, prdcfg):
                     The pixel density of the plot. Default 72
                 add_date_in_fname: Bool
                     If true the year is added in the plot file name
+        'PLOT_SUNSCAN': Plots a constant range radar azimuth-elevation of the
+            sunscan field data
         'WRITE_SUN_HITS': Writes the information concerning possible sun hits
             in a csv file
         'WRITE_SUN_RETRIEVAL': Writes the retrieved sun pattern parameters in
@@ -344,6 +347,8 @@ def generate_sun_hits_products(dataset, prdcfg):
             User defined parameters:
                 add_date_in_fname: Bool
                     If true the year is added in the csv file name
+        'WRITE_SUNSCAN': Writes the sunscan parameters in a csv file
+
         All the products of the 'VOL' dataset group
 
     Parameters
@@ -563,6 +568,120 @@ def generate_sun_hits_products(dataset, prdcfg):
             return None
 
         print('----- save to '+' '.join(fname_list))
+        return fname_list
+
+    if prdcfg['type'] == 'WRITE_SUNSCAN':
+        if 'sun_retrieval' not in dataset:
+            return None
+
+        text = ["SunScan info",
+                "sun_az:             [deg] Azimuth sun position ",
+                "sun_el:             [deg] Elevation sun position",
+                "noise_pwr:          [dBm] Noise power",
+                "sun_maxpwr_noise:   [dBm] sun maximal power sample (including noise)",
+                "sun_maxpwr_nonoise: [dBm] sun maximal power sample without noise",
+                "sun_maxpwr_fit:     [dBm] sun maximal fitted power (without noise)",
+                "sun_maxpwr_toa:     [dBm] sun maximal power at top of atmosphere",
+                "az_offset:          [deg] Azimuth shift of fitted maxima to sun azimuth",
+                "el_offset:          [deg] Elevation shift of fitted maxima to sun elevation",
+                "az_phi3db:          [deg] Half-power beam width in azimuth",
+                "el_phi3db:          [deg] Half-power beam width in elevation",
+                "fit_stddev:         [dBm] Standard deviation (fit to samples)",
+                "num_samples:        [#] Number of samples used for the sun power fitting"
+                ]
+
+        sunRdata = dataset['sun_retrieval']
+
+        if dataset['field_name'] == 'noisedBm_hh':
+            data = {'dstype': prdcfg['dstype'],
+                    'unit': 'dBm',
+                    'time': sunRdata['sunscan_time'],
+                    'label': ["sun_az", "sun_el", "noise_pwr",
+                              "sun_maxpwr_noise", "sun_maxpwr_nonoise", "sun_maxpwr_fit",
+                              "sun_maxpwr_toa", "az_offset", "el_offset",
+                              "az_phi3db", "el_phi3db", "fit_stddev",
+                              "num_samples"],
+                    'value': [sunRdata['sunpos_az'], sunRdata['sunpos_el'],
+                              sunRdata['noise_pwr'], sunRdata['sun_maxpwr_noise'],
+                              sunRdata['sun_maxpwr_nonoise'], sunRdata['dBm_sun_est'],
+                              sunRdata['dBm_sun_est_toa'], sunRdata['az_bias_h'],
+                              sunRdata['el_bias_h'], sunRdata['az_width_h'],
+                              sunRdata['el_width_h'], sunRdata['std(dBm_sun_est)'],
+                              sunRdata['nhits_h']]
+                    }
+        elif dataset['field_name'] == 'noisedBm_vv':
+            data = {'dstype': prdcfg['dstype'],
+                    'unit': 'dBm',
+                    'time': sunRdata['sunscan_time'],
+                    'label': ["sun_az", "sun_el", "noise_pwr",
+                              "sun_maxpwr_noise", "sun_maxpwr_nonoise", "sun_maxpwr_fit",
+                              "sun_maxpwr_toa", "az_offset", "el_offset",
+                              "az_phi3db", "el_phi3db", "fit_stddev",
+                              "num_samples"],
+                    'value': [sunRdata['sunpos_az'], sunRdata['sunpos_el'],
+                              sunRdata['noise_pwr'], sunRdata['sun_maxpwr_noise'],
+                              sunRdata['sun_maxpwr_nonoise'], sunRdata['dBmv_sun_est'],
+                              sunRdata['dBmv_sun_est_toa'], sunRdata['az_bias_v'],
+                              sunRdata['el_bias_v'], sunRdata['az_width_v'],
+                              sunRdata['el_width_v'], sunRdata['std(dBmv_sun_est)'],
+                              sunRdata['nhits_v']]
+                    }
+        else:
+            warn('ERROR: No valid datatype for WRITE_SUNSCAN product.')
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdcfg['prdname'], prdcfg['timeinfo'])
+
+        fname1 = make_filename(
+            'ts', prdcfg['dstype'], dataset['field_name'], ['csv'], timeinfo=prdcfg['timeinfo'],
+            timeformat='%Y%m%d', runinfo=prdcfg['runinfo'])[0]
+
+        fname1 = savedir+fname1
+        write_timeseries_point(fname1, data, prdcfg['dstype'], text)
+
+        print('saved sunscan file: ' +fname1)
+
+        return fname1
+
+    if prdcfg['type'] == 'PLOT_SUNSCAN':
+        radar = dataset['radar_out']
+        sun_hits = dataset['sun_hits']
+
+        field_name = dataset['field_name']
+        if field_name not in radar.fields:
+            warn(
+                ' Field type ' + field_name +
+                ' not available in data set. Skipping product ' +
+                prdcfg['type'])
+            return None
+
+        # user defined parameters
+        azi_res = prdcfg.get('azi_res', None)
+        ele_res = prdcfg.get('ele_res', None)
+        vmin = prdcfg.get('vmin', None)
+        vmax = prdcfg.get('vmax', None)
+        angtol = prdcfg.get('ang_tol', 0.5)
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdcfg['prdname'], prdcfg['timeinfo'])
+
+        fname_list = make_filename(
+            'constr', prdcfg['dstype'], prdcfg['dsname'],
+            prdcfg['imgformat'],
+            prdcfginfo='rng'+'{:.1f}'.format(
+                dataset['radar_out'].range['data'][0]),
+            timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
+
+        for i, fname in enumerate(fname_list):
+            fname_list[i] = savedir+fname
+
+        plot_fixed_rng_sun(radar, field_name, sun_hits, prdcfg, fname_list, azi_res=None,
+                           ele_res=None, ang_tol=angtol, vmin=vmin, vmax=vmax)
+
+        print('----- save to '+' '.join(fname_list))
+
         return fname_list
 
     if 'radar_out' in dataset:

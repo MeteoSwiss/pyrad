@@ -9,6 +9,7 @@ Auxiliary functions for reading/writing files
 
     get_rad4alp_prod_fname
     map_hydro
+    mf_sname_to_wmo_number
     map_Doppler
     get_save_dir
     make_filename
@@ -31,6 +32,8 @@ Auxiliary functions for reading/writing files
     find_raw_cosmo_file
     find_cosmo_file
     find_hzt_file
+    find_iso0_file
+    find_iso0_grib_file
     find_rad4alpcosmo_file
     find_pyradcosmo_file
     _get_datetime
@@ -351,6 +354,110 @@ def map_hydro(hydro_data_op):
     hydro_data_py[hydro_data_op == 200] = 9  # melting hail
 
     return hydro_data_py
+
+
+def mf_sname_to_wmo_number(radar_name):
+    """
+    returns de WMO radar number when given the short radar name used at MF
+
+    Parameters
+    ----------
+    radar_name : str
+        The radar name
+
+    Returns
+    -------
+    radar_num : str
+        The WMO radar number
+
+    """
+    if radar_name == 'ABBE':  # Abbeville
+        radar_num = '07005'
+    elif radar_name == 'AJAC':  # Ajaccio
+        radar_num = '07760'
+    elif radar_name == 'ALER':  # Aleria
+        radar_num = '07774'
+    elif radar_name == 'TROY':  # Arcis
+        radar_num = '07168'
+    elif radar_name == 'AVES':  # Avesnes
+        radar_num = '07083'
+    elif radar_name == 'BLAI':  # Blaisy
+        radar_num = '07274'
+    elif radar_name == 'BOLL':  # Bollene
+        radar_num = '07569'
+    elif radar_name == 'BORD':  # Bordeaux
+        radar_num = '07510'
+    elif radar_name == 'BOUR':  # Bourges
+        radar_num = '07255'
+    elif radar_name == 'CHER':  # Cherves
+        radar_num = '07336'
+    elif radar_name == 'COLL':  # Collobrieres
+        radar_num = '07671'
+    elif radar_name == 'CAEN':  # Falaise
+        radar_num = '07027'
+    elif radar_name == 'GREZ':  # Grezes
+        radar_num = '07436'
+    elif radar_name == 'MOMU':  # Momuy
+        radar_num = '07606'
+    elif radar_name == 'MTCY':  # Montancy
+        radar_num = '07291'
+    elif radar_name == 'MCLA':  # Montclar
+        radar_num = '07637'
+    elif radar_name == 'NANC':  # Nancy
+        radar_num = '07180'
+    elif radar_name == 'NIME':  # Nimes
+        radar_num = '07645'
+    elif radar_name == 'OPOU':  # Opoul
+        radar_num = '07745'
+    elif radar_name == 'PLAB':  # Plabennec
+        radar_num = '07108'
+    elif radar_name == 'LEPU':  # Sembadel
+        radar_num = '07471'
+    elif radar_name == 'NIZI':  # StNizier
+        radar_num = '07381'
+    elif radar_name == 'TOUL':  # Toulouse
+        radar_num = '07629'
+    elif radar_name == 'TRAP':  # Trappes
+        radar_num = '07145'
+    elif radar_name == 'TREI':  # Treillieres
+        radar_num = '07223'
+    elif radar_name == 'MAUR':  # Maurel
+        radar_num = '07572'
+    elif radar_name == 'COBI':  # Colombis
+        radar_num = '07578'
+    elif radar_name == 'VARS':  # Vars
+        radar_num = '07714'
+    elif radar_name == 'MOUC':  # Moucherotte
+        radar_num = '07468'
+    elif radar_name == 'REMY':  # StRemy
+        radar_num = '07366'
+    elif radar_name == 'NOYA':  # Noyal
+        radar_num = '07122'
+    elif radar_name == 'LEMO':  # Le Moule
+        radar_num = '78891'
+    elif radar_name == 'DIAM':  # Diamant
+        radar_num = '78924'
+    elif radar_name == 'CORA':  # Colorado
+        radar_num = '61979'
+    elif radar_name == 'PVIL':  # Villers
+        radar_num = '61978'
+    elif radar_name == 'NOUM':  # Noumea
+        radar_num = '91592'
+    elif radar_name == 'LIFO':  # Lifou
+        radar_num = '91582'
+    elif radar_name == 'TIEB':  # Tiebaghi
+        radar_num = '91571'
+    elif radar_name == 'JERS':  # Jersey
+        radar_num = '03897'
+    elif radar_name == 'LDOL':  # Ladole
+        radar_num = '06699'
+    elif radar_name == 'VIAL':  # Vial
+        radar_num = '07694'
+    else:
+        warn('Unable to find radar number for radar name '+radar_name)
+        radar_num = ''
+
+    return radar_num
 
 
 def map_Doppler(Doppler_data_bin, Nyquist_vel):
@@ -900,6 +1007,9 @@ def get_datatype_odim(datatype):
     elif datatype == 'hydro':
         field_name = 'radar_echo_classification'
         datatype_odim = 'CLASS'
+    elif datatype == 'hydroMF':
+        field_name = 'radar_echo_classification_MF'
+        datatype_odim = 'CLASS'
     elif datatype == 'entropy':
         field_name = 'hydroclass_entropy'
         datatype_odim = 'ENTROPY'
@@ -1051,6 +1161,9 @@ def get_fieldname_pyart(datatype):
         field_name = 'radar_cross_section_hh'
     elif datatype == 'rcs_v':
         field_name = 'radar_cross_section_vv'
+
+    elif datatype == 'sigma_zh':
+        field_name = 'sigma_zh'
 
     elif datatype == 'ZDR':
         field_name = 'differential_reflectivity'
@@ -1248,12 +1361,36 @@ def get_fieldname_pyart(datatype):
     elif datatype == 'ml':
         field_name = 'melting_layer'
 
-    elif datatype == 'VIS':
+    elif datatype == 'vis':
         field_name = 'visibility'
-    elif datatype == 'minvisel':
-        field_name = 'minimum_visible_elevation'
-    elif datatype == 'minvisalt':
-        field_name = 'minimum_visible_altitude'
+    elif datatype == 'visibility':
+        field_name = 'visibility'    
+    elif datatype == 'visibility_polar':
+        field_name = 'visibility_polar'       
+    elif datatype == 'terrain_altitude':
+        field_name = 'terrain_altitude'    
+    elif datatype == 'bent_terrain_altitude':
+        field_name = 'bent_terrain_altitude'    
+    elif datatype == 'terrain_slope':
+        field_name = 'terrain_slope'    
+    elif datatype == 'terrain_aspect':
+        field_name = 'terrain_aspect'    
+    elif datatype == 'elevation_angle':
+        field_name = 'elevation_angle'            
+    elif datatype == 'min_vis_elevation':
+        field_name = 'min_vis_elevation'     
+    elif datatype == 'min_vis_altitude':
+        field_name = 'min_vis_altitude'     
+    elif datatype == 'incident_angle':
+        field_name = 'incident_angle'     
+    elif datatype == 'sigma_0':
+        field_name = 'sigma_0'             
+    elif datatype == 'effective_area':
+        field_name = 'effective_area'  
+    elif datatype == 'dBm_clutter':
+        field_name = 'dBm_clutter'  
+    elif datatype == 'dBZ_clutter':
+        field_name = 'dBZ_clutter'  
 
     elif datatype == 'echoID':
         field_name = 'radar_echo_id'
@@ -1272,6 +1409,8 @@ def get_fieldname_pyart(datatype):
 
     elif datatype == 'hydro':
         field_name = 'radar_echo_classification'
+    elif datatype == 'hydroMF':
+        field_name = 'radar_echo_classification_MF'
     elif datatype == 'hydroc':
         field_name = 'corrected_radar_echo_classification'
     elif datatype == 'entropy':
@@ -2093,6 +2232,9 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                                     cfg['RadarName'][ind_rad]+dayinfo)
                         datapath = (cfg['datapath'][ind_rad]+dayinfo+'/' +
                                     basename+'/')
+                    if not os.path.isdir(datapath):
+                        warn("WARNING: Unknown datapath '%s'" % datapath)
+                        continue
                 elif cfg['path_convention'] == 'ODIM':
                     try:
                         fpath_strf = dataset[
@@ -2103,7 +2245,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     daydir = (
                         starttime+datetime.timedelta(days=i)).strftime(
                             fpath_strf)
-                    datapath = (cfg['datapath'][ind_rad] + daydir+'/')
+                    datapath = (cfg['datapath'][ind_rad]+daydir+'/')
                     dayfilelist = glob.glob(datapath+'*'+scan+'*')
                 else:
                     dayinfo = (starttime+datetime.timedelta(days=i)).strftime(
@@ -2124,10 +2266,10 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                             cfg['datapath'][ind_rad]+'P' +
                             cfg['RadarRes'][ind_rad] +
                             cfg['RadarName'][ind_rad]+'/')
+                    if not os.path.isdir(datapath):
+                        warn("WARNING: Unknown datapath '%s'" % datapath)
+                        continue
 
-                if not os.path.isdir(datapath):
-                    warn("WARNING: Unknown datapath '%s'" % datapath)
-                    continue
                 for filename in dayfilelist:
                     t_filelist.append(filename)
             elif datagroup in ('CFRADIAL', 'ODIMPYRAD', 'PYRADGRID',
@@ -2149,6 +2291,21 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     continue
                 dayfilelist = glob.glob(
                     datapath+dayinfo+'*'+datatype+termination)
+                for filename in dayfilelist:
+                    t_filelist.append(filename)
+            elif datagroup == 'MFCFRADIAL':
+                try:
+                    fpath_strf = dataset[
+                        dataset.find("D")+2:dataset.find("F")-2]
+                except AttributeError:
+                    warn('Unknown directory and/or date ' +
+                         'convention, check product config file')
+                daydir = (
+                    starttime+datetime.timedelta(days=i)).strftime(
+                        fpath_strf)
+                datapath = (cfg['datapath'][ind_rad]+daydir+'/')
+                dayfilelist = glob.glob(datapath+'*'+scan+'*')
+
                 for filename in dayfilelist:
                     t_filelist.append(filename)
             elif datagroup == 'MXPOL':
@@ -2507,7 +2664,8 @@ def get_datatype_fields(datadescriptor):
                 datatype = descrfields[2]
                 dataset = None
                 product = None
-            elif datagroup in ('ODIM', 'CFRADIAL2', 'CF1', 'NEXRADII'):
+            elif datagroup in ('ODIM', 'MFCFRADIAL', 'CFRADIAL2', 'CF1',
+                               'NEXRADII'):
                 descrfields2 = descrfields[2].split(',')
                 datatype = descrfields2[0]
                 product = None
@@ -2536,7 +2694,8 @@ def get_datatype_fields(datadescriptor):
             datatype = descrfields[1]
             dataset = None
             product = None
-        elif datagroup in ('ODIM', 'CFRADIAL2', 'CF1', 'NEXRADII'):
+        elif datagroup in ('ODIM', 'MFCFRADIAL', 'CFRADIAL2', 'CF1',
+                           'NEXRADII'):
             descrfields2 = descrfields[1].split(',')
             # warn(" descrfields2:  '%s'" % descrfields2[1])
             if len(descrfields2) == 2:
@@ -2857,6 +3016,103 @@ def find_hzt_file(voltime, cfg, ind_rad=0):
     return fname[0]
 
 
+def find_iso0_file(voltime, cfg, ind_rad=0):
+    """
+    Search an ISO-0 degree file in text format
+
+    Parameters
+    ----------
+    voltime : datetime object
+        volume scan time
+    cfg : dictionary of dictionaries
+        configuration info to figure out where the data is
+    ind_rad : int
+        radar index
+
+    Returns
+    -------
+    fname : str
+        Name of iso0 file if it exists. None otherwise
+
+    """
+    # initial run time to look for
+    runhour0 = int(voltime.hour/cfg['CosmoRunFreq'])*cfg['CosmoRunFreq']
+    runtime0 = voltime.replace(hour=runhour0, minute=0, second=0)
+
+    radar_name = mf_sname_to_wmo_number(cfg['RadarName'][ind_rad])
+    # look for file
+    found = False
+    nruns_to_check = int((cfg['CosmoForecasted'])/cfg['CosmoRunFreq'])
+    for i in range(nruns_to_check):
+        runtime = runtime0-datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
+        target_hour = int((voltime - runtime).total_seconds() / 3600.)
+        runtimestr = runtime.strftime('%Y%m%d%H0000')
+
+        datapath = cfg['cosmopath'][ind_rad]
+        search_name = (
+            datapath+'bdap_iso0_'+radar_name+'_'+runtimestr +
+            '.txt')
+
+        print('Looking for file: '+search_name)
+        fname = glob.glob(search_name)
+        if fname:
+            found = True
+            break
+
+    if not found:
+        warn('WARNING: Unable to find iso0 file')
+        return None
+
+    return fname[0]
+
+
+def find_iso0_grib_file(voltime, cfg, ind_rad=0):
+    """
+    Search an ISO-0 degree file in text format
+
+    Parameters
+    ----------
+    voltime : datetime object
+        volume scan time
+    cfg : dictionary of dictionaries
+        configuration info to figure out where the data is
+    ind_rad : int
+        radar index
+
+    Returns
+    -------
+    fname : str
+        Name of iso0 file if it exists. None otherwise
+
+    """
+    # initial run time to look for
+    runhour0 = int(voltime.hour/cfg['CosmoRunFreq'])*cfg['CosmoRunFreq']
+    runtime0 = voltime.replace(hour=runhour0, minute=0, second=0)
+
+    # look for file
+    found = False
+    nruns_to_check = int((cfg['CosmoForecasted'])/cfg['CosmoRunFreq'])
+    for i in range(nruns_to_check):
+        runtime = runtime0-datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
+        target_hour = int((voltime - runtime).total_seconds() / 3600.)
+        runtimestr = runtime.strftime('%Y%m%d%H0000')
+
+        datapath = cfg['cosmopath'][ind_rad]
+        search_name = datapath+'ISO_T_PAROME_'+runtimestr+'.grib'
+
+        print('Looking for file: '+search_name)
+        fname = glob.glob(search_name)
+        if fname:
+            found = True
+            break
+
+    if not found:
+        warn('WARNING: Unable to find iso0 file')
+        return None
+
+    return fname[0]
+
+
 def find_rad4alpcosmo_file(voltime, datatype, cfg, scanid, ind_rad=0):
     """
     Search a COSMO file
@@ -2950,7 +3206,7 @@ def _get_datetime(fname, datagroup, ftime_format=None):
         else:
             fdatetime = datetime.datetime.strptime(
                 datestr, '%y%j')+datetime.timedelta(days=1)
-    elif datagroup in ('ODIM', 'CFRADIAL2', 'CF1', 'NEXRADII'):
+    elif datagroup in ('ODIM', 'MFCFRADIAL', 'CFRADIAL2', 'CF1', 'NEXRADII'):
         if ftime_format is None:
             # we assume is rad4alp format
             datetimestr = bfile[3:12]

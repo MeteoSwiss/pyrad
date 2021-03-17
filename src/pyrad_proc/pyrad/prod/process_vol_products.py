@@ -24,7 +24,7 @@ from ..io.io_aux import generate_field_name_str
 from ..io.write_data import write_cdf, write_rhi_profile, write_field_coverage
 from ..io.write_data import write_last_state, write_histogram, write_quantiles
 from ..io.write_data import write_fixed_angle, write_monitoring_ts
-from ..io.write_data import write_alarm_msg, send_msg
+from ..io.write_data import write_alarm_msg, write_timeseries_point, send_msg
 
 from ..io.read_data_other import read_monitoring_ts
 
@@ -180,6 +180,7 @@ def generate_vol_products(dataset, prdcfg):
                 RngTol: float
                     The tolerance to match the radar range to the fixed ranges
                     Default 50.
+        'PLOT_TXH': Plots the transmitted signal power (H) for a standard sunscan.
         'PPI_CONTOUR': Plots a PPI countour plot
             User defined parameters:
                 contour_values: list of floats or None
@@ -478,6 +479,8 @@ def generate_vol_products(dataset, prdcfg):
                     The compression options allowed by the hdf5. Depends on
                     the type of compression. Default 6 (The gzip compression
                     level).
+        'SAVEALL_VOL' : Same as before but can be used in a mixed GRID/VOL
+            dataset, as there is no ambiguity with SAVEALL for VOL datasets
         'SAVESTATE': Saves the last processed data in a file. Used for real-
             time data processing
         'SAVEVOL': Saves one field of a radar volume data in a C/F radial or
@@ -497,6 +500,8 @@ def generate_vol_products(dataset, prdcfg):
                     The compression options allowed by the hdf5. Depends on
                     the type of compression. Default 6 (The gzip compression
                     level).
+        'SAVEVOL_VOL' : Same as before but can be used in a mixed GRID/VOL
+            dataset, as there is no ambiguity with SAVEVOL for GRID datasets
         'SAVE_FIXED_ANGLE': Saves the position of the first fix angle in a
             csv file
         'SELFCONSISTENCY': Plots a ZDR versus KDP/ZH histogram of data.
@@ -2121,6 +2126,45 @@ def generate_vol_products(dataset, prdcfg):
 
         return fname_list
 
+    if prdcfg['type'] == 'PLOT_TXH':
+        radar = dataset['radar_out']
+
+        field_name = 'transmitted_signal_power_h'
+        if field_name not in radar.fields:
+            warn(
+                ' Field type ' + field_name +
+                ' not available in data set. Skipping product ' +
+                prdcfg['type'])
+            return None
+
+        # user defined parameters
+        azi_res = prdcfg.get('azi_res', None)
+        ele_res = prdcfg.get('ele_res', None)
+        vmin = prdcfg.get('vmin', None)
+        vmax = prdcfg.get('vmax', None)
+        angtol = prdcfg.get('ang_tol', 0.5)
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdcfg['prdname'], prdcfg['timeinfo'])
+
+        fname_list = make_filename(
+            'constr', prdcfg['dstype'], prdcfg['dsname'],
+            prdcfg['imgformat'],
+            prdcfginfo='rng'+'{:.1f}'.format(
+                dataset['radar_out'].range['data'][0]),
+            timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
+
+        for i, fname in enumerate(fname_list):
+            fname_list[i] = savedir+fname
+
+        plot_fixed_rng(radar, field_name, prdcfg, fname_list, azi_res=None,
+                       ele_res=None, ang_tol=angtol, vmin=vmin, vmax=vmax)
+
+        print('----- save to '+' '.join(fname_list))
+
+        return fname_list
+
     if prdcfg['type'] == 'BSCOPE_IMAGE':
         field_name = get_fieldname_pyart(prdcfg['voltype'])
         if field_name not in dataset['radar_out'].fields:
@@ -2398,6 +2442,78 @@ def generate_vol_products(dataset, prdcfg):
             return fname
 
         return fname_list
+
+    if prdcfg['type'] == 'WRITE_MEAN':
+        field_name = get_fieldname_pyart(prdcfg['voltype'])
+        if field_name not in dataset['radar_out'].fields:
+            warn(
+                ' Field type ' + field_name +
+                ' not available in data set. Skipping product ' +
+                prdcfg['type'])
+            return None
+
+        ele_min = prdcfg.get('ele_min', 0.)
+        ele_max = prdcfg.get('ele_max', 90.)
+        azi_min = prdcfg.get('azi_min', 0.)
+        azi_max = prdcfg.get('azi_max', 360.)
+        rmin = prdcfg.get('rmin', 0.)
+        rmax = prdcfg.get('rmax', 50.)
+
+        field_data = dataset['radar_out'].fields[field_name]['data']
+        el_data = dataset['radar_out'].elevation['data']
+        az_data = dataset['radar_out'].azimuth['data']
+        rng_data = dataset['radar_out'].range['data']
+        units = dataset['radar_out'].fields[field_name]['units']
+
+        ind_ele = np.where((el_data >= ele_min) & (el_data <= ele_max))
+        ind_azi = np.where((az_data >= azi_min) & (az_data <= azi_max))
+        ind_rng = np.where((rng_data >= rmin) & (rng_data <= rmax))
+
+        azmin = dataset['radar_out'].get_azimuth(0)[0]
+        azmax = dataset['radar_out'].get_azimuth(0)[-1]
+        elmin = dataset['radar_out'].fixed_angle['data'][0]
+        elmax = dataset['radar_out'].fixed_angle['data'][-1]
+
+        field_data_process = field_data[np.intersect1d(ind_ele, ind_azi), ind_rng]
+        countzero = np.size(np.where(field_data_process == 0.))
+
+        meanval = np.nanmean(field_data_process)
+        stdval = np.nanstd(field_data_process)
+        medianval = np.nanmedian(field_data_process)
+        ntotal = np.size(field_data_process)
+        nvalid = ntotal - countzero
+
+        text = ["Statistics of a region in a volume.",
+                "  Name      : " + field_name,
+                "  Azimuth   : " + str(azmin) +" - "+str(azmax)+" [deg]",
+                "  Elevation : " + str(elmin) +" - "+str(elmax)+" [deg]",
+                "  Range     : " + str(rmin) +" - "+str(rmax)+" [m]"
+               ]
+
+        data = {'dstype': prdcfg['dstype'],
+                'unit': units,
+                'time':   prdcfg['timeinfo'],
+                'label': ["Mean", "Median", "Stddev", "Nsamples", "Nvalid"],
+                'value':  [meanval, medianval, stdval, ntotal, nvalid]
+                }
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdsavedir, timeinfo=prdcfg['timeinfo'])
+
+        fname = make_filename(
+            'ts', prdcfg['dstype'], prdcfg['voltype'],
+            ['csv'], timeinfo=prdcfg['timeinfo'],
+            timeformat='%Y%m%d', runinfo=prdcfg['runinfo'])[0]
+
+        fname = savedir+fname
+
+        write_timeseries_point(fname, data, field_name, text,
+                               timeformat=None, timeinfo=prdcfg['timeinfo'])
+
+        print('----- save to '+fname)
+
+        return fname
 
     if prdcfg['type'] == 'FIELD_COVERAGE':
         field_name = get_fieldname_pyart(prdcfg['voltype'])
@@ -2982,7 +3098,8 @@ def generate_vol_products(dataset, prdcfg):
 
         return alarm_fname
 
-    if prdcfg['type'] == 'SAVEVOL':
+
+    if prdcfg['type'] == 'SAVEVOL' or prdcfg['type'] == 'SAVEVOL_VOL':
         field_name = get_fieldname_pyart(prdcfg['voltype'])
         if field_name not in dataset['radar_out'].fields:
             warn(
@@ -3026,7 +3143,8 @@ def generate_vol_products(dataset, prdcfg):
 
         return fname
 
-    if prdcfg['type'] == 'SAVEALL':
+
+    if prdcfg['type'] == 'SAVEALL' or prdcfg['type'] == 'SAVEALL_VOL':
         file_type = prdcfg.get('file_type', 'nc')
         datatypes = prdcfg.get('datatypes', None)
         physical = prdcfg.get('physical', True)

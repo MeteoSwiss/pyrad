@@ -10,6 +10,7 @@ Functions for echo classification and filtering
     process_echo_id
     process_birds_id
     process_clt_to_echo_id
+    process_hydro_mf_to_hydro
     process_echo_filter
     process_cdf
     process_filter_snr
@@ -65,17 +66,17 @@ def process_echo_id(procstatus, dscfg, radar_list=None):
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         if datatype == 'dBZ':
-            refl_field = 'reflectivity'
+            refl_field = get_fieldname_pyart(datatype)
         if datatype == 'dBuZ':
-            refl_field = 'unfiltered_reflectivity'
+            refl_field = get_fieldname_pyart(datatype)
         if datatype == 'ZDR':
-            zdr_field = 'differential_reflectivity'
+            zdr_field = get_fieldname_pyart(datatype)
         if datatype == 'ZDRu':
-            zdr_field = 'unfiltered_differential_reflectivity'
+            zdr_field = get_fieldname_pyart(datatype)
         if datatype == 'RhoHV':
-            rhv_field = 'cross_correlation_ratio'
+            rhv_field = get_fieldname_pyart(datatype)
         if datatype == 'uPhiDP':
-            phi_field = 'uncorrected_differential_phase'
+            phi_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8])-1
     if radar_list[ind_rad] is None:
@@ -153,15 +154,15 @@ def process_birds_id(procstatus, dscfg, radar_list=None):
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         if datatype == 'dBZ':
-            refl_field = 'reflectivity'
+            refl_field = get_fieldname_pyart(datatype)
         if datatype == 'dBuZ':
-            refl_field = 'unfiltered_reflectivity'
+            refl_field = get_fieldname_pyart(datatype)
         if datatype == 'ZDR':
-            zdr_field = 'differential_reflectivity'
+            zdr_field = get_fieldname_pyart(datatype)
         if datatype == 'ZDRu':
-            zdr_field = 'unfiltered_differential_reflectivity'
+            zdr_field = get_fieldname_pyart(datatype)
         if datatype == 'RhoHV':
-            rhv_field = 'cross_correlation_ratio'
+            rhv_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8])-1
     if radar_list[ind_rad] is None:
@@ -242,7 +243,7 @@ def process_clt_to_echo_id(procstatus, dscfg, radar_list=None):
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         if datatype == 'CLT':
-            clt_field = 'clutter_exit_code'
+            clt_field = get_fieldname_pyart(datatype)
             break
 
     ind_rad = int(radarnr[5:8])-1
@@ -267,6 +268,86 @@ def process_clt_to_echo_id(procstatus, dscfg, radar_list=None):
     new_dataset = {'radar_out': deepcopy(radar)}
     new_dataset['radar_out'].fields = dict()
     new_dataset['radar_out'].add_field('radar_echo_id', id_field)
+
+    return new_dataset, ind_rad
+
+
+def process_hydro_mf_to_hydro(procstatus, dscfg, radar_list=None):
+    """
+    Converts the hydrometeor classification from Météo France to
+    that of MeteoSwiss
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration. Accepted Configuration Keywords::
+
+        datatype : list of string. Dataset keyword
+            The input data types
+    radar_list : list of Radar objects
+        Optional. list of radar objects
+
+    Returns
+    -------
+    new_dataset : dict
+        dictionary containing the output
+    ind_rad : int
+        radar index
+
+    """
+
+    if procstatus != 1:
+        return None, None
+
+    for datatypedescr in dscfg['datatype']:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        if datatype == 'hydroMF':
+            field = get_fieldname_pyart(datatype)
+            break
+
+    ind_rad = int(radarnr[5:8])-1
+    if radar_list[ind_rad] is None:
+        warn('No valid radar')
+        return None, None
+    radar = radar_list[ind_rad]
+
+    if field not in radar.fields:
+        warn('hydroMF not present. Unable to obtain hydro')
+        return None, None
+
+    hydro = np.zeros((radar.nrays, radar.ngates), dtype=np.uint8)
+    hydroMF = radar.fields[field]['data']
+
+    # BRUIT, ZH_MQT, SOL, INSECTES, OISEAUX, MER_CHAFF, PARASITES,
+    # ROND_CENTRAL, TYPE_INCONNU, SIMPLE_POLAR are classified as NC
+    hydro[hydroMF<8] = 1
+    hydro[hydroMF==30] = 1
+    hydro[hydroMF==31] = 1
+    # PRECIP_INDIFFERENCIEE, PLUIE, PRECIP are classified as RN
+    hydro[hydroMF==8] = 6
+    hydro[hydroMF==9] = 6
+    hydro[hydroMF==32] = 6
+    hydro[hydroMF==10] = 8  # NEIGE_MOUILLEE is WS
+    hydro[hydroMF==11] = 2  # NEIGE_SECHE is AG
+    hydro[hydroMF==12] = 3  # GLACE is CR
+    hydro[hydroMF==13] = 5  # PETITE_GRELE is RP
+    # MOYENNE_GRELE, GROSSE_GRELE is IH/HDG
+    hydro[hydroMF==14] = 10
+    hydro[hydroMF==15] = 10
+    # Light rain (LR), vertically oriented ice (VI) and melting hail (MH) have
+    # no equivalent in the Météo France classification
+
+    hydro_field = pyart.config.get_metadata('radar_echo_classification')
+    hydro_field['data'] = hydro
+
+    # prepare for exit
+    new_dataset = {'radar_out': deepcopy(radar)}
+    new_dataset['radar_out'].fields = dict()
+    new_dataset['radar_out'].add_field(
+        'radar_echo_classification', hydro_field)
 
     return new_dataset, ind_rad
 

@@ -1,0 +1,16 @@
+Metadata-Version: 1.2
+Name: pyrad-mch
+Version: 0.5.0
+Summary: Pyrad: Python Radar Toolkit
+Home-page: https://github.com/meteoswiss-mdr/pyrad.git
+Maintainer: MeteoSwiss Pyrad Developers
+Maintainer-email: jordi.figuerasiventura@meteoswiss.ch
+License: BSD
+Download-URL: https://github.com/meteoswiss-mdr/pyrad.git
+Description: Pyrad is a Python module containing
+        the utilities that run the MeteoSwiss radar processing framework.
+        It is designed so that it accepts a growing number of radar data types.
+        The core of the processing is performed by the module Py-ART.
+        
+        
+Platform: Linux

@@ -40,18 +40,18 @@ Operating System :: POSIX :: Linux
 
 NAME = 'pyrad_mch'
 MAINTAINER = "MeteoSwiss Pyrad Developers"
-MAINTAINER_EMAIL = "jordi.figuerasiventura@meteoswiss.ch"
+MAINTAINER_EMAIL = "daniel.wolfensberger@meteoswiss.ch"
 DESCRIPTION = DOCLINES[0]
 LONG_DESCRIPTION = "\n".join(DOCLINES[2:])
-URL = "https://github.com/meteoswiss-mdr/pyrad.git"
-DOWNLOAD_URL = "https://github.com/meteoswiss-mdr/pyrad.git"
+URL = "https://github.com/MeteoSwiss/pyrad.git"
+DOWNLOAD_URL = "https://github.com/MeteoSwiss/pyrad.git"
 LICENSE = 'BSD'
 CLASSIFIERS = filter(None, CLASSIFIERS.split('\n'))
 PLATFORMS = ["Linux"]
 MAJOR = 0
-MINOR = 4
-MICRO = 4
-ISRELEASED = False
+MINOR = 6
+MICRO = 2
+ISRELEASED = True
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 SCRIPTS = glob.glob('scripts/*')
 COMPILE_DATE_TIME = datetime.utcnow().strftime("%Y-%m-%d %H:%M")

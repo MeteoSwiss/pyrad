@@ -163,6 +163,8 @@ def string_to_datatype(dtype, strval):
 
     if uptype == 'BYTE':
         return int(strval[0])
+    elif uptype == 'BOOL':
+        return  bool(strval[0])
     elif uptype == 'INT':
         return int(strval[0])
     elif uptype == 'LONG':
