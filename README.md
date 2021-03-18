@@ -61,7 +61,7 @@ To use Pyrad for data quality monitoring check the report [pyrad_monitoring_fvj.
 
 # Newsletter
 
-If you would like to be informed about the addition of major features in Pyrad as well as the release of new Pyrad versions, you can subscribe to our [mailing list](https://github.us1.list-manage.com/subscribe?u=2e8561343b026dacadbc70c92&id=9a43ddb927), where we will periodically publish a newsletter. Note that we do not sell, communicate or divulge your email address to anyone, and you can unsubscribe at any time via a link provided in every newsletter.
+If you would like to be informed about the addition of major features in Pyrad as well as the release of new Pyrad versions, you can subscribe to our [mailing list](https://github.us1.list-manage.com/subscribe?u=2e8561343b026dacadbc70c92&id=9a43ddb927), where we will periodically publish a newsletter. Note that we do not sell, communicate or divulgate your email address to anyone, and you can unsubscribe at any time via a link provided in every newsletter.
 
 # Development
 We welcome contributions, suggestions of developments and bug reports.
