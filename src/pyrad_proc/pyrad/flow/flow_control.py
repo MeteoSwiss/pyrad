@@ -855,7 +855,8 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
     GECSX_MANDATORY = ['frequency', 'radar_beam_width_h','pulse_width',
                        'txpwrh', 'AntennaGainH', 'mflossh', 'lrxh']
 
-    GECSX_OPTIONAL = ['attg', 'AzimTol', 'mosotti_factor', 'refcorr']
+    GECSX_OPTIONAL = ['attg', 'AzimTol', 'mosotti_factor', 'refcorr',
+                     'RadarPosition']
 
     print("- PYRAD version: {} (compiled {} by {})".format(
         pyrad_version.version, pyrad_version.compile_date_time,
@@ -944,17 +945,18 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
 
         if len(radar_list) == 0:
             valid_radarpos = False
-            if 'RadarPosition' in datacfg:
-                if ('latitude' in datacfg['RadarPosition'] and
-                    'longitude' in datacfg['RadarPosition'] and
-                    'altitude' in datacfg['RadarPosition']):
+            if 'RadarPosition' in dset:
+                if ('latitude' in dset['RadarPosition'] and
+                    'longitude' in dset['RadarPosition'] and
+                    'altitude' in dset['RadarPosition']):
                     valid_radarpos = True
             if not valid_radarpos:
                 raise ValueError('When no radar data is provided, the structure ' +
                          '"RadarPosition" with field "altitude", "latitude" '
                          + 'and "longitude" must be provided in the loc file')
-
-            dset['RadarPosition'] = datacfg['RadarPosition']
+            for k in dset['RadarPosition'].keys():
+                if type(dset['RadarPosition'][k]) != list:
+                    dset['RadarPosition'][k] = [dset['RadarPosition'][k]]
 
     # process all data sets
     dscfg, _ = _process_datasets(

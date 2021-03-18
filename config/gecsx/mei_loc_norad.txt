@@ -22,12 +22,6 @@ txpwrh FLOAT 35000. # [W] Transmit power
 AntennaGainH FLOAT 42.2  # [dB] Antenna gain along beam axis
 mflossh FLOAT 1. # [dB] matching filter losses
 lrxh FLOAT 2.6 # [dB] # receiver losses from antenna feed to reference point 
-
-# The following radar parameters are required only if no radar data is given as input
-RadarPosition STRUCT 3
-    latitude FLOAT 46.22045
-    longitude FLOAT 7.34122
-    altitude FLOAT 491.3
 ###
 
 ####
@@ -45,12 +39,12 @@ refcorr FLOAT 1.33333 # Effect of atm refraction to the earth bending radius
 ppiImageConfig STRUCT 8
    xsize      FLOAT    10.    # image size [inches] (default dots per inch (dpi):72)
    ysize      FLOAT     8.    # image size [inches] (default dots per inch (dpi):72)
-   xmin       FLOAT   -6.0   # Min distance on horizontal axis [km]
-   xmax       FLOAT   6.0    # Max distance on horizontal axis [km]
-   ymin       FLOAT  -6.0   # Min distance on vertical axis [km]
-   ymax       FLOAT   6.0   # Max distance on vertical axis [km]
-   rngRing    FLOAT  2.5   # distance between range rings (0 no range ring) [km]
-   dpi        INT    72     # dots per inch (72 web quality, 300 print quality)   
+   xmin       FLOAT   -25.0   # Min distance on horizontal axis [km]
+   xmax       FLOAT   25.0    # Max distance on horizontal axis [km]
+   ymin       FLOAT  -25.0   # Min distance on vertical axis [km]
+   ymax       FLOAT   25.0   # Max distance on vertical axis [km]
+   rngRing    FLOAT  5   # distance between range rings (0 no range ring) [km]
+   dpi        INT    72     # dots per inch (72 web quality, 300 print quality)  
 
 rhiImageConfig STRUCT 7
    xsize      FLOAT  10.    # image size [inches]
@@ -65,10 +59,10 @@ ppiMapImageConfig STRUCT 10
    rngRing    FLOAT  20.0   # distance between range rings (0 no range ring) [km]
    xsize      FLOAT  7.   # image size [inches] (default dots per inch (dpi):72)
    ysize      FLOAT  7.   # image size [inches] (default dots per inch (dpi):72)
-   lonmin     FLOAT  7.2 # Min longitude [deg]
-   lonmax     FLOAT  7.5 # Max longitude [deg]
-   latmin     FLOAT 46.1 # Min latitude [deg]
-   latmax     FLOAT 46.4 # Max latitude [deg]
+   lonmin     FLOAT  7.85 # Min longitude [deg]
+   lonmax     FLOAT  8.4 # Max longitude [deg]
+   latmin     FLOAT 46.5 # Min latitude [deg]
+   latmax     FLOAT 46.9 # Max latitude [deg]
    mapres     STRING 10m  # map resolution (10m, 50m, 110m)
    dpi        INT    72     # dots per inch (72 web quality, 300 print quality)   
    maps STRARR 11         # maps to overplot
@@ -87,11 +81,11 @@ ppiMapImageConfig STRUCT 10
 gridMapImageConfig STRUCT 11
    xsize      FLOAT  10.   # image size [inches] (default dots per inch (dpi):72)
    ysize      FLOAT  8.   # image size [inches] (default dots per inch (dpi):72)
-   lonmin     FLOAT  7.2 # Min longitude [deg]
-   lonmax     FLOAT  7.5 # Max longitude [deg]
-   lonstep    FLOAT 0.05
-   latmin     FLOAT 46.1 # Min latitude [deg]
-   latmax     FLOAT 46.4 # Max latitude [deg]
+   lonmin     FLOAT  7.85 # Min longitude [deg]
+   lonmax     FLOAT  8.4 # Max longitude [deg]
+   lonstep    FLOAT 0.1
+   latmin     FLOAT 46.5 # Min latitude [deg]
+   latmax     FLOAT 46.9 # Max latitude [deg]
    latstep    FLOAT 0.05
    mapres     STRING h  # map resolution (10m, 50m, 110m)
    dpi        INT    72     # dots per inch (72 web quality, 300 print quality)

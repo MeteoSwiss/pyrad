@@ -315,6 +315,6 @@ def process_gecsx(procstatus, dscfg, radar_list=None):
                                        clip = clip,
                                        return_pyart_objects = True,
                                        verbose = verbose)
-    new_dataset = [{'radar_out' : gecsx_radar}, {'radar_out' : gecsx_grid}]
+    new_dataset = [{'radar_out' : gecsx_grid}, {'radar_out' : gecsx_radar}]
 
     return new_dataset, ind_rad
