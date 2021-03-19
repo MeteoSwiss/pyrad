@@ -1,6 +1,6 @@
 name: Test pyrad
 env:
-  MINIMAL_DEPENDENCIES: cython numpy scipy dask
+  MINIMAL_DEPENDENCIES: cython numpy scipy dask netCDF4
   OPTIONAL_DEPENDENCIES: pyfftw cartopy h5py PyWavelets pandas scikit-image
   TEST_DEPENDENCIES: pytest pytest-cov
 
