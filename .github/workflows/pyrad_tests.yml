@@ -7,9 +7,9 @@ env:
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ gh_pages ]
+    branches: [ gh_actions ]
   pull_request:
-    branches: [ gh_pages ]
+    branches: [ gh_actions ]
 
 jobs:
   unit_tests:
@@ -51,7 +51,7 @@ jobs:
           pip install -U cookiecutter
       - name: Install pyrad
         if: matrix.os != 'macos-latest'
-        working-directory: ${{github.workspace}}
+        working-directory: ${{github.workspace}}/src/pyrad_proc/
         run: pip install .
 
       - name: Download pyrad-examples
@@ -61,11 +61,11 @@ jobs:
         run: python fetch_pyrad_examples.py
 
       - name: Check imports
-        working-directory: ${{github.workspace}}/pyrad_examples
+        working-directory: ${{github.workspace}}/pyrad_examples/
         run: |
           python -c "import pyrad; print(pyrad.__file__)"
           python -c "from pyrad.flow import main"
       - name: Run tests
-        working-directory: ${{github.workspace}}/pyrad/src/pyrad_proc/pyrad/test/
+        working-directory: ${{github.workspace}}/src/pyrad_proc/pyrad/test/
         run: pytest run_tests.py
 
