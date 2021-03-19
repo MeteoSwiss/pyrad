@@ -1228,11 +1228,6 @@ def get_fieldname_pyart(datatype):
     elif datatype == 'SNRv':
         field_name = 'signal_to_noise_ratio_vv'
 
-    elif datatype == 'SNRu':
-        field_name = 'unfiltered_signal_to_noise_ratio_hh'
-    elif datatype == 'SNRvu':
-        field_name = 'unfiltered_signal_to_noise_ratio_vv'
-
     elif datatype == 'CCORh':
         field_name = 'clutter_correction_ratio_hh'
     elif datatype == 'CCORv':
@@ -1369,33 +1364,33 @@ def get_fieldname_pyart(datatype):
     elif datatype == 'vis':
         field_name = 'visibility'
     elif datatype == 'visibility':
-        field_name = 'visibility'    
+        field_name = 'visibility'
     elif datatype == 'visibility_polar':
-        field_name = 'visibility_polar'       
+        field_name = 'visibility_polar'
     elif datatype == 'terrain_altitude':
-        field_name = 'terrain_altitude'    
+        field_name = 'terrain_altitude'
     elif datatype == 'bent_terrain_altitude':
-        field_name = 'bent_terrain_altitude'    
+        field_name = 'bent_terrain_altitude'
     elif datatype == 'terrain_slope':
-        field_name = 'terrain_slope'    
+        field_name = 'terrain_slope'
     elif datatype == 'terrain_aspect':
-        field_name = 'terrain_aspect'    
+        field_name = 'terrain_aspect'
     elif datatype == 'elevation_angle':
-        field_name = 'elevation_angle'            
+        field_name = 'elevation_angle'
     elif datatype == 'min_vis_elevation':
-        field_name = 'min_vis_elevation'     
+        field_name = 'min_vis_elevation'
     elif datatype == 'min_vis_altitude':
-        field_name = 'min_vis_altitude'     
+        field_name = 'min_vis_altitude'
     elif datatype == 'incident_angle':
-        field_name = 'incident_angle'     
+        field_name = 'incident_angle'
     elif datatype == 'sigma_0':
-        field_name = 'sigma_0'             
+        field_name = 'sigma_0'
     elif datatype == 'effective_area':
-        field_name = 'effective_area'  
+        field_name = 'effective_area'
     elif datatype == 'dBm_clutter':
-        field_name = 'dBm_clutter'  
+        field_name = 'dBm_clutter'
     elif datatype == 'dBZ_clutter':
-        field_name = 'dBZ_clutter'  
+        field_name = 'dBZ_clutter'
 
     elif datatype == 'echoID':
         field_name = 'radar_echo_id'
@@ -1418,6 +1413,8 @@ def get_fieldname_pyart(datatype):
         field_name = 'radar_echo_classification_MF'
     elif datatype == 'hydroc':
         field_name = 'corrected_radar_echo_classification'
+    elif datatype == 'confidence':
+        field_name = 'hydroclass_confidence'
     elif datatype == 'entropy':
         field_name = 'hydroclass_entropy'
     elif datatype == 'propAG':
@@ -1438,6 +1435,24 @@ def get_fieldname_pyart(datatype):
         field_name = 'proportion_MH'
     elif datatype == 'propIH':
         field_name = 'proportion_IH'
+    elif datatype == 'probAG':
+        field_name = 'probability_AG'
+    elif datatype == 'probCR':
+        field_name = 'probability_CR'
+    elif datatype == 'probLR':
+        field_name = 'probability_LR'
+    elif datatype == 'probRP':
+        field_name = 'probability_RP'
+    elif datatype == 'probRN':
+        field_name = 'probability_RN'
+    elif datatype == 'probVI':
+        field_name = 'probability_VI'
+    elif datatype == 'probWS':
+        field_name = 'probability_WS'
+    elif datatype == 'probMH':
+        field_name = 'probability_MH'
+    elif datatype == 'probIH':
+        field_name = 'probability_IH'
 
     elif datatype == 'time_avg_flag':
         field_name = 'time_avg_flag'
@@ -3100,10 +3115,10 @@ def find_iso0_grib_file(voltime, cfg, ind_rad=0):
     for i in range(nruns_to_check):
         runtime = runtime0-datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
         target_hour = int((voltime - runtime).total_seconds() / 3600.)
-        runtimestr = runtime.strftime('%Y%m%d%H0000')
+        runtimestr = runtime.strftime('%Y%m%d%H00')
 
         datapath = cfg['cosmopath'][ind_rad]
-        search_name = datapath+'ISO_T_PAROME_'+runtimestr+'.grib'
+        search_name = datapath+'ISO_T_PAROME_'+runtimestr+'*.grib'
 
         print('Looking for file: '+search_name)
         fname = glob.glob(search_name)

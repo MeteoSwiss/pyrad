@@ -405,11 +405,12 @@ def _process_datasets(dataset_levels, cfg, dscfg, radar_list, master_voltime,
                 # update dataset config dictionary
                 for i, job in enumerate(jobs):
                     dscfg[job[2]] = job[3]
-                    _add_dataset(
-                        job[0][0], radar_list, job[1],
-                        make_global=make_global_list[i],
-                        substitute_object=substitute_object_list[i],
-                        fields_to_remove=fields_to_remove_list[i])
+                    if job[0] is not None:
+                        _add_dataset(
+                            job[0][0], radar_list, job[1],
+                            make_global=make_global_list[i],
+                            substitute_object=substitute_object_list[i],
+                            fields_to_remove=fields_to_remove_list[i])
 
                 del jobs
             except Exception as ee:
@@ -430,11 +431,12 @@ def _process_datasets(dataset_levels, cfg, dscfg, radar_list, master_voltime,
                     # only one dataset is generated but gecsx generates two:
                     # The first one is a radar object and the second is a grid
                     # object.
-                    _add_dataset(
-                        new_dataset[0], radar_list, ind_rad,
-                        make_global=dscfg[dataset]['MAKE_GLOBAL'],
-                        substitute_object=dscfg[dataset]['SUBSTITUTE_OBJECT'],
-                        fields_to_remove=dscfg[dataset]['FIELDS_TO_REMOVE'])
+                    if new_dataset is not None:
+                        _add_dataset(
+                            new_dataset[0], radar_list, ind_rad,
+                            make_global=dscfg[dataset]['MAKE_GLOBAL'],
+                            substitute_object=dscfg[dataset]['SUBSTITUTE_OBJECT'],
+                            fields_to_remove=dscfg[dataset]['FIELDS_TO_REMOVE'])
 
                     del new_dataset
                     gc.collect()
