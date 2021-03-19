@@ -12,5 +12,5 @@ from pyrad.test import download_pyrad_examples
 tox_test_data_dir = os.environ["PYSTEPS_DATA_PATH"]
 
 download_pyrad_examples(tox_test_data_dir, force=True)
-)
+
 
