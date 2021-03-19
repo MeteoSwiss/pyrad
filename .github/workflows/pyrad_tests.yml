@@ -66,7 +66,7 @@ jobs:
         run: python fetch_pyrad_examples.py
 
       - name: Check imports
-        working-directory: ${{github.workspace}}/pyrad_examples/
+        working-directory: ${{github.workspace}}/pyrad-examples/
         run: |
           python -c "import pyrad; print(pyrad.__file__)"
           python -c "from pyrad.flow import main"
