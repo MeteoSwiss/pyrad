@@ -51,8 +51,8 @@ jobs:
           pip install -U cookiecutter
       - name: Install pyrad
         if: matrix.os != 'macos-latest'
-        working-directory: ./src/
-        run: pip install pyrad_proc
+        working-directory: ${{github.workspace}}/src/pyrad_proc/
+        run: pip install .
 
       - name: Download pyrad-examples
         env:
@@ -61,11 +61,11 @@ jobs:
         run: python fetch_pyrad_examples.py
 
       - name: Check imports
-        working-directory: ${{github.workspace}}/pyrad_examples
+        working-directory: ${{github.workspace}}/pyrad_examples/
         run: |
           python -c "import pyrad; print(pyrad.__file__)"
           python -c "from pyrad.flow import main"
       - name: Run tests
-        working-directory: ${{github.workspace}}/pyrad/src/pyrad_proc/pyrad/test/
+        working-directory: ${{github.workspace}}/src/pyrad_proc/pyrad/test/
         run: pytest run_tests.py
 
