@@ -9,7 +9,7 @@ import os
 
 from pyrad.test import download_pyrad_examples
 
-tox_test_data_dir = os.environ["PYSTEPS_DATA_PATH"]
+tox_test_data_dir = os.environ["PYRAD_EXAMPLES_PATH"]
 
 download_pyrad_examples(tox_test_data_dir, force=True)
 
