@@ -49,11 +49,14 @@ jobs:
         run: |
           conda install --quiet ${{env.PACKAGES}}
           pip install -U cookiecutter
+      - name: Install pyart
+        if: matrix.os != 'macos-latest'
+        working-directory: ${{github.workspace}}/src/pyart/
+        run: pip install .
       - name: Install pyrad
         if: matrix.os != 'macos-latest'
         working-directory: ${{github.workspace}}/src/pyrad_proc/
         run: pip install .
-
       - name: Download pyrad-examples
         env:
           PYRAD_EXAMPLES_PATH: ${{github.workspace}}/pyrad-examples/
