@@ -1,3 +1,0 @@
-name: base
-dependencies:
-  - python==3.7
