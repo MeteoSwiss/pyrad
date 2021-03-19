@@ -61,18 +61,18 @@ jobs:
         run: pip install .
       - name: Download pyrad-examples
         env:
-          PYRAD_EXAMPLES_PATH: /home/runner/work/pyrad/pyrad/pyrad-examples/
+          PYRAD_EXAMPLES_PATH: ${{github.workspace}}/pyrad-examples/
         working-directory: ${{github.workspace}}/ci
         run: python fetch_pyrad_examples.py
 
       - name: Check imports
-        working-directory: /home/runner/work/pyrad/pyrad/pyrad-examples/
+        working-directory: ${{github.workspace}}/pyrad-examples/
         run: |
           python -c "import pyrad; print(pyrad.__file__)"
           python -c "from pyrad.flow import main"
       - name: Run tests
         env:
-           PYRAD_EXAMPLES_PATH: /home/runner/work/pyrad/pyrad/pyrad-examples/
+           PYRAD_EXAMPLES_PATH: ${{github.workspace}}/pyrad-examples/
         working-directory: ${{github.workspace}}/src/pyrad_proc/tests/
         run: pytest run_tests.py
 

@@ -51,7 +51,7 @@ def download_pyrad_examples(dir_path, force=True):
 
     print("Downloading pyrad_examples from github.")
     tmp_file_name, _ = request.urlretrieve(
-        "https://github.com/MeteoSwiss/pyrad-examples/archive/master.zip"
+        "https://github.com/MeteoSwiss/pyrad-examples/archive/gh_actions.zip"
     )
 
     with ZipFile(tmp_file_name, "r") as zip_obj:
