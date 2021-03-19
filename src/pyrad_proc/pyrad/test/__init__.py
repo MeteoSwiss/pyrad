@@ -41,13 +41,11 @@ def download_pyrad_examples(dir_path, force=True):
     # or use chunked Transfer-Encoding.
     # If Transfer-Encoding is chunked, then the Content-Length is not available since
     # the content is dynamically generated and we can't know the length a priori easily.
-    pbar = ShowProgress()
+    
     print("Downloading pyrad_examples from github.")
     tmp_file_name, _ = request.urlretrieve(
-        "https://github.com/MeteoSwiss/pyrad-examples/archive/master.zip",
-        reporthook=pbar,
+        "https://github.com/MeteoSwiss/pyrad-examples/archive/master.zip" 
     )
-    pbar.end(message="Download complete\n")
 
     with ZipFile(tmp_file_name, "r") as zip_obj:
         tmp_dir = TemporaryDirectory()
