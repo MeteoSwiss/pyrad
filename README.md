@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/wolfidan/pyrad.svg?branch=master)](https://travis-ci.org/meteoswiss-mdr/pyrad)
-
 [![Ref doc](https://img.shields.io/badge/docs-users-4088b8.svg)](https://pyrad-mch.readthedocs.io/en/stable/)
 
 [![Anaconda-Server Badge](https://img.shields.io/badge/Anaconda%20Cloud-0.6.2-blue.svg?style=flat-square)](https://anaconda.org/conda-forge/pyrad_mch)
