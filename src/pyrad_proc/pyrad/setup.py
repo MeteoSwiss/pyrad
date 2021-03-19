@@ -9,7 +9,6 @@ def configuration(parent_package='', top_path=None):
     config.add_subpackage('prod')
     config.add_subpackage('graph')
     config.add_subpackage('flow')
-    config.add_subpackage('test')
     return config
 
 if __name__ == '__main__':
