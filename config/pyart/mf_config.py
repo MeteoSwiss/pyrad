@@ -323,6 +323,17 @@ proportion_WS = 'proportion_WS'
 proportion_MH = 'proportion_MH'
 proportion_IH = 'proportion_IH'
 
+hydroclass_confidence = 'hydroclass_confidence'
+probability_AG = 'probability_AG'
+probability_CR = 'probability_CR'
+probability_LR = 'probability_LR'
+probability_RP = 'probability_RP'
+probability_RN = 'probability_RN'
+probability_VI = 'probability_VI'
+probability_WS = 'probability_WS'
+probability_MH = 'probability_MH'
+probability_IH = 'probability_IH'
+
 # rad4alp products
 probability_of_hail = 'probability_of_hail'
 maximum_expected_severe_hail_size = 'maximum_expected_severe_hail_size'
@@ -668,6 +679,16 @@ DEFAULT_FIELD_NAMES = {
     'proportion_WS': proportion_WS,
     'proportion_MH': proportion_MH,
     'proportion_IH': proportion_IH,
+    'probability_AG': probability_AG,
+    'probability_CR': probability_CR,
+    'probability_LR': probability_LR,
+    'probability_RP': probability_RP,
+    'probability_RN': probability_RN,
+    'probability_VI': probability_VI,
+    'probability_WS': probability_WS,
+    'probability_MH': probability_MH,
+    'probability_IH': probability_IH,
+    'hydroclass_confidence': hydroclass_confidence,
     'radar_echo_id': radar_echo_id,
     'clutter_exit_code': clutter_exit_code,
     'melting_layer': melting_layer,
@@ -2387,6 +2408,12 @@ DEFAULT_METADATA = {
         'long_name': 'Semi-supervised hydrometeor classification entropy',
         'coordinates': 'elevation azimuth range'},
 
+    hydroclass_confidence: {
+        'units': '-',
+        'standard_name': 'hydroclass_confidence',
+        'long_name': 'hydrometeor classification confidence',
+        'coordinates': 'elevation azimuth range'},
+
     proportion_AG: {
         'units': 'percent',
         'standard_name': 'proportion_AG',
@@ -2439,6 +2466,60 @@ DEFAULT_METADATA = {
         'units': 'percent',
         'standard_name': 'proportion_IH',
         'long_name': 'Ice Hail proportion',
+        'coordinates': 'elevation azimuth range'},
+
+    probability_AG: {
+        'units': 'percent',
+        'standard_name': 'probability_AG',
+        'long_name': 'Aggregates probability',
+        'coordinates': 'elevation azimuth range'},
+
+    probability_CR: {
+        'units': 'percent',
+        'standard_name': 'probability_CR',
+        'long_name': 'Crystals probability',
+        'coordinates': 'elevation azimuth range'},
+
+    probability_LR: {
+        'units': 'percent',
+        'standard_name': 'probability_LR',
+        'long_name': 'Light Rain probability',
+        'coordinates': 'elevation azimuth range'},
+
+    probability_RP: {
+        'units': 'percent',
+        'standard_name': 'probability_RP',
+        'long_name': 'Rimed particles probability',
+        'coordinates': 'elevation azimuth range'},
+
+    probability_RN: {
+        'units': 'percent',
+        'standard_name': 'probability_RN',
+        'long_name': 'Rain probability',
+        'coordinates': 'elevation azimuth range'},
+
+    probability_VI: {
+        'units': 'percent',
+        'standard_name': 'probability_VI',
+        'long_name': 'Vertical Ice Crystals probability',
+        'coordinates': 'elevation azimuth range'},
+
+    probability_WS: {
+        'units': 'percent',
+        'standard_name': 'probability_WS',
+        'long_name': 'Wet Snow probability',
+        'coordinates': 'elevation azimuth range'},
+
+    probability_MH: {
+        'units': 'percent',
+        'standard_name': 'probability_MH',
+        'long_name': 'Melting Hail probability',
+        'coordinates': 'elevation azimuth range'},
+
+    probability_IH: {
+        'units': 'percent',
+        'standard_name': 'probability_IH',
+        'long_name': 'Ice Hail probability',
         'coordinates': 'elevation azimuth range'},
 
     radar_echo_id: {
@@ -3743,6 +3824,7 @@ DEFAULT_FIELD_COLORMAP = {
     corrected_radar_echo_classification: 'pyart_LangRainbow12',
     radar_echo_classification_MF: 'pyart_LangRainbow12',
     hydroclass_entropy: 'pyart_LangRainbow12',
+    hydroclass_confidence: 'pyart_LangRainbow12',
     proportion_AG:  'pyart_LangRainbow12',
     proportion_CR:  'pyart_LangRainbow12',
     proportion_LR:  'pyart_LangRainbow12',
@@ -3752,6 +3834,16 @@ DEFAULT_FIELD_COLORMAP = {
     proportion_WS:  'pyart_LangRainbow12',
     proportion_MH:  'pyart_LangRainbow12',
     proportion_IH:  'pyart_LangRainbow12',
+
+    probability_AG:  'pyart_LangRainbow12',
+    probability_CR:  'pyart_LangRainbow12',
+    probability_LR:  'pyart_LangRainbow12',
+    probability_RP:  'pyart_LangRainbow12',
+    probability_RN:  'pyart_LangRainbow12',
+    probability_VI:  'pyart_LangRainbow12',
+    probability_WS:  'pyart_LangRainbow12',
+    probability_MH:  'pyart_LangRainbow12',
+    probability_IH:  'pyart_LangRainbow12',
 
     radar_echo_id: 'pyart_LangRainbow12',
     clutter_exit_code: 'pyart_LangRainbow12',
@@ -3976,6 +4068,7 @@ DEFAULT_FIELD_LIMITS = {
 
     radar_echo_classification: (0., 9.),
     hydroclass_entropy: (0., 1.),
+    # hydroclass_confidence: (0., 100.),
     proportion_AG: (0., 100.),
     proportion_CR: (0., 100.),
     proportion_LR: (0., 100.),

@@ -26,6 +26,9 @@ Functions for echo classification and filtering
 from copy import deepcopy
 from warnings import warn
 
+import sys
+import os
+
 import numpy as np
 
 import pyart
@@ -918,20 +921,58 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
             The input data types
         HYDRO_METHOD : string. Dataset keyword
             The hydrometeor classification method. One of the following:
-            SEMISUPERVISED
+            SEMISUPERVISED, UKMO
         RADARCENTROIDS : string. Dataset keyword
             Used with HYDRO_METHOD SEMISUPERVISED. The name of the radar of
             which the derived centroids will be used. One of the following: A
             Albis, L Lema, P Plaine Morte, DX50
         compute_entropy : bool. Dataset keyword
-            If true the entropy is computed and the field hydroclass_entropy
-            is output
+            Used with HYDRO_METHOD SEMISUPERVISED. If true the entropy is
+            computed and the field hydroclass_entropy is output
         output_distances : bool. Dataset keyword
-            If true the de-mixing algorithm based on the distances to the
-            centroids is computed and the field proportions of each
-            hydrometeor in the radar range gate is output
+            Used with HYDRO_METHOD SEMISUPERVISED. If true the de-mixing
+            algorithm based on the distances to the centroids is computed and
+            the field proportions of each hydrometeor in the radar range gate
+            is output
         vectorize : bool. Dataset keyword
-            If true a vectorized version of the algorithm is used
+            Used with HYDRO_METHOD SEMISUPERVISED. If true a vectorized
+            version of the algorithm is used
+        hydropath : string. Dataset keyword
+            Used with HYDRO_METHOD UKMO. Directory of the UK MetOffice
+            hydrometeor classification code
+        mf_dir : string. Dataset keyword
+            Used with HYDRO_METHOD UKMO. Directory where the UK MetOffice
+            hydrometeor classification membership functions are stored
+        ml_depth: float. Dataset keyword
+            Used with HYDRO_METHOD UKMO. Depth of the melting layer [km].
+            Default 500.
+        perturb_ml_depth: float. Dataset keyword
+            Used with HYDRO_METHOD UKMO. if specified, the depth of the
+            melting layer can be varied by +/- this value [km], allowing a
+            less-rigidly defined melting layer. Default 0.
+        freezing_level: float or None. Dataset keyword
+            Used with HYDRO_METHOD UKMO. if desired, a single freezing level
+            height can be specified for the entire PPI domain - this will
+            over-ride any field found within the input file. Default None
+        use_dualpol: Bool. Dataset keyword
+            Used with HYDRO_METHOD UKMO. If false no radar data is used and
+            the classification is performed using temperature information
+            only. Default True
+        use_temperature: Bool. Dataset keyword
+            Used with HYDRO_METHOD UKMO. If false no temperature information
+            is used and the classification is performed using radar data only.
+            Default True
+        use_interpolation: Bool. Dataset keyword
+            Used with HYDRO_METHOD UKMO. If True gaps in the classification
+            are filled using a nearest-neighbour interpolation. Default False
+        map_to_semisupervised: Bool. Dataset keyword
+            Used with HYDRO_METHOD UKMO. If True the output is map to the same
+            categories as the semi-supervised classification. Default True
+        append_all_fields: Bool. Dataset keyword
+            Used with HYDRO_METHOD UKMO. If True auxiliary fields such as
+            confidence and probability for each class are going to be added to
+            the output
+
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -951,40 +992,40 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
             "ERROR: Undefined parameter 'HYDRO_METHOD' for dataset '%s'"
             % dscfg['dsname'])
 
+    temp_field = None
+    iso0_field = None
+    for datatypedescr in dscfg['datatype']:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        if datatype == 'dBZ':
+            refl_field = 'reflectivity'
+        if datatype == 'dBZc':
+            refl_field = 'corrected_reflectivity'
+        if datatype == 'ZDR':
+            zdr_field = 'differential_reflectivity'
+        if datatype == 'ZDRc':
+            zdr_field = 'corrected_differential_reflectivity'
+        if datatype == 'RhoHV':
+            rhv_field = 'cross_correlation_ratio'
+        if datatype == 'uRhoHV':
+            rhv_field = 'uncorrected_cross_correlation_ratio'
+        if datatype == 'RhoHVc':
+            rhv_field = 'corrected_cross_correlation_ratio'
+        if datatype == 'KDP':
+            kdp_field = 'specific_differential_phase'
+        if datatype == 'KDPc':
+            kdp_field = 'corrected_specific_differential_phase'
+        if datatype == 'TEMP':
+            temp_field = 'temperature'
+        if datatype == 'H_ISO0':
+            iso0_field = 'height_over_iso0'
+
+    ind_rad = int(radarnr[5:8])-1
+    if radar_list[ind_rad] is None:
+        warn('No valid radar')
+        return None, None
+    radar = radar_list[ind_rad]
+
     if dscfg['HYDRO_METHOD'] == 'SEMISUPERVISED':
-        temp_field = None
-        iso0_field = None
-        for datatypedescr in dscfg['datatype']:
-            radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-            if datatype == 'dBZ':
-                refl_field = 'reflectivity'
-            if datatype == 'dBZc':
-                refl_field = 'corrected_reflectivity'
-            if datatype == 'ZDR':
-                zdr_field = 'differential_reflectivity'
-            if datatype == 'ZDRc':
-                zdr_field = 'corrected_differential_reflectivity'
-            if datatype == 'RhoHV':
-                rhv_field = 'cross_correlation_ratio'
-            if datatype == 'uRhoHV':
-                rhv_field = 'uncorrected_cross_correlation_ratio'
-            if datatype == 'RhoHVc':
-                rhv_field = 'corrected_cross_correlation_ratio'
-            if datatype == 'KDP':
-                kdp_field = 'specific_differential_phase'
-            if datatype == 'KDPc':
-                kdp_field = 'corrected_specific_differential_phase'
-            if datatype == 'TEMP':
-                temp_field = 'temperature'
-            if datatype == 'H_ISO0':
-                iso0_field = 'height_over_iso0'
-
-        ind_rad = int(radarnr[5:8])-1
-        if radar_list[ind_rad] is None:
-            warn('No valid radar')
-            return None, None
-        radar = radar_list[ind_rad]
-
         if temp_field is None and iso0_field is None:
             warn('iso0 or temperature fields needed to create hydrometeor ' +
                  'classification field')
@@ -1151,40 +1192,152 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
             entropy_field=None, temp_ref=temp_ref,
             compute_entropy=compute_entropy,
             output_distances=output_distances, vectorize=vectorize)
+
+        # prepare for exit
+        new_dataset = {'radar_out': deepcopy(radar)}
+        new_dataset['radar_out'].fields = dict()
+        new_dataset['radar_out'].add_field(
+            'radar_echo_classification', fields_dict['hydro'])
+
+        if compute_entropy:
+            new_dataset['radar_out'].add_field(
+                'hydroclass_entropy', fields_dict['entropy'])
+
+            if output_distances:
+                field_names = [
+                    'proportion_AG', 'proportion_CR', 'proportion_LR',
+                    'proportion_RP', 'proportion_RN', 'proportion_VI',
+                    'proportion_WS', 'proportion_MH', 'proportion_IH']
+                sfield_names = [
+                    'prop_AG', 'prop_CR', 'prop_LR', 'prop_RP', 'prop_RN',
+                    'prop_VI', 'prop_WS', 'prop_MH', 'prop_IH']
+                for field_name, sfield_name in zip(field_names, sfield_names):
+                    new_dataset['radar_out'].add_field(
+                        field_name, fields_dict[sfield_name])
+    elif dscfg['HYDRO_METHOD'] == 'UKMO':
+        if dscfg['initialized'] == 0:
+            # load the UKMO algorithm
+            hydropath = dscfg.get(
+                'hydropath',
+                os.path.expanduser('~')+'/hydrometeor-classification/code')
+            if not os.path.isdir(hydropath):
+                raise Exception(
+                    "ERROR: Wrong UKMO hydrometeor classification path " +
+                    hydropath)
+            sys.path.append(hydropath)
+            try:
+                import classify
+            except ImportError:
+                raise Exception(
+                    "ERROR: Unable to load UKMO hydrometeor classification module")
+            dscfg['initialized'] = 1
+
+        if dscfg['initialized'] == 0:
+            return None, None
+
+        if ((refl_field not in radar.fields) or
+                (zdr_field not in radar.fields) or
+                (rhv_field not in radar.fields) or
+                (kdp_field not in radar.fields)):
+            warn('Unable to create hydrometeor classification field. ' +
+                 'Missing data')
+            return None, None
+
+        mf_dir = dscfg.get(
+            'mf_dir',
+            os.path.expanduser('~') +
+            '/hydrometeor-classification/membership_functions/')
+        if not os.path.isdir(mf_dir):
+            raise Exception(
+                "ERROR: Unable to load hydrometeor MF. Path " +
+                mf_dir+' not a directory')
+
+        ml_depth = dscfg.get('ml_depth', 0.5)
+        perturb_ml_depth = dscfg.get('perturb_ml_depth', 0)
+        freezing_level = dscfg.get('freezing_level', None)
+
+        use_dualpol = dscfg.get('use_dualpol', True)
+        use_temperature = dscfg.get('use_temperature', True)
+        use_interpolation = dscfg.get('use_interpolation', False)
+        map_to_semisupervised = dscfg.get('map_to_semisupervised', True)
+        append_all_fields = dscfg.get('append_all_fields', True)
+
+        dualpol_vars = (rhv_field, zdr_field, kdp_field)
+        dualpol_vars_int = ('RHOHV', 'ZDR', 'KDP')
+
+        # prepare for exit
+        hydro_field = 'radar_echo_classification'
+        new_dataset = {'radar_out': deepcopy(radar)}
+        new_dataset['radar_out'].fields = dict()
+        hydro = pyart.config.get_metadata(hydro_field)
+        hydro['data'] = np.ma.masked_all(
+            (radar.nrays, radar.ngates), dtype=np.uint8)
+        new_dataset['radar_out'].add_field(hydro_field, hydro)
+
+        if append_all_fields:
+            confidence_field = 'hydroclass_confidence'
+            confidence = pyart.config.get_metadata(confidence_field)
+            confidence['data'] = np.ma.masked_all((radar.nrays, radar.ngates))
+            new_dataset['radar_out'].add_field(confidence_field, confidence)
+
+            prob_fields = [
+                'probability_RN', 'probability_WS', 'probability_AG',
+                'probability_IH', 'probability_LR', 'probability_IC',
+                'probability_RP']
+            prob_keys = [
+                    'RAIN', 'WET_SNOW', 'DRY_SNOW', 'HAIL', 'DRIZZLE', 'ICE',
+                    'GRAUPEL']
+            for prob_field in prob_fields:
+                prob = pyart.config.get_metadata(prob_field)
+                prob['data'] = np.ma.masked_all((radar.nrays, radar.ngates))
+                new_dataset['radar_out'].add_field(prob_field, prob)
+
+        for sweep in range(radar.nsweeps):
+            scan_object = ScanObject(
+                radar.extract_sweeps([sweep]), refl_field, iso0_field,
+                dualpol_vars, dualpol_vars_int=dualpol_vars_int)
+
+            hydro_object = classify.classify_hydrometeors(
+                scan_object, ml_depth, mf_dir, use_dualpol=use_dualpol,
+                use_temperature=use_temperature, freezing_level=freezing_level,
+                perturb_ml_depth=perturb_ml_depth,
+                dualpol_vars=dualpol_vars_int,
+                use_interpolation=use_interpolation,
+                append_all_fields=append_all_fields)
+
+            ind_start = radar.sweep_start_ray_index['data'][sweep]
+            ind_end = radar.sweep_end_ray_index['data'][sweep]
+
+            if map_to_semisupervised:
+                # re-mapping into semi-supervised classes
+                hydro_ukmo_aux = hydro_object.hydro_class
+                hydro_ukmo = np.ma.masked_all(
+                    hydro_ukmo_aux.shape, dtype=np.uint8)
+                hydro_ukmo[hydro_ukmo_aux == -1] = 1  # No data to NC
+                hydro_ukmo[hydro_ukmo_aux == 1] = 6  # RAIN to RN
+                hydro_ukmo[hydro_ukmo_aux == 2] = 8  # WET_SNOW to WS
+                hydro_ukmo[hydro_ukmo_aux == 3] = 2  # DRY_SNOW to AG
+                hydro_ukmo[hydro_ukmo_aux == 5] = 10  # HAIL to IH/HDG
+                hydro_ukmo[hydro_ukmo_aux == 6] = 4  # DRIZZLE to LR
+                hydro_ukmo[hydro_ukmo_aux == 7] = 3  # ICE to CR
+                hydro_ukmo[hydro_ukmo_aux == 8] = 5  # GRAUPEL to RP
+            else:
+                hydro_ukmo = hydro_object.hydro_class
+            new_dataset['radar_out'].fields[hydro_field]['data'][
+                ind_start:ind_end+1] = hydro_ukmo
+
+            if append_all_fields:
+                new_dataset['radar_out'].fields[confidence_field]['data'][
+                ind_start:ind_end+1] = hydro_object.confidence
+
+                for prob_field, prob_key in zip(prob_fields, prob_keys):
+                    new_dataset['radar_out'].fields[prob_field]['data'][
+                        ind_start:ind_end+1] = (
+                        hydro_object.probability[prob_key])
     else:
         raise Exception(
             "ERROR: Unknown hydrometeor classification method " +
             dscfg['HYDRO_METHOD'])
-
-    # prepare for exit
-    new_dataset = {'radar_out': deepcopy(radar)}
-    new_dataset['radar_out'].fields = dict()
-    new_dataset['radar_out'].add_field(
-        'radar_echo_classification', fields_dict['hydro'])
-
-    if compute_entropy:
-        new_dataset['radar_out'].add_field(
-            'hydroclass_entropy', fields_dict['entropy'])
-
-        if output_distances:
-            new_dataset['radar_out'].add_field(
-                'proportion_AG', fields_dict['prop_AG'])
-            new_dataset['radar_out'].add_field(
-                'proportion_CR', fields_dict['prop_CR'])
-            new_dataset['radar_out'].add_field(
-                'proportion_LR', fields_dict['prop_LR'])
-            new_dataset['radar_out'].add_field(
-                'proportion_RP', fields_dict['prop_RP'])
-            new_dataset['radar_out'].add_field(
-                'proportion_RN', fields_dict['prop_RN'])
-            new_dataset['radar_out'].add_field(
-                'proportion_VI', fields_dict['prop_VI'])
-            new_dataset['radar_out'].add_field(
-                'proportion_WS', fields_dict['prop_WS'])
-            new_dataset['radar_out'].add_field(
-                'proportion_MH', fields_dict['prop_MH'])
-            new_dataset['radar_out'].add_field(
-                'proportion_IH', fields_dict['prop_IH'])
 
     return new_dataset, ind_rad
 
@@ -1611,3 +1764,45 @@ def process_zdr_column(procstatus, dscfg, radar_list=None):
         'fields': {'differential_reflectivity_column_height': zdr_col_dict}}
 
     return new_dataset, ind_rad
+
+
+class ScanObject:
+    """generates scan object containing all required radar parameters"""
+
+    def __init__(self, radar, refl_field, iso0_field, dp_fields,
+                 dualpol_vars_int=('RHOHV', 'ZDR', 'KDP')):
+        """initialises required radar fields / parameters"""
+
+
+        # (currently pixels are only considered where their flag value
+        # matches the integer specified by classify.MET_FLAG_VAL)
+        if radar.instrument_parameters is None:
+            warn('Radar beamwidth not specified. Assumed 1. deg')
+            self.beam_width_degrees = 1.
+        elif 'radar_beam_width_h' not in radar.instrument_parameters:
+            warn('Radar beamwidth not specified. Assumed 1. deg')
+            self.beam_width_degrees = 1.
+        else:
+            self.beam_width_degrees = (
+                radar.instrument_parameters['radar_beam_width_h']['data'][0])
+        self.site_altitude_metres = radar.altitude['data'][0]
+        self.n_rays = radar.nrays
+        self.n_bins = radar.ngates
+        self.scan_elevation_degrees = radar.fixed_angle['data'][0]
+        self.bin_length_km = (
+            (radar.range['data'][1]-radar.range['data'][0])/1000.)
+
+        # from height over iso0 to iso0 height
+        self.freezing_level = (
+            radar.gate_altitude['data']-radar.fields[iso0_field]['data'])
+
+        self.zh_lin = np.power(10., 0.1*radar.fields[refl_field]['data'])
+
+        # assumes only precipitation has valid reflectivity
+        self.flags = np.ma.getmaskarray(radar.fields[refl_field]['data'])
+
+        # 'secondary' (dualpol) fields paired with Zh in membership functions:
+        dualpol_fields = {}
+        for field_name, field_name_int in zip(dp_fields, dualpol_vars_int):
+            dualpol_fields[field_name_int] = radar.fields[field_name]['data']
+        self.dualpol_fields = dualpol_fields
