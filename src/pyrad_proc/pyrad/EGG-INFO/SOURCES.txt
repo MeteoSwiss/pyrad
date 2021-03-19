@@ -14,6 +14,8 @@ pyrad/graph/plots_spectra.py
 pyrad/graph/plots_timeseries.py
 pyrad/graph/plots_vol.py
 pyrad/graph/setup.py
+pyrad/test/__init__.py
+pyrad/test/run_tests.py
 pyrad/io/__init__.py
 pyrad/io/config.py
 pyrad/io/io_aux.py
