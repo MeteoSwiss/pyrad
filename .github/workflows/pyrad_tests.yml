@@ -71,6 +71,6 @@ jobs:
           python -c "import pyrad; print(pyrad.__file__)"
           python -c "from pyrad.flow import main"
       - name: Run tests
-        working-directory: ${{github.workspace}}/src/pyrad_proc/pyrad/test/
-        run: python3 -m pytest run_tests.py
+        working-directory: ${{github.workspace}}
+        run: python3 -m pytest ${{github.workspace}}/src/pyrad_proc/pyrad/run_tests.py
 
