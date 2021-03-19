@@ -51,8 +51,8 @@ jobs:
           pip install -U cookiecutter
       - name: Install pyrad
         if: matrix.os != 'macos-latest'
-        working-directory: ${{github.workspace}}
-        run: pip install .
+        working-directory: ${{github.workspace}}/pyrad/src/
+        run: pip install pyrad_proc
 
       - name: Download pyrad-examples
         env:
