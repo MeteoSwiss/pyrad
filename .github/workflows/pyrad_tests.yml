@@ -7,9 +7,9 @@ env:
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ gh_actions ]
+    branches: [ master ]
   pull_request:
-    branches: [ gh_actions ]
+    branches: [ master ]
 
 jobs:
   unit_tests:
