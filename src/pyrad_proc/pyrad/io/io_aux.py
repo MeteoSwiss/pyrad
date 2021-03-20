@@ -2176,7 +2176,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     starttime+datetime.timedelta(days=i)).strftime('%Y-%m-%d')
                 dayinfo = (starttime+datetime.timedelta(days=i)).strftime(
                     '%Y%m%d')
-                datapath = cfg['datapath'][ind_rad] + scan + daydir + '/'
+                datapath = os.path.expandvars(cfg['datapath'][ind_rad]) + scan + daydir + '/'
                 if not os.path.isdir(datapath):
                     # warn("WARNING: Unknown datapath '%s'" % datapath)
                     continue

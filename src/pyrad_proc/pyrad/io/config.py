@@ -178,15 +178,8 @@ def string_to_datatype(dtype, strval):
     elif uptype == 'DOUBLE':
         return float(strval[0])
     elif uptype == 'STRING':
-        # Replace $HOME or ${HOME} by the users home directory
-        sval = strval[0]
-        if re.match("^\$HOME", sval) or re.match("^\$\{HOME\}", sval):
-            homedir = os.path.expanduser("~")
-            sval = sval.replace("{", "")
-            sval = sval.replace("}", "")
-            sval = sval.replace("$HOME", homedir)
-
-        return str(sval)
+        # Replace all environement variables
+        return os.path.expandvars(str(strval[0]))
     else:
         raise Exception("ERROR: Unexpected data type "+uptype)
 
