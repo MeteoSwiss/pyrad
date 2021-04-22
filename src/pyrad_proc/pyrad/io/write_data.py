@@ -7,6 +7,7 @@ Functions for writing pyrad output data
 .. autosummary::
     :toctree: generated/
 
+    write_centroids
     write_proc_periods
     write_fixed_angle
     write_ts_lightning
@@ -61,6 +62,42 @@ from pyart.config import get_fillvalue
 
 from .io_aux import generate_field_name_str
 
+
+def write_centroids(fname, centroids_dict, var_names):
+    """
+    writes the centroids of a semi-supervised hydrometeor classification
+
+    Parameters
+    ----------
+    centroids_dict : dict
+        dictionary containing the centroids
+    var_names : tuple
+        List of variables
+
+    Returns
+    -------
+    fname : str
+        the name of the file containing the content
+
+    """
+    with open(fname, 'w', newline='') as csvfile:
+        csvfile.write("# Centroids file\n")
+        csvfile.write("# Header lines with comments are preceded by '#'\n")
+        csvfile.write("#\n")
+
+        field_names = np.append('hydro_type', var_names)
+
+        writer = csv.DictWriter(csvfile, field_names)
+        writer.writeheader()
+
+        for hydro_type in centroids_dict.keys():
+            dict_row = {'hydro_type': hydro_type}
+            for ivar, var_name in enumerate(var_names):
+                dict_row.update({var_name: centroids_dict[hydro_type][ivar]})
+            writer.writerow(dict_row)
+        csvfile.close()
+
+    return fname
 
 
 def write_proc_periods(start_times, end_times, fname):

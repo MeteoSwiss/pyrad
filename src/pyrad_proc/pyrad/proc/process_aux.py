@@ -161,6 +161,8 @@ def get_process_func(dataset_type, dsname):
                 'sRhoHV': process_spectral_RhoHV
                 'SRHOHV_FILTER': process_filter_srhohv
                 'sZDR': process_spectral_differential_reflectivity
+            'CENTROIDS' format output:
+                'CENTROIDS': process_centroids
             'COLOCATED_GATES' format output:
                 'COLOCATED_GATES': process_colocated_gates
             'COSMO_COORD' format output:
@@ -426,6 +428,9 @@ def get_process_func(dataset_type, dsname):
         func_name = 'process_windshear'
     elif dataset_type == 'HYDROCLASS':
         func_name = 'process_hydroclass'
+    elif dataset_type == 'CENTROIDS':
+        func_name = 'process_centroids'
+        dsformat = 'CENTROIDS'
     elif dataset_type == 'ML_DETECTION':
         func_name = 'process_melting_layer'
         dsformat = 'ML'
@@ -1606,14 +1611,14 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
                 # average field
                 target_radar.fields['avg_'+field_name]['data'][
                     trad_ind_ray, trad_ind_rng] = avg
-                                                                               
-                                
+
+
 
                 # npoints field
                 target_radar.fields['npoints_'+field_name]['data'][
                     trad_ind_ray, trad_ind_rng] = nvals_valid
-                                                                               
-                                        
+
+
 
                 # quantile fields
                 for quant, val in zip(tadict['quantiles'], qvals):
@@ -1624,8 +1629,8 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
                         field_name)
                     target_radar.fields[quant_field]['data'][
                         trad_ind_ray, trad_ind_rng] = val
-                                   
-                                                                             
+
+
         else:
             # ================================================================
             # Radar and scanning antenna are NOT at the same place
@@ -1668,15 +1673,15 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
                 # average field
                 target_radar.fields['avg_'+field_name]['data'][
                     trad_ind_ray, trad_ind_rng] = avg
-                                                                               
-                                
+
+
 
                 # npoints field
                 target_radar.fields['npoints_'+field_name]['data'][
                     trad_ind_ray, trad_ind_rng] = nvals_valid
-                               
-                                                                       
-                                        
+
+
+
 
                 # quantile fields
                 for quant, val in zip(tadict['quantiles'], qvals):

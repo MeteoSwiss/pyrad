@@ -186,7 +186,8 @@ def plot_ppi(radar, field_name, ind_el, prdcfg, fname_list, plot_type='PPI',
         ticks = None
         ticklabs = None
         if vmin is None or vmax is None:
-            norm, ticks, ticklabs = get_norm(field_name)
+            norm, ticks, ticklabs = get_norm(
+                field_name, field_dict=radar.fields[field_name])
             vmin = None
             vmax = None
 
@@ -287,7 +288,8 @@ def plot_ppi_map(radar, field_name, ind_el, prdcfg, fname_list,
     """
     dpi = prdcfg['ppiImageConfig'].get('dpi', 72)
 
-    norm, ticks, ticklabs = get_norm(field_name)
+    norm, ticks, ticklabs = get_norm(
+        field_name, field_dict=radar.fields[field_name])
 
     xsize = prdcfg['ppiMapImageConfig']['xsize']
     ysize = prdcfg['ppiMapImageConfig']['ysize']
@@ -385,7 +387,8 @@ def plot_rhi(radar, field_name, ind_az, prdcfg, fname_list, plot_type='RHI',
         ticks = None
         ticklabs = None
         if vmin is None or vmax is None:
-            norm, ticks, ticklabs = get_norm(field_name)
+            norm, ticks, ticklabs = get_norm(
+                field_name, field_dict=radar.fields[field_name])
             vmin = None
             vmax = None
 
@@ -489,7 +492,8 @@ def plot_bscope(radar, field_name, ind_sweep, prdcfg, fname_list,
     ticks = None
     ticklabs = None
     if vmin is None or vmax is None:
-        norm, ticks, ticklabs = get_norm(field_name)
+        norm, ticks, ticklabs = get_norm(
+            field_name, field_dict=radar.fields[field_name])
 
         if norm is None:  # if norm is set do not override with vmin/vmax
             vmin, vmax = pyart.config.get_field_limits(field_name)
@@ -1110,7 +1114,8 @@ def plot_cappi(radar, field_name, altitude, prdcfg, fname_list,
         list of names of the saved plots or handle of the figure an axes
 
     """
-    norm, ticks, ticklabs = get_norm(field_name)
+    norm, ticks, ticklabs = get_norm(
+        field_name, field_dict=radar.fields[field_name])
 
     xmin = prdcfg['ppiImageConfig']['xmin']
     xmax = prdcfg['ppiImageConfig']['xmax']
@@ -1447,7 +1452,7 @@ def plot_ppi_contour(radar, field_name, ind_el, prdcfg, fname_list,
     linewidths : float
         width of the contour lines
     fig : Figure
-        Figure to add the colorbar to. If none a new figure will be created
+        Figure to add the contour to. If none a new figure will be created
     ax : Axis
         Axis to plot on. if fig is None a new axis will be created
     save_fig : bool
@@ -1648,7 +1653,7 @@ def plot_roi_contour(roi_dict, prdcfg, fname_list, plot_center=True,
 
 
 def plot_rhi_profile(data_list, hvec, fname_list, labelx='Value',
-                     labely='Height (m MSL)', labels=['Mean'],
+                     labely='Height (m MSL)', labels=('Mean'),
                      title='RHI profile', colors=None, linestyles=None,
                      vmin=None, vmax=None, hmin=None, hmax=None, dpi=72):
     """

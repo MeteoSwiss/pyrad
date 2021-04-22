@@ -268,16 +268,20 @@ def get_field_name(field_dict, field):
     return field_name
 
 
-def get_norm(field_name):
+def get_norm(field_name, field_dict=None):
     """
     Computes the normalization of the colormap, and gets the ticks and labels
     of the colorbar from the metadata of the field. Returns None if the
-    required parameters are not present in the metadata
+    required parameters are not present in the metadata. If field dict is
+    not None the metadata is obtained directly from the field. Otherwise it is
+    obtained from the Py-ART config file
 
     Parameters
     ----------
     field_name : str
         name of the field
+    field_dict : dict or None
+        dictionary containing the field and its metadata.
 
     Returns
     -------
@@ -293,16 +297,23 @@ def get_norm(field_name):
     ticks = None
     ticklabs = None
 
-    field_dict = pyart.config.get_metadata(field_name)
+    ref_dict = pyart.config.get_metadata(field_name)
     cmap = mpl.cm.get_cmap(pyart.config.get_field_colormap(field_name))
 
     if 'boundaries' in field_dict:
         norm = mpl.colors.BoundaryNorm(
             boundaries=field_dict['boundaries'], ncolors=cmap.N)
+    elif 'boundaries' in ref_dict:
+        norm = mpl.colors.BoundaryNorm(
+            boundaries=ref_dict['boundaries'], ncolors=cmap.N)
 
     if 'ticks' in field_dict:
         ticks = field_dict['ticks']
         if 'labels' in field_dict:
             ticklabs = field_dict['labels']
+    elif 'ticks' in ref_dict:
+        ticks = ref_dict['ticks']
+        if 'labels' in ref_dict:
+            ticklabs = ref_dict['labels']
 
     return norm, ticks, ticklabs

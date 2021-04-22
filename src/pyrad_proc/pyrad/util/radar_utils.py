@@ -1444,7 +1444,7 @@ def compute_histogram(field, field_name, bin_edges=None, step=None,
 
     step_aux = bin_edges[1]-bin_edges[0]
     bin_centers = bin_edges[0:-1]+step_aux/2.
-    values = field.compressed()
+    values = np.ma.array(field).compressed()
     values[values < bin_centers[0]] = bin_centers[0]
     values[values > bin_centers[-1]] = bin_centers[-1]
 

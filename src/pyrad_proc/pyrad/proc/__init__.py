@@ -105,6 +105,7 @@ Echo classification and filtering
     process_filter_visibility
     process_outlier_filter
     process_hydroclass
+    process_centroids
     process_melting_layer
     process_filter_vel_diff
     process_zdr_column
@@ -294,9 +295,9 @@ from .process_echoclass import process_echo_id, process_birds_id
 from .process_echoclass import process_echo_filter, process_clt_to_echo_id
 from .process_echoclass import process_filter_snr, process_filter_visibility
 from .process_echoclass import process_outlier_filter, process_hydroclass
+from .process_echoclass import process_centroids, process_hydro_mf_to_hydro
 from .process_echoclass import process_cdf, process_melting_layer
 from .process_echoclass import process_filter_vel_diff, process_zdr_column
-from .process_echoclass import process_hydro_mf_to_hydro
 
 from .process_phase import process_correct_phidp0
 from .process_phase import process_smooth_phidp_single_window
