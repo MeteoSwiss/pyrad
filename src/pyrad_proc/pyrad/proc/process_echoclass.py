@@ -18,6 +18,7 @@ Functions for echo classification and filtering
     process_filter_visibility
     process_outlier_filter
     process_hydroclass
+    process_centroids
     process_melting_layer
     process_zdr_column
 
@@ -34,6 +35,14 @@ import numpy as np
 import pyart
 
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
+from ..io.read_data_other import read_centroids
+
+try:
+    import sklearn_extra
+    import sklearn
+    _SKLEARN_AVAILABLE = True
+except ImportError:
+    _SKLEARN_AVAILABLE = False
 
 
 def process_echo_id(procstatus, dscfg, radar_list=None):
@@ -922,10 +931,11 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
         HYDRO_METHOD : string. Dataset keyword
             The hydrometeor classification method. One of the following:
             SEMISUPERVISED, UKMO
-        RADARCENTROIDS : string. Dataset keyword
-            Used with HYDRO_METHOD SEMISUPERVISED. The name of the radar of
-            which the derived centroids will be used. One of the following: A
-            Albis, L Lema, P Plaine Morte, DX50
+        centroids_file : string or None. Dataset keyword
+            Used with HYDRO_METHOD SEMISUPERVISED. The name of the .csv file
+            that stores the centroids. The path is given by
+            [configpath]/centroids_hydroclass/
+            If None is provided default centroids are going to be used
         compute_entropy : bool. Dataset keyword
             Used with HYDRO_METHOD SEMISUPERVISED. If true the entropy is
             computed and the field hydroclass_entropy is output
@@ -937,6 +947,9 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
         vectorize : bool. Dataset keyword
             Used with HYDRO_METHOD SEMISUPERVISED. If true a vectorized
             version of the algorithm is used
+        weights : array of floats. Dataset keyword
+            Used with HYDRO_METHOD SEMISUPERVISED. The list of weights given
+            to each variable
         hydropath : string. Dataset keyword
             Used with HYDRO_METHOD UKMO. Directory of the UK MetOffice
             hydrometeor classification code
@@ -1053,140 +1066,34 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
                  'Missing data')
             return None, None
 
-        mass_centers = np.zeros((9, 5))
-        if dscfg['RADARCENTROIDS'] == 'A':
-            #      Zh      ZDR     kdp   RhoHV   delta_Z
-            mass_centers[0, :] = [
-                13.5829, 0.4063, 0.0497, 0.9868, 1330.3]  # AG
-            mass_centers[1, :] = [
-                02.8453, 0.2457, 0.0000, 0.9798, 0653.8]  # CR
-            mass_centers[2, :] = [
-                07.6597, 0.2180, 0.0019, 0.9799, -1426.5]  # LR
-            mass_centers[3, :] = [
-                31.6815, 0.3926, 0.0828, 0.9978, 0535.3]  # RP
-            mass_centers[4, :] = [
-                39.4703, 1.0734, 0.4919, 0.9876, -1036.3]  # RN
-            mass_centers[5, :] = [
-                04.8267, -0.5690, 0.0000, 0.9691, 0869.8]  # VI
-            mass_centers[6, :] = [
-                30.8613, 0.9819, 0.1998, 0.9845, -0066.1]  # WS
-            mass_centers[7, :] = [
-                52.3969, 2.1094, 2.4675, 0.9730, -1550.2]  # MH
-            mass_centers[8, :] = [
-                50.6186, -0.0649, 0.0946, 0.9904, 1179.9]  # IH/HDG
-        elif dscfg['RADARCENTROIDS'] == 'L':
-            #       Zh      ZDR     kdp   RhoHV   delta_Z
-            mass_centers[0, :] = [
-                13.8231, 0.2514, 0.0644, 0.9861, 1380.6]  # AG
-            mass_centers[1, :] = [
-                03.0239, 0.1971, 0.0000, 0.9661, 1464.1]  # CR
-            mass_centers[2, :] = [
-                04.9447, 0.1142, 0.0000, 0.9787, -0974.7]  # LR
-            mass_centers[3, :] = [
-                34.2450, 0.5540, 0.1459, 0.9937, 0945.3]  # RP
-            mass_centers[4, :] = [
-                40.9432, 1.0110, 0.5141, 0.9928, -0993.5]  # RN
-            mass_centers[5, :] = [
-                03.5202, -0.3498, 0.0000, 0.9746, 0843.2]  # VI
-            mass_centers[6, :] = [
-                32.5287, 0.9751, 0.2640, 0.9804, -0055.5]  # WS
-            mass_centers[7, :] = [
-                52.6547, 2.7054, 2.5101, 0.9765, -1114.6]  # MH
-            mass_centers[8, :] = [
-                46.4998, 0.1978, 0.6431, 0.9845, 1010.1]  # IH/HDG
-        elif dscfg['RADARCENTROIDS'] == 'D':
-            #       Zh      ZDR     kdp   RhoHV   delta_Z
-            mass_centers[0, :] = [
-                12.567, 0.18934, 0.041193, 0.97693, 1328.1]  # AG
-            mass_centers[1, :] = [
-                3.2115, 0.13379, 0.0000, 0.96918, 1406.3]  # CR
-            mass_centers[2, :] = [
-                10.669, 0.18119, 0.0000, 0.97337, -1171.9]  # LR
-            mass_centers[3, :] = [
-                34.941, 0.13301, 0.090056, 0.9979, 898.44]  # RP
-            mass_centers[4, :] = [
-                39.653, 1.1432, 0.35013, 0.98501, -859.38]  # RN
-            mass_centers[5, :] = [
-                2.8874, -0.46363, 0.0000, 0.95653, 1015.6]  # VI
-            mass_centers[6, :] = [
-                34.122, 0.87987, 0.2281, 0.98003, -234.37]  # WS
-            mass_centers[7, :] = [
-                53.134, 2.0888, 2.0055, 0.96927, -1054.7]  # MH
-            mass_centers[8, :] = [
-                46.715, 0.030477, 0.16994, 0.9969, 976.56]  # IH/HDG
-        elif dscfg['RADARCENTROIDS'] == 'P':
-            #       Zh      ZDR     kdp   RhoHV   delta_Z
-            mass_centers[0, :] = [
-                13.9882, 0.2470, 0.0690, 0.9939, 1418.1]  # AG
-            mass_centers[1, :] = [
-                00.9834, 0.4830, 0.0043, 0.9834, 0950.6]  # CR
-            mass_centers[2, :] = [
-                05.3962, 0.2689, 0.0000, 0.9831, -0479.5]  # LR
-            mass_centers[3, :] = [
-                35.3411, 0.1502, 0.0940, 0.9974, 0920.9]  # RP
-            mass_centers[4, :] = [
-                35.0114, 0.9681, 0.1106, 0.9785, -0374.0]  # RN
-            mass_centers[5, :] = [
-                02.5897, -0.3879, 0.0282, 0.9876, 0985.5]  # VI
-            mass_centers[6, :] = [
-                32.2914, 0.7789, 0.1443, 0.9075, -0153.5]  # WS
-            mass_centers[7, :] = [
-                53.2413, 1.8723, 0.3857, 0.9454, -0470.8]  # MH
-            mass_centers[8, :] = [
-                44.7896, 0.0015, 0.1349, 0.9968, 1116.7]  # IH/HDG
-        elif dscfg['RADARCENTROIDS'] == 'W':
-            #       Zh      ZDR     kdp   RhoHV   delta_Z
-            mass_centers[0, :] = [
-                16.7650, 0.3754, 0.0442, 0.9866, 1409.0]  # AG
-            mass_centers[1, :] = [
-                01.4418, 0.3786, 0.0000, 0.9490, 1415.8]  # CR
-            mass_centers[2, :] = [
-                16.0987, 0.3238, 0.0000, 0.9871, -0818.7]  # LR
-            mass_centers[3, :] = [
-                36.5465, 0.2041, 0.0731, 0.9952, 0745.4]  # RP
-            mass_centers[4, :] = [
-                43.4011, 0.6658, 0.3241, 0.9894, -0778.5]  # RN
-            mass_centers[5, :] = [
-                00.9077, -0.4793, 0.0000, 0.9502, 1488.6]  # VI
-            mass_centers[6, :] = [
-                36.8091, 0.7266, 0.1284, 0.9924, -0071.1]  # WS
-            mass_centers[7, :] = [
-                53.8402, 0.8922, 0.5306, 0.9890, -1017.6]  # MH
-            mass_centers[8, :] = [
-                45.9686, 0.0845, 0.0963, 0.9940, 0867.4]  # IH/HDG
-        elif dscfg['RADARCENTROIDS'] == 'DX50':
-            #       Zh      ZDR     kdp   RhoHV   delta_Z
-            mass_centers[0, :] = [
-                19.0770, 0.4139, 0.0099, 0.9841, 1061.7]  # AG
-            mass_centers[1, :] = [
-                03.9877, 0.5040, 0.0000, 0.9642, 0856.6]  # CR
-            mass_centers[2, :] = [
-                20.7982, 0.3177, 0.0004, 0.9858, -1375.1]  # LR
-            mass_centers[3, :] = [
-                34.7124, -0.3748, 0.0988, 0.9828, 1224.2]  # RP
-            mass_centers[4, :] = [
-                33.0134, 0.6614, 0.0819, 0.9802, -1169.8]  # RN
-            mass_centers[5, :] = [
-                08.2610, -0.4681, 0.0000, 0.9722, 1100.7]  # VI
-            mass_centers[6, :] = [
-                35.1801, 1.2830, 0.1322, 0.9162, -0159.8]  # WS
-            mass_centers[7, :] = [
-                52.4539, 2.3714, 1.1120, 0.9382, -1618.5]  # MH
-            mass_centers[8, :] = [
-                44.2216, -0.3419, 0.0687, 0.9683, 1272.7]  # IH/HDG
-        else:
-            warn(
-                ' Unknown radar. ' +
-                'Default centroids will be used in classification.')
-            mass_centers = None
-
+        # user defined parameters
+        centroids_file = dscfg.get('centroids_file', None)
         compute_entropy = dscfg.get('compute_entropy', False)
         output_distances = dscfg.get('output_distances', False)
         vectorize = dscfg.get('vectorize', False)
+        weights = dscfg.get('weights', np.array((1., 1., 1., 0.75, 0.5)))
+
+        # load centroids
+        if centroids_file is not None:
+            mass_centers, hydro_names, var_names = read_centroids(
+                dscfg['configpath']+'centroids_hydroclass/'+centroids_file)
+            if mass_centers is None:
+                warn(
+                    'Unable to read centroids file. ' +
+                    'Default centroids will be used in classification.')
+                hydro_names = ('AG', 'CR', 'LR', 'RP', 'RN', 'VI', 'WS', 'MH', 'IH/HDG')
+                var_names = ('dBZ', 'ZDR', 'KDP', 'RhoHV', 'H_ISO0')
+        else:
+            warn(
+                'No centroids were specified. ' +
+                'Default centroids will be used in classification.')
+            mass_centers = None
+            hydro_names = ('AG', 'CR', 'LR', 'RP', 'RN', 'VI', 'WS', 'MH', 'IH/HDG')
+            var_names = ('dBZ', 'ZDR', 'KDP', 'RhoHV', 'H_ISO0')
 
         fields_dict = pyart.retrieve.hydroclass_semisupervised(
-            radar, mass_centers=mass_centers,
-            weights=np.array([1., 1., 1., 0.75, 0.5]), refl_field=refl_field,
+            radar, hydro_names=hydro_names, var_names=var_names,
+            mass_centers=mass_centers, weights=weights, refl_field=refl_field,
             zdr_field=zdr_field, rhv_field=rhv_field, kdp_field=kdp_field,
             temp_field=temp_field, iso0_field=iso0_field, hydro_field=None,
             entropy_field=None, temp_ref=temp_ref,
@@ -1202,18 +1109,12 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
         if compute_entropy:
             new_dataset['radar_out'].add_field(
                 'hydroclass_entropy', fields_dict['entropy'])
-
             if output_distances:
-                field_names = [
-                    'proportion_AG', 'proportion_CR', 'proportion_LR',
-                    'proportion_RP', 'proportion_RN', 'proportion_VI',
-                    'proportion_WS', 'proportion_MH', 'proportion_IH']
-                sfield_names = [
-                    'prop_AG', 'prop_CR', 'prop_LR', 'prop_RP', 'prop_RN',
-                    'prop_VI', 'prop_WS', 'prop_MH', 'prop_IH']
-                for field_name, sfield_name in zip(field_names, sfield_names):
+                for hydro_name in hydro_names:
+                    field_name = 'proportion_'+hydro_name
                     new_dataset['radar_out'].add_field(
-                        field_name, fields_dict[sfield_name])
+                        field_name, fields_dict[field_name])
+
     elif dscfg['HYDRO_METHOD'] == 'UKMO':
         if dscfg['initialized'] == 0:
             # load the UKMO algorithm
@@ -1338,6 +1239,296 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
         raise Exception(
             "ERROR: Unknown hydrometeor classification method " +
             dscfg['HYDRO_METHOD'])
+
+    return new_dataset, ind_rad
+
+
+def process_centroids(procstatus, dscfg, radar_list=None):
+    """
+    Computes centroids for the semi-supervised hydrometeor classification
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration. Accepted Configuration Keywords::
+
+        datatype : list of string. Dataset keyword
+            The input data types
+        samples_per_vol : int. Dataset keyword
+            Maximum number of samples per volume kept for further analysis.
+            Default 20000
+        nbins : int.
+            Number of bins of the histogram used to make the data platykurtic.
+            Default 110
+        pdf_zh_max : int
+            Multiplicative factor to the Guassian function used to make the
+            distribution of the reflectivity platykurtic that determines the
+            number of samples for each bin. Default 20000
+        pdf_relh_max : int
+            Multiplicative factor to the Guassian function used to make the
+            distribution of the height relative to the iso-0 platykurtic that
+            determines the number of samples for each bin. Default 10000
+        sigma_zh, sigma_relh : float
+            sigma of the respective Gaussian functions. Defaults 0.75 and 1.5
+        randomize : bool
+            If True the data is randomized to avoid the effects of the
+            quantization. Default True
+        relh_slope : float. Dataset keyword
+            The slope used to transform the height relative to the iso0 into
+            a sigmoid function. Default 0.001
+        external_iterations : int. Dataset keywords
+            Number of iterations of the external loop. This number will
+            determine how many medoids are computed for each hydrometeor
+            class. Default 30
+        internal_iterations : int. Dataset keyword
+            Maximum number of iterations of the internal loop. Default 10
+        nsamples_iter : int.
+            Number of samples per iteration. Default 20000
+        alpha : float
+            Minimum value to accept the cluster according to p. Default 0.01
+        n_samples_syn : int
+            Number of samples drawn from reference to compare it with
+            observations in the KS test. Default 50
+        num_samples_arr : array of int
+            Number of observation samples used in the KS test to choose from.
+            Default (30, 35, 40)
+        acceptance_threshold : float. Dataset keyword
+            Threshold on the inter-quantile coefficient of dispersion of the
+            medoids above which the medoid of the class is not acceptable.
+            Default 0.5
+        nmedoids_min : int
+            Minimum number of intermediate medoids to compute the final
+            result. Default 1
+        var_names : tupple
+            The names of the features. Default ('dBZ', 'ZDR', 'KDP', 'RhoHV',
+            'H_ISO0')
+        hydro_names: tupple
+            The name of the hydrometeor types. Default ('CR', 'AG', 'LR',
+            'RN', 'RP', 'VI', 'WS', 'MH', 'IH/HDG')
+        weight : tupple
+            The weight given to each feature when comparing to the reference.
+            It is in the same order as var_names. Default (1., 1., 1., 1.,
+            0.75)
+
+    radar_list : list of Radar objects
+        Optional. list of radar objects
+
+    Returns
+    -------
+    new_dataset : dict
+        dictionary containing the output
+    ind_rad : int
+        radar index
+
+    """
+    if procstatus == 0:
+        return None, None
+
+    temp_field = None
+    iso0_field = None
+    for datatypedescr in dscfg['datatype']:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        if datatype == 'dBZ':
+            refl_field = 'reflectivity'
+        if datatype == 'dBZc':
+            refl_field = 'corrected_reflectivity'
+        if datatype == 'ZDR':
+            zdr_field = 'differential_reflectivity'
+        if datatype == 'ZDRc':
+            zdr_field = 'corrected_differential_reflectivity'
+        if datatype == 'RhoHV':
+            rhv_field = 'cross_correlation_ratio'
+        if datatype == 'uRhoHV':
+            rhv_field = 'uncorrected_cross_correlation_ratio'
+        if datatype == 'RhoHVc':
+            rhv_field = 'corrected_cross_correlation_ratio'
+        if datatype == 'KDP':
+            kdp_field = 'specific_differential_phase'
+        if datatype == 'KDPc':
+            kdp_field = 'corrected_specific_differential_phase'
+        if datatype == 'TEMP':
+            temp_field = 'temperature'
+        if datatype == 'H_ISO0':
+            iso0_field = 'height_over_iso0'
+
+    ind_rad = int(radarnr[5:8])-1
+
+    if procstatus == 1:
+        if radar_list[ind_rad] is None:
+            warn('No valid radar')
+            return None, None
+        radar = radar_list[ind_rad]
+
+        if temp_field is None and iso0_field is None:
+            warn('iso0 or temperature fields needed to create hydrometeor ' +
+                 'classification field')
+            return None, None
+
+        if temp_field is not None and (temp_field not in radar.fields):
+            warn('Unable to create hydrometeor classification field. ' +
+                 'Missing temperature field')
+            return None, None
+
+        if iso0_field is not None and (iso0_field not in radar.fields):
+            warn('Unable to create hydrometeor classification field. ' +
+                 'Missing height over iso0 field')
+            return None, None
+
+        temp_ref = 'temperature'
+        if iso0_field is not None:
+            temp_ref = 'height_over_iso0'
+
+        if ((refl_field not in radar.fields) or
+                (zdr_field not in radar.fields) or
+                (rhv_field not in radar.fields) or
+                (kdp_field not in radar.fields)):
+            warn('Unable to compute centroids. Missing data')
+            return None, None
+
+        samples_per_vol = dscfg.get('samples_per_vol', 20000)
+
+        (refl, zdr, kdp, rhohv, relh) = pyart.retrieve.data_for_centroids(
+            radar, refl_field=refl_field, zdr_field=zdr_field,
+            rhv_field=rhv_field, kdp_field=kdp_field, temp_field=temp_field,
+            iso0_field=iso0_field, temp_ref=temp_ref,
+            nsamples_max=samples_per_vol)
+
+        # first volume: initialize global data
+        if dscfg['initialized'] == 0:
+            if radar.instrument_parameters is None:
+                warn('Unknown radar frequency. C-band assumed')
+                band = 'C'
+            elif 'frequency' not in radar.instrument_parameters.keys():
+                warn('Unknown radar frequency. C-band assumed')
+                band = 'C'
+            else:
+                band = pyart.retrieve.get_freq_band(
+                    radar.instrument_parameters['frequency']['data'][0])
+
+            data_dict = {
+                'dBZ': refl,
+                'ZDR': zdr,
+                'KDP': kdp,
+                'RhoHV': rhohv,
+                'H_ISO0': relh,
+                'npoints': np.array([refl.size], dtype=int),
+                'timeinfo': np.array([dscfg['timeinfo']]),
+                'final': False,
+                'band': band
+            }
+            dscfg['global_data'] = data_dict
+            dscfg['initialized'] = 1
+
+            new_dataset = {'data_dict': data_dict}
+            return new_dataset, ind_rad
+
+        if dscfg['initialized'] == 0:
+            return None, None
+
+        dscfg['global_data']['dBZ'] = np.ma.append(
+            dscfg['global_data']['dBZ'], refl)
+        dscfg['global_data']['ZDR'] = np.ma.append(
+            dscfg['global_data']['ZDR'], zdr)
+        dscfg['global_data']['KDP'] = np.ma.append(
+            dscfg['global_data']['KDP'], kdp)
+        dscfg['global_data']['RhoHV'] = np.ma.append(
+            dscfg['global_data']['RhoHV'], rhohv)
+        dscfg['global_data']['H_ISO0'] = np.ma.append(
+            dscfg['global_data']['H_ISO0'], relh)
+        dscfg['global_data']['npoints'] = np.ma.append(
+            dscfg['global_data']['npoints'], refl.size)
+        dscfg['global_data']['timeinfo'] = np.ma.append(
+            dscfg['global_data']['timeinfo'], dscfg['timeinfo'])
+
+        new_dataset = {'data_dict': dscfg['global_data']}
+        return new_dataset, ind_rad
+
+    if dscfg['initialized'] == 0:
+        warn('Unable to compute centroids. No valid data found')
+        return None, None
+
+    dscfg['global_data']['final'] = True
+    new_dataset = {'data_dict': dscfg['global_data']}
+
+    if not _SKLEARN_AVAILABLE:
+        warn(
+            'Unable to compute centroids. scikit-learn package not available')
+        return new_dataset, ind_rad
+
+    # select data to be used to determine centroids
+    nbins = dscfg.get('nbins', 110)
+    pdf_zh_max = dscfg.get('pdf_zh_max', 2500)
+    pdf_relh_max = dscfg.get('pdf_relh_max', 1250)
+    sigma_zh = dscfg.get('sigma_zh', 0.75)
+    sigma_relh = dscfg.get('sigma_relh', 1.5)
+    randomize = dscfg.get('randomize', True)
+
+    fm = np.transpose(np.array([
+        dscfg['global_data']['dBZ'],
+        dscfg['global_data']['ZDR'],
+        dscfg['global_data']['KDP'],
+        dscfg['global_data']['RhoHV'],
+        dscfg['global_data']['H_ISO0']], dtype=np.float32))
+
+    fm_sample = pyart.retrieve.select_samples(
+            fm, np.random.default_rng(seed=0), nbins=nbins,
+            pdf_zh_max=pdf_zh_max, pdf_relh_max=pdf_relh_max,
+            sigma_zh=sigma_zh, sigma_relh=sigma_relh, randomize=randomize)
+
+    dscfg['global_data']['dBZ'] = fm_sample[:, 0]
+    dscfg['global_data']['ZDR'] = fm_sample[:, 1]
+    dscfg['global_data']['KDP'] = fm_sample[:, 2]
+    dscfg['global_data']['RhoHV'] = fm_sample[:, 3]
+    dscfg['global_data']['H_ISO0'] = fm_sample[:, 4]
+
+    # user selected parameters
+    relh_slope = dscfg.get('relh_slope', 0.001)
+    external_iterations = dscfg.get('external_iterations', 30)
+    internal_iterations = dscfg.get('internal_iterations', 10)
+    nmedoids_min = dscfg.get('nmedoids_min', 1)
+    nsamples_iter = dscfg.get('nsamples_iter', 20000)
+    alpha = dscfg.get('alpha', 0.01)
+    n_samples_syn = dscfg.get('nsamples_syn', 50)
+    num_samples_arr = dscfg.get('nsamples_syn',(30, 35, 40))
+    acceptance_threshold = dscfg.get('acceptance_threshold', 0.5)
+    var_names = dscfg.get(
+        'var_names', ('dBZ', 'ZDR', 'KDP', 'RhoHV', 'H_ISO0'))
+    hydro_names = dscfg.get(
+        'hydro_names', ('AG', 'CR', 'LR', 'RP', 'RN', 'VI', 'WS', 'MH', 'IH/HDG'))
+    weight = dscfg.get('weight', (1., 1., 1., 1., 0.75))
+
+    (labeled_data, labels, medoids_dict,
+     final_medoids_dict) = pyart.retrieve.compute_centroids(
+        fm_sample, weight=weight, var_names=var_names,
+        hydro_names=hydro_names, nsamples_iter=nsamples_iter,
+        external_iterations=external_iterations,
+        internal_iterations=internal_iterations, alpha=alpha,
+        num_samples_arr=num_samples_arr, n_samples_syn=n_samples_syn,
+        nmedoids_min=nmedoids_min,
+        acceptance_threshold=acceptance_threshold,
+        band=dscfg['global_data']['band'], relh_slope=relh_slope)
+
+    if labeled_data is None:
+        return new_dataset, ind_rad
+
+    labeled_data_dict = {
+        'dBZ': labeled_data[:, 0],
+        'ZDR': labeled_data[:, 1],
+        'KDP': labeled_data[:, 2],
+        'RhoHV': labeled_data[:, 3],
+        'H_ISO0': labeled_data[:, 4],
+        'labels': labels,
+        'hydro_names': hydro_names,
+        'var_names': var_names,
+        'band': dscfg['global_data']['band'],
+        'medoids_dict': medoids_dict,
+        'final_medoids_dict': final_medoids_dict,
+        'timeinfo': dscfg['global_data']['timeinfo']
+    }
+    new_dataset.update({'labeled_data_dict': labeled_data_dict})
 
     return new_dataset, ind_rad
 

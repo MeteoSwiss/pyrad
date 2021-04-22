@@ -13,6 +13,7 @@ Functions for obtaining Pyrad products from the datasets
     generate_sun_hits_products
     generate_qvp_products
     generate_ml_products
+    generate_centroids_products
 
 """
 
@@ -32,15 +33,26 @@ from ..io.io_aux import get_save_dir, make_filename
 from ..io.read_data_sun import read_sun_retrieval
 from ..io.read_data_other import read_ml_ts
 
-from ..io.write_data import write_sun_hits, write_sun_retrieval, write_timeseries_point
-from ..io.write_data import write_excess_gates, write_ts_ml
+from ..io.write_data import write_sun_hits, write_sun_retrieval
+from ..io.write_data import write_excess_gates, write_ts_ml, write_histogram
+from ..io.write_data import write_timeseries_point, write_centroids
 
-from ..graph.plots import plot_sun_hits
+from ..graph.plots import plot_sun_hits, plot_histogram2, plot_scatter
+from ..graph.plots import plot_centroids
 from ..graph.plots_timeseries import plot_sun_retrieval_ts, plot_ml_ts
 from ..graph.plots_vol import plot_fixed_rng, plot_fixed_rng_sun
 
-from ..util.radar_utils import create_sun_hits_field
+from ..util.radar_utils import create_sun_hits_field, compute_histogram
 from ..util.radar_utils import create_sun_retrieval_field
+
+import matplotlib as mpl
+mpl.use('Agg')
+
+# Increase a bit font size
+mpl.rcParams.update({'font.size': 16})
+mpl.rcParams.update({'font.family':  "sans-serif"})
+
+import matplotlib.pyplot as plt
 
 
 def generate_occurrence_products(dataset, prdcfg):
@@ -832,3 +844,482 @@ def generate_ml_products(dataset, prdcfg):
         return fname
 
     return generate_vol_products(dataset, prdcfg)
+
+
+def generate_centroids_products(dataset, prdcfg):
+    """
+    Generates centroids products. Accepted product types:
+        'HISTOGRAM':
+        'HISTOGRAM2D':
+        'HISTOGRAM_LABELED':
+        'HISTOGRAM_CENTROIDS':
+        'HISTOGRAM2D_CENTROIDS':
+
+    Parameters
+    ----------
+    dataset : dict
+        dictionary containing the radar object and a keyword stating the
+        status of the processing
+
+    prdcfg : dictionary of dictionaries
+        product configuration dictionary of dictionaries
+
+    Returns
+    -------
+    filename : str
+        the name of the file created. None otherwise
+
+    """
+    dssavedir = prdcfg['dsname']
+    if 'dssavename' in prdcfg:
+        dssavedir = prdcfg['dssavename']
+
+    if prdcfg['type'] == 'HISTOGRAM':
+        data_dict = dataset['data_dict']
+
+        # check if we have to plot the data
+        hist_type = prdcfg.get('hist_type', 'cumulative')
+        if hist_type == 'cumulative' and not data_dict['final']:
+            return None
+        if hist_type == 'instant' and data_dict['final']:
+            return None
+
+        voltype = prdcfg['voltype']
+        if voltype not in data_dict.keys():
+            warn(
+                ' Field type ' + voltype +
+                ' not available in data set. Skipping product ' +
+                prdcfg['type'])
+            return None
+
+        write_data = prdcfg.get('write_data', 1)
+        step = prdcfg.get('step', 0.1)
+
+        timeformat = '%Y%m%d'
+        timeinfo = data_dict['timeinfo'][0]
+        titl = timeinfo.strftime('%Y-%m-%d')+'\n'+voltype
+        data_vals = data_dict[voltype]
+        if hist_type == 'instant':
+            timeformat = '%Y%m%d%H%M%S'
+            timeinfo = data_dict['timeinfo'][-1]
+            titl = timeinfo.strftime('%Y-%m-%d %H:%M:%S')+'\n'+voltype
+            nvols = data_dict['npoints'].size
+            ind_start = np.sum(data_dict['npoints'][0:nvols-2])
+            data_vals = data_vals[ind_start:]
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdcfg['prdname'], timeinfo=timeinfo)
+
+        fname_list = make_filename(
+            'histogram', prdcfg['dstype'], prdcfg['voltype'],
+            prdcfg['imgformat'],
+            timeinfo=timeinfo, timeformat=timeformat)
+
+        for i, fname in enumerate(fname_list):
+            fname_list[i] = savedir+fname
+
+        if '_std' in voltype:
+            bin_edges = np.arange(-1.-step/2., 1.+step/2+step, step)
+            values = data_vals
+        else:
+            field_name = get_fieldname_pyart(voltype)
+            bin_edges, values = compute_histogram(
+                data_vals, field_name, step=step)
+        bin_centers = bin_edges[1:]-step/2
+        hist, bin_edges = np.histogram(values, bins=bin_edges)
+        plot_histogram2(
+            bin_centers, hist, fname_list, labelx=voltype,
+            labely='Number of Samples', titl=titl)
+
+        print('----- save to '+' '.join(fname_list))
+
+        if write_data:
+            fname = savedir+make_filename(
+                'histogram', prdcfg['dstype'], prdcfg['voltype'],
+                ['csv'], timeinfo=timeinfo, timeformat=timeformat)[0]
+
+
+            write_histogram(bin_edges, hist, fname, step=step)
+            print('----- save to '+fname)
+
+            return fname
+
+        return fname_list
+
+    if prdcfg['type'] == 'HISTOGRAM2D':
+        data_dict = dataset['data_dict']
+
+        # check if we have to plot the data
+        hist_type = prdcfg.get('hist_type', 'cumulative')
+        if hist_type == 'cumulative' and not data_dict['final']:
+            return None
+        if hist_type == 'instant' and data_dict['final']:
+            return None
+
+        voltype_x = prdcfg['voltype_x']
+        voltype_y = prdcfg['voltype_y']
+        if voltype_x not in data_dict.keys():
+            warn(
+                ' Field type ' + voltype_x +
+                ' not available in data set. Skipping product ' +
+                prdcfg['type'])
+            return None
+        if voltype_y not in data_dict.keys():
+            warn(
+                ' Field type ' + voltype_y +
+                ' not available in data set. Skipping product ' +
+                prdcfg['type'])
+            return None
+
+        step_x = prdcfg.get('step_x', 0.1)
+        step_y = prdcfg.get('step_y', 0.1)
+
+        timeformat = '%Y%m%d'
+        timeinfo = data_dict['timeinfo'][0]
+        titl = (
+            timeinfo.strftime('%Y-%m-%d')+'\n'+voltype_x+'-'+voltype_y)
+        data_vals_x = data_dict[voltype_x]
+        data_vals_y = data_dict[voltype_y]
+        if hist_type == 'instant':
+            timeformat = '%Y%m%d%H%M%S'
+            timeinfo = data_dict['timeinfo'][-1]
+            titl = (
+                timeinfo.strftime('%Y-%m-%d %H:%M:%S')+'\n'+voltype_x+'-' +
+                voltype_y)
+            nvols = data_dict['npoints'].size
+            ind_start = np.sum(data_dict['npoints'][0:nvols-2])
+            data_vals_x = data_vals_x[ind_start:]
+            data_vals_y = data_vals_y[ind_start:]
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdcfg['prdname'], timeinfo=timeinfo)
+
+        fname_list = make_filename(
+            '2Dhistogram', prdcfg['dstype'], voltype_x+'-'+voltype_y,
+            prdcfg['imgformat'],
+            timeinfo=timeinfo, timeformat=timeformat)
+
+        for i, fname in enumerate(fname_list):
+            fname_list[i] = savedir+fname
+
+        if '_std' in voltype_x:
+            bin_edges_x = np.arange(-1.-step_x/2., 1.+step_x/2+step_x, step_x)
+            values_x = data_vals_x
+        else:
+            field_name_x = get_fieldname_pyart(voltype_x)
+            bin_edges_x, values_x = compute_histogram(
+                data_vals_x, field_name_x, step=step_x)
+
+        if '_std' in voltype_y:
+            bin_edges_y = np.arange(-1.-step_y/2., 1.+step_y/2+step_y, step_y)
+            values_y = data_vals_y
+        else:
+            field_name_y = get_fieldname_pyart(voltype_y)
+            bin_edges_y, values_y = compute_histogram(
+                data_vals_y, field_name_y, step=step_y)
+
+        hist_2d, bin_edges_x, bin_edges_y = np.histogram2d(
+            values_x, values_y, bins=[bin_edges_x, bin_edges_y])
+
+        plot_scatter(
+            bin_edges_x, bin_edges_y, np.ma.asarray(hist_2d), voltype_x,
+            voltype_y, fname_list, prdcfg, rad1_name='', rad2_name='',
+            titl=titl, cmap='viridis')
+
+        print('----- save to '+' '.join(fname_list))
+
+        return fname_list
+
+    if prdcfg['type'] == 'HISTOGRAM_LABELED':
+        if 'labeled_data_dict' not in dataset:
+            return None
+
+        data_dict = dataset['labeled_data_dict']
+
+        voltype = prdcfg['voltype']
+        if voltype not in data_dict.keys():
+            warn(
+                ' Field type ' + voltype +
+                ' not available in data set. Skipping product ' +
+                prdcfg['type'])
+            return None
+
+        write_data = prdcfg.get('write_data', 1)
+        step = prdcfg.get('step', 0.1)
+
+        timeformat = '%Y%m%d'
+        timeinfo = data_dict['timeinfo'][0]
+        titl = timeinfo.strftime('%Y-%m-%d')+'\n'+voltype
+        data_vals = data_dict[voltype]
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdcfg['prdname'], timeinfo=timeinfo)
+
+        fname_list = make_filename(
+            'histogram', prdcfg['dstype'], prdcfg['voltype'],
+            prdcfg['imgformat'],
+            timeinfo=timeinfo, timeformat=timeformat)
+
+        for i, fname in enumerate(fname_list):
+            fname_list[i] = savedir+fname
+
+        if '_std' in voltype:
+            bin_edges = np.arange(-1.-step/2., 1.+step/2+step, step)
+            values = data_vals
+        else:
+            field_name = get_fieldname_pyart(voltype)
+            bin_edges, values = compute_histogram(
+                data_vals, field_name, step=step)
+        bin_centers = bin_edges[1:]-step/2
+        hist, bin_edges = np.histogram(values, bins=bin_edges)
+        plot_histogram2(
+            bin_centers, hist, fname_list, labelx=voltype,
+            labely='Number of Samples', titl=titl)
+
+        print('----- save to '+' '.join(fname_list))
+
+        if write_data:
+            fname = savedir+make_filename(
+                'histogram', prdcfg['dstype'], prdcfg['voltype'],
+                ['csv'], timeinfo=timeinfo, timeformat=timeformat)[0]
+
+
+            write_histogram(bin_edges, hist, fname, step=step)
+            print('----- save to '+fname)
+
+            return fname
+
+        return fname_list
+
+    if prdcfg['type'] == 'HISTOGRAM_CENTROIDS':
+        if 'labeled_data_dict' not in dataset:
+            return None
+
+        data_dict = dataset['labeled_data_dict']
+
+        voltype = prdcfg['voltype']
+        hydro_type = prdcfg['hydro_type']
+        if voltype not in data_dict.keys():
+            warn(
+                ' Field type ' + voltype +
+                ' not available in data set. Skipping product ' +
+                prdcfg['type'])
+            return None
+        if hydro_type not in data_dict['medoids_dict']:
+            warn('No medoids where found for hydrometeor class '+hydro_type)
+            return None
+        ind_hydro = np.where(
+            np.array(data_dict['hydro_names']) == hydro_type)[0]
+        ind_medoid = np.where(
+            np.array(data_dict['var_names']) == voltype)[0]
+
+        write_data = prdcfg.get('write_data', 1)
+        step = prdcfg.get('step', 0.1)
+        dpi = 72
+        if 'dpi' in prdcfg['ppiImageConfig']:
+            dpi = prdcfg['ppiImageConfig']['dpi']
+
+        timeformat = '%Y%m%d'
+        timeinfo = data_dict['timeinfo'][0]
+        titl = timeinfo.strftime('%Y-%m-%d')+'\n'+voltype+' '+hydro_type
+        data_vals = data_dict[voltype]
+        data_vals = data_vals[data_dict['labels'] == ind_hydro]
+
+        medoids = np.array(data_dict['medoids_dict'][hydro_type])
+        medoids = medoids[:, ind_medoid]
+
+        if hydro_type not in data_dict['final_medoids_dict']:
+            warn('No medoid for hydrometeor class '+hydro_type)
+            fmedoid = None
+        else:
+            fmedoid = data_dict['final_medoids_dict'][hydro_type][ind_medoid]
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdcfg['prdname'], timeinfo=timeinfo)
+
+        fname_list = make_filename(
+            'histogram', prdcfg['dstype'], prdcfg['voltype'],
+            prdcfg['imgformat'],
+            timeinfo=timeinfo, timeformat=timeformat)
+
+        for i, fname in enumerate(fname_list):
+            fname_list[i] = savedir+fname
+
+        if '_std' in voltype:
+            bin_edges = np.arange(-1.-step/2., 1.+step/2+step, step)
+            values = data_vals
+        else:
+            field_name = get_fieldname_pyart(voltype)
+            bin_edges, values = compute_histogram(
+                data_vals, field_name, step=step)
+        bin_centers = bin_edges[1:]-step/2
+        hist, bin_edges = np.histogram(values, bins=bin_edges)
+        pos_medoids = []
+        for medoid in medoids:
+            ind = np.where(bin_edges <= medoid)[0][-1]
+            pos_medoids.append(hist[ind])
+        pos_medoids = np.array(pos_medoids)
+        if fmedoid is not None:
+            ind = np.where(bin_edges <= fmedoid)[0][-1]
+            pos_fmedoid = hist[ind]
+
+        fig, ax, = plot_histogram2(
+            bin_centers, hist, fname_list, labelx=voltype,
+            labely='Number of Samples', titl=titl, save_fig=False)
+
+        ax.scatter(medoids, pos_medoids, c='g', marker='o')
+        if fmedoid is not None:
+            ax.plot(fmedoid, pos_fmedoid, c='r', marker='D')
+
+        for fname in fname_list:
+            fig.savefig(fname, dpi=dpi)
+        plt.close(fig)
+
+        print('----- save to '+' '.join(fname_list))
+
+        if write_data:
+            fname = savedir+make_filename(
+                'histogram', prdcfg['dstype'], prdcfg['voltype'],
+                ['csv'], timeinfo=timeinfo, timeformat=timeformat)[0]
+
+
+            write_histogram(bin_edges, hist, fname, step=step)
+            print('----- save to '+fname)
+
+            return fname
+
+        return fname_list
+
+    if prdcfg['type'] == 'HISTOGRAM2D_CENTROIDS':
+        if 'labeled_data_dict' not in dataset:
+            return None
+
+        labeled_data_dict = dataset['labeled_data_dict']
+
+        voltype_x = prdcfg['voltype_x']
+        voltype_y = prdcfg['voltype_y']
+        hydro_type = prdcfg['hydro_type']
+        if voltype_x not in labeled_data_dict.keys():
+            warn(
+                ' Field type ' + voltype_x +
+                ' not available in data set. Skipping product ' +
+                prdcfg['type'])
+            return None
+        if voltype_y not in labeled_data_dict.keys():
+            warn(
+                ' Field type ' + voltype_y +
+                ' not available in data set. Skipping product ' +
+                prdcfg['type'])
+            return None
+        if hydro_type not in labeled_data_dict['medoids_dict']:
+            warn('No medoids where found for hydrometeor class '+hydro_type)
+            return None
+
+        ind_hydro = np.where(
+            np.array(labeled_data_dict['hydro_names']) == hydro_type)[0]
+        ind_medoid_x = np.where(
+            np.array(labeled_data_dict['var_names']) == voltype_x)[0]
+        ind_medoid_y = np.where(
+            np.array(labeled_data_dict['var_names']) == voltype_y)[0]
+
+        step_x = prdcfg.get('step_x', 0.1)
+        step_y = prdcfg.get('step_y', 0.1)
+
+        timeformat = '%Y%m%d'
+        timeinfo = labeled_data_dict['timeinfo'][0]
+        titl = (
+            timeinfo.strftime('%Y-%m-%d')+'\n'+voltype_x+'-'+voltype_y +
+            ' '+hydro_type)
+
+        data_vals_x = labeled_data_dict[voltype_x]
+        data_vals_y = labeled_data_dict[voltype_y]
+
+        data_vals_x = data_vals_x[labeled_data_dict['labels'] == ind_hydro]
+        data_vals_y = data_vals_y[labeled_data_dict['labels'] == ind_hydro]
+
+        medoids = np.array(labeled_data_dict['medoids_dict'][hydro_type])
+        medoids_x = medoids[:, ind_medoid_x]
+        medoids_y = medoids[:, ind_medoid_y]
+
+        if hydro_type not in labeled_data_dict['final_medoids_dict']:
+            warn('No medoid for hydrometeor class '+hydro_type)
+            fmedoid_x = None
+            fmedoid_y = None
+        else:
+            fmedoid_x = labeled_data_dict['final_medoids_dict'][hydro_type][
+                ind_medoid_x]
+            fmedoid_y = labeled_data_dict['final_medoids_dict'][hydro_type][
+                ind_medoid_y]
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdcfg['prdname'], timeinfo=timeinfo)
+
+        fname_list = make_filename(
+            '2Dhistogram', prdcfg['dstype'], voltype_x+'-'+voltype_y,
+            prdcfg['imgformat'],
+            timeinfo=timeinfo, timeformat=timeformat)
+
+        for i, fname in enumerate(fname_list):
+            fname_list[i] = savedir+fname
+
+        if '_std' in voltype_x:
+            bin_edges_x = np.arange(-1.-step_x/2., 1.+step_x/2+step_x, step_x)
+            values_x = data_vals_x
+        else:
+            field_name_x = get_fieldname_pyart(voltype_x)
+            bin_edges_x, values_x = compute_histogram(
+                data_vals_x, field_name_x, step=step_x)
+
+        if '_std' in voltype_y:
+            bin_edges_y = np.arange(-1.-step_y/2., 1.+step_y/2+step_y, step_y)
+            values_y = data_vals_y
+        else:
+            field_name_y = get_fieldname_pyart(voltype_y)
+            bin_edges_y, values_y = compute_histogram(
+                data_vals_y, field_name_y, step=step_y)
+
+        hist_2d, bin_edges_x, bin_edges_y = np.histogram2d(
+            values_x, values_y, bins=[bin_edges_x, bin_edges_y])
+
+        plot_centroids(
+            bin_edges_x, bin_edges_y, np.ma.asarray(hist_2d), voltype_x,
+            voltype_y, fname_list, prdcfg, titl=titl, medoids_x=medoids_x,
+            medoids_y=medoids_y, fmedoid_x=fmedoid_x, fmedoid_y=fmedoid_y,
+            cmap='viridis')
+
+        print('----- save to '+' '.join(fname_list))
+
+        return fname_list
+
+    if prdcfg['type'] == 'WRITE_CENTROIDS':
+        if 'labeled_data_dict' not in dataset:
+            return None
+
+        labeled_data_dict = dataset['labeled_data_dict']
+        timeformat = '%Y%m%d'
+        timeinfo = labeled_data_dict['timeinfo'][0]
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdcfg['prdname'], timeinfo=timeinfo)
+
+        fname = make_filename(
+            'centroids', prdcfg['dstype'], 'centroids',
+            ['csv'], timeinfo=timeinfo, timeformat=timeformat)[0]
+
+        fname = savedir+fname
+
+        write_centroids(
+            fname, labeled_data_dict['final_medoids_dict'],
+            labeled_data_dict['var_names'])
+        print('----- save to '+fname)
+
+        return fname
+
+    warn(' Unsupported product type: ' + prdcfg['type'])
+    return None

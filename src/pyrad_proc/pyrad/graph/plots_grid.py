@@ -82,7 +82,8 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
     vmin = prdcfg.get('vmin', None)
     vmax = prdcfg.get('vmax', None)
 
-    norm, ticks, ticklabs = get_norm(field_name)
+    norm, ticks, ticklabs = get_norm(
+        field_name, field_dict=grid.fields[field_name])
 
     xsize = prdcfg['gridMapImageConfig']['xsize']
     ysize = prdcfg['gridMapImageConfig']['ysize']
@@ -138,7 +139,7 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
                 resolution = '50m'
             elif resolution == 'h':
                 resolution = '10m'
-    
+
             if resolution not in ('110m', '50m', '10m'):
                 warn('Unknown map resolution: '+resolution)
                 resolution = '110m'
@@ -325,7 +326,7 @@ def plot_surface_contour(grid, field_name, level, prdcfg, fname_list,
                 lons, lats, data, contour_values, colors=colors,
                 linewidths=linewidths, transform=cartopy.crs.PlateCarree())
             ax.set_extent([min_lon, max_lon, min_lat, max_lat])
-            
+
     if save_fig:
         for fname in fname_list:
             fig.savefig(fname, dpi=dpi)
@@ -363,7 +364,8 @@ def plot_latitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
     if 'dpi' in prdcfg['rhiImageConfig']:
         dpi = prdcfg['rhiImageConfig']['dpi']
 
-    norm, ticks, ticklabs = get_norm(field_name)
+    norm, ticks, ticklabs = get_norm(
+        field_name, field_dict=grid.fields[field_name])
 
     xsize = prdcfg['rhiImageConfig'].get('xsize', 10.)
     ysize = prdcfg['rhiImageConfig'].get('ysize', 5.)
@@ -413,7 +415,8 @@ def plot_longitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
     if 'dpi' in prdcfg['rhiImageConfig']:
         dpi = prdcfg['rhiImageConfig']['dpi']
 
-    norm, ticks, ticklabs = get_norm(field_name)
+    norm, ticks, ticklabs = get_norm(
+        field_name, field_dict=grid.fields[field_name])
 
     xsize = prdcfg['rhiImageConfig'].get('xsize', 10.)
     ysize = prdcfg['rhiImageConfig'].get('ysize', 5.)
@@ -463,7 +466,8 @@ def plot_latlon_slice(grid, field_name, coord1, coord2, prdcfg, fname_list):
     if 'dpi' in prdcfg['rhiImageConfig']:
         dpi = prdcfg['rhiImageConfig']['dpi']
 
-    norm, ticks, ticklabs = get_norm(field_name)
+    norm, ticks, ticklabs = get_norm(
+        field_name, field_dict=grid.fields[field_name])
 
     xsize = prdcfg['rhiImageConfig'].get('xsize', 10.)
     ysize = prdcfg['rhiImageConfig'].get('ysize', 5.)

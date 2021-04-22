@@ -7,6 +7,7 @@ Functions for reading auxiliary data
 .. autosummary::
     :toctree: generated/
 
+    read_centroids
     read_proc_periods
     read_profile_ts
     read_histogram_ts
@@ -50,6 +51,49 @@ import numpy as np
 from pyart.config import get_fillvalue, get_metadata
 
 from .io_aux import get_fieldname_pyart, _get_datetime
+
+
+def read_centroids(fname):
+    """
+    Reads a file containing the centroids for the semi-supervised
+    classification
+
+    Parameters
+    ----------
+    fname : str
+        name of the file to read
+
+    Returns
+    -------
+    mass_centers : 2D-array
+        Matrix with the centroids as (nclasses, nvariables)
+
+    """
+    try:
+        with open(fname, 'r', newline='') as csvfile:
+            # first count the lines
+            reader = csv.DictReader(
+                row for row in csvfile if not row.startswith('#'))
+            nhydro = sum(1 for row in reader)
+            nvars = len(reader.fieldnames)-1
+            mass_centers = np.empty((nhydro, nvars))
+            hydro_names = []
+            var_names = reader.fieldnames[1:]
+
+            # now read the data
+            csvfile.seek(0)
+            reader = csv.DictReader(
+                row for row in csvfile if not row.startswith('#'))
+            for i, row in enumerate(reader):
+                hydro_names.append(row[reader.fieldnames[0]])
+                for j, col in enumerate(var_names):
+                    mass_centers[i, j] = float(row[col])
+
+            return mass_centers, hydro_names, var_names
+    except EnvironmentError as ee:
+        warn(str(ee))
+        warn('Unable to read file '+fname)
+        return None, None, None
 
 
 def read_proc_periods(fname):

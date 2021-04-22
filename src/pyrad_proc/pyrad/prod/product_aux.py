@@ -16,6 +16,7 @@ from .process_product import generate_occurrence_products
 from .process_product import generate_qvp_products
 from .process_product import generate_ml_products
 from .process_product import generate_cosmo_to_radar_products
+from .process_product import generate_centroids_products
 
 from .process_vol_products import generate_vol_products
 from .process_grid_products import generate_grid_products
@@ -41,6 +42,7 @@ def get_prodgen_func(dsformat, dsname, dstype):
         function that is called to generate their products. For details about
         what the functions do check the function documentation:
             'VOL': generate_vol_products
+            'CENTROIDS': generate_centroids_products
             'COLOCATED_GATES': generate_colocated_gates_products
             'COSMO_COORD': generate_cosmo_coord_products
             'COSMO2RADAR': generate_cosmo_to_radar_products
@@ -99,6 +101,8 @@ def get_prodgen_func(dsformat, dsname, dstype):
         func = generate_qvp_products
     elif dsformat == 'ML':
         func = generate_ml_products
+    elif dsformat == 'CENTROIDS':
+        func = generate_centroids_products
     else:
         raise ValueError("ERROR: Unknown dataset format '%s' of dataset '%s'"
                          "(dataset type '%s')" % (dsformat, dsname, dstype))

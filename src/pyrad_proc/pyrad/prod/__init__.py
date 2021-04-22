@@ -37,6 +37,7 @@ Product generation
     generate_grid_time_avg_products
     generate_traj_product
     generate_ml_products
+    generate_centroids_products
 
 """
 
@@ -48,6 +49,7 @@ from .process_product import generate_qvp_products
 from .process_product import generate_occurrence_products
 from .process_product import generate_ml_products
 from .process_product import generate_cosmo_to_radar_products
+from .process_product import generate_centroids_products
 
 from .process_vol_products import generate_vol_products
 from .process_grid_products import generate_grid_products

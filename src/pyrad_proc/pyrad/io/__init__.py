@@ -61,6 +61,7 @@ Reading other data
 .. autosummary::
     :toctree: generated/
 
+    read_centroids
     read_proc_periods
     read_last_state
     read_status
@@ -112,6 +113,7 @@ Writing data
 .. autosummary::
     :toctree: generated/
 
+    write_centroids
     write_proc_periods
     write_ts_lightning
     send_msg
@@ -212,7 +214,7 @@ from .read_data_other import read_timeseries, read_monitoring_ts, read_ts_cum
 from .read_data_other import read_intercomp_scores_ts, read_quantiles
 from .read_data_other import read_selfconsistency, read_colocated_gates
 from .read_data_other import read_colocated_data, read_antenna_pattern
-from .read_data_other import read_last_state, read_rhi_profile
+from .read_data_other import read_last_state, read_rhi_profile, read_centroids
 from .read_data_other import read_excess_gates, read_histogram
 from .read_data_other import read_profile_ts, read_histogram_ts
 from .read_data_other import read_quantiles_ts, read_ml_ts, read_proc_periods
@@ -242,7 +244,7 @@ from .write_data import write_histogram, write_quantiles, write_ts_lightning
 from .write_data import write_trt_cell_scores, write_trt_cell_lightning
 from .write_data import write_trt_info, write_fixed_angle, write_proc_periods
 from .write_data import write_trt_thundertracking_data, write_ts_grid_data
-from .write_data import write_trt_rpc, write_ts_stats
+from .write_data import write_trt_rpc, write_ts_stats, write_centroids
 
 from .io_aux import get_save_dir, make_filename, get_new_rainbow_file_name
 from .io_aux import get_datetime, get_dataset_fields, map_hydro, map_Doppler

@@ -116,7 +116,8 @@ def plot_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
 
         cmap = pyart.config.get_field_colormap(field_name)
 
-        norm, ticks, ticklabs = get_norm(field_name)
+        norm, ticks, ticklabs = get_norm(
+            field_name, field_dict=spectra.fields[field_name])
         if vmin is None or vmax is None:
             vmin = vmax = None
             if norm is None:  # if norm is set do not override with vmin/vmax
@@ -249,7 +250,8 @@ def plot_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng, prdcfg,
 
         cmap = pyart.config.get_field_colormap(field_name)
 
-        norm, ticks, ticklabs = get_norm(field_name)
+        norm, ticks, ticklabs = get_norm(
+            field_name, field_dict=spectra.fields[field_name])
         if vmin is None or vmax is None:
             vmin = vmax = None
             if norm is None:  # if norm is set do not override with vmin/vmax
@@ -369,7 +371,8 @@ def plot_time_Doppler(spectra, field_name, prdcfg, fname_list,
 
         cmap = pyart.config.get_field_colormap(field_name)
 
-        norm, ticks, ticklabs = get_norm(field_name)
+        norm, ticks, ticklabs = get_norm(
+            field_name, field_dict=spectra.fields[field_name])
         if vmin is None or vmax is None:
             vmin = vmax = None
             if norm is None:  # if norm is set do not override with vmin/vmax
@@ -582,7 +585,8 @@ def plot_complex_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
 
         cmap = pyart.config.get_field_colormap(field_name)
 
-        norm, ticks, ticklabs = get_norm(field_name)
+        norm, ticks, ticklabs = get_norm(
+            field_name, field_dict=spectra.fields[field_name])
         if vmin is None or vmax is None:
             vmin = vmax = None
             if norm is None:  # if norm is set do not override with vmin/vmax
@@ -731,7 +735,8 @@ def plot_complex_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng,
 
         cmap = pyart.config.get_field_colormap(field_name)
 
-        norm, ticks, ticklabs = get_norm(field_name)
+        norm, ticks, ticklabs = get_norm(
+            field_name, field_dict=spectra.fields[field_name])
         if vmin is None or vmax is None:
             vmin = vmax = None
             if norm is None:  # if norm is set do not override with vmin/vmax
@@ -865,7 +870,8 @@ def plot_complex_time_Doppler(spectra, field_name, prdcfg, fname_list,
 
         cmap = pyart.config.get_field_colormap(field_name)
 
-        norm, ticks, ticklabs = get_norm(field_name)
+        norm, ticks, ticklabs = get_norm(
+            field_name, field_dict=spectra.fields[field_name])
         if vmin is None or vmax is None:
             vmin = vmax = None
             if norm is None:  # if norm is set do not override with vmin/vmax
@@ -993,7 +999,8 @@ def plot_amp_phase_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
     if field_name is not None:
         cmap = pyart.config.get_field_colormap(field_name)
 
-        norm, ticks, ticklabs = get_norm(field_name)
+        norm, ticks, ticklabs = get_norm(
+            field_name, field_dict=spectra.fields[field_name])
         if ampli_vmin is None or ampli_vmax is None:
             ampli_vmin = ampli_vmax = None
             if norm is None:  # if norm is set do not override with vmin/vmax
@@ -1154,7 +1161,8 @@ def plot_amp_phase_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng,
     if field_name is not None:
         cmap = pyart.config.get_field_colormap(field_name)
 
-        norm, ticks, ticklabs = get_norm(field_name)
+        norm, ticks, ticklabs = get_norm(
+            field_name, field_dict=spectra.fields[field_name])
         if ampli_vmin is None or ampli_vmax is None:
             ampli_vmin = ampli_vmax = None
             if norm is None:  # if norm is set do not override with vmin/vmax
@@ -1300,7 +1308,8 @@ def plot_amp_phase_time_Doppler(spectra, field_name, prdcfg, fname_list,
     if field_name is not None:
         cmap = pyart.config.get_field_colormap(field_name)
 
-        norm, ticks, ticklabs = get_norm(field_name)
+        norm, ticks, ticklabs = get_norm(
+            field_name, field_dict=spectra.fields[field_name])
         if ampli_vmin is None or ampli_vmax is None:
             ampli_vmin = ampli_vmax = None
             if norm is None:  # if norm is set do not override with vmin/vmax

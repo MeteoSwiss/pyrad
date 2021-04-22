@@ -11,6 +11,7 @@ Functions to plot Pyrad datasets
     plot_pos_map
     plot_density
     plot_scatter
+    plot_centroids
     plot_quantiles
     plot_histogram
     plot_histogram2
@@ -285,7 +286,7 @@ def plot_pos_map(lat, lon, alt, fname_list, ax=None, fig=None, save_fig=True,
 
 
 def plot_density(hist_obj, hist_type, field_name, ind_sweep, prdcfg,
-                 fname_list, quantiles=[25., 50., 75.], ref_value=0.,
+                 fname_list, quantiles=(25., 50., 75.), ref_value=0.,
                  vmin=None, vmax=None):
     """
     density plot (angle-values representation)
@@ -448,9 +449,11 @@ def plot_density(hist_obj, hist_type, field_name, ind_sweep, prdcfg,
     return fname_list
 
 
-def plot_scatter(bin_edges1, bin_edges2, hist_2d, field_name1, field_name2, fname_list,
-                 prdcfg, metadata=None, lin_regr=None, lin_regr_slope1=None,
-                 rad1_name='RADAR001', rad2_name='RADAR002'):
+def plot_scatter(bin_edges1, bin_edges2, hist_2d, field_name1, field_name2,
+                 fname_list, prdcfg, metadata=None, lin_regr=None,
+                 lin_regr_slope1=None, rad1_name='RADAR001',
+                 rad2_name='RADAR002', titl='colocated radar gates',
+                 cmap=None):
     """
     2D histogram
 
@@ -474,6 +477,11 @@ def plot_scatter(bin_edges1, bin_edges2, hist_2d, field_name1, field_name2, fnam
         the intercep point of a linear regression of slope 1
     rad1_name, rad2_name : str
         name of the radars which data is used
+    titl : str
+        plot title
+    cmap : str or None
+        name of the colormap. If None it will be choosen the default for the
+        field_name
 
     Returns
     -------
@@ -485,7 +493,6 @@ def plot_scatter(bin_edges1, bin_edges2, hist_2d, field_name1, field_name2, fnam
     hist_2d = np.ma.masked_where(hist_2d == 0, hist_2d)
 
     # display data
-    titl = 'colocated radar gates'
     label = 'Number of Points'
     labelx = rad1_name+' '+field_name1
     labely = rad2_name+' '+field_name2
@@ -496,34 +503,32 @@ def plot_scatter(bin_edges1, bin_edges2, hist_2d, field_name1, field_name2, fnam
 
     fig = plt.figure(figsize=[prdcfg['ppiImageConfig']['xsize'],
                               prdcfg['ppiImageConfig']['ysize']],
-                     dpi=dpi)
+                        dpi=dpi)
     ax = fig.add_subplot(111)
 
-    cmap = pyart.config.get_field_colormap(field_name1)
+    if cmap is None:
+        cmap = pyart.config.get_field_colormap(field_name1)
 
-    cax = ax.imshow(
-        np.ma.transpose(hist_2d), origin='lower', cmap=cmap, vmin=0.,
-        vmax=np.max(hist_2d),
-        extent=(bin_edges1[0], bin_edges1[-1], bin_edges2[0], bin_edges2[-1]),
-        aspect='auto', interpolation='none')
-    ax.autoscale(False)
+    X, Y = np.meshgrid(bin_edges1, bin_edges2)
+    cax = ax.pcolormesh(
+        X, Y, np.ma.transpose(hist_2d), cmap=cmap, vmin=0.,
+        vmax=np.max(hist_2d))
 
-    # plot reference
     step1 = bin_edges1[1]-bin_edges1[0]
     bin_centers1 = bin_edges1[0:-1]+step1/2.
 
     step2 = bin_edges2[1]-bin_edges2[0]
     bin_centers2 = bin_edges2[0:-1]+step2/2.
 
-    ax.plot(bin_centers1, bin_centers2, 'k--')
+    # plot reference
+    if bin_edges1.size == bin_edges2.size:
+        ax.plot(bin_centers1, bin_centers2, 'k--')
 
     # plot linear regression
     if lin_regr is not None:
         ax.plot(bin_centers1, lin_regr[0]*bin_centers1+lin_regr[1], 'r')
     if lin_regr_slope1 is not None:
         ax.plot(bin_centers1, bin_centers1+lin_regr_slope1, 'g')
-
-    # ax.autoscale(enable=True, axis='both', tight=True)
 
     ax.set_xlabel(labelx)
     ax.set_ylabel(labely)
@@ -535,6 +540,89 @@ def plot_scatter(bin_edges1, bin_edges2, hist_2d, field_name1, field_name2, fnam
     if metadata is not None:
         ax.text(0.05, 0.95, metadata, horizontalalignment='left',
                 verticalalignment='top', transform=ax.transAxes)
+
+    # Make a tight layout
+    fig.tight_layout()
+
+    for fname in fname_list:
+        fig.savefig(fname, dpi=dpi)
+    plt.close(fig)
+
+    return fname_list
+
+
+def plot_centroids(bin_edges1, bin_edges2, hist_2d, field_name1, field_name2,
+                   fname_list, prdcfg, titl='centroids', cmap=None,
+                   medoids_x=None, medoids_y=None, fmedoid_x=None,
+                   fmedoid_y=None):
+    """
+    2D histogram
+
+    Parameters
+    ----------
+    bin_edges1, bin_edges2 : float array2
+        the bins of each field
+    hist_2d : ndarray 2D
+        the 2D histogram
+    field_name1, field_name2 : str
+        the names of each field
+    fname_list : list of str
+        list of names of the files where to store the plot
+    prdcfg : dict
+        product configuration dictionary
+    titl : str
+        plot title
+    cmap : str or None
+        name of the colormap. If None it will be choosen the default for the
+        field_name
+    medoids_x, medoids_y : ndarray 1D or None
+        intermediate medoids
+    fmedoid_x, fmedoid_y : ndarray 1D or None
+        final medoid
+
+    Returns
+    -------
+    fname_list : list of str
+        list of names of the created plots
+
+    """
+    # mask 0 data
+    hist_2d = np.ma.masked_where(hist_2d == 0, hist_2d)
+
+    # display data
+    label = 'Number of Points'
+    labelx = field_name1
+    labely = field_name2
+
+    dpi = 72
+    if 'dpi' in prdcfg['ppiImageConfig']:
+        dpi = prdcfg['ppiImageConfig']['dpi']
+
+    fig = plt.figure(figsize=[prdcfg['ppiImageConfig']['xsize'],
+                              prdcfg['ppiImageConfig']['ysize']],
+                        dpi=dpi)
+    ax = fig.add_subplot(111)
+
+    if cmap is None:
+        cmap = pyart.config.get_field_colormap(field_name1)
+
+    X, Y = np.meshgrid(bin_edges1, bin_edges2)
+    cax = ax.pcolormesh(
+        X, Y, np.ma.transpose(hist_2d), cmap=cmap, vmin=0.,
+        vmax=np.max(hist_2d))
+
+    # plot intermediate medoids
+    if medoids_x is not None:
+        ax.scatter(medoids_x, medoids_y, c='w', marker='o')
+    if fmedoid_x is not None:
+        ax.plot(fmedoid_x, fmedoid_y, c='r', marker='D')
+
+    ax.set_xlabel(labelx)
+    ax.set_ylabel(labely)
+    ax.set_title(titl)
+
+    cb = fig.colorbar(cax)
+    cb.set_label(label)
 
     # Make a tight layout
     fig.tight_layout()
@@ -1146,77 +1234,72 @@ def plot_selfconsistency_instrument2(zdr, kdp, zh, fname_list,
             warn('Unable to plot theoretical self-consistency curve. '
                  'Frequency band not provided')
             return None
+        if zdr_kdpzh_dict['freq_band'] == 'S':
+            kdpzh_th = 1e-5*(
+                3.696-1.963*zdr+0.504*zdr*zdr-0.051*zdr*zdr*zdr)
+        elif zdr_kdpzh_dict['freq_band'] == 'C':
+            kdpzh_th = 1e-5*(
+                6.746-2.970*zdr+0.711*zdr*zdr-0.079*zdr*zdr*zdr)
+        elif zdr_kdpzh_dict['freq_band'] == 'X':
+            kdpzh_th = 1e-5*(
+                11.74-4.020*zdr-0.140*zdr*zdr+0.130*zdr*zdr*zdr)
         else:
-            if zdr_kdpzh_dict['freq_band'] == 'S':
-                kdpzh_th = 1e-5*(
-                    3.696-1.963*zdr+0.504*zdr*zdr-0.051*zdr*zdr*zdr)
-            elif zdr_kdpzh_dict['freq_band'] == 'C':
-                kdpzh_th = 1e-5*(
-                    6.746-2.970*zdr+0.711*zdr*zdr-0.079*zdr*zdr*zdr)
-            elif zdr_kdpzh_dict['freq_band'] == 'X':
-                kdpzh_th = 1e-5*(
-                    11.74-4.020*zdr-0.140*zdr*zdr+0.130*zdr*zdr*zdr)
-            else:
-                warn(
-                    'Unable to plot theoretical self-consistency curve. '
-                    'Unknown frequency band '+zdr_kdpzh_dict['freq_band'])
-                return None
+            warn(
+                'Unable to plot theoretical self-consistency curve. '
+                'Unknown frequency band '+zdr_kdpzh_dict['freq_band'])
+            return None
     elif parametrization == 'Wolfensberger':
         if zdr_kdpzh_dict is None or 'freq_band' not in zdr_kdpzh_dict:
             warn('Unable to plot theoretical self-consistency curve. '
                  'Frequency band not provided')
             return None
+        if zdr_kdpzh_dict['freq_band'] == 'C':
+            kdpzh_th = 1e-5*(
+                3.199*np.ma.exp(-7.767e-1*zdr)-0.4436*zdr+3.464)
         else:
-            if zdr_kdpzh_dict['freq_band'] == 'C':
-                kdpzh_th = 1e-5*(
-                    3.199*np.ma.exp(-7.767e-1*zdr)-0.4436*zdr+3.464)
-            else:
-                warn(
-                    'Unable to plot theoretical self-consistency curve. '
-                    'Unknown frequency band '+zdr_kdpzh_dict['freq_band'])
-                return None
+            warn(
+                'Unable to plot theoretical self-consistency curve. '
+                'Unknown frequency band '+zdr_kdpzh_dict['freq_band'])
+            return None
     elif parametrization == 'Louf':
         if zdr_kdpzh_dict is None or 'freq_band' not in zdr_kdpzh_dict:
             warn('Unable to plot theoretical self-consistency curve. '
                  'Frequency band not provided')
             return None
+        if zdr_kdpzh_dict['freq_band'] == 'C':
+            kdpzh_th = 1e-5*(
+                6.607-4.577*zdr+1.577*zdr*zdr-0.23*zdr*zdr*zdr)
         else:
-            if zdr_kdpzh_dict['freq_band'] == 'C':
-                kdpzh_th = 1e-5*(
-                    6.607-4.577*zdr+1.577*zdr*zdr-0.23*zdr*zdr*zdr)
-            else:
-                warn(
-                    'Unable to plot theoretical self-consistency curve. '
-                    'Unknown frequency band '+zdr_kdpzh_dict['freq_band'])
-                return None
+            warn(
+                'Unable to plot theoretical self-consistency curve. '
+                'Unknown frequency band '+zdr_kdpzh_dict['freq_band'])
+            return None
     elif parametrization == 'Gorgucci':
         if zdr_kdpzh_dict is None or 'freq_band' not in zdr_kdpzh_dict:
             warn('Unable to plot theoretical self-consistency curve. '
                  'Frequency band not provided')
             return None
+        if zdr_kdpzh_dict['freq_band'] == 'C':
+            zdr_lin = np.ma.power(10., 0.1*zdr)
+            kdpzh_th = 1e-5*(18.2*np.power(zdr_lin, -1.28))
         else:
-            if zdr_kdpzh_dict['freq_band'] == 'C':
-                zdr_lin = np.ma.power(10., 0.1*zdr)
-                kdpzh_th = 1e-5*(18.2*np.power(zdr_lin, -1.28))
-            else:
-                warn(
-                    'Unable to plot theoretical self-consistency curve. '
-                    'Unknown frequency band '+zdr_kdpzh_dict['freq_band'])
-                return None
+            warn(
+                'Unable to plot theoretical self-consistency curve. '
+                'Unknown frequency band '+zdr_kdpzh_dict['freq_band'])
+            return None
     elif parametrization == 'Vaccarono':
         if zdr_kdpzh_dict is None or 'freq_band' not in zdr_kdpzh_dict:
             warn('Unable to plot theoretical self-consistency curve. '
                  'Frequency band not provided')
             return None
+        if zdr_kdpzh_dict['freq_band'] == 'C':
+            zdr_lin = np.ma.power(10., 0.1*zdr)
+            kdpzh_th = 1e-5*(17.7*np.power(zdr_lin, -2.09))
         else:
-            if zdr_kdpzh_dict['freq_band'] == 'C':
-                zdr_lin = np.ma.power(10., 0.1*zdr)
-                kdpzh_th = 1e-5*(17.7*np.power(zdr_lin, -2.09))
-            else:
-                warn(
-                    'Unable to plot theoretical self-consistency curve. '
-                    'Unknown frequency band '+zdr_kdpzh_dict['freq_band'])
-                return None
+            warn(
+                'Unable to plot theoretical self-consistency curve. '
+                'Unknown frequency band '+zdr_kdpzh_dict['freq_band'])
+            return None
 
     if parametrization == 'Gorgucci':
         zh_th = 10.*np.ma.log10(np.ma.power(kdp/kdpzh_th, 1/0.95))
@@ -1407,7 +1490,7 @@ def plot_sun_hits(field, field_name, fname_list, prdcfg):
 def _plot_sunscan(rad_az, rad_el, rad_data, sun_hits, field_name, fname_list,
                   titl='AZ-EL sunscan plot', xlabel='Azimuth (deg)',
                   ylabel='Elevation (deg)', clabel=None, vmin=None, vmax=None,
-                  figsize=[10, 8], save_fig=True, dpi=72):
+                  figsize=(10, 8), save_fig=True, dpi=72):
     """
     plots a AZ-EL plot of a sunscan
 
@@ -1506,11 +1589,13 @@ def _plot_sunscan(rad_az, rad_el, rad_data, sun_hits, field_name, fname_list,
         plt.close(fig)
 
         return fname_list
+    return fig, ax
+
 
 def _plot_time_range(rad_time, rad_range, rad_data, field_name, fname_list,
                      titl='Time-Range plot',
                      xlabel='time (s from start time)', ylabel='range (Km)',
-                     clabel=None, vmin=None, vmax=None, figsize=[10, 8],
+                     clabel=None, vmin=None, vmax=None, figsize=(10, 8),
                      save_fig=True, dpi=72):
     """
     plots a time-range plot
