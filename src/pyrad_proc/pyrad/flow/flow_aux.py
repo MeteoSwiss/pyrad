@@ -72,7 +72,6 @@ except ImportError:
 
 PROFILE_LEVEL = 0
 
-
 def profiler(level=1):
     """
     Function to be used as decorator for memory debugging. The function will
