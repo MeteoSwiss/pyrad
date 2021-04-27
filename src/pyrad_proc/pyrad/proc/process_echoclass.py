@@ -335,20 +335,20 @@ def process_hydro_mf_to_hydro(procstatus, dscfg, radar_list=None):
 
     # BRUIT, ZH_MQT, SOL, INSECTES, OISEAUX, MER_CHAFF, PARASITES,
     # ROND_CENTRAL, TYPE_INCONNU, SIMPLE_POLAR are classified as NC
-    hydro[hydroMF<8] = 1
-    hydro[hydroMF==30] = 1
-    hydro[hydroMF==31] = 1
+    hydro[hydroMF < 8] = 1
+    hydro[hydroMF == 30] = 1
+    hydro[hydroMF == 31] = 1
     # PRECIP_INDIFFERENCIEE, PLUIE, PRECIP are classified as RN
-    hydro[hydroMF==8] = 6
-    hydro[hydroMF==9] = 6
-    hydro[hydroMF==32] = 6
-    hydro[hydroMF==10] = 8  # NEIGE_MOUILLEE is WS
-    hydro[hydroMF==11] = 2  # NEIGE_SECHE is AG
-    hydro[hydroMF==12] = 3  # GLACE is CR
-    hydro[hydroMF==13] = 5  # PETITE_GRELE is RP
+    hydro[hydroMF == 8] = 6
+    hydro[hydroMF == 9] = 6
+    hydro[hydroMF == 32] = 6
+    hydro[hydroMF == 10] = 8  # NEIGE_MOUILLEE is WS
+    hydro[hydroMF == 11] = 2  # NEIGE_SECHE is AG
+    hydro[hydroMF == 12] = 3  # GLACE is CR
+    hydro[hydroMF == 13] = 5  # PETITE_GRELE is RP
     # MOYENNE_GRELE, GROSSE_GRELE is IH/HDG
-    hydro[hydroMF==14] = 10
-    hydro[hydroMF==15] = 10
+    hydro[hydroMF == 14] = 10
+    hydro[hydroMF == 15] = 10
     # Light rain (LR), vertically oriented ice (VI) and melting hail (MH) have
     # no equivalent in the Météo France classification
 
@@ -1002,8 +1002,8 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
 
     if 'HYDRO_METHOD' not in dscfg:
         raise Exception(
-            "ERROR: Undefined parameter 'HYDRO_METHOD' for dataset '%s'"
-            % dscfg['dsname'])
+            "ERROR: Undefined parameter 'HYDRO_METHOD' for dataset {}".format(
+                dscfg['dsname']))
 
     temp_field = None
     iso0_field = None
@@ -1081,14 +1081,16 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
                 warn(
                     'Unable to read centroids file. ' +
                     'Default centroids will be used in classification.')
-                hydro_names = ('AG', 'CR', 'LR', 'RP', 'RN', 'VI', 'WS', 'MH', 'IH/HDG')
+                hydro_names = (
+                    'AG', 'CR', 'LR', 'RP', 'RN', 'VI', 'WS', 'MH', 'IH/HDG')
                 var_names = ('dBZ', 'ZDR', 'KDP', 'RhoHV', 'H_ISO0')
         else:
             warn(
                 'No centroids were specified. ' +
                 'Default centroids will be used in classification.')
             mass_centers = None
-            hydro_names = ('AG', 'CR', 'LR', 'RP', 'RN', 'VI', 'WS', 'MH', 'IH/HDG')
+            hydro_names = (
+                'AG', 'CR', 'LR', 'RP', 'RN', 'VI', 'WS', 'MH', 'IH/HDG')
             var_names = ('dBZ', 'ZDR', 'KDP', 'RhoHV', 'H_ISO0')
 
         fields_dict = pyart.retrieve.hydroclass_semisupervised(
@@ -1122,15 +1124,15 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
                 'hydropath',
                 os.path.expanduser('~')+'/hydrometeor-classification/code')
             if not os.path.isdir(hydropath):
-                raise Exception(
-                    "ERROR: Wrong UKMO hydrometeor classification path " +
-                    hydropath)
+                str1 = "ERROR: Wrong UKMO hydrometeor classification path {}"
+                raise Exception(str1.format(hydropath))
             sys.path.append(hydropath)
             try:
                 import classify
             except ImportError:
                 raise Exception(
-                    "ERROR: Unable to load UKMO hydrometeor classification module")
+                    "ERROR: Unable to load UKMO hydrometeor classification"
+                    " module")
             dscfg['initialized'] = 1
 
         if dscfg['initialized'] == 0:
@@ -1140,7 +1142,7 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
                 (zdr_field not in radar.fields) or
                 (rhv_field not in radar.fields) or
                 (kdp_field not in radar.fields)):
-            warn('Unable to create hydrometeor classification field. ' +
+            warn('Unable to create hydrometeor classification field. '
                  'Missing data')
             return None, None
 
@@ -1149,9 +1151,10 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
             os.path.expanduser('~') +
             '/hydrometeor-classification/membership_functions/')
         if not os.path.isdir(mf_dir):
-            raise Exception(
-                "ERROR: Unable to load hydrometeor MF. Path " +
-                mf_dir+' not a directory')
+            str1 = (
+                'ERROR: Unable to load hydrometeor MF.'
+                ' Path {} not a directory')
+            raise Exception(str1.format(mf_dir))
 
         ml_depth = dscfg.get('ml_depth', 0.5)
         perturb_ml_depth = dscfg.get('perturb_ml_depth', 0)
@@ -1229,7 +1232,7 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
 
             if append_all_fields:
                 new_dataset['radar_out'].fields[confidence_field]['data'][
-                ind_start:ind_end+1] = hydro_object.confidence
+                    ind_start:ind_end+1] = hydro_object.confidence
 
                 for prob_field, prob_key in zip(prob_fields, prob_keys):
                     new_dataset['radar_out'].fields[prob_field]['data'][
@@ -1237,8 +1240,8 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
                         hydro_object.probability[prob_key])
     else:
         raise Exception(
-            "ERROR: Unknown hydrometeor classification method " +
-            dscfg['HYDRO_METHOD'])
+            "ERROR: Unknown hydrometeor classification method {}".format(
+                dscfg['HYDRO_METHOD']))
 
     return new_dataset, ind_rad
 
@@ -1289,6 +1292,10 @@ def process_centroids(procstatus, dscfg, radar_list=None):
             Number of samples per iteration. Default 20000
         alpha : float
             Minimum value to accept the cluster according to p. Default 0.01
+        cv_approach : Bool
+            If true it is used a critical value approach to reject or accept
+            similarity between observations and reference. If false it is used
+            a p-value approach. Default True
         n_samples_syn : int
             Number of samples drawn from reference to compare it with
             observations in the KS test. Default 50
@@ -1306,12 +1313,18 @@ def process_centroids(procstatus, dscfg, radar_list=None):
             The names of the features. Default ('dBZ', 'ZDR', 'KDP', 'RhoHV',
             'H_ISO0')
         hydro_names: tupple
-            The name of the hydrometeor types. Default ('CR', 'AG', 'LR',
-            'RN', 'RP', 'VI', 'WS', 'MH', 'IH/HDG')
+            The name of the hydrometeor types. Default ('AG', 'CR', 'LR',
+            'RP', 'RN', 'VI', 'WS', 'MH', 'IH/HDG')
         weight : tupple
             The weight given to each feature when comparing to the reference.
             It is in the same order as var_names. Default (1., 1., 1., 1.,
             0.75)
+        parallelized : bool
+            If True the centroids search is going to be parallelized. Default
+            False
+        sample_data : bool
+            If True the data is going to be sampled prior to each external
+            iteration. Default True
 
     radar_list : list of Radar objects
         Optional. list of radar objects
@@ -1491,14 +1504,18 @@ def process_centroids(procstatus, dscfg, radar_list=None):
     nmedoids_min = dscfg.get('nmedoids_min', 1)
     nsamples_iter = dscfg.get('nsamples_iter', 20000)
     alpha = dscfg.get('alpha', 0.01)
+    cv_approach = dscfg.get('cv_approach', True)
     n_samples_syn = dscfg.get('nsamples_syn', 50)
-    num_samples_arr = dscfg.get('nsamples_syn',(30, 35, 40))
+    num_samples_arr = dscfg.get('nsamples_syn', (30, 35, 40))
     acceptance_threshold = dscfg.get('acceptance_threshold', 0.5)
     var_names = dscfg.get(
         'var_names', ('dBZ', 'ZDR', 'KDP', 'RhoHV', 'H_ISO0'))
     hydro_names = dscfg.get(
-        'hydro_names', ('AG', 'CR', 'LR', 'RP', 'RN', 'VI', 'WS', 'MH', 'IH/HDG'))
+        'hydro_names',
+        ('AG', 'CR', 'LR', 'RP', 'RN', 'VI', 'WS', 'MH', 'IH/HDG'))
     weight = dscfg.get('weight', (1., 1., 1., 1., 0.75))
+    parallelized = dscfg.get('parallelized', False)
+    sample_data = dscfg.get('sample_data', True)
 
     (labeled_data, labels, medoids_dict,
      final_medoids_dict) = pyart.retrieve.compute_centroids(
@@ -1506,10 +1523,11 @@ def process_centroids(procstatus, dscfg, radar_list=None):
         hydro_names=hydro_names, nsamples_iter=nsamples_iter,
         external_iterations=external_iterations,
         internal_iterations=internal_iterations, alpha=alpha,
-        num_samples_arr=num_samples_arr, n_samples_syn=n_samples_syn,
-        nmedoids_min=nmedoids_min,
+        cv_approach=cv_approach, num_samples_arr=num_samples_arr,
+        n_samples_syn=n_samples_syn, nmedoids_min=nmedoids_min,
         acceptance_threshold=acceptance_threshold,
-        band=dscfg['global_data']['band'], relh_slope=relh_slope)
+        band=dscfg['global_data']['band'], relh_slope=relh_slope,
+        parallelized=parallelized, sample_data=sample_data)
 
     if labeled_data is None:
         return new_dataset, ind_rad
@@ -1562,9 +1580,8 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
         return None, None
 
     if 'ML_METHOD' not in dscfg:
-        raise Exception(
-            "ERROR: Undefined parameter 'ML_METHOD' for dataset '%s'"
-            % dscfg['dsname'])
+        str1 = "ERROR: Undefined parameter 'ML_METHOD' for dataset {}"
+        raise Exception(str1.format(dscfg['dsname']))
 
     if dscfg['ML_METHOD'] == 'GIANGRANDE':
 
@@ -1599,14 +1616,14 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
         # Check which should be the reference field for temperature
         if iso0_field is not None:
             if iso0_field not in radar.fields:
-                warn('Unable to detect melting layer. ' +
+                warn('Unable to detect melting layer. '
                      'Missing height over iso0 field')
                 return None, None
             temp_ref = 'height_over_iso0'
 
         if temp_field is not None:
             if temp_field not in radar.fields:
-                warn('Unable to detect melting layer. ' +
+                warn('Unable to detect melting layer. '
                      'Missing temperature field')
                 return None, None
             temp_ref = 'temperature'
@@ -1760,8 +1777,8 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
 
     else:
         raise Exception(
-            "ERROR: Unknown melting layer retrieval method " +
-            dscfg['ML_METHOD'])
+            "ERROR: Unknown melting layer retrieval method {}".format(
+                dscfg['ML_METHOD']))
 
     # prepare for exit
     if ml_dict is None:
@@ -1830,7 +1847,7 @@ def process_zdr_column(procstatus, dscfg, radar_list=None):
 
     # Check which should be the reference field for temperature
     if iso0_field is not None and (iso0_field not in radar.fields):
-        warn('Unable to detect melting layer. ' +
+        warn('Unable to detect melting layer. '
              'Missing height over iso0 field')
         return None, None
     temp_ref = 'height_over_iso0'
@@ -1963,7 +1980,6 @@ class ScanObject:
     def __init__(self, radar, refl_field, iso0_field, dp_fields,
                  dualpol_vars_int=('RHOHV', 'ZDR', 'KDP')):
         """initialises required radar fields / parameters"""
-
 
         # (currently pixels are only considered where their flag value
         # matches the integer specified by classify.MET_FLAG_VAL)
