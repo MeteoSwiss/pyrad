@@ -1325,6 +1325,12 @@ def process_centroids(procstatus, dscfg, radar_list=None):
         sample_data : bool
             If True the data is going to be sampled prior to each external
             iteration. Default True
+        kmax_iter : int
+            Maximum number of iterations of the k-medoids algorithm. Default
+            100
+        keep_labeled_data : bool
+            If True the labeled data is going to be kept for storage. Default
+            True
 
     radar_list : list of Radar objects
         Optional. list of radar objects
@@ -1516,6 +1522,8 @@ def process_centroids(procstatus, dscfg, radar_list=None):
     weight = dscfg.get('weight', (1., 1., 1., 1., 0.75))
     parallelized = dscfg.get('parallelized', False)
     sample_data = dscfg.get('sample_data', True)
+    kmax_iter = dscfg.get('kmax_iter', 100)
+    keep_labeled_data = dscfg.get('keep_labeled_data', True)
 
     (labeled_data, labels, medoids_dict,
      final_medoids_dict) = pyart.retrieve.compute_centroids(
@@ -1527,18 +1535,13 @@ def process_centroids(procstatus, dscfg, radar_list=None):
         n_samples_syn=n_samples_syn, nmedoids_min=nmedoids_min,
         acceptance_threshold=acceptance_threshold,
         band=dscfg['global_data']['band'], relh_slope=relh_slope,
-        parallelized=parallelized, sample_data=sample_data)
+        parallelized=parallelized, sample_data=sample_data,
+        kmax_iter=kmax_iter, keep_labeled_data=keep_labeled_data)
 
-    if labeled_data is None:
+    if not medoids_dict:
         return new_dataset, ind_rad
 
     labeled_data_dict = {
-        'dBZ': labeled_data[:, 0],
-        'ZDR': labeled_data[:, 1],
-        'KDP': labeled_data[:, 2],
-        'RhoHV': labeled_data[:, 3],
-        'H_ISO0': labeled_data[:, 4],
-        'labels': labels,
         'hydro_names': hydro_names,
         'var_names': var_names,
         'band': dscfg['global_data']['band'],
@@ -1546,6 +1549,14 @@ def process_centroids(procstatus, dscfg, radar_list=None):
         'final_medoids_dict': final_medoids_dict,
         'timeinfo': dscfg['global_data']['timeinfo']
     }
+    if keep_labeled_data:
+        labeled_data_dict.update({
+            'dBZ': labeled_data[:, 0],
+            'ZDR': labeled_data[:, 1],
+            'KDP': labeled_data[:, 2],
+            'RhoHV': labeled_data[:, 3],
+            'H_ISO0': labeled_data[:, 4],
+            'labels': labels})
     new_dataset.update({'labeled_data_dict': labeled_data_dict})
 
     return new_dataset, ind_rad

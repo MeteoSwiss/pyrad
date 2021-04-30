@@ -586,58 +586,73 @@ def generate_sun_hits_products(dataset, prdcfg):
         if 'sun_retrieval' not in dataset:
             return None
 
-        text = ["SunScan info",
-                "sun_az:             [deg] Azimuth sun position ",
-                "sun_el:             [deg] Elevation sun position",
-                "noise_pwr:          [dBm] Noise power",
-                "sun_maxpwr_noise:   [dBm] sun maximal power sample (including noise)",
-                "sun_maxpwr_nonoise: [dBm] sun maximal power sample without noise",
-                "sun_maxpwr_fit:     [dBm] sun maximal fitted power (without noise)",
-                "sun_maxpwr_toa:     [dBm] sun maximal power at top of atmosphere",
-                "az_offset:          [deg] Azimuth shift of fitted maxima to sun azimuth",
-                "el_offset:          [deg] Elevation shift of fitted maxima to sun elevation",
-                "az_phi3db:          [deg] Half-power beam width in azimuth",
-                "el_phi3db:          [deg] Half-power beam width in elevation",
-                "fit_stddev:         [dBm] Standard deviation (fit to samples)",
-                "num_samples:        [#] Number of samples used for the sun power fitting"
-                ]
+        text = [
+            "SunScan info",
+            "sun_az:             [deg] Azimuth sun position ",
+            "sun_el:             [deg] Elevation sun position",
+            "noise_pwr:          [dBm] Noise power",
+            "sun_maxpwr_noise:   [dBm]"
+            " sun maximal power sample (including noise)",
+            "sun_maxpwr_nonoise: [dBm]"
+            " sun maximal power sample without noise",
+            "sun_maxpwr_fit:     [dBm]"
+            " sun maximal fitted power (without noise)",
+            "sun_maxpwr_toa:     [dBm]"
+            " sun maximal power at top of atmosphere",
+            "az_offset:          [deg]"
+            " Azimuth shift of fitted maxima to sun azimuth",
+            "el_offset:          [deg]"
+            " Elevation shift of fitted maxima to sun elevation",
+            "az_phi3db:          [deg]"
+            " Half-power beam width in azimuth",
+            "el_phi3db:          [deg]"
+            " Half-power beam width in elevation",
+            "fit_stddev:         [dBm]"
+            " Standard deviation (fit to samples)",
+            "num_samples:        [#]"
+            " Number of samples used for the sun power fitting"
+            ]
 
         sunRdata = dataset['sun_retrieval']
 
         if dataset['field_name'] == 'noisedBm_hh':
-            data = {'dstype': prdcfg['dstype'],
-                    'unit': 'dBm',
-                    'time': sunRdata['sunscan_time'],
-                    'label': ["sun_az", "sun_el", "noise_pwr",
-                              "sun_maxpwr_noise", "sun_maxpwr_nonoise", "sun_maxpwr_fit",
-                              "sun_maxpwr_toa", "az_offset", "el_offset",
-                              "az_phi3db", "el_phi3db", "fit_stddev",
-                              "num_samples"],
-                    'value': [sunRdata['sunpos_az'], sunRdata['sunpos_el'],
-                              sunRdata['noise_pwr'], sunRdata['sun_maxpwr_noise'],
-                              sunRdata['sun_maxpwr_nonoise'], sunRdata['dBm_sun_est'],
-                              sunRdata['dBm_sun_est_toa'], sunRdata['az_bias_h'],
-                              sunRdata['el_bias_h'], sunRdata['az_width_h'],
-                              sunRdata['el_width_h'], sunRdata['std(dBm_sun_est)'],
-                              sunRdata['nhits_h']]
-                    }
+            data = {
+                'dstype': prdcfg['dstype'],
+                'unit': 'dBm',
+                'time': sunRdata['sunscan_time'],
+                'label': [
+                    "sun_az", "sun_el", "noise_pwr", "sun_maxpwr_noise",
+                    "sun_maxpwr_nonoise", "sun_maxpwr_fit", "sun_maxpwr_toa",
+                    "az_offset", "el_offset", "az_phi3db", "el_phi3db",
+                    "fit_stddev", "num_samples"],
+                'value': [
+                    sunRdata['sunpos_az'], sunRdata['sunpos_el'],
+                    sunRdata['noise_pwr'], sunRdata['sun_maxpwr_noise'],
+                    sunRdata['sun_maxpwr_nonoise'], sunRdata['dBm_sun_est'],
+                    sunRdata['dBm_sun_est_toa'], sunRdata['az_bias_h'],
+                    sunRdata['el_bias_h'], sunRdata['az_width_h'],
+                    sunRdata['el_width_h'], sunRdata['std(dBm_sun_est)'],
+                    sunRdata['nhits_h']]
+                }
         elif dataset['field_name'] == 'noisedBm_vv':
-            data = {'dstype': prdcfg['dstype'],
-                    'unit': 'dBm',
-                    'time': sunRdata['sunscan_time'],
-                    'label': ["sun_az", "sun_el", "noise_pwr",
-                              "sun_maxpwr_noise", "sun_maxpwr_nonoise", "sun_maxpwr_fit",
-                              "sun_maxpwr_toa", "az_offset", "el_offset",
-                              "az_phi3db", "el_phi3db", "fit_stddev",
-                              "num_samples"],
-                    'value': [sunRdata['sunpos_az'], sunRdata['sunpos_el'],
-                              sunRdata['noise_pwr'], sunRdata['sun_maxpwr_noise'],
-                              sunRdata['sun_maxpwr_nonoise'], sunRdata['dBmv_sun_est'],
-                              sunRdata['dBmv_sun_est_toa'], sunRdata['az_bias_v'],
-                              sunRdata['el_bias_v'], sunRdata['az_width_v'],
-                              sunRdata['el_width_v'], sunRdata['std(dBmv_sun_est)'],
-                              sunRdata['nhits_v']]
-                    }
+            data = {
+                'dstype': prdcfg['dstype'],
+                'unit': 'dBm',
+                'time': sunRdata['sunscan_time'],
+                'label': [
+                    "sun_az", "sun_el", "noise_pwr", "sun_maxpwr_noise",
+                    "sun_maxpwr_nonoise", "sun_maxpwr_fit", "sun_maxpwr_toa",
+                    "az_offset", "el_offset", "az_phi3db", "el_phi3db",
+                    "fit_stddev", "num_samples"],
+                'value': [
+                    sunRdata['sunpos_az'], sunRdata['sunpos_el'],
+                    sunRdata['noise_pwr'], sunRdata['sun_maxpwr_noise'],
+                    sunRdata['sun_maxpwr_nonoise'], sunRdata['dBmv_sun_est'],
+                    sunRdata['dBmv_sun_est_toa'], sunRdata['az_bias_v'],
+                    sunRdata['el_bias_v'], sunRdata['az_width_v'],
+                    sunRdata['el_width_v'], sunRdata['std(dBmv_sun_est)'],
+                    sunRdata['nhits_v']]
+                }
         else:
             warn('ERROR: No valid datatype for WRITE_SUNSCAN product.')
 
@@ -646,13 +661,14 @@ def generate_sun_hits_products(dataset, prdcfg):
             prdcfg['prdname'], prdcfg['timeinfo'])
 
         fname1 = make_filename(
-            'ts', prdcfg['dstype'], dataset['field_name'], ['csv'], timeinfo=prdcfg['timeinfo'],
-            timeformat='%Y%m%d', runinfo=prdcfg['runinfo'])[0]
+            'ts', prdcfg['dstype'], dataset['field_name'], ['csv'],
+            timeinfo=prdcfg['timeinfo'], timeformat='%Y%m%d',
+            runinfo=prdcfg['runinfo'])[0]
 
         fname1 = savedir+fname1
         write_timeseries_point(fname1, data, prdcfg['dstype'], text)
 
-        print('saved sunscan file: ' +fname1)
+        print('saved sunscan file: '+fname1)
 
         return fname1
 
@@ -689,8 +705,9 @@ def generate_sun_hits_products(dataset, prdcfg):
         for i, fname in enumerate(fname_list):
             fname_list[i] = savedir+fname
 
-        plot_fixed_rng_sun(radar, field_name, sun_hits, prdcfg, fname_list, azi_res=None,
-                           ele_res=None, ang_tol=angtol, vmin=vmin, vmax=vmax)
+        plot_fixed_rng_sun(
+            radar, field_name, sun_hits, prdcfg, fname_list, azi_res=None,
+            ele_res=None, ang_tol=angtol, vmin=vmin, vmax=vmax)
 
         print('----- save to '+' '.join(fname_list))
 
@@ -785,7 +802,8 @@ def generate_ml_products(dataset, prdcfg):
 
         csvfname = savedir+csvfname
 
-        ml_bottom = dataset['ml_obj'].fields['melting_layer_height']['data'][:, 0]
+        ml_bottom = dataset['ml_obj'].fields['melting_layer_height']['data'][
+            :, 0]
         ml_top = dataset['ml_obj'].fields['melting_layer_height']['data'][:, 1]
 
         ml_top_avg = np.ma.asarray(np.ma.mean(ml_top))
@@ -849,11 +867,66 @@ def generate_ml_products(dataset, prdcfg):
 def generate_centroids_products(dataset, prdcfg):
     """
     Generates centroids products. Accepted product types:
-        'HISTOGRAM':
-        'HISTOGRAM2D':
-        'HISTOGRAM_LABELED':
-        'HISTOGRAM_CENTROIDS':
-        'HISTOGRAM2D_CENTROIDS':
+        'HISTOGRAM': Plots the histogram of one of the variables used for
+            centroids computation.
+            User defined parameters:
+                voltype : str
+                    The name of the variable to plot. Can be dBZ, ZDR, KDP,
+                    RhoHV, H_ISO0 and its standardized form (e.g. dBZ_std)
+                write_data : Bool
+                    If true writes the histogram in a .csv file. Default True
+                step : float
+                    bin size. Default 0.1
+        'HISTOGRAM2D': Plots the 2D- histogram of two of the variables used
+            for centroids computation.
+            User defined parameters:
+                voltype_x, voltype_y : str
+                    The name of the variables to plot. Can be dBZ, ZDR, KDP,
+                    RhoHV, H_ISO0 and its standardized form (e.g. dBZ_std)
+                step_x, step_y : float
+                    bin size. Default 0.1
+        'HISTOGRAM_LABELED': Plots the histogram of one of the variables used
+            for centroids computation. Only plots labeled data.
+            User defined parameters:
+                voltype : str
+                    The name of the variable to plot. Can be dBZ, ZDR, KDP,
+                    RhoHV, H_ISO0 and its standardized form (e.g. dBZ_std)
+                write_data : Bool
+                    If true writes the histogram in a .csv file. Default True
+                step : float
+                    bin size. Default 0.1
+        'HISTOGRAM_CENTROIDS': Plots the histogram of one of the variables
+            used for centroids computation corresponding to a particular
+            hydrometeor type, the intermediate centroids and the final
+            centroid
+            User defined parameters:
+                voltype : str
+                    The name of the variable to plot. Can be dBZ, ZDR, KDP,
+                    RhoHV, H_ISO0 and its standardized form (e.g. dBZ_std)
+                hydro_type : str
+                    The name of the hydrometeor type.
+                write_data : Bool
+                    If true writes the histogram in a .csv file. Default True
+                step : float
+                    bin size. Default 0.1
+        'HISTOGRAM2D_CENTROIDS': Plots the 2D- histogram of two of the
+            variables used for centroids computatio ncorresponding to a
+            particular hydrometeor type, the intermediate centroids and the
+            final centroid
+            User defined parameters:
+                voltype_x, voltype_y : str
+                    The name of the variables to plot. Can be dBZ, ZDR, KDP,
+                    RhoHV, H_ISO0 and its standardized form (e.g. dBZ_std)
+                hydro_type : str
+                    The name of the hydrometeor type.
+                step_x, step_y : float
+                    bin size. Default 0.1
+        'WRITE_CENTROIDS': Writes the final centroids in a .csv file.
+        'SAVE_DATA': Saves the data used to compute the centroids in an .npz
+            file
+        'SAVE_LABELED_DATA': Saves the labeled data, the intermediate
+            centroids and the final centroids in an .npz file
+
 
     Parameters
     ----------
@@ -938,7 +1011,6 @@ def generate_centroids_products(dataset, prdcfg):
             fname = savedir+make_filename(
                 'histogram', prdcfg['dstype'], prdcfg['voltype'],
                 ['csv'], timeinfo=timeinfo, timeformat=timeformat)[0]
-
 
             write_histogram(bin_edges, hist, fname, step=step)
             print('----- save to '+fname)
@@ -1086,7 +1158,6 @@ def generate_centroids_products(dataset, prdcfg):
                 'histogram', prdcfg['dstype'], prdcfg['voltype'],
                 ['csv'], timeinfo=timeinfo, timeformat=timeformat)[0]
 
-
             write_histogram(bin_edges, hist, fname, step=step)
             print('----- save to '+fname)
 
@@ -1185,7 +1256,6 @@ def generate_centroids_products(dataset, prdcfg):
             fname = savedir+make_filename(
                 'histogram', prdcfg['dstype'], prdcfg['voltype'],
                 ['csv'], timeinfo=timeinfo, timeformat=timeformat)[0]
-
 
             write_histogram(bin_edges, hist, fname, step=step)
             print('----- save to '+fname)
@@ -1318,6 +1388,49 @@ def generate_centroids_products(dataset, prdcfg):
             fname, labeled_data_dict['final_medoids_dict'],
             labeled_data_dict['var_names'])
         print('----- save to '+fname)
+
+        return fname
+
+    if prdcfg['type'] == 'SAVE_DATA':
+        data_dict = dataset['data_dict']
+
+        # check if we have to save the data
+        if not data_dict['final']:
+            return None
+
+        timeinfo = data_dict['timeinfo'][0]
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdcfg['prdname'], timeinfo=timeinfo)
+
+        fname = make_filename(
+            'data', prdcfg['dstype'], 'centroids_data', ['.npz'],
+            timeinfo=timeinfo)[0]
+
+        fname = savedir+fname
+
+        np.savez_compressed(fname, centroids_data=data_dict)
+
+        return fname
+
+    if prdcfg['type'] == 'SAVE_LABELED_DATA':
+        if 'labeled_data_dict' not in dataset:
+            return None
+
+        data_dict = dataset['labeled_data_dict']
+
+        timeinfo = data_dict['timeinfo'][0]
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdcfg['prdname'], timeinfo=timeinfo)
+
+        fname = make_filename(
+            'labeled_data', prdcfg['dstype'], 'centroids_data', ['.npz'],
+            timeinfo=timeinfo)[0]
+
+        fname = savedir+fname
+
+        np.savez_compressed(fname, centroids_data=data_dict)
 
         return fname
 
