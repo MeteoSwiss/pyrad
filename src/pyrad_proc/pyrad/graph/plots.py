@@ -501,9 +501,9 @@ def plot_scatter(bin_edges1, bin_edges2, hist_2d, field_name1, field_name2,
     if 'dpi' in prdcfg['ppiImageConfig']:
         dpi = prdcfg['ppiImageConfig']['dpi']
 
-    fig = plt.figure(figsize=[prdcfg['ppiImageConfig']['xsize'],
-                              prdcfg['ppiImageConfig']['ysize']],
-                        dpi=dpi)
+    fig = plt.figure(
+        figsize=[prdcfg['ppiImageConfig']['xsize'],
+                 prdcfg['ppiImageConfig']['ysize']], dpi=dpi)
     ax = fig.add_subplot(111)
 
     if cmap is None:
@@ -598,9 +598,9 @@ def plot_centroids(bin_edges1, bin_edges2, hist_2d, field_name1, field_name2,
     if 'dpi' in prdcfg['ppiImageConfig']:
         dpi = prdcfg['ppiImageConfig']['dpi']
 
-    fig = plt.figure(figsize=[prdcfg['ppiImageConfig']['xsize'],
-                              prdcfg['ppiImageConfig']['ysize']],
-                        dpi=dpi)
+    fig = plt.figure(
+        figsize=[prdcfg['ppiImageConfig']['xsize'],
+                 prdcfg['ppiImageConfig']['ysize']], dpi=dpi)
     ax = fig.add_subplot(111)
 
     if cmap is None:
@@ -682,7 +682,8 @@ def plot_quantiles(quant, value, fname_list, labelx='quantile', labely='value',
 
 
 def plot_histogram(bin_edges, values, fname_list, labelx='bins',
-                   labely='Number of Samples', titl='histogram', dpi=72):
+                   labely='Number of Samples', titl='histogram',
+                   binwidth_equal=False, dpi=72):
     """
     computes and plots histogram
 
@@ -700,6 +701,9 @@ def plot_histogram(bin_edges, values, fname_list, labelx='bins',
         The label of the Y axis
     titl : str
         The figure title
+    binwidth_equal : bool
+        If True the bars are going to have the same width regardless of the
+        actual bin size
     dpi : int
         dots per inch
 
@@ -710,7 +714,13 @@ def plot_histogram(bin_edges, values, fname_list, labelx='bins',
 
     """
     fig, ax = plt.subplots(figsize=[10, 6], dpi=dpi)
-    ax.hist(values, bins=bin_edges)
+    if binwidth_equal:
+        hist, bin_edges = np.histogram(values, bins=bin_edges)
+        ax.bar(np.arange(len(bin_edges)-1.)+0.5, hist, width=1)
+        ax.set_xticks(np.arange(len(bin_edges)))
+        ax.set_xticklabels(bin_edges, rotation=45.)
+    else:
+        ax.hist(values, bins=bin_edges)
     ax.set_xlabel(labelx)
     ax.set_ylabel(labely)
     ax.set_title(titl)
@@ -1120,7 +1130,6 @@ def plot_selfconsistency_instrument(zdr, kdp, zh, fname_list,
         zdr, kdpzh, bins=[bins_zdr_edges, bins_kdpzh_edges])
 
     hist2d = np.ma.masked_equal(hist2d, 0)
-
 
     if normalize:
         hist2d = hist2d/np.expand_dims(np.ma.sum(hist2d, axis=-1), axis=1)

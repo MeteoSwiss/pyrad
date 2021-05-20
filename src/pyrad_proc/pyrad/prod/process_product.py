@@ -146,7 +146,7 @@ def generate_occurrence_products(dataset, prdcfg):
         fname = write_excess_gates(excess_dict, fname)
 
         if fname is not None:
-            print('saved excess gates file: '+fname)
+            print('saved excess gates file: {}'.format(fname))
 
         return fname
 
@@ -231,7 +231,7 @@ def generate_cosmo_coord_products(dataset, prdcfg):
                  'Unknown saving file type '+file_type)
             return None
 
-        print('saved file: '+savedir+fname)
+        print('saved file: {}'.format(savedir+fname))
 
         return fname
 
@@ -328,7 +328,7 @@ def generate_cosmo_to_radar_products(dataset, prdcfg):
                  'Unknown saving file type '+file_type)
             return None
 
-        print('saved file: '+savedir+fname)
+        print('saved file: {}'.format(savedir+fname))
 
         return fname
 
@@ -400,7 +400,7 @@ def generate_sun_hits_products(dataset, prdcfg):
 
         write_sun_hits(dataset['sun_hits'], fname)
 
-        print('saved sun hits file: '+fname)
+        print('saved sun hits file: {}'.format(fname))
 
         return fname[0]
 
@@ -471,7 +471,7 @@ def generate_sun_hits_products(dataset, prdcfg):
 
         write_sun_retrieval(dataset['sun_retrieval'], fname)
 
-        print('saved sun retrieval file: '+fname)
+        print('saved sun retrieval file: {}'.format(fname))
 
         return fname
 
@@ -668,7 +668,7 @@ def generate_sun_hits_products(dataset, prdcfg):
         fname1 = savedir+fname1
         write_timeseries_point(fname1, data, prdcfg['dstype'], text)
 
-        print('saved sunscan file: '+fname1)
+        print('saved sunscan file: {}'.format(fname1))
 
         return fname1
 
@@ -818,7 +818,7 @@ def generate_ml_products(dataset, prdcfg):
             prdcfg['timeinfo'], ml_top_avg, ml_top_std, thick_avg, thick_std,
             nrays_valid, nrays_total, csvfname)
 
-        print('saved CSV file: '+csvfname)
+        print('saved CSV file: {}'.format(csvfname))
 
         (dt_ml_arr, ml_top_avg_arr, ml_top_std_arr, thick_avg_arr,
          thick_std_arr, nrays_valid_arr, nrays_total_arr) = (
@@ -857,7 +857,7 @@ def generate_ml_products(dataset, prdcfg):
 
         fname = savedir+fname
         pyart.io.cfradial.write_cfradial(fname, dataset['ml_obj'])
-        print('saved file: '+fname)
+        print('saved file: {}'.format(fname))
 
         return fname
 
@@ -1013,7 +1013,7 @@ def generate_centroids_products(dataset, prdcfg):
                 ['csv'], timeinfo=timeinfo, timeformat=timeformat)[0]
 
             write_histogram(bin_edges, hist, fname, step=step)
-            print('----- save to '+fname)
+            print('----- save to {}'.format(fname))
 
             return fname
 
@@ -1159,7 +1159,7 @@ def generate_centroids_products(dataset, prdcfg):
                 ['csv'], timeinfo=timeinfo, timeformat=timeformat)[0]
 
             write_histogram(bin_edges, hist, fname, step=step)
-            print('----- save to '+fname)
+            print('----- save to {}'.format(fname))
 
             return fname
 
@@ -1258,7 +1258,7 @@ def generate_centroids_products(dataset, prdcfg):
                 ['csv'], timeinfo=timeinfo, timeformat=timeformat)[0]
 
             write_histogram(bin_edges, hist, fname, step=step)
-            print('----- save to '+fname)
+            print('----- save to {}'.format(fname))
 
             return fname
 
@@ -1387,7 +1387,7 @@ def generate_centroids_products(dataset, prdcfg):
         write_centroids(
             fname, labeled_data_dict['final_medoids_dict'],
             labeled_data_dict['var_names'])
-        print('----- save to '+fname)
+        print('----- save to {}'.format(fname))
 
         return fname
 
@@ -1411,6 +1411,8 @@ def generate_centroids_products(dataset, prdcfg):
 
         np.savez_compressed(fname, centroids_data=data_dict)
 
+        print('----- save to {}'.format(fname))
+
         return fname
 
     if prdcfg['type'] == 'SAVE_LABELED_DATA':
@@ -1431,6 +1433,8 @@ def generate_centroids_products(dataset, prdcfg):
         fname = savedir+fname
 
         np.savez_compressed(fname, centroids_data=data_dict)
+
+        print('----- save to {}'.format(fname))
 
         return fname
 

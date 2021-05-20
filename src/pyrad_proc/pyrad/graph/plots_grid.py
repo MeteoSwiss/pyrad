@@ -8,6 +8,7 @@ Functions to plot data in a Cartesian grid format
     :toctree: generated/
 
     plot_surface
+    plot_surface_raw
     plot_surface_contour
     plot_latitude_slice
     plot_longitude_slice
@@ -93,13 +94,13 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
     max_lon = prdcfg['gridMapImageConfig'].get('lonmax', 12.5)
     min_lat = prdcfg['gridMapImageConfig'].get('latmin', 43.5)
     max_lat = prdcfg['gridMapImageConfig'].get('latmax', 49.5)
+    embelish = prdcfg['gridMapImageConfig'].get('embelish', True)
+    colorbar_flag = prdcfg['gridMapImageConfig'].get('colorbar_flag', True)
 
     lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon)+1, lonstep)
     lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat)+1, latstep)
 
     if fig is None:
-
-
         fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
         ax = fig.add_subplot(111)
 
@@ -145,15 +146,16 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
                 resolution = '110m'
             background_zoom = prdcfg['gridMapImageConfig'].get(
                 'background_zoom', 8)
+            maps_list = prdcfg['gridMapImageConfig'].get('maps', [])
 
             display = pyart.graph.GridMapDisplay(grid)
             fig, ax = display.plot_grid(
                 field_name, level=level, norm=norm, ticks=ticks,
                 ticklabs=ticklabs, resolution=resolution,
                 background_zoom=background_zoom, lat_lines=lat_lines,
-                lon_lines=lon_lines,
-                maps_list=prdcfg['gridMapImageConfig']['maps'],
-                vmin=vmin, vmax=vmax, alpha=alpha, title=titl, ax=ax, fig=fig)
+                lon_lines=lon_lines, maps_list=maps_list, vmin=vmin,
+                vmax=vmax, alpha=alpha, title=titl, ax=ax, fig=fig,
+                embelish=embelish, colorbar_flag=colorbar_flag)
             ax.set_extent([min_lon, max_lon, min_lat, max_lat])
             # display.plot_crosshairs(lon=lon, lat=lat)
     else:
@@ -169,6 +171,83 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
                 lat_lines=lat_lines, lon_lines=lon_lines, ticklabs=ticklabs,
                 colorbar_flag=False, embelish=False, vmin=vmin, vmax=vmax,
                 alpha=alpha, title=titl, ax=ax, fig=fig)
+
+    if save_fig:
+        for fname in fname_list:
+            fig.savefig(fname, dpi=dpi)
+        plt.close(fig)
+
+        return fname_list
+
+    return (fig, ax, display)
+
+
+def plot_surface_raw(grid, field_name, level, prdcfg, fname_list, titl=None,
+                     alpha=None, ax=None, fig=None, display=None,
+                     save_fig=True):
+    """
+    plots a surface from gridded data within reprojecting the data into a map
+
+    Parameters
+    ----------
+    grid : Grid object
+        object containing the gridded data to plot
+    field_name : str
+        name of the radar field to plot
+    level : int
+        level index
+    prdcfg : dict
+        dictionary containing the product configuration
+    fname_list : list of str
+        list of names of the files where to store the plot
+    titl : str
+        Plot title
+    alpha : float or None
+        Set the alpha transparency of the grid plot. Useful for
+        overplotting radar over other datasets.
+    ax : Axis
+        Axis to plot on. if fig is None a new axis will be created
+    fig : Figure
+        Figure to add the colorbar to. If none a new figure will be created
+    display : GridMapDisplay object
+        The display used
+    save_fig : bool
+        if true save the figure. If false it does not close the plot and
+        returns the handle to the figure
+
+    Returns
+    -------
+    fname_list : list of str or
+    fig, ax, display : tupple
+        list of names of the saved plots or handle of the figure an axes
+
+    """
+    dpi = prdcfg['gridMapImageConfig'].get('dpi', 72)
+    vmin = prdcfg.get('vmin', None)
+    vmax = prdcfg.get('vmax', None)
+
+    norm, ticks, ticklabs = get_norm(
+        field_name, field_dict=grid.fields[field_name])
+
+    xsize = prdcfg['gridMapImageConfig']['xsize']
+    ysize = prdcfg['gridMapImageConfig']['ysize']
+    colorbar_flag = prdcfg['gridMapImageConfig'].get('colorbar_flag', True)
+
+    if fig is None:
+        fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
+        ax = fig.add_subplot(111)
+
+        display = pyart.graph.GridMapDisplay(grid)
+        fig, ax = display.plot_grid_raw(
+            field_name, level=level, norm=norm, ticks=ticks,
+            ticklabs=ticklabs, vmin=vmin, vmax=vmax, alpha=alpha,
+            title=titl, ax=ax, fig=fig, colorbar_flag=colorbar_flag)
+        # display.plot_crosshairs(lon=lon, lat=lat)
+    else:
+        fig, ax = display.plot_grid_raw(
+            field_name, level=level, norm=norm, ticks=ticks,
+            ticklabs=ticklabs, colorbar_flag=False, vmin=vmin, vmax=vmax,
+            alpha=alpha, title=titl, ax=ax, fig=fig)
 
     if save_fig:
         for fname in fname_list:
@@ -301,6 +380,7 @@ def plot_surface_contour(grid, field_name, level, prdcfg, fname_list,
                 resolution = '110m'
             background_zoom = prdcfg['gridMapImageConfig'].get(
                 'background_zoom', 8)
+            maps_list = prdcfg['gridMapImageConfig'].get('maps', [])
 
             display = pyart.graph.GridMapDisplay(grid)
             fig, ax = display.plot_grid_contour(
@@ -308,7 +388,7 @@ def plot_surface_contour(grid, field_name, level, prdcfg, fname_list,
                 lon_lines=lon_lines, contour_values=contour_values,
                 linewidths=linewidths, colors=colors, resolution=resolution,
                 background_zoom=background_zoom,
-                maps_list=prdcfg['gridMapImageConfig']['maps'])
+                maps_list=maps_list)
     else:
         if use_basemap or not _CARTOPY_AVAILABLE:
             lons, lats = grid.get_point_longitude_latitude(edges=False)

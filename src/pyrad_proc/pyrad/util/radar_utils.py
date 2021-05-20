@@ -1442,11 +1442,13 @@ def compute_histogram(field, field_name, bin_edges=None, step=None,
                 step = (vmax-vmin)/100.
             bin_edges = np.arange(vmin, vmax+step, step)
 
-    step_aux = bin_edges[1]-bin_edges[0]
-    bin_centers = bin_edges[0:-1]+step_aux/2.
+    step_left = bin_edges[1]-bin_edges[0]
+    step_right = bin_edges[-1]-bin_edges[-2]
+    bin_center_left = bin_edges[0]+step_left/2.
+    bin_center_right = bin_edges[-1]-step_right/2.
     values = np.ma.array(field).compressed()
-    values[values < bin_centers[0]] = bin_centers[0]
-    values[values > bin_centers[-1]] = bin_centers[-1]
+    values[values < bin_center_left] = bin_center_left
+    values[values > bin_center_right] = bin_center_right
 
     return bin_edges, values
 

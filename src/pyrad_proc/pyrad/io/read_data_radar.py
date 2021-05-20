@@ -28,6 +28,7 @@ Functions for reading radar data files
     merge_fields_psr_spectra
     merge_fields_rad4alp_grid
     merge_fields_sat_grid
+    merge_fields_mf_grid
     merge_fields_pyrad
     merge_fields_pyradcosmo
     merge_fields_pyradgrid
@@ -163,6 +164,8 @@ def get_data(voltime, datatypesdescr, cfg):
                 Cartesian products.
             'RAD4ALPGIF': Format used for operational MeteoSwiss Cartesian
                 products stored as gif files
+            'RAD4ALPBIN': Format used for operational MeteoSwiss Cartesian
+                products stored as binary files
             'PYRADGRID': Pyrad generated Cartesian grid products. For such
                 datatypes 'dataset' specifies the directory where the dataset
                 is stored and 'product' specifies the directroy where the
@@ -170,6 +173,10 @@ def get_data(voltime, datatypesdescr, cfg):
                 Example: ODIMPYRAD:RR,RZC,SAVEVOL
             'SATGRID': CF Netcdf from used for the MeteoSat satellite data
                 in the CCS4 (Radar composite) grid.
+            'MFBIN': Format used by some MeteoFrance products stored as binary
+                files
+            'MFPNG': Format used by some MeteoFrance products stored as binary
+                files
 
             'PSRSPECTRA': Format used to store Rainbow power spectra
                 recordings.
@@ -225,6 +232,10 @@ def get_data(voltime, datatypesdescr, cfg):
     datatype_rad4alpgrid = list()
     datatype_rad4alpgif = list()
     datatype_rad4alpbin = list()
+    datatype_mfbin = list()
+    dataset_mfbin = list()
+    datatype_mfpng = list()
+    dataset_mfpng = list()
     datatype_satgrid = list()
     datatype_rad4alpIQ = list()
     datatype_mxpol = list()
@@ -290,6 +301,12 @@ def get_data(voltime, datatypesdescr, cfg):
             datatype_rad4alpgif.append(datatype)
         elif datagroup == 'RAD4ALPBIN':
             datatype_rad4alpbin.append(datatype)
+        elif datagroup == 'MFBIN':
+            datatype_mfbin.append(datatype)
+            dataset_mfbin.append(dataset)
+        elif datagroup == 'MFPNG':
+            datatype_mfpng.append(datatype)
+            dataset_mfpng.append(dataset)
         elif datagroup == 'RAD4ALPIQ':
             datatype_rad4alpIQ.append(datatype)
         elif datagroup == 'PYRADGRID':
@@ -329,6 +346,8 @@ def get_data(voltime, datatypesdescr, cfg):
     ndatatypes_rad4alpgrid = len(datatype_rad4alpgrid)
     ndatatypes_rad4alpgif = len(datatype_rad4alpgif)
     ndatatypes_rad4alpbin = len(datatype_rad4alpbin)
+    ndatatypes_mfbin = len(datatype_mfbin)
+    ndatatypes_mfpng = len(datatype_mfpng)
     ndatatypes_satgrid = len(datatype_satgrid)
     ndatatypes_rad4alpIQ = len(datatype_rad4alpIQ)
     ndatatypes_pyradgrid = len(datatype_pyradgrid)
@@ -506,10 +525,25 @@ def get_data(voltime, datatypesdescr, cfg):
             else:
                 radar = radar_aux
 
-        # for field in radar.fields:
-        #     print(
-        #         'Field size (z, y, x): ', radar.fields[field]['data'].shape)
-        #     break
+    if ndatatypes_mfbin > 0:
+        radar_aux = merge_fields_mf_grid(
+            voltime, datatype_mfbin, dataset_mfbin, cfg['ScanList'][ind_rad],
+            cfg, ind_rad=ind_rad, ftype='bin')
+        if radar_aux is not None:
+            if radar is not None:
+                radar = merge_grids(radar, radar_aux)
+            else:
+                radar = radar_aux
+
+    if ndatatypes_mfpng > 0:
+        radar_aux = merge_fields_mf_grid(
+            voltime, datatype_mfpng, dataset_mfpng, cfg['ScanList'][ind_rad],
+            cfg, ind_rad=ind_rad, ftype='png')
+        if radar_aux is not None:
+            if radar is not None:
+                radar = merge_grids(radar, radar_aux)
+            else:
+                radar = radar_aux
 
     # add COSMO files to the radar field
     if ndatatypes_cosmo > 0 and _WRADLIB_AVAILABLE:
@@ -2641,6 +2675,9 @@ def merge_fields_rad4alp_grid(voltime, datatype_list, cfg, ind_rad=0,
     lon_max = cfg.get('lonmax', None)
     alt_min = cfg.get('altmin', None)
     alt_max = cfg.get('altmax', None)
+    ix_min = cfg.get('ixmin', None)
+    iy_min = cfg.get('iymin', None)
+    iz_min = cfg.get('izmin', None)
     nx = cfg.get('nx', None)
     ny = cfg.get('ny', None)
     nz = cfg.get('nz', None)
@@ -2648,7 +2685,7 @@ def merge_fields_rad4alp_grid(voltime, datatype_list, cfg, ind_rad=0,
     return crop_grid(
         grid, lat_min=lat_min, lat_max=lat_max, lon_min=lon_min,
         lon_max=lon_max, alt_min=alt_min, alt_max=alt_max, nx=nx, ny=ny,
-        nz=nz)
+        nz=nz, ix_min=ix_min, iy_min=iy_min, iz_min=iz_min)
 
 
 def merge_fields_sat_grid(voltime, datatype_list, cfg, ind_rad=0,
@@ -2705,6 +2742,9 @@ def merge_fields_sat_grid(voltime, datatype_list, cfg, ind_rad=0,
     lon_max = cfg.get('lonmax', None)
     alt_min = cfg.get('altmin', None)
     alt_max = cfg.get('altmax', None)
+    ix_min = cfg.get('ixmin', None)
+    iy_min = cfg.get('iymin', None)
+    iz_min = cfg.get('izmin', None)
     nx = cfg.get('nx', None)
     ny = cfg.get('ny', None)
     nz = cfg.get('nz', None)
@@ -2712,7 +2752,89 @@ def merge_fields_sat_grid(voltime, datatype_list, cfg, ind_rad=0,
     return crop_grid(
         grid, lat_min=lat_min, lat_max=lat_max, lon_min=lon_min,
         lon_max=lon_max, alt_min=alt_min, alt_max=alt_max, nx=nx, ny=ny,
-        nz=nz)
+        nz=nz, ix_min=ix_min, iy_min=iy_min, iz_min=iz_min)
+
+
+def merge_fields_mf_grid(voltime, datatype_list, dataset_list, scan_list, cfg,
+                         ind_rad=0, ftype='bin'):
+    """
+    merge rad4alp Cartesian products
+
+    Parameters
+    ----------
+    voltime: datetime object
+        reference time of the scan
+    datatype_list : list
+        name of the data types to read
+    dataset_list : list
+        list containing the date format to find the path to each data type
+    scan_list : list
+        list of scans
+    cfg : dict
+        configuration dictionary
+    ind_rad : int
+        radar index
+    ftype : str
+        File type. Can be 'png' or 'bin'
+
+    Returns
+    -------
+    radar : Radar
+        radar object
+
+    """
+    grid = None
+
+    fpath_strf = (
+        dataset_list[0][
+            dataset_list[0].find("D")+2:dataset_list[0].find("F")-2])
+    fdate_strf = dataset_list[0][dataset_list[0].find("F")+2:-1]
+    datapath = cfg['datapath'][ind_rad]+voltime.strftime(fpath_strf)+'/'
+    filenames = glob.glob(datapath+'*'+scan_list[0]+'*')
+    filename = []
+    for filename_aux in filenames:
+        fdatetime = find_date_in_file_name(
+            filename_aux, date_format=fdate_strf)
+        if fdatetime == voltime:
+            filename = [filename_aux]
+
+    field_names = []
+    for datatype in datatype_list:
+        prod_field = get_fieldname_pyart(datatype)
+        if ftype == 'bin':
+            grid_aux = pyart.aux_io.read_bin_mf(
+                filename[0], field_name=prod_field)
+        elif ftype == 'png':
+            grid_aux = pyart.aux_io.read_png(filename[0])
+        if grid_aux is None:
+            continue
+
+        if grid is None:
+            grid = grid_aux
+        else:
+            grid.add_field(prod_field, grid_aux.fields[prod_field])
+
+    if grid is None:
+        return grid
+
+    # Crop the data
+    lat_min = cfg.get('latmin', None)
+    lat_max = cfg.get('latmax', None)
+    lon_min = cfg.get('lonmin', None)
+    lon_max = cfg.get('lonmax', None)
+    alt_min = cfg.get('altmin', None)
+    alt_max = cfg.get('altmax', None)
+    ix_min = cfg.get('ixmin', None)
+    iy_min = cfg.get('iymin', None)
+    iz_min = cfg.get('izmin', None)
+    nx = cfg.get('nx', None)
+    ny = cfg.get('ny', None)
+    nz = cfg.get('nz', None)
+
+    return crop_grid(
+        grid, lat_min=lat_min, lat_max=lat_max, lon_min=lon_min,
+        lon_max=lon_max, alt_min=alt_min, alt_max=alt_max, nx=nx, ny=ny,
+        nz=nz, ix_min=ix_min, iy_min=iy_min, iz_min=iz_min)
 
 
 def merge_fields_pyrad(basepath, loadname, voltime, datatype_list,
@@ -3031,6 +3153,9 @@ def merge_fields_pyradgrid(basepath, loadname, voltime, datatype_list,
     lon_max = cfg.get('lonmax', None)
     alt_min = cfg.get('altmin', None)
     alt_max = cfg.get('altmax', None)
+    ix_min = cfg.get('ixmin', None)
+    iy_min = cfg.get('iymin', None)
+    iz_min = cfg.get('izmin', None)
     nx = cfg.get('nx', None)
     ny = cfg.get('ny', None)
     nz = cfg.get('nz', None)
@@ -3038,7 +3163,7 @@ def merge_fields_pyradgrid(basepath, loadname, voltime, datatype_list,
     return crop_grid(
         grid, lat_min=lat_min, lat_max=lat_max, lon_min=lon_min,
         lon_max=lon_max, alt_min=alt_min, alt_max=alt_max, nx=nx, ny=ny,
-        nz=nz)
+        nz=nz, ix_min=ix_min, iy_min=iy_min, iz_min=iz_min)
 
 
 def merge_fields_dem(basepath, scan_name, datatype_list):
@@ -3585,7 +3710,8 @@ def interpol_field(radar_dest, radar_orig, field_name, fill_value=None,
 
 
 def crop_grid(grid, lat_min=None, lat_max=None, lon_min=None, lon_max=None,
-              alt_min=None, alt_max=None, nx=None, ny=None, nz=None):
+              alt_min=None, alt_max=None, ix_min=None, iy_min=None,
+              iz_min=None, nx=None, ny=None, nz=None):
     """
     crops a grid object. The cropping can be done either specifying min and
     max lat, lon and altitude or by specifying the min lat, lon and altitude
@@ -3599,6 +3725,8 @@ def crop_grid(grid, lat_min=None, lat_max=None, lon_min=None, lon_max=None,
         the lat/lon limits of the object (deg)
     alt_min, alt_max : float
         the altitude limits of the object (m MSL)
+    ix_min, iy_min, iz_min : int
+        the pixel index where to start cropping
     nx, ny ,nz : int
         The number of pixels in each direction
 
@@ -3611,10 +3739,16 @@ def crop_grid(grid, lat_min=None, lat_max=None, lon_min=None, lon_max=None,
     grid_crop = deepcopy(grid)
     if (lat_min is None and lat_max is None and lon_min is None
             and lon_max is None and alt_min is None and alt_max is None
-            and nx is None and ny is None and nz is None):
+            and nx is None and ny is None and nz is None
+            and ix_min is None and iy_min is None and iz_min is None):
         return grid_crop
 
-    if lat_min is not None:
+    if iy_min is not None:
+        if grid.ny < iy_min:
+            warn('pixel index for latitude larger than number of pixels. '
+                 'Data will not be cropped')
+            iy_min = 0
+    elif lat_min is not None:
         iz, iy, ix = np.where(grid.point_latitude['data'] >= lat_min)
         if iy.size == 0:
             warn('Min latitude '+str(lat_min)+' outside of grid. ' +
@@ -3638,7 +3772,12 @@ def crop_grid(grid, lat_min=None, lat_max=None, lon_min=None, lon_max=None,
     else:
         iy_max = grid.ny
 
-    if lon_min is not None:
+    if ix_min is not None:
+        if grid.nx < ix_min:
+            warn('pixel index for longitude larger than number of pixels. '
+                 'Data will not be cropped')
+            ix_min = 0
+    elif lon_min is not None:
         iz, iy, ix = np.where(grid.point_longitude['data'] >= lon_min)
         if ix.size == 0:
             warn('Min longitude '+str(lon_min)+' outside of grid. ' +
@@ -3662,7 +3801,12 @@ def crop_grid(grid, lat_min=None, lat_max=None, lon_min=None, lon_max=None,
     else:
         ix_max = grid.nx
 
-    if alt_min is not None:
+    if iz_min is not None:
+        if grid.nz < iz_min:
+            warn('pixel index for altitude larger than number of pixels. '
+                 'Data will not be cropped')
+            iz_min = 0
+    elif alt_min is not None:
         iz, iy, ix = np.where(grid.point_altitude['data'] >= alt_min)
         if iz.size == 0:
             warn('Min altitude '+str(alt_min)+' outside of grid. ' +

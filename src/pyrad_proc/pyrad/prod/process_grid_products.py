@@ -24,9 +24,9 @@ from ..io.io_aux import get_fieldname_pyart
 from ..io.io_aux import get_save_dir, make_filename
 from ..io.write_data import write_histogram, write_ts_stats
 
-from ..graph.plots_grid import plot_surface, plot_surface_contour
+from ..graph.plots_grid import plot_surface, plot_surface_raw
 from ..graph.plots_grid import plot_longitude_slice, plot_latitude_slice
-from ..graph.plots_grid import plot_latlon_slice
+from ..graph.plots_grid import plot_latlon_slice, plot_surface_contour
 from ..graph.plots_aux import get_colobar_label, get_field_name
 from ..graph.plots import plot_histogram, plot_pos
 
@@ -184,6 +184,13 @@ def generate_grid_products(dataset, prdcfg):
             User defined parameters:
                 stat: str
                     The statistic used. Can be mean, median, min, max
+        'SURFACE_RAW': Plots a surface image of gridded data without
+            projecting it into a map
+            User defined parameters:
+                level: int
+                    The altitude level to plot. The rest of the parameters are
+                    defined by the parameters in 'ppiImageConfig' and
+                    'ppiMapImageConfig' in the 'loc' configuration file
         'SURFACE_IMAGE': Plots a surface image of gridded data.
             User defined parameters:
                 level: int
@@ -303,6 +310,37 @@ def generate_grid_products(dataset, prdcfg):
         print('----- save to '+fname)
 
         return fname
+
+    if prdcfg['type'] == 'SURFACE_RAW':
+        field_name = get_fieldname_pyart(prdcfg['voltype'])
+        if field_name not in dataset['radar_out'].fields:
+            warn(
+                ' Field type ' + field_name +
+                ' not available in data set. Skipping product ' +
+                prdcfg['type'])
+            return None
+
+        # user defined values
+        level = prdcfg.get('level', 0)
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdcfg['prdname'], timeinfo=prdcfg['timeinfo'])
+
+        fname_list = make_filename(
+            'surface', prdcfg['dstype'], prdcfg['voltype'],
+            prdcfg['imgformat'], prdcfginfo='l'+str(level),
+            timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
+
+        for i, fname in enumerate(fname_list):
+            fname_list[i] = savedir+fname
+
+        plot_surface_raw(
+            dataset['radar_out'], field_name, level, prdcfg, fname_list)
+
+        print('----- save to '+' '.join(fname_list))
+
+        return fname_list
 
     if prdcfg['type'] == 'SURFACE_IMAGE':
         field_name = get_fieldname_pyart(prdcfg['voltype'])
@@ -615,6 +653,7 @@ def generate_grid_products(dataset, prdcfg):
         vmax = prdcfg.get('vmax', None)
         mask_val = prdcfg.get('mask_val', None)
         write_data = prdcfg.get('write_data', 0)
+        binwidth_equal = prdcfg.get('binwidth_equal', 0)
 
         savedir = get_save_dir(
             prdcfg['basepath'], prdcfg['procname'], dssavedir,
@@ -643,8 +682,10 @@ def generate_grid_products(dataset, prdcfg):
         labelx = get_colobar_label(
             dataset['radar_out'].fields[field_name], field_name)
 
-        plot_histogram(bin_edges, values, fname_list, labelx=labelx,
-                       labely='Number of Samples', titl=titl)
+        plot_histogram(
+            bin_edges, values, fname_list, labelx=labelx,
+            labely='Number of Samples', titl=titl,
+            binwidth_equal=binwidth_equal)
 
         print('----- save to '+' '.join(fname_list))
 
@@ -662,8 +703,7 @@ def generate_grid_products(dataset, prdcfg):
             return fname
 
         return fname_list
-    
-    
+
     if prdcfg['type'] == 'SAVEVOL' or prdcfg['type'] == 'SAVEVOL_GRID':
         field_name = get_fieldname_pyart(prdcfg['voltype'])
         if field_name not in dataset['radar_out'].fields:
@@ -693,7 +733,7 @@ def generate_grid_products(dataset, prdcfg):
         print('saved file: '+fname)
 
         return fname
-        
+
     if prdcfg['type'] == 'SAVEALL' or prdcfg['type'] == 'SAVEALL_GRID':
         datatypes = prdcfg.get('datatypes', None)
 

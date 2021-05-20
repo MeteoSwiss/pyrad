@@ -1101,6 +1101,9 @@ def _create_datacfg_dict(cfg):
     datacfg.update({'nx': cfg.get('nx', None)})
     datacfg.update({'ny': cfg.get('ny', None)})
     datacfg.update({'nz': cfg.get('nz', None)})
+    datacfg.update({'ixmin': cfg.get('ixmin', None)})
+    datacfg.update({'iymin': cfg.get('iymin', None)})
+    datacfg.update({'izmin': cfg.get('izmin', None)})
 
     # variables to get the spectral data
     datacfg.update({'undo_txcorr': cfg.get('undo_txcorr', True)})

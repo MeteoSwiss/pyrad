@@ -309,6 +309,8 @@ melting_layer = 'melting_layer'
 melting_layer_height = 'melting_layer_height'
 
 # hydroclass
+precipitation_type = 'precipitation_type'
+
 radar_echo_classification = 'radar_echo_classification'
 radar_echo_classification_MF = 'radar_echo_classification_MF'
 corrected_radar_echo_classification = 'corrected_radar_echo_classification'
@@ -666,6 +668,7 @@ DEFAULT_FIELD_NAMES = {
     'radar_estimated_rain_rate': radar_estimated_rain_rate,
     'corrected_radar_estimated_rain_rate': corrected_radar_estimated_rain_rate,
     'rainfall_accumulation': rainfall_accumulation,
+    'precipitation_type': precipitation_type,
     'radar_echo_classification': radar_echo_classification,
     'corrected_radar_echo_classification': corrected_radar_echo_classification,
     'radar_echo_classification_MF': radar_echo_classification_MF,
@@ -2374,6 +2377,47 @@ DEFAULT_METADATA = {
         '_FillValue': 0,  # BRUIT
         '_Write_as_dtype': 'uint8'},
 
+    #   0 Précipitations indétectables/Absence de neige au sol
+    #   1 Précipitations indétectables/Présence de neige au sol
+    #   2 Précipitations indétectables/Sol invisible (nuit ou nuages)
+    #   3 Bruine
+    #   4 Bruine sur sol gelé
+    #   5 Bruine verglaçante
+    #   6 Pluie
+    #   7 Pluie sur sol gelé
+    #   8 Pluie verglaçante
+    #   9 Pluie et neige mêlées
+    #  10 Neige mouillée
+    #  11 Neige mouillée tenant au sol
+    #  12 Neige humide
+    #  13 Neige humide tenant au sol
+    #  14 Neige sèche
+    #  15 Neige sèche tenant au sol
+    #  16 Granules de glace
+    #  17 Grésil/Petite grêle
+    #  18 Moyenne grêle
+    #  19 Grosse grêle
+    # 255 Indéterminé
+
+    precipitation_type: {
+        'units': '-',
+        'standard_name': 'precipitation_type',
+        'long_name': 'Precipitation type',
+        'labels': ['NPREC', 'NPREC', 'NPREC', 'DZ', 'DZ_FRGR', 'FRDZ', 'RA',
+                   'RA_FRGR', 'FRRA', 'RA/SN', 'WS', 'WS_GR', 'HS', 'HS_GR',
+                   'DS', 'DS_GR', 'IC', 'SH', 'MH', 'LH', 'ND'],
+        'ticks': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+                  17, 18, 19, 20],
+        'boundaries': [-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5,
+                       10.5, 11.5, 12.5, 13.5, 14.5, 15.5, 16.5, 17.5, 18.5,
+                       19.5, 20.5],
+        'coordinates': 'elevation azimuth range',
+        'scale_factor': 1,
+        'add_offset': 0,
+        '_FillValue': 0,
+        '_Write_as_dtype': 'uint8'},
+
+
     radar_echo_classification: {
         'units': '-',
         'standard_name': 'radar_echo_classification',
@@ -3820,6 +3864,7 @@ DEFAULT_FIELD_COLORMAP = {
     sun_hit_v: 'pyart_LangRainbow12',
     sun_hit_zdr: 'pyart_LangRainbow12',
 
+    precipitation_type: 'pyart_LangRainbow12',
     radar_echo_classification: 'pyart_LangRainbow12',
     corrected_radar_echo_classification: 'pyart_LangRainbow12',
     radar_echo_classification_MF: 'pyart_LangRainbow12',
@@ -4066,6 +4111,7 @@ DEFAULT_FIELD_LIMITS = {
     radar_estimated_rain_rate: (0., 10.),
     rainfall_accumulation: (0., 100.),
 
+    precipitation_type: (0., 20.),
     radar_echo_classification: (0., 9.),
     hydroclass_entropy: (0., 1.),
     # hydroclass_confidence: (0., 100.),

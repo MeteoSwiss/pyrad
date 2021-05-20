@@ -1407,6 +1407,8 @@ def get_fieldname_pyart(datatype):
     elif datatype == 'Raccu':
         field_name = 'rainfall_accumulation'
 
+    elif datatype == 'prec_type':
+        field_name = 'precipitation_type'
     elif datatype == 'hydro':
         field_name = 'radar_echo_classification'
     elif datatype == 'hydroMF':
@@ -2176,7 +2178,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     starttime+datetime.timedelta(days=i)).strftime('%Y-%m-%d')
                 dayinfo = (starttime+datetime.timedelta(days=i)).strftime(
                     '%Y%m%d')
-                datapath = os.path.expandvars(cfg['datapath'][ind_rad]) + scan + daydir + '/'
+                datapath = cfg['datapath'][ind_rad] + scan + daydir + '/'
                 if not os.path.isdir(datapath):
                     # warn("WARNING: Unknown datapath '%s'" % datapath)
                     continue
@@ -2313,7 +2315,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     datapath+dayinfo+'*'+datatype+termination)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
-            elif datagroup == 'MFCFRADIAL':
+            elif datagroup in ('MFCFRADIAL', 'MFBIN', 'MFPNG'):
                 try:
                     fpath_strf = dataset[
                         dataset.find("D")+2:dataset.find("F")-2]
@@ -2386,7 +2388,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
             fdatetime = get_datetime(filenamestr, datadescriptor)
             if fdatetime is not None:
                 if starttime <= fdatetime <= endtime:
-                    filelist.append(filenamestr)
+                    if filenamestr not in filelist:
+                        filelist.append(filenamestr)
 
     return sorted(filelist)
 
@@ -2684,8 +2687,8 @@ def get_datatype_fields(datadescriptor):
                 datatype = descrfields[2]
                 dataset = None
                 product = None
-            elif datagroup in ('ODIM', 'MFCFRADIAL', 'CFRADIAL2', 'CF1',
-                               'NEXRADII'):
+            elif datagroup in ('ODIM', 'MFCFRADIAL', 'MFBIN', 'CFRADIAL2',
+                               'CF1', 'NEXRADII', 'MFPNG'):
                 descrfields2 = descrfields[2].split(',')
                 datatype = descrfields2[0]
                 product = None
@@ -2714,8 +2717,8 @@ def get_datatype_fields(datadescriptor):
             datatype = descrfields[1]
             dataset = None
             product = None
-        elif datagroup in ('ODIM', 'MFCFRADIAL', 'CFRADIAL2', 'CF1',
-                           'NEXRADII'):
+        elif datagroup in ('ODIM', 'MFCFRADIAL', 'MFBIN', 'CFRADIAL2', 'CF1',
+                           'NEXRADII', 'MFPNG'):
             descrfields2 = descrfields[1].split(',')
             # warn(" descrfields2:  '%s'" % descrfields2[1])
             if len(descrfields2) == 2:
@@ -3226,7 +3229,8 @@ def _get_datetime(fname, datagroup, ftime_format=None):
         else:
             fdatetime = datetime.datetime.strptime(
                 datestr, '%y%j')+datetime.timedelta(days=1)
-    elif datagroup in ('ODIM', 'MFCFRADIAL', 'CFRADIAL2', 'CF1', 'NEXRADII'):
+    elif datagroup in ('ODIM', 'MFCFRADIAL', 'MFBIN', 'CFRADIAL2', 'CF1',
+                       'NEXRADII', 'MFPNG'):
         if ftime_format is None:
             # we assume is rad4alp format
             datetimestr = bfile[3:12]
