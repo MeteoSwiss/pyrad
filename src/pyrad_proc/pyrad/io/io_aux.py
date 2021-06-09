@@ -2315,7 +2315,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     datapath+dayinfo+'*'+datatype+termination)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
-            elif datagroup in ('MFCFRADIAL', 'MFBIN', 'MFPNG'):
+            elif datagroup in ('MFCFRADIAL', 'MFBIN', 'MFPNG', 'MFGRIB',
+                               'MFDAT', 'MFCF'):
                 try:
                     fpath_strf = dataset[
                         dataset.find("D")+2:dataset.find("F")-2]
@@ -2688,7 +2689,8 @@ def get_datatype_fields(datadescriptor):
                 dataset = None
                 product = None
             elif datagroup in ('ODIM', 'MFCFRADIAL', 'MFBIN', 'CFRADIAL2',
-                               'CF1', 'NEXRADII', 'MFPNG'):
+                               'CF1', 'NEXRADII', 'MFPNG', 'MFGRIB', 'MFDAT',
+                               'MFCF'):
                 descrfields2 = descrfields[2].split(',')
                 datatype = descrfields2[0]
                 product = None
@@ -2718,7 +2720,7 @@ def get_datatype_fields(datadescriptor):
             dataset = None
             product = None
         elif datagroup in ('ODIM', 'MFCFRADIAL', 'MFBIN', 'CFRADIAL2', 'CF1',
-                           'NEXRADII', 'MFPNG'):
+                           'NEXRADII', 'MFPNG', 'MFGRIB', 'MFDAT', 'MFCF'):
             descrfields2 = descrfields[1].split(',')
             # warn(" descrfields2:  '%s'" % descrfields2[1])
             if len(descrfields2) == 2:
@@ -3108,22 +3110,32 @@ def find_iso0_grib_file(voltime, cfg, ind_rad=0):
         Name of iso0 file if it exists. None otherwise
 
     """
-    # initial run time to look for
+    datapath = cfg['cosmopath'][ind_rad]
+
+    if cfg['CosmoRunFreq'] == 0:
+        # The date of the NWP file corresponds to the data of the radar
+        runtimestr = voltime.strftime('%Y%m%d%H%M')
+        search_name = datapath+'ISO_T_PAROME_'+runtimestr+'*.grib'
+        print('Looking for file: {}'.format(search_name))
+        fname = glob.glob(search_name)
+        if fname:
+            return fname[0]
+        warn('WARNING: Unable to find iso0 file')
+        return None
+
     runhour0 = int(voltime.hour/cfg['CosmoRunFreq'])*cfg['CosmoRunFreq']
     runtime0 = voltime.replace(hour=runhour0, minute=0, second=0)
+    nruns_to_check = int((cfg['CosmoForecasted'])/cfg['CosmoRunFreq'])
 
     # look for file
     found = False
-    nruns_to_check = int((cfg['CosmoForecasted'])/cfg['CosmoRunFreq'])
     for i in range(nruns_to_check):
         runtime = runtime0-datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
         target_hour = int((voltime - runtime).total_seconds() / 3600.)
         runtimestr = runtime.strftime('%Y%m%d%H00')
-
-        datapath = cfg['cosmopath'][ind_rad]
         search_name = datapath+'ISO_T_PAROME_'+runtimestr+'*.grib'
 
-        print('Looking for file: '+search_name)
+        print('Looking for file: {}'.format(search_name))
         fname = glob.glob(search_name)
         if fname:
             found = True
@@ -3230,7 +3242,7 @@ def _get_datetime(fname, datagroup, ftime_format=None):
             fdatetime = datetime.datetime.strptime(
                 datestr, '%y%j')+datetime.timedelta(days=1)
     elif datagroup in ('ODIM', 'MFCFRADIAL', 'MFBIN', 'CFRADIAL2', 'CF1',
-                       'NEXRADII', 'MFPNG'):
+                       'NEXRADII', 'MFPNG', 'MFGRIB', 'MFDAT', 'MFCF'):
         if ftime_format is None:
             # we assume is rad4alp format
             datetimestr = bfile[3:12]

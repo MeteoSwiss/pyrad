@@ -149,14 +149,15 @@ def grib2radar_data(radar, iso0_data, time_info, time_interp=True,
         else:
             # put time in seconds from past forecast
             time_info_s = (
-                time_info-iso0_data['fcst_time'][time_index_past]).total_seconds()
+                time_info -
+                iso0_data['fcst_time'][time_index_past]).total_seconds()
             fcst_time_s = (
                 iso0_data['fcst_time'][time_index_future] -
                 iso0_data['fcst_time'][time_index_past]).total_seconds()
 
             # interpolate between two time steps
             fcst_time = np.array([0, fcst_time_s])
-            values = iso0_data['fcst_time'][
+            values = iso0_data['values'][
                 time_index_past:time_index_future+1, :, :]
             f = interp1d(fcst_time, values, axis=0, assume_sorted=True)
 
@@ -361,7 +362,10 @@ def read_iso0_grib_data(fname):
         lats, lons = grb.latlons()
         values.append(grb.values)
         date_analysis = grb.analDate
-        date_fcst.append(grb.analDate+datetime.timedelta(hours=grb['startStep']))
+        date_fcst.append(
+            grb.analDate+datetime.timedelta(hours=grb['startStep']))
+
+    grbs.close()
 
     iso0_data = {
         'values': np.array(values),
@@ -370,5 +374,4 @@ def read_iso0_grib_data(fname):
         'lons': lons,
         'lats': lats
     }
-
     return iso0_data

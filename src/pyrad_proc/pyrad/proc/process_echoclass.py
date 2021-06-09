@@ -1279,6 +1279,12 @@ def process_centroids(procstatus, dscfg, radar_list=None):
         randomize : bool
             If True the data is randomized to avoid the effects of the
             quantization. Default True
+        platykurtic_dBZ : bool
+            If True makes the reflectivity distribution platykurtic. Default
+            True
+        platykurtic_H_ISO0 : bool
+            If True makes the height respect to the iso-0 distribution
+            platykurtic. Default True
         relh_slope : float. Dataset keyword
             The slope used to transform the height relative to the iso0 into
             a sigmoid function. Default 0.001
@@ -1382,18 +1388,15 @@ def process_centroids(procstatus, dscfg, radar_list=None):
         radar = radar_list[ind_rad]
 
         if temp_field is None and iso0_field is None:
-            warn('iso0 or temperature fields needed to create hydrometeor ' +
-                 'classification field')
+            warn('iso0 or temperature fields needed to compute centroids')
             return None, None
 
         if temp_field is not None and (temp_field not in radar.fields):
-            warn('Unable to create hydrometeor classification field. ' +
-                 'Missing temperature field')
+            warn('temperature field needed to compute centroids')
             return None, None
 
         if iso0_field is not None and (iso0_field not in radar.fields):
-            warn('Unable to create hydrometeor classification field. ' +
-                 'Missing height over iso0 field')
+            warn('iso0 field needed to compute centroids')
             return None, None
 
         temp_ref = 'temperature'
@@ -1484,6 +1487,8 @@ def process_centroids(procstatus, dscfg, radar_list=None):
     sigma_zh = dscfg.get('sigma_zh', 0.75)
     sigma_relh = dscfg.get('sigma_relh', 1.5)
     randomize = dscfg.get('randomize', True)
+    platykurtic_dBZ = dscfg.get('platykurtic_dBZ', True)
+    platykurtic_H_ISO0 = dscfg.get('platykurtic_H_ISO0', True)
 
     fm = np.transpose(np.array([
         dscfg['global_data']['dBZ'],
@@ -1493,9 +1498,11 @@ def process_centroids(procstatus, dscfg, radar_list=None):
         dscfg['global_data']['H_ISO0']], dtype=np.float32))
 
     fm_sample = pyart.retrieve.select_samples(
-            fm, np.random.default_rng(seed=0), nbins=nbins,
-            pdf_zh_max=pdf_zh_max, pdf_relh_max=pdf_relh_max,
-            sigma_zh=sigma_zh, sigma_relh=sigma_relh, randomize=randomize)
+        fm, np.random.default_rng(seed=0), nbins=nbins,
+        pdf_zh_max=pdf_zh_max, pdf_relh_max=pdf_relh_max,
+        sigma_zh=sigma_zh, sigma_relh=sigma_relh, randomize=randomize,
+        platykurtic_dBZ=platykurtic_dBZ,
+        platykurtic_H_ISO0=platykurtic_H_ISO0)
 
     dscfg['global_data']['dBZ'] = fm_sample[:, 0]
     dscfg['global_data']['ZDR'] = fm_sample[:, 1]

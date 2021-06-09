@@ -177,6 +177,12 @@ def get_data(voltime, datatypesdescr, cfg):
                 files
             'MFPNG': Format used by some MeteoFrance products stored as binary
                 files
+            'MFGRIB': Format used by some MeteoFrance products stored as GRIB
+                files
+            'MFDAT': Format used by some MeteoFrance products stored as DAT
+                (text) files
+            'MFCF': Format used by some MeteoFrance products stored as netcdf
+                CF files
 
             'PSRSPECTRA': Format used to store Rainbow power spectra
                 recordings.
@@ -234,8 +240,14 @@ def get_data(voltime, datatypesdescr, cfg):
     datatype_rad4alpbin = list()
     datatype_mfbin = list()
     dataset_mfbin = list()
+    datatype_mfdat = list()
+    dataset_mfdat = list()
     datatype_mfpng = list()
     dataset_mfpng = list()
+    datatype_mfgrib = list()
+    dataset_mfgrib = list()
+    datatype_mfcf = list()
+    dataset_mfcf = list()
     datatype_satgrid = list()
     datatype_rad4alpIQ = list()
     datatype_mxpol = list()
@@ -304,9 +316,18 @@ def get_data(voltime, datatypesdescr, cfg):
         elif datagroup == 'MFBIN':
             datatype_mfbin.append(datatype)
             dataset_mfbin.append(dataset)
+        elif datagroup == 'MFDAT':
+            datatype_mfdat.append(datatype)
+            dataset_mfdat.append(dataset)
         elif datagroup == 'MFPNG':
             datatype_mfpng.append(datatype)
             dataset_mfpng.append(dataset)
+        elif datagroup == 'MFGRIB':
+            datatype_mfgrib.append(datatype)
+            dataset_mfgrib.append(dataset)
+        elif datagroup == 'MFCF':
+            datatype_mfcf.append(datatype)
+            dataset_mfcf.append(dataset)
         elif datagroup == 'RAD4ALPIQ':
             datatype_rad4alpIQ.append(datatype)
         elif datagroup == 'PYRADGRID':
@@ -348,6 +369,9 @@ def get_data(voltime, datatypesdescr, cfg):
     ndatatypes_rad4alpbin = len(datatype_rad4alpbin)
     ndatatypes_mfbin = len(datatype_mfbin)
     ndatatypes_mfpng = len(datatype_mfpng)
+    ndatatypes_mfgrib = len(datatype_mfgrib)
+    ndatatypes_mfcf = len(datatype_mfcf)
+    ndatatypes_mfdat = len(datatype_mfdat)
     ndatatypes_satgrid = len(datatype_satgrid)
     ndatatypes_rad4alpIQ = len(datatype_rad4alpIQ)
     ndatatypes_pyradgrid = len(datatype_pyradgrid)
@@ -539,6 +563,36 @@ def get_data(voltime, datatypesdescr, cfg):
         radar_aux = merge_fields_mf_grid(
             voltime, datatype_mfpng, dataset_mfpng, cfg['ScanList'][ind_rad],
             cfg, ind_rad=ind_rad, ftype='png')
+        if radar_aux is not None:
+            if radar is not None:
+                radar = merge_grids(radar, radar_aux)
+            else:
+                radar = radar_aux
+
+    if ndatatypes_mfgrib > 0:
+        radar_aux = merge_fields_mf_grid(
+            voltime, datatype_mfgrib, dataset_mfgrib,
+            cfg['ScanList'][ind_rad], cfg, ind_rad=ind_rad, ftype='grib')
+        if radar_aux is not None:
+            if radar is not None:
+                radar = merge_grids(radar, radar_aux)
+            else:
+                radar = radar_aux
+
+    if ndatatypes_mfdat > 0:
+        radar_aux = merge_fields_mf_grid(
+            voltime, datatype_mfdat, dataset_mfdat, cfg['ScanList'][ind_rad],
+            cfg, ind_rad=ind_rad, ftype='dat')
+        if radar_aux is not None:
+            if radar is not None:
+                radar = merge_grids(radar, radar_aux)
+            else:
+                radar = radar_aux
+
+    if ndatatypes_mfcf > 0:
+        radar_aux = merge_fields_mf_grid(
+            voltime, datatype_mfcf, dataset_mfcf, cfg['ScanList'][ind_rad],
+            cfg, ind_rad=ind_rad, ftype='nc')
         if radar_aux is not None:
             if radar is not None:
                 radar = merge_grids(radar, radar_aux)
@@ -2775,7 +2829,7 @@ def merge_fields_mf_grid(voltime, datatype_list, dataset_list, scan_list, cfg,
     ind_rad : int
         radar index
     ftype : str
-        File type. Can be 'png' or 'bin'
+        File type. Can be 'png', 'bin' or 'grib'
 
     Returns
     -------
@@ -2806,6 +2860,12 @@ def merge_fields_mf_grid(voltime, datatype_list, dataset_list, scan_list, cfg,
                 filename[0], field_name=prod_field)
         elif ftype == 'png':
             grid_aux = pyart.aux_io.read_png(filename[0])
+        elif ftype == 'grib':
+            grid_aux = pyart.aux_io.read_grib(filename[0])
+        elif ftype == 'dat':
+            grid_aux = pyart.aux_io.read_dat_mf(filename[0])
+        elif ftype == 'nc':
+            grid_aux = pyart.aux_io.read_cf1_cartesian_mf(filename[0])
         if grid_aux is None:
             continue
 
