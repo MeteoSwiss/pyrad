@@ -1213,7 +1213,7 @@ def generate_centroids_products(dataset, prdcfg):
             prdcfg['prdname'], timeinfo=timeinfo)
 
         fname_list = make_filename(
-            'histogram', prdcfg['dstype'], prdcfg['voltype'],
+            'histogram', prdcfg['dstype'], hydro_type+_+prdcfg['voltype'],
             prdcfg['imgformat'],
             timeinfo=timeinfo, timeformat=timeformat)
 
@@ -1330,8 +1330,8 @@ def generate_centroids_products(dataset, prdcfg):
             prdcfg['prdname'], timeinfo=timeinfo)
 
         fname_list = make_filename(
-            '2Dhistogram', prdcfg['dstype'], voltype_x+'-'+voltype_y,
-            prdcfg['imgformat'],
+            '2Dhistogram', prdcfg['dstype'],
+            hydro_type+'_'+voltype_x+'-'+voltype_y, prdcfg['imgformat'],
             timeinfo=timeinfo, timeformat=timeformat)
 
         for i, fname in enumerate(fname_list):
@@ -1404,7 +1404,7 @@ def generate_centroids_products(dataset, prdcfg):
             prdcfg['prdname'], timeinfo=timeinfo)
 
         fname = make_filename(
-            'data', prdcfg['dstype'], 'centroids_data', ['.npz'],
+            'data', prdcfg['dstype'], 'centroids_data', ['npz'],
             timeinfo=timeinfo)[0]
 
         fname = savedir+fname
@@ -1427,7 +1427,7 @@ def generate_centroids_products(dataset, prdcfg):
             prdcfg['prdname'], timeinfo=timeinfo)
 
         fname = make_filename(
-            'labeled_data', prdcfg['dstype'], 'centroids_data', ['.npz'],
+            'labeled_data', prdcfg['dstype'], 'centroids_data', ['npz'],
             timeinfo=timeinfo)[0]
 
         fname = savedir+fname

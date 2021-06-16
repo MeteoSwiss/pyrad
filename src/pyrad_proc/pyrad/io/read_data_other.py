@@ -7,6 +7,7 @@ Functions for reading auxiliary data
 .. autosummary::
     :toctree: generated/
 
+    read_centroids_npz
     read_centroids
     read_proc_periods
     read_profile_ts
@@ -51,6 +52,30 @@ import numpy as np
 from pyart.config import get_fillvalue, get_metadata
 
 from .io_aux import get_fieldname_pyart, _get_datetime
+
+
+def read_centroids_npz(fname):
+    """
+    Reads an npz file containing data used in centroid computation
+
+    Parameters
+    ----------
+    fname : str
+        name of the file to read
+
+    Returns
+    -------
+    centroids_data : dict
+        Dictionary with the data
+
+    """
+    try:
+        with np.load(fname, allow_pickle=True) as npzfile:
+            return npzfile['centroids_data'].item()
+    except EnvironmentError as ee:
+        warn(str(ee))
+        warn('Unable to read file '+fname)
+        return None
 
 
 def read_centroids(fname):
@@ -640,6 +665,7 @@ def read_quantiles(fname):
         warn(str(ee))
         warn('Unable to read file '+fname)
         return None, None
+
 
 def read_excess_gates(fname):
     """
@@ -1505,7 +1531,8 @@ def read_selfconsistency(fname):
 
     """
     try:
-        with open(fname, 'r', newline='', encoding='utf-8', errors='ignore') as csvfile:
+        with open(fname, 'r', newline='', encoding='utf-8',
+                  errors='ignore') as csvfile:
             # first count the lines
             reader = csv.DictReader(
                 csvfile, fieldnames=['zdr', 'kdpzh'], dialect='excel-tab')

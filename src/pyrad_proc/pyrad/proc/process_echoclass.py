@@ -1429,6 +1429,7 @@ def process_centroids(procstatus, dscfg, radar_list=None):
             else:
                 band = pyart.retrieve.get_freq_band(
                     radar.instrument_parameters['frequency']['data'][0])
+                print('Radar frequency band: {}'.format(band))
 
             data_dict = {
                 'dBZ': refl,

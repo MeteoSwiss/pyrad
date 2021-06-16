@@ -61,6 +61,7 @@ Reading other data
 .. autosummary::
     :toctree: generated/
 
+    read_centroids_npz
     read_centroids
     read_proc_periods
     read_last_state
@@ -218,6 +219,7 @@ from .read_data_other import read_last_state, read_rhi_profile, read_centroids
 from .read_data_other import read_excess_gates, read_histogram
 from .read_data_other import read_profile_ts, read_histogram_ts
 from .read_data_other import read_quantiles_ts, read_ml_ts, read_proc_periods
+from .read_data_other import read_centroids_npz
 
 from .read_data_sensor import read_lightning, read_lightning_traj
 from .read_data_sensor import get_sensor_data, read_smn, read_smn2
