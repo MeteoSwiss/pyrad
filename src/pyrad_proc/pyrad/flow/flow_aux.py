@@ -1027,12 +1027,12 @@ def _create_cfg_dict(cfgfile):
 
     # Convert the following floats to float arrays
     fltarr_list = [
-        'ray_angle_res', 'frequency', 'radar_beam_width_h',
-        'radar_beam_width_v', 'pulse_width', 'nyquist_velocity',
-        'AntennaGainH', 'AntennaGainV', 'dBADUtodBmh', 'dBADUtodBmv',
-        'mflossh', 'mflossv', 'radconsth', 'radconstv', 'txpwrh', 'txpwrv',
-        'attg', 'lradomeh', 'lradomev', 'lrxh', 'lrxv', 'ltxh', 'ltxv',
-        'mosotti_factor', 'refcorr', 'AzimTol']
+        'frequency', 'radar_beam_width_h', 'radar_beam_width_v',
+        'pulse_width', 'nyquist_velocity', 'AntennaGainH', 'AntennaGainV',
+        'dBADUtodBmh', 'dBADUtodBmv', 'mflossh', 'mflossv', 'radconsth',
+        'radconstv', 'txpwrh', 'txpwrv', 'attg', 'lradomeh', 'lradomev',
+        'lrxh', 'lrxv', 'ltxh', 'ltxv', 'mosotti_factor', 'refcorr',
+        'AzimTol']
     for param in fltarr_list:
         if param in cfg and isinstance(cfg[param], float):
             cfg[param] = [cfg[param]]
@@ -1115,10 +1115,6 @@ def _create_datacfg_dict(cfg):
     # Radar position
     if 'RadarPosition' in cfg:
         datacfg.update({'RadarPosition': cfg['RadarPosition']})
-        
-    # Ray angle resolution
-    if 'ray_angle_res' in cfg:
-        datacfg.update({'ray_angle_res': cfg['ray_angle_res']})
 
     # Instrument parameters
     if 'frequency' in cfg:

@@ -739,16 +739,6 @@ def get_data(voltime, datatypesdescr, cfg):
         radar.init_gate_longitude_latitude()
         radar.init_gate_altitude()
 
-    # if it is specified, get angular resolution
-    if 'ray_angle_res' in cfg:
-        rays_are_indexed = pyart.config.get_metadata('rays_are_indexed')
-        ray_angle_res = pyart.config.get_metadata('ray_angle_res')
-        rays_are_indexed['data'] = np.array([True], dtype=bool)
-        ray_angle_res['data'] = np.array(
-            [cfg['ray_angle_res'][ind_rad]], dtype=np.float32)
-        radar.ray_angle_res = ray_angle_res
-        radar.rays_are_indexed = rays_are_indexed
-
     # get instrument parameters from the config file
     if 'frequency' in cfg:
         if radar.instrument_parameters is None:
