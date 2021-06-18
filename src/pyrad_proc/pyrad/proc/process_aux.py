@@ -11,6 +11,7 @@ determined points or regions of interest.
 
     get_process_func
     process_raw
+    process_vol_to_grid
     process_save_radar
     process_fixed_rng
     process_fixed_rng_span
@@ -179,6 +180,7 @@ def get_process_func(dataset_type, dsname):
                 'GRID_TEXTURE': process_grid_texture
                 'NORMALIZE_LUMINOSITY': process_normalize_luminosity
                 'PIXEL_FILTER': process_pixel_filter
+                'VOL2GRID': process_vol_to_grid
             'GRID_TIMEAVG' format output:
                 'GRID_TIME_STATS': process_grid_time_stats
                 'GRID_TIME_STATS2': process_grid_time_stats2
@@ -252,6 +254,9 @@ def get_process_func(dataset_type, dsname):
         dsformat = 'GRID'
     elif dataset_type == 'RAW_GRID':
         func_name = 'process_raw_grid'
+        dsformat = 'GRID'
+    elif dataset_type == 'VOL2GRID':
+        func_name = 'process_vol_to_grid'
         dsformat = 'GRID'
     elif dataset_type == 'GRID_FIELDS_DIFF':
         func_name = 'process_grid_fields_diff'
@@ -634,6 +639,116 @@ def process_raw(procstatus, dscfg, radar_list=None):
         warn('ERROR: No valid radar')
         return None, None
     new_dataset = {'radar_out': deepcopy(radar_list[ind_rad])}
+
+    return new_dataset, ind_rad
+
+
+def process_vol_to_grid(procstatus, dscfg, radar_list=None):
+    """
+    Function to convert polar data into a Cartesian grid
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration
+    radar_list : list of Radar objects
+        Optional. list of radar objects
+    xmin, xmax, ymin, ymax : float
+        Horizontal limits of the grid [m from origin]. Default +-20000.
+    zmin, zmax : float
+        vertical limits of the grid [masl]. Default 1000.
+    hres, vres : float
+        horizontal and vertical resolution [m]. Default 1000.
+    wfunc : str
+        Weighting function. Default NEAREST
+
+
+    Returns
+    -------
+    new_dataset : dict
+        dictionary containing the output
+    ind_rad : int
+        radar index
+
+    """
+    if procstatus != 1:
+        return None, None
+
+    # Process
+    field_names_aux = []
+    for datatypedescr in dscfg['datatype']:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        field_names_aux.append(get_fieldname_pyart(datatype))
+
+    ind_rad = int(radarnr[5:8])-1
+    if ((radar_list is None) or (radar_list[ind_rad] is None)):
+        warn('ERROR: No valid radar found')
+        return None, None
+    radar = deepcopy(radar_list[ind_rad])
+
+    # keep only fields present in radar object
+    field_names = []
+    nfields_available = 0
+    for field_name in field_names_aux:
+        if field_name not in radar.fields:
+            warn('Field name '+field_name+' not available in radar object')
+            continue
+        field_names.append(field_name)
+        nfields_available += 1
+
+    if nfields_available == 0:
+        warn("Fields not available in radar data")
+        return None, None
+
+    xmin = dscfg.get('xmin', -20000.)
+    xmax = dscfg.get('xmax', 20000.)
+    ymin = dscfg.get('ymin', -20000.)
+    ymax = dscfg.get('ymax', 20000.)
+    zmin = dscfg.get('zmin', 1000.)
+    zmax = dscfg.get('zmax', 1000.)
+    hres = dscfg.get('hres', 1000.)
+    vres = dscfg.get('vres', 500.)
+
+    wfunc = dscfg.get('wfunc', 'NEAREST')
+
+    # number of grid points
+    ny = int((ymax-ymin)/hres)+1
+    nx = int((xmax-xmin)/hres)+1
+    nz = int((zmax-zmin)/vres)+1
+
+    # parameters to determine the gates to use for each grid point
+    if (radar.instrument_parameters is not None and
+            'radar_beam_width_h' in radar.instrument_parameters):
+        beamwidth = radar.instrument_parameters[
+            'radar_beam_width_h']['data'][0]
+    else:
+         warn('beamwidth not defined. Assumed 1 deg')
+         beamwidth = 1.
+
+    if radar.ray_angle_res is not None:
+        beam_spacing = radar.ray_angle_res['data'][0]
+    else:
+        warn('beam spacing not defined. Assumed 1 deg')
+        beam_spacing = 1.
+
+    lat = float(radar.latitude['data'])
+    lon = float(radar.longitude['data'])
+    alt = 0.
+
+    # cartesian mapping
+    grid = pyart.map.grid_from_radars(
+        (radar,), gridding_algo='map_to_grid', weighting_function=wfunc,
+        roi_func='dist_beam', h_factor=1.0, nb=beamwidth, bsp=beam_spacing,
+        min_radius=hres/2.,
+        grid_shape=(nz, ny, nx),
+        grid_limits=((zmin, zmax), (ymin, ymax), (xmin, xmax)),
+        grid_origin=(lat, lon), grid_origin_alt=alt,
+        fields=field_names)
+
+    new_dataset = {'radar_out': grid}
 
     return new_dataset, ind_rad
 

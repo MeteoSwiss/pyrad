@@ -435,13 +435,9 @@ def process_iso0_mf(procstatus, dscfg, radar_list=None):
 
 def process_iso0_grib(procstatus, dscfg, radar_list=None):
     """
-    Gets iso0 degree data in text format and put it in radar coordinates.
+    Gets iso0 degree data in grib format and put it in radar coordinates.
     This function is meant to process data received from the MeteoFrance NWP
-    model. The model provides a maximum of 9 points at 0.5 degree lat/lon
-    spacing surrounding a given radar. If a point is not provided it means
-    that the iso0 for that point is at or below the ground level. Out of these
-    points a single reference iso-0 is obtained according to the user defined
-    iso0 statistic.
+    model.
 
     Parameters
     ----------
@@ -453,9 +449,8 @@ def process_iso0_grib(procstatus, dscfg, radar_list=None):
 
         datatype : string. Dataset keyword
             arbitrary data type
-        iso0_statistic : str. Dataset keyword
-            The statistic used to weight the iso0 points. Can be avg_by_dist,
-            avg, min, max
+        time_interp : Bool. Dataset keyword
+            Whether to interpolate the data in time or not
 
     radar_list : list of Radar objects
         Optional. list of radar objects
