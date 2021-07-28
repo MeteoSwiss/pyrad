@@ -149,6 +149,7 @@ def main():
     main_gecsx(cfgfile_proc, starttime=proc_starttime, endtime=proc_endtime,
                infostr=infostr, gather_plots=gatherplots)
 
+
 def _print_end_msg(text):
     """
     prints end message
