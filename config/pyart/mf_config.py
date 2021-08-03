@@ -2765,6 +2765,12 @@ DEFAULT_METADATA = {
         'units': 'deg Celsius',
         'standard_name': 'temperature',
         'long_name': 'Temperature',
+        'labels': ['-60.', '-50.', '-40.', '-30.', '-20.', '-10.', '-5.',
+                   '0.', '5.', '10.', '20.', '30.'],
+        'ticks': [-60., -50., -40., -30., -20., -10., -5., 0, 5., 10., 20.,
+                  30.],
+        'boundaries': [-80., -60., -50., -40., -30., -20., -10., -5., 0, 5.,
+                       10., 20., 30., 40.],
         'coordinates': 'elevation azimuth range'},
 
     iso0: {
@@ -4154,7 +4160,7 @@ DEFAULT_FIELD_LIMITS = {
     frequency_of_occurrence: (0, 100),
 
     temperature: (-60, 30),
-    height_over_iso0: (-6000., 6000.),
+    height_over_iso0: (-2500., 2500.),
     iso0_height: (0., 5000.),
 
     # Additional reflectivity like fields

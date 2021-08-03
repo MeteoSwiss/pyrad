@@ -21,6 +21,7 @@ Auxiliary functions
     process_roi
     process_azimuthal_average
     process_radar_resampling
+    process_vol_to_grid
 
 Gridded data functions
 ======================
@@ -252,7 +253,7 @@ DEM data
 from .process_aux import get_process_func, process_raw, process_save_radar
 from .process_aux import process_roi, process_azimuthal_average
 from .process_aux import process_fixed_rng, process_fixed_rng_span
-from .process_aux import process_radar_resampling
+from .process_aux import process_radar_resampling, process_vol_to_grid
 
 from .process_grid import process_grid, process_raw_grid, process_grid_point
 from .process_grid import process_grid_time_stats, process_grid_time_stats2

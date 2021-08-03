@@ -572,8 +572,10 @@ def make_filename(prdtype, dstype, dsname, ext_list, prdcfginfo=None,
 
     fname_list = list()
     for ext in ext_list:
-        fname_list.append(timeinfostr + runstr + prdtype + '_' +
-                          dstype + '_' + dsname + cfgstr + '.' + ext)
+        fname = (
+            timeinfostr+runstr+prdtype+'_'+dstype+'_'+dsname+cfgstr+'.'+ext)
+        fname = fname.replace('/', '-')
+        fname_list.append(fname)
 
     return fname_list
 
@@ -2195,7 +2197,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     starttime+datetime.timedelta(days=i),
                     radar_name=cfg['RadarName'][ind_rad],
                     radar_res=cfg['RadarRes'][ind_rad], scan=scan,
-                    path_convention=cfg['path_convention'])
+                    path_convention=cfg['path_convention'][ind_rad])
 
                 if not os.path.isdir(datapath):
                     warn("WARNING: Unknown datapath '%s'" % datapath)
@@ -2211,7 +2213,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
 
                 datapath = get_rad4alp_grid_dir(
                     cfg['datapath'][ind_rad], dir_day, datatype, acronym,
-                    path_convention=cfg['path_convention'])
+                    path_convention=cfg['path_convention'][ind_rad])
 
                 if not os.path.isdir(datapath):
                     warn("WARNING: Unknown datapath '%s'" % datapath)
@@ -2239,7 +2241,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 if scan is None:
                     warn('Unknown scan name')
                     return None
-                if cfg['path_convention'] == 'MCH':
+                if cfg['path_convention'][ind_rad] == 'MCH':
                     dayinfo = (starttime+datetime.timedelta(days=i)).strftime(
                         '%y%j')
                     basename = ('M'+cfg['RadarRes'][ind_rad] +
@@ -2257,7 +2259,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     if not os.path.isdir(datapath):
                         warn("WARNING: Unknown datapath '%s'" % datapath)
                         continue
-                elif cfg['path_convention'] == 'ODIM':
+                elif cfg['path_convention'][ind_rad] == 'ODIM':
                     try:
                         fpath_strf = dataset[
                             dataset.find("D")+2:dataset.find("F")-2]
@@ -2335,7 +2337,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 if scan is None:
                     warn('Unknown scan name')
                     return None
-                if cfg['path_convention'] == 'LTE':
+                if cfg['path_convention'][ind_rad] == 'LTE':
                     sub1 = str(starttime.year)
                     sub2 = starttime.strftime('%m')
                     sub3 = starttime.strftime('%d')
@@ -2374,7 +2376,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     if not os.path.isdir(datapath):
                         warn("WARNING: Unknown datapath '%s'" % datapath)
                         continue
-                if cfg['path_convention'] == 'MCH':
+                if cfg['path_convention'][ind_rad] == 'MCH':
                     datapath = datapath+daydir+'/'
 
                 if not os.path.isdir(datapath):
@@ -3021,7 +3023,7 @@ def find_hzt_file(voltime, cfg, ind_rad=0):
         runtimestr = runtime.strftime('%y%j%H00')
 
         daydir = runtime.strftime('%y%j')
-        if cfg['path_convention'] == 'RT':
+        if cfg['path_convention'][ind_rad] == 'RT':
             datapath = cfg['cosmopath'][ind_rad]+'HZT/'
         else:
             datapath = cfg['cosmopath'][ind_rad]+'HZT/'+daydir+'/'

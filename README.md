@@ -47,10 +47,10 @@ sensors. This is particularly useful when performing measurement campaigns where
 sensing retrievals are validated with in-situ airplane or ground-based measurements.
 
 # Installation
-To install Pyrad and its submodules please have a look at the [Pyrad user manual (pdf)](./doc/pyrad_user_manual.pdf).
+To install Pyrad and its submodules please have a look at the [Pyrad user manual (pdf)](./additional_doc/pyrad_user_manual.pdf).
 
 # Use
-Before using it have a look at the [cookbook (pdf)](./doc/pyrad-framework-cookbook/DataProcessing.pdf).
+Before using it have a look at the [cookbook (pdf)](./additional_doc/pyrad-framework-cookbook/DataProcessing.pdf).
 
 For details on the implemented functions check the [pyrad library reference for users](https://pyrad-mch.readthedocs.io/en/stable/). Downloadable copies can be found in the repository: 
 
@@ -59,7 +59,7 @@ For details on the implemented functions check the [pyrad library reference for 
 
 Example configuration files can be found in the repository directory [pyrad/config/processing/](./config/processing) and in the dedicated [examples repository](https://github.com/MeteoSwiss/pyrad-examples). 
 
-To use Pyrad for data quality monitoring check the report [pyrad_monitoring_fvj.pdf](./doc/pyrad_monitoring_fvj.pdf).
+To use Pyrad for data quality monitoring check the report [pyrad_monitoring_fvj.pdf](./additional_doc/pyrad_monitoring_fvj.pdf).
 
 # Newsletter
 
@@ -70,7 +70,7 @@ We welcome contributions, suggestions of developments and bug reports.
 
 Suggestions of developments and bug reports should use the [Issues page of the github repository](https://github.com/meteoswiss-mdr/pyrad/issues).
 
-The process to contribute by partners external to MeteoSwiss is described in the [user manual](./doc/pyrad_user_manual.pdf).
+The process to contribute by partners external to MeteoSwiss is described in the [user manual](./additional_doc/pyrad_user_manual.pdf).
 
 # Citation
 The core of Pyrad is based on Py-ART. Py-ART was originally developed in the context of the [ARM Research Facility](https://www.arm.gov/). If you use Pyrad for your work, please cite BOTH Py-ART and Pyrad papers in your paper:

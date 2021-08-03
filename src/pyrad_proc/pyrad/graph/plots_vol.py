@@ -61,7 +61,8 @@ import pyart
 from .plots_aux import get_colobar_label, get_norm, generate_fixed_rng_title
 from .plots_aux import generate_fixed_rng_span_title
 from .plots_aux import generate_complex_range_Doppler_title
-from .plots import plot_quantiles, plot_histogram, _plot_time_range, _plot_sunscan
+from .plots import plot_quantiles, plot_histogram, _plot_time_range
+from .plots import _plot_sunscan
 
 from ..util.radar_utils import compute_quantiles_sweep, find_ang_index
 from ..util.radar_utils import compute_histogram_sweep
@@ -946,8 +947,9 @@ def plot_fixed_rng_span(radar, field_name, prdcfg, fname_list, azi_res=None,
         figsize=[xsize, ysize], dpi=dpi)
 
 
-def plot_fixed_rng_sun(radar, field_name, sun_hits, prdcfg, fname_list, azi_res=None,
-                   ele_res=None, ang_tol=1., vmin=None, vmax=None):
+def plot_fixed_rng_sun(radar, field_name, sun_hits, prdcfg, fname_list,
+                       azi_res=None, ele_res=None, ang_tol=1., vmin=None,
+                       vmax=None):
     """
     plots a fixed range plot
 
@@ -1006,10 +1008,10 @@ def plot_fixed_rng_sun(radar, field_name, sun_hits, prdcfg, fname_list, azi_res=
 
             for i, azi in enumerate(azi_vec):
                 ind = find_ang_index(azi_1D, azi, ang_tol=ang_tol)
-                #print('IND: ',ind)
+                # print('IND: ',ind)
                 if ind is None:
                     continue
-                #print('FIELD_1D: ',field_1D[ind])
+                # print('FIELD_1D: ',field_1D[ind])
                 field_2D[i, j] = field_1D[ind][0]
     else:
         for i, azi in enumerate(azi_vec):
@@ -1077,8 +1079,8 @@ def plot_fixed_rng_sun(radar, field_name, sun_hits, prdcfg, fname_list, azi_res=
     ysize = prdcfg['ppiImageConfig'].get('ysize', 8)
 
     return _plot_sunscan(
-        azi_vec, ele_vec, field_2D, sun_hits, field_name, fname_list, titl=titl,
-        xlabel='azimuth (deg)', ylabel='elevation (deg)',
+        azi_vec, ele_vec, field_2D, sun_hits, field_name, fname_list,
+        titl=titl, xlabel='azimuth (deg)', ylabel='elevation (deg)',
         figsize=[xsize, ysize], vmin=vmin, vmax=vmax, dpi=dpi)
 
 

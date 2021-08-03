@@ -11,6 +11,7 @@ determined points or regions of interest.
 
     get_process_func
     process_raw
+    process_vol_to_grid
     process_save_radar
     process_fixed_rng
     process_fixed_rng_span
@@ -179,6 +180,7 @@ def get_process_func(dataset_type, dsname):
                 'GRID_TEXTURE': process_grid_texture
                 'NORMALIZE_LUMINOSITY': process_normalize_luminosity
                 'PIXEL_FILTER': process_pixel_filter
+                'VOL2GRID': process_vol_to_grid
             'GRID_TIMEAVG' format output:
                 'GRID_TIME_STATS': process_grid_time_stats
                 'GRID_TIME_STATS2': process_grid_time_stats2
@@ -246,12 +248,15 @@ def get_process_func(dataset_type, dsname):
         func_name = 'process_ccor'
     elif dataset_type == 'GECSX':
         func_name = 'process_gecsx'
-        dsformat = ['GRID','VOL']
+        dsformat = ['GRID', 'VOL']
     elif dataset_type == 'GRID':
         func_name = 'process_grid'
         dsformat = 'GRID'
     elif dataset_type == 'RAW_GRID':
         func_name = 'process_raw_grid'
+        dsformat = 'GRID'
+    elif dataset_type == 'VOL2GRID':
+        func_name = 'process_vol_to_grid'
         dsformat = 'GRID'
     elif dataset_type == 'GRID_FIELDS_DIFF':
         func_name = 'process_grid_fields_diff'
@@ -634,6 +639,139 @@ def process_raw(procstatus, dscfg, radar_list=None):
         warn('ERROR: No valid radar')
         return None, None
     new_dataset = {'radar_out': deepcopy(radar_list[ind_rad])}
+
+    return new_dataset, ind_rad
+
+
+def process_vol_to_grid(procstatus, dscfg, radar_list=None):
+    """
+    Function to convert polar data into a Cartesian grid
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration
+    radar_list : list of Radar objects
+        Optional. list of radar objects
+    xmin, xmax, ymin, ymax : float
+        Horizontal limits of the grid [m from origin]. Default +-20000.
+    zmin, zmax : float
+        vertical limits of the grid [masl]. Default 1000.
+    hres, vres : float
+        horizontal and vertical resolution [m]. Default 1000.
+    lat0, lon0 : float
+        Grid origin [deg]. The default will be the radar position
+    alt0 : float
+        Grid origin altitude [masl]. Default is 0
+    wfunc : str
+        Weighting function. Default NEAREST
+
+
+    Returns
+    -------
+    new_dataset : dict
+        dictionary containing the output
+    ind_rad : int
+        radar index
+
+    """
+    if procstatus != 1:
+        return None, None
+
+    if radar_list is None:
+        warn('ERROR: No valid radar found')
+        return None, None
+
+    # Process
+    field_names_aux = []
+    ind_rads_aux = []
+    for datatypedescr in dscfg['datatype']:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        field_names_aux.append(get_fieldname_pyart(datatype))
+        ind_rads_aux.append(int(radarnr[5:8])-1)
+    field_names_aux = np.array(field_names_aux)
+    field_names_aux = np.unique(field_names_aux)
+    ind_rads_aux = np.array(ind_rads_aux)
+    ind_rads_aux = np.unique(ind_rads_aux)
+
+    radar_list_aux = []
+    ind_rads = []
+    for ind_rad in ind_rads_aux:
+        if radar_list[ind_rad] is None:
+            warn('ERROR: Radar {} not valid'.format(ind_rad))
+            continue
+        radar_list_aux.append(radar_list[ind_rad])
+        ind_rads.append(ind_rad)
+
+    if not radar_list_aux:
+        warn('ERROR: No valid radar found')
+        return None, None
+
+    # keep only fields present in radar object
+    field_names = []
+    nrad = len(radar_list_aux)
+    for field_name in field_names_aux:
+        nfields = 0
+        for radar in radar_list_aux:
+            if field_name not in radar.fields:
+                warn('Field name '+field_name+' not available in radar object')
+                continue
+            nfields += 1
+        if nfields == nrad:
+            field_names.append(field_name)
+
+    if not field_names:
+        warn("Fields not available in radar data")
+        return None, None
+
+    xmin = dscfg.get('xmin', -20000.)
+    xmax = dscfg.get('xmax', 20000.)
+    ymin = dscfg.get('ymin', -20000.)
+    ymax = dscfg.get('ymax', 20000.)
+    zmin = dscfg.get('zmin', 1000.)
+    zmax = dscfg.get('zmax', 1000.)
+    hres = dscfg.get('hres', 1000.)
+    vres = dscfg.get('vres', 500.)
+    lat = dscfg.get('lat0', float(radar_list_aux[0].latitude['data']))
+    lon = dscfg.get('lon0', float(radar_list_aux[0].latitude['data']))
+    alt = dscfg.get('alt0', 0.)
+
+    wfunc = dscfg.get('wfunc', 'NEAREST')
+
+    # number of grid points
+    ny = int((ymax-ymin)/hres)+1
+    nx = int((xmax-xmin)/hres)+1
+    nz = int((zmax-zmin)/vres)+1
+
+    # parameters to determine the gates to use for each grid point
+    if (radar_list_aux[0].instrument_parameters is not None and
+            'radar_beam_width_h' in radar_list_aux[0].instrument_parameters):
+        beamwidth = radar_list_aux[0].instrument_parameters[
+            'radar_beam_width_h']['data'][0]
+    else:
+        warn('beamwidth not defined. Assumed 1 deg')
+        beamwidth = 1.
+
+    if radar_list_aux[0].ray_angle_res is not None:
+        beam_spacing = radar_list_aux[0].ray_angle_res['data'][0]
+    else:
+        warn('beam spacing not defined. Assumed 1 deg')
+        beam_spacing = 1.
+
+    # cartesian mapping
+    grid = pyart.map.grid_from_radars(
+        radar_list_aux, gridding_algo='map_to_grid', weighting_function=wfunc,
+        roi_func='dist_beam', h_factor=1.0, nb=beamwidth, bsp=beam_spacing,
+        min_radius=hres/2.,
+        grid_shape=(nz, ny, nx),
+        grid_limits=((zmin, zmax), (ymin, ymax), (xmin, xmax)),
+        grid_origin=(lat, lon), grid_origin_alt=alt,
+        fields=field_names)
+
+    new_dataset = {'radar_out': grid}
 
     return new_dataset, ind_rad
 
@@ -1612,13 +1750,9 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
                 target_radar.fields['avg_'+field_name]['data'][
                     trad_ind_ray, trad_ind_rng] = avg
 
-
-
                 # npoints field
                 target_radar.fields['npoints_'+field_name]['data'][
                     trad_ind_ray, trad_ind_rng] = nvals_valid
-
-
 
                 # quantile fields
                 for quant, val in zip(tadict['quantiles'], qvals):
@@ -1629,7 +1763,6 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
                         field_name)
                     target_radar.fields[quant_field]['data'][
                         trad_ind_ray, trad_ind_rng] = val
-
 
         else:
             # ================================================================
@@ -1674,14 +1807,9 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
                 target_radar.fields['avg_'+field_name]['data'][
                     trad_ind_ray, trad_ind_rng] = avg
 
-
-
                 # npoints field
                 target_radar.fields['npoints_'+field_name]['data'][
                     trad_ind_ray, trad_ind_rng] = nvals_valid
-
-
-
 
                 # quantile fields
                 for quant, val in zip(tadict['quantiles'], qvals):
