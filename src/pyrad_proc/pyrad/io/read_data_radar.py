@@ -1352,7 +1352,6 @@ def merge_scans_rad4alp(basepath, scan_list, radar_name, radar_res, voltime,
     if radar is None:
         return radar
 
-    ind_rad = int(radarnr[5:8])-1
     rmin = None
     rmax = None
     elmin = None
