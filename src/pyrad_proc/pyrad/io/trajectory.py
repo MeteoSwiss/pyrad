@@ -17,6 +17,7 @@ import sys
 import re
 import datetime
 import locale
+import pandas as pd
 from warnings import warn
 from copy import deepcopy
 
@@ -79,6 +80,7 @@ class Trajectory(object):
     get_samples_in_period : Get indices of samples within period
     _convert_traj_to_swissgrid : convert data from WGS84 to Swiss coordinates
     _read_traj : Read plane trajectory from file
+    _read_traj_flores : Read FLORAKO plane trajectory from file
     _read_traj_trt : Read TRT trajectory from file
     _read_traj_lightning : Read lightning trajectory from file
     _get_total_seconds : Get the total time of the trajectory in seconds
@@ -138,6 +140,8 @@ class Trajectory(object):
                 self._read_traj_lightning(flashnr)
             elif self.trajtype == 'trt':
                 self._read_traj_trt()
+            elif self.trajtype == 'plane_flores':
+                self._read_traj_flores()
             else:
                 self._read_traj()
 
@@ -382,7 +386,53 @@ class Trajectory(object):
                 locale.setlocale(locale.LC_ALL, loc)  # restore saved locale
 
         self.nsamples = len(self.time_vector)
+        
+    def _read_traj_flores(self):
+        """
+        Read trajectory from FLORAKO file
 
+        File format
+        -----------
+        Column/Variable Contents, Units and Description:
+        01: UTCDate      Year-Month-Day                 Date of epoch or feature (UTC time)
+        02: UTCTime      HH:MM:SS.SS                    Time of epoch or feature - Receiver time frame (UTC)
+        03: Latitude     Decimal Degrees (signed)       North/South Geographic coordinate
+        04: Longitude    Decimal Degrees (signed)       East/West Geographic coordinate
+        05: H-MSL        Metres                         Height above the geoid
+        06: H-Ell        Metres                         Height above the current ellipsoid
+        07: Undulation   Metres                         Height of the ellipsoid above the geoid
+        08: PDOP                                        Position Dilution of Precision, which is a measure of X, Y, Z position geometry
+        09: HDOP                                        Horizontal Position Dilution of Precision, which is a measure of X, Y position geometry
+        10: VDOP                                        Vertical Position Dilution of Precision, which is a measure of Z position geometry
+        11: DopRms                                      Root mean square of all L1 Doppler measurement residuals
+        """
+          # check if the file can be read
+        try:
+            tfile = open(self.filename, "r")
+        except:
+            raise Exception("ERROR: Could not find|open trajectory file '" +
+                            self.filename+"'")
+        tfile.close()
+        
+        try:
+            data = pd.read_csv(self.filename, skiprows=28, 
+                               delim_whitespace=True)
+            data = data.drop(0)
+            times = [datetime.datetime.strptime(d+'_'+h+'0000',
+                                                '%Y-%m-%d_%H:%M:%S.%f') for 
+                                                d, h in zip(data['UTCDate'],
+                                                            data['UTCTime'])]
+                       
+            self.time_vector = np.array(times)
+            self.wgs84_lat_deg = np.array(pd.to_numeric(data['Latitude']))
+            self.wgs84_lon_deg = np.array(pd.to_numeric(data['Longitude']))
+            self.wgs84_alt_m = np.array(pd.to_numeric(data['H-MSL']))
+                
+        except:
+            raise
+            
+        self.nsamples = len(self.time_vector)
+        
     def _read_traj_lightning(self, flashnr=0):
         """
         Read trajectory from lightning file
