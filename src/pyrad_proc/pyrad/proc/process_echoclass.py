@@ -1334,9 +1334,22 @@ def process_centroids(procstatus, dscfg, radar_list=None):
         kmax_iter : int
             Maximum number of iterations of the k-medoids algorithm. Default
             100
+        nsamples_small : int
+            Maximum number before using the k-medoids CLARA algorithm. If this
+            number is exceeded the CLARA algorithm will be used
+        sampling_size_clara : int
+            Number of samples used in each iteration of the k-medoids CLARA
+            algorithm.
+        niter_clara : int
+            Number of iterations performed by the k-medoids CLARA algorithm
         keep_labeled_data : bool
-            If True the labeled data is going to be kept for storage. Default
-            True
+            If True the labeled data is going to be kept.
+        use_median : bool
+            If True the intermediate medoids are computed as the median of each
+            variable and the final medoids are computed as the median of each.
+            Otherwise they are computed using the kmedoids algorithm.
+        allow_label_duplicates : bool
+            If True allow to label multiple clusters with the same label
 
     radar_list : list of Radar objects
         Optional. list of radar objects
@@ -1527,11 +1540,17 @@ def process_centroids(procstatus, dscfg, radar_list=None):
     hydro_names = dscfg.get(
         'hydro_names',
         ('AG', 'CR', 'LR', 'RP', 'RN', 'VI', 'WS', 'MH', 'IH/HDG'))
-    weight = dscfg.get('weight', (1., 1., 1., 1., 0.75))
+    weight = dscfg.get('weight', (1., 1., 1., 1., 1.))
     parallelized = dscfg.get('parallelized', False)
     sample_data = dscfg.get('sample_data', True)
     kmax_iter = dscfg.get('kmax_iter', 100)
+    nsamples_small = dscfg.get('nsamples_small', 40000)
+    sampling_size_clara = dscfg.get('sampling_size_clara', 10000)
+    niter_clara = dscfg.get('niter_clara', 5)
     keep_labeled_data = dscfg.get('keep_labeled_data', True)
+    use_median = dscfg.get('use_median', True)
+    allow_label_duplicates = dscfg.get('allow_label_duplicates', True)
+
 
     (labeled_data, labels, medoids_dict,
      final_medoids_dict) = pyart.retrieve.compute_centroids(
@@ -1544,7 +1563,10 @@ def process_centroids(procstatus, dscfg, radar_list=None):
         acceptance_threshold=acceptance_threshold,
         band=dscfg['global_data']['band'], relh_slope=relh_slope,
         parallelized=parallelized, sample_data=sample_data,
-        kmax_iter=kmax_iter, keep_labeled_data=keep_labeled_data)
+        kmax_iter=kmax_iter, nsamples_small=nsamples_small,
+        sampling_size_clara=sampling_size_clara,
+        niter_clara=niter_clara, keep_labeled_data=keep_labeled_data,
+        use_median=use_median, allow_label_duplicates=allow_label_duplicates)
 
     if not medoids_dict:
         return new_dataset, ind_rad
