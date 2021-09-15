@@ -3662,7 +3662,7 @@ def get_data_rad4alp(filename, datatype_list, scan_name, cfg, ind_rad=0):
             radar = pyart.aux_io.read_metranet(
                 filename, field_names=metranet_field_names,
                 reader=cfg['metranet_read_lib'])
-        except ValueError as ee:
+        except (ValueError, TypeError) as ee:
             warn("Unable to read file '"+filename+": (%s)" % str(ee))
             return None
 
