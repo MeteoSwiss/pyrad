@@ -49,8 +49,9 @@ sensing retrievals are validated with in-situ airplane or ground-based measureme
 # Cloning from github
 Make sure to also get the submodules by running
 
-.. code:: bash
+```
     git clone --recursive https://github.com/MeteoSwiss/pyrad.git
+```
 
 # Installation
 To install Pyrad and its submodules please have a look at the [Pyrad user manual (pdf)](./additional_doc/pyrad_user_manual.pdf).
