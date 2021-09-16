@@ -1408,7 +1408,6 @@ def merge_scans_odim(basepath, scan_list, radar_name, radar_res, voltime,
         radar object
 
     """
-
     radar = None
     dayinfo = voltime.strftime('%y%j')
     timeinfo = voltime.strftime('%H%M')
@@ -2058,7 +2057,7 @@ def merge_scans_mxpol(basepath, scan_list, voltime, datatype_list, cfg,
     """
     radar = None
     for scan in scan_list:
-        if cfg['path_convention'] == 'LTE':
+        if cfg['path_convention'][ind_rad] == 'LTE':
             sub1 = str(voltime.year)
             sub2 = voltime.strftime('%m')
             sub3 = voltime.strftime('%d')

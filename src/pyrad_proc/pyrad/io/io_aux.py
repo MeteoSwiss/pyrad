@@ -572,10 +572,8 @@ def make_filename(prdtype, dstype, dsname, ext_list, prdcfginfo=None,
 
     fname_list = list()
     for ext in ext_list:
-        fname = (
-            timeinfostr+runstr+prdtype+'_'+dstype+'_'+dsname+cfgstr+'.'+ext)
-        fname = fname.replace('/', '-')
-        fname_list.append(fname)
+        fname_list.append(timeinfostr + runstr + prdtype + '_' +
+                          dstype + '_' + dsname + cfgstr + '.' + ext)
 
     return fname_list
 
