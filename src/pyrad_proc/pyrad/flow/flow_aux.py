@@ -950,8 +950,6 @@ def _create_cfg_dict(cfgfile):
         cfg.update({'datapath': None})
     if 'satpath' not in cfg:
         cfg.update({'satpath': None})
-    if 'path_convention' not in cfg:
-        cfg.update({'path_convention': 'MCH'})
     if 'cosmopath' not in cfg:
         cfg.update({'cosmopath': None})
     if 'psrpath' not in cfg:
@@ -993,6 +991,9 @@ def _create_cfg_dict(cfgfile):
              'Assumed default value 7h (including analysis)')
         cfg.update({'CosmoForecasted': 7})
 
+    if 'path_convention' not in cfg:
+        cfg.update({'path_convention': ['MCH']*cfg['NumRadars']})
+
     # Instrument parameters not in radar object attributes
     if 'lradomeh' not in cfg:
         cfg.update({
@@ -1020,7 +1021,7 @@ def _create_cfg_dict(cfgfile):
         'imgformat', 'frequency', 'radar_beam_width_h', 'radar_beam_width_v',
         'pulse_width', 'nyquist_velocity', 'AntennaGainH', 'AntennaGainV',
         'dBADUtodBmh', 'dBADUtodBmv', 'mflossh', 'mflossv', 'radconsth',
-        'radconstv', 'txpwrh', 'txpwrv', 'attg']
+        'radconstv', 'txpwrh', 'txpwrv', 'attg', 'path_convention']
     for param in strarr_list:
         if param in cfg and isinstance(cfg[param], str):
             cfg[param] = [cfg[param]]
