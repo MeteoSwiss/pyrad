@@ -1359,17 +1359,24 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
-        coloc_data_dir : string. Dataset keyword
-            name of the directory containing the csv file with colocated data
+            The input data types        
+        colocgatespath : string.
+            base path to the file containing the coordinates of the co-located
+            gates
         coloc_radars_name : string. Dataset keyword
             string identifying the radar names
+        rays_are_indexed : bool. Dataset keyword
+            If True it is considered that the rays are indexed and that the
+            data can be selected simply looking at the ray number.
+            Default false
         azi_tol : float. Dataset keyword
             azimuth tolerance between the two radars. Default 0.5 deg
         ele_tol : float. Dataset keyword
             elevation tolerance between the two radars. Default 0.5 deg
         rng_tol : float. Dataset keyword
             range tolerance between the two radars. Default 50 m
+        coloc_data_dir : string. Dataset keyword
+            name of the directory containing the csv file with colocated data
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -1658,10 +1665,17 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
 
         datatype : list of string. Dataset keyword
             The input data types
+        colocgatespath : string.
+            base path to the file containing the coordinates of the co-located
+            gates
         coloc_data_dir : string. Dataset keyword
             name of the directory containing the csv file with colocated data
         coloc_radars_name : string. Dataset keyword
             string identifying the radar names
+        rays_are_indexed : bool. Dataset keyword
+            If True it is considered that the rays are indexed and that the
+            data can be selected simply looking at the ray number.
+            Default false
         azi_tol : float. Dataset keyword
             azimuth tolerance between the two radars. Default 0.5 deg
         ele_tol : float. Dataset keyword
