@@ -179,6 +179,7 @@ Retrievals
     process_rainfall_accumulation
     process_vol_refl
     process_bird_density
+    process_vpr
 
 Doppler processing
 ==================
@@ -333,7 +334,7 @@ from .process_retrieve import process_signal_power, process_snr, process_ccor
 from .process_retrieve import process_l, process_cdr, process_bird_density
 from .process_retrieve import process_rainrate, process_vol_refl, process_rcs
 from .process_retrieve import process_rcs_pr, process_rainfall_accumulation
-from .process_retrieve import process_radial_noise_hs
+from .process_retrieve import process_radial_noise_hs, process_vpr
 from .process_retrieve import process_radial_noise_ivic
 
 from .process_Doppler import process_wind_vel, process_windshear

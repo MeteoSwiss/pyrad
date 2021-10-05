@@ -138,6 +138,7 @@ def get_process_func(dataset_type, dsname):
                 'VIS': process_visibility
                 'VIS_FILTER': process_filter_visibility
                 'VOL_REFL': process_vol_refl
+                'VPR': process_vpr
                 'WBN': process_wbn_iq
                 'WIND_VEL': process_wind_vel
                 'WINDSHEAR': process_windshear
@@ -357,6 +358,8 @@ def get_process_func(dataset_type, dsname):
         func_name = 'process_radial_noise_ivic'
     elif dataset_type == 'VOL_REFL':
         func_name = 'process_vol_refl'
+    elif dataset_type == 'VPR':
+        func_name = 'process_vpr'
     elif dataset_type == 'BIRD_DENSITY':
         func_name = 'process_bird_density'
     elif dataset_type == 'RHOHV_CORRECTION':
