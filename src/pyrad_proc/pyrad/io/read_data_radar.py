@@ -2604,7 +2604,7 @@ def merge_scans_iq_rad4alp(basepath, basepath_iq, scan_list, radar_name,
 
         radar_aux = pyart.aux_io.read_iq(
             filename[0], filenames_iq, field_names=field_names,
-            prf=prfs[int(scan)-1], noise_h=noise_h, noise_v=noise_h,
+            prf=prfs[int(scan)-1], noise_h=noise_h, noise_v=noise_v,
             rconst_h=rconst_h, rconst_v=rconst_v, radconst_h=radconst_h,
             radconst_v=radconst_v, mfloss_h=mfloss_h, mfloss_v=mfloss_v,
             ang_tol=cfg['ang_tol'], rng_min=cfg['rmin'], rng_max=cfg['rmax'],
