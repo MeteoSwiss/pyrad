@@ -21,6 +21,7 @@ Auxiliary functions
     process_roi
     process_azimuthal_average
     process_radar_resampling
+    process_vol_to_grid
 
 Gridded data functions
 ======================
@@ -178,6 +179,7 @@ Retrievals
     process_rainfall_accumulation
     process_vol_refl
     process_bird_density
+    process_vpr
 
 Doppler processing
 ==================
@@ -252,7 +254,7 @@ DEM data
 from .process_aux import get_process_func, process_raw, process_save_radar
 from .process_aux import process_roi, process_azimuthal_average
 from .process_aux import process_fixed_rng, process_fixed_rng_span
-from .process_aux import process_radar_resampling
+from .process_aux import process_radar_resampling, process_vol_to_grid
 
 from .process_grid import process_grid, process_raw_grid, process_grid_point
 from .process_grid import process_grid_time_stats, process_grid_time_stats2
@@ -332,7 +334,7 @@ from .process_retrieve import process_signal_power, process_snr, process_ccor
 from .process_retrieve import process_l, process_cdr, process_bird_density
 from .process_retrieve import process_rainrate, process_vol_refl, process_rcs
 from .process_retrieve import process_rcs_pr, process_rainfall_accumulation
-from .process_retrieve import process_radial_noise_hs
+from .process_retrieve import process_radial_noise_hs, process_vpr
 from .process_retrieve import process_radial_noise_ivic
 
 from .process_Doppler import process_wind_vel, process_windshear

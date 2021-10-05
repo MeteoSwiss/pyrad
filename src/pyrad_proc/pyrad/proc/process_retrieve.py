@@ -17,6 +17,7 @@ Functions for retrieving new moments and products
     process_radial_noise_ivic
     process_l
     process_cdr
+    process_vpr
     process_rainrate
     process_rainfall_accumulation
     process_bird_density
@@ -872,6 +873,59 @@ def process_cdr(procstatus, dscfg, radar_list=None):
     new_dataset = {'radar_out': deepcopy(radar)}
     new_dataset['radar_out'].fields = dict()
     new_dataset['radar_out'].add_field('circular_depolarization_ratio', cdr)
+
+    return new_dataset, ind_rad
+
+
+def process_vpr(procstatus, dscfg, radar_list=None):
+    """
+    Computes the vertical profile of reflectivity
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration. Accepted Configuration Keywords::
+
+        datatype : string. Dataset keyword
+            The input data type
+    radar_list : list of Radar objects
+        Optional. list of radar objects
+
+    Returns
+    -------
+    new_dataset : dict
+        dictionary containing the output
+    ind_rad : int
+        radar index
+
+    """
+    if procstatus != 1:
+        return None, None
+
+    for datatypedescr in dscfg['datatype']:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        if datatype in ('dBZ', 'dBZc'):
+            refl_field = get_fieldname_pyart(datatype)
+
+    ind_rad = int(radarnr[5:8])-1
+    if radar_list[ind_rad] is None:
+        warn('No valid radar')
+        return None, None
+    radar = radar_list[ind_rad]
+
+    if refl_field not in radar.fields:
+        warn('ERROR: Unable to compute VPR. Missing data')
+        return None, None
+
+    refl_corr = pyart.correct.correct_vpr(radar, refl_field=refl_field)
+
+    # prepare for exit
+    new_dataset = {'radar_out': deepcopy(radar)}
+    new_dataset['radar_out'].fields = dict()
+    new_dataset['radar_out'].add_field('corrected_reflectivity', refl_corr)
 
     return new_dataset, ind_rad
 
