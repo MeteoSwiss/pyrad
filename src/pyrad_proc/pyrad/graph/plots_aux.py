@@ -268,7 +268,7 @@ def get_field_name(field_dict, field):
     return field_name
 
 
-def get_norm(field_name, field_dict=None):
+def get_norm(field_name, field_dict={}):
     """
     Computes the normalization of the colormap, and gets the ticks and labels
     of the colorbar from the metadata of the field. Returns None if the
