@@ -8,8 +8,8 @@
 ![version](https://img.shields.io/badge/python-3.7-blue.svg)
 ![version](https://img.shields.io/badge/python-3.8-blue.svg)
 
-[![Anaconda-Server Badge](https://img.shields.io/badge/Anaconda%20Cloud-0.6.3-blue.svg?style=flat-square)](https://anaconda.org/conda-forge/pyrad_mch)
-[![Anaconda-Server Badge](https://img.shields.io/badge/Last%20updated-01%20Mar%202021-blue.svg?style=flat-square)](https://anaconda.org/conda-forge/pyrad_mch)
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/pyrad_mch/badges/version.svg)](https://anaconda.org/conda-forge/pyrad_mch)
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/pyrad_mch/badges/latest_release_date.svg)](https://anaconda.org/conda-forge/pyrad_mch)
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/pyrad_mch/badges/downloads.svg)](https://anaconda.org/conda-forge/pyrad_mch)
 
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/pyrad_mch/badges/platforms.svg)](https://anaconda.org/conda-forge/pyrad_mch)
