@@ -621,7 +621,7 @@ def plot_time_range(radar, field_name, ind_sweep, prdcfg, fname_list,
     ysize = prdcfg['ppiImageConfig'].get('ysize', 8)
 
     rng_aux = radar_aux.range['data']
-    if ylabel == 'range (Km)':
+    if ylabel == 'range (km)':
         rng_aux /= 1000.
     rng_res = rng_aux[1]-rng_aux[0]
     rng_aux = np.append(rng_aux-rng_res/2., rng_aux[-1]+rng_res/2.)
