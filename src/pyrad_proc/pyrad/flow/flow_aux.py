@@ -1092,6 +1092,12 @@ def _create_datacfg_dict(cfg):
     datacfg.update({'rmin': cfg.get('rmin', None)})
     datacfg.update({'rmax': cfg.get('rmax', None)})
 
+    # Convert the following floats to float arrays
+    fltarr_list = ['elmin', 'elmax', 'azmin', 'azmax', 'rmin', 'rmax']
+    for param in fltarr_list:
+        if param in datacfg and isinstance(datacfg[param], float):
+            datacfg[param] = [datacfg[param]]
+
     # Modify size of grid object
     datacfg.update({'latmin': cfg.get('latmin', None)})
     datacfg.update({'latmax': cfg.get('latmax', None)})

@@ -6,24 +6,26 @@
 movie_maker
 ================================================
 
-This program produces a movie out of all files present in a folder
+This program produces a movie and a gif out of all files present in a folder
 
 """
 
 # Author: fvj
 # License: BSD 3 clause
 
-from moviepy.editor import *
 import glob
 import os
 import datetime
 import atexit
+
+from moviepy.editor import ImageSequenceClip
 
 print(__doc__)
 
 
 def main():
     """
+    main programme
     """
     print("====== Movie maker started: %s" %
           datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"))
@@ -31,39 +33,66 @@ def main():
                     "====== Movie maker finished: ")
 
     file_type = 'png'
-    movie_type = 'avi'
-    codec = 'png'
+    movie_type = 'mp4'
+    codec = 'mpeg4'
     frames_per_second = 1
-    movie_path = '/users/jfigui/movies/'
-
+    movie_path = '/utemp/mdso/figuerasiventuraj/movies/'
     file_path_list = [
-        '/store/msrad/radar/pyrad_products/rad4alp_hydro_PHA/2017-07-19/reflectivity_traj/ALT5000_flash_time/',
-        '/store/msrad/radar/pyrad_products/rad4alp_hydro_PHA/2017-07-19/reflectivity_traj/ALT5000_flash_rel_alt/',
-        '/store/msrad/radar/pyrad_products/rad4alp_hydro_PHA/2017-07-30/reflectivity_traj/ALT5000_flash_time/',
-        '/store/msrad/radar/pyrad_products/rad4alp_hydro_PHA/2017-07-30/reflectivity_traj/ALT5000_flash_rel_alt/',
-        '/store/msrad/radar/pyrad_products/rad4alp_hydro_PHA/2017-08-01/reflectivity_traj/ALT5000_flash_time/',
-        '/store/msrad/radar/pyrad_products/rad4alp_hydro_PHA/2017-08-01/reflectivity_traj/ALT5000_flash_rel_alt/']
-
+        '/utemp/mdso/figuerasiventuraj/pyrad_products/MF_ODIM_OPOU_HAIL/2020-07-01/hydroMF_semisupervised_zoom/PPI_EL03/']
     movie_name_list = [
-        '20170719_allflash_cappi_time_TRAJ_LIGHTNING_dBZc_alt5000.0',
-        '20170719_allflash_cappi_rel_alt_TRAJ_LIGHTNING_dBZc_alt5000.0',
-        '20170730_allflash_cappi_time_TRAJ_LIGHTNING_dBZc_alt5000.0',
-        '20170730_allflash_cappi_rel_alt_TRAJ_LIGHTNING_dBZc_alt5000.0',
-        '20170801_allflash_cappi_time_TRAJ_LIGHTNING_dBZc_alt5000.0',
-        '20170801_allflash_cappi_rel_alt_TRAJ_LIGHTNING_dBZc_alt5000.0']
+        '20200701_OPOU_ppi_RAW_hydroMF_semisupervised_el1.8']
 
-    for i, file_path in enumerate(file_path_list):
-        movie_name = movie_name_list[i]
+    create_movie(
+        file_path_list, movie_name_list, movie_path, file_type=file_type,
+        fps=frames_per_second, movie_type=movie_type, codec=codec)
+
+
+def create_movie(file_path_list, movie_name_list, movie_path, file_type='png',
+                 fps=1, movie_type='mp4', codec='mpeg4'):
+    """
+    creates the movie.
+
+    can support any type supported by ffmpeg
+    some examples:
+    movie type / codec
+    .avi / rawvideo, png
+    .mp4 / libx264, mpeg4
+    avi/rawvideo supported by libreoffice
+    mp4 supported by windows media player
+
+    Parameters
+    ----------
+    file_path_list : list of str
+        List of folders where to find the images for the movies
+    movie_name_list : list of str
+        List of movies to create_movie
+    movie_path : str
+        path where to store the movies
+    file_type : str
+        the individual images file type
+    fps : int
+        the frames per second
+    movie_type : str
+        the type of movie file
+    codec : str
+        the codec used for the movie
+
+    Returns
+    -------
+    Nothing
+
+    """
+    for movie_name, file_path in zip(movie_name_list, file_path_list):
         file_list = sorted(glob.glob(file_path+'*.'+file_type))
-
         print(file_list)
 
         # Generate clip
-        clip = ImageSequenceClip(file_list, fps=frames_per_second)
+        clip = ImageSequenceClip(file_list, fps=fps)
         # Write out clip
         if not os.path.isdir(movie_path):
             os.makedirs(movie_path)
         clip.write_videofile(movie_path+movie_name+'.'+movie_type, codec=codec)
+        clip.write_gif(movie_path+movie_name+'.gif')
 
         print('Created movie '+movie_path+movie_name)
 
