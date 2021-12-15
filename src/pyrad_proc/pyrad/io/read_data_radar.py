@@ -3769,7 +3769,7 @@ def get_data_odim(filename, datatype_list, scan_name, cfg, ind_rad=0):
         try:
             radar = pyart.aux_io.read_odim_h5(
                 filename, field_names=odim_field_names)
-        except ValueError as ee:
+        except (ValueError, OSError) as ee:
             warn("Unable to read file '"+filename+": (%s)" % str(ee))
             return None
 
