@@ -37,10 +37,12 @@ def main():
     codec = 'mpeg4'
     frames_per_second = 1
     movie_path = '/utemp/mdso/figuerasiventuraj/movies/'
-    file_path_list = [
-        '/utemp/mdso/figuerasiventuraj/pyrad_products/MF_ODIM_OPOU_HAIL/2020-07-01/hydroMF_semisupervised_zoom/PPI_EL03/']
+    file_path_list = [        
+        '/utemp/mdso/figuerasiventuraj/pyrad_products/MF_ODIM_HAIL_20180703/2018-07-03/hydroMF_oper_MCLA/PPI_EL01/',
+        '/utemp/mdso/figuerasiventuraj/pyrad_products/MF_ODIM_HAIL_20180703/2018-07-03/dBZ_MCLA/PPI_EL01/']
     movie_name_list = [
-        '20200701_OPOU_ppi_RAW_hydroMF_semisupervised_el1.8']
+        '20180703_MCLA_ppi_RAW_hydroMF_el1.0',
+        '20180703_MCLA_ppi_RAW_dBZ_el1.0']
 
     create_movie(
         file_path_list, movie_name_list, movie_path, file_type=file_type,
