@@ -16,6 +16,7 @@ Miscellaneous functions dealing with radar data
     find_contiguous_times
     join_time_series
     get_range_bins_to_avg
+    get_cercle_coords
     belongs_roi_indices
     find_ray_index
     find_rng_index
@@ -599,16 +600,54 @@ def get_range_bins_to_avg(rad1_rng, rad2_rng):
     return avg_rad1, avg_rad2, avg_rad_lim
 
 
-def belongs_roi_indices(lat, lon, roi):
+def get_cercle_coords(x_centre, y_centre, radius=1000., resolution=16):
+    """
+    Get the points defining a cercle from the position of its centre and the
+    radius
+
+    Parameters
+    ----------
+    x_centre, y_centre : float
+        The Cartesian coordinates of the center. Typically in m
+    radius : float
+        the cercle radius. Typically in m
+    resolution : int
+        The number of points used to define a quarter of the cercle
+
+    Returns
+    -------
+    x_roi, y_roi : array of floats
+        The position of the points defining the cercle
+
+    """
+    if not _SHAPELY_AVAILABLE:
+        warn('shapely package not available. ' +
+             'Unable to determine Region Of Interest')
+        return None, None
+
+    center_point = shapely.geometry.Point(x_centre, y_centre)
+    cercle = center_point.buffer(radius, resolution=resolution)
+    cercle_coords = list(cercle.exterior.coords)
+    xy_roi = list(zip(*cercle_coords))
+    x_roi = np.array(xy_roi[0])
+    y_roi = np.array(xy_roi[1])
+
+    return x_roi, y_roi
+
+
+def belongs_roi_indices(lat, lon, roi, use_latlon=True):
     """
     Get the indices of points that belong to roi in a list of points
 
     Parameters
     ----------
     lat, lon : float arrays
-        latitudes and longitudes to check
+        latitudes (or y) and longitudes(or x) to check
     roi : dict
         Dictionary describing the region of interest
+    use_latlon : bool
+        If True uses lat/lon as coordinates. Otherwise use Cartesian
+        coordinates
 
     Returns
     -------
@@ -627,7 +666,10 @@ def belongs_roi_indices(lat, lon, roi):
     lon_list = lon.flatten()
     lat_list = lat.flatten()
 
-    polygon = shapely.geometry.Polygon(list(zip(roi['lon'], roi['lat'])))
+    if use_latlon:
+        polygon = shapely.geometry.Polygon(list(zip(roi['lon'], roi['lat'])))
+    else:
+        polygon = shapely.geometry.Polygon(list(zip(roi['x'], roi['y'])))
     points = shapely.geometry.MultiPoint(list(zip(lon_list, lat_list)))
 
     inds = []

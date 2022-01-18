@@ -510,10 +510,11 @@ def get_save_dir(basepath, procname, dsname, prdname, timeinfo=None,
 
     """
     if timeinfo is None:
-        savedir = basepath+procname+'/'+dsname+'/'+prdname+'/'
+        savedir = '{}{}/{}/{}/'.format(basepath, procname, dsname, prdname)
     else:
-        daydir = timeinfo.strftime(timeformat)
-        savedir = basepath+procname+'/'+daydir+'/'+dsname+'/'+prdname+'/'
+        savedir = '{}{}/{}/{}/{}/'.format(
+            basepath, procname, timeinfo.strftime(timeformat), dsname,
+            prdname)
 
     if create_dir is False:
         return savedir
@@ -558,22 +559,24 @@ def make_filename(prdtype, dstype, dsname, ext_list, prdcfginfo=None,
     if timeinfo is None:
         timeinfostr = ''
     else:
-        timeinfostr = timeinfo.strftime(timeformat)+'_'
+        timeinfostr = '{}_'.format(timeinfo.strftime(timeformat))
 
     if prdcfginfo is None:
         cfgstr = ''
     else:
-        cfgstr = '_' + prdcfginfo
+        cfgstr = '_{}'.format(prdcfginfo)
 
     if runinfo is None or runinfo == '':
         runstr = ''
     else:
-        runstr = runinfo + '_'
+        runstr = '{}_'.format(runinfo)
 
     fname_list = list()
     for ext in ext_list:
-        fname_list.append(timeinfostr + runstr + prdtype + '_' +
-                          dstype + '_' + dsname + cfgstr + '.' + ext)
+        fname = '{}{}{}_{}_{}{}.{}'.format(
+            timeinfostr, runstr, prdtype, dstype, dsname, cfgstr, ext)
+        fname = fname.replace('/', '-')
+        fname_list.append(fname)
 
     return fname_list
 

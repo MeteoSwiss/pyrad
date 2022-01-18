@@ -42,6 +42,7 @@ Radar Utilities
     compute_histogram
     compute_histogram_sweep
     belongs_roi_indices
+    get_cercle_coords
     compute_profile_stats
     compute_directional_stats
     project_to_vertical
@@ -64,7 +65,7 @@ from .radar_utils import compute_profile_stats, compute_directional_stats
 from .radar_utils import project_to_vertical, find_neighbour_gates
 from .radar_utils import get_target_elevations, get_data_along_rng
 from .radar_utils import get_data_along_azi, get_data_along_ele
-from .radar_utils import get_fixed_rng_data
+from .radar_utils import get_fixed_rng_data, get_cercle_coords
 
 from .stat_utils import quantiles_weighted, ratio_bootstrapping
 
