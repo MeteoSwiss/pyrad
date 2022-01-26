@@ -30,10 +30,11 @@ from warnings import warn
 import numpy as np
 from scipy.spatial import cKDTree
 
-import pyart
-from pyart.util import cross_section_rhi
+from pyart.util import cross_section_rhi, cut_radar
 from pyart.config import get_metadata
-from pyart.core import Radar
+from pyart.core import Radar, geographic_to_cartesian_aeqd
+from pyart.core import cartesian_to_geographic_aeqd
+from pyart.map import grid_from_radars
 
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from ..io.read_data_sensor import read_trt_traj_data
@@ -41,7 +42,7 @@ from ..io.read_data_other import read_antenna_pattern
 from ..io.read_data_cosmo import _put_radar_in_swiss_coord
 from ..util.radar_utils import belongs_roi_indices, get_target_elevations
 from ..util.radar_utils import find_neighbour_gates, compute_directional_stats
-from ..util.radar_utils import get_fixed_rng_data
+from ..util.radar_utils import get_fixed_rng_data, get_cercle_coords
 from ..util.stat_utils import quantiles_weighted
 from ..proc.process_traj import _get_gates_antenna_pattern
 
@@ -765,7 +766,7 @@ def process_vol_to_grid(procstatus, dscfg, radar_list=None):
         beam_spacing = 1.
 
     # cartesian mapping
-    grid = pyart.map.grid_from_radars(
+    grid = grid_from_radars(
         radar_list_aux, gridding_algo='map_to_grid', weighting_function=wfunc,
         roi_func='dist_beam', h_factor=1.0, nb=beamwidth, bsp=beam_spacing,
         min_radius=hres/2.,
@@ -937,7 +938,7 @@ def process_fixed_rng_span(procstatus, dscfg, radar_list=None):
     azi_min = dscfg.get('azi_min', None)
     azi_max = dscfg.get('azi_max', None)
 
-    radar_aux = pyart.util.cut_radar(
+    radar_aux = cut_radar(
         radar, field_names, rng_min=rmin, rng_max=rmax, ele_min=ele_min,
         ele_max=ele_max, azi_min=azi_min, azi_max=azi_max)
 
@@ -966,12 +967,27 @@ def process_roi(procstatus, dscfg, radar_list=None):
             The data type where we want to extract the point measurement
         trtfile : str. Dataset keyword
             TRT file from which to extract the region of interest
+        time_tol : float. Dataset keyword
+            Time tolerance between the TRT file date and the nominal radar
+            volume time
         lon_roi, lat_roi : float array. Dataset keyword
             latitude and longitude positions defining a region of interest
         alt_min, alt_max : float. Dataset keyword
             Minimum and maximum altitude of the region of interest. Can be
             None
-
+        cercle : boolean. Dataset keyword
+            If True the region of interest is going to be defined as a cercle
+            centered at a particular point. Default False
+        lon_centre, lat_centre : Float. Dataset keyword
+            The position of the centre of the cercle
+        rad_cercle : Float. Dataset keyword
+            The radius of the cercle in m. Default 1000.
+        res_cercle : int. Dataset keyword
+            Number of points used to define a quarter of cercle. Default 16
+        use_latlon : Bool. Dataset keyword
+            If True the coordinates used to find the radar gates within the
+            ROI will be lat/lon. If false it will use Cartesian Coordinates
+            with origin the radar position. Default True
 
     radar_list : list of Radar objects
           Optional. list of radar objects
@@ -1012,6 +1028,9 @@ def process_roi(procstatus, dscfg, radar_list=None):
         warn("Fields not available in radar data")
         return None, None
 
+    # Choose origin of ROI definition
+    cercle = dscfg.get('cercle', False)
+    use_latlon = dscfg.get('use_latlon', True)
     if 'trtfile' in dscfg:
         (_, yyyymmddHHMM, lon, lat, _, _, _, _, _, _, _, _, _, _, _, _, _, _,
          _, _, _, _, _, _, _, _, _, cell_contour) = read_trt_traj_data(
@@ -1028,6 +1047,31 @@ def process_roi(procstatus, dscfg, radar_list=None):
         ind = np.argmin(dt)
         lon_roi = cell_contour[ind]['lon']
         lat_roi = cell_contour[ind]['lat']
+
+        x_roi, y_roi = geographic_to_cartesian_aeqd(
+            lon_roi, lat_roi, radar.longitude['data'][0],
+            radar.longitude['data'][0])
+    elif 'cercle':
+        lon_centre = dscfg.get('lon_centre', None)
+        lat_centre = dscfg.get('lat_centre', None)
+        rad_cercle = dscfg.get('rad_cercle', 1000.) # m
+        res_cercle = dscfg.get('res_cercle', 16)
+
+        if lon_centre is None or lat_centre is None:
+            warn('Undefined ROI')
+            return None, None
+
+        # put data as x,y coordinates
+        x_centre, y_centre = geographic_to_cartesian_aeqd(
+            lon_centre, lat_centre, radar.longitude['data'][0],
+            radar.latitude['data'][0])
+        x_roi, y_roi = get_cercle_coords(
+            x_centre, y_centre, radius=rad_cercle, resolution=res_cercle)
+        if x_roi is None:
+            return None, None
+        lon_roi, lat_roi = cartesian_to_geographic_aeqd(
+            x_roi, y_roi, radar.longitude['data'][0],
+            radar.latitude['data'][0])
     else:
         lon_roi = dscfg.get('lon_roi', None)
         lat_roi = dscfg.get('lat_roi', None)
@@ -1035,6 +1079,9 @@ def process_roi(procstatus, dscfg, radar_list=None):
         if lon_roi is None or lat_roi is None:
             warn('Undefined ROI')
             return None, None
+        x_roi, y_roi = geographic_to_cartesian_aeqd(
+            lon_roi, lat_roi, radar.longitude['data'][0],
+            radar.latitude['data'][0])
 
     alt_min = dscfg.get('alt_min', None)
     alt_max = dscfg.get('alt_max', None)
@@ -1042,19 +1089,31 @@ def process_roi(procstatus, dscfg, radar_list=None):
     roi_dict = {
         'lon': lon_roi,
         'lat': lat_roi,
+        'x': x_roi,
+        'y': y_roi,
         'alt_min': alt_min,
         'alt_max': alt_max}
 
     # extract the data within the ROI boundaries
     inds_ray, inds_rng = np.indices(np.shape(radar.gate_longitude['data']))
 
-    mask = np.logical_and(
-        np.logical_and(
-            radar.gate_latitude['data'] >= roi_dict['lat'].min(),
-            radar.gate_latitude['data'] <= roi_dict['lat'].max()),
-        np.logical_and(
-            radar.gate_longitude['data'] >= roi_dict['lon'].min(),
-            radar.gate_longitude['data'] <= roi_dict['lon'].max()))
+    if use_latlon:
+        mask = np.logical_and(
+            np.logical_and(
+                radar.gate_latitude['data'] >= roi_dict['lat'].min(),
+                radar.gate_latitude['data'] <= roi_dict['lat'].max()),
+            np.logical_and(
+                radar.gate_longitude['data'] >= roi_dict['lon'].min(),
+                radar.gate_longitude['data'] <= roi_dict['lon'].max()))
+    else:
+        mask = np.logical_and(
+            np.logical_and(
+                radar.gate_y['data'] >= roi_dict['y'].min(),
+                radar.gate_y['data'] <= roi_dict['y'].max()),
+            np.logical_and(
+                radar.gate_x['data'] >= roi_dict['x'].min(),
+                radar.gate_x['data'] <= roi_dict['x'].max()))
+
 
     if alt_min is not None:
         mask[radar.gate_altitude['data'] < alt_min] = 0
@@ -1071,7 +1130,12 @@ def process_roi(procstatus, dscfg, radar_list=None):
     # extract the data inside the ROI
     lat = radar.gate_latitude['data'][mask]
     lon = radar.gate_longitude['data'][mask]
-    inds, is_roi = belongs_roi_indices(lat, lon, roi_dict)
+    if use_latlon:
+        inds, is_roi = belongs_roi_indices(lat, lon, roi_dict, use_latlon=use_latlon)
+    else:
+        y = radar.gate_y['data'][mask]
+        x = radar.gate_x['data'][mask]
+        inds, is_roi = belongs_roi_indices(y, x, roi_dict, use_latlon=use_latlon)
 
     if is_roi == 'None':
         warn('No values within ROI')
@@ -1080,9 +1144,9 @@ def process_roi(procstatus, dscfg, radar_list=None):
     inds_ray = inds_ray[inds]
     inds_rng = inds_rng[inds]
 
-    lat = lat[inds].T
-    lon = lon[inds].T
-    alt = radar.gate_altitude['data'][inds_ray, inds_rng].T
+    lat = lat[inds][np.newaxis, :]
+    lon = lon[inds][np.newaxis, :]
+    alt = radar.gate_altitude['data'][inds_ray, inds_rng][np.newaxis, :]
 
     # prepare new radar object output
     new_dataset = {'radar_out': deepcopy(radar)}
@@ -1120,20 +1184,20 @@ def process_roi(procstatus, dscfg, radar_list=None):
     new_dataset['radar_out'].gate_altitude['data'] = alt
 
     new_dataset['radar_out'].gate_x['data'] = (
-        radar.gate_x['data'][inds_ray, inds_rng].T)
+        radar.gate_x['data'][inds_ray, inds_rng][np.newaxis, :])
     new_dataset['radar_out'].gate_y['data'] = (
-        radar.gate_y['data'][inds_ray, inds_rng].T)
+        radar.gate_y['data'][inds_ray, inds_rng][np.newaxis, :])
     new_dataset['radar_out'].gate_z['data'] = (
-        radar.gate_z['data'][inds_ray, inds_rng].T)
+        radar.gate_z['data'][inds_ray, inds_rng][np.newaxis, :])
 
     new_dataset['radar_out'].fields = dict()
     for field_name in field_names:
         field_dict = deepcopy(radar.fields[field_name])
         field_dict['data'] = (
-            radar.fields[field_name]['data'][inds_ray, inds_rng].T)
+            radar.fields[field_name]['data'][inds_ray, inds_rng][np.newaxis, :])
         new_dataset['radar_out'].add_field(field_name, field_dict)
 
-    return new_dataset['radar_out'], ind_rad
+    return new_dataset, ind_rad
 
 
 def process_azimuthal_average(procstatus, dscfg, radar_list=None):
