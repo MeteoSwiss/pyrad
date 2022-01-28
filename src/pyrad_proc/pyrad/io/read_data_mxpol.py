@@ -24,7 +24,7 @@ Functions for reading radar mxpol data files
 """
 
 import time
-import imp
+import importlib.util
 import re
 import os
 import datetime
@@ -879,7 +879,11 @@ def load_myconfig(filename=None):
     global _DEFAULT_METADATA
     global _DEFAULT_RADAR_INFO
 
-    cfile = imp.load_source('metadata_config', filename)
+    spec = importlib.util.spec_from_file_location("metadata_config", 
+                                                  filename)
+    cfile = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(cfile)
+    
     _DEFAULT_METADATA = cfile.MY_METADATA
     _DEFAULT_POLARNAMES = cfile.MY_POLARNAMES
     _DEFAULT_RADAR_INFO = cfile.RADAR_INFO
