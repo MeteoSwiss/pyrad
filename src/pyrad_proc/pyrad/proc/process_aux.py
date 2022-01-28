@@ -1310,6 +1310,7 @@ def process_azimuthal_average(procstatus, dscfg, radar_list=None):
     radar_rhi.rays_per_sweep['data'] = np.array([radar_ppi.nsweeps])
     radar_rhi.azimuth['data'] = np.ones(radar_ppi.nsweeps)
     radar_rhi.elevation['data'] = radar_ppi.fixed_angle['data']
+    radar_rhi.time['data'] = np.zeros(radar_ppi.nsweeps)
     radar_rhi.nrays = radar_ppi.fixed_angle['data'].size
     radar_rhi.nsweeps = 1
     radar_rhi.rays_are_indexed = None
@@ -1335,7 +1336,12 @@ def process_azimuthal_average(procstatus, dscfg, radar_list=None):
             radar_aux, angle, None, delta_azi=delta_azi, delta_rng=None)
 
         if angle is None:
-            fixed_angle[sweep] = np.median(radar_aux.azimuth['data'][inds_ray])
+            fixed_angle[sweep] = np.median(
+                radar_aux.azimuth['data'][inds_ray])
+
+        # get time as the mean of the time of the selected rays
+        radar_rhi.time['data'][sweep] = np.mean(
+            radar_aux.time['data'][inds_ray])
 
         # keep only data we are interested in
         for field_name in field_names:
