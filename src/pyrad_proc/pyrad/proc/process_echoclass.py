@@ -10,6 +10,7 @@ Functions for echo classification and filtering
     process_echo_id
     process_birds_id
     process_clt_to_echo_id
+    process_hydro_mf_to_echo_id
     process_hydro_mf_to_hydro
     process_echo_filter
     process_cdf
@@ -272,6 +273,70 @@ def process_clt_to_echo_id(procstatus, dscfg, radar_list=None):
     clt = radar.fields[clt_field]['data']
     echo_id[clt == 1] = 1
     echo_id[clt >= 100] = 2
+
+    id_field = pyart.config.get_metadata('radar_echo_id')
+    id_field['data'] = echo_id
+
+    # prepare for exit
+    new_dataset = {'radar_out': deepcopy(radar)}
+    new_dataset['radar_out'].fields = dict()
+    new_dataset['radar_out'].add_field('radar_echo_id', id_field)
+
+    return new_dataset, ind_rad
+
+
+def process_hydro_mf_to_echo_id(procstatus, dscfg, radar_list=None):
+    """
+    Converts MF hydrometeor classification into pyrad echo ID
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration. Accepted Configuration Keywords::
+
+        datatype : list of string. Dataset keyword
+            The input data types
+    radar_list : list of Radar objects
+        Optional. list of radar objects
+
+    Returns
+    -------
+    new_dataset : dict
+        dictionary containing the output
+    ind_rad : int
+        radar index
+
+    """
+
+    if procstatus != 1:
+        return None, None
+
+    for datatypedescr in dscfg['datatype']:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        if datatype == 'hydroMF':
+            clt_field = get_fieldname_pyart(datatype)
+            break
+
+    ind_rad = int(radarnr[5:8])-1
+    if radar_list[ind_rad] is None:
+        warn('No valid radar')
+        return None, None
+    radar = radar_list[ind_rad]
+
+    if clt_field not in radar.fields:
+        warn('MF hydrometeor classification not present.'
+             ' Unable to obtain echoID')
+        return None, None
+
+    echo_id = np.zeros((radar.nrays, radar.ngates), dtype=np.uint8)+1
+    clt = radar.fields[clt_field]['data']
+    echo_id[clt >= 8] = 3  # precip
+    echo_id[np.logical_and(clt < 8, clt > 1)] = 2  # clt
+    echo_id[np.ma.getmaskarray(clt)] = 1  # noise
+    echo_id[clt == 1] = 1  # missing Zh
 
     id_field = pyart.config.get_metadata('radar_echo_id')
     id_field['data'] = echo_id
@@ -1550,7 +1615,6 @@ def process_centroids(procstatus, dscfg, radar_list=None):
     keep_labeled_data = dscfg.get('keep_labeled_data', True)
     use_median = dscfg.get('use_median', True)
     allow_label_duplicates = dscfg.get('allow_label_duplicates', True)
-
 
     (labeled_data, labels, medoids_dict,
      final_medoids_dict) = pyart.retrieve.compute_centroids(

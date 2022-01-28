@@ -84,6 +84,7 @@ def get_process_func(dataset_type, dsname):
                 'FIXED_RNG_SPAN': process_fixed_rng_span
                 'GECSX' : process_gecsx
                 'hydroMF_to_hydro': process_hydro_mf_to_hydro
+                'hydroMF_to_SAN: process_hydro_mf_to_echo_id
                 'HYDROCLASS': process_hydroclass
                 'HZT': process_hzt
                 'HZT_LOOKUP': process_hzt_lookup_table
@@ -379,6 +380,8 @@ def get_process_func(dataset_type, dsname):
         func_name = 'process_clt_to_echo_id'
     elif dataset_type == 'hydroMF_to_hydro':
         func_name = 'process_hydro_mf_to_hydro'
+    elif dataset_type == 'hydroMF_to_SAN':
+        func_name = 'process_hydro_mf_to_echo_id'
     elif dataset_type == 'ECHO_FILTER':
         func_name = 'process_echo_filter'
     elif dataset_type == 'ZDR_COLUMN':
@@ -1054,7 +1057,7 @@ def process_roi(procstatus, dscfg, radar_list=None):
     elif 'cercle':
         lon_centre = dscfg.get('lon_centre', None)
         lat_centre = dscfg.get('lat_centre', None)
-        rad_cercle = dscfg.get('rad_cercle', 1000.) # m
+        rad_cercle = dscfg.get('rad_cercle', 1000.)  # m
         res_cercle = dscfg.get('res_cercle', 16)
 
         if lon_centre is None or lat_centre is None:
@@ -1114,7 +1117,6 @@ def process_roi(procstatus, dscfg, radar_list=None):
                 radar.gate_x['data'] >= roi_dict['x'].min(),
                 radar.gate_x['data'] <= roi_dict['x'].max()))
 
-
     if alt_min is not None:
         mask[radar.gate_altitude['data'] < alt_min] = 0
     if alt_max is not None:
@@ -1131,11 +1133,13 @@ def process_roi(procstatus, dscfg, radar_list=None):
     lat = radar.gate_latitude['data'][mask]
     lon = radar.gate_longitude['data'][mask]
     if use_latlon:
-        inds, is_roi = belongs_roi_indices(lat, lon, roi_dict, use_latlon=use_latlon)
+        inds, is_roi = belongs_roi_indices(
+            lat, lon, roi_dict, use_latlon=use_latlon)
     else:
         y = radar.gate_y['data'][mask]
         x = radar.gate_x['data'][mask]
-        inds, is_roi = belongs_roi_indices(y, x, roi_dict, use_latlon=use_latlon)
+        inds, is_roi = belongs_roi_indices(
+            y, x, roi_dict, use_latlon=use_latlon)
 
     if is_roi == 'None':
         warn('No values within ROI')
@@ -1194,7 +1198,8 @@ def process_roi(procstatus, dscfg, radar_list=None):
     for field_name in field_names:
         field_dict = deepcopy(radar.fields[field_name])
         field_dict['data'] = (
-            radar.fields[field_name]['data'][inds_ray, inds_rng][np.newaxis, :])
+            radar.fields[field_name]['data'][inds_ray, inds_rng][
+                np.newaxis, :])
         new_dataset['radar_out'].add_field(field_name, field_dict)
 
     return new_dataset, ind_rad
@@ -1221,10 +1226,11 @@ def process_azimuthal_average(procstatus, dscfg, radar_list=None):
             The angle span to average. If not set or set to -1 all the
             available azimuth angles will be used
         avg_type : str. Dataset keyword
-            Average type. Can be mean or median
+            Average type. Can be mean or median. Default mean
         nvalid_min : int. Dataset keyword
-            the (minimum) radius of the region of interest in m. Default half
-            the largest resolution
+            the minimum number of valid points to consdier the average valid.
+            Default 1
+
 
     radar_list : list of Radar objects
         Optional. list of radar objects

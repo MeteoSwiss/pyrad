@@ -72,7 +72,7 @@ from .stat_utils import quantiles_weighted
 
 
 def get_data_along_rng(radar, field_name, fix_elevations, fix_azimuths,
-                       ang_tol=1., rmin=None, rmax=None):
+                       ang_tol=1., rmin=None, rmax=None, use_altitude=False):
     """
     Get data at particular (azimuths, elevations)
 
@@ -88,6 +88,8 @@ def get_data_along_rng(radar, field_name, fix_elevations, fix_azimuths,
         Tolerance between the nominal angle and the radar angle [deg]
     rmin, rmax: float
         Min and Max range of the obtained data [m]
+    use_altitude: bool
+        If True instead of range the x_vals is gate altitude
 
     Returns
     -------
@@ -103,11 +105,6 @@ def get_data_along_rng(radar, field_name, fix_elevations, fix_azimuths,
         rmin = 0.
     if rmax is None:
         rmax = np.max(radar.range['data'])
-
-    rng_mask = np.logical_and(
-        radar.range['data'] >= rmin, radar.range['data'] <= rmax)
-
-    x = radar.range['data'][rng_mask]
 
     xvals = []
     yvals = []
@@ -129,6 +126,16 @@ def get_data_along_rng(radar, field_name, fix_elevations, fix_azimuths,
                 warn(' No data found at azimuth '+str(azi) +
                      ' and elevation '+str(ele))
                 continue
+            if not use_altitude:
+                rng_mask = np.logical_and(
+                    radar.range['data'] >= rmin, radar.range['data'] <= rmax)
+
+                x = radar.range['data'][rng_mask]
+            else:
+                x = deepcopy(dataset_line.gate_altitude['data'][0, :])
+                rng_mask = np.logical_and(x >= rmin, x <= rmax)
+                x = x[rng_mask]
+
             yvals.append(dataset_line.fields[field_name]['data'][0, rng_mask])
             xvals.append(x)
             valid_azi.append(dataset_line.azimuth['data'][0])
@@ -149,6 +156,16 @@ def get_data_along_rng(radar, field_name, fix_elevations, fix_azimuths,
                 warn(' No data found at azimuth '+str(azi) +
                      ' and elevation '+str(ele))
                 continue
+            if not use_altitude:
+                rng_mask = np.logical_and(
+                    radar.range['data'] >= rmin, radar.range['data'] <= rmax)
+
+                x = radar.range['data'][rng_mask]
+            else:
+                x = deepcopy(dataset_line.gate_altitude['data'][0, :])
+                rng_mask = np.logical_and(x >= rmin, x <= rmax)
+                x = x[rng_mask]
+
             yvals.append(
                 dataset_line.fields[field_name]['data'][0, rng_mask])
             xvals.append(x)

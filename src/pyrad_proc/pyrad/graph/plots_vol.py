@@ -27,6 +27,7 @@ Functions to plot radar volume data
 
 """
 from warnings import warn
+from copy import deepcopy
 
 import numpy as np
 
@@ -61,7 +62,8 @@ import pyart
 from .plots_aux import get_colobar_label, get_norm, generate_fixed_rng_title
 from .plots_aux import generate_fixed_rng_span_title
 from .plots_aux import generate_complex_range_Doppler_title
-from .plots import plot_quantiles, plot_histogram, _plot_time_range, _plot_sunscan
+from .plots import plot_quantiles, plot_histogram, _plot_time_range
+from .plots import _plot_sunscan
 
 from ..util.radar_utils import compute_quantiles_sweep, find_ang_index
 from ..util.radar_utils import compute_histogram_sweep
@@ -620,7 +622,7 @@ def plot_time_range(radar, field_name, ind_sweep, prdcfg, fname_list,
     xsize = prdcfg['ppiImageConfig'].get('xsize', 10)
     ysize = prdcfg['ppiImageConfig'].get('ysize', 8)
 
-    rng_aux = radar_aux.range['data']
+    rng_aux = deepcopy(radar_aux.range['data'])
     if ylabel == 'range (km)':
         rng_aux /= 1000.
     rng_res = rng_aux[1]-rng_aux[0]
@@ -946,8 +948,9 @@ def plot_fixed_rng_span(radar, field_name, prdcfg, fname_list, azi_res=None,
         figsize=[xsize, ysize], dpi=dpi)
 
 
-def plot_fixed_rng_sun(radar, field_name, sun_hits, prdcfg, fname_list, azi_res=None,
-                   ele_res=None, ang_tol=1., vmin=None, vmax=None):
+def plot_fixed_rng_sun(radar, field_name, sun_hits, prdcfg, fname_list,
+                       azi_res=None, ele_res=None, ang_tol=1., vmin=None,
+                       vmax=None):
     """
     plots a fixed range plot
 
@@ -1006,10 +1009,10 @@ def plot_fixed_rng_sun(radar, field_name, sun_hits, prdcfg, fname_list, azi_res=
 
             for i, azi in enumerate(azi_vec):
                 ind = find_ang_index(azi_1D, azi, ang_tol=ang_tol)
-                #print('IND: ',ind)
+                # print('IND: ',ind)
                 if ind is None:
                     continue
-                #print('FIELD_1D: ',field_1D[ind])
+                # print('FIELD_1D: ',field_1D[ind])
                 field_2D[i, j] = field_1D[ind][0]
     else:
         for i, azi in enumerate(azi_vec):
@@ -1077,8 +1080,8 @@ def plot_fixed_rng_sun(radar, field_name, sun_hits, prdcfg, fname_list, azi_res=
     ysize = prdcfg['ppiImageConfig'].get('ysize', 8)
 
     return _plot_sunscan(
-        azi_vec, ele_vec, field_2D, sun_hits, field_name, fname_list, titl=titl,
-        xlabel='azimuth (deg)', ylabel='elevation (deg)',
+        azi_vec, ele_vec, field_2D, sun_hits, field_name, fname_list,
+         titl=titl, xlabel='azimuth (deg)', ylabel='elevation (deg)',
         figsize=[xsize, ysize], vmin=vmin, vmax=vmax, dpi=dpi)
 
 
@@ -1727,7 +1730,8 @@ def plot_rhi_profile(data_list, hvec, fname_list, labelx='Value',
 def plot_along_coord(xval_list, yval_list, fname_list, labelx='coord',
                      labely='Value', labels=None,
                      title='Plot along coordinate', colors=None,
-                     linestyles=None, ymin=None, ymax=None, dpi=72):
+                     linestyles=None, ymin=None, ymax=None, dpi=72,
+                     data_on_y=True):
     """
     plots data along a certain radar coordinate
 
@@ -1755,6 +1759,9 @@ def plot_along_coord(xval_list, yval_list, fname_list, labelx='coord',
         Lower/Upper limit of y axis
     dpi : int
         dots per inch
+    data_on_y : bool
+        If True the data is in the y axis and the coordinate in the x axis.
+        False swaps it
 
     Returns
     -------
@@ -1776,12 +1783,20 @@ def plot_along_coord(xval_list, yval_list, fname_list, labelx='coord',
             col = colors[i]
         if linestyles is not None:
             lstyle = linestyles[i]
-        ax.plot(xval, yval, label=lab, color=col, linestyle=lstyle)
+        if data_on_y:
+            ax.plot(xval, yval, label=lab, color=col, linestyle=lstyle)
+        else:
+            ax.plot(yval, xval, label=lab, color=col, linestyle=lstyle)
 
     ax.set_title(title)
-    ax.set_xlabel(labelx)
-    ax.set_ylabel(labely)
-    ax.set_ylim(bottom=ymin, top=ymax)
+    if data_on_y:
+        ax.set_xlabel(labelx)
+        ax.set_ylabel(labely)
+        ax.set_ylim(bottom=ymin, top=ymax)
+    else:
+        ax.set_xlabel(labely)
+        ax.set_ylabel(labelx)
+        ax.set_xlim(left=ymin, right=ymax)
     ax.legend(loc='best')
 
     for fname in fname_list:
