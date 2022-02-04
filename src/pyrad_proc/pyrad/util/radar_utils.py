@@ -82,8 +82,10 @@ def get_data_along_rng(radar, field_name, fix_elevations, fix_azimuths,
         the radar object where the data is
     field_name : str
         name of the field to filter
-    fix_elevations, fix_azimuths: list of floats
-        List of elevations, azimuths couples [deg]
+    fix_elevations, fix_azimuths: list of floats or None
+        List of elevations, azimuths couples [deg] if one of them is None
+        all angles corresponding to one of the fixed angles specified will
+        be gathered
     ang_tol : float
         Tolerance between the nominal angle and the radar angle [deg]
     rmin, rmax: float
@@ -111,6 +113,42 @@ def get_data_along_rng(radar, field_name, fix_elevations, fix_azimuths,
     valid_azi = []
     valid_ele = []
     if radar.scan_type == 'ppi':
+        if fix_elevations is None:
+            warn('at least one fixed elevation has to be specified'
+                 'when operating on PPI scans')
+            return None, None, None, None
+        if fix_azimuths is None:
+            for ele in fix_elevations:
+                ind_sweep = find_ang_index(
+                    radar.fixed_angle['data'], ele, ang_tol=ang_tol)
+                if ind_sweep is None:
+                    warn('No elevation angle found '
+                         'for fix_elevation {}'.format(ele))
+                    continue
+                new_dataset = radar.extract_sweeps([ind_sweep])
+
+                for ind_azi, azi in enumerate(new_dataset.azimuth['data']):
+                    if not use_altitude:
+                        rng_mask = np.logical_and(
+                            radar.range['data'] >= rmin,
+                            radar.range['data'] <= rmax)
+
+                        x = radar.range['data'][rng_mask]
+                    else:
+                        x = deepcopy(
+                            new_dataset.gate_altitude['data'][ind_azi, :])
+                        rng_mask = np.logical_and(x >= rmin, x <= rmax)
+                        x = x[rng_mask]
+
+                    yvals.append(
+                        new_dataset.fields[field_name]['data'][
+                            ind_azi, rng_mask])
+                    xvals.append(x)
+                    valid_azi.append(new_dataset.azimuth['data'][ind_azi])
+                    valid_ele.append(new_dataset.elevation['data'][ind_azi])
+
+            return xvals, yvals, valid_azi, valid_ele
+
         for ele, azi in zip(fix_elevations, fix_azimuths):
             ind_sweep = find_ang_index(
                 radar.fixed_angle['data'], ele, ang_tol=ang_tol)
@@ -140,37 +178,44 @@ def get_data_along_rng(radar, field_name, fix_elevations, fix_azimuths,
             xvals.append(x)
             valid_azi.append(dataset_line.azimuth['data'][0])
             valid_ele.append(dataset_line.elevation['data'][0])
-    else:
-        for ele, azi in zip(fix_elevations, fix_azimuths):
-            ind_sweep = find_ang_index(
-                radar.fixed_angle['data'], azi, ang_tol=ang_tol)
-            if ind_sweep is None:
-                warn('No azimuth angle found for fix_azimuth '+str(azi))
-                continue
-            new_dataset = radar.extract_sweeps([ind_sweep])
 
-            try:
-                dataset_line = pyart.util.cross_section_rhi(
-                    new_dataset, [ele], el_tol=ang_tol)
-            except EnvironmentError:
-                warn(' No data found at azimuth '+str(azi) +
-                     ' and elevation '+str(ele))
-                continue
-            if not use_altitude:
-                rng_mask = np.logical_and(
-                    radar.range['data'] >= rmin, radar.range['data'] <= rmax)
+        return xvals, yvals, valid_azi, valid_ele
 
-                x = radar.range['data'][rng_mask]
-            else:
-                x = deepcopy(dataset_line.gate_altitude['data'][0, :])
-                rng_mask = np.logical_and(x >= rmin, x <= rmax)
-                x = x[rng_mask]
+    if fix_elevations is None or fix_azimuths is None:
+        warn('at least one couple fixed elevation/fixed azimuth has to be'
+             ' specified when operating on scans that are not PPI')
+        return None, None, None, None
 
-            yvals.append(
-                dataset_line.fields[field_name]['data'][0, rng_mask])
-            xvals.append(x)
-            valid_azi.append(dataset_line.azimuth['data'][0])
-            valid_ele.append(dataset_line.elevation['data'][0])
+    for ele, azi in zip(fix_elevations, fix_azimuths):
+        ind_sweep = find_ang_index(
+            radar.fixed_angle['data'], azi, ang_tol=ang_tol)
+        if ind_sweep is None:
+            warn('No azimuth angle found for fix_azimuth '+str(azi))
+            continue
+        new_dataset = radar.extract_sweeps([ind_sweep])
+
+        try:
+            dataset_line = pyart.util.cross_section_rhi(
+                new_dataset, [ele], el_tol=ang_tol)
+        except EnvironmentError:
+            warn(' No data found at azimuth '+str(azi) +
+                 ' and elevation '+str(ele))
+            continue
+        if not use_altitude:
+            rng_mask = np.logical_and(
+                radar.range['data'] >= rmin, radar.range['data'] <= rmax)
+
+            x = radar.range['data'][rng_mask]
+        else:
+            x = deepcopy(dataset_line.gate_altitude['data'][0, :])
+            rng_mask = np.logical_and(x >= rmin, x <= rmax)
+            x = x[rng_mask]
+
+        yvals.append(
+            dataset_line.fields[field_name]['data'][0, rng_mask])
+        xvals.append(x)
+        valid_azi.append(dataset_line.azimuth['data'][0])
+        valid_ele.append(dataset_line.elevation['data'][0])
 
     return xvals, yvals, valid_azi, valid_ele
 

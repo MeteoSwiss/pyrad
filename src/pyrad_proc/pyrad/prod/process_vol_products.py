@@ -164,6 +164,8 @@ def generate_vol_products(dataset, prdcfg):
                 data_on_y : bool
                     If True the x-axis is the coordinates, and the y the data
                     values. False swaps the axis. Default True
+                plot_legend : bool
+                    If True a legend will be plotted. Default True
                 mode: str
                     Ploting mode. Can be 'ALONG_RNG', 'ALONG_AZI' or
                     'ALONG_ELE'
@@ -2067,9 +2069,17 @@ def generate_vol_products(dataset, prdcfg):
 
         colors = prdcfg.get('colors', None)
         data_on_y = prdcfg.get('data_on_y', True)
+        plot_legend = prdcfg.get('plot_legend', True)
         if prdcfg['mode'] == 'ALONG_RNG':
             use_altitude = prdcfg.get('use_altitude', False)
             value_start = prdcfg.get('value_start', 0.)
+            fix_elevations = prdcfg.get('fix_elevations', None)
+            fix_azimuths = prdcfg.get('fix_azimuths', None)
+            if fix_elevations is None and fix_azimuths is None:
+                warn('At least one fixed elevation or fixed azimuth'
+                     ' has to be specified')
+                return None
+
             if use_altitude:
                 value_stop = prdcfg.get(
                     'value_stop',
@@ -2080,8 +2090,8 @@ def generate_vol_products(dataset, prdcfg):
             ang_tol = prdcfg.get('AngTol', 1.)
 
             xvals, yvals, valid_azi, valid_ele = get_data_along_rng(
-                dataset['radar_out'], field_name, prdcfg['fix_elevations'],
-                prdcfg['fix_azimuths'], ang_tol=ang_tol, rmin=value_start,
+                dataset['radar_out'], field_name, fix_elevations,
+                fix_azimuths, ang_tol=ang_tol, rmin=value_start,
                 rmax=value_stop, use_altitude=use_altitude)
 
             if not yvals:
@@ -2171,7 +2181,8 @@ def generate_vol_products(dataset, prdcfg):
 
         plot_along_coord(
             xvals, yvals, fname_list, labelx=labelx, labely=labely,
-            labels=labels, title=titl, colors=colors, data_on_y=data_on_y)
+            labels=labels, title=titl, colors=colors, data_on_y=data_on_y,
+            plot_legend=plot_legend)
 
         print('----- save to '+' '.join(fname_list))
 
@@ -2900,7 +2911,8 @@ def generate_vol_products(dataset, prdcfg):
             np.array(dataset['selfconsistency_points']['zdr']),
             np.array(dataset['selfconsistency_points']['kdp']),
             np.array(dataset['selfconsistency_points']['zh']), fname_list,
-            parametrization=dataset['selfconsistency_points']['parametrization'],
+            parametrization=dataset['selfconsistency_points'][
+                'parametrization'],
             zdr_kdpzh_dict=dataset['selfconsistency_points']['zdr_kdpzh_dict'],
             normalize=normalize, retrieve_relation=retrieve_relation,
             plot_theoretical=plot_theoretical)
@@ -2933,7 +2945,8 @@ def generate_vol_products(dataset, prdcfg):
             np.array(dataset['selfconsistency_points']['kdp']),
             10.*np.ma.log10(np.array(dataset['selfconsistency_points']['zh'])),
             fname_list,
-            parametrization=dataset['selfconsistency_points']['parametrization'],
+            parametrization=dataset['selfconsistency_points'][
+                'parametrization'],
             zdr_kdpzh_dict=dataset['selfconsistency_points']['zdr_kdpzh_dict'],
             normalize=normalize)
 

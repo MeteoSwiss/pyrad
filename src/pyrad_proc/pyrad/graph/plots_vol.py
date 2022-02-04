@@ -1081,7 +1081,7 @@ def plot_fixed_rng_sun(radar, field_name, sun_hits, prdcfg, fname_list,
 
     return _plot_sunscan(
         azi_vec, ele_vec, field_2D, sun_hits, field_name, fname_list,
-         titl=titl, xlabel='azimuth (deg)', ylabel='elevation (deg)',
+        titl=titl, xlabel='azimuth (deg)', ylabel='elevation (deg)',
         figsize=[xsize, ysize], vmin=vmin, vmax=vmax, dpi=dpi)
 
 
@@ -1731,7 +1731,7 @@ def plot_along_coord(xval_list, yval_list, fname_list, labelx='coord',
                      labely='Value', labels=None,
                      title='Plot along coordinate', colors=None,
                      linestyles=None, ymin=None, ymax=None, dpi=72,
-                     data_on_y=True):
+                     data_on_y=True, plot_legend=True):
     """
     plots data along a certain radar coordinate
 
@@ -1762,6 +1762,8 @@ def plot_along_coord(xval_list, yval_list, fname_list, labelx='coord',
     data_on_y : bool
         If True the data is in the y axis and the coordinate in the x axis.
         False swaps it
+    plot_legend : bool
+        If True a legend will be plotted
 
     Returns
     -------
@@ -1797,7 +1799,8 @@ def plot_along_coord(xval_list, yval_list, fname_list, labelx='coord',
         ax.set_xlabel(labely)
         ax.set_ylabel(labelx)
         ax.set_xlim(left=ymin, right=ymax)
-    ax.legend(loc='best')
+    if plot_legend:
+        ax.legend(loc='best')
 
     for fname in fname_list:
         fig.savefig(fname, dpi=dpi)
