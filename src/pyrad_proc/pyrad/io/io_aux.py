@@ -2238,7 +2238,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 for filename in dayfilelist:
                     t_filelist.append(filename)
 
-            elif datagroup in ('ODIM', 'CFRADIAL2', 'CF1', 'NEXRADII'):
+            elif datagroup in ('ODIM', 'ODIMBIRDS', 'CFRADIAL2', 'CF1',
+                               'NEXRADII'):
                 if scan is None:
                     warn('Unknown scan name')
                     return None
@@ -2691,9 +2692,9 @@ def get_datatype_fields(datadescriptor):
                 datatype = descrfields[2]
                 dataset = None
                 product = None
-            elif datagroup in ('ODIM', 'MFCFRADIAL', 'MFBIN', 'CFRADIAL2',
-                               'CF1', 'NEXRADII', 'MFPNG', 'MFGRIB', 'MFDAT',
-                               'MFCF'):
+            elif datagroup in ('ODIM', 'ODIMBIRDS', 'MFCFRADIAL', 'MFBIN',
+                               'CFRADIAL2', 'CF1', 'NEXRADII', 'MFPNG',
+                               'MFGRIB', 'MFDAT', 'MFCF'):
                 descrfields2 = descrfields[2].split(',')
                 datatype = descrfields2[0]
                 product = None
@@ -2722,8 +2723,9 @@ def get_datatype_fields(datadescriptor):
             datatype = descrfields[1]
             dataset = None
             product = None
-        elif datagroup in ('ODIM', 'MFCFRADIAL', 'MFBIN', 'CFRADIAL2', 'CF1',
-                           'NEXRADII', 'MFPNG', 'MFGRIB', 'MFDAT', 'MFCF'):
+        elif datagroup in ('ODIM', 'ODIMBIRDS', 'MFCFRADIAL', 'MFBIN',
+                           'NEXRADII', 'MFPNG', 'MFGRIB', 'MFDAT', 'MFCF',
+                           'CFRADIAL2', 'CF1'):
             descrfields2 = descrfields[1].split(',')
             # warn(" descrfields2:  '%s'" % descrfields2[1])
             if len(descrfields2) == 2:
@@ -3244,8 +3246,9 @@ def _get_datetime(fname, datagroup, ftime_format=None):
         else:
             fdatetime = datetime.datetime.strptime(
                 datestr, '%y%j')+datetime.timedelta(days=1)
-    elif datagroup in ('ODIM', 'MFCFRADIAL', 'MFBIN', 'CFRADIAL2', 'CF1',
-                       'NEXRADII', 'MFPNG', 'MFGRIB', 'MFDAT', 'MFCF'):
+    elif datagroup in ('ODIM', 'ODIMBIRDS', 'MFCFRADIAL', 'MFBIN',
+                       'NEXRADII', 'MFPNG', 'MFGRIB', 'MFDAT', 'MFCF',
+                       'CFRADIAL2', 'CF1'):
         if ftime_format is None:
             # we assume is rad4alp format
             datetimestr = bfile[3:12]

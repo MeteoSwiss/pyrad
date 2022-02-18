@@ -2062,9 +2062,10 @@ def generate_vol_products(dataset, prdcfg):
                 prdcfg['type'])
             return None
 
-        if ((dataset['radar_out'].scan_type != 'ppi') and
-                (dataset['radar_out'].scan_type != 'rhi')):
-            warn('This product is only available for PPI or RHI volumes')
+        if dataset['radar_out'].scan_type not in ('ppi', 'rhi',
+                                                  'vertical_pointing'):
+            warn('This product is only available for PPI, RHI'
+                 ' or vertically pointing volumes')
             return None
 
         colors = prdcfg.get('colors', None)

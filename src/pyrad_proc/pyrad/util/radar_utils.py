@@ -112,7 +112,7 @@ def get_data_along_rng(radar, field_name, fix_elevations, fix_azimuths,
     yvals = []
     valid_azi = []
     valid_ele = []
-    if radar.scan_type == 'ppi':
+    if radar.scan_type in ('ppi', 'vertical_pointing'):
         if fix_elevations is None:
             warn('at least one fixed elevation has to be specified'
                  'when operating on PPI scans')
@@ -125,7 +125,10 @@ def get_data_along_rng(radar, field_name, fix_elevations, fix_azimuths,
                     warn('No elevation angle found '
                          'for fix_elevation {}'.format(ele))
                     continue
-                new_dataset = radar.extract_sweeps([ind_sweep])
+                if 'vertical_pointing':
+                    new_dataset = deepcopy(radar)
+                else:
+                    new_dataset = radar.extract_sweeps([ind_sweep])
 
                 for ind_azi, azi in enumerate(new_dataset.azimuth['data']):
                     if not use_altitude:
