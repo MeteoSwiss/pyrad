@@ -1,3 +1,4 @@
+numpy
 numpydoc
 cython
 ./src/pyrad_proc/
