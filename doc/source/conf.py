@@ -46,7 +46,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages'
 ]
-autodoc_mock_imports = ['pandas','pyart','pyproj','scipy','matplotlib','netCDF4']
+autodoc_mock_imports = ['pyrad','pandas','pyart','pyproj','scipy','matplotlib','netCDF4']
 autosummary_generate = True
 # Get all cython files and mock them
 cytfiles = list(glob.iglob(PYRAD_RELATIVE_PATH + '**/**/*.pyx'))
