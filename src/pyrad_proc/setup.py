@@ -18,6 +18,7 @@ import builtins
 from datetime import datetime
 import getpass
 import setuptools  # for 'develop' mode
+from numpy.distutils.core import setup
 
 DOCLINES = __doc__.split("\n")
 
@@ -158,9 +159,7 @@ def setup_package():
 
     # rewrite version file
     write_version_py()
-
-    from numpy.distutils.core import setup
-
+    
     setup(
         name=NAME,
         maintainer=MAINTAINER,
