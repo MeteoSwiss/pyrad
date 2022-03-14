@@ -4,7 +4,6 @@
 [![tests](https://github.com/MeteoSwiss/pyrad/workflows/Test%20pyrad/badge.svg)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests.yml)
 [![doc](https://readthedocs.org/projects/pyrad-mch/badge/?version=latest)](https://pyrad-mch.readthedocs.io/en/latest/)
 
-![version](https://img.shields.io/badge/python-3.6-blue.svg)
 ![version](https://img.shields.io/badge/python-3.7-blue.svg)
 ![version](https://img.shields.io/badge/python-3.8-blue.svg)
 
