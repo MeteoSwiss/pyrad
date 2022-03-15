@@ -22,9 +22,7 @@ Miscellaneous functions dealing with radar data
     find_rng_index
     find_ang_index
     find_nearest_gate
-    find_neighbour_gates
     find_colocated_indexes
-    get_target_elevations
     time_avg_range
     get_closest_solar_flux
     get_fixed_rng_data
@@ -41,7 +39,6 @@ Miscellaneous functions dealing with radar data
     compute_2d_hist
     quantize_field
     compute_profile_stats
-    compute_directional_stats
     project_to_vertical
 
 """
@@ -912,53 +909,6 @@ def find_nearest_gate(radar, lat, lon, latlon_tol=0.0005):
     return ind_ray, ind_rng, azi, rng
 
 
-def find_neighbour_gates(radar, azi, rng, delta_azi=None, delta_rng=None):
-    """
-    Find the neighbouring gates within +-delta_azi and +-delta_rng
-
-    Parameters
-    ----------
-    radar : radar object
-        the radar object
-    azi, rng : float
-        The azimuth [deg] and range [m] of the central gate
-    delta_azi, delta_rng : float
-        The extend where to look for
-
-    Returns
-    -------
-    inds_ray_aux, ind_rng_aux : int
-        The indices (ray, rng) of the neighbouring gates
-
-    """
-    # find gates close to lat lon point
-    if delta_azi is None:
-        inds_ray = np.ma.arange(radar.azimuth['data'].size)
-    else:
-        azi_max = azi+delta_azi
-        azi_min = azi-delta_azi
-        if azi_max > 360.:
-            azi_max -= 360.
-        if azi_min < 0.:
-            azi_min += 360.
-        if azi_max > azi_min:
-            inds_ray = np.where(np.logical_and(
-                radar.azimuth['data'] < azi_max,
-                radar.azimuth['data'] > azi_min))[0]
-        else:
-            inds_ray = np.where(np.logical_or(
-                radar.azimuth['data'] > azi_min,
-                radar.azimuth['data'] < azi_max))[0]
-    if delta_rng is None:
-        inds_rng = np.ma.arange(radar.range['data'].size)
-    else:
-        inds_rng = np.where(np.logical_and(
-            radar.range['data'] < rng+delta_rng,
-            radar.range['data'] > rng-delta_rng))[0]
-
-    return inds_ray, inds_rng
-
-
 def find_colocated_indexes(radar1, radar2, rad1_ele, rad1_azi, rad1_rng,
                            rad2_ele, rad2_azi, rad2_rng, ele_tol=0.5,
                            azi_tol=0.5, rng_tol=50.):
@@ -1023,31 +973,6 @@ def find_colocated_indexes(radar1, radar2, rad1_ele, rad1_azi, rad1_rng,
     ind_rng_rad2 = ind_rng_rad2.compressed()
 
     return ind_ray_rad1, ind_rng_rad1, ind_ray_rad2, ind_rng_rad2
-
-
-def get_target_elevations(radar_in):
-    """
-    Gets RHI target elevations
-
-    Parameters
-    ----------
-    radar_in : Radar object
-        current radar object
-
-    Returns
-    -------
-    target_elevations : 1D-array
-        Azimuth angles
-    el_tol : float
-        azimuth tolerance
-    """
-    sweep_start = radar_in.sweep_start_ray_index['data'][0]
-    sweep_end = radar_in.sweep_end_ray_index['data'][0]
-    target_elevations = np.sort(
-        radar_in.elevation['data'][sweep_start:sweep_end+1])
-    el_tol = np.median(target_elevations[1:]-target_elevations[:-1])
-
-    return target_elevations, el_tol
 
 
 def time_avg_range(timeinfo, avg_starttime, avg_endtime, period):
@@ -1976,42 +1901,6 @@ def compute_profile_stats(field, gate_altitude, h_vec, h_res,
                     val_valid[i] = nvalid
 
     return vals, val_valid
-
-
-def compute_directional_stats(field, avg_type='mean', nvalid_min=1, axis=0):
-    """
-    Computes the mean or the median along one of the axis (ray or range)
-
-    Parameters
-    ----------
-    field : ndarray
-        the radar field
-    avg_type :str
-        the type of average: 'mean' or 'median'
-    nvalid_min : int
-        the minimum number of points to consider the stats valid. Default 1
-    axis : int
-        the axis along which to compute (0=ray, 1=range)
-
-    Returns
-    -------
-    values : ndarray 1D
-        The resultant statistics
-    nvalid : ndarray 1D
-        The number of valid points used in the computation
-
-    """
-    if avg_type == 'mean':
-        values = np.ma.mean(field, axis=axis)
-    else:
-        values = np.ma.median(field, axis=axis)
-
-    # Set to non-valid if there is not a minimum number of valid gates
-    valid = np.logical_not(np.ma.getmaskarray(field))
-    nvalid = np.sum(valid, axis=0, dtype=int)
-    values[nvalid < nvalid_min] = np.ma.masked
-
-    return values, nvalid
 
 
 def project_to_vertical(data_in, data_height, grid_height, interp_kind='none',

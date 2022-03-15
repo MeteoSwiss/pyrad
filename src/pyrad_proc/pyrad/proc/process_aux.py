@@ -31,7 +31,9 @@ from warnings import warn
 import numpy as np
 from scipy.spatial import cKDTree
 
-from pyart.util import cross_section_rhi, cut_radar
+from pyart.util import cut_radar, compute_directional_stats
+from pyart.util import find_neighbour_gates
+from pyart.util import compute_azimuthal_average
 from pyart.config import get_metadata
 from pyart.core import Radar, geographic_to_cartesian_aeqd
 from pyart.core import cartesian_to_geographic_aeqd
@@ -41,8 +43,7 @@ from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from ..io.read_data_sensor import read_trt_traj_data
 from ..io.read_data_other import read_antenna_pattern
 from ..io.read_data_cosmo import _put_radar_in_swiss_coord
-from ..util.radar_utils import belongs_roi_indices, get_target_elevations
-from ..util.radar_utils import find_neighbour_gates, compute_directional_stats
+from ..util.radar_utils import belongs_roi_indices
 from ..util.radar_utils import get_fixed_rng_data, get_cercle_coords
 from ..util.stat_utils import quantiles_weighted
 from ..proc.process_traj import _get_gates_antenna_pattern
@@ -1289,82 +1290,9 @@ def process_azimuthal_average(procstatus, dscfg, radar_list=None):
     if angle == -1:
         angle = None
 
-    radar_aux = deepcopy(radar)
-    # transform radar into ppi over the required elevation
-    if radar_aux.scan_type == 'rhi':
-        target_elevations, el_tol = get_target_elevations(radar_aux)
-        radar_ppi = cross_section_rhi(
-            radar_aux, target_elevations, el_tol=el_tol)
-    elif radar_aux.scan_type == 'ppi':
-        radar_ppi = radar_aux
-    else:
-        warn('Error: unsupported scan type.')
-        return None, None
-
-    # range, metadata, radar position are the same as the original
-    # time
-    radar_rhi = deepcopy(radar)
-    radar_rhi.fields = dict()
-    radar_rhi.scan_type = 'rhi'
-    radar_rhi.sweep_number['data'] = np.array([0])
-    radar_rhi.sweep_mode['data'] = np.array(['rhi'])
-    radar_rhi.fixed_angle['data'] = np.array([0])
-    radar_rhi.sweep_start_ray_index['data'] = np.array([0])
-    radar_rhi.sweep_end_ray_index['data'] = np.array([radar_ppi.nsweeps-1])
-    radar_rhi.rays_per_sweep['data'] = np.array([radar_ppi.nsweeps])
-    radar_rhi.azimuth['data'] = np.ones(radar_ppi.nsweeps)
-    radar_rhi.elevation['data'] = radar_ppi.fixed_angle['data']
-    radar_rhi.time['data'] = np.zeros(radar_ppi.nsweeps)
-    radar_rhi.nrays = radar_ppi.fixed_angle['data'].size
-    radar_rhi.nsweeps = 1
-    radar_rhi.rays_are_indexed = None
-    radar_rhi.ray_angle_res = None
-
-    # average radar data
-    if angle is None:
-        fixed_angle = np.zeros(radar_ppi.nsweeps)
-
-    fields_dict = dict()
-    for field_name in field_names:
-        fields_dict.update(
-            {field_name: get_metadata(field_name)})
-        fields_dict[field_name]['data'] = np.ma.masked_all(
-            (radar_ppi.nsweeps, radar_ppi.ngates))
-
-    for sweep in range(radar_ppi.nsweeps):
-        radar_aux = deepcopy(radar_ppi)
-        radar_aux = radar_aux.extract_sweeps([sweep])
-
-        # find neighbouring gates to be selected
-        inds_ray, inds_rng = find_neighbour_gates(
-            radar_aux, angle, None, delta_azi=delta_azi, delta_rng=None)
-
-        if angle is None:
-            fixed_angle[sweep] = np.median(
-                radar_aux.azimuth['data'][inds_ray])
-
-        # get time as the mean of the time of the selected rays
-        radar_rhi.time['data'][sweep] = np.mean(
-            radar_aux.time['data'][inds_ray])
-
-        # keep only data we are interested in
-        for field_name in field_names:
-            field_aux = radar_aux.fields[field_name]['data'][:, inds_rng]
-            field_aux = field_aux[inds_ray, :]
-
-            vals, _ = compute_directional_stats(
-                field_aux, avg_type=avg_type, nvalid_min=nvalid_min, axis=0)
-
-            fields_dict[field_name]['data'][sweep, :] = vals
-
-    if angle is None:
-        radar_rhi.fixed_angle['data'] = np.array([np.mean(fixed_angle)])
-    else:
-        radar_rhi.fixed_angle['data'] = np.array([angle])
-    radar_rhi.azimuth['data'] *= radar_rhi.fixed_angle['data'][0]
-
-    for field_name in field_names:
-        radar_rhi.add_field(field_name, fields_dict[field_name])
+    radar_rhi = compute_azimuthal_average(
+        radar, field_names, angle=angle, delta_azi=delta_azi,
+        avg_type=avg_type, nvalid_min=nvalid_min)
 
     # prepare for exit
     new_dataset = {'radar_out': radar_rhi}
