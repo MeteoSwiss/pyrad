@@ -1853,6 +1853,46 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
             max_length_holes=max_length_holes,
             check_min_length=check_min_length, get_iso0=get_iso0)
 
+    elif dscfg['ML_METHOD'] == 'MF':
+        for datatypedescr in dscfg['datatype']:
+            radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+            if datatype == 'dBZ':
+                refl_field = 'reflectivity'
+            if datatype == 'dBZc':
+                refl_field = 'corrected_reflectivity'
+            if datatype == 'RhoHV':
+                rhohv_field = 'cross_correlation_ratio'
+            if datatype == 'RhoHVc':
+                rhohv_field = 'corrected_cross_correlation_ratio'
+
+        ind_rad = int(radarnr[5:8])-1
+        if radar_list[ind_rad] is None:
+            warn('No valid radar')
+            return None, None
+        radar = radar_list[ind_rad]
+
+        if ((refl_field not in radar.fields) or
+                (rhohv_field not in radar.fields)):
+            warn('Unable to detect melting layer. Missing data')
+            return None, None
+
+        # User defined parameters
+        max_range = dscfg.get('max_range', 20000.)
+        detect_threshold = dscfg.get('detect_threshold', 0.02)
+        interp_holes = dscfg.get('interp_holes', False)
+        max_length_holes = dscfg.get('max_length_holes', 250)
+        check_min_length = dscfg.get('check_min_length', True)
+        get_iso0 = dscfg.get('get_iso0', True)
+
+        ml_obj, ml_dict, iso0_dict, _ = pyart.retrieve.melting_layer_mf(
+            radar, refl_field=refl_field, rhohv_field=rhohv_field,
+            ml_field='melting_layer', ml_pos_field='melting_layer_height',
+            iso0_field='height_over_iso0', max_range=max_range,
+            detect_threshold=detect_threshold, interp_holes=interp_holes,
+            max_length_holes=max_length_holes,
+            check_min_length=check_min_length, get_iso0=get_iso0)
+
+
     elif dscfg['ML_METHOD'] == 'FROM_HYDROCLASS':
         for datatypedescr in dscfg['datatype']:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
