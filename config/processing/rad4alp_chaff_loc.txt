@@ -1,0 +1,91 @@
+#
+# Configuration for rad4alp gridded data
+
+# Number of radars to process
+NumRadars INT 1
+
+# rad4alp radar name
+RadarName STRING A
+
+
+# rad4alp radar range resolution L:Low H:High
+RadarRes STRING L
+
+
+# Names of the radar scans in the specified sector
+ScanList STRARR 20
+          001  # masterscan: first scan of a volume
+          002
+          003
+          004
+          005
+          006
+          007
+          008
+          009
+          010
+          011
+          012
+          013
+          014
+          015
+          016
+          017
+          018
+          019
+          020
+
+
+# cropping of the grid
+# latmin FLOAT 47.5
+# latmax FLOAT 48.
+# lonmin FLOAT 9.
+# lonmax FLOAT 10.
+
+# Repetition time of the scans [min]
+ScanPeriod FLOAT 2.5
+
+# Frequency of cosmo run [h]
+CosmoRunFreq INT 3
+
+# hours forecasted in cosmo run [h]
+CosmoForecasted INT 7
+
+# Image config
+ppiImageConfig STRUCT 6
+   xsize      FLOAT  10.   # image size [inches] (default dots per inch (dpi):72)
+   ysize      FLOAT   8.   # image size [inches] (default dots per inch (dpi):72)
+   xmin       FLOAT -70.0  # Min distance on horizontal axis [km]
+   xmax       FLOAT  70.0  # Max distance on horizontal axis [km]
+   ymin       FLOAT -70.0  # Min distance on vertical axis [km]
+   ymax       FLOAT  70.0  # Max distance on vertical axis [km]
+
+rhiImageConfig STRUCT 6
+   xsize      FLOAT  10.     # image size [inches]
+   ysize      FLOAT   6.     # image size [inches]
+   xmin       FLOAT -100.0   # Min distance on horizontal axis [km]
+   xmax       FLOAT   -55.0   # Max distance on horizontal axis [km]
+   ymin       FLOAT   0.0   # Min distance on vertical axis [km]
+   ymax       FLOAT  10.0   # Max distance on vertical axis [km]
+
+
+gridMapImageConfig STRUCT 11
+   xsize      FLOAT  10.   # image size [inches] (default dots per inch (dpi):72)
+   ysize      FLOAT  8.   # image size [inches] (default dots per inch (dpi):72)
+   lonmin     FLOAT  7.4 # Min longitude [deg]
+   lonmax     FLOAT  8.4 # Max longitude [deg]
+   lonstep    FLOAT 0.1
+   latmin     FLOAT 46.4 # Min latitude [deg]
+   latmax     FLOAT 47.1 # Max latitude [deg]
+   latstep    FLOAT 0.1
+   mapres     STRING h  # map resolution (10m, 50m, 110m)
+   dpi        INT    72     # dots per inch (72 web quality, 300 print quality)
+   maps STRARR 5        # maps to overplot (cartopy)
+       lakes_europe
+       provinces
+       coastlines
+       rivers
+       rivers_europe
+
+# basemap mapres: c (crude), l (low), i (intermediate), h (high), f (full)
+# cartopy mapres: '110m', '50m', '10m'

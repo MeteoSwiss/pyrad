@@ -82,6 +82,7 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
     dpi = prdcfg['gridMapImageConfig'].get('dpi', 72)
     vmin = prdcfg.get('vmin', None)
     vmax = prdcfg.get('vmax', None)
+    mask_outside = prdcfg.get('mask_outside', False)
 
     norm, ticks, ticklabs = get_norm(
         field_name, field_dict=grid.fields[field_name])
@@ -129,8 +130,8 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
                 min_lat=min_lat, max_lat=max_lat, ax=ax)
             display.plot_grid(
                 field_name, level=level, norm=norm, ticks=ticks, title=titl,
-                ticklabs=ticklabs, vmin=vmin, vmax=vmax, alpha=alpha, ax=ax,
-                fig=fig)
+                ticklabs=ticklabs, mask_outside = mask_outside, vmin=vmin, vmax=vmax, 
+                alpha=alpha, ax=ax, fig=fig)
         else:
             resolution = prdcfg['gridMapImageConfig'].get('mapres', '110m')
             # Map from basemap to cartopy notation
@@ -154,8 +155,8 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
                 ticklabs=ticklabs, resolution=resolution,
                 background_zoom=background_zoom, lat_lines=lat_lines,
                 lon_lines=lon_lines, maps_list=maps_list, vmin=vmin,
-                vmax=vmax, alpha=alpha, title=titl, ax=ax, fig=fig,
-                embelish=embelish, colorbar_flag=colorbar_flag)
+                vmax=vmax, mask_outside = mask_outside, alpha=alpha, title=titl, 
+                ax=ax, fig=fig, embelish=embelish, colorbar_flag=colorbar_flag)
             ax.set_extent([min_lon, max_lon, min_lat, max_lat])
             # display.plot_crosshairs(lon=lon, lat=lat)
     else:
@@ -164,13 +165,13 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
                 field_name, level=level, norm=norm, ticks=ticks,
                 lat_lines=lat_lines, lon_lines=lon_lines, title=titl,
                 ticklabs=ticklabs, colorbar_flag=False, vmin=vmin, vmax=vmax,
-                alpha=alpha, ax=ax, fig=fig)
+                mask_outside = mask_outside, alpha=alpha, ax=ax, fig=fig)
         else:
             fig, ax = display.plot_grid(
                 field_name, level=level, norm=norm, ticks=ticks,
                 lat_lines=lat_lines, lon_lines=lon_lines, ticklabs=ticklabs,
                 colorbar_flag=False, embelish=False, vmin=vmin, vmax=vmax,
-                alpha=alpha, title=titl, ax=ax, fig=fig)
+                mask_outside = mask_outside, alpha=alpha, title=titl, ax=ax, fig=fig)
 
     if save_fig:
         for fname in fname_list:
