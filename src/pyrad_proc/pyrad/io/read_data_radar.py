@@ -1543,8 +1543,6 @@ def merge_scans_odim(basepath, scan_list, radar_name, radar_res, voltime,
     return pyart.util.cut_radar(
         radar, radar.fields.keys(), rng_min=rmin, rng_max=rmax, ele_min=elmin,
         ele_max=elmax, azi_min=azmin, azi_max=azmax)
-<<<<<<< HEAD
-=======
 
 
 def merge_scans_odimbirds(basepath, scan_list, radar_name, radar_res, voltime,
