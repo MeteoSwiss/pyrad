@@ -20,6 +20,7 @@ Auxiliary functions
     process_fixed_rng_span
     process_roi
     process_azimuthal_average
+    process_moving_azimuthal_average
     process_radar_resampling
     process_vol_to_grid
 
@@ -99,6 +100,7 @@ Echo classification and filtering
     process_echo_id
     process_birds_id
     process_clt_to_echo_id
+    process_hydro_mf_to_echo_id
     process_hydro_mf_to_hydro
     process_echo_filter
     process_cdf
@@ -255,6 +257,10 @@ from .process_aux import get_process_func, process_raw, process_save_radar
 from .process_aux import process_roi, process_azimuthal_average
 from .process_aux import process_fixed_rng, process_fixed_rng_span
 from .process_aux import process_radar_resampling, process_vol_to_grid
+<<<<<<< HEAD
+=======
+from .process_aux import process_moving_azimuthal_average
+>>>>>>> e798a7eeabeffe0861332ffc7be101d9d32af0e1
 
 from .process_grid import process_grid, process_raw_grid, process_grid_point
 from .process_grid import process_grid_time_stats, process_grid_time_stats2
@@ -300,6 +306,7 @@ from .process_echoclass import process_outlier_filter, process_hydroclass
 from .process_echoclass import process_centroids, process_hydro_mf_to_hydro
 from .process_echoclass import process_cdf, process_melting_layer
 from .process_echoclass import process_filter_vel_diff, process_zdr_column
+from .process_echoclass import process_hydro_mf_to_echo_id
 
 from .process_phase import process_correct_phidp0
 from .process_phase import process_smooth_phidp_single_window

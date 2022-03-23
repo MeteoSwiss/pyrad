@@ -4023,7 +4023,7 @@ DEFAULT_FIELD_LIMITS = {
     circular_depolarization_ratio: (-40., 0.),
 
     rain_rate: (0., 10.),
-    radar_estimated_rain_rate: (0., 10.),
+    radar_estimated_rain_rate: (0.02, 10.),
     rainfall_accumulation: (0., 100.),
 
     radar_echo_classification: (0., 9.),

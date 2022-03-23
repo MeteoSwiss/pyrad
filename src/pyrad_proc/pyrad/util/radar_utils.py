@@ -16,14 +16,13 @@ Miscellaneous functions dealing with radar data
     find_contiguous_times
     join_time_series
     get_range_bins_to_avg
+    get_cercle_coords
     belongs_roi_indices
     find_ray_index
     find_rng_index
     find_ang_index
     find_nearest_gate
-    find_neighbour_gates
     find_colocated_indexes
-    get_target_elevations
     time_avg_range
     get_closest_solar_flux
     get_fixed_rng_data
@@ -40,7 +39,6 @@ Miscellaneous functions dealing with radar data
     compute_2d_hist
     quantize_field
     compute_profile_stats
-    compute_directional_stats
     project_to_vertical
 
 """
@@ -71,7 +69,7 @@ from .stat_utils import quantiles_weighted
 
 
 def get_data_along_rng(radar, field_name, fix_elevations, fix_azimuths,
-                       ang_tol=1., rmin=None, rmax=None):
+                       ang_tol=1., rmin=None, rmax=None, use_altitude=False):
     """
     Get data at particular (azimuths, elevations)
 
@@ -81,12 +79,16 @@ def get_data_along_rng(radar, field_name, fix_elevations, fix_azimuths,
         the radar object where the data is
     field_name : str
         name of the field to filter
-    fix_elevations, fix_azimuths: list of floats
-        List of elevations, azimuths couples [deg]
+    fix_elevations, fix_azimuths: list of floats or None
+        List of elevations, azimuths couples [deg] if one of them is None
+        all angles corresponding to one of the fixed angles specified will
+        be gathered
     ang_tol : float
         Tolerance between the nominal angle and the radar angle [deg]
     rmin, rmax: float
         Min and Max range of the obtained data [m]
+    use_altitude: bool
+        If True instead of range the x_vals is gate altitude
 
     Returns
     -------
@@ -103,16 +105,50 @@ def get_data_along_rng(radar, field_name, fix_elevations, fix_azimuths,
     if rmax is None:
         rmax = np.max(radar.range['data'])
 
-    rng_mask = np.logical_and(
-        radar.range['data'] >= rmin, radar.range['data'] <= rmax)
-
-    x = radar.range['data'][rng_mask]
-
     xvals = []
     yvals = []
     valid_azi = []
     valid_ele = []
-    if radar.scan_type == 'ppi':
+    if radar.scan_type in ('ppi', 'vertical_pointing'):
+        if fix_elevations is None:
+            warn('at least one fixed elevation has to be specified'
+                 'when operating on PPI scans')
+            return None, None, None, None
+        if fix_azimuths is None:
+            for ele in fix_elevations:
+                ind_sweep = find_ang_index(
+                    radar.fixed_angle['data'], ele, ang_tol=ang_tol)
+                if ind_sweep is None:
+                    warn('No elevation angle found '
+                         'for fix_elevation {}'.format(ele))
+                    continue
+                if 'vertical_pointing':
+                    new_dataset = deepcopy(radar)
+                else:
+                    new_dataset = radar.extract_sweeps([ind_sweep])
+
+                for ind_azi, azi in enumerate(new_dataset.azimuth['data']):
+                    if not use_altitude:
+                        rng_mask = np.logical_and(
+                            radar.range['data'] >= rmin,
+                            radar.range['data'] <= rmax)
+
+                        x = radar.range['data'][rng_mask]
+                    else:
+                        x = deepcopy(
+                            new_dataset.gate_altitude['data'][ind_azi, :])
+                        rng_mask = np.logical_and(x >= rmin, x <= rmax)
+                        x = x[rng_mask]
+
+                    yvals.append(
+                        new_dataset.fields[field_name]['data'][
+                            ind_azi, rng_mask])
+                    xvals.append(x)
+                    valid_azi.append(new_dataset.azimuth['data'][ind_azi])
+                    valid_ele.append(new_dataset.elevation['data'][ind_azi])
+
+            return xvals, yvals, valid_azi, valid_ele
+
         for ele, azi in zip(fix_elevations, fix_azimuths):
             ind_sweep = find_ang_index(
                 radar.fixed_angle['data'], ele, ang_tol=ang_tol)
@@ -128,31 +164,58 @@ def get_data_along_rng(radar, field_name, fix_elevations, fix_azimuths,
                 warn(' No data found at azimuth '+str(azi) +
                      ' and elevation '+str(ele))
                 continue
+            if not use_altitude:
+                rng_mask = np.logical_and(
+                    radar.range['data'] >= rmin, radar.range['data'] <= rmax)
+
+                x = radar.range['data'][rng_mask]
+            else:
+                x = deepcopy(dataset_line.gate_altitude['data'][0, :])
+                rng_mask = np.logical_and(x >= rmin, x <= rmax)
+                x = x[rng_mask]
+
             yvals.append(dataset_line.fields[field_name]['data'][0, rng_mask])
             xvals.append(x)
             valid_azi.append(dataset_line.azimuth['data'][0])
             valid_ele.append(dataset_line.elevation['data'][0])
-    else:
-        for ele, azi in zip(fix_elevations, fix_azimuths):
-            ind_sweep = find_ang_index(
-                radar.fixed_angle['data'], azi, ang_tol=ang_tol)
-            if ind_sweep is None:
-                warn('No azimuth angle found for fix_azimuth '+str(azi))
-                continue
-            new_dataset = radar.extract_sweeps([ind_sweep])
 
-            try:
-                dataset_line = pyart.util.cross_section_rhi(
-                    new_dataset, [ele], el_tol=ang_tol)
-            except EnvironmentError:
-                warn(' No data found at azimuth '+str(azi) +
-                     ' and elevation '+str(ele))
-                continue
-            yvals.append(
-                dataset_line.fields[field_name]['data'][0, rng_mask])
-            xvals.append(x)
-            valid_azi.append(dataset_line.azimuth['data'][0])
-            valid_ele.append(dataset_line.elevation['data'][0])
+        return xvals, yvals, valid_azi, valid_ele
+
+    if fix_elevations is None or fix_azimuths is None:
+        warn('at least one couple fixed elevation/fixed azimuth has to be'
+             ' specified when operating on scans that are not PPI')
+        return None, None, None, None
+
+    for ele, azi in zip(fix_elevations, fix_azimuths):
+        ind_sweep = find_ang_index(
+            radar.fixed_angle['data'], azi, ang_tol=ang_tol)
+        if ind_sweep is None:
+            warn('No azimuth angle found for fix_azimuth '+str(azi))
+            continue
+        new_dataset = radar.extract_sweeps([ind_sweep])
+
+        try:
+            dataset_line = pyart.util.cross_section_rhi(
+                new_dataset, [ele], el_tol=ang_tol)
+        except EnvironmentError:
+            warn(' No data found at azimuth '+str(azi) +
+                 ' and elevation '+str(ele))
+            continue
+        if not use_altitude:
+            rng_mask = np.logical_and(
+                radar.range['data'] >= rmin, radar.range['data'] <= rmax)
+
+            x = radar.range['data'][rng_mask]
+        else:
+            x = deepcopy(dataset_line.gate_altitude['data'][0, :])
+            rng_mask = np.logical_and(x >= rmin, x <= rmax)
+            x = x[rng_mask]
+
+        yvals.append(
+            dataset_line.fields[field_name]['data'][0, rng_mask])
+        xvals.append(x)
+        valid_azi.append(dataset_line.azimuth['data'][0])
+        valid_ele.append(dataset_line.elevation['data'][0])
 
     return xvals, yvals, valid_azi, valid_ele
 
@@ -599,16 +662,54 @@ def get_range_bins_to_avg(rad1_rng, rad2_rng):
     return avg_rad1, avg_rad2, avg_rad_lim
 
 
-def belongs_roi_indices(lat, lon, roi):
+def get_cercle_coords(x_centre, y_centre, radius=1000., resolution=16):
+    """
+    Get the points defining a cercle from the position of its centre and the
+    radius
+
+    Parameters
+    ----------
+    x_centre, y_centre : float
+        The Cartesian coordinates of the center. Typically in m
+    radius : float
+        the cercle radius. Typically in m
+    resolution : int
+        The number of points used to define a quarter of the cercle
+
+    Returns
+    -------
+    x_roi, y_roi : array of floats
+        The position of the points defining the cercle
+
+    """
+    if not _SHAPELY_AVAILABLE:
+        warn('shapely package not available. ' +
+             'Unable to determine Region Of Interest')
+        return None, None
+
+    center_point = shapely.geometry.Point(x_centre, y_centre)
+    cercle = center_point.buffer(radius, resolution=resolution)
+    cercle_coords = list(cercle.exterior.coords)
+    xy_roi = list(zip(*cercle_coords))
+    x_roi = np.array(xy_roi[0])
+    y_roi = np.array(xy_roi[1])
+
+    return x_roi, y_roi
+
+
+def belongs_roi_indices(lat, lon, roi, use_latlon=True):
     """
     Get the indices of points that belong to roi in a list of points
 
     Parameters
     ----------
     lat, lon : float arrays
-        latitudes and longitudes to check
+        latitudes (or y) and longitudes(or x) to check
     roi : dict
         Dictionary describing the region of interest
+    use_latlon : bool
+        If True uses lat/lon as coordinates. Otherwise use Cartesian
+        coordinates
 
     Returns
     -------
@@ -627,7 +728,10 @@ def belongs_roi_indices(lat, lon, roi):
     lon_list = lon.flatten()
     lat_list = lat.flatten()
 
-    polygon = shapely.geometry.Polygon(list(zip(roi['lon'], roi['lat'])))
+    if use_latlon:
+        polygon = shapely.geometry.Polygon(list(zip(roi['lon'], roi['lat'])))
+    else:
+        polygon = shapely.geometry.Polygon(list(zip(roi['x'], roi['y'])))
     points = shapely.geometry.MultiPoint(list(zip(lon_list, lat_list)))
 
     inds = []
@@ -805,53 +909,6 @@ def find_nearest_gate(radar, lat, lon, latlon_tol=0.0005):
     return ind_ray, ind_rng, azi, rng
 
 
-def find_neighbour_gates(radar, azi, rng, delta_azi=None, delta_rng=None):
-    """
-    Find the neighbouring gates within +-delta_azi and +-delta_rng
-
-    Parameters
-    ----------
-    radar : radar object
-        the radar object
-    azi, rng : float
-        The azimuth [deg] and range [m] of the central gate
-    delta_azi, delta_rng : float
-        The extend where to look for
-
-    Returns
-    -------
-    inds_ray_aux, ind_rng_aux : int
-        The indices (ray, rng) of the neighbouring gates
-
-    """
-    # find gates close to lat lon point
-    if delta_azi is None:
-        inds_ray = np.ma.arange(radar.azimuth['data'].size)
-    else:
-        azi_max = azi+delta_azi
-        azi_min = azi-delta_azi
-        if azi_max > 360.:
-            azi_max -= 360.
-        if azi_min < 0.:
-            azi_min += 360.
-        if azi_max > azi_min:
-            inds_ray = np.where(np.logical_and(
-                radar.azimuth['data'] < azi_max,
-                radar.azimuth['data'] > azi_min))[0]
-        else:
-            inds_ray = np.where(np.logical_or(
-                radar.azimuth['data'] > azi_min,
-                radar.azimuth['data'] < azi_max))[0]
-    if delta_rng is None:
-        inds_rng = np.ma.arange(radar.range['data'].size)
-    else:
-        inds_rng = np.where(np.logical_and(
-            radar.range['data'] < rng+delta_rng,
-            radar.range['data'] > rng-delta_rng))[0]
-
-    return inds_ray, inds_rng
-
-
 def find_colocated_indexes(radar1, radar2, rad1_ele, rad1_azi, rad1_rng,
                            rad2_ele, rad2_azi, rad2_rng, ele_tol=0.5,
                            azi_tol=0.5, rng_tol=50.):
@@ -916,31 +973,6 @@ def find_colocated_indexes(radar1, radar2, rad1_ele, rad1_azi, rad1_rng,
     ind_rng_rad2 = ind_rng_rad2.compressed()
 
     return ind_ray_rad1, ind_rng_rad1, ind_ray_rad2, ind_rng_rad2
-
-
-def get_target_elevations(radar_in):
-    """
-    Gets RHI target elevations
-
-    Parameters
-    ----------
-    radar_in : Radar object
-        current radar object
-
-    Returns
-    -------
-    target_elevations : 1D-array
-        Azimuth angles
-    el_tol : float
-        azimuth tolerance
-    """
-    sweep_start = radar_in.sweep_start_ray_index['data'][0]
-    sweep_end = radar_in.sweep_end_ray_index['data'][0]
-    target_elevations = np.sort(
-        radar_in.elevation['data'][sweep_start:sweep_end+1])
-    el_tol = np.median(target_elevations[1:]-target_elevations[:-1])
-
-    return target_elevations, el_tol
 
 
 def time_avg_range(timeinfo, avg_starttime, avg_endtime, period):
@@ -1869,42 +1901,6 @@ def compute_profile_stats(field, gate_altitude, h_vec, h_res,
                     val_valid[i] = nvalid
 
     return vals, val_valid
-
-
-def compute_directional_stats(field, avg_type='mean', nvalid_min=1, axis=0):
-    """
-    Computes the mean or the median along one of the axis (ray or range)
-
-    Parameters
-    ----------
-    field : ndarray
-        the radar field
-    avg_type :str
-        the type of average: 'mean' or 'median'
-    nvalid_min : int
-        the minimum number of points to consider the stats valid. Default 1
-    axis : int
-        the axis along which to compute (0=ray, 1=range)
-
-    Returns
-    -------
-    values : ndarray 1D
-        The resultant statistics
-    nvalid : ndarray 1D
-        The number of valid points used in the computation
-
-    """
-    if avg_type == 'mean':
-        values = np.ma.mean(field, axis=axis)
-    else:
-        values = np.ma.median(field, axis=axis)
-
-    # Set to non-valid if there is not a minimum number of valid gates
-    valid = np.logical_not(np.ma.getmaskarray(field))
-    nvalid = np.sum(valid, axis=0, dtype=int)
-    values[nvalid < nvalid_min] = np.ma.masked
-
-    return values, nvalid
 
 
 def project_to_vertical(data_in, data_height, grid_height, interp_kind='none',

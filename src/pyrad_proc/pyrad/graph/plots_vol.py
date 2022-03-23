@@ -27,6 +27,7 @@ Functions to plot radar volume data
 
 """
 from warnings import warn
+from copy import deepcopy
 
 import numpy as np
 
@@ -621,8 +622,8 @@ def plot_time_range(radar, field_name, ind_sweep, prdcfg, fname_list,
     xsize = prdcfg['ppiImageConfig'].get('xsize', 10)
     ysize = prdcfg['ppiImageConfig'].get('ysize', 8)
 
-    rng_aux = radar_aux.range['data']
-    if ylabel == 'range (Km)':
+    rng_aux = deepcopy(radar_aux.range['data'])
+    if ylabel == 'range (km)':
         rng_aux /= 1000.
     rng_res = rng_aux[1]-rng_aux[0]
     rng_aux = np.append(rng_aux-rng_res/2., rng_aux[-1]+rng_res/2.)
@@ -1729,7 +1730,8 @@ def plot_rhi_profile(data_list, hvec, fname_list, labelx='Value',
 def plot_along_coord(xval_list, yval_list, fname_list, labelx='coord',
                      labely='Value', labels=None,
                      title='Plot along coordinate', colors=None,
-                     linestyles=None, ymin=None, ymax=None, dpi=72):
+                     linestyles=None, ymin=None, ymax=None, dpi=72,
+                     data_on_y=True, plot_legend=True):
     """
     plots data along a certain radar coordinate
 
@@ -1757,6 +1759,11 @@ def plot_along_coord(xval_list, yval_list, fname_list, labelx='coord',
         Lower/Upper limit of y axis
     dpi : int
         dots per inch
+    data_on_y : bool
+        If True the data is in the y axis and the coordinate in the x axis.
+        False swaps it
+    plot_legend : bool
+        If True a legend will be plotted
 
     Returns
     -------
@@ -1778,13 +1785,22 @@ def plot_along_coord(xval_list, yval_list, fname_list, labelx='coord',
             col = colors[i]
         if linestyles is not None:
             lstyle = linestyles[i]
-        ax.plot(xval, yval, label=lab, color=col, linestyle=lstyle)
+        if data_on_y:
+            ax.plot(xval, yval, label=lab, color=col, linestyle=lstyle)
+        else:
+            ax.plot(yval, xval, label=lab, color=col, linestyle=lstyle)
 
     ax.set_title(title)
-    ax.set_xlabel(labelx)
-    ax.set_ylabel(labely)
-    ax.set_ylim(bottom=ymin, top=ymax)
-    ax.legend(loc='best')
+    if data_on_y:
+        ax.set_xlabel(labelx)
+        ax.set_ylabel(labely)
+        ax.set_ylim(bottom=ymin, top=ymax)
+    else:
+        ax.set_xlabel(labely)
+        ax.set_ylabel(labelx)
+        ax.set_xlim(left=ymin, right=ymax)
+    if plot_legend:
+        ax.legend(loc='best')
 
     for fname in fname_list:
         fig.savefig(fname, dpi=dpi)

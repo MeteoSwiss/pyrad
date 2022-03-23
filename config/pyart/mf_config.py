@@ -4068,7 +4068,7 @@ DEFAULT_FIELD_LIMITS = {
 
     #differential_reflectivity: (-1., 8.),
     differential_reflectivity: (-8., 12.),
-    corrected_differential_reflectivity: (-1., 8.),
+    corrected_differential_reflectivity: (-1., 2.),
     #unfiltered_differential_reflectivity: (-1., 8.),
     unfiltered_differential_reflectivity: (-8., 12.),
     differential_reflectivity_in_precipitation: (-10., 10.),

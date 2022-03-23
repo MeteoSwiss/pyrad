@@ -10,6 +10,7 @@ Functions for echo classification and filtering
     process_echo_id
     process_birds_id
     process_clt_to_echo_id
+    process_hydro_mf_to_echo_id
     process_hydro_mf_to_hydro
     process_echo_filter
     process_cdf
@@ -272,6 +273,70 @@ def process_clt_to_echo_id(procstatus, dscfg, radar_list=None):
     clt = radar.fields[clt_field]['data']
     echo_id[clt == 1] = 1
     echo_id[clt >= 100] = 2
+
+    id_field = pyart.config.get_metadata('radar_echo_id')
+    id_field['data'] = echo_id
+
+    # prepare for exit
+    new_dataset = {'radar_out': deepcopy(radar)}
+    new_dataset['radar_out'].fields = dict()
+    new_dataset['radar_out'].add_field('radar_echo_id', id_field)
+
+    return new_dataset, ind_rad
+
+
+def process_hydro_mf_to_echo_id(procstatus, dscfg, radar_list=None):
+    """
+    Converts MF hydrometeor classification into pyrad echo ID
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration. Accepted Configuration Keywords::
+
+        datatype : list of string. Dataset keyword
+            The input data types
+    radar_list : list of Radar objects
+        Optional. list of radar objects
+
+    Returns
+    -------
+    new_dataset : dict
+        dictionary containing the output
+    ind_rad : int
+        radar index
+
+    """
+
+    if procstatus != 1:
+        return None, None
+
+    for datatypedescr in dscfg['datatype']:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        if datatype == 'hydroMF':
+            clt_field = get_fieldname_pyart(datatype)
+            break
+
+    ind_rad = int(radarnr[5:8])-1
+    if radar_list[ind_rad] is None:
+        warn('No valid radar')
+        return None, None
+    radar = radar_list[ind_rad]
+
+    if clt_field not in radar.fields:
+        warn('MF hydrometeor classification not present.'
+             ' Unable to obtain echoID')
+        return None, None
+
+    echo_id = np.zeros((radar.nrays, radar.ngates), dtype=np.uint8)+1
+    clt = radar.fields[clt_field]['data']
+    echo_id[clt >= 8] = 3  # precip
+    echo_id[np.logical_and(clt < 8, clt > 1)] = 2  # clt
+    echo_id[np.ma.getmaskarray(clt)] = 1  # noise
+    echo_id[clt == 1] = 1  # missing Zh
 
     id_field = pyart.config.get_metadata('radar_echo_id')
     id_field['data'] = echo_id
@@ -1336,6 +1401,7 @@ def process_centroids(procstatus, dscfg, radar_list=None):
             100
         nsamples_small : int
             Maximum number before using the k-medoids CLARA algorithm. If this
+<<<<<<< HEAD
             number is exceeded the CLARA algorithm will be used. Default 40000
         sampling_size_clara : int
             Number of samples used in each iteration of the k-medoids CLARA
@@ -1354,6 +1420,22 @@ def process_centroids(procstatus, dscfg, radar_list=None):
         allow_label_duplicates : bool
             If True allow to label multiple clusters with the same label.
             Default True
+=======
+            number is exceeded the CLARA algorithm will be used
+        sampling_size_clara : int
+            Number of samples used in each iteration of the k-medoids CLARA
+            algorithm.
+        niter_clara : int
+            Number of iterations performed by the k-medoids CLARA algorithm
+        keep_labeled_data : bool
+            If True the labeled data is going to be kept.
+        use_median : bool
+            If True the intermediate medoids are computed as the median of each
+            variable and the final medoids are computed as the median of each.
+            Otherwise they are computed using the kmedoids algorithm.
+        allow_label_duplicates : bool
+            If True allow to label multiple clusters with the same label
+>>>>>>> e798a7eeabeffe0861332ffc7be101d9d32af0e1
 
     radar_list : list of Radar objects
         Optional. list of radar objects
@@ -1545,7 +1627,7 @@ def process_centroids(procstatus, dscfg, radar_list=None):
     hydro_names = dscfg.get(
         'hydro_names',
         ('AG', 'CR', 'LR', 'RP', 'RN', 'VI', 'WS', 'MH', 'IH/HDG'))
-    weight = dscfg.get('weight', (1., 1., 1., 1., 0.75))
+    weight = dscfg.get('weight', (1., 1., 1., 1., 1.))
     parallelized = dscfg.get('parallelized', False)
     kmax_iter = dscfg.get('kmax_iter', 100)
     nsamples_small = dscfg.get('nsamples_small', 40000)
@@ -1567,9 +1649,15 @@ def process_centroids(procstatus, dscfg, radar_list=None):
         band=dscfg['global_data']['band'], relh_slope=relh_slope,
         parallelized=parallelized, sample_data=sample_data,
         kmax_iter=kmax_iter, nsamples_small=nsamples_small,
+<<<<<<< HEAD
         sampling_size_clara=sampling_size_clara, niter_clara=niter_clara,
         keep_labeled_data=keep_labeled_data, use_median=use_median,
         allow_label_duplicates=allow_label_duplicates)
+=======
+        sampling_size_clara=sampling_size_clara,
+        niter_clara=niter_clara, keep_labeled_data=keep_labeled_data,
+        use_median=use_median, allow_label_duplicates=allow_label_duplicates)
+>>>>>>> e798a7eeabeffe0861332ffc7be101d9d32af0e1
 
     if not medoids_dict:
         return new_dataset, ind_rad
@@ -1791,6 +1879,46 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
             detect_threshold=detect_threshold, interp_holes=interp_holes,
             max_length_holes=max_length_holes,
             check_min_length=check_min_length, get_iso0=get_iso0)
+
+    elif dscfg['ML_METHOD'] == 'MF':
+        for datatypedescr in dscfg['datatype']:
+            radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+            if datatype == 'dBZ':
+                refl_field = 'reflectivity'
+            if datatype == 'dBZc':
+                refl_field = 'corrected_reflectivity'
+            if datatype == 'RhoHV':
+                rhohv_field = 'cross_correlation_ratio'
+            if datatype == 'RhoHVc':
+                rhohv_field = 'corrected_cross_correlation_ratio'
+
+        ind_rad = int(radarnr[5:8])-1
+        if radar_list[ind_rad] is None:
+            warn('No valid radar')
+            return None, None
+        radar = radar_list[ind_rad]
+
+        if ((refl_field not in radar.fields) or
+                (rhohv_field not in radar.fields)):
+            warn('Unable to detect melting layer. Missing data')
+            return None, None
+
+        # User defined parameters
+        max_range = dscfg.get('max_range', 20000.)
+        detect_threshold = dscfg.get('detect_threshold', 0.02)
+        interp_holes = dscfg.get('interp_holes', False)
+        max_length_holes = dscfg.get('max_length_holes', 250)
+        check_min_length = dscfg.get('check_min_length', True)
+        get_iso0 = dscfg.get('get_iso0', True)
+
+        ml_obj, ml_dict, iso0_dict, _ = pyart.retrieve.melting_layer_mf(
+            radar, refl_field=refl_field, rhohv_field=rhohv_field,
+            ml_field='melting_layer', ml_pos_field='melting_layer_height',
+            iso0_field='height_over_iso0', max_range=max_range,
+            detect_threshold=detect_threshold, interp_holes=interp_holes,
+            max_length_holes=max_length_holes,
+            check_min_length=check_min_length, get_iso0=get_iso0)
+
 
     elif dscfg['ML_METHOD'] == 'FROM_HYDROCLASS':
         for datatypedescr in dscfg['datatype']:

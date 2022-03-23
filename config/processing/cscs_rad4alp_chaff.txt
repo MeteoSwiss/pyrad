@@ -1,6 +1,6 @@
 # Name of this configuration:
 # Will be used in product generation save path
-name STRING rad4alp_grid
+name STRING rad4alp_chaff
 
 # ---------------------------------------------------------
 #  Raw data pathes
@@ -10,7 +10,6 @@ name STRING rad4alp_grid
 # Note: Must have a trailing '/'
 # ('<datapath>/<scanname>/<YYYY-MM-DD>/<YYYYMMDDHHMMSS00datatype>.<ext>')
 datapath STRING /store/msrad/radar/rad4alp/rawdata/
-metranet_read_lib STRING C
 
 # Base path for cosmo data
 cosmopath STRING /store/msrad/cosmo/cosmo1/
@@ -43,8 +42,8 @@ imgformat STRING png
 configpath STRING $HOME/pyrad/config/
 
 # Configuration of the radar location and approach direction
-locationConfigFile STRING $HOME/pyrad/config/processing/rad4alp_grid_loc.txt
+locationConfigFile STRING $HOME/pyrad/config/processing/rad4alp_chaff_loc.txt
 
 # Configuration of the product generation
-productConfigFile STRING $HOME/pyrad/config/processing/rad4alp_grid_prod.txt
+productConfigFile STRING $HOME/pyrad/config/processing/rad4alp_chaff_prod.txt
 

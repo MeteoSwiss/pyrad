@@ -1001,7 +1001,10 @@ def process_ts_along_coord(procstatus, dscfg, radar_list=None):
 
     if procstatus == 1:
         radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
-        field_name = get_fieldname_pyart(datatype)
+        field_names = []
+        for datatypedescr in dscfg['datatype']:
+            radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+            field_names.append(get_fieldname_pyart(datatype))
 
         ind_rad = int(radarnr[5:8])-1
 
@@ -1047,7 +1050,7 @@ def process_ts_along_coord(procstatus, dscfg, radar_list=None):
         # initialize dataset
         if not dscfg['initialized']:
             acoord = pyart.retrieve.compute_ts_along_coord(
-                radar, field_name, mode=mode, fixed_range=fixed_range,
+                radar, field_names, mode=mode, fixed_range=fixed_range,
                 fixed_azimuth=fixed_azimuth, fixed_elevation=fixed_elevation,
                 ang_tol=ang_tol, rng_tol=rng_tol, value_start=value_start,
                 value_stop=value_stop, ref_time=dscfg['timeinfo'],
@@ -1064,7 +1067,7 @@ def process_ts_along_coord(procstatus, dscfg, radar_list=None):
             dscfg['initialized'] = 1
         else:
             acoord = pyart.retrieve.compute_ts_along_coord(
-                radar, field_name, mode=mode, fixed_range=fixed_range,
+                radar, field_names, mode=mode, fixed_range=fixed_range,
                 fixed_azimuth=fixed_azimuth, fixed_elevation=fixed_elevation,
                 ang_tol=ang_tol, rng_tol=rng_tol, value_start=value_start,
                 value_stop=value_stop, ref_time=dscfg['timeinfo'],

@@ -161,6 +161,11 @@ def generate_vol_products(dataset, prdcfg):
             User defined parameters:
                 colors: list of str or None
                     The colors of each ploted line
+                data_on_y : bool
+                    If True the x-axis is the coordinates, and the y the data
+                    values. False swaps the axis. Default True
+                plot_legend : bool
+                    If True a legend will be plotted. Default True
                 mode: str
                     Ploting mode. Can be 'ALONG_RNG', 'ALONG_AZI' or
                     'ALONG_ELE'
@@ -180,7 +185,11 @@ def generate_vol_products(dataset, prdcfg):
                 RngTol: float
                     The tolerance to match the radar range to the fixed ranges
                     Default 50.
-        'PLOT_TXH': Plots the transmitted signal power (H) for a standard sunscan.
+                use_altitude : bool
+                    If true and in ALON_RNG mode the coordinate used is the
+                    gate altitude. Otherwise is the range. Default False
+        'PLOT_TXH': Plots the transmitted signal power (H) for a standard
+            sunscan.
         'PPI_CONTOUR': Plots a PPI countour plot
             User defined parameters:
                 contour_values: list of floats or None
@@ -483,7 +492,11 @@ def generate_vol_products(dataset, prdcfg):
             dataset, as there is no ambiguity with SAVEALL for VOL datasets
         'SAVESTATE': Saves the last processed data in a file. Used for real-
             time data processing
+<<<<<<< HEAD
         'SAVEPSEUDORHI': Saves one field of a pseudo-RHI computed from a 
+=======
+        'SAVEPSEUDORHI': Saves one field of a pseudo-RHI computed from a
+>>>>>>> e798a7eeabeffe0861332ffc7be101d9d32af0e1
             volume scan in C/F radial or ODIM file
             User defined paraeters:
                 file_type: str
@@ -500,7 +513,11 @@ def generate_vol_products(dataset, prdcfg):
                     The compression options allowed by the hdf5. Depends on
                     the type of compression. Default 6 (The gzip compression
                     level).
+<<<<<<< HEAD
         'SAVEPSEUDOPPI': Saves one field of a pseudo-PPI computed from a 
+=======
+        'SAVEPSEUDOPPI': Saves one field of a pseudo-PPI computed from a
+>>>>>>> e798a7eeabeffe0861332ffc7be101d9d32af0e1
             volume scan in C/F radial or ODIM file
             User defined paraeters:
                 file_type: str
@@ -550,8 +567,8 @@ def generate_vol_products(dataset, prdcfg):
                     If True the occurrence density of ZK/KDP for each ZDR bin
                     is going to be represented. Otherwise it will show the
                     number of gates at each bin. Default True
-        'SELFCONSISTENCY2': Plots a ZH measured versus ZH inferred from a self-consistency
-            relation histogram of data.
+        'SELFCONSISTENCY2': Plots a ZH measured versus ZH inferred from a
+            self-consistency relation histogram of data.
             User defined parameters:
                 normalize : bool
                     If True the occurrence density of ZK/KDP for each ZDR bin
@@ -2053,28 +2070,47 @@ def generate_vol_products(dataset, prdcfg):
                 prdcfg['type'])
             return None
 
-        if ((dataset['radar_out'].scan_type != 'ppi') and
-                (dataset['radar_out'].scan_type != 'rhi')):
-            warn('This product is only available for PPI or RHI volumes')
+        if dataset['radar_out'].scan_type not in ('ppi', 'rhi',
+                                                  'vertical_pointing'):
+            warn('This product is only available for PPI, RHI'
+                 ' or vertically pointing volumes')
             return None
 
         colors = prdcfg.get('colors', None)
+        data_on_y = prdcfg.get('data_on_y', True)
+        plot_legend = prdcfg.get('plot_legend', True)
         if prdcfg['mode'] == 'ALONG_RNG':
+            use_altitude = prdcfg.get('use_altitude', False)
             value_start = prdcfg.get('value_start', 0.)
-            value_stop = prdcfg.get(
-                'value_stop', np.max(dataset['radar_out'].range['data']))
+            fix_elevations = prdcfg.get('fix_elevations', None)
+            fix_azimuths = prdcfg.get('fix_azimuths', None)
+            if fix_elevations is None and fix_azimuths is None:
+                warn('At least one fixed elevation or fixed azimuth'
+                     ' has to be specified')
+                return None
+
+            if use_altitude:
+                value_stop = prdcfg.get(
+                    'value_stop',
+                    np.max(dataset['radar_out'].gate_altitude['data']))
+            else:
+                value_stop = prdcfg.get(
+                    'value_stop', np.max(dataset['radar_out'].range['data']))
             ang_tol = prdcfg.get('AngTol', 1.)
 
             xvals, yvals, valid_azi, valid_ele = get_data_along_rng(
-                dataset['radar_out'], field_name, prdcfg['fix_elevations'],
-                prdcfg['fix_azimuths'], ang_tol=ang_tol, rmin=value_start,
-                rmax=value_stop)
+                dataset['radar_out'], field_name, fix_elevations,
+                fix_azimuths, ang_tol=ang_tol, rmin=value_start,
+                rmax=value_stop, use_altitude=use_altitude)
 
             if not yvals:
                 warn('No data found')
                 return None
 
-            labelx = 'Range (m)'
+            if use_altitude:
+                labelx = 'Altitude (m MSL)'
+            else:
+                labelx = 'Range (m)'
 
             labels = list()
             for ele, azi in zip(valid_ele, valid_azi):
@@ -2154,7 +2190,8 @@ def generate_vol_products(dataset, prdcfg):
 
         plot_along_coord(
             xvals, yvals, fname_list, labelx=labelx, labely=labely,
-            labels=labels, title=titl, colors=colors)
+            labels=labels, title=titl, colors=colors, data_on_y=data_on_y,
+            plot_legend=plot_legend)
 
         print('----- save to '+' '.join(fname_list))
 
@@ -2508,7 +2545,8 @@ def generate_vol_products(dataset, prdcfg):
         elmin = dataset['radar_out'].fixed_angle['data'][0]
         elmax = dataset['radar_out'].fixed_angle['data'][-1]
 
-        field_data_process = field_data[np.intersect1d(ind_ele, ind_azi), ind_rng]
+        field_data_process = field_data[
+            np.intersect1d(ind_ele, ind_azi), ind_rng]
         countzero = np.size(np.where(field_data_process == 0.))
 
         meanval = np.nanmean(field_data_process)
@@ -2518,11 +2556,10 @@ def generate_vol_products(dataset, prdcfg):
         nvalid = ntotal - countzero
 
         text = ["Statistics of a region in a volume.",
-                "  Name      : " + field_name,
-                "  Azimuth   : " + str(azmin) +" - "+str(azmax)+" [deg]",
-                "  Elevation : " + str(elmin) +" - "+str(elmax)+" [deg]",
-                "  Range     : " + str(rmin) +" - "+str(rmax)+" [m]"
-               ]
+                "  Name      : "+field_name,
+                "  Azimuth   : "+str(azmin)+" - "+str(azmax)+" [deg]",
+                "  Elevation : "+str(elmin)+" - "+str(elmax)+" [deg]",
+                "  Range     : "+str(rmin)+" - "+str(rmax)+" [m]"]
 
         data = {'dstype': prdcfg['dstype'],
                 'unit': units,
@@ -2883,7 +2920,8 @@ def generate_vol_products(dataset, prdcfg):
             np.array(dataset['selfconsistency_points']['zdr']),
             np.array(dataset['selfconsistency_points']['kdp']),
             np.array(dataset['selfconsistency_points']['zh']), fname_list,
-            parametrization=dataset['selfconsistency_points']['parametrization'],
+            parametrization=dataset['selfconsistency_points'][
+                'parametrization'],
             zdr_kdpzh_dict=dataset['selfconsistency_points']['zdr_kdpzh_dict'],
             normalize=normalize, retrieve_relation=retrieve_relation,
             plot_theoretical=plot_theoretical)
@@ -2916,7 +2954,8 @@ def generate_vol_products(dataset, prdcfg):
             np.array(dataset['selfconsistency_points']['kdp']),
             10.*np.ma.log10(np.array(dataset['selfconsistency_points']['zh'])),
             fname_list,
-            parametrization=dataset['selfconsistency_points']['parametrization'],
+            parametrization=dataset['selfconsistency_points'][
+                'parametrization'],
             zdr_kdpzh_dict=dataset['selfconsistency_points']['zdr_kdpzh_dict'],
             normalize=normalize)
 
@@ -3132,7 +3171,6 @@ def generate_vol_products(dataset, prdcfg):
 
         return alarm_fname
 
-
     if prdcfg['type'] == 'SAVEVOL' or prdcfg['type'] == 'SAVEVOL_VOL':
         field_name = get_fieldname_pyart(prdcfg['voltype'])
         if field_name not in dataset['radar_out'].fields:
@@ -3176,7 +3214,6 @@ def generate_vol_products(dataset, prdcfg):
         print('saved file: '+fname)
 
         return fname
-
 
     if prdcfg['type'] == 'SAVEALL' or prdcfg['type'] == 'SAVEALL_VOL':
         file_type = prdcfg.get('file_type', 'nc')
@@ -3355,8 +3392,115 @@ def generate_vol_products(dataset, prdcfg):
 
         print('saved file: '+fname)
 
+<<<<<<< HEAD
         return fname     
          
+=======
+    if prdcfg['type'] == 'SAVEPSEUDORHI':
+        file_type = prdcfg.get('file_type', 'nc')
+        datatypes = prdcfg.get('datatypes', None)
+        physical = prdcfg.get('physical', True)
+        compression = prdcfg.get('compression', 'gzip')
+        compression_opts = prdcfg.get('compression_opts', 6)
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdsavedir, timeinfo=prdcfg['timeinfo'])
+
+        fname = make_filename(
+            'savepseudorhi', prdcfg['dstype'], 'all_fields', [file_type],
+            timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
+
+        fname = savedir+fname
+
+        field_names = None
+        if datatypes is not None:
+            field_names = []
+            for datatype in datatypes:
+                field_names.append(get_fieldname_pyart(datatype))
+        pseudorhi = pyart.util.cross_section_ppi(
+            dataset['radar_out'], [prdcfg['angle']], az_tol=prdcfg['AziTol'])
+        if file_type == 'nc':
+            if field_names is not None:
+                radar_aux = deepcopy(pseudorhi)
+                radar_aux.fields = dict()
+                for field_name in field_names:
+                    if field_name not in pseudorhi.fields:
+                        warn(field_name+' not in radar object')
+                    else:
+                        radar_aux.add_field(
+                            field_name,
+                            pseudorhi.fields[field_name])
+            else:
+                radar_aux = pseudorhi
+            pyart.io.write_cfradial(fname, radar_aux, physical=physical)
+        elif file_type == 'h5':
+            pyart.aux_io.write_odim_h5(
+                fname, pseudorhi, field_names=field_names,
+                physical=physical, compression=compression,
+                compression_opts=compression_opts)
+        else:
+            warn('Data could not be saved. ' +
+                 'Unknown saving file type '+file_type)
+
+        print('saved file: '+fname)
+
+        return fname
+
+    if prdcfg['type'] == 'SAVEPSEUDOPPI':
+        file_type = prdcfg.get('file_type', 'nc')
+        datatypes = prdcfg.get('datatypes', None)
+        physical = prdcfg.get('physical', True)
+        compression = prdcfg.get('compression', 'gzip')
+        compression_opts = prdcfg.get('compression_opts', 6)
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdsavedir, timeinfo=prdcfg['timeinfo'])
+
+        fname = make_filename(
+            'savepseudorhi', prdcfg['dstype'], 'all_fields', [file_type],
+            timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
+
+        fname = savedir+fname
+
+        field_names = None
+        if datatypes is not None:
+            field_names = []
+            for datatype in datatypes:
+                field_names.append(get_fieldname_pyart(datatype))
+
+        pseudoppi = pyart.util.cross_section_rhi(
+            dataset['radar_out'], [prdcfg['angle']], el_tol=prdcfg['EleTol'])
+
+        if file_type == 'nc':
+            if field_names is not None:
+                radar_aux = deepcopy(pseudoppi)
+                radar_aux.fields = dict()
+                for field_name in field_names:
+                    if field_name not in pseudoppi.fields:
+                        warn(field_name+' not in radar object')
+                    else:
+                        radar_aux.add_field(
+                            field_name,
+                            pseudoppi.fields[field_name])
+            else:
+                radar_aux = pseudoppi
+            pyart.io.write_cfradial(fname, radar_aux, physical=physical)
+        elif file_type == 'h5':
+            pyart.aux_io.write_odim_h5(
+                fname, pseudoppi, field_names=field_names,
+                physical=physical, compression=compression,
+                compression_opts=compression_opts)
+        else:
+            warn('Data could not be saved. ' +
+                 'Unknown saving file type '+file_type)
+
+        print('saved file: '+fname)
+
+        return fname
+
+>>>>>>> e798a7eeabeffe0861332ffc7be101d9d32af0e1
     if prdcfg['type'] == 'SAVE_FIXED_ANGLE':
         field_name = get_fieldname_pyart(prdcfg['voltype'])
         if field_name not in dataset['radar_out'].fields:
