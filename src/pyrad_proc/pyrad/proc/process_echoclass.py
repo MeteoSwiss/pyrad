@@ -1854,16 +1854,25 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
             check_min_length=check_min_length, get_iso0=get_iso0)
 
     elif dscfg['ML_METHOD'] == 'MF':
+        temp_ref = None
+        temp_field = None
+        iso0_field = None
         for datatypedescr in dscfg['datatype']:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-            if datatype == 'dBZ':
-                refl_field = 'reflectivity'
+            if datatype == 'H_ISO0':
+                iso0_field = 'height_over_iso0'
+            if datatype == 'H_ISO0c':
+                iso0_field = 'corrected_height_over_iso0'
+            if datatype == 'TEMP':
+                temp_field = 'temperature'
+            if datatype == 'TEMPc':
+                temp_field = 'corrected_temperature'
             if datatype == 'dBZc':
                 refl_field = 'corrected_reflectivity'
             if datatype == 'RhoHV':
-                rhohv_field = 'cross_correlation_ratio'
+                rhohv_field_obs = 'cross_correlation_ratio'
             if datatype == 'RhoHVc':
-                rhohv_field = 'corrected_cross_correlation_ratio'
+                rhohv_field_obs = 'corrected_cross_correlation_ratio'
 
         ind_rad = int(radarnr[5:8])-1
         if radar_list[ind_rad] is None:
@@ -1871,27 +1880,76 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
             return None, None
         radar = radar_list[ind_rad]
 
-        if ((refl_field not in radar.fields) or
-                (rhohv_field not in radar.fields)):
+        # Check which should be the reference field for temperature
+        if iso0_field is not None:
+            if iso0_field not in radar.fields:
+                warn('Unable to detect melting layer. '
+                     'Missing height over iso0 field')
+                return None, None
+            temp_ref = 'height_over_iso0'
+
+        if temp_field is not None:
+            if temp_field not in radar.fields:
+                warn('Unable to detect melting layer. '
+                     'Missing temperature field')
+                return None, None
+            temp_ref = 'temperature'
+
+        if temp_ref is None:
+            warn('A valid temperature reference field has to be specified')
+            return None, None
+
+        if rhohv_field_obs not in radar.fields:
             warn('Unable to detect melting layer. Missing data')
             return None, None
 
         # User defined parameters
-        max_range = dscfg.get('max_range', 20000.)
-        detect_threshold = dscfg.get('detect_threshold', 0.02)
-        interp_holes = dscfg.get('interp_holes', False)
-        max_length_holes = dscfg.get('max_length_holes', 250)
-        check_min_length = dscfg.get('check_min_length', True)
+        nvalid_min = dscfg.get('nvalid_min', 180.)
+        ml_thickness_min = dscfg.get('ml_thickness_min', 200.)
+        ml_thickness_max = dscfg.get('ml_thickness_max', 1400.)
+        ml_thickness_step = dscfg.get('ml_thickness_step', 100.)
+        iso0_max = dscfg.get('iso0_max', 4500.)
+        ml_top_diff_max = dscfg.get('ml_top_diff_max', 700.)
+        ml_top_step = dscfg.get('ml_top_step', 100.)
+        rhohv_snow = dscfg.get('rhohv_snow', 0.99)
+        rhohv_rain = dscfg.get('rhohv_rain', 0.99)
+        rhohv_ml = dscfg.get('rhohv_ml', 0.93)
+        zh_snow = dscfg.get('zh_snow', 20.)
+        zh_rain = dscfg.get('zh_rain', 20.)
+        zh_ml = dscfg.get('zh_ml', 27.)
+        zv_snow = dscfg.get('zv_snow', 20.)
+        zv_rain = dscfg.get('zv_rain', 20.)
+        zv_ml = dscfg.get('zv_ml', 26.)
+        h_max = dscfg.get('h_max', 6000.)
+        h_res = dscfg.get('h_res', 1.)
+        beam_factor = dscfg.get('beam_factor', 2.)
+        npts_diagram = dscfg.get('npts_diagram', 81)
+        rng_bottom_max = dscfg.get('rng_bottom_max', 200000.)
+        ns_factor = dscfg.get('ns_factor', 0.6)
+        rhohv_corr_min = dscfg.get('rhohv_corr_min', 0.9)
+        rhohv_nash_min = dscfg.get('rhohv_nash_min', 0.5)
+        ang_iso0 = dscfg.get('ang_iso0', 10.)
+        age_iso0 = dscfg.get('age_iso0', 3.)
+        ml_thickness_iso0 = dscfg.get('ml_thickness_iso0', 700.)
         get_iso0 = dscfg.get('get_iso0', True)
 
         ml_obj, ml_dict, iso0_dict, _ = pyart.retrieve.melting_layer_mf(
-            radar, refl_field=refl_field, rhohv_field=rhohv_field,
-            ml_field='melting_layer', ml_pos_field='melting_layer_height',
-            iso0_field='height_over_iso0', max_range=max_range,
-            detect_threshold=detect_threshold, interp_holes=interp_holes,
-            max_length_holes=max_length_holes,
-            check_min_length=check_min_length, get_iso0=get_iso0)
-
+            radar, nvalid_min=nvalid_min, ml_thickness_min=ml_thickness_min,
+            ml_thickness_max=ml_thickness_max,
+            ml_thickness_step=ml_thickness_step, iso0_max=iso0_max,
+            ml_top_diff_max=ml_top_diff_max, ml_top_step=ml_top_step,
+            rhohv_snow=rhohv_snow, rhohv_rain=rhohv_rain, rhohv_ml=rhohv_ml,
+            zh_snow=zh_snow, zh_rain=zh_rain, zh_ml=zh_ml, zv_snow=zv_snow,
+            zv_rain=zv_rain, zv_ml=zv_ml, h_max=h_max, h_res=h_res,
+            beam_factor=beam_factor, npts_diagram=npts_diagram,
+            rng_bottom_max=rng_bottom_max, ns_factor=ns_factor,
+            rhohv_corr_min=rhohv_corr_min, rhohv_nash_min=rhohv_nash_min,
+            ang_iso0=ang_iso0, age_iso0=age_iso0,
+            ml_thickness_iso0=ml_thickness_iso0,
+            rhohv_field_obs=rhohv_field_obs, temp_field=temp_field,
+            iso0_field=iso0_field,
+            rhohv_field_theo='theoretical_cross_correlation_ratio',
+            temp_ref=temp_ref, get_iso0=get_iso0)
 
     elif dscfg['ML_METHOD'] == 'FROM_HYDROCLASS':
         for datatypedescr in dscfg['datatype']:

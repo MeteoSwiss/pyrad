@@ -213,7 +213,7 @@ unfiltered_cross_correlation_ratio = 'unfiltered_cross_correlation_ratio'
 uncorrected_cross_correlation_ratio = 'uncorrected_cross_correlation_ratio'
 corrected_cross_correlation_ratio = 'corrected_cross_correlation_ratio'
 logarithmic_cross_correlation_ratio = 'logarithmic_cross_correlation_ratio'
-
+theoretical_cross_correlation_ratio = 'theoretical_cross_correlation_ratio'
 cross_correlation_ratio_in_rain = 'cross_correlation_ratio_in_rain'
 
 # Normalized coherent power, signal quality index, SQI, NCP
@@ -290,6 +290,7 @@ frequency_of_occurrence = 'frequency_of_occurrence'
 temperature = 'temperature'
 iso0 = 'iso0'
 height_over_iso0 = 'height_over_iso0'
+corrected_height_over_iso0 = 'corrected_height_over_iso0'
 cosmo_index = 'cosmo_index'
 hzt_index = 'hzt_index'
 iso0_height = 'iso0_height'
@@ -562,6 +563,7 @@ DEFAULT_FIELD_NAMES = {
     'uncorrected_cross_correlation_ratio': uncorrected_cross_correlation_ratio,
     'logarithmic_cross_correlation_ratio': logarithmic_cross_correlation_ratio,
     'cross_correlation_ratio_in_rain': cross_correlation_ratio_in_rain,
+    'theoretical_cross_correlation_ratio': theoretical_cross_correlation_ratio,
     'normalized_coherent_power': normalized_coherent_power,
     'wide_band_noise': wide_band_noise,
     'fields_difference': fields_difference,
@@ -720,6 +722,7 @@ DEFAULT_FIELD_NAMES = {
     'temperature': temperature,
     'iso0': iso0,
     'height_over_iso0': height_over_iso0,
+    'corrected_height_over_iso0': corrected_height_over_iso0,
     'iso0_height': iso0_height,
     'cosmo_index': cosmo_index,
     'hzt_index': hzt_index,
@@ -1643,6 +1646,12 @@ DEFAULT_METADATA = {
         'units': '-',
         'standard_name': 'copolar_correlation_coefficient',
         'long_name': 'Copolar correlation coefficient (RHOHV)',
+        'coordinates': 'elevation azimuth range'},
+
+    theoretical_cross_correlation_ratio: {
+        'units': '-',
+        'standard_name': 'copolar_correlation_coefficient',
+        'long_name': 'Theoretical copolar correlation coefficient (RHOHV)',
         'coordinates': 'elevation azimuth range'},
 
     corrected_cross_correlation_ratio: {
@@ -2786,6 +2795,12 @@ DEFAULT_METADATA = {
         'long_name': 'Height of the range bin respect to the iso0 level',
         'coordinates': 'elevation azimuth range'},
 
+    corrected_height_over_iso0: {
+        'units': 'm',
+        'standard_name': 'corrected_height_over_iso0',
+        'long_name': 'Height of the range bin respect to the iso0 level',
+        'coordinates': 'elevation azimuth range'},
+
     iso0_height: {
         'units': 'm MSL',
         'standard_name': 'iso0_height',
@@ -3819,6 +3834,7 @@ DEFAULT_FIELD_COLORMAP = {
     uncorrected_cross_correlation_ratio: 'pyart_RefDiff',
     logarithmic_cross_correlation_ratio: 'pyart_RefDiff',
     cross_correlation_ratio_in_rain: 'pyart_RefDiff',
+    theoretical_cross_correlation_ratio: 'pyart_RefDiff',
     spectral_copolar_correlation_coefficient: 'pyart_RefDiff',
     unfiltered_spectral_copolar_correlation_coefficient: 'pyart_RefDiff',
 
@@ -3894,6 +3910,7 @@ DEFAULT_FIELD_COLORMAP = {
     clutter_exit_code: 'pyart_LangRainbow12',
     melting_layer: 'pyart_LangRainbow12',
     height_over_iso0: 'pyart_BuDRd18',
+    corrected_height_over_iso0: 'pyart_BuDRd18',
 
     specific_attenuation: 'pyart_Carbone17',
     path_integrated_attenuation: 'pyart_Carbone17',
@@ -4079,6 +4096,7 @@ DEFAULT_FIELD_LIMITS = {
     uncorrected_cross_correlation_ratio: (0.7, 1.),
     logarithmic_cross_correlation_ratio: (0, 4),
     cross_correlation_ratio_in_rain: (0.9, 1.),
+    theoretical_cross_correlation_ratio: (0.8, 1.),
     # spectral_copolar_correlation_coefficient: (0.7, 1),
     # unfiltered_spectral_copolar_correlation_coefficient: (0.7, 1),
 
@@ -4155,6 +4173,7 @@ DEFAULT_FIELD_LIMITS = {
 
     temperature: (-60, 30),
     height_over_iso0: (-6000., 6000.),
+    corrected_height_over_iso0: (-6000., 6000.),
     iso0_height: (0., 5000.),
 
     # Additional reflectivity like fields

@@ -841,16 +841,20 @@ def plot_antenna_pattern(antpattern, fname_list, labelx='Angle [Deg]',
 
     """
     waystr = 'One-way '
+    bw_threshold = -3.
     if twoway:
         waystr = 'Two-way '
+        bw_threshold = -6
 
     linstr = 'Att [dB]'
     if linear:
         linstr = 'Att [-]'
         mainbeam = (
-            antpattern['angle'][antpattern['attenuation'] >= 10.**(-0.3)])
+            antpattern['angle'][
+                antpattern['attenuation'] >= 10.**(0.1*bw_threshold)])
     else:
-        mainbeam = antpattern['angle'][antpattern['attenuation'] >= -3.]
+        mainbeam = antpattern['angle'][
+            antpattern['attenuation'] >= bw_threshold]
     beamwidth = np.abs(np.max(mainbeam)-np.min(mainbeam))
 
     labely = waystr+linstr

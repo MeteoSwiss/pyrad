@@ -1265,6 +1265,8 @@ def get_fieldname_pyart(datatype):
         field_name = 'corrected_cross_correlation_ratio'
     elif datatype == 'RhoHV_rain':
         field_name = 'cross_correlation_ratio_in_rain'
+    elif datatype == 'RhoHV_theo':
+        field_name = 'theoretical_cross_correlation_ratio'
     elif datatype == 'L':
         field_name = 'logarithmic_cross_correlation_ratio'
     elif datatype == 'CDR':
@@ -1355,6 +1357,8 @@ def get_fieldname_pyart(datatype):
         field_name = 'iso0'
     elif datatype == 'H_ISO0':
         field_name = 'height_over_iso0'
+    elif datatype == 'H_ISO0c':
+        field_name = 'corrected_height_over_iso0'
     elif datatype == 'HZT':
         field_name = 'iso0_height'
     elif datatype == 'cosmo_index':
