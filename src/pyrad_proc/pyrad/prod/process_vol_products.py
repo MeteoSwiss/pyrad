@@ -492,11 +492,7 @@ def generate_vol_products(dataset, prdcfg):
             dataset, as there is no ambiguity with SAVEALL for VOL datasets
         'SAVESTATE': Saves the last processed data in a file. Used for real-
             time data processing
-<<<<<<< HEAD
         'SAVEPSEUDORHI': Saves one field of a pseudo-RHI computed from a 
-=======
-        'SAVEPSEUDORHI': Saves one field of a pseudo-RHI computed from a
->>>>>>> e798a7eeabeffe0861332ffc7be101d9d32af0e1
             volume scan in C/F radial or ODIM file
             User defined paraeters:
                 file_type: str
@@ -513,11 +509,7 @@ def generate_vol_products(dataset, prdcfg):
                     The compression options allowed by the hdf5. Depends on
                     the type of compression. Default 6 (The gzip compression
                     level).
-<<<<<<< HEAD
-        'SAVEPSEUDOPPI': Saves one field of a pseudo-PPI computed from a 
-=======
         'SAVEPSEUDOPPI': Saves one field of a pseudo-PPI computed from a
->>>>>>> e798a7eeabeffe0861332ffc7be101d9d32af0e1
             volume scan in C/F radial or ODIM file
             User defined paraeters:
                 file_type: str
@@ -3392,10 +3384,8 @@ def generate_vol_products(dataset, prdcfg):
 
         print('saved file: '+fname)
 
-<<<<<<< HEAD
         return fname     
          
-=======
     if prdcfg['type'] == 'SAVEPSEUDORHI':
         file_type = prdcfg.get('file_type', 'nc')
         datatypes = prdcfg.get('datatypes', None)
@@ -3500,7 +3490,6 @@ def generate_vol_products(dataset, prdcfg):
 
         return fname
 
->>>>>>> e798a7eeabeffe0861332ffc7be101d9d32af0e1
     if prdcfg['type'] == 'SAVE_FIXED_ANGLE':
         field_name = get_fieldname_pyart(prdcfg['voltype'])
         if field_name not in dataset['radar_out'].fields:

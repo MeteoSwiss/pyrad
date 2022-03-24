@@ -373,10 +373,6 @@ class Trajectory(object):
     def _read_traj_flores(self):
         """
         Read trajectory from FLORAKO file
-<<<<<<< HEAD
-=======
-
->>>>>>> e798a7eeabeffe0861332ffc7be101d9d32af0e1
         File format
         -----------
         Column/Variable Contents, Units and Description:

@@ -774,11 +774,7 @@ def process_vol_to_grid(procstatus, dscfg, radar_list=None):
         beam_spacing = 1.
 
     # cartesian mapping
-<<<<<<< HEAD
-    grid = pyart.map.grid_from_radars(
-=======
     grid = grid_from_radars(
->>>>>>> e798a7eeabeffe0861332ffc7be101d9d32af0e1
         radar_list_aux, gridding_algo='map_to_grid', weighting_function=wfunc,
         roi_func='dist_beam', h_factor=1.0, nb=beamwidth, bsp=beam_spacing,
         min_radius=hres/2.,
