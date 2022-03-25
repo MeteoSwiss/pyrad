@@ -1140,6 +1140,8 @@ def get_fieldname_pyart(datatype):
     """
     if datatype == 'dBZ':
         field_name = 'reflectivity'
+    if datatype == 'Zn':
+        field_name = 'normalized_reflectivity'
     elif datatype == 'dBuZ':
         field_name = 'unfiltered_reflectivity'
     elif datatype == 'dBZc':

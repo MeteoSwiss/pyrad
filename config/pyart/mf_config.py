@@ -48,6 +48,8 @@ unfiltered_reflectivity_vv = 'unfiltered_reflectivity_vv'
 reflectivity = 'reflectivity'
 reflectivity_vv = 'reflectivity_vv'
 
+normalized_reflectivity = 'normalized_reflectivity'
+
 corrected_unfiltered_reflectivity = 'corrected_unfiltered_reflectivity'
 
 corrected_reflectivity = 'corrected_reflectivity'
@@ -509,6 +511,7 @@ FILL_VALUE = fill_value
 DEFAULT_FIELD_NAMES = {
     # Internal field name (do not change): field name used (can change)
     'reflectivity': reflectivity,
+    'normalized_reflectivity': normalized_reflectivity,
     'bird_reflectivity': bird_reflectivity,
     'corrected_reflectivity': corrected_reflectivity,
     'total_power': total_power,
@@ -1174,6 +1177,12 @@ DEFAULT_METADATA = {
         'scale_factor': 0.5,
         'add_offset': -32.,
         '_Write_as_dtype': 'uint8'},
+
+    normalized_reflectivity: {
+        'units': '-',
+        'standard_name': 'normalized_reflectivity',
+        'long_name': 'Normalized Reflectivity',
+        'coordinates': 'elevation azimuth range'},
 
     avg_reflectivity: {
         'units': 'dBZ',
@@ -3707,6 +3716,7 @@ def spectrum_width_limit(container=None, selection=0):
 DEFAULT_FIELD_COLORMAP = {
     # field name : colormap
     reflectivity: 'pyart_NWSRef',
+    normalized_reflectivity: 'pyart_NWSRef',
     corrected_reflectivity: 'pyart_NWSRef',
     total_power: 'pyart_NWSRef',
     unfiltered_reflectivity: 'pyart_NWSRef',
@@ -3984,6 +3994,7 @@ DEFAULT_FIELD_LIMITS = {
     # field name : limits
     #reflectivity: (-30., 75.),
     reflectivity: (-30., 85.),
+    normalized_reflectivity: (-6., 6.),
     avg_reflectivity: (-30., 75.),
     quant05_reflectivity: (-30., 75.),
     quant10_reflectivity: (-30., 75.),
