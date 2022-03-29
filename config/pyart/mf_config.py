@@ -60,6 +60,8 @@ clutter_correction_ratio_vv = 'clutter_correction_ratio_vv'
 
 reflectivity_bias = 'reflectivity_bias'
 
+vpr_correction = 'vpr_correction'
+
 volumetric_reflectivity = 'volumetric_reflectivity'
 volumetric_reflectivity_vv = 'volumetric_reflectivity_vv'
 
@@ -529,6 +531,7 @@ DEFAULT_FIELD_NAMES = {
     'volumetric_reflectivity_vv': volumetric_reflectivity_vv,
     'radar_cross_section_hh': radar_cross_section_hh,
     'radar_cross_section_vv': radar_cross_section_vv,
+    'vpr_correction': vpr_correction,
     'sun_hit_power_h': sun_hit_power_h,
     'sun_hit_power_v': sun_hit_power_v,
     'sun_hit_differential_reflectivity': sun_hit_differential_reflectivity,
@@ -1328,6 +1331,12 @@ DEFAULT_METADATA = {
         'units': 'dBsm',
         'standard_name': 'radar_cross_section_vv',
         'long_name': 'Vertical Radar Cross-Section',
+        'coordinates': 'elevation azimuth range'},
+
+    vpr_correction: {
+        'units': 'dB',
+        'standard_name': 'vpr_correction',
+        'long_name': 'Vertical Profile of Reflectivity Correction',
         'coordinates': 'elevation azimuth range'},
 
     total_power: {
@@ -3819,6 +3828,7 @@ DEFAULT_FIELD_COLORMAP = {
     quant80_corrected_velocity: 'pyart_BuDRd18',
     quant90_corrected_velocity: 'pyart_BuDRd18',
     quant95_corrected_velocity: 'pyart_BuDRd18',
+    vpr_correction: 'pyart_BuDRd18',
 
     spectrum_width: 'pyart_NWS_SPW',
     corrected_spectrum_width: 'pyart_NWS_SPW',
@@ -4033,6 +4043,8 @@ DEFAULT_FIELD_LIMITS = {
     # spectral_reflectivity_vv: (-60., 45.),
     # unfiltered_spectral_reflectivity_hh: (-60., 45.),
     # unfiltered_spectral_reflectivity_vv: (-60., 45.),
+
+    vpr_correction: (-12., 12.),
 
     signal_power_hh: (-130., 0.),
     signal_power_vv: (-130., 0.),

@@ -150,20 +150,9 @@ def process_signal_power(procstatus, dscfg, radar_list=None):
 
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype == 'dBZ':
-            refl_field = 'reflectivity'
-        if datatype == 'dBuZ':
-            refl_field = 'unfiltered_reflectivity'
-        if datatype == 'dBZc':
-            refl_field = 'corrected_reflectivity'
-        if datatype == 'dBuZc':
-            refl_field = 'corrected_unfiltered_reflectivity'
-        if datatype == 'dBZv':
-            refl_field = 'reflectivity_vv'
-        if datatype == 'dBuZv':
-            refl_field = 'unfiltered_reflectivity_vv'
-        if datatype == 'dBuZvc':
-            refl_field = 'corrected_unfiltered_reflectivity_vv'
+        if datatype in ('dBZ', 'dBuZ', 'dBZc', 'dBuZc', 'dBZv', 'dBuZv',
+                        'dBuZvc'):
+            refl_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8])-1
     if radar_list[ind_rad] is None:
@@ -273,20 +262,9 @@ def process_rcs_pr(procstatus, dscfg, radar_list=None):
 
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype == 'dBZ':
-            refl_field = 'reflectivity'
-        if datatype == 'dBuZ':
-            refl_field = 'unfiltered_reflectivity'
-        if datatype == 'dBZc':
-            refl_field = 'corrected_reflectivity'
-        if datatype == 'dBuZc':
-            refl_field = 'corrected_unfiltered_reflectivity'
-        if datatype == 'dBZv':
-            refl_field = 'reflectivity_vv'
-        if datatype == 'dBuZv':
-            refl_field = 'unfiltered_reflectivity_vv'
-        if datatype == 'dBuZvc':
-            refl_field = 'corrected_unfiltered_reflectivity_vv'
+        if datatype in ('dBZ', 'dBuZ', 'dBZc', 'dBuZc', 'dBZv', 'dBuZv',
+                        'dBuZvc'):
+            refl_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8])-1
     if radar_list[ind_rad] is None:
@@ -385,20 +363,9 @@ def process_rcs(procstatus, dscfg, radar_list=None):
 
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype == 'dBZ':
-            refl_field = 'reflectivity'
-        if datatype == 'dBuZ':
-            refl_field = 'unfiltered_reflectivity'
-        if datatype == 'dBZc':
-            refl_field = 'corrected_reflectivity'
-        if datatype == 'dBuZc':
-            refl_field = 'corrected_unfiltered_reflectivity'
-        if datatype == 'dBZv':
-            refl_field = 'reflectivity_vv'
-        if datatype == 'dBuZv':
-            refl_field = 'unfiltered_reflectivity_vv'
-        if datatype == 'dBuZvc':
-            refl_field = 'corrected_unfiltered_reflectivity_vv'
+        if datatype in ('dBZ', 'dBuZ', 'dBZc', 'dBuZc', 'dBZv', 'dBuZv',
+                        'dBuZvc'):
+            refl_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8])-1
     if radar_list[ind_rad] is None:
@@ -468,20 +435,9 @@ def process_vol_refl(procstatus, dscfg, radar_list=None):
 
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype == 'dBZ':
-            refl_field = 'reflectivity'
-        if datatype == 'dBuZ':
-            refl_field = 'unfiltered_reflectivity'
-        if datatype == 'dBZc':
-            refl_field = 'corrected_reflectivity'
-        if datatype == 'dBuZc':
-            refl_field = 'corrected_unfiltered_reflectivity'
-        if datatype == 'dBZv':
-            refl_field = 'reflectivity_vv'
-        if datatype == 'dBuZv':
-            refl_field = 'unfiltered_reflectivity_vv'
-        if datatype == 'dBuZvc':
-            refl_field = 'corrected_unfiltered_reflectivity_vv'
+        if datatype in ('dBZ', 'dBuZ', 'dBZc', 'dBuZc', 'dBZv', 'dBuZv',
+                        'dBuZvc'):
+            refl_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8])-1
     if radar_list[ind_rad] is None:
@@ -546,18 +502,10 @@ def process_snr(procstatus, dscfg, radar_list=None):
 
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype == 'dBZ':
-            refl = 'reflectivity'
-        if datatype == 'dBuZ':
-            refl = 'unfiltered_reflectivity'
-        if datatype == 'dBZv':
-            refl = 'reflectivity_vv'
-        if datatype == 'dBuZv':
-            refl = 'unfiltered_reflectivity_vv'
-        if datatype == 'Nh':
-            noise = 'noisedBZ_hh'
-        if datatype == 'Nv':
-            noise = 'noisedBZ_vv'
+        if datatype in ('dBZ', 'dBuZ', 'dBZv', 'dBuZv'):
+            refl = get_fieldname_pyart(datatype)
+        elif datatype in ('Nh', 'Nv'):
+            noise = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8])-1
     if radar_list[ind_rad] is None:
@@ -843,16 +791,10 @@ def process_cdr(procstatus, dscfg, radar_list=None):
 
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype == 'RhoHV':
-            rhohv = 'cross_correlation_ratio'
-        if datatype == 'uRhoHV':
-            rhohv = 'uncorrected_cross_correlation_ratio'
-        if datatype == 'RhoHVu':
-            rhohv = 'unfiltered_cross_correlation_ratio'
-        if datatype == 'ZDR':
-            zdr = 'differential_reflectivity'
-        if datatype == 'ZDRc':
-            zdr = 'corrected_differential_reflectivity'
+        if datatype in ('RhoHV', 'uRhoHV', 'RhoHVu'):
+            rhohv = get_fieldname_pyart(datatype)
+        elif datatype in ('ZDR', 'ZDRc'):
+            zdr = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8])-1
     if radar_list[ind_rad] is None:
@@ -905,10 +847,17 @@ def process_vpr(procstatus, dscfg, radar_list=None):
     if procstatus != 1:
         return None, None
 
+    temp_ref = None
+    temp_field = None
+    iso0_field = None
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         if datatype in ('dBZ', 'dBZc'):
             refl_field = get_fieldname_pyart(datatype)
+        elif datatype in ('H_ISO0', 'H_ISO0c'):
+            iso0_field = get_fieldname_pyart(datatype)
+        elif datatype in ('TEMP', 'TEMPc'):
+            temp_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8])-1
     if radar_list[ind_rad] is None:
@@ -916,16 +865,70 @@ def process_vpr(procstatus, dscfg, radar_list=None):
         return None, None
     radar = radar_list[ind_rad]
 
+    # Check which should be the reference field for temperature
+    if iso0_field is not None:
+        if iso0_field not in radar.fields:
+            warn('Unable to detect melting layer. '
+                 'Missing height over iso0 field')
+            return None, None
+        temp_ref = 'height_over_iso0'
+
+    if temp_field is not None:
+        if temp_field not in radar.fields:
+            warn('Unable to detect melting layer. '
+                 'Missing temperature field')
+            return None, None
+        temp_ref = 'temperature'
+
+    if temp_ref is None:
+        warn('A valid temperature reference field has to be specified')
+        return None, None
+
     if refl_field not in radar.fields:
         warn('ERROR: Unable to compute VPR. Missing data')
         return None, None
 
-    refl_corr = pyart.correct.correct_vpr(radar, refl_field=refl_field)
+    # User defined variables
+    nvalid_min = dscfg.get('nvalid_min', 20)
+    angle_min = dscfg.get('angle_min', 0.)
+    angle_max = dscfg.get('angle_max', 4.)
+    ml_thickness_min = dscfg.get('ml_thickness_min', 200)
+    ml_thickness_max = dscfg.get('ml_thickness_max', 800)
+    ml_thickness_step = dscfg.get('ml_thickness_step', 200)
+    iso0_max = dscfg.get('iso0_max', 5000.)
+    ml_top_diff_max = dscfg.get('ml_top_diff_max', 200)
+    ml_top_step = dscfg.get('ml_top_step', 200)
+    ml_peak_min = dscfg.get('ml_peak_min', 1.)
+    ml_peak_max = dscfg.get('ml_peak_max', 6.)
+    ml_peak_step = dscfg.get('ml_peak_step', 1.)
+    dr_min = dscfg.get('dr_min', -6.)
+    dr_max = dscfg.get('dr_max', -1.5)
+    dr_step = dscfg.get('dr_step', 1.5)
+    dr_default = dscfg.get('dr_default', -4.5)
+    h_max = dscfg.get('h_max', 5000.)
+    h_res = dscfg.get('h_res', 1.)
+    max_weight = dscfg.get('max_weight', 9.)
+    rmin_obs = dscfg.get('rmin_obs', 5000.)
+    rmax_obs = dscfg.get('rmax_obs', 150000.)
+
+    refl_corr, vpr_corr = pyart.correct.correct_vpr(
+        radar, nvalid_min=nvalid_min, angle_min=angle_min,
+        angle_max=angle_max, ml_thickness_min=ml_thickness_min,
+        ml_thickness_max=ml_thickness_max,
+        ml_thickness_step=ml_thickness_step, iso0_max=iso0_max,
+        ml_top_diff_max=ml_top_diff_max, ml_top_step=ml_top_step,
+        ml_peak_min=ml_peak_min, ml_peak_max=ml_peak_max,
+        ml_peak_step=ml_peak_step, dr_min=dr_min, dr_max=dr_max,
+        dr_step=dr_step, dr_default=dr_default, h_max=h_max, h_res=h_res,
+        max_weight=max_weight, rmin_obs=rmin_obs, rmax_obs=rmax_obs,
+        refl_field=refl_field, temp_field=temp_field, iso0_field=iso0_field,
+        temp_ref=temp_ref)
 
     # prepare for exit
     new_dataset = {'radar_out': deepcopy(radar)}
     new_dataset['radar_out'].fields = dict()
     new_dataset['radar_out'].add_field('corrected_reflectivity', refl_corr)
+    new_dataset['radar_out'].add_field('vpr_correction', vpr_corr)
 
     return new_dataset, ind_rad
 
@@ -1077,14 +1080,10 @@ def process_rainrate(procstatus, dscfg, radar_list=None):
     elif dscfg['RR_METHOD'] == 'ZKDP':
         for datatypedescr in dscfg['datatype']:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-            if datatype == 'dBZc':
-                refl_field = 'corrected_reflectivity'
-            if datatype == 'KDPc':
-                kdp_field = 'corrected_specific_differential_phase'
-            if datatype == 'dBZ':
-                refl_field = 'reflectivity'
-            if datatype == 'KDP':
-                kdp_field = 'specific_differential_phase'
+            if datatype in ('dBZ', 'dBZc'):
+                refl_field = get_fieldname_pyart(datatype)
+            elif datatype in ('KDP', 'KDPc'):
+                kdp_field = get_fieldname_pyart(datatype)
 
         ind_rad = int(radarnr[5:8])-1
         if radar_list[ind_rad] is None:
@@ -1113,14 +1112,10 @@ def process_rainrate(procstatus, dscfg, radar_list=None):
     elif dscfg['RR_METHOD'] == 'ZA':
         for datatypedescr in dscfg['datatype']:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-            if datatype == 'dBZc':
-                refl_field = 'corrected_reflectivity'
-            if datatype == 'Ahc':
-                a_field = 'corrected_specific_attenuation'
-            if datatype == 'dBZ':
-                refl_field = 'reflectivity'
-            if datatype == 'Ah':
-                a_field = 'specific_attenuation'
+            if datatype in ('dBZ', 'dBZc'):
+                refl_field = get_fieldname_pyart(datatype)
+            elif datatype in ('Ah', 'Ahc'):
+                a_field = get_fieldname_pyart(datatype)
 
         ind_rad = int(radarnr[5:8])-1
         if radar_list[ind_rad] is None:
@@ -1148,16 +1143,12 @@ def process_rainrate(procstatus, dscfg, radar_list=None):
     elif dscfg['RR_METHOD'] == 'hydro':
         for datatypedescr in dscfg['datatype']:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-            if datatype == 'dBZc':
-                refl_field = 'corrected_reflectivity'
-            if datatype == 'Ahc':
-                a_field = 'corrected_specific_attenuation'
-            if datatype == 'hydro':
+            if datatype in ('dBZ', 'dBZc'):
+                refl_field = get_fieldname_pyart(datatype)
+            elif datatype in ('Ah', 'Ahc'):
+                a_field = get_fieldname_pyart(datatype)
+            elif datatype == 'hydro':
                 hydro_field = 'radar_echo_classification'
-            if datatype == 'dBZ':
-                refl_field = 'reflectivity'
-            if datatype == 'Ah':
-                a_field = 'specific_attenuation'
 
         ind_rad = int(radarnr[5:8])-1
         if radar_list[ind_rad] is None:
@@ -1428,10 +1419,8 @@ def process_bird_density(procstatus, dscfg, radar_list=None):
 
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype == 'eta_h':
-            vol_refl_field = 'volumetric_reflectivity'
-        if datatype == 'eta_v':
-            vol_refl_field = 'volumetric_reflectivity_vv'
+        if datatype in ('eta_h', 'eta_v'):
+            vol_refl_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8])-1
     if radar_list[ind_rad] is None:
