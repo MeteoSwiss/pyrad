@@ -832,9 +832,47 @@ def process_vpr(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The input data type
+            The input data type        
+        nvalid_min : int
+            Minimum number of rays with data to consider the azimuthal average
+            valid. Default 20.
+        angle_min, angle_max : float
+            Minimum and maximum elevation angles used to compute the ratios of
+            reflectivity. Default 0. and 4.
+        ml_thickness_min, ml_thickness_max, ml_thickness_step : float
+            Minimum, maximum and step of the melting layer thickness of the
+             models to explore [m]. Default 200., 800. and 200.
+        iso0_max : float
+            maximum iso0 altitude of the profile. Default 5000.
+        ml_top_diff_max, ml_top_step : float
+            maximum difference +- between iso-0 and top of the melting layer
+            [m] of the models to explore. Step. Default 200. and 200.
+        ml_peak_min, ml_peak_max, ml_peak_step: float
+            min, max and step of the value at the peak of the melting layer of
+            the models to explore. Default 1., 6. and 1.
+        dr_min, dr_max, dr_step : float
+            min, max and step of the decreasing ratio above the melting layer.
+            Default -6., -1.5 and 1.5
+        dr_default : float
+            default decreasing ratio to use if a proper model could not be
+            found. Default -4.5
+        dr_alt : float
+            altitude above the melting layer top (m) where theoretical profile
+            needs to be defined to be able to compute DR. If the theoretical
+            profile is not defined up to the resulting altitude a default DR
+            is used. Default 800.
+        h_max : float
+            maximum altitude [masl] where to compute the model profile.
+            Default 6000.
+        h_res : float
+            resolution of the model profile (m). Default 1.
+        max_weight : float
+            Maximum weight of the antenna pattern. Default 9.
+        rmin_obs, rmax_obs : float
+            minimum and maximum range (m) of the observations that are
+            compared with the model. Default 5000. and 150000.
     radar_list : list of Radar objects
-        Optional. list of radar objects
+        Optional. list of radar objects        
 
     Returns
     -------
@@ -905,7 +943,8 @@ def process_vpr(procstatus, dscfg, radar_list=None):
     dr_max = dscfg.get('dr_max', -1.5)
     dr_step = dscfg.get('dr_step', 1.5)
     dr_default = dscfg.get('dr_default', -4.5)
-    h_max = dscfg.get('h_max', 5000.)
+    dr_alt = dscfg.get('dr_alt', 800.)
+    h_max = dscfg.get('h_max', 6000.)
     h_res = dscfg.get('h_res', 1.)
     max_weight = dscfg.get('max_weight', 9.)
     rmin_obs = dscfg.get('rmin_obs', 5000.)
@@ -919,10 +958,10 @@ def process_vpr(procstatus, dscfg, radar_list=None):
         ml_top_diff_max=ml_top_diff_max, ml_top_step=ml_top_step,
         ml_peak_min=ml_peak_min, ml_peak_max=ml_peak_max,
         ml_peak_step=ml_peak_step, dr_min=dr_min, dr_max=dr_max,
-        dr_step=dr_step, dr_default=dr_default, h_max=h_max, h_res=h_res,
-        max_weight=max_weight, rmin_obs=rmin_obs, rmax_obs=rmax_obs,
-        refl_field=refl_field, temp_field=temp_field, iso0_field=iso0_field,
-        temp_ref=temp_ref)
+        dr_step=dr_step, dr_default=dr_default, dr_alt=dr_alt, h_max=h_max,
+        h_res=h_res, max_weight=max_weight, rmin_obs=rmin_obs,
+        rmax_obs=rmax_obs, refl_field=refl_field, temp_field=temp_field,
+        iso0_field=iso0_field, temp_ref=temp_ref)
 
     # prepare for exit
     new_dataset = {'radar_out': deepcopy(radar)}
