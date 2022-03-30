@@ -1365,6 +1365,8 @@ def get_fieldname_pyart(datatype):
         field_name = 'corrected_height_over_iso0'
     elif datatype == 'HZT':
         field_name = 'iso0_height'
+    elif datatype == 'HZTc':
+        field_name = 'corrected_iso0_height'
     elif datatype == 'cosmo_index':
         field_name = 'cosmo_index'
     elif datatype == 'hzt_index':

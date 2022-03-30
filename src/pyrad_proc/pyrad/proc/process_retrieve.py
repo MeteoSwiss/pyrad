@@ -821,7 +821,8 @@ def process_cdr(procstatus, dscfg, radar_list=None):
 
 def process_vpr(procstatus, dscfg, radar_list=None):
     """
-    Computes the vertical profile of reflectivity
+    Computes the vertical profile of reflectivity using the Meteo-France
+    operational algorithm
 
     Parameters
     ----------
@@ -832,7 +833,7 @@ def process_vpr(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The input data type        
+            The input data type
         nvalid_min : int
             Minimum number of rays with data to consider the azimuthal average
             valid. Default 20.
@@ -872,7 +873,7 @@ def process_vpr(procstatus, dscfg, radar_list=None):
             minimum and maximum range (m) of the observations that are
             compared with the model. Default 5000. and 150000.
     radar_list : list of Radar objects
-        Optional. list of radar objects        
+        Optional. list of radar objects
 
     Returns
     -------

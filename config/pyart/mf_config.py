@@ -298,6 +298,7 @@ corrected_height_over_iso0 = 'corrected_height_over_iso0'
 cosmo_index = 'cosmo_index'
 hzt_index = 'hzt_index'
 iso0_height = 'iso0_height'
+corrected_iso0_height = 'corrected_iso0_height'
 
 # DEM fields
 visibility = 'visibility'
@@ -730,6 +731,7 @@ DEFAULT_FIELD_NAMES = {
     'height_over_iso0': height_over_iso0,
     'corrected_height_over_iso0': corrected_height_over_iso0,
     'iso0_height': iso0_height,
+    'corrected_iso0_height': corrected_iso0_height,
     'cosmo_index': cosmo_index,
     'hzt_index': hzt_index,
     'visibility': visibility,
@@ -2824,6 +2826,11 @@ DEFAULT_METADATA = {
         'standard_name': 'iso0_height',
         'long_name': 'iso0 height'},
 
+    corrected_iso0_height: {
+        'units': 'm MSL',
+        'standard_name': 'corrected_iso0_height',
+        'long_name': 'iso0 height'},
+
     cosmo_index: {
         'units': 'bin index',
         'standard_name': 'cosmo_index',
@@ -4198,6 +4205,7 @@ DEFAULT_FIELD_LIMITS = {
     height_over_iso0: (-6000., 6000.),
     corrected_height_over_iso0: (-6000., 6000.),
     iso0_height: (0., 5000.),
+    corrected_iso0_height: (0., 5000.),
 
     # Additional reflectivity like fields
     'CZ': (-10., 65.),
