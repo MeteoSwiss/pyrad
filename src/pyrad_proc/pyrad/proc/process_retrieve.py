@@ -950,6 +950,21 @@ def process_vpr(procstatus, dscfg, radar_list=None):
     max_weight = dscfg.get('max_weight', 9.)
     rmin_obs = dscfg.get('rmin_obs', 5000.)
     rmax_obs = dscfg.get('rmax_obs', 150000.)
+    use_ml = dscfg.get('use_ml', False)
+    ml_basepath = dscfg.get('ml_basepath', None)
+    ml_dir = dscfg.get('ml_dir', None)
+    ml_fext = dscfg.get('ml_fext', None)
+
+    ml_fname = None
+    if use_ml:
+        if ml_basepath is None or ml_dir is None or ml_fext is None:
+            warn('Specify melting layer base path and directory to use'
+                 ' retrieved ML information')
+            use_ml = False
+        else:
+            ml_fname = '{}/{}/{}/{}_{}'.format(
+                ml_basepath, dscfg['timeinfo'].strftime('%Y-%m-%d'), ml_dir,
+                dscfg['timeinfo'].strftime('%Y%m%d%H%M%S'), ml_fext)
 
     refl_corr, vpr_corr = pyart.correct.correct_vpr(
         radar, nvalid_min=nvalid_min, angle_min=angle_min,
@@ -961,8 +976,9 @@ def process_vpr(procstatus, dscfg, radar_list=None):
         ml_peak_step=ml_peak_step, dr_min=dr_min, dr_max=dr_max,
         dr_step=dr_step, dr_default=dr_default, dr_alt=dr_alt, h_max=h_max,
         h_res=h_res, max_weight=max_weight, rmin_obs=rmin_obs,
-        rmax_obs=rmax_obs, refl_field=refl_field, temp_field=temp_field,
-        iso0_field=iso0_field, temp_ref=temp_ref)
+        rmax_obs=rmax_obs, use_ml=use_ml, ml_fname=ml_fname,
+        refl_field=refl_field, temp_field=temp_field, iso0_field=iso0_field,
+        temp_ref=temp_ref)
 
     # prepare for exit
     new_dataset = {'radar_out': deepcopy(radar)}
