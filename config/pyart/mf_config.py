@@ -49,6 +49,7 @@ reflectivity = 'reflectivity'
 reflectivity_vv = 'reflectivity_vv'
 
 normalized_reflectivity = 'normalized_reflectivity'
+linear_reflectivity = 'linear_reflectivity'
 
 corrected_unfiltered_reflectivity = 'corrected_unfiltered_reflectivity'
 
@@ -515,6 +516,7 @@ DEFAULT_FIELD_NAMES = {
     # Internal field name (do not change): field name used (can change)
     'reflectivity': reflectivity,
     'normalized_reflectivity': normalized_reflectivity,
+    'linear_reflectivity': linear_reflectivity,
     'bird_reflectivity': bird_reflectivity,
     'corrected_reflectivity': corrected_reflectivity,
     'total_power': total_power,
@@ -1187,6 +1189,12 @@ DEFAULT_METADATA = {
         'units': '-',
         'standard_name': 'normalized_reflectivity',
         'long_name': 'Normalized Reflectivity',
+        'coordinates': 'elevation azimuth range'},
+
+    linear_reflectivity: {
+        'units': 'mm6/m3',
+        'standard_name': 'linear_reflectivity',
+        'long_name': 'Linear Reflectivity',
         'coordinates': 'elevation azimuth range'},
 
     avg_reflectivity: {
@@ -3733,6 +3741,7 @@ DEFAULT_FIELD_COLORMAP = {
     # field name : colormap
     reflectivity: 'pyart_NWSRef',
     normalized_reflectivity: 'pyart_NWSRef',
+    linear_reflectivity: 'pyart_NWSRef',
     corrected_reflectivity: 'pyart_NWSRef',
     total_power: 'pyart_NWSRef',
     unfiltered_reflectivity: 'pyart_NWSRef',
@@ -4012,6 +4021,7 @@ DEFAULT_FIELD_LIMITS = {
     #reflectivity: (-30., 75.),
     reflectivity: (-30., 85.),
     normalized_reflectivity: (-6., 6.),
+    linear_reflectivity: (0., 1e7),
     avg_reflectivity: (-30., 75.),
     quant05_reflectivity: (-30., 75.),
     quant10_reflectivity: (-30., 75.),

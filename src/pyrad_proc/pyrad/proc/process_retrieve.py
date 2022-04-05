@@ -34,7 +34,9 @@ import numpy as np
 import pyart
 
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
+from ..io.io_aux import get_file_list
 from ..io.read_data_radar import interpol_field
+from ..io.read_data_other import read_rhi_profile
 
 from ..util.radar_utils import time_avg_range
 
@@ -872,6 +874,21 @@ def process_vpr(procstatus, dscfg, radar_list=None):
         rmin_obs, rmax_obs : float
             minimum and maximum range (m) of the observations that are
             compared with the model. Default 5000. and 150000.
+        use_ml : bool
+            If True the retrieved ML will be used to select the range of
+            variability the meltin layer top and thickness
+        vpr_memory_max : float
+            The maximum time range to average reflectivity (min)
+        filter_vpr_memory_max : float
+            The maximum time range where to look for previous VPR retrievals
+        ml_datatype : str
+            Melting layer data type descriptor
+        z_datatype : str
+            descriptor used get the linear reflectivity information
+        vpr_theo_datatype : str
+            descriptor used to get the retrieved theoretical VPR
+        weight_mem : float
+            Weight given to past VPR when filtering the current VPR
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -951,22 +968,94 @@ def process_vpr(procstatus, dscfg, radar_list=None):
     rmin_obs = dscfg.get('rmin_obs', 5000.)
     rmax_obs = dscfg.get('rmax_obs', 150000.)
     use_ml = dscfg.get('use_ml', False)
-    ml_basepath = dscfg.get('ml_basepath', None)
-    ml_dir = dscfg.get('ml_dir', None)
-    ml_fext = dscfg.get('ml_fext', None)
+    ml_datatypedescr = dscfg.get('ml_datatype', None)
+    z_datatypedescr = dscfg.get('z_datatype', None)
+    vpr_theo_datatypedescr = dscfg.get('vpr_theo_datatype', None)
+    vpr_memory_max = dscfg.get('vpr_memory_max', 0.)
+    filter_vpr_memory_max = dscfg.get('filter_vpr_memory_max', 0.)
+    weight_mem = dscfg.get('weight_mem', 0.75)
 
-    ml_fname = None
+    iso0 = None
     if use_ml:
-        if ml_basepath is None or ml_dir is None or ml_fext is None:
-            warn('Specify melting layer base path and directory to use'
-                 ' retrieved ML information')
-            use_ml = False
+        if (ml_datatypedescr is None or dscfg['loadbasepath'] is None
+                or dscfg['loadname'] is None):
+            warn('unable to find files containing melting layer information')
+            iso0 = None
         else:
-            ml_fname = '{}/{}/{}/{}_{}'.format(
-                ml_basepath, dscfg['timeinfo'].strftime('%Y-%m-%d'), ml_dir,
-                dscfg['timeinfo'].strftime('%Y%m%d%H%M%S'), ml_fext)
+            flist = get_file_list(
+                ml_datatypedescr, [dscfg['timeinfo']], [dscfg['timeinfo']],
+                dscfg)
+            if flist is None:
+                warn('unable to find files containing'
+                     ' melting layer information')
+                iso0 = None
+            else:
+                radar_ml = pyart.io.read_cfradial(flist[0])
+                if radar_ml is None:
+                    warn('Unable to use retrieved melting layer data')
+                    iso0 = None
+                else:
+                    print('Using file {} with melting layer information'.format(
+                        flist[0]))
+                    iso0 = np.ma.mean(
+                        radar_ml.fields['melting_layer_height']['data'][:, 1])
+                    ml_bottom = np.ma.mean(
+                        radar_ml.fields['melting_layer_height']['data'][:, 0])
+                    ml_thickness = iso0-ml_bottom
+                    ml_thickness_min = ml_thickness-ml_thickness_step
+                    ml_thickness_max = ml_thickness+ml_thickness_step
 
-    refl_corr, vpr_corr = pyart.correct.correct_vpr(
+    radar_mem_list = None
+    if vpr_memory_max > 0:
+        if (z_datatypedescr is None or dscfg['loadbasepath'] is None
+                or dscfg['loadname'] is None):
+            warn('unable to find files with azimuthal reflectivity average')
+        else:
+            # get previous reflectivity files but do not include current one
+            flist = get_file_list(
+                z_datatypedescr,
+                [dscfg['timeinfo']-datetime.timedelta(minutes=vpr_memory_max)],
+                [dscfg['timeinfo']-datetime.timedelta(seconds=1)], dscfg)
+            if flist is None:
+                warn('unable to find files containing reflectivity')
+            else:
+                radar_mem_list = []
+                for fname in flist:
+                    radar_vpr = pyart.io.read_cfradial(fname)
+                    if radar_vpr is None:
+                        warn('Unable to use azimuthal reflectivity average')
+                        continue
+                    print('Using file {} with azimuthal averaged refl'.format(
+                          fname))
+                    radar_mem_list.append(radar_vpr)
+                if not radar_mem_list:
+                    radar_mem_list = None
+
+    vpr_theo_dict_mem = None
+    if filter_vpr_memory_max > 0.:
+        if (vpr_theo_datatypedescr is None or dscfg['loadbasepath'] is None
+                or dscfg['loadname'] is None):
+            warn('unable to find files with theoretical VPR')
+        else:
+            # get previous VPR retrieved files but do not include current one
+            flist = get_file_list(
+                vpr_theo_datatypedescr,
+                [dscfg['timeinfo']
+                 - datetime.timedelta(minutes=filter_vpr_memory_max)],
+                [dscfg['timeinfo']-datetime.timedelta(seconds=1)], dscfg)
+            if flist is None:
+                warn('unable to find files containing retrieved VPR')
+            else:
+                height, _, vals = read_rhi_profile(flist[-1], labels=['Znorm'])
+                vpr_theo_dict_mem = {
+                    'value': vals[:, 0],
+                    'altitude': height}
+                print('Using file {} with previously retrieved VPR'.format(
+                      flist[-1]))
+
+    corr_refl_field = 'corrected_reflectivity'
+    corr_field = 'vpr_correction'
+    refl_corr, vpr_corr, vpr_theo_dict, radar_rhi = pyart.correct.correct_vpr(
         radar, nvalid_min=nvalid_min, angle_min=angle_min,
         angle_max=angle_max, ml_thickness_min=ml_thickness_min,
         ml_thickness_max=ml_thickness_max,
@@ -976,15 +1065,19 @@ def process_vpr(procstatus, dscfg, radar_list=None):
         ml_peak_step=ml_peak_step, dr_min=dr_min, dr_max=dr_max,
         dr_step=dr_step, dr_default=dr_default, dr_alt=dr_alt, h_max=h_max,
         h_res=h_res, max_weight=max_weight, rmin_obs=rmin_obs,
-        rmax_obs=rmax_obs, use_ml=use_ml, ml_fname=ml_fname,
-        refl_field=refl_field, temp_field=temp_field, iso0_field=iso0_field,
+        rmax_obs=rmax_obs, iso0=iso0, weight_mem=weight_mem,
+        vpr_theo_dict_mem=vpr_theo_dict_mem, radar_mem_list=radar_mem_list,
+        refl_field=refl_field, corr_refl_field=corr_refl_field,
+        corr_field=corr_field, temp_field=temp_field, iso0_field=iso0_field,
         temp_ref=temp_ref)
 
     # prepare for exit
     new_dataset = {'radar_out': deepcopy(radar)}
     new_dataset['radar_out'].fields = dict()
-    new_dataset['radar_out'].add_field('corrected_reflectivity', refl_corr)
-    new_dataset['radar_out'].add_field('vpr_correction', vpr_corr)
+    new_dataset['radar_out'].add_field(corr_refl_field, refl_corr)
+    new_dataset['radar_out'].add_field(corr_field, vpr_corr)
+    new_dataset.update({'vpr_theo_dict': vpr_theo_dict})
+    new_dataset.update({'radar_rhi': radar_rhi})
 
     return new_dataset, ind_rad
 

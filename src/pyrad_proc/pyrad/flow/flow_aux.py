@@ -1202,6 +1202,8 @@ def _create_dscfg_dict(cfg, dataset):
     # Path related parameters
     dscfg.update({'configpath': cfg['configpath']})
     dscfg.update({'basepath': cfg['saveimgbasepath']})
+    dscfg.update({'loadbasepath': cfg['loadbasepath']})
+    dscfg.update({'loadname': cfg['loadname']})
     dscfg.update({'path_convention': cfg['path_convention']})
     dscfg.update({'procname': cfg['name']})
     dscfg.update({'dsname': dataset})

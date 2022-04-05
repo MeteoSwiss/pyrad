@@ -1142,6 +1142,8 @@ def get_fieldname_pyart(datatype):
         field_name = 'reflectivity'
     elif datatype == 'Zn':
         field_name = 'normalized_reflectivity'
+    elif datatype == 'Zlin':
+        field_name = 'linear_reflectivity'
     elif datatype == 'dBuZ':
         field_name = 'unfiltered_reflectivity'
     elif datatype == 'dBZc':
@@ -2164,8 +2166,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
 
     Returns
     -------
-    filelist : list of strings
-        list of files within the time period
+    filelist : list of strings or None
+        list of files within the time period. None otherwise
 
     """
     radarnr, datagroup, datatype, dataset, product = get_datatype_fields(
@@ -2309,10 +2311,12 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 for filename in dayfilelist:
                     t_filelist.append(filename)
             elif datagroup in ('CFRADIAL', 'ODIMPYRAD', 'PYRADGRID',
-                               'NETCDFSPECTRA'):
+                               'NETCDFSPECTRA', 'CSV'):
                 termination = '.nc'
                 if datagroup == 'ODIMPYRAD':
                     termination = '.h*'
+                elif datagroup == 'CSV':
+                    termination = '.csv'
 
                 daydir = (
                     starttime+datetime.timedelta(days=i)).strftime(
@@ -2398,6 +2402,9 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 for filename in dayfilelist:
                     t_filelist.append(filename)
 
+        if not t_filelist:
+            continue
+
         for filename in t_filelist:
             filenamestr = str(filename)
             fdatetime = get_datetime(filenamestr, datadescriptor)
@@ -2405,6 +2412,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 if starttime <= fdatetime <= endtime:
                     if filenamestr not in filelist:
                         filelist.append(filenamestr)
+    if not filelist:
+        return None
 
     return sorted(filelist)
 
@@ -2688,7 +2697,7 @@ def get_datatype_fields(datadescriptor):
         else:
             datagroup = descrfields[1]
             if datagroup in ('CFRADIAL', 'ODIMPYRAD', 'PYRADGRID',
-                             'NETCDFSPECTRA'):
+                             'NETCDFSPECTRA', 'CSV'):
                 descrfields2 = descrfields[2].split(',')
                 datatype = descrfields2[0]
                 dataset = descrfields2[1]
@@ -2719,7 +2728,7 @@ def get_datatype_fields(datadescriptor):
         radarnr = 'RADAR001'
         datagroup = descrfields[0]
         if datagroup in ('CFRADIAL', 'ODIMPYRAD', 'PYRADGRID',
-                         'NETCDFSPECTRA'):
+                         'NETCDFSPECTRA', 'CSV'):
             descrfields2 = descrfields[1].split(',')
             datatype = descrfields2[0]
             dataset = descrfields2[1]
@@ -3244,7 +3253,7 @@ def _get_datetime(fname, datagroup, ftime_format=None):
     """
     bfile = os.path.basename(fname)
     if datagroup in ('RAINBOW', 'CFRADIAL', 'ODIMPYRAD', 'PYRADGRID',
-                     'NETCDFSPECTRA'):
+                     'NETCDFSPECTRA', 'CSV'):
         datetimestr = bfile[0:14]
         fdatetime = datetime.datetime.strptime(datetimestr, '%Y%m%d%H%M%S')
     elif datagroup in ('RAD4ALP', 'RAD4ALPGRID', 'RAD4ALPGIF', 'RAD4ALPBIN'):

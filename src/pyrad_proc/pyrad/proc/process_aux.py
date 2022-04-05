@@ -143,7 +143,6 @@ def get_process_func(dataset_type, dsname):
                 'VIS': process_visibility
                 'VIS_FILTER': process_filter_visibility
                 'VOL_REFL': process_vol_refl
-                'VPR': process_vpr
                 'WBN': process_wbn_iq
                 'WIND_VEL': process_wind_vel
                 'WINDSHEAR': process_windshear
@@ -196,6 +195,8 @@ def get_process_func(dataset_type, dsname):
                 'INTERCOMP_TIME_AVG': process_intercomp_time_avg
             'ML' format output:
                 'ML_DETECTION': process_melting_layer
+            'VPR' format output:
+                'VPR': process_vpr
             'MONITORING' format output:
                 'GC_MONITORING': process_gc_monitoring
                 'MONITORING': process_monitoring
@@ -367,6 +368,7 @@ def get_process_func(dataset_type, dsname):
         func_name = 'process_vol_refl'
     elif dataset_type == 'VPR':
         func_name = 'process_vpr'
+        dsformat = 'VPR'
     elif dataset_type == 'BIRD_DENSITY':
         func_name = 'process_bird_density'
     elif dataset_type == 'RHOHV_CORRECTION':

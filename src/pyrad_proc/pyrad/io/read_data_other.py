@@ -378,7 +378,8 @@ def read_rhi_profile(fname, labels=['50.0-percentile', '25.0-percentile',
                 )
             for i, row in enumerate(reader):
                 height[i] = float(row['Altitude [m MSL]'])
-                np_t[i] = int(row['N valid'])
+                if 'N valid' in row:
+                    np_t[i] = int(row['N valid'])
                 for j, label in enumerate(labels):
                     vals[i, j] = float(row[label])
 
