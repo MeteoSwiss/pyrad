@@ -985,7 +985,7 @@ def process_vpr(procstatus, dscfg, radar_list=None):
             flist = get_file_list(
                 ml_datatypedescr, [dscfg['timeinfo']], [dscfg['timeinfo']],
                 dscfg)
-            if flist is None:
+            if not flist:
                 warn('unable to find files containing'
                      ' melting layer information')
                 iso0 = None
@@ -1016,7 +1016,7 @@ def process_vpr(procstatus, dscfg, radar_list=None):
                 z_datatypedescr,
                 [dscfg['timeinfo']-datetime.timedelta(minutes=vpr_memory_max)],
                 [dscfg['timeinfo']-datetime.timedelta(seconds=1)], dscfg)
-            if flist is None:
+            if not flist:
                 warn('unable to find files containing reflectivity')
             else:
                 radar_mem_list = []
@@ -1043,7 +1043,7 @@ def process_vpr(procstatus, dscfg, radar_list=None):
                 [dscfg['timeinfo']
                  - datetime.timedelta(minutes=filter_vpr_memory_max)],
                 [dscfg['timeinfo']-datetime.timedelta(seconds=1)], dscfg)
-            if flist is None:
+            if not flist:
                 warn('unable to find files containing retrieved VPR')
             else:
                 height, _, vals = read_rhi_profile(flist[-1], labels=['Znorm'])
