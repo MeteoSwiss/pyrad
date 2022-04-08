@@ -2155,8 +2155,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
     Returns
     -------
     filelist : list of strings
-        list of files within the time period
-
+        list of files within the time period. If it could not find them
+        returns an empty list
     """
     radarnr, datagroup, datatype, dataset, product = get_datatype_fields(
         datadescriptor)
@@ -2176,7 +2176,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
             if datagroup == 'RAINBOW':
                 if scan is None:
                     warn('Unknown scan name')
-                    return None
+                    return []
                 daydir = (
                     starttime+datetime.timedelta(days=i)).strftime('%Y-%m-%d')
                 dayinfo = (starttime+datetime.timedelta(days=i)).strftime(
@@ -2191,7 +2191,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
             elif datagroup == 'RAD4ALP':
                 if scan is None:
                     warn('Unknown scan name')
-                    return None
+                    return []
 
                 datapath, basename = get_rad4alp_dir(
                     cfg['datapath'][ind_rad],
@@ -2242,7 +2242,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                                'NEXRADII'):
                 if scan is None:
                     warn('Unknown scan name')
-                    return None
+                    return []
                 if cfg['path_convention'][ind_rad] == 'MCH':
                     dayinfo = (starttime+datetime.timedelta(days=i)).strftime(
                         '%y%j')
@@ -2338,7 +2338,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
             elif datagroup == 'MXPOL':
                 if scan is None:
                     warn('Unknown scan name')
-                    return None
+                    return []
                 if cfg['path_convention'][ind_rad] == 'LTE':
                     sub1 = str(starttime.year)
                     sub2 = starttime.strftime('%m')

@@ -1896,6 +1896,78 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
             max_length_holes=max_length_holes,
             check_min_length=check_min_length, get_iso0=get_iso0)
 
+        ml_memory_max = dscfg.get('ml_memory_max', 0.)
+        datatypedescr = dscfg.get('ml_datatype', None)
+
+        # read the retrieved ml from the past X hours
+        ml_thickness_arr = np.ma.array([])
+        ml_bottom_arr = np.ma.array([])
+        age_arr = np.ma.array([])
+        ang_arr = np.ma.array([])
+        ml_memory = None
+        if ml_memory_max > 0:
+            if (datatypedescr is None or dscfg['loadbasepath'] is None
+                    or dscfg['loadname'] is None):
+                warn('unable to find files containing'
+                     ' melting layer information')
+            else:
+                flist = get_file_list(
+                    datatypedescr,
+                    [dscfg['timeinfo']
+                     - datetime.timedelta(hours=ml_memory_max)],
+                    [dscfg['timeinfo']], dscfg)
+                if not flist:
+                    warn('No files with melting information found')
+                else:
+                    for fname in flist:
+                        radar_ml = pyart.io.read_cfradial(fname)
+                        if radar_ml is None:
+                            warn('Unable to use retrieved melting layer data')
+                            continue
+
+                        ml_top = (
+                            radar_ml.fields['melting_layer_height']['data'][:, 1])
+                        ml_bottom = (
+                            radar_ml.fields['melting_layer_height']['data'][:, 0])
+                        ml_thickness = ml_top-ml_bottom
+                        ml_bottom_arr = np.ma.append(
+                            ml_bottom_arr,
+                            np.ma.zeros(radar_ml.nsweeps)+ml_bottom)
+                        ml_thickness_arr = np.ma.append(
+                            ml_thickness_arr,
+                            np.ma.zeros(radar_ml.nsweeps)+ml_thickness)
+                        ang_arr = np.ma.append(
+                            ang_arr, radar_ml.elevation['data'])
+                        age_arr = np.ma.append(
+                            age_arr,
+                            np.ma.zeros(radar_ml.nrays)+(
+                                dscfg['timeinfo']
+                                - get_datetime(fname,
+                                            datatypedescr)).seconds/3600.)
+                    ml_memory = {
+                        'ml_bottom': ml_bottom_arr,
+                        'ml_thickness': ml_thickness_arr,
+                        'ang': ang_arr,
+                        'age': age_arr}
+
+        (ml_obj, ml_dict, iso0_dict,
+         ml_retrieved) = pyart.retrieve.melting_layer_mf(
+            radar, nvalid_min=nvalid_min, ml_thickness_min=ml_thickness_min,
+            ml_thickness_max=ml_thickness_max,
+            ml_thickness_step=ml_thickness_step, iso0_max=iso0_max,
+            ml_top_diff_max=ml_top_diff_max, ml_top_step=ml_top_step,
+            rhohv_snow=rhohv_snow, rhohv_rain=rhohv_rain, rhohv_ml=rhohv_ml,
+            zh_snow=zh_snow, zh_rain=zh_rain, zh_ml=zh_ml, zv_snow=zv_snow,
+            zv_rain=zv_rain, zv_ml=zv_ml, h_max=h_max, h_res=h_res,
+            beam_factor=beam_factor, npts_diagram=npts_diagram,
+            rng_bottom_max=rng_bottom_max, ns_factor=ns_factor,
+            rhohv_corr_min=rhohv_corr_min, rhohv_nash_min=rhohv_nash_min,
+            ang_iso0=ang_iso0, age_iso0=age_iso0,
+            ml_thickness_iso0=ml_thickness_iso0, ml_memory=ml_memory,
+            rhohv_field_obs=rhohv_field_obs, temp_field=temp_field,
+            iso0_field=iso0_field,
+            rhohv_field_theo='theoretical_cross_correlation_ratio',
+            temp_ref=temp_ref, get_iso0=get_iso0)
 
     elif dscfg['ML_METHOD'] == 'FROM_HYDROCLASS':
         for datatypedescr in dscfg['datatype']:
