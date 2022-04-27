@@ -381,6 +381,9 @@ sun_hit_zdr = 'sun_hit_zdr'
 bird_density = 'bird_density'
 bird_reflectivity = 'bird_reflectivity'
 vol2bird_echo_classification = 'vol2bird_echo_classification'
+vol2bird_background = 'vol2bird_background'
+vol2bird_weather = 'vol2bird_weather'
+vol2bird_biology = 'vol2bird_biology'
 
 # profile variables
 height = 'height'
@@ -520,6 +523,9 @@ DEFAULT_FIELD_NAMES = {
     'linear_reflectivity': linear_reflectivity,
     'bird_reflectivity': bird_reflectivity,
     'vol2bird_echo_classification': vol2bird_echo_classification,
+    'vol2bird_background': vol2bird_background,
+    'vol2bird_weather': vol2bird_weather,
+    'vol2bird_biology': vol2bird_biology,
     'corrected_reflectivity': corrected_reflectivity,
     'total_power': total_power,
     'unfiltered_reflectivity': unfiltered_reflectivity,
@@ -2494,6 +2500,27 @@ DEFAULT_METADATA = {
         'boundaries': [-1.5, 0.5, 1.5, 2.5],
         'coordinates': 'elevation azimuth range'},
 
+    vol2bird_background: {
+        'units': '-',
+        'standard_name': 'vol2bird_background',
+        'long_name': 'VOL2BIRD background',
+        'labels': ['DATA', 'NO DATA'],
+        'ticks': [0, 1],
+        'boundaries': [-0.5, 0.5, 1.5],
+        'coordinates': 'elevation azimuth range'},
+
+    vol2bird_weather: {
+        'units': '-',
+        'standard_name': 'vol2bird_weather',
+        'long_name': 'VOL2BIRD weather',
+        'coordinates': 'elevation azimuth range'},
+
+    vol2bird_biology: {
+        'units': '-',
+        'standard_name': 'vol2bird_biology',
+        'long_name': 'VOL2BIRD biology',
+        'coordinates': 'elevation azimuth range'},
+
     hydroclass_entropy: {
         'units': '-',
         'standard_name': 'hydroclass_entropy',
@@ -4198,6 +4225,10 @@ DEFAULT_FIELD_LIMITS = {
     radar_echo_id: (0, 3),
     melting_layer: (0, 5),
     clutter_exit_code: (0, 200),
+
+    vol2bird_background: (0., 1.),
+    vol2bird_weather: (0., 1.),
+    vol2bird_biology: (0., 1.),
 
     probability_of_hail: (0., 100.),
     vertically_integrated_liquid: (0., 30.),
