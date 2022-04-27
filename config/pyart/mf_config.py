@@ -380,6 +380,7 @@ sun_hit_zdr = 'sun_hit_zdr'
 # birds signal
 bird_density = 'bird_density'
 bird_reflectivity = 'bird_reflectivity'
+vol2bird_echo_classification = 'vol2bird_echo_classification'
 
 # profile variables
 height = 'height'
@@ -518,6 +519,7 @@ DEFAULT_FIELD_NAMES = {
     'normalized_reflectivity': normalized_reflectivity,
     'linear_reflectivity': linear_reflectivity,
     'bird_reflectivity': bird_reflectivity,
+    'vol2bird_echo_classification': vol2bird_echo_classification,
     'corrected_reflectivity': corrected_reflectivity,
     'total_power': total_power,
     'unfiltered_reflectivity': unfiltered_reflectivity,
@@ -2483,6 +2485,15 @@ DEFAULT_METADATA = {
         '_FillValue': 0,
         '_Write_as_dtype': 'uint8'},
 
+    vol2bird_echo_classification: {
+        'units': '-',
+        'standard_name': 'vol2bird_echo_classification',
+        'long_name': 'VOL2BIRD echo classification',
+        'labels': ['OTHER', 'FRINGE', 'PRECIP_CELLS'],
+        'ticks': [-1, 1, 2],
+        'boundaries': [-1.5, 0.5, 1.5, 2.5],
+        'coordinates': 'elevation azimuth range'},
+
     hydroclass_entropy: {
         'units': '-',
         'standard_name': 'hydroclass_entropy',
@@ -3941,6 +3952,8 @@ DEFAULT_FIELD_COLORMAP = {
     probability_WS:  'pyart_LangRainbow12',
     probability_MH:  'pyart_LangRainbow12',
     probability_IH:  'pyart_LangRainbow12',
+
+    vol2bird_echo_classification: 'pyart_LangRainbow12',
 
     radar_echo_id: 'pyart_LangRainbow12',
     clutter_exit_code: 'pyart_LangRainbow12',

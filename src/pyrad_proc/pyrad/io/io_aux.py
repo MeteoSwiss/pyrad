@@ -1115,6 +1115,9 @@ def get_datatype_odim(datatype):
     elif datatype == 'n_dbz_all':
         field_name = 'number_of_samples_reflectivity_all'
         datatype_odim = 'n_dbz_all'
+    elif datatype == 'VOL2BIRD_CLASS':
+        field_name = 'vol2bird_echo_classification'
+        datatype_odim = 'CELL'
     else:
         raise ValueError(
             'ERROR: ODIM fields do not contain datatype '+datatype)
@@ -1830,6 +1833,8 @@ def get_fieldname_pyart(datatype):
         field_name = 'number_of_samples_velocity_all'
     elif datatype == 'n_dbz_all':
         field_name = 'number_of_samples_reflectivity_all'
+    elif datatype == 'VOL2BIRD_CLASS':
+        field_name = 'vol2bird_echo_classification'
 
     # wind lidar names
     elif datatype == 'wind_vel_rad':
