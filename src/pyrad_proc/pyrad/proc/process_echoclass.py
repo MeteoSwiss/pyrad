@@ -1,6 +1,6 @@
 """
 pyrad.proc.process_echoclass
-===============================
+============================
 
 Functions for echo classification and filtering
 
@@ -18,6 +18,8 @@ Functions for echo classification and filtering
     process_filter_vel_diff
     process_filter_visibility
     process_outlier_filter
+    process_filter_vol2bird
+    process_gate_filter_vol2bird
     process_hydroclass
     process_centroids
     process_melting_layer
@@ -977,6 +979,184 @@ def process_outlier_filter(procstatus, dscfg, radar_list=None):
     new_dataset = {'radar_out': deepcopy(radar)}
     new_dataset['radar_out'].fields = dict()
     new_dataset['radar_out'].add_field(new_field_name, field_out)
+
+    return new_dataset, ind_rad
+
+
+def process_filter_vol2bird(procstatus, dscfg, radar_list=None):
+    """
+    Masks all echo types that have been identified as non-biological by
+    vol2bird
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration. Accepted Configuration Keywords::
+
+        datatype : list of string. Dataset keyword
+            The input data types
+    radar_list : list of Radar objects
+        Optional. list of radar objects
+
+    Returns
+    -------
+    new_dataset : dict
+        dictionary containing the output
+    ind_rad : int
+        radar index
+
+    """
+    if procstatus != 1:
+        return None, None
+
+    echoid_field = None
+    for datatypedescr in dscfg['datatype']:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        if datatype == 'VOL2BIRD_CLASS':
+            echoid_field = get_fieldname_pyart(datatype)
+            break
+    if echoid_field is None:
+        warn('VOL2BIRD_CLASS field required to filter data')
+        return None, None
+
+    ind_rad = int(radarnr[5:8])-1
+    if radar_list[ind_rad] is None:
+        warn('No valid radar')
+        return None, None
+    radar = radar_list[ind_rad]
+
+    if echoid_field not in radar.fields:
+        warn('Unable to filter data. Missing VOL2BIRD_CLASS field')
+        return None, None
+
+    mask = np.ma.getmaskarray(np.ma.masked_greater(
+        radar.fields[echoid_field]['data'], 0))
+
+    new_dataset = {'radar_out': deepcopy(radar)}
+    new_dataset['radar_out'].fields = dict()
+
+    for datatypedescr in dscfg['datatype']:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        if datatype == 'VOL2BIRD_CLASS':
+            continue
+
+        field_name = get_fieldname_pyart(datatype)
+        if field_name not in radar.fields:
+            warn('Unable to filter {} according to VOL2BIRD_CLASS. No valid input fields'.format(
+                 field_name))
+            continue
+        radar_field = deepcopy(radar.fields[field_name])
+        radar_field['data'] = np.ma.masked_where(
+            mask, radar_field['data'])
+
+        if field_name.startswith('corrected_'):
+            new_field_name = field_name
+        elif field_name.startswith('uncorrected_'):
+            new_field_name = field_name.replace(
+                'uncorrected_', 'corrected_', 1)
+        else:
+            new_field_name = 'corrected_'+field_name
+        new_dataset['radar_out'].add_field(new_field_name, radar_field)
+
+    if not new_dataset['radar_out'].fields:
+        return None, None
+
+    return new_dataset, ind_rad
+
+
+def process_gate_filter_vol2bird(procstatus, dscfg, radar_list=None):
+    """
+    Adds filter on range gate values to the vol2bird filter
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration. Accepted Configuration Keywords::
+
+        datatype : list of string. Dataset keyword
+            The input data types
+        dBZ_max : float
+            Maximum reflectivity of biological scatterers
+        V_min : float
+            Minimum Doppler velocity of biological scatterers
+    radar_list : list of Radar objects
+        Optional. list of radar objects
+
+    Returns
+    -------
+    new_dataset : dict
+        dictionary containing the output
+    ind_rad : int
+        radar index
+
+    """
+    if procstatus != 1:
+        return None, None
+
+    echoid_field = None
+    refl_field = None
+    vel_field = None
+    for datatypedescr in dscfg['datatype']:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        if datatype == 'VOL2BIRD_CLASS':
+            echoid_field = get_fieldname_pyart(datatype)
+        elif datatype in ('dBZ', 'dBZc'):
+            refl_field = get_fieldname_pyart(datatype)
+        elif datatype in ('V', 'Vc'):
+            vel_field = get_fieldname_pyart(datatype)
+
+    if echoid_field is None:
+        warn('VOL2BIRD_CLASS field required to filter data')
+        return None, None
+
+    if refl_field is None or vel_field is None:
+        warn('reflectivity or velocity fields needed for gate filtering')
+        return None, None
+
+    ind_rad = int(radarnr[5:8])-1
+    if radar_list[ind_rad] is None:
+        warn('No valid radar')
+        return None, None
+    radar = radar_list[ind_rad]
+
+    if echoid_field not in radar.fields:
+        warn('Unable to filter data. Missing VOL2BIRD_CLASS field')
+        return None, None
+    if refl_field is not None and refl_field not in radar.fields:
+        warn('Unable to filter data. Missing reflectivity field')
+        return None, None
+    if vel_field is not None and vel_field not in radar.fields:
+        warn('Unable to filter data. Missing velocity field')
+        return None, None
+
+    # user defined parameters
+    dBZ_max = dscfg.get('dBZ_max', 20.)
+    V_min = dscfg.get('V_min', 1.)
+
+    echoid = deepcopy(radar.fields[echoid_field])
+    if refl_field is not None:
+        echoid['data'][
+            (radar.fields[refl_field]['data'] > dBZ_max)
+            & (echoid['data'] < 1)] = 1
+        mask = np.ma.getmaskarray(radar.fields[refl_field]['data'])
+        echoid['data'][(mask) & (echoid['data'] < 1)] = 1
+
+    if vel_field is not None:
+        echoid['data'][
+            (radar.fields[vel_field]['data'] < V_min)
+            & (echoid['data'] < 1)] = 1
+        mask = np.ma.getmaskarray(radar.fields[vel_field]['data'])
+        echoid['data'][(mask) & (echoid['data'] < 1)] = 1
+
+    new_dataset = {'radar_out': deepcopy(radar)}
+    new_dataset['radar_out'].fields = dict()
+    new_dataset['radar_out'].add_field(echoid_field, echoid)
 
     return new_dataset, ind_rad
 

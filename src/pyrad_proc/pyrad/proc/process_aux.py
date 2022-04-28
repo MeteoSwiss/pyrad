@@ -143,6 +143,8 @@ def get_process_func(dataset_type, dsname):
                 'VIS': process_visibility
                 'VIS_FILTER': process_filter_visibility
                 'VOL_REFL': process_vol_refl
+                'VOL2BIRD_FILTER': process_filter_vol2bird
+                'VOL2BIRD_GATE_FILTER': process_gate_filter_vol2bird
                 'WBN': process_wbn_iq
                 'WIND_VEL': process_wind_vel
                 'WINDSHEAR': process_windshear
@@ -391,6 +393,10 @@ def get_process_func(dataset_type, dsname):
         func_name = 'process_hydro_mf_to_echo_id'
     elif dataset_type == 'ECHO_FILTER':
         func_name = 'process_echo_filter'
+    elif dataset_type == 'VOL2BIRD_FILTER':
+        func_name = 'process_filter_vol2bird'
+    elif dataset_type == 'VOL2BIRD_GATE_FILTER':
+        func_name = 'process_gate_filter_vol2bird'
     elif dataset_type == 'ZDR_COLUMN':
         func_name = 'process_zdr_column'
         dsformat = 'SPARSE_GRID'
