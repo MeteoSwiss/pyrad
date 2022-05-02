@@ -228,7 +228,8 @@ def get_process_func(dataset_type, dsname):
                 'RAIN_ACCU': process_rainfall_accumulation
             'TIMESERIES' format output:
                 'GRID_POINT_MEASUREMENT': process_grid_point
-                'POINT_MEASUREMENT': 'process_point_measurement'
+                'MULTIPLE_POINTS': process_multiple_points
+                'POINT_MEASUREMENT': process_point_measurement
                 'TRAJ_ANTENNA_PATTERN': process_traj_antenna_pattern
                 'TRAJ_ATPLANE': process_traj_atplane
                 'TRAJ_LIGHTNING': process_traj_lightning
@@ -592,6 +593,9 @@ def get_process_func(dataset_type, dsname):
         dsformat = 'SUN_HITS'
     elif dataset_type == 'POINT_MEASUREMENT':
         func_name = 'process_point_measurement'
+        dsformat = 'TIMESERIES'
+    elif dataset_type == 'MULTIPLE_POINTS':
+        func_name = 'process_multiple_points'
         dsformat = 'TIMESERIES'
     elif dataset_type == 'GRID_POINT_MEASUREMENT':
         func_name = 'process_grid_point'

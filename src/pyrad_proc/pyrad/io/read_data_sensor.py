@@ -25,6 +25,7 @@ Functions for reading data from other sensors
     get_sensor_data
     read_smn
     read_smn2
+    read_coord_sensors
     read_disdro_scattering
     read_disdro
 
@@ -1867,6 +1868,61 @@ def read_smn2(fname):
         return None, None, None
 
 
+def read_coord_sensors(fname):
+    """
+    Reads a file containing the coordinates of multiple sensors. File of form
+    lat,lon,sensor_ID
+
+    Parameters
+    ----------
+    fname : str
+        path of time series file
+
+    Returns
+    -------
+    lat, lon , sensor_ID : tupple
+        The read values
+
+    """
+    try:
+        with open(fname, 'r', newline='') as csvfile:
+            # skip the first line
+            next(csvfile)
+
+            # first count the lines
+            reader = csv.DictReader(
+                csvfile, fieldnames=['lat', 'lon', 'sensor_ID'])
+            nrows = sum(1 for row in reader)
+
+            if nrows == 0:
+                warn('Empty file '+fname)
+                return None, None, None
+            lat = np.ma.empty(nrows, dtype=float)
+            lon = np.ma.empty(nrows, dtype=float)
+            sensor_ID = np.ma.empty(nrows, dtype=int)
+
+            # now read the data
+            csvfile.seek(0)
+
+            # skip the first line
+            next(csvfile)
+
+            reader = csv.DictReader(
+                csvfile, fieldnames=['lat', 'lon', 'sensor_ID'])
+            for i, row in enumerate(reader):
+                lat[i] = float(row['lat'])
+                lon[i] = float(row['lon'])
+                sensor_ID[i] = int(row['sensor_ID'])
+
+            csvfile.close()
+
+            return lat, lon, sensor_ID
+    except EnvironmentError as ee:
+        warn(str(ee))
+        warn('Unable to read file '+fname)
+        return None, None, None
+
+
 def read_disdro_scattering(fname):
     """
     Reads scattering parameters computed from disdrometer data contained in a
@@ -1970,7 +2026,7 @@ def read_disdro(fname):
         var = re.search('GHz_(.{,7})_el', fname).group(1)
     except AttributeError:
         # AAA, ZZZ not found in the original string
-        var = '' # apply your error handling
+        var = ''  # apply your error handling
     try:
         with open(fname, 'r', newline='', encoding='utf-8', errors='ignore') as csvfile:
             # first count the lines

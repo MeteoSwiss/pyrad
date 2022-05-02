@@ -207,6 +207,7 @@ Time series functions
     :toctree: generated/
 
     process_point_measurement
+    process_multiple_points
     process_qvp
     process_rqvp
     process_svp
@@ -293,6 +294,7 @@ from .process_iq import process_wbn_iq
 from .process_timeseries import process_point_measurement, process_qvp
 from .process_timeseries import process_rqvp, process_evp, process_svp
 from .process_timeseries import process_time_height, process_ts_along_coord
+from .process_timeseries import process_multiple_points
 
 from .process_traj import process_trajectory, process_traj_atplane
 from .process_traj import process_traj_antenna_pattern, process_traj_lightning

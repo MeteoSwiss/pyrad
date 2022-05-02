@@ -27,6 +27,7 @@ Functions for writing pyrad output data
     write_cdf
     write_histogram
     write_quantiles
+    write_multiple_points
     write_ts_polar_data
     write_ts_grid_data
     write_ts_ml
@@ -1259,6 +1260,68 @@ def write_quantiles(quantiles, values, fname, datatype='undefined'):
             writer.writerow({
                 'quantile': quant,
                 'value': values_aux[i]})
+        csvfile.close()
+
+    return fname
+
+
+def write_multiple_points(dataset, fname):
+    """
+    write radar data obtained at multiple points
+
+    Parameters
+    ----------
+    dataset : dict
+        dictionary containing the data
+    fname : str
+        file name
+
+    Returns
+    -------
+    fname : str
+        the name of the file where data has written
+
+    """
+    val = dataset['value'].filled(fill_value=get_fillvalue())
+    lon_ref = dataset['used_point_coordinates_WGS84_lon'].filled(
+        fill_value=get_fillvalue())
+    lat_ref = dataset['used_point_coordinates_WGS84_lat'].filled(
+        fill_value=get_fillvalue())
+    alt_ref = dataset['used_point_coordinates_WGS84_alt'].filled(
+        fill_value=get_fillvalue())
+    with open(fname, 'w', newline='') as csvfile:
+        csvfile.write(
+            '# Weather radar data at multiple points file\n' +
+            '# Comment lines are preceded by "#"\n' +
+            '# Description:\n' +
+            '# weather radar data at points of interest.\n' +
+            '# Data: '+generate_field_name_str(dataset['datatype'])+'\n' +
+            '#\n')
+        fieldnames = [
+            'point_ID', 'time', 'azi', 'ele', 'rng', 'lon', 'lat', 'alt',
+            'lon_ref', 'lat_ref', 'alt_ref', 'val']
+        writer = csv.DictWriter(csvfile, fieldnames)
+        writer.writeheader()
+        for i in range(val.size):
+            time_aux = dataset['time'][i]
+            if not np.ma.is_masked(dataset['time'][i]):
+                time_aux = time_aux.strftime('%Y%m%d%H%M%S')
+            else:
+                time_aux = 'NA'
+            writer.writerow({
+                'point_ID': dataset['point_id'][i],
+                'time': time_aux,
+                'azi': dataset['antenna_coordinates_az'][i],
+                'ele': dataset['antenna_coordinates_el'][i],
+                'rng': dataset['antenna_coordinates_r'][i],
+                'lon': dataset['point_coordinates_WGS84_lon'][i],
+                'lat': dataset['point_coordinates_WGS84_lat'][i],
+                'alt': dataset['point_coordinates_WGS84_alt'][i],
+                'lon_ref': lon_ref[i],
+                'lat_ref': lat_ref[i],
+                'alt_ref': alt_ref[i],
+                'val': val[i],
+                })
         csvfile.close()
 
     return fname
