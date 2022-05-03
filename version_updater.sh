@@ -73,7 +73,7 @@ fi
 # PyRAD
 #####################################################
 
-
+cd $dir/
 echo Do you want to release a new pyRAD version y/n?
 read updatepyrad
 if [[  "$updatepyrad" == "y" ]]; then
