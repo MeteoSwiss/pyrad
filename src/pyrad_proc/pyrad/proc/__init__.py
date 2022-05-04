@@ -107,6 +107,8 @@ Echo classification and filtering
     process_filter_snr
     process_filter_visibility
     process_outlier_filter
+    process_filter_vol2bird
+    process_gate_filter_vol2bird
     process_hydroclass
     process_centroids
     process_melting_layer
@@ -205,6 +207,7 @@ Time series functions
     :toctree: generated/
 
     process_point_measurement
+    process_multiple_points
     process_qvp
     process_rqvp
     process_svp
@@ -291,6 +294,7 @@ from .process_iq import process_wbn_iq
 from .process_timeseries import process_point_measurement, process_qvp
 from .process_timeseries import process_rqvp, process_evp, process_svp
 from .process_timeseries import process_time_height, process_ts_along_coord
+from .process_timeseries import process_multiple_points
 
 from .process_traj import process_trajectory, process_traj_atplane
 from .process_traj import process_traj_antenna_pattern, process_traj_lightning
@@ -304,6 +308,8 @@ from .process_echoclass import process_centroids, process_hydro_mf_to_hydro
 from .process_echoclass import process_cdf, process_melting_layer
 from .process_echoclass import process_filter_vel_diff, process_zdr_column
 from .process_echoclass import process_hydro_mf_to_echo_id
+from .process_echoclass import process_filter_vol2bird
+from .process_echoclass import process_gate_filter_vol2bird
 
 from .process_phase import process_correct_phidp0
 from .process_phase import process_smooth_phidp_single_window

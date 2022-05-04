@@ -143,7 +143,8 @@ def get_process_func(dataset_type, dsname):
                 'VIS': process_visibility
                 'VIS_FILTER': process_filter_visibility
                 'VOL_REFL': process_vol_refl
-                'VPR': process_vpr
+                'VOL2BIRD_FILTER': process_filter_vol2bird
+                'VOL2BIRD_GATE_FILTER': process_gate_filter_vol2bird
                 'WBN': process_wbn_iq
                 'WIND_VEL': process_wind_vel
                 'WINDSHEAR': process_windshear
@@ -196,6 +197,8 @@ def get_process_func(dataset_type, dsname):
                 'INTERCOMP_TIME_AVG': process_intercomp_time_avg
             'ML' format output:
                 'ML_DETECTION': process_melting_layer
+            'VPR' format output:
+                'VPR': process_vpr
             'MONITORING' format output:
                 'GC_MONITORING': process_gc_monitoring
                 'MONITORING': process_monitoring
@@ -225,7 +228,8 @@ def get_process_func(dataset_type, dsname):
                 'RAIN_ACCU': process_rainfall_accumulation
             'TIMESERIES' format output:
                 'GRID_POINT_MEASUREMENT': process_grid_point
-                'POINT_MEASUREMENT': 'process_point_measurement'
+                'MULTIPLE_POINTS': process_multiple_points
+                'POINT_MEASUREMENT': process_point_measurement
                 'TRAJ_ANTENNA_PATTERN': process_traj_antenna_pattern
                 'TRAJ_ATPLANE': process_traj_atplane
                 'TRAJ_LIGHTNING': process_traj_lightning
@@ -367,6 +371,7 @@ def get_process_func(dataset_type, dsname):
         func_name = 'process_vol_refl'
     elif dataset_type == 'VPR':
         func_name = 'process_vpr'
+        dsformat = 'VPR'
     elif dataset_type == 'BIRD_DENSITY':
         func_name = 'process_bird_density'
     elif dataset_type == 'RHOHV_CORRECTION':
@@ -389,6 +394,10 @@ def get_process_func(dataset_type, dsname):
         func_name = 'process_hydro_mf_to_echo_id'
     elif dataset_type == 'ECHO_FILTER':
         func_name = 'process_echo_filter'
+    elif dataset_type == 'VOL2BIRD_FILTER':
+        func_name = 'process_filter_vol2bird'
+    elif dataset_type == 'VOL2BIRD_GATE_FILTER':
+        func_name = 'process_gate_filter_vol2bird'
     elif dataset_type == 'ZDR_COLUMN':
         func_name = 'process_zdr_column'
         dsformat = 'SPARSE_GRID'
@@ -584,6 +593,9 @@ def get_process_func(dataset_type, dsname):
         dsformat = 'SUN_HITS'
     elif dataset_type == 'POINT_MEASUREMENT':
         func_name = 'process_point_measurement'
+        dsformat = 'TIMESERIES'
+    elif dataset_type == 'MULTIPLE_POINTS':
+        func_name = 'process_multiple_points'
         dsformat = 'TIMESERIES'
     elif dataset_type == 'GRID_POINT_MEASUREMENT':
         func_name = 'process_grid_point'
@@ -1235,6 +1247,9 @@ def process_azimuthal_average(procstatus, dscfg, radar_list=None):
         nvalid_min : int. Dataset keyword
             the minimum number of valid points to consdier the average valid.
             Default 1
+        lin_trans : dict or None
+            A dictionary specifying which data types have to be transformed
+            in linear units before averaging
 
 
     radar_list : list of Radar objects
@@ -1252,8 +1267,10 @@ def process_azimuthal_average(procstatus, dscfg, radar_list=None):
         return None, None
 
     field_names_aux = []
+    datatypes_aux = []
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        datatypes_aux.append(datatype)
         field_names_aux.append(get_fieldname_pyart(datatype))
 
     ind_rad = int(radarnr[5:8])-1
@@ -1261,20 +1278,6 @@ def process_azimuthal_average(procstatus, dscfg, radar_list=None):
         warn('ERROR: No valid radar')
         return None, None
     radar = radar_list[ind_rad]
-
-    # keep only fields present in radar object
-    field_names = []
-    nfields_available = 0
-    for field_name in field_names_aux:
-        if field_name not in radar.fields:
-            warn('Field name '+field_name+' not available in radar object')
-            continue
-        field_names.append(field_name)
-        nfields_available += 1
-
-    if nfields_available == 0:
-        warn("Fields not available in radar data")
-        return None, None
 
     # default parameters
     angle = dscfg.get('angle', None)
@@ -1285,6 +1288,35 @@ def process_azimuthal_average(procstatus, dscfg, radar_list=None):
         warn('Unsuported statistics '+avg_type)
         return None, None
 
+    # keep only fields present in radar object
+    field_names = []
+    datatypes = []
+    lin_trans = None
+    if avg_type == 'mean':
+        lin_trans = dict()
+    nfields_available = 0
+    for field_name, datatype in zip(field_names_aux, datatypes_aux):
+        if field_name not in radar.fields:
+            warn('Field name '+field_name+' not available in radar object')
+            continue
+        field_names.append(field_name)
+        datatypes.append(datatype)
+        nfields_available += 1
+
+        if avg_type != 'mean':
+            continue
+        lin_trans.update({field_name: False})
+        if 'lin_trans' in dscfg:
+            if datatype in dscfg['lin_trans']:
+                lin_trans[field_name] = (dscfg['lin_trans'] != 0)
+            else:
+                warn('Averaging in linear units for {} not specified'.format(
+                     datatype))
+
+    if nfields_available == 0:
+        warn("Fields not available in radar data")
+        return None, None
+
     if delta_azi == -1:
         delta_azi = None
     if angle == -1:
@@ -1292,7 +1324,7 @@ def process_azimuthal_average(procstatus, dscfg, radar_list=None):
 
     radar_rhi = compute_azimuthal_average(
         radar, field_names, angle=angle, delta_azi=delta_azi,
-        avg_type=avg_type, nvalid_min=nvalid_min)
+        avg_type=avg_type, nvalid_min=nvalid_min, lin_trans=lin_trans)
 
     # prepare for exit
     new_dataset = {'radar_out': radar_rhi}
@@ -1321,6 +1353,9 @@ def process_moving_azimuthal_average(procstatus, dscfg, radar_list=None):
         nvalid_min : int. Dataset keyword
             the minimum number of valid points to consdier the average valid.
             Default 1
+        lin_trans : dict or None
+            A dictionary specifying which data types have to be transformed
+            in linear units before averaging
 
 
     radar_list : list of Radar objects
@@ -1348,26 +1383,41 @@ def process_moving_azimuthal_average(procstatus, dscfg, radar_list=None):
         return None, None
     radar = radar_list[ind_rad]
 
-    # keep only fields present in radar object
-    field_names = []
-    nfields_available = 0
-    for field_name in field_names_aux:
-        if field_name not in radar.fields:
-            warn('Field name '+field_name+' not available in radar object')
-            continue
-        field_names.append(field_name)
-        nfields_available += 1
-
-    if nfields_available == 0:
-        warn("Fields not available in radar data")
-        return None, None
-
     # default parameters
     delta_azi = dscfg.get('delta_azi', 20.)
     avg_type = dscfg.get('avg_type', 'mean')
     nvalid_min = dscfg.get('nvalid_min', 1)
     if avg_type not in ('mean', 'median'):
         warn('Unsuported statistics '+avg_type)
+        return None, None
+
+    # keep only fields present in radar object
+    field_names = []
+    datatypes = []
+    lin_trans = None
+    if avg_type == 'mean':
+        lin_trans = dict()
+    nfields_available = 0
+    for field_name in field_names_aux:
+        if field_name not in radar.fields:
+            warn('Field name '+field_name+' not available in radar object')
+            continue
+        field_names.append(field_name)
+        datatypes.append(datatype)
+        nfields_available += 1
+
+        if avg_type != 'mean':
+            continue
+        lin_trans.update({field_name: False})
+        if 'lin_trans' in dscfg:
+            if datatype in dscfg['lin_trans']:
+                lin_trans[field_name] = (dscfg['lin_trans'] != 0)
+            else:
+                warn('Averaging in linear units for {} not specified'.format(
+                     datatype))
+
+    if nfields_available == 0:
+        warn("Fields not available in radar data")
         return None, None
 
     radar_out = deepcopy(radar)
@@ -1397,10 +1447,17 @@ def process_moving_azimuthal_average(procstatus, dscfg, radar_list=None):
             for field_name in field_names:
                 field_aux = radar_aux.fields[field_name]['data'][:, inds_rng]
                 field_aux = field_aux[inds_ray, :]
+                if avg_type == 'mean':
+                    if lin_trans_aux[field_name]:
+                        field_aux = np.ma.power(10., 0.1*field_aux)
 
                 vals, _ = compute_directional_stats(
                     field_aux, avg_type=avg_type, nvalid_min=nvalid_min,
                     axis=0)
+
+                if avg_type == 'mean':
+                    if lin_trans_aux[field_name]:
+                        vals = 10.*np.ma.log10(vals)
 
                 radar_out.fields[field_name]['data'][ind_ray, :] = vals
 

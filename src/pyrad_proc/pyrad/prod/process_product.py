@@ -13,6 +13,7 @@ Functions for obtaining Pyrad products from the datasets
     generate_sun_hits_products
     generate_qvp_products
     generate_ml_products
+    generate_vpr_products
     generate_centroids_products
 
 """
@@ -36,11 +37,13 @@ from ..io.read_data_other import read_ml_ts
 from ..io.write_data import write_sun_hits, write_sun_retrieval
 from ..io.write_data import write_excess_gates, write_ts_ml, write_histogram
 from ..io.write_data import write_timeseries_point, write_centroids
+from ..io.write_data import write_rhi_profile
 
 from ..graph.plots import plot_sun_hits, plot_histogram2, plot_scatter
 from ..graph.plots import plot_centroids
 from ..graph.plots_timeseries import plot_sun_retrieval_ts, plot_ml_ts
 from ..graph.plots_vol import plot_fixed_rng, plot_fixed_rng_sun
+from ..graph.plots_vol import plot_along_coord
 
 from ..util.radar_utils import create_sun_hits_field, compute_histogram
 from ..util.radar_utils import create_sun_retrieval_field
@@ -765,8 +768,11 @@ def generate_ml_products(dataset, prdcfg):
             User defined parameters:
                 dpi: int
                     The pixel density of the plot. Default 72
-        'SAVE_ML': Saves an object containing the melting layer retrieval
-            information in a C/F radial file
+        'SAVE_ML': Saves an object containing the best estimate of the melting
+            layer retrieved in a C/F radial file
+        'SAVE_RETRIEVED_ML': Saves an object containing the estimate of the
+            melting layer at each elevation angle obtained by the MF retrieval
+            in a C/F radial file
         All the products of the 'VOL' dataset group
 
     Parameters
@@ -861,7 +867,101 @@ def generate_ml_products(dataset, prdcfg):
 
         return fname
 
+    if prdcfg['type'] == 'SAVE_RETRIEVED_ML':
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdcfg['prdname'], timeinfo=prdcfg['timeinfo'])
+
+        fname = make_filename(
+            'saveml_retrieved', prdcfg['dstype'], 'ml_h', ['nc'],
+            timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
+
+        fname = savedir+fname
+        pyart.io.cfradial.write_cfradial(fname, dataset['ml_retrieved'])
+        print('saved file: {}'.format(fname))
+
+        return fname
+
     return generate_vol_products(dataset, prdcfg)
+
+
+def generate_vpr_products(dataset, prdcfg):
+    """
+    Generates melting layer products. Accepted product types:
+        'PLOT_VPR_THEO': Plots and writes the retrieved theoretical VPR
+            User defined parameters:
+                dpi: int
+                    The pixel density of the plot. Default 72
+        'SAVE_ML': Saves an object containing the melting layer retrieval
+            information in a C/F radial file
+        All the products of the 'VOL' dataset group
+
+    Parameters
+    ----------
+    dataset : dict
+        dictionary containing the radar object and a keyword stating the
+        status of the processing
+
+    prdcfg : dictionary of dictionaries
+        product configuration dictionary of dictionaries
+
+    Returns
+    -------
+    filename : str
+        the name of the file created. None otherwise
+
+    """
+
+    dssavedir = prdcfg['dsname']
+    if 'dssavename' in prdcfg:
+        dssavedir = prdcfg['dssavename']
+    radar_type = prdcfg.get('radar_type', 'radar_out')
+    if radar_type == 'radar_out':
+        dataset_aux = {'radar_out': dataset['radar_out']}
+    else:
+        dataset_aux = {'radar_out': dataset['radar_rhi']}
+
+    if prdcfg['type'] == 'PLOT_VPR_THEO':
+        dpi = prdcfg.get('dpi', 72)
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdcfg['prdname'], timeinfo=prdcfg['timeinfo'])
+
+        csvfname = make_filename(
+            'theo', prdcfg['dstype'], 'VPR', ['csv'],
+            timeinfo=prdcfg['timeinfo'], timeformat='%Y%m%d%H%M%S')[0]
+
+        csvfname = savedir+csvfname
+
+        write_rhi_profile(
+            dataset['vpr_theo_dict']['altitude'],
+            [dataset['vpr_theo_dict']['value']], None, ['Znorm'], csvfname,
+            datatype='normalized reflectivity (-)',
+            timeinfo=prdcfg['timeinfo'])
+        print('saved CSV file: {}'.format(csvfname))
+
+        figfname_list = make_filename(
+            'theo', prdcfg['dstype'], 'VPR', prdcfg['imgformat'],
+            timeinfo=prdcfg['timeinfo'], timeformat='%Y%m%d%H%M%S')
+
+        for i, figfname in enumerate(figfname_list):
+            figfname_list[i] = savedir+figfname
+
+        titl = '{}\nRetrieved VPR profile'.format(
+            prdcfg['timeinfo'].strftime('%Y-%m-%dT%H:%M:%S'))
+        plot_along_coord(
+            [dataset['vpr_theo_dict']['altitude']],
+            [dataset['vpr_theo_dict']['value']],
+            figfname_list, labelx='Altitude (m MSL)',
+            labely='normalized reflectivity (-)', labels=None, title=titl,
+            colors=None, linestyles=None, ymin=None, ymax=None, dpi=dpi,
+            data_on_y=False, plot_legend=False)
+        print('----- save to '+' '.join(figfname_list))
+
+        return figfname_list
+
+    return generate_vol_products(dataset_aux, prdcfg)
 
 
 def generate_centroids_products(dataset, prdcfg):

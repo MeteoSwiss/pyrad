@@ -119,7 +119,8 @@ def grib2radar_data(radar, iso0_data, time_info, time_interp=True,
         The statistic used to weight the iso0 points. Can be avg_by_dist,
         avg, min, max
     field_name : str
-        name of HZT fields to convert (default height_over_iso0)
+        name of HZT fields to convert. Can be height_over_iso0 or iso0_height
+        (default height_over_iso0)
 
     Returns
     -------
@@ -180,7 +181,10 @@ def grib2radar_data(radar, iso0_data, time_info, time_interp=True,
 
     # put field
     field_dict = get_metadata(field_name)
-    field_dict['data'] = radar.gate_altitude['data']-data_interp
+    if field_name == 'height_over_iso0':
+        field_dict['data'] = radar.gate_altitude['data']-data_interp
+    else:
+        field_dict['data'] = data_interp
 
     return field_dict
 

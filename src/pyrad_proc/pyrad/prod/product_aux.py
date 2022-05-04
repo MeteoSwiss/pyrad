@@ -17,6 +17,7 @@ from .process_product import generate_qvp_products
 from .process_product import generate_ml_products
 from .process_product import generate_cosmo_to_radar_products
 from .process_product import generate_centroids_products
+from .process_product import generate_vpr_products
 
 from .process_vol_products import generate_vol_products
 from .process_grid_products import generate_grid_products
@@ -59,6 +60,7 @@ def get_prodgen_func(dsformat, dsname, dstype):
             'TIMEAVG': generate_time_avg_products
             'TIMESERIES': generate_timeseries_products
             'TRAJ_ONLY': generate_traj_product
+            'VPR': generate_vpr_products
 
     Returns
     -------
@@ -101,6 +103,8 @@ def get_prodgen_func(dsformat, dsname, dstype):
         func = generate_qvp_products
     elif dsformat == 'ML':
         func = generate_ml_products
+    elif dsformat == 'VPR':
+        func = generate_vpr_products
     elif dsformat == 'CENTROIDS':
         func = generate_centroids_products
     else:
