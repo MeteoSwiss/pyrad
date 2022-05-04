@@ -1149,7 +1149,7 @@ def process_gate_filter_vol2bird(procstatus, dscfg, radar_list=None):
 
     if vel_field is not None:
         echoid['data'][
-            (radar.fields[vel_field]['data'] < V_min)
+            (np.ma.abs(radar.fields[vel_field]['data']) < V_min)
             & (echoid['data'] < 1)] = 1
         mask = np.ma.getmaskarray(radar.fields[vel_field]['data'])
         echoid['data'][(mask) & (echoid['data'] < 1)] = 1
