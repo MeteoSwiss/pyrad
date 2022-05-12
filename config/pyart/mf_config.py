@@ -2495,9 +2495,9 @@ DEFAULT_METADATA = {
         'units': '-',
         'standard_name': 'vol2bird_echo_classification',
         'long_name': 'VOL2BIRD echo classification',
-        'labels': ['OTHER', 'FRINGE', 'PRECIP_CELLS'],
-        'ticks': [-1, 1, 2],
-        'boundaries': [-1.5, 0.5, 1.5, 2.5],
+        'labels': ['MISSING', 'Vthresh', 'Zthresh', 'OTHER', 'FRINGE', 'PRECIP_CELLS'],
+        'ticks': [-4, -3, -2, -1, 1, 2],
+        'boundaries': [-4.5, -3.5, -2.5, -1.5, 0.5, 1.5, 2.5],
         'coordinates': 'elevation azimuth range'},
 
     vol2bird_background: {
