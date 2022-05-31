@@ -3575,6 +3575,15 @@ gamic_field_mapping = {
     'I': None,          # In phase signal
     'Q': None,          # Quadrature signal
 
+    'ZH': reflectivity,
+    'ZV': reflectivity_vv,
+    'UH': unfiltered_reflectivity,
+    'UV': unfiltered_reflectivity_vv,
+    'VH': velocity,
+    'VV': velocity_vv,
+    'WH': spectrum_width,
+    'WV': spectrum_width_vv,
+
     'Z': corrected_reflectivity,
                         # Reflectivity, corrected for 2nd trip & clutter
     'UZ': reflectivity,
@@ -3592,7 +3601,7 @@ gamic_field_mapping = {
     'V': corrected_velocity,
                         # Unfolded velocity from corrected timeseries
     'VF': velocity,     # Folded velocity from corr. t.s.
-    'UV': None,         # Unfolded velocity from uncorrected timeseries
+    # 'UV': None,         # Unfolded velocity from uncorrected timeseries
     'UVF': None,        # Folded velcity from uncorr. t.s.
     'Vh': corrected_velocity,
                         # Velocity from corr. t.s., horizontal channel
@@ -3648,7 +3657,7 @@ gamic_field_mapping = {
 
     # A '1' ending on differential reflectivity fields indicates that the
     # moment has calculated using a 1st LAG algorithm.
-    'ZDR': corrected_differential_reflectivity,
+    'ZDR': differential_reflectivity,
                         # Differential reflectivity from corrected timeseries
     'UZDR': differential_reflectivity,
                         # Diff. refl. from uncorrected timeseries
@@ -3659,7 +3668,7 @@ gamic_field_mapping = {
 
     'PHI': corrected_differential_phase,
                         # Differential phase from corrected timeseries
-    'PHIDP': corrected_differential_phase,
+    'PHIDP': differential_phase,
                         # Differential phase from corrected timeseries
     'UPHIDP': differential_phase,
                         # Diff. phase from uncorrected timeseries.

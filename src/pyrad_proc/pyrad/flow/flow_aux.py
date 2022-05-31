@@ -1132,6 +1132,8 @@ def _create_datacfg_dict(cfg):
         datacfg.update({'radar_beam_width_v': cfg['radar_beam_width_v']})
     if 'pulse_width' in cfg:
         datacfg.update({'pulse_width': cfg['pulse_width']})
+    if 'pulse_width_gamic' in cfg:
+        datacfg.update({'pulse_width_gamic': cfg['pulse_width_gamic']})
     if 'nyquist_velocity' in cfg:
         datacfg.update({'nyquist_velocity': cfg['nyquist_velocity']})
     if 'AntennaGainH' in cfg:

@@ -15,6 +15,7 @@ Functions for reading radar data files
     merge_scans_rad4alp
     merge_scans_odim
     merge_scans_odimbirds
+    merge_scans_gamic
     merge_scans_mfcfradial
     merge_scans_nexrad2
     merge_scans_cfradial2
@@ -40,6 +41,7 @@ Functions for reading radar data files
     get_data_rainbow
     get_data_rad4alp
     get_data_odim
+    get_data_gamic
     add_field
     interpol_field
     crop_grid
@@ -135,6 +137,8 @@ def get_data(voltime, datatypesdescr, cfg):
                 which datatype to use to match a particular ODIM field name
                 check the function 'get_datatype_odim' in pyrad/io/io_aux.py
 
+            'GAMIC': Gamic files.
+
             'NEXRADII': Nexrad-level II file format.
 
             'CFRADIAL2': CFRADIAL2 file format. For such types 'dataset'
@@ -200,12 +204,12 @@ def get_data(voltime, datatypesdescr, cfg):
 
             'RAD4ALPIQ': Format used to store rad4alp IQ data
 
-        'RAINBOW', 'RAD4ALP', 'ODIM' 'ODIMBIRDS' CFRADIAL2', 'CF1' 'MFCFRADIAL' and
-        'MXPOL' are primary data file sources and they cannot be mixed for the
-        same radar. It is also the case for their complementary data files,
-        i.e. 'COSMO' and 'RAD4ALPCOSMO', etc. 'CFRADIAL' and 'ODIMPYRAD' are
-        secondary data file sources and they can be combined with any other
-        datagroup type.
+        'RAINBOW', 'RAD4ALP', 'ODIM' 'ODIMBIRDS' CFRADIAL2', 'CF1' 'MFCFRADIAL'
+        'GAMIC' and 'MXPOL' are primary data file sources and they cannot be
+        mixed for the same radar. It is also the case for their complementary
+        data files, i.e. 'COSMO' and 'RAD4ALPCOSMO', etc. 'CFRADIAL' and
+        'ODIMPYRAD' are secondary data file sources and they can be combined
+        with any other datagroup type.
         For a list of accepted datatypes and how they map to the Py-ART name
         convention check function 'get_field_name_pyart' in pyrad/io/io_aux.py
     cfg: dictionary of dictionaries
@@ -221,6 +225,8 @@ def get_data(voltime, datatypesdescr, cfg):
     datatype_rad4alp = list()
     datatype_odim = list()
     dataset_odim = list()
+    datatype_gamic = list()
+    dataset_gamic = list()
     datatype_odimbirds = list()
     dataset_odimbirds = list()
     datatype_mfcfradial = list()
@@ -283,6 +289,9 @@ def get_data(voltime, datatypesdescr, cfg):
         elif datagroup == 'ODIMBIRDS':
             datatype_odimbirds.append(datatype)
             dataset_odimbirds.append(dataset)
+        elif datagroup == 'GAMIC':
+            datatype_gamic.append(datatype)
+            dataset_gamic.append(dataset)
         elif datagroup == 'MFCFRADIAL':
             datatype_mfcfradial.append(datatype)
             dataset_mfcfradial.append(dataset)
@@ -364,6 +373,7 @@ def get_data(voltime, datatypesdescr, cfg):
     ndatatypes_rad4alp = len(datatype_rad4alp)
     ndatatypes_odim = len(datatype_odim)
     ndatatypes_odimbirds = len(datatype_odimbirds)
+    ndatatypes_gamic = len(datatype_gamic)
     ndatatypes_mfcfradial = len(datatype_mfcfradial)
     ndatatypes_nexrad2 = len(datatype_nexrad2)
     ndatatypes_cfradial = len(datatype_cfradial)
@@ -446,6 +456,18 @@ def get_data(voltime, datatypesdescr, cfg):
         radar = merge_scans_odimbirds(
             cfg['datapath'][ind_rad], cfg['ScanList'][ind_rad], radar_name,
             radar_res, voltime, datatype_odimbirds, dataset_odimbirds, cfg,
+            ind_rad=ind_rad)
+
+    elif ndatatypes_gamic > 0:
+        try:
+            radar_name = cfg['RadarName'][ind_rad]
+            radar_res = cfg['RadarRes'][ind_rad]
+        except TypeError:
+            radar_name = None
+            radar_res = None
+        radar = merge_scans_gamic(
+            cfg['datapath'][ind_rad], cfg['ScanList'][ind_rad], radar_name,
+            radar_res, voltime, datatype_gamic, dataset_gamic, cfg,
             ind_rad=ind_rad)
 
     elif ndatatypes_nexrad2 > 0:
@@ -1657,6 +1679,150 @@ def merge_scans_odimbirds(basepath, scan_list, radar_name, radar_res, voltime,
         return pyart.util.cut_radar(
             radar, radar.fields.keys(), rng_min=rmin, rng_max=rmax,
             ele_min=elmin, ele_max=elmax, azi_min=azmin, azi_max=azmax)
+
+
+def merge_scans_gamic(basepath, scan_list, radar_name, radar_res, voltime,
+                      datatype_list, dataset_list, cfg, ind_rad=0):
+    """
+    merge GAMIC data.
+
+    Parameters
+    ----------
+    basepath : str
+        base path of gamic radar data
+    scan_list : list
+        list of scans
+    radar_name : str
+        radar_name (A, D, L, ...)
+    radar_res : str
+        radar resolution (H or L)
+    voltime: datetime object
+        reference time of the scan
+    datatype_list : list
+        lists of data types to get
+    dataset_list : list
+        list of datasets. Used to get path
+    cfg : dict
+        configuration dictionary
+    ind_rad : int
+        radar index
+
+    Returns
+    -------
+    radar : Radar
+        radar object
+
+    """
+    radar = None
+    dayinfo = voltime.strftime('%y%j')
+    timeinfo = voltime.strftime('%H%M')
+    if radar_name is not None and radar_res is not None:
+        basename = 'M'+radar_res+radar_name+dayinfo
+    if cfg['path_convention'][ind_rad] == 'LTE':
+        yy = dayinfo[0:2]
+        dy = dayinfo[2:]
+        subf = 'M'+radar_res+radar_name+yy+'hdf'+dy
+        datapath = basepath+subf+'/'
+        filename = glob.glob(
+            datapath+basename+timeinfo+'*'+scan_list[0] + '*')
+        if not filename:
+            basename = 'P'+radar_res+radar_name+dayinfo
+            subf = 'P'+radar_res+radar_name+yy+'hdf'+dy
+            datapath = basepath+subf+'/'
+    elif cfg['path_convention'][ind_rad] == 'MCH':
+        datapath = basepath+dayinfo+'/'+basename+'/'
+        filename = glob.glob(
+            datapath+basename+timeinfo+'*'+scan_list[0] + '*')
+        if not filename:
+            basename = 'P'+radar_res+radar_name+dayinfo
+            datapath = basepath+dayinfo+'/'+basename+'/'
+    elif cfg['path_convention'][ind_rad] == 'ODIM':
+        fpath_strf = (
+            dataset_list[0][
+                dataset_list[0].find("D")+2:dataset_list[0].find("F")-2])
+        fdate_strf = dataset_list[0][dataset_list[0].find("F")+2:-1]
+        datapath = (basepath+voltime.strftime(fpath_strf)+'/')
+        filenames = glob.glob(datapath+'*'+scan_list[0]+'*')
+        filename = []
+        for filename_aux in filenames:
+            fdatetime = find_date_in_file_name(
+                filename_aux, date_format=fdate_strf)
+            if fdatetime == voltime:
+                filename = [filename_aux]
+    else:
+        datapath = basepath+'M'+radar_res+radar_name+'/'
+        filename = glob.glob(
+            datapath+basename+timeinfo+'*'+scan_list[0] + '*')
+        if not filename:
+            basename = 'P'+radar_res+radar_name+dayinfo
+            datapath = basepath+'P'+radar_res+radar_name+'/'
+            filename = glob.glob(
+                datapath+basename+timeinfo+'*'+scan_list[0]+'*')
+    if not filename:
+        warn('No file found in '+datapath[0]+basename+timeinfo+'*.h*')
+    else:
+        radar = get_data_gamic(
+            filename[0], datatype_list, cfg['pulse_width_gamic'])
+
+    rmin = None
+    rmax = None
+    elmin = None
+    elmax = None
+    azmin = None
+    azmax = None
+    if cfg['rmin'] is not None:
+        rmin = cfg['rmin'][ind_rad]
+    if cfg['rmax'] is not None:
+        rmax = cfg['rmax'][ind_rad]
+    if cfg['elmin'] is not None:
+        elmin = cfg['elmin'][ind_rad]
+    if cfg['elmax'] is not None:
+        elmax = cfg['elmax'][ind_rad]
+    if cfg['azmin'] is not None:
+        azmin = cfg['azmin'][ind_rad]
+    if cfg['azmax'] is not None:
+        azmax = cfg['azmax'][ind_rad]
+
+    if len(scan_list) == 1:
+        if radar is None:
+            return radar
+
+        return pyart.util.cut_radar(
+            radar, radar.fields.keys(), rng_min=rmin, rng_max=rmax,
+            ele_min=elmin, ele_max=elmax, azi_min=azmin, azi_max=azmax)
+
+    # merge the elevations into a single radar instance
+    for scan in scan_list[1:]:
+        if cfg['path_convention'][ind_rad] == 'ODIM':
+            filenames = glob.glob(datapath+'*'+scan+'*')
+            filename = []
+            for filename_aux in filenames:
+                fdatetime = find_date_in_file_name(
+                    filename_aux, date_format=fdate_strf)
+                if fdatetime == voltime:
+                    filename = [filename_aux]
+                    break
+        else:
+            filename = glob.glob(datapath+basename+timeinfo+'*'+scan+'*')
+        if not filename:
+            warn('No file found in '+datapath+basename+timeinfo+'*.'+scan)
+        else:
+            radar_aux = get_data_gamic(
+                filename[0], datatype_list, cfg['pulse_width_gamic'])
+            if radar_aux is None:
+                continue
+
+            if radar is None:
+                radar = radar_aux
+            else:
+                radar = pyart.util.radar_utils.join_radar(radar, radar_aux)
+
+    if radar is None:
+        return radar
+
+    return pyart.util.cut_radar(
+        radar, radar.fields.keys(), rng_min=rmin, rng_max=rmax, ele_min=elmin,
+        ele_max=elmax, azi_min=azmin, azi_max=azmax)
 
 
 def merge_scans_mfcfradial(basepath, scan_list, voltime, datatype_list,
@@ -3979,6 +4145,38 @@ def get_data_odim(filename, datatype_list, scan_name, cfg, ind_rad=0):
         if not found:
             warn('Horizontal channel noise power not ' +
                  'available for sweep '+scan_name)
+
+    return radar
+
+
+def get_data_gamic(filename, datatype_list, pulse_width):
+    """
+    gets GAMIC radar data
+
+    Parameters
+    ----------
+    filename : str
+        name of file containing GAMIC data
+    datatype_list : list of strings
+        list of data fields to get
+    pulse_width : list or None
+        List of pulse width of the system
+
+    Returns
+    -------
+    radar : Radar
+        radar object. None if the reading has not been successful
+
+    """
+    gamic_field_names = dict()
+    for datatype in datatype_list:
+        # gamic_field_names.update(get_datatype_gamic(datatype))
+        try:
+            radar = pyart.aux_io.read_gamic(
+                filename, pulse_width=pulse_width)
+        except (ValueError, OSError) as ee:
+            warn("Unable to read file '"+filename+": (%s)" % str(ee))
+            return None
 
     return radar
 
