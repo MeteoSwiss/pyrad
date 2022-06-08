@@ -1392,6 +1392,8 @@ def get_fieldname_pyart(datatype):
     elif datatype == 'ml':
         field_name = 'melting_layer'
 
+    elif datatype == 'VIS':
+        field_name = 'visibility'
     elif datatype == 'vis':
         field_name = 'visibility'
     elif datatype == 'visibility':
