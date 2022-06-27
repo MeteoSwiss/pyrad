@@ -219,6 +219,9 @@ def generate_vol_products(dataset, prdcfg):
                 plot_type: str
                     The type of plot to perform. Can be 'PPI', 'QUANTILES' or
                     'HISTOGRAM'
+                write_data: Bool
+                    If True the histrogram will be also written in a csv
+                    file
                 step: float or None
                     If the plot type is 'HISTOGRAM', the width of the
                     histogram bin. If None it will be obtained from the Py-ART
@@ -696,11 +699,19 @@ def generate_vol_products(dataset, prdcfg):
         plot_type = prdcfg.get('plot_type', 'PPI')
         vmin = prdcfg.get('vmin', None)
         vmax = prdcfg.get('vmax', None)
+        write_data = prdcfg.get('write_data', 0)
+
+        fname_hist = None
+        if write_data:
+            fname_hist = savedir+make_filename(
+                'ppi', prdcfg['dstype'], prdcfg['voltype'],
+                ['csv'], prdcfginfo='el'+'{:.1f}'.format(el),
+                timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
 
         fname_list = plot_ppi(
             dataset['radar_out'], field_name, ind_el, prdcfg, fname_list,
             plot_type=plot_type, vmin=vmin, vmax=vmax, step=step,
-            quantiles=quantiles)
+            quantiles=quantiles, fname_hist=fname_hist)
 
         print('----- save to '+' '.join(fname_list))
 

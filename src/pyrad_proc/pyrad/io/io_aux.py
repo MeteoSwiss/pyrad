@@ -1315,6 +1315,8 @@ def get_fieldname_pyart(datatype):
 
     elif datatype == 'V':
         field_name = 'velocity'
+    elif datatype == 'Vv':
+        field_name = 'velocity_vv'
     elif datatype == 'Vu':
         field_name = 'unfiltered_velocity'
     elif datatype == 'dealV':
@@ -1331,6 +1333,8 @@ def get_fieldname_pyart(datatype):
         field_name = 'velocity_difference'
     elif datatype == 'W':
         field_name = 'spectrum_width'
+    elif datatype == 'Wv':
+        field_name = 'spectrum_width_vv'
     elif datatype == 'Wu':
         field_name = 'unfiltered_spectrum_width'
     elif datatype == 'Wc':
@@ -1388,6 +1392,8 @@ def get_fieldname_pyart(datatype):
     elif datatype == 'ml':
         field_name = 'melting_layer'
 
+    elif datatype == 'VIS':
+        field_name = 'visibility'
     elif datatype == 'vis':
         field_name = 'visibility'
     elif datatype == 'visibility':
@@ -2275,7 +2281,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     t_filelist.append(filename)
 
             elif datagroup in ('ODIM', 'ODIMBIRDS', 'CFRADIAL2', 'CF1',
-                               'NEXRADII'):
+                               'NEXRADII', 'GAMIC'):
                 if scan is None:
                     warn('Unknown scan name')
                     return []
@@ -2735,7 +2741,7 @@ def get_datatype_fields(datadescriptor):
                 product = None
             elif datagroup in ('ODIM', 'ODIMBIRDS', 'MFCFRADIAL', 'MFBIN',
                                'CFRADIAL2', 'CF1', 'NEXRADII', 'MFPNG',
-                               'MFGRIB', 'MFDAT', 'MFCF'):
+                               'MFGRIB', 'MFDAT', 'MFCF', 'GAMIC'):
                 descrfields2 = descrfields[2].split(',')
                 datatype = descrfields2[0]
                 product = None
@@ -2766,7 +2772,7 @@ def get_datatype_fields(datadescriptor):
             product = None
         elif datagroup in ('ODIM', 'ODIMBIRDS', 'MFCFRADIAL', 'MFBIN',
                            'NEXRADII', 'MFPNG', 'MFGRIB', 'MFDAT', 'MFCF',
-                           'CFRADIAL2', 'CF1'):
+                           'CFRADIAL2', 'CF1', 'GAMIC'):
             descrfields2 = descrfields[1].split(',')
             # warn(" descrfields2:  '%s'" % descrfields2[1])
             if len(descrfields2) == 2:
@@ -3289,7 +3295,7 @@ def _get_datetime(fname, datagroup, ftime_format=None):
                 datestr, '%y%j')+datetime.timedelta(days=1)
     elif datagroup in ('ODIM', 'ODIMBIRDS', 'MFCFRADIAL', 'MFBIN',
                        'NEXRADII', 'MFPNG', 'MFGRIB', 'MFDAT', 'MFCF',
-                       'CFRADIAL2', 'CF1'):
+                       'CFRADIAL2', 'CF1', 'GAMIC'):
         if ftime_format is None:
             # we assume is rad4alp format
             datetimestr = bfile[3:12]

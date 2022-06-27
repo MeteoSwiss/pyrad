@@ -598,6 +598,8 @@ def process_traj_atplane(procstatus, dscfg, radar_list=None, trajectory=None):
             azimuth and elevation tolerance (deg). Samples that have values
             beyond this tolerance from the limits in azimuth and elevation of
             the radar will be considered outside the sector. Default 3.
+        timeformat : str or None
+            time format of the time series output file
     radar_list : list of Radar objects
         Optional. list of radar objects
     trajectory : Trajectory object
@@ -659,6 +661,13 @@ def process_traj_atplane(procstatus, dscfg, radar_list=None, trajectory=None):
     ttask_start = radar.time['data'].min()
     dt_task_start = num2date(ttask_start, radar.time['units'],
                              radar.time['calendar'])
+                             
+    # User defined parameter
+    ang_tol = dscfg.get('ang_tol', 1.2)
+    az_tol = dscfg.get('az_tol', 3.)
+    el_tol = dscfg.get('el_tol', 3.)
+    timeformat = dscfg.get('timeformat', None)
+    
     if not dscfg['initialized']:
         # init
         if trajectory is None:
@@ -680,8 +689,8 @@ def process_traj_atplane(procstatus, dscfg, radar_list=None, trajectory=None):
         data_is_log = dict()
         for datatype, field_name in zip(datatypes, field_names):
             ts = TimeSeries(
-                description, maxlength=trajectory.time_vector.size,
-                datatype=datatype)
+                description, timeformat=timeformat,
+                maxlength=trajectory.time_vector.size, datatype=datatype)
 
             unit = get_field_unit(datatype)
             name = get_field_name(datatype)
@@ -731,11 +740,6 @@ def process_traj_atplane(procstatus, dscfg, radar_list=None, trajectory=None):
         trajdict['radar_old2'] = trajdict['radar_old']
         trajdict['radar_old'] = radar
         return None, None
-
-    # User defined parameter
-    ang_tol = dscfg.get('ang_tol', 1.2)
-    az_tol = dscfg.get('az_tol', 3.)
-    el_tol = dscfg.get('el_tol', 3.)
 
     az_list = []
     el_list = []

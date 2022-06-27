@@ -1143,16 +1143,16 @@ def process_gate_filter_vol2bird(procstatus, dscfg, radar_list=None):
     if refl_field is not None:
         echoid['data'][
             (radar.fields[refl_field]['data'] > dBZ_max)
-            & (echoid['data'] < 1)] = 1
+            & (echoid['data'] < 1)] = -2
         mask = np.ma.getmaskarray(radar.fields[refl_field]['data'])
-        echoid['data'][(mask) & (echoid['data'] < 1)] = 1
+        echoid['data'][(mask) & (echoid['data'] < 1)] = -4
 
     if vel_field is not None:
         echoid['data'][
-            (radar.fields[vel_field]['data'] < V_min)
-            & (echoid['data'] < 1)] = 1
+            (np.ma.abs(radar.fields[vel_field]['data']) < V_min)
+            & (echoid['data'] < 1)] = -3
         mask = np.ma.getmaskarray(radar.fields[vel_field]['data'])
-        echoid['data'][(mask) & (echoid['data'] < 1)] = 1
+        echoid['data'][(mask) & (echoid['data'] < 1)] = -4
 
     new_dataset = {'radar_out': deepcopy(radar)}
     new_dataset['radar_out'].fields = dict()
@@ -2174,7 +2174,7 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
                             np.ma.zeros(radar_ml.nrays)+(
                                 dscfg['timeinfo']
                                 - get_datetime(fname,
-                                            datatypedescr)).seconds/3600.)
+                                               datatypedescr)).seconds/3600.)
                     ml_memory = {
                         'ml_bottom': ml_bottom_arr,
                         'ml_thickness': ml_thickness_arr,

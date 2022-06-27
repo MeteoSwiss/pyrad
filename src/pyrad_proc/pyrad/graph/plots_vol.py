@@ -67,6 +67,7 @@ from .plots import _plot_sunscan
 
 from ..util.radar_utils import compute_quantiles_sweep, find_ang_index
 from ..util.radar_utils import compute_histogram_sweep
+from ..io.write_data import write_histogram
 
 
 def plot_ray(radar, field_name, ind_ray, prdcfg, fname_list, titl=None,
@@ -143,7 +144,7 @@ def plot_ray(radar, field_name, ind_ray, prdcfg, fname_list, titl=None,
 
 def plot_ppi(radar, field_name, ind_el, prdcfg, fname_list, plot_type='PPI',
              titl=None, vmin=None, vmax=None, step=None, quantiles=None,
-             save_fig=True):
+             save_fig=True, fname_hist=None):
     """
     plots a PPI
 
@@ -173,6 +174,8 @@ def plot_ppi(radar, field_name, ind_el, prdcfg, fname_list, plot_type='PPI',
     save_fig : bool
         if true save the figure. If false it does not close the plot and
         returns the handle to the figure
+    fname_hist : str or None
+        If not None, the name of a text file where the histogram will be stored
 
     Returns
     -------
@@ -254,6 +257,9 @@ def plot_ppi(radar, field_name, ind_el, prdcfg, fname_list, plot_type='PPI',
 
         plot_histogram(bins, values, fname_list, labelx=labelx,
                        labely='Number of Samples', titl=titl)
+        if fname_hist is not None:
+            hist, _ = np.histogram(values, bins=bins)
+            write_histogram(bins, hist, fname_hist, step=step)
     else:
         warn('Unknown plot type '+plot_type)
 
