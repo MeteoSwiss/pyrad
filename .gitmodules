@@ -1,7 +1,3 @@
-[submodule "src/pyart"]
-	path = src/pyart
-	url = https://github.com/ARM-DOE/pyart.git
-	branch = master
 [submodule "src/PyTDA"]
 	path = src/PyTDA
 	url = https://github.com/MeteoSwiss/PyTDA
