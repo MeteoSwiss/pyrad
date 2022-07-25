@@ -26,7 +26,7 @@ import queue
 import time
 from pathlib import Path
 
-from pyart import version as pyart_version
+from pyart import __version__ as pyart_version
 from pyrad import version as pyrad_version
 
 from .flow_aux import _warning_format, _initialize_listener
