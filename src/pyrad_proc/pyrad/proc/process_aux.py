@@ -955,7 +955,7 @@ def process_fixed_rng_span(procstatus, dscfg, radar_list=None):
     azi_min = dscfg.get('azi_min', None)
     azi_max = dscfg.get('azi_max', None)
 
-    radar_aux = cut_radar(
+    radar_aux = subset_radar(
         radar, field_names, rng_min=rmin, rng_max=rmax, ele_min=ele_min,
         ele_max=ele_max, azi_min=azi_min, azi_max=azi_max)
 

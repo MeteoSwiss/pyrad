@@ -90,11 +90,11 @@ def process_echo_id(procstatus, dscfg, radar_list=None):
             zdr_field = get_fieldname_pyart(datatype)
         if datatype == 'ZDRu':
             zdr_field = get_fieldname_pyart(datatype)
-        if datatype == 'RhoHV':
+        if datatype in ['RhoHV', 'uRhoHV']:
             rhv_field = get_fieldname_pyart(datatype)
         if datatype == 'uPhiDP':
             phi_field = get_fieldname_pyart(datatype)
-
+        
     ind_rad = int(radarnr[5:8])-1
     if radar_list[ind_rad] is None:
         warn('No valid radar')

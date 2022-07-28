@@ -408,7 +408,7 @@ def plot_rhi(radar, field_name, ind_az, prdcfg, fname_list, plot_type='RHI',
         display.plot_rhi(
             field_name, title=titl, sweep=ind_az, norm=norm, ticks=ticks,
             ticklabs=ticklabs, vmin=vmin, vmax=vmax,
-            colorbar_orient='horizontal', reverse_xaxis=False, fig=fig, ax=ax)
+            colorbar_orient='horizontal',  fig=fig, ax=ax)
         display.set_limits(
             ylim=[prdcfg['rhiImageConfig']['ymin'],
                   prdcfg['rhiImageConfig']['ymax']],

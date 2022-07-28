@@ -100,7 +100,7 @@ def main(cfgfile, starttime=None, endtime=None, trajfile="", trajtype='plane',
     print("- PYRAD version: {} (compiled {} by {})".format(
         pyrad_version.version, pyrad_version.compile_date_time,
         pyrad_version.username))
-    print("- PYART version: {}".format(pyart_version.version))
+    print("- PYART version: {}".format(pyart_version))
 
     # Define behaviour of warnings
     warnings.simplefilter('always')  # always print matching warnings
