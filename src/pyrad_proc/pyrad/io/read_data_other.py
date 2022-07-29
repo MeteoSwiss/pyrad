@@ -51,7 +51,6 @@ import errno
 import numpy as np
 
 from pyart.config import get_fillvalue, get_metadata
-from pyart.util import ma_broadcast_to
 
 from .io_aux import get_fieldname_pyart, _get_datetime
 

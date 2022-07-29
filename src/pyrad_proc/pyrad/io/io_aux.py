@@ -2195,10 +2195,6 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
     filelist : list of strings
         list of files within the time period. If it could not find them
         returns an empty list
-<<<<<<< HEAD
-=======
-
->>>>>>> dev
     """
     radarnr, datagroup, datatype, dataset, product = get_datatype_fields(
         datadescriptor)
@@ -2280,8 +2276,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 for filename in dayfilelist:
                     t_filelist.append(filename)
 
-            elif datagroup in ('ODIM', 'ODIMBIRDS', 'CFRADIAL2', 'CF1',
-                               'NEXRADII', 'GAMIC'):
+            elif datagroup in ('ODIM', 'ODIMBIRDS', 'CFRADIAL', 'CFRADIAL2', 
+                               'CF1', 'NEXRADII', 'GAMIC'):
                 if scan is None:
                     warn('Unknown scan name')
                     return []
@@ -2340,7 +2336,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
 
                 for filename in dayfilelist:
                     t_filelist.append(filename)
-            elif datagroup in ('CFRADIAL', 'ODIMPYRAD', 'PYRADGRID',
+            elif datagroup in ('CFRADIALPYRAD', 'ODIMPYRAD', 'PYRADGRID',
                                'NETCDFSPECTRA', 'CSV'):
                 termination = '.nc'
                 if datagroup == 'ODIMPYRAD':
@@ -2724,7 +2720,7 @@ def get_datatype_fields(datadescriptor):
             product = None
         else:
             datagroup = descrfields[1]
-            if datagroup in ('CFRADIAL', 'ODIMPYRAD', 'PYRADGRID',
+            if datagroup in ('CFRADIALPYRAD', 'ODIMPYRAD', 'PYRADGRID',
                              'NETCDFSPECTRA', 'CSV'):
                 descrfields2 = descrfields[2].split(',')
                 datatype = descrfields2[0]
@@ -2741,7 +2737,7 @@ def get_datatype_fields(datadescriptor):
                 product = None
             elif datagroup in ('ODIM', 'ODIMBIRDS', 'MFCFRADIAL', 'MFBIN',
                                'CFRADIAL2', 'CF1', 'NEXRADII', 'MFPNG',
-                               'MFGRIB', 'MFDAT', 'MFCF', 'GAMIC'):
+                               'MFGRIB', 'MFDAT', 'MFCF', 'GAMIC', 'CFRADIAL'):
                 descrfields2 = descrfields[2].split(',')
                 datatype = descrfields2[0]
                 product = None
@@ -2755,7 +2751,7 @@ def get_datatype_fields(datadescriptor):
     else:
         radarnr = 'RADAR001'
         datagroup = descrfields[0]
-        if datagroup in ('CFRADIAL', 'ODIMPYRAD', 'PYRADGRID',
+        if datagroup in ('CFRADIALPYRAD', 'ODIMPYRAD', 'PYRADGRID',
                          'NETCDFSPECTRA', 'CSV'):
             descrfields2 = descrfields[1].split(',')
             datatype = descrfields2[0]
@@ -2772,7 +2768,7 @@ def get_datatype_fields(datadescriptor):
             product = None
         elif datagroup in ('ODIM', 'ODIMBIRDS', 'MFCFRADIAL', 'MFBIN',
                            'NEXRADII', 'MFPNG', 'MFGRIB', 'MFDAT', 'MFCF',
-                           'CFRADIAL2', 'CF1', 'GAMIC'):
+                           'CFRADIAL2', 'CF1', 'GAMIC', 'CFRADIAL'):
             descrfields2 = descrfields[1].split(',')
             # warn(" descrfields2:  '%s'" % descrfields2[1])
             if len(descrfields2) == 2:
@@ -3280,7 +3276,7 @@ def _get_datetime(fname, datagroup, ftime_format=None):
 
     """
     bfile = os.path.basename(fname)
-    if datagroup in ('RAINBOW', 'CFRADIAL', 'ODIMPYRAD', 'PYRADGRID',
+    if datagroup in ('RAINBOW', 'CFRADIALPYRAD', 'ODIMPYRAD', 'PYRADGRID',
                      'NETCDFSPECTRA', 'CSV'):
         datetimestr = bfile[0:14]
         fdatetime = datetime.datetime.strptime(datetimestr, '%Y%m%d%H%M%S')
@@ -3295,7 +3291,7 @@ def _get_datetime(fname, datagroup, ftime_format=None):
                 datestr, '%y%j')+datetime.timedelta(days=1)
     elif datagroup in ('ODIM', 'ODIMBIRDS', 'MFCFRADIAL', 'MFBIN',
                        'NEXRADII', 'MFPNG', 'MFGRIB', 'MFDAT', 'MFCF',
-                       'CFRADIAL2', 'CF1', 'GAMIC'):
+                       'CFRADIAL2', 'CF1', 'GAMIC', 'CFRADIAL'):
         if ftime_format is None:
             # we assume is rad4alp format
             datetimestr = bfile[3:12]

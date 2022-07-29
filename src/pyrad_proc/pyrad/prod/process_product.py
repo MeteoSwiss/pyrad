@@ -224,10 +224,10 @@ def generate_cosmo_coord_products(dataset, prdcfg):
 
         if file_type == 'nc':
             pyart.io.cfradial.write_cfradial(
-                savedir+fname, new_dataset, physical=physical)
+                savedir+fname, new_dataset)
         elif file_type == 'h5':
             pyart.aux_io.write_odim_h5(
-                savedir+fname, new_dataset, physical=physical,
+                savedir+fname, new_dataset,
                 compression=compression, compression_opts=compression_opts)
         else:
             warn('Data could not be saved. ' +
@@ -321,10 +321,10 @@ def generate_cosmo_to_radar_products(dataset, prdcfg):
 
         if file_type == 'nc':
             pyart.io.cfradial.write_cfradial(
-                savedir+fname, new_dataset, physical=physical)
+                savedir+fname, new_dataset)
         elif file_type == 'h5':
             pyart.aux_io.write_odim_h5(
-                savedir+fname, new_dataset, physical=physical,
+                savedir+fname, new_dataset,
                 compression=compression, compression_opts=compression_opts)
         else:
             warn('Data could not be saved. ' +

@@ -31,9 +31,6 @@ from warnings import warn
 import numpy as np
 from scipy.spatial import cKDTree
 
-from pyart.util import cut_radar, compute_directional_stats
-from pyart.util import find_neighbour_gates
-from pyart.util import compute_azimuthal_average
 from pyart.config import get_metadata
 from pyart.core import Radar, geographic_to_cartesian_aeqd
 from pyart.core import cartesian_to_geographic_aeqd
@@ -958,7 +955,7 @@ def process_fixed_rng_span(procstatus, dscfg, radar_list=None):
     azi_min = dscfg.get('azi_min', None)
     azi_max = dscfg.get('azi_max', None)
 
-    radar_aux = cut_radar(
+    radar_aux = subset_radar(
         radar, field_names, rng_min=rmin, rng_max=rmax, ele_min=ele_min,
         ele_max=ele_max, azi_min=azi_min, azi_max=azi_max)
 
