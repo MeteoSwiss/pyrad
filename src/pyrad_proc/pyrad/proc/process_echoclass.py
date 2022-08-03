@@ -636,7 +636,7 @@ def process_filter_snr(procstatus, dscfg, radar_list=None):
 
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype in ('SNRh', 'SNRv'):
+        if datatype in ('SNRh', 'SNRv', 'SNR'):
             snr_field = get_fieldname_pyart(datatype)
             break
 
@@ -652,15 +652,33 @@ def process_filter_snr(procstatus, dscfg, radar_list=None):
     if snr_field not in radar.fields:
         warn('Unable to filter dataset according to SNR. Missing SNR field')
         return None, None
-
-    gatefilter = pyart.filters.snr_based_gate_filter(
-        radar, snr_field=snr_field, min_snr=dscfg['SNRmin'])
+    
+    try:
+        gatefilter = pyart.filters.snr_based_gate_filter(
+            radar, snr_field=snr_field, min_snr=dscfg['SNRmin'])
+    except AttributeError as e:
+        # Pyart-ARM
+        min_snr = dscfg['SNRmin']
+        max_snr = None
+        
+        # filter gates based upon field parameters
+        radar_aux = deepcopy(radar)
+        gatefilter = pyart.filters.GateFilter(radar_aux)
+    
+        if ((min_snr is not None or max_snr is not None) and
+                (snr_field in radar_aux.fields)):
+            gatefilter.exclude_masked(snr_field)
+            gatefilter.exclude_invalid(snr_field)
+            if min_snr is not None:
+                gatefilter.exclude_below(snr_field, min_snr)
+         
+            
     is_low_snr = gatefilter.gate_excluded == 1
 
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
 
-        if datatype in ('SNRh', 'SNRv'):
+        if datatype in ('SNRh', 'SNRv', 'SNR'):
             continue
 
         field_name = get_fieldname_pyart(datatype)
@@ -1339,23 +1357,39 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
             hydro_names = (
                 'AG', 'CR', 'LR', 'RP', 'RN', 'VI', 'WS', 'MH', 'IH/HDG')
             var_names = ('dBZ', 'ZDR', 'KDP', 'RhoHV', 'H_ISO0')
-
-        fields_dict = pyart.retrieve.hydroclass_semisupervised(
-            radar, hydro_names=hydro_names, var_names=var_names,
-            mass_centers=mass_centers, weights=weights, refl_field=refl_field,
-            zdr_field=zdr_field, rhv_field=rhv_field, kdp_field=kdp_field,
-            temp_field=temp_field, iso0_field=iso0_field, hydro_field=None,
-            entropy_field=None, temp_ref=temp_ref,
-            compute_entropy=compute_entropy,
-            output_distances=output_distances, vectorize=vectorize)
-
+        
+        ARM_VERSION = False
+        try:
+            fields_dict = pyart.retrieve.hydroclass_semisupervised(
+                radar, hydro_names=hydro_names, var_names=var_names,
+                mass_centers=mass_centers, weights=weights, refl_field=refl_field,
+                zdr_field=zdr_field, rhv_field=rhv_field, kdp_field=kdp_field,
+                temp_field=temp_field, iso0_field=iso0_field, hydro_field=None,
+                entropy_field=None, temp_ref=temp_ref,
+                compute_entropy=compute_entropy,
+                output_distances=output_distances, vectorize=vectorize)
+        except TypeError as e:
+            ARM_VERSION = True
+            warn('Hydroclass method could not parse all inputs')
+            warn('You are probably using PyART-ARM')
+            warn('Please use PyART-MCH to get all functionalities')
+            fields_dict = pyart.retrieve.hydroclass_semisupervised(
+                radar, mass_centers=mass_centers, weights=weights, 
+                refl_field=refl_field, zdr_field=zdr_field, 
+                rhv_field=rhv_field, kdp_field=kdp_field, 
+                temp_field=temp_field)
+            
         # prepare for exit
         new_dataset = {'radar_out': deepcopy(radar)}
         new_dataset['radar_out'].fields = dict()
-        new_dataset['radar_out'].add_field(
-            'radar_echo_classification', fields_dict['hydro'])
+        if ARM_VERSION:
+            new_dataset['radar_out'].add_field(
+                'radar_echo_classification', fields_dict)
+        else:
+            new_dataset['radar_out'].add_field(
+                'radar_echo_classification', fields_dict['hydro'])
 
-        if compute_entropy:
+        if compute_entropy and not ARM_VERSION:
             new_dataset['radar_out'].add_field(
                 'hydroclass_entropy', fields_dict['entropy'])
             if output_distances:

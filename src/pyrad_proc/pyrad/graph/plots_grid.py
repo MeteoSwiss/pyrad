@@ -21,6 +21,7 @@ import numpy as np
 
 try:
     import cartopy
+    from cartopy.io.img_tiles import Stamen
     _CARTOPY_AVAILABLE = True
 except ImportError:
     _CARTOPY_AVAILABLE = False
@@ -153,7 +154,7 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
             display.plot_grid(
                 field_name, level=level, norm=norm, ticks=ticks,
                 ticklabs=ticklabs, lat_lines=lat_lines, projection = projection,
-                lon_lines=lon_lines, vmin=vmin, embellish = True,
+                lon_lines=lon_lines, vmin=vmin, embellish = False,
                 vmax=vmax, mask_outside = mask_outside, alpha=alpha, title=titl, 
                 colorbar_flag=colorbar_flag)
             
@@ -165,18 +166,30 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
             display.plot_grid(
                 field_name, level=level, norm=norm, ticks=ticks,
                 lat_lines=lat_lines, lon_lines=lon_lines, title=titl,
-                ticklabs=ticklabs, colorbar_flag=False, vmin=vmin, vmax=vmax,
-                mask_outside = mask_outside, alpha=alpha, ax=ax, fig=fig)
+                ticklabs=ticklabs, colorbar_flag=False, embellish=False,
+                vmin=vmin, vmax=vmax, mask_outside = mask_outside,
+                alpha=alpha, ax=ax, fig=fig)
         else:
             display.plot_grid(
                 field_name, level=level, norm=norm, ticks=ticks, projection = projection,
                 lat_lines=lat_lines, lon_lines=lon_lines, ticklabs=ticklabs,
-                colorbar_flag=False, embelish=True, vmin=vmin, vmax=vmax,
+                colorbar_flag=False, embelish=False, vmin=vmin, vmax=vmax,
                 mask_outside = mask_outside, alpha=alpha, title=titl, ax=ax, fig=fig)
-
+   
     if embellish:
         ax = plt.gca()
+        if 'relief' in maps_list:
+              tiler = Stamen('terrain-background')
+              projection = tiler.crs
+              fig.delaxes(ax)
+              ax = fig.add_subplot(111, projection=projection)
+              warn(
+                  'The projection of the image is set to that of the ' +
+                  'background map, i.e. '+str(projection), UserWarning)
+
         for cartomap in maps_list:
+            if cartomap == 'relief':
+                    ax.add_image(tiler, background_zoom)
             if cartomap == 'countries':
                 # add countries
                 countries = cartopy.feature.NaturalEarthFeature(

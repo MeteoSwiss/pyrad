@@ -329,11 +329,23 @@ def plot_ppi_map(radar, field_name, ind_el, prdcfg, fname_list,
         field_name, sweep=ind_el, norm=norm, ticks=ticks, ticklabs=ticklabs,
         min_lon=min_lon, max_lon=max_lon, min_lat=min_lat, max_lat=max_lat,
         lat_lines=lat_lines, lon_lines=lon_lines, projection = projection,
-        fig=fig,
+        fig=fig, embellish = False,
         colorbar_flag=True, alpha=1)
 
     ax = display_map.ax
+    
+    if 'relief' in prdcfg['ppiMapImageConfig']['maps']:
+          tiler = Stamen('terrain-background')
+          projection = tiler.crs
+          fig.delaxes(ax)
+          ax = fig.add_subplot(111, projection=projection)
+          warn(
+              'The projection of the image is set to that of the ' +
+              'background map, i.e. '+str(projection), UserWarning)
+          
     for cartomap in prdcfg['ppiMapImageConfig']['maps']:
+        if cartomap == 'relief':
+                    ax.add_image(tiler, background_zoom)
         if cartomap == 'countries':
             # add countries
             countries = cartopy.feature.NaturalEarthFeature(

@@ -797,6 +797,9 @@ def get_datatype_odim(datatype):
     elif datatype == 'Nv':
         field_name = 'noisedBZ_vv'
         datatype_odim = 'NDBZV'
+    elif datatype == 'SNR':
+        field_name = 'signal_to_noise_ratio'
+        datatype_odim = 'SNRH'
     elif datatype == 'SNRh':
         field_name = 'signal_to_noise_ratio_hh'
         datatype_odim = 'SNRH'
@@ -1248,6 +1251,8 @@ def get_fieldname_pyart(datatype):
         field_name = 'signal_to_noise_ratio_hh'
     elif datatype == 'SNRv':
         field_name = 'signal_to_noise_ratio_vv'
+    elif datatype == 'SNR':
+        field_name = 'signal_to_noise_ratio'
 
     elif datatype == 'CCORh':
         field_name = 'clutter_correction_ratio_hh'
