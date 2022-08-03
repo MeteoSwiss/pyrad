@@ -1111,7 +1111,7 @@ def generate_spectra_products(dataset, prdcfg):
 
         fname = savedir+fname
 
-        pyart.aux_io.write_spectra(fname, new_dataset, physical=physical)
+        pyart.aux_io.write_spectra(fname, new_dataset)
 
         print('saved file: '+fname)
 
@@ -1150,7 +1150,7 @@ def generate_spectra_products(dataset, prdcfg):
                         dataset['radar_out'].fields[field_name])
         else:
             radar_aux = dataset['radar_out']
-        pyart.aux_io.write_spectra(fname, radar_aux, physical=physical)
+        pyart.aux_io.write_spectra(fname, radar_aux, )
 
         print('saved file: '+fname)
 

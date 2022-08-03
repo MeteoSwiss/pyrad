@@ -18,6 +18,7 @@ import builtins
 from datetime import datetime
 import getpass
 import setuptools  # for 'develop' mode
+from numpy.distutils.core import setup
 
 DOCLINES = __doc__.split("\n")
 
@@ -48,9 +49,9 @@ DOWNLOAD_URL = "https://github.com/MeteoSwiss/pyrad.git"
 LICENSE = 'BSD'
 CLASSIFIERS = filter(None, CLASSIFIERS.split('\n'))
 PLATFORMS = ["Linux"]
-MAJOR = 0
-MINOR = 6
-MICRO = 5
+MAJOR = 1
+MINOR = 2
+MICRO = 0
 ISRELEASED = True
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 SCRIPTS = glob.glob('scripts/*')
@@ -158,9 +159,7 @@ def setup_package():
 
     # rewrite version file
     write_version_py()
-
-    from numpy.distutils.core import setup
-
+    
     setup(
         name=NAME,
         maintainer=MAINTAINER,

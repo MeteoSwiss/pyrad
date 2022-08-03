@@ -1062,8 +1062,8 @@ def process_grid_texture(procstatus, dscfg, radar_list=None):
 
 def process_grid_mask(procstatus, dscfg, radar_list=None):
     """
-    Mask data. Puts True if data is above a certain threshold and false
-    otherwise.
+    Mask data. Puts True if data is within thresholds, False if it is not.
+    Thresholds can be min, max or both min and max
 
     Parameters
     ----------
@@ -1074,9 +1074,12 @@ def process_grid_mask(procstatus, dscfg, radar_list=None):
         data set configuration
     radar_list : list of Radar objects
         Optional. list of radar objects
-    threshold : float
+    threshold_min : float or None
         Threshold used for the mask. Values below threshold are set to False.
-        Above threshold are set to True. Default 0.
+        Above threshold are set to True. Default None.
+    threshold_max : float or None
+        Threshold used for the mask. Values above threshold are set to False.
+        Below threshold are set to True. Default None.
     x_dir_ext, y_dir_ext : int
         Number of pixels by which to extend the mask on each side of the
         west-east direction and south-north direction
@@ -1107,9 +1110,14 @@ def process_grid_mask(procstatus, dscfg, radar_list=None):
         warn('Unable to mask field '+field_name+' Field missing in grid')
         return None, None
 
-    threshold = dscfg.get('threshold', 0.)
+    threshold_min = dscfg.get('threshold_min', None)
+    threshold_max = dscfg.get('threshold_max', None)
     x_dir_ext = dscfg.get('x_dir_ext', 0)
     y_dir_ext = dscfg.get('y_dir_ext', 0)
+    
+    if threshold_min is None and threshold_max is None:
+        warn('At least one threshold necessary')
+        return None, None
 
     field_mask = pyart.config.get_metadata('field_mask')
     field_mask['data'] = np.ma.masked_all(
@@ -1117,8 +1125,21 @@ def process_grid_mask(procstatus, dscfg, radar_list=None):
     field_mask['data'][:] = 0
     valid = np.logical_not(np.ma.getmaskarray(grid.fields[field_name]['data']))
     field_mask['data'][valid] = 1
-    field_mask['data'][grid.fields[field_name]['data'] >= threshold] = 2
-    field_mask['long_name'] = field_name+' threshold '+str(threshold)
+    
+    if threshold_min is not None and threshold_max is not None:
+        field_mask['data'][
+            (grid.fields[field_name]['data'] >= threshold_min) &
+            (grid.fields[field_name]['data'] <= threshold_max)] = 2
+        field_mask['long_name'] = '{} threshold {}-{}'.format(
+            field_name, threshold_min, threshold_max)
+    elif threshold_min is not None:
+        field_mask['data'][grid.fields[field_name]['data'] >= threshold_min] = 2
+        field_mask['long_name'] = '{} threshold_min {}'.format(
+            field_name, threshold_min)
+    elif threshold_max is not None:
+        field_mask['data'][grid.fields[field_name]['data'] <= threshold_max] = 2
+        field_mask['long_name'] = '{} threshold_max {}'.format(
+            field_name, threshold_max)        
 
     if x_dir_ext > 0 or y_dir_ext > 0:
         ind_z, ind_y, ind_x = np.where(field_mask['data'] == 2)

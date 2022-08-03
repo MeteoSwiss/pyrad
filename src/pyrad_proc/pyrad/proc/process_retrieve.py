@@ -944,6 +944,7 @@ def process_vpr(procstatus, dscfg, radar_list=None):
         warn('ERROR: Unable to compute VPR. Missing data')
         return None, None
 
+    refl_corr = pyart.correct.correct_vpr(radar, refl_field=refl_field)
     # User defined variables
     nvalid_min = dscfg.get('nvalid_min', 20)
     angle_min = dscfg.get('angle_min', 0.)
