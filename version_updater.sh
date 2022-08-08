@@ -9,7 +9,7 @@ read continue
 # PyART
 #####################################################
 
-dir=$(dirname "$0")
+dir="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 echo Do you want to release a new pyART version y/n?
 read updatepyart
 if [[ $updatepyart == "y" ]]; then
