@@ -22,19 +22,25 @@ from setuptools import setup, find_packages
 DOCLINES = __doc__.split("\n")
 
 CLASSIFIERS = """\
-Development Status :: 0 - Prototype
-Intended Audience :: Science/Research
-Intended Audience :: Developers
-License :: OSI Approved :: BSD License
-Programming Language :: Python
-Programming Language :: Python :: 3
-Programming Language :: Python :: 3.6
-Programming Language :: Python :: 3.7
-Programming Language :: C
-Programming Language :: Cython
-Topic :: Scientific/Engineering
-Topic :: Scientific/Engineering :: Atmospheric Science
-Operating System :: POSIX :: Linux
+    Development Status :: 5 - Production/Stable
+    Intended Audience :: Science/Research
+    Intended Audience :: Developers
+    License :: OSI Approved :: BSD License
+    Programming Language :: Python
+    Programming Language :: Python :: 3
+    Programming Language :: Python :: 3.6
+    Programming Language :: Python :: 3.7
+    Programming Language :: Python :: 3.8
+    Programming Language :: Python :: 3.9
+    Programming Language :: Python :: 3.10
+    Programming Language :: C
+    Programming Language :: Cython
+    Topic :: Scientific/Engineering
+    Topic :: Scientific/Engineering :: Atmospheric Science
+    Operating System :: POSIX :: Linux
+    Operating System :: MacOS :: MacOS X
+    Operating System :: Microsoft :: Windows
+    Framework :: Matplotlib
 """
 
 
