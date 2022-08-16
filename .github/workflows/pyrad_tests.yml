@@ -1,7 +1,7 @@
 name: Test pyrad
 env:
-  MINIMAL_DEPENDENCIES: cython numpy scipy netCDF4
-  OPTIONAL_DEPENDENCIES: pyfftw cartopy h5py pandas
+  MINIMAL_DEPENDENCIES: cython numpy scipy netCDF4 
+  OPTIONAL_DEPENDENCIES: pyfftw cartopy h5py pandas scikit-image
   TEST_DEPENDENCIES: pytest pytest-cov
 
 on:
