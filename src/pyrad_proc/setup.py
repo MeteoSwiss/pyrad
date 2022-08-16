@@ -164,7 +164,7 @@ if __name__ == '__main__':
         maintainer=MAINTAINER,
         maintainer_email=MAINTAINER_EMAIL,
         url=URL,
-        packages=find_packages(include=['pyrad'], exclude=['docs']),
+        packages=find_packages(),
         include_package_data=True,
         configuration=configuration,
         scripts=SCRIPTS,
