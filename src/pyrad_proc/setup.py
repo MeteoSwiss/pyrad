@@ -46,7 +46,7 @@ LONG_DESCRIPTION = "\n".join(DOCLINES[2:])
 URL = "https://github.com/MeteoSwiss/pyrad.git"
 DOWNLOAD_URL = "https://github.com/MeteoSwiss/pyrad.git"
 LICENSE = 'BSD'
-CLASSIFIERS = filter(None, CLASSIFIERS.split('\n'))
+CLASSIFIERS = list(filter(None, CLASSIFIERS.split('\n')))
 PLATFORMS = ["Linux"]
 MAJOR = 1
 MINOR = 3
@@ -164,8 +164,9 @@ if __name__ == '__main__':
         maintainer=MAINTAINER,
         maintainer_email=MAINTAINER_EMAIL,
         url=URL,
-        packages=find_packages(include=['pyrad'], exclude=['docs']),
+        packages=find_packages(),
         include_package_data=True,
+        configuration=configuration,
         scripts=SCRIPTS,
         license=LICENSE,
         platforms=PLATFORMS,
