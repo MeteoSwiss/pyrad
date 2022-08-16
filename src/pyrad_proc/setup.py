@@ -166,6 +166,7 @@ if __name__ == '__main__':
         url=URL,
         packages=find_packages(include=['pyrad'], exclude=['docs']),
         include_package_data=True,
+        configuration=configuration,
         scripts=SCRIPTS,
         license=LICENSE,
         platforms=PLATFORMS,
