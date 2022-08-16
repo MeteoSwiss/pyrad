@@ -27,7 +27,7 @@ import time
 from pathlib import Path
 
 from pyart import __version__ as pyart_version
-from pyrad import version as pyrad_version
+from pyrad import __version__ as pyrad_version
 
 from .flow_aux import _warning_format, _initialize_listener
 from .flow_aux import _create_cfg_dict, _create_datacfg_dict
