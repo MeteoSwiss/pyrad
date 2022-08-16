@@ -1,3 +1,4 @@
+# This branch is intended for MeteoSwiss Py-ART developers. Pull requests should target this branch!
 
 **Master branch**
 
