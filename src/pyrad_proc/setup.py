@@ -152,30 +152,29 @@ def configuration(parent_package='', top_path=None):
     config.add_data_files(('pyrad', '*.txt'))
 
     return config
-
-if __name__ == '__main__':
-    write_version_py()
-    setup(
-        name=NAME,
-        description=DESCRIPTION,
-        long_description=LONG_DESCRIPTION,
-        author=MAINTAINER,
-        author_email=MAINTAINER_EMAIL,
-        maintainer=MAINTAINER,
-        maintainer_email=MAINTAINER_EMAIL,
-        url=URL,
-        packages=find_packages(include=['pyrad'], exclude=['docs']),
-        include_package_data=True,
-        scripts=SCRIPTS,
-        license=LICENSE,
-        platforms=PLATFORMS,
-        classifiers=CLASSIFIERS,
-        version=VERSION,
-        zip_safe=False,
-        use_scm_version={
-            'version_scheme': 'post-release',
-            'local_scheme': 'dirty-tag',
-        },
-    )
+print(find_packages(include=['pyrad'], exclude=['docs']))
+write_version_py()
+setup(
+    name=NAME,
+    description=DESCRIPTION,
+    long_description=LONG_DESCRIPTION,
+    author=MAINTAINER,
+    author_email=MAINTAINER_EMAIL,
+    maintainer=MAINTAINER,
+    maintainer_email=MAINTAINER_EMAIL,
+    url=URL,
+    packages=find_packages(),
+    include_package_data=True,
+    scripts=SCRIPTS,
+    license=LICENSE,
+    platforms=PLATFORMS,
+    classifiers=CLASSIFIERS,
+    version=VERSION,
+    zip_safe=False,
+    use_scm_version={
+        'version_scheme': 'post-release',
+        'local_scheme': 'dirty-tag',
+    },
+)
 
 
