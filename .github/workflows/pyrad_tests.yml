@@ -1,7 +1,7 @@
 name: Test pyrad
 env:
-  MINIMAL_DEPENDENCIES: cython numpy scipy dask netCDF4
-  OPTIONAL_DEPENDENCIES: pyfftw cartopy h5py PyWavelets pandas scikit-image
+  MINIMAL_DEPENDENCIES: cython numpy scipy netCDF4
+  OPTIONAL_DEPENDENCIES: pyfftw cartopy h5py pandas
   TEST_DEPENDENCIES: pytest pytest-cov
 
 on:
@@ -54,11 +54,11 @@ jobs:
       - name: Install pyart
         if: matrix.os != 'macos-latest'
         working-directory: ${{github.workspace}}/src/pyart/
-        run: pip install .
+        run: python setup.py install
       - name: Install pyrad
         if: matrix.os != 'macos-latest'
         working-directory: ${{github.workspace}}/src/pyrad_proc/
-        run: pip install .
+        run: python setup.py install
       - name: Download pyrad-examples
         env:
           PYRAD_EXAMPLES_PATH: ${{github.workspace}}/pyrad-examples/
