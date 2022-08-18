@@ -54,7 +54,7 @@ jobs:
       - name: clone pyart
         uses: actions/checkout@v2
         with:
-          repository: MeteoSwiss/pyart_mch
+          repository: MeteoSwiss/pyart
           path: resources/pyart/master
           ref: master
       - name: Install pyart
