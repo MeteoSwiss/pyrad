@@ -1,6 +1,6 @@
 name: Test pyrad
 env:
-  MINIMAL_DEPENDENCIES: cython numpy scipy netCDF4 
+  MINIMAL_DEPENDENCIES: cython numpy scipy netCDF4 xarray
   OPTIONAL_DEPENDENCIES: pyfftw cartopy h5py pandas scikit-image
   TEST_DEPENDENCIES: pytest pytest-cov
 
@@ -51,9 +51,14 @@ jobs:
         run: |
           conda install --quiet ${{env.PACKAGES}}
           pip install -U cookiecutter
+      - name: clone pyart
+        uses: actions/checkout@v2
+        with:
+          repository: MeteoSwiss/pyart
+          path: resources/pyart/master
+          ref: master
       - name: Install pyart
-        if: matrix.os != 'macos-latest'
-        working-directory: ${{github.workspace}}/src/pyart/
+        working-directory: resources/pyart/master/
         run: python setup.py install
       - name: Install pyrad
         if: matrix.os != 'macos-latest'
