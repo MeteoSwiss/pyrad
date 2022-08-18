@@ -52,9 +52,7 @@ jobs:
           conda install --quiet ${{env.PACKAGES}}
           pip install -U cookiecutter
       - name: Install pyart
-        if: matrix.os != 'macos-latest'
-        working-directory: ${{github.workspace}}/src/pyart/
-        run: python setup.py install
+        run: pip install -U arm_pyart
       - name: Install pyrad
         if: matrix.os != 'macos-latest'
         working-directory: ${{github.workspace}}/src/pyrad_proc/
