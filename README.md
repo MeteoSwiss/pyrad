@@ -68,14 +68,21 @@ sensors. This is particularly useful when performing measurement campaigns where
 sensing retrievals are validated with in-situ airplane or ground-based measurements.
 
 # Cloning from github
-Make sure to also get the submodules by running
+Make sure to also get the latest *Py-ART* library either from our fork 
 
 ```
-    git clone --recursive https://github.com/MeteoSwiss/pyrad.git
+    git clone https://github.com/MeteoSwiss/pyart.git
 ```
+which is highly recommended because it provides more functionalities for Pyrad. But if you'd like you can also use the official Py-ART from ARM.
+
+```
+    git clone https://github.com/ARM-DOE/pyart.git
+```
+
+
 
 # Installation
-To install Pyrad and its submodules please have a look at the [Pyrad user manual (pdf)](./additional_doc/pyrad_user_manual.pdf).
+To install Pyrad and Py-ART please have a look at the [Pyrad user manual (pdf)](./additional_doc/pyrad_user_manual.pdf).
 
 # Use
 Before using it have a look at the [cookbook (pdf)](./additional_doc/pyrad-framework-cookbook/DataProcessing.pdf).
