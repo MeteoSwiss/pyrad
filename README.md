@@ -74,6 +74,15 @@ Make sure to also get the submodules by running
     git clone --recursive https://github.com/MeteoSwiss/pyrad.git
 ```
 
+# Installation with conda
+To install from the conda repositories simply run
+
+```
+    conda install -c conda-forge pyart_mch
+    conda install -c conda-forge pyrad_mch
+```
+Note that you can also install *arm_pyart* instead of *pyart_mch*, which will use the [official Py-ART](https://github.com/ARM-DOE/pyart), but some functionalities of pyrad will be missing!
+
 # Installation
 To install Pyrad and its submodules please have a look at the [Pyrad user manual (pdf)](./additional_doc/pyrad_user_manual.pdf).
 
