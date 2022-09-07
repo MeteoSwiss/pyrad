@@ -51,8 +51,14 @@ jobs:
         run: |
           conda install --quiet ${{env.PACKAGES}}
           pip install -U cookiecutter
+      - name: Clone pyart
+        uses: actions/checkout@master
+        with:
+          name: ARM-DOE/pyart     <-- clone https://github.com/org1/repo1
+          ref: refs/heads/release
       - name: Install pyart
-        run: pip install -U arm_pyart
+        working-directory: ${{github.workspace}}/pyart/
+        run: pip install .
       - name: Install pyrad
         if: matrix.os != 'macos-latest'
         working-directory: ${{github.workspace}}/src/pyrad_proc/
