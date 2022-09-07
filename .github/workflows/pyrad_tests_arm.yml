@@ -34,7 +34,11 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-
+      - name: Clone pyart
+        uses: actions/checkout@master
+        with:
+          repository: ARM-DOE/pyart 
+          path: pyart
       - name: Setup Miniconda
         uses: conda-incubator/setup-miniconda@v2.0.0
         with:
@@ -52,7 +56,8 @@ jobs:
           conda install --quiet ${{env.PACKAGES}}
           pip install -U cookiecutter
       - name: Install pyart
-        run: pip install -U arm_pyart
+        working-directory:  ${{github.workspace}}/pyart/
+        run: pip install .
       - name: Install pyrad
         if: matrix.os != 'macos-latest'
         working-directory: ${{github.workspace}}/src/pyrad_proc/
