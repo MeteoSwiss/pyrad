@@ -19,6 +19,7 @@ Functions to plot Pyrad datasets
 from warnings import warn
 
 import numpy as np
+import datetime
 
 import matplotlib as mpl
 mpl.use('Agg')
@@ -219,7 +220,7 @@ def plot_timeseries_comp(date1, value1, date2, value2, fname_list,
 def plot_monitoring_ts(date, np_t, cquant, lquant, hquant, field_name,
                        fname_list, ref_value=None, vmin=None, vmax=None,
                        np_min=0, labelx='Time [UTC]', labely='Value',
-                       titl='Time Series', dpi=72):
+                       titl='Time Series', dpi=72, plot_until_year_end = False):
     """
     plots a time series of monitoring data
 
@@ -249,7 +250,8 @@ def plot_monitoring_ts(date, np_t, cquant, lquant, hquant, field_name,
         The figure title
     dpi : int
         dots per inch
-
+    plot_until_year_end : bool
+        if true will always set the maximum xtick to the end of the year
     Returns
     -------
     fname_list : list of str
@@ -295,6 +297,14 @@ def plot_monitoring_ts(date, np_t, cquant, lquant, hquant, field_name,
     ax.set_ylabel(labely)
     ax.set_title(titl)
     ax.set_ylim([vmin, vmax])
+    if plot_until_year_end:
+        t0 = date_plot[0]
+        tend = datetime.datetime(year = t0.year, 
+                                 month = 12,
+                                 day = 31, 
+                                 hour = 23, 
+                                 minute = 59)
+        ax.set_xlim([t0, tend])
 
     # tight x axis
     ax.autoscale(enable=True, axis='x', tight=True)
