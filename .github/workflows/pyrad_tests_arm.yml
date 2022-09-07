@@ -1,6 +1,6 @@
 name: Test pyrad ARM
 env:
-  MINIMAL_DEPENDENCIES: cython numpy scipy dask netCDF4
+  MINIMAL_DEPENDENCIES: cython numpy scipy dask netCDF4 xarray
   OPTIONAL_DEPENDENCIES: pyfftw cartopy h5py PyWavelets pandas scikit-image
   TEST_DEPENDENCIES: pytest pytest-cov
 
