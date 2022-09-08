@@ -215,8 +215,8 @@ SNRFilter STRUCT 4
 # ==========================================================================================
 #                 PHIDP processing
 # ==========================================================================================
-PhiDPc_smooth2w STRUCT 12
-    type STRING PHIDP_SMOOTH_2W
+PhiDPc_maesaka STRUCT 13
+    type STRING PHIDP_MAESAKA
     datatype STRARR 2
         PROC:PhiDPc
         PROC:dBZc
@@ -228,6 +228,7 @@ PhiDPc_smooth2w STRUCT 12
     rwinds FLOAT 1000.
     rwindl FLOAT 3000.
     Zthr FLOAT 40.
+    fzl: 3500
     MAKE_GLOBAL INT 1
     products STRUCT 3
       EL001 STRUCT 3

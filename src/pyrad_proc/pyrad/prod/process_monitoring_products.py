@@ -370,6 +370,7 @@ def generate_monitoring_products(dataset, prdcfg):
         ref_value = prdcfg.get('ref_value', 0.)
         sort_by_date = prdcfg.get('sort_by_date', False)
         rewrite = prdcfg.get('rewrite', False)
+        plot_until_year_end = prdcfg.get('plot_until_year_end', False)        
 
         savedir = get_save_dir(
             prdcfg['basepath'], prdcfg['procname'], dssavedir,
@@ -444,7 +445,8 @@ def generate_monitoring_products(dataset, prdcfg):
         plot_monitoring_ts(
             date, np_t_vec, cquant_vec, lquant_vec, hquant_vec, field_name,
             figfname_list, ref_value=ref_value, vmin=vmin, vmax=vmax,
-            np_min=np_min, labelx='Time UTC', labely=labely, titl=titl)
+            np_min=np_min, labelx='Time UTC', labely=labely, titl=titl,
+            plot_until_year_end = plot_until_year_end)
         print('----- save to '+' '.join(figfname_list))
 
         # generate alarms if needed
@@ -564,6 +566,7 @@ def generate_monitoring_products(dataset, prdcfg):
         ref_value = prdcfg.get('ref_value', 0.)
         sort_by_date = prdcfg.get('sort_by_date', False)
         rewrite = prdcfg.get('rewrite', False)
+        plot_until_year_end = prdcfg.get('plot_until_year_end', False)
 
         savedir = get_save_dir(
             prdcfg['basepath'], prdcfg['procname'], dssavedir,
@@ -658,7 +661,8 @@ def generate_monitoring_products(dataset, prdcfg):
         plot_monitoring_ts(
             date, np_t_vec, cquant_vec, lquant_vec, hquant_vec, field_name,
             figfname_list, ref_value=ref_value, vmin=vmin, vmax=vmax,
-            np_min=np_min, labelx='Time UTC', labely=labely, titl=titl)
+            np_min=np_min, labelx='Time UTC', labely=labely, titl=titl,
+            plot_until_year_end = plot_until_year_end)
         print('----- save to '+' '.join(figfname_list))
 
         # generate alarms if needed

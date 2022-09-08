@@ -90,11 +90,11 @@ def process_echo_id(procstatus, dscfg, radar_list=None):
             zdr_field = get_fieldname_pyart(datatype)
         if datatype == 'ZDRu':
             zdr_field = get_fieldname_pyart(datatype)
-        if datatype == 'RhoHV':
+        if datatype in ['RhoHV', 'uRhoHV']:
             rhv_field = get_fieldname_pyart(datatype)
         if datatype == 'uPhiDP':
             phi_field = get_fieldname_pyart(datatype)
-
+        
     ind_rad = int(radarnr[5:8])-1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
@@ -636,7 +636,7 @@ def process_filter_snr(procstatus, dscfg, radar_list=None):
 
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype in ('SNRh', 'SNRv'):
+        if datatype in ('SNRh', 'SNRv', 'SNR'):
             snr_field = get_fieldname_pyart(datatype)
             break
 
@@ -652,15 +652,33 @@ def process_filter_snr(procstatus, dscfg, radar_list=None):
     if snr_field not in radar.fields:
         warn('Unable to filter dataset according to SNR. Missing SNR field')
         return None, None
-
-    gatefilter = pyart.filters.snr_based_gate_filter(
-        radar, snr_field=snr_field, min_snr=dscfg['SNRmin'])
+    
+    try:
+        gatefilter = pyart.filters.snr_based_gate_filter(
+            radar, snr_field=snr_field, min_snr=dscfg['SNRmin'])
+    except AttributeError as e:
+        # Pyart-ARM
+        min_snr = dscfg['SNRmin']
+        max_snr = None
+        
+        # filter gates based upon field parameters
+        radar_aux = deepcopy(radar)
+        gatefilter = pyart.filters.GateFilter(radar_aux)
+    
+        if ((min_snr is not None or max_snr is not None) and
+                (snr_field in radar_aux.fields)):
+            gatefilter.exclude_masked(snr_field)
+            gatefilter.exclude_invalid(snr_field)
+            if min_snr is not None:
+                gatefilter.exclude_below(snr_field, min_snr)
+         
+            
     is_low_snr = gatefilter.gate_excluded == 1
 
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
 
-        if datatype in ('SNRh', 'SNRv'):
+        if datatype in ('SNRh', 'SNRv', 'SNR'):
             continue
 
         field_name = get_fieldname_pyart(datatype)
@@ -1339,23 +1357,39 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
             hydro_names = (
                 'AG', 'CR', 'LR', 'RP', 'RN', 'VI', 'WS', 'MH', 'IH/HDG')
             var_names = ('dBZ', 'ZDR', 'KDP', 'RhoHV', 'H_ISO0')
-
-        fields_dict = pyart.retrieve.hydroclass_semisupervised(
-            radar, hydro_names=hydro_names, var_names=var_names,
-            mass_centers=mass_centers, weights=weights, refl_field=refl_field,
-            zdr_field=zdr_field, rhv_field=rhv_field, kdp_field=kdp_field,
-            temp_field=temp_field, iso0_field=iso0_field, hydro_field=None,
-            entropy_field=None, temp_ref=temp_ref,
-            compute_entropy=compute_entropy,
-            output_distances=output_distances, vectorize=vectorize)
-
+        
+        ARM_VERSION = False
+        try:
+            fields_dict = pyart.retrieve.hydroclass_semisupervised(
+                radar, hydro_names=hydro_names, var_names=var_names,
+                mass_centers=mass_centers, weights=weights, refl_field=refl_field,
+                zdr_field=zdr_field, rhv_field=rhv_field, kdp_field=kdp_field,
+                temp_field=temp_field, iso0_field=iso0_field, hydro_field=None,
+                entropy_field=None, temp_ref=temp_ref,
+                compute_entropy=compute_entropy,
+                output_distances=output_distances, vectorize=vectorize)
+        except TypeError as e:
+            ARM_VERSION = True
+            warn('Hydroclass method could not parse all inputs')
+            warn('You are probably using PyART-ARM')
+            warn('Please use PyART-MCH to get all functionalities')
+            fields_dict = pyart.retrieve.hydroclass_semisupervised(
+                radar, mass_centers=mass_centers, weights=weights, 
+                refl_field=refl_field, zdr_field=zdr_field, 
+                rhv_field=rhv_field, kdp_field=kdp_field, 
+                temp_field=temp_field)
+            
         # prepare for exit
         new_dataset = {'radar_out': deepcopy(radar)}
         new_dataset['radar_out'].fields = dict()
-        new_dataset['radar_out'].add_field(
-            'radar_echo_classification', fields_dict['hydro'])
+        if ARM_VERSION:
+            new_dataset['radar_out'].add_field(
+                'radar_echo_classification', fields_dict)
+        else:
+            new_dataset['radar_out'].add_field(
+                'radar_echo_classification', fields_dict['hydro'])
 
-        if compute_entropy:
+        if compute_entropy and not ARM_VERSION:
             new_dataset['radar_out'].add_field(
                 'hydroclass_entropy', fields_dict['entropy'])
             if output_distances:
@@ -1516,11 +1550,11 @@ def process_centroids(procstatus, dscfg, radar_list=None):
         pdf_zh_max : int
             Multiplicative factor to the Guassian function used to make the
             distribution of the reflectivity platykurtic that determines the
-            number of samples for each bin. Default 20000
+            number of samples for each bin. Default 10000
         pdf_relh_max : int
             Multiplicative factor to the Guassian function used to make the
             distribution of the height relative to the iso-0 platykurtic that
-            determines the number of samples for each bin. Default 10000
+            determines the number of samples for each bin. Default 20000
         sigma_zh, sigma_relh : float
             sigma of the respective Gaussian functions. Defaults 0.75 and 1.5
         randomize : bool
@@ -1541,6 +1575,9 @@ def process_centroids(procstatus, dscfg, radar_list=None):
             class. Default 30
         internal_iterations : int. Dataset keyword
             Maximum number of iterations of the internal loop. Default 10
+        sample_data : Bool.
+            If True the data is going to be sampled prior to each external
+            iteration. Default False
         nsamples_iter : int.
             Number of samples per iteration. Default 20000
         alpha : float
@@ -1575,28 +1612,29 @@ def process_centroids(procstatus, dscfg, radar_list=None):
         parallelized : bool
             If True the centroids search is going to be parallelized. Default
             False
-        sample_data : bool
-            If True the data is going to be sampled prior to each external
-            iteration. Default True
         kmax_iter : int
             Maximum number of iterations of the k-medoids algorithm. Default
             100
         nsamples_small : int
             Maximum number before using the k-medoids CLARA algorithm. If this
-            number is exceeded the CLARA algorithm will be used
+            number is exceeded the CLARA algorithm will be used. Default 40000
         sampling_size_clara : int
             Number of samples used in each iteration of the k-medoids CLARA
-            algorithm.
+            algorithm. Default 10000
         niter_clara : int
-            Number of iterations performed by the k-medoids CLARA algorithm
+            Number of iterations performed by the k-medoids CLARA algorithm.
+            Default 5
         keep_labeled_data : bool
-            If True the labeled data is going to be kept.
+            If True the labeled data is going to be kept for storage. Default
+            True
         use_median : bool
-            If True the intermediate medoids are computed as the median of each
-            variable and the final medoids are computed as the median of each.
-            Otherwise they are computed using the kmedoids algorithm.
+            If True the intermediate centroids are computed as the median
+            of the observation variables and the final centroids are computed
+            as the median of the intermediate centroids. If false they are
+            computed using the kmedoids algorithm. Default false
         allow_label_duplicates : bool
-            If True allow to label multiple clusters with the same label
+            If True allow to label multiple clusters with the same label.
+            Default True
 
     radar_list : list of Radar objects
         Optional. list of radar objects
@@ -1743,8 +1781,8 @@ def process_centroids(procstatus, dscfg, radar_list=None):
 
     # select data to be used to determine centroids
     nbins = dscfg.get('nbins', 110)
-    pdf_zh_max = dscfg.get('pdf_zh_max', 2500)
-    pdf_relh_max = dscfg.get('pdf_relh_max', 1250)
+    pdf_zh_max = dscfg.get('pdf_zh_max', 10000)
+    pdf_relh_max = dscfg.get('pdf_relh_max', 20000)
     sigma_zh = dscfg.get('sigma_zh', 0.75)
     sigma_relh = dscfg.get('sigma_relh', 1.5)
     randomize = dscfg.get('randomize', True)
@@ -1775,13 +1813,14 @@ def process_centroids(procstatus, dscfg, radar_list=None):
     relh_slope = dscfg.get('relh_slope', 0.001)
     external_iterations = dscfg.get('external_iterations', 30)
     internal_iterations = dscfg.get('internal_iterations', 10)
-    nmedoids_min = dscfg.get('nmedoids_min', 1)
+    sample_data = dscfg.get('sample_data', False)
     nsamples_iter = dscfg.get('nsamples_iter', 20000)
     alpha = dscfg.get('alpha', 0.01)
     cv_approach = dscfg.get('cv_approach', True)
     n_samples_syn = dscfg.get('nsamples_syn', 50)
-    num_samples_arr = dscfg.get('nsamples_syn', (30, 35, 40))
+    num_samples_arr = dscfg.get('num_samples_arr', (30, 35, 40))
     acceptance_threshold = dscfg.get('acceptance_threshold', 0.5)
+    nmedoids_min = dscfg.get('nmedoids_min', 1)
     var_names = dscfg.get(
         'var_names', ('dBZ', 'ZDR', 'KDP', 'RhoHV', 'H_ISO0'))
     hydro_names = dscfg.get(
@@ -1789,7 +1828,6 @@ def process_centroids(procstatus, dscfg, radar_list=None):
         ('AG', 'CR', 'LR', 'RP', 'RN', 'VI', 'WS', 'MH', 'IH/HDG'))
     weight = dscfg.get('weight', (1., 1., 1., 1., 1.))
     parallelized = dscfg.get('parallelized', False)
-    sample_data = dscfg.get('sample_data', True)
     kmax_iter = dscfg.get('kmax_iter', 100)
     nsamples_small = dscfg.get('nsamples_small', 40000)
     sampling_size_clara = dscfg.get('sampling_size_clara', 10000)
@@ -2114,6 +2152,15 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
         age_iso0 = dscfg.get('age_iso0', 3.)
         ml_thickness_iso0 = dscfg.get('ml_thickness_iso0', 700.)
         get_iso0 = dscfg.get('get_iso0', True)
+
+        ml_obj, ml_dict, iso0_dict, _ = pyart.retrieve.melting_layer_mf(
+            radar, refl_field=refl_field, rhohv_field=rhohv_field,
+            ml_field='melting_layer', ml_pos_field='melting_layer_height',
+            iso0_field='height_over_iso0', max_range=max_range,
+            detect_threshold=detect_threshold, interp_holes=interp_holes,
+            max_length_holes=max_length_holes,
+            check_min_length=check_min_length, get_iso0=get_iso0)
+
         ml_memory_max = dscfg.get('ml_memory_max', 0.)
         datatypedescr = dscfg.get('ml_datatype', None)
 

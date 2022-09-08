@@ -24,10 +24,6 @@ else:
     # fvj built not checked for the moment
     # from . import __check_build
 
-    # versioning
-    from .version import git_revision as __git_revision__
-    from .version import version as __version__
-
     # import subpackages
     from . import graph
     from . import io

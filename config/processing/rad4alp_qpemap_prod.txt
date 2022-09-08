@@ -1,0 +1,38 @@
+#
+# Product generation configuration
+#
+
+# List of datasets to generate.
+# The detailed specification of each dataset is given below.
+dataSetList STRARR 1
+    RZC
+
+
+# ============================================================================
+#               raw grid data
+# ============================================================================
+RZC STRUCT 3
+    type STRING RAW_GRID
+    datatype STRING RAD4ALPGRID:RZC
+    products STRUCT 2
+        SURFACE STRUCT 5
+            type  STRING SURFACE_IMAGE
+            voltype STRING RR
+            vmin FLOAT 0.25
+            vmax FLOAT 20
+            mask_outside INT 1
+        HISTOGRAM STRUCT 4
+            type STRING HISTOGRAM
+            voltype STRING RR
+            mask_val FLOAT 0.03526497
+            write_data INT 1
+
+reflectivity STRUCT 3
+   type     STRING RAW
+   datatype STRING RAD4ALP:dBZ
+   products STRUCT 1
+       RHI228 STRUCT 4
+            type  STRING PSEUDORHI_IMAGE
+            angle FLOAT 228
+            AziTol FLOAT 5.
+            voltype STRING dBZ
