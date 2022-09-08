@@ -4271,12 +4271,8 @@ DEFAULT_FIELD_LIMITS = {
     frequency_of_occurrence: (0, 100),
 
     temperature: (-60, 30),
-<<<<<<< HEAD
-    height_over_iso0: (-2500., 2500.),
-=======
     height_over_iso0: (-6000., 6000.),
     corrected_height_over_iso0: (-6000., 6000.),
->>>>>>> dev
     iso0_height: (0., 5000.),
     corrected_iso0_height: (0., 5000.),
 
