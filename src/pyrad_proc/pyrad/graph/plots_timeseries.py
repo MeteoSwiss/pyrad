@@ -298,7 +298,7 @@ def plot_monitoring_ts(date, np_t, cquant, lquant, hquant, field_name,
     ax.set_title(titl)
     ax.set_ylim([vmin, vmax])
     if plot_until_year_end:
-        t0 = date_plot[0]
+        t0 = date_plt[0]
         tend = datetime.datetime(year = t0.year, 
                                  month = 12,
                                  day = 31, 
