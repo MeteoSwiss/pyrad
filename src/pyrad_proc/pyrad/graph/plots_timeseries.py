@@ -317,6 +317,9 @@ def plot_monitoring_ts(date, np_t, cquant, lquant, hquant, field_name,
     if np_min is not None:
         ax.plot(date, np.zeros(len(date))+np_min, 'k--')
 
+    if plot_until_year_end:
+         ax.set_xlim([t0, tend])
+         
     ax.set_ylabel('Number of Samples')
     ax.set_xlabel(labelx)
 
