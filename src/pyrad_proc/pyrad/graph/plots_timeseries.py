@@ -305,9 +305,10 @@ def plot_monitoring_ts(date, np_t, cquant, lquant, hquant, field_name,
                                  hour = 23, 
                                  minute = 59)
         ax.set_xlim([t0, tend])
-
-    # tight x axis
-    ax.autoscale(enable=True, axis='x', tight=True)
+    else:
+        # tight x axis
+        ax.autoscale(enable=True, axis='x', tight=True)
+    
     ax.grid(True)
 
     ax = fig.add_subplot(2, 1, 2)
