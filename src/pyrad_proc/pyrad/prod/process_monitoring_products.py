@@ -90,6 +90,8 @@ def generate_monitoring_products(dataset, prdcfg):
                     trend of the last X events is above this margin an alarm
                     is sent. If the margin is not specified it is not possible
                     to send any alarm
+                plot_until_year_end: Bool
+                    If true will always set the xmax of the timeseries to the end of the current year
                 nevents_min: int
                     Minimum number of events with sufficient points to send an
                     alarm related to the trend. If not specified it is not
@@ -149,6 +151,8 @@ def generate_monitoring_products(dataset, prdcfg):
                     trend of the last X events is above this margin an alarm
                     is sent. If the margin is not specified it is not possible
                     to send any alarm
+                plot_until_year_end: Bool
+                    If true will always set the xmax of the timeseries to the end of the current year
                 nevents_min: int
                     Minimum number of events with sufficient points to send an
                     alarm related to the trend. If not specified it is not
