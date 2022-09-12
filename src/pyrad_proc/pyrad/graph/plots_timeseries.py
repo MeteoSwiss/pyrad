@@ -319,7 +319,10 @@ def plot_monitoring_ts(date, np_t, cquant, lquant, hquant, field_name,
 
     if plot_until_year_end:
          ax.set_xlim([t0, tend])
-         
+    else:
+        # tight x axis
+        ax.autoscale(enable=True, axis='x', tight=True)
+
     ax.set_ylabel('Number of Samples')
     ax.set_xlabel(labelx)
 
@@ -327,9 +330,7 @@ def plot_monitoring_ts(date, np_t, cquant, lquant, hquant, field_name,
     # axes up to make room for them
     fig.autofmt_xdate()
 
-    # tight x axis
-    ax.autoscale(enable=True, axis='x', tight=True)
-
+    
     for fname in fname_list:
         fig.savefig(fname, dpi=dpi)
     plt.close(fig)
