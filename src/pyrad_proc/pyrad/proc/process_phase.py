@@ -107,7 +107,7 @@ def process_correct_phidp0(procstatus, dscfg, radar_list=None):
         phidp_field = 'corrected_'+psidp_field
 
     try:
-        phidp = pyart.correct_sys_phase(
+        phidp = pyart.correct.correct_sys_phase(
             radar, ind_rmin=ind_rmin, ind_rmax=ind_rmax, min_rcons=min_rcons,
             zmin=dscfg['Zmin'], zmax=dscfg['Zmax'], psidp_field=psidp_field,
             refl_field=refl_field, phidp_field=phidp_field)
