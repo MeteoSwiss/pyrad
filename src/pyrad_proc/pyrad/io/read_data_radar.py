@@ -147,13 +147,13 @@ def get_data(voltime, datatypesdescr, cfg):
                 Example: ODIM:dBZ,D{%Y-%m-%d}-F{%Y%m%d%H%M%S}. To find out
                 which datatype to use to match a particular ODIM field name
                 check the function 'get_datatype_odim' in pyrad/io/io_aux.py
-                
+
             'CFRADIAL': CFRADIAL file format. For such types 'dataset'
                 specifies the directory and file name date convention.
                 Example: ODIM:dBZ,D{%Y-%m-%d}-F{%Y%m%d%H%M%S}. To find out
                 which datatype to use to match a particular ODIM field name
                 check the function 'get_datatype_odim' in pyrad/io/io_aux.py
-        
+
             'CF1': CF1 file format. For such types 'dataset'
                 specifies the directory and file name date convention.
                 Example: ODIM:dBZ,D{%Y-%m-%d}-F{%Y%m%d%H%M%S}. To find out
@@ -244,7 +244,7 @@ def get_data(voltime, datatypesdescr, cfg):
     dataset_cfradialpyrad = list()
     product_cfradialpyrad = list()
     datatype_cfradial = list()
-    dataset_cfradial = list()    
+    dataset_cfradial = list()
     datatype_cfradial2 = list()
     dataset_cfradial2 = list()
     datatype_cf1 = list()
@@ -389,7 +389,7 @@ def get_data(voltime, datatypesdescr, cfg):
     ndatatypes_mfcfradial = len(datatype_mfcfradial)
     ndatatypes_nexrad2 = len(datatype_nexrad2)
     ndatatypes_cfradial = len(datatype_cfradial)
-    ndatatypes_cfradialpyrad = len(datatype_cfradialpyrad)    
+    ndatatypes_cfradialpyrad = len(datatype_cfradialpyrad)
     ndatatypes_cfradial2 = len(datatype_cfradial2)
     ndatatypes_cf1 = len(datatype_cf1)
     ndatatypes_odimpyrad = len(datatype_odimpyrad)
@@ -494,7 +494,7 @@ def get_data(voltime, datatypesdescr, cfg):
             cfg['datapath'][ind_rad], cfg['ScanList'][ind_rad], radar_name,
             radar_res, voltime, datatype_nexrad2, dataset_nexrad2, cfg,
             ind_rad=ind_rad)
-        
+
     elif ndatatypes_cfradial > 0:
         try:
             radar_name = cfg['RadarName'][ind_rad]
@@ -506,7 +506,7 @@ def get_data(voltime, datatypesdescr, cfg):
             cfg['datapath'][ind_rad], cfg['ScanList'][ind_rad], radar_name,
             radar_res, voltime, datatype_cfradial, dataset_cfradial, cfg,
             ind_rad=ind_rad)
-        
+
     elif ndatatypes_cfradial2 > 0:
         try:
             radar_name = cfg['RadarName'][ind_rad]
