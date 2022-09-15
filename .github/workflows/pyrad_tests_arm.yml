@@ -39,6 +39,11 @@ jobs:
         with:
           repository: ARM-DOE/pyart 
           path: pyart
+      - name: Clone pyrad-examples
+        uses: actions/checkout@master
+        with:
+          repository: MeteoSwiss/pyrad-examples
+          path: pyrad-examples
       - name: Setup Miniconda
         uses: conda-incubator/setup-miniconda@v2.0.0
         with:
@@ -57,16 +62,11 @@ jobs:
           pip install -U cookiecutter
       - name: Install pyart
         working-directory:  ${{github.workspace}}/pyart/
-        run: pip install .
+        run: python -m pip install .
       - name: Install pyrad
         if: matrix.os != 'macos-latest'
         working-directory: ${{github.workspace}}/src/pyrad_proc/
-        run: pip install .
-      - name: Download pyrad-examples
-        env:
-          PYRAD_EXAMPLES_PATH: ${{github.workspace}}/pyrad-examples/
-        working-directory: ${{github.workspace}}/ci
-        run: python fetch_pyrad_examples.py
+        run: python -m pip install .
 
       - name: Check imports
         working-directory: ${{github.workspace}}/pyrad-examples/

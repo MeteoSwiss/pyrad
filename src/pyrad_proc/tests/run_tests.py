@@ -11,6 +11,15 @@ from pathlib import Path
  
 from pyrad.flow import main
 
+def test_rad4alp_hydro():
+    cfgfile = Path(os.environ['PYRAD_EXAMPLES_PATH'], 'config', 'processing',
+                   'rad4alp_hydro_PLL.txt')
+    os.environ['PYART_CONFIG'] = str(Path(os.environ['PYRAD_EXAMPLES_PATH'],
+                                     'mch_config.py'))
+    starttime = datetime.datetime(2022,6,28, 7, 20)
+    endtime = datetime.datetime(2022,6,28, 7, 25)
+    main(str(cfgfile), starttime=starttime, endtime=endtime)
+
 def test_cpc():
     cfgfile = Path(os.environ['PYRAD_EXAMPLES_PATH'], 'config', 'processing',
                    'cpc_gif.txt')
@@ -38,7 +47,7 @@ def test_rainbow_poi():
     starttime = datetime.datetime(2019,10,15, 9, 35)
     endtime = datetime.datetime(2019,10,15, 9, 40)
     main(str(cfgfile), starttime=starttime, endtime=endtime)
-    
+
 def test_nexrad2():
     cfgfile = Path(os.environ['PYRAD_EXAMPLES_PATH'], 'config', 'processing',
                    'nexrad2.txt')
