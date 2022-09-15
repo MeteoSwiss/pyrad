@@ -2065,11 +2065,11 @@ def _create_target_radar(radar, dscfg, fixed_angle_val, info, field_names,
     altitude = deepcopy(radar.altitude)
     if 'target_radar_pos' in dscfg:
         latitude['data'] = np.array(
-            [dscfg['target_radar_pos']['latitude']], dtype=np.float)
+            [dscfg['target_radar_pos']['latitude']], dtype=np.float64)
         longitude['data'] = np.array(
-            [dscfg['target_radar_pos']['longitude']], dtype=np.float)
+            [dscfg['target_radar_pos']['longitude']], dtype=np.float64)
         altitude['data'] = np.array(
-            [dscfg['target_radar_pos']['altitude']], dtype=np.float)
+            [dscfg['target_radar_pos']['altitude']], dtype=np.float64)
 
     _range['data'] = np.arange(rng_min, rng_max+rng_res, rng_res)
     ngates = _range['data'].size
