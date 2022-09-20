@@ -48,6 +48,9 @@ unfiltered_reflectivity_vv = 'unfiltered_reflectivity_vv'
 reflectivity = 'reflectivity'
 reflectivity_vv = 'reflectivity_vv'
 
+normalized_reflectivity = 'normalized_reflectivity'
+linear_reflectivity = 'linear_reflectivity'
+
 corrected_unfiltered_reflectivity = 'corrected_unfiltered_reflectivity'
 
 corrected_reflectivity = 'corrected_reflectivity'
@@ -57,6 +60,8 @@ clutter_correction_ratio_hh = 'clutter_correction_ratio_hh'
 clutter_correction_ratio_vv = 'clutter_correction_ratio_vv'
 
 reflectivity_bias = 'reflectivity_bias'
+
+vpr_correction = 'vpr_correction'
 
 volumetric_reflectivity = 'volumetric_reflectivity'
 volumetric_reflectivity_vv = 'volumetric_reflectivity_vv'
@@ -213,7 +218,7 @@ unfiltered_cross_correlation_ratio = 'unfiltered_cross_correlation_ratio'
 uncorrected_cross_correlation_ratio = 'uncorrected_cross_correlation_ratio'
 corrected_cross_correlation_ratio = 'corrected_cross_correlation_ratio'
 logarithmic_cross_correlation_ratio = 'logarithmic_cross_correlation_ratio'
-
+theoretical_cross_correlation_ratio = 'theoretical_cross_correlation_ratio'
 cross_correlation_ratio_in_rain = 'cross_correlation_ratio_in_rain'
 
 # Normalized coherent power, signal quality index, SQI, NCP
@@ -290,9 +295,11 @@ frequency_of_occurrence = 'frequency_of_occurrence'
 temperature = 'temperature'
 iso0 = 'iso0'
 height_over_iso0 = 'height_over_iso0'
+corrected_height_over_iso0 = 'corrected_height_over_iso0'
 cosmo_index = 'cosmo_index'
 hzt_index = 'hzt_index'
 iso0_height = 'iso0_height'
+corrected_iso0_height = 'corrected_iso0_height'
 
 # DEM fields
 visibility = 'visibility'
@@ -373,6 +380,10 @@ sun_hit_zdr = 'sun_hit_zdr'
 # birds signal
 bird_density = 'bird_density'
 bird_reflectivity = 'bird_reflectivity'
+vol2bird_echo_classification = 'vol2bird_echo_classification'
+vol2bird_background = 'vol2bird_background'
+vol2bird_weather = 'vol2bird_weather'
+vol2bird_biology = 'vol2bird_biology'
 
 # profile variables
 height = 'height'
@@ -508,7 +519,13 @@ FILL_VALUE = fill_value
 DEFAULT_FIELD_NAMES = {
     # Internal field name (do not change): field name used (can change)
     'reflectivity': reflectivity,
+    'normalized_reflectivity': normalized_reflectivity,
+    'linear_reflectivity': linear_reflectivity,
     'bird_reflectivity': bird_reflectivity,
+    'vol2bird_echo_classification': vol2bird_echo_classification,
+    'vol2bird_background': vol2bird_background,
+    'vol2bird_weather': vol2bird_weather,
+    'vol2bird_biology': vol2bird_biology,
     'corrected_reflectivity': corrected_reflectivity,
     'total_power': total_power,
     'unfiltered_reflectivity': unfiltered_reflectivity,
@@ -525,6 +542,7 @@ DEFAULT_FIELD_NAMES = {
     'volumetric_reflectivity_vv': volumetric_reflectivity_vv,
     'radar_cross_section_hh': radar_cross_section_hh,
     'radar_cross_section_vv': radar_cross_section_vv,
+    'vpr_correction': vpr_correction,
     'sun_hit_power_h': sun_hit_power_h,
     'sun_hit_power_v': sun_hit_power_v,
     'sun_hit_differential_reflectivity': sun_hit_differential_reflectivity,
@@ -562,6 +580,7 @@ DEFAULT_FIELD_NAMES = {
     'uncorrected_cross_correlation_ratio': uncorrected_cross_correlation_ratio,
     'logarithmic_cross_correlation_ratio': logarithmic_cross_correlation_ratio,
     'cross_correlation_ratio_in_rain': cross_correlation_ratio_in_rain,
+    'theoretical_cross_correlation_ratio': theoretical_cross_correlation_ratio,
     'normalized_coherent_power': normalized_coherent_power,
     'wide_band_noise': wide_band_noise,
     'fields_difference': fields_difference,
@@ -720,7 +739,9 @@ DEFAULT_FIELD_NAMES = {
     'temperature': temperature,
     'iso0': iso0,
     'height_over_iso0': height_over_iso0,
+    'corrected_height_over_iso0': corrected_height_over_iso0,
     'iso0_height': iso0_height,
+    'corrected_iso0_height': corrected_iso0_height,
     'cosmo_index': cosmo_index,
     'hzt_index': hzt_index,
     'visibility': visibility,
@@ -1172,6 +1193,18 @@ DEFAULT_METADATA = {
         'add_offset': -32.,
         '_Write_as_dtype': 'uint8'},
 
+    normalized_reflectivity: {
+        'units': '-',
+        'standard_name': 'normalized_reflectivity',
+        'long_name': 'Normalized Reflectivity',
+        'coordinates': 'elevation azimuth range'},
+
+    linear_reflectivity: {
+        'units': 'mm6/m3',
+        'standard_name': 'linear_reflectivity',
+        'long_name': 'Linear Reflectivity',
+        'coordinates': 'elevation azimuth range'},
+
     avg_reflectivity: {
         'units': 'dBZ',
         'standard_name': 'horizontal_reflectivity',
@@ -1316,6 +1349,12 @@ DEFAULT_METADATA = {
         'units': 'dBsm',
         'standard_name': 'radar_cross_section_vv',
         'long_name': 'Vertical Radar Cross-Section',
+        'coordinates': 'elevation azimuth range'},
+
+    vpr_correction: {
+        'units': 'dB',
+        'standard_name': 'vpr_correction',
+        'long_name': 'Vertical Profile of Reflectivity Correction',
         'coordinates': 'elevation azimuth range'},
 
     total_power: {
@@ -1643,6 +1682,12 @@ DEFAULT_METADATA = {
         'units': '-',
         'standard_name': 'copolar_correlation_coefficient',
         'long_name': 'Copolar correlation coefficient (RHOHV)',
+        'coordinates': 'elevation azimuth range'},
+
+    theoretical_cross_correlation_ratio: {
+        'units': '-',
+        'standard_name': 'copolar_correlation_coefficient',
+        'long_name': 'Theoretical copolar correlation coefficient (RHOHV)',
         'coordinates': 'elevation azimuth range'},
 
     corrected_cross_correlation_ratio: {
@@ -2446,6 +2491,36 @@ DEFAULT_METADATA = {
         '_FillValue': 0,
         '_Write_as_dtype': 'uint8'},
 
+    vol2bird_echo_classification: {
+        'units': '-',
+        'standard_name': 'vol2bird_echo_classification',
+        'long_name': 'VOL2BIRD echo classification',
+        'labels': ['MISSING', 'Vthresh', 'Zthresh', 'OTHER', 'FRINGE', 'PRECIP_CELLS'],
+        'ticks': [-4, -3, -2, -1, 1, 2],
+        'boundaries': [-4.5, -3.5, -2.5, -1.5, 0.5, 1.5, 2.5],
+        'coordinates': 'elevation azimuth range'},
+
+    vol2bird_background: {
+        'units': '-',
+        'standard_name': 'vol2bird_background',
+        'long_name': 'VOL2BIRD background',
+        'labels': ['DATA', 'NO DATA'],
+        'ticks': [0, 1],
+        'boundaries': [-0.5, 0.5, 1.5],
+        'coordinates': 'elevation azimuth range'},
+
+    vol2bird_weather: {
+        'units': '-',
+        'standard_name': 'vol2bird_weather',
+        'long_name': 'VOL2BIRD weather',
+        'coordinates': 'elevation azimuth range'},
+
+    vol2bird_biology: {
+        'units': '-',
+        'standard_name': 'vol2bird_biology',
+        'long_name': 'VOL2BIRD biology',
+        'coordinates': 'elevation azimuth range'},
+
     hydroclass_entropy: {
         'units': '-',
         'standard_name': 'hydroclass_entropy',
@@ -2765,6 +2840,12 @@ DEFAULT_METADATA = {
         'units': 'deg Celsius',
         'standard_name': 'temperature',
         'long_name': 'Temperature',
+        'labels': ['-60.', '-50.', '-40.', '-30.', '-20.', '-10.', '-5.',
+                   '0.', '5.', '10.', '20.', '30.'],
+        'ticks': [-60., -50., -40., -30., -20., -10., -5., 0, 5., 10., 20.,
+                  30.],
+        'boundaries': [-80., -60., -50., -40., -30., -20., -10., -5., 0, 5.,
+                       10., 20., 30., 40.],
         'coordinates': 'elevation azimuth range'},
 
     iso0: {
@@ -2786,9 +2867,20 @@ DEFAULT_METADATA = {
         'long_name': 'Height of the range bin respect to the iso0 level',
         'coordinates': 'elevation azimuth range'},
 
+    corrected_height_over_iso0: {
+        'units': 'm',
+        'standard_name': 'corrected_height_over_iso0',
+        'long_name': 'Height of the range bin respect to the iso0 level',
+        'coordinates': 'elevation azimuth range'},
+
     iso0_height: {
         'units': 'm MSL',
         'standard_name': 'iso0_height',
+        'long_name': 'iso0 height'},
+
+    corrected_iso0_height: {
+        'units': 'm MSL',
+        'standard_name': 'corrected_iso0_height',
         'long_name': 'iso0 height'},
 
     cosmo_index: {
@@ -3489,6 +3581,15 @@ gamic_field_mapping = {
     'I': None,          # In phase signal
     'Q': None,          # Quadrature signal
 
+    'ZH': reflectivity,
+    'ZV': reflectivity_vv,
+    'UH': unfiltered_reflectivity,
+    'UV': unfiltered_reflectivity_vv,
+    'VH': velocity,
+    'VV': velocity_vv,
+    'WH': spectrum_width,
+    'WV': spectrum_width_vv,
+
     'Z': corrected_reflectivity,
                         # Reflectivity, corrected for 2nd trip & clutter
     'UZ': reflectivity,
@@ -3506,7 +3607,7 @@ gamic_field_mapping = {
     'V': corrected_velocity,
                         # Unfolded velocity from corrected timeseries
     'VF': velocity,     # Folded velocity from corr. t.s.
-    'UV': None,         # Unfolded velocity from uncorrected timeseries
+    # 'UV': None,         # Unfolded velocity from uncorrected timeseries
     'UVF': None,        # Folded velcity from uncorr. t.s.
     'Vh': corrected_velocity,
                         # Velocity from corr. t.s., horizontal channel
@@ -3562,7 +3663,7 @@ gamic_field_mapping = {
 
     # A '1' ending on differential reflectivity fields indicates that the
     # moment has calculated using a 1st LAG algorithm.
-    'ZDR': corrected_differential_reflectivity,
+    'ZDR': differential_reflectivity,
                         # Differential reflectivity from corrected timeseries
     'UZDR': differential_reflectivity,
                         # Diff. refl. from uncorrected timeseries
@@ -3573,7 +3674,7 @@ gamic_field_mapping = {
 
     'PHI': corrected_differential_phase,
                         # Differential phase from corrected timeseries
-    'PHIDP': corrected_differential_phase,
+    'PHIDP': differential_phase,
                         # Differential phase from corrected timeseries
     'UPHIDP': differential_phase,
                         # Diff. phase from uncorrected timeseries.
@@ -3692,6 +3793,8 @@ def spectrum_width_limit(container=None, selection=0):
 DEFAULT_FIELD_COLORMAP = {
     # field name : colormap
     reflectivity: 'pyart_NWSRef',
+    normalized_reflectivity: 'pyart_NWSRef',
+    linear_reflectivity: 'pyart_NWSRef',
     corrected_reflectivity: 'pyart_NWSRef',
     total_power: 'pyart_NWSRef',
     unfiltered_reflectivity: 'pyart_NWSRef',
@@ -3794,6 +3897,7 @@ DEFAULT_FIELD_COLORMAP = {
     quant80_corrected_velocity: 'pyart_BuDRd18',
     quant90_corrected_velocity: 'pyart_BuDRd18',
     quant95_corrected_velocity: 'pyart_BuDRd18',
+    vpr_correction: 'pyart_BuDRd18',
 
     spectrum_width: 'pyart_NWS_SPW',
     corrected_spectrum_width: 'pyart_NWS_SPW',
@@ -3819,6 +3923,7 @@ DEFAULT_FIELD_COLORMAP = {
     uncorrected_cross_correlation_ratio: 'pyart_RefDiff',
     logarithmic_cross_correlation_ratio: 'pyart_RefDiff',
     cross_correlation_ratio_in_rain: 'pyart_RefDiff',
+    theoretical_cross_correlation_ratio: 'pyart_RefDiff',
     spectral_copolar_correlation_coefficient: 'pyart_RefDiff',
     unfiltered_spectral_copolar_correlation_coefficient: 'pyart_RefDiff',
 
@@ -3890,10 +3995,13 @@ DEFAULT_FIELD_COLORMAP = {
     probability_MH:  'pyart_LangRainbow12',
     probability_IH:  'pyart_LangRainbow12',
 
+    vol2bird_echo_classification: 'pyart_LangRainbow12',
+
     radar_echo_id: 'pyart_LangRainbow12',
     clutter_exit_code: 'pyart_LangRainbow12',
     melting_layer: 'pyart_LangRainbow12',
     height_over_iso0: 'pyart_BuDRd18',
+    corrected_height_over_iso0: 'pyart_BuDRd18',
 
     specific_attenuation: 'pyart_Carbone17',
     path_integrated_attenuation: 'pyart_Carbone17',
@@ -3967,6 +4075,8 @@ DEFAULT_FIELD_LIMITS = {
     # field name : limits
     #reflectivity: (-30., 75.),
     reflectivity: (-30., 85.),
+    normalized_reflectivity: (-6., 6.),
+    linear_reflectivity: (0., 1e7),
     avg_reflectivity: (-30., 75.),
     quant05_reflectivity: (-30., 75.),
     quant10_reflectivity: (-30., 75.),
@@ -4005,6 +4115,8 @@ DEFAULT_FIELD_LIMITS = {
     # spectral_reflectivity_vv: (-60., 45.),
     # unfiltered_spectral_reflectivity_hh: (-60., 45.),
     # unfiltered_spectral_reflectivity_vv: (-60., 45.),
+
+    vpr_correction: (-12., 12.),
 
     signal_power_hh: (-130., 0.),
     signal_power_vv: (-130., 0.),
@@ -4062,7 +4174,7 @@ DEFAULT_FIELD_LIMITS = {
 
     #differential_reflectivity: (-1., 8.),
     differential_reflectivity: (-8., 12.),
-    corrected_differential_reflectivity: (-1., 8.),
+    corrected_differential_reflectivity: (-1., 2.),
     #unfiltered_differential_reflectivity: (-1., 8.),
     unfiltered_differential_reflectivity: (-8., 12.),
     differential_reflectivity_in_precipitation: (-10., 10.),
@@ -4079,6 +4191,7 @@ DEFAULT_FIELD_LIMITS = {
     uncorrected_cross_correlation_ratio: (0.7, 1.),
     logarithmic_cross_correlation_ratio: (0, 4),
     cross_correlation_ratio_in_rain: (0.9, 1.),
+    theoretical_cross_correlation_ratio: (0.8, 1.),
     # spectral_copolar_correlation_coefficient: (0.7, 1),
     # unfiltered_spectral_copolar_correlation_coefficient: (0.7, 1),
 
@@ -4128,6 +4241,10 @@ DEFAULT_FIELD_LIMITS = {
     melting_layer: (0, 5),
     clutter_exit_code: (0, 200),
 
+    vol2bird_background: (0., 1.),
+    vol2bird_weather: (0., 1.),
+    vol2bird_biology: (0., 1.),
+
     probability_of_hail: (0., 100.),
     vertically_integrated_liquid: (0., 30.),
 
@@ -4155,7 +4272,9 @@ DEFAULT_FIELD_LIMITS = {
 
     temperature: (-60, 30),
     height_over_iso0: (-6000., 6000.),
+    corrected_height_over_iso0: (-6000., 6000.),
     iso0_height: (0., 5000.),
+    corrected_iso0_height: (0., 5000.),
 
     # Additional reflectivity like fields
     'CZ': (-10., 65.),

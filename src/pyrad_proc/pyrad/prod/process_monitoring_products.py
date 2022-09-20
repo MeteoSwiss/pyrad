@@ -90,6 +90,8 @@ def generate_monitoring_products(dataset, prdcfg):
                     trend of the last X events is above this margin an alarm
                     is sent. If the margin is not specified it is not possible
                     to send any alarm
+                plot_until_year_end: Bool
+                    If true will always set the xmax of the timeseries to the end of the current year
                 nevents_min: int
                     Minimum number of events with sufficient points to send an
                     alarm related to the trend. If not specified it is not
@@ -149,6 +151,8 @@ def generate_monitoring_products(dataset, prdcfg):
                     trend of the last X events is above this margin an alarm
                     is sent. If the margin is not specified it is not possible
                     to send any alarm
+                plot_until_year_end: Bool
+                    If true will always set the xmax of the timeseries to the end of the current year
                 nevents_min: int
                     Minimum number of events with sufficient points to send an
                     alarm related to the trend. If not specified it is not
@@ -370,6 +374,7 @@ def generate_monitoring_products(dataset, prdcfg):
         ref_value = prdcfg.get('ref_value', 0.)
         sort_by_date = prdcfg.get('sort_by_date', False)
         rewrite = prdcfg.get('rewrite', False)
+        plot_until_year_end = prdcfg.get('plot_until_year_end', False)        
 
         savedir = get_save_dir(
             prdcfg['basepath'], prdcfg['procname'], dssavedir,
@@ -444,7 +449,8 @@ def generate_monitoring_products(dataset, prdcfg):
         plot_monitoring_ts(
             date, np_t_vec, cquant_vec, lquant_vec, hquant_vec, field_name,
             figfname_list, ref_value=ref_value, vmin=vmin, vmax=vmax,
-            np_min=np_min, labelx='Time UTC', labely=labely, titl=titl)
+            np_min=np_min, labelx='Time UTC', labely=labely, titl=titl,
+            plot_until_year_end = plot_until_year_end)
         print('----- save to '+' '.join(figfname_list))
 
         # generate alarms if needed
@@ -564,6 +570,7 @@ def generate_monitoring_products(dataset, prdcfg):
         ref_value = prdcfg.get('ref_value', 0.)
         sort_by_date = prdcfg.get('sort_by_date', False)
         rewrite = prdcfg.get('rewrite', False)
+        plot_until_year_end = prdcfg.get('plot_until_year_end', False)
 
         savedir = get_save_dir(
             prdcfg['basepath'], prdcfg['procname'], dssavedir,
@@ -658,7 +665,8 @@ def generate_monitoring_products(dataset, prdcfg):
         plot_monitoring_ts(
             date, np_t_vec, cquant_vec, lquant_vec, hquant_vec, field_name,
             figfname_list, ref_value=ref_value, vmin=vmin, vmax=vmax,
-            np_min=np_min, labelx='Time UTC', labely=labely, titl=titl)
+            np_min=np_min, labelx='Time UTC', labely=labely, titl=titl,
+            plot_until_year_end = plot_until_year_end)
         print('----- save to '+' '.join(figfname_list))
 
         # generate alarms if needed

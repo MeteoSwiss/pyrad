@@ -18,6 +18,7 @@ Functions for reading auxiliary data
     read_status
     read_rad4alp_cosmo
     read_rad4alp_vis
+    read_mf_vis
     read_histogram
     read_quantiles
     read_excess_gates
@@ -378,7 +379,8 @@ def read_rhi_profile(fname, labels=['50.0-percentile', '25.0-percentile',
                 )
             for i, row in enumerate(reader):
                 height[i] = float(row['Altitude [m MSL]'])
-                np_t[i] = int(row['N valid'])
+                if 'N valid' in row:
+                    np_t[i] = int(row['N valid'])
                 for j, label in enumerate(labels):
                     vals[i, j] = float(row[label])
 
@@ -581,6 +583,58 @@ def read_rad4alp_vis(fname, datatype):
             visfile.close()
 
             return field_list
+
+    except EnvironmentError as ee:
+        warn(str(ee))
+        warn('Unable to read file '+fname)
+        return None
+
+
+def read_mf_vis(fname, datatype):
+    """
+    Reads Météo-France visibility data binary file.
+
+    Parameters
+    ----------
+    fname : str
+        name of the file to read
+
+    datatype : str
+        name of the data type
+
+    Returns
+    -------
+    field : dict
+        A data field
+
+    """
+    datatype = datatype.strip()
+    if datatype != 'VIS':
+        warn('Unknown DEM data type '+datatype)
+        return None
+
+    try:
+        with open(fname, 'rb') as visfile:
+            if os.path.getsize(fname) == 262144:
+                bindata = np.fromfile(visfile, dtype='uint8', count=-1)
+                bindata = np.reshape(bindata, (512, 512)).astype(float)
+                field_data = np.ma.masked_values(bindata, 255)
+                if 'coefmasqZ' not in fname:
+                    field_data = 100.*np.ma.power(field_data/100., 1.6)
+                field_data = 100. - ma_broadcast_to(
+                    field_data[::-1, :], (1, 512, 512))
+            else:
+                bindata = 100. - np.fromfile(
+                    visfile, dtype='float32', count=-1)
+                field_data = np.reshape(bindata, (720, 270))
+
+            field_name = get_fieldname_pyart(datatype)
+            field = get_metadata(field_name)
+            field['data'] = field_data
+
+            visfile.close()
+
+            return field
 
     except EnvironmentError as ee:
         warn(str(ee))

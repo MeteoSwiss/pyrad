@@ -120,7 +120,7 @@ for ((iday=0; iday<${nday}; iday++)); do
         datedir=$(date -d "$(date --date "${date_vec[${iday}]}")+1 day" +"%Y-%m-%d")
         day=$(date -d "$(date --date "${date_vec[${iday}]}")+1 day" +"%Y%m%d")
         data_destpath=${cosmobaseraw}${datedir}
-        filebase=cosmo-1_MDR_3D_${day}00.nc
+        filebase=cosmo-1e_MDR_3D_${day}00.nc
         cp ${cosmopathcscs}${filebase} ${data_destpath}
         chmod -R gu+rw ${data_destpath}
     fi

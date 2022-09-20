@@ -27,6 +27,7 @@ Functions to plot radar volume data
 
 """
 from warnings import warn
+from copy import deepcopy
 
 import numpy as np
 
@@ -61,10 +62,12 @@ import pyart
 from .plots_aux import get_colobar_label, get_norm, generate_fixed_rng_title
 from .plots_aux import generate_fixed_rng_span_title
 from .plots_aux import generate_complex_range_Doppler_title
-from .plots import plot_quantiles, plot_histogram, _plot_time_range, _plot_sunscan
+from .plots import plot_quantiles, plot_histogram, _plot_time_range
+from .plots import _plot_sunscan
 
 from ..util.radar_utils import compute_quantiles_sweep, find_ang_index
 from ..util.radar_utils import compute_histogram_sweep
+from ..io.write_data import write_histogram
 
 
 def plot_ray(radar, field_name, ind_ray, prdcfg, fname_list, titl=None,
@@ -141,7 +144,7 @@ def plot_ray(radar, field_name, ind_ray, prdcfg, fname_list, titl=None,
 
 def plot_ppi(radar, field_name, ind_el, prdcfg, fname_list, plot_type='PPI',
              titl=None, vmin=None, vmax=None, step=None, quantiles=None,
-             save_fig=True):
+             save_fig=True, fname_hist=None):
     """
     plots a PPI
 
@@ -171,6 +174,8 @@ def plot_ppi(radar, field_name, ind_el, prdcfg, fname_list, plot_type='PPI',
     save_fig : bool
         if true save the figure. If false it does not close the plot and
         returns the handle to the figure
+    fname_hist : str or None
+        If not None, the name of a text file where the histogram will be stored
 
     Returns
     -------
@@ -252,6 +257,9 @@ def plot_ppi(radar, field_name, ind_el, prdcfg, fname_list, plot_type='PPI',
 
         plot_histogram(bins, values, fname_list, labelx=labelx,
                        labely='Number of Samples', titl=titl)
+        if fname_hist is not None:
+            hist, _ = np.histogram(values, bins=bins)
+            write_histogram(bins, hist, fname_hist, step=step)
     else:
         warn('Unknown plot type '+plot_type)
 
@@ -286,6 +294,11 @@ def plot_ppi_map(radar, field_name, ind_el, prdcfg, fname_list,
         list of names of the saved plots or handle of the figure an axes
 
     """
+    if not _CARTOPY_AVAILABLE:
+        warn('Unable to plot PPI map. Missing shapely cartopy module')
+        return None
+
+
     dpi = prdcfg['ppiImageConfig'].get('dpi', 72)
 
     norm, ticks, ticklabs = get_norm(
@@ -309,19 +322,105 @@ def plot_ppi_map(radar, field_name, ind_el, prdcfg, fname_list,
     lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat)+1, latstep)
 
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
-    ax = fig.add_subplot(111)
 
+    projection = cartopy.crs.PlateCarree()
     display_map = pyart.graph.RadarMapDisplay(radar)
     display_map.plot_ppi_map(
         field_name, sweep=ind_el, norm=norm, ticks=ticks, ticklabs=ticklabs,
         min_lon=min_lon, max_lon=max_lon, min_lat=min_lat, max_lat=max_lat,
-        resolution=resolution, background_zoom=background_zoom,
-        lat_lines=lat_lines, lon_lines=lon_lines,
-        maps_list=prdcfg['ppiMapImageConfig']['maps'], ax=ax, fig=fig,
+        lat_lines=lat_lines, lon_lines=lon_lines, projection = projection,
+        fig=fig, embellish = False,
         colorbar_flag=True, alpha=1)
 
     ax = display_map.ax
-
+    
+    if 'relief' in prdcfg['ppiMapImageConfig']['maps']:
+          tiler = Stamen('terrain-background')
+          projection = tiler.crs
+          fig.delaxes(ax)
+          ax = fig.add_subplot(111, projection=projection)
+          warn(
+              'The projection of the image is set to that of the ' +
+              'background map, i.e. '+str(projection), UserWarning)
+          
+    for cartomap in prdcfg['ppiMapImageConfig']['maps']:
+        if cartomap == 'relief':
+                    ax.add_image(tiler, background_zoom)
+        if cartomap == 'countries':
+            # add countries
+            countries = cartopy.feature.NaturalEarthFeature(
+                category='cultural',
+                name='admin_0_countries',
+                scale=resolution,
+                facecolor='none')
+            ax.add_feature(countries, edgecolor='black')
+        elif cartomap == 'provinces':
+            # Create a feature for States/Admin 1 regions at
+            # 1:resolution from Natural Earth
+            states_provinces = cartopy.feature.NaturalEarthFeature(
+                category='cultural',
+                name='admin_1_states_provinces_lines',
+                scale=resolution,
+                facecolor='none')
+            ax.add_feature(states_provinces, edgecolor='gray')
+        elif (cartomap == 'urban_areas' and
+                resolution in ('10m', '50m')):
+            urban_areas = cartopy.feature.NaturalEarthFeature(
+                category='cultural',
+                name='urban_areas',
+                scale=resolution)
+            ax.add_feature(
+                urban_areas, edgecolor='brown', facecolor='brown',
+                alpha=0.25)
+        elif cartomap == 'roads' and resolution == '10m':
+            roads = cartopy.feature.NaturalEarthFeature(
+                category='cultural',
+                name='roads',
+                scale=resolution)
+            ax.add_feature(roads, edgecolor='red', facecolor='none')
+        elif cartomap == 'railroads' and resolution == '10m':
+            railroads = cartopy.feature.NaturalEarthFeature(
+                category='cultural',
+                name='railroads',
+                scale=resolution)
+            ax.add_feature(
+                railroads, edgecolor='green', facecolor='none',
+                linestyle=':')
+        elif cartomap == 'coastlines':
+            ax.coastlines(resolution=resolution)
+        elif cartomap == 'lakes':
+            # add lakes
+            lakes = cartopy.feature.NaturalEarthFeature(
+                category='physical',
+                name='lakes',
+                scale=resolution)
+            ax.add_feature(
+                lakes, edgecolor='blue', facecolor='blue', alpha=0.25)
+        elif resolution == '10m' and cartomap == 'lakes_europe':
+            lakes_europe = cartopy.feature.NaturalEarthFeature(
+                category='physical',
+                name='lakes_europe',
+                scale=resolution)
+            ax.add_feature(
+                lakes_europe, edgecolor='blue', facecolor='blue',
+                alpha=0.25)
+        elif cartomap == 'rivers':
+            # add rivers
+            rivers = cartopy.feature.NaturalEarthFeature(
+                category='physical',
+                name='rivers_lake_centerlines',
+                scale=resolution)
+            ax.add_feature(rivers, edgecolor='blue', facecolor='none')
+        elif resolution == '10m' and cartomap == 'rivers_europe':
+            rivers_europe = cartopy.feature.NaturalEarthFeature(
+                category='physical',
+                name='rivers_europe',
+                scale=resolution)
+            ax.add_feature(
+                rivers_europe, edgecolor='blue', facecolor='none')
+        else:
+            warn('cartomap '+cartomap+' for resolution '+resolution +
+                  ' not available')
     if 'rngRing' in prdcfg['ppiMapImageConfig']:
         if prdcfg['ppiMapImageConfig']['rngRing'] > 0:
             rng_rings = np.arange(
@@ -400,7 +499,7 @@ def plot_rhi(radar, field_name, ind_az, prdcfg, fname_list, plot_type='RHI',
         display.plot_rhi(
             field_name, title=titl, sweep=ind_az, norm=norm, ticks=ticks,
             ticklabs=ticklabs, vmin=vmin, vmax=vmax,
-            colorbar_orient='horizontal', reverse_xaxis=False, fig=fig, ax=ax)
+            colorbar_orient='horizontal',  fig=fig, ax=ax)
         display.set_limits(
             ylim=[prdcfg['rhiImageConfig']['ymin'],
                   prdcfg['rhiImageConfig']['ymax']],
@@ -620,8 +719,8 @@ def plot_time_range(radar, field_name, ind_sweep, prdcfg, fname_list,
     xsize = prdcfg['ppiImageConfig'].get('xsize', 10)
     ysize = prdcfg['ppiImageConfig'].get('ysize', 8)
 
-    rng_aux = radar_aux.range['data']
-    if ylabel == 'range (Km)':
+    rng_aux = deepcopy(radar_aux.range['data'])
+    if ylabel == 'range (km)':
         rng_aux /= 1000.
     rng_res = rng_aux[1]-rng_aux[0]
     rng_aux = np.append(rng_aux-rng_res/2., rng_aux[-1]+rng_res/2.)
@@ -946,8 +1045,9 @@ def plot_fixed_rng_span(radar, field_name, prdcfg, fname_list, azi_res=None,
         figsize=[xsize, ysize], dpi=dpi)
 
 
-def plot_fixed_rng_sun(radar, field_name, sun_hits, prdcfg, fname_list, azi_res=None,
-                   ele_res=None, ang_tol=1., vmin=None, vmax=None):
+def plot_fixed_rng_sun(radar, field_name, sun_hits, prdcfg, fname_list,
+                       azi_res=None, ele_res=None, ang_tol=1., vmin=None,
+                       vmax=None):
     """
     plots a fixed range plot
 
@@ -1006,10 +1106,10 @@ def plot_fixed_rng_sun(radar, field_name, sun_hits, prdcfg, fname_list, azi_res=
 
             for i, azi in enumerate(azi_vec):
                 ind = find_ang_index(azi_1D, azi, ang_tol=ang_tol)
-                #print('IND: ',ind)
+                # print('IND: ',ind)
                 if ind is None:
                     continue
-                #print('FIELD_1D: ',field_1D[ind])
+                # print('FIELD_1D: ',field_1D[ind])
                 field_2D[i, j] = field_1D[ind][0]
     else:
         for i, azi in enumerate(azi_vec):
@@ -1077,8 +1177,8 @@ def plot_fixed_rng_sun(radar, field_name, sun_hits, prdcfg, fname_list, azi_res=
     ysize = prdcfg['ppiImageConfig'].get('ysize', 8)
 
     return _plot_sunscan(
-        azi_vec, ele_vec, field_2D, sun_hits, field_name, fname_list, titl=titl,
-        xlabel='azimuth (deg)', ylabel='elevation (deg)',
+        azi_vec, ele_vec, field_2D, sun_hits, field_name, fname_list,
+        titl=titl, xlabel='azimuth (deg)', ylabel='elevation (deg)',
         figsize=[xsize, ysize], vmin=vmin, vmax=vmax, dpi=dpi)
 
 
@@ -1727,7 +1827,8 @@ def plot_rhi_profile(data_list, hvec, fname_list, labelx='Value',
 def plot_along_coord(xval_list, yval_list, fname_list, labelx='coord',
                      labely='Value', labels=None,
                      title='Plot along coordinate', colors=None,
-                     linestyles=None, ymin=None, ymax=None, dpi=72):
+                     linestyles=None, ymin=None, ymax=None, dpi=72,
+                     data_on_y=True, plot_legend=True):
     """
     plots data along a certain radar coordinate
 
@@ -1755,6 +1856,11 @@ def plot_along_coord(xval_list, yval_list, fname_list, labelx='coord',
         Lower/Upper limit of y axis
     dpi : int
         dots per inch
+    data_on_y : bool
+        If True the data is in the y axis and the coordinate in the x axis.
+        False swaps it
+    plot_legend : bool
+        If True a legend will be plotted
 
     Returns
     -------
@@ -1776,13 +1882,22 @@ def plot_along_coord(xval_list, yval_list, fname_list, labelx='coord',
             col = colors[i]
         if linestyles is not None:
             lstyle = linestyles[i]
-        ax.plot(xval, yval, label=lab, color=col, linestyle=lstyle)
+        if data_on_y:
+            ax.plot(xval, yval, label=lab, color=col, linestyle=lstyle)
+        else:
+            ax.plot(yval, xval, label=lab, color=col, linestyle=lstyle)
 
     ax.set_title(title)
-    ax.set_xlabel(labelx)
-    ax.set_ylabel(labely)
-    ax.set_ylim(bottom=ymin, top=ymax)
-    ax.legend(loc='best')
+    if data_on_y:
+        ax.set_xlabel(labelx)
+        ax.set_ylabel(labely)
+        ax.set_ylim(bottom=ymin, top=ymax)
+    else:
+        ax.set_xlabel(labely)
+        ax.set_ylabel(labelx)
+        ax.set_xlim(left=ymin, right=ymax)
+    if plot_legend:
+        ax.legend(loc='best')
 
     for fname in fname_list:
         fig.savefig(fname, dpi=dpi)

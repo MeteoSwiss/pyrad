@@ -435,13 +435,10 @@ def process_iso0_mf(procstatus, dscfg, radar_list=None):
 
 def process_iso0_grib(procstatus, dscfg, radar_list=None):
     """
-    Gets iso0 degree data in text format and put it in radar coordinates.
+    Gets iso0 degree data in GRIB format and put it in radar coordinates.
     This function is meant to process data received from the MeteoFrance NWP
-    model. The model provides a maximum of 9 points at 0.5 degree lat/lon
-    spacing surrounding a given radar. If a point is not provided it means
-    that the iso0 for that point is at or below the ground level. Out of these
-    points a single reference iso-0 is obtained according to the user defined
-    iso0 statistic.
+    model. It can output the height over the iso0 of each gate or the iso0
+    height at each gate
 
     Parameters
     ----------
@@ -453,9 +450,11 @@ def process_iso0_grib(procstatus, dscfg, radar_list=None):
 
         datatype : string. Dataset keyword
             arbitrary data type
-        iso0_statistic : str. Dataset keyword
-            The statistic used to weight the iso0 points. Can be avg_by_dist,
-            avg, min, max
+        time_interp : bool. Dataset keyword
+            whether to perform an interpolation in time between consecutive
+            model outputs. Default True
+        voltype: str. Dataset keyword
+            The type of data to output. Can be H_ISO0 or HZT. Default H_ISO0
 
     radar_list : list of Radar objects
         Optional. list of radar objects
@@ -485,6 +484,8 @@ def process_iso0_grib(procstatus, dscfg, radar_list=None):
     radar = radar_list[ind_rad]
 
     time_interp = dscfg.get('time_interp', True)
+    voltype = dscfg.get('voltype', 'H_ISO0')
+    field_name = get_fieldname_pyart(voltype)
 
     fname = find_iso0_grib_file(dscfg['timeinfo'], dscfg, ind_rad=ind_rad)
     if fname is None:
@@ -497,7 +498,8 @@ def process_iso0_grib(procstatus, dscfg, radar_list=None):
 
     time_index = np.argmin(abs(iso0_data['fcst_time']-dscfg['timeinfo']))
     iso0_field = grib2radar_data(
-        radar, iso0_data, dscfg['timeinfo'], time_interp=time_interp)
+        radar, iso0_data, dscfg['timeinfo'], time_interp=time_interp,
+        field_name=field_name)
     if iso0_field is None:
         warn('Unable to obtain iso0 fields')
         return None, None
@@ -505,7 +507,7 @@ def process_iso0_grib(procstatus, dscfg, radar_list=None):
     # prepare for exit
     new_dataset = {'radar_out': deepcopy(radar)}
     new_dataset['radar_out'].fields = dict()
-    new_dataset['radar_out'].add_field('height_over_iso0', iso0_field)
+    new_dataset['radar_out'].add_field(field_name, iso0_field)
 
     return new_dataset, ind_rad
 
