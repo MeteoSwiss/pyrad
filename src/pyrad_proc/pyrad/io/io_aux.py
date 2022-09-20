@@ -510,10 +510,11 @@ def get_save_dir(basepath, procname, dsname, prdname, timeinfo=None,
 
     """
     if timeinfo is None:
-        savedir = basepath+procname+'/'+dsname+'/'+prdname+'/'
+        savedir = '{}{}/{}/{}/'.format(basepath, procname, dsname, prdname)
     else:
-        daydir = timeinfo.strftime(timeformat)
-        savedir = basepath+procname+'/'+daydir+'/'+dsname+'/'+prdname+'/'
+        savedir = '{}{}/{}/{}/{}/'.format(
+            basepath, procname, timeinfo.strftime(timeformat), dsname,
+            prdname)
 
     if create_dir is False:
         return savedir
@@ -558,22 +559,24 @@ def make_filename(prdtype, dstype, dsname, ext_list, prdcfginfo=None,
     if timeinfo is None:
         timeinfostr = ''
     else:
-        timeinfostr = timeinfo.strftime(timeformat)+'_'
+        timeinfostr = '{}_'.format(timeinfo.strftime(timeformat))
 
     if prdcfginfo is None:
         cfgstr = ''
     else:
-        cfgstr = '_' + prdcfginfo
+        cfgstr = '_{}'.format(prdcfginfo)
 
     if runinfo is None or runinfo == '':
         runstr = ''
     else:
-        runstr = runinfo + '_'
+        runstr = '{}_'.format(runinfo)
 
     fname_list = list()
     for ext in ext_list:
-        fname_list.append(timeinfostr + runstr + prdtype + '_' +
-                          dstype + '_' + dsname + cfgstr + '.' + ext)
+        fname = '{}{}{}_{}_{}{}.{}'.format(
+            timeinfostr, runstr, prdtype, dstype, dsname, cfgstr, ext)
+        fname = fname.replace('/', '-')
+        fname_list.append(fname)
 
     return fname_list
 
@@ -794,6 +797,9 @@ def get_datatype_odim(datatype):
     elif datatype == 'Nv':
         field_name = 'noisedBZ_vv'
         datatype_odim = 'NDBZV'
+    elif datatype == 'SNR':
+        field_name = 'signal_to_noise_ratio'
+        datatype_odim = 'SNRH'
     elif datatype == 'SNRh':
         field_name = 'signal_to_noise_ratio_hh'
         datatype_odim = 'SNRH'
@@ -1112,6 +1118,18 @@ def get_datatype_odim(datatype):
     elif datatype == 'n_dbz_all':
         field_name = 'number_of_samples_reflectivity_all'
         datatype_odim = 'n_dbz_all'
+    elif datatype == 'VOL2BIRD_CLASS':
+        field_name = 'vol2bird_echo_classification'
+        datatype_odim = 'CELL'
+    elif datatype == 'VOL2BIRD_WEATHER':
+        field_name = 'vol2bird_weather'
+        datatype_odim = 'WEATHER'
+    elif datatype == 'VOL2BIRD_BACKGROUND':
+        field_name = 'vol2bird_background'
+        datatype_odim = 'BACKGROUND'
+    elif datatype == 'VOL2BIRD_BIOLOGY':
+        field_name = 'vol2bird_biology'
+        datatype_odim = 'BIOLOGY'
     else:
         raise ValueError(
             'ERROR: ODIM fields do not contain datatype '+datatype)
@@ -1137,6 +1155,10 @@ def get_fieldname_pyart(datatype):
     """
     if datatype == 'dBZ':
         field_name = 'reflectivity'
+    elif datatype == 'Zn':
+        field_name = 'normalized_reflectivity'
+    elif datatype == 'Zlin':
+        field_name = 'linear_reflectivity'
     elif datatype == 'dBuZ':
         field_name = 'unfiltered_reflectivity'
     elif datatype == 'dBZc':
@@ -1162,6 +1184,8 @@ def get_fieldname_pyart(datatype):
     elif datatype == 'rcs_v':
         field_name = 'radar_cross_section_vv'
 
+    elif datatype == 'VPRcorr':
+        field_name = 'vpr_correction'
     elif datatype == 'sigma_zh':
         field_name = 'sigma_zh'
 
@@ -1227,6 +1251,8 @@ def get_fieldname_pyart(datatype):
         field_name = 'signal_to_noise_ratio_hh'
     elif datatype == 'SNRv':
         field_name = 'signal_to_noise_ratio_vv'
+    elif datatype == 'SNR':
+        field_name = 'signal_to_noise_ratio'
 
     elif datatype == 'CCORh':
         field_name = 'clutter_correction_ratio_hh'
@@ -1262,6 +1288,8 @@ def get_fieldname_pyart(datatype):
         field_name = 'corrected_cross_correlation_ratio'
     elif datatype == 'RhoHV_rain':
         field_name = 'cross_correlation_ratio_in_rain'
+    elif datatype == 'RhoHV_theo':
+        field_name = 'theoretical_cross_correlation_ratio'
     elif datatype == 'L':
         field_name = 'logarithmic_cross_correlation_ratio'
     elif datatype == 'CDR':
@@ -1292,6 +1320,8 @@ def get_fieldname_pyart(datatype):
 
     elif datatype == 'V':
         field_name = 'velocity'
+    elif datatype == 'Vv':
+        field_name = 'velocity_vv'
     elif datatype == 'Vu':
         field_name = 'unfiltered_velocity'
     elif datatype == 'dealV':
@@ -1308,6 +1338,8 @@ def get_fieldname_pyart(datatype):
         field_name = 'velocity_difference'
     elif datatype == 'W':
         field_name = 'spectrum_width'
+    elif datatype == 'Wv':
+        field_name = 'spectrum_width_vv'
     elif datatype == 'Wu':
         field_name = 'unfiltered_spectrum_width'
     elif datatype == 'Wc':
@@ -1352,8 +1384,12 @@ def get_fieldname_pyart(datatype):
         field_name = 'iso0'
     elif datatype == 'H_ISO0':
         field_name = 'height_over_iso0'
+    elif datatype == 'H_ISO0c':
+        field_name = 'corrected_height_over_iso0'
     elif datatype == 'HZT':
         field_name = 'iso0_height'
+    elif datatype == 'HZTc':
+        field_name = 'corrected_iso0_height'
     elif datatype == 'cosmo_index':
         field_name = 'cosmo_index'
     elif datatype == 'hzt_index':
@@ -1361,6 +1397,8 @@ def get_fieldname_pyart(datatype):
     elif datatype == 'ml':
         field_name = 'melting_layer'
 
+    elif datatype == 'VIS':
+        field_name = 'visibility'
     elif datatype == 'vis':
         field_name = 'visibility'
     elif datatype == 'visibility':
@@ -1815,6 +1853,14 @@ def get_fieldname_pyart(datatype):
         field_name = 'number_of_samples_velocity_all'
     elif datatype == 'n_dbz_all':
         field_name = 'number_of_samples_reflectivity_all'
+    elif datatype == 'VOL2BIRD_CLASS':
+        field_name = 'vol2bird_echo_classification'
+    elif datatype == 'VOL2BIRD_WEATHER':
+        field_name = 'vol2bird_weather'
+    elif datatype == 'VOL2BIRD_BACKGROUND':
+        field_name = 'vol2bird_background'
+    elif datatype == 'VOL2BIRD_BIOLOGY':
+        field_name = 'vol2bird_biology'
 
     # wind lidar names
     elif datatype == 'wind_vel_rad':
@@ -2152,8 +2198,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
     Returns
     -------
     filelist : list of strings
-        list of files within the time period
-
+        list of files within the time period. If it could not find them
+        returns an empty list
     """
     radarnr, datagroup, datatype, dataset, product = get_datatype_fields(
         datadescriptor)
@@ -2173,7 +2219,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
             if datagroup == 'RAINBOW':
                 if scan is None:
                     warn('Unknown scan name')
-                    return None
+                    return []
                 daydir = (
                     starttime+datetime.timedelta(days=i)).strftime('%Y-%m-%d')
                 dayinfo = (starttime+datetime.timedelta(days=i)).strftime(
@@ -2188,7 +2234,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
             elif datagroup == 'RAD4ALP':
                 if scan is None:
                     warn('Unknown scan name')
-                    return None
+                    return []
 
                 datapath, basename = get_rad4alp_dir(
                     cfg['datapath'][ind_rad],
@@ -2235,10 +2281,11 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 for filename in dayfilelist:
                     t_filelist.append(filename)
 
-            elif datagroup in ('ODIM', 'CFRADIAL2', 'CF1', 'NEXRADII'):
+            elif datagroup in ('ODIM', 'ODIMBIRDS', 'CFRADIAL', 'CFRADIAL2', 
+                               'CF1', 'NEXRADII', 'GAMIC'):
                 if scan is None:
                     warn('Unknown scan name')
-                    return None
+                    return []
                 if cfg['path_convention'][ind_rad] == 'MCH':
                     dayinfo = (starttime+datetime.timedelta(days=i)).strftime(
                         '%y%j')
@@ -2294,11 +2341,13 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
 
                 for filename in dayfilelist:
                     t_filelist.append(filename)
-            elif datagroup in ('CFRADIAL', 'ODIMPYRAD', 'PYRADGRID',
-                               'NETCDFSPECTRA'):
+            elif datagroup in ('CFRADIALPYRAD', 'ODIMPYRAD', 'PYRADGRID',
+                               'NETCDFSPECTRA', 'CSV'):
                 termination = '.nc'
                 if datagroup == 'ODIMPYRAD':
                     termination = '.h*'
+                elif datagroup == 'CSV':
+                    termination = '.csv'
 
                 daydir = (
                     starttime+datetime.timedelta(days=i)).strftime(
@@ -2334,7 +2383,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
             elif datagroup == 'MXPOL':
                 if scan is None:
                     warn('Unknown scan name')
-                    return None
+                    return []
                 if cfg['path_convention'][ind_rad] == 'LTE':
                     sub1 = str(starttime.year)
                     sub2 = starttime.strftime('%m')
@@ -2383,6 +2432,9 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 dayfilelist = glob.glob(datapath+'*'+dayinfo+'*.nc')
                 for filename in dayfilelist:
                     t_filelist.append(filename)
+
+        if not t_filelist:
+            continue
 
         for filename in t_filelist:
             filenamestr = str(filename)
@@ -2673,8 +2725,8 @@ def get_datatype_fields(datadescriptor):
             product = None
         else:
             datagroup = descrfields[1]
-            if datagroup in ('CFRADIAL', 'ODIMPYRAD', 'PYRADGRID',
-                             'NETCDFSPECTRA'):
+            if datagroup in ('CFRADIALPYRAD', 'ODIMPYRAD', 'PYRADGRID',
+                             'NETCDFSPECTRA', 'CSV'):
                 descrfields2 = descrfields[2].split(',')
                 datatype = descrfields2[0]
                 dataset = descrfields2[1]
@@ -2688,9 +2740,9 @@ def get_datatype_fields(datadescriptor):
                 datatype = descrfields[2]
                 dataset = None
                 product = None
-            elif datagroup in ('ODIM', 'MFCFRADIAL', 'MFBIN', 'CFRADIAL2',
-                               'CF1', 'NEXRADII', 'MFPNG', 'MFGRIB', 'MFDAT',
-                               'MFCF'):
+            elif datagroup in ('ODIM', 'ODIMBIRDS', 'MFCFRADIAL', 'MFBIN',
+                               'CFRADIAL2', 'CF1', 'NEXRADII', 'MFPNG',
+                               'MFGRIB', 'MFDAT', 'MFCF', 'GAMIC', 'CFRADIAL'):
                 descrfields2 = descrfields[2].split(',')
                 datatype = descrfields2[0]
                 product = None
@@ -2704,8 +2756,8 @@ def get_datatype_fields(datadescriptor):
     else:
         radarnr = 'RADAR001'
         datagroup = descrfields[0]
-        if datagroup in ('CFRADIAL', 'ODIMPYRAD', 'PYRADGRID',
-                         'NETCDFSPECTRA'):
+        if datagroup in ('CFRADIALPYRAD', 'ODIMPYRAD', 'PYRADGRID',
+                         'NETCDFSPECTRA', 'CSV'):
             descrfields2 = descrfields[1].split(',')
             datatype = descrfields2[0]
             dataset = descrfields2[1]
@@ -2719,8 +2771,9 @@ def get_datatype_fields(datadescriptor):
             datatype = descrfields[1]
             dataset = None
             product = None
-        elif datagroup in ('ODIM', 'MFCFRADIAL', 'MFBIN', 'CFRADIAL2', 'CF1',
-                           'NEXRADII', 'MFPNG', 'MFGRIB', 'MFDAT', 'MFCF'):
+        elif datagroup in ('ODIM', 'ODIMBIRDS', 'MFCFRADIAL', 'MFBIN',
+                           'NEXRADII', 'MFPNG', 'MFGRIB', 'MFDAT', 'MFCF',
+                           'CFRADIAL2', 'CF1', 'GAMIC', 'CFRADIAL'):
             descrfields2 = descrfields[1].split(',')
             # warn(" descrfields2:  '%s'" % descrfields2[1])
             if len(descrfields2) == 2:
@@ -3228,8 +3281,8 @@ def _get_datetime(fname, datagroup, ftime_format=None):
 
     """
     bfile = os.path.basename(fname)
-    if datagroup in ('RAINBOW', 'CFRADIAL', 'ODIMPYRAD', 'PYRADGRID',
-                     'NETCDFSPECTRA'):
+    if datagroup in ('RAINBOW', 'CFRADIALPYRAD', 'ODIMPYRAD', 'PYRADGRID',
+                     'NETCDFSPECTRA', 'CSV'):
         datetimestr = bfile[0:14]
         fdatetime = datetime.datetime.strptime(datetimestr, '%Y%m%d%H%M%S')
     elif datagroup in ('RAD4ALP', 'RAD4ALPGRID', 'RAD4ALPGIF', 'RAD4ALPBIN'):
@@ -3241,8 +3294,9 @@ def _get_datetime(fname, datagroup, ftime_format=None):
         else:
             fdatetime = datetime.datetime.strptime(
                 datestr, '%y%j')+datetime.timedelta(days=1)
-    elif datagroup in ('ODIM', 'MFCFRADIAL', 'MFBIN', 'CFRADIAL2', 'CF1',
-                       'NEXRADII', 'MFPNG', 'MFGRIB', 'MFDAT', 'MFCF'):
+    elif datagroup in ('ODIM', 'ODIMBIRDS', 'MFCFRADIAL', 'MFBIN',
+                       'NEXRADII', 'MFPNG', 'MFGRIB', 'MFDAT', 'MFCF',
+                       'CFRADIAL2', 'CF1', 'GAMIC', 'CFRADIAL'):
         if ftime_format is None:
             # we assume is rad4alp format
             datetimestr = bfile[3:12]

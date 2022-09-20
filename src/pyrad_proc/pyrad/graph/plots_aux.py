@@ -268,7 +268,7 @@ def get_field_name(field_dict, field):
     return field_name
 
 
-def get_norm(field_name, field_dict=None):
+def get_norm(field_name, field_dict={}):
     """
     Computes the normalization of the colormap, and gets the ticks and labels
     of the colorbar from the metadata of the field. Returns None if the
@@ -300,14 +300,14 @@ def get_norm(field_name, field_dict=None):
     ref_dict = pyart.config.get_metadata(field_name)
     cmap = mpl.cm.get_cmap(pyart.config.get_field_colormap(field_name))
 
-    if 'boundaries' in field_dict:
+    if field_dict is not None and 'boundaries' in field_dict:
         norm = mpl.colors.BoundaryNorm(
             boundaries=field_dict['boundaries'], ncolors=cmap.N)
     elif 'boundaries' in ref_dict:
         norm = mpl.colors.BoundaryNorm(
             boundaries=ref_dict['boundaries'], ncolors=cmap.N)
 
-    if 'ticks' in field_dict:
+    if field_dict is not None and 'ticks' in field_dict:
         ticks = field_dict['ticks']
         if 'labels' in field_dict:
             ticklabs = field_dict['labels']

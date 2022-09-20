@@ -347,6 +347,10 @@ def process_traj_lightning(procstatus, dscfg, radar_list=None,
         ang_tol : float. Dataset keyword
             Factor that multiplies the angle resolution. Used when determining
             the neighbouring rays. Default 1.2
+        az_tol, el_tol : float
+            azimuth and elevation tolerance (deg). Samples that have values
+            beyond this tolerance from the limits in azimuth and elevation of
+            the radar will be considered outside the sector. Default 3.
 
     radar_list : list of Radar objects
         Optional. list of radar objects
@@ -487,6 +491,8 @@ def process_traj_lightning(procstatus, dscfg, radar_list=None,
 
     # User defined parameter
     ang_tol = dscfg.get('ang_tol', 1.2)
+    az_tol = dscfg.get('az_tol', 3.)
+    el_tol = dscfg.get('el_tol', 3.)
 
     az_list = []
     el_list = []
@@ -502,7 +508,8 @@ def process_traj_lightning(procstatus, dscfg, radar_list=None,
 
         (radar_sel, traj_ray_ind, traj_rng_ind, cell_ray_inds,
          cell_rng_ind_min, cell_rng_ind_max) = _get_gates(
-             radar, az, el, rr, tt, trajdict, ang_tol=ang_tol)
+             radar, az, el, rr, tt, trajdict, ang_tol=ang_tol, az_tol=az_tol,
+             el_tol=el_tol)
 
         if radar_sel is None:
             continue
@@ -586,6 +593,12 @@ def process_traj_atplane(procstatus, dscfg, radar_list=None, trajectory=None):
         ang_tol : float. Dataset keyword
             Factor that multiplies the angle resolution. Used when determining
             the neighbouring rays. Default 1.2
+        az_tol, el_tol : float
+            azimuth and elevation tolerance (deg). Samples that have values
+            beyond this tolerance from the limits in azimuth and elevation of
+            the radar will be considered outside the sector. Default 3.
+        timeformat : str or None
+            time format of the time series output file
     radar_list : list of Radar objects
         Optional. list of radar objects
     trajectory : Trajectory object
@@ -647,6 +660,13 @@ def process_traj_atplane(procstatus, dscfg, radar_list=None, trajectory=None):
     ttask_start = radar.time['data'].min()
     dt_task_start = num2date(ttask_start, radar.time['units'],
                              radar.time['calendar'])
+                             
+    # User defined parameter
+    ang_tol = dscfg.get('ang_tol', 1.2)
+    az_tol = dscfg.get('az_tol', 3.)
+    el_tol = dscfg.get('el_tol', 3.)
+    timeformat = dscfg.get('timeformat', None)
+    
     if not dscfg['initialized']:
         # init
         if trajectory is None:
@@ -668,8 +688,8 @@ def process_traj_atplane(procstatus, dscfg, radar_list=None, trajectory=None):
         data_is_log = dict()
         for datatype, field_name in zip(datatypes, field_names):
             ts = TimeSeries(
-                description, maxlength=trajectory.time_vector.size,
-                datatype=datatype)
+                description, timeformat=timeformat,
+                maxlength=trajectory.time_vector.size, datatype=datatype)
 
             unit = get_field_unit(datatype)
             name = get_field_name(datatype)
@@ -720,9 +740,6 @@ def process_traj_atplane(procstatus, dscfg, radar_list=None, trajectory=None):
         trajdict['radar_old'] = radar
         return None, None
 
-    # User defined parameter
-    ang_tol = dscfg.get('ang_tol', 1.2)
-
     az_list = []
     el_list = []
     rr_list = []
@@ -735,7 +752,8 @@ def process_traj_atplane(procstatus, dscfg, radar_list=None, trajectory=None):
 
         (radar_sel, traj_ray_ind, traj_rng_ind, cell_ray_inds,
          cell_rng_ind_min, cell_rng_ind_max) = _get_gates(
-             radar, az, el, rr, tt, trajdict, ang_tol=ang_tol)
+             radar, az, el, rr, tt, trajdict, ang_tol=ang_tol, az_tol=az_tol,
+             el_tol=el_tol)
 
         if radar_sel is None:
             continue
@@ -879,6 +897,10 @@ def process_traj_antenna_pattern(procstatus, dscfg, radar_list=None,
         nan_value : dict. Dataset keyword
             Dictionary with the value to use to substitute the NaN values when
             computing the statistics of each field. Default 0
+        az_tol, el_tol : float
+            azimuth and elevation tolerance (deg). Samples that have values
+            beyond this tolerance from the limits in azimuth and elevation of
+            the radar will be considered outside the sector. Default 3.
     radar_list : list of Radar objects
         Optional. list of radar objects
     trajectory : Trajectory object
@@ -1217,8 +1239,12 @@ def process_traj_antenna_pattern(procstatus, dscfg, radar_list=None,
         traj_ind = trajectory.get_samples_in_period(
             start=tadict['last_task_start_dt'], end=dt_task_start)
 
+    az_tol = dscfg.get('az_tol', 3.)
+    el_tol = dscfg.get('el_tol', 3.)
+
     if not _get_ts_values_antenna_pattern(
-            radar, trajectory, tadict, traj_ind, field_names):
+            radar, trajectory, tadict, traj_ind, field_names, az_tol=az_tol,
+            el_tol=el_tol):
         return None, None
 
     tadict['last_task_start_dt'] = dt_task_start
@@ -1232,7 +1258,7 @@ def process_traj_antenna_pattern(procstatus, dscfg, radar_list=None,
 
 
 def _get_ts_values_antenna_pattern(radar, trajectory, tadict, traj_ind,
-                                   field_names):
+                                   field_names, az_tol=3., el_tol=3.):
     """
     Get the time series values of a trajectory using a synthetic antenna
     pattern
@@ -1249,6 +1275,10 @@ def _get_ts_values_antenna_pattern(radar, trajectory, tadict, traj_ind,
         The indices of trajectory data within the current radar volume time
     field_names : list of str
         list of names of the radar field
+    az_tol, el_tol : float
+        azimuth and elevation tolerance (deg). Samples that have values beyond
+        this tolerance from the limits in azimuth and elevation of the radar
+        will be considered outside the sector
 
     Returns
     -------
@@ -1291,8 +1321,9 @@ def _get_ts_values_antenna_pattern(radar, trajectory, tadict, traj_ind,
             _get_closest_bin(az, el, rr, tt, radar, tadict)
 
         # Check if traj sample is within scan sector
-        if (_sample_out_of_sector(az, el, rr, radar_sel, ray_sel,
-                                  rr_ind, el_vec_rnd, az_vec_rnd)):
+        if (_sample_out_of_sector(
+                az, el, rr, radar_sel, ray_sel, rr_ind, el_vec_rnd,
+                az_vec_rnd, az_tol=az_tol, el_tol=el_tol)):
             continue
 
         if radar_antenna_atsameplace:
@@ -1474,7 +1505,8 @@ def _get_contour_trt(radar, trajectory, voltime, time_tol=100.):
     return roi_dict
 
 
-def _get_gates(radar, az, el, rr, tt, trajdict, ang_tol=1.2):
+def _get_gates(radar, az, el, rr, tt, trajdict, ang_tol=1.2, az_tol=3.,
+               el_tol=3.):
     """
     Find the gates of the radar object that have to be used to compute the
     data of a trajectory
@@ -1492,6 +1524,10 @@ def _get_gates(radar, az, el, rr, tt, trajdict, ang_tol=1.2):
     ang_tol : float
         Factor that multiplies the angle resolution. Used when determining
         the neighbouring rays
+    az_tol, el_tol : float
+        azimuth and elevation tolerance (deg). Samples that have values beyond
+        this tolerance from the limits in azimuth and elevation of the radar
+        will be considered outside the sector
 
     Returns
     -------
@@ -1513,8 +1549,9 @@ def _get_gates(radar, az, el, rr, tt, trajdict, ang_tol=1.2):
         _get_closest_bin(az, el, rr, tt, radar, trajdict)
 
     # Check if traj sample is within scan sector
-    if (_sample_out_of_sector(az, el, rr, radar_sel, ray_sel,
-                              rr_ind, el_vec_rnd, az_vec_rnd)):
+    if (_sample_out_of_sector(
+            az, el, rr, radar_sel, ray_sel, rr_ind, el_vec_rnd, az_vec_rnd,
+            az_tol=az_tol, el_tol=el_tol)):
         return None, None, None, None, None, None
 
     # Get indices of gates surrounding the cell (3x3 box)
@@ -1830,7 +1867,7 @@ def _get_closest_bin(az, el, rr, tt, radar, tdict):
 
 
 def _sample_out_of_sector(az, el, rr, radar_sel, ray_sel, rr_ind,
-                          el_vec_rnd, az_vec_rnd):
+                          el_vec_rnd, az_vec_rnd, az_tol=3., el_tol=3.):
     """
     Check if trajectory sample is within radar sector
 
@@ -1845,11 +1882,15 @@ def _sample_out_of_sector(az, el, rr, radar_sel, ray_sel, rr_ind,
     el_vec_rnd, az_vec_rnd : array of floats
         The elevation and azimuth fields of the selected radar rounded to the
         first decimal
+    az_tol, el_tol : float
+        azimuth and elevation tolerance (deg). Samples that have values beyond
+        this tolerance from the limits in azimuth and elevation of the radar
+        will be considered outside the sector
 
     Returns
     -------
     result : bool
-        False if the sample is out of sector. True otherwise
+        True if the sample is out of sector. False otherwise
 
     """
     # Check if sample is within sector
@@ -1859,11 +1900,11 @@ def _sample_out_of_sector(az, el, rr, radar_sel, ray_sel, rr_ind,
         # print("INFO: Trajectory sample out of range")
         return True
 
-    if (((az_vec_rnd[0] - az) > 3.0) or ((az - az_vec_rnd[-1]) > 3.0)):
+    if (((az_vec_rnd[0] - az) > az_tol) or ((az - az_vec_rnd[-1]) > az_tol)):
         # print("INFO: Trajectory sample out of azimuth angle")
         return True
 
-    if (((el_vec_rnd[0] - el) > 3.0) or ((el - el_vec_rnd[-1]) > 3.0)):
+    if (((el_vec_rnd[0] - el) > el_tol) or ((el - el_vec_rnd[-1]) > el_tol)):
         # print("INFO: Trajectory sample out of elevation angle")
         return True
 

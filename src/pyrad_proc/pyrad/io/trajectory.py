@@ -1,16 +1,12 @@
 """
 pyrad.io.trajectory
 ===================
-
 Trajectory class implementation for reading trajectory file.
 Converting to different coordinate systems.
-
 .. autosummary::
     :toctree: generated/
-
     Trajectory
     _Radar_Trajectory
-
 """
 
 import sys
@@ -32,7 +28,6 @@ from ..io.read_data_sensor import read_trt_thundertracking_traj_data
 class Trajectory(object):
     """
     A class for reading and handling trajectory data from a file.
-
     Attributes
     ----------
     filename : str
@@ -69,8 +64,6 @@ class Trajectory(object):
           For 'lightning' only. Flash number of each data sample
     dBm : array of floats
           For 'lightning' only. Lightning power (dBm)
-
-
     Methods:
     --------
     add_radar : Add a radar
@@ -84,14 +77,12 @@ class Trajectory(object):
     _read_traj_trt : Read TRT trajectory from file
     _read_traj_lightning : Read lightning trajectory from file
     _get_total_seconds : Get the total time of the trajectory in seconds
-
     """
 
     def __init__(self, filename, starttime=None, endtime=None,
                  trajtype='plane', flashnr=0):
         """
         Initalize the object.
-
         Parameters
         ----------
         filename : str
@@ -155,16 +146,13 @@ class Trajectory(object):
         """
         Add the coordinates (WGS84 longitude, latitude and non WGS84 altitude)
         of a radar to the radar_list.
-
         Parameters
         ----------
         radar : pyart radar object
             containing the radar coordinates
-
         Return
         ------
         Radar object
-
         """
 
         # Check if radar location is already in the radar list
@@ -199,7 +187,6 @@ class Trajectory(object):
     def calculate_velocities(self, radar):
         """
         Calculate velocities.
-
         """
 
         if not radar.traj_assigned:
@@ -252,7 +239,6 @@ class Trajectory(object):
     def get_start_time(self):
         """
         Get time of first trajectory sample.
-
         Return
         ------
         datetime object
@@ -263,7 +249,6 @@ class Trajectory(object):
     def get_end_time(self):
         """
         Get time of last trajectory sample.
-
         Return
         ------
         datetime object
@@ -288,7 +273,6 @@ class Trajectory(object):
     def _read_traj(self):
         """
         Read trajectory from file
-
         File format
         -----------
         Comment symbol: '#'
@@ -298,7 +282,6 @@ class Trajectory(object):
         3. WGS84 latitude [radians]
         4. WGS84 longitude [radians]
         5. WGS84 altitude [m]
-
         """
 
         # check if the file can be read
@@ -390,7 +373,6 @@ class Trajectory(object):
     def _read_traj_flores(self):
         """
         Read trajectory from FLORAKO file
-
         File format
         -----------
         Column/Variable Contents, Units and Description:
@@ -436,7 +418,6 @@ class Trajectory(object):
     def _read_traj_lightning(self, flashnr=0):
         """
         Read trajectory from lightning file
-
         File format
         -----------
         Columns:
@@ -447,12 +428,10 @@ class Trajectory(object):
         4. WGS84 longitude [deg]
         5. WGS84 altitude [m]
         6. Power [dBm]
-
         Parameters
         ----------
         flashnr : int
             the flash number to keep. If 0 data from all flashes will be kept
-
         """
         flashnr_vec, time, time_in_flash, lat, lon, alt, dBm = read_lightning(
             self.filename)
@@ -506,7 +485,6 @@ class Trajectory(object):
     def _read_traj_trt(self):
         """
         Read trajectory from TRT file
-
         File format
         -----------
         Columns:
@@ -538,10 +516,8 @@ class Trajectory(object):
         25. Dvel_x
         26. Dvel_y
         27. cell_contours
-
         Parameters
         ----------
-
         """
         if '_tt.trt' in self.filename:
             (traj_ID, _, yyyymmddHHMM, _, _, _, lon, lat, _, _, _, _, _, _, _,
@@ -612,7 +588,6 @@ class Trajectory(object):
 class _Radar_Trajectory:
     """
     A class for holding the trajectory data assigned to a radar.
-
     Attributes
     ----------
     latitude : float
@@ -632,7 +607,6 @@ class _Radar_Trajectory:
     v_abs, v_r, v_el, v_az : array-like
        Velocity vectors of the absolute [m/s], radial [m/s], elevation [deg/s]
        and azimuth [deg/s] velocities
-
     Methods:
     --------
     location_is_equal
@@ -644,7 +618,6 @@ class _Radar_Trajectory:
     def __init__(self, lat, lon, alt):
         """
         Initalize the object.
-
         Parameters
         ----------
         lat, lon , alt : radar location coordinates
@@ -678,11 +651,9 @@ class _Radar_Trajectory:
     def location_is_equal(self, lat, lon, alt):
         """
         Check if the given coordinates are the same.
-
         Parameters
         ----------
         lat, lon , alt : radar location coordinates
-
         Return
         ------
         True if the radar location is equal, False otherwise
@@ -703,7 +674,6 @@ class _Radar_Trajectory:
         """
         Assign a trajectory to the radar in polar radar
         coordinates.
-
         Parameters
         ----------
         el, az, rr : array-like
@@ -723,7 +693,6 @@ class _Radar_Trajectory:
         """
         Convert the radar location (in WGS84 coordinates) to
         swiss CH1903 coordinates.
-
         """
 
         if self._swiss_coords_done:
@@ -739,7 +708,6 @@ class _Radar_Trajectory:
     def assign_velocity_vecs(self, v_abs, v_r, v_el, v_az):
         """
         Assign velocity vectors to the radar.
-
         """
 
         if self._velocity_vecs_assigned:

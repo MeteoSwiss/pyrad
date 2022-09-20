@@ -27,6 +27,7 @@ Functions for writing pyrad output data
     write_cdf
     write_histogram
     write_quantiles
+    write_multiple_points
     write_ts_polar_data
     write_ts_grid_data
     write_ts_ml
@@ -430,7 +431,8 @@ def write_smn(datetime_vec, value_avg_vec, value_std_vec, fname):
     return fname
 
 
-def write_timeseries_point(fname, data, dstype, text, timeformat=None, timeinfo=None):
+def write_timeseries_point(fname, data, dstype, text, timeformat=None,
+                           timeinfo=None):
     """
     Write one timesample of a time series to a file
 
@@ -466,16 +468,17 @@ def write_timeseries_point(fname, data, dstype, text, timeformat=None, timeinfo=
 
     print("----- Write timeseries ", fname)
 
-    if os.path.isfile(fname) == False:
-        #File does not exist. Open it and fill in header info.
+    if not os.path.isfile(fname):
+        # File does not exist. Open it and fill in header info.
         with open(fname, 'w', newline='') as csvfile:
             csvfile.write("# Weather radar timeseries data file\n")
             csvfile.write("# Project: MALSplus\n")
-            csvfile.write("# Data/Unit : " +  datatypename + " [" + unit + "]\n")
+            csvfile.write(
+                "# Data/Unit : " + datatypename + " [" + unit + "]\n")
             csvfile.write("# Start : " + datatime + " UTC\n")
             csvfile.write("# Header lines with comments are preceded by '#'\n")
             for line in text:
-                csvfile.write("# " + line +'\n')
+                csvfile.write("# " + line + '\n')
             csvfile.write("#\n")
 
             if timeformat is None:
@@ -484,7 +487,7 @@ def write_timeseries_point(fname, data, dstype, text, timeformat=None, timeinfo=
                 time_str_old = dt.strptime(datatime, tformat)
                 time_str = time_str_old.strftime(tformat)
             else:
-                label_str = "# Date ["+ timeformat +"]"
+                label_str = "# Date [" + timeformat + "]"
                 tformat = timeformat
                 time_str = datatime.strftime(tformat)
 
@@ -493,7 +496,7 @@ def write_timeseries_point(fname, data, dstype, text, timeformat=None, timeinfo=
             csvfile.write(label_str + '\n')
 
             for value in data['value']:
-                time_str = time_str + ", " + ('%.4f'% value)
+                time_str = time_str + ", " + ('%.4f' % value)
             csvfile.write(time_str + '\n')
 
     else:
@@ -508,7 +511,7 @@ def write_timeseries_point(fname, data, dstype, text, timeformat=None, timeinfo=
         with open(fname, 'a', newline='') as csvfile:
 
             for value in data['value']:
-                time_str = time_str + ", " + ('%.4f'% value)
+                time_str = time_str + ", " + ('%.4f' % value)
             csvfile.write(time_str + '\n')
 
     csvfile.close()
@@ -914,7 +917,7 @@ def write_rhi_profile(hvec, data, nvalid_vec, labels, fname, datatype=None,
         array containing the alitude in m MSL
     data : list of float array
         the quantities at each altitude
-    nvalid_vec : int array
+    nvalid_vec : int array or None
         number of valid data points used to compute the quantiles
     labels : list of strings
         label specifying the quantitites in data
@@ -963,14 +966,16 @@ def write_rhi_profile(hvec, data, nvalid_vec, labels, fname, datatype=None,
 
         fieldnames = ['Altitude [m MSL]']
         fieldnames.extend(labels)
-        fieldnames.append('N valid')
+        if nvalid_vec is not None:
+            fieldnames.append('N valid')
         writer = csv.DictWriter(csvfile, fieldnames)
         writer.writeheader()
         for j, height in enumerate(hvec):
             data_dict = {fieldnames[0]: height}
             for i in range(len(labels)):
                 data_dict.update({fieldnames[i+1]: data_aux[i][j]})
-            data_dict.update({fieldnames[-1]: nvalid_vec[j]})
+            if nvalid_vec is not None:
+                data_dict.update({fieldnames[-1]: nvalid_vec[j]})
             writer.writerow(data_dict)
 
         csvfile.close()
@@ -1255,6 +1260,68 @@ def write_quantiles(quantiles, values, fname, datatype='undefined'):
             writer.writerow({
                 'quantile': quant,
                 'value': values_aux[i]})
+        csvfile.close()
+
+    return fname
+
+
+def write_multiple_points(dataset, fname):
+    """
+    write radar data obtained at multiple points
+
+    Parameters
+    ----------
+    dataset : dict
+        dictionary containing the data
+    fname : str
+        file name
+
+    Returns
+    -------
+    fname : str
+        the name of the file where data has written
+
+    """
+    val = dataset['value'].filled(fill_value=get_fillvalue())
+    lon_ref = dataset['used_point_coordinates_WGS84_lon'].filled(
+        fill_value=get_fillvalue())
+    lat_ref = dataset['used_point_coordinates_WGS84_lat'].filled(
+        fill_value=get_fillvalue())
+    alt_ref = dataset['used_point_coordinates_WGS84_alt'].filled(
+        fill_value=get_fillvalue())
+    with open(fname, 'w', newline='') as csvfile:
+        csvfile.write(
+            '# Weather radar data at multiple points file\n' +
+            '# Comment lines are preceded by "#"\n' +
+            '# Description:\n' +
+            '# weather radar data at points of interest.\n' +
+            '# Data: '+generate_field_name_str(dataset['datatype'])+'\n' +
+            '#\n')
+        fieldnames = [
+            'point_ID', 'time', 'azi', 'ele', 'rng', 'lon', 'lat', 'alt',
+            'lon_ref', 'lat_ref', 'alt_ref', 'val']
+        writer = csv.DictWriter(csvfile, fieldnames)
+        writer.writeheader()
+        for i in range(val.size):
+            time_aux = dataset['time'][i]
+            if not np.ma.is_masked(dataset['time'][i]):
+                time_aux = time_aux.strftime('%Y%m%d%H%M%S')
+            else:
+                time_aux = 'NA'
+            writer.writerow({
+                'point_ID': dataset['point_id'][i],
+                'time': time_aux,
+                'azi': dataset['antenna_coordinates_az'][i],
+                'ele': dataset['antenna_coordinates_el'][i],
+                'rng': dataset['antenna_coordinates_r'][i],
+                'lon': dataset['point_coordinates_WGS84_lon'][i],
+                'lat': dataset['point_coordinates_WGS84_lat'][i],
+                'alt': dataset['point_coordinates_WGS84_alt'][i],
+                'lon_ref': lon_ref[i],
+                'lat_ref': lat_ref[i],
+                'alt_ref': alt_ref[i],
+                'val': val[i],
+                })
         csvfile.close()
 
     return fname

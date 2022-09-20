@@ -8,6 +8,7 @@ Functions to obtain time series of radar data
     :toctree: generated/
 
     process_point_measurement
+    process_multiple_points
     process_qvp
     process_rqvp
     process_evp
@@ -17,6 +18,7 @@ Functions to obtain time series of radar data
 
 """
 
+import datetime
 from warnings import warn
 import numpy as np
 from netCDF4 import num2date
@@ -24,6 +26,7 @@ from netCDF4 import num2date
 import pyart
 
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
+from ..io.read_data_sensor import read_coord_sensors
 
 
 def process_point_measurement(procstatus, dscfg, radar_list=None):
@@ -225,6 +228,181 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
         {'point_coordinates_WGS84_lon_lat_alt': [lon, lat, alt]})
     new_dataset.update({'antenna_coordinates_az_el_r': [az, el, r]})
     new_dataset.update({'used_antenna_coordinates_az_el_r': ant_coord})
+    new_dataset.update({'final': False})
+
+    return new_dataset, ind_rad
+
+
+def process_multiple_points(procstatus, dscfg, radar_list=None):
+    """
+    Obtains the radar data at multiple points. The points are defined in a file
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration. Accepted Configuration Keywords::
+
+        datatype : string. Dataset keyword
+            The data type where we want to extract the point measurement
+        single_point : boolean. Dataset keyword
+            if True only one gate per radar volume is going to be kept.
+            Otherwise all gates within the azimuth and elevation tolerance
+            are going to be kept. This is useful to extract all data from
+            fixed pointing scans. Default True
+        latlon : boolean. Dataset keyword
+            if True position is obtained from latitude, longitude information,
+            otherwise position is obtained from antenna coordinates
+            (range, azimuth, elevation).
+        truealt : boolean. Dataset keyword
+            if True the user input altitude is used to determine the point of
+            interest.
+            if False use the altitude at a given radar elevation ele over the
+            point of interest.
+        lon : float. Dataset keyword
+            the longitude [deg]. Use when latlon is True.
+        lat : float. Dataset keyword
+            the latitude [deg]. Use when latlon is True.
+        alt : float. Dataset keyword
+            altitude [m MSL]. Use when latlon is True.
+        ele : float. Dataset keyword
+            radar elevation [deg]. Use when latlon is False or when latlon is
+            True and truealt is False
+        azi : float. Dataset keyword
+            radar azimuth [deg]. Use when latlon is False
+        rng : float. Dataset keyword
+            range from radar [m]. Use when latlon is False
+        AziTol : float. Dataset keyword
+            azimuthal tolerance to determine which radar azimuth to use [deg]
+        EleTol : float. Dataset keyword
+            elevation tolerance to determine which radar elevation to use [deg]
+        RngTol : float. Dataset keyword
+            range tolerance to determine which radar bin to use [m]
+
+    radar_list : list of Radar objects
+          Optional. list of radar objects
+
+    Returns
+    -------
+    new_dataset : dict
+        dictionary containing the data and metadata at the point of interest
+    ind_rad : int
+        radar index
+
+    """
+    if procstatus != 1:
+        return None, None
+
+    for datatypedescr in dscfg['datatype']:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        break
+    field_name = get_fieldname_pyart(datatype)
+    ind_rad = int(radarnr[5:8])-1
+
+    if (radar_list is None) or (radar_list[ind_rad] is None):
+        warn('ERROR: No valid radar')
+        return None, None
+    radar = radar_list[ind_rad]
+
+    if field_name not in radar.fields:
+        warn('Unable to extract point measurement information. ' +
+             'Field not available')
+        return None, None
+
+    # default parameters
+    truealt = dscfg.get('truealt', False)
+    ele_points = dscfg.get('ele_points', 1.)
+    alt_points = dscfg.get('alt_points', 0.)
+    AziTol = dscfg.get('AziTol', 0.25)
+    EleTol = dscfg.get('EleTol', 1.)
+    RngTol = dscfg.get('RngTol', 120.)
+
+    projparams = dict()
+    projparams.update({'proj': 'pyart_aeqd'})
+    projparams.update({'lon_0': radar.longitude['data']})
+    projparams.update({'lat_0': radar.latitude['data']})
+
+    lat, lon, point_id = read_coord_sensors(dscfg['coord_fname'])
+    x, y = pyart.core.geographic_to_cartesian(lon, lat, projparams)
+    npoints = lon.size
+
+    if not truealt:
+        ke = 4./3.  # constant for effective radius
+        a = 6378100.  # earth radius
+        re = a * ke  # effective radius
+
+        elrad = ele_points * np.pi / 180.
+        r_ground = np.sqrt(x ** 2. + y ** 2.)
+        r = r_ground / np.cos(elrad)
+        alt = radar.altitude['data']+np.sqrt(
+            r ** 2. + re ** 2. + 2. * r * re * np.sin(elrad)) - re
+    else:
+        alt = alt_points+np.zeros(npoints)
+
+    r, az, el = pyart.core.cartesian_to_antenna(
+        x, y, alt-radar.altitude['data'])
+
+    val = np.ma.masked_all(npoints)
+    time = np.ma.masked_all(npoints, dtype=datetime.datetime)
+    used_lon = np.ma.masked_all(npoints)
+    used_lat = np.ma.masked_all(npoints)
+    used_alt = np.ma.masked_all(npoints)
+    for ind in range(npoints):
+        d_az = np.abs(radar.azimuth['data'] - az[ind])
+        if np.min(d_az) > AziTol:
+            warn(' No radar bin found for point (az, el, r):(' +
+                 str(az[ind])+', '+str(el[ind])+', '+str(r[ind]) +
+                 '). Minimum distance to radar azimuth '+str(d_az) +
+                 ' larger than tolerance')
+            continue
+
+        d_el = np.abs(radar.elevation['data'] - el[ind])
+        if np.min(d_el) > EleTol:
+            warn(' No radar bin found for point (az, el, r):(' +
+                 str(az[ind])+', '+str(el[ind])+', '+str(r[ind]) +
+                 '). Minimum distance to radar elevation '+str(d_el) +
+                 ' larger than tolerance')
+            continue
+
+        d_r = np.abs(radar.range['data'] - r[ind])
+        if np.min(d_r) > RngTol:
+            warn(' No radar bin found for point (az, el, r):(' +
+                 str(az[ind])+', '+str(el[ind])+', '+str(r[ind]) +
+                 '). Minimum distance to radar range bin '+str(d_r) +
+                 ' larger than tolerance')
+            continue
+
+        ind_ray = np.argmin(np.abs(radar.azimuth['data'] - az[ind]) +
+                            np.abs(radar.elevation['data'] - el[ind]))
+        ind_r = np.argmin(np.abs(radar.range['data'] - r[ind]))
+
+        used_lon[ind] = radar.gate_longitude['data'][ind_ray, ind_r]
+        used_lat[ind] = radar.gate_latitude['data'][ind_ray, ind_r]
+        used_alt[ind] = radar.gate_altitude['data'][ind_ray, ind_r]
+
+        val[ind] = radar.fields[field_name]['data'].data[ind_ray, ind_r]
+        time[ind] = num2date(
+            radar.time['data'][ind_ray], radar.time['units'],
+            radar.time['calendar'])
+
+    # prepare for exit
+    new_dataset = dict()
+    new_dataset.update({'value': val})
+    new_dataset.update({'datatype': datatype})
+    new_dataset.update({'time': time})
+    new_dataset.update({'ref_time': dscfg['timeinfo']})
+    new_dataset.update({'point_coordinates_WGS84_lon': lon})
+    new_dataset.update({'point_coordinates_WGS84_lat': lat})
+    new_dataset.update({'point_coordinates_WGS84_alt': alt})
+    new_dataset.update({'antenna_coordinates_az': az})
+    new_dataset.update({'antenna_coordinates_el': el})
+    new_dataset.update({'antenna_coordinates_r': r})
+    new_dataset.update({'used_point_coordinates_WGS84_lon': used_lon})
+    new_dataset.update({'used_point_coordinates_WGS84_lat': used_lat})
+    new_dataset.update({'used_point_coordinates_WGS84_alt': used_alt})
+    new_dataset.update({'point_id': point_id})
     new_dataset.update({'final': False})
 
     return new_dataset, ind_rad
@@ -1001,7 +1179,10 @@ def process_ts_along_coord(procstatus, dscfg, radar_list=None):
 
     if procstatus == 1:
         radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
-        field_name = get_fieldname_pyart(datatype)
+        field_names = []
+        for datatypedescr in dscfg['datatype']:
+            radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+            field_names.append(get_fieldname_pyart(datatype))
 
         ind_rad = int(radarnr[5:8])-1
 
@@ -1047,7 +1228,7 @@ def process_ts_along_coord(procstatus, dscfg, radar_list=None):
         # initialize dataset
         if not dscfg['initialized']:
             acoord = pyart.retrieve.compute_ts_along_coord(
-                radar, field_name, mode=mode, fixed_range=fixed_range,
+                radar, field_names, mode=mode, fixed_range=fixed_range,
                 fixed_azimuth=fixed_azimuth, fixed_elevation=fixed_elevation,
                 ang_tol=ang_tol, rng_tol=rng_tol, value_start=value_start,
                 value_stop=value_stop, ref_time=dscfg['timeinfo'],
@@ -1064,7 +1245,7 @@ def process_ts_along_coord(procstatus, dscfg, radar_list=None):
             dscfg['initialized'] = 1
         else:
             acoord = pyart.retrieve.compute_ts_along_coord(
-                radar, field_name, mode=mode, fixed_range=fixed_range,
+                radar, field_names, mode=mode, fixed_range=fixed_range,
                 fixed_azimuth=fixed_azimuth, fixed_elevation=fixed_elevation,
                 ang_tol=ang_tol, rng_tol=rng_tol, value_start=value_start,
                 value_stop=value_stop, ref_time=dscfg['timeinfo'],

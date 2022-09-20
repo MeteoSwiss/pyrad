@@ -34,7 +34,9 @@ import numpy as np
 import pyart
 
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
+from ..io.io_aux import get_file_list
 from ..io.read_data_radar import interpol_field
+from ..io.read_data_other import read_rhi_profile
 
 from ..util.radar_utils import time_avg_range
 
@@ -150,20 +152,9 @@ def process_signal_power(procstatus, dscfg, radar_list=None):
 
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype == 'dBZ':
-            refl_field = 'reflectivity'
-        if datatype == 'dBuZ':
-            refl_field = 'unfiltered_reflectivity'
-        if datatype == 'dBZc':
-            refl_field = 'corrected_reflectivity'
-        if datatype == 'dBuZc':
-            refl_field = 'corrected_unfiltered_reflectivity'
-        if datatype == 'dBZv':
-            refl_field = 'reflectivity_vv'
-        if datatype == 'dBuZv':
-            refl_field = 'unfiltered_reflectivity_vv'
-        if datatype == 'dBuZvc':
-            refl_field = 'corrected_unfiltered_reflectivity_vv'
+        if datatype in ('dBZ', 'dBuZ', 'dBZc', 'dBuZc', 'dBZv', 'dBuZv',
+                        'dBuZvc'):
+            refl_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8])-1
     if radar_list[ind_rad] is None:
@@ -273,20 +264,9 @@ def process_rcs_pr(procstatus, dscfg, radar_list=None):
 
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype == 'dBZ':
-            refl_field = 'reflectivity'
-        if datatype == 'dBuZ':
-            refl_field = 'unfiltered_reflectivity'
-        if datatype == 'dBZc':
-            refl_field = 'corrected_reflectivity'
-        if datatype == 'dBuZc':
-            refl_field = 'corrected_unfiltered_reflectivity'
-        if datatype == 'dBZv':
-            refl_field = 'reflectivity_vv'
-        if datatype == 'dBuZv':
-            refl_field = 'unfiltered_reflectivity_vv'
-        if datatype == 'dBuZvc':
-            refl_field = 'corrected_unfiltered_reflectivity_vv'
+        if datatype in ('dBZ', 'dBuZ', 'dBZc', 'dBuZc', 'dBZv', 'dBuZv',
+                        'dBuZvc'):
+            refl_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8])-1
     if radar_list[ind_rad] is None:
@@ -385,20 +365,9 @@ def process_rcs(procstatus, dscfg, radar_list=None):
 
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype == 'dBZ':
-            refl_field = 'reflectivity'
-        if datatype == 'dBuZ':
-            refl_field = 'unfiltered_reflectivity'
-        if datatype == 'dBZc':
-            refl_field = 'corrected_reflectivity'
-        if datatype == 'dBuZc':
-            refl_field = 'corrected_unfiltered_reflectivity'
-        if datatype == 'dBZv':
-            refl_field = 'reflectivity_vv'
-        if datatype == 'dBuZv':
-            refl_field = 'unfiltered_reflectivity_vv'
-        if datatype == 'dBuZvc':
-            refl_field = 'corrected_unfiltered_reflectivity_vv'
+        if datatype in ('dBZ', 'dBuZ', 'dBZc', 'dBuZc', 'dBZv', 'dBuZv',
+                        'dBuZvc'):
+            refl_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8])-1
     if radar_list[ind_rad] is None:
@@ -468,20 +437,9 @@ def process_vol_refl(procstatus, dscfg, radar_list=None):
 
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype == 'dBZ':
-            refl_field = 'reflectivity'
-        if datatype == 'dBuZ':
-            refl_field = 'unfiltered_reflectivity'
-        if datatype == 'dBZc':
-            refl_field = 'corrected_reflectivity'
-        if datatype == 'dBuZc':
-            refl_field = 'corrected_unfiltered_reflectivity'
-        if datatype == 'dBZv':
-            refl_field = 'reflectivity_vv'
-        if datatype == 'dBuZv':
-            refl_field = 'unfiltered_reflectivity_vv'
-        if datatype == 'dBuZvc':
-            refl_field = 'corrected_unfiltered_reflectivity_vv'
+        if datatype in ('dBZ', 'dBuZ', 'dBZc', 'dBuZc', 'dBZv', 'dBuZv',
+                        'dBuZvc'):
+            refl_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8])-1
     if radar_list[ind_rad] is None:
@@ -546,18 +504,10 @@ def process_snr(procstatus, dscfg, radar_list=None):
 
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype == 'dBZ':
-            refl = 'reflectivity'
-        if datatype == 'dBuZ':
-            refl = 'unfiltered_reflectivity'
-        if datatype == 'dBZv':
-            refl = 'reflectivity_vv'
-        if datatype == 'dBuZv':
-            refl = 'unfiltered_reflectivity_vv'
-        if datatype == 'Nh':
-            noise = 'noisedBZ_hh'
-        if datatype == 'Nv':
-            noise = 'noisedBZ_vv'
+        if datatype in ('dBZ', 'dBuZ', 'dBZv', 'dBuZv'):
+            refl = get_fieldname_pyart(datatype)
+        elif datatype in ('Nh', 'Nv'):
+            noise = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8])-1
     if radar_list[ind_rad] is None:
@@ -843,16 +793,10 @@ def process_cdr(procstatus, dscfg, radar_list=None):
 
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype == 'RhoHV':
-            rhohv = 'cross_correlation_ratio'
-        if datatype == 'uRhoHV':
-            rhohv = 'uncorrected_cross_correlation_ratio'
-        if datatype == 'RhoHVu':
-            rhohv = 'unfiltered_cross_correlation_ratio'
-        if datatype == 'ZDR':
-            zdr = 'differential_reflectivity'
-        if datatype == 'ZDRc':
-            zdr = 'corrected_differential_reflectivity'
+        if datatype in ('RhoHV', 'uRhoHV', 'RhoHVu'):
+            rhohv = get_fieldname_pyart(datatype)
+        elif datatype in ('ZDR', 'ZDRc'):
+            zdr = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8])-1
     if radar_list[ind_rad] is None:
@@ -879,7 +823,8 @@ def process_cdr(procstatus, dscfg, radar_list=None):
 
 def process_vpr(procstatus, dscfg, radar_list=None):
     """
-    Computes the vertical profile of reflectivity
+    Computes the vertical profile of reflectivity using the Meteo-France
+    operational algorithm
 
     Parameters
     ----------
@@ -891,6 +836,59 @@ def process_vpr(procstatus, dscfg, radar_list=None):
 
         datatype : string. Dataset keyword
             The input data type
+        nvalid_min : int
+            Minimum number of rays with data to consider the azimuthal average
+            valid. Default 20.
+        angle_min, angle_max : float
+            Minimum and maximum elevation angles used to compute the ratios of
+            reflectivity. Default 0. and 4.
+        ml_thickness_min, ml_thickness_max, ml_thickness_step : float
+            Minimum, maximum and step of the melting layer thickness of the
+             models to explore [m]. Default 200., 800. and 200.
+        iso0_max : float
+            maximum iso0 altitude of the profile. Default 5000.
+        ml_top_diff_max, ml_top_step : float
+            maximum difference +- between iso-0 and top of the melting layer
+            [m] of the models to explore. Step. Default 200. and 200.
+        ml_peak_min, ml_peak_max, ml_peak_step: float
+            min, max and step of the value at the peak of the melting layer of
+            the models to explore. Default 1., 6. and 1.
+        dr_min, dr_max, dr_step : float
+            min, max and step of the decreasing ratio above the melting layer.
+            Default -6., -1.5 and 1.5
+        dr_default : float
+            default decreasing ratio to use if a proper model could not be
+            found. Default -4.5
+        dr_alt : float
+            altitude above the melting layer top (m) where theoretical profile
+            needs to be defined to be able to compute DR. If the theoretical
+            profile is not defined up to the resulting altitude a default DR
+            is used. Default 800.
+        h_max : float
+            maximum altitude [masl] where to compute the model profile.
+            Default 6000.
+        h_res : float
+            resolution of the model profile (m). Default 1.
+        max_weight : float
+            Maximum weight of the antenna pattern. Default 9.
+        rmin_obs, rmax_obs : float
+            minimum and maximum range (m) of the observations that are
+            compared with the model. Default 5000. and 150000.
+        use_ml : bool
+            If True the retrieved ML will be used to select the range of
+            variability the meltin layer top and thickness
+        vpr_memory_max : float
+            The maximum time range to average reflectivity (min)
+        filter_vpr_memory_max : float
+            The maximum time range where to look for previous VPR retrievals
+        ml_datatype : str
+            Melting layer data type descriptor
+        z_datatype : str
+            descriptor used get the linear reflectivity information
+        vpr_theo_datatype : str
+            descriptor used to get the retrieved theoretical VPR
+        weight_mem : float
+            Weight given to past VPR when filtering the current VPR
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -905,10 +903,17 @@ def process_vpr(procstatus, dscfg, radar_list=None):
     if procstatus != 1:
         return None, None
 
+    temp_ref = None
+    temp_field = None
+    iso0_field = None
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         if datatype in ('dBZ', 'dBZc'):
             refl_field = get_fieldname_pyart(datatype)
+        elif datatype in ('H_ISO0', 'H_ISO0c'):
+            iso0_field = get_fieldname_pyart(datatype)
+        elif datatype in ('TEMP', 'TEMPc'):
+            temp_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8])-1
     if radar_list[ind_rad] is None:
@@ -916,16 +921,164 @@ def process_vpr(procstatus, dscfg, radar_list=None):
         return None, None
     radar = radar_list[ind_rad]
 
+    # Check which should be the reference field for temperature
+    if iso0_field is not None:
+        if iso0_field not in radar.fields:
+            warn('Unable to detect melting layer. '
+                 'Missing height over iso0 field')
+            return None, None
+        temp_ref = 'height_over_iso0'
+
+    if temp_field is not None:
+        if temp_field not in radar.fields:
+            warn('Unable to detect melting layer. '
+                 'Missing temperature field')
+            return None, None
+        temp_ref = 'temperature'
+
+    if temp_ref is None:
+        warn('A valid temperature reference field has to be specified')
+        return None, None
+
     if refl_field not in radar.fields:
         warn('ERROR: Unable to compute VPR. Missing data')
         return None, None
 
     refl_corr = pyart.correct.correct_vpr(radar, refl_field=refl_field)
+    # User defined variables
+    nvalid_min = dscfg.get('nvalid_min', 20)
+    angle_min = dscfg.get('angle_min', 0.)
+    angle_max = dscfg.get('angle_max', 4.)
+    ml_thickness_min = dscfg.get('ml_thickness_min', 200)
+    ml_thickness_max = dscfg.get('ml_thickness_max', 800)
+    ml_thickness_step = dscfg.get('ml_thickness_step', 200)
+    iso0_max = dscfg.get('iso0_max', 5000.)
+    ml_top_diff_max = dscfg.get('ml_top_diff_max', 200)
+    ml_top_step = dscfg.get('ml_top_step', 200)
+    ml_peak_min = dscfg.get('ml_peak_min', 1.)
+    ml_peak_max = dscfg.get('ml_peak_max', 6.)
+    ml_peak_step = dscfg.get('ml_peak_step', 1.)
+    dr_min = dscfg.get('dr_min', -6.)
+    dr_max = dscfg.get('dr_max', -1.5)
+    dr_step = dscfg.get('dr_step', 1.5)
+    dr_default = dscfg.get('dr_default', -4.5)
+    dr_alt = dscfg.get('dr_alt', 800.)
+    h_max = dscfg.get('h_max', 6000.)
+    h_res = dscfg.get('h_res', 1.)
+    max_weight = dscfg.get('max_weight', 9.)
+    rmin_obs = dscfg.get('rmin_obs', 5000.)
+    rmax_obs = dscfg.get('rmax_obs', 150000.)
+    use_ml = dscfg.get('use_ml', False)
+    ml_datatypedescr = dscfg.get('ml_datatype', None)
+    z_datatypedescr = dscfg.get('z_datatype', None)
+    vpr_theo_datatypedescr = dscfg.get('vpr_theo_datatype', None)
+    vpr_memory_max = dscfg.get('vpr_memory_max', 0.)
+    filter_vpr_memory_max = dscfg.get('filter_vpr_memory_max', 0.)
+    weight_mem = dscfg.get('weight_mem', 0.75)
+
+    iso0 = None
+    if use_ml:
+        if (ml_datatypedescr is None or dscfg['loadbasepath'] is None
+                or dscfg['loadname'] is None):
+            warn('unable to find files containing melting layer information')
+            iso0 = None
+        else:
+            flist = get_file_list(
+                ml_datatypedescr, [dscfg['timeinfo']], [dscfg['timeinfo']],
+                dscfg)
+            if not flist:
+                warn('unable to find files containing'
+                     ' melting layer information')
+                iso0 = None
+            else:
+                radar_ml = pyart.io.read_cfradial(flist[0])
+                if radar_ml is None:
+                    warn('Unable to use retrieved melting layer data')
+                    iso0 = None
+                else:
+                    print('Using file {} with melting layer information'.format(
+                        flist[0]))
+                    iso0 = np.ma.mean(
+                        radar_ml.fields['melting_layer_height']['data'][:, 1])
+                    ml_bottom = np.ma.mean(
+                        radar_ml.fields['melting_layer_height']['data'][:, 0])
+                    ml_thickness = iso0-ml_bottom
+                    ml_thickness_min = ml_thickness-ml_thickness_step
+                    ml_thickness_max = ml_thickness+ml_thickness_step
+
+    radar_mem_list = None
+    if vpr_memory_max > 0:
+        if (z_datatypedescr is None or dscfg['loadbasepath'] is None
+                or dscfg['loadname'] is None):
+            warn('unable to find files with azimuthal reflectivity average')
+        else:
+            # get previous reflectivity files but do not include current one
+            flist = get_file_list(
+                z_datatypedescr,
+                [dscfg['timeinfo']-datetime.timedelta(minutes=vpr_memory_max)],
+                [dscfg['timeinfo']-datetime.timedelta(seconds=1)], dscfg)
+            if not flist:
+                warn('unable to find files containing reflectivity')
+            else:
+                radar_mem_list = []
+                for fname in flist:
+                    radar_vpr = pyart.io.read_cfradial(fname)
+                    if radar_vpr is None:
+                        warn('Unable to use azimuthal reflectivity average')
+                        continue
+                    print('Using file {} with azimuthal averaged refl'.format(
+                          fname))
+                    radar_mem_list.append(radar_vpr)
+                if not radar_mem_list:
+                    radar_mem_list = None
+
+    vpr_theo_dict_mem = None
+    if filter_vpr_memory_max > 0.:
+        if (vpr_theo_datatypedescr is None or dscfg['loadbasepath'] is None
+                or dscfg['loadname'] is None):
+            warn('unable to find files with theoretical VPR')
+        else:
+            # get previous VPR retrieved files but do not include current one
+            flist = get_file_list(
+                vpr_theo_datatypedescr,
+                [dscfg['timeinfo']
+                 - datetime.timedelta(minutes=filter_vpr_memory_max)],
+                [dscfg['timeinfo']-datetime.timedelta(seconds=1)], dscfg)
+            if not flist:
+                warn('unable to find files containing retrieved VPR')
+            else:
+                height, _, vals = read_rhi_profile(flist[-1], labels=['Znorm'])
+                vpr_theo_dict_mem = {
+                    'value': vals[:, 0],
+                    'altitude': height}
+                print('Using file {} with previously retrieved VPR'.format(
+                      flist[-1]))
+
+    corr_refl_field = 'corrected_reflectivity'
+    corr_field = 'vpr_correction'
+    refl_corr, vpr_corr, vpr_theo_dict, radar_rhi = pyart.correct.correct_vpr(
+        radar, nvalid_min=nvalid_min, angle_min=angle_min,
+        angle_max=angle_max, ml_thickness_min=ml_thickness_min,
+        ml_thickness_max=ml_thickness_max,
+        ml_thickness_step=ml_thickness_step, iso0_max=iso0_max,
+        ml_top_diff_max=ml_top_diff_max, ml_top_step=ml_top_step,
+        ml_peak_min=ml_peak_min, ml_peak_max=ml_peak_max,
+        ml_peak_step=ml_peak_step, dr_min=dr_min, dr_max=dr_max,
+        dr_step=dr_step, dr_default=dr_default, dr_alt=dr_alt, h_max=h_max,
+        h_res=h_res, max_weight=max_weight, rmin_obs=rmin_obs,
+        rmax_obs=rmax_obs, iso0=iso0, weight_mem=weight_mem,
+        vpr_theo_dict_mem=vpr_theo_dict_mem, radar_mem_list=radar_mem_list,
+        refl_field=refl_field, corr_refl_field=corr_refl_field,
+        corr_field=corr_field, temp_field=temp_field, iso0_field=iso0_field,
+        temp_ref=temp_ref)
 
     # prepare for exit
     new_dataset = {'radar_out': deepcopy(radar)}
     new_dataset['radar_out'].fields = dict()
-    new_dataset['radar_out'].add_field('corrected_reflectivity', refl_corr)
+    new_dataset['radar_out'].add_field(corr_refl_field, refl_corr)
+    new_dataset['radar_out'].add_field(corr_field, vpr_corr)
+    new_dataset.update({'vpr_theo_dict': vpr_theo_dict})
+    new_dataset.update({'radar_rhi': radar_rhi})
 
     return new_dataset, ind_rad
 
@@ -1077,14 +1230,10 @@ def process_rainrate(procstatus, dscfg, radar_list=None):
     elif dscfg['RR_METHOD'] == 'ZKDP':
         for datatypedescr in dscfg['datatype']:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-            if datatype == 'dBZc':
-                refl_field = 'corrected_reflectivity'
-            if datatype == 'KDPc':
-                kdp_field = 'corrected_specific_differential_phase'
-            if datatype == 'dBZ':
-                refl_field = 'reflectivity'
-            if datatype == 'KDP':
-                kdp_field = 'specific_differential_phase'
+            if datatype in ('dBZ', 'dBZc'):
+                refl_field = get_fieldname_pyart(datatype)
+            elif datatype in ('KDP', 'KDPc'):
+                kdp_field = get_fieldname_pyart(datatype)
 
         ind_rad = int(radarnr[5:8])-1
         if radar_list[ind_rad] is None:
@@ -1113,14 +1262,10 @@ def process_rainrate(procstatus, dscfg, radar_list=None):
     elif dscfg['RR_METHOD'] == 'ZA':
         for datatypedescr in dscfg['datatype']:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-            if datatype == 'dBZc':
-                refl_field = 'corrected_reflectivity'
-            if datatype == 'Ahc':
-                a_field = 'corrected_specific_attenuation'
-            if datatype == 'dBZ':
-                refl_field = 'reflectivity'
-            if datatype == 'Ah':
-                a_field = 'specific_attenuation'
+            if datatype in ('dBZ', 'dBZc'):
+                refl_field = get_fieldname_pyart(datatype)
+            elif datatype in ('Ah', 'Ahc'):
+                a_field = get_fieldname_pyart(datatype)
 
         ind_rad = int(radarnr[5:8])-1
         if radar_list[ind_rad] is None:
@@ -1148,16 +1293,12 @@ def process_rainrate(procstatus, dscfg, radar_list=None):
     elif dscfg['RR_METHOD'] == 'hydro':
         for datatypedescr in dscfg['datatype']:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-            if datatype == 'dBZc':
-                refl_field = 'corrected_reflectivity'
-            if datatype == 'Ahc':
-                a_field = 'corrected_specific_attenuation'
-            if datatype == 'hydro':
+            if datatype in ('dBZ', 'dBZc'):
+                refl_field = get_fieldname_pyart(datatype)
+            elif datatype in ('Ah', 'Ahc'):
+                a_field = get_fieldname_pyart(datatype)
+            elif datatype == 'hydro':
                 hydro_field = 'radar_echo_classification'
-            if datatype == 'dBZ':
-                refl_field = 'reflectivity'
-            if datatype == 'Ah':
-                a_field = 'specific_attenuation'
 
         ind_rad = int(radarnr[5:8])-1
         if radar_list[ind_rad] is None:
@@ -1428,10 +1569,8 @@ def process_bird_density(procstatus, dscfg, radar_list=None):
 
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype == 'eta_h':
-            vol_refl_field = 'volumetric_reflectivity'
-        if datatype == 'eta_v':
-            vol_refl_field = 'volumetric_reflectivity_vv'
+        if datatype in ('eta_h', 'eta_v'):
+            vol_refl_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8])-1
     if radar_list[ind_rad] is None:

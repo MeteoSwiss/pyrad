@@ -1,15 +1,15 @@
 name: Test pyrad
 env:
-  MINIMAL_DEPENDENCIES: cython numpy scipy dask netCDF4
-  OPTIONAL_DEPENDENCIES: pyfftw cartopy h5py PyWavelets pandas scikit-image
+  MINIMAL_DEPENDENCIES: cython numpy scipy netCDF4 
+  OPTIONAL_DEPENDENCIES: pyfftw cartopy h5py pandas scikit-image
   TEST_DEPENDENCIES: pytest pytest-cov
 
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
+    branches: [ dev ]
   pull_request:
-    branches: [ master ]
+    branches: [ dev ]
 
 jobs:
   unit_tests:
@@ -20,7 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ "ubuntu-latest" ]
-        python-version: [ "3.6", "3.7" ]
+        python-version: [ "3.7", "3.8", "3.9"]
       max-parallel: 6
 
     defaults:
@@ -34,7 +34,11 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-
+      - name: Clone pyrad-examples
+        uses: actions/checkout@master
+        with:
+          repository: MeteoSwiss/pyrad-examples
+          path: pyrad-examples 
       - name: Setup Miniconda
         uses: conda-incubator/setup-miniconda@v2.0.0
         with:
@@ -54,16 +58,12 @@ jobs:
       - name: Install pyart
         if: matrix.os != 'macos-latest'
         working-directory: ${{github.workspace}}/src/pyart/
-        run: pip install .
+        run: python setup.py install
       - name: Install pyrad
         if: matrix.os != 'macos-latest'
         working-directory: ${{github.workspace}}/src/pyrad_proc/
-        run: pip install .
-      - name: Download pyrad-examples
-        env:
-          PYRAD_EXAMPLES_PATH: ${{github.workspace}}/pyrad-examples/
-        working-directory: ${{github.workspace}}/ci
-        run: python fetch_pyrad_examples.py
+        run: python setup.py install
+     
 
       - name: Check imports
         working-directory: ${{github.workspace}}/pyrad-examples/
@@ -75,4 +75,3 @@ jobs:
            PYRAD_EXAMPLES_PATH: ${{github.workspace}}/pyrad-examples/
         working-directory: ${{github.workspace}}/src/pyrad_proc/tests/
         run: pytest run_tests.py
-

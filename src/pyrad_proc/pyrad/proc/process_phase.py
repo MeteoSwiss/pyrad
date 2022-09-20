@@ -106,11 +106,17 @@ def process_correct_phidp0(procstatus, dscfg, radar_list=None):
     else:
         phidp_field = 'corrected_'+psidp_field
 
-    phidp = pyart.correct.correct_sys_phase(
-        radar, ind_rmin=ind_rmin, ind_rmax=ind_rmax, min_rcons=min_rcons,
-        zmin=dscfg['Zmin'], zmax=dscfg['Zmax'], psidp_field=psidp_field,
-        refl_field=refl_field, phidp_field=phidp_field)
-
+    try:
+        phidp = pyart.correct.correct_sys_phase(
+            radar, ind_rmin=ind_rmin, ind_rmax=ind_rmax, min_rcons=min_rcons,
+            zmin=dscfg['Zmin'], zmax=dscfg['Zmax'], psidp_field=psidp_field,
+            refl_field=refl_field, phidp_field=phidp_field)
+    except AttributeError as e:
+        warn('Could not find correct_sys_phase function...')
+        warn('Skipping system phase correction...')
+        warn('Please use PyART-MCH to get this functionality')
+        phidp = radar.fields[phidp_field]
+     
     # prepare for exit
     new_dataset = {'radar_out': deepcopy(radar)}
     new_dataset['radar_out'].fields = dict()
@@ -434,11 +440,17 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
     r_res = radar_aux.range['data'][1]-radar_aux.range['data'][0]
     min_rcons = int(dscfg['rcell']/r_res)
 
-    phidp = pyart.correct.correct_sys_phase(
-        radar_aux, ind_rmin=ind_rmin, ind_rmax=ind_rmax, min_rcons=min_rcons,
-        zmin=dscfg['Zmin'], zmax=dscfg['Zmax'], psidp_field=psidp_field,
-        refl_field=refl_field, phidp_field=phidp_field)
-
+    try:
+        phidp = pyart.correct.correct_sys_phase(
+            radar_aux, ind_rmin=ind_rmin, ind_rmax=ind_rmax, min_rcons=min_rcons,
+            zmin=dscfg['Zmin'], zmax=dscfg['Zmax'], psidp_field=psidp_field,
+            refl_field=refl_field, phidp_field=phidp_field)
+    except AttributeError as e:
+        warn('Could not find correct_sys_phase function...')
+        warn('Skipping system phase correction...')
+        warn('Please use PyART-MCH to get this functionality')
+        phidp = radar_aux.fields[phidp_field]
+        
     # filter out data in an above the melting layer
     mask = np.ma.getmaskarray(phidp['data'])
 
@@ -453,12 +465,18 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
                     'data'][0]
     if beamwidth is None:
         warn('Antenna beam width unknown.')
-
-    mask_fzl, _ = pyart.correct.get_mask_fzl(
-        radar_aux, fzl=fzl, doc=15, min_temp=0., max_h_iso0=0.,
-        thickness=thickness, beamwidth=beamwidth, temp_field=temp_field,
-        iso0_field=iso0_field, temp_ref=temp_ref)
-    mask = np.logical_or(mask, mask_fzl)
+        
+    try:
+        mask_fzl, _ = pyart.correct.get_mask_fzl(
+            radar_aux, fzl=fzl, doc=15, min_temp=0., max_h_iso0=0.,
+            thickness=thickness, beamwidth=beamwidth, temp_field=temp_field,
+            iso0_field=iso0_field, temp_ref=temp_ref)
+        mask = np.logical_or(mask, mask_fzl)
+    except AttributeError as e:
+        warn("Masking above FZL is only available in PyART-MCH")
+        warn("Please use this library instead of ARM's version")
+    
+        
 
     # filter out data with invalid reflectivity
     mask_refl = np.ma.getmaskarray(radar_aux.fields[refl_field]['data'])

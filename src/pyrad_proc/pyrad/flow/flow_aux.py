@@ -1092,6 +1092,12 @@ def _create_datacfg_dict(cfg):
     datacfg.update({'rmin': cfg.get('rmin', None)})
     datacfg.update({'rmax': cfg.get('rmax', None)})
 
+    # Convert the following floats to float arrays
+    fltarr_list = ['elmin', 'elmax', 'azmin', 'azmax', 'rmin', 'rmax']
+    for param in fltarr_list:
+        if param in datacfg and isinstance(datacfg[param], float):
+            datacfg[param] = [datacfg[param]]
+
     # Modify size of grid object
     datacfg.update({'latmin': cfg.get('latmin', None)})
     datacfg.update({'latmax': cfg.get('latmax', None)})
@@ -1126,6 +1132,8 @@ def _create_datacfg_dict(cfg):
         datacfg.update({'radar_beam_width_v': cfg['radar_beam_width_v']})
     if 'pulse_width' in cfg:
         datacfg.update({'pulse_width': cfg['pulse_width']})
+    if 'pulse_width_gamic' in cfg:
+        datacfg.update({'pulse_width_gamic': cfg['pulse_width_gamic']})
     if 'nyquist_velocity' in cfg:
         datacfg.update({'nyquist_velocity': cfg['nyquist_velocity']})
     if 'AntennaGainH' in cfg:
@@ -1196,6 +1204,8 @@ def _create_dscfg_dict(cfg, dataset):
     # Path related parameters
     dscfg.update({'configpath': cfg['configpath']})
     dscfg.update({'basepath': cfg['saveimgbasepath']})
+    dscfg.update({'loadbasepath': cfg['loadbasepath']})
+    dscfg.update({'loadname': cfg['loadname']})
     dscfg.update({'path_convention': cfg['path_convention']})
     dscfg.update({'procname': cfg['name']})
     dscfg.update({'dsname': dataset})

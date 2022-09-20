@@ -1348,7 +1348,8 @@ def process_colocated_gates(procstatus, dscfg, radar_list=None):
 
 def process_intercomp(procstatus, dscfg, radar_list=None):
     """
-    intercomparison between two radars
+    intercomparison between two radars at co-located gates. The variables
+    compared must be of the same type.
 
     Parameters
     ----------
@@ -1390,6 +1391,27 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
         radar index
 
     """
+    # check how many radars have to be compared and which datatype to use
+    ind_radar_list = []
+    field_name_list = []
+    datatype_list = []
+    for datatypedescr in dscfg['datatype']:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        field_name = get_fieldname_pyart(datatype)
+        ind_radar_list.append(int(radarnr[5:8])-1)
+        datatype_list.append(datatype)
+        field_name_list.append(field_name)
+    ind_radar_list = np.array(ind_radar_list)
+    datatype_list = np.array(datatype_list)
+    field_name_list = np.array(field_name_list)
+    
+    if (ind_radar_list.size != 2) or (np.unique(ind_radar_list).size < 2):
+        warn('Intercomparison requires data from two different radars')
+        return None, None
+    if np.unique(field_name_list).size > 1:
+        warn('Intercomparison must be performed on the same variable')
+        return None, None
+        
     if procstatus == 0:
         savedir = dscfg['colocgatespath']+dscfg['coloc_radars_name']+'/'
 
@@ -1424,26 +1446,6 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
         return None, None
 
     if procstatus == 1:
-        # check how many radars are there
-        radarnr_dict = dict()
-        ind_radar_list = set()
-        for datatypedescr in dscfg['datatype']:
-            radarnr = datatypedescr.split(':')[0]
-            radarnr_dict.update({radarnr: []})
-            ind_radar_list.add(int(radarnr[5:8])-1)
-
-        ind_radar_list = list(ind_radar_list)
-
-        if (len(radarnr_dict) != 2) or (len(radar_list) < 2):
-            warn('Intercomparison requires data from two different radars')
-            return None, None
-
-        # create the list of data types for each radar
-        for datatypedescr in dscfg['datatype']:
-            radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-            field_name = get_fieldname_pyart(datatype)
-            break
-
         radar1 = radar_list[ind_radar_list[0]]
         radar2 = radar_list[ind_radar_list[1]]
 
@@ -1619,7 +1621,7 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
             timeinfo=dscfg['global_data']['timeinfo'], create_dir=False)
 
         fname = make_filename(
-            'colocated_data', dscfg['type'], 'dBZc', ['csv'],
+            'colocated_data', dscfg['type'], datatype, ['csv'],
             timeinfo=dscfg['global_data']['timeinfo'], timeformat='%Y%m%d')
 
         fname = savedir+fname[0]
