@@ -14,6 +14,7 @@ Functions for reading auxiliary data
     read_histogram_ts
     read_quantiles_ts
     read_rhi_profile
+    read read_vpr_parameters
     read_last_state
     read_status
     read_rad4alp_cosmo
@@ -392,6 +393,57 @@ def read_rhi_profile(fname, labels=['50.0-percentile', '25.0-percentile',
         warn('Unable to read file '+fname)
         return None, None, None
 
+
+def read_vpr_parameters(fname, labels=['top','thickness','bottom','peak','dr']):
+    """
+    Reads a monitoring time series contained in a csv file
+
+    Parameters
+    ----------
+    fname : str
+        path of time series file
+    labels : list of str
+        The data labels
+
+    Returns
+    -------
+    height, np_t, vals : tupple
+        The read data. None otherwise
+
+    """
+    try:
+        with open(fname, 'r', newline='') as csvfile:
+            nfields = len(labels)
+            # first count the lines
+            reader = csv.DictReader(
+                row for row in csvfile if not row.startswith('#'))
+            nrows = sum(1 for row in reader)
+
+            height = np.empty(nrows, dtype=float)
+            np_t = np.zeros(nrows, dtype=int)
+            vals = np.ma.empty((nrows, nfields), dtype=float)
+
+            # now read the data
+            csvfile.seek(0)
+            reader = csv.DictReader(
+                row for row in csvfile if not row.startswith('#')
+                )
+            for i, row in enumerate(reader):
+                height[i] = float(row['Altitude [m MSL]'])
+                if 'N valid' in row:
+                    np_t[i] = int(row['N valid'])
+                for j, label in enumerate(labels):
+                    vals[i, j] = float(row[label])
+
+            vals = np.ma.masked_values(vals, get_fillvalue())
+
+            return height, np_t, vals
+    except EnvironmentError as ee:
+        warn(str(ee))
+        warn('Unable to read file '+fname)
+        return None, None, None
+        
+        
 
 def read_last_state(fname):
     """
