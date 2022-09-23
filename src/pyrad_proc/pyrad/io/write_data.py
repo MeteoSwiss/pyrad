@@ -15,13 +15,14 @@ Functions for writing pyrad output data
     write_alarm_msg
     write_last_state
     write_smn
-   *write_timeseries_point
+    write_timeseries_point
     write_trt_info
     write_trt_cell_data
     write_trt_thundertracking_data
     write_trt_cell_scores
     write_trt_cell_lightning
     write_trt_rpc
+    write_vpr_theo_params
     write_rhi_profile
     write_field_coverage
     write_cdf
@@ -900,6 +901,37 @@ def write_trt_rpc(cell_ID, cell_time, lon, lat, area, rank, hmin, hmax, freq,
                 'hmax': hmax[i],
                 'freq': freq[i]
             })
+
+        csvfile.close()
+
+    return fname
+
+
+def write_vpr_theo_params(vpr_theo_dict, fname,
+                          labels=('ml_top', 'ml_bottom', 'val_ml_peak', 'val_dr')):
+    """
+    writes the parameters defining a theoretical VPR profile into a csv file
+
+    Parameters
+    ----------
+    vpr_theo_dict : dict
+        dictionary containing the parameters of the VPR profile
+    fname : str
+        file name where to store the data
+    labels : list of str
+        new of parameters to write in file
+
+    Returns
+    -------
+    fname : str
+        the name of the file where data has been written
+
+    """
+    with open(fname, 'w', newline='') as csvfile:
+        writer = csv.DictWriter(csvfile, labels)
+        writer.writeheader()
+        data_dict = dict((k, vpr_theo_dict[k]) for k in labels)
+        writer.writerow(data_dict)
 
         csvfile.close()
 

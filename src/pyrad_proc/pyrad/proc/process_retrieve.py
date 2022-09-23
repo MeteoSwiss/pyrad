@@ -36,7 +36,7 @@ import pyart
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from ..io.io_aux import get_file_list
 from ..io.read_data_radar import interpol_field
-from ..io.read_data_other import read_rhi_profile
+from ..io.read_data_other import read_rhi_profile, read_vpr_theo_parameters
 
 from ..util.radar_utils import time_avg_range
 
@@ -889,6 +889,8 @@ def process_vpr(procstatus, dscfg, radar_list=None):
             descriptor used to get the retrieved theoretical VPR
         weight_mem : float
             Weight given to past VPR when filtering the current VPR
+        spatialized : bool
+            If True the VPR correction is spatialized
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -944,7 +946,6 @@ def process_vpr(procstatus, dscfg, radar_list=None):
         warn('ERROR: Unable to compute VPR. Missing data')
         return None, None
 
-    refl_corr = pyart.correct.correct_vpr(radar, refl_field=refl_field)
     # User defined variables
     nvalid_min = dscfg.get('nvalid_min', 20)
     angle_min = dscfg.get('angle_min', 0.)
@@ -975,6 +976,7 @@ def process_vpr(procstatus, dscfg, radar_list=None):
     vpr_memory_max = dscfg.get('vpr_memory_max', 0.)
     filter_vpr_memory_max = dscfg.get('filter_vpr_memory_max', 0.)
     weight_mem = dscfg.get('weight_mem', 0.75)
+    spatialised = dscfg.get('spatialised', False)
 
     iso0 = None
     if use_ml:
@@ -1047,30 +1049,52 @@ def process_vpr(procstatus, dscfg, radar_list=None):
             if not flist:
                 warn('unable to find files containing retrieved VPR')
             else:
-                height, _, vals = read_rhi_profile(flist[-1], labels=['Znorm'])
-                vpr_theo_dict_mem = {
-                    'value': vals[:, 0],
-                    'altitude': height}
+                if spatialised:
+                    # this function will read the stored VPR parameters from the previous volume
+                    vpr_theo_dict_mem = read_vpr_theo_parameters(flist[-1])
+                else:
+                    height, _, vals = read_rhi_profile(flist[-1], labels=['Znorm'])
+                    vpr_theo_dict_mem = {
+                        'value': vals[:, 0],
+                        'altitude': height}
                 print('Using file {} with previously retrieved VPR'.format(
                       flist[-1]))
 
     corr_refl_field = 'corrected_reflectivity'
     corr_field = 'vpr_correction'
-    refl_corr, vpr_corr, vpr_theo_dict, radar_rhi = pyart.correct.correct_vpr(
-        radar, nvalid_min=nvalid_min, angle_min=angle_min,
-        angle_max=angle_max, ml_thickness_min=ml_thickness_min,
-        ml_thickness_max=ml_thickness_max,
-        ml_thickness_step=ml_thickness_step, iso0_max=iso0_max,
-        ml_top_diff_max=ml_top_diff_max, ml_top_step=ml_top_step,
-        ml_peak_min=ml_peak_min, ml_peak_max=ml_peak_max,
-        ml_peak_step=ml_peak_step, dr_min=dr_min, dr_max=dr_max,
-        dr_step=dr_step, dr_default=dr_default, dr_alt=dr_alt, h_max=h_max,
-        h_res=h_res, max_weight=max_weight, rmin_obs=rmin_obs,
-        rmax_obs=rmax_obs, iso0=iso0, weight_mem=weight_mem,
-        vpr_theo_dict_mem=vpr_theo_dict_mem, radar_mem_list=radar_mem_list,
-        refl_field=refl_field, corr_refl_field=corr_refl_field,
-        corr_field=corr_field, temp_field=temp_field, iso0_field=iso0_field,
-        temp_ref=temp_ref)
+
+    if spatialised:
+        refl_corr, vpr_corr, vpr_theo_dict, radar_rhi = pyart.correct.correct_vpr_spatialised(
+            radar, nvalid_min=nvalid_min, angle_min=angle_min,
+            angle_max=angle_max, ml_thickness_min=ml_thickness_min,
+            ml_thickness_max=ml_thickness_max,
+            ml_thickness_step=ml_thickness_step, iso0_max=iso0_max,
+            ml_top_diff_max=ml_top_diff_max, ml_top_step=ml_top_step,
+            ml_peak_min=ml_peak_min, ml_peak_max=ml_peak_max,
+            ml_peak_step=ml_peak_step, dr_min=dr_min, dr_max=dr_max,
+            dr_step=dr_step, dr_default=dr_default, dr_alt=dr_alt, h_max=h_max,
+            h_res=h_res, max_weight=max_weight, rmin_obs=rmin_obs,
+            rmax_obs=rmax_obs, iso0=iso0, weight_mem=weight_mem,
+            vpr_theo_dict_mem=vpr_theo_dict_mem, radar_mem_list=radar_mem_list,
+            refl_field=refl_field, corr_refl_field=corr_refl_field,
+            corr_field=corr_field, temp_field=temp_field, iso0_field=iso0_field,
+            temp_ref=temp_ref)
+    else:
+        refl_corr, vpr_corr, vpr_theo_dict, radar_rhi = pyart.correct.correct_vpr(
+            radar, nvalid_min=nvalid_min, angle_min=angle_min,
+            angle_max=angle_max, ml_thickness_min=ml_thickness_min,
+            ml_thickness_max=ml_thickness_max,
+            ml_thickness_step=ml_thickness_step, iso0_max=iso0_max,
+            ml_top_diff_max=ml_top_diff_max, ml_top_step=ml_top_step,
+            ml_peak_min=ml_peak_min, ml_peak_max=ml_peak_max,
+            ml_peak_step=ml_peak_step, dr_min=dr_min, dr_max=dr_max,
+            dr_step=dr_step, dr_default=dr_default, dr_alt=dr_alt, h_max=h_max,
+            h_res=h_res, max_weight=max_weight, rmin_obs=rmin_obs,
+            rmax_obs=rmax_obs, iso0=iso0, weight_mem=weight_mem,
+            vpr_theo_dict_mem=vpr_theo_dict_mem, radar_mem_list=radar_mem_list,
+            refl_field=refl_field, corr_refl_field=corr_refl_field,
+            corr_field=corr_field, temp_field=temp_field, iso0_field=iso0_field,
+            temp_ref=temp_ref)
 
     # prepare for exit
     new_dataset = {'radar_out': deepcopy(radar)}
