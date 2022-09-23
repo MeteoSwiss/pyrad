@@ -36,7 +36,7 @@ import pyart
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from ..io.io_aux import get_file_list
 from ..io.read_data_radar import interpol_field
-from ..io.read_data_other import read_rhi_profile
+from ..io.read_data_other import read_rhi_profile, read_vpr_theo_parameters
 
 from ..util.radar_utils import time_avg_range
 
@@ -946,7 +946,6 @@ def process_vpr(procstatus, dscfg, radar_list=None):
         warn('ERROR: Unable to compute VPR. Missing data')
         return None, None
 
-    refl_corr = pyart.correct.correct_vpr(radar, refl_field=refl_field)
     # User defined variables
     nvalid_min = dscfg.get('nvalid_min', 20)
     angle_min = dscfg.get('angle_min', 0.)
@@ -1052,7 +1051,7 @@ def process_vpr(procstatus, dscfg, radar_list=None):
             else:
                 if spatialised:
                     # this function will read the stored VPR parameters from the previous volume
-                    vpr_theo_dict_mem = read_vpr_parameters(flist[-1])
+                    vpr_theo_dict_mem = read_vpr_theo_parameters(flist[-1])
                 else:
                     height, _, vals = read_rhi_profile(flist[-1], labels=['Znorm'])
                     vpr_theo_dict_mem = {
