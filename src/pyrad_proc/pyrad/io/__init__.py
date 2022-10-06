@@ -101,6 +101,7 @@ Reading other data
     read_trt_info2
     read_thundertracking_info
     read_rhi_profile
+    read_vpr_theo_parameters
     read_histogram
     read_quantiles
     read_profile_ts
@@ -128,6 +129,7 @@ Writing data
     write_trt_cell_scores
     write_trt_cell_lightning
     write_trt_rpc
+    write_vpr_theo_params
     write_rhi_profile
     write_field_coverage
     write_cdf
@@ -222,6 +224,7 @@ from .read_data_other import read_excess_gates, read_histogram
 from .read_data_other import read_profile_ts, read_histogram_ts
 from .read_data_other import read_quantiles_ts, read_ml_ts, read_proc_periods
 from .read_data_other import read_centroids_npz, read_mf_vis
+from .read_data_other import read_vpr_theo_parameters
 
 from .read_data_sensor import read_lightning, read_lightning_traj
 from .read_data_sensor import get_sensor_data, read_smn, read_smn2
@@ -250,7 +253,7 @@ from .write_data import write_trt_cell_scores, write_trt_cell_lightning
 from .write_data import write_trt_info, write_fixed_angle, write_proc_periods
 from .write_data import write_trt_thundertracking_data, write_ts_grid_data
 from .write_data import write_trt_rpc, write_ts_stats, write_centroids
-from .write_data import write_multiple_points
+from .write_data import write_multiple_points, write_vpr_theo_params
 
 from .io_aux import get_save_dir, make_filename, get_new_rainbow_file_name
 from .io_aux import get_datetime, get_dataset_fields, map_hydro, map_Doppler
