@@ -867,6 +867,8 @@ def process_vpr(procstatus, dscfg, radar_list=None):
         h_max : float
             maximum altitude [masl] where to compute the model profile.
             Default 6000.
+        h_corr_max : float
+            maximum altitude [masl] considered for the VPR correction
         h_res : float
             resolution of the model profile (m). Default 1.
         max_weight : float
@@ -965,6 +967,7 @@ def process_vpr(procstatus, dscfg, radar_list=None):
     dr_default = dscfg.get('dr_default', -4.5)
     dr_alt = dscfg.get('dr_alt', 800.)
     h_max = dscfg.get('h_max', 6000.)
+    h_corr_max = dscfg.get('h_corr_max', 15000.)
     h_res = dscfg.get('h_res', 1.)
     max_weight = dscfg.get('max_weight', 9.)
     rmin_obs = dscfg.get('rmin_obs', 5000.)
@@ -998,8 +1001,8 @@ def process_vpr(procstatus, dscfg, radar_list=None):
                     warn('Unable to use retrieved melting layer data')
                     iso0 = None
                 else:
-                    print('Using file {} with melting layer information'.format(
-                        flist[0]))
+                    print(f'Using file {flist[0]} '
+                          f'with melting layer information')
                     iso0 = np.ma.mean(
                         radar_ml.fields['melting_layer_height']['data'][:, 1])
                     ml_bottom = np.ma.mean(
@@ -1028,8 +1031,7 @@ def process_vpr(procstatus, dscfg, radar_list=None):
                     if radar_vpr is None:
                         warn('Unable to use azimuthal reflectivity average')
                         continue
-                    print('Using file {} with azimuthal averaged refl'.format(
-                          fname))
+                    print(f'Using file {fname} with azimuthal averaged refl')
                     radar_mem_list.append(radar_vpr)
                 if not radar_mem_list:
                     radar_mem_list = None
@@ -1050,15 +1052,16 @@ def process_vpr(procstatus, dscfg, radar_list=None):
                 warn('unable to find files containing retrieved VPR')
             else:
                 if spatialised:
-                    # this function will read the stored VPR parameters from the previous volume
+                    # this function will read the stored VPR parameters from
+                    # the previous volume
                     vpr_theo_dict_mem = read_vpr_theo_parameters(flist[-1])
                 else:
-                    height, _, vals = read_rhi_profile(flist[-1], labels=['Znorm'])
+                    height, _, vals = read_rhi_profile(
+                        flist[-1], labels=['Znorm'])
                     vpr_theo_dict_mem = {
                         'value': vals[:, 0],
                         'altitude': height}
-                print('Using file {} with previously retrieved VPR'.format(
-                      flist[-1]))
+                print(f'Using file {flist[-1]} with previously retrieved VPR')
 
     corr_refl_field = 'corrected_reflectivity'
     corr_field = 'vpr_correction'
@@ -1072,13 +1075,14 @@ def process_vpr(procstatus, dscfg, radar_list=None):
             ml_top_diff_max=ml_top_diff_max, ml_top_step=ml_top_step,
             ml_peak_min=ml_peak_min, ml_peak_max=ml_peak_max,
             ml_peak_step=ml_peak_step, dr_min=dr_min, dr_max=dr_max,
-            dr_step=dr_step, dr_default=dr_default, dr_alt=dr_alt, h_max=h_max,
-            h_res=h_res, max_weight=max_weight, rmin_obs=rmin_obs,
-            rmax_obs=rmax_obs, iso0=iso0, weight_mem=weight_mem,
+            dr_step=dr_step, dr_default=dr_default, dr_alt=dr_alt,
+            h_max=h_max, h_corr_max=h_corr_max, h_res=h_res,
+            max_weight=max_weight, rmin_obs=rmin_obs,  rmax_obs=rmax_obs,
+            iso0=iso0, weight_mem=weight_mem,
             vpr_theo_dict_mem=vpr_theo_dict_mem, radar_mem_list=radar_mem_list,
             refl_field=refl_field, corr_refl_field=corr_refl_field,
-            corr_field=corr_field, temp_field=temp_field, iso0_field=iso0_field,
-            temp_ref=temp_ref)
+            corr_field=corr_field, temp_field=temp_field,
+            iso0_field=iso0_field, temp_ref=temp_ref)
     else:
         refl_corr, vpr_corr, vpr_theo_dict, radar_rhi = pyart.correct.correct_vpr(
             radar, nvalid_min=nvalid_min, angle_min=angle_min,
@@ -1088,13 +1092,14 @@ def process_vpr(procstatus, dscfg, radar_list=None):
             ml_top_diff_max=ml_top_diff_max, ml_top_step=ml_top_step,
             ml_peak_min=ml_peak_min, ml_peak_max=ml_peak_max,
             ml_peak_step=ml_peak_step, dr_min=dr_min, dr_max=dr_max,
-            dr_step=dr_step, dr_default=dr_default, dr_alt=dr_alt, h_max=h_max,
-            h_res=h_res, max_weight=max_weight, rmin_obs=rmin_obs,
-            rmax_obs=rmax_obs, iso0=iso0, weight_mem=weight_mem,
+            dr_step=dr_step, dr_default=dr_default, dr_alt=dr_alt,
+            h_max=h_max, h_corr_max=h_corr_max, h_res=h_res,
+            max_weight=max_weight, rmin_obs=rmin_obs, rmax_obs=rmax_obs,
+            iso0=iso0, weight_mem=weight_mem,
             vpr_theo_dict_mem=vpr_theo_dict_mem, radar_mem_list=radar_mem_list,
             refl_field=refl_field, corr_refl_field=corr_refl_field,
-            corr_field=corr_field, temp_field=temp_field, iso0_field=iso0_field,
-            temp_ref=temp_ref)
+            corr_field=corr_field, temp_field=temp_field,
+            iso0_field=iso0_field, temp_ref=temp_ref)
 
     # prepare for exit
     new_dataset = {'radar_out': deepcopy(radar)}
@@ -1350,14 +1355,14 @@ def process_rainrate(procstatus, dscfg, radar_list=None):
                 hydro_field=hydro_field, rr_field=None,
                 master_field=refl_field, thresh=thresh, thresh_max=True)
         elif refl_field in radar.fields:
-            warn('Unable to compute rainfall rate using hydrometeor ' +
-                 'classification. Missing data. ' +
+            warn('Unable to compute rainfall rate using hydrometeor '
+                 'classification. Missing data. '
                  'A simple Z-R relation will be used instead')
             rain = pyart.retrieve.est_rain_rate_z(
                 radar, alpha=alphazr, beta=betazr, refl_field=refl_field,
                 rr_field=None)
         else:
-            warn('Unable to compute rainfall rate using hydrometeor ' +
+            warn('Unable to compute rainfall rate using hydrometeor '
                  'classification. Missing data.')
             return None, None
     else:
@@ -1412,8 +1417,8 @@ def process_rainfall_accumulation(procstatus, dscfg, radar_list=None):
 
     radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
     if datatype != 'RR':
-        warn('Unable to compute rainfall accumulation. Data type: '+datatype +
-             '. Expected RR')
+        warn(f'Unable to compute rainfall accumulation. '
+             f'Data type: {datatype}. Expected RR')
         return None, None
     field_name = get_fieldname_pyart(datatype)
 
@@ -1603,7 +1608,7 @@ def process_bird_density(procstatus, dscfg, radar_list=None):
     radar = radar_list[ind_rad]
 
     if vol_refl_field not in radar.fields:
-        warn('Unable to obtain bird density. Missing field '+vol_refl_field)
+        warn(f'Unable to obtain bird density. Missing field {vol_refl_field}')
         return None, None
 
     sigma_bird = dscfg.get('sigma_bird', 11.)
