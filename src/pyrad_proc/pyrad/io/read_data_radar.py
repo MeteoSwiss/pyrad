@@ -308,9 +308,9 @@ def get_data(voltime, datatypesdescr, cfg):
             datatype_nexrad2.append(datatype)
             dataset_nexrad2.append(dataset)
         elif datagroup == 'CFRADIALPYRAD':
-             datatype_cfradialpyrad.append(datatype)
-             dataset_cfradialpyrad.append(dataset)
-             product_cfradialpyrad.append(product)
+            datatype_cfradialpyrad.append(datatype)
+            dataset_cfradialpyrad.append(dataset)
+            product_cfradialpyrad.append(product)
         elif datagroup == 'CFRADIAL':
             datatype_cfradial.append(datatype)
             dataset_cfradial.append(dataset)
@@ -563,9 +563,9 @@ def get_data(voltime, datatypesdescr, cfg):
     if ndatatypes_cfradialpyrad > 0:
         radar_aux = merge_fields_pyrad(
             cfg['loadbasepath'][ind_rad], cfg['loadname'][ind_rad], voltime,
-            datatype_cfradialpyrad, dataset_cfradialpyrad, product_cfradialpyrad,
-            rng_min=rmin, rng_max=rmax, ele_min=elmin, ele_max=elmax,
-            azi_min=azmin, azi_max=azmax)
+            datatype_cfradialpyrad, dataset_cfradialpyrad,
+            product_cfradialpyrad, rng_min=rmin, rng_max=rmax, ele_min=elmin,
+            ele_max=elmax, azi_min=azmin, azi_max=azmax)
         radar = add_field(radar, radar_aux)
 
     if ndatatypes_odimpyrad > 0:
@@ -1483,33 +1483,35 @@ def merge_scans_odim(basepath, scan_list, radar_name, radar_res, voltime,
     radar = None
     dayinfo = voltime.strftime('%y%j')
     timeinfo = voltime.strftime('%H%M')
+    basename = ''
     if radar_name is not None and radar_res is not None:
-        basename = 'M'+radar_res+radar_name+dayinfo
+        basename = f'M{radar_res}{radar_name}{dayinfo}'
     if cfg['path_convention'][ind_rad] == 'LTE':
         yy = dayinfo[0:2]
         dy = dayinfo[2:]
-        subf = 'M'+radar_res+radar_name+yy+'hdf'+dy
+        subf = f'M{radar_res}{radar_name}{yy}hdf{dy}'
         datapath = basepath+subf+'/'
         filename = glob.glob(
-            datapath+basename+timeinfo+'*'+scan_list[0] + '*')
+            f'{datapath}{basename}{timeinfo}*{scan_list[0]}*')
         if not filename:
-            basename = 'P'+radar_res+radar_name+dayinfo
-            subf = 'P'+radar_res+radar_name+yy+'hdf'+dy
-            datapath = basepath+subf+'/'
+            basename = f'P{radar_res}{radar_name}{dayinfo}'
+            subf = f'P{radar_res}{radar_name}{yy}{hdf}{dy}'
+            datapath = f'{basepath}{subf}/'
     elif cfg['path_convention'][ind_rad] == 'MCH':
-        datapath = basepath+dayinfo+'/'+basename+'/'
+        datapath = f'{basepath}{dayinfo}/{basename}/'
         filename = glob.glob(
-            datapath+basename+timeinfo+'*'+scan_list[0] + '*')
+            f'{datapath}{basename}{timeinfo}*{scan_list[0]}*')
         if not filename:
-            basename = 'P'+radar_res+radar_name+dayinfo
-            datapath = basepath+dayinfo+'/'+basename+'/'
+            basename = f'P{radar_res}{radar_name}{dayinfo}'
+            datapath = f'{basepath}{dayinfo}/{basename}/'
     elif cfg['path_convention'][ind_rad] == 'ODIM':
+        basename = ''
         fpath_strf = (
             dataset_list[0][
                 dataset_list[0].find("D")+2:dataset_list[0].find("F")-2])
         fdate_strf = dataset_list[0][dataset_list[0].find("F")+2:-1]
-        datapath = (basepath+voltime.strftime(fpath_strf)+'/')
-        filenames = glob.glob(datapath+'*'+scan_list[0]+'*')
+        datapath = f'{basepath}{voltime.strftime(fpath_strf)}/'
+        filenames = glob.glob(f'{datapath}*{scan_list[0]}*')
         filename = []
         for filename_aux in filenames:
             fdatetime = find_date_in_file_name(
@@ -1517,16 +1519,16 @@ def merge_scans_odim(basepath, scan_list, radar_name, radar_res, voltime,
             if fdatetime == voltime:
                 filename = [filename_aux]
     else:
-        datapath = basepath+'M'+radar_res+radar_name+'/'
+        datapath = f'{basepath}M{radar_res}{radar_name}/'
         filename = glob.glob(
-            datapath+basename+timeinfo+'*'+scan_list[0] + '*')
+            f'{datapath}{basename}{timeinfo}*{scan_list[0]}*')
         if not filename:
-            basename = 'P'+radar_res+radar_name+dayinfo
-            datapath = basepath+'P'+radar_res+radar_name+'/'
+            basename = f'P{radar_res}{radar_name}{dayinfo}'
+            datapath = f'{basepath}P{radar_res}{radar_name}/'
             filename = glob.glob(
-                datapath+basename+timeinfo+'*'+scan_list[0]+'*')
+                f'{datapath}{basename}{timeinfo}*{scan_list[0]}*')
     if not filename:
-        warn('No file found in '+datapath[0]+basename+timeinfo+'*.h*')
+        warn(f'No file found in {datapath[0]}{basename}{timeinfo}*.h*')
     else:
         radar = get_data_odim(
             filename[0], datatype_list, scan_list[0], cfg, ind_rad=ind_rad)
@@ -1561,18 +1563,31 @@ def merge_scans_odim(basepath, scan_list, radar_name, radar_res, voltime,
     # merge the elevations into a single radar instance
     for scan in scan_list[1:]:
         if cfg['path_convention'][ind_rad] == 'ODIM':
-            filenames = glob.glob(datapath+'*'+scan+'*')
+            filenames = glob.glob(f'{datapath}*{scan}*')
             filename = []
             for filename_aux in filenames:
                 fdatetime = find_date_in_file_name(
                     filename_aux, date_format=fdate_strf)
-                if fdatetime == voltime:
-                    filename = [filename_aux]
-                    break
+                if cfg['MasterScanTimeTol'][ind_rad] == 0:
+                    if fdatetime == voltime:
+                        filename = [filename_aux]
+                        break
+                elif cfg['MasterScanTimeTol'][ind_rad] == 1:
+                    if (voltime <= fdatetime < voltime
+                            + datetime.timedelta(minutes=cfg['ScanPeriod'])):
+                        filename = [filename_aux]
+                        print(os.path.basename(filename[0]))
+                        break
+                else:
+                    if (voltime - datetime.timedelta(minutes=cfg['ScanPeriod'])
+                            < fdatetime <= voltime):
+                        filename = [filename_aux]
+                        print(os.path.basename(filename[0]))
+                        break
         else:
-            filename = glob.glob(datapath+basename+timeinfo+'*'+scan+'*')
+            filename = glob.glob(f'{datapath}{basename}{timeinfo}*{scan}*')
         if not filename:
-            warn('No file found in '+datapath+basename+timeinfo+'*.'+scan)
+            warn(f'No file found in {datapath}{basename}{timeinfo}*.{scan}')
         else:
             radar_aux = get_data_odim(
                 filename[0], datatype_list, scan, cfg, ind_rad=ind_rad)
@@ -2071,9 +2086,8 @@ def merge_scans_nexrad2(basepath, scan_list, radar_name, radar_res, voltime,
         ele_min=elmin, ele_max=elmax, azi_min=azmin, azi_max=azmax)
 
 
-
 def merge_scans_cfradial(basepath, scan_list, radar_name, radar_res, voltime,
-                          datatype_list, dataset_list, cfg, ind_rad=0):
+                         datatype_list, dataset_list, cfg, ind_rad=0):
     """
     merge CFRADIAL data.
 
@@ -2213,6 +2227,7 @@ def merge_scans_cfradial(basepath, scan_list, radar_name, radar_res, voltime,
     return pyart.util.subset_radar(
         radar, radar.fields.keys(), rng_min=rmin, rng_max=rmax,
         ele_min=elmin, ele_max=elmax, azi_min=azmin, azi_max=azmax)
+
 
 def merge_scans_cfradial2(basepath, scan_list, radar_name, radar_res, voltime,
                           datatype_list, dataset_list, cfg, ind_rad=0):

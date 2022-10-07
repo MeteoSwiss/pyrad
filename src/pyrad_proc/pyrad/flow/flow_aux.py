@@ -944,6 +944,11 @@ def _create_cfg_dict(cfgfile):
         cfg.update({'ScanList': None})
     else:
         cfg.update({'ScanList': get_scan_list(cfg['ScanList'])})
+    if 'MasterScanTimeTol' not in cfg:
+        #  0: no tolerance
+        #  1: time master scan + ScanPeriod
+        # -1: time master scan - ScanPeriod
+        cfg.update({'MasterScanTimeTol': 0})
     if 'lastStateFile' not in cfg:
         cfg.update({'lastStateFile': None})
     if 'datapath' not in cfg:
@@ -1033,7 +1038,7 @@ def _create_cfg_dict(cfgfile):
         'dBADUtodBmh', 'dBADUtodBmv', 'mflossh', 'mflossv', 'radconsth',
         'radconstv', 'txpwrh', 'txpwrv', 'attg', 'lradomeh', 'lradomev',
         'lrxh', 'lrxv', 'ltxh', 'ltxv', 'mosotti_factor', 'refcorr',
-        'AzimTol']
+        'AzimTol', 'MasterScanTimeTol']
     for param in fltarr_list:
         if param in cfg and isinstance(cfg[param], float):
             cfg[param] = [cfg[param]]
@@ -1070,6 +1075,7 @@ def _create_datacfg_dict(cfg):
     datacfg.update({'psrpath': cfg['psrpath']})
     datacfg.update({'iqpath': cfg['iqpath']})
     datacfg.update({'ScanList': cfg['ScanList']})
+    datacfg.update({'MasterScanTimeTol': cfg['MasterScanTimeTol']})
     datacfg.update({'TimeTol': cfg['TimeTol']})
     datacfg.update({'NumRadars': cfg['NumRadars']})
     datacfg.update({'cosmopath': cfg['cosmopath']})
