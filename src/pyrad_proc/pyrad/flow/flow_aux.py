@@ -948,7 +948,9 @@ def _create_cfg_dict(cfgfile):
         #  0: no tolerance
         #  1: time master scan + ScanPeriod
         # -1: time master scan - ScanPeriod
-        cfg.update({'MasterScanTimeTol': 0})
+        cfg.update({
+            'MasterScanTimeTol': 0.*np.ones(
+                cfg['NumRadars'], dtype=np.float32)})
     if 'lastStateFile' not in cfg:
         cfg.update({'lastStateFile': None})
     if 'datapath' not in cfg:

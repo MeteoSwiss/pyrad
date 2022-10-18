@@ -14,6 +14,7 @@ Functions for reading radar data files
     merge_scans_dem
     merge_scans_rad4alp
     merge_scans_odim
+    merge_scans_odimgrid
     merge_scans_odimbirds
     merge_scans_gamic
     merge_scans_mfcfradial
@@ -42,6 +43,7 @@ Functions for reading radar data files
     get_data_rainbow
     get_data_rad4alp
     get_data_odim
+    get_data_odimgrid
     get_data_gamic
     add_field
     interpol_field
@@ -169,7 +171,7 @@ def get_data(voltime, datatypesdescr, cfg):
                 datatypes 'dataset' specifies the directory where the dataset
                 is stored and 'product' specifies the directory where the
                 product is stored.
-                Example: CFRADIAL:dBZc,Att_ZPhi,SAVEVOL_dBZc
+                Example: CFRADIALPYRAD:dBZc,Att_ZPhi,SAVEVOL_dBZc
             'CFRADIALCOSMO': COSMO data in radar coordinates in a CFRadial
                 file format.
             'ODIMPYRAD': ODIM file format with the naming convention and
@@ -187,9 +189,12 @@ def get_data(voltime, datatypesdescr, cfg):
                 products stored as binary files
             'PYRADGRID': Pyrad generated Cartesian grid products. For such
                 datatypes 'dataset' specifies the directory where the dataset
-                is stored and 'product' specifies the directroy where the
+                is stored and 'product' specifies the directory where the
                 product is stored.
-                Example: ODIMPYRAD:RR,RZC,SAVEVOL
+                Example: PYRADGRID:RR,RZC,SAVEVOL
+            'ODIMGRID': Gridded data in ODIM format. For such types 'dataset'
+                specifies the directory and file name date convention.
+                Example: ODIMGRID:dBZ,D{%Y-%m-%d}-F{%Y%m%d%H%M%S}.
             'SATGRID': CF Netcdf from used for the MeteoSat satellite data
                 in the CCS4 (Radar composite) grid.
             'MFBIN': Format used by some MeteoFrance products stored as binary
@@ -279,6 +284,8 @@ def get_data(voltime, datatypesdescr, cfg):
     datatype_pyradgrid = list()
     dataset_pyradgrid = list()
     product_pyradgrid = list()
+    datatype_odimgrid = list()
+    dataset_odimgrid = list()
     datatype_psr = list()
     datatype_psrspectra = list()
     datatype_netcdfspectra = list()
@@ -368,6 +375,9 @@ def get_data(voltime, datatypesdescr, cfg):
             datatype_pyradgrid.append(datatype)
             dataset_pyradgrid.append(dataset)
             product_pyradgrid.append(product)
+        elif datagroup == 'ODIMGRID':
+            datatype_odimgrid.append(datatype)
+            dataset_odimgrid.append(dataset)
         elif datagroup == 'SATGRID':
             datatype_satgrid.append(datatype)
         elif datagroup == 'PSR':
@@ -412,6 +422,7 @@ def get_data(voltime, datatypesdescr, cfg):
     ndatatypes_satgrid = len(datatype_satgrid)
     ndatatypes_rad4alpIQ = len(datatype_rad4alpIQ)
     ndatatypes_pyradgrid = len(datatype_pyradgrid)
+    ndatatypes_odimgrid = len(datatype_odimgrid)
     ndatatypes_psr = len(datatype_psr)
     ndatatypes_psrspectra = len(datatype_psrspectra)
     ndatatypes_netcdfspectra = len(datatype_netcdfspectra)
@@ -623,6 +634,16 @@ def get_data(voltime, datatypesdescr, cfg):
         radar_aux = merge_fields_pyradgrid(
             cfg['loadbasepath'][ind_rad], cfg['loadname'][ind_rad], voltime,
             datatype_pyradgrid, dataset_pyradgrid, product_pyradgrid, cfg)
+        if radar_aux is not None:
+            if radar is not None:
+                radar = merge_grids(radar, radar_aux)
+            else:
+                radar = radar_aux
+
+    if ndatatypes_odimgrid > 0:
+        radar_aux = merge_scans_odimgrid(
+            cfg['datapath'][ind_rad], cfg['ScanList'][ind_rad], voltime,
+            datatype_odimgrid, dataset_odimgrid, cfg)
         if radar_aux is not None:
             if radar is not None:
                 radar = merge_grids(radar, radar_aux)
@@ -1494,16 +1515,22 @@ def merge_scans_odim(basepath, scan_list, radar_name, radar_res, voltime,
         filename = glob.glob(
             f'{datapath}{basename}{timeinfo}*{scan_list[0]}*')
         if not filename:
-            basename = f'P{radar_res}{radar_name}{dayinfo}'
+            if base_name != '':
+                basename = f'P{radar_res}{radar_name}{dayinfo}'
             subf = f'P{radar_res}{radar_name}{yy}{hdf}{dy}'
             datapath = f'{basepath}{subf}/'
+            filename = glob.glob(
+                f'{datapath}{basename}{timeinfo}*{scan_list[0]}*')
     elif cfg['path_convention'][ind_rad] == 'MCH':
         datapath = f'{basepath}{dayinfo}/{basename}/'
         filename = glob.glob(
             f'{datapath}{basename}{timeinfo}*{scan_list[0]}*')
         if not filename:
-            basename = f'P{radar_res}{radar_name}{dayinfo}'
+            if base_name != '':
+                basename = f'P{radar_res}{radar_name}{dayinfo}'
             datapath = f'{basepath}{dayinfo}/{basename}/'
+            filename = glob.glob(
+                f'{datapath}{basename}{timeinfo}*{scan_list[0]}*')
     elif cfg['path_convention'][ind_rad] == 'ODIM':
         basename = ''
         fpath_strf = (
@@ -1518,12 +1545,14 @@ def merge_scans_odim(basepath, scan_list, radar_name, radar_res, voltime,
                 filename_aux, date_format=fdate_strf)
             if fdatetime == voltime:
                 filename = [filename_aux]
+                break
     else:
         datapath = f'{basepath}M{radar_res}{radar_name}/'
         filename = glob.glob(
             f'{datapath}{basename}{timeinfo}*{scan_list[0]}*')
         if not filename:
-            basename = f'P{radar_res}{radar_name}{dayinfo}'
+            if base_name != '':
+                basename = f'P{radar_res}{radar_name}{dayinfo}'
             datapath = f'{basepath}P{radar_res}{radar_name}/'
             filename = glob.glob(
                 f'{datapath}{basename}{timeinfo}*{scan_list[0]}*')
@@ -1605,6 +1634,91 @@ def merge_scans_odim(basepath, scan_list, radar_name, radar_res, voltime,
     return pyart.util.subset_radar(
         radar, radar.fields.keys(), rng_min=rmin, rng_max=rmax, ele_min=elmin,
         ele_max=elmax, azi_min=azmin, azi_max=azmax)
+
+
+def merge_scans_odimgrid(basepath, scan_list, voltime, datatype_list,
+                         dataset_list, cfg, ind_rad=0):
+    """
+    merge odim  grid data.
+
+    Parameters
+    ----------
+    basepath : str
+        base path of odim radar data
+    scan_list : list
+        list of scans
+    voltime: datetime object
+        reference time of the scan
+    datatype_list : list
+        lists of data types to get
+    dataset_list : list
+        list of datasets. Used to get path
+    cfg : dict
+        configuration dictionary
+    ind_rad : int
+        radar index
+
+    Returns
+    -------
+    radar : Radar
+        radar object
+
+    """
+    grid = None
+    if cfg['path_convention'][ind_rad] != 'ODIM':
+        raise ValueError(
+            'ERROR: required path convention ODIM for files of type ODIMGRID')
+
+    fpath_strf = dataset_list[0][
+        dataset_list[0].find("D")+2:dataset_list[0].find("F")-2]
+    fdate_strf = dataset_list[0][dataset_list[0].find("F")+2:-1]
+    datapath = f'{basepath}{voltime.strftime(fpath_strf)}/'
+    for scan in scan_list:
+        filenames = glob.glob(f'{datapath}*{scan}*')
+        filename = []
+        for filename_aux in filenames:
+            fdatetime = find_date_in_file_name(
+                filename_aux, date_format=fdate_strf)
+            if fdatetime == voltime:
+                filename = [filename_aux]
+                break
+
+        if not filename:
+            warn(f'No file found in {datapath}*{scan}*')
+            continue
+
+        grid_aux = get_data_odimgrid(filename[0], datatype_list)
+
+        if grid_aux is None:
+            continue
+
+        if grid is None:
+            grid = grid_aux
+        else:
+            for prod_field in grid_aux.fields.keys():
+                grid.add_field(prod_field, grid_aux.fields[prod_field])
+
+    if grid is None:
+        return grid
+
+    # Crop the data
+    lat_min = cfg.get('latmin', None)
+    lat_max = cfg.get('latmax', None)
+    lon_min = cfg.get('lonmin', None)
+    lon_max = cfg.get('lonmax', None)
+    alt_min = cfg.get('altmin', None)
+    alt_max = cfg.get('altmax', None)
+    ix_min = cfg.get('ixmin', None)
+    iy_min = cfg.get('iymin', None)
+    iz_min = cfg.get('izmin', None)
+    nx = cfg.get('nx', None)
+    ny = cfg.get('ny', None)
+    nz = cfg.get('nz', None)
+
+    return crop_grid(
+        grid, lat_min=lat_min, lat_max=lat_max, lon_min=lon_min,
+        lon_max=lon_max, alt_min=alt_min, alt_max=alt_max, nx=nx, ny=ny,
+        nz=nz, ix_min=ix_min, iy_min=iy_min, iz_min=iz_min)
 
 
 def merge_scans_odimbirds(basepath, scan_list, radar_name, radar_res, voltime,
@@ -4251,12 +4365,12 @@ def get_data_odim(filename, datatype_list, scan_name, cfg, ind_rad=0):
     for datatype in datatype_list:
         if datatype not in ('Nh', 'Nv'):
             odim_field_names.update(get_datatype_odim(datatype))
-        try:
-            radar = pyart.aux_io.read_odim_h5(
-                filename, field_names=odim_field_names)
-        except (ValueError, OSError) as ee:
-            warn("Unable to read file '"+filename+": (%s)" % str(ee))
-            return None
+    try:
+        radar = pyart.aux_io.read_odim_h5(
+            filename, field_names=odim_field_names)
+    except (ValueError, OSError) as ee:
+        warn("Unable to read file '"+filename+": (%s)" % str(ee))
+        return None
 
     if ('Nh' not in datatype_list) and ('Nv' not in datatype_list):
         return radar
@@ -4332,6 +4446,37 @@ def get_data_odim(filename, datatype_list, scan_name, cfg, ind_rad=0):
     return radar
 
 
+def get_data_odimgrid(filename, datatype_list):
+    """
+    gets ODIM grid data
+
+    Parameters
+    ----------
+    filename : str
+        name of file containing odim data
+    datatype_list : list of strings
+        list of data fields to get
+
+    Returns
+    -------
+    grid : Grid
+        Grid object. None if the reading has not been successful
+
+    """
+    odim_field_names = dict()
+    for datatype in datatype_list:
+        odim_field_names.update(get_datatype_odim(datatype))
+
+    try:
+        grid = pyart.aux_io.read_odim_grid_h5(
+            filename, field_names=odim_field_names)
+    except (ValueError, OSError) as ee:
+        warn("Unable to read file '"+filename+": (%s)" % str(ee))
+        return None
+
+    return grid
+
+
 def get_data_gamic(filename, datatype_list, pulse_width):
     """
     gets GAMIC radar data
@@ -4351,15 +4496,15 @@ def get_data_gamic(filename, datatype_list, pulse_width):
         radar object. None if the reading has not been successful
 
     """
-    gamic_field_names = dict()
-    for datatype in datatype_list:
-        # gamic_field_names.update(get_datatype_gamic(datatype))
-        try:
-            radar = pyart.aux_io.read_gamic(
-                filename, pulse_width=pulse_width)
-        except (ValueError, OSError) as ee:
-            warn("Unable to read file '"+filename+": (%s)" % str(ee))
-            return None
+    # gamic_field_names = dict()
+    # for datatype in datatype_list:
+    #     # gamic_field_names.update(get_datatype_gamic(datatype))
+    try:
+        radar = pyart.aux_io.read_gamic(
+            filename, pulse_width=pulse_width)
+    except (ValueError, OSError) as ee:
+        warn("Unable to read file '"+filename+": (%s)" % str(ee))
+        return None
 
     return radar
 

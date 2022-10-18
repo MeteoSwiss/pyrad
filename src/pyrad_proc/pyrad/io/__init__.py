@@ -178,6 +178,7 @@ Auxiliary functions
     find_hzt_file
     find_iso0_file
     find_iso0_grib_file
+    find_date_in_file_name
     _get_datetime
 
 Trajectory
@@ -262,7 +263,7 @@ from .io_aux import get_fieldname_pyart, get_field_unit, get_fieldname_cosmo
 from .io_aux import generate_field_name_str, find_raw_cosmo_file
 from .io_aux import find_hzt_file, _get_datetime, get_rad4alp_prod_fname
 from .io_aux import get_rad4alp_dir, get_rad4alp_grid_dir, find_iso0_file
-from .io_aux import find_iso0_grib_file
+from .io_aux import find_iso0_grib_file, find_date_in_file_name
 
 from .trajectory import Trajectory
 
