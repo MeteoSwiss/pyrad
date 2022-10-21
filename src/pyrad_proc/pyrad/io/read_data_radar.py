@@ -3698,28 +3698,42 @@ def merge_fields_mf_grid(voltime, datatype_list, dataset_list, scan_list, cfg,
             dataset_list[0].find("D")+2:dataset_list[0].find("F")-2])
     fdate_strf = dataset_list[0][dataset_list[0].find("F")+2:-1]
     datapath = cfg['datapath'][ind_rad]+voltime.strftime(fpath_strf)+'/'
-    filenames = glob.glob(datapath+'*'+scan_list[0]+'*')
-    filename = []
-    for filename_aux in filenames:
-        fdatetime = find_date_in_file_name(
-            filename_aux, date_format=fdate_strf)
-        if fdatetime == voltime:
-            filename = [filename_aux]
 
-    field_names = []
-    for datatype in datatype_list:
+    for scan, datatype in zip(scan_list, cfg['BinFileParams']['datatype']):
+        filename = None
+        filenames = glob.glob(datapath+'*'+scan+'*')
+        for filename_aux in filenames:
+            fdatetime = find_date_in_file_name(
+                filename_aux, date_format=fdate_strf)
+            if fdatetime == voltime:
+                filename = filename_aux
+        if filename is None:
+            warn(f'No file found for scan {scan}')
+            continue
+
         prod_field = get_fieldname_pyart(datatype)
         if ftype == 'bin':
             grid_aux = pyart.aux_io.read_bin_mf(
-                filename[0], field_name=prod_field)
+                filename, field_name=prod_field,
+                xres=cfg['BinFileParams']['xres'],
+                yres=cfg['BinFileParams']['yres'],
+                nx=cfg['BinFileParams']['nx'],
+                ny=cfg['BinFileParams']['ny'], nz=cfg['BinFileParams']['nz'],
+                dtype=cfg['BinFileParams']['dtype'],
+                date_format=cfg['BinFileParams']['date_format'],
+                added_time=cfg['BinFileParams']['added_time'],
+                x_offset=cfg['BinFileParams']['x_offset'],
+                y_offset=cfg['BinFileParams']['y_offset'],
+                lat_0=cfg['BinFileParams']['lat_0'],
+                lon_0=cfg['BinFileParams']['lon_0'])
         elif ftype == 'png':
-            grid_aux = pyart.aux_io.read_png(filename[0])
+            grid_aux = pyart.aux_io.read_png(filename)
         elif ftype == 'grib':
-            grid_aux = pyart.aux_io.read_grib(filename[0])
+            grid_aux = pyart.aux_io.read_grib(filename)
         elif ftype == 'dat':
-            grid_aux = pyart.aux_io.read_dat_mf(filename[0])
+            grid_aux = pyart.aux_io.read_dat_mf(filename)
         elif ftype == 'nc':
-            grid_aux = pyart.aux_io.read_cf1_cartesian_mf(filename[0])
+            grid_aux = pyart.aux_io.read_cf1_cartesian_mf(filename)
         if grid_aux is None:
             continue
 
