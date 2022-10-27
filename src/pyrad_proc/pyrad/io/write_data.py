@@ -29,6 +29,7 @@ Functions for writing pyrad output data
     write_histogram
     write_quantiles
     write_multiple_points
+    write_multiple_points_grid
     write_ts_polar_data
     write_ts_grid_data
     write_ts_ml
@@ -1352,6 +1353,63 @@ def write_multiple_points(dataset, fname):
                 'lon_ref': lon_ref[i],
                 'lat_ref': lat_ref[i],
                 'alt_ref': alt_ref[i],
+                'val': val[i],
+                })
+        csvfile.close()
+
+    return fname
+
+
+def write_multiple_points_grid(dataset, fname):
+    """
+    write data obtained at multiple points from a grid
+
+    Parameters
+    ----------
+    dataset : dict
+        dictionary containing the data
+    fname : str
+        file name
+
+    Returns
+    -------
+    fname : str
+        the name of the file where data has written
+
+    """
+    val = dataset['value'].filled(fill_value=get_fillvalue())
+    lon_ref = dataset['used_point_coordinates_WGS84_lon'].filled(
+        fill_value=get_fillvalue())
+    lat_ref = dataset['used_point_coordinates_WGS84_lat'].filled(
+        fill_value=get_fillvalue())
+    with open(fname, 'w', newline='') as csvfile:
+        csvfile.write(
+            '# Gridded data at multiple points file\n' +
+            '# Comment lines are preceded by "#"\n' +
+            '# Description:\n' +
+            '# Gridded data at points of interest.\n' +
+            '# Data: '+generate_field_name_str(dataset['datatype'])+'\n' +
+            '#\n')
+        fieldnames = [
+            'point_ID', 'time', 'ix', 'iy', 'lon', 'lat',
+            'lon_ref', 'lat_ref', 'val']
+        writer = csv.DictWriter(csvfile, fieldnames)
+        writer.writeheader()
+        for i in range(val.size):
+            time_aux = dataset['time'][i]
+            if not np.ma.is_masked(dataset['time'][i]):
+                time_aux = time_aux.strftime('%Y%m%d%H%M%S')
+            else:
+                time_aux = 'NA'
+            writer.writerow({
+                'point_ID': dataset['point_id'][i],
+                'time': time_aux,
+                'ix': dataset['grid_point_ix'][i],
+                'iy': dataset['grid_point_iy'][i],
+                'lon': dataset['point_coordinates_WGS84_lon'][i],
+                'lat': dataset['point_coordinates_WGS84_lat'][i],
+                'lon_ref': lon_ref[i],
+                'lat_ref': lat_ref[i],
                 'val': val[i],
                 })
         csvfile.close()

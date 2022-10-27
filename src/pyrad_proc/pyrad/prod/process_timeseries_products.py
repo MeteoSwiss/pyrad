@@ -25,6 +25,7 @@ from ..io.read_data_other import read_timeseries
 
 from ..io.write_data import write_ts_polar_data, write_ts_cum
 from ..io.write_data import write_ts_grid_data, write_multiple_points
+from ..io.write_data import write_multiple_points_grid
 
 from ..graph.plots_timeseries import plot_timeseries, plot_timeseries_comp
 from ..graph.plots_vol import plot_cappi, plot_traj
@@ -152,6 +153,10 @@ def generate_timeseries_products(dataset, prdcfg):
                     Default 'NEAREST'
                 res: float
                     The CAPPI resolution [m]. Default 500.
+        'WRITE_MULTIPLE_POINTS': Writes a csv file containing data from
+            multiple points obtained from a radar object
+        'WRITE_MULTIPLE_POINTS_GRID': Writes a csv file containing data from
+            multiple points obtained from a grid object
 
     Parameters
     ----------
@@ -186,6 +191,22 @@ def generate_timeseries_products(dataset, prdcfg):
 
         csvfname = savedir+csvfname
         write_multiple_points(dataset, csvfname)
+        print('saved CSV file: '+csvfname)
+
+        return csvfname
+
+    if prdcfg['type'] == 'WRITE_MULTIPLE_POINTS_GRID':
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir, prdsavedir,
+            timeinfo=dataset['ref_time'])
+
+        csvfname = make_filename(
+            'POI', prdcfg['dstype'], dataset['datatype'], ['csv'],
+            timeinfo=dataset['ref_time'])[0]
+
+        csvfname = savedir+csvfname
+        write_multiple_points_grid(dataset, csvfname)
         print('saved CSV file: '+csvfname)
 
         return csvfname

@@ -188,6 +188,7 @@ def get_process_func(dataset_type, dsname):
             'GRID_TIMEAVG' format output:
                 'GRID_TIME_STATS': process_grid_time_stats
                 'GRID_TIME_STATS2': process_grid_time_stats2
+                'GRID_RAIN_ACCU': process_grid_rainfall_accumulation
             'INTERCOMP' format output:
                 'INTERCOMP': process_intercomp
                 'INTERCOMP_FIELDS': process_intercomp_fields
@@ -225,6 +226,7 @@ def get_process_func(dataset_type, dsname):
                 'RAIN_ACCU': process_rainfall_accumulation
             'TIMESERIES' format output:
                 'GRID_POINT_MEASUREMENT': process_grid_point
+                'GRID_MULTIPLE_POINTS': process_grid_multiple_points
                 'MULTIPLE_POINTS': process_multiple_points
                 'POINT_MEASUREMENT': process_point_measurement
                 'TRAJ_ANTENNA_PATTERN': process_traj_antenna_pattern
@@ -553,6 +555,9 @@ def get_process_func(dataset_type, dsname):
     elif dataset_type == 'GRID_TIME_STATS2':
         func_name = 'process_grid_time_stats2'
         dsformat = 'GRID_TIMEAVG'
+    elif dataset_type == 'GRID_RAIN_ACCU':
+        func_name = 'process_grid_rainfall_accumulation'
+        dsformat = 'GRID_TIMEAVG'
     elif dataset_type == 'COLOCATED_GATES':
         func_name = 'process_colocated_gates'
         dsformat = 'COLOCATED_GATES'
@@ -596,6 +601,9 @@ def get_process_func(dataset_type, dsname):
         dsformat = 'TIMESERIES'
     elif dataset_type == 'GRID_POINT_MEASUREMENT':
         func_name = 'process_grid_point'
+        dsformat = 'TIMESERIES'
+    elif dataset_type == 'GRID_MULTIPLE_POINTS':
+        func_name = 'process_grid_multiple_points'
         dsformat = 'TIMESERIES'
     elif dataset_type == 'ROI':
         func_name = process_roi
