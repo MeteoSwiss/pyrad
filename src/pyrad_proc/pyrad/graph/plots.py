@@ -1413,12 +1413,14 @@ def plot_scatter_comp(value1, value2, fname_list, labelx='Sensor 1',
         if axis == 'equal':
             ax.axis([0, max_value, 0, max_value])
             ax.plot([0, max_value], [0, max_value], 'k--')
-            ax.set(adjustable='box-forced', aspect='equal')
+            ax.set(adjustable='box', aspect='equal')
 
         if metadata is not None:
             ax.text(0.05, 0.95, metadata, horizontalalignment='left',
                     verticalalignment='top', transform=ax.transAxes)
 
+        # turn on the grid
+        ax.grid()
         # Make a tight layout
         fig.tight_layout()
     else:

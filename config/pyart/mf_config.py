@@ -310,6 +310,7 @@ rain_rate = 'rain_rate'
 radar_estimated_rain_rate = 'radar_estimated_rain_rate'
 corrected_radar_estimated_rain_rate = 'corrected_radar_estimated_rain_rate'
 rainfall_accumulation = 'rainfall_accumulation'
+radar_rainrate_relation = 'radar_rainrate_relation'
 
 # melting layer
 melting_layer = 'melting_layer'
@@ -687,6 +688,7 @@ DEFAULT_FIELD_NAMES = {
     'radar_estimated_rain_rate': radar_estimated_rain_rate,
     'corrected_radar_estimated_rain_rate': corrected_radar_estimated_rain_rate,
     'rainfall_accumulation': rainfall_accumulation,
+    'radar_rainrate_relation': radar_rainrate_relation,
     'precipitation_type': precipitation_type,
     'radar_echo_classification': radar_echo_classification,
     'corrected_radar_echo_classification': corrected_radar_echo_classification,
@@ -2339,6 +2341,19 @@ DEFAULT_METADATA = {
                        40., 63., 100., 160., 250., 500.],
         'coordinates': 'elevation azimuth range'},
 
+    radar_rainrate_relation: {
+        'units': '-',
+        'standard_name': 'radar_rainrate_relation',
+        'long_name': 'Radar rain rate relation',
+        'labels': ['None', 'Z-R', 'Z-S', 'KDP-R'],
+        'ticks': [1, 2, 3, 4],
+        'boundaries': [0.5, 1.5, 2.5, 3.5, 4.5],
+        'coordinates': 'elevation azimuth range',
+        'scale_factor': 1,
+        'add_offset': 0,
+        '_FillValue': 0,
+        '_Write_as_dtype': 'uint8'},
+
     sun_hit_h: {
         'units': '-',
         'standard_name': 'sun_hit_h',
@@ -3968,6 +3983,8 @@ DEFAULT_FIELD_COLORMAP = {
     sun_hit_h: 'pyart_LangRainbow12',
     sun_hit_v: 'pyart_LangRainbow12',
     sun_hit_zdr: 'pyart_LangRainbow12',
+
+    radar_rainrate_relation: 'pyart_LangRainbow12',
 
     precipitation_type: 'pyart_LangRainbow12',
     radar_echo_classification: 'pyart_LangRainbow12',

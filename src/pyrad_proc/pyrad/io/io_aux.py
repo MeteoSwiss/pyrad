@@ -1467,6 +1467,8 @@ def get_fieldname_pyart(datatype):
         field_name = 'rainfall_accumulation'
     elif datatype == 'QIMF':
         field_name = 'signal_quality_index'
+    elif datatype == 'radar_R_rel':
+        field_name = 'radar_rainrate_relation'
 
     elif datatype == 'prec_type':
         field_name = 'precipitation_type'

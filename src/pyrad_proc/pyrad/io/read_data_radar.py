@@ -3717,17 +3717,29 @@ def merge_fields_mf_grid(voltime, datatype_list, dataset_list, scan_list, cfg,
                 filename, field_name=prod_field,
                 xres=cfg['BinFileParams']['xres'],
                 yres=cfg['BinFileParams']['yres'],
-                nx=cfg['BinFileParams']['nx'],
-                ny=cfg['BinFileParams']['ny'], nz=cfg['BinFileParams']['nz'],
+                nx=cfg['BinFileParams']['nx'], ny=cfg['BinFileParams']['ny'],
+                nz=cfg['BinFileParams']['nz'],
                 dtype=cfg['BinFileParams']['dtype'],
                 date_format=cfg['BinFileParams']['date_format'],
                 added_time=cfg['BinFileParams']['added_time'],
                 x_offset=cfg['BinFileParams']['x_offset'],
                 y_offset=cfg['BinFileParams']['y_offset'],
                 lat_0=cfg['BinFileParams']['lat_0'],
-                lon_0=cfg['BinFileParams']['lon_0'])
+                lon_0=cfg['BinFileParams']['lon_0'],
+                proj=cfg['BinFileParams']['proj'])
         elif ftype == 'png':
-            grid_aux = pyart.aux_io.read_png(filename)
+            grid_aux = pyart.aux_io.read_png(
+                filename, field_name=prod_field,
+                xres=cfg['BinFileParams']['xres'],
+                yres=cfg['BinFileParams']['yres'],
+                nz=cfg['BinFileParams']['nz'],
+                date_format=cfg['BinFileParams']['date_format'],
+                added_time=cfg['BinFileParams']['added_time'],
+                x_offset=cfg['BinFileParams']['x_offset'],
+                y_offset=cfg['BinFileParams']['y_offset'],
+                lat_0=cfg['BinFileParams']['lat_0'],
+                lon_0=cfg['BinFileParams']['lon_0'],
+                proj=cfg['BinFileParams']['proj'])
         elif ftype == 'grib':
             grid_aux = pyart.aux_io.read_grib(filename)
         elif ftype == 'dat':
