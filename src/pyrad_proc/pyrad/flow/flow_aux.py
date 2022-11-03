@@ -1067,7 +1067,7 @@ def _create_cfg_dict(cfgfile):
             'y_offset': -3526818.337932,
             'lat_0': 90.,
             'lon_0': 0.,
-            'proj': 'stere',
+            'proj': 'gnom',
             'datatype': ['Raccu']
         }
         cfg.update({'BinFileParams': bin_file_params})
@@ -1111,8 +1111,8 @@ def _create_cfg_dict(cfgfile):
             warn('BinFileParams: lat_0 not specified. Assumed 0.')
             cfg['BinFileParams'].update({'lat_0': 0.})
         if 'proj' not in cfg['BinFileParams']:
-            warn('BinFileParams: proj not specified. Assumed stere')
-            cfg['BinFileParams'].update({'proj': 'stere'})
+            warn('BinFileParams: proj not specified. Assumed gnom')
+            cfg['BinFileParams'].update({'proj': 'gnom'})
         if 'datatype' not in cfg['BinFileParams']:
             warn('BinFileParams: datatype not specified. Assumed Raccu')
             cfg['BinFileParams'].update({'datatype': 'Raccu'})

@@ -155,7 +155,7 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
                 field_name, level=level, norm=norm, ticks=ticks,
                 ticklabs=ticklabs, lat_lines=lat_lines, projection=projection,
                 lon_lines=lon_lines, vmin=vmin, embellish=False,
-                add_lines=True, vmax=vmax, mask_outside=mask_outside,
+                add_grid_lines=True, vmax=vmax, mask_outside=mask_outside,
                 alpha=alpha, title=titl, colorbar_flag=colorbar_flag)
 
             # fig = plt.gcf()
