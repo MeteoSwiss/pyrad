@@ -973,10 +973,8 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
                   gather_dir + '/ALL_FIGURES/'))
             for ex in img_ext:
                 if os.path.exists(gather_dir):
-                    cmd = (
-                        f'cd {gather_dir}; mkdir -p ALL_FIGURES; '
-                        f'find . -type f -name "*.{ex}" '
-                        f'-exec cp {} ALL_FIGURES \\;')
+                    cmd = ('cd {:s}; mkdir -p ALL_FIGURES; find . -type f -name "*.{:s}" '.format(gather_dir,
+                                       ex) + '-exec cp {} ALL_FIGURES \\;')
                     subprocess.call(cmd, shell=True)
 
     print('- This is the end my friend! See you soon!')
