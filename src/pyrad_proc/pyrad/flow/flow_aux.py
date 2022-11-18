@@ -944,6 +944,12 @@ def _create_cfg_dict(cfgfile):
         cfg.update({'ScanList': None})
     else:
         cfg.update({'ScanList': get_scan_list(cfg['ScanList'])})
+
+    # to use when we need to combine multiple files corresponding to multiple
+    # and data types
+    if 'DataTypeID' not in cfg:
+        cfg.update({'DataTypeID': None})
+
     if 'MasterScanTimeTol' not in cfg:
         #  0: no tolerance
         #  1: time master scan + ScanPeriod
@@ -1051,6 +1057,10 @@ def _create_cfg_dict(cfgfile):
         for param in fltarr_list:
             if isinstance(cfg['RadarPosition'][param], float):
                 cfg['RadarPosition'][param] = [cfg['RadarPosition'][param]]
+
+    # keyword to force the use of MF scale in ODIM data
+    if 'MFScale' not in cfg:
+        cfg.update({'MFScale': 0})
 
     # parameters necessary to read correctly MF grid binary files
     if 'BinFileParams' not in cfg:
@@ -1162,6 +1172,8 @@ def _create_datacfg_dict(cfg):
     datacfg.update({'metranet_read_lib': cfg['metranet_read_lib']})
 
     datacfg.update({'BinFileParams': cfg['BinFileParams']})
+    datacfg.update({'MFScale': cfg['MFScale']})
+    datacfg.update({'DataTypeID': cfg['DataTypeID']})
 
     # Modify size of radar or radar spectra object
     datacfg.update({'elmin': cfg.get('elmin', None)})

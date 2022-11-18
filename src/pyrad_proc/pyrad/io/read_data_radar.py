@@ -76,7 +76,7 @@ try:
     if platform.system() == 'Linux':
         METRANET_LIB = pyart.aux_io.get_library(momentms=True)
     _METRANETLIB_AVAILABLE = True
-except:
+except Exception:
     _METRANETLIB_AVAILABLE = False
 
 from .read_data_other import read_status, read_rad4alp_cosmo, read_rad4alp_vis
@@ -1507,6 +1507,10 @@ def merge_scans_odim(basepath, scan_list, radar_name, radar_res, voltime,
     basename = ''
     if radar_name is not None and radar_res is not None:
         basename = f'M{radar_res}{radar_name}{dayinfo}'
+
+    # get list of files to combine
+    flist = []
+    scan_list_aux = []
     if cfg['path_convention'][ind_rad] == 'LTE':
         yy = dayinfo[0:2]
         dy = dayinfo[2:]
@@ -1559,8 +1563,101 @@ def merge_scans_odim(basepath, scan_list, radar_name, radar_res, voltime,
     if not filename:
         warn(f'No file found in {datapath[0]}{basename}{timeinfo}*.h*')
     else:
-        radar = get_data_odim(
-            filename[0], datatype_list, scan_list[0], cfg, ind_rad=ind_rad)
+        flist.append(filename[0])
+        scan_list_aux.append(scan_list[0])
+
+    if len(scan_list) > 1:
+        # merge the elevations into a single radar instance
+        for scan in scan_list[1:]:
+            if cfg['path_convention'][ind_rad] == 'ODIM':
+                filenames = glob.glob(f'{datapath}*{scan}*')
+                filename = []
+                for filename_aux in filenames:
+                    fdatetime = find_date_in_file_name(
+                        filename_aux, date_format=fdate_strf)
+                    if cfg['MasterScanTimeTol'][ind_rad] == 0:
+                        if fdatetime == voltime:
+                            filename = [filename_aux]
+                            break
+                    elif cfg['MasterScanTimeTol'][ind_rad] == 1:
+                        if (voltime <= fdatetime < voltime
+                                + datetime.timedelta(
+                                    minutes=cfg['ScanPeriod'])):
+                            filename = [filename_aux]
+                            print(os.path.basename(filename[0]))
+                            break
+                    else:
+                        if (voltime
+                            - datetime.timedelta(minutes=cfg['ScanPeriod'])
+                                < fdatetime <= voltime):
+                            filename = [filename_aux]
+                            print(os.path.basename(filename[0]))
+                            break
+            else:
+                filename = glob.glob(f'{datapath}{basename}{timeinfo}*{scan}*')
+            if not filename:
+                warn(f'No file found in {datapath}{basename}{timeinfo}*.'
+                     f'{scan}')
+                continue
+            flist.append(filename[0])
+            scan_list_aux.append(scan)
+
+    if not flist:
+        return radar
+
+    if cfg['DataTypeID'] is None:
+        for fname, scan in zip(flist, scan_list_aux):
+            radar_aux = get_data_odim(
+                fname, datatype_list, scan, cfg, ind_rad=ind_rad)
+            if radar_aux is None:
+                continue
+            if radar is None:
+                radar = radar_aux
+                continue
+            radar = pyart.util.radar_utils.join_radar(radar, radar_aux)
+    else:
+        for datatype in datatype_list:
+            if datatype not in cfg['DataTypeID'].keys():
+                warn(f'No file contains data type {datatype}')
+                continue
+            nscans = 0
+            radar_aux = None
+            for fname, scan in zip(flist, scan_list_aux):
+                if cfg['DataTypeID'][datatype] not in os.path.basename(fname):
+                    continue
+                radar_aux2 = get_data_odim(
+                    fname, [datatype], scan, cfg, ind_rad=ind_rad)
+                if radar_aux2 is None:
+                    continue
+                if radar_aux is None:
+                    radar_aux = radar_aux2
+                    nscans += 1
+                    continue
+                radar_aux = pyart.util.radar_utils.join_radar(
+                    radar_aux, radar_aux2)
+                nscans += 1
+            if radar is None:
+                radar = radar_aux
+                nscans_expected = nscans
+                continue
+            if nscans != nscans_expected:
+                warn(f'Unable to merge datatype {datatype} into radar object.'
+                     f' Number of scans containing the datatype {nscans}'
+                     f' different from number of scans expected'
+                     f' {nscans_expected}')
+                continue
+            field_name = get_fieldname_pyart(datatype)
+            try:
+                radar.add_field(field_name, radar_aux.fields[field_name])
+            except ValueError:
+                if radar.nrays*radar.ngates > radar_aux.nrays*radar_aux.ngates:
+                    warn(f'Field {field_name} will be interpolated')
+                    radar = add_field(radar, radar_aux)
+                else:
+                    warn(
+                        f'Fields will be adapted to {field_name} field size')
+                    radar = add_field(radar_aux, radar)
+                print(f'nrays: {radar.nrays} ngates: {radar.ngates}')
 
     rmin = None
     rmax = None
@@ -1580,56 +1677,6 @@ def merge_scans_odim(basepath, scan_list, radar_name, radar_res, voltime,
         azmin = cfg['azmin'][ind_rad]
     if cfg['azmax'] is not None:
         azmax = cfg['azmax'][ind_rad]
-
-    if len(scan_list) == 1:
-        if radar is None:
-            return radar
-
-        return pyart.util.subset_radar(
-            radar, radar.fields.keys(), rng_min=rmin, rng_max=rmax,
-            ele_min=elmin, ele_max=elmax, azi_min=azmin, azi_max=azmax)
-
-    # merge the elevations into a single radar instance
-    for scan in scan_list[1:]:
-        if cfg['path_convention'][ind_rad] == 'ODIM':
-            filenames = glob.glob(f'{datapath}*{scan}*')
-            filename = []
-            for filename_aux in filenames:
-                fdatetime = find_date_in_file_name(
-                    filename_aux, date_format=fdate_strf)
-                if cfg['MasterScanTimeTol'][ind_rad] == 0:
-                    if fdatetime == voltime:
-                        filename = [filename_aux]
-                        break
-                elif cfg['MasterScanTimeTol'][ind_rad] == 1:
-                    if (voltime <= fdatetime < voltime
-                            + datetime.timedelta(minutes=cfg['ScanPeriod'])):
-                        filename = [filename_aux]
-                        print(os.path.basename(filename[0]))
-                        break
-                else:
-                    if (voltime - datetime.timedelta(minutes=cfg['ScanPeriod'])
-                            < fdatetime <= voltime):
-                        filename = [filename_aux]
-                        print(os.path.basename(filename[0]))
-                        break
-        else:
-            filename = glob.glob(f'{datapath}{basename}{timeinfo}*{scan}*')
-        if not filename:
-            warn(f'No file found in {datapath}{basename}{timeinfo}*.{scan}')
-        else:
-            radar_aux = get_data_odim(
-                filename[0], datatype_list, scan, cfg, ind_rad=ind_rad)
-            if radar_aux is None:
-                continue
-
-            if radar is None:
-                radar = radar_aux
-            else:
-                radar = pyart.util.radar_utils.join_radar(radar, radar_aux)
-
-    if radar is None:
-        return radar
 
     return pyart.util.subset_radar(
         radar, radar.fields.keys(), rng_min=rmin, rng_max=rmax, ele_min=elmin,
@@ -1687,7 +1734,8 @@ def merge_scans_odimgrid(basepath, scan_list, voltime, datatype_list,
             warn(f'No file found in {datapath}*{scan}*')
             continue
 
-        grid_aux = get_data_odimgrid(filename[0], datatype_list)
+        grid_aux = get_data_odimgrid(
+            filename[0], datatype_list, mf_scale=cfg['MFScale'])
 
         if grid_aux is None:
             continue
@@ -4392,8 +4440,55 @@ def get_data_odim(filename, datatype_list, scan_name, cfg, ind_rad=0):
         if datatype not in ('Nh', 'Nv'):
             odim_field_names.update(get_datatype_odim(datatype))
     try:
-        radar = pyart.aux_io.read_odim_h5(
-            filename, field_names=odim_field_names)
+        if cfg['MFScale']:
+            # assumes only a data type per file
+            offset = 0.
+            gain = 1.
+            nodata = np.nan
+            undetect = np.nan
+            use_file_conversion = True
+            if datatype_list[0] == 'dBuZ':
+                offset = -10.5
+                gain = 1
+                nodata = 0
+                undetect = 255
+                use_file_conversion = False
+            elif datatype_list[0] == 'ZDR':
+                offset = -9.95
+                gain = 0.1
+                nodata = 255
+                undetect = 255
+                use_file_conversion = False
+            elif datatype_list[0] == 'RhoHV':
+                offset = 0.305
+                gain = 0.01
+                nodata = 255
+                undetect = 255
+                use_file_conversion = False
+            elif datatype_list[0] == 'PhiDP':
+                offset = 0
+                gain = 1
+                nodata = 65535
+                undetect = 65535
+                use_file_conversion = False
+            elif datatype_list[0] == 'sigma_zh':
+                offset = 0.125
+                gain = 0.25
+                nodata = 255
+                undetect = 0
+                use_file_conversion = False
+
+            radar = pyart.aux_io.read_odim_h5(
+                filename, field_names=odim_field_names, offset=offset,
+                gain=gain, nodata=nodata, undetect=undetect,
+                use_file_conversion=use_file_conversion)
+
+            if datatype_list[0] == 'PhiDP':
+                radar.fields['differential_phase']['data'][
+                    radar.fields['differential_phase']['data'] > 180.] -= 360.
+        else:
+            radar = pyart.aux_io.read_odim_h5(
+                filename, field_names=odim_field_names)
     except (ValueError, OSError) as ee:
         warn("Unable to read file '"+filename+": (%s)" % str(ee))
         return None
@@ -4472,7 +4567,7 @@ def get_data_odim(filename, datatype_list, scan_name, cfg, ind_rad=0):
     return radar
 
 
-def get_data_odimgrid(filename, datatype_list):
+def get_data_odimgrid(filename, datatype_list, mf_scale=False):
     """
     gets ODIM grid data
 
@@ -4482,6 +4577,8 @@ def get_data_odimgrid(filename, datatype_list):
         name of file containing odim data
     datatype_list : list of strings
         list of data fields to get
+    mf_scale : bool
+        Whether to impose a MF scale
 
     Returns
     -------
@@ -4489,16 +4586,57 @@ def get_data_odimgrid(filename, datatype_list):
         Grid object. None if the reading has not been successful
 
     """
-    odim_field_names = dict()
-    for datatype in datatype_list:
-        odim_field_names.update(get_datatype_odim(datatype))
+    grid = None
+    if mf_scale:
+        for datatype in datatype_list:
+            odim_field_name = get_datatype_odim(datatype)
+            field_name = get_fieldname_pyart(datatype)
 
-    try:
-        grid = pyart.aux_io.read_odim_grid_h5(
-            filename, field_names=odim_field_names)
-    except (ValueError, OSError) as ee:
-        warn("Unable to read file '"+filename+": (%s)" % str(ee))
-        return None
+            offset = 0.
+            gain = 1.
+            nodata = np.nan
+            undetect = np.nan
+            use_file_conversion = True
+            if field_name == 'reflectivity':
+                offset = -10.5
+                gain = 1
+                nodata = 2047
+                undetect = 0
+                use_file_conversion = False
+            elif field_name == 'sigma_zh':
+                offset = 0.125
+                gain = 0.25
+                nodata = 255
+                undetect = 0
+                use_file_conversion = False
+            if grid is None:
+                try:
+                    grid = pyart.aux_io.read_odim_grid_h5(
+                        filename, field_names=odim_field_name, offset=offset,
+                        gain=gain, nodata=nodata, undetect=undetect,
+                        use_file_conversion=use_file_conversion)
+                except (ValueError, OSError) as ee:
+                    warn("Unable to read file '"+filename+": (%s)" % str(ee))
+            else:
+                try:
+                    grid_aux = pyart.aux_io.read_odim_grid_h5(
+                        filename, field_names=odim_field_name, offset=offset,
+                        gain=gain, nodata=nodata, undetect=undetect,
+                        use_file_conversion=use_file_conversion)
+                    if grid_aux is not None:
+                        grid.add_field(field_name, grid_aux.fields[field_name])
+                except (ValueError, OSError) as ee:
+                    warn("Unable to read file '"+filename+": (%s)" % str(ee))
+    else:
+        odim_field_names = dict()
+        for datatype in datatype_list:
+            odim_field_names.update(get_datatype_odim(datatype))
+
+        try:
+            grid = pyart.aux_io.read_odim_grid_h5(
+                filename, field_names=odim_field_names)
+        except (ValueError, OSError) as ee:
+            warn("Unable to read file '"+filename+": (%s)" % str(ee))
 
     return grid
 

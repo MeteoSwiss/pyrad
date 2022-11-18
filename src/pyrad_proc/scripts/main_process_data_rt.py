@@ -118,7 +118,7 @@ def main():
             end_proc = pyrad_main(
                 cfgfile_list, starttime=proc_starttime, endtime=proc_endtime,
                 proc_period=args.proc_period, proc_finish=args.proc_finish)
-        except:
+        except Exception:
             traceback.print_exc()
             if args.proc_finish is None:
                 warn("An exception occurred. " +

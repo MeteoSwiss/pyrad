@@ -729,8 +729,8 @@ def get_datatype_odim(datatype):
     if datatype == 'dBZ':
         field_name = 'reflectivity'
         datatype_odim = 'DBZH'
-    if datatype == 'dBZ_MF':
-        field_name = 'reflectivity'
+    elif datatype == 'sigma_zh':
+        field_name = 'sigma_zh'
         datatype_odim = 'DBZH_DEV'
     elif datatype == 'dBuZ':
         field_name = 'unfiltered_reflectivity'
@@ -768,6 +768,9 @@ def get_datatype_odim(datatype):
     elif datatype == 'rcs_v':
         field_name = 'radar_cross_section_vv'
         datatype_odim = 'RCSV'
+    elif datatype == 'VPRFEATURES':
+        field_name = 'vpr_features'
+        datatype_odim = 'VPRFEATURES'
 
     elif datatype == 'ZDR':
         field_name = 'differential_reflectivity'
@@ -1203,6 +1206,8 @@ def get_fieldname_pyart(datatype):
 
     elif datatype == 'VPRcorr':
         field_name = 'vpr_correction'
+    elif datatype == 'VPRFEATURES':
+        field_name = 'vpr_features'
     elif datatype == 'sigma_zh':
         field_name = 'sigma_zh'
 

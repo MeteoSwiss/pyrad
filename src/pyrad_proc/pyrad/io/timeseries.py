@@ -115,7 +115,7 @@ class TimeSeries(object):
 
         try:
             tsfile = open(fname, "w")
-        except:
+        except Exception:
             raise Exception("ERROR: Could not create file '%s'" % fname)
 
         print("# Weather radar timeseries data file", file=tsfile)
