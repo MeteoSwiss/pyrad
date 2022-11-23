@@ -294,7 +294,7 @@ def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
     print("- PYRAD version: %s (compiled %s by %s)" %
           (pyrad_version.version, pyrad_version.compile_date_time,
            pyrad_version.username))
-    print("- PYART version: " + pyart_version.version)
+    print("- PYART version: " + pyart_version)
 
     # Define behaviour of warnings
     warnings.simplefilter('always')  # always print matching warnings
@@ -542,7 +542,7 @@ def main_cosmo(cfgfile, starttime=None, endtime=None, trajfile="", infostr=""):
     print("- PYRAD version: {} (compiled {} by {})".format(
         pyrad_version.version, pyrad_version.compile_date_time,
         pyrad_version.username))
-    print("- PYART version: {}".format(pyart_version.version))
+    print("- PYART version: {}".format(pyart_version))
 
     # Define behaviour of warnings
     warnings.simplefilter('always')  # always print matching warnings
@@ -634,7 +634,7 @@ def main_cosmo_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
     print("- PYRAD version: %s (compiled %s by %s)" %
           (pyrad_version.version, pyrad_version.compile_date_time,
            pyrad_version.username))
-    print("- PYART version: " + pyart_version.version)
+    print("- PYART version: " + pyart_version)
 
     # Define behaviour of warnings
     warnings.simplefilter('always')  # always print matching warnings
@@ -861,7 +861,7 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
     print("- PYRAD version: {} (compiled {} by {})".format(
         pyrad_version.version, pyrad_version.compile_date_time,
         pyrad_version.username))
-    print("- PYART version: {}".format(pyart_version.version))
+    print("- PYART version: {}".format(pyart_version))
 
     # Define behaviour of warnings
     warnings.simplefilter('always')  # always print matching warnings
