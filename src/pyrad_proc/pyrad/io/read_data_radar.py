@@ -4449,8 +4449,14 @@ def get_data_odim(filename, datatype_list, scan_name, cfg, ind_rad=0):
             undetect = np.nan
             use_file_conversion = True
             if datatype_list[0] == 'dBuZ':
+                # SEMAFOR campaign:
+                # offset = -41.25
+                # gain = 0.5
+
+                # regular
                 offset = -10.5
                 gain = 1
+
                 nodata = 0
                 undetect = 255
                 use_file_conversion = False
