@@ -889,10 +889,21 @@ def process_vpr(procstatus, dscfg, radar_list=None):
             descriptor used get the linear reflectivity information
         vpr_theo_datatype : str
             descriptor used to get the retrieved theoretical VPR
+        filter_params : bool
+            If True the current theoretical VPR profile is averaged with the
+            past VPR profile by averaging the 4 parameters that define the
+            profile, otherwise the shape of the profiles is averaged. Default
+            false. Used only in non-spatialised VPR correction
         weight_mem : float
             Weight given to past VPR when filtering the current VPR
         spatialized : bool
             If True the VPR correction is spatialized
+        correct_iso0 : bool
+            If True the iso0 field is corrected by a bias constant computed as
+            the difference between the retrieved melting layer top and the
+            average iso0 and areas with precipitation. Default True. Used only
+            in the spatialised VPR correction
+
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -969,6 +980,7 @@ def process_vpr(procstatus, dscfg, radar_list=None):
     h_max = dscfg.get('h_max', 6000.)
     h_corr_max = dscfg.get('h_corr_max', 15000.)
     h_res = dscfg.get('h_res', 1.)
+    filter_params = dscfg.get('filter_params', False)
     max_weight = dscfg.get('max_weight', 9.)
     rmin_obs = dscfg.get('rmin_obs', 5000.)
     rmax_obs = dscfg.get('rmax_obs', 150000.)
@@ -980,6 +992,7 @@ def process_vpr(procstatus, dscfg, radar_list=None):
     filter_vpr_memory_max = dscfg.get('filter_vpr_memory_max', 0.)
     weight_mem = dscfg.get('weight_mem', 0.75)
     spatialised = dscfg.get('spatialised', False)
+    correct_iso0 = dscfg.get('correct_iso0', True)
 
     iso0 = None
     if use_ml:
@@ -1051,7 +1064,7 @@ def process_vpr(procstatus, dscfg, radar_list=None):
             if not flist:
                 warn('unable to find files containing retrieved VPR')
             else:
-                if spatialised:
+                if spatialised or filter_params:
                     # this function will read the stored VPR parameters from
                     # the previous volume
                     vpr_theo_dict_mem = read_vpr_theo_parameters(flist[-1])
@@ -1067,7 +1080,7 @@ def process_vpr(procstatus, dscfg, radar_list=None):
     corr_field = 'vpr_correction'
 
     if spatialised:
-        refl_corr, vpr_corr, vpr_theo_dict, radar_rhi = pyart.correct.correct_vpr_spatialised(
+        refl_corr, vpr_corr, vpr_theo_dict, radar_rhi, vpr_info = pyart.correct.correct_vpr_spatialised(
             radar, nvalid_min=nvalid_min, angle_min=angle_min,
             angle_max=angle_max, ml_thickness_min=ml_thickness_min,
             ml_thickness_max=ml_thickness_max,
@@ -1078,13 +1091,13 @@ def process_vpr(procstatus, dscfg, radar_list=None):
             dr_step=dr_step, dr_default=dr_default, dr_alt=dr_alt,
             h_max=h_max, h_corr_max=h_corr_max, h_res=h_res,
             max_weight=max_weight, rmin_obs=rmin_obs,  rmax_obs=rmax_obs,
-            iso0=iso0, weight_mem=weight_mem,
+            iso0=iso0, correct_iso0=correct_iso0, weight_mem=weight_mem,
             vpr_theo_dict_mem=vpr_theo_dict_mem, radar_mem_list=radar_mem_list,
             refl_field=refl_field, corr_refl_field=corr_refl_field,
             corr_field=corr_field, temp_field=temp_field,
             iso0_field=iso0_field, temp_ref=temp_ref)
     else:
-        refl_corr, vpr_corr, vpr_theo_dict, radar_rhi = pyart.correct.correct_vpr(
+        refl_corr, vpr_corr, vpr_theo_dict, radar_rhi, vpr_info = pyart.correct.correct_vpr(
             radar, nvalid_min=nvalid_min, angle_min=angle_min,
             angle_max=angle_max, ml_thickness_min=ml_thickness_min,
             ml_thickness_max=ml_thickness_max,
@@ -1095,7 +1108,7 @@ def process_vpr(procstatus, dscfg, radar_list=None):
             dr_step=dr_step, dr_default=dr_default, dr_alt=dr_alt,
             h_max=h_max, h_corr_max=h_corr_max, h_res=h_res,
             max_weight=max_weight, rmin_obs=rmin_obs, rmax_obs=rmax_obs,
-            iso0=iso0, weight_mem=weight_mem,
+            iso0=iso0, filter_params=filter_params, weight_mem=weight_mem,
             vpr_theo_dict_mem=vpr_theo_dict_mem, radar_mem_list=radar_mem_list,
             refl_field=refl_field, corr_refl_field=corr_refl_field,
             corr_field=corr_field, temp_field=temp_field,
@@ -1107,6 +1120,7 @@ def process_vpr(procstatus, dscfg, radar_list=None):
     new_dataset['radar_out'].add_field(corr_refl_field, refl_corr)
     new_dataset['radar_out'].add_field(corr_field, vpr_corr)
     new_dataset.update({'vpr_theo_dict': vpr_theo_dict})
+    new_dataset.update({'vpr_info': vpr_info})
     new_dataset.update({'radar_rhi': radar_rhi})
 
     return new_dataset, ind_rad

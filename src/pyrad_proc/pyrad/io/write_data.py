@@ -23,6 +23,7 @@ Functions for writing pyrad output data
     write_trt_cell_lightning
     write_trt_rpc
     write_vpr_theo_params
+    write_vpr_info
     write_rhi_profile
     write_field_coverage
     write_cdf
@@ -933,6 +934,34 @@ def write_vpr_theo_params(vpr_theo_dict, fname,
         writer.writeheader()
         data_dict = dict((k, vpr_theo_dict[k]) for k in labels)
         writer.writerow(data_dict)
+
+        csvfile.close()
+
+    return fname
+
+
+def write_vpr_info(vpr_info_dict, fname):
+    """
+    Writes a dictionary containing relevant parameters of the VPR profile
+    retrieval into a text file
+
+    Parameters
+    ----------
+    vpr_info_dict : dict
+        dictionary containing the parameters of the VPR profile
+    fname : str
+        file name where to store the data
+
+    Returns
+    -------
+    fname : str
+        the name of the file where data has been written
+
+    """
+    with open(fname, 'w', newline='') as csvfile:
+        writer = csv.DictWriter(csvfile, vpr_info_dict.keys())
+        writer.writeheader()
+        writer.writerow(vpr_info_dict)
 
         csvfile.close()
 
