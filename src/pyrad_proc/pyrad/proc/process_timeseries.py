@@ -62,7 +62,7 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
         lat : float. Dataset keyword
             the latitude [deg]. Use when latlon is True.
         alt : float. Dataset keyword
-            altitude [m MSL]. Use when latlon is True.
+            altitude [m MSL]. Use when latlon is True and truealt is True
         ele : float. Dataset keyword
             radar elevation [deg]. Use when latlon is False or when latlon is
             True and truealt is False
@@ -133,7 +133,6 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
     if dscfg['latlon']:
         lon = dscfg['lon']
         lat = dscfg['lat']
-        alt = dscfg['alt']
         x, y = pyart.core.geographic_to_cartesian(lon, lat, projparams)
 
         if not dscfg['truealt']:
@@ -144,14 +143,14 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
             elrad = dscfg['ele'] * np.pi / 180.
             r_ground = np.sqrt(x ** 2. + y ** 2.)
             r = r_ground / np.cos(elrad)
-            alt_radar = radar.altitude['data']+np.sqrt(
+            alt = radar.altitude['data']+np.sqrt(
                 r ** 2. + re ** 2. + 2. * r * re * np.sin(elrad)) - re
-            alt_radar = alt_radar[0]
+            alt = alt[0]
         else:
-            alt_radar = dscfg['alt']
+            alt = dscfg['alt']
 
         r, az, el = pyart.core.cartesian_to_antenna(
-            x, y, alt_radar-radar.altitude['data'])
+            x, y, alt-radar.altitude['data'])
         r = r[0]
         az = az[0]
         el = el[0]
