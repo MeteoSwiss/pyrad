@@ -302,10 +302,10 @@ def get_norm(field_name, field_dict={}):
 
     if field_dict is not None and 'boundaries' in field_dict:
         norm = mpl.colors.BoundaryNorm(
-            boundaries=field_dict['boundaries'], ncolors=cmap.N)
+            boundaries=field_dict['boundaries'], ncolors=len(field_dict['boundaries']) - 1)
     elif 'boundaries' in ref_dict:
-        norm = mpl.colors.BoundaryNorm(
-            boundaries=ref_dict['boundaries'], ncolors=cmap.N)
+        norm = mpl.colors.BoundaryNo
+            boundaries=ref_dict['boundaries'], ncolors=len(field_dict['boundaries']) - 1)
 
     if field_dict is not None and 'ticks' in field_dict:
         ticks = field_dict['ticks']
