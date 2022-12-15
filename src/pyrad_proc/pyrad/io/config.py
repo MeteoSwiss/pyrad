@@ -56,7 +56,7 @@ def read_config(fname, cfg=None):
     fileend = 0
     while fileend == 0:
         # remove leading and trailing whitespace
-        line = cfgfile.readline()
+        line = os.path.expandvars(cfgfile.readline())
         if line:
             line = line.strip()
 
@@ -270,7 +270,7 @@ def get_struct(cfgfile, pos, nels, fname):
     newpos = pos
     for i in range(nels):
         pos = cfgfile.seek(newpos)
-        line = cfgfile.readline()
+        line = os.path.expandvars(cfgfile.readline())
 
         # remove leading and trailing whitespace
         line = line.strip()
