@@ -4836,6 +4836,10 @@ def interpol_field(radar_dest, radar_orig, field_name, fill_value=None,
                 angle_new = radar_dest.elevation['data'][
                     sweep_start_dest:sweep_end_dest+1]
 
+            # Reduce precision to avoid issues with floating numbers
+            angle_new = np.around(angle_new, 6)
+            angle_old = np.around(angle_old, 6)
+
             field_orig_sweep_data = field_orig_data[
                 sweep_start_orig:sweep_end_orig+1, :]
             interpol_func = RegularGridInterpolator(
