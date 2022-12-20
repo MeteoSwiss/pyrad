@@ -13,6 +13,7 @@ Functions for reading auxiliary data
     read_profile_ts
     read_histogram_ts
     read_quantiles_ts
+    read_vpr_theo_parameters
     read_rhi_profile
     read_last_state
     read_status
@@ -340,6 +341,35 @@ def read_quantiles_ts(fname_list, step=5., qmin=0., qmax=100., t_res=300.):
     tbin_edges = np.append(dt_s-t_res, dt_s[-1])
 
     return tbin_edges, qbin_edges, data_ma, datetime_arr
+
+
+def read_vpr_theo_parameters(fname):
+    """
+    Reads the parameters defining a theoretical VPR profile from a csv file
+
+    Parameters
+    ----------
+    fname : str
+        file name where to store the data
+
+    Returns
+    -------
+    vpr_theo_dict : dict
+        Dictionary containing the parameters
+
+    """
+    try:
+        with open(fname, 'r', newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            vpr_theo_dict = next(reader)
+            for k, v in vpr_theo_dict.items():
+                vpr_theo_dict[k] = float(v)
+            return vpr_theo_dict
+
+    except EnvironmentError as ee:
+        warn(str(ee))
+        warn('Unable to read file '+fname)
+        return None
 
 
 def read_rhi_profile(fname, labels=['50.0-percentile', '25.0-percentile',

@@ -33,8 +33,10 @@ Gridded data functions
     process_raw_grid
     process_grid
     process_grid_point
+    process_grid_multiple_points
     process_grid_time_stats
     process_grid_time_stats2
+    process_grid_rainfall_accumulation
     process_grid_texture
     process_grid_fields_diff
     process_grid_mask
@@ -266,7 +268,8 @@ from .process_grid import process_grid, process_raw_grid, process_grid_point
 from .process_grid import process_grid_time_stats, process_grid_time_stats2
 from .process_grid import process_grid_fields_diff, process_grid_mask
 from .process_grid import process_normalize_luminosity, process_pixel_filter
-from .process_grid import process_grid_texture
+from .process_grid import process_grid_texture, process_grid_multiple_points
+from .process_grid import process_grid_rainfall_accumulation
 
 from .process_spectra import process_raw_spectra, process_spectral_power
 from .process_spectra import process_spectra_point, process_spectral_phase

@@ -54,4 +54,18 @@ def test_nexrad2():
     starttime = datetime.datetime(2013, 7, 17, 19, 50)
     endtime = datetime.datetime(2013, 7, 17, 19, 55)
     main(str(cfgfile), starttime=starttime, endtime=endtime)
+
+def test_mf_pag_mtcy():
+    cfgfile = Path(os.environ['PYRAD_EXAMPLES_PATH'], 'config', 'processing',
+                   'mf_pag_mtcy.txt')
+    starttime = datetime.datetime(2021, 1, 14, 23, 45)
+    endtime = datetime.datetime(2021, 1, 14, 23, 50)
+    main(str(cfgfile), starttime=starttime, endtime=endtime)
+    
+def test_mf_pag_mtcy():
+    cfgfile = Path(os.environ['PYRAD_EXAMPLES_PATH'], 'config', 'processing',
+                   'mf_odim_mtcy.txt')
+    starttime = datetime.datetime(2021, 1, 14, 0, 0)
+    endtime = datetime.datetime(2021, 1, 14, 0, 5)
+    main(str(cfgfile), starttime=starttime, endtime=endtime)
     

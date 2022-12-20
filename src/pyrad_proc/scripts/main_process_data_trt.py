@@ -127,8 +127,8 @@ def main():
         if args.years is not None:
             years = list(map(int, args.years.split(',')))
 
-        _, max_rank, _, trt_time_start, trt_time_end = read_thundertracking_info(
-            args.info_file)
+        _, max_rank, _, trt_time_start, trt_time_end = (
+            read_thundertracking_info(args.info_file))
         trt_times = np.append(trt_time_start, trt_time_end)
 
         trt_dates = np.array([], dtype=datetime.date)
@@ -146,7 +146,6 @@ def main():
                     continue
 
             time_dir_list.append(trt_date.strftime("%Y-%m-%d"))
-
 
     if args.postproc:
         datatype_list = args.datatypes.split(',')
@@ -189,7 +188,7 @@ def main():
                 trajtype=trajtype)
             trt_cell_id_list.append(infostr)
             trt_file_list.append(fname)
-        except:
+        except Exception:
             warn('Unable to process TRT cell file '+fname)
 
     if not args.postproc:
@@ -214,7 +213,8 @@ def main():
         for j, datatype in enumerate(datatype_list):
             dataset = dataset_list[j]
             if args.path_structure == 1:
-                file_base2 = args.radarbase+time_dir+'/'+dataset+'_trt_center_traj/'
+                file_base2 = (
+                    f'{args.radarbase}{time_dir}/{dataset}_trt_center_traj/')
             elif args.path_structure == 0:
                 file_base2 = args.radarbase+time_dir+'/'+dataset+'_trt_traj/'
             elif args.path_structure == 2:
@@ -228,13 +228,12 @@ def main():
             # plot time-height
             if args.path_structure == 2:
                 flist = glob.glob(
-                    file_base2+'PROFILE_'+dataset+'/*_'+trt_cell_id+'_rhi_profile_*_' +
-                    datatype+'_hres'+str(int(args.hres))+'.csv')
+                    f'{file_base2}PROFILE_{dataset}/*_{trt_cell_id}'
+                    f'_rhi_profile_*_{datatype}_hres{args.hres}.csv')
             else:
                 flist = glob.glob(
                     file_base2+'PROFILE/*_'+trt_cell_id+'_rhi_profile_*_' +
                     datatype+'_hres'+str(int(args.hres))+'.csv')
-
 
             if not flist:
                 warn('No profile files found in '+file_base2 +
@@ -245,7 +244,8 @@ def main():
                     labels = ['Mean', 'Min', 'Max']
                 else:
                     labels = [
-                        '50.0-percentile', '25.0-percentile', '75.0-percentile']
+                        '50.0-percentile', '25.0-percentile',
+                        '75.0-percentile']
                     if datatype == 'RhoHVc':
                         labels = [
                             '80.0-percentile', '65.0-percentile',
@@ -303,8 +303,8 @@ def main():
             # plot time-hist
             if args.path_structure == 2:
                 flist = glob.glob(
-                    file_base2+'HISTOGRAM_'+dataset+'/*_'+trt_cell_id+'_histogram_*_' +
-                    datatype+'.csv')
+                    f'{file_base2}HISTOGRAM_{dataset}/*_{trt_cell_id}'
+                    f'_histogram_*_{datatype}.csv')
             else:
                 flist = glob.glob(
                     file_base2+'HISTOGRAM/*_'+trt_cell_id+'_histogram_*_' +

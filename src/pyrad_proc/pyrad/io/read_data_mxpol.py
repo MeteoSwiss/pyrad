@@ -39,15 +39,17 @@ try:
 except ImportError:
     _H5PY_AVAILABLE = False
 
-class MissingOptionalDependency(Exception):
-    """ Exception raised when a optional dependency is needed but not found. """
-    pass
-
 import pyart
 
+
+class MissingOptionalDependency(Exception):
+    """
+    Exception raised when a optional dependency is needed but not found.
+    """
+    pass
+
+
 # -------------------------- classes - MXPOL ------------------------------ #
-
-
 class pyrad_MXPOL(pyart.core.Radar):
     def __init__(self, filename, field_names=None, max_range=np.Inf,
                  min_range=10000, pyrad_names=True):
@@ -66,8 +68,9 @@ class pyrad_MXPOL(pyart.core.Radar):
         # if field name is None, take all available fields
 
         if field_names is None:
-            field_names = ['Zh', 'Zdr', 'Kdp', 'Phidp', 'Rhohv', 'ZhCorr',
-                           'ZdrCorr', 'RVel', 'Rvel', 'Sw', 'SNRh', 'SNRv', 'Psidp']
+            field_names = [
+                'Zh', 'Zdr', 'Kdp', 'Phidp', 'Rhohv', 'ZhCorr',
+                'ZdrCorr', 'RVel', 'Rvel', 'Sw', 'SNRh', 'SNRv', 'Psidp']
 
         # convert fieldname if necessary
         varnames = []
@@ -138,7 +141,7 @@ class pyrad_MXPOL(pyart.core.Radar):
 
             for j, v in enumerate(varnames):
                 if v in data.keys():
-                    if not(len(fields[v]['data'])):
+                    if not len(fields[v]['data']):
                         fields[v]['data'] = data[v]
                     else:
                         fields[v]['data'] = row_stack(
@@ -285,11 +288,13 @@ class pyrad_IDL(pyart.core.Radar):
             elevations.extend([data['elevation'][0]]*N_az)
             nyquist.extend([data['nyquist_vel']]*N_az)
             azimuths.extend(list(data['azimuth']))
-            warnings.warn("Warning, sweep rank could not be found, using first rank")
+            warnings.warn(
+                "Warning, sweep rank could not be found, using first rank")
 
             starttime, endtime = findTimes(1)
             interval = ((endtime-starttime)/N_az)
-            #time_lapse = np.arange(starttime+(0.5*interval), endtime, interval)
+            # time_lapse = np.arange(
+            #     starttime+(0.5*interval), endtime, interval)
             # because this is a single sweep
             time_lapse = np.around(
                 np.arange(0.+(0.5*interval), endtime-starttime, interval))
@@ -351,6 +356,7 @@ class pyrad_IDL(pyart.core.Radar):
             instrument_parameters=instrument_parameters)
 
 # -------------------------- classes - MCH --------------------------- #
+
 
 class pyrad_MCH(pyart.core.Radar):
     def __init__(self, filename, field_names=None, max_range=np.Inf):
@@ -673,7 +679,7 @@ def readMXPOLRadData(filename, variableList, max_range=np.Inf, min_range=0):
     for varname in variableList:
         try:
             varPol[varname] = ncid.variables[varname][:].T
-        except:
+        except Exception:
             pass
 
     varPol['resolution'] = ncid.__dict__['RangeResolution-value']
@@ -707,6 +713,7 @@ def readMXPOLRadData(filename, variableList, max_range=np.Inf, min_range=0):
     ncid.close()
 
     return metadata, varPol
+
 
 def readIDLRadData(filename, variableList, max_range=np.Inf, min_range=0):
     """
@@ -743,14 +750,14 @@ def readIDLRadData(filename, variableList, max_range=np.Inf, min_range=0):
     for varname in variableList:
         try:
             varPol[varname] = ncid.variables[varname][:].T
-        except:
+        except Exception:
             pass
 
     varPol['resolution'] = ncid.__dict__['RangeResolution-value']
     varPol['range'] = rrange
     varPol['range_units'] = ncid.__dict__['RangeResolution-unit']
     # because this data seems to be on -180 to 180
-    #varPol['azimuth'] = (ncid.variables['Azimuth'][:] + 180)%360
+    # varPol['azimuth'] = (ncid.variables['Azimuth'][:] + 180)%360
     varPol['azimuth'] = ncid.variables['Azimuth'][:]
     try:
         varPol['azim_units'] = ncid.__dict__['Azimuth-unit']
@@ -879,11 +886,11 @@ def load_myconfig(filename=None):
     global _DEFAULT_METADATA
     global _DEFAULT_RADAR_INFO
 
-    spec = importlib.util.spec_from_file_location("metadata_config", 
+    spec = importlib.util.spec_from_file_location("metadata_config",
                                                   filename)
     cfile = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(cfile)
-    
+
     _DEFAULT_METADATA = cfile.MY_METADATA
     _DEFAULT_POLARNAMES = cfile.MY_POLARNAMES
     _DEFAULT_RADAR_INFO = cfile.RADAR_INFO
@@ -1030,14 +1037,17 @@ def convert_polvar_name(convention, polvar):
         'STA1', 'STA2', 'WBN', 'ZHC', 'ZDRC', 'ZDRP', 'Kdpc', 'Rhohvc']
     MCH_list = [
         'Z', 'ZV', 'ZDR', 'PHIDP', 'V', 'V', 'W', 'RHO', 'CLUT', 'MPH', 'STA1',
-        'STA2', 'WBN', 'Zhc', 'Zdrc', 'Hydrometeor_type_from_Besic1', 'Kdpc', 'RHOC']
+        'STA2', 'WBN', 'Zhc', 'Zdrc', 'Hydrometeor_type_from_Besic1', 'Kdpc',
+        'RHOC']
     # ZhCorr and ZdrCorr have been changed to Zhc and Zdrc!
     LTE_list = [
-        'Zh', 'Zv', 'Zdr', 'Phidp', 'RVel', 'Rvel', 'Sw', 'Rhohv', 'Clut', 'mph',
-        'sta1', 'sta2', 'wbn', 'Zhc', 'Zdrc', 'Hydroclass', 'Kdpc', 'Rhohvc']
+        'Zh', 'Zv', 'Zdr', 'Phidp', 'RVel', 'Rvel', 'Sw', 'Rhohv', 'Clut',
+        'mph', 'sta1', 'sta2', 'wbn', 'Zhc', 'Zdrc', 'Hydroclass', 'Kdpc',
+        'Rhohvc']
     IDL_list = [
-        'Zh', 'Zv', 'Zdr', 'Phidp_raw', 'V', 'V', 'W', 'uRhohv', 'CLUT', 'MPH', 'STA1',
-        'STA2', 'WBN', 'Zhc', 'Zdrc', 'TYPECLUS2', 'Kdpc', 'Rhohvc']
+        'Zh', 'Zv', 'Zdr', 'Phidp_raw', 'V', 'V', 'W', 'uRhohv', 'CLUT',
+        'MPH', 'STA1', 'STA2', 'WBN', 'Zhc', 'Zdrc', 'TYPECLUS2', 'Kdpc',
+        'Rhohvc']
     pyrad_list = [
         'reflectivity', 'reflectivity_vv', 'differential_reflectivity',
         'differential_phase', 'velocity', 'velocity', 'spectrum_width',

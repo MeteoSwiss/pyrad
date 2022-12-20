@@ -231,8 +231,9 @@ def main(cfgfile, starttime=None, endtime=None, trajfile="", trajtype='plane',
 
             # process all data sets
             dscfg, traj = _process_datasets(
-                dataset_levels, cfg, dscfg, radar_list, master_voltime, traj=traj,
-                infostr=infostr, MULTIPROCESSING_DSET=MULTIPROCESSING_DSET,
+                dataset_levels, cfg, dscfg, radar_list, master_voltime,
+                traj=traj, infostr=infostr,
+                MULTIPROCESSING_DSET=MULTIPROCESSING_DSET,
                 MULTIPROCESSING_PROD=MULTIPROCESSING_PROD)
 
             # delete variables
@@ -603,8 +604,8 @@ def main_cosmo(cfgfile, starttime=None, endtime=None, trajfile="", infostr=""):
     print('- This is the end my friend! See you soon!')
 
 
-def main_cosmo_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
-                  proc_period=60, proc_finish=None):
+def main_cosmo_rt(cfgfile_list, starttime=None, endtime=None,
+                  infostr_list=None, proc_period=60, proc_finish=None):
     """
     main flow control. Processes radar data in real time. The start and end
     processing times can be determined by the user. This function is inteded
@@ -832,9 +833,8 @@ def main_cosmo_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
     return end_proc
 
 
-
 def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
-               gather_plots = True):
+               gather_plots=True):
     """
     Main flow control. Processes radar data off-line over a period of time
     given either by the user, a trajectory file, or determined by the last
@@ -852,11 +852,11 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
         Information string about the actual data processing
         (e.g. 'RUN57'). This string is added to product files.
     """
-    GECSX_MANDATORY = ['frequency', 'radar_beam_width_h','pulse_width',
+    GECSX_MANDATORY = ['frequency', 'radar_beam_width_h', 'pulse_width',
                        'txpwrh', 'AntennaGainH', 'mflossh', 'lrxh']
 
     GECSX_OPTIONAL = ['attg', 'AzimTol', 'mosotti_factor', 'refcorr',
-                     'RadarPosition']
+                      'RadarPosition']
 
     print("- PYRAD version: {} (compiled {} by {})".format(
         pyrad_version.version, pyrad_version.compile_date_time,
@@ -900,10 +900,9 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
 
         nvolumes = len(masterfilelist)
         if nvolumes == 0:
-            warn("WARNING: Could not find any valid radar data between "
-                "{} and {}".format(
-                    starttimes[0].strftime('%Y-%m-%d %H:%M:%S'),
-                    endtimes[-1].strftime('%Y-%m-%d %H:%M:%S')))
+            warn(f"WARNING: Could not find any valid radar data between "
+                 f"{starttimes[0].strftime('%Y-%m-%d %H:%M:%S')} and "
+                 f"{endtimes[-1].strftime('%Y-%m-%d %H:%M:%S')}")
             warn('WARNING: Proceeding without radar reference')
         print('- Number of volumes to process: {}'.format(nvolumes))
         print('- Start time: {}'.format(
@@ -936,8 +935,8 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
                 continue
             try:
                 dset[k] = datacfg[k]
-            except:
-                msg = 'Mandatory GECSX key {:s} is missing from loc file'.format(k)
+            except Exception:
+                msg = f'Mandatory GECSX key {k} is missing from loc file'
                 raise ValueError(msg)
         for k in GECSX_OPTIONAL:
             if k in datacfg.keys():
@@ -946,14 +945,15 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
         if len(radar_list) == 0:
             valid_radarpos = False
             if 'RadarPosition' in dset:
-                if ('latitude' in dset['RadarPosition'] and
-                    'longitude' in dset['RadarPosition'] and
-                    'altitude' in dset['RadarPosition']):
+                if ('latitude' in dset['RadarPosition']
+                        and 'longitude' in dset['RadarPosition']
+                        and 'altitude' in dset['RadarPosition']):
                     valid_radarpos = True
             if not valid_radarpos:
-                raise ValueError('When no radar data is provided, the structure ' +
-                         '"RadarPosition" with field "altitude", "latitude" '
-                         + 'and "longitude" must be provided in the loc file')
+                raise ValueError(
+                    'When no radar data is provided, the structure '
+                    '"RadarPosition" with field "altitude", "latitude" '
+                    'and "longitude" must be provided in the loc file')
             for k in dset['RadarPosition'].keys():
                 if type(dset['RadarPosition'][k]) != list:
                     dset['RadarPosition'][k] = [dset['RadarPosition'][k]]
@@ -970,11 +970,11 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
         for dset in dscfg:
             gather_dir = str(Path(cfg['saveimgbasepath'], cfg['name'], dset))
             print('Copying all generated figures into dir {:s}...'.format(
-                gather_dir + '/ALL_FIGURES/'))
+                  gather_dir + '/ALL_FIGURES/'))
             for ex in img_ext:
                 if os.path.exists(gather_dir):
                     cmd = ('cd {:s}; mkdir -p ALL_FIGURES; find . -type f -name "*.{:s}" '.format(gather_dir,
                                        ex) + '-exec cp {} ALL_FIGURES \\;')
-                    subprocess.call(cmd, shell = True)
+                    subprocess.call(cmd, shell=True)
 
     print('- This is the end my friend! See you soon!')

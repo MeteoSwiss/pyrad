@@ -37,7 +37,8 @@ from ..io.read_data_other import read_ml_ts
 from ..io.write_data import write_sun_hits, write_sun_retrieval
 from ..io.write_data import write_excess_gates, write_ts_ml, write_histogram
 from ..io.write_data import write_timeseries_point, write_centroids
-from ..io.write_data import write_rhi_profile
+from ..io.write_data import write_rhi_profile, write_vpr_theo_params
+from ..io.write_data import write_vpr_info
 
 from ..graph.plots import plot_sun_hits, plot_histogram2, plot_scatter
 from ..graph.plots import plot_centroids
@@ -892,8 +893,10 @@ def generate_vpr_products(dataset, prdcfg):
             User defined parameters:
                 dpi: int
                     The pixel density of the plot. Default 72
-        'SAVE_ML': Saves an object containing the melting layer retrieval
-            information in a C/F radial file
+        'WRITE_VPR_THEO_PARAMS': Writes the parameters of the theoretical VPR
+            in a text file
+        'WRITE_VPR_INFO': Writes a dictionary containing relevant parameters
+        of the VPR profile retrieval into a text file
         All the products of the 'VOL' dataset group
 
     Parameters
@@ -960,6 +963,44 @@ def generate_vpr_products(dataset, prdcfg):
         print('----- save to '+' '.join(figfname_list))
 
         return figfname_list
+
+    if prdcfg['type'] == 'WRITE_VPR_THEO_PARAMS':
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdcfg['prdname'], timeinfo=prdcfg['timeinfo'])
+
+        csvfname = make_filename(
+            'theo', prdcfg['dstype'], 'VPR', ['csv'],
+            timeinfo=prdcfg['timeinfo'], timeformat='%Y%m%d%H%M%S')[0]
+
+        csvfname = savedir+csvfname
+
+        write_vpr_theo_params(dataset['vpr_theo_dict'], csvfname)
+
+        print('saved CSV file: {}'.format(csvfname))
+
+        return csvfname
+
+    if prdcfg['type'] == 'WRITE_VPR_INFO':
+        if 'vpr_info' not in dataset:
+            warn('No VPR info available')
+            return None
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdcfg['prdname'], timeinfo=prdcfg['timeinfo'])
+
+        csvfname = make_filename(
+            'info', prdcfg['dstype'], 'VPR', ['csv'],
+            timeinfo=prdcfg['timeinfo'], timeformat='%Y%m%d%H%M%S')[0]
+
+        csvfname = savedir+csvfname
+
+        write_vpr_info(dataset['vpr_info'], csvfname)
+
+        print('saved CSV file: {}'.format(csvfname))
+
+        return csvfname
 
     return generate_vol_products(dataset_aux, prdcfg)
 

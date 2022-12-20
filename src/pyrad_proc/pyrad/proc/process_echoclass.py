@@ -94,7 +94,7 @@ def process_echo_id(procstatus, dscfg, radar_list=None):
             rhv_field = get_fieldname_pyart(datatype)
         if datatype == 'uPhiDP':
             phi_field = get_fieldname_pyart(datatype)
-        
+
     ind_rad = int(radarnr[5:8])-1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
@@ -652,7 +652,7 @@ def process_filter_snr(procstatus, dscfg, radar_list=None):
     if snr_field not in radar.fields:
         warn('Unable to filter dataset according to SNR. Missing SNR field')
         return None, None
-    
+
     try:
         gatefilter = pyart.filters.snr_based_gate_filter(
             radar, snr_field=snr_field, min_snr=dscfg['SNRmin'])
@@ -660,19 +660,19 @@ def process_filter_snr(procstatus, dscfg, radar_list=None):
         # Pyart-ARM
         min_snr = dscfg['SNRmin']
         max_snr = None
-        
+
         # filter gates based upon field parameters
         radar_aux = deepcopy(radar)
         gatefilter = pyart.filters.GateFilter(radar_aux)
-    
+
         if ((min_snr is not None or max_snr is not None) and
                 (snr_field in radar_aux.fields)):
             gatefilter.exclude_masked(snr_field)
             gatefilter.exclude_invalid(snr_field)
             if min_snr is not None:
                 gatefilter.exclude_below(snr_field, min_snr)
-         
-            
+
+
     is_low_snr = gatefilter.gate_excluded == 1
 
     for datatypedescr in dscfg['datatype']:
@@ -1357,7 +1357,7 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
             hydro_names = (
                 'AG', 'CR', 'LR', 'RP', 'RN', 'VI', 'WS', 'MH', 'IH/HDG')
             var_names = ('dBZ', 'ZDR', 'KDP', 'RhoHV', 'H_ISO0')
-        
+
         ARM_VERSION = False
         try:
             fields_dict = pyart.retrieve.hydroclass_semisupervised(
@@ -1374,11 +1374,11 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
             warn('You are probably using PyART-ARM')
             warn('Please use PyART-MCH to get all functionalities')
             fields_dict = pyart.retrieve.hydroclass_semisupervised(
-                radar, mass_centers=mass_centers, weights=weights, 
-                refl_field=refl_field, zdr_field=zdr_field, 
-                rhv_field=rhv_field, kdp_field=kdp_field, 
+                radar, mass_centers=mass_centers, weights=weights,
+                refl_field=refl_field, zdr_field=zdr_field,
+                rhv_field=rhv_field, kdp_field=kdp_field,
                 temp_field=temp_field)
-            
+
         # prepare for exit
         new_dataset = {'radar_out': deepcopy(radar)}
         new_dataset['radar_out'].fields = dict()
@@ -2087,8 +2087,6 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
                 temp_field = 'temperature'
             if datatype == 'TEMPc':
                 temp_field = 'corrected_temperature'
-            if datatype == 'dBZc':
-                refl_field = 'corrected_reflectivity'
             if datatype == 'RhoHV':
                 rhohv_field_obs = 'cross_correlation_ratio'
             if datatype == 'RhoHVc':
@@ -2152,15 +2150,6 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
         age_iso0 = dscfg.get('age_iso0', 3.)
         ml_thickness_iso0 = dscfg.get('ml_thickness_iso0', 700.)
         get_iso0 = dscfg.get('get_iso0', True)
-
-        ml_obj, ml_dict, iso0_dict, _ = pyart.retrieve.melting_layer_mf(
-            radar, refl_field=refl_field, rhohv_field=rhohv_field,
-            ml_field='melting_layer', ml_pos_field='melting_layer_height',
-            iso0_field='height_over_iso0', max_range=max_range,
-            detect_threshold=detect_threshold, interp_holes=interp_holes,
-            max_length_holes=max_length_holes,
-            check_min_length=check_min_length, get_iso0=get_iso0)
-
         ml_memory_max = dscfg.get('ml_memory_max', 0.)
         datatypedescr = dscfg.get('ml_datatype', None)
 

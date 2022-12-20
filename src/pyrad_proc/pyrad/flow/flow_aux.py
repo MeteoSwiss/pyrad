@@ -944,6 +944,19 @@ def _create_cfg_dict(cfgfile):
         cfg.update({'ScanList': None})
     else:
         cfg.update({'ScanList': get_scan_list(cfg['ScanList'])})
+
+    # to use when we need to combine multiple files corresponding to multiple
+    # and data types
+    if 'DataTypeID' not in cfg:
+        cfg.update({'DataTypeID': None})
+
+    if 'MasterScanTimeTol' not in cfg:
+        #  0: no tolerance
+        #  1: time master scan + ScanPeriod
+        # -1: time master scan - ScanPeriod
+        cfg.update({
+            'MasterScanTimeTol': 0.*np.ones(
+                cfg['NumRadars'], dtype=np.float32)})
     if 'lastStateFile' not in cfg:
         cfg.update({'lastStateFile': None})
     if 'datapath' not in cfg:
@@ -1033,7 +1046,7 @@ def _create_cfg_dict(cfgfile):
         'dBADUtodBmh', 'dBADUtodBmv', 'mflossh', 'mflossv', 'radconsth',
         'radconstv', 'txpwrh', 'txpwrv', 'attg', 'lradomeh', 'lradomev',
         'lrxh', 'lrxv', 'ltxh', 'ltxv', 'mosotti_factor', 'refcorr',
-        'AzimTol']
+        'AzimTol', 'MasterScanTimeTol']
     for param in fltarr_list:
         if param in cfg and isinstance(cfg[param], float):
             cfg[param] = [cfg[param]]
@@ -1044,6 +1057,79 @@ def _create_cfg_dict(cfgfile):
         for param in fltarr_list:
             if isinstance(cfg['RadarPosition'][param], float):
                 cfg['RadarPosition'][param] = [cfg['RadarPosition'][param]]
+
+    # keyword to force the use of MF scale in ODIM data
+    if 'MFScale' not in cfg:
+        cfg.update({'MFScale': 0})
+
+    # parameters necessary to read correctly MF grid binary files
+    if 'BinFileParams' not in cfg:
+        bin_file_params = {
+            'xres': 1.,
+            'yres': 1.,
+            'nx': 1536,
+            'ny': 1536,
+            'nz': 1,
+            'dtype': 'float32',
+            'date_format': '%Y%m%d',
+            'added_time': 86400.,
+            'x_offset': -619652.074056,
+            'y_offset': -3526818.337932,
+            'lat_0': 90.,
+            'lon_0': 0.,
+            'proj': 'gnom',
+            'datatype': ['Raccu']
+        }
+        cfg.update({'BinFileParams': bin_file_params})
+    else:
+        if 'xres' not in cfg['BinFileParams']:
+            warn('BinFileParams: xres not specified. Assumed 1')
+            cfg['BinFileParams'].update({'xres': 1.})
+        if 'yres' not in cfg['BinFileParams']:
+            warn('BinFileParams: yres not specified. Assumed 1')
+            cfg['BinFileParams'].update({'yres': 1.})
+        if 'nx' not in cfg['BinFileParams']:
+            warn('BinFileParams: nx not specified. Assumed 1536')
+            cfg['BinFileParams'].update({'nx': 1536})
+        if 'ny' not in cfg['BinFileParams']:
+            warn('BinFileParams: ny not specified. Assumed 1536')
+            cfg['BinFileParams'].update({'ny': 1536})
+        if 'nz' not in cfg['BinFileParams']:
+            warn('BinFileParams: nz not specified. Assumed 1')
+            cfg['BinFileParams'].update({'nz': 1.})
+        if 'dtype' not in cfg['BinFileParams']:
+            warn('BinFileParams: dtype not specified. Assumed float32')
+            cfg['BinFileParams'].update({'dtype': 'float32'})
+        if 'date_format' not in cfg['BinFileParams']:
+            warn('BinFileParams: date_format not specified. Assumed %Y%m%d')
+            cfg['BinFileParams'].update({'date_format': '%Y%m%d'})
+        if 'added_time' not in cfg['BinFileParams']:
+            warn('BinFileParams: added_time not specified. Assumed 86400.')
+            cfg['BinFileParams'].update({'added_time': 86400.})
+        if 'x_offset' not in cfg['BinFileParams']:
+            warn('BinFileParams: x_offset not specified.'
+                 ' Assumed -619652.074056')
+            cfg['BinFileParams'].update({'x_offset': -619652.074056})
+        if 'y_offset' not in cfg['BinFileParams']:
+            warn('BinFileParams: y_offset not specified.'
+                 ' Assumed -3526818.337932')
+            cfg['BinFileParams'].update({'y_offset': -3526818.337932})
+        if 'lat_0' not in cfg['BinFileParams']:
+            warn('BinFileParams: lat_0 not specified. Assumed 90.')
+            cfg['BinFileParams'].update({'lat_0': 90.})
+        if 'lon_0' not in cfg['BinFileParams']:
+            warn('BinFileParams: lat_0 not specified. Assumed 0.')
+            cfg['BinFileParams'].update({'lat_0': 0.})
+        if 'proj' not in cfg['BinFileParams']:
+            warn('BinFileParams: proj not specified. Assumed gnom')
+            cfg['BinFileParams'].update({'proj': 'gnom'})
+        if 'datatype' not in cfg['BinFileParams']:
+            warn('BinFileParams: datatype not specified. Assumed Raccu')
+            cfg['BinFileParams'].update({'datatype': 'Raccu'})
+
+        if isinstance(cfg['BinFileParams']['datatype'], str):
+            cfg['BinFileParams']['datatype'] = [
+                cfg['BinFileParams']['datatype']]
 
     return cfg
 
@@ -1070,6 +1156,7 @@ def _create_datacfg_dict(cfg):
     datacfg.update({'psrpath': cfg['psrpath']})
     datacfg.update({'iqpath': cfg['iqpath']})
     datacfg.update({'ScanList': cfg['ScanList']})
+    datacfg.update({'MasterScanTimeTol': cfg['MasterScanTimeTol']})
     datacfg.update({'TimeTol': cfg['TimeTol']})
     datacfg.update({'NumRadars': cfg['NumRadars']})
     datacfg.update({'cosmopath': cfg['cosmopath']})
@@ -1083,6 +1170,10 @@ def _create_datacfg_dict(cfg):
     datacfg.update({'CosmoForecasted': int(cfg['CosmoForecasted'])})
     datacfg.update({'path_convention': cfg['path_convention']})
     datacfg.update({'metranet_read_lib': cfg['metranet_read_lib']})
+
+    datacfg.update({'BinFileParams': cfg['BinFileParams']})
+    datacfg.update({'MFScale': cfg['MFScale']})
+    datacfg.update({'DataTypeID': cfg['DataTypeID']})
 
     # Modify size of radar or radar spectra object
     datacfg.update({'elmin': cfg.get('elmin', None)})

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Pyrad: Python Radar Toolkit
+""" Python Radar Toolkit
 
 Pyrad is a Python module containing
 the utilities that run the MeteoSwiss radar processing framework.
@@ -184,5 +184,6 @@ if __name__ == '__main__':
             'local_scheme': 'dirty-tag',
         },
     )
+
 
 

@@ -310,6 +310,7 @@ rain_rate = 'rain_rate'
 radar_estimated_rain_rate = 'radar_estimated_rain_rate'
 corrected_radar_estimated_rain_rate = 'corrected_radar_estimated_rain_rate'
 rainfall_accumulation = 'rainfall_accumulation'
+radar_rainrate_relation = 'radar_rainrate_relation'
 
 # melting layer
 melting_layer = 'melting_layer'
@@ -687,6 +688,7 @@ DEFAULT_FIELD_NAMES = {
     'radar_estimated_rain_rate': radar_estimated_rain_rate,
     'corrected_radar_estimated_rain_rate': corrected_radar_estimated_rain_rate,
     'rainfall_accumulation': rainfall_accumulation,
+    'radar_rainrate_relation': radar_rainrate_relation,
     'precipitation_type': precipitation_type,
     'radar_echo_classification': radar_echo_classification,
     'corrected_radar_echo_classification': corrected_radar_echo_classification,
@@ -2339,6 +2341,19 @@ DEFAULT_METADATA = {
                        40., 63., 100., 160., 250., 500.],
         'coordinates': 'elevation azimuth range'},
 
+    radar_rainrate_relation: {
+        'units': '-',
+        'standard_name': 'radar_rainrate_relation',
+        'long_name': 'Radar rain rate relation',
+        'labels': ['None', 'Z-R', 'Z-S', 'KDP-R'],
+        'ticks': [1, 2, 3, 4],
+        'boundaries': [0.5, 1.5, 2.5, 3.5, 4.5],
+        'coordinates': 'elevation azimuth range',
+        'scale_factor': 1,
+        'add_offset': 0,
+        '_FillValue': 0,
+        '_Write_as_dtype': 'uint8'},
+
     sun_hit_h: {
         'units': '-',
         'standard_name': 'sun_hit_h',
@@ -3969,6 +3984,8 @@ DEFAULT_FIELD_COLORMAP = {
     sun_hit_v: 'pyart_LangRainbow12',
     sun_hit_zdr: 'pyart_LangRainbow12',
 
+    radar_rainrate_relation: 'pyart_LangRainbow12',
+
     precipitation_type: 'pyart_LangRainbow12',
     radar_echo_classification: 'pyart_LangRainbow12',
     corrected_radar_echo_classification: 'pyart_LangRainbow12',
@@ -4074,28 +4091,28 @@ DEFAULT_FIELD_COLORMAP = {
 DEFAULT_FIELD_LIMITS = {
     # field name : limits
     #reflectivity: (-30., 75.),
-    reflectivity: (-30., 85.),
+    reflectivity: (-10., 70.),
     normalized_reflectivity: (-6., 6.),
     linear_reflectivity: (0., 1e7),
-    avg_reflectivity: (-30., 75.),
-    quant05_reflectivity: (-30., 75.),
-    quant10_reflectivity: (-30., 75.),
-    quant20_reflectivity: (-30., 75.),
-    quant50_reflectivity: (-30., 75.),
-    quant80_reflectivity: (-30., 75.),
-    quant90_reflectivity: (-30., 75.),
-    quant95_reflectivity: (-30., 75.),
-    bird_reflectivity: (-30., 75.),
-    corrected_reflectivity: (-30., 75.),
-    total_power: (-30., 75.),
+    avg_reflectivity: (-10., 70.),
+    quant05_reflectivity: (-10., 70.),
+    quant10_reflectivity: (-10., 70.),
+    quant20_reflectivity: (-10., 70.),
+    quant50_reflectivity: (-10., 70.),
+    quant80_reflectivity: (-10., 70.),
+    quant90_reflectivity: (-10., 70.),
+    quant95_reflectivity: (-10., 70.),
+    bird_reflectivity: (-10., 70.),
+    corrected_reflectivity: (-10., 70.),
+    total_power: (-10., 70.),
     # unfiltered_reflectivity: (-30., 75.),
-    unfiltered_reflectivity: (-30., 85.),
-    corrected_unfiltered_reflectivity:  (-30., 75.),
+    unfiltered_reflectivity: (-10., 70.),
+    corrected_unfiltered_reflectivity:  (-10., 70.),
     # reflectivity_vv: (-30., 75.),
-    reflectivity_vv: (-30., 85.),
-    corrected_reflectivity_vv: (-30., 75.),
+    reflectivity_vv: (-10., 70.),
+    corrected_reflectivity_vv: (-10., 70.),
     # unfiltered_reflectivity_vv: (-30., 75.),
-    unfiltered_reflectivity_vv: (-30., 85.),
+    unfiltered_reflectivity_vv: (-10., 70.),
     signal_to_noise_ratio: (-5., 30.),
     signal_to_noise_ratio_hh: (-5., 30.),
     signal_to_noise_ratio_vv: (-5., 30.),
@@ -4107,7 +4124,7 @@ DEFAULT_FIELD_LIMITS = {
     bird_density: (0., 400.),
     radar_cross_section_hh: (-50., 55.),
     radar_cross_section_vv: (-50., 55.),
-    sigma_zh: (0., 10.),
+    sigma_zh: (0., 20.),
     stat_test_lag1: (0., 10.),
     stat_test_lag2: (0., 10.),
     wide_band_noise: (0., 25.),
@@ -4173,10 +4190,10 @@ DEFAULT_FIELD_LIMITS = {
     normalized_coherent_power: (0., 1.),
 
     #differential_reflectivity: (-1., 8.),
-    differential_reflectivity: (-8., 12.),
+    differential_reflectivity: (-10., 10.),
     corrected_differential_reflectivity: (-1., 2.),
     #unfiltered_differential_reflectivity: (-1., 8.),
-    unfiltered_differential_reflectivity: (-8., 12.),
+    unfiltered_differential_reflectivity: (-10., 10.),
     differential_reflectivity_in_precipitation: (-10., 10.),
     differential_reflectivity_in_snow: (-10., 10.),
     differential_reflectivity_column_height: (0., 6.),
@@ -4184,10 +4201,10 @@ DEFAULT_FIELD_LIMITS = {
     unfiltered_spectral_differential_reflectivity: (-1., 8.),
 
     #cross_correlation_ratio: (0.7, 1.),
-    cross_correlation_ratio: (0., 1.),
+    cross_correlation_ratio: (0.3, 1.),
     corrected_cross_correlation_ratio: (0.7, 1.),
     #unfiltered_cross_correlation_ratio: (0.7, 1.),
-    unfiltered_cross_correlation_ratio: (0., 1.),
+    unfiltered_cross_correlation_ratio: (0.3, 1.),
     uncorrected_cross_correlation_ratio: (0.7, 1.),
     logarithmic_cross_correlation_ratio: (0, 4),
     cross_correlation_ratio_in_rain: (0.9, 1.),
@@ -4271,12 +4288,8 @@ DEFAULT_FIELD_LIMITS = {
     frequency_of_occurrence: (0, 100),
 
     temperature: (-60, 30),
-<<<<<<< HEAD
-    height_over_iso0: (-2500., 2500.),
-=======
     height_over_iso0: (-6000., 6000.),
     corrected_height_over_iso0: (-6000., 6000.),
->>>>>>> dev
     iso0_height: (0., 5000.),
     corrected_iso0_height: (0., 5000.),
 

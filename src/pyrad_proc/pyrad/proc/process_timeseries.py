@@ -62,7 +62,7 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
         lat : float. Dataset keyword
             the latitude [deg]. Use when latlon is True.
         alt : float. Dataset keyword
-            altitude [m MSL]. Use when latlon is True.
+            altitude [m MSL]. Use when latlon is True and truealt is True
         ele : float. Dataset keyword
             radar elevation [deg]. Use when latlon is False or when latlon is
             True and truealt is False
@@ -133,7 +133,6 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
     if dscfg['latlon']:
         lon = dscfg['lon']
         lat = dscfg['lat']
-        alt = dscfg['alt']
         x, y = pyart.core.geographic_to_cartesian(lon, lat, projparams)
 
         if not dscfg['truealt']:
@@ -144,14 +143,14 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
             elrad = dscfg['ele'] * np.pi / 180.
             r_ground = np.sqrt(x ** 2. + y ** 2.)
             r = r_ground / np.cos(elrad)
-            alt_radar = radar.altitude['data']+np.sqrt(
+            alt = radar.altitude['data']+np.sqrt(
                 r ** 2. + re ** 2. + 2. * r * re * np.sin(elrad)) - re
-            alt_radar = alt_radar[0]
+            alt = alt[0]
         else:
-            alt_radar = dscfg['alt']
+            alt = dscfg['alt']
 
         r, az, el = pyart.core.cartesian_to_antenna(
-            x, y, alt_radar-radar.altitude['data'])
+            x, y, alt-radar.altitude['data'])
         r = r[0]
         az = az[0]
         el = el[0]
@@ -247,33 +246,18 @@ def process_multiple_points(procstatus, dscfg, radar_list=None):
 
         datatype : string. Dataset keyword
             The data type where we want to extract the point measurement
-        single_point : boolean. Dataset keyword
-            if True only one gate per radar volume is going to be kept.
-            Otherwise all gates within the azimuth and elevation tolerance
-            are going to be kept. This is useful to extract all data from
-            fixed pointing scans. Default True
-        latlon : boolean. Dataset keyword
-            if True position is obtained from latitude, longitude information,
-            otherwise position is obtained from antenna coordinates
-            (range, azimuth, elevation).
         truealt : boolean. Dataset keyword
             if True the user input altitude is used to determine the point of
             interest.
             if False use the altitude at a given radar elevation ele over the
             point of interest.
-        lon : float. Dataset keyword
-            the longitude [deg]. Use when latlon is True.
-        lat : float. Dataset keyword
-            the latitude [deg]. Use when latlon is True.
-        alt : float. Dataset keyword
+        coord_fname : string
+            File name containing the points coordinates
+        alt_points : float. Dataset keyword
             altitude [m MSL]. Use when latlon is True.
-        ele : float. Dataset keyword
+        ele_points : float. Dataset keyword
             radar elevation [deg]. Use when latlon is False or when latlon is
             True and truealt is False
-        azi : float. Dataset keyword
-            radar azimuth [deg]. Use when latlon is False
-        rng : float. Dataset keyword
-            range from radar [m]. Use when latlon is False
         AziTol : float. Dataset keyword
             azimuthal tolerance to determine which radar azimuth to use [deg]
         EleTol : float. Dataset keyword

@@ -13,7 +13,7 @@ RadarName STRARR 1
 
 # rad4alp radar range resolution L:Low H:High
 RadarRes STRARR 1
-	H
+	L
 
 # Names of the radar scans in the specified sector
 ScanList STRARR 1

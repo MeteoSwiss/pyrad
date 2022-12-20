@@ -101,6 +101,7 @@ Reading other data
     read_trt_info2
     read_thundertracking_info
     read_rhi_profile
+    read_vpr_theo_parameters
     read_histogram
     read_quantiles
     read_profile_ts
@@ -128,12 +129,15 @@ Writing data
     write_trt_cell_scores
     write_trt_cell_lightning
     write_trt_rpc
+    write_vpr_theo_params
+    write_vpr_info
     write_rhi_profile
     write_field_coverage
     write_cdf
     write_histogram
     write_quantiles
     write_multiple_points
+    write_multiple_points_grid
     write_ts_polar_data
     write_ts_grid_data
     write_ts_cum
@@ -176,6 +180,7 @@ Auxiliary functions
     find_hzt_file
     find_iso0_file
     find_iso0_grib_file
+    find_date_in_file_name
     _get_datetime
 
 Trajectory
@@ -222,6 +227,7 @@ from .read_data_other import read_excess_gates, read_histogram
 from .read_data_other import read_profile_ts, read_histogram_ts
 from .read_data_other import read_quantiles_ts, read_ml_ts, read_proc_periods
 from .read_data_other import read_centroids_npz, read_mf_vis
+from .read_data_other import read_vpr_theo_parameters
 
 from .read_data_sensor import read_lightning, read_lightning_traj
 from .read_data_sensor import get_sensor_data, read_smn, read_smn2
@@ -250,7 +256,8 @@ from .write_data import write_trt_cell_scores, write_trt_cell_lightning
 from .write_data import write_trt_info, write_fixed_angle, write_proc_periods
 from .write_data import write_trt_thundertracking_data, write_ts_grid_data
 from .write_data import write_trt_rpc, write_ts_stats, write_centroids
-from .write_data import write_multiple_points
+from .write_data import write_multiple_points, write_vpr_theo_params
+from .write_data import write_multiple_points_grid, write_vpr_info
 
 from .io_aux import get_save_dir, make_filename, get_new_rainbow_file_name
 from .io_aux import get_datetime, get_dataset_fields, map_hydro, map_Doppler
@@ -259,7 +266,7 @@ from .io_aux import get_fieldname_pyart, get_field_unit, get_fieldname_cosmo
 from .io_aux import generate_field_name_str, find_raw_cosmo_file
 from .io_aux import find_hzt_file, _get_datetime, get_rad4alp_prod_fname
 from .io_aux import get_rad4alp_dir, get_rad4alp_grid_dir, find_iso0_file
-from .io_aux import find_iso0_grib_file
+from .io_aux import find_iso0_grib_file, find_date_in_file_name
 
 from .trajectory import Trajectory
 

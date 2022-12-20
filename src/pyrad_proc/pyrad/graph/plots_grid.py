@@ -104,7 +104,7 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
 
     if fig is None:
         fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
-        
+
         if use_basemap:
             resolution = prdcfg['gridMapImageConfig'].get('mapres', 'l')
             if resolution not in ('c', 'l', 'i', 'h', 'f'):
@@ -130,8 +130,8 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
                 min_lat=min_lat, max_lat=max_lat)
             display.plot_grid(
                 field_name, level=level, norm=norm, ticks=ticks, title=titl,
-                ticklabs=ticklabs, mask_outside = mask_outside, vmin=vmin, vmax=vmax, 
-                alpha=alpha, fig=fig)
+                ticklabs=ticklabs, mask_outside=mask_outside, vmin=vmin,
+                vmax=vmax, alpha=alpha, fig=fig)
         else:
             resolution = prdcfg['gridMapImageConfig'].get('mapres', '110m')
             projection = cartopy.crs.PlateCarree()
@@ -153,13 +153,13 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
             display = pyart.graph.GridMapDisplay(grid)
             display.plot_grid(
                 field_name, level=level, norm=norm, ticks=ticks,
-                ticklabs=ticklabs, lat_lines=lat_lines, projection = projection,
-                lon_lines=lon_lines, vmin=vmin, embellish = False,
-                vmax=vmax, mask_outside = mask_outside, alpha=alpha, title=titl, 
-                colorbar_flag=colorbar_flag)
-            
+                ticklabs=ticklabs, lat_lines=lat_lines, projection=projection,
+                lon_lines=lon_lines, vmin=vmin, embellish=False,
+                add_grid_lines=True, vmax=vmax, mask_outside=mask_outside,
+                alpha=alpha, title=titl, colorbar_flag=colorbar_flag)
+
             # fig = plt.gcf()
-            # ax.set_extent([min_lon, max_lon, min_lat, max_lat])
+            ax.set_extent([min_lon, max_lon, min_lat, max_lat])
             # display.plot_crosshairs(lon=lon, lat=lat)
     else:
         if use_basemap:
@@ -167,29 +167,31 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
                 field_name, level=level, norm=norm, ticks=ticks,
                 lat_lines=lat_lines, lon_lines=lon_lines, title=titl,
                 ticklabs=ticklabs, colorbar_flag=False, embellish=False,
-                vmin=vmin, vmax=vmax, mask_outside = mask_outside,
+                vmin=vmin, vmax=vmax, mask_outside=mask_outside,
                 alpha=alpha, ax=ax, fig=fig)
         else:
             display.plot_grid(
-                field_name, level=level, norm=norm, ticks=ticks, projection = projection,
-                lat_lines=lat_lines, lon_lines=lon_lines, ticklabs=ticklabs,
-                colorbar_flag=False, embelish=False, vmin=vmin, vmax=vmax,
-                mask_outside = mask_outside, alpha=alpha, title=titl, ax=ax, fig=fig)
-   
+                field_name, level=level, norm=norm, ticks=ticks,
+                projection=projection, lat_lines=lat_lines,
+                lon_lines=lon_lines, ticklabs=ticklabs, colorbar_flag=False,
+                embellish=False, vmin=vmin, vmax=vmax,
+                mask_outside=mask_outside, alpha=alpha, title=titl, ax=ax,
+                fig=fig)
+
     if embellish:
         ax = plt.gca()
         if 'relief' in maps_list:
-              tiler = Stamen('terrain-background')
-              projection = tiler.crs
-              fig.delaxes(ax)
-              ax = fig.add_subplot(111, projection=projection)
-              warn(
-                  'The projection of the image is set to that of the ' +
-                  'background map, i.e. '+str(projection), UserWarning)
+            tiler = Stamen('terrain-background')
+            projection = tiler.crs
+            fig.delaxes(ax)
+            ax = fig.add_subplot(111, projection=projection)
+            warn(
+                'The projection of the image is set to that of the ' +
+                'background map, i.e. '+str(projection), UserWarning)
 
         for cartomap in maps_list:
             if cartomap == 'relief':
-                    ax.add_image(tiler, background_zoom)
+                ax.add_image(tiler, background_zoom)
             if cartomap == 'countries':
                 # add countries
                 countries = cartopy.feature.NaturalEarthFeature(
@@ -264,8 +266,7 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
                     rivers_europe, edgecolor='blue', facecolor='none')
             else:
                 warn('cartomap '+cartomap+' for resolution '+resolution +
-                      ' not available')
-                    
+                     ' not available')
 
     if save_fig:
         for fname in fname_list:
@@ -343,7 +344,7 @@ def plot_surface_raw(grid, field_name, level, prdcfg, fname_list, titl=None,
             field_name, level=level, norm=norm, ticks=ticks,
             ticklabs=ticklabs, colorbar_flag=False, vmin=vmin, vmax=vmax,
             alpha=alpha, title=titl, ax=ax, fig=fig)
-        
+
     if save_fig:
         for fname in fname_list:
             fig.savefig(fname, dpi=dpi)
