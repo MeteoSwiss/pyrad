@@ -25,7 +25,7 @@ jobs:
 
     - name: Build a binary wheel and a source tarball
       run: 
-        python -m build --sdist --outdir dist/
+        python -m build --sdist --outdir ${{github.workspace}}/dist/
     
     - name: Publish distribution 📦 to PyPI
       if: startsWith(github.ref, 'refs/tags')
