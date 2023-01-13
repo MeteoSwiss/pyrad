@@ -159,7 +159,7 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
                 alpha=alpha, title=titl, colorbar_flag=colorbar_flag)
 
             # fig = plt.gcf()
-            ax.set_extent([min_lon, max_lon, min_lat, max_lat])
+            # ax.set_extent([min_lon, max_lon, min_lat, max_lat])
             # display.plot_crosshairs(lon=lon, lat=lat)
     else:
         if use_basemap:
