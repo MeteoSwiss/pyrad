@@ -5055,7 +5055,7 @@ def merge_grids(grid1, grid2):
     z_equal = True
 
     x = pyart.config.get_metadata('x')
-    if np.array_equal(grid1.x['data'], grid2.x['data']):
+    if np.allclose(grid1.x['data'], grid2.x['data']):
         x['data'] = grid1.x['data']
     else:
         x['data'] = np.sort(np.unique(np.append(
@@ -5063,7 +5063,7 @@ def merge_grids(grid1, grid2):
         x_equal = False
 
     y = pyart.config.get_metadata('y')
-    if np.array_equal(grid1.y['data'], grid2.y['data']):
+    if np.allclose(grid1.y['data'], grid2.y['data']):
         y['data'] = grid1.y['data']
     else:
         y['data'] = np.sort(np.unique(np.append(
@@ -5071,7 +5071,7 @@ def merge_grids(grid1, grid2):
         y_equal = False
 
     z = pyart.config.get_metadata('z')
-    if np.array_equal(grid1.z['data'], grid2.z['data']):
+    if np.allclose(grid1.z['data'], grid2.z['data']):
         z['data'] = grid1.z['data']
     else:
         z['data'] = np.sort(np.unique(np.append(
@@ -5093,6 +5093,8 @@ def merge_grids(grid1, grid2):
                 grid.add_field(field, grid2.fields[field])
 
         return grid
+
+    warn('non-identical grids, interpolating...')
 
     # create new grid object
     grid = pyart.core.grid.Grid(
