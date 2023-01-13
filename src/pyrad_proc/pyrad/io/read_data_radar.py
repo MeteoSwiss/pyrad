@@ -188,11 +188,16 @@ def get_data(voltime, datatypesdescr, cfg):
                 products stored as gif files
             'RAD4ALPBIN': Format used for operational MeteoSwiss Cartesian
                 products stored as binary files
-            'PYRADGRID': Pyrad generated Cartesian grid products. For such
-                datatypes 'dataset' specifies the directory where the dataset
-                is stored and 'product' specifies the directory where the
-                product is stored.
+            'PYRADGRID': Pyrad generated Cartesian grid products stored in a
+                netcdf file. For such datatypes 'dataset' specifies the
+                directory where the dataset is stored and 'product' specifies
+                the directory where the product is stored.
                 Example: PYRADGRID:RR,RZC,SAVEVOL
+            'ODIMPYRADGRID': Pyrad generated Cartesian grid products in an
+                ODIM HDF5 file. For such datatypes 'dataset' specifies the
+                directory where the dataset is stored and 'product' specifies
+                the directory where the product is stored.
+                Example: ODIMPYRADGRID:RR,RZC,SAVEVOL
             'ODIMGRID': Gridded data in ODIM format. For such types 'dataset'
                 specifies the directory and file name date convention.
                 Example: ODIMGRID:dBZ,D{%Y-%m-%d}-F{%Y%m%d%H%M%S}.
@@ -285,6 +290,9 @@ def get_data(voltime, datatypesdescr, cfg):
     datatype_pyradgrid = list()
     dataset_pyradgrid = list()
     product_pyradgrid = list()
+    datatype_odimpyradgrid = list()
+    dataset_odimpyradgrid = list()
+    product_odimpyradgrid = list()
     datatype_odimgrid = list()
     dataset_odimgrid = list()
     datatype_psr = list()
@@ -376,6 +384,10 @@ def get_data(voltime, datatypesdescr, cfg):
             datatype_pyradgrid.append(datatype)
             dataset_pyradgrid.append(dataset)
             product_pyradgrid.append(product)
+        elif datagroup == 'ODIMPYRADGRID':
+            datatype_odimpyradgrid.append(datatype)
+            dataset_odimpyradgrid.append(dataset)
+            product_odimpyradgrid.append(product)
         elif datagroup == 'ODIMGRID':
             datatype_odimgrid.append(datatype)
             dataset_odimgrid.append(dataset)
@@ -423,6 +435,7 @@ def get_data(voltime, datatypesdescr, cfg):
     ndatatypes_satgrid = len(datatype_satgrid)
     ndatatypes_rad4alpIQ = len(datatype_rad4alpIQ)
     ndatatypes_pyradgrid = len(datatype_pyradgrid)
+    ndatatypes_odimpyradgrid = len(datatype_odimpyradgrid)
     ndatatypes_odimgrid = len(datatype_odimgrid)
     ndatatypes_psr = len(datatype_psr)
     ndatatypes_psrspectra = len(datatype_psrspectra)
@@ -634,7 +647,19 @@ def get_data(voltime, datatypesdescr, cfg):
     if ndatatypes_pyradgrid > 0:
         radar_aux = merge_fields_pyradgrid(
             cfg['loadbasepath'][ind_rad], cfg['loadname'][ind_rad], voltime,
-            datatype_pyradgrid, dataset_pyradgrid, product_pyradgrid, cfg)
+            datatype_pyradgrid, dataset_pyradgrid, product_pyradgrid, cfg,
+            termination='nc')
+        if radar_aux is not None:
+            if radar is not None:
+                radar = merge_grids(radar, radar_aux)
+            else:
+                radar = radar_aux
+
+    if ndatatypes_odimpyradgrid > 0:
+        radar_aux = merge_fields_pyradgrid(
+            cfg['loadbasepath'][ind_rad], cfg['loadname'][ind_rad], voltime,
+            datatype_odimpyradgrid, dataset_odimpyradgrid,
+            product_odimpyradgrid, cfg, termination='.h*')
         if radar_aux is not None:
             if radar is not None:
                 radar = merge_grids(radar, radar_aux)
@@ -4113,11 +4138,14 @@ def merge_fields_pyradgrid(basepath, loadname, voltime, datatype_list,
             datapath+fdatetime+'*'+datatype_list[i]+termination)
         if not filename:
             warn('No file found in '+datapath+fdatetime+'*' +
-                 datatype_list[i]+'.nc')
+                 datatype_list[i]+termination)
             continue
 
         try:
-            grid_aux = pyart.io.read_grid(filename[0])
+            if termination == '.nc':
+                grid_aux = pyart.io.read_grid(filename[0])
+            else:
+                grid_aux = pyart.aux_io.read_odim_grid_h5(filename[0])
         except OSError as ee:
             warn(str(ee))
             warn('Unable to read file '+filename[0])
