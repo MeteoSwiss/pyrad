@@ -1,8 +1,25 @@
+# This branch is intended for MeteoSwiss Py-ART developers. Pull requests should target this branch!
+
+**Master branch**
+
+[![tests](https://github.com/MeteoSwiss/pyrad/workflows/Test%20pyrad/badge.svg?branch=master)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests.yml)
+[![tests](https://github.com/MeteoSwiss/pyrad/workflows/Test%20pyrad%20ARM/badge.svg?branch=master)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_arm.yml)
+
+**Dev branch**
+
+[![tests](https://github.com/MeteoSwiss/pyrad/workflows/Test%20pyrad/badge.svg?branch=dev)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests.yml)
+[![tests](https://github.com/MeteoSwiss/pyrad/workflows/Test%20pyrad%20ARM/badge.svg?branch=dev)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_arm.yml)
+
+**Doc**
+
+[![doc](https://readthedocs.org/projects/pyrad-mch/badge/?version=latest)](https://pyrad-mch.readthedocs.io/en/latest/)
+
+
+---
 
 [![Ref doc](https://img.shields.io/badge/docs-users-4088b8.svg)](https://pyrad-mch.readthedocs.io/en/stable/)
 
-[![tests](https://github.com/MeteoSwiss/pyrad/workflows/Test%20pyrad/badge.svg)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests.yml)
-[![doc](https://readthedocs.org/projects/pyrad-mch/badge/?version=latest)](https://pyrad-mch.readthedocs.io/en/latest/)
+
 
 ![version](https://img.shields.io/badge/python-3.7-blue.svg)
 ![version](https://img.shields.io/badge/python-3.8-blue.svg)
@@ -56,6 +73,15 @@ Make sure to also get the submodules by running
 ```
     git clone --recursive https://github.com/MeteoSwiss/pyrad.git
 ```
+
+# Installation with conda
+To install from the conda repositories simply run
+
+```
+    conda install -c conda-forge pyart_mch
+    conda install -c conda-forge pyrad_mch
+```
+Note that you can also install *arm_pyart* instead of *pyart_mch*, which will use the [official Py-ART](https://github.com/ARM-DOE/pyart), but some functionalities of pyrad will be missing!
 
 # Installation
 To install Pyrad and its submodules please have a look at the [Pyrad user manual (pdf)](./additional_doc/pyrad_user_manual.pdf).

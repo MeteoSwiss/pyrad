@@ -31,9 +31,6 @@ from warnings import warn
 import numpy as np
 from scipy.spatial import cKDTree
 
-from pyart.util import cut_radar, compute_directional_stats
-from pyart.util import find_neighbour_gates
-from pyart.util import compute_azimuthal_average
 from pyart.config import get_metadata
 from pyart.core import Radar, geographic_to_cartesian_aeqd
 from pyart.core import cartesian_to_geographic_aeqd
@@ -191,6 +188,7 @@ def get_process_func(dataset_type, dsname):
             'GRID_TIMEAVG' format output:
                 'GRID_TIME_STATS': process_grid_time_stats
                 'GRID_TIME_STATS2': process_grid_time_stats2
+                'GRID_RAIN_ACCU': process_grid_rainfall_accumulation
             'INTERCOMP' format output:
                 'INTERCOMP': process_intercomp
                 'INTERCOMP_FIELDS': process_intercomp_fields
@@ -228,6 +226,7 @@ def get_process_func(dataset_type, dsname):
                 'RAIN_ACCU': process_rainfall_accumulation
             'TIMESERIES' format output:
                 'GRID_POINT_MEASUREMENT': process_grid_point
+                'GRID_MULTIPLE_POINTS': process_grid_multiple_points
                 'MULTIPLE_POINTS': process_multiple_points
                 'POINT_MEASUREMENT': process_point_measurement
                 'TRAJ_ANTENNA_PATTERN': process_traj_antenna_pattern
@@ -556,6 +555,9 @@ def get_process_func(dataset_type, dsname):
     elif dataset_type == 'GRID_TIME_STATS2':
         func_name = 'process_grid_time_stats2'
         dsformat = 'GRID_TIMEAVG'
+    elif dataset_type == 'GRID_RAIN_ACCU':
+        func_name = 'process_grid_rainfall_accumulation'
+        dsformat = 'GRID_TIMEAVG'
     elif dataset_type == 'COLOCATED_GATES':
         func_name = 'process_colocated_gates'
         dsformat = 'COLOCATED_GATES'
@@ -599,6 +601,9 @@ def get_process_func(dataset_type, dsname):
         dsformat = 'TIMESERIES'
     elif dataset_type == 'GRID_POINT_MEASUREMENT':
         func_name = 'process_grid_point'
+        dsformat = 'TIMESERIES'
+    elif dataset_type == 'GRID_MULTIPLE_POINTS':
+        func_name = 'process_grid_multiple_points'
         dsformat = 'TIMESERIES'
     elif dataset_type == 'ROI':
         func_name = process_roi
@@ -958,7 +963,7 @@ def process_fixed_rng_span(procstatus, dscfg, radar_list=None):
     azi_min = dscfg.get('azi_min', None)
     azi_max = dscfg.get('azi_max', None)
 
-    radar_aux = cut_radar(
+    radar_aux = subset_radar(
         radar, field_names, rng_min=rmin, rng_max=rmax, ele_min=ele_min,
         ele_max=ele_max, azi_min=azi_min, azi_max=azi_max)
 
@@ -2068,11 +2073,11 @@ def _create_target_radar(radar, dscfg, fixed_angle_val, info, field_names,
     altitude = deepcopy(radar.altitude)
     if 'target_radar_pos' in dscfg:
         latitude['data'] = np.array(
-            [dscfg['target_radar_pos']['latitude']], dtype=np.float)
+            [dscfg['target_radar_pos']['latitude']], dtype=np.float64)
         longitude['data'] = np.array(
-            [dscfg['target_radar_pos']['longitude']], dtype=np.float)
+            [dscfg['target_radar_pos']['longitude']], dtype=np.float64)
         altitude['data'] = np.array(
-            [dscfg['target_radar_pos']['altitude']], dtype=np.float)
+            [dscfg['target_radar_pos']['altitude']], dtype=np.float64)
 
     _range['data'] = np.arange(rng_min, rng_max+rng_res, rng_res)
     ngates = _range['data'].size

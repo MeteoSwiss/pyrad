@@ -45,7 +45,7 @@ def read_config(fname, cfg=None):
     # check if the file can be read
     try:
         cfgfile = open(fname, "r", encoding='utf-8', errors='ignore')
-    except:
+    except Exception:
         raise Exception("ERROR: Could not find|open config file '"+fname+"'")
 
     # if config dictionary does not exist yet create it
@@ -56,7 +56,7 @@ def read_config(fname, cfg=None):
     fileend = 0
     while fileend == 0:
         # remove leading and trailing whitespace
-        line = cfgfile.readline()
+        line = os.path.expandvars(cfgfile.readline())
         if line:
             line = line.strip()
 
@@ -164,7 +164,7 @@ def string_to_datatype(dtype, strval):
     if uptype == 'BYTE':
         return int(strval[0])
     elif uptype == 'BOOL':
-        return  bool(strval[0])
+        return bool(strval[0])
     elif uptype == 'INT':
         return int(strval[0])
     elif uptype == 'LONG':
@@ -270,7 +270,7 @@ def get_struct(cfgfile, pos, nels, fname):
     newpos = pos
     for i in range(nels):
         pos = cfgfile.seek(newpos)
-        line = cfgfile.readline()
+        line = os.path.expandvars(cfgfile.readline())
 
         # remove leading and trailing whitespace
         line = line.strip()

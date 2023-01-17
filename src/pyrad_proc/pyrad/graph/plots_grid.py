@@ -21,6 +21,7 @@ import numpy as np
 
 try:
     import cartopy
+    from cartopy.io.img_tiles import Stamen
     _CARTOPY_AVAILABLE = True
 except ImportError:
     _CARTOPY_AVAILABLE = False
@@ -95,7 +96,7 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
     max_lon = prdcfg['gridMapImageConfig'].get('lonmax', 12.5)
     min_lat = prdcfg['gridMapImageConfig'].get('latmin', 43.5)
     max_lat = prdcfg['gridMapImageConfig'].get('latmax', 49.5)
-    embelish = prdcfg['gridMapImageConfig'].get('embelish', True)
+    embellish = prdcfg['gridMapImageConfig'].get('embellish', True)
     colorbar_flag = prdcfg['gridMapImageConfig'].get('colorbar_flag', True)
 
     lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon)+1, lonstep)
@@ -103,7 +104,6 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
 
     if fig is None:
         fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
-        ax = fig.add_subplot(111)
 
         if use_basemap:
             resolution = prdcfg['gridMapImageConfig'].get('mapres', 'l')
@@ -127,13 +127,14 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
                 lat_lines=lat_lines, lon_lines=lon_lines,
                 resolution=resolution, area_thresh=area_thresh,
                 auto_range=False, min_lon=min_lon, max_lon=max_lon,
-                min_lat=min_lat, max_lat=max_lat, ax=ax)
+                min_lat=min_lat, max_lat=max_lat)
             display.plot_grid(
                 field_name, level=level, norm=norm, ticks=ticks, title=titl,
-                ticklabs=ticklabs, mask_outside = mask_outside, vmin=vmin, vmax=vmax, 
-                alpha=alpha, ax=ax, fig=fig)
+                ticklabs=ticklabs, mask_outside=mask_outside, vmin=vmin,
+                vmax=vmax, alpha=alpha, fig=fig)
         else:
             resolution = prdcfg['gridMapImageConfig'].get('mapres', '110m')
+            projection = cartopy.crs.PlateCarree()
             # Map from basemap to cartopy notation
             if resolution == 'l':
                 resolution = '110m'
@@ -150,13 +151,14 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
             maps_list = prdcfg['gridMapImageConfig'].get('maps', [])
 
             display = pyart.graph.GridMapDisplay(grid)
-            fig, ax = display.plot_grid(
+            display.plot_grid(
                 field_name, level=level, norm=norm, ticks=ticks,
-                ticklabs=ticklabs, resolution=resolution,
-                background_zoom=background_zoom, lat_lines=lat_lines,
-                lon_lines=lon_lines, maps_list=maps_list, vmin=vmin,
-                vmax=vmax, mask_outside = mask_outside, alpha=alpha, title=titl, 
-                ax=ax, fig=fig, embelish=embelish, colorbar_flag=colorbar_flag)
+                ticklabs=ticklabs, lat_lines=lat_lines, projection=projection,
+                lon_lines=lon_lines, vmin=vmin, embellish=False,
+                add_grid_lines=True, vmax=vmax, mask_outside=mask_outside,
+                alpha=alpha, title=titl, colorbar_flag=colorbar_flag)
+
+            # fig = plt.gcf()
             ax.set_extent([min_lon, max_lon, min_lat, max_lat])
             # display.plot_crosshairs(lon=lon, lat=lat)
     else:
@@ -164,14 +166,107 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
             display.plot_grid(
                 field_name, level=level, norm=norm, ticks=ticks,
                 lat_lines=lat_lines, lon_lines=lon_lines, title=titl,
-                ticklabs=ticklabs, colorbar_flag=False, vmin=vmin, vmax=vmax,
-                mask_outside = mask_outside, alpha=alpha, ax=ax, fig=fig)
+                ticklabs=ticklabs, colorbar_flag=False, embellish=False,
+                vmin=vmin, vmax=vmax, mask_outside=mask_outside,
+                alpha=alpha, ax=ax, fig=fig)
         else:
-            fig, ax = display.plot_grid(
+            display.plot_grid(
                 field_name, level=level, norm=norm, ticks=ticks,
-                lat_lines=lat_lines, lon_lines=lon_lines, ticklabs=ticklabs,
-                colorbar_flag=False, embelish=False, vmin=vmin, vmax=vmax,
-                mask_outside = mask_outside, alpha=alpha, title=titl, ax=ax, fig=fig)
+                projection=projection, lat_lines=lat_lines,
+                lon_lines=lon_lines, ticklabs=ticklabs, colorbar_flag=False,
+                embellish=False, vmin=vmin, vmax=vmax,
+                mask_outside=mask_outside, alpha=alpha, title=titl, ax=ax,
+                fig=fig)
+
+    if embellish:
+        ax = plt.gca()
+        if 'relief' in maps_list:
+            tiler = Stamen('terrain-background')
+            projection = tiler.crs
+            fig.delaxes(ax)
+            ax = fig.add_subplot(111, projection=projection)
+            warn(
+                'The projection of the image is set to that of the ' +
+                'background map, i.e. '+str(projection), UserWarning)
+
+        for cartomap in maps_list:
+            if cartomap == 'relief':
+                ax.add_image(tiler, background_zoom)
+            if cartomap == 'countries':
+                # add countries
+                countries = cartopy.feature.NaturalEarthFeature(
+                    category='cultural',
+                    name='admin_0_countries',
+                    scale=resolution,
+                    facecolor='none')
+                ax.add_feature(countries, edgecolor='black')
+            elif cartomap == 'provinces':
+                # Create a feature for States/Admin 1 regions at
+                # 1:resolution from Natural Earth
+                states_provinces = cartopy.feature.NaturalEarthFeature(
+                    category='cultural',
+                    name='admin_1_states_provinces_lines',
+                    scale=resolution,
+                    facecolor='none')
+                ax.add_feature(states_provinces, edgecolor='gray')
+            elif (cartomap == 'urban_areas' and
+                    resolution in ('10m', '50m')):
+                urban_areas = cartopy.feature.NaturalEarthFeature(
+                    category='cultural',
+                    name='urban_areas',
+                    scale=resolution)
+                ax.add_feature(
+                    urban_areas, edgecolor='brown', facecolor='brown',
+                    alpha=0.25)
+            elif cartomap == 'roads' and resolution == '10m':
+                roads = cartopy.feature.NaturalEarthFeature(
+                    category='cultural',
+                    name='roads',
+                    scale=resolution)
+                ax.add_feature(roads, edgecolor='red', facecolor='none')
+            elif cartomap == 'railroads' and resolution == '10m':
+                railroads = cartopy.feature.NaturalEarthFeature(
+                    category='cultural',
+                    name='railroads',
+                    scale=resolution)
+                ax.add_feature(
+                    railroads, edgecolor='green', facecolor='none',
+                    linestyle=':')
+            elif cartomap == 'coastlines':
+                ax.coastlines(resolution=resolution)
+            elif cartomap == 'lakes':
+                # add lakes
+                lakes = cartopy.feature.NaturalEarthFeature(
+                    category='physical',
+                    name='lakes',
+                    scale=resolution)
+                ax.add_feature(
+                    lakes, edgecolor='blue', facecolor='blue', alpha=0.25)
+            elif resolution == '10m' and cartomap == 'lakes_europe':
+                lakes_europe = cartopy.feature.NaturalEarthFeature(
+                    category='physical',
+                    name='lakes_europe',
+                    scale=resolution)
+                ax.add_feature(
+                    lakes_europe, edgecolor='blue', facecolor='blue',
+                    alpha=0.25)
+            elif cartomap == 'rivers':
+                # add rivers
+                rivers = cartopy.feature.NaturalEarthFeature(
+                    category='physical',
+                    name='rivers_lake_centerlines',
+                    scale=resolution)
+                ax.add_feature(rivers, edgecolor='blue', facecolor='none')
+            elif resolution == '10m' and cartomap == 'rivers_europe':
+                rivers_europe = cartopy.feature.NaturalEarthFeature(
+                    category='physical',
+                    name='rivers_europe',
+                    scale=resolution)
+                ax.add_feature(
+                    rivers_europe, edgecolor='blue', facecolor='none')
+            else:
+                warn('cartomap '+cartomap+' for resolution '+resolution +
+                     ' not available')
 
     if save_fig:
         for fname in fname_list:
@@ -239,13 +334,13 @@ def plot_surface_raw(grid, field_name, level, prdcfg, fname_list, titl=None,
         ax = fig.add_subplot(111)
 
         display = pyart.graph.GridMapDisplay(grid)
-        fig, ax = display.plot_grid_raw(
+        display.plot_grid_raw(
             field_name, level=level, norm=norm, ticks=ticks,
             ticklabs=ticklabs, vmin=vmin, vmax=vmax, alpha=alpha,
             title=titl, ax=ax, fig=fig, colorbar_flag=colorbar_flag)
         # display.plot_crosshairs(lon=lon, lat=lat)
     else:
-        fig, ax = display.plot_grid_raw(
+        display.plot_grid_raw(
             field_name, level=level, norm=norm, ticks=ticks,
             ticklabs=ticklabs, colorbar_flag=False, vmin=vmin, vmax=vmax,
             alpha=alpha, title=titl, ax=ax, fig=fig)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Pyrad: Python Radar Toolkit
+""" Python Radar Toolkit
 
 Pyrad is a Python module containing
 the utilities that run the MeteoSwiss radar processing framework.
@@ -17,25 +17,30 @@ import glob
 import builtins
 from datetime import datetime
 import getpass
-import setuptools  # for 'develop' mode
-from numpy.distutils.core import setup
+from setuptools import setup, find_packages
 
 DOCLINES = __doc__.split("\n")
 
 CLASSIFIERS = """\
-Development Status :: 0 - Prototype
-Intended Audience :: Science/Research
-Intended Audience :: Developers
-License :: OSI Approved :: BSD License
-Programming Language :: Python
-Programming Language :: Python :: 3
-Programming Language :: Python :: 3.6
-Programming Language :: Python :: 3.7
-Programming Language :: C
-Programming Language :: Cython
-Topic :: Scientific/Engineering
-Topic :: Scientific/Engineering :: Atmospheric Science
-Operating System :: POSIX :: Linux
+    Development Status :: 5 - Production/Stable
+    Intended Audience :: Science/Research
+    Intended Audience :: Developers
+    License :: OSI Approved :: BSD License
+    Programming Language :: Python
+    Programming Language :: Python :: 3
+    Programming Language :: Python :: 3.6
+    Programming Language :: Python :: 3.7
+    Programming Language :: Python :: 3.8
+    Programming Language :: Python :: 3.9
+    Programming Language :: Python :: 3.10
+    Programming Language :: C
+    Programming Language :: Cython
+    Topic :: Scientific/Engineering
+    Topic :: Scientific/Engineering :: Atmospheric Science
+    Operating System :: POSIX :: Linux
+    Operating System :: MacOS :: MacOS X
+    Operating System :: Microsoft :: Windows
+    Framework :: Matplotlib
 """
 
 
@@ -47,11 +52,11 @@ LONG_DESCRIPTION = "\n".join(DOCLINES[2:])
 URL = "https://github.com/MeteoSwiss/pyrad.git"
 DOWNLOAD_URL = "https://github.com/MeteoSwiss/pyrad.git"
 LICENSE = 'BSD'
-CLASSIFIERS = filter(None, CLASSIFIERS.split('\n'))
+CLASSIFIERS = list(filter(None, CLASSIFIERS.split('\n')))
 PLATFORMS = ["Linux"]
 MAJOR = 1
-MINOR = 1
-MICRO = 2
+MINOR = 6
+MICRO = 0
 ISRELEASED = True
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 SCRIPTS = glob.glob('scripts/*')
@@ -154,27 +159,27 @@ def configuration(parent_package='', top_path=None):
 
     return config
 
-
-def setup_package():
-
-    # rewrite version file
+if __name__ == '__main__':
     write_version_py()
-    
     setup(
         name=NAME,
-        maintainer=MAINTAINER,
-        maintainer_email=MAINTAINER_EMAIL,
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
+        author=MAINTAINER,
+        author_email=MAINTAINER_EMAIL,
+        maintainer=MAINTAINER,
+        maintainer_email=MAINTAINER_EMAIL,
         url=URL,
-        version=VERSION,
-        download_url=DOWNLOAD_URL,
-        license=LICENSE,
-        classifiers=CLASSIFIERS,
-        platforms=PLATFORMS,
+        packages=find_packages(),
+        include_package_data=True,
         configuration=configuration,
         scripts=SCRIPTS,
+        license=LICENSE,
+        platforms=PLATFORMS,
+        classifiers=CLASSIFIERS,
+        version=VERSION,
+        zip_safe=False,
     )
 
-if __name__ == '__main__':
-    setup_package()
+
+

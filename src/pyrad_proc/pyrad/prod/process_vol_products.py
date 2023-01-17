@@ -219,6 +219,9 @@ def generate_vol_products(dataset, prdcfg):
                 plot_type: str
                     The type of plot to perform. Can be 'PPI', 'QUANTILES' or
                     'HISTOGRAM'
+                write_data: Bool
+                    If True the histrogram will be also written in a csv
+                    file
                 step: float or None
                     If the plot type is 'HISTOGRAM', the width of the
                     histogram bin. If None it will be obtained from the Py-ART
@@ -696,11 +699,19 @@ def generate_vol_products(dataset, prdcfg):
         plot_type = prdcfg.get('plot_type', 'PPI')
         vmin = prdcfg.get('vmin', None)
         vmax = prdcfg.get('vmax', None)
+        write_data = prdcfg.get('write_data', 0)
+
+        fname_hist = None
+        if write_data:
+            fname_hist = savedir+make_filename(
+                'ppi', prdcfg['dstype'], prdcfg['voltype'],
+                ['csv'], prdcfginfo='el'+'{:.1f}'.format(el),
+                timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
 
         fname_list = plot_ppi(
             dataset['radar_out'], field_name, ind_el, prdcfg, fname_list,
             plot_type=plot_type, vmin=vmin, vmax=vmax, step=step,
-            quantiles=quantiles)
+            quantiles=quantiles, fname_hist=fname_hist)
 
         print('----- save to '+' '.join(fname_list))
 
@@ -3193,10 +3204,10 @@ def generate_vol_products(dataset, prdcfg):
         fname = savedir+fname
 
         if file_type == 'nc':
-            pyart.io.write_cfradial(fname, new_dataset, physical=physical)
+            pyart.io.write_cfradial(fname, new_dataset)
         elif file_type == 'h5':
             pyart.aux_io.write_odim_h5(
-                fname, new_dataset, physical=physical,
+                fname, new_dataset,
                 compression=compression, compression_opts=compression_opts)
         else:
             warn('Data could not be saved. ' +
@@ -3243,11 +3254,11 @@ def generate_vol_products(dataset, prdcfg):
                             dataset['radar_out'].fields[field_name])
             else:
                 radar_aux = dataset['radar_out']
-            pyart.io.write_cfradial(fname, radar_aux, physical=physical)
+            pyart.io.write_cfradial(fname, radar_aux)
         elif file_type == 'h5':
             pyart.aux_io.write_odim_h5(
                 fname, dataset['radar_out'], field_names=field_names,
-                physical=physical, compression=compression,
+                compression=compression,
                 compression_opts=compression_opts)
         else:
             warn('Data could not be saved. ' +
@@ -3318,11 +3329,11 @@ def generate_vol_products(dataset, prdcfg):
                             pseudorhi.fields[field_name])
             else:
                 radar_aux = pseudorhi
-            pyart.io.write_cfradial(fname, radar_aux, physical=physical)
+            pyart.io.write_cfradial(fname, radar_aux, )
         elif file_type == 'h5':
             pyart.aux_io.write_odim_h5(
                 fname, pseudorhi, field_names=field_names,
-                physical=physical, compression=compression,
+                compression=compression,
                 compression_opts=compression_opts)
         else:
             warn('Data could not be saved. ' +
@@ -3372,11 +3383,11 @@ def generate_vol_products(dataset, prdcfg):
                             pseudoppi.fields[field_name])
             else:
                 radar_aux = pseudoppi
-            pyart.io.write_cfradial(fname, radar_aux, physical=physical)
+            pyart.io.write_cfradial(fname, radar_aux, )
         elif file_type == 'h5':
             pyart.aux_io.write_odim_h5(
                 fname, pseudoppi, field_names=field_names,
-                physical=physical, compression=compression,
+                compression=compression,
                 compression_opts=compression_opts)
         else:
             warn('Data could not be saved. ' +
@@ -3423,11 +3434,11 @@ def generate_vol_products(dataset, prdcfg):
                             pseudorhi.fields[field_name])
             else:
                 radar_aux = pseudorhi
-            pyart.io.write_cfradial(fname, radar_aux, physical=physical)
+            pyart.io.write_cfradial(fname, radar_aux, )
         elif file_type == 'h5':
             pyart.aux_io.write_odim_h5(
                 fname, pseudorhi, field_names=field_names,
-                physical=physical, compression=compression,
+                 compression=compression,
                 compression_opts=compression_opts)
         else:
             warn('Data could not be saved. ' +
@@ -3476,11 +3487,11 @@ def generate_vol_products(dataset, prdcfg):
                             pseudoppi.fields[field_name])
             else:
                 radar_aux = pseudoppi
-            pyart.io.write_cfradial(fname, radar_aux, physical=physical)
+            pyart.io.write_cfradial(fname, radar_aux)
         elif file_type == 'h5':
             pyart.aux_io.write_odim_h5(
                 fname, pseudoppi, field_names=field_names,
-                physical=physical, compression=compression,
+                compression=compression,
                 compression_opts=compression_opts)
         else:
             warn('Data could not be saved. ' +

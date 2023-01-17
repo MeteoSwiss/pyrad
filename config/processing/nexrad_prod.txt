@@ -30,8 +30,10 @@ dBZ STRUCT 3
             voltype STRING dBZ
             angle FLOAT 90.
             AziTol FLOAT 0.5
-        SAVEALL STRUCT 1
-            type STRING SAVEALL
+        EL002_5_MAP STRUCT 3
+            type  STRING PPI_MAP
+            anglenr INT 4
+            voltype STRING dBZ
 
 ZDR STRUCT 3
     type STRING RAW

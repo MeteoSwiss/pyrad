@@ -287,7 +287,7 @@ class Trajectory(object):
         # check if the file can be read
         try:
             tfile = open(self.filename, "r")
-        except:
+        except Exception:
             raise Exception("ERROR: Could not find|open trajectory file '" +
                             self.filename+"'")
 
@@ -361,7 +361,7 @@ class Trajectory(object):
                     self.wgs84_lon_deg, [float(mm.group(4)) * 180. / np.pi])
                 self.wgs84_alt_m = np.append(
                     self.wgs84_alt_m, [float(mm.group(5))])
-        except:
+        except Exception:
             raise
         finally:
             tfile.close()
@@ -369,7 +369,7 @@ class Trajectory(object):
                 locale.setlocale(locale.LC_ALL, loc)  # restore saved locale
 
         self.nsamples = len(self.time_vector)
-        
+
     def _read_traj_flores(self):
         """
         Read trajectory from FLORAKO file
@@ -388,33 +388,33 @@ class Trajectory(object):
         10: VDOP                                        Vertical Position Dilution of Precision, which is a measure of Z position geometry
         11: DopRms                                      Root mean square of all L1 Doppler measurement residuals
         """
-          # check if the file can be read
+        # check if the file can be read
         try:
             tfile = open(self.filename, "r")
-        except:
+        except Exception:
             raise Exception("ERROR: Could not find|open trajectory file '" +
                             self.filename+"'")
         tfile.close()
-        
+
         try:
-            data = pd.read_csv(self.filename, skiprows=28, 
+            data = pd.read_csv(self.filename, skiprows=28,
                                delim_whitespace=True)
             data = data.drop(0)
-            times = [datetime.datetime.strptime(d+'_'+h+'0000',
-                                                '%Y-%m-%d_%H:%M:%S.%f') for 
-                                                d, h in zip(data['UTCDate'],
-                                                            data['UTCTime'])]
-                       
+            times = [
+                datetime.datetime.strptime(
+                    d+'_'+h+'0000', '%Y-%m-%d_%H:%M:%S.%f') for
+                d, h in zip(data['UTCDate'], data['UTCTime'])]
+
             self.time_vector = np.array(times)
             self.wgs84_lat_deg = np.array(pd.to_numeric(data['Latitude']))
             self.wgs84_lon_deg = np.array(pd.to_numeric(data['Longitude']))
             self.wgs84_alt_m = np.array(pd.to_numeric(data['H-MSL']))
-                
-        except:
+
+        except Exception:
             raise
-            
+
         self.nsamples = len(self.time_vector)
-        
+
     def _read_traj_lightning(self, flashnr=0):
         """
         Read trajectory from lightning file

@@ -1,4 +1,4 @@
-#!/home/daniel/anaconda3/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 """
@@ -44,7 +44,7 @@ import os
 import traceback
 from warnings import warn
 
-from pyrad.flow.flow_control import main_cosmo_rt
+from pyrad.flow.flow_control import main_rt as pyrad_main
 
 print(__doc__)
 
@@ -115,10 +115,10 @@ def main():
     end_proc = False
     while not end_proc:
         try:
-            end_proc = main_cosmo_rt(
+            end_proc = pyrad_main(
                 cfgfile_list, starttime=proc_starttime, endtime=proc_endtime,
                 proc_period=args.proc_period, proc_finish=args.proc_finish)
-        except:
+        except Exception:
             traceback.print_exc()
             if args.proc_finish is None:
                 warn("An exception occurred. " +

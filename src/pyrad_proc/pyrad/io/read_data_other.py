@@ -13,11 +13,13 @@ Functions for reading auxiliary data
     read_profile_ts
     read_histogram_ts
     read_quantiles_ts
+    read_vpr_theo_parameters
     read_rhi_profile
     read_last_state
     read_status
     read_rad4alp_cosmo
     read_rad4alp_vis
+    read_mf_vis
     read_histogram
     read_quantiles
     read_excess_gates
@@ -341,6 +343,35 @@ def read_quantiles_ts(fname_list, step=5., qmin=0., qmax=100., t_res=300.):
     return tbin_edges, qbin_edges, data_ma, datetime_arr
 
 
+def read_vpr_theo_parameters(fname):
+    """
+    Reads the parameters defining a theoretical VPR profile from a csv file
+
+    Parameters
+    ----------
+    fname : str
+        file name where to store the data
+
+    Returns
+    -------
+    vpr_theo_dict : dict
+        Dictionary containing the parameters
+
+    """
+    try:
+        with open(fname, 'r', newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            vpr_theo_dict = next(reader)
+            for k, v in vpr_theo_dict.items():
+                vpr_theo_dict[k] = float(v)
+            return vpr_theo_dict
+
+    except EnvironmentError as ee:
+        warn(str(ee))
+        warn('Unable to read file '+fname)
+        return None
+
+
 def read_rhi_profile(fname, labels=['50.0-percentile', '25.0-percentile',
                                     '75.0-percentile']):
     """
@@ -582,6 +613,58 @@ def read_rad4alp_vis(fname, datatype):
             visfile.close()
 
             return field_list
+
+    except EnvironmentError as ee:
+        warn(str(ee))
+        warn('Unable to read file '+fname)
+        return None
+
+
+def read_mf_vis(fname, datatype):
+    """
+    Reads Météo-France visibility data binary file.
+
+    Parameters
+    ----------
+    fname : str
+        name of the file to read
+
+    datatype : str
+        name of the data type
+
+    Returns
+    -------
+    field : dict
+        A data field
+
+    """
+    datatype = datatype.strip()
+    if datatype != 'VIS':
+        warn('Unknown DEM data type '+datatype)
+        return None
+
+    try:
+        with open(fname, 'rb') as visfile:
+            if os.path.getsize(fname) == 262144:
+                bindata = np.fromfile(visfile, dtype='uint8', count=-1)
+                bindata = np.reshape(bindata, (512, 512)).astype(float)
+                field_data = np.ma.masked_values(bindata, 255)
+                if 'coefmasqZ' not in fname:
+                    field_data = 100.*np.ma.power(field_data/100., 1.6)
+                field_data = 100. - ma_broadcast_to(
+                    field_data[::-1, :], (1, 512, 512))
+            else:
+                bindata = 100. - np.fromfile(
+                    visfile, dtype='float32', count=-1)
+                field_data = np.reshape(bindata, (720, 270))
+
+            field_name = get_fieldname_pyart(datatype)
+            field = get_metadata(field_name)
+            field['data'] = field_data
+
+            visfile.close()
+
+            return field
 
     except EnvironmentError as ee:
         warn(str(ee))

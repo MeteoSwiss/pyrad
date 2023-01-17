@@ -15,19 +15,22 @@ Functions for writing pyrad output data
     write_alarm_msg
     write_last_state
     write_smn
-   *write_timeseries_point
+    write_timeseries_point
     write_trt_info
     write_trt_cell_data
     write_trt_thundertracking_data
     write_trt_cell_scores
     write_trt_cell_lightning
     write_trt_rpc
+    write_vpr_theo_params
+    write_vpr_info
     write_rhi_profile
     write_field_coverage
     write_cdf
     write_histogram
     write_quantiles
     write_multiple_points
+    write_multiple_points_grid
     write_ts_polar_data
     write_ts_grid_data
     write_ts_ml
@@ -906,6 +909,65 @@ def write_trt_rpc(cell_ID, cell_time, lon, lat, area, rank, hmin, hmax, freq,
     return fname
 
 
+def write_vpr_theo_params(vpr_theo_dict, fname,
+                          labels=('ml_top', 'ml_bottom', 'val_ml_peak', 'val_dr')):
+    """
+    writes the parameters defining a theoretical VPR profile into a csv file
+
+    Parameters
+    ----------
+    vpr_theo_dict : dict
+        dictionary containing the parameters of the VPR profile
+    fname : str
+        file name where to store the data
+    labels : list of str
+        new of parameters to write in file
+
+    Returns
+    -------
+    fname : str
+        the name of the file where data has been written
+
+    """
+    with open(fname, 'w', newline='') as csvfile:
+        writer = csv.DictWriter(csvfile, labels)
+        writer.writeheader()
+        data_dict = dict((k, vpr_theo_dict[k]) for k in labels)
+        writer.writerow(data_dict)
+
+        csvfile.close()
+
+    return fname
+
+
+def write_vpr_info(vpr_info_dict, fname):
+    """
+    Writes a dictionary containing relevant parameters of the VPR profile
+    retrieval into a text file
+
+    Parameters
+    ----------
+    vpr_info_dict : dict
+        dictionary containing the parameters of the VPR profile
+    fname : str
+        file name where to store the data
+
+    Returns
+    -------
+    fname : str
+        the name of the file where data has been written
+
+    """
+    with open(fname, 'w', newline='') as csvfile:
+        writer = csv.DictWriter(csvfile, vpr_info_dict.keys())
+        writer.writeheader()
+        writer.writerow(vpr_info_dict)
+
+        csvfile.close()
+
+    return fname
+
+
 def write_rhi_profile(hvec, data, nvalid_vec, labels, fname, datatype=None,
                       timeinfo=None, sector=None):
     """
@@ -1320,6 +1382,63 @@ def write_multiple_points(dataset, fname):
                 'lon_ref': lon_ref[i],
                 'lat_ref': lat_ref[i],
                 'alt_ref': alt_ref[i],
+                'val': val[i],
+                })
+        csvfile.close()
+
+    return fname
+
+
+def write_multiple_points_grid(dataset, fname):
+    """
+    write data obtained at multiple points from a grid
+
+    Parameters
+    ----------
+    dataset : dict
+        dictionary containing the data
+    fname : str
+        file name
+
+    Returns
+    -------
+    fname : str
+        the name of the file where data has written
+
+    """
+    val = dataset['value'].filled(fill_value=get_fillvalue())
+    lon_ref = dataset['used_point_coordinates_WGS84_lon'].filled(
+        fill_value=get_fillvalue())
+    lat_ref = dataset['used_point_coordinates_WGS84_lat'].filled(
+        fill_value=get_fillvalue())
+    with open(fname, 'w', newline='') as csvfile:
+        csvfile.write(
+            '# Gridded data at multiple points file\n' +
+            '# Comment lines are preceded by "#"\n' +
+            '# Description:\n' +
+            '# Gridded data at points of interest.\n' +
+            '# Data: '+generate_field_name_str(dataset['datatype'])+'\n' +
+            '#\n')
+        fieldnames = [
+            'point_ID', 'time', 'ix', 'iy', 'lon', 'lat',
+            'lon_ref', 'lat_ref', 'val']
+        writer = csv.DictWriter(csvfile, fieldnames)
+        writer.writeheader()
+        for i in range(val.size):
+            time_aux = dataset['time'][i]
+            if not np.ma.is_masked(dataset['time'][i]):
+                time_aux = time_aux.strftime('%Y%m%d%H%M%S')
+            else:
+                time_aux = 'NA'
+            writer.writerow({
+                'point_ID': dataset['point_id'][i],
+                'time': time_aux,
+                'ix': dataset['grid_point_ix'][i],
+                'iy': dataset['grid_point_iy'][i],
+                'lon': dataset['point_coordinates_WGS84_lon'][i],
+                'lat': dataset['point_coordinates_WGS84_lat'][i],
+                'lon_ref': lon_ref[i],
+                'lat_ref': lat_ref[i],
                 'val': val[i],
                 })
         csvfile.close()

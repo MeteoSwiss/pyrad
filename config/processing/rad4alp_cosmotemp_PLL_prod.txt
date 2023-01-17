@@ -4,9 +4,9 @@
 
 # List of datasets to generate.
 # The detailed specification of each dataset is given below.
-dataSetList STRARR 1
-    l0:dBm
-#    l0:ZH
+dataSetList STRARR 2
+    l0:RAD2COSMO
+    l1:TEMP
 #    l0:ZH_TIME_HEIGHT
 #    l0:SNRh
 #    l0:RhoHV
@@ -24,33 +24,24 @@ dataSetList STRARR 1
 # ==========================================================================================
 #               COSMO data
 # ==========================================================================================
-#RAD2COSMO STRUCT 3
-#    type STRING COSMO_COORD
-#    datatype STRARR 1
-#        RAD4ALP:dBZ
-#    products STRUCT 1
-#        rad2cosmo STRUCT 2
-#            type  STRING SAVEVOL
-#            voltype STRING cosmo_index
-#
+RAD2COSMO STRUCT 3
+    type STRING COSMO_COORD
+    datatype STRARR 1
+        RAD4ALP:dBZ
+    products STRUCT 1
+        rad2cosmo STRUCT 2
+            type  STRING SAVEVOL
+            voltype STRING cosmo_index
+
 TEMP STRUCT 7
     type STRING COSMO_LOOKUP
     datatype STRARR 1
         RAD4ALP:dBZ
     cosmo_type STRING TEMP
-    regular_grid INT 1
-    lookup_table INT 1
+    regular_grid INT 0
+    lookup_table INT 0
     MAKE_GLOBAL INT 1
-    products STRUCT 3
-        EL001 STRUCT 3
-            type  STRING PPI_IMAGE
-            anglenr INT 2
-            voltype STRING TEMP
-        AZ093 STRUCT 4
-            type  STRING PSEUDORHI_IMAGE
-            angle FLOAT 93.
-            AziTol FLOAT 1.
-            voltype STRING TEMP
+    products STRUCT 1
         SAVEVOL_TEMP STRUCT 2
             type   STRING SAVEVOL
             voltype STRING TEMP
@@ -215,8 +206,8 @@ SNRFilter STRUCT 4
 # ==========================================================================================
 #                 PHIDP processing
 # ==========================================================================================
-PhiDPc_maesaka STRUCT 13
-    type STRING PHIDP_MAESAKA
+PhiDPc_smooth2w STRUCT 12
+    type STRING PHIDP_SMOOTH_2W
     datatype STRARR 2
         PROC:PhiDPc
         PROC:dBZc
@@ -228,7 +219,6 @@ PhiDPc_maesaka STRUCT 13
     rwinds FLOAT 1000.
     rwindl FLOAT 3000.
     Zthr FLOAT 40.
-    fzl: 3500
     MAKE_GLOBAL INT 1
     products STRUCT 3
       EL001 STRUCT 3
