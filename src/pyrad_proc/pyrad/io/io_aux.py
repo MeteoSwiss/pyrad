@@ -2372,9 +2372,9 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 for filename in dayfilelist:
                     t_filelist.append(filename)
             elif datagroup in ('CFRADIALPYRAD', 'ODIMPYRAD', 'PYRADGRID',
-                               'NETCDFSPECTRA', 'CSV'):
+                               'ODIMPYRADGRID', 'NETCDFSPECTRA', 'CSV'):
                 termination = '.nc'
-                if datagroup == 'ODIMPYRAD':
+                if datagroup in ('ODIMPYRAD', 'ODIMPYRADGRID'):
                     termination = '.h*'
                 elif datagroup == 'CSV':
                     termination = '.csv'
@@ -2756,7 +2756,7 @@ def get_datatype_fields(datadescriptor):
         else:
             datagroup = descrfields[1]
             if datagroup in ('CFRADIALPYRAD', 'ODIMPYRAD', 'PYRADGRID',
-                             'NETCDFSPECTRA', 'CSV'):
+                             'ODIMPYRADGRID', 'NETCDFSPECTRA', 'CSV'):
                 descrfields2 = descrfields[2].split(',')
                 datatype = descrfields2[0]
                 dataset = descrfields2[1]
@@ -2788,7 +2788,7 @@ def get_datatype_fields(datadescriptor):
         radarnr = 'RADAR001'
         datagroup = descrfields[0]
         if datagroup in ('CFRADIALPYRAD', 'ODIMPYRAD', 'PYRADGRID',
-                         'NETCDFSPECTRA', 'CSV'):
+                         'ODIMPYRADGRID', 'NETCDFSPECTRA', 'CSV'):
             descrfields2 = descrfields[1].split(',')
             datatype = descrfields2[0]
             dataset = descrfields2[1]
@@ -3314,7 +3314,7 @@ def _get_datetime(fname, datagroup, ftime_format=None):
     """
     bfile = os.path.basename(fname)
     if datagroup in ('RAINBOW', 'CFRADIALPYRAD', 'ODIMPYRAD', 'PYRADGRID',
-                     'NETCDFSPECTRA', 'CSV'):
+                     'ODIMPYRADGRID', 'NETCDFSPECTRA', 'CSV'):
         datetimestr = bfile[0:14]
         fdatetime = datetime.datetime.strptime(datetimestr, '%Y%m%d%H%M%S')
     elif datagroup in ('RAD4ALP', 'RAD4ALPGRID', 'RAD4ALPGIF', 'RAD4ALPBIN'):

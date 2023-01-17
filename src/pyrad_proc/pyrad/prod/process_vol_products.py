@@ -495,7 +495,7 @@ def generate_vol_products(dataset, prdcfg):
             dataset, as there is no ambiguity with SAVEALL for VOL datasets
         'SAVESTATE': Saves the last processed data in a file. Used for real-
             time data processing
-        'SAVEPSEUDORHI': Saves one field of a pseudo-RHI computed from a 
+        'SAVEPSEUDORHI': Saves one field of a pseudo-RHI computed from a
             volume scan in C/F radial or ODIM file
             User defined paraeters:
                 file_type: str
@@ -537,7 +537,8 @@ def generate_vol_products(dataset, prdcfg):
                     'h5'. Default 'nc'
                 physical: Bool
                     If True the data will be saved in physical units (floats).
-                    Otherwise it will be quantized and saved as binary
+                    Otherwise it will be quantized and saved as binary.
+                    Default True
                 compression: str
                     For ODIM file formats, the type of compression. Can be any
                     of the allowed compression types for hdf5 files. Default
@@ -3290,7 +3291,7 @@ def generate_vol_products(dataset, prdcfg):
         print('saved file: '+prdcfg['lastStateFile'])
 
         return prdcfg['lastStateFile']
-    
+
     if prdcfg['type'] == 'SAVEPSEUDORHI':
         file_type = prdcfg.get('file_type', 'nc')
         datatypes = prdcfg.get('datatypes', None)
@@ -3313,12 +3314,12 @@ def generate_vol_products(dataset, prdcfg):
             field_names = []
             for datatype in datatypes:
                 field_names.append(get_fieldname_pyart(datatype))
-        pseudorhi =  pyart.util.cross_section_ppi(
+        pseudorhi = pyart.util.cross_section_ppi(
                 dataset['radar_out'], [prdcfg['angle']],
                 az_tol=prdcfg['AziTol'])
         if file_type == 'nc':
             if field_names is not None:
-                radar_aux = deepcopy(pseudorhi) 
+                radar_aux = deepcopy(pseudorhi)
                 radar_aux.fields = dict()
                 for field_name in field_names:
                     if field_name not in pseudorhi.fields:
@@ -3341,7 +3342,7 @@ def generate_vol_products(dataset, prdcfg):
 
         print('saved file: '+fname)
 
-        return fname        
+        return fname
 
     if prdcfg['type'] == 'SAVEPSEUDOPPI':
         file_type = prdcfg.get('file_type', 'nc')
@@ -3365,8 +3366,8 @@ def generate_vol_products(dataset, prdcfg):
             field_names = []
             for datatype in datatypes:
                 field_names.append(get_fieldname_pyart(datatype))
-        
-        pseudoppi =  pyart.util.cross_section_rhi(
+
+        pseudoppi = pyart.util.cross_section_rhi(
                 dataset['radar_out'], [prdcfg['angle']],
                 el_tol=prdcfg['EleTol'])
 
@@ -3395,8 +3396,8 @@ def generate_vol_products(dataset, prdcfg):
 
         print('saved file: '+fname)
 
-        return fname     
-         
+        return fname
+
     if prdcfg['type'] == 'SAVEPSEUDORHI':
         file_type = prdcfg.get('file_type', 'nc')
         datatypes = prdcfg.get('datatypes', None)
@@ -3438,7 +3439,7 @@ def generate_vol_products(dataset, prdcfg):
         elif file_type == 'h5':
             pyart.aux_io.write_odim_h5(
                 fname, pseudorhi, field_names=field_names,
-                 compression=compression,
+                compression=compression,
                 compression_opts=compression_opts)
         else:
             warn('Data could not be saved. ' +

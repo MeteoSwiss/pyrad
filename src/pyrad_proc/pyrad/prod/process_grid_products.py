@@ -177,6 +177,22 @@ def generate_grid_products(dataset, prdcfg):
         'SAVEALL_GRID' : Same as before but can be used in a mixed GRID/VOL
             dataset, as there is no ambiguity with SAVEALL for VOL datasets
         'SAVEVOL': Saves on field of a gridded data object in a netcdf file.
+            User defined parameters:
+                file_type: str
+                    The type of file used to save the data. Can be 'nc' or
+                    'h5'. Default 'nc'
+                physical: Bool
+                    If True the data will be saved in physical units (floats).
+                    Otherwise it will be quantized and saved as binary.
+                    Default True
+                compression: str
+                    For ODIM file formats, the type of compression. Can be any
+                    of the allowed compression types for hdf5 files. Default
+                    gzip
+                compression_opts: any
+                    The compression options allowed by the hdf5. Depends on
+                    the type of compression. Default 6 (The gzip compression
+                    level).
         'SAVEVOL_GRID' : Same as before but can be used in a mixed GRID/VOL
             dataset, as there is no ambiguity with SAVEVOL for VOL datasets
         'STATS': Computes statistics over the whole images and stores them in
@@ -713,6 +729,11 @@ def generate_grid_products(dataset, prdcfg):
                 prdcfg['type'])
             return None
 
+        file_type = prdcfg.get('file_type', 'nc')
+        physical = prdcfg.get('physical', True)
+        compression = prdcfg.get('compression', 'gzip')
+        compression_opts = prdcfg.get('compression_opts', 6)
+
         new_dataset = deepcopy(dataset['radar_out'])
         new_dataset.fields = dict()
         new_dataset.add_field(
@@ -723,13 +744,24 @@ def generate_grid_products(dataset, prdcfg):
             prdcfg['prdname'], timeinfo=prdcfg['timeinfo'])
 
         fname = make_filename(
-            'savevol', prdcfg['dstype'], prdcfg['voltype'], ['nc'],
+            'savevol', prdcfg['dstype'], prdcfg['voltype'], [file_type],
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
 
         fname = savedir+fname
 
-        pyart.io.write_grid(fname, new_dataset, write_point_x_y_z=True,
-                            write_point_lon_lat_alt=True)
+        if file_type == 'nc':
+            pyart.io.write_grid(
+                fname, new_dataset, write_point_x_y_z=True,
+                write_point_lon_lat_alt=True)
+        elif file_type == 'h5':
+            pyart.aux_io.write_odim_grid_h5(
+                fname, new_dataset,
+                compression=compression, compression_opts=compression_opts)
+        else:
+            warn('Data could not be saved. ' +
+                 'Unknown saving file type '+file_type)
+            return None
+
         print('saved file: '+fname)
 
         return fname
