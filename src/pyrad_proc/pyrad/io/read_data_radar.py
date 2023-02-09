@@ -1685,6 +1685,9 @@ def merge_scans_odim(basepath, scan_list, radar_name, radar_res, voltime,
                     radar = add_field(radar_aux, radar)
                 print(f'nrays: {radar.nrays} ngates: {radar.ngates}')
 
+    if radar is None:
+        return radar
+
     rmin = None
     rmax = None
     elmin = None
