@@ -4527,6 +4527,12 @@ def get_data_odim(filename, datatype_list, scan_name, cfg, ind_rad=0):
         else:
             radar = pyart.aux_io.read_odim_h5(
                 filename, field_names=odim_field_names)
+
+            if 'differential_phase' in radar.fields:
+                # make sure that data is within [-180, 180] deg
+                radar.fields['differential_phase']['data'][
+                    radar.fields['differential_phase']['data'] > 180.] -= 360.
+
     except (ValueError, OSError) as ee:
         warn("Unable to read file '"+filename+": (%s)" % str(ee))
         return None
