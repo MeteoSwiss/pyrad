@@ -2,13 +2,15 @@
 
 **Master branch**
 
-[![tests](https://github.com/MeteoSwiss/pyrad/workflows/Test%20pyrad/badge.svg?branch=master)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests.yml)
-[![tests](https://github.com/MeteoSwiss/pyrad/workflows/Test%20pyrad%20ARM/badge.svg?branch=master)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_arm.yml)
+[![Test pyrad master](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_master.yml/badge.svg)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_master.yml)
+[![Test pyrad ARM master](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_arm_master.yml/badge.svg)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_arm_master.yml)
+
 
 **Dev branch**
 
-[![tests](https://github.com/MeteoSwiss/pyrad/workflows/Test%20pyrad/badge.svg?branch=dev)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests.yml)
-[![tests](https://github.com/MeteoSwiss/pyrad/workflows/Test%20pyrad%20ARM/badge.svg?branch=dev)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_arm.yml)
+[![Test pyrad dev](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_dev.yml/badge.svg)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_dev.yml)
+[![Test pyrad ARM dev](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_arm_dev.yml/badge.svg)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_arm_dev.yml)
+
 
 **Doc**
 
