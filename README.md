@@ -2,8 +2,8 @@
 
 **Master branch**
 
-[![Test pyrad master](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_master.yml/badge.svg)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_master.yml)
-[![Test pyrad ARM master](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_arm_master.yml/badge.svg)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_arm_master.yml)
+[![Test pyrad](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests.yml/badge.svg)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests.yml)
+[![Test pyrad](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_arm.yml/badge.svg)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_arm.yml)
 
 
 **Dev branch**
