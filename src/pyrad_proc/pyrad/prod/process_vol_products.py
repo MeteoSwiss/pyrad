@@ -38,7 +38,7 @@ from ..graph.plots import plot_quantiles, plot_histogram
 from ..graph.plots import plot_selfconsistency_instrument
 from ..graph.plots import plot_selfconsistency_instrument2
 from ..graph.plots_aux import get_colobar_label, get_field_name
-from ..graph.plots_timeseries import plot_monitoring_ts
+from ..graph.plots_timeseries import plot_monitoring_ts, plot_timeseries
 
 from ..util.radar_utils import get_ROI, compute_profile_stats
 from ..util.radar_utils import compute_histogram, compute_quantiles
@@ -50,6 +50,14 @@ from ..util.stat_utils import quantiles_weighted
 def generate_vol_products(dataset, prdcfg):
     """
     Generates radar volume products. Accepted product types:
+        'ANTENNA_POS': Plots time series of the antenna position with respect
+            to elevation or azimuth
+            User defined parameters:
+                dpi: float
+                    dpi of the plot
+                datatype: str
+                    type of data to plot. Can be AZ or EL
+
         'CDF': plots and writes the cumulative density function of data
             User defined parameters:
                 quantiles: list of floats
@@ -669,6 +677,48 @@ def generate_vol_products(dataset, prdcfg):
     prdsavedir = prdcfg['prdname']
     if 'prdsavedir' in prdcfg:
         prdsavedir = prdcfg['prdsavedir']
+
+    if prdcfg['type'] == 'ANTENNA_POS':
+        dpi = prdcfg.get('dpi', 72)
+        datatype = prdcfg.get('datatype', 'AZ')
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdsavedir, timeinfo=prdcfg['timeinfo'])
+
+        fname_list = make_filename(
+            'ts', prdcfg['dstype'], 'ANTENNA_POS',
+            prdcfg['imgformat'], prdcfginfo=datatype,
+            timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
+
+        for i, fname in enumerate(fname_list):
+            fname_list[i] = savedir+fname
+
+        if datatype == 'EL':
+            value = dataset['radar_out'].elevation['data']
+            labely = 'antenna elevation (deg)'
+        elif datatype == 'AZ':
+            value = dataset['radar_out'].azimuth['data']
+            labely = 'antenna azimuth (deg)'
+
+        titl = (
+            f'antenna position '
+            f'{prdcfg["timeinfo"].strftime("%Y-%m-%d %H:%M:%S")}')
+
+        ray_time = pyart.util.datetimes_from_radar(
+            dataset['radar_out'], only_use_cftime_datetimes=False,
+            only_use_python_datetimes=True)
+
+        ind = np.argsort(ray_time)
+        ray_time = ray_time[ind]
+        value = value[ind]
+
+        plot_timeseries(
+            ray_time, [value], fname_list, labelx='Time UTC', labely=labely,
+            title=titl, dpi=dpi)
+        print('----- save to '+' '.join(fname_list))
+
+        return fname_list
 
     if prdcfg['type'] == 'PPI_IMAGE':
         field_name = get_fieldname_pyart(prdcfg['voltype'])
