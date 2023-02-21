@@ -55,8 +55,8 @@ LICENSE = 'BSD'
 CLASSIFIERS = list(filter(None, CLASSIFIERS.split('\n')))
 PLATFORMS = ["Linux"]
 MAJOR = 1
-MINOR = 4
-MICRO = 5
+MINOR = 6
+MICRO = 2
 ISRELEASED = True
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 SCRIPTS = glob.glob('scripts/*')
@@ -179,10 +179,6 @@ if __name__ == '__main__':
         classifiers=CLASSIFIERS,
         version=VERSION,
         zip_safe=False,
-        use_scm_version={
-            'version_scheme': 'post-release',
-            'local_scheme': 'dirty-tag',
-        },
     )
 
 

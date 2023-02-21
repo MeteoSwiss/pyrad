@@ -4041,6 +4041,11 @@ DEFAULT_FIELD_LIMITS = {
     melting_layer: (0, 5),
     clutter_exit_code: (0, 200),
 
+    echo_top_15dBZ: (0, 10),
+    echo_top_20dBZ: (0, 10),
+    echo_top_45dBZ: (0, 10),
+    echo_top_50dBZ: (0, 10),
+
     probability_of_hail: (0., 100.),
     vertically_integrated_liquid: (0., 30.),
 
