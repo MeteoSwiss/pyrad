@@ -298,8 +298,7 @@ def plot_ppi_map(radar, field_name, ind_el, prdcfg, fname_list,
         warn('Unable to plot PPI map. Missing shapely cartopy module')
         return None
 
-
-    dpi = prdcfg['ppiImageConfig'].get('dpi', 72)
+    dpi = prdcfg['ppiMapImageConfig'].get('dpi', 72)
 
     norm, ticks, ticklabs = get_norm(
         field_name, field_dict=radar.fields[field_name])
@@ -328,99 +327,100 @@ def plot_ppi_map(radar, field_name, ind_el, prdcfg, fname_list,
     display_map.plot_ppi_map(
         field_name, sweep=ind_el, norm=norm, ticks=ticks, ticklabs=ticklabs,
         min_lon=min_lon, max_lon=max_lon, min_lat=min_lat, max_lat=max_lat,
-        lat_lines=lat_lines, lon_lines=lon_lines, projection = projection,
-        fig=fig, embellish = False,
-        colorbar_flag=True, alpha=1)
+        lat_lines=lat_lines, lon_lines=lon_lines, projection=projection,
+        fig=fig, embellish=False, colorbar_flag=True, alpha=1)
 
     ax = display_map.ax
-    
-    if 'relief' in prdcfg['ppiMapImageConfig']['maps']:
-          tiler = Stamen('terrain-background')
-          projection = tiler.crs
-          fig.delaxes(ax)
-          ax = fig.add_subplot(111, projection=projection)
-          warn(
-              'The projection of the image is set to that of the ' +
-              'background map, i.e. '+str(projection), UserWarning)
-          
-    for cartomap in prdcfg['ppiMapImageConfig']['maps']:
-        if cartomap == 'relief':
-                    ax.add_image(tiler, background_zoom)
-        if cartomap == 'countries':
-            # add countries
-            countries = cartopy.feature.NaturalEarthFeature(
-                category='cultural',
-                name='admin_0_countries',
-                scale=resolution,
-                facecolor='none')
-            ax.add_feature(countries, edgecolor='black')
-        elif cartomap == 'provinces':
-            # Create a feature for States/Admin 1 regions at
-            # 1:resolution from Natural Earth
-            states_provinces = cartopy.feature.NaturalEarthFeature(
-                category='cultural',
-                name='admin_1_states_provinces_lines',
-                scale=resolution,
-                facecolor='none')
-            ax.add_feature(states_provinces, edgecolor='gray')
-        elif (cartomap == 'urban_areas' and
-                resolution in ('10m', '50m')):
-            urban_areas = cartopy.feature.NaturalEarthFeature(
-                category='cultural',
-                name='urban_areas',
-                scale=resolution)
-            ax.add_feature(
-                urban_areas, edgecolor='brown', facecolor='brown',
-                alpha=0.25)
-        elif cartomap == 'roads' and resolution == '10m':
-            roads = cartopy.feature.NaturalEarthFeature(
-                category='cultural',
-                name='roads',
-                scale=resolution)
-            ax.add_feature(roads, edgecolor='red', facecolor='none')
-        elif cartomap == 'railroads' and resolution == '10m':
-            railroads = cartopy.feature.NaturalEarthFeature(
-                category='cultural',
-                name='railroads',
-                scale=resolution)
-            ax.add_feature(
-                railroads, edgecolor='green', facecolor='none',
-                linestyle=':')
-        elif cartomap == 'coastlines':
-            ax.coastlines(resolution=resolution)
-        elif cartomap == 'lakes':
-            # add lakes
-            lakes = cartopy.feature.NaturalEarthFeature(
-                category='physical',
-                name='lakes',
-                scale=resolution)
-            ax.add_feature(
-                lakes, edgecolor='blue', facecolor='blue', alpha=0.25)
-        elif resolution == '10m' and cartomap == 'lakes_europe':
-            lakes_europe = cartopy.feature.NaturalEarthFeature(
-                category='physical',
-                name='lakes_europe',
-                scale=resolution)
-            ax.add_feature(
-                lakes_europe, edgecolor='blue', facecolor='blue',
-                alpha=0.25)
-        elif cartomap == 'rivers':
-            # add rivers
-            rivers = cartopy.feature.NaturalEarthFeature(
-                category='physical',
-                name='rivers_lake_centerlines',
-                scale=resolution)
-            ax.add_feature(rivers, edgecolor='blue', facecolor='none')
-        elif resolution == '10m' and cartomap == 'rivers_europe':
-            rivers_europe = cartopy.feature.NaturalEarthFeature(
-                category='physical',
-                name='rivers_europe',
-                scale=resolution)
-            ax.add_feature(
-                rivers_europe, edgecolor='blue', facecolor='none')
-        else:
-            warn('cartomap '+cartomap+' for resolution '+resolution +
-                  ' not available')
+
+    if 'maps' in prdcfg['ppiMapImageConfig']:
+        if 'relief' in prdcfg['ppiMapImageConfig']['maps']:
+            tiler = Stamen('terrain-background')
+            projection = tiler.crs
+            fig.delaxes(ax)
+            ax = fig.add_subplot(111, projection=projection)
+            warn(
+                'The projection of the image is set to that of the ' +
+                'background map, i.e. '+str(projection), UserWarning)
+
+        for cartomap in prdcfg['ppiMapImageConfig']['maps']:
+            if cartomap == 'relief':
+                ax.add_image(tiler, background_zoom)
+            if cartomap == 'countries':
+                # add countries
+                countries = cartopy.feature.NaturalEarthFeature(
+                    category='cultural',
+                    name='admin_0_countries',
+                    scale=resolution,
+                    facecolor='none')
+                ax.add_feature(countries, edgecolor='black')
+            elif cartomap == 'provinces':
+                # Create a feature for States/Admin 1 regions at
+                # 1:resolution from Natural Earth
+                states_provinces = cartopy.feature.NaturalEarthFeature(
+                    category='cultural',
+                    name='admin_1_states_provinces_lines',
+                    scale=resolution,
+                    facecolor='none')
+                ax.add_feature(states_provinces, edgecolor='gray')
+            elif (cartomap == 'urban_areas' and
+                    resolution in ('10m', '50m')):
+                urban_areas = cartopy.feature.NaturalEarthFeature(
+                    category='cultural',
+                    name='urban_areas',
+                    scale=resolution)
+                ax.add_feature(
+                    urban_areas, edgecolor='brown', facecolor='brown',
+                    alpha=0.25)
+            elif cartomap == 'roads' and resolution == '10m':
+                roads = cartopy.feature.NaturalEarthFeature(
+                    category='cultural',
+                    name='roads',
+                    scale=resolution)
+                ax.add_feature(roads, edgecolor='red', facecolor='none')
+            elif cartomap == 'railroads' and resolution == '10m':
+                railroads = cartopy.feature.NaturalEarthFeature(
+                    category='cultural',
+                    name='railroads',
+                    scale=resolution)
+                ax.add_feature(
+                    railroads, edgecolor='green', facecolor='none',
+                    linestyle=':')
+            elif cartomap == 'coastlines':
+                ax.coastlines(resolution=resolution)
+            elif cartomap == 'lakes':
+                # add lakes
+                lakes = cartopy.feature.NaturalEarthFeature(
+                    category='physical',
+                    name='lakes',
+                    scale=resolution)
+                ax.add_feature(
+                    lakes, edgecolor='blue', facecolor='blue', alpha=0.25)
+            elif resolution == '10m' and cartomap == 'lakes_europe':
+                lakes_europe = cartopy.feature.NaturalEarthFeature(
+                    category='physical',
+                    name='lakes_europe',
+                    scale=resolution)
+                ax.add_feature(
+                    lakes_europe, edgecolor='blue', facecolor='blue',
+                    alpha=0.25)
+            elif cartomap == 'rivers':
+                # add rivers
+                rivers = cartopy.feature.NaturalEarthFeature(
+                    category='physical',
+                    name='rivers_lake_centerlines',
+                    scale=resolution)
+                ax.add_feature(rivers, edgecolor='blue', facecolor='none')
+            elif resolution == '10m' and cartomap == 'rivers_europe':
+                rivers_europe = cartopy.feature.NaturalEarthFeature(
+                    category='physical',
+                    name='rivers_europe',
+                    scale=resolution)
+                ax.add_feature(
+                    rivers_europe, edgecolor='blue', facecolor='none')
+            else:
+                warn('cartomap '+cartomap+' for resolution '+resolution +
+                     ' not available')
+
     if 'rngRing' in prdcfg['ppiMapImageConfig']:
         if prdcfg['ppiMapImageConfig']['rngRing'] > 0:
             rng_rings = np.arange(

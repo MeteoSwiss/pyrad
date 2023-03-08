@@ -20,7 +20,7 @@ Functions for reading pyrad config files
 import os
 import re
 import numpy as np
-
+from warnings import warn
 
 def read_config(fname, cfg=None):
     """
@@ -67,38 +67,43 @@ def read_config(fname, cfg=None):
             # ignore comments
             if line.startswith('#'):
                 continue
-
+            
             line = line.partition('#')[0]  # Remove comments
             line = line.strip()
+            
+            try:
+                vals = line.split()
 
-            vals = line.split()
+                fieldname = vals[0]
+                nvals = len(vals)
 
-            fieldname = vals[0]
-            nvals = len(vals)
+                if nvals < 3:
+                    raise Exception(
+                        "FILE FORMAT ERROR: file: " + fname +
+                        ", variable: " + fieldname +
+                        ": Wrong number of elements!")
 
-            if nvals < 3:
-                raise Exception(
-                    "FILE FORMAT ERROR: file: " + fname +
-                    ", variable: " + fieldname +
-                    ": Wrong number of elements!")
+                valtype = vals[1]
+                valuestr = vals[2:nvals]
+                nel, isstruct = get_num_elements(valtype, valuestr)
 
-            valtype = vals[1]
-            valuestr = vals[2:nvals]
-            nel, isstruct = get_num_elements(valtype, valuestr)
-
-            if nel > 0:
-                if isstruct:
-                    pos = cfgfile.tell()
-                    fieldvalue, newpos = get_struct(cfgfile, pos, nel, fname)
-                    cfgfile.seek(newpos)
+                if nel > 0:
+                    if isstruct:
+                        pos = cfgfile.tell()
+                        fieldvalue, newpos = get_struct(cfgfile, pos, nel, fname)
+                        cfgfile.seek(newpos)
+                    else:
+                        pos = cfgfile.tell()
+                        fieldvalue, newpos = get_array(cfgfile, pos, nel, valtype)
+                        cfgfile.seek(newpos)
                 else:
-                    pos = cfgfile.tell()
-                    fieldvalue, newpos = get_array(cfgfile, pos, nel, valtype)
-                    cfgfile.seek(newpos)
-            else:
-                fieldvalue = string_to_datatype(valtype, valuestr)
+                    fieldvalue = string_to_datatype(valtype, valuestr)
 
-            cfg.update({fieldname: fieldvalue})
+                cfg.update({fieldname: fieldvalue})
+            except:
+                if line != '':
+                    warn('Parsing failed after line {:s}'.format(line))
+                raise
         else:
             fileend = 1
 
@@ -278,35 +283,40 @@ def get_struct(cfgfile, pos, nels, fname):
         line = line.partition('#')[0]  # Remove comments
         line = line.strip()
 
-        vals = line.split()
+        try:
+            vals = line.split()
 
-        sfieldname = vals[0]
-        nvals = len(vals)
+            sfieldname = vals[0]
+            nvals = len(vals)
 
-        if nvals < 3:
-            raise Exception(
-                "FILE FORMAT ERROR: file: " + fname +
-                ", struct variable: " + sfieldname +
-                ": Wrong number of elements!")
+            if nvals < 3:
+                raise Exception(
+                    "FILE FORMAT ERROR: file: " + fname +
+                    ", struct variable: " + sfieldname +
+                    ": Wrong number of elements!")
 
-        svaltype = vals[1]
-        svaluestr = vals[2:nvals]
-        nel, isstruct = get_num_elements(svaltype, svaluestr)
+            svaltype = vals[1]
+            svaluestr = vals[2:nvals]
+            nel, isstruct = get_num_elements(svaltype, svaluestr)
 
-        if nel > 0:
-            if isstruct:
-                pos = cfgfile.tell()
-                sfieldvalue, newpos = get_struct(cfgfile, pos, nel, fname)
-                cfgfile.seek(newpos)
+            if nel > 0:
+                if isstruct:
+                    pos = cfgfile.tell()
+                    sfieldvalue, newpos = get_struct(cfgfile, pos, nel, fname)
+                    cfgfile.seek(newpos)
+                else:
+                    pos = cfgfile.tell()
+                    sfieldvalue, newpos = get_array(cfgfile, pos, nel, svaltype)
+                    cfgfile.seek(newpos)
             else:
-                pos = cfgfile.tell()
-                sfieldvalue, newpos = get_array(cfgfile, pos, nel, svaltype)
-                cfgfile.seek(newpos)
-        else:
-            newpos = cfgfile.tell()
-            sfieldvalue = string_to_datatype(svaltype, svaluestr)
+                newpos = cfgfile.tell()
+                sfieldvalue = string_to_datatype(svaltype, svaluestr)
 
-        struct.update({sfieldname: sfieldvalue})
+            struct.update({sfieldname: sfieldvalue})
+        except:
+            if line != '':
+                warn('Parsing failed after line {:s}'.format(line))
+            raise
 
     return struct, newpos
 

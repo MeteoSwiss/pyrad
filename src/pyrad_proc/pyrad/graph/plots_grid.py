@@ -86,7 +86,7 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
     mask_outside = prdcfg.get('mask_outside', False)
 
     norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name])
+        field_name, field_dict=grid.fields[field_name], isxarray = True)
 
     xsize = prdcfg['gridMapImageConfig']['xsize']
     ysize = prdcfg['gridMapImageConfig']['ysize']
@@ -323,7 +323,7 @@ def plot_surface_raw(grid, field_name, level, prdcfg, fname_list, titl=None,
     vmax = prdcfg.get('vmax', None)
 
     norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name])
+        field_name, field_dict=grid.fields[field_name], isxarray = True)
 
     xsize = prdcfg['gridMapImageConfig']['xsize']
     ysize = prdcfg['gridMapImageConfig']['ysize']
@@ -541,7 +541,8 @@ def plot_latitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
         dpi = prdcfg['rhiImageConfig']['dpi']
 
     norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name])
+        field_name, field_dict=grid.fields[field_name],
+        isxarray = True)
 
     xsize = prdcfg['rhiImageConfig'].get('xsize', 10.)
     ysize = prdcfg['rhiImageConfig'].get('ysize', 5.)
@@ -592,7 +593,8 @@ def plot_longitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
         dpi = prdcfg['rhiImageConfig']['dpi']
 
     norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name])
+        field_name, field_dict=grid.fields[field_name],
+        isxarray = True)
 
     xsize = prdcfg['rhiImageConfig'].get('xsize', 10.)
     ysize = prdcfg['rhiImageConfig'].get('ysize', 5.)
@@ -643,7 +645,8 @@ def plot_latlon_slice(grid, field_name, coord1, coord2, prdcfg, fname_list):
         dpi = prdcfg['rhiImageConfig']['dpi']
 
     norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name])
+        field_name, field_dict=grid.fields[field_name],
+        isxarray = True)
 
     xsize = prdcfg['rhiImageConfig'].get('xsize', 10.)
     ysize = prdcfg['rhiImageConfig'].get('ysize', 5.)

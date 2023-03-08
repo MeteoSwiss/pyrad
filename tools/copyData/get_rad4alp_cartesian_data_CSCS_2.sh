@@ -56,6 +56,8 @@ do
     shift # past argument or value
 done
 
+echo $PROD
+echo $DAY
 # get vector of times to retrieve
 
 # set start time as multiple of 5 minutes

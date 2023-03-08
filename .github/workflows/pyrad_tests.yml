@@ -1,6 +1,6 @@
-name: Test pyrad
+name: Test pyrad master
 env:
-  MINIMAL_DEPENDENCIES: cython numpy scipy netCDF4 
+  MINIMAL_DEPENDENCIES: cython numpy scipy netCDF4 xarray 
   OPTIONAL_DEPENDENCIES: pyfftw cartopy h5py pandas scikit-image
   TEST_DEPENDENCIES: pytest pytest-cov
 
@@ -20,7 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ "ubuntu-latest" ]
-        python-version: [ "3.7", "3.8", "3.9"]
+        python-version: ["3.8", "3.9"]
       max-parallel: 6
 
     defaults:

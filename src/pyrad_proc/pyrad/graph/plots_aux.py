@@ -268,7 +268,7 @@ def get_field_name(field_dict, field):
     return field_name
 
 
-def get_norm(field_name, field_dict={}):
+def get_norm(field_name, field_dict={}, isxarray = False):
     """
     Computes the normalization of the colormap, and gets the ticks and labels
     of the colorbar from the metadata of the field. Returns None if the
@@ -282,7 +282,10 @@ def get_norm(field_name, field_dict={}):
         name of the field
     field_dict : dict or None
         dictionary containing the field and its metadata.
-
+    isxarray : bool
+        whether or not the norm will be used with xarray's plotting functions 
+        default is false, which means that matplotlib plotting functions will be used
+        should be set to true when plotting Grid objects which are handled as xarray by pyart
     Returns
     -------
     norm : list
@@ -299,13 +302,18 @@ def get_norm(field_name, field_dict={}):
 
     ref_dict = pyart.config.get_metadata(field_name)
     cmap = mpl.cm.get_cmap(pyart.config.get_field_colormap(field_name))
+    
+    if isxarray:
+        ncolors = len(field_dict['boundaries']) - 1
+    else:
+        ncolors = cmap.N
 
     if field_dict is not None and 'boundaries' in field_dict:
         norm = mpl.colors.BoundaryNorm(
-            boundaries=field_dict['boundaries'], ncolors=len(field_dict['boundaries']) - 1)
+            boundaries=field_dict['boundaries'], ncolors=ncolors)
     elif 'boundaries' in ref_dict:
         norm = mpl.colors.BoundaryNorm(
-            boundaries=ref_dict['boundaries'], ncolors=len(field_dict['boundaries']) - 1)
+            boundaries=ref_dict['boundaries'], ncolors=ncolors)
 
     if field_dict is not None and 'ticks' in field_dict:
         ticks = field_dict['ticks']
