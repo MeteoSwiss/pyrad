@@ -21,6 +21,8 @@ from netCDF4 import num2date
 from ..io.io_aux import get_save_dir, make_filename, get_fieldname_pyart
 from ..io.io_aux import generate_field_name_str
 
+from ..io.trajectory import Trajectory
+
 from ..io.write_data import write_cdf, write_rhi_profile, write_field_coverage
 from ..io.write_data import write_last_state, write_histogram, write_quantiles
 from ..io.write_data import write_fixed_angle, write_monitoring_ts
@@ -913,6 +915,18 @@ def generate_vol_products(dataset, prdcfg):
                 prdcfg['type'])
             return None
 
+        if 'roi_dict' in dataset:
+            roi_dict = dataset['roi_dict']
+        elif 'roi_file' in prdcfg:
+            traj = Trajectory(prdcfg['roi_file'])
+            roi_dict = {
+                'lon': traj.wgs84_lon_deg,
+                'lat': traj.wgs84_lat_deg
+            }
+        else:
+            warn('unable to plot ROI over PPI MAP. ROI data not found')
+            return None
+
         el_vec = np.sort(dataset['radar_out'].fixed_angle['data'])
         el = el_vec[prdcfg['anglenr']]
         ind_el = np.where(
@@ -935,7 +949,7 @@ def generate_vol_products(dataset, prdcfg):
             save_fig=False)
 
         fname_list = plot_roi_contour(
-            dataset['roi_dict'], prdcfg, fname_list, ax=ax, fig=fig,
+            roi_dict, prdcfg, fname_list, ax=ax, fig=fig,
             save_fig=True)
 
         print('----- save to '+' '.join(fname_list))
