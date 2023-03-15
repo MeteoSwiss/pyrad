@@ -27,6 +27,7 @@ from ..io.write_data import write_cdf, write_rhi_profile, write_field_coverage
 from ..io.write_data import write_last_state, write_histogram, write_quantiles
 from ..io.write_data import write_fixed_angle, write_monitoring_ts
 from ..io.write_data import write_alarm_msg, write_timeseries_point, send_msg
+from ..io.write_data import write_vol_kml, write_vol_csv
 
 from ..io.read_data_other import read_monitoring_ts
 
@@ -47,6 +48,12 @@ from ..util.radar_utils import compute_histogram, compute_quantiles
 from ..util.radar_utils import get_data_along_rng, get_data_along_azi
 from ..util.radar_utils import get_data_along_ele
 from ..util.stat_utils import quantiles_weighted
+
+try:
+    import simplekml
+    _SIMPLEKML_AVAILABLE = True
+except ImportError:
+    _SIMPLEKML_AVAILABLE = False
 
 
 def generate_vol_products(dataset, prdcfg):
@@ -557,6 +564,18 @@ def generate_vol_products(dataset, prdcfg):
                     The compression options allowed by the hdf5. Depends on
                     the type of compression. Default 6 (The gzip compression
                     level).
+        'SAVEVOL_CSV': Saves one field of a radar volume data in a CSV file
+            User defined parameters:
+                ignore_masked: bool
+                    If True masked values will not be saved. Default False
+        'SAVEVOL_KML': Saves one field of a radar volume data in a KML file
+            User defined parameters:
+                ignore_masked: bool
+                    If True masked values will not be saved. Default False
+                azi_res : float or None
+                    azimuthal resolution of the range bins. If None the
+                    antenna beamwidth is going to be used to determine the
+                    resolution
         'SAVEVOL_VOL' : Same as before but can be used in a mixed GRID/VOL
             dataset, as there is no ambiguity with SAVEVOL for GRID datasets
         'SAVE_FIXED_ANGLE': Saves the position of the first fix angle in a
@@ -3238,6 +3257,84 @@ def generate_vol_products(dataset, prdcfg):
         send_msg(sender, receiver_list, subject, alarm_fname)
 
         return alarm_fname
+
+    if prdcfg['type'] == 'SAVEVOL_CSV':
+        field_name = get_fieldname_pyart(prdcfg['voltype'])
+        if field_name not in dataset['radar_out'].fields:
+            warn(
+                ' Field type ' + field_name +
+                ' not available in data set. Skipping product ' +
+                prdcfg['type'])
+            return None
+
+        ignore_masked = prdcfg.get('ignore_masked', False)
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdsavedir, timeinfo=prdcfg['timeinfo'])
+
+        fname = make_filename(
+            'savevol', prdcfg['dstype'], prdcfg['voltype'], ['csv'],
+            timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
+
+        fname = savedir+fname
+
+        fname = write_vol_csv(
+            fname, dataset['radar_out'], field_name,
+            ignore_masked=ignore_masked)
+
+        print('saved file: '+fname)
+
+        return fname
+
+    if prdcfg['type'] == 'SAVEVOL_KML':
+        if not _SIMPLEKML_AVAILABLE:
+            warn('simplekml needed to output kml file')
+            return None
+
+        field_name = get_fieldname_pyart(prdcfg['voltype'])
+        if field_name not in dataset['radar_out'].fields:
+            warn(
+                ' Field type ' + field_name +
+                ' not available in data set. Skipping product ' +
+                prdcfg['type'])
+            return None
+
+        ignore_masked = prdcfg.get('ignore_masked', False)
+        azi_res = prdcfg.get('azi_res', None)
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdsavedir, timeinfo=prdcfg['timeinfo'])
+
+        fname = make_filename(
+            'savevol', prdcfg['dstype'], prdcfg['voltype'], ['kml'],
+            timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
+
+        fname = savedir+fname
+
+        if azi_res is None:
+            azi_res = 1.
+            if dataset['radar_out'].instrument_parameters is None:
+                warn(f'radar beamwidth not specified.'
+                     f' Default {azi_res} deg will be used')
+            elif 'radar_beam_width_h' not in dataset[
+                    'radar_out'].instrument_parameters:
+                warn(f'radar beamwidth not specified.'
+                     f' Default {azi_res} deg will be used')
+            else:
+                azi_res = dataset['radar_out'].instrument_parameters[
+                    'radar_beam_width_h']['data'][0]
+        rng_res_km = dataset['rng_res']/1000.
+
+        fname = write_vol_kml(
+            fname, dataset['radar_out'], field_name,
+            ignore_masked=ignore_masked, rng_res_km=rng_res_km,
+            azi_res=azi_res)
+
+        print('saved file: '+fname)
+
+        return fname
 
     if prdcfg['type'] == 'SAVEVOL' or prdcfg['type'] == 'SAVEVOL_VOL':
         field_name = get_fieldname_pyart(prdcfg['voltype'])
