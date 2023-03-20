@@ -229,6 +229,7 @@ def process_gecsx(procstatus, dscfg, radar_list=None):
 
     fname = dscfg['dempath'][ind_rad] + dscfg['demfile']
 
+    demproj = None
     if 'demproj' in dscfg.keys():
         demproj = dscfg['demproj']
         try:

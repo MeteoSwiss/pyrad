@@ -28,6 +28,7 @@ from ..io.write_data import write_last_state, write_histogram, write_quantiles
 from ..io.write_data import write_fixed_angle, write_monitoring_ts
 from ..io.write_data import write_alarm_msg, write_timeseries_point, send_msg
 from ..io.write_data import write_vol_kml, write_vol_csv
+from ..io.read_data_dem import read_dem, dem2radar_data
 
 from ..io.read_data_other import read_monitoring_ts
 
@@ -37,6 +38,7 @@ from ..graph.plots_vol import plot_field_coverage, plot_time_range
 from ..graph.plots_vol import plot_rhi_contour, plot_ppi_contour
 from ..graph.plots_vol import plot_fixed_rng, plot_fixed_rng_span
 from ..graph.plots_vol import plot_roi_contour, plot_ray
+from ..graph.plots_vol import plot_xsection
 from ..graph.plots import plot_quantiles, plot_histogram
 from ..graph.plots import plot_selfconsistency_instrument
 from ..graph.plots import plot_selfconsistency_instrument2
@@ -120,6 +122,24 @@ def generate_vol_products(dataset, prdcfg):
                     pyart.map.grid_from_radars. Default 'NEAREST'
                 cappi_res: float
                     The CAPPI resolution [m]. Default 500.
+        'CROSS_SECTION' : Plots a cross-section of polar data through arbitrary coordinates
+            User defined parameters:
+                coord1, coord2, ..., coordN: dict
+                    The two lat-lon coordinates marking the limits. They have
+                    the keywords 'lat' and 'lon' [degree]. 
+                step : int
+                    Step in meters to use between reference points to calculate
+                    the cross-section (i.e horizontal resolution).
+                vert_res : int
+                    Vertical resolution in meters used to calculate the cross-section 
+                alt_max : int
+                    Maximum altitude of the vertical cross-section 
+                beamwidth : float
+                    3dB beamwidth in degrees to be used in the calculations, if not provided
+                    will be read from the loc file
+                demfile : str
+                    Name of the DEM file to use to plot the topography, it must be in the 
+                    dempath specified in the main config file
         'FIELD_COVERAGE': Gets the field coverage over a certain sector
             User defined parameters:
                 threshold: float or None
@@ -2067,6 +2087,85 @@ def generate_vol_products(dataset, prdcfg):
         plot_cappi(
             dataset['radar_out'], field_name, prdcfg['altitude'], prdcfg,
             fname_list)
+        print('----- save to '+' '.join(fname_list))
+
+        return fname_list
+
+    if prdcfg['type'] == 'CROSS_SECTION':
+        field_name = get_fieldname_pyart(prdcfg['voltype'])
+        if field_name not in dataset['radar_out'].fields:
+            warn(
+                ' Field type ' + field_name +
+                ' not available in data set. Skipping product ' +
+                prdcfg['type'])
+            return None
+
+        vmin = prdcfg.get('vmin', None)
+        vmax = prdcfg.get('vmax', None)
+        
+        step = prdcfg.get('step', 1000)
+        vert_res = prdcfg.get('vert_res', 100)
+        alt_max = prdcfg.get('alt_max', 10000)
+        beamwidth = prdcfg.get('beamwidth', None)
+        if beamwidth == None:
+            if 'RadarBeamwidth' in prdcfg:
+                beamwidth = prdcfg['RadarBeamwidth']
+            else:
+                warn('Radar beamwidth not provided, assuming 1 deg')
+                beamwidth = 1
+        demfile = prdcfg.get('demfile', None)
+
+        if demfile != None:
+            demproj = None
+            if 'demproj' in prdcfg.keys():
+                demproj = prdcfg['demproj']
+                try:
+                    demproj = int(demproj)
+                except ValueError:
+                    # demproj is not an EPSG int
+                    pass
+
+            fname = prdcfg['dempath'][0] + prdcfg['demfile']
+            dem = read_dem(fname, projparams = demproj)
+        else:
+            dem = None
+
+        # user defined values
+        ref_pts = []
+        i = 1
+        while True:
+            coord = 'coord{:d}'.format(i)
+            coord_pt = []
+            if coord in prdcfg:
+                if 'lon' in prdcfg[coord]:
+                    coord_pt.append(prdcfg[coord]['lon'])
+                if 'lat' in prdcfg[coord]:
+                    coord_pt.append(prdcfg[coord]['lat'])
+                ref_pts.append(coord_pt)
+            else:
+                break
+            i += 1
+        
+        ref_pts_str = '_'.join(['{:2.1f}-{:2.1f}'.format(pt[0], pt[1])
+             for pt in ref_pts])
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdsavedir, timeinfo=prdcfg['timeinfo'])
+
+        fname_list = make_filename(
+            'cross_section', prdcfg['dstype'], prdcfg['voltype'],
+            prdcfg['imgformat'],
+            prdcfginfo='refpts_'+'{:s}'.format(ref_pts_str),
+            timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
+
+        for i, fname in enumerate(fname_list):
+                fname_list[i] = savedir+fname
+
+        plot_xsection(
+            dataset['radar_out'], field_name, ref_pts, step, vert_res,
+            alt_max, beamwidth, dem, prdcfg, fname_list, vmin = vmin, 
+            vmax = vmax)
+
         print('----- save to '+' '.join(fname_list))
 
         return fname_list
