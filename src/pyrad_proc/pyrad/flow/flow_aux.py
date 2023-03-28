@@ -1388,9 +1388,12 @@ def _create_prdcfg_dict(cfg, dataset, product, voltime, runinfo=None):
     prdcfg.update({'smnpath': cfg['smnpath']})
     prdcfg.update({'disdropath': cfg['disdropath']})
     prdcfg.update({'cosmopath': cfg['cosmopath']})
+    prdcfg.update({'dempath': cfg['dempath']})
     prdcfg.update({'ScanPeriod': cfg['ScanPeriod']})
     prdcfg.update({'imgformat': cfg['imgformat']})
     prdcfg.update({'RadarName': cfg['RadarName']})
+    if 'RadarBeamwidth' in cfg:
+        prdcfg.update({'RadarBeamwidth': cfg['RadarBeamwidth']})
     if 'ppiImageConfig' in cfg:
         prdcfg.update({'ppiImageConfig': cfg['ppiImageConfig']})
     if 'ppiMapImageConfig' in cfg:

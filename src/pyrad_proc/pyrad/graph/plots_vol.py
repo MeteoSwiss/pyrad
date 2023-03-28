@@ -17,6 +17,7 @@ Functions to plot radar volume data
     plot_fixed_rng_span
     plot_fixed_rng_sun
     plot_cappi
+    plot_xsection
     plot_traj
     plot_rhi_contour
     plot_ppi_contour
@@ -1297,6 +1298,94 @@ def plot_cappi(radar, field_name, altitude, prdcfg, fname_list,
 
     return (fig, ax)
 
+
+def plot_xsection(radar, field_name, ref_points, step, vert_res, alt_max, beamwidth, 
+             dem, prdcfg, fname_list, titl=None, vmin=None, vmax=None, save_fig=True):
+    """
+    plots a cross-section on polar data
+
+    Parameters
+    ----------
+    radar : Radar object
+        object containing the radar data to plot
+    field_name : str
+        name of the radar field to plot
+    ref_points :  ndarray
+            N x 2 array containing the lon, lat coordinates of N reference 
+            points along the trajectory in WGS84 coordinates,
+            for example [[11, 46], [10, 45], [9, 47]]
+    step : int
+            Step in meters to use between reference points to calculate
+            the cross-section (i.e horizontal resolution).
+    vert_res : int
+            Vertical resolution in meters used to calculate the cross-section 
+    alt_max : int
+        Maximum altitude of the vertical cross-section 
+    beamwidth : float
+        3dB beamwidth in degrees to be used in the calculations
+    dem : Grid
+        Grid object that contains data from a digital elevation model
+        the data ist expected to be in meters
+    prdcfg : dict
+        dictionary containing the product configuration
+    fname_list : list of str
+        list of names of the files where to store the plot
+    titl : str
+        Plot title
+    vmin, vmax : float
+        The minimum and maximum value. If None the scale is going to be
+        obtained from the Py-ART config file.
+    save_fig : bool
+        if true save the figure. If false it does not close the plot and
+        returns the handle to the figure
+
+    Returns
+    -------
+    fname_list : list of str or
+    fig, ax : tupple
+        list of names of the saved plots or handle of the figure an axes
+
+    """
+    dpi = prdcfg['rhiImageConfig'].get('dpi', 72)
+
+    norm = None
+    ticks = None
+    ticklabs = None
+    if vmin is None or vmax is None:
+        norm, ticks, ticklabs = get_norm(
+            field_name, field_dict=radar.fields[field_name])
+        vmin = None
+        vmax = None
+
+    xsize = prdcfg['rhiImageConfig']['xsize']
+    ysize = prdcfg['rhiImageConfig']['ysize']
+    fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
+
+    step = prdcfg.get('step', 1000)
+    ax = fig.add_subplot(111)
+    display = pyart.graph.RadarDisplay(radar)
+
+    display.plot_xsection(
+        field_name, ref_points, step, vert_res, alt_max, beamwidth, dem, title=titl,
+        norm=norm, ticks=ticks, ticklabs=ticklabs, vmin=vmin, vmax=vmax,
+        colorbar_orient='horizontal',  fig=fig, ax=ax)
+
+    # Turn on the grid
+    ax.grid()
+
+    # Make a tight layout
+    fig.tight_layout()
+
+    if save_fig:
+        for fname in fname_list:
+            fig.savefig(fname, dpi=dpi)
+        plt.close(fig)
+
+        return fname_list
+
+    return (fig, ax)
+
+    return fname_list
 
 def plot_traj(rng_traj, azi_traj, ele_traj, time_traj, prdcfg, fname_list,
               rad_alt=None, rad_tstart=None, ax=None, fig=None,
