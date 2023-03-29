@@ -7,6 +7,8 @@ Functions for writing pyrad output data
 .. autosummary::
     :toctree: generated/
 
+    write_vol_csv
+    write_vol_kml
     write_centroids
     write_proc_periods
     write_fixed_angle
@@ -61,10 +63,161 @@ import time
 from datetime import datetime as dt
 
 import numpy as np
+import pandas as pd
 
-from pyart.config import get_fillvalue
+from pyart.config import get_fillvalue, get_field_colormap, get_field_limits
+from pyart.core import antenna_to_cartesian, cartesian_to_geographic_aeqd
+from pyart.graph.cm import cmap_d
 
 from .io_aux import generate_field_name_str
+
+try:
+    import simplekml
+    _SIMPLEKML_AVAILABLE = True
+except ImportError:
+    _SIMPLEKML_AVAILABLE = False
+
+
+def write_vol_csv(fname, radar, field_name, ignore_masked=False):
+    """
+    Creates a kml file with the radar volume data
+
+    Parameters
+    ----------
+    fname : str
+        kml file name
+    radar : radar object
+        radar object containing the data
+    field_name : str
+        field name to convert
+    ignore_masked : bool
+        if True the masked values will be ignored
+
+    Returns
+    -------
+    fname : str
+        the name of the file containing the content
+
+    """
+    df = pd.DataFrame()
+    df['lon'] = radar.gate_longitude['data'][0, :]
+    df['lat'] = radar.gate_latitude['data'][0, :]
+    df['alt'] = radar.gate_altitude['data'][0, :]
+    if radar.azimuth['data'].size == df.shape[0]:
+        df['azi'] = radar.azimuth['data']
+        df['ele'] = radar.elevation['data']
+    df['rng'] = radar.range['data']
+    df[field_name] = radar.fields[field_name]['data'][0, :]
+
+    if ignore_masked:
+        df.dropna(inplace=True)
+
+    df.to_csv(fname, index=False)
+
+    return fname
+
+
+def write_vol_kml(fname, radar, field_name, ignore_masked=False,
+                  rng_res_km=0.24, azi_res=0.5):
+    """
+    Creates a kml file with the radar volume data
+
+    Parameters
+    ----------
+    fname : str
+        kml file name
+    radar : radar object
+        radar object containing the data
+    field_name : str
+        field name to convert
+    ignore_masked : bool
+        if True the masked values will be ignored
+    rng_res_km : float
+        range resolution in km
+    azi_res : float
+        azimuth resolution (deg)
+
+    Returns
+    -------
+    fname : str
+        the name of the file containing the content
+
+    """
+    if not _SIMPLEKML_AVAILABLE:
+        warn('simplekml module required to write kml files')
+        return None
+
+    df = pd.DataFrame()
+    df['lon'] = radar.gate_longitude['data'][0, :]
+    df['lat'] = radar.gate_latitude['data'][0, :]
+    df['alt'] = radar.gate_altitude['data'][0, :]
+    if radar.azimuth['data'].size == df.shape[0]:
+        df['azi'] = radar.azimuth['data']
+        df['ele'] = radar.elevation['data']
+    df['rng'] = radar.range['data']
+    df[field_name] = radar.fields[field_name]['data'][0, :]
+
+    if ignore_masked:
+        df.dropna(inplace=True)
+
+    x1, y1, z1 = antenna_to_cartesian(
+        df['rng'].values/1000.-rng_res_km/2., df['azi'].values-azi_res/2,
+        df['ele'].values)
+    x2, y2, z2 = antenna_to_cartesian(
+        df['rng'].values/1000.-rng_res_km/2., df['azi'].values+azi_res/2,
+        df['ele'].values)
+    x3, y3, z3 = antenna_to_cartesian(
+        df['rng'].values/1000.+rng_res_km/2., df['azi'].values+azi_res/2,
+        df['ele'].values)
+    x4, y4, z4 = antenna_to_cartesian(
+        df['rng'].values/1000.+rng_res_km/2., df['azi'].values-azi_res/2,
+        df['ele'].values)
+
+    lon1, lat1 = cartesian_to_geographic_aeqd(
+        x1, y1, radar.longitude['data'][0], radar.latitude['data'][0])
+    lon2, lat2 = cartesian_to_geographic_aeqd(
+        x2, y2, radar.longitude['data'][0], radar.latitude['data'][0])
+    lon3, lat3 = cartesian_to_geographic_aeqd(
+        x3, y3, radar.longitude['data'][0], radar.latitude['data'][0])
+    lon4, lat4 = cartesian_to_geographic_aeqd(
+        x4, y4, radar.longitude['data'][0], radar.latitude['data'][0])
+
+    df['lon1'] = lon1
+    df['lon2'] = lon2
+    df['lon3'] = lon3
+    df['lon4'] = lon4
+    df['lat1'] = lat1
+    df['lat2'] = lat2
+    df['lat3'] = lat3
+    df['lat4'] = lat4
+    df['alt1'] = z1
+    df['alt2'] = z2
+    df['alt3'] = z3
+    df['alt4'] = z4
+
+    kml = simplekml.Kml()
+    df.apply(lambda X: kml.newpolygon(
+        name=f'azi={X["azi"]}, ele={X["ele"]}, rng={X["rng"]}',
+        outerboundaryis=[
+            (X['lon1'], X['lat1'], X["alt1"]),
+            (X['lon2'], X['lat2'], X["alt2"]),
+            (X['lon3'], X['lat3'], X["alt3"]),
+            (X['lon4'], X['lat4'], X["alt4"]),
+            (X['lon1'], X['lat1'], X["alt1"])],
+        altitudemode='absolute'),
+            axis=1)
+
+    # color value
+    cmap = cmap_d[get_field_colormap(field_name).split('_')[1]]
+    vmin, vmax = get_field_limits(field_name)
+    col_number = (df[field_name].values-vmin)/(vmax-vmin)
+    for ind, pol in enumerate(kml.features):
+        r, g, b, a = cmap(col_number[ind], bytes=True)
+        pol.style.polystyle.color = simplekml.Color.rgb(r, g, b)
+
+    kml.save(fname)
+
+    return fname
 
 
 def write_centroids(fname, centroids_dict, var_names):
@@ -73,6 +226,8 @@ def write_centroids(fname, centroids_dict, var_names):
 
     Parameters
     ----------
+    fname : str
+        file name
     centroids_dict : dict
         dictionary containing the centroids
     var_names : tuple

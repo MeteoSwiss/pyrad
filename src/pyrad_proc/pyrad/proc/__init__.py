@@ -19,6 +19,7 @@ Auxiliary functions
     process_fixed_rng
     process_fixed_rng_span
     process_roi
+    process_roi2
     process_azimuthal_average
     process_moving_azimuthal_average
     process_radar_resampling
@@ -259,7 +260,7 @@ DEM data
 """
 
 from .process_aux import get_process_func, process_raw, process_save_radar
-from .process_aux import process_roi, process_azimuthal_average
+from .process_aux import process_roi, process_roi2, process_azimuthal_average
 from .process_aux import process_fixed_rng, process_fixed_rng_span
 from .process_aux import process_radar_resampling, process_vol_to_grid
 from .process_aux import process_moving_azimuthal_average

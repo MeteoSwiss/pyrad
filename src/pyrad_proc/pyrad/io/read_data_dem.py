@@ -14,6 +14,7 @@ Functions for reading data derived from Digital Elevation Models (DEM)
 
 
 """
+import os
 import pathlib
 from warnings import warn
 import numpy as np
@@ -138,9 +139,7 @@ def read_dem(fname, field_name = 'terrain_altitude', fill_value=None,
         proj = osr.SpatialReference()
         proj.ImportFromEPSG(projparams)
         projparams = proj.ExportToProj4()
-    
-    projparams = _proj4_str_to_dict(projparams) 
-    
+        
     if extension in ['.tif','.tiff','.gtif']:
         metadata, rasterarray =   read_geotiff_data(fname, fill_value)
     elif extension in ['.asc','.dem','.txt']:
@@ -179,8 +178,10 @@ def read_dem(fname, field_name = 'terrain_altitude', fill_value=None,
     orig_alt['data'] = [0]
 
     if projparams is None:
-        projparams = _get_lv1903_wkt()
-    
+        projparams = _get_lv1903_proj4()
+    else:
+        projparams = _proj4_str_to_dict(projparams) 
+        
     time = get_metadata('grid_time')
     time['data'] = np.array([0.0])
     time['units'] = 'seconds since 2000-01-01T00:00:00Z'
@@ -326,7 +327,6 @@ def read_ascii_data(fname, fill_value = None):
                                  (metadata['rows'],metadata['columns']))
         rasterarray = np.ma.masked_equal(rasterarray, fill_value)
 
-
         return metadata, rasterarray
 
     except EnvironmentError as ee:
@@ -403,6 +403,8 @@ def read_idrisi_metadata(fname):
     """
     # read the data
     fname_rdc = fname.replace('.rst', '.rdc')
+    if not os.path.exists(fname_rdc):
+        fname_rdc = fname.replace('.rst', '.RDC')
 
     try:
         metadata = dict()

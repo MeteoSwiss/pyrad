@@ -116,6 +116,8 @@ Writing data
 .. autosummary::
     :toctree: generated/
 
+    write_vol_csv
+    write_vol_kml
     write_centroids
     write_proc_periods
     write_ts_lightning
@@ -258,6 +260,7 @@ from .write_data import write_trt_thundertracking_data, write_ts_grid_data
 from .write_data import write_trt_rpc, write_ts_stats, write_centroids
 from .write_data import write_multiple_points, write_vpr_theo_params
 from .write_data import write_multiple_points_grid, write_vpr_info
+from .write_data import write_vol_kml, write_vol_csv
 
 from .io_aux import get_save_dir, make_filename, get_new_rainbow_file_name
 from .io_aux import get_datetime, get_dataset_fields, map_hydro, map_Doppler

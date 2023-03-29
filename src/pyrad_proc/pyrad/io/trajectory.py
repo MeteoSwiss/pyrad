@@ -13,11 +13,11 @@ import sys
 import re
 import datetime
 import locale
-import pandas as pd
 from warnings import warn
 from copy import deepcopy
 
 import numpy as np
+import pandas as pd
 
 import pyart
 
@@ -25,7 +25,7 @@ from ..io.read_data_sensor import read_lightning, read_trt_traj_data
 from ..io.read_data_sensor import read_trt_thundertracking_traj_data
 
 
-class Trajectory(object):
+class Trajectory():
     """
     A class for reading and handling trajectory data from a file.
     Attributes
@@ -41,9 +41,9 @@ class Trajectory(object):
     time_vector : Array of datetime objects
         Array containing the trajectory time samples
     wgs84_lat_deg : Array of floats
-        WGS84 latitude samples in radian
+        WGS84 latitude samples in deg
     wgs84_lon_deg : Array of floats
-        WGS84 longitude samples in radian
+        WGS84 longitude samples in deg
     wgs84_alt_m : Array of floats
         WGS84 altitude samples in m
     nsamples : int
@@ -228,13 +228,11 @@ class Trajectory(object):
 
         if ((start is None) and (end is None)):
             raise Exception("ERROR: Either start or end must be defined")
-        elif start is None:
+        if start is None:
             return np.where(self.time_vector < end)
-        elif end is None:
+        if end is None:
             return np.where(self.time_vector >= start)
-        else:
-            return np.where((self.time_vector >= start) &
-                            (self.time_vector < end))
+        return np.where((self.time_vector >= start) & (self.time_vector < end))
 
     def get_start_time(self):
         """
@@ -301,8 +299,7 @@ class Trajectory(object):
                 try:
                     locale.setlocale(locale.LC_ALL, ('en_US', 'UTF-8'))
                 except Exception as ee:
-                    raise Exception("ERROR: Cannot set local 'en_US': %s"
-                                    % str(ee))
+                    raise Exception(f"ERROR: Cannot set local 'en_US': {ee}")
                 loc_set = True
 
             recording_started = True
@@ -327,8 +324,8 @@ class Trajectory(object):
 
                 mm = repat.match(line)
                 if not mm:
-                    print("WARNING: Format error in trajectory file '%s'"
-                          " on line '%s'" % (self.filename, line),
+                    print(f"WARNING: Format error in trajectory file"
+                          f" '{self.filename}' on line '{line}'",
                           file=sys.stderr)
                     continue
 
@@ -337,17 +334,16 @@ class Trajectory(object):
                     sday = datetime.datetime.strptime(mm.group(1), "%d-%b-%Y")
                 except Exception as ee:
                     print(datetime.datetime.utcnow().strftime("%d-%b-%Y"))
-                    raise Exception("ERROR: Format error in traj file '%s' "
-                                    "on line '%s' (%s)"
-                                    % (self.filename, line, str(ee)))
+                    raise Exception(
+                        f"ERROR: Format error in traj file '{self.filename}' "
+                        f"on line '{line}' ({str(ee)})")
 
                 sday += datetime.timedelta(seconds=float(mm.group(2)))
 
                 if not recording_started:
                     if sday < self.starttime:
                         continue
-                    else:
-                        recording_started = True
+                    recording_started = True
 
                 if recording_check_stop:
                     if sday > self.endtime:
@@ -462,8 +458,7 @@ class Trajectory(object):
             if not recording_started:
                 if time[i] < self.starttime:
                     continue
-                else:
-                    recording_started = True
+                recording_started = True
 
             if recording_check_stop:
                 if time[i] > self.endtime:
@@ -563,8 +558,7 @@ class Trajectory(object):
             if not recording_started:
                 if yyyymmddHHMM[i] < self.starttime:
                     continue
-                else:
-                    recording_started = True
+                recording_started = True
 
             if recording_check_stop:
                 if yyyymmddHHMM[i] > self.endtime:

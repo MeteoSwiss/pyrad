@@ -21,10 +21,14 @@ from netCDF4 import num2date
 from ..io.io_aux import get_save_dir, make_filename, get_fieldname_pyart
 from ..io.io_aux import generate_field_name_str
 
+from ..io.trajectory import Trajectory
+
 from ..io.write_data import write_cdf, write_rhi_profile, write_field_coverage
 from ..io.write_data import write_last_state, write_histogram, write_quantiles
 from ..io.write_data import write_fixed_angle, write_monitoring_ts
 from ..io.write_data import write_alarm_msg, write_timeseries_point, send_msg
+from ..io.write_data import write_vol_kml, write_vol_csv
+from ..io.read_data_dem import read_dem, dem2radar_data
 
 from ..io.read_data_other import read_monitoring_ts
 
@@ -34,6 +38,7 @@ from ..graph.plots_vol import plot_field_coverage, plot_time_range
 from ..graph.plots_vol import plot_rhi_contour, plot_ppi_contour
 from ..graph.plots_vol import plot_fixed_rng, plot_fixed_rng_span
 from ..graph.plots_vol import plot_roi_contour, plot_ray
+from ..graph.plots_vol import plot_xsection
 from ..graph.plots import plot_quantiles, plot_histogram
 from ..graph.plots import plot_selfconsistency_instrument
 from ..graph.plots import plot_selfconsistency_instrument2
@@ -45,6 +50,12 @@ from ..util.radar_utils import compute_histogram, compute_quantiles
 from ..util.radar_utils import get_data_along_rng, get_data_along_azi
 from ..util.radar_utils import get_data_along_ele
 from ..util.stat_utils import quantiles_weighted
+
+try:
+    import simplekml
+    _SIMPLEKML_AVAILABLE = True
+except ImportError:
+    _SIMPLEKML_AVAILABLE = False
 
 
 def generate_vol_products(dataset, prdcfg):
@@ -111,6 +122,24 @@ def generate_vol_products(dataset, prdcfg):
                     pyart.map.grid_from_radars. Default 'NEAREST'
                 cappi_res: float
                     The CAPPI resolution [m]. Default 500.
+        'CROSS_SECTION' : Plots a cross-section of polar data through arbitrary coordinates
+            User defined parameters:
+                coord1, coord2, ..., coordN: dict
+                    The two lat-lon coordinates marking the limits. They have
+                    the keywords 'lat' and 'lon' [degree]. 
+                step : int
+                    Step in meters to use between reference points to calculate
+                    the cross-section (i.e horizontal resolution).
+                vert_res : int
+                    Vertical resolution in meters used to calculate the cross-section 
+                alt_max : int
+                    Maximum altitude of the vertical cross-section 
+                beamwidth : float
+                    3dB beamwidth in degrees to be used in the calculations, if not provided
+                    will be read from the loc file
+                demfile : str
+                    Name of the DEM file to use to plot the topography, it must be in the 
+                    dempath specified in the main config file
         'FIELD_COVERAGE': Gets the field coverage over a certain sector
             User defined parameters:
                 threshold: float or None
@@ -555,6 +584,18 @@ def generate_vol_products(dataset, prdcfg):
                     The compression options allowed by the hdf5. Depends on
                     the type of compression. Default 6 (The gzip compression
                     level).
+        'SAVEVOL_CSV': Saves one field of a radar volume data in a CSV file
+            User defined parameters:
+                ignore_masked: bool
+                    If True masked values will not be saved. Default False
+        'SAVEVOL_KML': Saves one field of a radar volume data in a KML file
+            User defined parameters:
+                ignore_masked: bool
+                    If True masked values will not be saved. Default False
+                azi_res : float or None
+                    azimuthal resolution of the range bins. If None the
+                    antenna beamwidth is going to be used to determine the
+                    resolution
         'SAVEVOL_VOL' : Same as before but can be used in a mixed GRID/VOL
             dataset, as there is no ambiguity with SAVEVOL for GRID datasets
         'SAVE_FIXED_ANGLE': Saves the position of the first fix angle in a
@@ -913,6 +954,18 @@ def generate_vol_products(dataset, prdcfg):
                 prdcfg['type'])
             return None
 
+        if 'roi_dict' in dataset:
+            roi_dict = dataset['roi_dict']
+        elif 'roi_file' in prdcfg:
+            traj = Trajectory(prdcfg['roi_file'])
+            roi_dict = {
+                'lon': traj.wgs84_lon_deg,
+                'lat': traj.wgs84_lat_deg
+            }
+        else:
+            warn('unable to plot ROI over PPI MAP. ROI data not found')
+            return None
+
         el_vec = np.sort(dataset['radar_out'].fixed_angle['data'])
         el = el_vec[prdcfg['anglenr']]
         ind_el = np.where(
@@ -935,7 +988,7 @@ def generate_vol_products(dataset, prdcfg):
             save_fig=False)
 
         fname_list = plot_roi_contour(
-            dataset['roi_dict'], prdcfg, fname_list, ax=ax, fig=fig,
+            roi_dict, prdcfg, fname_list, ax=ax, fig=fig,
             save_fig=True)
 
         print('----- save to '+' '.join(fname_list))
@@ -2034,6 +2087,85 @@ def generate_vol_products(dataset, prdcfg):
         plot_cappi(
             dataset['radar_out'], field_name, prdcfg['altitude'], prdcfg,
             fname_list)
+        print('----- save to '+' '.join(fname_list))
+
+        return fname_list
+
+    if prdcfg['type'] == 'CROSS_SECTION':
+        field_name = get_fieldname_pyart(prdcfg['voltype'])
+        if field_name not in dataset['radar_out'].fields:
+            warn(
+                ' Field type ' + field_name +
+                ' not available in data set. Skipping product ' +
+                prdcfg['type'])
+            return None
+
+        vmin = prdcfg.get('vmin', None)
+        vmax = prdcfg.get('vmax', None)
+        
+        step = prdcfg.get('step', 1000)
+        vert_res = prdcfg.get('vert_res', 100)
+        alt_max = prdcfg.get('alt_max', 10000)
+        beamwidth = prdcfg.get('beamwidth', None)
+        if beamwidth == None:
+            if 'RadarBeamwidth' in prdcfg:
+                beamwidth = prdcfg['RadarBeamwidth']
+            else:
+                warn('Radar beamwidth not provided, assuming 1 deg')
+                beamwidth = 1
+        demfile = prdcfg.get('demfile', None)
+
+        if demfile != None:
+            demproj = None
+            if 'demproj' in prdcfg.keys():
+                demproj = prdcfg['demproj']
+                try:
+                    demproj = int(demproj)
+                except ValueError:
+                    # demproj is not an EPSG int
+                    pass
+
+            fname = prdcfg['dempath'][0] + prdcfg['demfile']
+            dem = read_dem(fname, projparams = demproj)
+        else:
+            dem = None
+
+        # user defined values
+        ref_pts = []
+        i = 1
+        while True:
+            coord = 'coord{:d}'.format(i)
+            coord_pt = []
+            if coord in prdcfg:
+                if 'lon' in prdcfg[coord]:
+                    coord_pt.append(prdcfg[coord]['lon'])
+                if 'lat' in prdcfg[coord]:
+                    coord_pt.append(prdcfg[coord]['lat'])
+                ref_pts.append(coord_pt)
+            else:
+                break
+            i += 1
+        
+        ref_pts_str = '_'.join(['{:2.1f}-{:2.1f}'.format(pt[0], pt[1])
+             for pt in ref_pts])
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdsavedir, timeinfo=prdcfg['timeinfo'])
+
+        fname_list = make_filename(
+            'cross_section', prdcfg['dstype'], prdcfg['voltype'],
+            prdcfg['imgformat'],
+            prdcfginfo='refpts_'+'{:s}'.format(ref_pts_str),
+            timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
+
+        for i, fname in enumerate(fname_list):
+                fname_list[i] = savedir+fname
+
+        plot_xsection(
+            dataset['radar_out'], field_name, ref_pts, step, vert_res,
+            alt_max, beamwidth, dem, prdcfg, fname_list, vmin = vmin, 
+            vmax = vmax)
+
         print('----- save to '+' '.join(fname_list))
 
         return fname_list
@@ -3224,6 +3356,84 @@ def generate_vol_products(dataset, prdcfg):
         send_msg(sender, receiver_list, subject, alarm_fname)
 
         return alarm_fname
+
+    if prdcfg['type'] == 'SAVEVOL_CSV':
+        field_name = get_fieldname_pyart(prdcfg['voltype'])
+        if field_name not in dataset['radar_out'].fields:
+            warn(
+                ' Field type ' + field_name +
+                ' not available in data set. Skipping product ' +
+                prdcfg['type'])
+            return None
+
+        ignore_masked = prdcfg.get('ignore_masked', False)
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdsavedir, timeinfo=prdcfg['timeinfo'])
+
+        fname = make_filename(
+            'savevol', prdcfg['dstype'], prdcfg['voltype'], ['csv'],
+            timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
+
+        fname = savedir+fname
+
+        fname = write_vol_csv(
+            fname, dataset['radar_out'], field_name,
+            ignore_masked=ignore_masked)
+
+        print('saved file: '+fname)
+
+        return fname
+
+    if prdcfg['type'] == 'SAVEVOL_KML':
+        if not _SIMPLEKML_AVAILABLE:
+            warn('simplekml needed to output kml file')
+            return None
+
+        field_name = get_fieldname_pyart(prdcfg['voltype'])
+        if field_name not in dataset['radar_out'].fields:
+            warn(
+                ' Field type ' + field_name +
+                ' not available in data set. Skipping product ' +
+                prdcfg['type'])
+            return None
+
+        ignore_masked = prdcfg.get('ignore_masked', False)
+        azi_res = prdcfg.get('azi_res', None)
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdsavedir, timeinfo=prdcfg['timeinfo'])
+
+        fname = make_filename(
+            'savevol', prdcfg['dstype'], prdcfg['voltype'], ['kml'],
+            timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
+
+        fname = savedir+fname
+
+        if azi_res is None:
+            azi_res = 1.
+            if dataset['radar_out'].instrument_parameters is None:
+                warn(f'radar beamwidth not specified.'
+                     f' Default {azi_res} deg will be used')
+            elif 'radar_beam_width_h' not in dataset[
+                    'radar_out'].instrument_parameters:
+                warn(f'radar beamwidth not specified.'
+                     f' Default {azi_res} deg will be used')
+            else:
+                azi_res = dataset['radar_out'].instrument_parameters[
+                    'radar_beam_width_h']['data'][0]
+        rng_res_km = dataset['rng_res']/1000.
+
+        fname = write_vol_kml(
+            fname, dataset['radar_out'], field_name,
+            ignore_masked=ignore_masked, rng_res_km=rng_res_km,
+            azi_res=azi_res)
+
+        print('saved file: '+fname)
+
+        return fname
 
     if prdcfg['type'] == 'SAVEVOL' or prdcfg['type'] == 'SAVEVOL_VOL':
         field_name = get_fieldname_pyart(prdcfg['voltype'])
