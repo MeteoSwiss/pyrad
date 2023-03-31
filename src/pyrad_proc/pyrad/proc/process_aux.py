@@ -1425,12 +1425,12 @@ def process_roi2(procstatus, dscfg, radar_list=None):
         warn('No values within ROI')
         return None, None
 
-    inds_ray = inds_ray[inds]
-    inds_rng = inds_rng[inds]
+    inds_ray = np.squeeze(inds_ray[inds])
+    inds_rng = np.squeeze(inds_rng[inds])
 
-    lat = lat[inds]
-    lon = lon[inds]
-    alt = radar.gate_altitude['data'][inds_ray, inds_rng]
+    lat = np.squeeze(lat[inds])
+    lon = np.squeeze(lon[inds])
+    alt = np.squeeze(radar.gate_altitude['data'][inds_ray, inds_rng])
 
     # prepare new radar object output
     new_dataset = {
