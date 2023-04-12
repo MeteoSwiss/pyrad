@@ -14,7 +14,6 @@ Functions for reading data derived from Digital Elevation Models (DEM)
 
 
 """
-import os
 import pathlib
 from warnings import warn
 import numpy as np
@@ -123,7 +122,8 @@ def read_dem(fname, field_name = 'terrain_altitude', fill_value=None,
     fill_value : float
         The fill value, if not provided will be infered from metadata
         if possible
-    projparams : projection transform as can be used by gdal either a  Proj4 
+    projparams : str or int
+        projection transform as can be used by gdal either a  Proj4 
         string, see epsg.io for a list, or a EPSG number, if not provided
         will be infered from the file, or for ASCII, LV1903 will be used
 
@@ -139,21 +139,25 @@ def read_dem(fname, field_name = 'terrain_altitude', fill_value=None,
         proj = osr.SpatialReference()
         proj.ImportFromEPSG(projparams)
         projparams = proj.ExportToProj4()
-        
+        projparams = _proj4_str_to_dict(projparams) 
+    
     if extension in ['.tif','.tiff','.gtif']:
-        metadata, rasterarray =   read_geotiff_data(fname, fill_value)
+        dem =   read_geotiff_data(fname, fill_value)
     elif extension in ['.asc','.dem','.txt']:
-        metadata, rasterarray =  read_ascii_data(fname, fill_value)
+        dem =  read_ascii_data(fname, fill_value)
     elif extension in ['.rst']:
-        metadata, rasterarray = read_idrisi_data(fname, fill_value)
+        dem = read_idrisi_data(fname, fill_value)
     else:
-        warn('Unable to read file %s, extension must be .tif .tiff .gtif, '+
+        warn('WARNING: unable to read file %s, extension must be .tif .tiff .gtif, '+
              '.asc .dem .txt .rst'.format(fname))
         return None
 
+    if 'projparams' in dem:
+        projparams = dem['projparams']
+
     field_dict = get_metadata(field_name)
-    field_dict['data'] = rasterarray[::-1, :][None,:,:]
-    field_dict['units'] = metadata['value units']
+    field_dict['data'] = dem['data'][::-1, :][None,:,:]
+    field_dict['units'] = dem['metadata']['value units']
 
     x = get_metadata('x')
     y = get_metadata('y')
@@ -164,12 +168,12 @@ def read_dem(fname, field_name = 'terrain_altitude', fill_value=None,
     orig_alt = get_metadata('origin_altitude')
 
     x['data'] = (
-        np.arange(metadata['columns'])*metadata['resolution'] +
-        metadata['resolution']/2.+metadata['min. X'])
+        np.arange(dem['metadata']['columns'])*dem['metadata']['resolution'] +
+        dem['metadata']['resolution']/2.+dem['metadata']['min. X'])
 
     y['data'] = (
-        np.arange(metadata['rows'])*metadata['resolution'] +
-        metadata['resolution']/2.+metadata['min. Y'])
+        np.arange(dem['metadata']['rows'])*dem['metadata']['resolution'] +
+        dem['metadata']['resolution']/2.+dem['metadata']['min. Y'])
 
     z['data'] = np.array([0])
 
@@ -178,10 +182,10 @@ def read_dem(fname, field_name = 'terrain_altitude', fill_value=None,
     orig_alt['data'] = [0]
 
     if projparams is None:
+        warn('WARNING: No proj could be read from file and no projparams were provided, '+
+        'assuming the projection is CH1903.')
         projparams = _get_lv1903_proj4()
-    else:
-        projparams = _proj4_str_to_dict(projparams) 
-        
+    
     time = get_metadata('grid_time')
     time['data'] = np.array([0.0])
     time['units'] = 'seconds since 2000-01-01T00:00:00Z'
@@ -189,7 +193,7 @@ def read_dem(fname, field_name = 'terrain_altitude', fill_value=None,
     # The use of CRS().to_dict() is required to use GridMapDisplay of Pyart
     # which expects a dict for the projection attribute of the grid
     dem_data = pyart.core.Grid(time, {field_name : field_dict},
-       metadata,  orig_lat, orig_lon, orig_alt, x, y, z,
+       dem['metadata'],  orig_lat, orig_lon, orig_alt, x, y, z,
        projection = projparams)
 
     return dem_data
@@ -217,10 +221,16 @@ def read_geotiff_data(fname, fill_value = None):
 
     Returns
     -------
-    dem_data : dictionary
-        dictionary with the data and metadata
-
+    dem : dict
+        A dictionary with the following keys:
+        - data : array
+            data within the DEM
+        - metadata : dict
+            a dictionary containing the metadata
+        - projparams : str
+            projection parameters in proj4 format    
     """
+
     if not _GDAL_AVAILABLE:
         warn("gdal is required to use read_geotiff_data but is not installed")
         return None
@@ -230,6 +240,12 @@ def read_geotiff_data(fname, fill_value = None):
     try:
         raster = gdal.Open(fname)
 
+        prj = raster.GetProjection()
+        srs = osr.SpatialReference(wkt=prj)
+        projparams = _proj4_str_to_dict(srs.ExportToProj4())
+        if not len(projparams): # gdal could not read proj
+            projparams = None
+        import pdb; pdb.set_trace()
         width = raster.RasterXSize
         height = raster.RasterYSize
         gt = raster.GetGeoTransform()
@@ -255,8 +271,10 @@ def read_geotiff_data(fname, fill_value = None):
         rasterarray = raster.ReadAsArray()
         rasterarray = np.ma.masked_equal(rasterarray, fill_value)
 
-        return metadata, rasterarray
-
+        dem = {'projparams' : projparams,
+               'metadata'   : metadata,
+               'data' : rasterarray}
+        return dem
 
     except EnvironmentError as ee:
         warn(str(ee))
@@ -286,9 +304,12 @@ def read_ascii_data(fname, fill_value = None):
 
     Returns
     -------
-    dem_data : dictionary
-        dictionary with the data and metadata
-
+    dem : dict
+        A dictionary with the following keys:
+        - data : array
+            data within the DEM
+        - metadata : dict
+            a dictionary containing the metadata
     """
 
     # read the data
@@ -327,7 +348,12 @@ def read_ascii_data(fname, fill_value = None):
                                  (metadata['rows'],metadata['columns']))
         rasterarray = np.ma.masked_equal(rasterarray, fill_value)
 
-        return metadata, rasterarray
+
+        dem = {'metadata'   : metadata,
+               'data' : rasterarray}
+
+        return dem
+
 
     except EnvironmentError as ee:
         warn(str(ee))
@@ -355,10 +381,16 @@ def read_idrisi_data(fname, fill_value = None):
 
     Returns
     -------
-    dem_data : dictionary
-        dictionary with the data and metadata
-
+    dem : dict
+        A dictionary with the following keys:
+        - data : array
+            data within the DEM
+        - metadata : dict
+            a dictionary containing the metadata
+        - projparams : str
+            projection parameters in proj4 format    
     """
+
     if not _GDAL_AVAILABLE:
         warn("gdal is required to use read_idrisi_data but is not installed")
         return None
@@ -370,6 +402,13 @@ def read_idrisi_data(fname, fill_value = None):
             fill_value = -99.
 
         raster = gdal.Open(fname)
+
+        prj = raster.GetProjection()
+        srs = osr.SpatialReference(wkt=prj)
+        projparams = _proj4_str_to_dict(srs.ExportToProj4())
+        if not len(projparams): # gdal could not read proj
+            projparams = None
+
         rasterarray = raster.ReadAsArray()
         rasterarray = np.ma.masked_equal(rasterarray, fill_value)
 
@@ -378,7 +417,10 @@ def read_idrisi_data(fname, fill_value = None):
         if metadata is None:
             return None
 
-        return metadata, rasterarray
+        dem = {'projparams' : projparams,
+               'metadata'   : metadata,
+               'data' : rasterarray}
+        return dem
 
     except EnvironmentError as ee:
         warn(str(ee))
@@ -403,8 +445,6 @@ def read_idrisi_metadata(fname):
     """
     # read the data
     fname_rdc = fname.replace('.rst', '.rdc')
-    if not os.path.exists(fname_rdc):
-        fname_rdc = fname.replace('.rst', '.RDC')
 
     try:
         metadata = dict()
