@@ -86,7 +86,7 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
     mask_outside = prdcfg.get('mask_outside', False)
 
     norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name], isxarray = True)
+        field_name, field_dict=grid.fields[field_name])
 
     xsize = prdcfg['gridMapImageConfig']['xsize']
     ysize = prdcfg['gridMapImageConfig']['ysize']
@@ -98,9 +98,14 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
     max_lat = prdcfg['gridMapImageConfig'].get('latmax', 49.5)
     embellish = prdcfg['gridMapImageConfig'].get('embellish', True)
     colorbar_flag = prdcfg['gridMapImageConfig'].get('colorbar_flag', True)
+    exact_limits = prdcfg['gridMapImageConfig'].get('exact_limits', 0)
 
-    lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon)+1, lonstep)
-    lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat)+1, latstep)
+    if exact_limits:
+        lon_lines = np.arange(min_lon, max_lon, lonstep)
+        lat_lines = np.arange(min_lat, max_lat, latstep)
+    else:
+        lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon)+1, lonstep)
+        lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat)+1, latstep)
 
     if fig is None:
         fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
@@ -323,7 +328,7 @@ def plot_surface_raw(grid, field_name, level, prdcfg, fname_list, titl=None,
     vmax = prdcfg.get('vmax', None)
 
     norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name], isxarray = True)
+        field_name, field_dict=grid.fields[field_name])
 
     xsize = prdcfg['gridMapImageConfig']['xsize']
     ysize = prdcfg['gridMapImageConfig']['ysize']
@@ -422,10 +427,15 @@ def plot_surface_contour(grid, field_name, level, prdcfg, fname_list,
     max_lon = prdcfg['gridMapImageConfig'].get('lonmax', 12.5)
     min_lat = prdcfg['gridMapImageConfig'].get('latmin', 43.5)
     max_lat = prdcfg['gridMapImageConfig'].get('latmax', 49.5)
+    exact_limits = prdcfg['gridMapImageConfig'].get('exact_limits', 0)
 
     if fig is None:
-        lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon)+1, lonstep)
-        lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat)+1, latstep)
+        if exact_limits:
+            lon_lines = np.arange(min_lon, max_lon, lonstep)
+            lat_lines = np.arange(min_lat, max_lat, latstep)
+        else:
+            lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon)+1, lonstep)
+            lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat)+1, latstep)
 
         fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
         ax = fig.add_subplot(111)
@@ -541,8 +551,7 @@ def plot_latitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
         dpi = prdcfg['rhiImageConfig']['dpi']
 
     norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name],
-        isxarray = True)
+        field_name, field_dict=grid.fields[field_name])
 
     xsize = prdcfg['rhiImageConfig'].get('xsize', 10.)
     ysize = prdcfg['rhiImageConfig'].get('ysize', 5.)
@@ -593,8 +602,7 @@ def plot_longitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
         dpi = prdcfg['rhiImageConfig']['dpi']
 
     norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name],
-        isxarray = True)
+        field_name, field_dict=grid.fields[field_name])
 
     xsize = prdcfg['rhiImageConfig'].get('xsize', 10.)
     ysize = prdcfg['rhiImageConfig'].get('ysize', 5.)
@@ -645,8 +653,7 @@ def plot_latlon_slice(grid, field_name, coord1, coord2, prdcfg, fname_list):
         dpi = prdcfg['rhiImageConfig']['dpi']
 
     norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name],
-        isxarray = True)
+        field_name, field_dict=grid.fields[field_name])
 
     xsize = prdcfg['rhiImageConfig'].get('xsize', 10.)
     ysize = prdcfg['rhiImageConfig'].get('ysize', 5.)
