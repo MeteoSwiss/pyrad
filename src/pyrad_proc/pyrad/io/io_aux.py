@@ -2767,7 +2767,7 @@ def get_datatype_fields(datadescriptor):
         else:
             datagroup = descrfields[1]
             if datagroup in ('CFRADIALPYRAD', 'ODIMPYRAD', 'PYRADGRID',
-                             'ODIMPYRADGRID', 'NETCDFSPECTRA', 'CSV'):
+                             'ODIMPYRADGRID', 'NETCDFSPECTRA', 'CSV', 'GECSX'):
                 descrfields2 = descrfields[2].split(',')
                 datatype = descrfields2[0]
                 dataset = descrfields2[1]

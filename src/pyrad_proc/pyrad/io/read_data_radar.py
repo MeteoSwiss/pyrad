@@ -251,6 +251,9 @@ def get_data(voltime, datatypesdescr, cfg):
     dataset_mfcfradial = list()
     datatype_nexrad2 = list()
     dataset_nexrad2 = list()
+    datatype_gecsx = list()
+    dataset_gecsx = list()
+    product_gecsx = list()
     datatype_cfradialpyrad = list()
     dataset_cfradialpyrad = list()
     product_cfradialpyrad = list()
@@ -300,7 +303,7 @@ def get_data(voltime, datatypesdescr, cfg):
     datatype_netcdfspectra = list()
     dataset_netcdfspectra = list()
     product_netcdfspectra = list()
-
+    
     for datatypedescr in datatypesdescr:
         radarnr, datagroup, datatype, dataset, product = get_datatype_fields(
             datatypedescr)
@@ -323,6 +326,10 @@ def get_data(voltime, datatypesdescr, cfg):
         elif datagroup == 'NEXRADII':
             datatype_nexrad2.append(datatype)
             dataset_nexrad2.append(dataset)
+        elif datagroup == 'GECSX':
+            datatype_gecsx.append(datatype)
+            dataset_gecsx.append(dataset)
+            product_gecsx.append(product)
         elif datagroup == 'CFRADIALPYRAD':
             datatype_cfradialpyrad.append(datatype)
             dataset_cfradialpyrad.append(dataset)
@@ -440,7 +447,8 @@ def get_data(voltime, datatypesdescr, cfg):
     ndatatypes_psr = len(datatype_psr)
     ndatatypes_psrspectra = len(datatype_psrspectra)
     ndatatypes_netcdfspectra = len(datatype_netcdfspectra)
-
+    ndatatypes_gecsx = len(datatype_gecsx)
+    
     rmin = None
     rmax = None
     elmin = None
@@ -592,7 +600,7 @@ def get_data(voltime, datatypesdescr, cfg):
             product_cfradialpyrad, rng_min=rmin, rng_max=rmax, ele_min=elmin,
             ele_max=elmax, azi_min=azmin, azi_max=azmax)
         radar = add_field(radar, radar_aux)
-
+    
     if ndatatypes_odimpyrad > 0:
         radar_aux = merge_fields_pyrad(
             cfg['loadbasepath'][ind_rad], cfg['loadname'][ind_rad], voltime,
@@ -601,6 +609,14 @@ def get_data(voltime, datatypesdescr, cfg):
             azi_min=azmin, azi_max=azmax, termination='.h*')
         radar = add_field(radar, radar_aux)
 
+    if ndatatypes_gecsx > 0:
+        radar_aux = merge_fields_gecsx(
+            cfg['loadbasepath'][ind_rad], cfg['loadname'][ind_rad],
+            datatype_gecsx, dataset_gecsx, product_gecsx,
+            rng_min=rmin, rng_max=rmax, ele_min=elmin, ele_max=elmax,
+            azi_min=azmin, azi_max=azmax)
+        radar = add_field(radar, radar_aux)
+        
     if ndatatypes_cfradialcosmo > 0:
         radar_aux = merge_fields_pyradcosmo(
             cfg['cosmopath'][ind_rad], voltime,
@@ -3920,6 +3936,73 @@ def merge_fields_pyrad(basepath, loadname, voltime, datatype_list,
                 warn(str(ee))
                 warn('Unable to read file '+filename[0])
                 radar_aux = None
+
+        if radar_aux is None:
+            continue
+
+        if radar is None:
+            radar = radar_aux
+            continue
+
+        radar = add_field(radar, radar_aux)
+
+    if radar is None:
+        return radar
+
+    return pyart.util.subset_radar(
+        radar, radar.fields.keys(), rng_min=rng_min, rng_max=rng_max,
+        ele_min=ele_min, ele_max=ele_max, azi_min=azi_min, azi_max=azi_max)
+
+def merge_fields_gecsx(basepath, loadname, datatype_list,
+                       dataset_list, product_list, rng_min=None, rng_max=None,
+                       azi_min=None, azi_max=None, ele_min=None, ele_max=None):
+    """
+    merge fields from GECSX Pyrad-generated files into a single radar object.
+    Accepted file types are CFRadial.
+
+    Parameters
+    ----------
+    basepath : str
+        name of the base path where to find the data
+    loadname: str
+        name of the saving directory
+    datatype_list : list
+        list of data types to get
+    dataset_list : list
+        list of datasets that produced the data type to get.
+        Used to get path.
+    product_list : list
+        list of products. Used to get path
+    rng_min, rng_max : float
+        The range limits [m]. If None the entire coverage of the radar is
+        going to be used
+    ele_min, ele_max, azi_min, azi_max : float or None
+        The limits of the grid [deg]. If None the limits will be the limits
+        of the radar volume
+    Returns
+    -------
+    radar : Radar
+        radar object
+
+    """
+    radar = None
+    for i, dataset in enumerate(dataset_list):
+        datapath = (
+            basepath+loadname+'/' +
+            dataset+'/'+product_list[i]+'/')
+        filename = glob.glob(
+            datapath+'*'+datatype_list[i]+'.nc')
+        if not filename:
+            warn('No file found in '+datapath+'*' +
+                 datatype_list[i]+'.nc')
+            continue
+
+        try:
+            radar_aux = pyart.io.read_cfradial(filename[0])
+        except (OSError, KeyError) as ee:
+            warn(str(ee))
+            warn('Unable to read file '+filename[0])
+            radar_aux = None
 
         if radar_aux is None:
             continue
