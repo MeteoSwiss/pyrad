@@ -98,9 +98,14 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
     max_lat = prdcfg['gridMapImageConfig'].get('latmax', 49.5)
     embellish = prdcfg['gridMapImageConfig'].get('embellish', True)
     colorbar_flag = prdcfg['gridMapImageConfig'].get('colorbar_flag', True)
+    exact_limits = prdcfg['gridMapImageConfig'].get('exact_limits', 0)
 
-    lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon)+1, lonstep)
-    lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat)+1, latstep)
+    if exact_limits:
+        lon_lines = np.arange(min_lon, max_lon+lonstep, lonstep)
+        lat_lines = np.arange(min_lat, max_lat + latstep, latstep)
+    else:
+        lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon)+1, lonstep)
+        lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat)+1, latstep)
 
     if fig is None:
         fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
@@ -422,10 +427,15 @@ def plot_surface_contour(grid, field_name, level, prdcfg, fname_list,
     max_lon = prdcfg['gridMapImageConfig'].get('lonmax', 12.5)
     min_lat = prdcfg['gridMapImageConfig'].get('latmin', 43.5)
     max_lat = prdcfg['gridMapImageConfig'].get('latmax', 49.5)
+    exact_limits = prdcfg['gridMapImageConfig'].get('exact_limits', 0)
 
     if fig is None:
-        lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon)+1, lonstep)
-        lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat)+1, latstep)
+        if exact_limits:
+            lon_lines = np.arange(min_lon, max_lon+lonstep, lonstep)
+            lat_lines = np.arange(min_lat, max_lat + latstep, latstep)
+        else:
+            lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon)+1, lonstep)
+            lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat)+1, latstep)
 
         fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
         ax = fig.add_subplot(111)
