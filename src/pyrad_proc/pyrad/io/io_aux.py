@@ -2245,6 +2245,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
         enddate = endtime.replace(hour=0, minute=0, second=0, microsecond=0)
         ndays = int((enddate-startdate).days)+1
         t_filelist = []
+        pattern = None
         for i in range(ndays):
             if datagroup == 'RAINBOW':
                 if scan is None:
@@ -2258,7 +2259,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 if not os.path.isdir(datapath):
                     warn("WARNING: Unknown datapath '%s'" % datapath)
                     continue
-                dayfilelist = glob.glob(datapath+dayinfo+'*00'+datatype+'.*')
+                pattern = datapath+dayinfo+'*00'+datatype+'.*'
+                dayfilelist = glob.glob(pattern)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
             elif datagroup == 'RAD4ALP':
@@ -2276,7 +2278,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 if not os.path.isdir(datapath):
                     warn("WARNING: Unknown datapath '%s'" % datapath)
                     continue
-                dayfilelist = glob.glob(datapath+basename+'*.'+scan+'*')
+                pattern = datapath+basename+'*.'+scan+'*'
+                dayfilelist = glob.glob(pattern)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
             elif datagroup in ('RAD4ALPGRID', 'RAD4ALPGIF', 'RAD4ALPBIN'):
@@ -2292,8 +2295,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 if not os.path.isdir(datapath):
                     warn("WARNING: Unknown datapath '%s'" % datapath)
                     continue
-
-                dayfilelist = glob.glob(datapath+basename+'*'+termination)
+                pattern = datapath+basename+'*'+termination
+                dayfilelist = glob.glob(pattern)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
             elif datagroup == 'SATGRID':
@@ -2306,8 +2309,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 if not os.path.isdir(datapath):
                     # warn("WARNING: Unknown datapath '%s'" % datapath)
                     continue
-                dayfilelist = glob.glob(
-                    datapath+'MSG?_ccs4_'+dayinfo+'*_rad_PLAX.nc')
+                pattern = datapath+'MSG?_ccs4_'+dayinfo+'*_rad_PLAX.nc'
+                dayfilelist = glob.glob(pattern)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
 
@@ -2325,7 +2328,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                         cfg['datapath'][ind_rad]+dayinfo+'/'+basename+'/')
 
                     # check that M files exist. if not search P files
-                    dayfilelist = glob.glob(datapath+basename+'*'+scan+'*')
+                    pattern = datapath+basename+'*'+scan+'*'
+                    dayfilelist = glob.glob(pattern)
                     if not dayfilelist:
                         basename = ('P'+cfg['RadarRes'][ind_rad] +
                                     cfg['RadarName'][ind_rad]+dayinfo)
@@ -2345,7 +2349,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                         starttime+datetime.timedelta(days=i)).strftime(
                             fpath_strf)
                     datapath = (cfg['datapath'][ind_rad]+daydir+'/')
-                    dayfilelist = glob.glob(datapath+'*'+scan+'*')
+                    pattern = datapath+'*'+scan+'*'
+                    dayfilelist = glob.glob(pattern)
                 else:
                     dayinfo = (starttime+datetime.timedelta(days=i)).strftime(
                         '%y%j')
@@ -2357,7 +2362,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                         '/')
 
                     # check that M files exist. if not search P files
-                    dayfilelist = glob.glob(datapath+basename+'*'+scan+'*')
+                    pattern = datapath+basename+'*'+scan+'*'
+                    dayfilelist = glob.glob(pattern)
                     if not dayfilelist:
                         basename = ('P'+cfg['RadarRes'][ind_rad] +
                                     cfg['RadarName'][ind_rad]+dayinfo)
@@ -2390,8 +2396,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 if not os.path.isdir(datapath):
                     warn("WARNING: Unknown datapath '%s'" % datapath)
                     continue
-                dayfilelist = glob.glob(
-                    datapath+dayinfo+'*'+datatype+termination)
+                pattern = datapath+dayinfo+'*'+datatype+termination
+                dayfilelist = glob.glob(pattern)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
             elif datagroup in ('MFCFRADIAL', 'MFBIN', 'MFPNG', 'MFGRIB',
@@ -2406,7 +2412,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     starttime+datetime.timedelta(days=i)).strftime(
                         fpath_strf)
                 datapath = (cfg['datapath'][ind_rad]+daydir+'/')
-                dayfilelist = glob.glob(datapath+'*'+scan+'*')
+                pattern = datapath+'*'+scan+'*'
+                dayfilelist = glob.glob(pattern)
 
                 for filename in dayfilelist:
                     t_filelist.append(filename)
@@ -2424,7 +2431,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     basename = (
                         'MXPol-polar-'+starttime.strftime('%Y%m%d')+'-*-' +
                         scan+'*')
-                    dayfilelist = glob.glob(datapath+basename)
+                    pattern = datapath+basename
+                    dayfilelist = glob.glob(pattern)
                 else:
                     daydir = (
                         starttime+datetime.timedelta(days=i)).strftime(
@@ -2436,8 +2444,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     if not os.path.isdir(datapath):
                         warn("WARNING: Unknown datapath '%s'" % datapath)
                         continue
-                    dayfilelist = glob.glob(
-                        datapath+'MXPol-polar-'+dayinfo+'-*-'+scan+'.nc')
+                    pattern = datapath+'MXPol-polar-'+dayinfo+'-*-'+scan+'.nc'
+                    dayfilelist = glob.glob(pattern)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
             elif datagroup == 'COSMORAW':
@@ -2459,11 +2467,14 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 if not os.path.isdir(datapath):
                     warn("WARNING: Unknown datapath '%s'" % datapath)
                     continue
-                dayfilelist = glob.glob(datapath+'*'+dayinfo+'*.nc')
+                pattern = datapath+'*'+dayinfo+'*.nc'
+                dayfilelist = glob.glob(pattern)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
 
         if not t_filelist:
+            if pattern != None:
+                warn("WARNING: No file with pattern {:s} could be found".format(pattern))
             continue
 
         for filename in t_filelist:
