@@ -2351,6 +2351,19 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     datapath = (cfg['datapath'][ind_rad]+daydir+'/')
                     pattern = datapath+'*'+scan+'*'
                     dayfilelist = glob.glob(pattern)
+                elif cfg['path_convention'][ind_rad] == 'RADARV':
+                    try:
+                        fpath_strf = dataset[
+                            dataset.find("D")+2:dataset.find("F")-2]
+                    except AttributeError:
+                        warn('Unknown ODIM directory and/or date ' +
+                             'convention, check product config file')
+                    daydir = (
+                        starttime+datetime.timedelta(days=i)).strftime(
+                            fpath_strf)
+                    datapath = (cfg['datapath'][ind_rad]+scan+'/')
+                    pattern = datapath+'/'+daydir+'/*'
+                    dayfilelist = glob.glob(pattern)
                 else:
                     dayinfo = (starttime+datetime.timedelta(days=i)).strftime(
                         '%y%j')

@@ -225,7 +225,7 @@ def get_data(voltime, datatypesdescr, cfg):
         'RAINBOW', 'RAD4ALP', 'ODIM' 'ODIMBIRDS' CFRADIAL2', 'CF1' 'MFCFRADIAL'
         'GAMIC' and 'MXPOL' are primary data file sources and they cannot be
         mixed for the same radar. It is also the case for their complementary
-        data files, i.e. 'COSMO' and 'RAD4ALPCOSMO', etc. 'CFRADIAL' and
+        data files, i.e. 'COSMO' and 'RAD4ALPCOSMO', etc. 'CFRADIALPYRAD' and
         'ODIMPYRAD' are secondary data file sources and they can be combined
         with any other datagroup type.
         For a list of accepted datatypes and how they map to the Py-ART name
@@ -303,7 +303,7 @@ def get_data(voltime, datatypesdescr, cfg):
     datatype_netcdfspectra = list()
     dataset_netcdfspectra = list()
     product_netcdfspectra = list()
-    
+
     for datatypedescr in datatypesdescr:
         radarnr, datagroup, datatype, dataset, product = get_datatype_fields(
             datatypedescr)
@@ -408,7 +408,7 @@ def get_data(voltime, datatypesdescr, cfg):
             datatype_netcdfspectra.append(datatype)
             dataset_netcdfspectra.append(dataset)
             product_netcdfspectra.append(product)
-
+  
     ind_rad = int(radarnr[5:8])-1
 
     ndatatypes_rainbow = len(datatype_rainbow)
@@ -448,7 +448,7 @@ def get_data(voltime, datatypesdescr, cfg):
     ndatatypes_psrspectra = len(datatype_psrspectra)
     ndatatypes_netcdfspectra = len(datatype_netcdfspectra)
     ndatatypes_gecsx = len(datatype_gecsx)
-    
+
     rmin = None
     rmax = None
     elmin = None
@@ -664,7 +664,7 @@ def get_data(voltime, datatypesdescr, cfg):
         radar_aux = merge_fields_pyradgrid(
             cfg['loadbasepath'][ind_rad], cfg['loadname'][ind_rad], voltime,
             datatype_pyradgrid, dataset_pyradgrid, product_pyradgrid, cfg,
-            termination='nc')
+            termination='.nc')
         if radar_aux is not None:
             if radar is not None:
                 radar = merge_grids(radar, radar_aux)
@@ -1206,7 +1206,6 @@ def merge_scans_rainbow(basepath, scan_list, voltime, scan_period,
         for scan in scan_list[1:]:
             filelist = get_file_list(datadescriptor, [voltime], [endtime],
                                      cfg, scan=scan)
-
             if not filelist:
                 warn("ERROR: No data file found for scan '%s' "
                      "between %s and %s" % (scan, voltime, endtime))
@@ -2498,6 +2497,19 @@ def merge_scans_cfradial2(basepath, scan_list, radar_name, radar_res, voltime,
         fdate_strf = dataset_list[0][dataset_list[0].find("F")+2:-1]
         datapath = (basepath+voltime.strftime(fpath_strf)+'/')
         filenames = glob.glob(datapath+'*'+scan_list[0]+'*')
+        filename = []
+        for filename_aux in filenames:
+            fdatetime = find_date_in_file_name(
+                filename_aux, date_format=fdate_strf)
+            if fdatetime == voltime:
+                filename = [filename_aux]
+    elif cfg['path_convention'][ind_rad] == 'RADARV':
+        fpath_strf = (
+            dataset_list[0][
+                dataset_list[0].find("D")+2:dataset_list[0].find("F")-2])
+        fdate_strf = dataset_list[0][dataset_list[0].find("F")+2:-1]
+        datapath = (basepath+scan_list[0]+'/')
+        filenames = glob.glob(datapath+'/'+voltime.strftime(fpath_strf)+'/*')
         filename = []
         for filename_aux in filenames:
             fdatetime = find_date_in_file_name(
@@ -4350,7 +4362,6 @@ def merge_fields_cosmo(filename_list):
         radar.add_field(field_name, radar_aux.fields[field_name])
 
     return radar
-
 
 def get_data_rainbow(filename, datatype):
     """

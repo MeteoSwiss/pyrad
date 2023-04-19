@@ -15,6 +15,7 @@ Functions for processing Doppler related parameters
     process_wind_vel
     process_windshear
     process_vad
+    process_dda
 
 """
 
@@ -30,6 +31,12 @@ try:
     _PYTDA_AVAILABLE = True
 except ImportError:
     _PYTDA_AVAILABLE = False
+
+try:
+    import pydda
+    _PYDDA_AVAILABLE = True
+except ImportError:
+    _PYDDA_AVAILABLE = False
 
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 
@@ -751,3 +758,64 @@ def process_vad(procstatus, dscfg, radar_list=None):
     new_dataset['radar_out'].add_field('velocity_difference', vel_diff_dict)
 
     return new_dataset, ind_rad
+
+def process_dda(procstatus, dscfg, radar_list=None):
+    """
+    Estimates horizontal wind speed and direction with a multi-doppler approach
+    This method uses the python package pyDDA
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration. Accepted Configuration Keywords::
+
+        datatype : string. Dataset keyword
+            The input data type
+    radar_list : list of Radar objects
+        Optional. list of radar objects
+
+    Returns
+    -------
+    new_dataset : dict
+        dictionary containing the output
+    ind_rad : int
+        radar index
+
+    """
+    if not _PYDDA_AVAILABLE:
+        warn('PyDDA package not available. Unable to compute DDA')
+        return None, None
+
+    if procstatus != 1:
+        return None, None
+
+    import pdb; pdb.set_trace()
+    # check how many radars are there
+    radarnr_dict = dict()
+    ind_radar_list = set()
+    for datatypedescr in dscfg['datatype']:
+        radarnr = datatypedescr.split(':')[0]
+        radarnr_dict.update({radarnr: []})
+        ind_radar_list.add(int(radarnr[5:8])-1)
+
+    ind_radar_list = list(ind_radar_list)
+
+    if len(radarnr_dict) < 2:
+        warn('DDA requires data from at least two different radars')
+        return None, None
+
+    # create the list of data types for each radar
+    radars = []
+    for ind_radar in ind_radar_list:
+        if radar_list[ind_radar_list] is None:
+            warn('Unable to use DDA, one of the radar objects is empty')
+            return None, None
+
+        radars.append(radar_list[ind_radar_list])
+
+    import pdb; pdb.set_trace()
+    return new_dataset, ind_rad
+
