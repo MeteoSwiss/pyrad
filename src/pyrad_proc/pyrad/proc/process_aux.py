@@ -20,7 +20,6 @@ determined points or regions of interest.
     process_azimuthal_average
     process_moving_azimuthal_average
     process_radar_resampling
-    process_dda
     _get_values_antenna_pattern
     _create_target_radar
 
@@ -188,7 +187,6 @@ def get_process_func(dataset_type, dsname):
                 'NORMALIZE_LUMINOSITY': process_normalize_luminosity
                 'PIXEL_FILTER': process_pixel_filter
                 'VOL2GRID': process_vol_to_grid
-                'DDA': process_dda
             'GRID_TIMEAVG' format output:
                 'GRID_TIME_STATS': process_grid_time_stats
                 'GRID_TIME_STATS2': process_grid_time_stats2
@@ -453,8 +451,6 @@ def get_process_func(dataset_type, dsname):
         func_name = 'process_wind_vel'
     elif dataset_type == 'VAD':
         func_name = 'process_vad'
-    elif dataset_type == 'DDA':
-        func_name = 'process_dda'
     elif dataset_type == 'WINDSHEAR':
         func_name = 'process_windshear'
     elif dataset_type == 'HYDROCLASS':
