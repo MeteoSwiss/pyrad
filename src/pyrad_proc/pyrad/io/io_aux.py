@@ -2485,11 +2485,6 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 for filename in dayfilelist:
                     t_filelist.append(filename)
 
-        if not t_filelist:
-            if pattern != None:
-                warn("WARNING: No file with pattern {:s} could be found".format(pattern))
-            continue
-
         for filename in t_filelist:
             filenamestr = str(filename)
             fdatetime = get_datetime(filenamestr, datadescriptor)
@@ -2497,7 +2492,12 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 if starttime <= fdatetime <= endtime:
                     if filenamestr not in filelist:
                         filelist.append(filenamestr)
-
+    
+        if not filelist:
+            if pattern != None:
+                warn("WARNING: No file with pattern {:s} could be found between ".format(pattern)+\
+                    "starttime {:s} and endtime {:s}".format(str(starttime),
+                                                                str(endtime)))
     return sorted(filelist)
 
 
