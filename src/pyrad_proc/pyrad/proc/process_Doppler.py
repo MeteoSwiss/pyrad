@@ -15,6 +15,7 @@ Functions for processing Doppler related parameters
     process_wind_vel
     process_windshear
     process_vad
+    process_dda
 
 """
 
@@ -30,6 +31,12 @@ try:
     _PYTDA_AVAILABLE = True
 except ImportError:
     _PYTDA_AVAILABLE = False
+
+try:
+    import pydda
+    _PYDDA_AVAILABLE = True
+except ImportError:
+    _PYDDA_AVAILABLE = False
 
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 
@@ -312,6 +319,11 @@ def process_dealias_region_based(procstatus, dscfg, radar_list=None):
             algorithm so that the average number of unfolding is near 0. False
             does not apply centering which may results in individual sweeps
             under or over folded by the nyquist interval.
+        nyquist_vel : float, optional
+            Nyquist velocity of the aquired radar velocity.
+            Usually this parameter is provided in the
+            Radar object intrument_parameters. If it is not available it can 
+            be provided as a keyword here.
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -346,12 +358,13 @@ def process_dealias_region_based(procstatus, dscfg, radar_list=None):
     skip_between_rays = dscfg.get('skip_between_rays', 100)
     skip_along_ray = dscfg.get('skip_along_ray', 100)
     centered = dscfg.get('centered', True)
+    nyquist_vel = dscfg.get('nyquist_vel', None)
 
     corr_vel_dict = pyart.correct.dealias_region_based(
         radar, ref_vel_field=None, interval_splits=interval_splits,
         interval_limits=None, skip_between_rays=skip_between_rays,
         skip_along_ray=skip_along_ray, centered=centered,
-        nyquist_vel=None, check_nyquist_uniform=True, gatefilter=False,
+        nyquist_vel=nyquist_vel, check_nyquist_uniform=True, gatefilter=False,
         rays_wrap_around=None, keep_original=False, set_limits=False,
         vel_field=vel_field, corr_vel_field=corr_vel_field)
 

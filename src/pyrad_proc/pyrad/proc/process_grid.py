@@ -96,7 +96,7 @@ def process_grid(procstatus, dscfg, radar_list=None):
                 Defaults -40, 40, -40, 40, 0., 10000.
             latmin, latmax, lonmin, lonmax : floats
                 minimum and maximum latitude and longitude [deg], if specified
-                xmin, xmax, ymin, ymax will be ignored
+                xmin, xmax, ymin, ymax, latorig, lonorig will be ignored
             hres, vres : floats
                 horizontal and vertical grid resolution [m]
                 Defaults 1000., 500.
@@ -206,15 +206,14 @@ def process_grid(procstatus, dscfg, radar_list=None):
             hres = dscfg['gridConfig']['hres']
         if 'vres' in dscfg['gridConfig']:
             vres = dscfg['gridConfig']['vres']
-        if 'latorig' in dscfg['gridConfig']:
-            lat = dscfg['gridConfig']['latorig']
-        if 'lonorig' in dscfg['gridConfig']:
-            lon = dscfg['gridConfig']['lonorig']
         if 'altorig' in dscfg['gridConfig']:
             alt = dscfg['gridConfig']['altorig']
-
+            
     if (latmin is not None and latmax is not None and 
         lonmin is not None and lonmax is not None):
+        warn('Specified lat/lon limits')
+        warn('xmin, xmax, ymin, ymax, latorig and lonorig parameters\n' +
+            'will be ignored') 
         # get xmin, xmax, ymin, ymax from lon/lat
         gatelat = radar.gate_latitude['data']
         gatelon = radar.gate_longitude['data']
@@ -225,7 +224,12 @@ def process_grid(procstatus, dscfg, radar_list=None):
         xmax = np.max(radar.gate_x['data'][mask]) / 1000.
         ymin = np.min(radar.gate_y['data'][mask]) / 1000.
         ymax = np.max(radar.gate_y['data'][mask]) / 1000.
-
+    else:
+        if 'latorig' in dscfg['gridConfig']:
+            lat = dscfg['gridConfig']['latorig']
+        if 'lonorig' in dscfg['gridConfig']:
+            lon = dscfg['gridConfig']['lonorig']
+       
     wfunc = dscfg.get('wfunc', 'NEAREST')
     roi_func = dscfg.get('roi_func', 'dist_beam')
 

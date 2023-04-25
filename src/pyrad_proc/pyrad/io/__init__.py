@@ -109,6 +109,7 @@ Reading other data
     read_quantiles_ts
     read_ml_ts
     read_windmills_data
+    read_windcube
 
 Writing data
 ==================

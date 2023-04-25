@@ -981,6 +981,8 @@ def _create_cfg_dict(cfgfile):
         cfg.update({'disdropath': None})
     if 'solarfluxpath' not in cfg:
         cfg.update({'solarfluxpath': None})
+    if 'selfconsistencypath' not in cfg:
+        cfg.update({'selfconsistencypath': None})
     if 'loadbasepath' not in cfg:
         cfg.update({'loadbasepath': None})
     if 'loadname' not in cfg:
@@ -1304,6 +1306,7 @@ def _create_dscfg_dict(cfg, dataset):
     dscfg.update({'colocgatespath': cfg['colocgatespath']})
     dscfg.update({'excessgatespath': cfg['excessgatespath']})
     dscfg.update({'dempath': cfg['dempath']})
+    dscfg.update({'selfconsistencypath': cfg['selfconsistencypath']})
     dscfg.update({'cosmopath': cfg['cosmopath']})
     dscfg.update({'CosmoRunFreq': cfg['CosmoRunFreq']})
     dscfg.update({'CosmoForecasted': cfg['CosmoForecasted']})

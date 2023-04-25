@@ -183,8 +183,12 @@ def process_selfconsistency_kdp_phidp(procstatus, dscfg, radar_list=None):
             zdr_kdpzh_list = list()
             el_list = list()
             for el in el_vec:
+                if 'selfconsistencypath' in dscfg:
+                    selfcons_dir = dscfg['selfconsistencypath']
+                else:
+                    selfcons_dir = dscfg['configpath'] + 'selfconsistency/'
                 fname = (
-                    dscfg['configpath'] + 'selfconsistency/' +
+                    selfcons_dir +
                     'selfconsistency_zdr_zhkdp_'+freq_band+'band_temp10_elev' +
                     '{:03d}'.format(el)+'_mu05.txt')
                 zdr_kdpzh_table = read_selfconsistency(fname)
@@ -196,7 +200,7 @@ def process_selfconsistency_kdp_phidp(procstatus, dscfg, radar_list=None):
                      'No selfconsistency files for the radar elevations.')
 
                 return None, None
-
+            import pdb; pdb.set_trace()
             zdr_kdpzh_dict = {'zdr_kdpzh': zdr_kdpzh_list,
                               'elev': el_list,
                               'freq_band': freq_band}
@@ -431,8 +435,12 @@ def process_selfconsistency_bias(procstatus, dscfg, radar_list=None):
             zdr_kdpzh_list = list()
             el_list = list()
             for el in el_vec:
+                if 'selfconsistencypath' in dscfg:
+                    selfcons_dir = dscfg['selfconsistencypath']
+                else:
+                    selfcons_dir = dscfg['configpath'] + 'selfconsistency/'
                 fname = (
-                    dscfg['configpath'] + 'selfconsistency/' +
+                    selfcons_dir +
                     'selfconsistency_zdr_zhkdp_'+freq_band+'band_temp10_elev' +
                     '{:03d}'.format(el)+'_mu05.txt')
                 zdr_kdpzh_table = read_selfconsistency(fname)
@@ -444,7 +452,6 @@ def process_selfconsistency_bias(procstatus, dscfg, radar_list=None):
                      'No selfconsistency files for the radar elevations.')
 
                 return None, None
-
             zdr_kdpzh_dict = {'zdr_kdpzh': zdr_kdpzh_list,
                               'elev': el_list,
                               'freq_band': freq_band}

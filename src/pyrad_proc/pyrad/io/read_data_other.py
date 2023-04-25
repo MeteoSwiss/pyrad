@@ -1198,10 +1198,14 @@ def read_monitoring_ts(fname, sort_by_date=False):
                     fcntl.flock(csvfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
                     break
                 except OSError as e:
-                    if e.errno != errno.EAGAIN:
-                        raise
-                    else:
+                    if e.errno == errno.EAGAIN:
                         time.sleep(0.1)
+                    elif e.errno == errno.EBADF:
+                        warn("WARNING: No file locking is possible (NFS mount?), "+
+                             "expect strange issues with multiprocessing...")
+                        break
+                    else:
+                        raise
 
             # first count the lines
             reader = csv.DictReader(
