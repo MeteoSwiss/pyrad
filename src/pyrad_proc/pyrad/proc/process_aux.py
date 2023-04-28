@@ -218,7 +218,6 @@ def get_process_func(dataset_type, dsname):
                 'ZDR_COLUMN': process_zdr_column
             'SUN_HITS' format output:
                 'SUN_HITS': process_sun_hits
-            'SUNSCAN' format output:
                 'SUNSCAN': process_sunscan
             'TIMEAVG' format output:
                 'FLAG_TIME_AVG': process_time_avg_flag
