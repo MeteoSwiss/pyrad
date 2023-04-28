@@ -187,6 +187,7 @@ def get_process_func(dataset_type, dsname):
                 'NORMALIZE_LUMINOSITY': process_normalize_luminosity
                 'PIXEL_FILTER': process_pixel_filter
                 'VOL2GRID': process_vol_to_grid
+                'DDA': process_dda
             'GRID_TIMEAVG' format output:
                 'GRID_TIME_STATS': process_grid_time_stats
                 'GRID_TIME_STATS2': process_grid_time_stats2
@@ -262,6 +263,9 @@ def get_process_func(dataset_type, dsname):
     elif dataset_type == 'GECSX':
         func_name = 'process_gecsx'
         dsformat = ['GRID', 'VOL']
+    elif dataset_type == 'DDA':
+        func_name = 'process_dda'
+        dsformat = 'GRID'
     elif dataset_type == 'GRID':
         func_name = 'process_grid'
         dsformat = 'GRID'
