@@ -1,0 +1,45 @@
+# Name of this configuration:
+# Will be used in product generation save path
+name STRING dda_doppler
+
+# ---------------------------------------------------------
+#  Raw data pathes
+# ---------------------------------------------------------
+
+# Base path of the raw data.
+# Note: Must have a trailing '/'
+# ('<datapath>/<scanname>/<YYYY-MM-DD>/<YYYYMMDDHHMMSS00datatype>.<ext>')
+datapath STRARR 2
+    /store/msrad/radar/rad4alp/rawdata/
+    /store/msrad/radar/DX50/rawdata/
+
+# Loading of saved datasets
+loadbasepath STRARR 2
+    /store/msrad/radar/pyrad_products/
+    /store/msrad/radar/pyrad_products/
+
+loadname STRARR 2
+    dda_doppler_A
+    dda_doppler_DX50
+    
+# --------------------------------------------
+# Output data
+# --------------------------------------------
+saveimgbasepath STRING /store/msrad/radar/pyrad_products/
+saveimg         INT 1
+# Supported formats: eps, jpeg, jpg, pdf, pgf, png, ps, raw, rgba, svg, svgz, tif, tiff
+imgformat STRING png
+
+# --------------------------------------------------------
+# configuration files pathes
+# --------------------------------------------------------
+
+# Base path of configuration files
+configpath STRING $HOME/pyrad/config/processing/
+
+# Configuration of the radar location and approach direction
+locationConfigFile STRING $HOME/pyrad/config/processing/dda_example_loc.txt
+
+# Configuration of the product generation
+productConfigFile STRING $HOME/pyrad/config/processing/dda_example_prod.txt
+
