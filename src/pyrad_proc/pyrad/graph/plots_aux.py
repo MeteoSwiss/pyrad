@@ -436,16 +436,18 @@ def get_norm(field_name, field_dict={}, isxarray = False):
 
     ref_dict = pyart.config.get_metadata(field_name)
     cmap = mpl.colormaps[pyart.config.get_field_colormap(field_name)]
-    
-    if isxarray:
-        ncolors = len(field_dict['boundaries']) - 1
-    else:
-        ncolors = cmap.N
-
     if field_dict is not None and 'boundaries' in field_dict:
+        if isxarray:
+            ncolors = len(field_dict['boundaries']) - 1 
+        else:
+            ncolors = cmap.N
         norm = mpl.colors.BoundaryNorm(
             boundaries=field_dict['boundaries'], ncolors=ncolors)
     elif 'boundaries' in ref_dict:
+        if isxarray:
+            ncolors = len(ref_dict['boundaries']) - 1
+        else:
+            ncolors = cmap.N
         norm = mpl.colors.BoundaryNorm(
             boundaries=ref_dict['boundaries'], ncolors=ncolors)
 
