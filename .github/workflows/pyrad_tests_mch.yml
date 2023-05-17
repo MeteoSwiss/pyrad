@@ -74,6 +74,6 @@ jobs:
       - name: Run tests
         env:
            PYRAD_TESTS_PATH: ${{github.workspace}}/pyrad-tests/
-           PSRLIB_PATH: ${{github.workspace}}/src/libDX50/
+           PSRLIB_PATH: ${{github.workspace}}/src/libDX50/lib/
         working-directory: ${{github.workspace}}/pyrad-tests//
         run: pytest "run_tests.py::test_mch"
