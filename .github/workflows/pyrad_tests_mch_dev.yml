@@ -82,5 +82,4 @@ jobs:
         run: pytest "run_tests.py::test_mch"
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
-        if: ${{ failure() && github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
         
