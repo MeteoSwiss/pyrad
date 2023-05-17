@@ -77,5 +77,5 @@ jobs:
       - name: Run tests
         env:
            PYRAD_TESTS_PATH: ${{github.workspace}}/pyrad-tests/
-        working-directory: ${{github.workspace}}/src/pyrad_proc/tests/
+        working-directory: ${{github.workspace}}/pyrad-tests/
         run: pytest "run_tests.py::test_base"
