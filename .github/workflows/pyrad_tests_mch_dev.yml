@@ -1,4 +1,4 @@
-name: Test pyrad dev
+name: Test pyrad mch dev
 env:
   MINIMAL_DEPENDENCIES: cython numpy scipy netCDF4 xarray 
   OPTIONAL_DEPENDENCIES: pyfftw cartopy h5py pandas scikit-image
