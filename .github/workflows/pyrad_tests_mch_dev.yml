@@ -81,5 +81,6 @@ jobs:
         working-directory: ${{github.workspace}}/pyrad-tests//
         run: pytest "run_tests.py::test_mch"
       - name: Setup tmate session
+        if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
         
