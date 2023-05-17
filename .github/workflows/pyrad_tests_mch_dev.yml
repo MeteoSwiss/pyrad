@@ -10,7 +10,14 @@ on:
     branches: [ dev ]
   pull_request:
     branches: [ dev ]
-
+  workflow_dispatch:
+      inputs:
+        debug_enabled:
+          type: boolean
+          description: 'Run the build with tmate debugging enabled (https://github.com/marketplace/actions/debugging-with-tmate)'
+          required: false
+          default: false
+          
 jobs:
   unit_tests:
     name: Unit Tests (${{ matrix.python-version }}, ${{ matrix.os }})
@@ -73,3 +80,7 @@ jobs:
            PYRAD_TESTS_PATH: ${{github.workspace}}/pyrad-tests/
         working-directory: ${{github.workspace}}/pyrad-tests//
         run: pytest "run_tests.py::test_mch"
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        if: ${{ failure() && github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
+        
