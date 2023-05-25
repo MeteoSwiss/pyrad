@@ -144,7 +144,7 @@ def generate_grid_products(dataset, prdcfg):
                 coord1, coord2: dict
                     The two lat-lon coordinates marking the limits. They have
                     the keywords 'lat' and 'lon' [degree]. The altitude limits
-                    are defined by the parameters in 'rhiImageConfig' in the
+                    are defined by the parameters in 'xsecImageConfig' in the
                     'loc' configuration file
         'HISTOGRAM': Computes a histogram of the radar volum data
             User defined parameters:
@@ -163,14 +163,14 @@ def generate_grid_products(dataset, prdcfg):
             User defined parameters:
                 lon, lat: floats
                     The starting point of the cross-section. The ending point
-                    is defined by the parameters in 'rhiImageConfig' in the
+                    is defined by the parameters in 'xsecImageConfig' in the
                     'loc' configuration file
         'LONGITUDE_SLICE': Plots a cross-ection of gridded data over a
             constant longitude.
             User defined parameters:
                 lon, lat: floats
                     The starting point of the cross-section. The ending point
-                    is defined by the parameters in 'rhiImageConfig' in the
+                    is defined by the parameters in 'xsecImageConfig' in the
                     'loc' configuration file
         'SAVEALL': Saves a gridded data object including all or a list of
             user-defined fields in a netcdf file
@@ -264,7 +264,7 @@ def generate_grid_products(dataset, prdcfg):
                     countours are 10 values linearly distributed from vmin to
                     vmax
         DDA_MAP:
-            Plots wind vectors obtained from a DDA analysis. The pyDDA package is 
+            Plots wind vectors obtained from a DDA analysis. The pyDDA package is
             required
             User defined parameters:
                 level: int
@@ -918,7 +918,7 @@ def generate_grid_products(dataset, prdcfg):
             'lat', dataset['radar_out'].origin_latitude['data'][0])
         alpha = prdcfg.get('alpha', 1)
         wind_vectors = prdcfg.get('wind_vectors', 'hor')
-        
+
         # Find indexes where to slice with a pyart display object
         # this is a bit clumsy
         display = pyart.graph.GridMapDisplay(dataset['radar_out'])

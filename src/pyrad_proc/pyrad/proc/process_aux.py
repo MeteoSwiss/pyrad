@@ -772,7 +772,7 @@ def process_vol_to_grid(procstatus, dscfg, radar_list=None):
     hres = dscfg.get('hres', 1000.)
     vres = dscfg.get('vres', 500.)
     lat = dscfg.get('lat0', float(radar_list_aux[0].latitude['data']))
-    lon = dscfg.get('lon0', float(radar_list_aux[0].latitude['data']))
+    lon = dscfg.get('lon0', float(radar_list_aux[0].longitude['data']))
     alt = dscfg.get('alt0', 0.)
 
     wfunc = dscfg.get('wfunc', 'NEAREST')

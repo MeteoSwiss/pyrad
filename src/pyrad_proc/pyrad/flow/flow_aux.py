@@ -1403,6 +1403,8 @@ def _create_prdcfg_dict(cfg, dataset, product, voltime, runinfo=None):
         prdcfg.update({'ppiMapImageConfig': cfg['ppiMapImageConfig']})
     if 'rhiImageConfig' in cfg:
         prdcfg.update({'rhiImageConfig': cfg['rhiImageConfig']})
+    if 'xsecImageConfig' in cfg:
+        prdcfg.update({'xsecImageConfig': cfg['xsecImageConfig']})
     if 'gridMapImageConfig' in cfg:
         prdcfg.update({'gridMapImageConfig': cfg['gridMapImageConfig']})
     if 'sunhitsImageConfig' in cfg:

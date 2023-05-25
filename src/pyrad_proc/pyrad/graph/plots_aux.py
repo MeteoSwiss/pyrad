@@ -33,7 +33,8 @@ mpl.rcParams.update({'font.size': 16})
 mpl.rcParams.update({'font.family':  "sans-serif"})
 
 
-def generate_complex_range_Doppler_title(radar, field, ray, datetime_format=None):
+def generate_complex_range_Doppler_title(radar, field, ray,
+                                         datetime_format=None):
     """
     creates the fixed range plot title
 
@@ -209,6 +210,7 @@ def generate_fixed_rng_title(radar, field, fixed_rng, datetime_format=None):
     field_name = pyart.graph.common.generate_field_name(radar, field)
     return l1 + '\n' + field_name
 
+
 def generate_dda_map_title(grid, field, level, datetime_format=None):
     """
     creates the dda map plot title
@@ -244,8 +246,9 @@ def generate_dda_map_title(grid, field, level, datetime_format=None):
     field_name = "Hor. wind vectors (u,v) with " + field
     return l1 + '\n' + field_name
 
-def generate_dda_latitude_slice_title(grid, field, level, datetime_format=None, 
-                                                wind_vectors = 'hor'):
+
+def generate_dda_latitude_slice_title(grid, field, level, datetime_format=None,
+                                      wind_vectors='hor'):
     """
     creates the dda latitude slice plot title
 
@@ -289,12 +292,14 @@ def generate_dda_latitude_slice_title(grid, field, level, datetime_format=None,
     if wind_vectors == 'hor':
         field_name = "Hor. wind vectors (u,v)"
     elif wind_vectors == 'ver':
-        field_name = "Vert. wind vectors (v,w)" 
+        field_name = "Vert. wind vectors (v,w)"
     field_name += ' with ' + field
     return l1 + '\n' + field_name
 
-def generate_dda_longitude_slice_title(grid, field, level, datetime_format=None, 
-                                                wind_vectors = 'hor'):
+
+def generate_dda_longitude_slice_title(grid, field, level,
+                                       datetime_format=None,
+                                       wind_vectors='hor'):
     """
     creates the dda longitude slice plot title
 
@@ -337,9 +342,10 @@ def generate_dda_longitude_slice_title(grid, field, level, datetime_format=None,
     if wind_vectors == 'hor':
         field_name = "Hor. wind vectors (u,v)"
     elif wind_vectors == 'ver':
-        field_name = "Vert. wind vectors (v,w)" 
+        field_name = "Vert. wind vectors (v,w)"
     field_name += ' with ' + field
     return l1 + '\n' + field_name
+
 
 def get_colobar_label(field_dict, field_name):
     """
@@ -402,7 +408,7 @@ def get_field_name(field_dict, field):
     return field_name
 
 
-def get_norm(field_name, field_dict={}, isxarray = False):
+def get_norm(field_name, field_dict={}, isxarray=False):
     """
     Computes the normalization of the colormap, and gets the ticks and labels
     of the colorbar from the metadata of the field. Returns None if the
@@ -417,9 +423,10 @@ def get_norm(field_name, field_dict={}, isxarray = False):
     field_dict : dict or None
         dictionary containing the field and its metadata.
     isxarray : bool
-        whether or not the norm will be used with xarray's plotting functions 
-        default is false, which means that matplotlib plotting functions will be used
-        should be set to true when plotting Grid objects which are handled as xarray by pyart
+        whether or not the norm will be used with xarray's plotting functions
+        default is false, which means that matplotlib plotting functions will
+        be used should be set to true when plotting Grid objects which are
+        handled as xarray by pyart
     Returns
     -------
     norm : list
@@ -436,9 +443,12 @@ def get_norm(field_name, field_dict={}, isxarray = False):
 
     ref_dict = pyart.config.get_metadata(field_name)
     cmap = mpl.colormaps[pyart.config.get_field_colormap(field_name)]
-    
+
     if isxarray:
-        ncolors = len(field_dict['boundaries']) - 1
+        if 'boundaries' in field_dict:
+            ncolors = len(field_dict['boundaries']) - 1
+        else:
+            ncolors = cmap.N
     else:
         ncolors = cmap.N
 
@@ -459,5 +469,3 @@ def get_norm(field_name, field_dict={}, isxarray = False):
             ticklabs = ref_dict['labels']
 
     return norm, ticks, ticklabs
-
-
