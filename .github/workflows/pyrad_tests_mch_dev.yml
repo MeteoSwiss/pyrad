@@ -1,6 +1,6 @@
 name: Test pyrad mch dev
 env:
-  MINIMAL_DEPENDENCIES: Cython numpy
+  MINIMAL_DEPENDENCIES: Cython numpy wradlib
   TEST_DEPENDENCIES: pytest imageio
 
 on:
