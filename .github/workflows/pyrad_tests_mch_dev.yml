@@ -1,5 +1,6 @@
 name: Test pyrad mch dev
 env:
+  MINIMAL_DEPENDENCIES: numpy
   TEST_DEPENDENCIES: pytest
 
 on:
