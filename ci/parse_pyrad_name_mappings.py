@@ -60,5 +60,3 @@ for fun_name in FUNCTIONS_TO_PARSE:
     df = pd.DataFrame(dic)
     df.to_csv(str(Path(OUT_DIRECTORY, 'pyrad_to_{:s}.txt'.format(mapping))),
                        index=False)
-    
-# %%
