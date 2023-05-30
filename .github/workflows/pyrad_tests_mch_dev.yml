@@ -1,7 +1,7 @@
 name: Test pyrad mch dev
 env:
   MINIMAL_DEPENDENCIES: Cython numpy
-  TEST_DEPENDENCIES: pytest
+  TEST_DEPENDENCIES: pytest imageio
 
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ "ubuntu-latest" ]
-        python-version: [ "3.8", "3.9"]
+        python-version: [ "3.9", "3.10"]
       max-parallel: 6
 
     defaults:
