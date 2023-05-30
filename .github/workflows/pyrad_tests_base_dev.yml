@@ -1,8 +1,7 @@
 name: Test pyrad base dev
 env:
-  MINIMAL_DEPENDENCIES: cython numpy scipy dask netCDF4 xarray wradlib
-  OPTIONAL_DEPENDENCIES: pyfftw cartopy h5py PyWavelets pandas scikit-image
-  TEST_DEPENDENCIES: pytest pytest-cov
+  MINIMAL_DEPENDENCIES: Cython numpy cartopy
+  TEST_DEPENDENCIES: pytest imageio
 
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
