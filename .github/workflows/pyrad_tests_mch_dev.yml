@@ -1,8 +1,6 @@
 name: Test pyrad mch dev
 env:
-  MINIMAL_DEPENDENCIES: cython numpy scipy netCDF4 xarray wradlib
-  OPTIONAL_DEPENDENCIES: pyfftw cartopy h5py pandas scikit-image
-  TEST_DEPENDENCIES: pytest pytest-cov
+  TEST_DEPENDENCIES: pytest
 
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
