@@ -1,0 +1,59 @@
+#
+# Product generation configuration
+#
+
+# List of datasets to generate.
+# The detailed specification of each dataset is given below.
+dataSetList STRARR 1
+    l0:dda
+
+
+dda STRUCT 6
+   type     STRING DDA
+   datatype STRARR 4
+        RADAR001:RAD4ALP:dBZ
+        RADAR002:RAINBOW:dBZ
+        RADAR001:RAD4ALPDOPPLER:dealV
+        RADAR002:RAINBOW:V
+   wfunc STRING NEAREST
+   gridConfig STRUCT 11
+       xmin FLOAT -20.
+       xmax FLOAT 20.
+       ymin FLOAT -20.
+       ymax FLOAT 20.
+       zmin FLOAT 2000.
+       zmax FLOAT 6000.
+       hres FLOAT 1000.
+       vres FLOAT 200.
+       altorig FLOAT 570.
+       latorig FLOAT 46.74
+       lonorig FLOAT 8.
+    signs INTARR 2
+        1
+        -1
+    products STRUCT 2
+        quiver_map STRUCT 10
+            type STRING DDA_MAP
+            voltype STRING dBZ
+            display_type STRING quiver
+            bg_ref_rad INT 0
+            quiver_len FLOAT 20
+            vector_spacing_km FLOAT 2
+            vmin FLOAT 0
+            vmax FLOAT 40
+            alpha FLOAT 0.6
+            level INT 10
+        lon_slice_8 STRUCT 11
+            type STRING DDA_LONGITUDE_SLICE
+            voltype STRING dBZ
+            display_type STRING quiver
+            bg_ref_rad INT 0
+            quiver_len FLOAT 10
+            vector_spacing_km FLOAT 2
+            vmin FLOAT 0
+            vmax FLOAT 40
+            alpha FLOAT 0.6
+            wind_vectors STRING hor
+            lon FLOAT 8
+
+

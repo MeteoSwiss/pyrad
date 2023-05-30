@@ -355,7 +355,7 @@ from .process_Doppler import process_wind_vel, process_windshear
 from .process_Doppler import process_radial_velocity, process_dealias_fourdd
 from .process_Doppler import process_dealias_region_based
 from .process_Doppler import process_dealias_unwrap_phase
-from .process_Doppler import process_vad, process_turbulence
+from .process_Doppler import process_vad, process_turbulence, process_dda
 
 from .process_cosmo import process_cosmo, process_cosmo_lookup_table
 from .process_cosmo import process_cosmo_coord, process_hzt, process_iso0_mf

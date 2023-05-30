@@ -3788,7 +3788,7 @@ def merge_fields_mf_grid(voltime, datatype_list, dataset_list, scan_list, cfg,
     ind_rad : int
         radar index
     ftype : str
-        File type. Can be 'png', 'bin' or 'grib'
+        File type. Can be 'png', 'bin', 'grib', 'dat' or 'nc'
 
     Returns
     -------

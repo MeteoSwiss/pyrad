@@ -187,6 +187,7 @@ def get_process_func(dataset_type, dsname):
                 'NORMALIZE_LUMINOSITY': process_normalize_luminosity
                 'PIXEL_FILTER': process_pixel_filter
                 'VOL2GRID': process_vol_to_grid
+                'DDA': process_dda
             'GRID_TIMEAVG' format output:
                 'GRID_TIME_STATS': process_grid_time_stats
                 'GRID_TIME_STATS2': process_grid_time_stats2
@@ -217,7 +218,6 @@ def get_process_func(dataset_type, dsname):
                 'ZDR_COLUMN': process_zdr_column
             'SUN_HITS' format output:
                 'SUN_HITS': process_sun_hits
-            'SUNSCAN' format output:
                 'SUNSCAN': process_sunscan
             'TIMEAVG' format output:
                 'FLAG_TIME_AVG': process_time_avg_flag
@@ -262,6 +262,9 @@ def get_process_func(dataset_type, dsname):
     elif dataset_type == 'GECSX':
         func_name = 'process_gecsx'
         dsformat = ['GRID', 'VOL']
+    elif dataset_type == 'DDA':
+        func_name = 'process_dda'
+        dsformat = 'GRID'
     elif dataset_type == 'GRID':
         func_name = 'process_grid'
         dsformat = 'GRID'
@@ -769,7 +772,7 @@ def process_vol_to_grid(procstatus, dscfg, radar_list=None):
     hres = dscfg.get('hres', 1000.)
     vres = dscfg.get('vres', 500.)
     lat = dscfg.get('lat0', float(radar_list_aux[0].latitude['data']))
-    lon = dscfg.get('lon0', float(radar_list_aux[0].latitude['data']))
+    lon = dscfg.get('lon0', float(radar_list_aux[0].longitude['data']))
     alt = dscfg.get('alt0', 0.)
 
     wfunc = dscfg.get('wfunc', 'NEAREST')

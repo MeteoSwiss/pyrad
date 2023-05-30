@@ -1,8 +1,7 @@
-name: Test pyrad ARM dev
+name: Test pyrad mch dev
 env:
-  MINIMAL_DEPENDENCIES: cython numpy scipy dask netCDF4 xarray
-  OPTIONAL_DEPENDENCIES: pyfftw cartopy h5py PyWavelets pandas scikit-image
-  TEST_DEPENDENCIES: pytest pytest-cov
+  MINIMAL_DEPENDENCIES: Cython numpy wradlib
+  TEST_DEPENDENCIES: pytest imageio
 
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
@@ -10,7 +9,7 @@ on:
     branches: [ dev ]
   pull_request:
     branches: [ dev ]
-
+          
 jobs:
   unit_tests:
     name: Unit Tests (${{ matrix.python-version }}, ${{ matrix.os }})
@@ -20,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ "ubuntu-latest" ]
-        python-version: ["3.9"]
+        python-version: [ "3.9", "3.10"]
       max-parallel: 6
 
     defaults:
@@ -32,19 +31,11 @@ jobs:
         with:
          submodules: recursive
          ref : dev
-      - uses: actions/setup-python@v2
+      - name: Clone pyrad-tests
+        uses: actions/checkout@main
         with:
-          python-version: ${{ matrix.python-version }}
-      - name: Clone pyart
-        uses: actions/checkout@master
-        with:
-          repository: ARM-DOE/pyart 
-          path: pyart
-      - name: Clone pyrad-examples
-        uses: actions/checkout@master
-        with:
-          repository: MeteoSwiss/pyrad-examples
-          path: pyrad-examples
+          repository: MeteoSwiss/pyrad-tests
+          path: pyrad-tests
       - name: Setup Miniconda
         uses: conda-incubator/setup-miniconda@v2.0.0
         with:
@@ -57,25 +48,31 @@ jobs:
       - name: Install dependencies
         env:
           PACKAGES: ${{env.MINIMAL_DEPENDENCIES}} ${{env.OPTIONAL_DEPENDENCIES}} ${{env.TEST_DEPENDENCIES}}
-          PYRAD_EXAMPLES_PATH: ${{github.workspace}}/pyrad-examples/
+          PYRAD_TESTS_PATH: ${{github.workspace}}/pyrad-tests/
         run: |
           conda install --quiet ${{env.PACKAGES}}
           pip install -U cookiecutter
       - name: Install pyart
-        working-directory:  ${{github.workspace}}/pyart/
-        run: python -m pip install .
+        if: matrix.os != 'macos-latest'
+        working-directory: ${{github.workspace}}/src/pyart/
+        run: python setup.py install
       - name: Install pyrad
         if: matrix.os != 'macos-latest'
         working-directory: ${{github.workspace}}/src/pyrad_proc/
-        run: python -m pip install .
-
+        run: python setup.py install
+      - name: Install DX50 lib
+        working-directory: ${{github.workspace}}/src/libDX50/
+        run: make
       - name: Check imports
-        working-directory: ${{github.workspace}}/pyrad-examples/
+        working-directory: ${{github.workspace}}/pyrad-tests/
         run: |
           python -c "import pyrad; print(pyrad.__file__)"
           python -c "from pyrad.flow import main"
       - name: Run tests
         env:
-           PYRAD_EXAMPLES_PATH: ${{github.workspace}}/pyrad-examples/
-        working-directory: ${{github.workspace}}/src/pyrad_proc/tests/
-        run: pytest run_tests_arm.py
+           PYRAD_TESTS_PATH: ${{github.workspace}}/pyrad-tests/
+           PSRLIB_PATH: ${{github.workspace}}/src/libDX50/lib/
+           PYART_CONFIG: ${{github.workspace}}/config/pyart/mch_config.py
+        working-directory: ${{github.workspace}}/pyrad-tests//
+        run: pytest "run_tests.py::test_mch"
+        

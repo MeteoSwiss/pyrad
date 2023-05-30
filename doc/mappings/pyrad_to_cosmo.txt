@@ -1,0 +1,5 @@
+pyrad_name,cosmo_name
+temperature,T
+wind_speed,FF
+wind_direction,DD
+vertical_wind_shear,WSHEAR

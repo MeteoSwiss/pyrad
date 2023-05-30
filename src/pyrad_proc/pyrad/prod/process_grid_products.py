@@ -27,11 +27,15 @@ from ..io.write_data import write_histogram, write_ts_stats
 from ..graph.plots_grid import plot_surface, plot_surface_raw
 from ..graph.plots_grid import plot_longitude_slice, plot_latitude_slice
 from ..graph.plots_grid import plot_latlon_slice, plot_surface_contour
+from ..graph.plots_grid import plot_dda_map, plot_dda_slice
+
 from ..graph.plots_aux import get_colobar_label, get_field_name
+from ..graph.plots_aux import generate_dda_map_title
+from ..graph.plots_aux import generate_dda_latitude_slice_title
+from ..graph.plots_aux import generate_dda_longitude_slice_title
 from ..graph.plots import plot_histogram, plot_pos
 
 from ..util.radar_utils import compute_histogram
-
 
 def generate_grid_time_avg_products(dataset, prdcfg):
     """
@@ -140,7 +144,7 @@ def generate_grid_products(dataset, prdcfg):
                 coord1, coord2: dict
                     The two lat-lon coordinates marking the limits. They have
                     the keywords 'lat' and 'lon' [degree]. The altitude limits
-                    are defined by the parameters in 'rhiImageConfig' in the
+                    are defined by the parameters in 'xsecImageConfig' in the
                     'loc' configuration file
         'HISTOGRAM': Computes a histogram of the radar volum data
             User defined parameters:
@@ -159,14 +163,14 @@ def generate_grid_products(dataset, prdcfg):
             User defined parameters:
                 lon, lat: floats
                     The starting point of the cross-section. The ending point
-                    is defined by the parameters in 'rhiImageConfig' in the
+                    is defined by the parameters in 'xsecImageConfig' in the
                     'loc' configuration file
         'LONGITUDE_SLICE': Plots a cross-ection of gridded data over a
             constant longitude.
             User defined parameters:
                 lon, lat: floats
                     The starting point of the cross-section. The ending point
-                    is defined by the parameters in 'rhiImageConfig' in the
+                    is defined by the parameters in 'xsecImageConfig' in the
                     'loc' configuration file
         'SAVEALL': Saves a gridded data object including all or a list of
             user-defined fields in a netcdf file
@@ -259,7 +263,41 @@ def generate_grid_products(dataset, prdcfg):
                     Py-ART config file. If 'boundaries' is not set the
                     countours are 10 values linearly distributed from vmin to
                     vmax
-
+        DDA_MAP:
+            Plots wind vectors obtained from a DDA analysis. The pyDDA package is
+            required
+            User defined parameters:
+                level: int
+                    The altitude level to plot. The rest of the parameters are
+                    defined by the parameters in 'ppiImageConfig' and
+                    'ppiMapImageConfig' in the 'loc' configuration file
+                display_type: str
+                    Display method for the wind vectors, can be either
+                    'streamline', 'quiver' or 'barbs'
+                bg_ref_rad: int
+                    Which radar to use as reference to display the background
+                    voltype.
+                u_vel_contours: list of int
+                    The contours to use for plotting contours of u. Set to None to not
+                    display such contours.
+                v_vel_contours: list of int
+                    The contours to use for plotting contours of v. Set to None to not
+                    display such contours.
+                w_vel_contours: list of int
+                    The contours to use for plotting contours of w. Set to None to not
+                    display such contours.
+                vector_spacing_km: float
+                    Spacing in km between wind vectors in x and y axis
+                    (only used for barbs and quiver plots)
+                quiver_len: float
+                    Length to use for the quiver key in m/s.
+                    (only used for quiver plots)
+                streamline_arrowsize: float
+                    Factor scale arrow size for streamlines.
+                    (only used for streamline plots)
+                linewidth: float
+                    Linewidths for streamlines.
+                    (only used for streamline plots)
     Parameters
     ----------
     dataset : grid
@@ -803,5 +841,164 @@ def generate_grid_products(dataset, prdcfg):
 
         return fname
 
-    warn(' Unsupported product type: ' + prdcfg['type'])
-    return None
+    if prdcfg['type'] == 'DDA_MAP':
+
+        display_type = prdcfg.get('display_type', 'quiver')
+        if display_type not in ['quiver', 'barbs', 'streamline']:
+            warn(
+                'Invalid display_type, must be ' +
+                '"streamline", "quiver" or "barbs"'
+            )
+            return None
+
+        bg_field_name = get_fieldname_pyart(prdcfg['voltype'])
+        bg_ref_rad = prdcfg.get('bg_ref_rad', 0)
+        # get bg field name given which radar serves as reference
+        if bg_ref_rad != 0:
+            bg_field_name += '_radar{:d}'.format(bg_ref_rad)
+
+        if bg_field_name not in dataset['radar_out'].fields:
+            warn(
+                ' Field type ' + field_name +
+                ' not available in data set. Skipping product ' +
+                prdcfg['type'])
+            return None
+
+        # user defined values
+        level = prdcfg.get('level', 0)
+        alpha = prdcfg.get('alpha', 1)
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdcfg['prdname'], timeinfo=prdcfg['timeinfo'])
+
+        fname_list = make_filename(
+            'dda_map', prdcfg['dstype'], prdcfg['voltype'],
+            prdcfg['imgformat'], prdcfginfo='l'+str(level),
+            timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
+
+        for i, fname in enumerate(fname_list):
+            fname_list[i] = savedir+fname
+
+        titl = generate_dda_map_title(dataset['radar_out'], bg_field_name, level)
+
+        plot_dda_map(
+            dataset['radar_out'], bg_field_name, level, prdcfg, fname_list,
+            alpha = alpha, display_type = display_type, titl = titl)
+
+        print('----- save to '+' '.join(fname_list))
+
+    if prdcfg['type'] == 'DDA_LONGITUDE_SLICE':
+
+        display_type = prdcfg.get('display_type', 'quiver')
+        if display_type not in ['quiver', 'barbs', 'streamline']:
+            warn(
+                'Invalid display_type, must be ' +
+                '"streamline", "quiver" or "barbs"'
+            )
+            return None
+
+        bg_field_name = get_fieldname_pyart(prdcfg['voltype'])
+        bg_ref_rad = prdcfg.get('bg_ref_rad', 0)
+        # get bg field name given which radar serves as reference
+        if bg_ref_rad != 0:
+            bg_field_name += '_radar{:d}'.format(bg_ref_rad)
+
+        if bg_field_name not in dataset['radar_out'].fields:
+            warn(
+                ' Field type ' + field_name +
+                ' not available in data set. Skipping product ' +
+                prdcfg['type'])
+            return None
+
+        # user defined values
+        lon = prdcfg.get(
+            'lon', dataset['radar_out'].origin_longitude['data'][0])
+        lat = prdcfg.get(
+            'lat', dataset['radar_out'].origin_latitude['data'][0])
+        alpha = prdcfg.get('alpha', 1)
+        wind_vectors = prdcfg.get('wind_vectors', 'hor')
+
+        # Find indexes where to slice with a pyart display object
+        # this is a bit clumsy
+        display = pyart.graph.GridMapDisplay(dataset['radar_out'])
+        level, _ = display._find_nearest_grid_indices(lon, lat)
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdcfg['prdname'], timeinfo=prdcfg['timeinfo'])
+
+        fname_list = make_filename(
+            'dda_lon_slice', prdcfg['dstype'], prdcfg['voltype'],
+            prdcfg['imgformat'], prdcfginfo='l'+str(level),
+            timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
+
+        for i, fname in enumerate(fname_list):
+            fname_list[i] = savedir+fname
+
+        titl = generate_dda_longitude_slice_title(dataset['radar_out'], bg_field_name, level)
+
+        plot_dda_slice(
+            dataset['radar_out'], bg_field_name, 'longitude', level, prdcfg, fname_list,
+            alpha = alpha, display_type = display_type, titl = titl, wind_vectors = wind_vectors)
+
+        print('----- save to '+' '.join(fname_list))
+
+    if prdcfg['type'] == 'DDA_LATITUDE_SLICE':
+
+        display_type = prdcfg.get('display_type', 'quiver')
+        if display_type not in ['quiver', 'barbs', 'streamline']:
+            warn(
+                'Invalid display_type, must be ' +
+                '"streamline", "quiver" or "barbs"'
+            )
+            return None
+
+        bg_field_name = get_fieldname_pyart(prdcfg['voltype'])
+        bg_ref_rad = prdcfg.get('bg_ref_rad', 0)
+        # get bg field name given which radar serves as reference
+        if bg_ref_rad != 0:
+            bg_field_name += '_radar{:d}'.format(bg_ref_rad)
+
+        if bg_field_name not in dataset['radar_out'].fields:
+            warn(
+                ' Field type ' + field_name +
+                ' not available in data set. Skipping product ' +
+                prdcfg['type'])
+            return None
+
+        # user defined values
+        lon = prdcfg.get(
+            'lon', dataset['radar_out'].origin_longitude['data'][0])
+        lat = prdcfg.get(
+            'lat', dataset['radar_out'].origin_latitude['data'][0])
+        alpha = prdcfg.get('alpha', 1)
+        wind_vectors = prdcfg.get('wind_vectors', 'hor')
+
+        # Find indexes where to slice with a pyart display object
+        # this is a bit clumsy
+        display = pyart.graph.GridMapDisplay(dataset['radar_out'])
+        _, level = display._find_nearest_grid_indices(lon, lat)
+
+        savedir = get_save_dir(
+            prdcfg['basepath'], prdcfg['procname'], dssavedir,
+            prdcfg['prdname'], timeinfo=prdcfg['timeinfo'])
+
+        fname_list = make_filename(
+            'dda_lat_slice', prdcfg['dstype'], prdcfg['voltype'],
+            prdcfg['imgformat'], prdcfginfo='l'+str(level),
+            timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
+
+        for i, fname in enumerate(fname_list):
+            fname_list[i] = savedir+fname
+
+        titl = generate_dda_latitude_slice_title(dataset['radar_out'], bg_field_name, level)
+
+        plot_dda_slice(
+            dataset['radar_out'], bg_field_name, 'latitude', level, prdcfg, fname_list,
+            alpha = alpha, display_type = display_type, titl = titl, wind_vectors = wind_vectors)
+
+        print('----- save to '+' '.join(fname_list))
+
+    else:
+        return None
