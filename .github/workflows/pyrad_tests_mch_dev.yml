@@ -1,6 +1,6 @@
 name: Test pyrad mch dev
 env:
-  MINIMAL_DEPENDENCIES: Cython numpy wradlib cartopy
+  MINIMAL_DEPENDENCIES: Cython numpy cartopy
   TEST_DEPENDENCIES: pytest imageio
 
 on:
@@ -51,7 +51,7 @@ jobs:
           PYRAD_TESTS_PATH: ${{github.workspace}}/pyrad-tests/
         run: |
           conda install -c conda-forge ${{env.PACKAGES}}
-          pip install -U cookiecutter
+          pip install wradlib
       - name: Install pyart
         if: matrix.os != 'macos-latest'
         working-directory: ${{github.workspace}}/src/pyart/
