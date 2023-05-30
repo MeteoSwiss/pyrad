@@ -59,7 +59,7 @@ jobs:
           PYRAD_TESTS_PATH: ${{github.workspace}}/pyrad-tests/
         run: |
           conda install --quiet ${{env.PACKAGES}}
-          pip install -U cookiecutter
+          pip install wradlib
       - name: Install pyart
         working-directory:  ${{github.workspace}}/pyart/
         run: python -m pip install .
