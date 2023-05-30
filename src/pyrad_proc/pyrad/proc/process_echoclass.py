@@ -551,7 +551,6 @@ def process_cdf(procstatus, dscfg, radar_list=None):
 
     if procstatus != 1:
         return None, None
-
     echoid_field = None
     hydro_field = None
     vis_field = None
@@ -636,7 +635,7 @@ def process_filter_snr(procstatus, dscfg, radar_list=None):
 
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype in ('SNRh', 'SNRv', 'SNR'):
+        if datatype in ('SNRh', 'SNRv', 'SNR','CNR'):
             snr_field = get_fieldname_pyart(datatype)
             break
 
@@ -824,6 +823,8 @@ def process_filter_visibility(procstatus, dscfg, radar_list=None):
         if datatype == 'VIS':
             vis_field = get_fieldname_pyart(datatype)
             break
+        elif 'visibility_polar' in datatype: # from GECSX
+            vis_field = get_fieldname_pyart('visibility_polar')
 
     ind_rad = int(radarnr[5:8])-1
     if radar_list[ind_rad] is None:
@@ -847,7 +848,7 @@ def process_filter_visibility(procstatus, dscfg, radar_list=None):
         _, _, datatype, _, _ = get_datatype_fields(
             datatypedescr)
 
-        if datatype == 'VIS':
+        if datatype == 'VIS' or 'visibility_polar' in datatype:
             continue
         field_name = get_fieldname_pyart(datatype)
         if field_name not in radar.fields:

@@ -19,6 +19,7 @@ Auxiliary functions
     process_fixed_rng
     process_fixed_rng_span
     process_roi
+    process_roi2
     process_azimuthal_average
     process_moving_azimuthal_average
     process_radar_resampling
@@ -259,7 +260,7 @@ DEM data
 """
 
 from .process_aux import get_process_func, process_raw, process_save_radar
-from .process_aux import process_roi, process_azimuthal_average
+from .process_aux import process_roi, process_roi2, process_azimuthal_average
 from .process_aux import process_fixed_rng, process_fixed_rng_span
 from .process_aux import process_radar_resampling, process_vol_to_grid
 from .process_aux import process_moving_azimuthal_average
@@ -354,7 +355,7 @@ from .process_Doppler import process_wind_vel, process_windshear
 from .process_Doppler import process_radial_velocity, process_dealias_fourdd
 from .process_Doppler import process_dealias_region_based
 from .process_Doppler import process_dealias_unwrap_phase
-from .process_Doppler import process_vad, process_turbulence
+from .process_Doppler import process_vad, process_turbulence, process_dda
 
 from .process_cosmo import process_cosmo, process_cosmo_lookup_table
 from .process_cosmo import process_cosmo_coord, process_hzt, process_iso0_mf

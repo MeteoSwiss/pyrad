@@ -981,6 +981,8 @@ def _create_cfg_dict(cfgfile):
         cfg.update({'disdropath': None})
     if 'solarfluxpath' not in cfg:
         cfg.update({'solarfluxpath': None})
+    if 'selfconsistencypath' not in cfg:
+        cfg.update({'selfconsistencypath': None})
     if 'loadbasepath' not in cfg:
         cfg.update({'loadbasepath': None})
     if 'loadname' not in cfg:
@@ -1304,6 +1306,7 @@ def _create_dscfg_dict(cfg, dataset):
     dscfg.update({'colocgatespath': cfg['colocgatespath']})
     dscfg.update({'excessgatespath': cfg['excessgatespath']})
     dscfg.update({'dempath': cfg['dempath']})
+    dscfg.update({'selfconsistencypath': cfg['selfconsistencypath']})
     dscfg.update({'cosmopath': cfg['cosmopath']})
     dscfg.update({'CosmoRunFreq': cfg['CosmoRunFreq']})
     dscfg.update({'CosmoForecasted': cfg['CosmoForecasted']})
@@ -1388,15 +1391,20 @@ def _create_prdcfg_dict(cfg, dataset, product, voltime, runinfo=None):
     prdcfg.update({'smnpath': cfg['smnpath']})
     prdcfg.update({'disdropath': cfg['disdropath']})
     prdcfg.update({'cosmopath': cfg['cosmopath']})
+    prdcfg.update({'dempath': cfg['dempath']})
     prdcfg.update({'ScanPeriod': cfg['ScanPeriod']})
     prdcfg.update({'imgformat': cfg['imgformat']})
     prdcfg.update({'RadarName': cfg['RadarName']})
+    if 'RadarBeamwidth' in cfg:
+        prdcfg.update({'RadarBeamwidth': cfg['RadarBeamwidth']})
     if 'ppiImageConfig' in cfg:
         prdcfg.update({'ppiImageConfig': cfg['ppiImageConfig']})
     if 'ppiMapImageConfig' in cfg:
         prdcfg.update({'ppiMapImageConfig': cfg['ppiMapImageConfig']})
     if 'rhiImageConfig' in cfg:
         prdcfg.update({'rhiImageConfig': cfg['rhiImageConfig']})
+    if 'xsecImageConfig' in cfg:
+        prdcfg.update({'xsecImageConfig': cfg['xsecImageConfig']})
     if 'gridMapImageConfig' in cfg:
         prdcfg.update({'gridMapImageConfig': cfg['gridMapImageConfig']})
     if 'sunhitsImageConfig' in cfg:

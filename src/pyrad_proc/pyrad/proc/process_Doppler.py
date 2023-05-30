@@ -15,12 +15,12 @@ Functions for processing Doppler related parameters
     process_wind_vel
     process_windshear
     process_vad
+    process_dda
 
 """
 
 from copy import deepcopy
 from warnings import warn
-
 import numpy as np
 
 import pyart
@@ -31,8 +31,14 @@ try:
 except ImportError:
     _PYTDA_AVAILABLE = False
 
-from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
+try:
+    import pydda
+    _PYDDA_AVAILABLE = True
+except ImportError:
+    _PYDDA_AVAILABLE = False
 
+from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
+from .process_grid import process_grid
 
 def process_turbulence(procstatus, dscfg, radar_list=None):
     """
@@ -312,6 +318,11 @@ def process_dealias_region_based(procstatus, dscfg, radar_list=None):
             algorithm so that the average number of unfolding is near 0. False
             does not apply centering which may results in individual sweeps
             under or over folded by the nyquist interval.
+        nyquist_vel : float, optional
+            Nyquist velocity of the aquired radar velocity.
+            Usually this parameter is provided in the
+            Radar object intrument_parameters. If it is not available it can 
+            be provided as a keyword here.
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -346,12 +357,13 @@ def process_dealias_region_based(procstatus, dscfg, radar_list=None):
     skip_between_rays = dscfg.get('skip_between_rays', 100)
     skip_along_ray = dscfg.get('skip_along_ray', 100)
     centered = dscfg.get('centered', True)
+    nyquist_vel = dscfg.get('nyquist_vel', None)
 
     corr_vel_dict = pyart.correct.dealias_region_based(
         radar, ref_vel_field=None, interval_splits=interval_splits,
         interval_limits=None, skip_between_rays=skip_between_rays,
         skip_along_ray=skip_along_ray, centered=centered,
-        nyquist_vel=None, check_nyquist_uniform=True, gatefilter=False,
+        nyquist_vel=nyquist_vel, check_nyquist_uniform=True, gatefilter=False,
         rays_wrap_around=None, keep_original=False, set_limits=False,
         vel_field=vel_field, corr_vel_field=corr_vel_field)
 
@@ -359,7 +371,7 @@ def process_dealias_region_based(procstatus, dscfg, radar_list=None):
     new_dataset = {'radar_out': deepcopy(radar)}
     new_dataset['radar_out'].fields = dict()
     new_dataset['radar_out'].add_field(corr_vel_field, corr_vel_dict)
-
+    
     return new_dataset, ind_rad
 
 
@@ -751,3 +763,241 @@ def process_vad(procstatus, dscfg, radar_list=None):
     new_dataset['radar_out'].add_field('velocity_difference', vel_diff_dict)
 
     return new_dataset, ind_rad
+
+def process_dda(procstatus, dscfg, radar_list=None):
+    """
+    Estimates horizontal wind speed and direction with a multi-doppler approach
+    This method uses the python package pyDDA
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration. Accepted Configuration Keywords::
+
+        datatype : string. Dataset keyword
+            The input data type
+
+        gridding  parameters:
+            gridconfig : dictionary. Dataset keyword
+                Dictionary containing some or all of this keywords:
+                xmin, xmax, ymin, ymax, zmin, zmax : floats
+                    minimum and maximum horizontal distance from grid origin [km]
+                    and minimum and maximum vertical distance from grid origin [m]
+                    Defaults -40, 40, -40, 40, 0., 10000.
+                latmin, latmax, lonmin, lonmax : floats
+                    minimum and maximum latitude and longitude [deg], if specified
+                    xmin, xmax, ymin, ymax will be ignored
+                hres, vres : floats
+                    horizontal and vertical grid resolution [m]
+                    Defaults 1000., 500.
+                latorig, lonorig, altorig : floats
+                    latitude and longitude of grid origin [deg] and altitude of
+                    grid origin [m MSL]
+                    Defaults the latitude, longitude and altitude of the radar
+            wfunc : str. Dataset keyword
+                the weighting function used to combine the radar gates close to a
+                grid point. Possible values BARNES, BARNES2, CRESSMAN, NEAREST
+                Default NEAREST
+            roif_func : str. Dataset keyword
+                the function used to compute the region of interest.
+                Possible values: dist_beam, constant
+            roi : float. Dataset keyword
+                the (minimum) radius of the region of interest in m. Default half
+                the largest resolution
+            beamwidth : float. Dataset keyword
+                the radar antenna beamwidth [deg]. If None that of the key
+                radar_beam_width_h in attribute instrument_parameters of the radar
+                object will be used. If the key or the attribute are not present
+                a default 1 deg value will be used
+            beam_spacing : float. Dataset keyword
+                the beam spacing, i.e. the ray angle resolution [deg]. If None,
+                that of the attribute ray_angle_res of the radar object will be
+                used. If the attribute is None a default 1 deg value will be used
+        dda parameters:
+            signs : list of integers
+                The sign of the velocity field for every radar object.  
+                A value of 1 represents when
+                positive values velocities are towards the radar, -1 represents
+                when negative velocities are towards the radar.
+            Co : float
+                Weight for cost function related to observed radial velocities.
+                Default: 1. 
+            Cm : float
+                Weight for cost function related to the mass continuity equation.
+                Default: 1500. 
+
+    radar_list : list of Radar objects
+        Optional. list of radar objects
+
+    Returns
+    -------
+    new_dataset : dict
+        dictionary containing the output
+    ind_rad : int
+        radar index
+
+    """
+    if not _PYDDA_AVAILABLE:
+        warn('PyDDA package not available. Unable to compute wind fields')
+        return None, None
+
+    if procstatus != 1:
+        return None, None
+    
+    if len(radar_list) < 2:
+        warn('DDA requires data from at least two different radars')
+        return None, None
+
+    # check how many radars have to be compared and which datatype to use
+    ind_radar_list = []
+    field_name_list = []
+    datatype_list = []
+    for datatypedescr in dscfg['datatype']:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        field_name = get_fieldname_pyart(datatype)
+        ind_radar_list.append(int(radarnr[5:8])-1)
+        datatype_list.append(datatype)
+        field_name_list.append(field_name)
+    ind_radar_list = np.array(ind_radar_list)
+    datatype_list = np.array(datatype_list)
+    field_name_list = np.array(field_name_list)
+    
+    # Get DDA numerical parameters
+    Co = dscfg.get('Co', 1.)
+    Cm = dscfg.get('Cm', 1500.)
+
+    # Compute VAD for every radar to initialize DDA
+    # z-vector for vad
+    z_want = np.arange(dscfg['gridConfig']['zmin'],
+        dscfg['gridConfig']['zmax'] + dscfg['gridConfig']['vres'],
+        dscfg['gridConfig']['vres'])
+    
+    all_vad = []
+    distances_to_center = []
+    vel_fields = []
+    refl_fields = []
+    for i, radar in enumerate(radar_list):
+        # Find vel and refl fields
+        field_names_rad = field_name_list[ind_radar_list == i]
+        vel_field = field_names_rad[['velocity' in vname 
+                    for vname in field_name_list[ind_radar_list == i]]][0]
+        vel_fields.append(vel_field)
+        refl_field = field_names_rad[['reflectivity' in vname 
+                    for vname in field_name_list[ind_radar_list == i]]][0]
+        refl_fields.append(refl_field)
+
+        # Compute VAD
+        all_vad.append(pyart.retrieve.vad_browning(radar, vel_field, 
+            z_want = z_want, sign = dscfg['signs'][i]))
+        dist = np.sqrt((radar.latitude['data'][0] 
+                                - dscfg['gridConfig']['latorig'])**2 + 
+                        (radar.longitude['data'][0] 
+                                - dscfg['gridConfig']['lonorig'])**2)
+        distances_to_center.append(dist)
+
+    # Compute VAD weights
+    distances_to_center = np.array(distances_to_center)
+    weights = 1/distances_to_center
+    weights /= np.sum(weights)
+
+    # Now average the VADs
+    u_avg = []
+    v_avg = []
+    for i, vad in enumerate(all_vad):
+        u_avg.append(weights[i] * np.ma.filled(vad.u_wind, np.nan))
+        v_avg.append(weights[i] * np.ma.filled(vad.v_wind, np.nan))
+    u_avg = np.nansum(u_avg, axis = 0)
+    v_avg = np.nansum(v_avg, axis = 0)
+
+    vad_avg = pyart.core.HorizontalWindProfile.from_u_and_v(z_want, 
+                    np.ma.array(u_avg, mask = np.isnan(u_avg)),
+                    np.ma.array(v_avg,  mask = np.isnan(v_avg)))
+
+    grids = []
+    for i, radar in enumerate(radar_list):
+        # Now we grid
+        dscfg_grid = deepcopy(dscfg)
+        dscfg_grid['datatype'] = np.array(dscfg['datatype'])[ind_radar_list == i]
+        grids.append(process_grid(1, dscfg_grid, radar_list)[0]['radar_out'])
+
+    # Harmonize variables
+    for i, grid in enumerate(grids):
+        grid.fields['velocity'] = grid.fields.pop(vel_fields[i])
+        if dscfg['signs'][i] == 1:
+            grid.fields['velocity']['data'] *= -1
+        grid.fields['reflectivity'] = grid.fields.pop(refl_fields[i])
+
+    # DDA initialization
+    u_init, v_init, w_init = pydda.initialization.make_wind_field_from_profile(grids[0], 
+                                vad_avg, vel_field='velocity')
+
+    # Actual DDA computation
+    new_grids = pydda.retrieval.get_dd_wind_field(grids,
+                                u_init, v_init, w_init,
+                                vel_name='velocity', refl_field='reflectivity', 
+                                mask_outside_opt=True, wind_tol=0.01,
+                                engine='scipy', Co = Co, Cm = Cm)
+
+    # pyDDA returns as many grid objects as input radars
+    # the idea here is to merge these grid objects into one
+    # and to replace the homogeneized vel and refl fields by the
+    # original ones
+
+    # create merged grid from first dda grid
+    # First radar will have normal field names
+    # Additional radars will have _radar1, radar_2, ..., radar_N
+    # appended to their field names 
+    merged_grid = deepcopy(new_grids[0])
+    for var in list(merged_grid.fields):
+        if var in grids[0].fields:
+            if var == 'velocity':
+                new_key = vel_fields[0]
+            elif var == 'reflectivity':
+                new_key = refl_fields[0]
+            else:
+                new_key = var
+            merged_grid.fields[new_key] = merged_grid.fields.pop(var)
+
+    # add the other dda grids
+    radar_metadata = []
+    for i, additional_grid in enumerate(new_grids[1:]):
+        for var in list(additional_grid.fields):
+            if var in grids[i+1].fields:
+                if var == 'velocity':
+                    new_key = vel_fields[i+1]
+                elif var == 'reflectivity':
+                    new_key = refl_fields[i+1]
+                else:
+                    new_key = var
+                new_key += '_radar{:d}'.format(i+1)
+                merged_grid.fields[new_key] = additional_grid.fields[var]
+                
+        # Get additional radar metadata
+        mdata = {}
+        mdata['radar_longitude'] =  additional_grid.radar_longitude['data']
+        mdata['radar_latitude'] =  additional_grid.radar_latitude['data']
+        # Try to find name of radar
+        if additional_grid.radar_name['data'] != '':
+            mdata['radar_name'] =  additional_grid.radar_name['data'][0]
+        elif dscfg['RadarName'][i+1] != '':
+            mdata['radar_name'] =  dscfg['RadarName'][i+1]
+        else:
+            mdata['radar_name'] =  'Unknown'
+
+        radar_metadata.append(mdata)
+    
+    # Rename DDA u, v, w fields to pyart names
+    merged_grid.fields['eastward_wind_component'] = merged_grid.fields.pop('u')
+    merged_grid.fields['northward_wind_component'] = merged_grid.fields.pop('v')
+    merged_grid.fields['vertical_wind_component'] = merged_grid.fields.pop('w')
+
+    # Add coordinates of additional radars in metadata
+    merged_grid.metadata['additional_radars'] = radar_metadata
+
+    new_dataset = {}
+    new_dataset['radar_out'] = merged_grid
+
+    return new_dataset, ind_radar_list

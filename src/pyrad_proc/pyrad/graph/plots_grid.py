@@ -13,10 +13,14 @@ Functions to plot data in a Cartesian grid format
     plot_latitude_slice
     plot_longitude_slice
     plot_latlon_slice
-
+    plot_dda_map
+    plot_dda_latitude_slice
+    plot_dda_longitude_slice
 """
 
 from warnings import warn
+from copy import deepcopy
+
 import numpy as np
 
 try:
@@ -25,6 +29,12 @@ try:
     _CARTOPY_AVAILABLE = True
 except ImportError:
     _CARTOPY_AVAILABLE = False
+
+try:
+    import pydda
+    _PYDDA_AVAILABLE = True
+except ImportError:
+    _PYDDA_AVAILABLE = False
 
 import matplotlib as mpl
 mpl.use('Agg')
@@ -86,7 +96,7 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
     mask_outside = prdcfg.get('mask_outside', False)
 
     norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name])
+        field_name, field_dict=grid.fields[field_name], isxarray=True)
 
     xsize = prdcfg['gridMapImageConfig']['xsize']
     ysize = prdcfg['gridMapImageConfig']['ysize']
@@ -101,7 +111,7 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
     exact_limits = prdcfg['gridMapImageConfig'].get('exact_limits', 0)
 
     if exact_limits:
-        lon_lines = np.arange(min_lon, max_lon+lonstep, lonstep)
+        lon_lines = np.arange(min_lon, max_lon + lonstep, lonstep)
         lat_lines = np.arange(min_lat, max_lat + latstep, latstep)
     else:
         lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon)+1, lonstep)
@@ -328,7 +338,7 @@ def plot_surface_raw(grid, field_name, level, prdcfg, fname_list, titl=None,
     vmax = prdcfg.get('vmax', None)
 
     norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name])
+        field_name, field_dict=grid.fields[field_name], isxarray=True)
 
     xsize = prdcfg['gridMapImageConfig']['xsize']
     ysize = prdcfg['gridMapImageConfig']['ysize']
@@ -431,11 +441,13 @@ def plot_surface_contour(grid, field_name, level, prdcfg, fname_list,
 
     if fig is None:
         if exact_limits:
-            lon_lines = np.arange(min_lon, max_lon+lonstep, lonstep)
+            lon_lines = np.arange(min_lon, max_lon + lonstep, lonstep)
             lat_lines = np.arange(min_lat, max_lat + latstep, latstep)
         else:
-            lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon)+1, lonstep)
-            lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat)+1, latstep)
+            lon_lines = np.arange(
+                np.floor(min_lon), np.ceil(max_lon)+1, lonstep)
+            lat_lines = np.arange(
+                np.floor(min_lat), np.ceil(max_lat)+1, latstep)
 
         fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
         ax = fig.add_subplot(111)
@@ -547,18 +559,18 @@ def plot_latitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
 
     """
     dpi = 72
-    if 'dpi' in prdcfg['rhiImageConfig']:
-        dpi = prdcfg['rhiImageConfig']['dpi']
+    if 'dpi' in prdcfg['xsecImageConfig']:
+        dpi = prdcfg['xsecImageConfig']['dpi']
 
     norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name])
+        field_name, field_dict=grid.fields[field_name], isxarray=True)
 
-    xsize = prdcfg['rhiImageConfig'].get('xsize', 10.)
-    ysize = prdcfg['rhiImageConfig'].get('ysize', 5.)
-    xmin = prdcfg['rhiImageConfig'].get('xmin', None)
-    xmax = prdcfg['rhiImageConfig'].get('xmax', None)
-    ymin = prdcfg['rhiImageConfig'].get('ymin', None)
-    ymax = prdcfg['rhiImageConfig'].get('ymax', None)
+    xsize = prdcfg['xsecImageConfig'].get('xsize', 10.)
+    ysize = prdcfg['xsecImageConfig'].get('ysize', 5.)
+    xmin = prdcfg['xsecImageConfig'].get('xmin', None)
+    xmax = prdcfg['xsecImageConfig'].get('xmax', None)
+    ymin = prdcfg['xsecImageConfig'].get('ymin', None)
+    ymax = prdcfg['xsecImageConfig'].get('ymax', None)
 
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
     ax = fig.add_subplot(111, aspect='equal')
@@ -598,18 +610,18 @@ def plot_longitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
 
     """
     dpi = 72
-    if 'dpi' in prdcfg['rhiImageConfig']:
-        dpi = prdcfg['rhiImageConfig']['dpi']
+    if 'dpi' in prdcfg['xsecImageConfig']:
+        dpi = prdcfg['xsecImageConfig']['dpi']
 
     norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name])
+        field_name, field_dict=grid.fields[field_name], isxarray=True)
 
-    xsize = prdcfg['rhiImageConfig'].get('xsize', 10.)
-    ysize = prdcfg['rhiImageConfig'].get('ysize', 5.)
-    xmin = prdcfg['rhiImageConfig'].get('xmin', None)
-    xmax = prdcfg['rhiImageConfig'].get('xmax', None)
-    ymin = prdcfg['rhiImageConfig'].get('ymin', None)
-    ymax = prdcfg['rhiImageConfig'].get('ymax', None)
+    xsize = prdcfg['xsecImageConfig'].get('xsize', 10.)
+    ysize = prdcfg['xsecImageConfig'].get('ysize', 5.)
+    xmin = prdcfg['xsecImageConfig'].get('xmin', None)
+    xmax = prdcfg['xsecImageConfig'].get('xmax', None)
+    ymin = prdcfg['xsecImageConfig'].get('ymin', None)
+    ymax = prdcfg['xsecImageConfig'].get('ymax', None)
 
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
     ax = fig.add_subplot(111, aspect='equal')
@@ -649,18 +661,18 @@ def plot_latlon_slice(grid, field_name, coord1, coord2, prdcfg, fname_list):
 
     """
     dpi = 72
-    if 'dpi' in prdcfg['rhiImageConfig']:
-        dpi = prdcfg['rhiImageConfig']['dpi']
+    if 'dpi' in prdcfg['xsecImageConfig']:
+        dpi = prdcfg['xsecImageConfig']['dpi']
 
     norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name])
+        field_name, field_dict=grid.fields[field_name], isxarray=True)
 
-    xsize = prdcfg['rhiImageConfig'].get('xsize', 10.)
-    ysize = prdcfg['rhiImageConfig'].get('ysize', 5.)
-    # xmin = prdcfg['rhiImageConfig'].get('xmin', None)
-    # xmax = prdcfg['rhiImageConfig'].get('xmax', None)
-    # ymin = prdcfg['rhiImageConfig'].get('ymin', None)
-    # ymax = prdcfg['rhiImageConfig'].get('ymax', None)
+    xsize = prdcfg['xsecImageConfig'].get('xsize', 10.)
+    ysize = prdcfg['xsecImageConfig'].get('ysize', 5.)
+    # xmin = prdcfg['xsecImageConfig'].get('xmin', None)
+    # xmax = prdcfg['xsecImageConfig'].get('xmax', None)
+    # ymin = prdcfg['xsecImageConfig'].get('ymin', None)
+    # ymax = prdcfg['xsecImageConfig'].get('ymax', None)
 
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
     ax = fig.add_subplot(111, aspect='equal')
@@ -668,10 +680,474 @@ def plot_latlon_slice(grid, field_name, coord1, coord2, prdcfg, fname_list):
     display.plot_latlon_slice(
         field_name, coord1=coord1, coord2=coord2, norm=norm,
         colorbar_orient='vertical', ticks=ticks, ticklabs=ticklabs, fig=fig,
-        ax=ax)
+        ax=ax, axislabels_flag=True)
     # ax.set_ylim(
-    #    [prdcfg['rhiImageConfig']['ymin'], prdcfg['rhiImageConfig']['ymax']])
+    #    [prdcfg['xsecImageConfig']['ymin'], prdcfg['xsecImageConfig']['ymax']])
 
     for fname in fname_list:
         fig.savefig(fname, dpi=dpi)
     plt.close(fig)
+
+
+def plot_dda_map(grid, bg_field_name, level, prdcfg, fname_list, titl=None,
+                 alpha=None, ax=None, fig=None, display=None, save_fig=True,
+                 display_type='quiver'):
+    """
+    This procedure plots a horizontal cross section of winds from wind fields
+    generated by PyDDA.
+
+    Parameters
+    ----------
+    grid : Grid object
+        object containing the gridded data to plot
+    bg_field_name : str
+        name of the background radar field to plot (behind  the wind vectors)
+    level : int
+        level index
+    prdcfg : dict
+        dictionary containing the product configuration
+    fname_list : list of str
+        list of names of the files where to store the plot
+    titl : str
+        Plot title
+    alpha : float or None
+        Set the alpha transparency of the grid plot. Useful for
+        overplotting radar over other datasets.
+    ax : Axis
+        Axis to plot on. if fig is None a new axis will be created
+    fig : Figure
+        Figure to add the colorbar to. If none a new figure will be created
+    display : GridMapDisplay object
+        The display used
+    save_fig : bool
+        if true save the figure. If false it does not close the plot and
+        returns the handle to the figure
+    display_type : str
+        Display type for the wind vectors, can be either 'quiver', 'barbs' or
+        'streamline'
+
+    Returns
+    -------
+    fname_list : list of str or
+    fig, ax, display : tupple
+        list of names of the saved plots or handle of the figure an axes
+
+    """
+
+    if not _PYDDA_AVAILABLE:
+        warn('PyDDA package not available. Unable to display wind fields')
+        return None
+
+    dpi = prdcfg['gridMapImageConfig'].get('dpi', 72)
+    vmin = prdcfg.get('vmin', None)
+    vmax = prdcfg.get('vmax', None)
+    u_vel_contours = prdcfg.get('u_vel_contours', None)
+    v_vel_contours = prdcfg.get('v_vel_contours', None)
+    w_vel_contours = prdcfg.get('w_vel_contours', None)
+    vector_spacing_km = prdcfg.get('vector_spacing_km', 10.)
+    quiver_len = prdcfg.get('quiver_len', 10.)
+    streamline_width = prdcfg.get('streamline_width', None)
+    streamline_arrowsize = prdcfg.get('streamline_arrowsize', None)
+    display_type = prdcfg.get('display_type', 'quiver')
+
+    norm, ticks, ticklabs = get_norm(
+        bg_field_name, field_dict=grid.fields[bg_field_name])
+
+    xsize = prdcfg['gridMapImageConfig']['xsize']
+    ysize = prdcfg['gridMapImageConfig']['ysize']
+    lonstep = prdcfg['gridMapImageConfig'].get('lonstep', 0.5)
+    latstep = prdcfg['gridMapImageConfig'].get('latstep', 0.5)
+    min_lon = prdcfg['gridMapImageConfig'].get('lonmin', 2.5)
+    max_lon = prdcfg['gridMapImageConfig'].get('lonmax', 12.5)
+    min_lat = prdcfg['gridMapImageConfig'].get('latmin', 43.5)
+    max_lat = prdcfg['gridMapImageConfig'].get('latmax', 49.5)
+    embellish = prdcfg['gridMapImageConfig'].get('embellish', True)
+    exact_limits = prdcfg['gridMapImageConfig'].get('exact_limits', 0)
+    colorbar_flag = prdcfg['gridMapImageConfig'].get('colorbar_flag', True)
+    colorbar_contour_flag = prdcfg['gridMapImageConfig'].get(
+        'colorbar_contour_flag', False)
+    cmap = pyart.config.get_field_colormap(bg_field_name)
+
+    if exact_limits:
+        lon_lines = np.arange(min_lon, max_lon + lonstep, lonstep)
+        lat_lines = np.arange(min_lat, max_lat + latstep, latstep)
+    else:
+        lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon)+1, lonstep)
+        lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat)+1, latstep)
+
+    fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
+
+    resolution = prdcfg['gridMapImageConfig'].get('mapres', '110m')
+    # Map from basemap to cartopy notation
+    if resolution == 'l':
+        resolution = '110m'
+    elif resolution == 'i':
+        resolution = '50m'
+    elif resolution == 'h':
+        resolution = '10m'
+
+    if resolution not in ('110m', '50m', '10m'):
+        warn('Unknown map resolution: '+resolution)
+        resolution = '110m'
+
+    maps_list = prdcfg['gridMapImageConfig'].get('maps', [])
+
+    grids = [grid]
+    for mdata in grid.metadata['additional_radars']:
+        add_grid = deepcopy(grid)
+        # No need for data this is just a placeholder for coords
+        add_grid.fields = {}
+        add_grid.radar_longitude['data'] = mdata['radar_longitude']
+        add_grid.radar_latitude['data'] = mdata['radar_latitude']
+        grids.append(add_grid)
+
+    if display_type == 'quiver':
+        ax = pydda.vis.plot_horiz_xsection_quiver_map(
+            grids, background_field=bg_field_name, level=level,
+            show_lobes=True, bg_grid_no=0, vmin=vmin, vmax=vmax,
+            u_vel_contours=u_vel_contours, v_vel_contours=v_vel_contours,
+            w_vel_contours=w_vel_contours,
+            quiver_spacing_x_km=vector_spacing_km,
+            quiver_spacing_y_km=vector_spacing_km, quiverkey_len=quiver_len,
+            colorbar_flag=colorbar_flag,
+            colorbar_contour_flag=colorbar_contour_flag,
+            u_field='eastward_wind_component',
+            v_field='northward_wind_component',
+            w_field='vertical_wind_component', title_flag=False, cmap=cmap)
+
+    elif display_type == 'streamline':
+        ax = pydda.vis.plot_horiz_xsection_barbs_map(
+            grids, background_field=bg_field_name, level=level,
+            show_lobes=True, bg_grid_no=0, vmin=vmin, vmax=vmax,
+            u_vel_contours=u_vel_contours, v_vel_contours=v_vel_contours,
+            w_vel_contours=w_vel_contours,
+            barb_spacing_x_km=vector_spacing_km,
+            barb_spacing_y_km=vector_spacing_km,
+            colorbar_flag=colorbar_flag,
+            colorbar_contour_flag=colorbar_contour_flag,
+            u_field='eastward_wind_component',
+            v_field='northward_wind_component',
+            w_field='vertical_wind_component', title_flag=False, cmap=cmap)
+
+    elif display_type == 'streamline':
+        ax = pydda.vis.plot_horiz_xsection_streamlines_map(
+            grids, background_field=bg_field_name, level=level,
+            show_lobes=True, bg_grid_no=0, vmin=vmin, vmax=vmax,
+            u_vel_contours=u_vel_contours, v_vel_contours=v_vel_contours,
+            w_vel_contours=w_vel_contours, linewidth=streamline_width,
+            arrowsize=streamline_arrowsize, colorbar_flag=colorbar_flag,
+            colorbar_contour_flag=colorbar_contour_flag,
+            u_field='eastward_wind_component',
+            v_field='northward_wind_component',
+            w_field='vertical_wind_component', title_flag=False, cmap=cmap)
+
+    # Edit parameters a posteriori
+    # since they cannot be given to pyDDA
+    ax.set_title(titl)
+    ax.collections[0].set_alpha(alpha)
+    if norm:
+        ax.collections[0].set_norm(norm)
+    if ticks:
+        ax.collections[0].colorbar.set_ticks(ticks)
+    if ticklabs:
+        ax.collections[0].colorbar.set_ticklabels(ticklabs)
+
+    ax.set_xticks(lon_lines)
+    ax.set_yticks(lat_lines)
+    ax.set_xlim([lon_lines[0], lon_lines[-1]])
+    ax.set_ylim([lat_lines[0], lat_lines[-1]])
+
+    if embellish:
+        for cartomap in maps_list:
+            if cartomap == 'countries':
+                # add countries
+                countries = cartopy.feature.NaturalEarthFeature(
+                    category='cultural',
+                    name='admin_0_countries',
+                    scale=resolution,
+                    facecolor='none')
+                ax.add_feature(countries, edgecolor='black')
+            elif cartomap == 'provinces':
+                # Create a feature for States/Admin 1 regions at
+                # 1:resolution from Natural Earth
+                states_provinces = cartopy.feature.NaturalEarthFeature(
+                    category='cultural',
+                    name='admin_1_states_provinces_lines',
+                    scale=resolution,
+                    facecolor='none')
+                ax.add_feature(states_provinces, edgecolor='gray')
+            elif (cartomap == 'urban_areas' and
+                    resolution in ('10m', '50m')):
+                urban_areas = cartopy.feature.NaturalEarthFeature(
+                    category='cultural',
+                    name='urban_areas',
+                    scale=resolution)
+                ax.add_feature(
+                    urban_areas, edgecolor='brown', facecolor='brown',
+                    alpha=0.25)
+            elif cartomap == 'roads' and resolution == '10m':
+                roads = cartopy.feature.NaturalEarthFeature(
+                    category='cultural',
+                    name='roads',
+                    scale=resolution)
+                ax.add_feature(roads, edgecolor='red', facecolor='none')
+            elif cartomap == 'railroads' and resolution == '10m':
+                railroads = cartopy.feature.NaturalEarthFeature(
+                    category='cultural',
+                    name='railroads',
+                    scale=resolution)
+                ax.add_feature(
+                    railroads, edgecolor='green', facecolor='none',
+                    linestyle=':')
+            elif cartomap == 'coastlines':
+                ax.coastlines(resolution=resolution)
+            elif cartomap == 'lakes':
+                # add lakes
+                lakes = cartopy.feature.NaturalEarthFeature(
+                    category='physical',
+                    name='lakes',
+                    scale=resolution)
+                ax.add_feature(
+                    lakes, edgecolor='blue', facecolor='blue', alpha=0.25)
+            elif resolution == '10m' and cartomap == 'lakes_europe':
+                lakes_europe = cartopy.feature.NaturalEarthFeature(
+                    category='physical',
+                    name='lakes_europe',
+                    scale=resolution)
+                ax.add_feature(
+                    lakes_europe, edgecolor='blue', facecolor='blue',
+                    alpha=0.25)
+            elif cartomap == 'rivers':
+                # add rivers
+                rivers = cartopy.feature.NaturalEarthFeature(
+                    category='physical',
+                    name='rivers_lake_centerlines',
+                    scale=resolution)
+                ax.add_feature(rivers, edgecolor='blue', facecolor='none')
+            elif resolution == '10m' and cartomap == 'rivers_europe':
+                rivers_europe = cartopy.feature.NaturalEarthFeature(
+                    category='physical',
+                    name='rivers_europe',
+                    scale=resolution)
+                ax.add_feature(
+                    rivers_europe, edgecolor='blue', facecolor='none')
+            else:
+                warn('cartomap '+cartomap+' for resolution '+resolution +
+                     ' not available')
+
+    if save_fig:
+        for fname in fname_list:
+            fig.savefig(fname, dpi=dpi)
+        plt.close(fig)
+
+        return fname_list
+
+    return (fig, ax, display)
+
+
+def plot_dda_slice(grid, bg_field_name, slice_type, level, prdcfg, fname_list,
+                   titl=None, alpha=None, ax=None, fig=None, display=None,
+                   save_fig=True, display_type='quiver', wind_vectors='hor'):
+    """
+    This procedure plots a cross section of wind vectorsfrom wind fields
+    generated by PyDDA in the X-Z plane at a specified latitude
+
+        Parameters
+    ----------
+    grid : Grid object
+        object containing the gridded data to plot
+    bg_field_name : str
+        name of the background radar field to plot (behind  the wind vectors)
+    slice_type : str
+        type of slice, can be either "latitude" or "longitude"
+    level : int
+        slicing level in latitudinal or longitudinal direction
+    prdcfg : dict
+        dictionary containing the product configuration
+    fname_list : list of str
+        list of names of the files where to store the plot
+    titl : str
+        Plot title
+    alpha : float or None
+        Set the alpha transparency of the grid plot. Useful for
+        overplotting radar over other datasets.
+    ax : Axis
+        Axis to plot on. if fig is None a new axis will be created
+    fig : Figure
+        Figure to add the colorbar to. If none a new figure will be created
+    display : GridMapDisplay object
+        The display used
+    save_fig : bool
+        if true save the figure. If false it does not close the plot and
+        returns the handle to the figure
+    display_type : str
+        Display type for the wind vectors, can be either 'quiver', 'barbs' or
+        'streamline'
+    wind_vectors : str
+        'hor' if horizontal wind vectors are displayed (u and v) or 'ver'
+        if vertical wind vectors are displayed (u and w) for latitude slice
+        and (v and w) for longitude slice
+
+    Returns
+    -------
+    fname_list : list of str or
+    fig, ax, display : tupple
+        list of names of the saved plots or handle of the figure an axes
+
+    """
+    if not _PYDDA_AVAILABLE:
+        warn('PyDDA package not available. Unable to display wind fields')
+        return None
+
+    dpi = prdcfg['xsecImageConfig'].get('dpi', 72)
+    vmin = prdcfg.get('vmin', None)
+    vmax = prdcfg.get('vmax', None)
+    u_vel_contours = prdcfg.get('u_vel_contours', None)
+    v_vel_contours = prdcfg.get('v_vel_contours', None)
+    w_vel_contours = prdcfg.get('w_vel_contours', None)
+    vector_spacing_km = prdcfg.get('vector_spacing_km', 10.)
+    quiver_len = prdcfg.get('quiver_len', 10.)
+    streamline_width = prdcfg.get('streamline_width', None)
+    streamline_arrowsize = prdcfg.get('streamline_arrowsize', None)
+    display_type = prdcfg.get('display_type', 'quiver')
+
+    norm, ticks, ticklabs = get_norm(
+        bg_field_name, field_dict=grid.fields[bg_field_name])
+
+    colorbar_flag = prdcfg['xsecImageConfig'].get('colorbar_flag', True)
+    colorbar_contour_flag = prdcfg['xsecImageConfig'].get(
+        'colorbar_contour_flag', False)
+    cmap = pyart.config.get_field_colormap(bg_field_name)
+
+    xsize = prdcfg['xsecImageConfig'].get('xsize', 10.)
+    ysize = prdcfg['xsecImageConfig'].get('ysize', 5.)
+    xmin = prdcfg['xsecImageConfig'].get('xmin', None)
+    xmax = prdcfg['xsecImageConfig'].get('xmax', None)
+    ymin = prdcfg['xsecImageConfig'].get('ymin', None)
+    ymax = prdcfg['xsecImageConfig'].get('ymax', None)
+
+    # This is a bit hackish
+    # pyDDA does not support plotting vertical profiles of u and v
+    # only (v and w) or (u and w), so we trick it by assigning the v variable
+    # to w
+
+    if wind_vectors == 'hor':
+        w_field = 'eastward_wind_component'
+    else:
+        w_field = 'vertical_wind_component'
+
+    fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
+
+    grids = [grid]
+    for mdata in grid.metadata['additional_radars']:
+        add_grid = deepcopy(grid)
+        # No need for data this is just a placeholder for coords
+        add_grid.fields = {}
+        add_grid.radar_longitude['data'] = mdata['radar_longitude']
+        add_grid.radar_latitude['data'] = mdata['radar_latitude']
+        grids.append(add_grid)
+
+    if slice_type == 'latitude':
+        if display_type == 'quiver':
+            ax = pydda.vis.plot_yz_xsection_quiver(
+                grids, background_field=bg_field_name, level=level,
+                bg_grid_no=0, vmin=vmin, vmax=vmax,
+                u_vel_contours=u_vel_contours, v_vel_contours=v_vel_contours,
+                w_vel_contours=w_vel_contours,
+                quiver_spacing_y_km=vector_spacing_km,
+                quiver_spacing_z_km=vector_spacing_km,
+                quiverkey_len=quiver_len, colorbar_flag=colorbar_flag,
+                colorbar_contour_flag=colorbar_contour_flag,
+                u_field='eastward_wind_component',
+                v_field='northward_wind_component', w_field=w_field,
+                title_flag=False, cmap=cmap)
+
+        elif display_type == 'streamline':
+            ax = pydda.vis.plot_yz_xsection_barbs(
+                grids, background_field=bg_field_name, level=level,
+                bg_grid_no=0, vmin=vmin, vmax=vmax,
+                u_vel_contours=u_vel_contours, v_vel_contours=v_vel_contours,
+                w_vel_contours=w_vel_contours,
+                barb_spacing_y_km=vector_spacing_km,
+                barb_spacing_z_km=vector_spacing_km,
+                colorbar_flag=colorbar_flag,
+                colorbar_contour_flag=colorbar_contour_flag,
+                u_field='eastward_wind_component',
+                v_field='northward_wind_component', w_field=w_field,
+                title_flag=False, cmap=cmap)
+
+        elif display_type == 'streamline':
+            ax = pydda.vis.plot_yz_xsection_streamlines(
+                grids, background_field=bg_field_name, level=level,
+                bg_grid_no=0, vmin=vmin, vmax=vmax,
+                u_vel_contours=u_vel_contours, v_vel_contours=v_vel_contours,
+                w_vel_contours=w_vel_contours, linewidth=streamline_width,
+                arrowsize=streamline_arrowsize, colorbar_flag=colorbar_flag,
+                colorbar_contour_flag=colorbar_contour_flag,
+                u_field='eastward_wind_component',
+                v_field='northward_wind_component', w_field=w_field,
+                title_flag=False, cmap=cmap)
+
+    elif slice_type == 'longitude':
+        if display_type == 'quiver':
+            ax = pydda.vis.plot_xz_xsection_quiver(
+                grids, background_field=bg_field_name, level=level,
+                bg_grid_no=0, vmin=vmin, vmax=vmax,
+                u_vel_contours=u_vel_contours, v_vel_contours=v_vel_contours,
+                w_vel_contours=w_vel_contours,
+                quiver_spacing_x_km=vector_spacing_km,
+                quiver_spacing_z_km=vector_spacing_km,
+                quiverkey_len=quiver_len, colorbar_flag=colorbar_flag,
+                colorbar_contour_flag=colorbar_contour_flag,
+                u_field='eastward_wind_component',
+                v_field='northward_wind_component', w_field=w_field,
+                title_flag=False, cmap=cmap)
+
+        elif display_type == 'streamline':
+            ax = pydda.vis.plot_xz_xsection_barbs(
+                grids, background_field=bg_field_name, level=level,
+                bg_grid_no=0, vmin=vmin, vmax=vmax,
+                u_vel_contours=u_vel_contours, v_vel_contours=v_vel_contours,
+                w_vel_contours=w_vel_contours,
+                barb_spacing_x_km=vector_spacing_km,
+                barb_spacing_z_km=vector_spacing_km,
+                colorbar_flag=colorbar_flag,
+                colorbar_contour_flag=colorbar_contour_flag,
+                u_field='eastward_wind_component',
+                v_field='northward_wind_component', w_field=w_field,
+                title_flag=False, cmap=cmap)
+
+        elif display_type == 'streamline':
+            ax = pydda.vis.plot_xz_xsection_streamlines(
+                grids, background_field=bg_field_name, level=level,
+                bg_grid_no=0, vmin=vmin, vmax=vmax,
+                u_vel_contours=u_vel_contours, v_vel_contours=v_vel_contours,
+                w_vel_contours=w_vel_contours, linewidth=streamline_width,
+                arrowsize=streamline_arrowsize, colorbar_flag=colorbar_flag,
+                colorbar_contour_flag=colorbar_contour_flag,
+                u_field='eastward_wind_component',
+                v_field='northward_wind_component', w_field=w_field,
+                title_flag=False, cmap=cmap)
+
+    # Edit parameters a posteriori
+    # since they cannot be given to pyDDA
+    ax.set_title(titl)
+    ax.collections[0].set_alpha(alpha)
+    if norm:
+        ax.collections[0].set_norm(norm)
+    if ticks:
+        ax.collections[0].colorbar.set_ticks(ticks)
+    if ticklabs:
+        ax.collections[0].colorbar.set_ticklabels(ticklabs)
+
+    ax.set_xlim([xmin, xmax])
+    ax.set_ylim([ymin, ymax])
+
+    if save_fig:
+        for fname in fname_list:
+            fig.savefig(fname, dpi=dpi)
+        plt.close(fig)
+
+        return fname_list
+
+    return (fig, ax, display)

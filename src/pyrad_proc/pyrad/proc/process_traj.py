@@ -386,7 +386,8 @@ def process_traj_lightning(procstatus, dscfg, radar_list=None,
     field_names = []
     datatypes = []
     for datatypedescr in dscfg['datatype']:
-        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        radarnr, _, datatype, _, _ = get_datatype_fields(
+            datatypedescr)
         field_names.append(get_fieldname_pyart(datatype))
         datatypes.append(datatype)
 
@@ -660,13 +661,13 @@ def process_traj_atplane(procstatus, dscfg, radar_list=None, trajectory=None):
     ttask_start = radar.time['data'].min()
     dt_task_start = num2date(ttask_start, radar.time['units'],
                              radar.time['calendar'])
-                             
+
     # User defined parameter
     ang_tol = dscfg.get('ang_tol', 1.2)
     az_tol = dscfg.get('az_tol', 3.)
     el_tol = dscfg.get('el_tol', 3.)
     timeformat = dscfg.get('timeformat', None)
-    
+
     if not dscfg['initialized']:
         # init
         if trajectory is None:

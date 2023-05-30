@@ -225,7 +225,7 @@ def get_data(voltime, datatypesdescr, cfg):
         'RAINBOW', 'RAD4ALP', 'ODIM' 'ODIMBIRDS' CFRADIAL2', 'CF1' 'MFCFRADIAL'
         'GAMIC' and 'MXPOL' are primary data file sources and they cannot be
         mixed for the same radar. It is also the case for their complementary
-        data files, i.e. 'COSMO' and 'RAD4ALPCOSMO', etc. 'CFRADIAL' and
+        data files, i.e. 'COSMO' and 'RAD4ALPCOSMO', etc. 'CFRADIALPYRAD' and
         'ODIMPYRAD' are secondary data file sources and they can be combined
         with any other datagroup type.
         For a list of accepted datatypes and how they map to the Py-ART name
@@ -251,6 +251,9 @@ def get_data(voltime, datatypesdescr, cfg):
     dataset_mfcfradial = list()
     datatype_nexrad2 = list()
     dataset_nexrad2 = list()
+    datatype_gecsx = list()
+    dataset_gecsx = list()
+    product_gecsx = list()
     datatype_cfradialpyrad = list()
     dataset_cfradialpyrad = list()
     product_cfradialpyrad = list()
@@ -323,6 +326,10 @@ def get_data(voltime, datatypesdescr, cfg):
         elif datagroup == 'NEXRADII':
             datatype_nexrad2.append(datatype)
             dataset_nexrad2.append(dataset)
+        elif datagroup == 'GECSX':
+            datatype_gecsx.append(datatype)
+            dataset_gecsx.append(dataset)
+            product_gecsx.append(product)
         elif datagroup == 'CFRADIALPYRAD':
             datatype_cfradialpyrad.append(datatype)
             dataset_cfradialpyrad.append(dataset)
@@ -401,7 +408,7 @@ def get_data(voltime, datatypesdescr, cfg):
             datatype_netcdfspectra.append(datatype)
             dataset_netcdfspectra.append(dataset)
             product_netcdfspectra.append(product)
-
+  
     ind_rad = int(radarnr[5:8])-1
 
     ndatatypes_rainbow = len(datatype_rainbow)
@@ -440,6 +447,7 @@ def get_data(voltime, datatypesdescr, cfg):
     ndatatypes_psr = len(datatype_psr)
     ndatatypes_psrspectra = len(datatype_psrspectra)
     ndatatypes_netcdfspectra = len(datatype_netcdfspectra)
+    ndatatypes_gecsx = len(datatype_gecsx)
 
     rmin = None
     rmax = None
@@ -592,7 +600,7 @@ def get_data(voltime, datatypesdescr, cfg):
             product_cfradialpyrad, rng_min=rmin, rng_max=rmax, ele_min=elmin,
             ele_max=elmax, azi_min=azmin, azi_max=azmax)
         radar = add_field(radar, radar_aux)
-
+    
     if ndatatypes_odimpyrad > 0:
         radar_aux = merge_fields_pyrad(
             cfg['loadbasepath'][ind_rad], cfg['loadname'][ind_rad], voltime,
@@ -601,6 +609,14 @@ def get_data(voltime, datatypesdescr, cfg):
             azi_min=azmin, azi_max=azmax, termination='.h*')
         radar = add_field(radar, radar_aux)
 
+    if ndatatypes_gecsx > 0:
+        radar_aux = merge_fields_gecsx(
+            cfg['loadbasepath'][ind_rad], cfg['loadname'][ind_rad],
+            datatype_gecsx, dataset_gecsx, product_gecsx,
+            rng_min=rmin, rng_max=rmax, ele_min=elmin, ele_max=elmax,
+            azi_min=azmin, azi_max=azmax)
+        radar = add_field(radar, radar_aux)
+        
     if ndatatypes_cfradialcosmo > 0:
         radar_aux = merge_fields_pyradcosmo(
             cfg['cosmopath'][ind_rad], voltime,
@@ -648,7 +664,7 @@ def get_data(voltime, datatypesdescr, cfg):
         radar_aux = merge_fields_pyradgrid(
             cfg['loadbasepath'][ind_rad], cfg['loadname'][ind_rad], voltime,
             datatype_pyradgrid, dataset_pyradgrid, product_pyradgrid, cfg,
-            termination='nc')
+            termination='.nc')
         if radar_aux is not None:
             if radar is not None:
                 radar = merge_grids(radar, radar_aux)
@@ -1190,7 +1206,6 @@ def merge_scans_rainbow(basepath, scan_list, voltime, scan_period,
         for scan in scan_list[1:]:
             filelist = get_file_list(datadescriptor, [voltime], [endtime],
                                      cfg, scan=scan)
-
             if not filelist:
                 warn("ERROR: No data file found for scan '%s' "
                      "between %s and %s" % (scan, voltime, endtime))
@@ -1684,6 +1699,9 @@ def merge_scans_odim(basepath, scan_list, radar_name, radar_res, voltime,
                         f'Fields will be adapted to {field_name} field size')
                     radar = add_field(radar_aux, radar)
                 print(f'nrays: {radar.nrays} ngates: {radar.ngates}')
+
+    if radar is None:
+        return radar
 
     rmin = None
     rmax = None
@@ -2479,6 +2497,19 @@ def merge_scans_cfradial2(basepath, scan_list, radar_name, radar_res, voltime,
         fdate_strf = dataset_list[0][dataset_list[0].find("F")+2:-1]
         datapath = (basepath+voltime.strftime(fpath_strf)+'/')
         filenames = glob.glob(datapath+'*'+scan_list[0]+'*')
+        filename = []
+        for filename_aux in filenames:
+            fdatetime = find_date_in_file_name(
+                filename_aux, date_format=fdate_strf)
+            if fdatetime == voltime:
+                filename = [filename_aux]
+    elif cfg['path_convention'][ind_rad] == 'RADARV':
+        fpath_strf = (
+            dataset_list[0][
+                dataset_list[0].find("D")+2:dataset_list[0].find("F")-2])
+        fdate_strf = dataset_list[0][dataset_list[0].find("F")+2:-1]
+        datapath = (basepath+scan_list[0]+'/')
+        filenames = glob.glob(datapath+'/'+voltime.strftime(fpath_strf)+'/*')
         filename = []
         for filename_aux in filenames:
             fdatetime = find_date_in_file_name(
@@ -3757,7 +3788,7 @@ def merge_fields_mf_grid(voltime, datatype_list, dataset_list, scan_list, cfg,
     ind_rad : int
         radar index
     ftype : str
-        File type. Can be 'png', 'bin' or 'grib'
+        File type. Can be 'png', 'bin', 'grib', 'dat' or 'nc'
 
     Returns
     -------
@@ -3917,6 +3948,73 @@ def merge_fields_pyrad(basepath, loadname, voltime, datatype_list,
                 warn(str(ee))
                 warn('Unable to read file '+filename[0])
                 radar_aux = None
+
+        if radar_aux is None:
+            continue
+
+        if radar is None:
+            radar = radar_aux
+            continue
+
+        radar = add_field(radar, radar_aux)
+
+    if radar is None:
+        return radar
+
+    return pyart.util.subset_radar(
+        radar, radar.fields.keys(), rng_min=rng_min, rng_max=rng_max,
+        ele_min=ele_min, ele_max=ele_max, azi_min=azi_min, azi_max=azi_max)
+
+def merge_fields_gecsx(basepath, loadname, datatype_list,
+                       dataset_list, product_list, rng_min=None, rng_max=None,
+                       azi_min=None, azi_max=None, ele_min=None, ele_max=None):
+    """
+    merge fields from GECSX Pyrad-generated files into a single radar object.
+    Accepted file types are CFRadial.
+
+    Parameters
+    ----------
+    basepath : str
+        name of the base path where to find the data
+    loadname: str
+        name of the saving directory
+    datatype_list : list
+        list of data types to get
+    dataset_list : list
+        list of datasets that produced the data type to get.
+        Used to get path.
+    product_list : list
+        list of products. Used to get path
+    rng_min, rng_max : float
+        The range limits [m]. If None the entire coverage of the radar is
+        going to be used
+    ele_min, ele_max, azi_min, azi_max : float or None
+        The limits of the grid [deg]. If None the limits will be the limits
+        of the radar volume
+    Returns
+    -------
+    radar : Radar
+        radar object
+
+    """
+    radar = None
+    for i, dataset in enumerate(dataset_list):
+        datapath = (
+            basepath+loadname+'/' +
+            dataset+'/'+product_list[i]+'/')
+        filename = glob.glob(
+            datapath+'*'+datatype_list[i]+'.nc')
+        if not filename:
+            warn('No file found in '+datapath+'*' +
+                 datatype_list[i]+'.nc')
+            continue
+
+        try:
+            radar_aux = pyart.io.read_cfradial(filename[0])
+        except (OSError, KeyError) as ee:
+            warn(str(ee))
+            warn('Unable to read file '+filename[0])
+            radar_aux = None
 
         if radar_aux is None:
             continue
@@ -4265,7 +4363,6 @@ def merge_fields_cosmo(filename_list):
 
     return radar
 
-
 def get_data_rainbow(filename, datatype):
     """
     gets rainbow radar data
@@ -4524,6 +4621,12 @@ def get_data_odim(filename, datatype_list, scan_name, cfg, ind_rad=0):
         else:
             radar = pyart.aux_io.read_odim_h5(
                 filename, field_names=odim_field_names)
+
+            if 'differential_phase' in radar.fields:
+                # make sure that data is within [-180, 180] deg
+                radar.fields['differential_phase']['data'][
+                    radar.fields['differential_phase']['data'] > 180.] -= 360.
+
     except (ValueError, OSError) as ee:
         warn("Unable to read file '"+filename+": (%s)" % str(ee))
         return None

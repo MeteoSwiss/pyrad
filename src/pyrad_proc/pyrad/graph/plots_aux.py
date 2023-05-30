@@ -12,6 +12,9 @@ Auxiliary plotting functions
     generate_complex_Doppler_title
     generate_fixed_rng_span_title
     generate_fixed_rng_title
+    generate_dda_map_title
+    generate_dda_latitude_slice_title
+    generate_dda_longitude_slice_title
     get_colobar_label
     get_field_name
     get_norm
@@ -30,7 +33,8 @@ mpl.rcParams.update({'font.size': 16})
 mpl.rcParams.update({'font.family':  "sans-serif"})
 
 
-def generate_complex_range_Doppler_title(radar, field, ray, datetime_format=None):
+def generate_complex_range_Doppler_title(radar, field, ray,
+                                         datetime_format=None):
     """
     creates the fixed range plot title
 
@@ -207,6 +211,142 @@ def generate_fixed_rng_title(radar, field, fixed_rng, datetime_format=None):
     return l1 + '\n' + field_name
 
 
+def generate_dda_map_title(grid, field, level, datetime_format=None):
+    """
+    creates the dda map plot title
+
+    Parameters
+    ----------
+    grid : grid
+        The grid object
+    field : str
+        name of the background field
+    level : int
+        Verical level plotted.
+    datetime_format : str or None
+        The date time format to use
+
+    Returns
+    -------
+    titl : str
+        The plot title
+
+    """
+    begin_time = pyart.graph.common.generate_radar_time_begin(grid)
+    if datetime_format:
+        time_str = begin_time.strftime(datetime_format)
+    else:
+        time_str = begin_time.isoformat() + 'Z'
+    radar_names = pyart.graph.common.generate_radar_name(grid)
+
+    for mdata in grid.metadata['additional_radars']:
+        radar_names += '-' + mdata['radar_name']
+    height = grid.z["data"][level] / 1000.0
+    l1 = f"DDA: {radar_names} {height:.1f} km {time_str}"
+    field_name = "Hor. wind vectors (u,v) with " + field
+    return l1 + '\n' + field_name
+
+
+def generate_dda_latitude_slice_title(grid, field, level, datetime_format=None,
+                                      wind_vectors='hor'):
+    """
+    creates the dda latitude slice plot title
+
+    Parameters
+    ----------
+    grid : grid
+        The grid object
+    field : str
+        name of the background field
+    level : int
+        latitudinal level plotted.
+    datetime_format : str or None
+        The date time format to use
+    wind_vectors : str
+        'hor' if horizontal wind vectors are displayed (u and v) or 'ver'
+        if vertical wind vectors are displayed (v and w)
+
+    Returns
+    -------
+    titl : str
+        The plot title
+
+    """
+    begin_time = pyart.graph.common.generate_radar_time_begin(grid)
+    if datetime_format:
+        time_str = begin_time.strftime(datetime_format)
+    else:
+        time_str = begin_time.isoformat() + 'Z'
+    radar_names = pyart.graph.common.generate_radar_name(grid)
+
+    for mdata in grid.metadata['additional_radars']:
+        radar_names += '-' + mdata['radar_name']
+    disp = grid.x["data"][level] / 1000.0
+    if disp >= 0:
+        direction = "east"
+    else:
+        direction = "west"
+        disp = -disp
+
+    l1 = f"DDA: {radar_names} {disp:.1f} km {direction} of origin {time_str}"
+    if wind_vectors == 'hor':
+        field_name = "Hor. wind vectors (u,v)"
+    elif wind_vectors == 'ver':
+        field_name = "Vert. wind vectors (v,w)"
+    field_name += ' with ' + field
+    return l1 + '\n' + field_name
+
+
+def generate_dda_longitude_slice_title(grid, field, level,
+                                       datetime_format=None,
+                                       wind_vectors='hor'):
+    """
+    creates the dda longitude slice plot title
+
+    Parameters
+    ----------
+    grid : grid
+        The grid object
+    field : str
+        name of the background field
+    level : int
+        longitudinal level plotted.
+    datetime_format : str or None
+        The date time format to use
+    wind_vectors : str
+        'hor' if horizontal wind vectors are displayed (u and v) or 'ver'
+        if vertical wind vectors are displayed (v and w)
+
+    Returns
+    -------
+    titl : str
+        The plot title
+
+    """
+    begin_time = pyart.graph.common.generate_radar_time_begin(grid)
+    if datetime_format:
+        time_str = begin_time.strftime(datetime_format)
+    else:
+        time_str = begin_time.isoformat() + 'Z'
+    radar_names = pyart.graph.common.generate_radar_name(grid)
+
+    for mdata in grid.metadata['additional_radars']:
+        radar_names += '-' + mdata['radar_name']
+    disp = grid.x["data"][level] / 1000.0
+    if disp >= 0:
+        direction = "north"
+    else:
+        direction = "south"
+        disp = -disp
+    l1 = f"DDA: {radar_names} {disp:.1f} km {direction} of origin {time_str}"
+    if wind_vectors == 'hor':
+        field_name = "Hor. wind vectors (u,v)"
+    elif wind_vectors == 'ver':
+        field_name = "Vert. wind vectors (v,w)"
+    field_name += ' with ' + field
+    return l1 + '\n' + field_name
+
+
 def get_colobar_label(field_dict, field_name):
     """
     creates the colorbar label using field metadata
@@ -268,7 +408,7 @@ def get_field_name(field_dict, field):
     return field_name
 
 
-def get_norm(field_name, field_dict={}):
+def get_norm(field_name, field_dict={}, isxarray=False):
     """
     Computes the normalization of the colormap, and gets the ticks and labels
     of the colorbar from the metadata of the field. Returns None if the
@@ -282,7 +422,11 @@ def get_norm(field_name, field_dict={}):
         name of the field
     field_dict : dict or None
         dictionary containing the field and its metadata.
-
+    isxarray : bool
+        whether or not the norm will be used with xarray's plotting functions
+        default is false, which means that matplotlib plotting functions will
+        be used should be set to true when plotting Grid objects which are
+        handled as xarray by pyart
     Returns
     -------
     norm : list
@@ -298,14 +442,22 @@ def get_norm(field_name, field_dict={}):
     ticklabs = None
 
     ref_dict = pyart.config.get_metadata(field_name)
-    cmap = mpl.cm.get_cmap(pyart.config.get_field_colormap(field_name))
+    cmap = mpl.colormaps[pyart.config.get_field_colormap(field_name)]
 
     if field_dict is not None and 'boundaries' in field_dict:
+        if isxarray:
+            ncolors = len(field_dict['boundaries']) - 1
+        else:
+            ncolors = cmap.N
         norm = mpl.colors.BoundaryNorm(
-            boundaries=field_dict['boundaries'], ncolors=len(field_dict['boundaries']) - 1)
+            boundaries=field_dict['boundaries'], ncolors=ncolors)
     elif 'boundaries' in ref_dict:
+        if isxarray:
+            ncolors = len(ref_dict['boundaries']) - 1
+        else:
+            ncolors = cmap.N
         norm = mpl.colors.BoundaryNorm(
-            boundaries=ref_dict['boundaries'], ncolors=len(field_dict['boundaries']) - 1)
+            boundaries=ref_dict['boundaries'], ncolors=ncolors)
 
     if field_dict is not None and 'ticks' in field_dict:
         ticks = field_dict['ticks']

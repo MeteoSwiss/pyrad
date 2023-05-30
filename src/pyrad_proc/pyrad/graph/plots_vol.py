@@ -17,6 +17,7 @@ Functions to plot radar volume data
     plot_fixed_rng_span
     plot_fixed_rng_sun
     plot_cappi
+    plot_xsection
     plot_traj
     plot_rhi_contour
     plot_ppi_contour
@@ -298,8 +299,7 @@ def plot_ppi_map(radar, field_name, ind_el, prdcfg, fname_list,
         warn('Unable to plot PPI map. Missing shapely cartopy module')
         return None
 
-
-    dpi = prdcfg['ppiImageConfig'].get('dpi', 72)
+    dpi = prdcfg['ppiMapImageConfig'].get('dpi', 72)
 
     norm, ticks, ticklabs = get_norm(
         field_name, field_dict=radar.fields[field_name])
@@ -328,99 +328,100 @@ def plot_ppi_map(radar, field_name, ind_el, prdcfg, fname_list,
     display_map.plot_ppi_map(
         field_name, sweep=ind_el, norm=norm, ticks=ticks, ticklabs=ticklabs,
         min_lon=min_lon, max_lon=max_lon, min_lat=min_lat, max_lat=max_lat,
-        lat_lines=lat_lines, lon_lines=lon_lines, projection = projection,
-        fig=fig, embellish = False,
-        colorbar_flag=True, alpha=1)
+        lat_lines=lat_lines, lon_lines=lon_lines, projection=projection,
+        fig=fig, embellish=False, colorbar_flag=True, alpha=1)
 
     ax = display_map.ax
-    
-    if 'relief' in prdcfg['ppiMapImageConfig']['maps']:
-          tiler = Stamen('terrain-background')
-          projection = tiler.crs
-          fig.delaxes(ax)
-          ax = fig.add_subplot(111, projection=projection)
-          warn(
-              'The projection of the image is set to that of the ' +
-              'background map, i.e. '+str(projection), UserWarning)
-          
-    for cartomap in prdcfg['ppiMapImageConfig']['maps']:
-        if cartomap == 'relief':
-                    ax.add_image(tiler, background_zoom)
-        if cartomap == 'countries':
-            # add countries
-            countries = cartopy.feature.NaturalEarthFeature(
-                category='cultural',
-                name='admin_0_countries',
-                scale=resolution,
-                facecolor='none')
-            ax.add_feature(countries, edgecolor='black')
-        elif cartomap == 'provinces':
-            # Create a feature for States/Admin 1 regions at
-            # 1:resolution from Natural Earth
-            states_provinces = cartopy.feature.NaturalEarthFeature(
-                category='cultural',
-                name='admin_1_states_provinces_lines',
-                scale=resolution,
-                facecolor='none')
-            ax.add_feature(states_provinces, edgecolor='gray')
-        elif (cartomap == 'urban_areas' and
-                resolution in ('10m', '50m')):
-            urban_areas = cartopy.feature.NaturalEarthFeature(
-                category='cultural',
-                name='urban_areas',
-                scale=resolution)
-            ax.add_feature(
-                urban_areas, edgecolor='brown', facecolor='brown',
-                alpha=0.25)
-        elif cartomap == 'roads' and resolution == '10m':
-            roads = cartopy.feature.NaturalEarthFeature(
-                category='cultural',
-                name='roads',
-                scale=resolution)
-            ax.add_feature(roads, edgecolor='red', facecolor='none')
-        elif cartomap == 'railroads' and resolution == '10m':
-            railroads = cartopy.feature.NaturalEarthFeature(
-                category='cultural',
-                name='railroads',
-                scale=resolution)
-            ax.add_feature(
-                railroads, edgecolor='green', facecolor='none',
-                linestyle=':')
-        elif cartomap == 'coastlines':
-            ax.coastlines(resolution=resolution)
-        elif cartomap == 'lakes':
-            # add lakes
-            lakes = cartopy.feature.NaturalEarthFeature(
-                category='physical',
-                name='lakes',
-                scale=resolution)
-            ax.add_feature(
-                lakes, edgecolor='blue', facecolor='blue', alpha=0.25)
-        elif resolution == '10m' and cartomap == 'lakes_europe':
-            lakes_europe = cartopy.feature.NaturalEarthFeature(
-                category='physical',
-                name='lakes_europe',
-                scale=resolution)
-            ax.add_feature(
-                lakes_europe, edgecolor='blue', facecolor='blue',
-                alpha=0.25)
-        elif cartomap == 'rivers':
-            # add rivers
-            rivers = cartopy.feature.NaturalEarthFeature(
-                category='physical',
-                name='rivers_lake_centerlines',
-                scale=resolution)
-            ax.add_feature(rivers, edgecolor='blue', facecolor='none')
-        elif resolution == '10m' and cartomap == 'rivers_europe':
-            rivers_europe = cartopy.feature.NaturalEarthFeature(
-                category='physical',
-                name='rivers_europe',
-                scale=resolution)
-            ax.add_feature(
-                rivers_europe, edgecolor='blue', facecolor='none')
-        else:
-            warn('cartomap '+cartomap+' for resolution '+resolution +
-                  ' not available')
+
+    if 'maps' in prdcfg['ppiMapImageConfig']:
+        if 'relief' in prdcfg['ppiMapImageConfig']['maps']:
+            tiler = Stamen('terrain-background')
+            projection = tiler.crs
+            fig.delaxes(ax)
+            ax = fig.add_subplot(111, projection=projection)
+            warn(
+                'The projection of the image is set to that of the ' +
+                'background map, i.e. '+str(projection), UserWarning)
+
+        for cartomap in prdcfg['ppiMapImageConfig']['maps']:
+            if cartomap == 'relief':
+                ax.add_image(tiler, background_zoom)
+            if cartomap == 'countries':
+                # add countries
+                countries = cartopy.feature.NaturalEarthFeature(
+                    category='cultural',
+                    name='admin_0_countries',
+                    scale=resolution,
+                    facecolor='none')
+                ax.add_feature(countries, edgecolor='black')
+            elif cartomap == 'provinces':
+                # Create a feature for States/Admin 1 regions at
+                # 1:resolution from Natural Earth
+                states_provinces = cartopy.feature.NaturalEarthFeature(
+                    category='cultural',
+                    name='admin_1_states_provinces_lines',
+                    scale=resolution,
+                    facecolor='none')
+                ax.add_feature(states_provinces, edgecolor='gray')
+            elif (cartomap == 'urban_areas' and
+                    resolution in ('10m', '50m')):
+                urban_areas = cartopy.feature.NaturalEarthFeature(
+                    category='cultural',
+                    name='urban_areas',
+                    scale=resolution)
+                ax.add_feature(
+                    urban_areas, edgecolor='brown', facecolor='brown',
+                    alpha=0.25)
+            elif cartomap == 'roads' and resolution == '10m':
+                roads = cartopy.feature.NaturalEarthFeature(
+                    category='cultural',
+                    name='roads',
+                    scale=resolution)
+                ax.add_feature(roads, edgecolor='red', facecolor='none')
+            elif cartomap == 'railroads' and resolution == '10m':
+                railroads = cartopy.feature.NaturalEarthFeature(
+                    category='cultural',
+                    name='railroads',
+                    scale=resolution)
+                ax.add_feature(
+                    railroads, edgecolor='green', facecolor='none',
+                    linestyle=':')
+            elif cartomap == 'coastlines':
+                ax.coastlines(resolution=resolution)
+            elif cartomap == 'lakes':
+                # add lakes
+                lakes = cartopy.feature.NaturalEarthFeature(
+                    category='physical',
+                    name='lakes',
+                    scale=resolution)
+                ax.add_feature(
+                    lakes, edgecolor='blue', facecolor='blue', alpha=0.25)
+            elif resolution == '10m' and cartomap == 'lakes_europe':
+                lakes_europe = cartopy.feature.NaturalEarthFeature(
+                    category='physical',
+                    name='lakes_europe',
+                    scale=resolution)
+                ax.add_feature(
+                    lakes_europe, edgecolor='blue', facecolor='blue',
+                    alpha=0.25)
+            elif cartomap == 'rivers':
+                # add rivers
+                rivers = cartopy.feature.NaturalEarthFeature(
+                    category='physical',
+                    name='rivers_lake_centerlines',
+                    scale=resolution)
+                ax.add_feature(rivers, edgecolor='blue', facecolor='none')
+            elif resolution == '10m' and cartomap == 'rivers_europe':
+                rivers_europe = cartopy.feature.NaturalEarthFeature(
+                    category='physical',
+                    name='rivers_europe',
+                    scale=resolution)
+                ax.add_feature(
+                    rivers_europe, edgecolor='blue', facecolor='none')
+            else:
+                warn('cartomap '+cartomap+' for resolution '+resolution +
+                     ' not available')
+
     if 'rngRing' in prdcfg['ppiMapImageConfig']:
         if prdcfg['ppiMapImageConfig']['rngRing'] > 0:
             rng_rings = np.arange(
@@ -493,8 +494,12 @@ def plot_rhi(radar, field_name, ind_az, prdcfg, fname_list, plot_type='RHI',
 
         xsize = prdcfg['rhiImageConfig']['xsize']
         ysize = prdcfg['rhiImageConfig']['ysize']
+        if 'aspect' in prdcfg['rhiImageConfig']:
+            aspect = prdcfg['rhiImageConfig']['aspect']
+        else:
+            aspect = 'equal'
         fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
-        ax = fig.add_subplot(111, aspect='equal')
+        ax = fig.add_subplot(111, aspect=aspect)
         display = pyart.graph.RadarDisplay(radar)
         display.plot_rhi(
             field_name, title=titl, sweep=ind_az, norm=norm, ticks=ticks,
@@ -1297,6 +1302,94 @@ def plot_cappi(radar, field_name, altitude, prdcfg, fname_list,
 
     return (fig, ax)
 
+
+def plot_xsection(radar, field_name, ref_points, step, vert_res, alt_max, beamwidth, 
+             dem, prdcfg, fname_list, titl=None, vmin=None, vmax=None, save_fig=True):
+    """
+    plots a cross-section on polar data
+
+    Parameters
+    ----------
+    radar : Radar object
+        object containing the radar data to plot
+    field_name : str
+        name of the radar field to plot
+    ref_points :  ndarray
+            N x 2 array containing the lon, lat coordinates of N reference 
+            points along the trajectory in WGS84 coordinates,
+            for example [[11, 46], [10, 45], [9, 47]]
+    step : int
+            Step in meters to use between reference points to calculate
+            the cross-section (i.e horizontal resolution).
+    vert_res : int
+            Vertical resolution in meters used to calculate the cross-section 
+    alt_max : int
+        Maximum altitude of the vertical cross-section 
+    beamwidth : float
+        3dB beamwidth in degrees to be used in the calculations
+    dem : Grid
+        Grid object that contains data from a digital elevation model
+        the data ist expected to be in meters
+    prdcfg : dict
+        dictionary containing the product configuration
+    fname_list : list of str
+        list of names of the files where to store the plot
+    titl : str
+        Plot title
+    vmin, vmax : float
+        The minimum and maximum value. If None the scale is going to be
+        obtained from the Py-ART config file.
+    save_fig : bool
+        if true save the figure. If false it does not close the plot and
+        returns the handle to the figure
+
+    Returns
+    -------
+    fname_list : list of str or
+    fig, ax : tupple
+        list of names of the saved plots or handle of the figure an axes
+
+    """
+    dpi = prdcfg['rhiImageConfig'].get('dpi', 72)
+
+    norm = None
+    ticks = None
+    ticklabs = None
+    if vmin is None or vmax is None:
+        norm, ticks, ticklabs = get_norm(
+            field_name, field_dict=radar.fields[field_name])
+        vmin = None
+        vmax = None
+
+    xsize = prdcfg['rhiImageConfig']['xsize']
+    ysize = prdcfg['rhiImageConfig']['ysize']
+    fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
+
+    step = prdcfg.get('step', 1000)
+    ax = fig.add_subplot(111)
+    display = pyart.graph.RadarDisplay(radar)
+
+    display.plot_xsection(
+        field_name, ref_points, step, vert_res, alt_max, beamwidth, dem, title=titl,
+        norm=norm, ticks=ticks, ticklabs=ticklabs, vmin=vmin, vmax=vmax,
+        colorbar_orient='horizontal',  fig=fig, ax=ax)
+
+    # Turn on the grid
+    ax.grid()
+
+    # Make a tight layout
+    fig.tight_layout()
+
+    if save_fig:
+        for fname in fname_list:
+            fig.savefig(fname, dpi=dpi)
+        plt.close(fig)
+
+        return fname_list
+
+    return (fig, ax)
+
+    return fname_list
 
 def plot_traj(rng_traj, azi_traj, ele_traj, time_traj, prdcfg, fname_list,
               rad_alt=None, rad_tstart=None, ax=None, fig=None,
