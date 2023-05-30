@@ -1895,6 +1895,8 @@ def get_fieldname_pyart(datatype):
     # wind lidar names
     elif datatype == 'wind_vel_rad':
         field_name = 'radial_wind_speed'
+    elif datatype == 'wind_vel_rad_filtered':
+        field_name = 'corrected_radial_wind_speed'
     elif datatype == 'wind_vel_rad_ci':
         field_name = 'radial_wind_speed_ci'
     elif datatype == 'wind_vel_rad_status':

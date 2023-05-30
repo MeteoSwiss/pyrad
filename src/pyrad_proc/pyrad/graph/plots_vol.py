@@ -494,8 +494,12 @@ def plot_rhi(radar, field_name, ind_az, prdcfg, fname_list, plot_type='RHI',
 
         xsize = prdcfg['rhiImageConfig']['xsize']
         ysize = prdcfg['rhiImageConfig']['ysize']
+        if 'aspect' in prdcfg['rhiImageConfig']:
+            aspect = prdcfg['rhiImageConfig']['aspect']
+        else:
+            aspect = 'equal'
         fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
-        ax = fig.add_subplot(111, aspect='equal')
+        ax = fig.add_subplot(111, aspect=aspect)
         display = pyart.graph.RadarDisplay(radar)
         display.plot_rhi(
             field_name, title=titl, sweep=ind_az, norm=norm, ticks=ticks,

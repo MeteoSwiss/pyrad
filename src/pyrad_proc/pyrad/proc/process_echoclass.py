@@ -635,7 +635,7 @@ def process_filter_snr(procstatus, dscfg, radar_list=None):
 
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype in ('SNRh', 'SNRv', 'SNR'):
+        if datatype in ('SNRh', 'SNRv', 'SNR','CNR'):
             snr_field = get_fieldname_pyart(datatype)
             break
 
