@@ -50,7 +50,7 @@ jobs:
           PACKAGES: ${{env.MINIMAL_DEPENDENCIES}} ${{env.OPTIONAL_DEPENDENCIES}} ${{env.TEST_DEPENDENCIES}}
           PYRAD_TESTS_PATH: ${{github.workspace}}/pyrad-tests/
         run: |
-          conda install --quiet ${{env.PACKAGES}}
+          pip install ${{env.PACKAGES}}
           pip install -U cookiecutter
       - name: Install pyart
         if: matrix.os != 'macos-latest'
