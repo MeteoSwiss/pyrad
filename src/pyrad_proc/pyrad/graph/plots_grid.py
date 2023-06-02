@@ -117,26 +117,43 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
         lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon)+1, lonstep)
         lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat)+1, latstep)
 
+    if use_basemap:
+        resolution = prdcfg['gridMapImageConfig'].get('mapres', 'l')
+        if resolution not in ('c', 'l', 'i', 'h', 'f'):
+            warn('Unknown map resolution: '+resolution)
+            resolution = 'l'
+
+        if resolution == 'c':
+            area_thresh = 10000
+        elif resolution == 'l':
+            area_thresh = 1000
+        elif resolution == 'i':
+            area_thresh = 100
+        elif resolution == 'h':
+            area_thresh = 10
+        elif resolution == 'f':
+            area_thresh = 1
+    else:
+        resolution = prdcfg['gridMapImageConfig'].get('mapres', '110m')
+        # Map from basemap to cartopy notation
+        if resolution == 'l':
+            resolution = '110m'
+        elif resolution == 'i':
+            resolution = '50m'
+        elif resolution == 'h':
+            resolution = '10m'
+
+        if resolution not in ('110m', '50m', '10m'):
+            warn('Unknown map resolution: '+resolution)
+            resolution = '110m'
+        background_zoom = prdcfg['gridMapImageConfig'].get(
+            'background_zoom', 8)
+        maps_list = prdcfg['gridMapImageConfig'].get('maps', [])
+
     if fig is None:
         fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
 
         if use_basemap:
-            resolution = prdcfg['gridMapImageConfig'].get('mapres', 'l')
-            if resolution not in ('c', 'l', 'i', 'h', 'f'):
-                warn('Unknown map resolution: '+resolution)
-                resolution = 'l'
-
-            if resolution == 'c':
-                area_thresh = 10000
-            elif resolution == 'l':
-                area_thresh = 1000
-            elif resolution == 'i':
-                area_thresh = 100
-            elif resolution == 'h':
-                area_thresh = 10
-            elif resolution == 'f':
-                area_thresh = 1
-
             display = pyart.graph.GridMapDisplayBasemap(grid)
             display.plot_basemap(
                 lat_lines=lat_lines, lon_lines=lon_lines,
@@ -148,22 +165,7 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
                 ticklabs=ticklabs, mask_outside=mask_outside, vmin=vmin,
                 vmax=vmax, alpha=alpha, fig=fig)
         else:
-            resolution = prdcfg['gridMapImageConfig'].get('mapres', '110m')
             projection = cartopy.crs.PlateCarree()
-            # Map from basemap to cartopy notation
-            if resolution == 'l':
-                resolution = '110m'
-            elif resolution == 'i':
-                resolution = '50m'
-            elif resolution == 'h':
-                resolution = '10m'
-
-            if resolution not in ('110m', '50m', '10m'):
-                warn('Unknown map resolution: '+resolution)
-                resolution = '110m'
-            background_zoom = prdcfg['gridMapImageConfig'].get(
-                'background_zoom', 8)
-            maps_list = prdcfg['gridMapImageConfig'].get('maps', [])
 
             display = pyart.graph.GridMapDisplay(grid)
             display.plot_grid(
@@ -187,7 +189,7 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
         else:
             display.plot_grid(
                 field_name, level=level, norm=norm, ticks=ticks,
-                projection=projection, lat_lines=lat_lines,
+                projection=ax.projection, lat_lines=lat_lines,
                 lon_lines=lon_lines, ticklabs=ticklabs, colorbar_flag=False,
                 embellish=False, vmin=vmin, vmax=vmax,
                 mask_outside=mask_outside, alpha=alpha, title=titl, ax=ax,
