@@ -122,24 +122,26 @@ def generate_vol_products(dataset, prdcfg):
                     pyart.map.grid_from_radars. Default 'NEAREST'
                 cappi_res: float
                     The CAPPI resolution [m]. Default 500.
-        'CROSS_SECTION' : Plots a cross-section of polar data through arbitrary coordinates
+        'CROSS_SECTION' : Plots a cross-section of polar data through
+            arbitrary coordinates
             User defined parameters:
                 coord1, coord2, ..., coordN: dict
                     The two lat-lon coordinates marking the limits. They have
-                    the keywords 'lat' and 'lon' [degree]. 
+                    the keywords 'lat' and 'lon' [degree].
                 step : int
                     Step in meters to use between reference points to calculate
                     the cross-section (i.e horizontal resolution).
                 vert_res : int
-                    Vertical resolution in meters used to calculate the cross-section 
+                    Vertical resolution in meters used to calculate the
+                    cross-section
                 alt_max : int
-                    Maximum altitude of the vertical cross-section 
+                    Maximum altitude of the vertical cross-section
                 beamwidth : float
-                    3dB beamwidth in degrees to be used in the calculations, if not provided
-                    will be read from the loc file
+                    3dB beamwidth in degrees to be used in the calculations,
+                    if not provided will be read from the loc file
                 demfile : str
-                    Name of the DEM file to use to plot the topography, it must be in the 
-                    dempath specified in the main config file
+                    Name of the DEM file to use to plot the topography, it
+                    must be in the dempath specified in the main config file
         'FIELD_COVERAGE': Gets the field coverage over a certain sector
             User defined parameters:
                 threshold: float or None
@@ -2102,12 +2104,12 @@ def generate_vol_products(dataset, prdcfg):
 
         vmin = prdcfg.get('vmin', None)
         vmax = prdcfg.get('vmax', None)
-        
+
         step = prdcfg.get('step', 1000)
         vert_res = prdcfg.get('vert_res', 100)
         alt_max = prdcfg.get('alt_max', 10000)
         beamwidth = prdcfg.get('beamwidth', None)
-        if beamwidth == None:
+        if beamwidth is None:
             if 'RadarBeamwidth' in prdcfg:
                 beamwidth = prdcfg['RadarBeamwidth']
             else:
@@ -2115,7 +2117,7 @@ def generate_vol_products(dataset, prdcfg):
                 beamwidth = 1
         demfile = prdcfg.get('demfile', None)
 
-        if demfile != None:
+        if demfile is not None:
             demproj = None
             if 'demproj' in prdcfg.keys():
                 demproj = prdcfg['demproj']
@@ -2126,7 +2128,7 @@ def generate_vol_products(dataset, prdcfg):
                     pass
 
             fname = prdcfg['dempath'][0] + prdcfg['demfile']
-            dem = read_dem(fname, projparams = demproj)
+            dem = read_dem(fname, projparams=demproj)
         else:
             dem = None
 
@@ -2145,9 +2147,9 @@ def generate_vol_products(dataset, prdcfg):
             else:
                 break
             i += 1
-        
-        ref_pts_str = '_'.join(['{:2.1f}-{:2.1f}'.format(pt[0], pt[1])
-             for pt in ref_pts])
+
+        ref_pts_str = '_'.join(
+            ['{:2.1f}-{:2.1f}'.format(pt[0], pt[1]) for pt in ref_pts])
         savedir = get_save_dir(
             prdcfg['basepath'], prdcfg['procname'], dssavedir,
             prdsavedir, timeinfo=prdcfg['timeinfo'])
@@ -2159,12 +2161,12 @@ def generate_vol_products(dataset, prdcfg):
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-                fname_list[i] = savedir+fname
+            fname_list[i] = savedir+fname
 
         plot_xsection(
             dataset['radar_out'], field_name, ref_pts, step, vert_res,
-            alt_max, beamwidth, dem, prdcfg, fname_list, vmin = vmin, 
-            vmax = vmax)
+            alt_max, beamwidth, dem, prdcfg, fname_list, vmin=vmin,
+            vmax=vmax)
 
         print('----- save to '+' '.join(fname_list))
 
@@ -2522,6 +2524,8 @@ def generate_vol_products(dataset, prdcfg):
             return None
 
         step = prdcfg.get('step', None)
+        vmin = prdcfg.get('vmin', None)
+        vmax = prdcfg.get('vmax', None)
         write_data = prdcfg.get('write_data', 0)
 
         savedir = get_save_dir(
@@ -2538,7 +2542,7 @@ def generate_vol_products(dataset, prdcfg):
 
         bin_edges, values = compute_histogram(
             dataset['radar_out'].fields[field_name]['data'], field_name,
-            step=step)
+            step=step, vmin=vmin, vmax=vmax)
 
         titl = (
             pyart.graph.common.generate_radar_time_begin(

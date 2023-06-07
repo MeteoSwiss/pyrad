@@ -47,15 +47,16 @@ def process_correct_phidp0(procstatus, dscfg, radar_list=None):
         datatype : list of string. Dataset keyword
             The input data types
         rmin : float. Dataset keyword
-            The minimum range where to look for valid data [m]
+            The minimum range where to look for valid data [m]. Default 1000.
         rmax : float. Dataset keyword
-            The maximum range where to look for valid data [m]
+            The maximum range where to look for valid data [m]. Default 50000.
         rcell : float. Dataset keyword
-            The length of a continuous cell to consider it valid precip [m]
+            The length of a continuous cell to consider it valid precip [m].
+            Default 1000.
         Zmin : float. Dataset keyword
-            The minimum reflectivity [dBZ]
+            The minimum reflectivity [dBZ]. Default 20.
         Zmax : float. Dataset keyword
-            The maximum reflectivity [dBZ]
+            The maximum reflectivity [dBZ]. Default 40.
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -94,10 +95,17 @@ def process_correct_phidp0(procstatus, dscfg, radar_list=None):
         warn('Unable to correct PhiDP system offset. Missing data')
         return None, None
 
-    ind_rmin = np.where(radar.range['data'] > dscfg['rmin'])[0][0]
-    ind_rmax = np.where(radar.range['data'] < dscfg['rmax'])[0][-1]
+    # user defined parameters
+    rmin = dscfg.get('rmin', 1000.)
+    rmax = dscfg.get('rmax', 50000.)
+    rcell = dscfg.get('rcell', 1000.)
+    zmin = dscfg.get('Zmin', 20.)
+    zmax = dscfg.get('Zmax', 40.)
+
+    ind_rmin = np.where(radar.range['data'] > rmin)[0][0]
+    ind_rmax = np.where(radar.range['data'] < rmax)[0][-1]
     r_res = radar.range['data'][1]-radar.range['data'][0]
-    min_rcons = int(dscfg['rcell']/r_res)
+    min_rcons = int(rcell/r_res)
 
     if psidp_field.startswith('corrected_'):
         phidp_field = psidp_field
@@ -109,14 +117,14 @@ def process_correct_phidp0(procstatus, dscfg, radar_list=None):
     try:
         phidp = pyart.correct.correct_sys_phase(
             radar, ind_rmin=ind_rmin, ind_rmax=ind_rmax, min_rcons=min_rcons,
-            zmin=dscfg['Zmin'], zmax=dscfg['Zmax'], psidp_field=psidp_field,
+            zmin=zmin, zmax=zmax, psidp_field=psidp_field,
             refl_field=refl_field, phidp_field=phidp_field)
     except AttributeError as e:
         warn('Could not find correct_sys_phase function...')
         warn('Skipping system phase correction...')
         warn('Please use PyART-MCH to get this functionality')
         phidp = radar.fields[phidp_field]
-     
+
     # prepare for exit
     new_dataset = {'radar_out': deepcopy(radar)}
     new_dataset['radar_out'].fields = dict()
@@ -140,17 +148,18 @@ def process_smooth_phidp_single_window(procstatus, dscfg, radar_list=None):
         datatype : list of string. Dataset keyword
             The input data types
         rmin : float. Dataset keyword
-            The minimum range where to look for valid data [m]
+            The minimum range where to look for valid data [m]. Default 1000.
         rmax : float. Dataset keyword
-            The maximum range where to look for valid data [m]
+            The maximum range where to look for valid data [m]. Default 50000.
         rcell : float. Dataset keyword
-            The length of a continuous cell to consider it valid precip [m]
+            The length of a continuous cell to consider it valid precip [m].
+            Default 1000.
         rwind : float. Dataset keyword
-            The length of the smoothing window [m]
+            The length of the smoothing window [m]. Default 6000.
         Zmin : float. Dataset keyword
-            The minimum reflectivity [dBZ]
+            The minimum reflectivity [dBZ]. Default 20.
         Zmax : float. Dataset keyword
-            The maximum reflectivity [dBZ]
+            The maximum reflectivity [dBZ]. Default 40.
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -189,11 +198,19 @@ def process_smooth_phidp_single_window(procstatus, dscfg, radar_list=None):
         warn('Unable to smooth PhiDP. Missing data')
         return None, None
 
-    ind_rmin = np.where(radar.range['data'] > dscfg['rmin'])[0][0]
-    ind_rmax = np.where(radar.range['data'] < dscfg['rmax'])[0][-1]
+    # user defined parameters
+    rmin = dscfg.get('rmin', 1000.)
+    rmax = dscfg.get('rmax', 50000.)
+    rcell = dscfg.get('rcell', 1000.)
+    zmin = dscfg.get('Zmin', 20.)
+    zmax = dscfg.get('Zmax', 40.)
+    rwind = dscfg.get('rwind', 6000.)
+
+    ind_rmin = np.where(radar.range['data'] > rmin)[0][0]
+    ind_rmax = np.where(radar.range['data'] < rmax)[0][-1]
     r_res = radar.range['data'][1]-radar.range['data'][0]
-    min_rcons = int(dscfg['rcell']/r_res)
-    wind_len = int(dscfg['rwind']/r_res)
+    min_rcons = int(rcell/r_res)
+    wind_len = int(rwind/r_res)
     min_valid = int(wind_len/2+1)
 
     if psidp_field.startswith('corrected_'):
@@ -205,7 +222,7 @@ def process_smooth_phidp_single_window(procstatus, dscfg, radar_list=None):
 
     phidp = pyart.correct.smooth_phidp_single_window(
         radar, ind_rmin=ind_rmin, ind_rmax=ind_rmax, min_rcons=min_rcons,
-        zmin=dscfg['Zmin'], zmax=dscfg['Zmax'], wind_len=wind_len,
+        zmin=zmin, zmax=zmax, wind_len=wind_len,
         min_valid=min_valid, psidp_field=psidp_field, refl_field=refl_field,
         phidp_field=phidp_field)
 
@@ -285,13 +302,23 @@ def process_smooth_phidp_double_window(procstatus, dscfg, radar_list=None):
         warn('Unable to smooth PhiDP. Missing data')
         return None, None
 
-    ind_rmin = np.where(radar.range['data'] > dscfg['rmin'])[0][0]
-    ind_rmax = np.where(radar.range['data'] < dscfg['rmax'])[0][-1]
+    # user defined parameters
+    rmin = dscfg.get('rmin', 1000.)
+    rmax = dscfg.get('rmax', 50000.)
+    rcell = dscfg.get('rcell', 1000.)
+    zmin = dscfg.get('Zmin', 20.)
+    zmax = dscfg.get('Zmax', 40.)
+    rwinds = dscfg.get('rwinds', 2000.)
+    rwindl = dscfg.get('rwindl', 6000.)
+    zthr = dscfg.get('Zthr', 40.)
+
+    ind_rmin = np.where(radar.range['data'] > rmin)[0][0]
+    ind_rmax = np.where(radar.range['data'] < rmax)[0][-1]
     r_res = radar.range['data'][1]-radar.range['data'][0]
-    min_rcons = int(dscfg['rcell']/r_res)
-    swind_len = int(dscfg['rwinds']/r_res)
+    min_rcons = int(rcell/r_res)
+    swind_len = int(rwinds/r_res)
     smin_valid = int(swind_len/2+1)
-    lwind_len = int(dscfg['rwindl']/r_res)
+    lwind_len = int(rwindl/r_res)
     lmin_valid = int(lwind_len/2+1)
 
     if psidp_field.startswith('corrected_'):
@@ -303,9 +330,9 @@ def process_smooth_phidp_double_window(procstatus, dscfg, radar_list=None):
 
     phidp = pyart.correct.smooth_phidp_double_window(
         radar, ind_rmin=ind_rmin, ind_rmax=ind_rmax, min_rcons=min_rcons,
-        zmin=dscfg['Zmin'], zmax=dscfg['Zmax'], swind_len=swind_len,
+        zmin=zmin, zmax=zmax, swind_len=swind_len,
         smin_valid=smin_valid, lwind_len=lwind_len, lmin_valid=lmin_valid,
-        zthr=dscfg['Zthr'], psidp_field=psidp_field, refl_field=refl_field,
+        zthr=zthr, psidp_field=psidp_field, refl_field=refl_field,
         phidp_field=phidp_field)
 
     # prepare for exit
@@ -332,15 +359,16 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
         datatype : list of string. Dataset keyword
             The input data types
         rmin : float. Dataset keyword
-            The minimum range where to look for valid data [m]
+            The minimum range where to look for valid data [m]. Default 1000.
         rmax : float. Dataset keyword
-            The maximum range where to look for valid data [m]
+            The maximum range where to look for valid data [m]. Default 50000.
         rcell : float. Dataset keyword
-            The length of a continuous cell to consider it valid precip [m]
+            The length of a continuous cell to consider it valid precip [m].
+            Default 1000.
         Zmin : float. Dataset keyword
-            The minimum reflectivity [dBZ]
+            The minimum reflectivity [dBZ]. Default 20
         Zmax : float. Dataset keyword
-            The maximum reflectivity [dBZ]
+            The maximum reflectivity [dBZ]. Default 40
         fzl : float. Dataset keyword
             The freezing level height [m]. Default 2000.
         ml_thickness : float. Dataset keyword
@@ -396,6 +424,14 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
              'Missing data')
         return None, None
 
+    # user defined parameters
+    rmin = dscfg.get('rmin', 1000.)
+    rmax = dscfg.get('rmax', 50000.)
+    rcell = dscfg.get('rcell', 1000.)
+    zmin = dscfg.get('Zmin', 20.)
+    zmax = dscfg.get('Zmax', 40.)
+    thickness = dscfg.get('ml_thickness', 700.)
+
     # determine which freezing level reference
     temp_ref = 'temperature'
     if temp_field is None and iso0_field is None:
@@ -425,32 +461,29 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
             warn('Freezing level height not defined. Using default ' +
                  str(fzl)+' m')
 
-    thickness = 700.
-    if 'ml_thickness' in dscfg:
-        thickness = dscfg['ml_thickness']
-
     phidp_field = 'corrected_differential_phase'
     kdp_field = 'corrected_specific_differential_phase'
 
     radar_aux = deepcopy(radar)
 
     # correct PhiDP0
-    ind_rmin = np.where(radar_aux.range['data'] > dscfg['rmin'])[0][0]
-    ind_rmax = np.where(radar_aux.range['data'] < dscfg['rmax'])[0][-1]
+    ind_rmin = np.where(radar_aux.range['data'] > rmin)[0][0]
+    ind_rmax = np.where(radar_aux.range['data'] < rmax)[0][-1]
     r_res = radar_aux.range['data'][1]-radar_aux.range['data'][0]
-    min_rcons = int(dscfg['rcell']/r_res)
+    min_rcons = int(rcell/r_res)
 
     try:
         phidp = pyart.correct.correct_sys_phase(
-            radar_aux, ind_rmin=ind_rmin, ind_rmax=ind_rmax, min_rcons=min_rcons,
-            zmin=dscfg['Zmin'], zmax=dscfg['Zmax'], psidp_field=psidp_field,
-            refl_field=refl_field, phidp_field=phidp_field)
+            radar_aux, ind_rmin=ind_rmin, ind_rmax=ind_rmax,
+            min_rcons=min_rcons, zmin=zmin, zmax=zmax,
+            psidp_field=psidp_field, refl_field=refl_field,
+            phidp_field=phidp_field)
     except AttributeError as e:
         warn('Could not find correct_sys_phase function...')
         warn('Skipping system phase correction...')
         warn('Please use PyART-MCH to get this functionality')
         phidp = radar_aux.fields[phidp_field]
-        
+
     # filter out data in an above the melting layer
     mask = np.ma.getmaskarray(phidp['data'])
 
@@ -465,7 +498,7 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
                     'data'][0]
     if beamwidth is None:
         warn('Antenna beam width unknown.')
-        
+
     try:
         mask_fzl, _ = pyart.correct.get_mask_fzl(
             radar_aux, fzl=fzl, doc=15, min_temp=0., max_h_iso0=0.,
@@ -475,8 +508,6 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
     except AttributeError as e:
         warn("Masking above FZL is only available in PyART-MCH")
         warn("Please use this library instead of ARM's version")
-    
-        
 
     # filter out data with invalid reflectivity
     mask_refl = np.ma.getmaskarray(radar_aux.fields[refl_field]['data'])
@@ -612,14 +643,11 @@ def process_phidp_kdp_lp(procstatus, dscfg, radar_list=None):
             warn('Freezing level height not defined. Using default ' +
                  str(fzl)+' m')
 
-    thickness = 700.
-    if 'ml_thickness' in dscfg:
-        thickness = dscfg['ml_thickness']
-
     radar_aux = deepcopy(radar)
 
     # user config
     LP_solver = dscfg.get('LP_solver', 'cvxopt')
+    thickness = dscfg.get('ml_thickness', 700.)
 
     # filter out data in an above the melting layer
     mask = np.ma.getmaskarray(radar_aux.fields[psidp_field]['data'])
@@ -687,7 +715,8 @@ def process_kdp_leastsquare_single_window(procstatus, dscfg, radar_list=None):
         datatype : list of string. Dataset keyword
             The input data types
         rwind : float. Dataset keyword
-            The length of the segment for the least square method [m]
+            The length of the segment for the least square method [m].
+            Default 6000.
         vectorize : bool. Dataset keyword
             Whether to vectorize the KDP processing. Default false
     radar_list : list of Radar objects
@@ -724,11 +753,14 @@ def process_kdp_leastsquare_single_window(procstatus, dscfg, radar_list=None):
              'Missing data')
         return None, None
 
+    # user defined parameters
+    rwind = dscfg.get('rwind', 6000.)
+    vectorize = dscfg.get('vectorize', False)
+
     r_res = radar.range['data'][1]-radar.range['data'][0]
-    wind_len = int(dscfg['rwind']/r_res)
+    wind_len = int(rwind/r_res)
     min_valid = int(wind_len/2+1)
     kdp_field = 'corrected_specific_differential_phase'
-    vectorize = dscfg.get('vectorize', False)
 
     kdp = pyart.retrieve.kdp_leastsquare_single_window(
         radar, wind_len=wind_len, min_valid=min_valid, phidp_field=phidp_field,
@@ -757,9 +789,11 @@ def process_kdp_leastsquare_double_window(procstatus, dscfg, radar_list=None):
         datatype : list of string. Dataset keyword
             The input data types
         rwinds : float. Dataset keyword
-            The length of the short segment for the least square method [m]
+            The length of the short segment for the least square method [m].
+            Default 2000.
         rwindl : float. Dataset keyword
-            The length of the long segment for the least square method [m]
+            The length of the long segment for the least square method [m].
+            Default 6000.
         Zthr : float. Dataset keyword
             The threshold defining which estimated data to use [dBZ]
         vectorize : Bool. Dataset keyword
@@ -802,18 +836,23 @@ def process_kdp_leastsquare_double_window(procstatus, dscfg, radar_list=None):
              'Missing data')
         return None, None
 
-    r_res = radar.range['data'][1]-radar.range['data'][0]
-    swind_len = int(dscfg['rwinds']/r_res)
-    smin_valid = int(swind_len/2+1)
-    lwind_len = int(dscfg['rwindl']/r_res)
-    lmin_valid = int(lwind_len/2+1)
+    # user defined parameters
+    rwinds = dscfg.get('rwinds', 2000.)
+    rwindl = dscfg.get('rwindl', 6000.)
+    zthr = dscfg.get('Zthr', 40.)
     vectorize = dscfg.get('vectorize', False)
+
+    r_res = radar.range['data'][1]-radar.range['data'][0]
+    swind_len = int(rwinds/r_res)
+    smin_valid = int(swind_len/2+1)
+    lwind_len = int(rwindl/r_res)
+    lmin_valid = int(lwind_len/2+1)
 
     kdp_field = 'corrected_specific_differential_phase'
 
     kdp = pyart.retrieve.kdp_leastsquare_double_window(
         radar, swind_len=swind_len, smin_valid=smin_valid,
-        lwind_len=lwind_len, lmin_valid=lmin_valid, zthr=dscfg['Zthr'],
+        lwind_len=lwind_len, lmin_valid=lmin_valid, zthr=zthr,
         phidp_field=phidp_field, refl_field=refl_field, kdp_field=kdp_field,
         vectorize=vectorize)
 
@@ -842,17 +881,17 @@ def process_phidp_kdp_Vulpiani(procstatus, dscfg, radar_list=None):
         datatype : list of string. Dataset keyword
             The input data types
         rwind : float. Dataset keyword
-            The length of the segment [m]
+            The length of the segment [m]. Default 2000.
         n_iter : int. Dataset keyword
-            number of iterations
+            number of iterations. Default 3.
         interp : boolean. Dataset keyword
             if set non valid values are interpolated using neighbouring valid
-            values
+            values. Default 0 (False)
         parallel : boolean. Dataset keyword
-            if set use parallel computing
+            if set use parallel computing. Default 1 (True)
         get_phidp : boolean. Datset keyword
             if set the PhiDP computed by integrating the resultant KDP is
-            added to the radar field
+            added to the radar field. Default 0 (False)
         frequency : float. Dataset keyword
             the radar frequency [Hz]. If None that of the key
             frequency in attribute instrument_parameters of the radar
@@ -892,31 +931,18 @@ def process_phidp_kdp_Vulpiani(procstatus, dscfg, radar_list=None):
              'Missing data')
         return None, None
 
-    # number of iterations
-    n_iter = 3
-    if 'n_iter' in dscfg:
-        n_iter = dscfg['n_iter']
+    # user defined parameters
+    n_iter = dscfg.get('n_iter', 3)
+    rwind = dscfg.get('rwind', 2000.)
+    interp = dscfg.get('interp', 0)
+    parallel = dscfg.get('parallel', 1)
+    get_phidp = dscfg.get('get_phidp', 0)
 
     # window length (must be even)
     r_res = radar.range['data'][1]-radar.range['data'][0]
-    wind_len = int(dscfg['rwind']/r_res)
+    wind_len = int(rwind/r_res)
     if wind_len % 2 == 1:
         wind_len += 1
-
-    # interpolate invalid values?
-    interp = 0
-    if 'interp' in dscfg:
-        interp = dscfg['interp']
-
-    # parallel computing?
-    parallel = 1
-    if 'parallel' in dscfg:
-        parallel = dscfg['parallel']
-
-    # get PhiDP computed from KDP?
-    get_phidp = 0
-    if 'get_phidp' in dscfg:
-        get_phidp = dscfg['get_phidp']
 
     # get band
     freq = dscfg.get('frequency', None)
@@ -1076,7 +1102,7 @@ def process_attenuation(procstatus, dscfg, radar_list=None):
             The input data types
         ATT_METHOD : float. Dataset keyword
             The attenuation estimation method used. One of the following:
-            ZPhi, Philin
+            ZPhi, Philin. Default ZPhi
         fzl : float. Dataset keyword
             The default freezing level height. It will be used if no
             temperature field name is specified or the temperature field is

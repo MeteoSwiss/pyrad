@@ -2463,9 +2463,9 @@ def merge_scans_cfradial2(basepath, scan_list, radar_name, radar_res, voltime,
         radar object
 
     """
-    field_names = []
+    field_names = {}
     for datatype in datatype_list:
-        field_names.append(get_fieldname_pyart(datatype))
+        field_names[datatype] = (get_fieldname_pyart(datatype))
 
     radar = None
     dayinfo = voltime.strftime('%y%j')
@@ -2568,13 +2568,14 @@ def merge_scans_cfradial2(basepath, scan_list, radar_name, radar_res, voltime,
                 if fdatetime == voltime:
                     filename = [filename_aux]
                     break
+        elif cfg['path_convention'][ind_rad] == 'RADARV':
+            filename = glob.glob(datapath+'/'+voltime.strftime(fpath_strf)+'/*')
         else:
             filename = glob.glob(datapath+basename+timeinfo+'*'+scan+'*')
         if not filename:
             warn('No file found in '+datapath+basename+timeinfo+'*.'+scan)
         else:
-            radar_aux = pyart.io.read_cfradial2(
-                filename[0], field_names=field_names)
+            radar_aux = pyart.io.read_cfradial2(filename[0], field_names=field_names)
             if radar_aux is None:
                 continue
 

@@ -203,6 +203,9 @@ corrected_differential_reflectivity = 'corrected_differential_reflectivity'
 
 unfiltered_differential_reflectivity = 'unfiltered_differential_reflectivity'
 
+corrected_unfiltered_differential_reflectivity = (
+    'corrected_unfiltered_differential_reflectivity')
+
 differential_reflectivity_in_precipitation = (
     'differential_reflectivity_in_precipitation')
 
@@ -570,6 +573,8 @@ DEFAULT_FIELD_NAMES = {
     'corrected_differential_reflectivity': corrected_differential_reflectivity,
     'unfiltered_differential_reflectivity': (
         unfiltered_differential_reflectivity),
+    'corrected_unfiltered_differential_reflectivity': (
+        corrected_unfiltered_differential_reflectivity),
     'differential_reflectivity_in_precipitation': (
         differential_reflectivity_in_precipitation),
     'differential_reflectivity_in_snow': differential_reflectivity_in_snow,
@@ -1657,6 +1662,12 @@ DEFAULT_METADATA = {
         'coordinates': 'elevation azimuth range'},
 
     unfiltered_differential_reflectivity: {
+        'units': 'dB',
+        'standard_name': 'differential_reflectivity',
+        'long_name': 'Unfiltered differential reflectivity',
+        'coordinates': 'elevation azimuth range'},
+        
+    corrected_unfiltered_differential_reflectivity: {
         'units': 'dB',
         'standard_name': 'differential_reflectivity',
         'long_name': 'Unfiltered differential reflectivity',
@@ -3926,6 +3937,7 @@ DEFAULT_FIELD_COLORMAP = {
     differential_reflectivity: 'pyart_RefDiff',
     corrected_differential_reflectivity: 'pyart_RefDiff',
     unfiltered_differential_reflectivity: 'pyart_RefDiff',
+    corrected_unfiltered_differential_reflectivity: 'pyart_RefDiff',
     differential_reflectivity_in_precipitation: 'pyart_RefDiff',
     differential_reflectivity_in_snow: 'pyart_RefDiff',
     differential_reflectivity_column_height: 'pyart_RefDiff',
@@ -4194,6 +4206,7 @@ DEFAULT_FIELD_LIMITS = {
     corrected_differential_reflectivity: (-1., 2.),
     #unfiltered_differential_reflectivity: (-1., 8.),
     unfiltered_differential_reflectivity: (-10., 10.),
+    corrected_unfiltered_differential_reflectivity: (-10., 10.),
     differential_reflectivity_in_precipitation: (-10., 10.),
     differential_reflectivity_in_snow: (-10., 10.),
     differential_reflectivity_column_height: (0., 6.),

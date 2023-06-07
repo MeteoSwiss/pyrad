@@ -65,6 +65,15 @@ def process_echo_id(procstatus, dscfg, radar_list=None):
 
         datatype : list of string. Dataset keyword
             The input data types
+        wind_size : int
+            Size of the moving window used to compute the ray texture
+            (number of gates). Default 7
+        max_textphi, max_textrhv, max_textzdr, max_textrefl : float
+            Maximum value for the texture of the differential phase, texture
+            of RhoHV, texture of Zdr and texture of reflectivity. Gates in
+            these. Default 20, 0.3, 2.85, 8
+        min_rhv : float
+            Minimum value for the RhoHV. Default 0.6
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -110,13 +119,21 @@ def process_echo_id(procstatus, dscfg, radar_list=None):
 
     echo_id = np.ma.zeros((radar.nrays, radar.ngates), dtype=np.uint8)+3
 
+    # user defined parameters
+    wind_size = dscfg.get('wind_size', 7)
+    max_textphi = dscfg.get('max_textphi', 20.)
+    max_textrhv = dscfg.get('max_textrhv', 0.3)
+    max_textzdr = dscfg.get('max_textzdr', 2.85)
+    max_textrefl = dscfg.get('max_textrefl', 8.)
+    min_rhv = dscfg.get('min_rhv', 0.6)
+
     # look for clutter
     gatefilter = pyart.filters.moment_and_texture_based_gate_filter(
         radar, zdr_field=zdr_field, rhv_field=rhv_field, phi_field=phi_field,
         refl_field=refl_field, textzdr_field=None, textrhv_field=None,
-        textphi_field=None, textrefl_field=None, wind_size=7,
-        max_textphi=20., max_textrhv=0.3, max_textzdr=2.85,
-        max_textrefl=8., min_rhv=0.6)
+        textphi_field=None, textrefl_field=None, wind_size=wind_size,
+        max_textphi=max_textphi, max_textrhv=max_textrhv,
+        max_textzdr=max_textzdr, max_textrefl=max_textrefl, min_rhv=min_rhv)
 
     is_clutter = gatefilter.gate_excluded == 1
     echo_id[is_clutter] = 2
@@ -512,6 +529,9 @@ def process_echo_filter(procstatus, dscfg, radar_list=None):
         elif field_name.startswith('uncorrected_'):
             new_field_name = field_name.replace(
                 'uncorrected_', 'corrected_', 1)
+        elif field_name.startswith('unfiltered_'):
+            new_field_name = field_name.replace(
+                'unfiltered_', 'corrected_', 1)
         else:
             new_field_name = 'corrected_'+field_name
         new_dataset['radar_out'].add_field(new_field_name, radar_field)
@@ -635,7 +655,7 @@ def process_filter_snr(procstatus, dscfg, radar_list=None):
 
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype in ('SNRh', 'SNRv', 'SNR','CNR'):
+        if datatype in ('SNRh', 'SNRv', 'SNR', 'CNR'):
             snr_field = get_fieldname_pyart(datatype)
             break
 
@@ -670,7 +690,6 @@ def process_filter_snr(procstatus, dscfg, radar_list=None):
             gatefilter.exclude_invalid(snr_field)
             if min_snr is not None:
                 gatefilter.exclude_below(snr_field, min_snr)
-
 
     is_low_snr = gatefilter.gate_excluded == 1
 
@@ -823,7 +842,7 @@ def process_filter_visibility(procstatus, dscfg, radar_list=None):
         if datatype == 'VIS':
             vis_field = get_fieldname_pyart(datatype)
             break
-        elif 'visibility_polar' in datatype: # from GECSX
+        elif 'visibility_polar' in datatype:  # from GECSX
             vis_field = get_fieldname_pyart('visibility_polar')
 
     ind_rad = int(radarnr[5:8])-1
@@ -1064,8 +1083,8 @@ def process_filter_vol2bird(procstatus, dscfg, radar_list=None):
 
         field_name = get_fieldname_pyart(datatype)
         if field_name not in radar.fields:
-            warn('Unable to filter {} according to VOL2BIRD_CLASS. No valid input fields'.format(
-                 field_name))
+            warn(f'Unable to filter {field_name} according to VOL2BIRD_CLASS.'
+                 f' No valid input fields')
             continue
         radar_field = deepcopy(radar.fields[field_name])
         radar_field['data'] = np.ma.masked_where(
@@ -1363,8 +1382,9 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
         try:
             fields_dict = pyart.retrieve.hydroclass_semisupervised(
                 radar, hydro_names=hydro_names, var_names=var_names,
-                mass_centers=mass_centers, weights=weights, refl_field=refl_field,
-                zdr_field=zdr_field, rhv_field=rhv_field, kdp_field=kdp_field,
+                mass_centers=mass_centers, weights=weights,
+                refl_field=refl_field, zdr_field=zdr_field,
+                rhv_field=rhv_field, kdp_field=kdp_field,
                 temp_field=temp_field, iso0_field=iso0_field, hydro_field=None,
                 entropy_field=None, temp_ref=temp_ref,
                 compute_entropy=compute_entropy,
@@ -2181,9 +2201,11 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
                             continue
 
                         ml_top = (
-                            radar_ml.fields['melting_layer_height']['data'][:, 1])
+                            radar_ml.fields['melting_layer_height']['data'][
+                                :, 1])
                         ml_bottom = (
-                            radar_ml.fields['melting_layer_height']['data'][:, 0])
+                            radar_ml.fields['melting_layer_height']['data'][
+                                :, 0])
                         ml_thickness = ml_top-ml_bottom
                         ml_bottom_arr = np.ma.append(
                             ml_bottom_arr,
