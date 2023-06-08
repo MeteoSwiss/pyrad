@@ -2504,11 +2504,13 @@ def merge_scans_cfradial2(basepath, scan_list, radar_name, radar_res, voltime,
             if fdatetime == voltime:
                 filename = [filename_aux]
     elif cfg['path_convention'][ind_rad] == 'RADARV':
+        datapath = basepath+scan_list[0]
+        basename = '*'
         fpath_strf = (
             dataset_list[0][
                 dataset_list[0].find("D")+2:dataset_list[0].find("F")-2])
         fdate_strf = dataset_list[0][dataset_list[0].find("F")+2:-1]
-        filenames = glob.glob(basepath+scan_list[0]+'/'+'/'+
+        filenames = glob.glob(basepath+scan_list[0]+'/'+
                               voltime.strftime(fpath_strf)+'/*')
         filename = []
         for filename_aux in filenames:
@@ -2569,8 +2571,28 @@ def merge_scans_cfradial2(basepath, scan_list, radar_name, radar_res, voltime,
                     filename = [filename_aux]
                     break
         elif cfg['path_convention'][ind_rad] == 'RADARV':
-            filename = glob.glob(basepath+scan+'/'+'/'+
+            filenames = glob.glob(basepath+scan+'/'+'/'+
                               voltime.strftime(fpath_strf)+'/*')
+            filename = []
+            for filename_aux in filenames:
+                fdatetime = find_date_in_file_name(
+                    filename_aux, date_format=fdate_strf)
+                if cfg['MasterScanTimeTol'][ind_rad] == 0:
+                    if fdatetime == voltime:
+                        filename = [filename_aux]
+                        break
+                elif cfg['MasterScanTimeTol'][ind_rad] == 1:
+                    if (voltime <= fdatetime < voltime
+                            + datetime.timedelta(
+                                minutes=cfg['ScanPeriod'])):
+                        filename = [filename_aux]
+                        break
+                else:
+                    if (voltime
+                        - datetime.timedelta(minutes=cfg['ScanPeriod'])
+                            < fdatetime <= voltime):
+                        filename = [filename_aux]
+                        break
         else:
             filename = glob.glob(datapath+basename+timeinfo+'*'+scan+'*')
         if not filename:
@@ -2579,7 +2601,6 @@ def merge_scans_cfradial2(basepath, scan_list, radar_name, radar_res, voltime,
             radar_aux = pyart.io.read_cfradial2(filename[0], field_names=field_names)
             if radar_aux is None:
                 continue
-
             if radar is None:
                 radar = radar_aux
             else:
