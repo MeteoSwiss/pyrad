@@ -1244,13 +1244,13 @@ def process_colocated_gates(procstatus, dscfg, radar_list=None):
     if (len(radarnr_dict) != 2) or (len(radar_list) < 2):
         warn('Intercomparison requires data from two different radars')
         return None, None
-
+    
     # create the list of data types for each radar
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         if radarnr in radarnr_dict:
             radarnr_dict[radarnr].append(get_fieldname_pyart(datatype))
-
+    
     radar1 = radar_list[ind_radar_list[0]]
     radar2 = radar_list[ind_radar_list[1]]
 

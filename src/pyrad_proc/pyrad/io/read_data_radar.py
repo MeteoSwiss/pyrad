@@ -611,7 +611,7 @@ def get_data(voltime, datatypesdescr, cfg):
 
     if ndatatypes_gecsx > 0:
         radar_aux = merge_fields_gecsx(
-            cfg['loadbasepath'][ind_rad], cfg['loadname'][ind_rad],
+            cfg['gecsxbasepath'][ind_rad], cfg['gecsxname'][ind_rad],
             datatype_gecsx, dataset_gecsx, product_gecsx,
             rng_min=rmin, rng_max=rmax, ele_min=elmin, ele_max=elmax,
             azi_min=azmin, azi_max=azmax)
@@ -4026,12 +4026,11 @@ def merge_fields_gecsx(basepath, loadname, datatype_list,
             basepath+loadname+'/' +
             dataset+'/'+product_list[i]+'/')
         filename = glob.glob(
-            datapath+'*'+datatype_list[i]+'.nc')
+            datapath+'*'+datatype_list[i]+'*.nc')
         if not filename:
             warn('No file found in '+datapath+'*' +
-                 datatype_list[i]+'.nc')
+                 datatype_list[i]+'*.nc')
             continue
-
         try:
             radar_aux = pyart.io.read_cfradial(filename[0])
         except (OSError, KeyError) as ee:
