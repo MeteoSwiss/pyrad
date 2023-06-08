@@ -82,6 +82,10 @@ def main():
     parser.add_argument(
         '--proc_finish', type=int, default=None,
         help='Processing time allowed before shutdown (s)')
+    parser.add_argument(
+        '--hide_warnings', type=int, default=0,
+        help='Disables warnings shown during pyrad processing')
+
 
     args = parser.parse_args()
 
@@ -117,7 +121,8 @@ def main():
         try:
             end_proc = pyrad_main(
                 cfgfile_list, starttime=proc_starttime, endtime=proc_endtime,
-                proc_period=args.proc_period, proc_finish=args.proc_finish)
+                proc_period=args.proc_period, proc_finish=args.proc_finish,
+                hide_warning=args.hide_warnings)
         except Exception:
             traceback.print_exc()
             if args.proc_finish is None:
