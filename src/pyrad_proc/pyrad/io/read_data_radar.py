@@ -2508,8 +2508,8 @@ def merge_scans_cfradial2(basepath, scan_list, radar_name, radar_res, voltime,
             dataset_list[0][
                 dataset_list[0].find("D")+2:dataset_list[0].find("F")-2])
         fdate_strf = dataset_list[0][dataset_list[0].find("F")+2:-1]
-        datapath = (basepath+scan_list[0]+'/')
-        filenames = glob.glob(datapath+'/'+voltime.strftime(fpath_strf)+'/*')
+        filenames = glob.glob(basepath+scan_list[0]+'/'+'/'+
+                              voltime.strftime(fpath_strf)+'/*')
         filename = []
         for filename_aux in filenames:
             fdatetime = find_date_in_file_name(
@@ -2569,7 +2569,8 @@ def merge_scans_cfradial2(basepath, scan_list, radar_name, radar_res, voltime,
                     filename = [filename_aux]
                     break
         elif cfg['path_convention'][ind_rad] == 'RADARV':
-            filename = glob.glob(datapath+'/'+voltime.strftime(fpath_strf)+'/*')
+            filename = glob.glob(basepath+scan+'/'+'/'+
+                              voltime.strftime(fpath_strf)+'/*')
         else:
             filename = glob.glob(datapath+basename+timeinfo+'*'+scan+'*')
         if not filename:
