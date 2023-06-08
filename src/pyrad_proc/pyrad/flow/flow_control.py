@@ -265,7 +265,7 @@ def main(cfgfile, starttime=None, endtime=None, trajfile="", trajtype='plane',
 
 
 def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
-            proc_period=60, proc_finish=None):
+            proc_period=60, proc_finish=None, hide_warnings=False):
     """
     main flow control. Processes radar data in real time. The start and end
     processing times can be determined by the user. This function is inteded
@@ -285,6 +285,10 @@ def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
     proc_finish : int or None
         if set to a value the program will be forced to shut down after the
         value (in seconds) from start time has been exceeded
+    hide_warnings : bool
+        if set to true it will hide the warnings during the pyrad processing
+        this is useful when logging the outputs to log files, as they can 
+        become very large
 
     Returns
     -------
@@ -297,10 +301,13 @@ def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
            pyrad_version.username))
     print("- PYART version: " + pyart_version)
 
-    # Define behaviour of warnings
-    warnings.simplefilter('always')  # always print matching warnings
-    # warnings.simplefilter('error')  # turn matching warnings into exceptions
-    warnings.formatwarning = _warning_format  # define format
+    if hide_warnings:
+    	warnings.filterwarnings("ignore")
+    else:
+    	# Define behaviour of warnings
+    	warnings.simplefilter('always')  # always print matching warnings
+    	# warnings.simplefilter('error')  # turn matching warnings into exceptions
+    	warnings.formatwarning = _warning_format  # define format
 
     # The processing will be allowed to run for a limited period
     if proc_finish is not None:
