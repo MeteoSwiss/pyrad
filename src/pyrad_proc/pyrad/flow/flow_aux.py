@@ -987,6 +987,10 @@ def _create_cfg_dict(cfgfile):
         cfg.update({'loadbasepath': None})
     if 'loadname' not in cfg:
         cfg.update({'loadname': None})
+    if 'gecsxbasepath' not in cfg:
+        cfg.update({'gecsxbasepath': None})
+    if 'gecsxname' not in cfg:
+        cfg.update({'gecsxname': None})
     if 'RadarName' not in cfg:
         cfg.update({'RadarName': None})
     if 'RadarRes' not in cfg:
@@ -1031,12 +1035,12 @@ def _create_cfg_dict(cfgfile):
 
     # Convert the following strings to string arrays
     strarr_list = [
-        'datapath', 'cosmopath', 'dempath', 'loadbasepath', 'psrpath',
-        'iqpath', 'satpath', 'loadname', 'RadarName', 'RadarRes', 'ScanList',
-        'imgformat', 'frequency', 'radar_beam_width_h', 'radar_beam_width_v',
-        'pulse_width', 'nyquist_velocity', 'AntennaGainH', 'AntennaGainV',
-        'dBADUtodBmh', 'dBADUtodBmv', 'mflossh', 'mflossv', 'radconsth',
-        'radconstv', 'txpwrh', 'txpwrv', 'attg', 'path_convention']
+        'datapath', 'cosmopath', 'dempath', 'gecsxbasepath', 'gecsxname',
+        'loadbasepath', 'psrpath','iqpath', 'satpath', 'loadname', 'RadarName',
+        'RadarRes', 'ScanList','imgformat', 'frequency', 'radar_beam_width_h', 
+        'radar_beam_width_v','pulse_width', 'nyquist_velocity', 'AntennaGainH', 
+        'AntennaGainV', 'dBADUtodBmh', 'dBADUtodBmv', 'mflossh', 'mflossv',
+        'radconsth', 'radconstv', 'txpwrh', 'txpwrv', 'attg', 'path_convention']
     for param in strarr_list:
         if param in cfg and isinstance(cfg[param], str):
             cfg[param] = [cfg[param]]
@@ -1132,7 +1136,6 @@ def _create_cfg_dict(cfgfile):
         if isinstance(cfg['BinFileParams']['datatype'], str):
             cfg['BinFileParams']['datatype'] = [
                 cfg['BinFileParams']['datatype']]
-
     return cfg
 
 
@@ -1165,6 +1168,8 @@ def _create_datacfg_dict(cfg):
     datacfg.update({'dempath': cfg['dempath']})
     datacfg.update({'loadbasepath': cfg['loadbasepath']})
     datacfg.update({'loadname': cfg['loadname']})
+    datacfg.update({'gecsxbasepath': cfg['gecsxbasepath']})
+    datacfg.update({'gecsxname': cfg['gecsxname']})
     datacfg.update({'RadarName': cfg['RadarName']})
     datacfg.update({'RadarRes': cfg['RadarRes']})
     datacfg.update({'ScanPeriod': cfg['ScanPeriod']})
@@ -1542,7 +1547,7 @@ def _get_masterfile_list(datatypesdescr, starttimes, endtimes, datacfg,
         if (datagroup not in (
                 'COSMO', 'RAD4ALPCOSMO', 'CFRADIALCOSMO', 'DEM', 'RAD4ALPDEM',
                 'RAD4ALPHYDRO', 'RAD4ALPDOPPLER', 'RAD4ALPIQ', 'PSR',
-                'PSRSPECTRA')):
+                'PSRSPECTRA', 'GECSX')):
             masterdatatypedescr = datatypedescr
             if scan_list is not None:
                 masterscan = scan_list[int(radarnr[5:8])-1][0]
