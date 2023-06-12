@@ -200,7 +200,6 @@ def process_selfconsistency_kdp_phidp(procstatus, dscfg, radar_list=None):
                      'No selfconsistency files for the radar elevations.')
 
                 return None, None
-            import pdb; pdb.set_trace()
             zdr_kdpzh_dict = {'zdr_kdpzh': zdr_kdpzh_list,
                               'elev': el_list,
                               'freq_band': freq_band}
