@@ -2235,8 +2235,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
     """
     radarnr, datagroup, datatype, dataset, product = get_datatype_fields(
         datadescriptor)
-    ind_rad = int(radarnr[5:8])-1
 
+    ind_rad = int(radarnr[5:8])-1
     if datatype in ('Nh', 'Nv'):
         datatype = 'dBZ'
 
@@ -2415,6 +2415,20 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 dayfilelist = glob.glob(pattern)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
+            elif datagroup in ('GECSX'):
+                termination = '.nc'
+                # Choose any date 
+                import pdb; pdb.set_trace()
+                datapath = (cfg['gecsxbasepath'][ind_rad] + 
+                            cfg['gecsxname'][ind_rad] + '/' + 
+                            dataset +'/' + product+'/')
+                if not os.path.isdir(datapath):
+                    warn("WARNING: Unknown datapath '%s'" % datapath)
+                    continue
+                pattern = datapath+'*'+datatype+termination
+                dayfilelist = glob.glob(pattern)
+                for filename in dayfilelist:
+                    t_filelist.append(filename)
             elif datagroup in ('MFCFRADIAL', 'MFBIN', 'MFPNG', 'MFGRIB',
                                'MFDAT', 'MFCF'):
                 try:
@@ -2487,14 +2501,17 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 for filename in dayfilelist:
                     t_filelist.append(filename)
 
-        for filename in t_filelist:
-            filenamestr = str(filename)
-            fdatetime = get_datetime(filenamestr, datadescriptor)
-            if fdatetime is not None:
-                if starttime <= fdatetime <= endtime:
-                    if filenamestr not in filelist:
-                        filelist.append(filenamestr)
-    
+        if datagroup != 'GECSX':
+            for filename in t_filelist:
+                filenamestr = str(filename)
+                fdatetime = get_datetime(filenamestr, datadescriptor)
+                if fdatetime is not None:
+                    if starttime <= fdatetime <= endtime:
+                        if filenamestr not in filelist:
+                            filelist.append(filenamestr)
+        else: # For GECSX we ignore time, since the visibility is static
+            filelist = t_filelist
+            
         if not filelist:
             if pattern != None:
                 warn("WARNING: No file with pattern {:s} could be found between ".format(pattern)+\
