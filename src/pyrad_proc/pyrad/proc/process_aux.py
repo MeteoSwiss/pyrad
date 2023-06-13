@@ -147,6 +147,7 @@ def get_process_func(dataset_type, dsname):
                 'WBN': process_wbn_iq
                 'WIND_VEL': process_wind_vel
                 'WINDSHEAR': process_windshear
+                'WINDSHEAR_LIDAR': process_windshear_lidar
                 'ZDR': process_differential_reflectivity
                 'ZDR_IQ': process_differential_reflectivity_iq
                 'ZDR_PREC': process_zdr_precip
@@ -456,6 +457,8 @@ def get_process_func(dataset_type, dsname):
         func_name = 'process_vad'
     elif dataset_type == 'WINDSHEAR':
         func_name = 'process_windshear'
+    elif dataset_type == 'WINDSHEAR_LIDAR':
+        func_name = 'process_windshear_lidar'    
     elif dataset_type == 'HYDROCLASS':
         func_name = 'process_hydroclass'
     elif dataset_type == 'CENTROIDS':

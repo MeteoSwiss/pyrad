@@ -201,6 +201,7 @@ Doppler processing
     process_radial_velocity
     process_wind_vel
     process_windshear
+    process_windshear_lidar
     process_vad
 
 Time series functions
@@ -351,7 +352,7 @@ from .process_retrieve import process_rcs_pr, process_rainfall_accumulation
 from .process_retrieve import process_radial_noise_hs, process_vpr
 from .process_retrieve import process_radial_noise_ivic
 
-from .process_Doppler import process_wind_vel, process_windshear
+from .process_Doppler import process_wind_vel, process_windshear, process_windshear_lidar
 from .process_Doppler import process_radial_velocity, process_dealias_fourdd
 from .process_Doppler import process_dealias_region_based
 from .process_Doppler import process_dealias_unwrap_phase

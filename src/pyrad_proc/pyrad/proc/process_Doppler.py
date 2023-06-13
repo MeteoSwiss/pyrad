@@ -14,6 +14,7 @@ Functions for processing Doppler related parameters
     process_radial_velocity
     process_wind_vel
     process_windshear
+    process_windshear_lidar
     process_vad
     process_dda
 
@@ -693,6 +694,64 @@ def process_windshear(procstatus, dscfg, radar_list=None):
 
     return new_dataset, ind_rad
 
+def process_windshear_lidar(procstatus, dscfg, radar_list=None):
+    """
+    Estimates the wind shear from the wind velocity of lidar scans
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration. Accepted Configuration Keywords::
+
+        datatype : string. Dataset keyword
+            The input data type
+        az_tol : float
+            The tolerance in azimuth when looking for gates on top
+            of the gate when computation is performed
+
+    radar_list : list of Radar objects
+        Optional. list of radar objects
+
+    Returns
+    -------
+    new_dataset : dict
+        dictionary containing the output
+    ind_rad : int
+        radar index
+
+    """
+    if procstatus != 1:
+        return None, None
+
+    radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
+    wind_field = get_fieldname_pyart(datatype)
+
+    ind_rad = int(radarnr[5:8])-1
+    if radar_list[ind_rad] is None:
+        warn('No valid radar')
+        return None, None
+    radar = radar_list[ind_rad]
+
+    if wind_field not in radar.fields:
+        warn('Unable to retrieve wind shear. Missing data')
+        return None, None
+
+    az_tol = dscfg.get('az_tol', 0.5)
+    windshear_field = 'vertical_wind_shear'
+
+    windshear = pyart.retrieve.est_vertical_windshear_lidar(
+        radar, az_tol=az_tol, wind_field=wind_field,
+        windshear_field=windshear_field)
+
+    # prepare for exit
+    new_dataset = {'radar_out': deepcopy(radar)}
+    new_dataset['radar_out'].fields = dict()
+    new_dataset['radar_out'].add_field(windshear_field, windshear)
+
+    return new_dataset, ind_rad
 
 def process_vad(procstatus, dscfg, radar_list=None):
     """
