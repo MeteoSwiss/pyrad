@@ -817,7 +817,7 @@ def plot_dda_map(grid, bg_field_name, level, prdcfg, fname_list, titl=None,
             v_field='northward_wind_component',
             w_field='vertical_wind_component', title_flag=False, cmap=cmap)
 
-    elif display_type == 'streamline':
+    elif display_type == 'barbs':
         ax = pydda.vis.plot_horiz_xsection_barbs_map(
             grids, background_field=bg_field_name, level=level,
             show_lobes=True, bg_grid_no=0, vmin=vmin, vmax=vmax,
@@ -1064,7 +1064,7 @@ def plot_dda_slice(grid, bg_field_name, slice_type, level, prdcfg, fname_list,
                 v_field='northward_wind_component', w_field=w_field,
                 title_flag=False, cmap=cmap)
 
-        elif display_type == 'streamline':
+        elif display_type == 'barbs':
             ax = pydda.vis.plot_yz_xsection_barbs(
                 grids, background_field=bg_field_name, level=level,
                 bg_grid_no=0, vmin=vmin, vmax=vmax,
@@ -1105,7 +1105,7 @@ def plot_dda_slice(grid, bg_field_name, slice_type, level, prdcfg, fname_list,
                 v_field='northward_wind_component', w_field=w_field,
                 title_flag=False, cmap=cmap)
 
-        elif display_type == 'streamline':
+        elif display_type == 'barbs':
             ax = pydda.vis.plot_xz_xsection_barbs(
                 grids, background_field=bg_field_name, level=level,
                 bg_grid_no=0, vmin=vmin, vmax=vmax,
