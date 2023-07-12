@@ -455,7 +455,8 @@ def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
 
             # get data of master radar
             radar_list = _get_radars_data(
-                master_voltime, datatypesdescr_list, datacfg)
+                master_voltime, datatypesdescr_list, datacfg,
+                           num_radars=datacfg['NumRadars']))
 
             # process all data sets
             dscfg, traj = _process_datasets(
