@@ -381,6 +381,7 @@ height = 'height'
 interpolated_profile = 'interpolated_profile'
 
 # wind lidar variables
+corrected_radial_wind_speed = 'corrected_radial_wind_speed'
 radial_wind_speed = 'radial_wind_speed'
 radial_wind_speed_ci = 'radial_wind_speed_ci'
 radial_wind_speed_status = 'radial_wind_speed_status'
@@ -751,6 +752,7 @@ DEFAULT_FIELD_NAMES = {
     'occurrence': occurrence,
     'frequency_of_occurrence': frequency_of_occurrence,
     'interpolated_profile': interpolated_profile,
+    'corrected_radial_wind_speed': corrected_radial_wind_speed,
     'radial_wind_speed': radial_wind_speed,
     'radial_wind_speed_ci': radial_wind_speed_ci,
     'radial_wind_speed_status': radial_wind_speed_status,
@@ -3827,7 +3829,8 @@ DEFAULT_FIELD_COLORMAP = {
 
     height: 'pyart_SCook18',
     interpolated_profile: 'pyart_SCook18',
-
+    
+    corrected_radial_wind_speed: 'pyart_BuDRd18',
     radial_wind_speed: 'pyart_BuDRd18',
     #radial_wind_speed_ci:
     #radial_wind_speed_status:
@@ -3959,13 +3962,15 @@ DEFAULT_FIELD_LIMITS = {
     northward_wind_component: velocity_limit,
     vertical_wind_component: velocity_limit,
     azimuthal_horizontal_wind_component: velocity_limit,
+    radial_wind_speed: velocity_limit,
+    corrected_radial_wind_speed: velocity_limit,
     vertical_wind_shear: velocity_limit,
     retrieved_velocity: velocity_limit,
     retrieved_velocity_std: (0., 15.),
     velocity_difference: (-15., 15.),
     wind_speed: (0., 50.),
     wind_direction: (0., 360.),
-
+    
     spectrum_width: spectrum_width_limit,
     corrected_spectrum_width: spectrum_width_limit,
     unfiltered_spectrum_width: spectrum_width_limit,
