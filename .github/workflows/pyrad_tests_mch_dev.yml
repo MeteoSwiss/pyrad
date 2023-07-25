@@ -29,13 +29,18 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-         submodules: recursive
          ref : dev
       - name: Clone pyrad-tests
         uses: actions/checkout@main
         with:
           repository: MeteoSwiss/pyrad-tests
           path: pyrad-tests
+      - name: Clone pyart
+        uses: actions/checkout@main
+        with:
+          repository: MeteoSwiss/pyart
+          path: pyart
+          ref: dev
       - name: Setup Miniconda
         uses: conda-incubator/setup-miniconda@v2.0.0
         with:
@@ -54,7 +59,7 @@ jobs:
           pip install wradlib
       - name: Install pyart
         if: matrix.os != 'macos-latest'
-        working-directory: ${{github.workspace}}/src/pyart/
+        working-directory: ${{github.workspace}}/pyart/
         run: python setup.py install
       - name: Install pyrad
         if: matrix.os != 'macos-latest'
