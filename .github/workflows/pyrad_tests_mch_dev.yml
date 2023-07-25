@@ -60,11 +60,11 @@ jobs:
       - name: Install pyart
         if: matrix.os != 'macos-latest'
         working-directory: ${{github.workspace}}/pyart/
-        run: python setup.py install
+        run: python -m pip install .
       - name: Install pyrad
         if: matrix.os != 'macos-latest'
         working-directory: ${{github.workspace}}/src/pyrad_proc/
-        run: python setup.py install
+        run: python -m pip install .
       - name: Install DX50 lib
         working-directory: ${{github.workspace}}/src/libDX50/
         run: make
