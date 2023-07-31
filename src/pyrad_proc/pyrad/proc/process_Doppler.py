@@ -931,15 +931,18 @@ def process_dda(procstatus, dscfg, radar_list=None):
         grid.fields['reflectivity'] = grid.fields.pop(refl_fields[i])
 
     # DDA initialization
-    u_init, v_init, w_init = pydda.initialization.make_wind_field_from_profile(grids[0], 
+    winds_init = pydda.initialization.make_wind_field_from_profile(grids[0], 
                                 vad_avg, vel_field='velocity')
+    u_init = winds_init.fields['u']['data']
+    v_init = winds_init.fields['v']['data']
+    w_init = winds_init.fields['w']['data']
 
     # Actual DDA computation
     new_grids = pydda.retrieval.get_dd_wind_field(grids,
                                 u_init, v_init, w_init,
                                 vel_name='velocity', refl_field='reflectivity', 
                                 mask_outside_opt=True, wind_tol=0.01,
-                                engine='scipy', Co = Co, Cm = Cm)
+                                engine='scipy', Co = Co, Cm = Cm)[0]
 
     # pyDDA returns as many grid objects as input radars
     # the idea here is to merge these grid objects into one

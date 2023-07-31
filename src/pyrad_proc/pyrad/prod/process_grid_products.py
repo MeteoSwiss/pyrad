@@ -196,7 +196,7 @@ def generate_grid_products(dataset, prdcfg):
                 compression_opts: any
                     The compression options allowed by the hdf5. Depends on
                     the type of compression. Default 6 (The gzip compression
-                    level).
+                    level). 
         'SAVEVOL_GRID' : Same as before but can be used in a mixed GRID/VOL
             dataset, as there is no ambiguity with SAVEVOL for VOL datasets
         'STATS': Computes statistics over the whole images and stores them in
@@ -776,6 +776,11 @@ def generate_grid_products(dataset, prdcfg):
         new_dataset.fields = dict()
         new_dataset.add_field(
             field_name, dataset['radar_out'].fields[field_name])
+       
+        # This key is required for pyDDA processing but poses
+        # problem when saving to CFRadial
+        if 'additional_radars' in new_dataset.metadata:
+            new_dataset.metadata.pop('additional_radars')
 
         savedir = get_save_dir(
             prdcfg['basepath'], prdcfg['procname'], dssavedir,
@@ -786,7 +791,6 @@ def generate_grid_products(dataset, prdcfg):
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
 
         fname = savedir+fname
-
         if file_type == 'nc':
             pyart.io.write_grid(
                 fname, new_dataset, write_point_x_y_z=True,
