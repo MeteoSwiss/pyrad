@@ -177,9 +177,9 @@ def process_grid(procstatus, dscfg, radar_list=None):
     latmin = None
     latmax = None
 
-    lat = float(radar.latitude['data'])
-    lon = float(radar.longitude['data'])
-    alt = float(radar.altitude['data'])
+    lat = float(radar.latitude['data'][0])
+    lon = float(radar.longitude['data'][0])
+    alt = float(radar.altitude['data'][0])
 
     if 'gridConfig' in dscfg:
         if 'latmin' in dscfg['gridConfig']:

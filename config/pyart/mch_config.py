@@ -169,6 +169,7 @@ IQ_noise_power_vv_ADU = 'IQ_noise_power_vv_ADU'
 velocity = 'velocity'
 corrected_velocity = 'corrected_velocity'
 unfiltered_velocity = 'unfiltered_velocity'
+simulated_velocity = 'simulated_velocity'
 
 velocity_vv = 'velocity_vv'
 unfiltered_velocity_vv = 'unfiltered_velocity_vv'
@@ -381,6 +382,7 @@ height = 'height'
 interpolated_profile = 'interpolated_profile'
 
 # wind lidar variables
+corrected_radial_wind_speed = 'corrected_radial_wind_speed'
 radial_wind_speed = 'radial_wind_speed'
 radial_wind_speed_ci = 'radial_wind_speed_ci'
 radial_wind_speed_status = 'radial_wind_speed_status'
@@ -534,6 +536,7 @@ DEFAULT_FIELD_NAMES = {
     'sun_est_power_v': sun_est_power_v,
     'sun_est_differential_reflectivity': sun_est_differential_reflectivity,
     'velocity': velocity,
+    'simulated_velocity': simulated_velocity,
     'corrected_velocity': corrected_velocity,
     'unfiltered_velocity': unfiltered_velocity,
     'velocity_vv': velocity_vv,
@@ -751,6 +754,7 @@ DEFAULT_FIELD_NAMES = {
     'occurrence': occurrence,
     'frequency_of_occurrence': frequency_of_occurrence,
     'interpolated_profile': interpolated_profile,
+    'corrected_radial_wind_speed': corrected_radial_wind_speed,
     'radial_wind_speed': radial_wind_speed,
     'radial_wind_speed_ci': radial_wind_speed_ci,
     'radial_wind_speed_status': radial_wind_speed_status,
@@ -1432,6 +1436,13 @@ DEFAULT_METADATA = {
         'units': 'm/s',
         'standard_name': 'mean_Doppler_velocity',
         'long_name': 'Mean Doppler velocity',
+        'coordinates': 'elevation azimuth range'},
+
+    simulated_velocity: {
+        'units': 'meters_per_second',
+        'standard_name': (
+            'radial_velocity_of_scatterers_away_from_instrument'),
+        'long_name': 'Simulated mean doppler velocity',
         'coordinates': 'elevation azimuth range'},
 
     corrected_velocity: {
@@ -3256,38 +3267,39 @@ nexrad_cdm_field_mapping = {
 # NEXRAD Level 3 Product files.
 nexrad_level3_mapping = {
     # Message code : field name         # Product name
-    19: reflectivity,                   # Base Reflectivity
-    20: reflectivity,                   # Base Reflectivity
-    25: velocity,                       # Base Velocity
-    27: velocity,                       # Base Velocity
-    28: spectrum_width,                 # Base Spectrum Width
-    30: spectrum_width,                 # Base Spectrum Width
-    32: reflectivity,                   # Digital Hybrid Scan Reflectivity
-    34: None,                           # Clutter Filter Control
-    56: velocity,                       # Storm Relative Mean Radial Velocity
-    78: radar_estimated_rain_rate,      # Surface Rainfall Accum. (1 hr)
-    79: radar_estimated_rain_rate,      # Surface Rainfall Accum. (3 hr)
-    80: radar_estimated_rain_rate,      # Storm Total Rainfall Accumulation
-    94: reflectivity,                   # Base Reflectivity Data Array
-    99: velocity,                       # Base Velocity Data Array
-    134: None,                          # High Resolution VIL
-    135: None,                          # Enhanced Echo Tops
-    138: radar_estimated_rain_rate,     # Digital Storm Total Precipitation
-    159: differential_reflectivity,     # Digital Differential Reflectivity
-    161: cross_correlation_ratio,       # Digital Correlation Coefficient
-    163: specific_differential_phase,   # Digital Specific Differential Phase
-    165: radar_echo_classification,     # Digital Hydrometeor Classification
-    169: radar_estimated_rain_rate,     # One Hour Accumulation
-    170: radar_estimated_rain_rate,     # Digital Accumulation Array
-    171: radar_estimated_rain_rate,     # Storm Total Accumulation
-    172: radar_estimated_rain_rate,     # Digital Storm Total Accumulation
-    173: radar_estimated_rain_rate,     # Digital User-Selectable Accum.
-    174: radar_estimated_rain_rate,     # Digital 1 hr Diff. Accum.
-    175: radar_estimated_rain_rate,     # Digital Storm Total Diff. Accum.
-    177: radar_echo_classification,     # Hybrid Hydrometeor Classification
-    181: reflectivity,                  # Base Reflectivity
-    182: velocity,                      # Base Velocity
-    186: reflectivity,                  # Base Reflectivity
+    19: reflectivity,  # Base Reflectivity
+    20: reflectivity,  # Base Reflectivity
+    25: velocity,  # Base Velocity
+    27: velocity,  # Base Velocity
+    28: spectrum_width,  # Base Spectrum Width
+    30: spectrum_width,  # Base Spectrum Width
+    32: reflectivity,  # Digital Hybrid Scan Reflectivity
+    34: None,  # Clutter Filter Control
+    56: velocity,  # Storm Relative Mean Radial Velocity
+    78: radar_estimated_rain_rate,  # Surface Rainfall Accum. (1 hr)
+    79: radar_estimated_rain_rate,  # Surface Rainfall Accum. (3 hr)
+    80: radar_estimated_rain_rate,  # Storm Total Rainfall Accumulation
+    94: reflectivity,  # Base Reflectivity Data Array
+    99: velocity,  # Base Velocity Data Array
+    134: None,  # High Resolution VIL
+    135: None,  # Enhanced Echo Tops
+    138: radar_estimated_rain_rate,  # Digital Storm Total Precipitation
+    159: differential_reflectivity,  # Digital Differential Reflectivity
+    161: cross_correlation_ratio,  # Digital Correlation Coefficient
+    163: specific_differential_phase,  # Digital Specific Differential Phase
+    165: radar_echo_classification,  # Digital Hydrometeor Classification
+    169: radar_estimated_rain_rate,  # One Hour Accumulation
+    170: radar_estimated_rain_rate,  # Digital Accumulation Array
+    171: radar_estimated_rain_rate,  # Storm Total Accumulation
+    172: radar_estimated_rain_rate,  # Digital Storm Total Accumulation
+    173: radar_estimated_rain_rate,  # Digital User-Selectable Accum.
+    174: radar_estimated_rain_rate,  # Digital 1 hr Diff. Accum.
+    175: radar_estimated_rain_rate,  # Digital Storm Total Diff. Accum.
+    176: radar_estimated_rain_rate,  # Digital Inst. Precipitation Rate
+    177: radar_echo_classification,  # Hybrid Hydrometeor Classification
+    181: reflectivity,  # Base Reflectivity
+    182: velocity,  # Base Velocity
+    186: reflectivity,  # Base Reflectivity
 }
 
 # MDV files
@@ -3690,6 +3702,7 @@ DEFAULT_FIELD_COLORMAP = {
 
     sun_est_differential_reflectivity: 'pyart_RefDiff',
 
+    simulated_velocity: 'pyart_BuDRd18',
     velocity: 'pyart_BuDRd18',
     corrected_velocity: 'pyart_BuDRd18',
     unfiltered_velocity: 'pyart_BuDRd18',
@@ -3827,7 +3840,8 @@ DEFAULT_FIELD_COLORMAP = {
 
     height: 'pyart_SCook18',
     interpolated_profile: 'pyart_SCook18',
-
+    
+    corrected_radial_wind_speed: 'pyart_BuDRd18',
     radial_wind_speed: 'pyart_BuDRd18',
     #radial_wind_speed_ci:
     #radial_wind_speed_status:
@@ -3959,13 +3973,15 @@ DEFAULT_FIELD_LIMITS = {
     northward_wind_component: velocity_limit,
     vertical_wind_component: velocity_limit,
     azimuthal_horizontal_wind_component: velocity_limit,
+    radial_wind_speed: velocity_limit,
+    corrected_radial_wind_speed: velocity_limit,
     vertical_wind_shear: velocity_limit,
     retrieved_velocity: velocity_limit,
     retrieved_velocity_std: (0., 15.),
     velocity_difference: (-15., 15.),
     wind_speed: (0., 50.),
     wind_direction: (0., 360.),
-
+    
     spectrum_width: spectrum_width_limit,
     corrected_spectrum_width: spectrum_width_limit,
     unfiltered_spectrum_width: spectrum_width_limit,
