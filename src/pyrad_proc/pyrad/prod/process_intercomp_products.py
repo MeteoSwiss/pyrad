@@ -128,9 +128,7 @@ def generate_intercomp_products(dataset, prdcfg):
             timeformat='%Y%m%d')
 
         fname = savedir+fname[0]
-
         write_colocated_data_time_avg(dataset['intercomp_dict'], fname)
-
         print('saved colocated time averaged data file: '+fname)
 
         return fname
@@ -156,9 +154,10 @@ def generate_intercomp_products(dataset, prdcfg):
 
         for i, fname in enumerate(fname_list):
             fname_list[i] = savedir+fname
-
+        titl='colocated radar gates' + ' \n ' \
+            + dataset['timeinfo'].strftime(timeformat)
+        
         step = prdcfg.get('step', None)
-
         hist_2d, bin_edges1, bin_edges2, stats = compute_2d_stats(
             np.ma.asarray(dataset['intercomp_dict']['rad1_val']),
             np.ma.asarray(dataset['intercomp_dict']['rad2_val']),
@@ -178,7 +177,7 @@ def generate_intercomp_products(dataset, prdcfg):
             'intercep: '+'{:.2f}'.format(float(stats['intercep']))+'\n')
 
         plot_scatter(bin_edges1, bin_edges2, np.ma.asarray(hist_2d), field_name,
-                     field_name, fname_list, prdcfg, metadata=metadata,
+                     field_name, fname_list, prdcfg, titl=titl, metadata=metadata,
                      lin_regr=[stats['slope'], stats['intercep']],
                      lin_regr_slope1=stats['intercep_slope_1'],
                      rad1_name=dataset['intercomp_dict']['rad1_name'],

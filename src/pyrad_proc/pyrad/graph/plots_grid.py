@@ -573,13 +573,15 @@ def plot_latitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
     xmax = prdcfg['xsecImageConfig'].get('xmax', None)
     ymin = prdcfg['xsecImageConfig'].get('ymin', None)
     ymax = prdcfg['xsecImageConfig'].get('ymax', None)
-
+    vmin = prdcfg.get('vmin', None)
+    vmax = prdcfg.get('vmax', None)
+    
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
     ax = fig.add_subplot(111, aspect='equal')
     display = pyart.graph.GridMapDisplay(grid)
     display.plot_latitude_slice(
         field_name, lon=lon, lat=lat, norm=norm, colorbar_orient='horizontal',
-        ticks=ticks, ticklabs=ticklabs, ax=ax, fig=fig)
+        ticks=ticks, ticklabs=ticklabs, ax=ax, fig=fig, vmin=vmin, vmax=vmax)
     ax.set_xlim([xmin, xmax])
     ax.set_ylim([ymin, ymax])
 
@@ -624,13 +626,15 @@ def plot_longitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
     xmax = prdcfg['xsecImageConfig'].get('xmax', None)
     ymin = prdcfg['xsecImageConfig'].get('ymin', None)
     ymax = prdcfg['xsecImageConfig'].get('ymax', None)
-
+    vmin = prdcfg.get('vmin', None)
+    vmax = prdcfg.get('vmax', None)
+    
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
     ax = fig.add_subplot(111, aspect='equal')
     display = pyart.graph.GridMapDisplay(grid)
     display.plot_longitude_slice(
         field_name, lon=lon, lat=lat, norm=norm, colorbar_orient='horizontal',
-        ticks=ticks, ticklabs=ticklabs, ax=ax, fig=fig)
+        ticks=ticks, ticklabs=ticklabs, ax=ax, fig=fig, vmin=vmin, vmax=vmax)
     ax.set_xlim([xmin, xmax])
     ax.set_ylim([ymin, ymax])
 
@@ -671,6 +675,8 @@ def plot_latlon_slice(grid, field_name, coord1, coord2, prdcfg, fname_list):
 
     xsize = prdcfg['xsecImageConfig'].get('xsize', 10.)
     ysize = prdcfg['xsecImageConfig'].get('ysize', 5.)
+    vmin = prdcfg.get('vmin', None)
+    vmax = prdcfg.get('vmax', None)
     # xmin = prdcfg['xsecImageConfig'].get('xmin', None)
     # xmax = prdcfg['xsecImageConfig'].get('xmax', None)
     # ymin = prdcfg['xsecImageConfig'].get('ymin', None)
@@ -682,7 +688,7 @@ def plot_latlon_slice(grid, field_name, coord1, coord2, prdcfg, fname_list):
     display.plot_latlon_slice(
         field_name, coord1=coord1, coord2=coord2, norm=norm,
         colorbar_orient='vertical', ticks=ticks, ticklabs=ticklabs, fig=fig,
-        ax=ax, axislabels_flag=True)
+        ax=ax, axislabels_flag=True, vmin = vmin, vmax = vmax)
     # ax.set_ylim(
     #    [prdcfg['xsecImageConfig']['ymin'], prdcfg['xsecImageConfig']['ymax']])
 
@@ -817,7 +823,7 @@ def plot_dda_map(grid, bg_field_name, level, prdcfg, fname_list, titl=None,
             v_field='northward_wind_component',
             w_field='vertical_wind_component', title_flag=False, cmap=cmap)
 
-    elif display_type == 'streamline':
+    elif display_type == 'barbs':
         ax = pydda.vis.plot_horiz_xsection_barbs_map(
             grids, background_field=bg_field_name, level=level,
             show_lobes=True, bg_grid_no=0, vmin=vmin, vmax=vmax,
@@ -1064,7 +1070,7 @@ def plot_dda_slice(grid, bg_field_name, slice_type, level, prdcfg, fname_list,
                 v_field='northward_wind_component', w_field=w_field,
                 title_flag=False, cmap=cmap)
 
-        elif display_type == 'streamline':
+        elif display_type == 'barbs':
             ax = pydda.vis.plot_yz_xsection_barbs(
                 grids, background_field=bg_field_name, level=level,
                 bg_grid_no=0, vmin=vmin, vmax=vmax,
@@ -1105,7 +1111,7 @@ def plot_dda_slice(grid, bg_field_name, slice_type, level, prdcfg, fname_list,
                 v_field='northward_wind_component', w_field=w_field,
                 title_flag=False, cmap=cmap)
 
-        elif display_type == 'streamline':
+        elif display_type == 'barbs':
             ax = pydda.vis.plot_xz_xsection_barbs(
                 grids, background_field=bg_field_name, level=level,
                 bg_grid_no=0, vmin=vmin, vmax=vmax,
