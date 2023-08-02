@@ -245,7 +245,6 @@ def read_geotiff_data(fname, fill_value = None):
         projparams = _proj4_str_to_dict(srs.ExportToProj4())
         if not len(projparams): # gdal could not read proj
             projparams = None
-        import pdb; pdb.set_trace()
         width = raster.RasterXSize
         height = raster.RasterYSize
         gt = raster.GetGeoTransform()
