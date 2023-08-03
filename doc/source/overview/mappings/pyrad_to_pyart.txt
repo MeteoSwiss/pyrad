@@ -338,6 +338,7 @@ VOL2BIRD_WEATHER,vol2bird_weather
 VOL2BIRD_BACKGROUND,vol2bird_background
 VOL2BIRD_BIOLOGY,vol2bird_biology
 wind_vel_rad,radial_wind_speed
+wind_vel_rad_filtered,corrected_radial_wind_speed
 wind_vel_rad_ci,radial_wind_speed_ci
 wind_vel_rad_status,radial_wind_speed_status
 WD,doppler_spectrum_width

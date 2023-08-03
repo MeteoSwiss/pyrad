@@ -1,8 +1,6 @@
 # %%
 import pandas as pd
 import inspect
-import importlib
-import os
 from pathlib import Path
 
 from pyrad.io import io_aux
