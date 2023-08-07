@@ -14,12 +14,12 @@ The Python ARM Radar Toolkit - Py-ART
    :hidden:
    :caption: Reference Guide
 
-   overview/index.rst
+   API/index.rst
 
 .. toctree::
    :maxdepth: 2
    :hidden:
-   :caption: Product overview
+   :caption: Feature overview
 
    overview/index.rst
 

@@ -40,6 +40,11 @@ jobs:
         run: |
           pip install -e .
 
+      - name: Run mapping codes
+        working-directory: ${{github.workspace}}/ci/
+        run: |
+          bash run_all.sh
+
       # Build the website
       - name: Build the site
         run: |
