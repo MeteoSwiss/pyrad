@@ -38,7 +38,7 @@ from pyart.core import cartesian_to_geographic_aeqd
 from pyart.map import grid_from_radars
 from pyart.util import compute_directional_stats
 from pyart.util import compute_azimuthal_average, subset_radar
-from pyart.util import find_neighbour_gates, lin_trans_aux
+from pyart.util import find_neighbour_gates
 
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from ..io.read_data_sensor import read_trt_traj_data
@@ -1727,7 +1727,7 @@ def process_moving_azimuthal_average(procstatus, dscfg, radar_list=None):
                 field_aux = radar_aux.fields[field_name]['data'][:, inds_rng]
                 field_aux = field_aux[inds_ray, :]
                 if avg_type == 'mean':
-                    if lin_trans_aux[field_name]:
+                    if lin_trans[field_name]:
                         field_aux = np.ma.power(10., 0.1 * field_aux)
 
                 vals, _ = compute_directional_stats(
@@ -1735,7 +1735,7 @@ def process_moving_azimuthal_average(procstatus, dscfg, radar_list=None):
                     axis=0)
 
                 if avg_type == 'mean':
-                    if lin_trans_aux[field_name]:
+                    if lin_trans[field_name]:
                         vals = 10. * np.ma.log10(vals)
 
                 radar_out.fields[field_name]['data'][ind_ray, :] = vals
