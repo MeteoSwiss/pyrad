@@ -10,7 +10,11 @@ from pyrad import proc
 mainpath = Path(__file__).resolve().parent.parent
 procpath = Path(mainpath, 'src', 'pyrad_proc', 'pyrad', 'proc')
 OUT_DIRECTORY = str(Path(mainpath, 'doc', 'source', 'overview'))
+DOC_PATH = 'https://wolfidan.github.io/pyrad/_modules/pyrad'
 
+def funcpath_to_docpath(funcpath):
+    funcpath = funcpath.split('pyrad')[-1]
+    return DOC_PATH + funcpath.replace('.py', '.html')
 
 def dict_to_restructured_text(yaml_data):
     rst_output = []
@@ -27,7 +31,7 @@ def dict_to_restructured_text(yaml_data):
             rst_output.append(f"{key2}")
             rst_output.append('""""""""""""""""""""""""""""""')
             rst_output.append('description')
-            rst_output.append('   ' + value2['description'] + '\n')
+            rst_output.append('   ' + value2['description'] + f'\n `*[Source]* <{value2["link"]}>`_' )
             rst_output.append('parameters')
             params = value2['parameters']
             for key3, value3 in params.items():
@@ -107,8 +111,10 @@ with open(file_path, 'r') as f:
 for processtype in all_processes:
     for process in all_processes[processtype]:
         fun = getattr(proc, all_processes[processtype][process])
+        funcname = all_processes[processtype][process]
         docstr = inspect.getdoc(fun)
         parameters = process_docstring(docstr)
+        parameters['link'] = funcpath_to_docpath(inspect.getfile(fun)) +'#' + funcname 
         all_processes[processtype][process] = parameters
 
 # Convert dict data to reStructuredText format

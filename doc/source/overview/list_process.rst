@@ -7,7 +7,7 @@ ATTENUATION
 """"""""""""""""""""""""""""""
 description
    Computes specific attenuation and specific differential attenuation using the Z-Phi method and corrects reflectivity and differential reflectivity
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_attenuation>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -20,7 +20,7 @@ AZI_AVG
 """"""""""""""""""""""""""""""
 description
    Averages radar data in azimuth obtaining and RHI as a result
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_azimuthal_average>`_
 parameters
    datatype : string. Dataset keyword
        The data type where we want to extract the point measurement
@@ -39,7 +39,7 @@ MOVING_AZI_AVG
 """"""""""""""""""""""""""""""
 description
    Applies a moving azimuthal average to the radar data
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_moving_azimuthal_average>`_
 parameters
    datatype : string. Dataset keyword
        The data type where we want to extract the point measurement
@@ -56,7 +56,7 @@ BIAS_CORRECTION
 """"""""""""""""""""""""""""""
 description
    Corrects a bias on the data
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_correct_bias>`_
 parameters
    datatype : string. Dataset keyword
        The data type to correct for bias
@@ -67,7 +67,7 @@ BIRDS_ID
 """"""""""""""""""""""""""""""
 description
    identifies echoes as 0: No data, 1: Noise, 2: Clutter, 3: Birds
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_birds_id>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -76,7 +76,7 @@ BIRD_DENSITY
 """"""""""""""""""""""""""""""
 description
    Computes the bird density from the volumetric reflectivity
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_bird_density>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -87,7 +87,7 @@ CCOR
 """"""""""""""""""""""""""""""
 description
    Computes the Clutter Correction Ratio, i.e. the ratio between the signal without Doppler filtering and the signal with Doppler filtering
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_ccor>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -96,7 +96,7 @@ CDF
 """"""""""""""""""""""""""""""
 description
    Collects the fields necessary to compute the Cumulative Distribution Function
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_cdf>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -105,7 +105,7 @@ CDR
 """"""""""""""""""""""""""""""
 description
    Computes Circular Depolarization Ratio
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_cdr>`_
 parameters
    datatype : string. Dataset keyword
        The input data type
@@ -114,7 +114,7 @@ CLT_TO_SAN
 """"""""""""""""""""""""""""""
 description
    Converts clutter exit code from rad4alp into pyrad echo ID
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_clt_to_echo_id>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -123,7 +123,7 @@ COSMO
 """"""""""""""""""""""""""""""
 description
    Gets COSMO data and put it in radar coordinates
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_cosmo>`_
 parameters
    datatype : string. Dataset keyword
        arbitrary data type
@@ -140,7 +140,7 @@ COSMO_LOOKUP
 """"""""""""""""""""""""""""""
 description
    Gets COSMO data and put it in radar coordinates using look up tables computed or loaded when initializing
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_cosmo_lookup_table>`_
 parameters
    datatype : string. Dataset keyword
        arbitrary data type
@@ -157,7 +157,7 @@ DEM
 """"""""""""""""""""""""""""""
 description
    Gets DEM data and put it in radar coordinates
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_dem.html#process_dem>`_
 parameters
    datatype : string. Dataset keyword
        arbitrary data type
@@ -174,7 +174,7 @@ DEALIAS_FOURDD
 """"""""""""""""""""""""""""""
 description
    Dealiases the Doppler velocity field using the 4DD technique from Curtis and Houze, 2001
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_dealias_fourdd>`_
 parameters
    datatype : string. Dataset keyword
        The input data type
@@ -187,7 +187,7 @@ DEALIAS_REGION
 """"""""""""""""""""""""""""""
 description
    Dealiases the Doppler velocity field using a region based algorithm
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_dealias_region_based>`_
 parameters
    datatype : string. Dataset keyword
        The input data type
@@ -204,7 +204,7 @@ DEALIAS_UNWRAP
 """"""""""""""""""""""""""""""
 description
    Dealiases the Doppler velocity field using multi-dimensional phase unwrapping
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_dealias_unwrap_phase>`_
 parameters
    datatype : string. Dataset keyword
        The input data type
@@ -215,7 +215,7 @@ DOPPLER_VELOCITY
 """"""""""""""""""""""""""""""
 description
    Compute the Doppler velocity from the spectral reflectivity
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_Doppler_velocity>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -224,7 +224,7 @@ DOPPLER_VELOCITY_IQ
 """"""""""""""""""""""""""""""
 description
    Compute the Doppler velocity from the spectral reflectivity
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_Doppler_velocity_iq>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -235,7 +235,7 @@ DOPPLER_WIDTH
 """"""""""""""""""""""""""""""
 description
    Compute the Doppler spectrum width from the spectral reflectivity
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_Doppler_width>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -244,7 +244,7 @@ DOPPLER_WIDTH_IQ
 """"""""""""""""""""""""""""""
 description
    Compute the Doppler spectrum width from the spectral reflectivity
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_Doppler_width_iq>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -257,7 +257,7 @@ ECHO_FILTER
 """"""""""""""""""""""""""""""
 description
    Masks all echo types that are not of the class specified in keyword echo_type
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_echo_filter>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -268,7 +268,7 @@ FIELDS_DIFF
 """"""""""""""""""""""""""""""
 description
    Computes the field difference between RADAR001 and radar002, i.e. RADAR001-RADAR002. Assumes both radars have the same geometry
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_fields_diff>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -277,7 +277,7 @@ FIXED_RNG
 """"""""""""""""""""""""""""""
 description
    Obtains radar data at a fixed range
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_fixed_rng>`_
 parameters
    datatype : list of strings. Dataset keyword
        The fields we want to extract
@@ -292,7 +292,7 @@ FIXED_RNG_SPAN
 """"""""""""""""""""""""""""""
 description
    For each azimuth-elevation gets the data within a fixed range span and computes a user-defined statistic: mean, min, max, mode, median
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_fixed_rng_span>`_
 parameters
    datatype : list of strings. Dataset keyword
        The fields we want to extract
@@ -305,7 +305,7 @@ GECSX
 """"""""""""""""""""""""""""""
 description
    Computes ground clutter RCS, radar visibility and many others using the GECSX algorithmn translated from IDL into python
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_dem.html#process_gecsx>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -314,7 +314,7 @@ HYDROCLASS
 """"""""""""""""""""""""""""""
 description
    Classifies precipitation echoes
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_hydroclass>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -355,7 +355,7 @@ HZT
 """"""""""""""""""""""""""""""
 description
    Gets iso0 degree data in HZT format and put it in radar coordinates
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_hzt>`_
 parameters
    metranet_read_lib : str. Global keyword
        Type of METRANET reader library used to read the data. Can be 'C' or 'python'
@@ -374,7 +374,7 @@ HZT_LOOKUP
 """"""""""""""""""""""""""""""
 description
    Gets HZT data and put it in radar coordinates using look up tables computed or loaded when initializing
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_hzt_lookup_table>`_
 parameters
    metranet_read_lib : str. Global keyword
        Type of METRANET reader library used to read the data. Can be 'C' or 'python'
@@ -389,7 +389,7 @@ ISO0_GRIB
 """"""""""""""""""""""""""""""
 description
    Gets iso0 degree data in GRIB format and put it in radar coordinates. This function is meant to process data received from the MeteoFrance NWP model. It can output the height over the iso0 of each gate or the iso0 height at each gate
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_iso0_grib>`_
 parameters
    datatype : string. Dataset keyword
        arbitrary data type
@@ -402,7 +402,7 @@ ISO0_MF
 """"""""""""""""""""""""""""""
 description
    Gets iso0 degree data in text format and put it in radar coordinates. This function is meant to process data received from the MeteoFrance NWP model. The model provides a maximum of 9 points at 0.5 degree lat/lon spacing surrounding a given radar. If a point is not provided it means that the iso0 for that point is at or below the ground level. Out of these points a single reference iso-0 is obtained according to the user defined iso0 statistic.
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_iso0_mf>`_
 parameters
    datatype : string. Dataset keyword
        arbitrary data type
@@ -413,7 +413,7 @@ KDP_LEASTSQUARE_1W
 """"""""""""""""""""""""""""""
 description
    Computes specific differential phase using a piecewise least square method
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_kdp_leastsquare_single_window>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -426,7 +426,7 @@ KDP_LEASTSQUARE_2W
 """"""""""""""""""""""""""""""
 description
    Computes specific differential phase using a piecewise least square method
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_kdp_leastsquare_double_window>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -443,7 +443,7 @@ L
 """"""""""""""""""""""""""""""
 description
    Computes L parameter
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_l>`_
 parameters
    datatype : string. Dataset keyword
        The input data type
@@ -452,7 +452,7 @@ MEAN_PHASE_IQ
 """"""""""""""""""""""""""""""
 description
    Computes the mean phase from the horizontal or vertical IQ data
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_mean_phase_iq>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -461,7 +461,7 @@ NCVOL
 """"""""""""""""""""""""""""""
 description
    Dummy function that allows to save the entire radar object
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_save_radar>`_
 parameters
    
        
@@ -470,7 +470,7 @@ NOISE_POWER
 """"""""""""""""""""""""""""""
 description
    Computes the noise power from the spectra
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_noise_power>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -487,7 +487,7 @@ OUTLIER_FILTER
 """"""""""""""""""""""""""""""
 description
    filters out gates which are outliers respect to the surrounding
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_outlier_filter>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -504,7 +504,7 @@ PHIDP0_CORRECTION
 """"""""""""""""""""""""""""""
 description
    corrects phidp of the system phase
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_correct_phidp0>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -523,7 +523,7 @@ PHIDP0_ESTIMATE
 """"""""""""""""""""""""""""""
 description
    estimates the system differential phase offset at each ray
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_estimate_phidp0>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -542,7 +542,7 @@ PHIDP_KDP_KALMAN
 """"""""""""""""""""""""""""""
 description
    Computes specific differential phase and differential phase using the Kalman filter as proposed by Schneebeli et al. The data is assumed to be clutter free and continous
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_phidp_kdp_Kalman>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -557,7 +557,7 @@ PHIDP_KDP_LP
 """"""""""""""""""""""""""""""
 description
    Estimates PhiDP and KDP using a linear programming algorithm. This method only retrieves data in rain (i.e. below the melting layer)
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_phidp_kdp_lp>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -572,7 +572,7 @@ PHIDP_KDP_VULPIANI
 """"""""""""""""""""""""""""""
 description
    Computes specific differential phase and differential phase using the method developed by Vulpiani et al. The data is assumed to be clutter free and monotonous
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_phidp_kdp_Vulpiani>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -593,7 +593,7 @@ PHIDP_SMOOTH_1W
 """"""""""""""""""""""""""""""
 description
    corrects phidp of the system phase and smoothes it using one window
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_smooth_phidp_single_window>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -614,7 +614,7 @@ PHIDP_SMOOTH_2W
 """"""""""""""""""""""""""""""
 description
    corrects phidp of the system phase and smoothes it using one window
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_smooth_phidp_double_window>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -639,7 +639,7 @@ POL_VARIABLES
 """"""""""""""""""""""""""""""
 description
    Computes the polarimetric variables from the complex spectra
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_pol_variables>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -654,7 +654,7 @@ POL_VARIABLES_IQ
 """"""""""""""""""""""""""""""
 description
    Computes the polarimetric variables from the IQ data
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_pol_variables_iq>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -673,7 +673,7 @@ PWR
 """"""""""""""""""""""""""""""
 description
    Computes the signal power in dBm
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_signal_power>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -692,7 +692,7 @@ RADAR_RESAMPLING
 """"""""""""""""""""""""""""""
 description
    Resamples the radar data to mimic another radar with different geometry and antenna pattern
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_radar_resampling>`_
 parameters
    
        
@@ -701,7 +701,7 @@ RADIAL_NOISE_HS
 """"""""""""""""""""""""""""""
 description
    Computes the radial noise from the signal power using the Hildebrand and Sekhon 1974 method
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_radial_noise_hs>`_
 parameters
    datatype : string. Dataset keyword
        The input data type
@@ -718,7 +718,7 @@ RADIAL_NOISE_IVIC
 """"""""""""""""""""""""""""""
 description
    Computes the radial noise from the signal power using the Ivic 2013 method
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_radial_noise_ivic>`_
 parameters
    datatype : string. Dataset keyword
        The input data type
@@ -735,7 +735,7 @@ RADIAL_VELOCITY
 """"""""""""""""""""""""""""""
 description
    Estimates the radial velocity respect to the radar from the wind velocity
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_radial_velocity>`_
 parameters
    datatype : string. Dataset keyword
        The input data type
@@ -748,7 +748,7 @@ RAINRATE
 """"""""""""""""""""""""""""""
 description
    Estimates rainfall rate from polarimetric moments
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_rainrate>`_
 parameters
    datatype : string. Dataset keyword
        The input data type
@@ -775,7 +775,7 @@ RAW
 """"""""""""""""""""""""""""""
 description
    Dummy function that returns the initial input data set
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_raw>`_
 parameters
    
        
@@ -784,7 +784,7 @@ REFLECTIVITY
 """"""""""""""""""""""""""""""
 description
    Computes reflectivity from the spectral reflectivity
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_reflectivity>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -793,7 +793,7 @@ REFLECTIVITY_IQ
 """"""""""""""""""""""""""""""
 description
    Computes reflectivity from the IQ data
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_reflectivity_iq>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -804,7 +804,7 @@ RCS
 """"""""""""""""""""""""""""""
 description
    Computes the radar cross-section (assuming a point target) from radar reflectivity.
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_rcs>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -821,7 +821,7 @@ RCS_PR
 """"""""""""""""""""""""""""""
 description
    Computes the radar cross-section (assuming a point target) from radar reflectivity by first computing the received power and then the RCS from it.
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_rcs_pr>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -846,7 +846,7 @@ RHOHV_CORRECTION
 """"""""""""""""""""""""""""""
 description
    identifies echoes as 0: No data, 1: Noise, 2: Clutter, 3: Precipitation
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_correct_noise_rhohv>`_
 parameters
    datatype : list of string. Dataset keyword
        The data types used in the correction
@@ -855,7 +855,7 @@ RHOHV_RAIN
 """"""""""""""""""""""""""""""
 description
    Keeps only suitable data to evaluate the 80 percentile of RhoHV in rain
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_rhohv_rain>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -876,7 +876,7 @@ ROI
 """"""""""""""""""""""""""""""
 description
    Obtains the radar data at a region of interest defined by a TRT file or by the user.
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_roi>`_
 parameters
    datatype : string. Dataset keyword
        The data type where we want to extract the point measurement
@@ -903,7 +903,7 @@ ROI2
 """"""""""""""""""""""""""""""
 description
    Obtains the radar data at a region of interest defined by a TRT file or by the user. More information is kept
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_roi2>`_
 parameters
    datatype : string. Dataset keyword
        The data type where we want to extract the point measurement
@@ -930,7 +930,7 @@ SAN
 """"""""""""""""""""""""""""""
 description
    identifies echoes as 0: No data, 1: Noise, 2: Clutter, 3: Precipitation
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_echo_id>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -945,7 +945,7 @@ SELFCONSISTENCY_BIAS
 """"""""""""""""""""""""""""""
 description
    Estimates the reflectivity bias by means of the selfconsistency algorithm by Gourley
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_selfconsistency_bias>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -990,7 +990,7 @@ SELFCONSISTENCY_BIAS2
 """"""""""""""""""""""""""""""
 description
    Estimates the reflectivity bias by means of the selfconsistency algorithm by Gourley
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_selfconsistency_bias2>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1029,7 +1029,7 @@ SELFCONSISTENCY_KDP_PHIDP
 """"""""""""""""""""""""""""""
 description
    Computes specific differential phase and differential phase in rain using the selfconsistency between Zdr, Zh and KDP
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_selfconsistency_kdp_phidp>`_
 parameters
    datatype : list of strings. Dataset keyword
        The input data types
@@ -1054,7 +1054,7 @@ SNR
 """"""""""""""""""""""""""""""
 description
    Computes SNR
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_snr>`_
 parameters
    datatype : string. Dataset keyword
        The input data type
@@ -1065,7 +1065,7 @@ SNR_FILTER
 """"""""""""""""""""""""""""""
 description
    filters out low SNR echoes
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_filter_snr>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1076,7 +1076,7 @@ ST1_IQ
 """"""""""""""""""""""""""""""
 description
    Computes the statistical test one lag fluctuation from the horizontal or vertical IQ data
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_st1_iq>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1085,7 +1085,7 @@ ST2_IQ
 """"""""""""""""""""""""""""""
 description
    Computes the statistical test two lag fluctuation from the horizontal or vertical IQ data
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_st2_iq>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1094,7 +1094,7 @@ TRAJ_TRT
 """"""""""""""""""""""""""""""
 description
    Processes data according to TRT trajectory
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_traj.html#process_traj_trt>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1111,7 +1111,7 @@ TRAJ_TRT_CONTOUR
 """"""""""""""""""""""""""""""
 description
    Gets the TRT cell contour corresponding to each radar volume
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_traj.html#process_traj_trt_contour>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1122,7 +1122,7 @@ TURBULENCE
 """"""""""""""""""""""""""""""
 description
    Computes turbulence from the Doppler spectrum width and reflectivity using the PyTDA package
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_turbulence>`_
 parameters
    datatype : string. Dataset keyword
        The input data type
@@ -1145,7 +1145,7 @@ VAD
 """"""""""""""""""""""""""""""
 description
    Estimates vertical wind profile using the VAD (velocity Azimuth Display) technique
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_vad>`_
 parameters
    datatype : string. Dataset keyword
        The input data type
@@ -1154,7 +1154,7 @@ VEL_FILTER
 """"""""""""""""""""""""""""""
 description
    filters out range gates that could not be used for Doppler velocity estimation
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_filter_vel_diff>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1163,7 +1163,7 @@ VIS
 """"""""""""""""""""""""""""""
 description
    Gets the visibility in percentage from the minimum visible elevation. Anything with elevation lower than the minimum visible elevation plus and offset is set to 0 while above is set to 100.
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_dem.html#process_visibility>`_
 parameters
    datatype : string. Dataset keyword
        arbitrary data type
@@ -1174,7 +1174,7 @@ VIS_FILTER
 """"""""""""""""""""""""""""""
 description
    filters out rays gates with low visibility and corrects the reflectivity
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_filter_visibility>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1185,7 +1185,7 @@ VOL_REFL
 """"""""""""""""""""""""""""""
 description
    Computes the volumetric reflectivity in 10log10(cm^2 km^-3)
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_vol_refl>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1198,7 +1198,7 @@ VOL2BIRD_FILTER
 """"""""""""""""""""""""""""""
 description
    Masks all echo types that have been identified as non-biological by vol2bird
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_filter_vol2bird>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1207,7 +1207,7 @@ VOL2BIRD_GATE_FILTER
 """"""""""""""""""""""""""""""
 description
    Adds filter on range gate values to the vol2bird filter
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_gate_filter_vol2bird>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1220,7 +1220,7 @@ WBN
 """"""""""""""""""""""""""""""
 description
    Computes the wide band noise from the horizontal or vertical IQ data
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_wbn_iq>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1229,7 +1229,7 @@ WIND_VEL
 """"""""""""""""""""""""""""""
 description
    Estimates the horizontal or vertical component of the wind from the radial velocity
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_wind_vel>`_
 parameters
    datatype : string. Dataset keyword
        The input data type
@@ -1240,7 +1240,7 @@ WINDSHEAR
 """"""""""""""""""""""""""""""
 description
    Estimates the wind shear from the wind velocity
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_windshear>`_
 parameters
    datatype : string. Dataset keyword
        The input data type
@@ -1251,7 +1251,7 @@ ZDR
 """"""""""""""""""""""""""""""
 description
    Computes differential reflectivity from the horizontal and vertical spectral reflectivity
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_differential_reflectivity>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1260,7 +1260,7 @@ ZDR_IQ
 """"""""""""""""""""""""""""""
 description
    Computes differential reflectivity from the horizontal and vertical IQ data
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_differential_reflectivity_iq>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1273,7 +1273,7 @@ ZDR_PREC
 """"""""""""""""""""""""""""""
 description
    Keeps only suitable data to evaluate the differential reflectivity in moderate rain or precipitation (for vertical scans)
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_zdr_precip>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1302,7 +1302,7 @@ ZDR_SNOW
 """"""""""""""""""""""""""""""
 description
    Keeps only suitable data to evaluate the differential reflectivity in snow
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_zdr_snow>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1339,7 +1339,7 @@ FFT
 """"""""""""""""""""""""""""""
 description
    Compute the Doppler spectra form the IQ data with a Fourier transform
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_fft>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1350,7 +1350,7 @@ FILTER_0DOPPLER
 """"""""""""""""""""""""""""""
 description
    Function to filter the 0-Doppler line bin and neighbours of the Doppler spectra
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_filter_0Doppler>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1363,7 +1363,7 @@ FILTER_SPECTRA_NOISE
 """"""""""""""""""""""""""""""
 description
    Filter the noise of the Doppler spectra by clipping any data below the noise level plus a margin
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_filter_spectra_noise>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1374,7 +1374,7 @@ IFFT
 """"""""""""""""""""""""""""""
 description
    Compute the Doppler spectrum width from the spectral reflectivity
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_ifft>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1383,7 +1383,7 @@ RAW_IQ
 """"""""""""""""""""""""""""""
 description
    Dummy function that returns the initial input data set
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_raw_iq>`_
 parameters
    
        
@@ -1392,7 +1392,7 @@ RAW_SPECTRA
 """"""""""""""""""""""""""""""
 description
    Dummy function that returns the initial input data set
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_raw_spectra>`_
 parameters
    
        
@@ -1401,7 +1401,7 @@ SPECTRA_ANGULAR_AVERAGE
 """"""""""""""""""""""""""""""
 description
    Function to average the spectra over the rays. This function is intended mainly for vertically pointing scans. The function assumes the volume is composed of a single sweep, it averages over the number of rays specified by the user and produces a single ray output.
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_spectra_ang_avg>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1412,7 +1412,7 @@ SPECTRA_POINT
 """"""""""""""""""""""""""""""
 description
    Obtains the spectra or IQ data at a point location.
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_spectra_point>`_
 parameters
    datatype : string. Dataset keyword
        The data type where we want to extract the point measurement
@@ -1445,7 +1445,7 @@ SPECTRAL_NOISE
 """"""""""""""""""""""""""""""
 description
    Computes the spectral noise
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_spectral_noise>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1462,7 +1462,7 @@ SPECTRAL_PHASE
 """"""""""""""""""""""""""""""
 description
    Computes the spectral phase
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_spectral_phase>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1471,7 +1471,7 @@ SPECTRAL_POWER
 """"""""""""""""""""""""""""""
 description
    Computes the spectral power
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_spectral_power>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1486,7 +1486,7 @@ SPECTRAL_REFLECTIVITY
 """"""""""""""""""""""""""""""
 description
    Computes spectral reflectivity
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_spectral_reflectivity>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1499,7 +1499,7 @@ SRHOHV_FILTER
 """"""""""""""""""""""""""""""
 description
    Filter Doppler spectra as a function of spectral RhoHV
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_filter_srhohv>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1512,7 +1512,7 @@ CENTROIDS
 """"""""""""""""""""""""""""""
 description
    Computes centroids for the semi-supervised hydrometeor classification
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_centroids>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1583,7 +1583,7 @@ COLOCATED_GATES
 """"""""""""""""""""""""""""""
 description
    Find colocated gates within two radars
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_colocated_gates>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1622,7 +1622,7 @@ COSMO_COORD
 """"""""""""""""""""""""""""""
 description
    Gets the COSMO indices corresponding to each cosmo coordinates
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_cosmo_coord>`_
 parameters
    datatype : string. Dataset keyword
        arbitrary data type
@@ -1635,7 +1635,7 @@ HZT_COORD
 """"""""""""""""""""""""""""""
 description
    Gets the HZT indices corresponding to each HZT coordinates
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_hzt_coord>`_
 parameters
    metranet_read_lib : str. Global keyword
        Type of METRANET reader library used to read the data. Can be 'C' or 'python'
@@ -1650,7 +1650,7 @@ COSMO2RADAR
 """"""""""""""""""""""""""""""
 description
    Gets COSMO data and put it in radar coordinates using look up tables
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_cosmo_to_radar>`_
 parameters
    datatype : string. Dataset keyword
        arbitrary data type
@@ -1667,7 +1667,7 @@ RAW_GRID
 """"""""""""""""""""""""""""""
 description
    Dummy function that returns the initial input data set
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_raw_grid>`_
 parameters
    
        
@@ -1676,7 +1676,7 @@ GECSX
 """"""""""""""""""""""""""""""
 description
    Computes ground clutter RCS, radar visibility and many others using the GECSX algorithmn translated from IDL into python
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_dem.html#process_gecsx>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1685,7 +1685,7 @@ GRID
 """"""""""""""""""""""""""""""
 description
    Puts the radar data in a regular grid
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid>`_
 parameters
    datatype : string. Dataset keyword
        The data type where we want to extract the point measurement
@@ -1706,7 +1706,7 @@ GRID_FIELDS_DIFF
 """"""""""""""""""""""""""""""
 description
    Computes grid field differences
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid_fields_diff>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1715,7 +1715,7 @@ GRID_MASK
 """"""""""""""""""""""""""""""
 description
    Mask data. Puts True if data is within thresholds, False if it is not. Thresholds can be min, max or both min and max
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid_mask>`_
 parameters
    
        
@@ -1724,7 +1724,7 @@ GRID_TEXTURE
 """"""""""""""""""""""""""""""
 description
    Computes the 2D texture of a gridded field
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid_texture>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1737,7 +1737,7 @@ NORMALIZE_LUMINOSITY
 """"""""""""""""""""""""""""""
 description
    Normalize the data by the sinus of the sun elevation. The sun elevation is computed at the central pixel.
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_normalize_luminosity>`_
 parameters
    
        
@@ -1746,7 +1746,7 @@ PIXEL_FILTER
 """"""""""""""""""""""""""""""
 description
    Masks all pixels that are not of the class specified in keyword pixel_type
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_pixel_filter>`_
 parameters
    pixel_type : int or list of ints
        The type of pixels to keep: 0 No data, 1 Below threshold, 2 Above threshold. Default 2
@@ -1755,7 +1755,7 @@ VOL2GRID
 """"""""""""""""""""""""""""""
 description
    Function to convert polar data into a Cartesian grid
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_vol_to_grid>`_
 parameters
    
        
@@ -1764,7 +1764,7 @@ DDA
 """"""""""""""""""""""""""""""
 description
    Estimates horizontal wind speed and direction with a multi-doppler approach This method uses the python package pyDDA
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_dda>`_
 parameters
    datatype : string. Dataset keyword
        The input data type
@@ -1781,7 +1781,7 @@ GRID_TIME_STATS
 """"""""""""""""""""""""""""""
 description
    computes the temporal statistics of a field
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid_time_stats>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1802,7 +1802,7 @@ GRID_TIME_STATS2
 """"""""""""""""""""""""""""""
 description
    computes temporal statistics of a field
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid_time_stats2>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1821,7 +1821,7 @@ GRID_RAIN_ACCU
 """"""""""""""""""""""""""""""
 description
    computes rainfall accumulation fields
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid_rainfall_accumulation>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1840,7 +1840,7 @@ INTERCOMP
 """"""""""""""""""""""""""""""
 description
    intercomparison between two radars at co-located gates. The variables compared must be of the same type.
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_intercomp>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1863,7 +1863,7 @@ INTERCOMP_FIELDS
 """"""""""""""""""""""""""""""
 description
    intercomparison between two radars
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_intercomp_fields>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1872,7 +1872,7 @@ INTERCOMP_TIME_AVG
 """"""""""""""""""""""""""""""
 description
    intercomparison between the average reflectivity of two radars
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_intercomp_time_avg>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1905,7 +1905,7 @@ ML_DETECTION
 """"""""""""""""""""""""""""""
 description
    Detects the melting layer
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_melting_layer>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -1916,7 +1916,7 @@ VPR
 """"""""""""""""""""""""""""""
 description
    Computes the vertical profile of reflectivity using the Meteo-France operational algorithm
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_vpr>`_
 parameters
    datatype : string. Dataset keyword
        The input data type
@@ -1975,7 +1975,7 @@ GC_MONITORING
 """"""""""""""""""""""""""""""
 description
    computes ground clutter monitoring statistics
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_gc_monitoring>`_
 parameters
    excessgatespath : str. Config keyword
        The path to the gates in excess of quantile location
@@ -2000,7 +2000,7 @@ MONITORING
 """"""""""""""""""""""""""""""
 description
    computes monitoring statistics
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_monitoring>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -2015,7 +2015,7 @@ OCCURRENCE
 """"""""""""""""""""""""""""""
 description
    computes the frequency of occurrence of data. It looks only for gates where data is present.
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_occurrence>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -2036,7 +2036,7 @@ OCCURRENCE_PERIOD
 """"""""""""""""""""""""""""""
 description
    computes the frequency of occurrence over a long period of time by adding together shorter periods
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_occurrence_period>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -2049,7 +2049,7 @@ TIMEAVG_STD
 """"""""""""""""""""""""""""""
 description
    computes the average and standard deviation of data. It looks only for gates where data is present.
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_time_avg_std>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -2074,7 +2074,7 @@ EVP
 """"""""""""""""""""""""""""""
 description
    Computes enhanced vertical profiles, by averaging over height levels PPI data.
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_evp>`_
 parameters
    datatype : string. Dataset keyword
        The data type where we want to extract the point measurement
@@ -2099,7 +2099,7 @@ QVP
 """"""""""""""""""""""""""""""
 description
    Computes quasi vertical profiles, by averaging over height levels PPI data.
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_qvp>`_
 parameters
    datatype : string. Dataset keyword
        The data type where we want to extract the point measurement
@@ -2122,7 +2122,7 @@ SVP
 """"""""""""""""""""""""""""""
 description
    Computes slanted vertical profiles, by averaging over height levels PPI data.
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_svp>`_
 parameters
    datatype : string. Dataset keyword
        The data type where we want to extract the point measurement
@@ -2151,7 +2151,7 @@ TIME_HEIGHT
 """"""""""""""""""""""""""""""
 description
    Produces time height radar objects at a point of interest defined by latitude and longitude. A time-height contains the evolution of the vertical structure of radar measurements above the location of interest.
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_time_height>`_
 parameters
    datatype : string. Dataset keyword
        The data type where we want to extract the point measurement
@@ -2170,7 +2170,7 @@ TIME_ALONG_COORD
 """"""""""""""""""""""""""""""
 description
    Produces time series along a particular antenna coordinate
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_ts_along_coord>`_
 parameters
    datatype : string. Dataset keyword
        The data type where we want to extract the time series
@@ -2189,7 +2189,7 @@ ZDR_COLUMN
 """"""""""""""""""""""""""""""
 description
    Detects ZDR columns
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_zdr_column>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -2200,7 +2200,7 @@ SUN_HITS
 """"""""""""""""""""""""""""""
 description
    monitoring of the radar using sun hits
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_sun_hits>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -2257,7 +2257,7 @@ SUNSCAN
 """"""""""""""""""""""""""""""
 description
    Processing of automatic sun scans for monitoring purposes of the radar system.
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_sunscan>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -2330,7 +2330,7 @@ FLAG_TIME_AVG
 """"""""""""""""""""""""""""""
 description
    computes a flag field describing the conditions of the data used while averaging
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_time_avg_flag>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -2347,7 +2347,7 @@ TIME_AVG
 """"""""""""""""""""""""""""""
 description
    computes the temporal mean of a field
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_time_avg>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -2362,7 +2362,7 @@ WEIGHTED_TIME_AVG
 """"""""""""""""""""""""""""""
 description
    computes the temporal mean of a field weighted by the reflectivity
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_weighted_time_avg>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -2375,7 +2375,7 @@ TIME_STATS
 """"""""""""""""""""""""""""""
 description
    computes the temporal statistics of a field
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_time_stats>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -2396,7 +2396,7 @@ TIME_STATS2
 """"""""""""""""""""""""""""""
 description
    computes the temporal mean of a field
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_time_stats2>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -2415,7 +2415,7 @@ RAIN_ACCU
 """"""""""""""""""""""""""""""
 description
    Computes rainfall accumulation fields
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_rainfall_accumulation>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -2434,7 +2434,7 @@ GRID_POINT_MEASUREMENT
 """"""""""""""""""""""""""""""
 description
    Obtains the grid data at a point location.
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid_point>`_
 parameters
    datatype : string. Dataset keyword
        The data type where we want to extract the point measurement
@@ -2457,7 +2457,7 @@ GRID_MULTIPLE_POINTS
 """"""""""""""""""""""""""""""
 description
    Obtains the grid data at a point location.
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid_multiple_points>`_
 parameters
    datatype : string. Dataset keyword
        The data type where we want to extract the point measurement
@@ -2470,7 +2470,7 @@ MULTIPLE_POINTS
 """"""""""""""""""""""""""""""
 description
    Obtains the radar data at multiple points. The points are defined in a file
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_multiple_points>`_
 parameters
    datatype : string. Dataset keyword
        The data type where we want to extract the point measurement
@@ -2493,7 +2493,7 @@ POINT_MEASUREMENT
 """"""""""""""""""""""""""""""
 description
    Obtains the radar data at a point location.
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_point_measurement>`_
 parameters
    datatype : string. Dataset keyword
        The data type where we want to extract the point measurement
@@ -2526,7 +2526,7 @@ TRAJ_ANTENNA_PATTERN
 """"""""""""""""""""""""""""""
 description
    Process a new array of data volumes considering a plane trajectory. As result a timeseries with the values transposed for a given antenna pattern is created. The result is created when the LAST flag is set.
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_traj.html#process_traj_antenna_pattern>`_
 parameters
    
        
@@ -2535,7 +2535,7 @@ TRAJ_ATPLANE
 """"""""""""""""""""""""""""""
 description
    Return time series according to trajectory
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_traj.html#process_traj_atplane>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -2552,7 +2552,7 @@ TRAJ_LIGHTNING
 """"""""""""""""""""""""""""""
 description
    Return time series according to lightning trajectory
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_traj.html#process_traj_lightning>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
@@ -2569,7 +2569,7 @@ TRAJ
 """"""""""""""""""""""""""""""
 description
    Return trajectory
-
+ `*[Source]* <https://wolfidan.github.io/pyrad/_modules/pyrad/proc/process_traj.html#process_trajectory>`_
 parameters
    datatype : list of string. Dataset keyword
        The input data types
