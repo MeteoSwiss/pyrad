@@ -30,10 +30,6 @@ jobs:
           environment-name: pyrad-docs
           cache-downloads: true
 
-      - name: Fetch all history for all tags and branches
-        run: |
-           git fetch --prune --unshallow
-
       - name: Install pyart
         working-directory: ${{github.workspace}}/src/pyart/
         run: |
