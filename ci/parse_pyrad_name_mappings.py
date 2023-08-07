@@ -11,7 +11,7 @@ FUNCTIONS_TO_PARSE = ['get_fieldname_pyart',
                       'get_fieldname_cosmo']
 
 mainpath = Path(__file__).resolve().parent.parent
-OUT_DIRECTORY = str(Path(mainpath, 'doc', 'mappings'))
+OUT_DIRECTORY = str(Path(mainpath, 'doc', 'overview'))
 
 
 for fun_name in FUNCTIONS_TO_PARSE:
