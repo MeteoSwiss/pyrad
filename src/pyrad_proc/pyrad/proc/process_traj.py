@@ -34,6 +34,7 @@ from netCDF4 import num2date, date2num
 import pyart
 from pyart.config import get_metadata
 from pyart.core import Radar
+from pyart.util import get_target_elevations, cross_section_rhi
 
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from ..io.io_aux import get_field_unit, get_field_name
@@ -145,7 +146,7 @@ def process_traj_trt(procstatus, dscfg, radar_list=None, trajectory=None):
         field_names.append(get_fieldname_pyart(datatype))
         datatypes.append(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if ((radar_list is None) or (radar_list[ind_rad] is None)):
         warn('ERROR: No valid radar found')
         return None, None
@@ -290,7 +291,7 @@ def process_traj_trt_contour(procstatus, dscfg, radar_list=None,
         field_names.append(get_fieldname_pyart(datatype))
         datatypes.append(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if ((radar_list is None) or (radar_list[ind_rad] is None)):
         warn('ERROR: No valid radar found')
         return None, None
@@ -391,7 +392,7 @@ def process_traj_lightning(procstatus, dscfg, radar_list=None,
         field_names.append(get_fieldname_pyart(datatype))
         datatypes.append(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if ((radar_list is None) or (radar_list[ind_rad] is None)):
         warn('ERROR: No valid radar found')
         return None, None
@@ -456,7 +457,7 @@ def process_traj_lightning(procstatus, dscfg, radar_list=None,
                 if datatype in dscfg['data_is_log']:
                     data_is_log[field_name] = (dscfg['data_is_log'] != 0)
                 else:
-                    warn('Units type for data type '+datatype +
+                    warn('Units type for data type ' + datatype +
                          ' not specified. Assumed linear')
 
         trajdict = dict({
@@ -523,14 +524,14 @@ def process_traj_lightning(procstatus, dscfg, radar_list=None,
             rdata = radar_sel.fields[field_name]['data']
             val = rdata[traj_ray_ind, traj_rng_ind]
             cell_vals = rdata[
-                cell_ray_inds, cell_rng_ind_min:cell_rng_ind_max+1]
+                cell_ray_inds, cell_rng_ind_min:cell_rng_ind_max + 1]
 
             # Compute statistics and get number of valid data
             if data_is_log[field_name]:
                 val_mean = np.ma.masked
                 cell_vals_valid = cell_vals.compressed()
                 if cell_vals_valid.size > 0:
-                    vals_lin = np.ma.power(10., cell_vals_valid/10.)
+                    vals_lin = np.ma.power(10., cell_vals_valid / 10.)
                     val_mean = np.ma.mean(vals_lin)
                     val_mean = 10. * np.ma.log10(val_mean)
             else:
@@ -638,7 +639,7 @@ def process_traj_atplane(procstatus, dscfg, radar_list=None, trajectory=None):
         field_names.append(get_fieldname_pyart(datatype))
         datatypes.append(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if ((radar_list is None) or (radar_list[ind_rad] is None)):
         warn('ERROR: No valid radar found')
         return None, None
@@ -707,7 +708,7 @@ def process_traj_atplane(procstatus, dscfg, radar_list=None, trajectory=None):
                 if datatype in dscfg['data_is_log']:
                     data_is_log[field_name] = (dscfg['data_is_log'] != 0)
                 else:
-                    warn('Units type for data type '+datatype +
+                    warn('Units type for data type ' + datatype +
                          ' not specified. Assumed linear')
 
         trajdict = dict({
@@ -767,14 +768,14 @@ def process_traj_atplane(procstatus, dscfg, radar_list=None, trajectory=None):
             rdata = radar_sel.fields[field_name]['data']
             val = rdata[traj_ray_ind, traj_rng_ind]
             cell_vals = rdata[
-                cell_ray_inds, cell_rng_ind_min:cell_rng_ind_max+1]
+                cell_ray_inds, cell_rng_ind_min:cell_rng_ind_max + 1]
 
             # Compute statistics and get number of valid data
             if data_is_log[field_name]:
                 val_mean = np.ma.masked
                 cell_vals_valid = cell_vals.compressed()
                 if cell_vals_valid.size > 0:
-                    vals_lin = np.ma.power(10., cell_vals_valid/10.)
+                    vals_lin = np.ma.power(10., cell_vals_valid / 10.)
                     val_mean = np.ma.mean(vals_lin)
                     val_mean = 10. * np.ma.log10(val_mean)
             else:
@@ -939,7 +940,7 @@ def process_traj_antenna_pattern(procstatus, dscfg, radar_list=None,
         field_names.append(get_fieldname_pyart(datatype))
         datatypes.append(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if ((radar_list is None) or (radar_list[ind_rad] is None)):
         warn('ERROR: No valid radar found')
         return None, None
@@ -1181,7 +1182,7 @@ def process_traj_antenna_pattern(procstatus, dscfg, radar_list=None,
                     data_is_log[field_name] = (
                         dscfg['data_is_log'][datatype] != 0)
                 else:
-                    warn('Units type for data type '+datatype +
+                    warn('Units type for data type ' + datatype +
                          ' not specified. Assumed linear')
 
             use_nans.update({field_name: False})
@@ -1190,15 +1191,15 @@ def process_traj_antenna_pattern(procstatus, dscfg, radar_list=None,
                     use_nans[field_name] = (
                         dscfg['use_nans'][datatype] != 0)
                 else:
-                    warn('Use of nans not specified for data type '+datatype +
-                         ' not specified. Assumed not used')
+                    warn('Use of nans not specified for data type ' +
+                         datatype + ' not specified. Assumed not used')
 
             nan_value.update({field_name: 0.})
             if 'nan_value' in dscfg:
                 if datatype in dscfg['nan_value']:
                     nan_value[field_name] = dscfg['nan_value'][datatype]
                 else:
-                    warn('NaN value not specified for data type '+datatype +
+                    warn('NaN value not specified for data type ' + datatype +
                          ' not specified. Assumed 0')
 
         quants = np.array([ee['val'] for ee in quantiles])
@@ -1377,7 +1378,7 @@ def _get_ts_values_antenna_pattern(radar, trajectory, tadict, traj_ind,
                          field_name)
                     continue
                 rdata = radar_sel.fields[field_name]['data']
-                values = rdata[ray_inds, rr_ind_min:rr_ind+1]
+                values = rdata[ray_inds, rr_ind_min:rr_ind + 1]
                 if use_nans[field_name]:
                     values_ma = np.ma.getmaskarray(values)
                     values[values_ma] = nan_value[field_name]
@@ -1563,13 +1564,13 @@ def _get_gates(radar, az, el, rr, tt, trajdict, ang_tol=1.2, az_tol=3.,
                   radar_sel.elevation['data'][ray_sel])
     d_az = np.abs(radar_sel.azimuth['data'] -
                   radar_sel.azimuth['data'][ray_sel])
-    cell_ind = np.where((d_el < el_res*ang_tol) & (d_az < az_res*ang_tol))
+    cell_ind = np.where((d_el < el_res * ang_tol) & (d_az < az_res * ang_tol))
 
-    rr_min = rr_ind-1
+    rr_min = rr_ind - 1
     if rr_min < 0:
         rr_min = 0
 
-    return radar_sel, ray_sel, rr_ind, cell_ind, rr_min, rr_ind+1
+    return radar_sel, ray_sel, rr_ind, cell_ind, rr_min, rr_ind + 1
 
 
 def _get_gates_trt(radar, trajectory, voltime, time_tol=100., alt_min=None,
@@ -1755,7 +1756,8 @@ def _get_gates_antenna_pattern(radar_sel, target_radar, az, rr, tt,
     r_elevation = {'data': scan_angles}
     r_sweep_number = {'data': np.array([0])}
     r_fields = {'colocated_gates': get_metadata('colocated_gates')}
-    r_fields['colocated_gates']['data'] = 2*np.ma.ones((n_rays, 1), dtype=int)
+    r_fields['colocated_gates']['data'] = 2 * \
+        np.ma.ones((n_rays, 1), dtype=int)
 
     r_radar = Radar(r_time, r_range, r_fields, None, 'rhi',
                     target_radar.latitude, target_radar.longitude,
@@ -1897,7 +1899,7 @@ def _sample_out_of_sector(az, el, rr, radar_sel, ray_sel, rr_ind,
     # Check if sample is within sector
     rr_min = radar_sel.range['data'][rr_ind]
     range_res = radar_sel.range['data'][1] - radar_sel.range['data'][0]
-    if np.abs(rr_min - rr) > (2*range_res):
+    if np.abs(rr_min - rr) > (2 * range_res):
         # print("INFO: Trajectory sample out of range")
         return True
 
@@ -1922,6 +1924,7 @@ class TargetRadar:
         Position of the dummy radar
 
     """
+
     def __init__(self, latitude, longitude, altitude):
         self.latitude = latitude
         self.longitude = longitude

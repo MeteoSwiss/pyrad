@@ -53,7 +53,7 @@ def main():
     enddate = datetime.datetime.strptime(tend, '%Y%m%d')
 
     ndays = (enddate - startdate).days + 1
-    print('Number of days to process: '+str(ndays)+'\n\n')
+    print('Number of days to process: ' + str(ndays) + '\n\n')
 
     for param in param_vec:
         ts_vec = np.array([])
@@ -68,13 +68,21 @@ def main():
                 day_dir = current_date.strftime("%Y-%m-%d")
                 daybase = current_date.strftime("%Y%m%d")
 
-                fpath = (fbase+day_dir+'/rg'+station+'_'+param+'/RRcum' +
-                         str(avg_time)+'s/')
+                fpath = (
+                    fbase +
+                    day_dir +
+                    '/rg' +
+                    station +
+                    '_' +
+                    param +
+                    '/RRcum' +
+                    str(avg_time) +
+                    's/')
                 fname = glob.glob(
-                    fpath+daybase+'_'+str(avg_time) +
+                    fpath + daybase + '_' + str(avg_time) +
                     's_acc_ts_comp_POINT_MEASUREMENT_*.csv')
                 if not fname:
-                    warn('No file found in '+fpath)
+                    warn('No file found in ' + fpath)
                     continue
                 else:
                     (ts_aux, np_radar_aux, radar_value_aux, np_sensor_aux,
@@ -98,30 +106,41 @@ def main():
         stats = compute_1d_stats(val_sensor, val_radar)
 
         # create output image
-        fpath = fbase+'RR/'
+        fpath = fbase + 'RR/'
         if os.path.isdir(fpath):
             pass
         else:
             os.makedirs(fpath)
 
         figfname = [
-            startdate.strftime('%Y%m%d')+'-'+enddate.strftime('%Y%m%d')+'_' +
-            str(avg_time)+'s_acc_ts_comp_'+param+'.'+img_ext]
+            startdate.strftime('%Y%m%d') +
+            '-' +
+            enddate.strftime('%Y%m%d') +
+            '_' +
+            str(avg_time) +
+            's_acc_ts_comp_' +
+            param +
+            '.' +
+            img_ext]
 
         for i in range(len(figfname)):
-            figfname[i] = fpath+figfname[i]
+            figfname[i] = fpath + figfname[i]
 
         labelx = 'RG (mm)'
         labely = 'Radar (mm)'
-        titl = (str(avg_time)+' s Acc. Comp. '+startdate.strftime('%Y%m%d') +
-                '-'+enddate.strftime('%Y%m%d'))
+        titl = (
+            str(avg_time) +
+            ' s Acc. Comp. ' +
+            startdate.strftime('%Y%m%d') +
+            '-' +
+            enddate.strftime('%Y%m%d'))
 
         metadata = (
-            'npoints: '+str(stats['npoints'])+'\n' +
-            'NB: '+'{:.2f}'.format(float(stats['NB']))+'\n' +
-            'corr: '+'{:.2f}'.format(float(stats['corr']))+'\n' +
-            'RMS: '+'{:.2f}'.format(float(stats['RMS']))+'\n' +
-            'Nash: '+'{:.2f}'.format(float(stats['Nash']))+'\n')
+            'npoints: ' + str(stats['npoints']) + '\n' +
+            'NB: ' + '{:.2f}'.format(float(stats['NB'])) + '\n' +
+            'corr: ' + '{:.2f}'.format(float(stats['corr'])) + '\n' +
+            'RMS: ' + '{:.2f}'.format(float(stats['RMS'])) + '\n' +
+            'Nash: ' + '{:.2f}'.format(float(stats['Nash'])) + '\n')
 
         plot_scatter_comp(
             val_sensor, val_radar, figfname, labelx=labelx,

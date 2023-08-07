@@ -68,7 +68,7 @@ def main():
         help='name of main post-processing configuration file')
     parser.add_argument(
         '--cfgpath', type=str,
-        default=os.path.expanduser('~')+'/pyrad/config/processing/',
+        default=os.path.expanduser('~') + '/pyrad/config/processing/',
         help='configuration file path')
     parser.add_argument("-i", "--infostr", type=str,
                         help="Information string about the actual data "
@@ -101,15 +101,15 @@ def main():
     atexit.register(_print_end_msg,
                     "====== PYRAD data processing finished: ")
 
-    print('config path: '+args.cfgpath)
-    print('config file: '+args.proc_cfgfile)
-    print('postproc config file: '+str(args.postproc_cfgfile))
+    print('config path: ' + args.cfgpath)
+    print('config file: ' + args.proc_cfgfile)
+    print('postproc config file: ' + str(args.postproc_cfgfile))
     if args.starttime is not None:
-        print('start time: '+args.starttime)
+        print('start time: ' + args.starttime)
     else:
         print('start time not defined by user')
     if args.endtime is not None:
-        print('end time: '+args.endtime)
+        print('end time: ' + args.endtime)
     else:
         print('end time not defined by user')
     if args.MULTIPROCESSING_DSET:
@@ -126,7 +126,7 @@ def main():
     proc_endtime = None
     if args.endtime is not None:
         proc_endtime = datetime.datetime.strptime(args.endtime, '%Y%m%d%H%M%S')
-    cfgfile_proc = args.cfgpath+args.proc_cfgfile
+    cfgfile_proc = args.cfgpath + args.proc_cfgfile
 
     if args.infostr == 'None':
         infostr = ''
@@ -141,7 +141,7 @@ def main():
                PROFILE_MULTIPROCESSING=args.PROFILE_MULTIPROCESSING)
 
     if args.postproc_cfgfile is not None:
-        cfgfile_postproc = args.cfgpath+args.postproc_cfgfile
+        cfgfile_postproc = args.cfgpath + args.postproc_cfgfile
         pyrad_main(cfgfile_postproc, starttime=proc_starttime,
                    endtime=proc_endtime, trajfile=args.trajfile,
                    infostr=infostr, trajtype=args.trajtype,

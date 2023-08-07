@@ -18,6 +18,9 @@ Functions to plot data in a Cartesian grid format
     plot_dda_longitude_slice
 """
 
+from .plots_aux import get_norm
+import pyart
+import matplotlib.pyplot as plt
 from warnings import warn
 from copy import deepcopy
 
@@ -41,13 +44,7 @@ mpl.use('Agg')
 
 # Increase a bit font size
 mpl.rcParams.update({'font.size': 16})
-mpl.rcParams.update({'font.family':  "sans-serif"})
-
-import matplotlib.pyplot as plt
-
-import pyart
-
-from .plots_aux import get_norm
+mpl.rcParams.update({'font.family': "sans-serif"})
 
 
 def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
@@ -114,13 +111,13 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
         lon_lines = np.arange(min_lon, max_lon + lonstep, lonstep)
         lat_lines = np.arange(min_lat, max_lat + latstep, latstep)
     else:
-        lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon)+1, lonstep)
-        lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat)+1, latstep)
+        lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon) + 1, lonstep)
+        lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat) + 1, latstep)
 
     if use_basemap:
         resolution = prdcfg['gridMapImageConfig'].get('mapres', 'l')
         if resolution not in ('c', 'l', 'i', 'h', 'f'):
-            warn('Unknown map resolution: '+resolution)
+            warn('Unknown map resolution: ' + resolution)
             resolution = 'l'
 
         if resolution == 'c':
@@ -144,7 +141,7 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
             resolution = '10m'
 
         if resolution not in ('110m', '50m', '10m'):
-            warn('Unknown map resolution: '+resolution)
+            warn('Unknown map resolution: ' + resolution)
             resolution = '110m'
         background_zoom = prdcfg['gridMapImageConfig'].get(
             'background_zoom', 8)
@@ -204,7 +201,7 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
             ax = fig.add_subplot(111, projection=projection)
             warn(
                 'The projection of the image is set to that of the ' +
-                'background map, i.e. '+str(projection), UserWarning)
+                'background map, i.e. ' + str(projection), UserWarning)
 
         for cartomap in maps_list:
             if cartomap == 'relief':
@@ -282,7 +279,7 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
                 ax.add_feature(
                     rivers_europe, edgecolor='blue', facecolor='none')
             else:
-                warn('cartomap '+cartomap+' for resolution '+resolution +
+                warn('cartomap ' + cartomap + ' for resolution ' + resolution +
                      ' not available')
 
     if save_fig:
@@ -447,9 +444,9 @@ def plot_surface_contour(grid, field_name, level, prdcfg, fname_list,
             lat_lines = np.arange(min_lat, max_lat + latstep, latstep)
         else:
             lon_lines = np.arange(
-                np.floor(min_lon), np.ceil(max_lon)+1, lonstep)
+                np.floor(min_lon), np.ceil(max_lon) + 1, lonstep)
             lat_lines = np.arange(
-                np.floor(min_lat), np.ceil(max_lat)+1, latstep)
+                np.floor(min_lat), np.ceil(max_lat) + 1, latstep)
 
         fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
         ax = fig.add_subplot(111)
@@ -457,7 +454,7 @@ def plot_surface_contour(grid, field_name, level, prdcfg, fname_list,
         if use_basemap or not _CARTOPY_AVAILABLE:
             resolution = prdcfg['gridMapImageConfig'].get('mapres', 'l')
             if resolution not in ('c', 'l', 'i', 'h', 'f'):
-                warn('Unknown map resolution: '+resolution)
+                warn('Unknown map resolution: ' + resolution)
                 resolution = 'l'
 
             if resolution == 'c':
@@ -496,7 +493,7 @@ def plot_surface_contour(grid, field_name, level, prdcfg, fname_list,
             elif resolution == 'h':
                 resolution = '10m'
             if resolution not in ('110m', '50m', '10m'):
-                warn('Unknown map resolution: '+resolution)
+                warn('Unknown map resolution: ' + resolution)
                 resolution = '110m'
             background_zoom = prdcfg['gridMapImageConfig'].get(
                 'background_zoom', 8)
@@ -575,7 +572,7 @@ def plot_latitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
     ymax = prdcfg['xsecImageConfig'].get('ymax', None)
     vmin = prdcfg.get('vmin', None)
     vmax = prdcfg.get('vmax', None)
-    
+
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
     ax = fig.add_subplot(111, aspect='equal')
     display = pyart.graph.GridMapDisplay(grid)
@@ -628,7 +625,7 @@ def plot_longitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
     ymax = prdcfg['xsecImageConfig'].get('ymax', None)
     vmin = prdcfg.get('vmin', None)
     vmax = prdcfg.get('vmax', None)
-    
+
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
     ax = fig.add_subplot(111, aspect='equal')
     display = pyart.graph.GridMapDisplay(grid)
@@ -688,7 +685,7 @@ def plot_latlon_slice(grid, field_name, coord1, coord2, prdcfg, fname_list):
     display.plot_latlon_slice(
         field_name, coord1=coord1, coord2=coord2, norm=norm,
         colorbar_orient='vertical', ticks=ticks, ticklabs=ticklabs, fig=fig,
-        ax=ax, axislabels_flag=True, vmin = vmin, vmax = vmax)
+        ax=ax, axislabels_flag=True, vmin=vmin, vmax=vmax)
     # ax.set_ylim(
     #    [prdcfg['xsecImageConfig']['ymin'], prdcfg['xsecImageConfig']['ymax']])
 
@@ -780,8 +777,8 @@ def plot_dda_map(grid, bg_field_name, level, prdcfg, fname_list, titl=None,
         lon_lines = np.arange(min_lon, max_lon + lonstep, lonstep)
         lat_lines = np.arange(min_lat, max_lat + latstep, latstep)
     else:
-        lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon)+1, lonstep)
-        lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat)+1, latstep)
+        lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon) + 1, lonstep)
+        lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat) + 1, latstep)
 
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
 
@@ -795,7 +792,7 @@ def plot_dda_map(grid, bg_field_name, level, prdcfg, fname_list, titl=None,
         resolution = '10m'
 
     if resolution not in ('110m', '50m', '10m'):
-        warn('Unknown map resolution: '+resolution)
+        warn('Unknown map resolution: ' + resolution)
         resolution = '110m'
 
     maps_list = prdcfg['gridMapImageConfig'].get('maps', [])
@@ -940,7 +937,7 @@ def plot_dda_map(grid, bg_field_name, level, prdcfg, fname_list, titl=None,
                 ax.add_feature(
                     rivers_europe, edgecolor='blue', facecolor='none')
             else:
-                warn('cartomap '+cartomap+' for resolution '+resolution +
+                warn('cartomap ' + cartomap + ' for resolution ' + resolution +
                      ' not available')
 
     if save_fig:

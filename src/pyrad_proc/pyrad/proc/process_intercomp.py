@@ -82,7 +82,7 @@ def process_time_stats(procstatus, dscfg, radar_list=None):
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_name = get_fieldname_pyart(datatype)
         break
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
 
     start_average = dscfg.get('start_average', 0.)
     period = dscfg.get('period', 3600.)
@@ -101,21 +101,21 @@ def process_time_stats(procstatus, dscfg, radar_list=None):
         radar = radar_list[ind_rad]
 
         if field_name not in radar.fields:
-            warn(field_name+' not available.')
+            warn(field_name + ' not available.')
             return None, None
 
         # Prepare auxiliary radar
         field = deepcopy(radar.fields[field_name])
         if stat in ('mean', 'std', 'cov'):
             if lin_trans:
-                field['data'] = np.ma.power(10., 0.1*field['data'])
+                field['data'] = np.ma.power(10., 0.1 * field['data'])
 
             if use_nan:
                 field['data'] = np.ma.asarray(field['data'].filled(nan_value))
 
             if stat in ('std', 'cov'):
                 sum2_dict = pyart.config.get_metadata('sum_squared')
-                sum2_dict['data'] = field['data']*field['data']
+                sum2_dict['data'] = field['data'] * field['data']
         else:
             if use_nan:
                 field['data'] = np.ma.asarray(field['data'].filled(nan_value))
@@ -140,10 +140,10 @@ def process_time_stats(procstatus, dscfg, radar_list=None):
                     hour=0, minute=0, second=0, microsecond=0)
 
                 avg_par.update(
-                    {'starttime': date_00+datetime.timedelta(
+                    {'starttime': date_00 + datetime.timedelta(
                         seconds=start_average)})
                 avg_par.update(
-                    {'endtime': avg_par['starttime']+datetime.timedelta(
+                    {'endtime': avg_par['starttime'] + datetime.timedelta(
                         seconds=period)})
             else:
                 avg_par.update({'starttime': dscfg['timeinfo']})
@@ -264,7 +264,7 @@ def process_time_stats(procstatus, dscfg, radar_list=None):
             if stat == 'mean':
                 if lin_trans:
                     dscfg['global_data']['radar_out'].fields[
-                        field_name]['data'] = 10.*np.ma.log10(field_mean)
+                        field_name]['data'] = 10. * np.ma.log10(field_mean)
                 else:
                     dscfg['global_data']['radar_out'].fields[
                         field_name]['data'] = field_mean
@@ -273,23 +273,23 @@ def process_time_stats(procstatus, dscfg, radar_list=None):
                     dscfg['global_data']['radar_out'].fields[
                         'sum_squared']['data'] /
                     dscfg['global_data']['radar_out'].fields[
-                        'number_of_samples']['data']-field_mean*field_mean)
+                        'number_of_samples']['data'] - field_mean * field_mean)
 
                 if stat == 'std':
                     if lin_trans:
                         dscfg['global_data']['radar_out'].fields[
-                            field_name]['data'] = 10.*np.ma.log10(field_std)
+                            field_name]['data'] = 10. * np.ma.log10(field_std)
                     else:
                         dscfg['global_data']['radar_out'].fields[
                             field_name]['data'] = field_std
                 else:
                     if lin_trans:
                         dscfg['global_data']['radar_out'].fields[
-                            field_name]['data'] = 10.*np.ma.log10(
-                                field_std/field_mean)
+                            field_name]['data'] = 10. * np.ma.log10(
+                                field_std / field_mean)
                     else:
                         dscfg['global_data']['radar_out'].fields[
-                            field_name]['data'] = field_std/field_mean
+                            field_name]['data'] = field_std / field_mean
 
         new_dataset = {
             'radar_out': deepcopy(dscfg['global_data']['radar_out']),
@@ -330,7 +330,7 @@ def process_time_stats(procstatus, dscfg, radar_list=None):
             if stat == 'mean':
                 if lin_trans:
                     dscfg['global_data']['radar_out'].fields[
-                        field_name]['data'] = 10.*np.ma.log10(field_mean)
+                        field_name]['data'] = 10. * np.ma.log10(field_mean)
                 else:
                     dscfg['global_data']['radar_out'].fields[
                         field_name]['data'] = field_mean
@@ -340,17 +340,17 @@ def process_time_stats(procstatus, dscfg, radar_list=None):
                     dscfg['global_data']['radar_out'].fields[
                         'sum_squared']['data'] /
                     dscfg['global_data']['radar_out'].fields[
-                        'number_of_samples']['data']-field_mean*field_mean)
+                        'number_of_samples']['data'] - field_mean * field_mean)
                 if stat == 'std':
                     if lin_trans:
                         dscfg['global_data']['radar_out'].fields[
-                            field_name]['data'] = 10.*np.ma.log10(field_std)
+                            field_name]['data'] = 10. * np.ma.log10(field_std)
                     else:
                         dscfg['global_data']['radar_out'].fields[
                             field_name]['data'] = field_std
                 else:
                     dscfg['global_data']['radar_out'].fields[
-                        field_name]['data'] = field_std/field_mean
+                        field_name]['data'] = field_std / field_mean
 
         new_dataset = {
             'radar_out': deepcopy(dscfg['global_data']['radar_out']),
@@ -399,7 +399,7 @@ def process_time_stats2(procstatus, dscfg, radar_list=None):
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_name = get_fieldname_pyart(datatype)
         break
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
 
     start_average = dscfg.get('start_average', 0.)
     period = dscfg.get('period', 3600.)
@@ -419,7 +419,7 @@ def process_time_stats2(procstatus, dscfg, radar_list=None):
         radar = radar_list[ind_rad]
 
         if field_name not in radar.fields:
-            warn(field_name+' not available.')
+            warn(field_name + ' not available.')
             return None, None
 
         # prepare auxiliary radar
@@ -443,10 +443,10 @@ def process_time_stats2(procstatus, dscfg, radar_list=None):
                     hour=0, minute=0, second=0, microsecond=0)
 
                 avg_par.update(
-                    {'starttime': date_00+datetime.timedelta(
+                    {'starttime': date_00 + datetime.timedelta(
                         seconds=start_average)})
                 avg_par.update(
-                    {'endtime': avg_par['starttime']+datetime.timedelta(
+                    {'endtime': avg_par['starttime'] + datetime.timedelta(
                         seconds=period)})
             else:
                 avg_par.update({'starttime': dscfg['timeinfo']})
@@ -623,7 +623,7 @@ def process_time_avg(procstatus, dscfg, radar_list=None):
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_name = get_fieldname_pyart(datatype)
         break
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
 
     lin_trans = dscfg.get('lin_trans', 0)
 
@@ -637,14 +637,14 @@ def process_time_avg(procstatus, dscfg, radar_list=None):
         radar = radar_list[ind_rad]
 
         if field_name not in radar.fields:
-            warn(field_name+' not available.')
+            warn(field_name + ' not available.')
             return None, None
 
         period = dscfg.get('period', 3600.)
 
         field = deepcopy(radar.fields[field_name])
         if lin_trans:
-            field['data'] = np.ma.power(10., 0.1*field['data'])
+            field['data'] = np.ma.power(10., 0.1 * field['data'])
 
         field['data'] = field['data'].filled(fill_value=0.)
         field['data'] = np.ma.asarray(field['data'])
@@ -666,10 +666,10 @@ def process_time_avg(procstatus, dscfg, radar_list=None):
 
             avg_par = dict()
             avg_par.update(
-                {'starttime': date_00+datetime.timedelta(
+                {'starttime': date_00 + datetime.timedelta(
                     seconds=start_average)})
             avg_par.update(
-                {'endtime': avg_par['starttime']+datetime.timedelta(
+                {'endtime': avg_par['starttime'] + datetime.timedelta(
                     seconds=period)})
             avg_par.update({'timeinfo': dscfg['timeinfo']})
             dscfg['global_data'] = avg_par
@@ -716,7 +716,7 @@ def process_time_avg(procstatus, dscfg, radar_list=None):
                 'number_of_samples']['data'])
         if lin_trans:
             dscfg['global_data']['radar_out'].fields[field_name]['data'] = (
-                10.*np.ma.log10(
+                10. * np.ma.log10(
                     dscfg['global_data']['radar_out'].fields[
                         field_name]['data']))
 
@@ -756,7 +756,7 @@ def process_time_avg(procstatus, dscfg, radar_list=None):
                     'number_of_samples']['data'])
         if lin_trans:
             dscfg['global_data']['radar_out'].fields[field_name]['data'] = (
-                10.*np.ma.log10(
+                10. * np.ma.log10(
                     dscfg['global_data']['radar_out'].fields[
                         field_name]['data']))
 
@@ -803,7 +803,7 @@ def process_weighted_time_avg(procstatus, dscfg, radar_list=None):
         else:
             field_name = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
 
     if procstatus == 0:
         return None, None
@@ -824,7 +824,7 @@ def process_weighted_time_avg(procstatus, dscfg, radar_list=None):
         field['data'] = np.ma.asarray(field['data'])
 
         refl_field = deepcopy(radar.fields[refl_name])
-        refl_field['data'] = np.ma.power(10., 0.1*refl_field['data'])
+        refl_field['data'] = np.ma.power(10., 0.1 * refl_field['data'])
         refl_field['data'] = refl_field['data'].filled(fill_value=0.)
         refl_field['data'] = np.ma.asarray(refl_field['data'])
 
@@ -844,10 +844,10 @@ def process_weighted_time_avg(procstatus, dscfg, radar_list=None):
 
             avg_par = dict()
             avg_par.update(
-                {'starttime': date_00+datetime.timedelta(
+                {'starttime': date_00 + datetime.timedelta(
                     seconds=start_average)})
             avg_par.update(
-                {'endtime': avg_par['starttime']+datetime.timedelta(
+                {'endtime': avg_par['starttime'] + datetime.timedelta(
                     seconds=period)})
             avg_par.update({'timeinfo': dscfg['timeinfo']})
             dscfg['global_data'] = avg_par
@@ -985,7 +985,7 @@ def process_time_avg_flag(procstatus, dscfg, radar_list=None):
         elif datatype == 'H_ISO0':
             iso0_name = 'height_over_iso0'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
 
     if procstatus == 0:
         return None, None
@@ -1096,10 +1096,10 @@ def process_time_avg_flag(procstatus, dscfg, radar_list=None):
 
             avg_par = dict()
             avg_par.update(
-                {'starttime': date_00+datetime.timedelta(
+                {'starttime': date_00 + datetime.timedelta(
                     seconds=start_average)})
             avg_par.update(
-                {'endtime': avg_par['starttime']+datetime.timedelta(
+                {'endtime': avg_par['starttime'] + datetime.timedelta(
                     seconds=period)})
             avg_par.update({'timeinfo': dscfg['timeinfo']})
             dscfg['global_data'] = avg_par
@@ -1237,20 +1237,20 @@ def process_colocated_gates(procstatus, dscfg, radar_list=None):
     for datatypedescr in dscfg['datatype']:
         radarnr = datatypedescr.split(':')[0]
         radarnr_dict.update({radarnr: []})
-        ind_radar_list.add(int(radarnr[5:8])-1)
+        ind_radar_list.add(int(radarnr[5:8]) - 1)
 
     ind_radar_list = list(ind_radar_list)
 
     if (len(radarnr_dict) != 2) or (len(radar_list) < 2):
         warn('Intercomparison requires data from two different radars')
         return None, None
-    
+
     # create the list of data types for each radar
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         if radarnr in radarnr_dict:
             radarnr_dict[radarnr].append(get_fieldname_pyart(datatype))
-    
+
     radar1 = radar_list[ind_radar_list[0]]
     radar2 = radar_list[ind_radar_list[1]]
 
@@ -1258,9 +1258,9 @@ def process_colocated_gates(procstatus, dscfg, radar_list=None):
         warn('Unable to inter-compare radars. Missing radar')
 
     if 'instrument_name' in radar1.metadata:
-        print('Radar 1: '+radar1.metadata['instrument_name'])
+        print('Radar 1: ' + radar1.metadata['instrument_name'])
     if 'instrument_name' in radar2.metadata:
-        print('Radar 2: '+radar2.metadata['instrument_name'])
+        print('Radar 2: ' + radar2.metadata['instrument_name'])
 
     coloc_gates_field = 'colocated_gates'
 
@@ -1280,13 +1280,13 @@ def process_colocated_gates(procstatus, dscfg, radar_list=None):
     azrad2max = dscfg.get('azrad2max', None)
 
     visib_field = None
-    if 'visibility' in radarnr_dict['RADAR'+'{:03d}'.format(
-            ind_radar_list[0]+1)]:
+    if 'visibility' in radarnr_dict['RADAR' + '{:03d}'.format(
+            ind_radar_list[0] + 1)]:
         visib_field = 'visibility'
     if vismin is not None and visib_field is None:
         warn('Unable to filter data according to visibility. ' +
-             'Visibility field for RADAR'+'{:03d}'.format(
-                 ind_radar_list[0]+1)+' not available')
+             'Visibility field for RADAR' + '{:03d}'.format(
+                 ind_radar_list[0] + 1) + ' not available')
 
     gate_coloc_rad1_dict = pyart.util.intersection(
         radar1, radar2,
@@ -1296,14 +1296,14 @@ def process_colocated_gates(procstatus, dscfg, radar_list=None):
         visib_field=visib_field, intersec_field=coloc_gates_field)
 
     visib_field = None
-    if 'visibility' in radarnr_dict['RADAR'+'{:03d}'.format(
-            ind_radar_list[1]+1)]:
+    if 'visibility' in radarnr_dict['RADAR' + '{:03d}'.format(
+            ind_radar_list[1] + 1)]:
         visib_field = 'visibility'
 
     if vismin is not None and visib_field is None:
         warn('Unable to filter data according to visibility. ' +
-             'Visibility field for RADAR'+'{:03d}'.format(
-                 ind_radar_list[1]+1)+' not available')
+             'Visibility field for RADAR' + '{:03d}'.format(
+                 ind_radar_list[1] + 1) + ' not available')
 
     gate_coloc_rad2_dict = pyart.util.intersection(
         radar2, radar1,
@@ -1340,8 +1340,8 @@ def process_colocated_gates(procstatus, dscfg, radar_list=None):
         'radar_out': new_rad2}
 
     new_dataset = {
-        'RADAR'+'{:03d}'.format(ind_radar_list[0]+1): rad1_dict,
-        'RADAR'+'{:03d}'.format(ind_radar_list[1]+1): rad2_dict}
+        'RADAR' + '{:03d}'.format(ind_radar_list[0] + 1): rad1_dict,
+        'RADAR' + '{:03d}'.format(ind_radar_list[1] + 1): rad2_dict}
 
     return new_dataset, ind_radar_list
 
@@ -1360,7 +1360,7 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types        
+            The input data types
         colocgatespath : string.
             base path to the file containing the coordinates of the co-located
             gates
@@ -1398,22 +1398,22 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_name = get_fieldname_pyart(datatype)
-        ind_radar_list.append(int(radarnr[5:8])-1)
+        ind_radar_list.append(int(radarnr[5:8]) - 1)
         datatype_list.append(datatype)
         field_name_list.append(field_name)
     ind_radar_list = np.array(ind_radar_list)
     datatype_list = np.array(datatype_list)
     field_name_list = np.array(field_name_list)
-    
+
     if (ind_radar_list.size != 2) or (np.unique(ind_radar_list).size < 2):
         warn('Intercomparison requires data from two different radars')
         return None, None
     if np.unique(field_name_list).size > 1:
         warn('Intercomparison must be performed on the same variable')
         return None, None
-        
+
     if procstatus == 0:
-        savedir = dscfg['colocgatespath']+dscfg['coloc_radars_name']+'/'
+        savedir = dscfg['colocgatespath'] + dscfg['coloc_radars_name'] + '/'
 
         prdtype = 'info'
         if 'prdtype' in dscfg:
@@ -1425,7 +1425,7 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
 
         (rad1_ray_ind, rad1_rng_ind, rad1_ele, rad1_azi, rad1_rng,
          rad2_ray_ind, rad2_rng_ind, rad2_ele, rad2_azi, rad2_rng) = (
-             read_colocated_gates(savedir+fname))
+             read_colocated_gates(savedir + fname))
 
         if rad1_ele is None:
             raise ValueError('Unable to intercompare radars. ' +
@@ -1455,7 +1455,7 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
 
         if ((field_name not in radar1.fields) or
                 (field_name not in radar2.fields)):
-            warn('Unable to get values of field '+field_name +
+            warn('Unable to get values of field ' + field_name +
                  ' at colocated range bins. ' +
                  'Field missing in one of the radars')
             return None, None
@@ -1533,12 +1533,12 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
             val1_vec = np.ma.masked_all(ngates_valid, dtype=float)
             is_valid_avg = np.zeros(ngates_valid, dtype=bool)
             for i in range(ngates_valid):
-                if rad1_rng_ind[i]+avg_rad_lim[1] >= radar1.ngates:
+                if rad1_rng_ind[i] + avg_rad_lim[1] >= radar1.ngates:
                     continue
-                if rad1_rng_ind[i]+avg_rad_lim[0] < 0:
+                if rad1_rng_ind[i] + avg_rad_lim[0] < 0:
                     continue
-                ind_rng = list(range(rad1_rng_ind[i]+avg_rad_lim[0],
-                                     rad1_rng_ind[i]+avg_rad_lim[1]+1))
+                ind_rng = list(range(rad1_rng_ind[i] + avg_rad_lim[0],
+                                     rad1_rng_ind[i] + avg_rad_lim[1] + 1))
 
                 if np.any(np.ma.getmaskarray(
                         rad1_field[rad1_ray_ind[i], ind_rng])):
@@ -1562,12 +1562,12 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
             val2_vec = np.ma.masked_all(ngates_valid, dtype=float)
             is_valid_avg = np.zeros(ngates_valid, dtype=bool)
             for i in range(ngates_valid):
-                if rad2_rng_ind[i]+avg_rad_lim[1] >= radar2.ngates:
+                if rad2_rng_ind[i] + avg_rad_lim[1] >= radar2.ngates:
                     continue
-                if rad2_rng_ind[i]+avg_rad_lim[0] < 0:
+                if rad2_rng_ind[i] + avg_rad_lim[0] < 0:
                     continue
-                ind_rng = list(range(rad2_rng_ind[i]+avg_rad_lim[0],
-                                     rad2_rng_ind[i]+avg_rad_lim[1]+1))
+                ind_rng = list(range(rad2_rng_ind[i] + avg_rad_lim[0],
+                                     rad2_rng_ind[i] + avg_rad_lim[1] + 1))
 
                 if np.any(np.ma.getmaskarray(
                         rad2_field[rad2_ray_ind[i], ind_rng])):
@@ -1624,7 +1624,7 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
             'colocated_data', dscfg['type'], datatype, ['csv'],
             timeinfo=dscfg['global_data']['timeinfo'], timeformat='%Y%m%d')
 
-        fname = savedir+fname[0]
+        fname = savedir + fname[0]
 
         coloc_data = read_colocated_data(fname)
 
@@ -1709,7 +1709,7 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
 
     """
     if procstatus == 0:
-        savedir = dscfg['colocgatespath']+dscfg['coloc_radars_name']+'/'
+        savedir = dscfg['colocgatespath'] + dscfg['coloc_radars_name'] + '/'
 
         prdtype = 'info'
         if 'prdtype' in dscfg:
@@ -1721,7 +1721,7 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
 
         (rad1_ray_ind, rad1_rng_ind, rad1_ele, rad1_azi, rad1_rng,
          rad2_ray_ind, rad2_rng_ind, rad2_ele, rad2_azi, rad2_rng) = (
-             read_colocated_gates(savedir+fname))
+             read_colocated_gates(savedir + fname))
 
         if rad1_ele is None:
             raise ValueError('Unable to intercompare radars. ' +
@@ -1746,7 +1746,7 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
         ind_radar_list = set()
         for datatypedescr in dscfg['datatype']:
             radarnr = datatypedescr.split(':')[0]
-            ind_radar_list.add(int(radarnr[5:8])-1)
+            ind_radar_list.add(int(radarnr[5:8]) - 1)
 
         ind_radar_list = list(ind_radar_list)
 
@@ -1754,8 +1754,8 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             warn('Intercomparison requires data from two different radars')
             return None, None
 
-        radarnr_list = ['RADAR'+'{:03d}'.format(ind_radar_list[0]+1),
-                        'RADAR'+'{:03d}'.format(ind_radar_list[1]+1)]
+        radarnr_list = ['RADAR' + '{:03d}'.format(ind_radar_list[0] + 1),
+                        'RADAR' + '{:03d}'.format(ind_radar_list[1] + 1)]
 
         # get field names
         for datatypedescr in dscfg['datatype']:
@@ -1890,12 +1890,12 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             flag1_vec = np.ma.masked_all(ngates_valid, dtype=int)
             is_valid_avg = np.zeros(ngates_valid, dtype=bool)
             for i in range(ngates_valid):
-                if rad1_rng_ind[i]+avg_rad_lim[1] >= radar1.ngates:
+                if rad1_rng_ind[i] + avg_rad_lim[1] >= radar1.ngates:
                     continue
-                if rad1_rng_ind[i]+avg_rad_lim[0] < 0:
+                if rad1_rng_ind[i] + avg_rad_lim[0] < 0:
                     continue
-                ind_rng = list(range(rad1_rng_ind[i]+avg_rad_lim[0],
-                                     rad1_rng_ind[i]+avg_rad_lim[1]+1))
+                ind_rng = list(range(rad1_rng_ind[i] + avg_rad_lim[0],
+                                     rad1_rng_ind[i] + avg_rad_lim[1] + 1))
 
                 if np.any(np.ma.getmaskarray(
                         refl1[rad1_ray_ind[i], ind_rng])):
@@ -1912,13 +1912,13 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
                 rad1_flag = flag1[rad1_ray_ind[i], ind_rng]
 
                 rad1_excess_phi = rad1_flag % 100
-                rad1_clt = ((rad1_flag-rad1_excess_phi) % 10000) / 100
+                rad1_clt = ((rad1_flag - rad1_excess_phi) % 10000) / 100
                 rad1_prec = (
-                    ((rad1_flag-rad1_clt*100-rad1_excess_phi) % 1000000) /
-                    10000)
+                    ((rad1_flag - rad1_clt * 100 - rad1_excess_phi) %
+                     1000000) / 10000)
 
                 flag1_vec[i] = int(
-                    10000*np.max(rad1_prec)+100*np.max(rad1_clt) +
+                    10000 * np.max(rad1_prec) + 100 * np.max(rad1_clt) +
                     np.max(rad1_excess_phi))
                 is_valid_avg[i] = True
 
@@ -1942,12 +1942,12 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             flag2_vec = np.ma.masked_all(ngates_valid, dtype=int)
             is_valid_avg = np.zeros(ngates_valid, dtype=bool)
             for i in range(ngates_valid):
-                if rad2_rng_ind[i]+avg_rad_lim[1] >= radar2.ngates:
+                if rad2_rng_ind[i] + avg_rad_lim[1] >= radar2.ngates:
                     continue
-                if rad2_rng_ind[i]+avg_rad_lim[0] < 0:
+                if rad2_rng_ind[i] + avg_rad_lim[0] < 0:
                     continue
-                ind_rng = list(range(rad2_rng_ind[i]+avg_rad_lim[0],
-                                     rad2_rng_ind[i]+avg_rad_lim[1]+1))
+                ind_rng = list(range(rad2_rng_ind[i] + avg_rad_lim[0],
+                                     rad2_rng_ind[i] + avg_rad_lim[1] + 1))
 
                 if np.any(np.ma.getmaskarray(
                         refl2[rad2_ray_ind[i], ind_rng])):
@@ -1964,13 +1964,13 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
                 rad2_flag = flag2[rad2_ray_ind[i], ind_rng]
 
                 rad2_excess_phi = rad2_flag % 100
-                rad2_clt = ((rad2_flag-rad2_excess_phi) % 10000) / 100
+                rad2_clt = ((rad2_flag - rad2_excess_phi) % 10000) / 100
                 rad2_prec = (
-                    ((rad2_flag-rad2_clt*100-rad2_excess_phi) % 1000000) /
-                    10000)
+                    ((rad2_flag - rad2_clt * 100 - rad2_excess_phi) %
+                     1000000) / 10000)
 
                 flag2_vec[i] = int(
-                    10000*np.max(rad2_prec)+100*np.max(rad2_clt) +
+                    10000 * np.max(rad2_prec) + 100 * np.max(rad2_clt) +
                     np.max(rad2_excess_phi))
                 is_valid_avg[i] = True
 
@@ -2043,7 +2043,7 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             'colocated_data', dscfg['type'], refl_type, ['csv'],
             timeinfo=dscfg['global_data']['timeinfo'], timeformat='%Y%m%d')
 
-        fname = savedir+fname[0]
+        fname = savedir + fname[0]
 
         (rad1_time, rad1_ray_ind, rad1_rng_ind, rad1_ele, rad1_azi, rad1_rng,
          rad1_dBZ, rad1_phi, rad1_flag, rad2_time, rad2_ray_ind, rad2_rng_ind,
@@ -2053,14 +2053,14 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
         rad1_excess_phi = (rad1_flag % 100).astype(int)
         rad2_excess_phi = (rad2_flag % 100).astype(int)
 
-        rad1_clt = (((rad1_flag-rad1_excess_phi) % 10000) / 100).astype(int)
-        rad2_clt = (((rad2_flag-rad2_excess_phi) % 10000) / 100).astype(int)
+        rad1_clt = (((rad1_flag - rad1_excess_phi) % 10000) / 100).astype(int)
+        rad2_clt = (((rad2_flag - rad2_excess_phi) % 10000) / 100).astype(int)
 
         rad1_non_rain = (
-            ((rad1_flag-rad1_clt*100-rad1_excess_phi) % 1000000) /
+            ((rad1_flag - rad1_clt * 100 - rad1_excess_phi) % 1000000) /
             10000).astype(int)
         rad2_non_rain = (
-            ((rad2_flag-rad2_clt*100-rad2_excess_phi) % 1000000) /
+            ((rad2_flag - rad2_clt * 100 - rad2_excess_phi) % 1000000) /
             10000).astype(int)
 
         clt_max = dscfg.get('clt_max', 100)
@@ -2137,7 +2137,7 @@ def process_fields_diff(procstatus, dscfg, radar_list=None):
     for datatypedescr in dscfg['datatype']:
         radarnr = datatypedescr.split(':')[0]
         radarnr_dict.update({radarnr: []})
-        ind_radar_list.add(int(radarnr[5:8])-1)
+        ind_radar_list.add(int(radarnr[5:8]) - 1)
 
     ind_radar_list = list(ind_radar_list)
 
@@ -2161,15 +2161,15 @@ def process_fields_diff(procstatus, dscfg, radar_list=None):
 
     if ((field_name_1 not in radar1.fields) or
             (field_name_2 not in radar2.fields)):
-        warn('Unable to compare fields '+field_name_1+'and '+field_name_2 +
-             '. Field missing in one of the radars')
+        warn('Unable to compare fields ' + field_name_1 + 'and ' +
+             field_name_2 + '. Field missing in one of the radars')
         return None, None
 
     field_diff = pyart.config.get_metadata('fields_difference')
     field_diff['data'] = (
         radar1.fields[field_name_1]['data'] -
         radar2.fields[field_name_2]['data'])
-    field_diff['long_name'] = field_name_1+' - '+field_name_2
+    field_diff['long_name'] = field_name_1 + ' - ' + field_name_2
 
     rad_diff = deepcopy(radar1)
     rad_diff.fields = dict()
@@ -2214,7 +2214,7 @@ def process_intercomp_fields(procstatus, dscfg, radar_list=None):
     for datatypedescr in dscfg['datatype']:
         radarnr = datatypedescr.split(':')[0]
         radarnr_dict.update({radarnr: []})
-        ind_radar_list.add(int(radarnr[5:8])-1)
+        ind_radar_list.add(int(radarnr[5:8]) - 1)
 
     ind_radar_list = list(ind_radar_list)
 
@@ -2238,8 +2238,8 @@ def process_intercomp_fields(procstatus, dscfg, radar_list=None):
 
     if ((field_name_1 not in radar1.fields) or
             (field_name_2 not in radar2.fields)):
-        warn('Unable to compare fields '+field_name_1+' and '+field_name_2 +
-             '. Field missing in one of the radars')
+        warn('Unable to compare fields ' + field_name_1 + ' and ' +
+             field_name_2 + '. Field missing in one of the radars')
         return None, None
 
     data1 = deepcopy(radar1.fields[field_name_1]['data'])

@@ -1,11 +1,10 @@
-==========
-User Guide
-==========
+List of pyrad products
+==============================
 
 VOL
-==============================
-ANTENNA_POS
 -----------------------------
+ANTENNA_POS
+""""""""""""""""""""""""""""""
 description
    Plots time series of the antenna position with respect to elevation or azimuth
 
@@ -16,7 +15,7 @@ parameters
         type of data to plot. Can be AZ or EL 
 
 CDF
------------------------------
+""""""""""""""""""""""""""""""
 description
    plots and writes the cumulative density function of data
 
@@ -49,7 +48,7 @@ parameters
         of ints The hydrometeor types that are filtered from the analysis. Default empty list.
 
 BSCOPE_IMAGE
------------------------------
+""""""""""""""""""""""""""""""
 description
    Creates a B-scope image (azimuth, range)
 
@@ -64,7 +63,7 @@ parameters
         or None The minimum and maximum values of the color scale. If None the scale is going to be set according to the Py-ART config file
 
 CAPPI_IMAGE
------------------------------
+""""""""""""""""""""""""""""""
 description
    Creates a CAPPI image
 
@@ -77,7 +76,7 @@ parameters
         The CAPPI resolution [m]. Default 500.
 
 CROSS_SECTION 
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a cross-section of polar data through arbitrary coordinates
 
@@ -96,7 +95,7 @@ parameters
         Name of the DEM file to use to plot the topography, it must be in the dempath specified in the main config file
 
 FIELD_COVERAGE
------------------------------
+""""""""""""""""""""""""""""""
 description
    Gets the field coverage over a certain sector
 
@@ -119,7 +118,7 @@ parameters
         The tolerance in elevation angle when putting the data in a fixed grid
 
 FIXED_RNG_IMAGE
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a fixed range image
 
@@ -132,7 +131,7 @@ parameters
         or None Min and Max values of the color scale. If None the values are taken from the Py-ART config file
 
 FIXED_RNG_SPAN_IMAGE
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a user-defined statistic over a fixed range image
 
@@ -145,7 +144,7 @@ parameters
         The statistic to compute. Can be 'min', 'max', 'mean', 'mode'. Default 'max'
 
 HISTOGRAM
------------------------------
+""""""""""""""""""""""""""""""
 description
    Computes a histogram of the radar volum data
 
@@ -156,7 +155,7 @@ parameters
         If true the histogram data is written in a csv file
 
 PLOT_ALONG_COORD
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots the radar volume data along a particular coordinate
 
@@ -181,7 +180,7 @@ parameters
         If true and in ALON_RNG mode the coordinate used is the gate altitude. Otherwise is the range. Default False
 
 PPI_CONTOUR
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a PPI countour plot
 
@@ -192,7 +191,7 @@ parameters
         The elevation angle number
 
 PPI_CONTOUR_OVERPLOT
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a PPI of a field with another field overplotted as a contour plot.
 
@@ -203,7 +202,7 @@ parameters
         The elevation angle number
 
 PPI_IMAGE
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a PPI image. It can also plot the histogram and the quantiles of the data in the PPI.
 
@@ -222,7 +221,7 @@ parameters
         or None The minimum and maximum values of the color scale. If None the scale is going to be set according to the Py-ART config file
 
 PPI_MAP
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a PPI image over a map. The map resolution and the type of maps used are defined in the variables 'mapres' and 'maps' in 'ppiMapImageConfig' in the loc config file.
 
@@ -231,7 +230,7 @@ parameters
         The elevation angle number
 
 PPIMAP_ROI_OVERPLOT
------------------------------
+""""""""""""""""""""""""""""""
 description
    Over plots a polygon delimiting a region of interest on a PPI map. The map resolution and the type of maps used are defined in the variables 'mapres' and 'maps' in 'ppiMapImageConfig' in the loc config file.
 
@@ -240,7 +239,7 @@ parameters
         The elevation angle number
 
 PROFILE_STATS
------------------------------
+""""""""""""""""""""""""""""""
 description
    Computes and plots a vertical profile statistics. The statistics are saved in a csv file
 
@@ -265,7 +264,7 @@ parameters
         or None If fixed_span is set, the minimum and maximum values of the X-axis. If None, they are obtained from the Py-ART config file
 
 PSEUDOPPI_CONTOUR
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a pseudo-PPI countour plot
 
@@ -278,7 +277,7 @@ parameters
         The tolerance between the actual radar elevation angle and the nominal pseudo-PPI elevation angle.
 
 PSEUDOPPI_CONTOUR_OVERPLOT
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a pseudo-PPI of a field with another field over-plotted as a contour plot
 
@@ -291,7 +290,7 @@ parameters
         The tolerance between the actual radar elevation angle and the nominal pseudo-PPI elevation angle.
 
 PSEUDOPPI_IMAGE
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a pseudo-PPI image. It can also plot the histogram and the quantiles of the data in the pseudo-PPI.
 
@@ -310,7 +309,7 @@ parameters
         or None Min and Max values of the color scale. If None the values are taken from the Py-ART config file
 
 PSEUDOPPI_MAP
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a pseudo-PPI image over a map. The map resolution and the type of maps used are defined in the variables 'mapres' and 'maps' in 'ppiMapImageConfig' in the loc config file.
 
@@ -321,7 +320,7 @@ parameters
         The tolerance between the actual radar elevation angle and the nominal pseudo-PPI elevation angle.
 
 PSEUDORHI_CONTOUR
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a pseudo-RHI countour plot
 
@@ -334,7 +333,7 @@ parameters
         The tolerance between the actual radar azimuth angle and the nominal pseudo-RHI azimuth angle.
 
 PSEUDORHI_CONTOUR_OVERPLOT
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a pseudo-RHI of a field with another field over-plotted as a contour plot
 
@@ -347,7 +346,7 @@ parameters
         The tolerance between the actual radar azimuth angle and the nominal pseudo-RHI azimuth angle.
 
 PSEUDORHI_IMAGE
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a pseudo-RHI image. It can also plot the histogram and the quantiles of the data in the pseudo-RHI.
 
@@ -366,7 +365,7 @@ parameters
         or None Min and Max values of the color scale. If None the values are taken from the Py-ART config file
 
 QUANTILES
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots and writes the quantiles of a radar volume
 
@@ -381,7 +380,7 @@ parameters
         or None If fixed_span is set, the minimum and maximum values of the Y-axis. If None, they are obtained from the Py-ART config file
 
 RHI_CONTOUR
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots an RHI countour plot
 
@@ -392,7 +391,7 @@ parameters
         The azimuth angle number
 
 RHI_CONTOUR_OVERPLOT
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots an RHI of a field with another field over-plotted as a contour plot
 
@@ -403,7 +402,7 @@ parameters
         The azimuth angle number
 
 RHI_IMAGE
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots an RHI image. It can also plot the histogram and the quantiles of the data in the RHI.
 
@@ -420,7 +419,7 @@ parameters
         or None The minimum and maximum values of the color scale. If None the scale is going to be set according to the Py-ART config file
 
 RHI_PROFILE
------------------------------
+""""""""""""""""""""""""""""""
 description
    Computes and plots a vertical profile statistics out of an RHI. The statistics are saved in a csv file
 
@@ -447,7 +446,7 @@ parameters
         or None If fixed_span is set, the minimum and maximum values of the X-axis. If None, they are obtained from the Py-ART config file
 
 SAVEALL
------------------------------
+""""""""""""""""""""""""""""""
 description
    Saves radar volume data including all or a list of user- defined fields in a C/F radial or ODIM file
 
@@ -464,7 +463,7 @@ parameters
         The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level).
 
 SAVEVOL
------------------------------
+""""""""""""""""""""""""""""""
 description
    Saves one field of a radar volume data in a C/F radial or ODIM file
 
@@ -479,7 +478,7 @@ parameters
         The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level).
 
 SAVEVOL_CSV
------------------------------
+""""""""""""""""""""""""""""""
 description
    Saves one field of a radar volume data in a CSV file
 
@@ -488,7 +487,7 @@ parameters
         If True masked values will not be saved. Default False
 
 SAVEVOL_KML
------------------------------
+""""""""""""""""""""""""""""""
 description
    Saves one field of a radar volume data in a KML file
 
@@ -499,7 +498,7 @@ parameters
         or None azimuthal resolution of the range bins. If None the antenna beamwidth is going to be used to determine the resolution
 
 SELFCONSISTENCY
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a ZDR versus KDP/ZH histogram of data.
 
@@ -512,7 +511,7 @@ parameters
         If True the occurrence density of ZK/KDP for each ZDR bin is going to be represented. Otherwise it will show the number of gates at each bin. Default True
 
 SELFCONSISTENCY2
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a ZH measured versus ZH inferred from a self-consistency relation histogram of data.
 
@@ -521,7 +520,7 @@ parameters
         If True the occurrence density of ZK/KDP for each ZDR bin is going to be represented. Otherwise it will show the number of gates at each bin. Default True
 
 TIME_RANGE
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a time-range/azimuth/elevation plot
 
@@ -532,7 +531,7 @@ parameters
         or None The minimum and maximum values of the color scale. If None the scale is going to be set according to the Py-ART config file
 
 VOL_TS
------------------------------
+""""""""""""""""""""""""""""""
 description
    Writes and plots a value corresponding to a time series. Meant primarily for writing and plotting the results of the SELFCONSISTENCY2 algorithm
 
@@ -563,7 +562,7 @@ parameters
         of str The list of emails of the people that will receive the alarm.. If not specified it is not possible to send any alarm
 
 WIND_PROFILE
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots vertical profile of wind data (U, V, W components and wind velocity and direction) out of a radar volume containing the retrieved U,V and W components of the wind, the standard deviation of the retrieval and the velocity difference between the estimated radial velocity (assuming the wind to be uniform) and the actual measured radial velocity.
 
@@ -582,9 +581,9 @@ parameters
         or None If fixed_span is set, the minimum and maximum values of the X-axis. If None, they are obtained from the span of the U component defined in the Py-ART config file 
 
 CENTROIDS
-==============================
-HISTOGRAM
 -----------------------------
+HISTOGRAM
+""""""""""""""""""""""""""""""
 description
    Plots the histogram of one of the variables used for centroids computation.
 
@@ -597,7 +596,7 @@ parameters
         bin size. Default 0.1
 
 HISTOGRAM2D
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots the 2D- histogram of two of the variables used for centroids computation.
 
@@ -608,7 +607,7 @@ parameters
         bin size. Default 0.1
 
 HISTOGRAM_LABELED
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots the histogram of one of the variables used for centroids computation. Only plots labeled data.
 
@@ -621,7 +620,7 @@ parameters
         bin size. Default 0.1
 
 HISTOGRAM_CENTROIDS
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots the histogram of one of the variables used for centroids computation corresponding to a particular hydrometeor type, the intermediate centroids and the final centroid
 
@@ -636,7 +635,7 @@ parameters
         bin size. Default 0.1
 
 HISTOGRAM2D_CENTROIDS
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots the 2D- histogram of two of the variables used for centroids computatio ncorresponding to a particular hydrometeor type, the intermediate centroids and the final centroid
 
@@ -649,11 +648,11 @@ parameters
         bin size. Default 0.1
 
 COLOCATED_GATES
-==============================
-COSMO_COORD
-==============================
-SAVEVOL
 -----------------------------
+COSMO_COORD
+-----------------------------
+SAVEVOL
+""""""""""""""""""""""""""""""
 description
    Save an object containing the index of the COSMO model grid that corresponds to each radar gate in a C/F radial file.
 
@@ -668,9 +667,9 @@ parameters
         The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level). 
 
 COSMO2RADAR
-==============================
-SAVEVOL
 -----------------------------
+SAVEVOL
+""""""""""""""""""""""""""""""
 description
    Save an object containing the COSMO data in radar coordinatesin a C/F radial or ODIM file.
 
@@ -685,9 +684,9 @@ parameters
         The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level). All the products of the 'VOL' dataset group 
 
 GRID
-==============================
-CROSS_SECTION
 -----------------------------
+CROSS_SECTION
+""""""""""""""""""""""""""""""
 description
    Plots a cross-section of gridded data
 
@@ -696,7 +695,7 @@ parameters
         The two lat-lon coordinates marking the limits. They have the keywords 'lat' and 'lon' [degree]. The altitude limits are defined by the parameters in 'xsecImageConfig' in the 'loc' configuration file
 
 HISTOGRAM
------------------------------
+""""""""""""""""""""""""""""""
 description
    Computes a histogram of the radar volum data
 
@@ -711,7 +710,7 @@ parameters
         If true the histogram data is written in a csv file
 
 LATITUDE_SLICE
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a cross-section of gridded data over a constant latitude.
 
@@ -720,7 +719,7 @@ parameters
         The starting point of the cross-section. The ending point is defined by the parameters in 'xsecImageConfig' in the 'loc' configuration file
 
 LONGITUDE_SLICE
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a cross-ection of gridded data over a constant longitude.
 
@@ -729,7 +728,7 @@ parameters
         The starting point of the cross-section. The ending point is defined by the parameters in 'xsecImageConfig' in the 'loc' configuration file
 
 SAVEALL
------------------------------
+""""""""""""""""""""""""""""""
 description
    Saves a gridded data object including all or a list of user-defined fields in a netcdf file
 
@@ -738,7 +737,7 @@ parameters
         of str or None The list of data types to save. If it is None, all fields in the radar object will be saved
 
 SAVEVOL
------------------------------
+""""""""""""""""""""""""""""""
 description
    Saves on field of a gridded data object in a netcdf file.
 
@@ -753,7 +752,7 @@ parameters
         The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level).
 
 STATS
------------------------------
+""""""""""""""""""""""""""""""
 description
    Computes statistics over the whole images and stores them in a file.
 
@@ -762,7 +761,7 @@ parameters
         The statistic used. Can be mean, median, min, max
 
 SURFACE_RAW
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a surface image of gridded data without projecting it into a map
 
@@ -771,7 +770,7 @@ parameters
         The altitude level to plot. The rest of the parameters are defined by the parameters in 'ppiImageConfig' and 'ppiMapImageConfig' in the 'loc' configuration file
 
 SURFACE_IMAGE
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a surface image of gridded data.
 
@@ -780,7 +779,7 @@ parameters
         The altitude level to plot. The rest of the parameters are defined by the parameters in 'ppiImageConfig' and 'ppiMapImageConfig' in the 'loc' configuration file
 
 SURFACE_CONTOUR
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a surface image of contour gridded data.
 
@@ -819,9 +818,9 @@ parameters
         Linewidths for streamlines. (only used for streamline plots)
 
 SPECTRA
-==============================
-AMPLITUDE_PHASE_ANGLE_DOPPLER
 -----------------------------
+AMPLITUDE_PHASE_ANGLE_DOPPLER
+""""""""""""""""""""""""""""""
 description
    Makes an angle Doppler plot of complex spectra or IQ data. The plot can be along azimuth or along range. It is plotted separately the module and the phase of the signal.
 
@@ -842,7 +841,7 @@ parameters
         or None Minimum and maximum of the color scale for the module and phase
 
 AMPLITUDE_PHASE_DOPPLER
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a complex Doppler spectrum or IQ data making two separate plots for the module and phase of the signal
 
@@ -859,7 +858,7 @@ parameters
         or None Minimum and maximum of the color scale for the module and phase
 
 AMPLITUDE_PHASE_RANGE_DOPPLER
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a complex spectra or IQ data range-Doppler making two separate plots for the module and phase
 
@@ -876,7 +875,7 @@ parameters
         or None Minimum and maximum of the color scale for the module and phase
 
 AMPLITUDE_PHASE_TIME_DOPPLER
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a complex spectra or IQ data time-Doppler making two separate plots for the module and phase of the signal
 
@@ -889,7 +888,7 @@ parameters
         Can be 'final' or 'temporal'. If final the data is only plotted at the end of the processing
 
 ANGLE_DOPPLER
------------------------------
+""""""""""""""""""""""""""""""
 description
    Makes an angle Doppler plot. The plot can be along azimuth or along range
 
@@ -910,7 +909,7 @@ parameters
         or None Minimum and maximum of the color scale
 
 COMPLEX_ANGLE_DOPPLER
------------------------------
+""""""""""""""""""""""""""""""
 description
    Makes an angle Doppler plot of complex spectra or IQ data. The plot can be along azimuth or along range. The real and imaginary parts are plotted separately
 
@@ -931,7 +930,7 @@ parameters
         or None Minimum and maximum of the color scale
 
 COMPLEX_DOPPLER
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a complex Doppler spectrum or IQ data making two separate plots for the real and imaginary parts
 
@@ -948,7 +947,7 @@ parameters
         or None Minimum and maximum of the color scale
 
 COMPLEX_RANGE_DOPPLER
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots the complex spectra or IQ data range-Doppler making two separate plots for the real and imaginary parts
 
@@ -965,7 +964,7 @@ parameters
         or None Minimum and maximum of the color scale
 
 COMPLEX_TIME_DOPPLER
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots the complex spectra or IQ data time-Doppler making two separate plots for the real and imaginary parts
 
@@ -978,7 +977,7 @@ parameters
         Can be 'final' or 'temporal'. If final the data is only plotted at the end of the processing
 
 DOPPLER
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a Doppler spectrum variable or IQ data variable
 
@@ -995,7 +994,7 @@ parameters
         or None Minimum and maximum of the color scale
 
 RANGE_DOPPLER
------------------------------
+""""""""""""""""""""""""""""""
 description
    Makes a range-Doppler plot of spectral or IQ data
 
@@ -1012,7 +1011,7 @@ parameters
         or None Minimum and maximum of the color scale
 
 SAVEALL
------------------------------
+""""""""""""""""""""""""""""""
 description
    Saves radar spectra or IQ volume data including all or a list of userdefined fields in a netcdf file
 
@@ -1023,7 +1022,7 @@ parameters
         If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary
 
 SAVEVOL
------------------------------
+""""""""""""""""""""""""""""""
 description
    Saves one field of a radar spectra or IQ volume data in a netcdf file
 
@@ -1032,7 +1031,7 @@ parameters
         If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary
 
 TIME_DOPPLER
------------------------------
+""""""""""""""""""""""""""""""
 description
    Makes a time-Doppler plot of spectral or IQ data at a point of interest.
 
@@ -1045,11 +1044,11 @@ parameters
         Can be 'final' or 'temporal'. If final the data is only plotted at the end of the processing 
 
 GRID_TIMEAVG
-==============================
-INTERCOMP
-==============================
-PLOT_AND_WRITE_INTERCOMP_TS
 -----------------------------
+INTERCOMP
+-----------------------------
+PLOT_AND_WRITE_INTERCOMP_TS
+""""""""""""""""""""""""""""""
 description
    Writes statistics of radar intercomparison in a file and plots the time series of the statistics.
 
@@ -1062,7 +1061,7 @@ parameters
         The minimum correlation to consider the statistics valid and therefore use the data point in the plotting. Default 0.
 
 PLOT_SCATTER_INTERCOMP
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a density plot with the points of radar 1 versus the points of radar 2
 
@@ -1073,9 +1072,9 @@ parameters
         Type of scatter plot. Can be a plot for each radar volume ('instant') or at the end of the processing period ('cumulative'). Default is 'cumulative'
 
 ML
-==============================
-ML_TS
 -----------------------------
+ML_TS
+""""""""""""""""""""""""""""""
 description
    Plots and writes a time series of the melting layer, i.e. the evolution of the average and standard deviation of the melting layer top and thickness and the the number of rays used in the retrieval.
 
@@ -1084,9 +1083,9 @@ parameters
         The pixel density of the plot. Default 72
 
 MONITORING
-==============================
-ANGULAR_DENSITY
 -----------------------------
+ANGULAR_DENSITY
+""""""""""""""""""""""""""""""
 description
    For a specified elevation angle, plots a 2D histogram with the azimuth angle in the X-axis and the data values in the Y-axis. The reference values and the user defined quantiles are also plot on the same figure
 
@@ -1101,7 +1100,7 @@ parameters
         or None The minimum and maximum values of the data points. If not specified they are obtained from the Py-ART config file
 
 CUMUL_VOL_TS
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots time series of the average of instantaneous quantiles stored in a csv file.
 
@@ -1136,7 +1135,7 @@ parameters
         of str The list of emails of the people that will receive the alarm.. If not specified it is not possible to send any alarm
 
 PPI_HISTOGRAM
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a histogram of data at a particular elevation angle.
 
@@ -1145,7 +1144,7 @@ parameters
         The elevation angle number to plot
 
 VOL_HISTOGRAM
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a histogram of data collected from all the radar volume.
 
@@ -1154,7 +1153,7 @@ parameters
         If true the resultant histogram is also saved in a csv file. Default True.
 
 VOL_TS
------------------------------
+""""""""""""""""""""""""""""""
 description
    Computes statistics of the gathered data and writes them in a csv file and plots a time series of those statistics.
 
@@ -1189,9 +1188,9 @@ parameters
         of str The list of emails of the people that will receive the alarm.. If not specified it is not possible to send any alarm 
 
 OCCURRENCE
-==============================
-WRITE_EXCESS_GATES
 -----------------------------
+WRITE_EXCESS_GATES
+""""""""""""""""""""""""""""""
 description
    Write the data that identifies radar gates with clutter that has a frequency of occurrence above a certain threshold.
 
@@ -1200,11 +1199,11 @@ parameters
         Minimum frequency of occurrence in percentage to keep the gate as valid. Default 95. All the products of the 'VOL' dataset group 
 
 QVP
-==============================
-SPARSE_GRID
-==============================
-SURFACE_IMAGE
 -----------------------------
+SPARSE_GRID
+-----------------------------
+SURFACE_IMAGE
+""""""""""""""""""""""""""""""
 description
    Generates a surface image
 
@@ -1213,9 +1212,9 @@ parameters
         of floats The limits of the surface to plot [deg] lon0, lon1, lat0, lat1 
 
 SUN_HITS
-==============================
-PLOT_SUN_RETRIEVAL_TS
 -----------------------------
+PLOT_SUN_RETRIEVAL_TS
+""""""""""""""""""""""""""""""
 description
    Plots time series of the retrieved sun pattern parameters
 
@@ -1226,7 +1225,7 @@ parameters
         If true the year is added in the plot file name
 
 WRITE_SUN_RETRIEVAL
------------------------------
+""""""""""""""""""""""""""""""
 description
    Writes the retrieved sun pattern parameters in a csv file.
 
@@ -1235,11 +1234,11 @@ parameters
         If true the year is added in the csv file name
 
 TIMEAVG
-==============================
-TIMESERIES
-==============================
-COMPARE_CUMULATIVE_POINT
 -----------------------------
+TIMESERIES
+-----------------------------
+COMPARE_CUMULATIVE_POINT
+""""""""""""""""""""""""""""""
 description
    Plots in the same graph 2 time series of data accumulation (tipically rainfall rate). One time series is a point measurement of radar data while the other is from a co-located instrument (rain gauge or disdrometer)
 
@@ -1262,7 +1261,7 @@ parameters
         The scaning period of the radar in seconds. This parameter is defined in the 'loc' config file
 
 COMPARE_POINT
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots in the same graph 2 time series of data . One time series is a point measurement of radar data while the other is from a co-located instrument (rain gauge or disdrometer)
 
@@ -1283,7 +1282,7 @@ parameters
         The elevation angle used to retrieve the polarimetric variables of a disdrometer
 
 COMPARE_TIME_AVG
------------------------------
+""""""""""""""""""""""""""""""
 description
    Creates a scatter plot of average radar data versus average sensor data.
 
@@ -1306,7 +1305,7 @@ parameters
         Starting moment of the accumulation [s from midnight]. Default 0.
 
 PLOT_AND_WRITE
------------------------------
+""""""""""""""""""""""""""""""
 description
    Writes and plots a trajectory time series.
 
@@ -1315,7 +1314,7 @@ parameters
         The minimum and maximum value of the Y-axis. If none it will be obtained from the Py-ART config file.
 
 PLOT_AND_WRITE_POINT
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots and writes a time series of radar data at a particular point
 
@@ -1326,7 +1325,7 @@ parameters
         The limits of the Y-axis. If none they will be obtained from the Py-ART config file.
 
 PLOT_CUMULATIVE_POINT
------------------------------
+""""""""""""""""""""""""""""""
 description
    Plots a time series of radar data accumulation at a particular point.
 
@@ -1339,7 +1338,7 @@ parameters
         The scaning period of the radar in seconds. This parameter is defined in the 'loc' config file
 
 PLOT_HIST
------------------------------
+""""""""""""""""""""""""""""""
 description
    plots and writes a histogram of all the data gathered during the trajectory processing
 
@@ -1348,7 +1347,7 @@ parameters
         or None The quantization step of the data. If None it will be obtained from the Py-ART config file
 
 TRAJ_CAPPI_IMAGE
------------------------------
+""""""""""""""""""""""""""""""
 description
    Creates a CAPPI image with the trajectory position overplot on it.
 
@@ -1363,9 +1362,9 @@ parameters
         The CAPPI resolution [m]. Default 500.
 
 TRAJ_ONLY
-==============================
-TRAJ_PLOT
 -----------------------------
+TRAJ_PLOT
+""""""""""""""""""""""""""""""
 description
    Plots time series of the trajectory respect to the radar elevation, azimuth or range
 
@@ -1376,9 +1375,9 @@ parameters
        'EL', 'AZ', or 'RANGE'
 
 VPR
-==============================
-PLOT_VPR_THEO
 -----------------------------
+PLOT_VPR_THEO
+""""""""""""""""""""""""""""""
 description
    Plots and writes the retrieved theoretical VPR
 

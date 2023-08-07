@@ -27,7 +27,7 @@ RADAR_INFO = {
         'MLE': [46.041, 8.833],
         'DX50': [46.8425, 6.9184],
         'MXPOL': [46.8133, 6.9428]
-        },
+    },
     'altitude': {
         'ALB': 938,
         'DOL': 1682,
@@ -35,7 +35,7 @@ RADAR_INFO = {
         'MLE': 1626,
         'DX50': 451,
         'MXPOL': 489
-        },
+    },
     'searchkey': {
         'ALB': 'PHA*hdf*',
         'DOL': 'PHD*hdf*',
@@ -43,7 +43,7 @@ RADAR_INFO = {
         'MLE': 'PHL*hdf*',
         'DX50': None,
         'MXPOL': None
-        },
+    },
     'radarID': {
         'ALB': 'ALB',
         'A': 'ALB',
@@ -55,7 +55,7 @@ RADAR_INFO = {
         'M': 'MLE',
         'DX50': 'DX50',
         'MXPOL': 'MXPOL'
-        },
+    },
     'dbbeam': {
         'ALB': 1.,
         'DOL': 1.,
@@ -63,7 +63,7 @@ RADAR_INFO = {
         'MLE': 1.,
         'MXPOL': 1.4,
         'DX50': 1.27
-        },
+    },
     'elevations': {
         'ALB': MCH_elev,
         'DOL': MCH_elev,
@@ -71,8 +71,8 @@ RADAR_INFO = {
         'MLE': MCH_elev,
         'DX50': None,
         'MXPOL': None
-        }
     }
+}
 
 MY_METADATA = {
     'nyq_vel': NYQUIST_VEL,
@@ -94,7 +94,7 @@ MY_METADATA = {
         'valid_min': None,
         'valid_max': None,
         'plot_interval': None},
-    }
+}
 
 # Metadata for polarimetric short and long names
 MY_POLARNAMES = {
@@ -122,7 +122,7 @@ MY_POLARNAMES = {
     'corrected_Z': ['corrected_reflectivity', 'Clutter filtered reflectivity',
                     'dBZ', 0., 55., 1.],
     'SNRh': ['signal_noise_ratio_h', 'Signal to noise ratio at hor. pol',
-                    '-', 0., 50., 0.5],
+             '-', 0., 50., 0.5],
     'SNRv': ['signal_noise_ratio_v', 'Signal to noise ratio at vert. pol',
-                    '-', 0., 50., 0.5]
-    }
+             '-', 0., 50., 0.5]
+}

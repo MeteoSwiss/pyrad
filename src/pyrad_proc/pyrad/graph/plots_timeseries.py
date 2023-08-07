@@ -16,6 +16,9 @@ Functions to plot Pyrad datasets
 
 """
 
+import pyart
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 from warnings import warn
 
 import numpy as np
@@ -26,12 +29,7 @@ mpl.use('Agg')
 
 # Increase a bit font size
 mpl.rcParams.update({'font.size': 16})
-mpl.rcParams.update({'font.family':  "sans-serif"})
-
-import matplotlib.dates as mdates
-import matplotlib.pyplot as plt
-
-import pyart
+mpl.rcParams.update({'font.family': "sans-serif"})
 
 
 def plot_timeseries(tvec, data_list, fname_list, labelx='Time [UTC]',
@@ -87,7 +85,7 @@ def plot_timeseries(tvec, data_list, fname_list, labelx='Time [UTC]',
     """
     if period > 0:
         for i, data in enumerate(data_list):
-            data *= (period/3600.)
+            data *= (period / 3600.)
             data_list[i] = np.ma.cumsum(data)
 
     fig, ax = plt.subplots(figsize=[10, 6], dpi=dpi)
@@ -184,10 +182,10 @@ def plot_timeseries_comp(date1, value1, date2, value2, fname_list,
     """
     if (period1 > 0) and (period2 > 0):
         # TODO: document this and check (sometimes artefacts)
-        value1 *= (period1/3600.)
+        value1 *= (period1 / 3600.)
         value1 = np.ma.cumsum(value1)
 
-        value2 *= (period2/3600.)
+        value2 *= (period2 / 3600.)
         value2 = np.ma.cumsum(value2)
 
     fig, ax = plt.subplots(figsize=[10, 6.5], dpi=dpi)
@@ -220,7 +218,7 @@ def plot_timeseries_comp(date1, value1, date2, value2, fname_list,
 def plot_monitoring_ts(date, np_t, cquant, lquant, hquant, field_name,
                        fname_list, ref_value=None, vmin=None, vmax=None,
                        np_min=0, labelx='Time [UTC]', labely='Value',
-                       titl='Time Series', dpi=72, plot_until_year_end = False):
+                       titl='Time Series', dpi=72, plot_until_year_end=False):
     """
     plots a time series of monitoring data
 
@@ -293,32 +291,32 @@ def plot_monitoring_ts(date, np_t, cquant, lquant, hquant, field_name,
     ax.plot(date_plt, lquant_plt, 'rx-')
     ax.plot(date_plt, hquant_plt, 'rx-')
     if ref_value is not None:
-        ax.plot(date_plt, np.zeros(len(date_plt))+ref_value, 'k--')
+        ax.plot(date_plt, np.zeros(len(date_plt)) + ref_value, 'k--')
     ax.set_ylabel(labely)
     ax.set_title(titl)
     ax.set_ylim([vmin, vmax])
     if plot_until_year_end:
         t0 = date_plt[0]
-        tend = datetime.datetime(year = t0.year, 
-                                 month = 12,
-                                 day = 31, 
-                                 hour = 23, 
-                                 minute = 59)
+        tend = datetime.datetime(year=t0.year,
+                                 month=12,
+                                 day=31,
+                                 hour=23,
+                                 minute=59)
         ax.set_xlim([t0, tend])
     else:
         # tight x axis
         ax.autoscale(enable=True, axis='x', tight=True)
-    
+
     ax.grid(True)
 
     ax = fig.add_subplot(2, 1, 2)
     ax.plot(date, np_t, 'x-')
 
     if np_min is not None:
-        ax.plot(date, np.zeros(len(date))+np_min, 'k--')
+        ax.plot(date, np.zeros(len(date)) + np_min, 'k--')
 
     if plot_until_year_end:
-         ax.set_xlim([t0, tend])
+        ax.set_xlim([t0, tend])
     else:
         # tight x axis
         ax.autoscale(enable=True, axis='x', tight=True)
@@ -330,7 +328,6 @@ def plot_monitoring_ts(date, np_t, cquant, lquant, hquant, field_name,
     # axes up to make room for them
     fig.autofmt_xdate()
 
-    
     for fname in fname_list:
         fig.savefig(fname, dpi=dpi)
     plt.close(fig)
@@ -433,7 +430,7 @@ def plot_intercomp_scores_ts(date_vec, np_vec, meanbias_vec, medianbias_vec,
     ax.plot(date_plt, modebias_plt, 'gx-', label='mode')
     ax.plot(date_plt, intercep_plt, 'yx-', label='intercep of slope 1 LR')
     if ref_value is not None:
-        ax.plot(date_plt, np.zeros(len(date_plt))+ref_value, 'k--')
+        ax.plot(date_plt, np.zeros(len(date_plt)) + ref_value, 'k--')
     # plt.legend(loc='best')
     ax.set_ylabel('bias [dB]')
     ax.set_title(titl)
@@ -448,7 +445,7 @@ def plot_intercomp_scores_ts(date_vec, np_vec, meanbias_vec, medianbias_vec,
     ax.plot(date_plt, quant25bias_plt, 'rx-', label='25-percentile')
     ax.plot(date_plt, quant75bias_plt, 'rx-', label='75-percentile')
     if ref_value is not None:
-        ax.plot(date_plt, np.zeros(len(date_plt))+ref_value, 'k--')
+        ax.plot(date_plt, np.zeros(len(date_plt)) + ref_value, 'k--')
     # plt.legend(loc='best')
     ax.set_ylabel('bias [dB]')
     ax.set_ylim([-5., 5.])
@@ -461,7 +458,7 @@ def plot_intercomp_scores_ts(date_vec, np_vec, meanbias_vec, medianbias_vec,
     ax.plot(date_corr, corr_plt, 'bx-')
 
     if corr_min > 0:
-        ax.plot(date_corr, np.zeros(len(date_corr))+corr_min, 'k--')
+        ax.plot(date_corr, np.zeros(len(date_corr)) + corr_min, 'k--')
 
     ax.set_ylabel('correlation')
     ax.set_ylim([0., 1.])
@@ -474,7 +471,7 @@ def plot_intercomp_scores_ts(date_vec, np_vec, meanbias_vec, medianbias_vec,
     ax.plot(date2, np_vec, 'bx-')
 
     if np_min > 0:
-        ax.plot(date2, np.zeros(len(date2))+np_min, 'k--')
+        ax.plot(date2, np.zeros(len(date2)) + np_min, 'k--')
 
     ax.set_ylabel('Number of Samples')
     ax.set_xlabel(labelx)
@@ -535,8 +532,8 @@ def plot_ml_ts(dt_ml_arr, ml_top_avg_arr, ml_top_std_arr, thick_avg_arr,
 
     ax = fig.add_subplot(3, 1, 1)
     ax.plot(dt_ml_arr, ml_top_avg_arr, 'bx-', label='avg')
-    ax.plot(dt_ml_arr, ml_top_avg_arr+ml_top_std_arr, 'rx-', label='avg+std')
-    ax.plot(dt_ml_arr, ml_top_avg_arr-ml_top_std_arr, 'rx-', label='avg-std')
+    ax.plot(dt_ml_arr, ml_top_avg_arr + ml_top_std_arr, 'rx-', label='avg+std')
+    ax.plot(dt_ml_arr, ml_top_avg_arr - ml_top_std_arr, 'rx-', label='avg-std')
     # plt.legend(loc='best')
     ax.set_ylabel('Top height [m MSL]')
     ax.set_title(titl)
@@ -549,8 +546,8 @@ def plot_ml_ts(dt_ml_arr, ml_top_avg_arr, ml_top_std_arr, thick_avg_arr,
 
     ax = fig.add_subplot(3, 1, 2)
     ax.plot(dt_ml_arr, thick_avg_arr, 'bx-', label='avg')
-    ax.plot(dt_ml_arr, thick_avg_arr+thick_std_arr, 'rx-', label='avg+std')
-    ax.plot(dt_ml_arr, thick_avg_arr-thick_std_arr, 'rx-', label='avg-std')
+    ax.plot(dt_ml_arr, thick_avg_arr + thick_std_arr, 'rx-', label='avg+std')
+    ax.plot(dt_ml_arr, thick_avg_arr - thick_std_arr, 'rx-', label='avg-std')
     # plt.legend(loc='best')
     ax.set_ylabel('Thickness [m]')
     ax.set_ylim([0., 3000.])
@@ -566,7 +563,7 @@ def plot_ml_ts(dt_ml_arr, ml_top_avg_arr, ml_top_std_arr, thick_avg_arr,
     # plt.legend(loc='best')
     ax.set_ylabel('Rays')
     ax.set_xlabel(labelx)
-    ax.set_ylim([0, np.max(nrays_total_arr)+5])
+    ax.set_ylim([0, np.max(nrays_total_arr) + 5])
     ax.set_xlim([dt_ml_arr[0], dt_ml_arr[-1]])
 
     # tight x axis
@@ -617,7 +614,7 @@ def plot_sun_retrieval_ts(sun_retrieval, data_type, fname_list, labelx='Date',
         value = sun_retrieval[2]
         labely = 'Number of sun hits H channel'
         vmin = 0
-        vmax = np.max(sun_retrieval[2])+1
+        vmax = np.max(sun_retrieval[2]) + 1
     elif data_type == 'el_width_h':
         value = sun_retrieval[3]
         labely = 'Elevation beamwidth H channel (Deg)'
@@ -647,17 +644,17 @@ def plot_sun_retrieval_ts(sun_retrieval, data_type, fname_list, labelx='Date',
         vmin = -110.
         vmax = -90.
     elif data_type == 'rx_bias_h':
-        value = (10.*np.ma.log10(sun_retrieval[9]) -
-                 10.*np.ma.log10(sun_retrieval[21]))
+        value = (10. * np.ma.log10(sun_retrieval[9]) -
+                 10. * np.ma.log10(sun_retrieval[21]))
         value_std = sun_retrieval[8]
         ref = np.zeros(len(value))
         labely = 'Receiver bias H channel (dB)'
         vmin = -5.
         vmax = 5.
     elif data_type == 'sf_h':
-        value = 10.*np.ma.log10(sun_retrieval[9])
+        value = 10. * np.ma.log10(sun_retrieval[9])
         # value_std = sun_retrieval[8]
-        ref = 10.*np.ma.log10(sun_retrieval[21])
+        ref = 10. * np.ma.log10(sun_retrieval[21])
         labely = 'Observed solar flux H channel (dB(sfu))'
         vmin = 15.
         vmax = 30.
@@ -665,7 +662,7 @@ def plot_sun_retrieval_ts(sun_retrieval, data_type, fname_list, labelx='Date',
         value = sun_retrieval[10]
         labely = 'Number of sun hits V channel'
         vmin = 0
-        vmax = np.max(sun_retrieval[10])+1
+        vmax = np.max(sun_retrieval[10]) + 1
     elif data_type == 'el_width_v':
         value = sun_retrieval[11]
         labely = 'Elevation beamwidth V channel (Deg)'
@@ -695,17 +692,17 @@ def plot_sun_retrieval_ts(sun_retrieval, data_type, fname_list, labelx='Date',
         vmin = -110.
         vmax = -90.
     elif data_type == 'rx_bias_v':
-        value = (10.*np.ma.log10(sun_retrieval[17]) -
-                 10.*np.ma.log10(sun_retrieval[21]))
+        value = (10. * np.ma.log10(sun_retrieval[17]) -
+                 10. * np.ma.log10(sun_retrieval[21]))
         value_std = sun_retrieval[16]
         ref = np.zeros(len(value))
         labely = 'Receiver bias V channel (dB)'
         vmin = -5.
         vmax = 5.
     elif data_type == 'sf_v':
-        value = 10.*np.ma.log10(sun_retrieval[17])
+        value = 10. * np.ma.log10(sun_retrieval[17])
         # value_std = sun_retrieval[16]
-        ref = 10.*np.ma.log10(sun_retrieval[21])
+        ref = 10. * np.ma.log10(sun_retrieval[21])
         labely = 'Observed solar flux V channel (dB(sfu))'
         vmin = 15.
         vmax = 30.
@@ -713,7 +710,7 @@ def plot_sun_retrieval_ts(sun_retrieval, data_type, fname_list, labelx='Date',
         value = sun_retrieval[18]
         labely = 'Number of sun hits ZDR'
         vmin = 0
-        vmax = np.max(sun_retrieval[18])+1
+        vmax = np.max(sun_retrieval[18]) + 1
     elif data_type == 'ZDR_sun_est':
         value = sun_retrieval[19]
         value_std = sun_retrieval[20]
@@ -724,7 +721,7 @@ def plot_sun_retrieval_ts(sun_retrieval, data_type, fname_list, labelx='Date',
 
     mask = np.ma.getmaskarray(value)
     if mask.all():
-        warn('Unable to create figure '+' '.join(fname_list) +
+        warn('Unable to create figure ' + ' '.join(fname_list) +
              '. No valid data')
         return None
 
@@ -750,8 +747,8 @@ def plot_sun_retrieval_ts(sun_retrieval, data_type, fname_list, labelx='Date',
         if not isvalid[-1]:
             value_std_plt = np.ma.append(value_std_plt, np.ma.masked)
 
-        ax.plot(date_plt, value_plt+value_std_plt, 'rx-')
-        ax.plot(date_plt, value_plt-value_std_plt, 'rx-')
+        ax.plot(date_plt, value_plt + value_std_plt, 'rx-')
+        ax.plot(date_plt, value_plt - value_std_plt, 'rx-')
     if ref is not None:
         ref_plt = ref[isvalid]
         if not isvalid[0]:

@@ -31,7 +31,7 @@ mpl.use('Agg')
 
 # Increase a bit font size
 mpl.rcParams.update({'font.size': 16})
-mpl.rcParams.update({'font.family':  "sans-serif"})
+mpl.rcParams.update({'font.family': "sans-serif"})
 
 
 def generate_complex_range_Doppler_title(radar, field, ray,
@@ -141,7 +141,7 @@ def generate_complex_Doppler_title(radar, field, ray, rng,
     l1 = "%s azi%.1f-ele%.1f deg rng%.1f km. %s " % (
         pyart.graph.common.generate_radar_name(radar),
         radar.azimuth['data'][ray], radar.elevation['data'][ray],
-        radar.range['data'][rng]/1000., time_str)
+        radar.range['data'][rng] / 1000., time_str)
     field_name = pyart.graph.common.generate_field_name(radar, field)
     return l1 + '\n' + field_name
 

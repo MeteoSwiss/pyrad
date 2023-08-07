@@ -535,7 +535,7 @@ def _wait_for_files(nowtime, datacfg, datatype_list, last_processed=None):
         starttime_loop = starttime_loop_default
         last_processed = starttime_loop_default
     elif (starttime_loop_default - last_processed
-          > timedelta(minutes=scan_min*3)):
+          > timedelta(minutes=scan_min * 3)):
         warn('last processed volume too old. '
              'There may be missing processed volumes')
         starttime_loop = starttime_loop_default
@@ -591,7 +591,7 @@ def _wait_for_files(nowtime, datacfg, datatype_list, last_processed=None):
     # for the first volume have arrived
     masterfile = masterfilelist[0]
     master_voltime = get_datetime(masterfile, masterdatatypedescr)
-    wait_time = nowtime+timedelta(minutes=scan_min)
+    wait_time = nowtime + timedelta(minutes=scan_min)
     found_all = False
     currenttime = deepcopy(nowtime)
     while currenttime <= wait_time or not found_all:
@@ -602,7 +602,7 @@ def _wait_for_files(nowtime, datacfg, datatype_list, last_processed=None):
         # currenttime = currenttime.replace(nowtime.hour)
 
         starttime_loop = master_voltime
-        endtime_loop = master_voltime+timedelta(minutes=scan_min)
+        endtime_loop = master_voltime + timedelta(minutes=scan_min)
         filelist_vol = []
         for scan in datacfg['ScanList'][0]:
             filelist = get_file_list(
@@ -673,7 +673,7 @@ def _wait_for_rainbow_datatypes(rainbow_files, period=30):
     #     year=2017, month=6, day=14)
     # startime_proc = currenttime.replace(10)
 
-    wait_time = currenttime+timedelta(seconds=period)
+    wait_time = currenttime + timedelta(seconds=period)
     while currenttime <= wait_time:
         currenttime = datetime.utcnow()
         # for offline testing
@@ -727,8 +727,8 @@ def _get_radars_data(master_voltime, datatypesdescr_list, datacfg,
     for i in range(1, num_radars):
         filelist_ref, datatypedescr_ref, _ = _get_masterfile_list(
             datatypesdescr_list[i],
-            [master_voltime-timedelta(seconds=datacfg['TimeTol'])],
-            [master_voltime+timedelta(seconds=datacfg['TimeTol'])],
+            [master_voltime - timedelta(seconds=datacfg['TimeTol'])],
+            [master_voltime + timedelta(seconds=datacfg['TimeTol'])],
             datacfg, scan_list=datacfg['ScanList'])
 
         nfiles_ref = len(filelist_ref)
@@ -737,7 +737,7 @@ def _get_radars_data(master_voltime, datatypesdescr_list, datacfg,
                 'ERROR: Could not find any valid volume for reference time'
                 ' {} and radar RADAR{:03d}')
             warn(str1.format(
-                master_voltime.strftime('%Y-%m-%d %H:%M:%S'), i+1))
+                master_voltime.strftime('%Y-%m-%d %H:%M:%S'), i + 1))
             radar_list.append(None)
         elif nfiles_ref == 1:
             voltime_ref = get_datetime(
@@ -750,7 +750,7 @@ def _get_radars_data(master_voltime, datatypesdescr_list, datacfg,
                 voltime_ref_list.append(get_datetime(
                     filelist_ref[j], datatypedescr_ref))
             voltime_ref = min(
-                voltime_ref_list, key=lambda x: abs(x-master_voltime))
+                voltime_ref_list, key=lambda x: abs(x - master_voltime))
             radar_list.append(
                 get_data(voltime_ref, datatypesdescr_list[i], datacfg))
 
@@ -955,7 +955,7 @@ def _create_cfg_dict(cfgfile):
         #  1: time master scan + ScanPeriod
         # -1: time master scan - ScanPeriod
         cfg.update({
-            'MasterScanTimeTol': 0.*np.ones(
+            'MasterScanTimeTol': 0. * np.ones(
                 cfg['NumRadars'], dtype=np.float32)})
     if 'lastStateFile' not in cfg:
         cfg.update({'lastStateFile': None})
@@ -1011,36 +1011,61 @@ def _create_cfg_dict(cfgfile):
         cfg.update({'CosmoForecasted': 7})
 
     if 'path_convention' not in cfg:
-        cfg.update({'path_convention': ['MCH']*cfg['NumRadars']})
+        cfg.update({'path_convention': ['MCH'] * cfg['NumRadars']})
 
     # Instrument parameters not in radar object attributes
     if 'lradomeh' not in cfg:
         cfg.update({
-            'lradomeh': 0.*np.ones(cfg['NumRadars'], dtype=np.float32)})
+            'lradomeh': 0. * np.ones(cfg['NumRadars'], dtype=np.float32)})
     if 'lradomev' not in cfg:
         cfg.update({
-            'lradomev': 0.*np.ones(cfg['NumRadars'], dtype=np.float32)})
+            'lradomev': 0. * np.ones(cfg['NumRadars'], dtype=np.float32)})
     if 'lrxh' not in cfg:
         cfg.update({
-            'lrxh': 0.*np.ones(cfg['NumRadars'], dtype=np.float32)})
+            'lrxh': 0. * np.ones(cfg['NumRadars'], dtype=np.float32)})
     if 'lrxv' not in cfg:
         cfg.update({
-            'lrxv': 0.*np.ones(cfg['NumRadars'], dtype=np.float32)})
+            'lrxv': 0. * np.ones(cfg['NumRadars'], dtype=np.float32)})
     if 'ltxh' not in cfg:
         cfg.update({
-            'ltxh': 0.*np.ones(cfg['NumRadars'], dtype=np.float32)})
+            'ltxh': 0. * np.ones(cfg['NumRadars'], dtype=np.float32)})
     if 'ltxv' not in cfg:
         cfg.update({
-            'ltxv': 0.*np.ones(cfg['NumRadars'], dtype=np.float32)})
+            'ltxv': 0. * np.ones(cfg['NumRadars'], dtype=np.float32)})
 
     # Convert the following strings to string arrays
     strarr_list = [
-        'datapath', 'cosmopath', 'dempath', 'gecsxbasepath', 'gecsxname',
-        'loadbasepath', 'psrpath','iqpath', 'satpath', 'loadname', 'RadarName',
-        'RadarRes', 'ScanList','imgformat', 'frequency', 'radar_beam_width_h', 
-        'radar_beam_width_v','pulse_width', 'nyquist_velocity', 'AntennaGainH', 
-        'AntennaGainV', 'dBADUtodBmh', 'dBADUtodBmv', 'mflossh', 'mflossv',
-        'radconsth', 'radconstv', 'txpwrh', 'txpwrv', 'attg', 'path_convention']
+        'datapath',
+        'cosmopath',
+        'dempath',
+        'gecsxbasepath',
+        'gecsxname',
+        'loadbasepath',
+        'psrpath',
+        'iqpath',
+        'satpath',
+        'loadname',
+        'RadarName',
+        'RadarRes',
+        'ScanList',
+        'imgformat',
+        'frequency',
+        'radar_beam_width_h',
+        'radar_beam_width_v',
+        'pulse_width',
+        'nyquist_velocity',
+        'AntennaGainH',
+        'AntennaGainV',
+        'dBADUtodBmh',
+        'dBADUtodBmv',
+        'mflossh',
+        'mflossv',
+        'radconsth',
+        'radconstv',
+        'txpwrh',
+        'txpwrv',
+        'attg',
+        'path_convention']
     for param in strarr_list:
         if param in cfg and isinstance(cfg[param], str):
             cfg[param] = [cfg[param]]
@@ -1550,7 +1575,7 @@ def _get_masterfile_list(datatypesdescr, starttimes, endtimes, datacfg,
                 'PSRSPECTRA', 'GECSX')):
             masterdatatypedescr = datatypedescr
             if scan_list is not None:
-                masterscan = scan_list[int(radarnr[5:8])-1][0]
+                masterscan = scan_list[int(radarnr[5:8]) - 1][0]
             break
 
     # if data type is not radar use dBZ as reference
@@ -1560,14 +1585,14 @@ def _get_masterfile_list(datatypesdescr, starttimes, endtimes, datacfg,
             if datagroup in ('COSMO', 'DEM', 'PSR', 'PSRSPECTRA'):
                 masterdatatypedescr = '{}:RAINBOW:dBZ'.format(radarnr)
                 if scan_list is not None:
-                    masterscan = scan_list[int(radarnr[5:8])-1][0]
+                    masterscan = scan_list[int(radarnr[5:8]) - 1][0]
                 break
             if (datagroup in (
                     'RAD4ALPCOSMO', 'RAD4ALPDEM', 'RAD4ALPHYDRO',
                     'RAD4ALPDOPPLER', 'RAD4ALPIQ')):
                 masterdatatypedescr = '{}:RAD4ALP:dBZ'.format(radarnr)
                 if scan_list is not None:
-                    masterscan = scan_list[int(radarnr[5:8])-1][0]
+                    masterscan = scan_list[int(radarnr[5:8]) - 1][0]
                 break
 
     if masterdatatypedescr is None:

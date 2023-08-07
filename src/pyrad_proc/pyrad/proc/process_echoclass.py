@@ -33,6 +33,7 @@ from warnings import warn
 import sys
 import os
 import datetime
+import importlib
 
 import numpy as np
 
@@ -42,11 +43,10 @@ from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from ..io.io_aux import get_file_list, get_datetime
 from ..io.read_data_other import read_centroids
 
-try:
-    import sklearn_extra
-    import sklearn
+if (importlib.util.find_spec('sklearn_extra') and 
+    importlib.util.find_spec('sklearn')):
     _SKLEARN_AVAILABLE = True
-except ImportError:
+else:
     _SKLEARN_AVAILABLE = False
 
 
@@ -104,7 +104,7 @@ def process_echo_id(procstatus, dscfg, radar_list=None):
         if datatype == 'uPhiDP':
             phi_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -117,7 +117,7 @@ def process_echo_id(procstatus, dscfg, radar_list=None):
         warn('Unable to create radar_echo_id dataset. Missing data')
         return None, None
 
-    echo_id = np.ma.zeros((radar.nrays, radar.ngates), dtype=np.uint8)+3
+    echo_id = np.ma.zeros((radar.nrays, radar.ngates), dtype=np.uint8) + 3
 
     # user defined parameters
     wind_size = dscfg.get('wind_size', 7)
@@ -198,7 +198,7 @@ def process_birds_id(procstatus, dscfg, radar_list=None):
         if datatype == 'RhoHV':
             rhv_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -218,7 +218,7 @@ def process_birds_id(procstatus, dscfg, radar_list=None):
     rmax = dscfg.get('rmax', 25000.)
     elmin = dscfg.get('elmin', 1.5)
     elmax = dscfg.get('elmax', 85.)
-    echo_id = np.zeros((radar.nrays, radar.ngates), dtype=np.uint8)+3
+    echo_id = np.zeros((radar.nrays, radar.ngates), dtype=np.uint8) + 3
 
     # look for clutter
     gatefilter = pyart.filters.birds_gate_filter(
@@ -280,7 +280,7 @@ def process_clt_to_echo_id(procstatus, dscfg, radar_list=None):
             clt_field = get_fieldname_pyart(datatype)
             break
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -290,7 +290,7 @@ def process_clt_to_echo_id(procstatus, dscfg, radar_list=None):
         warn('rad4alp clutter exit code not present. Unable to obtain echoID')
         return None, None
 
-    echo_id = np.zeros((radar.nrays, radar.ngates), dtype=np.uint8)+3
+    echo_id = np.zeros((radar.nrays, radar.ngates), dtype=np.uint8) + 3
     clt = radar.fields[clt_field]['data']
     echo_id[clt == 1] = 1
     echo_id[clt >= 100] = 2
@@ -341,7 +341,7 @@ def process_hydro_mf_to_echo_id(procstatus, dscfg, radar_list=None):
             clt_field = get_fieldname_pyart(datatype)
             break
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -352,7 +352,7 @@ def process_hydro_mf_to_echo_id(procstatus, dscfg, radar_list=None):
              ' Unable to obtain echoID')
         return None, None
 
-    echo_id = np.zeros((radar.nrays, radar.ngates), dtype=np.uint8)+1
+    echo_id = np.zeros((radar.nrays, radar.ngates), dtype=np.uint8) + 1
     clt = radar.fields[clt_field]['data']
     echo_id[clt >= 8] = 3  # precip
     echo_id[np.logical_and(clt < 8, clt > 1)] = 2  # clt
@@ -406,7 +406,7 @@ def process_hydro_mf_to_hydro(procstatus, dscfg, radar_list=None):
             field = get_fieldname_pyart(datatype)
             break
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -493,7 +493,7 @@ def process_echo_filter(procstatus, dscfg, radar_list=None):
         warn('echoID field required to filter data')
         return None, None
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -517,7 +517,7 @@ def process_echo_filter(procstatus, dscfg, radar_list=None):
 
         field_name = get_fieldname_pyart(datatype)
         if field_name not in radar.fields:
-            warn('Unable to filter '+field_name+' according to echo ID. ' +
+            warn('Unable to filter ' + field_name + ' according to echo ID. ' +
                  'No valid input fields')
             continue
         radar_field = deepcopy(radar.fields[field_name])
@@ -533,7 +533,7 @@ def process_echo_filter(procstatus, dscfg, radar_list=None):
             new_field_name = field_name.replace(
                 'unfiltered_', 'corrected_', 1)
         else:
-            new_field_name = 'corrected_'+field_name
+            new_field_name = 'corrected_' + field_name
         new_dataset['radar_out'].add_field(new_field_name, radar_field)
 
     if not new_dataset['radar_out'].fields:
@@ -585,7 +585,7 @@ def process_cdf(procstatus, dscfg, radar_list=None):
         else:
             field_name = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -659,7 +659,7 @@ def process_filter_snr(procstatus, dscfg, radar_list=None):
             snr_field = get_fieldname_pyart(datatype)
             break
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -675,7 +675,7 @@ def process_filter_snr(procstatus, dscfg, radar_list=None):
     try:
         gatefilter = pyart.filters.snr_based_gate_filter(
             radar, snr_field=snr_field, min_snr=dscfg['SNRmin'])
-    except AttributeError as e:
+    except AttributeError:
         # Pyart-ARM
         min_snr = dscfg['SNRmin']
         max_snr = None
@@ -701,8 +701,8 @@ def process_filter_snr(procstatus, dscfg, radar_list=None):
 
         field_name = get_fieldname_pyart(datatype)
         if field_name not in radar.fields:
-            warn('Unable to filter '+field_name +
-                 ' according to SNR. '+'No valid input fields')
+            warn('Unable to filter ' + field_name +
+                 ' according to SNR. ' + 'No valid input fields')
             continue
 
         radar_field = deepcopy(radar.fields[field_name])
@@ -715,7 +715,7 @@ def process_filter_snr(procstatus, dscfg, radar_list=None):
             new_field_name = field_name.replace(
                 'uncorrected_', 'corrected_', 1)
         else:
-            new_field_name = 'corrected_'+field_name
+            new_field_name = 'corrected_' + field_name
         new_dataset['radar_out'].add_field(new_field_name, radar_field)
 
     if not new_dataset['radar_out'].fields:
@@ -760,7 +760,7 @@ def process_filter_vel_diff(procstatus, dscfg, radar_list=None):
             vel_diff_field = get_fieldname_pyart(datatype)
             break
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -784,8 +784,8 @@ def process_filter_vel_diff(procstatus, dscfg, radar_list=None):
 
         field_name = get_fieldname_pyart(datatype)
         if field_name not in radar.fields:
-            warn('Unable to filter '+field_name +
-                 ' according to SNR. '+'No valid input fields')
+            warn('Unable to filter ' + field_name +
+                 ' according to SNR. ' + 'No valid input fields')
             continue
 
         radar_field = deepcopy(radar.fields[field_name])
@@ -797,7 +797,7 @@ def process_filter_vel_diff(procstatus, dscfg, radar_list=None):
             new_field_name = field_name.replace(
                 'uncorrected_', 'corrected_', 1)
         else:
-            new_field_name = 'corrected_'+field_name
+            new_field_name = 'corrected_' + field_name
         new_dataset['radar_out'].add_field(new_field_name, radar_field)
 
     if not new_dataset['radar_out'].fields:
@@ -845,7 +845,7 @@ def process_filter_visibility(procstatus, dscfg, radar_list=None):
         elif 'visibility_polar' in datatype:  # from GECSX
             vis_field = get_fieldname_pyart('visibility_polar')
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -871,7 +871,7 @@ def process_filter_visibility(procstatus, dscfg, radar_list=None):
             continue
         field_name = get_fieldname_pyart(datatype)
         if field_name not in radar.fields:
-            warn('Unable to filter '+field_name +
+            warn('Unable to filter ' + field_name +
                  ' according to visibility. No valid input fields')
             continue
 
@@ -891,7 +891,7 @@ def process_filter_visibility(procstatus, dscfg, radar_list=None):
             new_field_name = field_name.replace(
                 'uncorrected_', 'corrected_', 1)
         else:
-            new_field_name = 'corrected_'+field_name
+            new_field_name = 'corrected_' + field_name
         new_dataset['radar_out'].add_field(new_field_name, radar_field)
 
     if not new_dataset['radar_out'].fields:
@@ -943,7 +943,7 @@ def process_outlier_filter(procstatus, dscfg, radar_list=None):
     radarnr, _, datatype, _, _ = get_datatype_fields(
         dscfg['datatype'][0])
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -967,7 +967,7 @@ def process_outlier_filter(procstatus, dscfg, radar_list=None):
         sweep_start = radar.sweep_start_ray_index['data'][sweep]
         sweep_end = radar.sweep_end_ray_index['data'][sweep]
         nrays_sweep = radar.rays_per_sweep['data'][sweep]
-        data_sweep = field['data'][sweep_start:sweep_end+1, :]
+        data_sweep = field['data'][sweep_start:sweep_end + 1, :]
 
         # check if all elements in array are masked
         if np.all(np.ma.getmaskarray(data_sweep)):
@@ -984,27 +984,28 @@ def process_outlier_filter(procstatus, dscfg, radar_list=None):
             ind_rng = ind_rngs[i]
             # find neighbours of suspected outlier gate
             data_cube = []
-            for ray_nb in range(-nb, nb+1):
-                for rng_nb in range(-nb, nb+1):
+            for ray_nb in range(-nb, nb + 1):
+                for rng_nb in range(-nb, nb + 1):
                     if ray_nb == 0 and rng_nb == 0:
                         continue
-                    if ((ind_ray+ray_nb >= 0) and
-                            (ind_ray+ray_nb < nrays_sweep) and
-                            (ind_rng+rng_nb >= 0) and
-                            (ind_rng+rng_nb < radar.ngates)):
-                        if (data_sweep[ind_ray+ray_nb, ind_rng+rng_nb] is not
-                                np.ma.masked):
+                    if ((ind_ray + ray_nb >= 0) and
+                            (ind_ray + ray_nb < nrays_sweep) and
+                            (ind_rng + rng_nb >= 0) and
+                            (ind_rng + rng_nb < radar.ngates)):
+                        if (data_sweep[ind_ray + ray_nb,
+                                       ind_rng + rng_nb] is not np.ma.masked):
                             data_cube.append(
-                                data_sweep[ind_ray+ray_nb, ind_rng+rng_nb])
+                                data_sweep[ind_ray + ray_nb, ind_rng + rng_nb])
 
             # remove data far from median of neighbours or with not enough
             # valid neighbours
             if len(data_cube) < nb_min:
                 field_out['data'][
-                    sweep_start+ind_ray, ind_rng] = np.ma.masked
+                    sweep_start + ind_ray, ind_rng] = np.ma.masked
             elif (abs(np.ma.median(data_cube) -
                       data_sweep[ind_ray, ind_rng]) > threshold):
-                field_out['data'][sweep_start+ind_ray, ind_rng] = np.ma.masked
+                field_out['data'][sweep_start +
+                                  ind_ray, ind_rng] = np.ma.masked
 
     if field_name.startswith('corrected_'):
         new_field_name = field_name
@@ -1012,7 +1013,7 @@ def process_outlier_filter(procstatus, dscfg, radar_list=None):
         new_field_name = field_name.replace(
             'uncorrected_', 'corrected_', 1)
     else:
-        new_field_name = 'corrected_'+field_name
+        new_field_name = 'corrected_' + field_name
 
     new_dataset = {'radar_out': deepcopy(radar)}
     new_dataset['radar_out'].fields = dict()
@@ -1060,7 +1061,7 @@ def process_filter_vol2bird(procstatus, dscfg, radar_list=None):
         warn('VOL2BIRD_CLASS field required to filter data')
         return None, None
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -1096,7 +1097,7 @@ def process_filter_vol2bird(procstatus, dscfg, radar_list=None):
             new_field_name = field_name.replace(
                 'uncorrected_', 'corrected_', 1)
         else:
-            new_field_name = 'corrected_'+field_name
+            new_field_name = 'corrected_' + field_name
         new_dataset['radar_out'].add_field(new_field_name, radar_field)
 
     if not new_dataset['radar_out'].fields:
@@ -1157,7 +1158,7 @@ def process_gate_filter_vol2bird(procstatus, dscfg, radar_list=None):
         warn('reflectivity or velocity fields needed for gate filtering')
         return None, None
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -1317,7 +1318,7 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
         if datatype == 'H_ISO0':
             iso0_field = 'height_over_iso0'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -1361,7 +1362,7 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
         # load centroids
         if centroids_file is not None:
             mass_centers, hydro_names, var_names = read_centroids(
-                dscfg['configpath']+'centroids_hydroclass/'+centroids_file)
+                dscfg['configpath'] + 'centroids_hydroclass/' + centroids_file)
             if mass_centers is None:
                 warn(
                     'Unable to read centroids file. ' +
@@ -1389,7 +1390,7 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
                 entropy_field=None, temp_ref=temp_ref,
                 compute_entropy=compute_entropy,
                 output_distances=output_distances, vectorize=vectorize)
-        except TypeError as e:
+        except TypeError:
             ARM_VERSION = True
             warn('Hydroclass method could not parse all inputs')
             warn('You are probably using PyART-ARM')
@@ -1415,7 +1416,7 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
                 'hydroclass_entropy', fields_dict['entropy'])
             if output_distances:
                 for hydro_name in hydro_names:
-                    field_name = 'proportion_'+hydro_name
+                    field_name = 'proportion_' + hydro_name
                     new_dataset['radar_out'].add_field(
                         field_name, fields_dict[field_name])
 
@@ -1424,7 +1425,7 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
             # load the UKMO algorithm
             hydropath = dscfg.get(
                 'hydropath',
-                os.path.expanduser('~')+'/hydrometeor-classification/code')
+                os.path.expanduser('~') + '/hydrometeor-classification/code')
             if not os.path.isdir(hydropath):
                 str1 = "ERROR: Wrong UKMO hydrometeor classification path {}"
                 raise Exception(str1.format(hydropath))
@@ -1491,8 +1492,8 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
                 'probability_IH', 'probability_LR', 'probability_IC',
                 'probability_RP']
             prob_keys = [
-                    'RAIN', 'WET_SNOW', 'DRY_SNOW', 'HAIL', 'DRIZZLE', 'ICE',
-                    'GRAUPEL']
+                'RAIN', 'WET_SNOW', 'DRY_SNOW', 'HAIL', 'DRIZZLE', 'ICE',
+                'GRAUPEL']
             for prob_field in prob_fields:
                 prob = pyart.config.get_metadata(prob_field)
                 prob['data'] = np.ma.masked_all((radar.nrays, radar.ngates))
@@ -1530,15 +1531,15 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
             else:
                 hydro_ukmo = hydro_object.hydro_class
             new_dataset['radar_out'].fields[hydro_field]['data'][
-                ind_start:ind_end+1] = hydro_ukmo
+                ind_start:ind_end + 1] = hydro_ukmo
 
             if append_all_fields:
                 new_dataset['radar_out'].fields[confidence_field]['data'][
-                    ind_start:ind_end+1] = hydro_object.confidence
+                    ind_start:ind_end + 1] = hydro_object.confidence
 
                 for prob_field, prob_key in zip(prob_fields, prob_keys):
                     new_dataset['radar_out'].fields[prob_field]['data'][
-                        ind_start:ind_end+1] = (
+                        ind_start:ind_end + 1] = (
                         hydro_object.probability[prob_key])
     else:
         raise Exception(
@@ -1698,7 +1699,7 @@ def process_centroids(procstatus, dscfg, radar_list=None):
         if datatype == 'H_ISO0':
             iso0_field = 'height_over_iso0'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
 
     if procstatus == 1:
         if radar_list[ind_rad] is None:
@@ -1953,7 +1954,7 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
             if datatype == 'H_ISO0':
                 iso0_field = 'height_over_iso0'
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
         if radar_list[ind_rad] is None:
             warn('No valid radar')
             return None, None
@@ -2067,7 +2068,7 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
             if datatype == 'RhoHVc':
                 rhohv_field = 'corrected_cross_correlation_ratio'
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
         if radar_list[ind_rad] is None:
             warn('No valid radar')
             return None, None
@@ -2113,7 +2114,7 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
             if datatype == 'RhoHVc':
                 rhohv_field_obs = 'corrected_cross_correlation_ratio'
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
         if radar_list[ind_rad] is None:
             warn('No valid radar')
             return None, None
@@ -2206,21 +2207,21 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
                         ml_bottom = (
                             radar_ml.fields['melting_layer_height']['data'][
                                 :, 0])
-                        ml_thickness = ml_top-ml_bottom
+                        ml_thickness = ml_top - ml_bottom
                         ml_bottom_arr = np.ma.append(
                             ml_bottom_arr,
-                            np.ma.zeros(radar_ml.nsweeps)+ml_bottom)
+                            np.ma.zeros(radar_ml.nsweeps) + ml_bottom)
                         ml_thickness_arr = np.ma.append(
                             ml_thickness_arr,
-                            np.ma.zeros(radar_ml.nsweeps)+ml_thickness)
+                            np.ma.zeros(radar_ml.nsweeps) + ml_thickness)
                         ang_arr = np.ma.append(
                             ang_arr, radar_ml.elevation['data'])
                         age_arr = np.ma.append(
                             age_arr,
-                            np.ma.zeros(radar_ml.nrays)+(
+                            np.ma.zeros(radar_ml.nrays) + (
                                 dscfg['timeinfo']
                                 - get_datetime(fname,
-                                               datatypedescr)).seconds/3600.)
+                                               datatypedescr)).seconds / 3600.)
                     ml_memory = {
                         'ml_bottom': ml_bottom_arr,
                         'ml_thickness': ml_thickness_arr,
@@ -2252,7 +2253,7 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
             if datatype == 'hydro':
                 hydro_field = get_fieldname_pyart(datatype)
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
         if radar_list[ind_rad] is None:
             warn('No valid radar')
             return None, None
@@ -2339,7 +2340,7 @@ def process_zdr_column(procstatus, dscfg, radar_list=None):
         if datatype == 'H_ISO0':
             iso0_field = 'height_over_iso0'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -2350,12 +2351,10 @@ def process_zdr_column(procstatus, dscfg, radar_list=None):
         warn('Unable to detect melting layer. '
              'Missing height over iso0 field')
         return None, None
-    temp_ref = 'height_over_iso0'
 
     if temp_field is not None and (temp_field not in radar.fields):
         warn('Unable to detect melting layer. Missing temperature field')
         return None, None
-    temp_ref = 'temperature'
     iso0_field = 'height_over_iso0'
 
     if ((zdr_field not in radar.fields) or
@@ -2371,7 +2370,7 @@ def process_zdr_column(procstatus, dscfg, radar_list=None):
         smooth_window_len = 0
     else:
         smooth_window_len = int(
-            smooth_window/(radar.range['data'][1]-radar.range['data'][0]))
+            smooth_window / (radar.range['data'][1] - radar.range['data'][0]))
 
     zdr_dict = deepcopy(radar.fields[zdr_field])
 
@@ -2404,7 +2403,7 @@ def process_zdr_column(procstatus, dscfg, radar_list=None):
             continue
 
         # Segment negative temperatures and get start of each segment
-        cons_list = np.split(ind_rngs, np.where(np.diff(ind_rngs) != 1)[0]+1)
+        cons_list = np.split(ind_rngs, np.where(np.diff(ind_rngs) != 1)[0] + 1)
         for ind_rngs_cell in cons_list:
             if not zdr_valid[ind_ray, ind_rngs_cell[0]]:
                 continue
@@ -2415,11 +2414,11 @@ def process_zdr_column(procstatus, dscfg, radar_list=None):
             # extract data around point:
             ind_rays, ind_rngs = np.where(np.logical_and.reduce((
                 np.logical_and(
-                    g_lat >= g_lat[ind_ray_col, ind_rng_col]-latlon_tol,
-                    g_lat <= g_lat[ind_ray_col, ind_rng_col]+latlon_tol),
+                    g_lat >= g_lat[ind_ray_col, ind_rng_col] - latlon_tol,
+                    g_lat <= g_lat[ind_ray_col, ind_rng_col] + latlon_tol),
                 np.logical_and(
-                    g_lon >= g_lon[ind_ray_col, ind_rng_col]-latlon_tol,
-                    g_lon <= g_lon[ind_ray_col, ind_rng_col]+latlon_tol),
+                    g_lon >= g_lon[ind_ray_col, ind_rng_col] - latlon_tol,
+                    g_lon <= g_lon[ind_ray_col, ind_rng_col] + latlon_tol),
                 zdr_valid)))
 
             # get ZDR column height for each radar sweep
@@ -2444,10 +2443,10 @@ def process_zdr_column(procstatus, dscfg, radar_list=None):
             # get the first segment of continuous ZDR valid values
             ind_valid = np.where(np.ma.getmaskarray(h_low) == 0)[0]
             ind_valid = np.split(
-                ind_valid, np.where(np.diff(ind_valid) != 1)[0]+1)[0]
+                ind_valid, np.where(np.diff(ind_valid) != 1)[0] + 1)[0]
 
             # compute ZDR column
-            zdr_col = h_high[ind_valid[-1]]-h_low[ind_valid[0]]
+            zdr_col = h_high[ind_valid[-1]] - h_low[ind_valid[0]]
 
             # put data in output array
             lat_cols = np.append(
@@ -2460,7 +2459,7 @@ def process_zdr_column(procstatus, dscfg, radar_list=None):
 
     zdr_col_dict = pyart.config.get_metadata(
         'differential_reflectivity_column_height')
-    zdr_col_dict['data'] = zdr_cols/1000.
+    zdr_col_dict['data'] = zdr_cols / 1000.
     new_dataset = {
         'field_limits': [
             np.min(radar.gate_longitude['data']),
@@ -2497,13 +2496,13 @@ class ScanObject:
         self.n_bins = radar.ngates
         self.scan_elevation_degrees = radar.fixed_angle['data'][0]
         self.bin_length_km = (
-            (radar.range['data'][1]-radar.range['data'][0])/1000.)
+            (radar.range['data'][1] - radar.range['data'][0]) / 1000.)
 
         # from height over iso0 to iso0 height
         self.freezing_level = (
-            radar.gate_altitude['data']-radar.fields[iso0_field]['data'])
+            radar.gate_altitude['data'] - radar.fields[iso0_field]['data'])
 
-        self.zh_lin = np.power(10., 0.1*radar.fields[refl_field]['data'])
+        self.zh_lin = np.power(10., 0.1 * radar.fields[refl_field]['data'])
 
         # assumes only precipitation has valid reflectivity
         self.flags = np.ma.getmaskarray(radar.fields[refl_field]['data'])

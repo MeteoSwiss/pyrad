@@ -90,7 +90,7 @@ def process_cosmo(procstatus, dscfg, radar_list=None):
         radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
         break
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -115,7 +115,7 @@ def process_cosmo(procstatus, dscfg, radar_list=None):
                 field_names.append(get_fieldname_pyart(var))
         zmin = None
     else:
-        warn('Unknown COSMO data type '+cosmo_type)
+        warn('Unknown COSMO data type ' + cosmo_type)
         return None, None
 
     fname = find_raw_cosmo_file(dscfg['timeinfo'], cosmo_type, dscfg,
@@ -126,7 +126,7 @@ def process_cosmo(procstatus, dscfg, radar_list=None):
 
     model = os.path.basename(fname)[0:7]
     if model not in ('cosmo-1', 'cosmo-2', 'cosmo-7'):
-        warn('Unknown NWP model '+model)
+        warn('Unknown NWP model ' + model)
         return None, None
 
     # check if model is cosmo-1 or cosmo-1e
@@ -138,7 +138,7 @@ def process_cosmo(procstatus, dscfg, radar_list=None):
     if keep_in_memory:
         if dscfg['initialized'] == 0:
             cosmo_coord = read_cosmo_coord(
-                dscfg['cosmopath'][ind_rad]+'rad2cosmo/'+model +
+                dscfg['cosmopath'][ind_rad] + 'rad2cosmo/' + model +
                 '_MDR_3D_const.nc', zmin=zmin)
             dscfg['global_data'] = {
                 'cosmo_fname': None,
@@ -167,7 +167,7 @@ def process_cosmo(procstatus, dscfg, radar_list=None):
             cosmo_data = dscfg['global_data']['cosmo_data']
     else:
         cosmo_coord = read_cosmo_coord(
-            dscfg['cosmopath'][ind_rad]+'rad2cosmo/'+model +
+            dscfg['cosmopath'][ind_rad] + 'rad2cosmo/' + model +
             '_MDR_3D_const.nc', zmin=zmin)
 
         # debugging
@@ -182,7 +182,7 @@ def process_cosmo(procstatus, dscfg, radar_list=None):
 
     dtcosmo = num2date(
         cosmo_data['time']['data'][:], cosmo_data['time']['units'])
-    time_index = np.argmin(abs(dtcosmo-dscfg['timeinfo']))
+    time_index = np.argmin(abs(dtcosmo - dscfg['timeinfo']))
 
     if keep_in_memory and regular_grid:
         if time_index != dscfg['global_data']['time_index']:
@@ -266,7 +266,7 @@ def process_hzt(procstatus, dscfg, radar_list=None):
         radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
         break
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -324,7 +324,7 @@ def process_hzt(procstatus, dscfg, radar_list=None):
 
     dthzt = num2date(
         hzt_data['time']['data'][:], hzt_data['time']['units'])
-    time_index = np.argmin(abs(dthzt-dscfg['timeinfo']))
+    time_index = np.argmin(abs(dthzt - dscfg['timeinfo']))
 
     if keep_in_memory and regular_grid:
         if time_index != dscfg['global_data']['time_index']:
@@ -397,7 +397,7 @@ def process_iso0_mf(procstatus, dscfg, radar_list=None):
         radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
         break
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -405,7 +405,7 @@ def process_iso0_mf(procstatus, dscfg, radar_list=None):
 
     iso0_statistic = dscfg.get('iso0_statistic', 'avg_by_dist')
     if iso0_statistic not in ('avg_by_dist', 'avg', 'min', 'max'):
-        warn('iso0 statistic '+iso0_statistic +
+        warn('iso0 statistic ' + iso0_statistic +
              ' unknown. Default avg_by_dist will be applied')
         iso0_statistic = 'avg_by_dist'
 
@@ -418,7 +418,7 @@ def process_iso0_mf(procstatus, dscfg, radar_list=None):
         warn('iso0 data not found')
         return None, None
 
-    time_index = np.argmin(abs(iso0_data['fcst_time']-dscfg['timeinfo']))
+    np.argmin(abs(iso0_data['fcst_time'] - dscfg['timeinfo']))
     iso0_field = iso2radar_data(
         radar, iso0_data, dscfg['timeinfo'], iso0_statistic=iso0_statistic)
     if iso0_field is None:
@@ -477,7 +477,7 @@ def process_iso0_grib(procstatus, dscfg, radar_list=None):
         radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
         break
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -496,7 +496,7 @@ def process_iso0_grib(procstatus, dscfg, radar_list=None):
         warn('iso0 data not found')
         return None, None
 
-    time_index = np.argmin(abs(iso0_data['fcst_time']-dscfg['timeinfo']))
+    np.argmin(abs(iso0_data['fcst_time'] - dscfg['timeinfo']))
     iso0_field = grib2radar_data(
         radar, iso0_data, dscfg['timeinfo'], time_interp=time_interp,
         field_name=field_name)
@@ -561,7 +561,7 @@ def process_cosmo_lookup_table(procstatus, dscfg, radar_list=None):
         radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
         break
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -586,7 +586,7 @@ def process_cosmo_lookup_table(procstatus, dscfg, radar_list=None):
                 field_names.append(get_fieldname_pyart(var))
         zmin = None
     else:
-        warn('Unknown COSMO data type '+cosmo_type)
+        warn('Unknown COSMO data type ' + cosmo_type)
         return None, None
 
     fname = find_raw_cosmo_file(dscfg['timeinfo'], cosmo_type, dscfg,
@@ -597,7 +597,7 @@ def process_cosmo_lookup_table(procstatus, dscfg, radar_list=None):
 
     model = os.path.basename(fname)[0:7]
     if model not in ('cosmo-1', 'cosmo-1e', 'cosmo-2', 'cosmo-7'):
-        warn('Unknown NWP model '+model)
+        warn('Unknown NWP model ' + model)
         return None, None
 
     # check if model is cosmo-1 or cosmo-1e
@@ -608,16 +608,16 @@ def process_cosmo_lookup_table(procstatus, dscfg, radar_list=None):
 
     if dscfg['initialized'] == 0:
         if lookup_table:
-            savedir = dscfg['cosmopath'][ind_rad]+'rad2cosmo/'
-            fname_ind = 'rad2cosmo_cosmo_index_'+dscfg['procname']+'.nc'
-            fname_ind2 = glob.glob(savedir+fname_ind)
+            savedir = dscfg['cosmopath'][ind_rad] + 'rad2cosmo/'
+            fname_ind = 'rad2cosmo_cosmo_index_' + dscfg['procname'] + '.nc'
+            fname_ind2 = glob.glob(savedir + fname_ind)
             if not fname_ind2:
-                warn('File '+savedir+fname_ind+' not found')
+                warn('File ' + savedir + fname_ind + ' not found')
                 return None, None
             cosmo_radar = pyart.io.read_cfradial(fname_ind2[0])
         else:
             cosmo_coord = read_cosmo_coord(
-                dscfg['cosmopath'][ind_rad]+'rad2cosmo/'+model +
+                dscfg['cosmopath'][ind_rad] + 'rad2cosmo/' + model +
                 '_MDR_3D_const.nc', zmin=zmin)
             print('COSMO coordinates files read')
             cosmo_ind_field = cosmo2radar_coord(radar, cosmo_coord)
@@ -653,7 +653,7 @@ def process_cosmo_lookup_table(procstatus, dscfg, radar_list=None):
     dtcosmo = num2date(
         cosmo_data['time']['data'][:], cosmo_data['time']['units'])
 
-    time_index = np.argmin(abs(dtcosmo-dscfg['timeinfo']))
+    time_index = np.argmin(abs(dtcosmo - dscfg['timeinfo']))
 
     if (fname != dscfg['global_data']['cosmo_fname'] or
             time_index != dscfg['global_data']['time_index']):
@@ -701,7 +701,7 @@ def process_cosmo_lookup_table(procstatus, dscfg, radar_list=None):
                         field_name, cosmo_field_interp)
             except Exception as ee:
                 warn(str(ee))
-                warn('Unable to add COSMO '+field_name +
+                warn('Unable to add COSMO ' + field_name +
                      ' field to radar object')
                 return None, None
 
@@ -755,7 +755,7 @@ def process_hzt_lookup_table(procstatus, dscfg, radar_list=None):
         radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
         break
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -771,11 +771,11 @@ def process_hzt_lookup_table(procstatus, dscfg, radar_list=None):
 
     if dscfg['initialized'] == 0:
         if lookup_table:
-            savedir = dscfg['cosmopath'][ind_rad]+'rad2cosmo/'
-            fname_ind = 'rad2cosmo_hzt_index_'+dscfg['procname']+'.nc'
-            fname_ind2 = glob.glob(savedir+fname_ind)
+            savedir = dscfg['cosmopath'][ind_rad] + 'rad2cosmo/'
+            fname_ind = 'rad2cosmo_hzt_index_' + dscfg['procname'] + '.nc'
+            fname_ind2 = glob.glob(savedir + fname_ind)
             if not fname_ind2:
-                warn('File '+savedir+fname_ind+' not found')
+                warn('File ' + savedir + fname_ind + ' not found')
                 return None, None
             hzt_radar = pyart.io.read_cfradial(fname_ind2[0])
         else:
@@ -814,7 +814,7 @@ def process_hzt_lookup_table(procstatus, dscfg, radar_list=None):
 
     dthzt = num2date(
         hzt_data['time']['data'][:], hzt_data['time']['units'])
-    time_index = np.argmin(abs(dthzt-dscfg['timeinfo']))
+    time_index = np.argmin(abs(dthzt - dscfg['timeinfo']))
 
     if (fname != dscfg['global_data']['hzt_fname'] or
             time_index != dscfg['global_data']['time_index']):
@@ -905,7 +905,7 @@ def process_cosmo_to_radar(procstatus, dscfg, radar_list=None):
         radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
         break
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
 
     cosmo_type = dscfg.get('cosmo_type', 'TEMP')
     if cosmo_type == 'TEMP':
@@ -914,16 +914,14 @@ def process_cosmo_to_radar(procstatus, dscfg, radar_list=None):
             field_names = []
             for var in dscfg['cosmo_variables']:
                 field_names.append(get_fieldname_pyart(var))
-        zmin = None
     elif cosmo_type == 'WIND':
         field_names = ['wind_speed', 'wind_direction', 'vertical_wind_shear']
         if 'cosmo_variables' in dscfg:
             field_names = []
             for var in dscfg['cosmo_variables']:
                 field_names.append(get_fieldname_pyart(var))
-        zmin = None
     else:
-        warn('Unknown COSMO data type '+cosmo_type)
+        warn('Unknown COSMO data type ' + cosmo_type)
         return None, None
 
     time_index_min = dscfg.get('cosmo_time_index_min', None)
@@ -937,7 +935,7 @@ def process_cosmo_to_radar(procstatus, dscfg, radar_list=None):
 
     model = os.path.basename(fname)[0:7]
     if model not in ('cosmo-1', 'cosmo-1e', 'cosmo-2', 'cosmo-7'):
-        warn('Unknown NWP model '+model)
+        warn('Unknown NWP model ' + model)
         return None, None
 
     # check if model is cosmo-1 or cosmo-1e
@@ -947,11 +945,11 @@ def process_cosmo_to_radar(procstatus, dscfg, radar_list=None):
             model = model_aux
 
     if dscfg['initialized'] == 0:
-        savedir = dscfg['cosmopath'][ind_rad]+'rad2cosmo/'
-        fname_ind = 'rad2cosmo_cosmo_index_'+dscfg['procname']+'.nc'
-        fname_ind2 = glob.glob(savedir+fname_ind)
+        savedir = dscfg['cosmopath'][ind_rad] + 'rad2cosmo/'
+        fname_ind = 'rad2cosmo_cosmo_index_' + dscfg['procname'] + '.nc'
+        fname_ind2 = glob.glob(savedir + fname_ind)
         if not fname_ind2:
-            warn('File '+savedir+fname_ind+' not found')
+            warn('File ' + savedir + fname_ind + ' not found')
             return None, None
         cosmo_radar = pyart.io.read_cfradial(fname_ind2[0])
 
@@ -971,12 +969,12 @@ def process_cosmo_to_radar(procstatus, dscfg, radar_list=None):
     if time_index_min is None:
         time_index_min = 0
     if time_index_max is None:
-        time_index_max = len(dtcosmo)-1
+        time_index_max = len(dtcosmo) - 1
 
-    if time_index_max > len(dtcosmo)-1:
+    if time_index_max > len(dtcosmo) - 1:
         warn('cosmo_time_index_max larger than number of COSMO forecasts'
-             'cosmo forecasts '+len(dtcosmo))
-        time_index_max = len(dtcosmo)-1
+             'cosmo forecasts ' + len(dtcosmo))
+        time_index_max = len(dtcosmo) - 1
 
     cosmo_radars = []
     for time_index, dtc in enumerate(dtcosmo):
@@ -1050,7 +1048,7 @@ def process_cosmo_coord(procstatus, dscfg, radar_list=None):
         radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
         break
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -1058,17 +1056,14 @@ def process_cosmo_coord(procstatus, dscfg, radar_list=None):
 
     model = dscfg.get('model', 'cosmo-1e')
     if model not in ('cosmo-1', 'cosmo-1e', 'cosmo-2', 'cosmo-7'):
-        warn('Unknown NWP model '+model)
+        warn('Unknown NWP model ' + model)
         return None, None
 
-    # check if model is cosmo-1 or cosmo-1e
-    if model == 'cosmo-1':
-        model_aux = os.path.basename(fname)[0:8]
-        if model_aux == 'cosmo-1e':
-            model = model_aux
-
     cosmo_coord = read_cosmo_coord(
-        dscfg['cosmopath'][ind_rad]+'rad2cosmo/'+model+'_MDR_3D_const.nc',
+        dscfg['cosmopath'][ind_rad] +
+        'rad2cosmo/' +
+        model +
+        '_MDR_3D_const.nc',
         zmin=None)
 
     if cosmo_coord is None:
@@ -1131,7 +1126,7 @@ def process_hzt_coord(procstatus, dscfg, radar_list=None):
         radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
         break
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None

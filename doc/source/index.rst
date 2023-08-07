@@ -43,7 +43,7 @@ Development
 
 We welcome contributions, suggestions of developments and bug reports.
 
-Suggestions of developments and bug reports should use the Issues page of the `github repository <https://github.com/meteoswiss-mdr/pyrad/issues
+Suggestions of developments and bug reports should use the Issues page of the `github repository <https://github.com/Meteoswiss/pyrad/issues
 >`_.
 
 

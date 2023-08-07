@@ -75,12 +75,11 @@ def dem2radar_data(radar, dem_data, slice_xy=True, field_name='visibility'):
             x_radar, y_radar, dem_data, slice_xy=slice_xy))
 
     if field_name not in dem_data:
-        warn('DEM field '+field_name+' data not available')
+        warn('DEM field ' + field_name + ' data not available')
         return None
 
     values = dem_data[field_name]['data'][
-        ind_xmin:ind_xmax+1, ind_ymin:ind_ymax+1]
-
+        ind_xmin:ind_xmax + 1, ind_ymin:ind_ymax + 1]
 
     # Note RegularGridInterpolator is 10x faster than NDNearestInterpolator
     # and has the advantage of not extrapolating outside of grid domain
@@ -88,8 +87,7 @@ def dem2radar_data(radar, dem_data, slice_xy=True, field_name='visibility'):
     # replace masked values with nans
     values = np.ma.filled(values, np.nan)
     interp_func = RegularGridInterpolator(
-        (x_dem, y_dem), values, bounds_error = False)
-
+        (x_dem, y_dem), values, bounds_error=False)
 
     # interpolate
     data_interp = interp_func((x_radar, y_radar))
@@ -107,8 +105,10 @@ def dem2radar_data(radar, dem_data, slice_xy=True, field_name='visibility'):
     return field_dict
 
 # @profile
-def read_dem(fname, field_name = 'terrain_altitude', fill_value=None,
-             projparams = None):
+
+
+def read_dem(fname, field_name='terrain_altitude', fill_value=None,
+             projparams=None):
     """
     Generic reader that reads DEM data from any format, will infer the proper
     reader from filename extension
@@ -123,7 +123,7 @@ def read_dem(fname, field_name = 'terrain_altitude', fill_value=None,
         The fill value, if not provided will be infered from metadata
         if possible
     projparams : str or int
-        projection transform as can be used by gdal either a  Proj4 
+        projection transform as can be used by gdal either a  Proj4
         string, see epsg.io for a list, or a EPSG number, if not provided
         will be infered from the file, or for ASCII, LV1903 will be used
 
@@ -135,28 +135,29 @@ def read_dem(fname, field_name = 'terrain_altitude', fill_value=None,
     """
     extension = pathlib.Path(fname).suffix
 
-    if isinstance(projparams, int): # Retrieve Wkt code from EPSG number
+    if isinstance(projparams, int):  # Retrieve Wkt code from EPSG number
         proj = osr.SpatialReference()
         proj.ImportFromEPSG(projparams)
         projparams = proj.ExportToProj4()
-        projparams = _proj4_str_to_dict(projparams) 
-    
-    if extension in ['.tif','.tiff','.gtif']:
-        dem =   read_geotiff_data(fname, fill_value)
-    elif extension in ['.asc','.dem','.txt']:
-        dem =  read_ascii_data(fname, fill_value)
+        projparams = _proj4_str_to_dict(projparams)
+
+    if extension in ['.tif', '.tiff', '.gtif']:
+        dem = read_geotiff_data(fname, fill_value)
+    elif extension in ['.asc', '.dem', '.txt']:
+        dem = read_ascii_data(fname, fill_value)
     elif extension in ['.rst']:
         dem = read_idrisi_data(fname, fill_value)
     else:
-        warn('WARNING: unable to read file %s, extension must be .tif .tiff .gtif, '+
-             '.asc .dem .txt .rst'.format(fname))
+        warn(
+            'WARNING: unable to read file %s, extension must be .tif .tiff .gtif, ' +
+            '.asc .dem .txt .rst'.format())
         return None
 
     if 'projparams' in dem:
         projparams = dem['projparams']
 
     field_dict = get_metadata(field_name)
-    field_dict['data'] = dem['data'][::-1, :][None,:,:]
+    field_dict['data'] = dem['data'][::-1, :][None, :, :]
     field_dict['units'] = dem['metadata']['value units']
 
     x = get_metadata('x')
@@ -168,12 +169,12 @@ def read_dem(fname, field_name = 'terrain_altitude', fill_value=None,
     orig_alt = get_metadata('origin_altitude')
 
     x['data'] = (
-        np.arange(dem['metadata']['columns'])*dem['metadata']['resolution'] +
-        dem['metadata']['resolution']/2.+dem['metadata']['min. X'])
+        np.arange(dem['metadata']['columns']) * dem['metadata']['resolution'] +
+        dem['metadata']['resolution'] / 2. + dem['metadata']['min. X'])
 
     y['data'] = (
-        np.arange(dem['metadata']['rows'])*dem['metadata']['resolution'] +
-        dem['metadata']['resolution']/2.+dem['metadata']['min. Y'])
+        np.arange(dem['metadata']['rows']) * dem['metadata']['resolution'] +
+        dem['metadata']['resolution'] / 2. + dem['metadata']['min. Y'])
 
     z['data'] = np.array([0])
 
@@ -182,25 +183,34 @@ def read_dem(fname, field_name = 'terrain_altitude', fill_value=None,
     orig_alt['data'] = [0]
 
     if projparams is None:
-        warn('WARNING: No proj could be read from file and no projparams were provided, '+
-        'assuming the projection is CH1903.')
+        warn(
+            'WARNING: No proj could be read from file and no projparams were provided, ' +
+            'assuming the projection is CH1903.')
         projparams = _get_lv1903_proj4()
-    
+
     time = get_metadata('grid_time')
     time['data'] = np.array([0.0])
     time['units'] = 'seconds since 2000-01-01T00:00:00Z'
 
     # The use of CRS().to_dict() is required to use GridMapDisplay of Pyart
     # which expects a dict for the projection attribute of the grid
-    dem_data = pyart.core.Grid(time, {field_name : field_dict},
-       dem['metadata'],  orig_lat, orig_lon, orig_alt, x, y, z,
-       projection = projparams)
+    dem_data = pyart.core.Grid(time,
+                               {field_name: field_dict},
+                               dem['metadata'],
+                               orig_lat,
+                               orig_lon,
+                               orig_alt,
+                               x,
+                               y,
+                               z,
+                               projection=projparams)
 
     return dem_data
 
 # @profile
-def read_geotiff_data(fname, fill_value = None):
 
+
+def read_geotiff_data(fname, fill_value=None):
     """
     Reads DEM data from a generic geotiff file, unit system is expected to be
     in meters!
@@ -228,13 +238,12 @@ def read_geotiff_data(fname, fill_value = None):
         - metadata : dict
             a dictionary containing the metadata
         - projparams : str
-            projection parameters in proj4 format    
+            projection parameters in proj4 format
     """
 
     if not _GDAL_AVAILABLE:
         warn("gdal is required to use read_geotiff_data but is not installed")
         return None
-
 
     # read the data
     try:
@@ -243,13 +252,13 @@ def read_geotiff_data(fname, fill_value = None):
         prj = raster.GetProjection()
         srs = osr.SpatialReference(wkt=prj)
         projparams = _proj4_str_to_dict(srs.ExportToProj4())
-        if not len(projparams): # gdal could not read proj
+        if not len(projparams):  # gdal could not read proj
             projparams = None
         width = raster.RasterXSize
         height = raster.RasterYSize
         gt = raster.GetGeoTransform()
         minx = gt[0]
-        miny = gt[3] + width*gt[4] + height*gt[5]
+        miny = gt[3] + width * gt[4] + height * gt[5]
 
         metadata = {}
         metadata['resolution'] = np.abs(gt[1])
@@ -270,18 +279,20 @@ def read_geotiff_data(fname, fill_value = None):
         rasterarray = raster.ReadAsArray()
         rasterarray = np.ma.masked_equal(rasterarray, fill_value)
 
-        dem = {'projparams' : projparams,
-               'metadata'   : metadata,
-               'data' : rasterarray}
+        dem = {'projparams': projparams,
+               'metadata': metadata,
+               'data': rasterarray}
         return dem
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None
 
 # @profile
-def read_ascii_data(fname, fill_value = None):
+
+
+def read_ascii_data(fname, fill_value=None):
     """
     Reads DEM data from an ASCII file in the Swisstopo format, the
     unit system is expected to be in meters!
@@ -313,7 +324,7 @@ def read_ascii_data(fname, fill_value = None):
 
     # read the data
     try:
-        asciidata = pd.read_csv(fname, header = None)
+        asciidata = pd.read_csv(fname, header=None)
 
         metadata = {}
         metadata['columns'] = int(asciidata.iloc[0][0].split(' ')[1])
@@ -331,36 +342,36 @@ def read_ascii_data(fname, fill_value = None):
         if not fill_value:
             fill_value = metadata['flag value']
 
-        raster_array = pd.read_csv(fname, skiprows = 6, header = None,
-                                  sep = ' ')
+        raster_array = pd.read_csv(fname, skiprows=6, header=None,
+                                   sep=' ')
         raster_array = np.array(raster_array)
         raster_array = raster_array[np.isfinite(raster_array)]
         raster_array = np.reshape(raster_array,
-                                 (metadata['rows'],metadata['columns']))
+                                  (metadata['rows'], metadata['columns']))
         raster_array = np.ma.masked_equal(raster_array, fill_value)
 
-        rasterarray = pd.read_csv(fname, skiprows = 6, header = None,
-                                  sep = ' ')
+        rasterarray = pd.read_csv(fname, skiprows=6, header=None,
+                                  sep=' ')
         rasterarray = np.array(rasterarray)
         rasterarray = rasterarray[np.isfinite(rasterarray)]
         rasterarray = np.reshape(rasterarray,
-                                 (metadata['rows'],metadata['columns']))
+                                 (metadata['rows'], metadata['columns']))
         rasterarray = np.ma.masked_equal(rasterarray, fill_value)
 
-
-        dem = {'metadata'   : metadata,
-               'data' : rasterarray}
+        dem = {'metadata': metadata,
+               'data': rasterarray}
 
         return dem
 
-
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None
 
 # @profile
-def read_idrisi_data(fname, fill_value = None):
+
+
+def read_idrisi_data(fname, fill_value=None):
     """
     Reads DEM data from an IDRISI .rst file
 
@@ -387,13 +398,12 @@ def read_idrisi_data(fname, fill_value = None):
         - metadata : dict
             a dictionary containing the metadata
         - projparams : str
-            projection parameters in proj4 format    
+            projection parameters in proj4 format
     """
 
     if not _GDAL_AVAILABLE:
         warn("gdal is required to use read_idrisi_data but is not installed")
         return None
-
 
     # read the data
     try:
@@ -405,7 +415,7 @@ def read_idrisi_data(fname, fill_value = None):
         prj = raster.GetProjection()
         srs = osr.SpatialReference(wkt=prj)
         projparams = _proj4_str_to_dict(srs.ExportToProj4())
-        if not len(projparams): # gdal could not read proj
+        if not len(projparams):  # gdal could not read proj
             projparams = None
 
         rasterarray = raster.ReadAsArray()
@@ -416,14 +426,14 @@ def read_idrisi_data(fname, fill_value = None):
         if metadata is None:
             return None
 
-        dem = {'projparams' : projparams,
-               'metadata'   : metadata,
-               'data' : rasterarray}
+        dem = {'projparams': projparams,
+               'metadata': metadata,
+               'data': rasterarray}
         return dem
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None
 
 
@@ -455,7 +465,7 @@ def read_idrisi_metadata(fname):
 
         return metadata
     except EnvironmentError:
-        warn('Unable to read file '+fname_rdc)
+        warn('Unable to read file ' + fname_rdc)
         return None
 
 
@@ -503,7 +513,7 @@ def _prepare_for_interpolation(x_radar, y_radar, dem_coord, slice_xy=True):
 
         ind_xmax = np.where(dem_coord['x']['data'] > xmax)[0]
         if ind_xmax.size == 0:
-            ind_xmax = nx_dem-1
+            ind_xmax = nx_dem - 1
         else:
             ind_xmax = ind_xmax[0]
 
@@ -515,18 +525,17 @@ def _prepare_for_interpolation(x_radar, y_radar, dem_coord, slice_xy=True):
 
         ind_ymax = np.where(dem_coord['y']['data'] > ymax)[0]
         if ind_ymax.size == 0:
-            ind_ymax = ny_dem-1
+            ind_ymax = ny_dem - 1
         else:
             ind_ymax = ind_ymax[0]
     else:
         ind_xmin = 0
-        ind_xmax = nx_dem-1
+        ind_xmax = nx_dem - 1
         ind_ymin = 0
-        ind_ymax = ny_dem-1
+        ind_ymax = ny_dem - 1
 
-
-    x_dem = dem_coord['x']['data'][ind_xmin:ind_xmax+1]
-    y_dem = dem_coord['y']['data'][ind_ymin:ind_ymax+1]
+    x_dem = dem_coord['x']['data'][ind_xmin:ind_xmax + 1]
+    y_dem = dem_coord['y']['data'][ind_ymin:ind_ymax + 1]
 
     # Not used with RegularGridInterpolator
     # nx = ind_xmax-ind_xmin+1
@@ -538,15 +547,17 @@ def _prepare_for_interpolation(x_radar, y_radar, dem_coord, slice_xy=True):
 
     return (x_dem, y_dem, ind_xmin, ind_ymin, ind_xmax, ind_ymax)
 
+
 def _proj4_str_to_dict(proj4str):
     # COnverts proj4 string to dict as can be used by part
     return dict(item.split("=") for item in proj4str.strip(' ').split("+")
-            if len(item.split('=')) == 2) 
-    
+                if len(item.split('=')) == 2)
+
+
 def _get_lv1903_proj4():
     # Gets proj4 dict for Swiss LV1903 coordinates
     if _GDAL_AVAILABLE:
-        lv1903 = osr.SpatialReference( )
+        lv1903 = osr.SpatialReference()
         lv1903.ImportFromEPSG(21781)
         lv1903 = lv1903.ExportToProj4()
         # Convert proj4 string to dict
@@ -556,14 +567,14 @@ def _get_lv1903_proj4():
     else:
         # Hardcoded version
         lv1903 = {'proj': 'somerc',
-                 'lat_0': 46.9524055555556,
-                 'lon_0': 7.43958333333333,
-                 'k_0': 1,
-                 'x_0': 600000,
-                 'y_0': 200000,
-                 'ellps': 'bessel',
-                 'units': 'm',
-                 'no_defs': 0,
-                 'type': 'crs'}
-        
+                  'lat_0': 46.9524055555556,
+                  'lon_0': 7.43958333333333,
+                  'k_0': 1,
+                  'x_0': 600000,
+                  'y_0': 200000,
+                  'ellps': 'bessel',
+                  'units': 'm',
+                  'no_defs': 0,
+                  'type': 'crs'}
+
     return lv1903

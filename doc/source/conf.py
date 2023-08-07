@@ -16,6 +16,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+import pyart
 import os
 import sys
 from pathlib import Path
@@ -72,7 +73,8 @@ autodoc_typehints = "description"
 
 # Otherwise, the Return parameter list looks different from the Parameters list
 napoleon_use_rtype = False
-# Otherwise, the Attributes parameter list looks different from the Parameters list
+# Otherwise, the Attributes parameter list looks different from the
+# Parameters list
 napoleon_use_ivar = True
 napoleon_include_init_with_doc = False
 napoleon_use_param = False
@@ -96,7 +98,6 @@ author = "Jordi Figueras I Ventura, Daniel Wolfensberger"
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
-import pyart
 
 # The short X.Y version (including the .devXXXX suffix if present)
 version = re.sub(r"^(\d+\.\d+)\.\d+(.*)", r"\1\2", pyart.__version__)
@@ -208,7 +209,11 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, "pyart.tex", "Py-ART Documentation", "Contributors", "manual"),
+    (master_doc,
+     "pyart.tex",
+     "Py-ART Documentation",
+     "Contributors",
+     "manual"),
 ]
 
 
@@ -216,7 +221,8 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, "pyart", "The Python ARM Radar Toolkit", [author], 1)]
+man_pages = [
+    (master_doc, "pyart", "The Python ARM Radar Toolkit", [author], 1)]
 
 # -- Options for Texinfo output -------------------------------------------
 

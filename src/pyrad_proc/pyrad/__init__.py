@@ -25,11 +25,11 @@ else:
     # from . import __check_build
 
     # import subpackages
-    from . import graph
-    from . import io
-    from . import proc
-    from . import prod
-    from . import util
-    from . import flow
+    from . import graph #noqa
+    from . import io #noqa
+    from . import proc #noqa
+    from . import prod #noqa
+    from . import util #noqa
+    from . import flow #noqa
     # root level functions
     # non at the moment

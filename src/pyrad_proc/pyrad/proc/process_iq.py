@@ -25,8 +25,6 @@ Functions to processes IQ data.
 
 from copy import deepcopy
 from warnings import warn
-import numpy as np
-from netCDF4 import num2date
 
 import pyart
 
@@ -62,7 +60,7 @@ def process_raw_iq(procstatus, dscfg, radar_list=None):
     for datatypedescr in dscfg['datatype']:
         radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
         break
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
         return None, None
@@ -125,7 +123,7 @@ def process_pol_variables_iq(procstatus, dscfg, radar_list=None):
         elif datatype == 'IQNADUv':
             noise_v_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
         return None, None
@@ -197,7 +195,7 @@ def process_reflectivity_iq(procstatus, dscfg, radar_list=None):
         warn('Signal field must be specified')
         return None, None
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
         return None, None
@@ -258,7 +256,7 @@ def process_st1_iq(procstatus, dscfg, radar_list=None):
     radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
     signal_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
         return None, None
@@ -315,7 +313,7 @@ def process_st2_iq(procstatus, dscfg, radar_list=None):
     radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
     signal_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
         return None, None
@@ -371,7 +369,7 @@ def process_wbn_iq(procstatus, dscfg, radar_list=None):
     radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
     signal_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
         return None, None
@@ -444,7 +442,7 @@ def process_differential_reflectivity_iq(procstatus, dscfg, radar_list=None):
         elif datatype == 'IQNADUv':
             noise_v_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
         return None, None
@@ -503,7 +501,7 @@ def process_mean_phase_iq(procstatus, dscfg, radar_list=None):
     radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
     signal_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
         return None, None
@@ -567,7 +565,7 @@ def process_differential_phase_iq(procstatus, dscfg, radar_list=None):
         elif datatype == 'IQvvADU':
             signal_v_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
         return None, None
@@ -639,7 +637,7 @@ def process_rhohv_iq(procstatus, dscfg, radar_list=None):
         elif datatype == 'IQNADUv':
             noise_v_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
         return None, None
@@ -702,7 +700,7 @@ def process_Doppler_velocity_iq(procstatus, dscfg, radar_list=None):
         if datatype in ('IQhhADU', 'IQvvADU'):
             signal_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
         return None, None
@@ -710,7 +708,7 @@ def process_Doppler_velocity_iq(procstatus, dscfg, radar_list=None):
 
     if signal_field not in radar.fields:
         warn('Unable to obtain Doppler velocity. ' +
-             'Missing field '+signal_field)
+             'Missing field ' + signal_field)
         return None, None
 
     direction = dscfg.get('direction', 'negative_away')
@@ -770,7 +768,7 @@ def process_Doppler_width_iq(procstatus, dscfg, radar_list=None):
         elif datatype in ('IQNADUh', 'IQNADUv'):
             noise_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
         return None, None
@@ -778,10 +776,10 @@ def process_Doppler_width_iq(procstatus, dscfg, radar_list=None):
 
     if signal_field not in radar.fields:
         warn('Unable to obtain Doppler spectrum width. ' +
-             'Missing field '+signal_field)
+             'Missing field ' + signal_field)
         return None, None
 
-    subtract_noise = dscfg.get('subtract_noise', False)
+    dscfg.get('subtract_noise', False)
     lag = dscfg.get('lag', 1)
 
     width = pyart.retrieve.compute_Doppler_width_iq(
@@ -833,7 +831,7 @@ def process_fft(procstatus, dscfg, radar_list=None):
         return None, None
 
     radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
         return None, None
@@ -861,7 +859,7 @@ def process_fft(procstatus, dscfg, radar_list=None):
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_name = get_fieldname_pyart(datatype)
         if field_name not in radar.fields:
-            warn(field_name+' not in radar')
+            warn(field_name + ' not in radar')
             continue
         if field_name == 'IQ_hh_ADU':
             fields_out_list.append('unfiltered_complex_spectra_hh_ADU')
@@ -872,7 +870,7 @@ def process_fft(procstatus, dscfg, radar_list=None):
         elif field_name == 'IQ_noiseADU_vv':
             fields_out_list.append('spectral_noise_power_vv_ADU')
         else:
-            warn(field_name+' can not be Fourier transformed')
+            warn(field_name + ' can not be Fourier transformed')
         fields_in_list.append(field_name)
 
     radar_out = pyart.retrieve.compute_spectra(

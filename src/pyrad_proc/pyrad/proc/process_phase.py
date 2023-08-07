@@ -85,7 +85,7 @@ def process_correct_phidp0(procstatus, dscfg, radar_list=None):
         if datatype == 'uPhiDP':
             psidp_field = 'uncorrected_differential_phase'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -104,22 +104,22 @@ def process_correct_phidp0(procstatus, dscfg, radar_list=None):
 
     ind_rmin = np.where(radar.range['data'] > rmin)[0][0]
     ind_rmax = np.where(radar.range['data'] < rmax)[0][-1]
-    r_res = radar.range['data'][1]-radar.range['data'][0]
-    min_rcons = int(rcell/r_res)
+    r_res = radar.range['data'][1] - radar.range['data'][0]
+    min_rcons = int(rcell / r_res)
 
     if psidp_field.startswith('corrected_'):
         phidp_field = psidp_field
     elif psidp_field.startswith('uncorrected_'):
         phidp_field = psidp_field.replace('uncorrected_', 'corrected_', 1)
     else:
-        phidp_field = 'corrected_'+psidp_field
+        phidp_field = 'corrected_' + psidp_field
 
     try:
         phidp = pyart.correct.correct_sys_phase(
             radar, ind_rmin=ind_rmin, ind_rmax=ind_rmax, min_rcons=min_rcons,
             zmin=zmin, zmax=zmax, psidp_field=psidp_field,
             refl_field=refl_field, phidp_field=phidp_field)
-    except AttributeError as e:
+    except AttributeError:
         warn('Could not find correct_sys_phase function...')
         warn('Skipping system phase correction...')
         warn('Please use PyART-MCH to get this functionality')
@@ -188,7 +188,7 @@ def process_smooth_phidp_single_window(procstatus, dscfg, radar_list=None):
         if datatype == 'uPhiDP':
             psidp_field = 'uncorrected_differential_phase'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -208,17 +208,17 @@ def process_smooth_phidp_single_window(procstatus, dscfg, radar_list=None):
 
     ind_rmin = np.where(radar.range['data'] > rmin)[0][0]
     ind_rmax = np.where(radar.range['data'] < rmax)[0][-1]
-    r_res = radar.range['data'][1]-radar.range['data'][0]
-    min_rcons = int(rcell/r_res)
-    wind_len = int(rwind/r_res)
-    min_valid = int(wind_len/2+1)
+    r_res = radar.range['data'][1] - radar.range['data'][0]
+    min_rcons = int(rcell / r_res)
+    wind_len = int(rwind / r_res)
+    min_valid = int(wind_len / 2 + 1)
 
     if psidp_field.startswith('corrected_'):
         phidp_field = psidp_field
     elif psidp_field.startswith('uncorrected_'):
         phidp_field = psidp_field.replace('uncorrected_', 'corrected_', 1)
     else:
-        phidp_field = 'corrected_'+psidp_field
+        phidp_field = 'corrected_' + psidp_field
 
     phidp = pyart.correct.smooth_phidp_single_window(
         radar, ind_rmin=ind_rmin, ind_rmax=ind_rmax, min_rcons=min_rcons,
@@ -292,7 +292,7 @@ def process_smooth_phidp_double_window(procstatus, dscfg, radar_list=None):
         if datatype == 'uPhiDP':
             psidp_field = 'uncorrected_differential_phase'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -314,19 +314,19 @@ def process_smooth_phidp_double_window(procstatus, dscfg, radar_list=None):
 
     ind_rmin = np.where(radar.range['data'] > rmin)[0][0]
     ind_rmax = np.where(radar.range['data'] < rmax)[0][-1]
-    r_res = radar.range['data'][1]-radar.range['data'][0]
-    min_rcons = int(rcell/r_res)
-    swind_len = int(rwinds/r_res)
-    smin_valid = int(swind_len/2+1)
-    lwind_len = int(rwindl/r_res)
-    lmin_valid = int(lwind_len/2+1)
+    r_res = radar.range['data'][1] - radar.range['data'][0]
+    min_rcons = int(rcell / r_res)
+    swind_len = int(rwinds / r_res)
+    smin_valid = int(swind_len / 2 + 1)
+    lwind_len = int(rwindl / r_res)
+    lmin_valid = int(lwind_len / 2 + 1)
 
     if psidp_field.startswith('corrected_'):
         phidp_field = psidp_field
     elif psidp_field.startswith('uncorrected_'):
         phidp_field = psidp_field.replace('uncorrected_', 'corrected_', 1)
     else:
-        phidp_field = 'corrected_'+psidp_field
+        phidp_field = 'corrected_' + psidp_field
 
     phidp = pyart.correct.smooth_phidp_double_window(
         radar, ind_rmin=ind_rmin, ind_rmax=ind_rmax, min_rcons=min_rcons,
@@ -412,7 +412,7 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
         if datatype == 'H_ISO0':
             iso0_field = 'height_over_iso0'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -459,7 +459,7 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
         else:
             fzl = 2000.
             warn('Freezing level height not defined. Using default ' +
-                 str(fzl)+' m')
+                 str(fzl) + ' m')
 
     phidp_field = 'corrected_differential_phase'
     kdp_field = 'corrected_specific_differential_phase'
@@ -469,8 +469,8 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
     # correct PhiDP0
     ind_rmin = np.where(radar_aux.range['data'] > rmin)[0][0]
     ind_rmax = np.where(radar_aux.range['data'] < rmax)[0][-1]
-    r_res = radar_aux.range['data'][1]-radar_aux.range['data'][0]
-    min_rcons = int(rcell/r_res)
+    r_res = radar_aux.range['data'][1] - radar_aux.range['data'][0]
+    min_rcons = int(rcell / r_res)
 
     try:
         phidp = pyart.correct.correct_sys_phase(
@@ -478,7 +478,7 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
             min_rcons=min_rcons, zmin=zmin, zmax=zmax,
             psidp_field=psidp_field, refl_field=refl_field,
             phidp_field=phidp_field)
-    except AttributeError as e:
+    except AttributeError:
         warn('Could not find correct_sys_phase function...')
         warn('Skipping system phase correction...')
         warn('Please use PyART-MCH to get this functionality')
@@ -505,7 +505,7 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
             thickness=thickness, beamwidth=beamwidth, temp_field=temp_field,
             iso0_field=iso0_field, temp_ref=temp_ref)
         mask = np.logical_or(mask, mask_fzl)
-    except AttributeError as e:
+    except AttributeError:
         warn("Masking above FZL is only available in PyART-MCH")
         warn("Please use this library instead of ARM's version")
 
@@ -600,7 +600,7 @@ def process_phidp_kdp_lp(procstatus, dscfg, radar_list=None):
         if datatype == 'H_ISO0':
             iso0_field = 'height_over_iso0'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -641,7 +641,7 @@ def process_phidp_kdp_lp(procstatus, dscfg, radar_list=None):
         else:
             fzl = 2000.
             warn('Freezing level height not defined. Using default ' +
-                 str(fzl)+' m')
+                 str(fzl) + ' m')
 
     radar_aux = deepcopy(radar)
 
@@ -742,7 +742,7 @@ def process_kdp_leastsquare_single_window(procstatus, dscfg, radar_list=None):
         if datatype == 'uPhiDP':
             phidp_field = 'uncorrected_differential_phase'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -757,9 +757,9 @@ def process_kdp_leastsquare_single_window(procstatus, dscfg, radar_list=None):
     rwind = dscfg.get('rwind', 6000.)
     vectorize = dscfg.get('vectorize', False)
 
-    r_res = radar.range['data'][1]-radar.range['data'][0]
-    wind_len = int(rwind/r_res)
-    min_valid = int(wind_len/2+1)
+    r_res = radar.range['data'][1] - radar.range['data'][0]
+    wind_len = int(rwind / r_res)
+    min_valid = int(wind_len / 2 + 1)
     kdp_field = 'corrected_specific_differential_phase'
 
     kdp = pyart.retrieve.kdp_leastsquare_single_window(
@@ -825,7 +825,7 @@ def process_kdp_leastsquare_double_window(procstatus, dscfg, radar_list=None):
         if datatype == 'dBZc':
             refl_field = 'corrected_reflectivity'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -842,11 +842,11 @@ def process_kdp_leastsquare_double_window(procstatus, dscfg, radar_list=None):
     zthr = dscfg.get('Zthr', 40.)
     vectorize = dscfg.get('vectorize', False)
 
-    r_res = radar.range['data'][1]-radar.range['data'][0]
-    swind_len = int(rwinds/r_res)
-    smin_valid = int(swind_len/2+1)
-    lwind_len = int(rwindl/r_res)
-    lmin_valid = int(lwind_len/2+1)
+    r_res = radar.range['data'][1] - radar.range['data'][0]
+    swind_len = int(rwinds / r_res)
+    smin_valid = int(swind_len / 2 + 1)
+    lwind_len = int(rwindl / r_res)
+    lmin_valid = int(lwind_len / 2 + 1)
 
     kdp_field = 'corrected_specific_differential_phase'
 
@@ -920,7 +920,7 @@ def process_phidp_kdp_Vulpiani(procstatus, dscfg, radar_list=None):
         if datatype == 'uPhiDP':
             phidp_field = 'uncorrected_differential_phase'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -939,8 +939,8 @@ def process_phidp_kdp_Vulpiani(procstatus, dscfg, radar_list=None):
     get_phidp = dscfg.get('get_phidp', 0)
 
     # window length (must be even)
-    r_res = radar.range['data'][1]-radar.range['data'][0]
-    wind_len = int(rwind/r_res)
+    r_res = radar.range['data'][1] - radar.range['data'][0]
+    wind_len = int(rwind / r_res)
     if wind_len % 2 == 1:
         wind_len += 1
 
@@ -1032,7 +1032,7 @@ def process_phidp_kdp_Kalman(procstatus, dscfg, radar_list=None):
         if datatype == 'uPhiDP':
             phidp_field = 'uncorrected_differential_phase'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -1144,7 +1144,7 @@ def process_attenuation(procstatus, dscfg, radar_list=None):
         if datatype == 'H_ISO0':
             iso0 = 'height_over_iso0'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -1181,7 +1181,7 @@ def process_attenuation(procstatus, dscfg, radar_list=None):
         else:
             fzl = 2000.
             warn('Freezing level height not defined. Using default ' +
-                 str(fzl)+' m')
+                 str(fzl) + ' m')
 
     att_method = dscfg.get('ATT_METHOD', 'ZPhi')
     if att_method not in ('ZPhi', 'Philin'):

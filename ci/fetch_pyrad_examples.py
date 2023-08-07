@@ -19,6 +19,7 @@ from urllib import request
 from urllib.error import HTTPError
 from zipfile import ZipFile
 
+
 def download_pyrad_examples(dir_path, force=True):
     """
     Download pyrad examples from github.
@@ -47,7 +48,8 @@ def download_pyrad_examples(dir_path, force=True):
     # The http response from github can either contain Content-Length (size of the file)
     # or use chunked Transfer-Encoding.
     # If Transfer-Encoding is chunked, then the Content-Length is not available since
-    # the content is dynamically generated and we can't know the length a priori easily.
+    # the content is dynamically generated and we can't know the length a
+    # priori easily.
 
     print("Downloading pyrad_examples from github.")
     tmp_file_name, _ = request.urlretrieve(
@@ -68,5 +70,3 @@ def download_pyrad_examples(dir_path, force=True):
 tox_test_data_dir = os.environ["PYRAD_EXAMPLES_PATH"]
 
 download_pyrad_examples(tox_test_data_dir, force=True)
-
-

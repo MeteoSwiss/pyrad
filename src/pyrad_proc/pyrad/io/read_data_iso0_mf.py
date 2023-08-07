@@ -59,13 +59,13 @@ def iso2radar_data(radar, iso0_data, time_info, iso0_statistic='avg_by_dist',
 
     """
     # get the relevant time indices for interpolation in time
-    time_index = np.argmin(abs(iso0_data['fcst_time']-time_info))
+    time_index = np.argmin(abs(iso0_data['fcst_time'] - time_info))
     if time_info > iso0_data['fcst_time'][time_index]:
-        time_index_future = time_index+1
+        time_index_future = time_index + 1
         time_index_past = time_index
     else:
         time_index_future = time_index
-        time_index_past = time_index-1
+        time_index_past = time_index - 1
 
     # interpolate the iso0 ref in time
     if time_index_past == -1:
@@ -85,7 +85,8 @@ def iso2radar_data(radar, iso0_data, time_info, iso0_statistic='avg_by_dist',
 
         # put time in seconds from past forecast
         time_info_s = (
-            time_info-iso0_data['fcst_time'][time_index_past]).total_seconds()
+            time_info -
+            iso0_data['fcst_time'][time_index_past]).total_seconds()
         fcst_time_s = (
             iso0_data['fcst_time'][time_index_future] -
             iso0_data['fcst_time'][time_index_past]).total_seconds()
@@ -96,7 +97,7 @@ def iso2radar_data(radar, iso0_data, time_info, iso0_statistic='avg_by_dist',
 
     # put field
     field_dict = get_metadata(field_name)
-    field_dict['data'] = radar.gate_altitude['data']-iso0_ref
+    field_dict['data'] = radar.gate_altitude['data'] - iso0_ref
 
     return field_dict
 
@@ -129,16 +130,16 @@ def grib2radar_data(radar, iso0_data, time_info, time_interp=True,
         metadata
 
     """
-    time_index = np.argmin(abs(iso0_data['fcst_time']-time_info))
+    time_index = np.argmin(abs(iso0_data['fcst_time'] - time_info))
 
     if time_interp:
         # get the relevant time indices for interpolation in time
         if time_info > iso0_data['fcst_time'][time_index]:
-            time_index_future = time_index+1
+            time_index_future = time_index + 1
             time_index_past = time_index
         else:
             time_index_future = time_index
-            time_index_past = time_index-1
+            time_index_past = time_index - 1
 
         # interpolate the iso0 ref in time
         if time_index_past == -1:
@@ -159,7 +160,7 @@ def grib2radar_data(radar, iso0_data, time_info, time_interp=True,
             # interpolate between two time steps
             fcst_time = np.array([0, fcst_time_s])
             values = iso0_data['values'][
-                time_index_past:time_index_future+1, :, :]
+                time_index_past:time_index_future + 1, :, :]
             f = interp1d(fcst_time, values, axis=0, assume_sorted=True)
 
             iso0_ref = f(time_info_s)
@@ -182,7 +183,7 @@ def grib2radar_data(radar, iso0_data, time_info, time_interp=True,
     # put field
     field_dict = get_metadata(field_name)
     if field_name == 'height_over_iso0':
-        field_dict['data'] = radar.gate_altitude['data']-data_interp
+        field_dict['data'] = radar.gate_altitude['data'] - data_interp
     else:
         field_dict['data'] = data_interp
 
@@ -230,16 +231,16 @@ def get_iso0_ref(radar, iso0_data, time_index, statistic='avg_by_dist'):
         return np.max(iso0_data['iso0_points'][time_index])
 
     if statistic != 'avg_by_dist':
-        warn('unknown statistic '+statistic +
+        warn('unknown statistic ' + statistic +
              '. Default avg_by_dist will be applied')
     # mean weighted by the distance from the iso0 point to the radar
     x_iso, y_iso = geographic_to_cartesian_aeqd(
         iso0_data['lon_points'][time_index],
         iso0_data['lat_points'][time_index], radar.longitude['data'][0],
         radar.latitude['data'][0])
-    dist_iso = np.sqrt(x_iso*x_iso+y_iso*y_iso)
+    dist_iso = np.sqrt(x_iso * x_iso + y_iso * y_iso)
     return (
-        np.sum(iso0_data['iso0_points'][time_index]*dist_iso) /
+        np.sum(iso0_data['iso0_points'][time_index] * dist_iso) /
         np.sum(dist_iso))
 
 
@@ -311,8 +312,8 @@ def read_iso0_mf_data(fname):
                             vals2 = line.split()
 
                             if vals2[0] == 'LONGITUDE':
-                                lon_points_aux.append(float(vals2[1])/1000.)
-                                lat_points_aux.append(float(vals2[3])/1000.)
+                                lon_points_aux.append(float(vals2[1]) / 1000.)
+                                lat_points_aux.append(float(vals2[3]) / 1000.)
                                 iso0_points_aux.append(float(vals2[5]))
                         lon_points.append(lon_points_aux)
                         lat_points.append(lat_points_aux)
@@ -325,7 +326,7 @@ def read_iso0_mf_data(fname):
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None
 
     iso0_data = {
@@ -356,7 +357,7 @@ def read_iso0_grib_data(fname):
 
     """
     if not _PYGRIB_AVAILABLE:
-        warn('Unable to read file '+fname+'. Pygrib library not available')
+        warn('Unable to read file ' + fname + '. Pygrib library not available')
         return None
 
     values = []
@@ -367,13 +368,13 @@ def read_iso0_grib_data(fname):
         values.append(grb.values)
         date_analysis = grb.analDate
         date_fcst.append(
-            grb.analDate+datetime.timedelta(hours=grb['startStep']))
+            grb.analDate + datetime.timedelta(hours=grb['startStep']))
 
     grbs.close()
 
     iso0_data = {
         'values': np.array(values),
-        'run_time':  date_analysis,
+        'run_time': date_analysis,
         'fcst_time': np.array(date_fcst),
         'lons': lons,
         'lats': lats

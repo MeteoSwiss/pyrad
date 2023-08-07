@@ -1,4 +1,4 @@
-#%%
+# %%
 import pandas as pd
 from pathlib import Path
 import os
@@ -7,24 +7,28 @@ import re
 
 mainpath = Path(__file__).resolve().parent.parent
 prodpath = Path(mainpath, 'src', 'pyrad_proc', 'pyrad', 'prod')
-OUT_DIRECTORY = str(Path(mainpath, 'doc', 'source', 'overview', 'mappings'))
+OUT_DIRECTORY = str(Path(mainpath, 'doc', 'source', 'overview'))
 
 
 def parameters_to_dict(params):
     dic = {}
-    keys = re.findall('([a-zA-Z_]*\s*:\s*[a-zA-Z]*)',params)
+    keys = re.findall('([a-zA-Z_]*\\s*:\\s*[a-zA-Z]*)', params)
     for i in range(len(keys)):
         idx_now = params.index(keys[i]) + len(keys[i])
         if i == len(keys) - 1:
             idx_next = len(params)
         else:
-            idx_next = params.index(keys[i+1])
+            idx_next = params.index(keys[i + 1])
 
-        dic[keys[i].replace(':','').strip()] = params[idx_now:idx_next]
+        dic[keys[i].replace(':', '').strip()] = params[idx_now:idx_next]
     return dic
 
-def yaml_to_restructured_text(yaml_data):
+
+def dict_to_restructured_text(yaml_data):
     rst_output = []
+    rst_output.append('List of pyrad products')
+    rst_output.append('==============================\n')
+
     for key, value in yaml_data.items():
         rst_output.append(f"{key}")
         rst_output.append("-----------------------------")
@@ -35,15 +39,16 @@ def yaml_to_restructured_text(yaml_data):
             rst_output.append(f"{key2}")
             rst_output.append('""""""""""""""""""""""""""""""')
             rst_output.append('description')
-            rst_output.append('   '+value2['description']+'\n')
+            rst_output.append('   ' + value2['description'] + '\n')
             rst_output.append('parameters')
             params = parameters_to_dict(value2['parameters'])
             for key3, value3 in params.items():
-                rst_output.append('   '+key3)
-                rst_output.append('       '+value3)
+                rst_output.append('   ' + key3)
+                rst_output.append('       ' + value3)
             rst_output.append('')
             # rst_output.append(f"\n\n{value2['parameters']}\n\n")
     return '\n'.join(rst_output)
+
 
 def process_file(filepath):
     with open(filepath, 'r') as f:
@@ -61,28 +66,31 @@ def process_file(filepath):
             started = True
             reading_params = False
         if started:
-            match = re.findall("^'[A-Z0-9_]*'\s*:\d*", line.strip())
+            match = re.findall("^'[A-Z0-9_]*'\\s*:\\d*", line.strip())
             if 'Parameters' in line:
                 reading_params = False
             if len(match):
                 reading_params = False
                 reading_title = True
-                product = match[0].replace("'","").split(':')[0]
+                product = match[0].replace("'", "").split(':')[0]
                 descr = line.split(':')[1].strip()
                 all_products[function][product] = {}
                 all_products[function][product]['parameters'] = ''
                 continue
             if 'User defined parameters' in line:
-                all_products[function][product]['description'] = " ".join(descr.replace('\n','').split())
+                all_products[function][product]['description'] = " ".join(
+                    descr.replace('\n', '').split())
                 reading_params = True
                 reading_title = False
                 continue
             if reading_title:
                 descr += line
             if reading_params and product:
-                all_products[function][product]['parameters'] +=  " " + " ".join(line.replace('\n',' ').split())
-                
+                all_products[function][product]['parameters'] += " " + \
+                    " ".join(line.replace('\n', ' ').split())
+
     return all_products
+
 
 products = {}
 for root, _, files in os.walk(prodpath):
@@ -90,26 +98,26 @@ for root, _, files in os.walk(prodpath):
         if file.endswith(".py") and file.startswith("process"):
             file_path = os.path.join(root, file)
             products.update(process_file(file_path))
-            
+
 # Match function names to product types
 mapping_func_to_prodname = {}
 file_path = Path(prodpath, 'product_aux.py')
 with open(file_path, 'r') as f:
     content = f.readlines()
 for line in content:
-    match = re.findall("^'[A-Z0-9_]*'\s*:\d*", line.strip())
+    match = re.findall("^'[A-Z0-9_]*'\\s*:\\d*", line.strip())
     if len(match):
-        product = match[0].replace("'","").split(':')[0]
+        product = match[0].replace("'", "").split(':')[0]
         function = line.split(':')[1].strip()
         mapping_func_to_prodname[function] = product
-    
+
 for k in mapping_func_to_prodname:
     if k in products:
         products[mapping_func_to_prodname[k]] = products.pop(k)
 
 
-# Convert YAML data to reStructuredText format
-rst_content = yaml_to_restructured_text(products)
+# Convert dict data to reStructuredText format
+rst_content = dict_to_restructured_text(products)
 fname = Path(OUT_DIRECTORY, 'list_products.rst')
 with open(fname, 'w') as f:
     f.write(rst_content)

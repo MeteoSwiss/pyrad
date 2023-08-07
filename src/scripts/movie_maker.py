@@ -37,7 +37,7 @@ def main():
     codec = 'mpeg4'
     frames_per_second = 1
     movie_path = '/utemp/mdso/figuerasiventuraj/movies/'
-    file_path_list = [        
+    file_path_list = [
         '/utemp/mdso/figuerasiventuraj/pyrad_products/MF_ODIM_OPOU_HAIL/2020-07-01/dBuZ/PPI_EL00/',
         '/utemp/mdso/figuerasiventuraj/pyrad_products/MF_ODIM_OPOU_HAIL/2020-07-01/dBuZ/PPI_EL01/',
         '/utemp/mdso/figuerasiventuraj/pyrad_products/MF_ODIM_OPOU_HAIL/2020-07-01/dBuZ/PPI_EL02/',
@@ -105,7 +105,7 @@ def create_movie(file_path_list, movie_name_list, movie_path, file_type='png',
 
     """
     for movie_name, file_path in zip(movie_name_list, file_path_list):
-        file_list = sorted(glob.glob(file_path+'*.'+file_type))
+        file_list = sorted(glob.glob(file_path + '*.' + file_type))
         print(file_list)
 
         # Generate clip
@@ -113,10 +113,15 @@ def create_movie(file_path_list, movie_name_list, movie_path, file_type='png',
         # Write out clip
         if not os.path.isdir(movie_path):
             os.makedirs(movie_path)
-        clip.write_videofile(movie_path+movie_name+'.'+movie_type, codec=codec)
-        clip.write_gif(movie_path+movie_name+'.gif')
+        clip.write_videofile(
+            movie_path +
+            movie_name +
+            '.' +
+            movie_type,
+            codec=codec)
+        clip.write_gif(movie_path + movie_name + '.gif')
 
-        print('Created movie '+movie_path+movie_name)
+        print('Created movie ' + movie_path + movie_name)
 
 
 def _print_end_msg(text):

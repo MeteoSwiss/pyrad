@@ -47,61 +47,61 @@ def main():
                     "====== Monitoring rewriting finished: ")
 
     for i, rad in enumerate(rad_vec):
-        print('Processing Radar '+rad)
+        print('Processing Radar ' + rad)
         for j, var in enumerate(var_vec):
             if var == 'dBZ':
-                basedir = 'rad4alp_gc_PH'+rad
+                basedir = 'rad4alp_gc_PH' + rad
                 dsdir = 'monitoring_clt_Zh'
                 mon_type = 'GC_MONITORING'
                 quantiles = [50., 95., 99.]
             elif var == 'dBZv':
-                basedir = 'rad4alp_gc_PH'+rad
+                basedir = 'rad4alp_gc_PH' + rad
                 dsdir = 'monitoring_clt_Zv'
                 mon_type = 'GC_MONITORING'
                 quantiles = [50., 95., 99.]
             elif var == 'RhoHV_rain':
-                basedir = 'rad4alp_dataquality_PL'+rad
+                basedir = 'rad4alp_dataquality_PL' + rad
                 dsdir = 'monitoring_RhoHV'
                 mon_type = 'MONITORING'
                 quantiles = [65., 80., 95.]
             elif var == 'PhiDP0':
-                basedir = 'rad4alp_dataquality_PL'+rad
+                basedir = 'rad4alp_dataquality_PL' + rad
                 dsdir = 'monitoring_PhiDP0'
                 mon_type = 'MONITORING'
                 quantiles = [25., 50., 75.]
             elif var == 'ZDR_prec':
-                basedir = 'rad4alp_dataquality_PL'+rad
+                basedir = 'rad4alp_dataquality_PL' + rad
                 dsdir = 'monitoring_ZDR'
                 mon_type = 'MONITORING'
                 quantiles = [25., 50., 75.]
             elif var == 'ZDR_snow':
-                basedir = 'rad4alp_dataquality_PL'+rad
+                basedir = 'rad4alp_dataquality_PL' + rad
                 dsdir = 'monitoring_ZDR_snow'
                 mon_type = 'MONITORING'
                 quantiles = [25., 50., 75.]
             elif var == 'dBZ_bias':
-                basedir = 'rad4alp_dataquality_PL'+rad
+                basedir = 'rad4alp_dataquality_PL' + rad
                 dsdir = 'monitoring_Zh_bias'
                 mon_type = 'MONITORING'
                 quantiles = [25., 50., 75.]
 
-            input_path = input_base+basedir+'/'+dsdir+'/VOL_TS/'
-            output_path = output_base+basedir+'/'+dsdir+'/VOL_TS/'
+            input_path = input_base + basedir + '/' + dsdir + '/VOL_TS/'
+            output_path = output_base + basedir + '/' + dsdir + '/VOL_TS/'
             if not os.path.isdir(output_path):
                 os.makedirs(output_path)
 
-            print('- Processing Variable '+var)
+            print('- Processing Variable ' + var)
             for k, year in enumerate(year_vec):
-                print('-- Processing Year '+year.strftime('%Y'))
+                print('-- Processing Year ' + year.strftime('%Y'))
                 fname_input = (
-                    input_path+year.strftime('%Y')+'_'+rad +
-                    '_ts_'+mon_type+'_'+var+'.csv')
+                    input_path + year.strftime('%Y') + '_' + rad +
+                    '_ts_' + mon_type + '_' + var + '.csv')
                 fname_output = (
-                    output_path+year.strftime('%Y')+'_'+rad +
-                    '_ts_'+mon_type+'_'+var+'.csv')
+                    output_path + year.strftime('%Y') + '_' + rad +
+                    '_ts_' + mon_type + '_' + var + '.csv')
                 figfname = [
-                    output_path+year.strftime('%Y')+'_'+rad +
-                    '_ts_'+mon_type+'_'+var+'.png']
+                    output_path + year.strftime('%Y') + '_' + rad +
+                    '_ts_' + mon_type + '_' + var + '.png']
 
                 date, np_t_vec, cquant_vec, lquant_vec, hquant_vec = (
                     read_monitoring_ts(fname_input, sort_by_date=True))
@@ -115,14 +115,14 @@ def main():
                     date, np_t_vec, val_vec, quantiles, var,
                     fname_output, rewrite=True)
 
-                print('written file '+fname)
+                print('written file ' + fname)
 
                 if not plot_data:
                     continue
 
-                titldate = (date[0].strftime('%Y%m%d')+'-' +
+                titldate = (date[0].strftime('%Y%m%d') + '-' +
                             date[-1].strftime('%Y%m%d'))
-                titl = rad+' Monitoring '+titldate
+                titl = rad + ' Monitoring ' + titldate
 
                 labely = generate_field_name_str(var)
 
@@ -209,7 +209,7 @@ def main():
                     get_fieldname_pyart(var), figfname,
                     ref_value=ref_value, vmin=vmin, vmax=vmax, np_min=np_min,
                     labelx='Time UTC', labely=labely, titl=titl)
-                print('plotted file '+' '.join(fname))
+                print('plotted file ' + ' '.join(fname))
 
 
 def _print_end_msg(text):

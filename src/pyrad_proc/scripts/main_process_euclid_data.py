@@ -73,7 +73,7 @@ def main():
 
     if np.size(lons) != np.size(lats):
         warn(
-            str(np.size(lons))+' longitudes but '+str(np.size(lats)) +
+            str(np.size(lons)) + ' longitudes but ' + str(np.size(lats)) +
             ' latitudes. Their number must be equal')
         return
 
@@ -96,15 +96,15 @@ def main():
     intra_all = np.asarray([], dtype=int)
     for day in day_vec:
         day_str = day.strftime('%y%m%d')
-        fname = args.basepath+'THX/THX'+day.strftime('%y%j0000')+'.prd'
+        fname = args.basepath + 'THX/THX' + day.strftime('%y%j0000') + '.prd'
 
-        print('Reading EUCLID data file '+fname)
+        print('Reading EUCLID data file ' + fname)
         (stroke_time, lon, lat, intens, ns, mode, intra, ax, ki2, ecc, incl,
          sind) = read_meteorage(fname)
 
-        print('N strokes: '+str(stroke_time.size))
-        print('IC: '+str(intra[intra == 1].size))
-        print('CG: '+str(intra[intra == 0].size))
+        print('N strokes: ' + str(stroke_time.size))
+        print('IC: ' + str(intra[intra == 1].size))
+        print('CG: ' + str(intra[intra == 0].size))
 
         inds, is_roi = belongs_roi_indices(lat, lon, roi)
 
@@ -123,154 +123,155 @@ def main():
         intens_all = np.append(intens_all, intens_roi)
         intra_all = np.append(intra_all, intra_roi)
 
-        print('N strokes: '+str(lon_roi.size))
-        print('IC: '+str(intra_roi[intra_roi == 1].size))
-        print('CG: '+str(intra_roi[intra_roi == 0].size))
+        print('N strokes: ' + str(lon_roi.size))
+        print('IC: ' + str(intra_roi[intra_roi == 1].size))
+        print('CG: ' + str(intra_roi[intra_roi == 0].size))
 
         # plot position all strokes
-        figfname = args.basepath+day_str+'_EUCLID_strokes_pos.png'
+        figfname = args.basepath + day_str + '_EUCLID_strokes_pos.png'
         figfname = plot_pos(
             lat_roi, lon_roi, intens_roi, [figfname],
             cb_label='stroke intensity [kA]',
-            titl=day_str+' EUCLID stroke position')
-        print('Plotted '+' '.join(figfname))
+            titl=day_str + ' EUCLID stroke position')
+        print('Plotted ' + ' '.join(figfname))
 
         # plot position IC
-        figfname = args.basepath+day_str+'_EUCLID_IC_pos.png'
+        figfname = args.basepath + day_str + '_EUCLID_IC_pos.png'
         figfname = plot_pos(
             lat_roi[intra_roi == 1], lon_roi[intra_roi == 1],
             intens_roi[intra_roi == 1], [figfname],
             cb_label='stroke intensity [kA]',
-            titl=day_str+' EUCLID IC position')
-        print('Plotted '+' '.join(figfname))
+            titl=day_str + ' EUCLID IC position')
+        print('Plotted ' + ' '.join(figfname))
 
         # plot position CG
         lat_CG = lat_roi[intra_roi == 0]
         lon_CG = lon_roi[intra_roi == 0]
         intens_CG = intens_roi[intra_roi == 0]
 
-        figfname = args.basepath+day_str+'_EUCLID_CG_pos.png'
+        figfname = args.basepath + day_str + '_EUCLID_CG_pos.png'
         figfname = plot_pos(
             lat_CG, lon_CG, intens_CG, [figfname],
             cb_label='stroke intensity [kA]',
-            titl=day_str+' EUCLID CG position')
-        print('Plotted '+' '.join(figfname))
+            titl=day_str + ' EUCLID CG position')
+        print('Plotted ' + ' '.join(figfname))
 
         # plot position CGp
-        figfname = args.basepath+day_str+'_EUCLID_CGp_pos.png'
+        figfname = args.basepath + day_str + '_EUCLID_CGp_pos.png'
         figfname = plot_pos(
             lat_CG[intens_CG > 0.], lon_CG[intens_CG > 0.],
             intens_CG[intens_CG > 0.], [figfname],
             cb_label='stroke intensity [kA]',
-            titl=day_str+' EUCLID CGp position')
-        print('Plotted '+' '.join(figfname))
+            titl=day_str + ' EUCLID CGp position')
+        print('Plotted ' + ' '.join(figfname))
 
         # plot position CGn
-        figfname = args.basepath+day_str+'_EUCLID_CGn_pos.png'
+        figfname = args.basepath + day_str + '_EUCLID_CGn_pos.png'
         figfname = plot_pos(
             lat_CG[intens_CG < 0.], lon_CG[intens_CG < 0.],
             intens_CG[intens_CG < 0.], [figfname],
             cb_label='stroke intensity [kA]',
-            titl=day_str+' EUCLID CGn position')
-        print('Plotted '+' '.join(figfname))
+            titl=day_str + ' EUCLID CGn position')
+        print('Plotted ' + ' '.join(figfname))
 
         # Plot histogram intensity all strokes
-        fname_hist = args.basepath+day_str+'_EUCLID_strokes_hist_intens.png'
+        fname_hist = args.basepath + day_str + '_EUCLID_strokes_hist_intens.png'
         fname_hist = plot_histogram(
-            bin_edges_intens, intens_roi, [fname_hist], labelx='Intensity [kA]',
-            titl=day_str+' EUCLID stroke intensity')
-        print('Plotted '+' '.join(fname_hist))
+            bin_edges_intens, intens_roi, [
+                fname_hist], labelx='Intensity [kA]',
+            titl=day_str + ' EUCLID stroke intensity')
+        print('Plotted ' + ' '.join(fname_hist))
 
         # Plot histogram intensity IC
-        fname_hist = args.basepath+day_str+'_EUCLID_IC_hist_intens.png'
+        fname_hist = args.basepath + day_str + '_EUCLID_IC_hist_intens.png'
         fname_hist = plot_histogram(
             bin_edges_intens, intens_roi[intra_roi == 1], [fname_hist],
             labelx='Intensity [kA]',
-            titl=day_str+' EUCLID IC intensity')
-        print('Plotted '+' '.join(fname_hist))
+            titl=day_str + ' EUCLID IC intensity')
+        print('Plotted ' + ' '.join(fname_hist))
 
         # Plot histogram intensity CG
-        fname_hist = args.basepath+day_str+'_EUCLID_CG_hist_intens.png'
+        fname_hist = args.basepath + day_str + '_EUCLID_CG_hist_intens.png'
         fname_hist = plot_histogram(
             bin_edges_intens, intens_roi[intra_roi == 0], [fname_hist],
             labelx='Intensity [kA]',
-            titl=day_str+' EUCLID CG intensity')
+            titl=day_str + ' EUCLID CG intensity')
 
     lat_CG = lat_all[intra_all == 0]
     lon_CG = lon_all[intra_all == 0]
     intens_CG = intens_all[intra_all == 0]
 
-    print('N strokes: '+str(lon_all.size))
-    print('IC: '+str(intra_all[intra_all == 1].size))
-    print('CG: '+str(lon_CG.size))
-    print('CGp: '+str(lon_CG[intens_CG > 0].size))
-    print('CGn: '+str(lon_CG[intens_CG < 0].size))
+    print('N strokes: ' + str(lon_all.size))
+    print('IC: ' + str(intra_all[intra_all == 1].size))
+    print('CG: ' + str(lon_CG.size))
+    print('CGp: ' + str(lon_CG[intens_CG > 0].size))
+    print('CGn: ' + str(lon_CG[intens_CG < 0].size))
 
     # plot position all strokes
-    figfname = args.basepath+'EUCLID_strokes_pos.png'
+    figfname = args.basepath + 'EUCLID_strokes_pos.png'
     figfname = plot_pos(
         lat_all, lon_all, intens_all, [figfname],
         cb_label='stroke intensity [kA]',
-        titl=day_str+' EUCLID stroke position')
-    print('Plotted '+' '.join(figfname))
+        titl=day_str + ' EUCLID stroke position')
+    print('Plotted ' + ' '.join(figfname))
 
     # plot position IC
-    figfname = args.basepath+'EUCLID_IC_pos.png'
+    figfname = args.basepath + 'EUCLID_IC_pos.png'
     figfname = plot_pos(
         lat_all[intra_all == 1], lon_all[intra_all == 1],
         intens_all[intra_all == 1], [figfname],
         cb_label='stroke intensity [kA]',
         titl='EUCLID IC position')
-    print('Plotted '+' '.join(figfname))
+    print('Plotted ' + ' '.join(figfname))
 
     # plot position CG
-    figfname = args.basepath+'EUCLID_CG_pos.png'
+    figfname = args.basepath + 'EUCLID_CG_pos.png'
     figfname = plot_pos(
         lat_CG, lon_CG, intens_CG, [figfname],
         cb_label='stroke intensity [kA]',
         titl='EUCLID CG position')
-    print('Plotted '+' '.join(figfname))
+    print('Plotted ' + ' '.join(figfname))
 
     # plot position CGp
-    figfname = args.basepath+'EUCLID_CGp_pos.png'
+    figfname = args.basepath + 'EUCLID_CGp_pos.png'
     figfname = plot_pos(
         lat_CG[intens_CG > 0.], lon_CG[intens_CG > 0.],
         intens_CG[intens_CG > 0.], [figfname],
         cb_label='stroke intensity [kA]',
         titl='EUCLID CGp position')
-    print('Plotted '+' '.join(figfname))
+    print('Plotted ' + ' '.join(figfname))
 
     # plot position CGn
-    figfname = args.basepath+'EUCLID_CGn_pos.png'
+    figfname = args.basepath + 'EUCLID_CGn_pos.png'
     figfname = plot_pos(
         lat_CG[intens_CG < 0.], lon_CG[intens_CG < 0.],
         intens_CG[intens_CG < 0.], [figfname],
         cb_label='stroke intensity [kA]',
         titl='EUCLID CGn position')
-    print('Plotted '+' '.join(figfname))
+    print('Plotted ' + ' '.join(figfname))
 
     # Plot histogram intensity all strokes
-    fname_hist = args.basepath+'EUCLID_strokes_hist_intens.png'
+    fname_hist = args.basepath + 'EUCLID_strokes_hist_intens.png'
     fname_hist = plot_histogram(
         bin_edges_intens, intens_all, [fname_hist], labelx='Intensity [kA]',
         titl='EUCLID stroke intensity')
-    print('Plotted '+' '.join(fname_hist))
+    print('Plotted ' + ' '.join(fname_hist))
 
     # Plot histogram intensity IC
-    fname_hist = args.basepath+'EUCLID_IC_hist_intens.png'
+    fname_hist = args.basepath + 'EUCLID_IC_hist_intens.png'
     fname_hist = plot_histogram(
         bin_edges_intens, intens_all[intra_all == 1], [fname_hist],
         labelx='Intensity [kA]',
         titl='EUCLID IC intensity')
-    print('Plotted '+' '.join(fname_hist))
+    print('Plotted ' + ' '.join(fname_hist))
 
     # Plot histogram intensity CG
-    fname_hist = args.basepath+'EUCLID_CG_hist_intens.png'
+    fname_hist = args.basepath + 'EUCLID_CG_hist_intens.png'
     fname_hist = plot_histogram(
         bin_edges_intens, intens_all[intra_all == 0], [fname_hist],
         labelx='Intensity [kA]',
         titl='EUCLID CG intensity')
-    print('Plotted '+' '.join(fname_hist))
+    print('Plotted ' + ' '.join(fname_hist))
 
 
 def _print_end_msg(text):

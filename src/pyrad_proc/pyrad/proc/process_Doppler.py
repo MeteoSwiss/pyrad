@@ -40,6 +40,7 @@ except ImportError:
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from .process_grid import process_grid
 
+
 def process_turbulence(procstatus, dscfg, radar_list=None):
     """
     Computes turbulence from the Doppler spectrum width and reflectivity using
@@ -109,7 +110,7 @@ def process_turbulence(procstatus, dscfg, radar_list=None):
              ' to estimate turbulence')
         return None, None
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -138,7 +139,7 @@ def process_turbulence(procstatus, dscfg, radar_list=None):
             warn('Unknown radar beamwidth. Default 1 deg will be used')
             beamwidth = 1
 
-    rng_res = radar.range['data'][1]-radar.range['data'][0]/1000.
+    rng_res = radar.range['data'][1] - radar.range['data'][0] / 1000.
 
     radar_out = deepcopy(radar)
     radar_out.fields = dict()
@@ -166,7 +167,7 @@ def process_turbulence(procstatus, dscfg, radar_list=None):
             use_ntda=True, beamwidth=beamwidth, gate_spacing=rng_res,
             compute_gate_pos=compute_gate_pos)
     else:
-        warn('Radar volume of type '+radar_out.scan_type +
+        warn('Radar volume of type ' + radar_out.scan_type +
              '. Only volumes of type PPI or RHI are allowed')
         return None, None
 
@@ -224,7 +225,7 @@ def process_dealias_fourdd(procstatus, dscfg, radar_list=None):
     radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
     vel_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -234,7 +235,7 @@ def process_dealias_fourdd(procstatus, dscfg, radar_list=None):
         warn('Unable to correct Doppler aliasing. Missing data')
         return None, None
 
-    corr_vel_field = 'dealiased_'+vel_field
+    corr_vel_field = 'dealiased_' + vel_field
 
     if not dscfg['initialized']:
         # Use phase unwraping method to obtain first guess
@@ -321,7 +322,7 @@ def process_dealias_region_based(procstatus, dscfg, radar_list=None):
         nyquist_vel : float, optional
             Nyquist velocity of the aquired radar velocity.
             Usually this parameter is provided in the
-            Radar object intrument_parameters. If it is not available it can 
+            Radar object intrument_parameters. If it is not available it can
             be provided as a keyword here.
     radar_list : list of Radar objects
         Optional. list of radar objects
@@ -340,7 +341,7 @@ def process_dealias_region_based(procstatus, dscfg, radar_list=None):
     radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
     vel_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -350,7 +351,7 @@ def process_dealias_region_based(procstatus, dscfg, radar_list=None):
         warn('Unable to correct Doppler aliasing. Missing data')
         return None, None
 
-    corr_vel_field = 'dealiased_'+vel_field
+    corr_vel_field = 'dealiased_' + vel_field
 
     # get user parameters
     interval_splits = dscfg.get('interval_splits', 3)
@@ -371,7 +372,7 @@ def process_dealias_region_based(procstatus, dscfg, radar_list=None):
     new_dataset = {'radar_out': deepcopy(radar)}
     new_dataset['radar_out'].fields = dict()
     new_dataset['radar_out'].add_field(corr_vel_field, corr_vel_dict)
-    
+
     return new_dataset, ind_rad
 
 
@@ -415,7 +416,7 @@ def process_dealias_unwrap_phase(procstatus, dscfg, radar_list=None):
     radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
     vel_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -425,7 +426,7 @@ def process_dealias_unwrap_phase(procstatus, dscfg, radar_list=None):
         warn('Unable to correct Doppler aliasing. Missing data')
         return None, None
 
-    corr_vel_field = 'dealiased_'+vel_field
+    corr_vel_field = 'dealiased_' + vel_field
 
     # get user parameters
     unwrap_unit = dscfg.get('unwrap_unit', 'sweep')
@@ -495,7 +496,7 @@ def process_radial_velocity(procstatus, dscfg, radar_list=None):
              ' to estimate radial velocity')
         return None, None
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -526,8 +527,8 @@ def process_radial_velocity(procstatus, dscfg, radar_list=None):
 
     # get u and v wind components
     h_dir_rad = np.deg2rad(h_dir)
-    speed_h_u = h_speed*np.sin(h_dir_rad)  # eastward component
-    speed_h_v = h_speed*np.cos(h_dir_rad)  # northward component
+    speed_h_u = h_speed * np.sin(h_dir_rad)  # eastward component
+    speed_h_v = h_speed * np.cos(h_dir_rad)  # northward component
 
     if lat is not None or lon is not None or alt is not None:
         # get antenna coordinates respect to new radar location
@@ -561,8 +562,8 @@ def process_radial_velocity(procstatus, dscfg, radar_list=None):
 
     # with vertical velocity included
     r_speed['data'] = (
-        (speed_h_u*np.sin(azi_2D_rad)+speed_h_v*np.cos(azi_2D_rad)) *
-        np.cos(ele_2D_rad)+np.sin(ele_2D_rad)*v_speed)
+        (speed_h_u * np.sin(azi_2D_rad) + speed_h_v * np.cos(azi_2D_rad)) *
+        np.cos(ele_2D_rad) + np.sin(ele_2D_rad) * v_speed)
 
     # prepare for exit
     new_dataset = {'radar_out': deepcopy(radar)}
@@ -607,7 +608,7 @@ def process_wind_vel(procstatus, dscfg, radar_list=None):
     radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
     vel_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -669,7 +670,7 @@ def process_windshear(procstatus, dscfg, radar_list=None):
     radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
     wind_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -726,7 +727,7 @@ def process_vad(procstatus, dscfg, radar_list=None):
     radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
     vel_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -763,6 +764,7 @@ def process_vad(procstatus, dscfg, radar_list=None):
     new_dataset['radar_out'].add_field('velocity_difference', vel_diff_dict)
 
     return new_dataset, ind_rad
+
 
 def process_dda(procstatus, dscfg, radar_list=None):
     """
@@ -818,16 +820,16 @@ def process_dda(procstatus, dscfg, radar_list=None):
                 used. If the attribute is None a default 1 deg value will be used
         dda parameters:
             signs : list of integers
-                The sign of the velocity field for every radar object.  
+                The sign of the velocity field for every radar object.
                 A value of 1 represents when
                 positive values velocities are towards the radar, -1 represents
                 when negative velocities are towards the radar.
             Co : float
                 Weight for cost function related to observed radial velocities.
-                Default: 1. 
+                Default: 1.
             Cm : float
                 Weight for cost function related to the mass continuity equation.
-                Default: 1500. 
+                Default: 1500.
 
     radar_list : list of Radar objects
         Optional. list of radar objects
@@ -846,7 +848,7 @@ def process_dda(procstatus, dscfg, radar_list=None):
 
     if procstatus != 1:
         return None, None
-    
+
     if len(radar_list) < 2:
         warn('DDA requires data from at least two different radars')
         return None, None
@@ -858,13 +860,13 @@ def process_dda(procstatus, dscfg, radar_list=None):
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_name = get_fieldname_pyart(datatype)
-        ind_radar_list.append(int(radarnr[5:8])-1)
+        ind_radar_list.append(int(radarnr[5:8]) - 1)
         datatype_list.append(datatype)
         field_name_list.append(field_name)
     ind_radar_list = np.array(ind_radar_list)
     datatype_list = np.array(datatype_list)
     field_name_list = np.array(field_name_list)
-    
+
     # Get DDA numerical parameters
     Co = dscfg.get('Co', 1.)
     Cm = dscfg.get('Cm', 1500.)
@@ -872,9 +874,10 @@ def process_dda(procstatus, dscfg, radar_list=None):
     # Compute VAD for every radar to initialize DDA
     # z-vector for vad
     z_want = np.arange(dscfg['gridConfig']['zmin'],
-        dscfg['gridConfig']['zmax'] + dscfg['gridConfig']['vres'],
-        dscfg['gridConfig']['vres'])
-    
+                       dscfg['gridConfig']['zmax'] +
+                       dscfg['gridConfig']['vres'],
+                       dscfg['gridConfig']['vres'])
+
     all_vad = []
     distances_to_center = []
     vel_fields = []
@@ -882,25 +885,29 @@ def process_dda(procstatus, dscfg, radar_list=None):
     for i, radar in enumerate(radar_list):
         # Find vel and refl fields
         field_names_rad = field_name_list[ind_radar_list == i]
-        vel_field = field_names_rad[['velocity' in vname 
-                    for vname in field_name_list[ind_radar_list == i]]][0]
+        vel_field = field_names_rad[[
+            'velocity' in vname for vname in field_name_list[ind_radar_list == i]]][0]
         vel_fields.append(vel_field)
-        refl_field = field_names_rad[['reflectivity' in vname 
-                    for vname in field_name_list[ind_radar_list == i]]][0]
+        refl_field = field_names_rad[['reflectivity' in vname
+                                      for vname in field_name_list[ind_radar_list == i]]][0]
         refl_fields.append(refl_field)
 
         # Compute VAD
-        all_vad.append(pyart.retrieve.vad_browning(radar, vel_field, 
-            z_want = z_want, sign = dscfg['signs'][i]))
-        dist = np.sqrt((radar.latitude['data'][0] 
-                                - dscfg['gridConfig']['latorig'])**2 + 
-                        (radar.longitude['data'][0] 
-                                - dscfg['gridConfig']['lonorig'])**2)
+        all_vad.append(
+            pyart.retrieve.vad_browning(
+                radar,
+                vel_field,
+                z_want=z_want,
+                sign=dscfg['signs'][i]))
+        dist = np.sqrt((radar.latitude['data'][0]
+                        - dscfg['gridConfig']['latorig'])**2 +
+                       (radar.longitude['data'][0]
+                        - dscfg['gridConfig']['lonorig'])**2)
         distances_to_center.append(dist)
 
     # Compute VAD weights
     distances_to_center = np.array(distances_to_center)
-    weights = 1/distances_to_center
+    weights = 1 / distances_to_center
     weights /= np.sum(weights)
 
     # Now average the VADs
@@ -909,18 +916,20 @@ def process_dda(procstatus, dscfg, radar_list=None):
     for i, vad in enumerate(all_vad):
         u_avg.append(weights[i] * np.ma.filled(vad.u_wind, np.nan))
         v_avg.append(weights[i] * np.ma.filled(vad.v_wind, np.nan))
-    u_avg = np.nansum(u_avg, axis = 0)
-    v_avg = np.nansum(v_avg, axis = 0)
+    u_avg = np.nansum(u_avg, axis=0)
+    v_avg = np.nansum(v_avg, axis=0)
 
-    vad_avg = pyart.core.HorizontalWindProfile.from_u_and_v(z_want, 
-                    np.ma.array(u_avg, mask = np.isnan(u_avg)),
-                    np.ma.array(v_avg,  mask = np.isnan(v_avg)))
+    vad_avg = pyart.core.HorizontalWindProfile.from_u_and_v(
+        z_want, np.ma.array(
+            u_avg, mask=np.isnan(u_avg)), np.ma.array(
+            v_avg, mask=np.isnan(v_avg)))
 
     grids = []
     for i, radar in enumerate(radar_list):
         # Now we grid
         dscfg_grid = deepcopy(dscfg)
-        dscfg_grid['datatype'] = np.array(dscfg['datatype'])[ind_radar_list == i]
+        dscfg_grid['datatype'] = np.array(dscfg['datatype'])[
+            ind_radar_list == i]
         grids.append(process_grid(1, dscfg_grid, radar_list)[0]['radar_out'])
 
     # Harmonize variables
@@ -931,15 +940,22 @@ def process_dda(procstatus, dscfg, radar_list=None):
         grid.fields['reflectivity'] = grid.fields.pop(refl_fields[i])
 
     # DDA initialization
-    u_init, v_init, w_init = pydda.initialization.make_wind_field_from_profile(grids[0], 
-                                vad_avg, vel_field='velocity')
+    u_init, v_init, w_init = pydda.initialization.make_wind_field_from_profile(
+        grids[0], vad_avg, vel_field='velocity')
 
     # Actual DDA computation
-    new_grids = pydda.retrieval.get_dd_wind_field(grids,
-                                u_init, v_init, w_init,
-                                vel_name='velocity', refl_field='reflectivity', 
-                                mask_outside_opt=True, wind_tol=0.01,
-                                engine='scipy', Co = Co, Cm = Cm)
+    new_grids = pydda.retrieval.get_dd_wind_field(
+        grids,
+        u_init,
+        v_init,
+        w_init,
+        vel_name='velocity',
+        refl_field='reflectivity',
+        mask_outside_opt=True,
+        wind_tol=0.01,
+        engine='scipy',
+        Co=Co,
+        Cm=Cm)
 
     # pyDDA returns as many grid objects as input radars
     # the idea here is to merge these grid objects into one
@@ -949,7 +965,7 @@ def process_dda(procstatus, dscfg, radar_list=None):
     # create merged grid from first dda grid
     # First radar will have normal field names
     # Additional radars will have _radar1, radar_2, ..., radar_N
-    # appended to their field names 
+    # appended to their field names
     merged_grid = deepcopy(new_grids[0])
     for var in list(merged_grid.fields):
         if var in grids[0].fields:
@@ -965,33 +981,34 @@ def process_dda(procstatus, dscfg, radar_list=None):
     radar_metadata = []
     for i, additional_grid in enumerate(new_grids[1:]):
         for var in list(additional_grid.fields):
-            if var in grids[i+1].fields:
+            if var in grids[i + 1].fields:
                 if var == 'velocity':
-                    new_key = vel_fields[i+1]
+                    new_key = vel_fields[i + 1]
                 elif var == 'reflectivity':
-                    new_key = refl_fields[i+1]
+                    new_key = refl_fields[i + 1]
                 else:
                     new_key = var
-                new_key += '_radar{:d}'.format(i+1)
+                new_key += '_radar{:d}'.format(i + 1)
                 merged_grid.fields[new_key] = additional_grid.fields[var]
-                
+
         # Get additional radar metadata
         mdata = {}
-        mdata['radar_longitude'] =  additional_grid.radar_longitude['data']
-        mdata['radar_latitude'] =  additional_grid.radar_latitude['data']
+        mdata['radar_longitude'] = additional_grid.radar_longitude['data']
+        mdata['radar_latitude'] = additional_grid.radar_latitude['data']
         # Try to find name of radar
         if additional_grid.radar_name['data'] != '':
-            mdata['radar_name'] =  additional_grid.radar_name['data'][0]
-        elif dscfg['RadarName'][i+1] != '':
-            mdata['radar_name'] =  dscfg['RadarName'][i+1]
+            mdata['radar_name'] = additional_grid.radar_name['data'][0]
+        elif dscfg['RadarName'][i + 1] != '':
+            mdata['radar_name'] = dscfg['RadarName'][i + 1]
         else:
-            mdata['radar_name'] =  'Unknown'
+            mdata['radar_name'] = 'Unknown'
 
         radar_metadata.append(mdata)
-    
+
     # Rename DDA u, v, w fields to pyart names
     merged_grid.fields['eastward_wind_component'] = merged_grid.fields.pop('u')
-    merged_grid.fields['northward_wind_component'] = merged_grid.fields.pop('v')
+    merged_grid.fields['northward_wind_component'] = merged_grid.fields.pop(
+        'v')
     merged_grid.fields['vertical_wind_component'] = merged_grid.fields.pop('w')
 
     # Add coordinates of additional radars in metadata

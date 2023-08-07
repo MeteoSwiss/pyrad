@@ -24,6 +24,12 @@ Functions to plot spectral data
 
 """
 
+from .plots_aux import generate_angle_Doppler_title
+from .plots_aux import generate_complex_Doppler_title
+from .plots_aux import generate_complex_range_Doppler_title
+from .plots_aux import get_colobar_label, get_norm
+import pyart
+import matplotlib.pyplot as plt
 import numpy as np
 
 import matplotlib as mpl
@@ -31,16 +37,7 @@ mpl.use('Agg')
 
 # Increase a bit font size
 mpl.rcParams.update({'font.size': 16})
-mpl.rcParams.update({'font.family':  "sans-serif"})
-
-import matplotlib.pyplot as plt
-
-import pyart
-
-from .plots_aux import get_colobar_label, get_norm
-from .plots_aux import generate_complex_range_Doppler_title
-from .plots_aux import generate_complex_Doppler_title
-from .plots_aux import generate_angle_Doppler_title
+mpl.rcParams.update({'font.family': "sans-serif"})
 
 
 def plot_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
@@ -91,14 +88,14 @@ def plot_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
         xaxis = np.arange(spectra.npulses['data'][ray])
         xlabel = 'Pulse number'
 
-    xres = np.abs(xaxis[1]-xaxis[0])
+    xres = np.abs(xaxis[1] - xaxis[0])
 
-    yaxis = spectra.range['data']/1000.
-    yres = np.abs(yaxis[1]-yaxis[0])
+    yaxis = spectra.range['data'] / 1000.
+    yres = np.abs(yaxis[1] - yaxis[0])
     ylabel = 'range (km)'
 
-    xaxis_lim = np.append(xaxis-xres/2, xaxis[-1]+xres/2)
-    yaxis_lim = np.append(yaxis-yres/2, yaxis[-1]+yres/2)
+    xaxis_lim = np.append(xaxis - xres / 2, xaxis[-1] + xres / 2)
+    yaxis_lim = np.append(yaxis - yres / 2, yaxis[-1] + yres / 2)
 
     field_2D = spectra.fields[field_name]['data'][ray, :, 0:xaxis.size]
 
@@ -557,14 +554,14 @@ def plot_complex_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
         xaxis = np.arange(spectra.npulses['data'][ray])
         xlabel = 'Pulse number'
 
-    xres = np.abs(xaxis[1]-xaxis[0])
+    xres = np.abs(xaxis[1] - xaxis[0])
 
-    yaxis = spectra.range['data']/1000.
-    yres = np.abs(yaxis[1]-yaxis[0])
+    yaxis = spectra.range['data'] / 1000.
+    yres = np.abs(yaxis[1] - yaxis[0])
     ylabel = 'range (km)'
 
-    xaxis_lim = np.append(xaxis-xres/2, xaxis[-1]+xres/2)
-    yaxis_lim = np.append(yaxis-yres/2, yaxis[-1]+yres/2)
+    xaxis_lim = np.append(xaxis - xres / 2, xaxis[-1] + xres / 2)
+    yaxis_lim = np.append(yaxis - yres / 2, yaxis[-1] + yres / 2)
 
     field_2D = spectra.fields[field_name]['data'][ray, :, 0:xaxis.size]
 
@@ -975,14 +972,14 @@ def plot_amp_phase_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
     else:
         xaxis = np.arange(spectra.npulses['data'][ray])
         xlabel = 'Pulse number'
-    xres = np.abs(xaxis[1]-xaxis[0])
+    xres = np.abs(xaxis[1] - xaxis[0])
 
-    yaxis = spectra.range['data']/1000.
-    yres = np.abs(yaxis[1]-yaxis[0])
+    yaxis = spectra.range['data'] / 1000.
+    yres = np.abs(yaxis[1] - yaxis[0])
     ylabel = 'range (km)'
 
-    xaxis_lim = np.append(xaxis-xres/2, xaxis[-1]+xres/2)
-    yaxis_lim = np.append(yaxis-yres/2, yaxis[-1]+yres/2)
+    xaxis_lim = np.append(xaxis - xres / 2, xaxis[-1] + xres / 2)
+    yaxis_lim = np.append(yaxis - yres / 2, yaxis[-1] + yres / 2)
 
     field_2D = spectra.fields[field_name]['data'][ray, :, 0:xaxis.size]
 
@@ -1625,22 +1622,22 @@ def _create_irregular_grid(xaxis, yaxis, yaxis_pos='start'):
     nbinsy = yaxis.size
 
     # One dimensional y-axis bin limits
-    yres = np.median(yaxis[1:]-yaxis[:-1])
+    yres = np.median(yaxis[1:] - yaxis[:-1])
     if yaxis_pos == 'start':
-        yaxis_lim = np.append(yaxis, yaxis[-1]+yres)
+        yaxis_lim = np.append(yaxis, yaxis[-1] + yres)
     elif yaxis_pos == 'end':
-        yaxis_lim = np.append(yaxis-yres, yaxis[-1])
+        yaxis_lim = np.append(yaxis - yres, yaxis[-1])
     else:
-        yaxis_lim = np.append(yaxis-yres/2., yaxis[-1]+yres/2.)
+        yaxis_lim = np.append(yaxis - yres / 2., yaxis[-1] + yres / 2.)
 
     # List of x-axis bin limits
-    xres = np.abs(xaxis[:, 1]-xaxis[:, 0])
+    xres = np.abs(xaxis[:, 1] - xaxis[:, 0])
     xaxis_size = list()
     xaxis_list = list()
     for i in range(nbinsy):
         xaxis_aux = xaxis[i, :].compressed()
         xaxis_lim = np.append(
-            xaxis_aux-xres[i]/2., xaxis_aux[-1]+xres[i]/2.)
+            xaxis_aux - xres[i] / 2., xaxis_aux[-1] + xres[i] / 2.)
         xaxis_size.append(xaxis_lim.size)
         xaxis_list.append(xaxis_lim)
 
@@ -1683,10 +1680,11 @@ def _adapt_data_to_irregular_grid(data, xaxis_size, nxbin_lim, nybin_lim):
     nbinsy = data.shape[0]
 
     # adapt Z data
-    zpoints = np.ma.masked_all((nxbin_lim-1, nybin_lim-1), dtype=data.dtype)
-    for i in range(nbinsy-1):
-        zpoints[0:xaxis_size[i]-1, 2*i] = data[i, 0:xaxis_size[i]-1]
-        zpoints[0:xaxis_size[i]-1, 2*i+1] = data[i, 0:xaxis_size[i]-1]
-    zpoints[0:xaxis_size[-1]-1, -1] = data[-1, 0:xaxis_size[-1]-1]
+    zpoints = np.ma.masked_all(
+        (nxbin_lim - 1, nybin_lim - 1), dtype=data.dtype)
+    for i in range(nbinsy - 1):
+        zpoints[0:xaxis_size[i] - 1, 2 * i] = data[i, 0:xaxis_size[i] - 1]
+        zpoints[0:xaxis_size[i] - 1, 2 * i + 1] = data[i, 0:xaxis_size[i] - 1]
+    zpoints[0:xaxis_size[-1] - 1, -1] = data[-1, 0:xaxis_size[-1] - 1]
 
     return zpoints

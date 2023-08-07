@@ -13,6 +13,6 @@ It gives as list of all possible datasets and products, as well as all variable 
 .. toctree::
    :maxdepth: 1
 
-   list_datasets
+   list_process
    list_products
    list_variables
