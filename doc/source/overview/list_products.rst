@@ -785,19 +785,48 @@ description
 
 parameters
    level int
-        The altitude level to plot. The rest of the parameters are defined by the parameters in 'ppiImageConfig' and 'ppiMapImageConfig' in the 'loc' configuration file contour_values : float array or None The contour values. If None the values are taken from the 'boundaries' keyword in the field description in the Py-ART config file. If 'boundaries' is not set the countours are 10 values linearly distributed from vmin to vmax linewidths : float width of the contour lines colors : color string or sequence of colors The contour colours SURFACE_CONTOUR_OVERPLOT: Plots a surface image of gridded data with a contour overplotted. level: int The altitude level to plot. The rest of the parameters are defined by the parameters in 'ppiImageConfig' and 'ppiMapImageConfig' in the 'loc' configuration file contour_values : float array or None The contour values. If None the values are taken from the 'boundaries' keyword in the field description in the Py-ART config file. If 'boundaries' is not set the countours are 10 values linearly distributed from vmin to vmax linewidths : float width of the contour lines colors : color string or sequence of colors The contour colours SURFACE_OVERPLOT: Plots on the same surface two images, one on top of the other. level: int The altitude level to plot. The rest of the parameters are defined by the parameters in 'ppiImageConfig' and 'ppiMapImageConfig' in the 'loc' configuration file contour_values : float array or None The contour values. If None the values are taken from the 'boundaries' keyword in the field description in the Py-ART config file. If 'boundaries' is not set the countours are 10 values linearly distributed from vmin to vmax DDA_MAP: Plots wind vectors obtained from a DDA analysis. The pyDDA package is required level: int The altitude level to plot. The rest of the parameters are defined by the parameters in 'ppiImageConfig' and 'ppiMapImageConfig' in the 'loc' configuration file 
+        The altitude level to plot. The rest of the parameters are defined by the parameters in 'ppiImageConfig' and 'ppiMapImageConfig' in the 'loc' configuration file 
    contour_values  float
-        array or None The contour values. If None the values are taken from the 'boundaries' keyword in the field description in the Py-ART config file. If 'boundaries' is not set the countours are 10 values linearly distributed from vmin to vmax linewidths : float width of the contour lines colors : color string or sequence of colors The contour colours SURFACE_CONTOUR_OVERPLOT: Plots a surface image of gridded data with a contour overplotted. level: int The altitude level to plot. The rest of the parameters are defined by the parameters in 'ppiImageConfig' and 'ppiMapImageConfig' in the 'loc' configuration file contour_values : float array or None The contour values. If None the values are taken from the 'boundaries' keyword in the field description in the Py-ART config file. If 'boundaries' is not set the countours are 10 values linearly distributed from vmin to vmax linewidths : float width of the contour lines colors : color string or sequence of colors The contour colours SURFACE_OVERPLOT: Plots on the same surface two images, one on top of the other. level: int The altitude level to plot. The rest of the parameters are defined by the parameters in 'ppiImageConfig' and 'ppiMapImageConfig' in the 'loc' configuration file contour_values : float array or None The contour values. If None the values are taken from the 'boundaries' keyword in the field description in the Py-ART config file. If 'boundaries' is not set the countours are 10 values linearly distributed from vmin to vmax 
+        array or None The contour values. If None the values are taken from the 'boundaries' keyword in the field description in the Py-ART config file. If 'boundaries' is not set the countours are 10 values linearly distributed from vmin to vmax 
    linewidths  float
         width of the contour lines 
    colors  color
-        string or sequence of colors The contour colours SURFACE_CONTOUR_OVERPLOT: Plots a surface image of gridded data with a contour overplotted. level: int The altitude level to plot. The rest of the parameters are defined by the parameters in 'ppiImageConfig' and 'ppiMapImageConfig' in the 'loc' configuration file contour_values : float array or None The contour values. If None the values are taken from the 'boundaries' keyword in the field description in the Py-ART config file. If 'boundaries' is not set the countours are 10 values linearly distributed from vmin to vmax linewidths : float width of the contour lines colors : color string or sequence of colors The contour colours 
-   SURFACE_CONTOUR_OVERPLOT Plots
-       
-   SURFACE_OVERPLOT Plots
-       
-   DDA_MAP Plots
-       
+        string or sequence of colors The contour colours
+
+SURFACE_CONTOUR_OVERPLOT
+""""""""""""""""""""""""""""""
+description
+   Plots a surface image of gridded data with a contour overplotted.
+
+parameters
+   level int
+        The altitude level to plot. The rest of the parameters are defined by the parameters in 'ppiImageConfig' and 'ppiMapImageConfig' in the 'loc' configuration file 
+   contour_values  float
+        array or None The contour values. If None the values are taken from the 'boundaries' keyword in the field description in the Py-ART config file. If 'boundaries' is not set the countours are 10 values linearly distributed from vmin to vmax 
+   linewidths  float
+        width of the contour lines 
+   colors  color
+        string or sequence of colors The contour colours
+
+SURFACE_OVERPLOT
+""""""""""""""""""""""""""""""
+description
+   Plots on the same surface two images, one on top of the other.
+
+parameters
+   level int
+        The altitude level to plot. The rest of the parameters are defined by the parameters in 'ppiImageConfig' and 'ppiMapImageConfig' in the 'loc' configuration file 
+   contour_values  float
+        array or None The contour values. If None the values are taken from the 'boundaries' keyword in the field description in the Py-ART config file. If 'boundaries' is not set the countours are 10 values linearly distributed from vmin to vmax
+
+DDA_MAP
+""""""""""""""""""""""""""""""
+description
+   Plots wind vectors obtained from a DDA analysis. The pyDDA package is required
+
+parameters
+   level int
+        The altitude level to plot. The rest of the parameters are defined by the parameters in 'ppiImageConfig' and 'ppiMapImageConfig' in the 'loc' configuration file 
    display_type str
         Display method for the wind vectors, can be either 'streamline', 'quiver' or 'barbs' 
    bg_ref_rad int
