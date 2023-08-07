@@ -36,4 +36,5 @@ jobs:
         working-directory: ${{github.workspace}}/src/pyrad_proc/pyrad/
         shell: bash -l {0}
         run: |
+          pip install ruff
           ruff .
