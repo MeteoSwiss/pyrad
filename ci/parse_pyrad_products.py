@@ -7,7 +7,11 @@ import re
 mainpath = Path(__file__).resolve().parent.parent
 prodpath = Path(mainpath, 'src', 'pyrad_proc', 'pyrad', 'prod')
 OUT_DIRECTORY = str(Path(mainpath, 'doc', 'source', 'overview'))
+DOC_PATH = 'https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad'
 
+def funcpath_to_docpath(funcpath):
+    funcpath = funcpath.split('pyrad')[-1]
+    return DOC_PATH + funcpath
 
 def parameters_to_dict(params):
     dic = {}
@@ -33,12 +37,13 @@ def dict_to_restructured_text(yaml_data):
         rst_output.append("-----------------------------")
 
         for key2, value2 in yaml_data[key].items():
+            print(key2)
             if 'description' not in value2.keys():
                 continue
             rst_output.append(f"{key2}")
             rst_output.append('""""""""""""""""""""""""""""""')
             rst_output.append('description')
-            rst_output.append('   ' + value2['description'] + '\n')
+            rst_output.append('   ' + value2['description'] + f'\n `[Source] <{value2["link"]}>`_' )
             rst_output.append('parameters')
             params = parameters_to_dict(value2['parameters'])
             for key3, value3 in params.items():
@@ -57,7 +62,7 @@ def process_file(filepath):
     product = None
     reading_title = False
     reading_params = False
-    for line in content:
+    for i,line in enumerate(content):
         if 'def generate' in line:
             function = line.split('def')[1].split('(')[0].strip()
             all_products[function] = {}
@@ -71,7 +76,7 @@ def process_file(filepath):
             if len(match):
                 reading_params = False
                 reading_title = True
-                product = match[0].replace("'", "").split(':')[0]
+                product = match[0].replace("'", "").split(':')[0].strip()
                 descr = line.split(':')[1].strip()
                 all_products[function][product] = {}
                 all_products[function][product]['parameters'] = ''
@@ -87,7 +92,13 @@ def process_file(filepath):
             if reading_params and product:
                 all_products[function][product]['parameters'] += " " + \
                     " ".join(line.replace('\n', ' ').split())
-
+        if "prdcfg['type']" in line and '==' in line:
+            print(i)
+            print(filepath)
+            for product in all_products[function].keys():
+                if product in line:
+                    all_products[function][product]['link'] = (funcpath_to_docpath(filepath) +
+                        f'#L{i+1}')
     return all_products
 
 
