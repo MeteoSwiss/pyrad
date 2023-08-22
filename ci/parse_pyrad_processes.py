@@ -10,7 +10,7 @@ from pyrad import proc
 mainpath = Path(__file__).resolve().parent.parent
 procpath = Path(mainpath, 'src', 'pyrad_proc', 'pyrad', 'proc')
 OUT_DIRECTORY = str(Path(mainpath, 'doc', 'source', 'overview'))
-DOC_PATH = 'https://wolfidan.github.io/pyrad/_modules/pyrad'
+DOC_PATH = 'https://meteoswiss.github.io/pyrad/_modules/pyrad'
 
 def funcpath_to_docpath(funcpath):
     funcpath = funcpath.split('pyrad')[-1]

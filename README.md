@@ -4,7 +4,7 @@
 
 [![Test pyrad](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_base.yml/badge.svg)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests.yml)
 [![Test pyrad](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_mch.yml/badge.svg)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_arm.yml)
-
+[![build-deploy-site](https://github.com/MeteoSwiss/pyrad/actions/workflows/build_docs.yml/badge.svg)](https://github.com/MeteoSwiss/pyrad/actions/workflows/build_docs.yml)
 
 **Dev branch**
 
@@ -12,20 +12,14 @@
 [![Test pyrad mch dev](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_mch_dev.yml/badge.svg)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_mch_dev.yml)
 
 
-**Doc**
-
-[![doc](https://readthedocs.org/projects/pyrad-mch/badge/?version=latest)](https://pyrad-mch.readthedocs.io/en/latest/)
-
-
 ---
 
-[![Ref doc](https://img.shields.io/badge/docs-users-4088b8.svg)](https://pyrad-mch.readthedocs.io/en/stable/)
+[![Ref doc](https://img.shields.io/badge/docs-users-4088b8.svg)](https://meteoswiss.github.io/pyrad/)
 
 
-
-![version](https://img.shields.io/badge/python-3.7-blue.svg)
 ![version](https://img.shields.io/badge/python-3.8-blue.svg)
 ![version](https://img.shields.io/badge/python-3.9-blue.svg)
+![version](https://img.shields.io/badge/python-3.10-blue.svg)
 
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/pyrad_mch/badges/version.svg)](https://anaconda.org/conda-forge/pyrad_mch)
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/pyrad_mch/badges/latest_release_date.svg)](https://anaconda.org/conda-forge/pyrad_mch)
@@ -91,10 +85,7 @@ To install Pyrad and its submodules please have a look at the [Pyrad user manual
 # Use
 Before using it have a look at the [cookbook (pdf)](./additional_doc/pyrad-framework-cookbook/DataProcessing.pdf).
 
-For details on the implemented functions check the [pyrad library reference for users](https://pyrad-mch.readthedocs.io/en/stable/). Downloadable copies can be found in the repository: 
-
-[For users (pdf)](https://media.readthedocs.org/pdf/pyrad-mch/stable/pyrad-mch.pdf)
-
+For details on the implemented functions check the [pyrad library reference for users](https://meteoswiss.github.io/pyrad/). 
 
 Example configuration files can be found in the repository directory [pyrad/config/processing/](./config/processing) and in the dedicated [examples repository](https://github.com/MeteoSwiss/pyrad-examples). 
 

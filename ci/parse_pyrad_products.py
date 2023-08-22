@@ -7,7 +7,7 @@ import re
 mainpath = Path(__file__).resolve().parent.parent
 prodpath = Path(mainpath, 'src', 'pyrad_proc', 'pyrad', 'prod')
 OUT_DIRECTORY = str(Path(mainpath, 'doc', 'source', 'overview'))
-DOC_PATH = 'https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad'
+DOC_PATH = 'https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad'
 
 def funcpath_to_docpath(funcpath):
     funcpath = funcpath.split('pyrad')[-1]
