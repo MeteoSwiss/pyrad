@@ -20,8 +20,7 @@ Plots
     plot_longitude_slice
     plot_cross_section
     plot_dda_map
-    plot_dda_latitude_slice
-    plot_dda_longitude_slice
+    plot_dda_slice
     plot_ppi
     plot_ppi_contour
     plot_ppi_map
@@ -90,8 +89,8 @@ from .plots_vol import plot_fixed_rng, plot_fixed_rng_span, plot_roi_contour# no
 from .plots_vol import plot_fixed_rng_sun # noqa
 
 from .plots_grid import plot_surface_raw, plot_surface, plot_latitude_slice # noqa
-from .plots_grid import plot_longitude_slice, plot_cross_section, plot_dda_map # noqa
-from .plots_grid import plot_dda_longitude_slice, plot_dda_latitude_slice #noqa
+from .plots_grid import plot_longitude_slice, plot_cross_section # noqa
+from .plots_grid import plot_dda_slice, plot_dda_map #noqa
 
 from .plots_spectra import plot_range_Doppler, plot_complex_range_Doppler # noqa
 from .plots_spectra import plot_amp_phase_range_Doppler, plot_Doppler # noqa
