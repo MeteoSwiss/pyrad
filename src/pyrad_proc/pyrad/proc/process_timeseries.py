@@ -95,7 +95,7 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         break
     field_name = get_fieldname_pyart(datatype)
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
 
     if procstatus == 2:
         if dscfg['initialized'] == 0:
@@ -136,21 +136,21 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
         x, y = pyart.core.geographic_to_cartesian(lon, lat, projparams)
 
         if not dscfg['truealt']:
-            ke = 4./3.  # constant for effective radius
+            ke = 4. / 3.  # constant for effective radius
             a = 6378100.  # earth radius
             re = a * ke  # effective radius
 
             elrad = dscfg['ele'] * np.pi / 180.
             r_ground = np.sqrt(x ** 2. + y ** 2.)
             r = r_ground / np.cos(elrad)
-            alt = radar.altitude['data']+np.sqrt(
+            alt = radar.altitude['data'] + np.sqrt(
                 r ** 2. + re ** 2. + 2. * r * re * np.sin(elrad)) - re
             alt = alt[0]
         else:
             alt = dscfg['alt']
 
         r, az, el = pyart.core.cartesian_to_antenna(
-            x, y, alt-radar.altitude['data'])
+            x, y, alt - radar.altitude['data'])
         r = r[0]
         az = az[0]
         el = el[0]
@@ -159,7 +159,7 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
         az = dscfg['azi']
         el = dscfg['ele']
 
-        x, y, alt = pyart.core.antenna_to_cartesian(r/1000., az, el)
+        x, y, alt = pyart.core.antenna_to_cartesian(r / 1000., az, el)
         lon, lat = pyart.core.cartesian_to_geographic(x, y, projparams)
         lon = lon[0]
         lat = lat[0]
@@ -167,24 +167,24 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
     d_az = np.abs(radar.azimuth['data'] - az)
     if np.min(d_az) > dscfg['AziTol']:
         warn(' No radar bin found for point (az, el, r):(' +
-             str(az)+', '+str(el)+', '+str(r) +
-             '). Minimum distance to radar azimuth '+str(d_az) +
+             str(az) + ', ' + str(el) + ', ' + str(r) +
+             '). Minimum distance to radar azimuth ' + str(d_az) +
              ' larger than tolerance')
         return None, None
 
     d_el = np.abs(radar.elevation['data'] - el)
     if np.min(d_el) > dscfg['EleTol']:
         warn(' No radar bin found for point (az, el, r):(' +
-             str(az)+', '+str(el)+', '+str(r) +
-             '). Minimum distance to radar elevation '+str(d_el) +
+             str(az) + ', ' + str(el) + ', ' + str(r) +
+             '). Minimum distance to radar elevation ' + str(d_el) +
              ' larger than tolerance')
         return None, None
 
     d_r = np.abs(radar.range['data'] - r)
     if np.min(d_r) > dscfg['RngTol']:
         warn(' No radar bin found for point (az, el, r):(' +
-             str(az)+', '+str(el)+', '+str(r) +
-             '). Minimum distance to radar range bin '+str(d_r) +
+             str(az) + ', ' + str(el) + ', ' + str(r) +
+             '). Minimum distance to radar range bin ' + str(d_r) +
              ' larger than tolerance')
         return None, None
 
@@ -199,7 +199,7 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
     ant_coord = np.empty((3, ind_ray.size), np.float32)
     ant_coord[0, :] = radar.azimuth['data'][ind_ray]
     ant_coord[1, :] = radar.elevation['data'][ind_ray]
-    ant_coord[2, :] = np.zeros(ind_ray.size)+radar.range['data'][ind_r]
+    ant_coord[2, :] = np.zeros(ind_ray.size) + radar.range['data'][ind_r]
 
     val = radar.fields[field_name]['data'].data[ind_ray, ind_r]
     time = num2date(radar.time['data'][ind_ray], radar.time['units'],
@@ -283,7 +283,7 @@ def process_multiple_points(procstatus, dscfg, radar_list=None):
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         break
     field_name = get_fieldname_pyart(datatype)
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
 
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
@@ -313,20 +313,20 @@ def process_multiple_points(procstatus, dscfg, radar_list=None):
     npoints = lon.size
 
     if not truealt:
-        ke = 4./3.  # constant for effective radius
+        ke = 4. / 3.  # constant for effective radius
         a = 6378100.  # earth radius
         re = a * ke  # effective radius
 
         elrad = ele_points * np.pi / 180.
         r_ground = np.sqrt(x ** 2. + y ** 2.)
         r = r_ground / np.cos(elrad)
-        alt = radar.altitude['data']+np.sqrt(
+        alt = radar.altitude['data'] + np.sqrt(
             r ** 2. + re ** 2. + 2. * r * re * np.sin(elrad)) - re
     else:
-        alt = alt_points+np.zeros(npoints)
+        alt = alt_points + np.zeros(npoints)
 
     r, az, el = pyart.core.cartesian_to_antenna(
-        x, y, alt-radar.altitude['data'])
+        x, y, alt - radar.altitude['data'])
 
     val = np.ma.masked_all(npoints)
     time = np.ma.masked_all(npoints, dtype=datetime.datetime)
@@ -337,24 +337,24 @@ def process_multiple_points(procstatus, dscfg, radar_list=None):
         d_az = np.abs(radar.azimuth['data'] - az[ind])
         if np.min(d_az) > AziTol:
             warn(' No radar bin found for point (az, el, r):(' +
-                 str(az[ind])+', '+str(el[ind])+', '+str(r[ind]) +
-                 '). Minimum distance to radar azimuth '+str(d_az) +
+                 str(az[ind]) + ', ' + str(el[ind]) + ', ' + str(r[ind]) +
+                 '). Minimum distance to radar azimuth ' + str(d_az) +
                  ' larger than tolerance')
             continue
 
         d_el = np.abs(radar.elevation['data'] - el[ind])
         if np.min(d_el) > EleTol:
             warn(' No radar bin found for point (az, el, r):(' +
-                 str(az[ind])+', '+str(el[ind])+', '+str(r[ind]) +
-                 '). Minimum distance to radar elevation '+str(d_el) +
+                 str(az[ind]) + ', ' + str(el[ind]) + ', ' + str(r[ind]) +
+                 '). Minimum distance to radar elevation ' + str(d_el) +
                  ' larger than tolerance')
             continue
 
         d_r = np.abs(radar.range['data'] - r[ind])
         if np.min(d_r) > RngTol:
             warn(' No radar bin found for point (az, el, r):(' +
-                 str(az[ind])+', '+str(el[ind])+', '+str(r[ind]) +
-                 '). Minimum distance to radar range bin '+str(d_r) +
+                 str(az[ind]) + ', ' + str(el[ind]) + ', ' + str(r[ind]) +
+                 '). Minimum distance to radar range bin ' + str(d_r) +
                  ' larger than tolerance')
             continue
 
@@ -461,7 +461,7 @@ def process_qvp(procstatus, dscfg, radar_list=None):
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             field_names.append(get_fieldname_pyart(datatype))
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
 
         if (radar_list is None) or (radar_list[ind_rad] is None):
             warn('ERROR: No valid radar')
@@ -524,7 +524,7 @@ def process_qvp(procstatus, dscfg, radar_list=None):
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             break
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
 
         qvp = dscfg['global_data']['radar_out']
 
@@ -605,7 +605,7 @@ def process_rqvp(procstatus, dscfg, radar_list=None):
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             field_names.append(get_fieldname_pyart(datatype))
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
 
         if (radar_list is None) or (radar_list[ind_rad] is None):
             warn('ERROR: No valid radar')
@@ -668,7 +668,7 @@ def process_rqvp(procstatus, dscfg, radar_list=None):
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             break
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
 
         qvp = dscfg['global_data']['radar_out']
 
@@ -751,7 +751,7 @@ def process_evp(procstatus, dscfg, radar_list=None):
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             field_names.append(get_fieldname_pyart(datatype))
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
 
         if (radar_list is None) or (radar_list[ind_rad] is None):
             warn('ERROR: No valid radar')
@@ -817,7 +817,7 @@ def process_evp(procstatus, dscfg, radar_list=None):
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             break
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
 
         qvp = dscfg['global_data']['radar_out']
 
@@ -907,7 +907,7 @@ def process_svp(procstatus, dscfg, radar_list=None):
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             field_names.append(get_fieldname_pyart(datatype))
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
 
         if (radar_list is None) or (radar_list[ind_rad] is None):
             warn('ERROR: No valid radar')
@@ -977,7 +977,7 @@ def process_svp(procstatus, dscfg, radar_list=None):
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             break
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
 
         svp = dscfg['global_data']['radar_out']
 
@@ -1046,7 +1046,7 @@ def process_time_height(procstatus, dscfg, radar_list=None):
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             field_names.append(get_fieldname_pyart(datatype))
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
 
         if (radar_list is None) or (radar_list[ind_rad] is None):
             warn('ERROR: No valid radar')
@@ -1106,7 +1106,7 @@ def process_time_height(procstatus, dscfg, radar_list=None):
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             break
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
 
         qvp = dscfg['global_data']['radar_out']
 
@@ -1168,7 +1168,7 @@ def process_ts_along_coord(procstatus, dscfg, radar_list=None):
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             field_names.append(get_fieldname_pyart(datatype))
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
 
         if (radar_list is None) or (radar_list[ind_rad] is None):
             warn('ERROR: No valid radar')
@@ -1206,7 +1206,7 @@ def process_ts_along_coord(procstatus, dscfg, radar_list=None):
             fixed_azimuth = dscfg.get('fixed_azimuth', 0.)
             fixed_elevation = dscfg.get('fixed_elevation', None)
         else:
-            warn('Unknown plotting mode '+dscfg['mode'])
+            warn('Unknown plotting mode ' + dscfg['mode'])
             return None, None
 
         # initialize dataset
@@ -1256,7 +1256,7 @@ def process_ts_along_coord(procstatus, dscfg, radar_list=None):
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             break
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
 
         acoord = dscfg['global_data']['radar_out']
 

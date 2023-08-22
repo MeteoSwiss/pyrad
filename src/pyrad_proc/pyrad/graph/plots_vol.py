@@ -27,6 +27,16 @@ Functions to plot radar volume data
     plot_field_coverage
 
 """
+from ..io.write_data import write_histogram
+from ..util.radar_utils import compute_histogram_sweep
+from ..util.radar_utils import compute_quantiles_sweep, find_ang_index
+from .plots import _plot_sunscan
+from .plots import plot_quantiles, plot_histogram, _plot_time_range
+from .plots_aux import generate_complex_range_Doppler_title
+from .plots_aux import generate_fixed_rng_span_title
+from .plots_aux import get_colobar_label, get_norm, generate_fixed_rng_title
+import pyart
+import matplotlib.pyplot as plt
 from warnings import warn
 from copy import deepcopy
 
@@ -54,21 +64,7 @@ mpl.use('Agg')
 
 # Increase a bit font size
 mpl.rcParams.update({'font.size': 16})
-mpl.rcParams.update({'font.family':  "sans-serif"})
-
-import matplotlib.pyplot as plt
-
-import pyart
-
-from .plots_aux import get_colobar_label, get_norm, generate_fixed_rng_title
-from .plots_aux import generate_fixed_rng_span_title
-from .plots_aux import generate_complex_range_Doppler_title
-from .plots import plot_quantiles, plot_histogram, _plot_time_range
-from .plots import _plot_sunscan
-
-from ..util.radar_utils import compute_quantiles_sweep, find_ang_index
-from ..util.radar_utils import compute_histogram_sweep
-from ..io.write_data import write_histogram
+mpl.rcParams.update({'font.family': "sans-serif"})
 
 
 def plot_ray(radar, field_name, ind_ray, prdcfg, fname_list, titl=None,
@@ -105,7 +101,7 @@ def plot_ray(radar, field_name, ind_ray, prdcfg, fname_list, titl=None,
         list of names of the saved plots or handle of the figure an axes
 
     """
-    rng_km = radar.range['data']/1000.
+    rng_km = radar.range['data'] / 1000.
     dpi = prdcfg['ppiImageConfig'].get('dpi', 72)
 
     xsize = prdcfg['ppiImageConfig']['xsize']
@@ -216,7 +212,7 @@ def plot_ppi(radar, field_name, ind_el, prdcfg, fname_list, plot_type='PPI',
         if 'rngRing' in prdcfg['ppiImageConfig']:
             if prdcfg['ppiImageConfig']['rngRing'] > 0:
                 display.plot_range_rings(np.arange(
-                    0., radar.range['data'][-1]/1000.,
+                    0., radar.range['data'][-1] / 1000.,
                     prdcfg['ppiImageConfig']['rngRing']), ax=ax)
         display.plot_cross_hair(5., ax=ax)
 
@@ -262,7 +258,7 @@ def plot_ppi(radar, field_name, ind_el, prdcfg, fname_list, plot_type='PPI',
             hist, _ = np.histogram(values, bins=bins)
             write_histogram(bins, hist, fname_hist, step=step)
     else:
-        warn('Unknown plot type '+plot_type)
+        warn('Unknown plot type ' + plot_type)
 
     return fname_list
 
@@ -314,12 +310,12 @@ def plot_ppi_map(radar, field_name, ind_el, prdcfg, fname_list,
     max_lat = prdcfg['ppiMapImageConfig'].get('latmax', 49.5)
     resolution = prdcfg['ppiMapImageConfig'].get('mapres', '110m')
     if resolution not in ('110m', '50m', '10m'):
-        warn('Unknown map resolution: '+resolution)
+        warn('Unknown map resolution: ' + resolution)
         resolution = '110m'
     background_zoom = prdcfg['ppiMapImageConfig'].get('background_zoom', 8)
 
-    lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon)+1, lonstep)
-    lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat)+1, latstep)
+    lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon) + 1, lonstep)
+    lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat) + 1, latstep)
 
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
 
@@ -341,7 +337,7 @@ def plot_ppi_map(radar, field_name, ind_el, prdcfg, fname_list,
             ax = fig.add_subplot(111, projection=projection)
             warn(
                 'The projection of the image is set to that of the ' +
-                'background map, i.e. '+str(projection), UserWarning)
+                'background map, i.e. ' + str(projection), UserWarning)
 
         for cartomap in prdcfg['ppiMapImageConfig']['maps']:
             if cartomap == 'relief':
@@ -419,13 +415,13 @@ def plot_ppi_map(radar, field_name, ind_el, prdcfg, fname_list,
                 ax.add_feature(
                     rivers_europe, edgecolor='blue', facecolor='none')
             else:
-                warn('cartomap '+cartomap+' for resolution '+resolution +
+                warn('cartomap ' + cartomap + ' for resolution ' + resolution +
                      ' not available')
 
     if 'rngRing' in prdcfg['ppiMapImageConfig']:
         if prdcfg['ppiMapImageConfig']['rngRing'] > 0:
             rng_rings = np.arange(
-                0., radar.range['data'][-1]/1000.,
+                0., radar.range['data'][-1] / 1000.,
                 prdcfg['ppiMapImageConfig']['rngRing'])
             for rng_ring in rng_rings:
                 display_map.plot_range_ring(rng_ring, ax=ax)
@@ -504,7 +500,7 @@ def plot_rhi(radar, field_name, ind_az, prdcfg, fname_list, plot_type='RHI',
         display.plot_rhi(
             field_name, title=titl, sweep=ind_az, norm=norm, ticks=ticks,
             ticklabs=ticklabs, vmin=vmin, vmax=vmax,
-            colorbar_orient='horizontal',  fig=fig, ax=ax)
+            colorbar_orient='horizontal', fig=fig, ax=ax)
         display.set_limits(
             ylim=[prdcfg['rhiImageConfig']['ymin'],
                   prdcfg['rhiImageConfig']['ymax']],
@@ -556,7 +552,7 @@ def plot_rhi(radar, field_name, ind_az, prdcfg, fname_list, plot_type='RHI',
         plot_histogram(bins, values, fname_list, labelx=labelx,
                        labely='Number of Samples', titl=titl)
     else:
-        warn('Unknown plot type '+plot_type)
+        warn('Unknown plot type ' + plot_type)
 
     return fname_list
 
@@ -628,7 +624,7 @@ def plot_bscope(radar, field_name, ind_sweep, prdcfg, fname_list,
             start_time, radar_aux.time['units'], radar_aux.time['calendar'])
         ray_label = (
             'time [s from ' +
-            sweep_start_time.strftime('%Y-%m-%d %H:%M:%S')+' UTC]')
+            sweep_start_time.strftime('%Y-%m-%d %H:%M:%S') + ' UTC]')
 
     # display data
     titl = pyart.graph.common.generate_title(radar_aux, field_name, 0)
@@ -648,13 +644,13 @@ def plot_bscope(radar, field_name, ind_sweep, prdcfg, fname_list,
     else:
         cmap = pyart.config.get_field_colormap(field_name)
 
-        rng_aux = radar_aux.range['data']/1000.
-        rng_res = rng_aux[1]-rng_aux[0]
-        rng_aux = np.append(rng_aux-rng_res/2., rng_aux[-1]+rng_res/2.)
+        rng_aux = radar_aux.range['data'] / 1000.
+        rng_res = rng_aux[1] - rng_aux[0]
+        rng_aux = np.append(rng_aux - rng_res / 2., rng_aux[-1] + rng_res / 2.)
         rng_label = 'Range (km)'
 
-        ray_res = np.ma.median(ray[1:]-ray[:-1])
-        ray_aux = np.append(ray-ray_res/2, ray[-1]+ray_res/2)
+        ray_res = np.ma.median(ray[1:] - ray[:-1])
+        ray_aux = np.append(ray - ray_res / 2, ray[-1] + ray_res / 2)
 
         if xaxis_rng:
             cax = ax.pcolormesh(
@@ -727,12 +723,13 @@ def plot_time_range(radar, field_name, ind_sweep, prdcfg, fname_list,
     rng_aux = deepcopy(radar_aux.range['data'])
     if ylabel == 'range (km)':
         rng_aux /= 1000.
-    rng_res = rng_aux[1]-rng_aux[0]
-    rng_aux = np.append(rng_aux-rng_res/2., rng_aux[-1]+rng_res/2.)
+    rng_res = rng_aux[1] - rng_aux[0]
+    rng_aux = np.append(rng_aux - rng_res / 2., rng_aux[-1] + rng_res / 2.)
 
-    time_res = np.mean(radar_aux.time['data'][1:]-radar_aux.time['data'][0:-1])
+    time_res = np.mean(radar_aux.time['data']
+                       [1:] - radar_aux.time['data'][0:-1])
     time_aux = np.append(
-        radar_aux.time['data'], radar_aux.time['data'][-1]+time_res)
+        radar_aux.time['data'], radar_aux.time['data'][-1] + time_res)
     return _plot_time_range(
         time_aux, rng_aux, field, field_name, fname_list, titl=titl,
         ylabel=ylabel, vmin=vmin, vmax=vmax, figsize=[xsize, ysize], dpi=dpi)
@@ -775,11 +772,11 @@ def plot_fixed_rng(radar, field_name, prdcfg, fname_list, azi_res=None,
         ele_vec = np.sort(radar.fixed_angle['data'])
         azi_vec = np.sort(
             radar.azimuth['data'][radar.sweep_start_ray_index['data'][0]:
-                                  radar.sweep_end_ray_index['data'][0]+1])
+                                  radar.sweep_end_ray_index['data'][0] + 1])
     else:
         ele_vec = np.sort(
             radar.elevation['data'][radar.sweep_start_ray_index['data'][0]:
-                                    radar.sweep_end_ray_index['data'][0]+1])
+                                    radar.sweep_end_ray_index['data'][0] + 1])
         azi_vec = np.sort(radar.fixed_angle['data'])
 
     # put data in a regular 2D grid
@@ -790,9 +787,9 @@ def plot_fixed_rng(radar, field_name, prdcfg, fname_list, azi_res=None,
     if radar.scan_type == 'ppi':
         for j, ele in enumerate(ele_vec):
             field_1D = radar.fields[field_name]['data'][
-                sweep_start_inds[j]:sweep_end_inds[j]+1]
+                sweep_start_inds[j]:sweep_end_inds[j] + 1]
             azi_1D = radar.azimuth['data'][
-                sweep_start_inds[j]:sweep_end_inds[j]+1]
+                sweep_start_inds[j]:sweep_end_inds[j] + 1]
 
             for i, azi in enumerate(azi_vec):
                 ind = find_ang_index(azi_1D, azi, ang_tol=ang_tol)
@@ -806,9 +803,9 @@ def plot_fixed_rng(radar, field_name, prdcfg, fname_list, azi_res=None,
     else:
         for i, azi in enumerate(azi_vec):
             field_1D = radar.fields[field_name]['data'][
-                sweep_start_inds[i]:sweep_end_inds[i]+1]
+                sweep_start_inds[i]:sweep_end_inds[i] + 1]
             ele_1D = radar.elevation['data'][
-                sweep_start_inds[i]:sweep_end_inds[i]+1]
+                sweep_start_inds[i]:sweep_end_inds[i] + 1]
 
             for j, ele in enumerate(ele_vec):
                 ind = find_ang_index(ele_1D, ele, ang_tol=ang_tol)
@@ -819,15 +816,15 @@ def plot_fixed_rng(radar, field_name, prdcfg, fname_list, azi_res=None,
     # get limits of angle bins
     if radar.scan_type == 'ppi':
         if azi_res is None:
-            azi_res = np.median(azi_vec[1:]-azi_vec[0:-1])
+            azi_res = np.median(azi_vec[1:] - azi_vec[0:-1])
             if radar.ray_angle_res is not None:
                 azi_res = np.min(
                     [radar.ray_angle_res['data'][0], azi_res])
 
-        azi_vec = np.append(azi_vec-azi_res/2., azi_vec[-1]+azi_res/2.)
+        azi_vec = np.append(azi_vec - azi_res / 2., azi_vec[-1] + azi_res / 2.)
 
         if ele_res is None:
-            ele_res = np.median(ele_vec[1:]-ele_vec[0:-1])
+            ele_res = np.median(ele_vec[1:] - ele_vec[0:-1])
             if radar.instrument_parameters is not None:
                 if 'radar_beam_width_h' in radar.instrument_parameters:
                     bwidth = radar.instrument_parameters[
@@ -838,18 +835,18 @@ def plot_fixed_rng(radar, field_name, prdcfg, fname_list, azi_res=None,
                         'radar_beam_width_v']['data'][0]
                     ele_res = np.min([bwidth, ele_res])
 
-        ele_vec = np.append(ele_vec-ele_res/2., ele_vec[-1]+ele_res/2.)
+        ele_vec = np.append(ele_vec - ele_res / 2., ele_vec[-1] + ele_res / 2.)
     else:
         if ele_res is None:
-            ele_res = np.median(ele_vec[1:]-ele_vec[0:-1])
+            ele_res = np.median(ele_vec[1:] - ele_vec[0:-1])
             if radar.ray_angle_res is not None:
                 ele_res = np.min(
                     [radar.ray_angle_res['data'][0], ele_res])
 
-        ele_vec = np.append(ele_vec-ele_res/2., ele_vec[-1]+ele_res/2.)
+        ele_vec = np.append(ele_vec - ele_res / 2., ele_vec[-1] + ele_res / 2.)
 
         if azi_res is None:
-            azi_res = np.median(azi_vec[1:]-azi_vec[0:-1])
+            azi_res = np.median(azi_vec[1:] - azi_vec[0:-1])
             if radar.instrument_parameters is not None:
                 if 'radar_beam_width_h' in radar.instrument_parameters:
                     bwidth = radar.instrument_parameters[
@@ -860,7 +857,7 @@ def plot_fixed_rng(radar, field_name, prdcfg, fname_list, azi_res=None,
                         'radar_beam_width_v']['data'][0]
                     azi_res = np.min([bwidth, azi_res])
 
-        azi_vec = np.append(azi_vec-azi_res/2., azi_vec[-1]+azi_res/2.)
+        azi_vec = np.append(azi_vec - azi_res / 2., azi_vec[-1] + azi_res / 2.)
 
     titl = generate_fixed_rng_title(radar, field_name, fixed_rng)
 
@@ -906,11 +903,11 @@ def plot_fixed_rng_span(radar, field_name, prdcfg, fname_list, azi_res=None,
         ele_vec = np.sort(radar.fixed_angle['data'])
         azi_vec = np.sort(
             radar.azimuth['data'][radar.sweep_start_ray_index['data'][0]:
-                                  radar.sweep_end_ray_index['data'][0]+1])
+                                  radar.sweep_end_ray_index['data'][0] + 1])
     else:
         ele_vec = np.sort(
             radar.elevation['data'][radar.sweep_start_ray_index['data'][0]:
-                                    radar.sweep_end_ray_index['data'][0]+1])
+                                    radar.sweep_end_ray_index['data'][0] + 1])
         azi_vec = np.sort(radar.fixed_angle['data'])
 
     # put data in a regular 2D grid
@@ -922,7 +919,7 @@ def plot_fixed_rng_span(radar, field_name, prdcfg, fname_list, azi_res=None,
     if radar.scan_type == 'ppi':
         for j, ele in enumerate(ele_vec):
             field = radar.fields[field_name]['data'][
-                sweep_start_inds[j]:sweep_end_inds[j]+1, :]
+                sweep_start_inds[j]:sweep_end_inds[j] + 1, :]
 
             if stat == 'max':
                 field_1D = np.ma.max(field, axis=-1)
@@ -934,15 +931,15 @@ def plot_fixed_rng_span(radar, field_name, prdcfg, fname_list, azi_res=None,
                 rng_1D = radar.range['data'][ind]
             elif stat == 'mean':
                 field_1D = np.ma.mean(field, axis=-1)
-                mid_rng = radar.range['data'][int(radar.ngates/2)]
-                rng_1D = np.ma.zeros(np.shape(field_1D))+mid_rng
+                mid_rng = radar.range['data'][int(radar.ngates / 2)]
+                rng_1D = np.ma.zeros(np.shape(field_1D)) + mid_rng
             elif stat == 'median':
                 field_1D = np.ma.median(field, axis=-1)
-                mid_rng = radar.range['data'][int(radar.ngates/2)]
-                rng_1D = np.ma.zeros(np.shape(field_1D))+mid_rng
+                mid_rng = radar.range['data'][int(radar.ngates / 2)]
+                rng_1D = np.ma.zeros(np.shape(field_1D)) + mid_rng
 
             azi_1D = radar.azimuth['data'][
-                sweep_start_inds[j]:sweep_end_inds[j]+1]
+                sweep_start_inds[j]:sweep_end_inds[j] + 1]
 
             for i, azi in enumerate(azi_vec):
                 ind = find_ang_index(azi_1D, azi, ang_tol=ang_tol)
@@ -953,7 +950,7 @@ def plot_fixed_rng_span(radar, field_name, prdcfg, fname_list, azi_res=None,
     else:
         for i, azi in enumerate(azi_vec):
             field = radar.fields[field_name]['data'][
-                sweep_start_inds[i]:sweep_end_inds[i]+1, :]
+                sweep_start_inds[i]:sweep_end_inds[i] + 1, :]
 
             if stat == 'max':
                 field_1D = np.ma.max(field, axis=-1)
@@ -965,15 +962,15 @@ def plot_fixed_rng_span(radar, field_name, prdcfg, fname_list, azi_res=None,
                 rng_1D = radar.range['data'][ind]
             elif stat == 'mean':
                 field_1D = np.ma.mean(field, axis=-1)
-                mid_rng = radar.range['data'][int(radar.ngates/2)]
-                rng_1D = np.ma.zeros(np.shape(field_1D))+mid_rng
+                mid_rng = radar.range['data'][int(radar.ngates / 2)]
+                rng_1D = np.ma.zeros(np.shape(field_1D)) + mid_rng
             elif stat == 'median':
                 field_1D = np.ma.median(field, axis=-1)
-                mid_rng = radar.range['data'][int(radar.ngates/2)]
-                rng_1D = np.ma.zeros(np.shape(field_1D))+mid_rng
+                mid_rng = radar.range['data'][int(radar.ngates / 2)]
+                rng_1D = np.ma.zeros(np.shape(field_1D)) + mid_rng
 
             ele_1D = radar.elevation['data'][
-                sweep_start_inds[i]:sweep_end_inds[i]+1]
+                sweep_start_inds[i]:sweep_end_inds[i] + 1]
 
             for j, ele in enumerate(ele_vec):
                 ind = find_ang_index(ele_1D, ele, ang_tol=ang_tol)
@@ -985,15 +982,15 @@ def plot_fixed_rng_span(radar, field_name, prdcfg, fname_list, azi_res=None,
     # get limits of angle bins
     if radar.scan_type == 'ppi':
         if azi_res is None:
-            azi_res = np.median(azi_vec[1:]-azi_vec[0:-1])
+            azi_res = np.median(azi_vec[1:] - azi_vec[0:-1])
             if radar.ray_angle_res is not None:
                 azi_res = np.min(
                     [radar.ray_angle_res['data'][0], azi_res])
 
-        azi_vec = np.append(azi_vec-azi_res/2., azi_vec[-1]+azi_res/2.)
+        azi_vec = np.append(azi_vec - azi_res / 2., azi_vec[-1] + azi_res / 2.)
 
         if ele_res is None:
-            ele_res = np.median(ele_vec[1:]-ele_vec[0:-1])
+            ele_res = np.median(ele_vec[1:] - ele_vec[0:-1])
             if radar.instrument_parameters is not None:
                 if 'radar_beam_width_h' in radar.instrument_parameters:
                     bwidth = radar.instrument_parameters[
@@ -1004,18 +1001,18 @@ def plot_fixed_rng_span(radar, field_name, prdcfg, fname_list, azi_res=None,
                         'radar_beam_width_v']['data'][0]
                     ele_res = np.min([bwidth, ele_res])
 
-        ele_vec = np.append(ele_vec-ele_res/2., ele_vec[-1]+ele_res/2.)
+        ele_vec = np.append(ele_vec - ele_res / 2., ele_vec[-1] + ele_res / 2.)
     else:
         if ele_res is None:
-            ele_res = np.median(ele_vec[1:]-ele_vec[0:-1])
+            ele_res = np.median(ele_vec[1:] - ele_vec[0:-1])
             if radar.ray_angle_res is not None:
                 ele_res = np.min(
                     [radar.ray_angle_res['data'][0], ele_res])
 
-        ele_vec = np.append(ele_vec-ele_res/2., ele_vec[-1]+ele_res/2.)
+        ele_vec = np.append(ele_vec - ele_res / 2., ele_vec[-1] + ele_res / 2.)
 
         if azi_res is None:
-            azi_res = np.median(azi_vec[1:]-azi_vec[0:-1])
+            azi_res = np.median(azi_vec[1:] - azi_vec[0:-1])
             if radar.instrument_parameters is not None:
                 if 'radar_beam_width_h' in radar.instrument_parameters:
                     bwidth = radar.instrument_parameters[
@@ -1026,7 +1023,7 @@ def plot_fixed_rng_span(radar, field_name, prdcfg, fname_list, azi_res=None,
                         'radar_beam_width_v']['data'][0]
                     azi_res = np.min([bwidth, azi_res])
 
-        azi_vec = np.append(azi_vec-azi_res/2., azi_vec[-1]+azi_res/2.)
+        azi_vec = np.append(azi_vec - azi_res / 2., azi_vec[-1] + azi_res / 2.)
 
     titl = generate_fixed_rng_span_title(radar, field_name, stat)
 
@@ -1037,7 +1034,7 @@ def plot_fixed_rng_span(radar, field_name, prdcfg, fname_list, azi_res=None,
     fname_rng_list = []
     for fname in fname_list:
         fname_rng_list.append(
-            fname.rsplit('.', 1)[0]+'_RNG.'+fname.rsplit('.', 1)[1])
+            fname.rsplit('.', 1)[0] + '_RNG.' + fname.rsplit('.', 1)[1])
 
     _plot_time_range(
         azi_vec, ele_vec, rng_2D, 'radar_range', fname_rng_list, titl=titl,
@@ -1090,11 +1087,11 @@ def plot_fixed_rng_sun(radar, field_name, sun_hits, prdcfg, fname_list,
         ele_vec = np.sort(radar.fixed_angle['data'])
         azi_vec = np.sort(
             radar.azimuth['data'][radar.sweep_start_ray_index['data'][0]:
-                                  radar.sweep_end_ray_index['data'][0]+1])
+                                  radar.sweep_end_ray_index['data'][0] + 1])
     else:
         ele_vec = np.sort(
             radar.elevation['data'][radar.sweep_start_ray_index['data'][0]:
-                                    radar.sweep_end_ray_index['data'][0]+1])
+                                    radar.sweep_end_ray_index['data'][0] + 1])
         azi_vec = np.sort(radar.fixed_angle['data'])
 
     # put data in a regular 2D grid
@@ -1105,9 +1102,9 @@ def plot_fixed_rng_sun(radar, field_name, sun_hits, prdcfg, fname_list,
     if radar.scan_type == 'ppi':
         for j, ele in enumerate(ele_vec):
             field_1D = radar.fields[field_name]['data'][
-                sweep_start_inds[j]:sweep_end_inds[j]+1]
+                sweep_start_inds[j]:sweep_end_inds[j] + 1]
             azi_1D = radar.azimuth['data'][
-                sweep_start_inds[j]:sweep_end_inds[j]+1]
+                sweep_start_inds[j]:sweep_end_inds[j] + 1]
 
             for i, azi in enumerate(azi_vec):
                 ind = find_ang_index(azi_1D, azi, ang_tol=ang_tol)
@@ -1119,9 +1116,9 @@ def plot_fixed_rng_sun(radar, field_name, sun_hits, prdcfg, fname_list,
     else:
         for i, azi in enumerate(azi_vec):
             field_1D = radar.fields[field_name]['data'][
-                sweep_start_inds[i]:sweep_end_inds[i]+1]
+                sweep_start_inds[i]:sweep_end_inds[i] + 1]
             ele_1D = radar.elevation['data'][
-                sweep_start_inds[i]:sweep_end_inds[i]+1]
+                sweep_start_inds[i]:sweep_end_inds[i] + 1]
 
             for j, ele in enumerate(ele_vec):
                 ind = find_ang_index(ele_1D, ele, ang_tol=ang_tol)
@@ -1132,15 +1129,15 @@ def plot_fixed_rng_sun(radar, field_name, sun_hits, prdcfg, fname_list,
     # get limits of angle bins
     if radar.scan_type == 'ppi':
         if azi_res is None:
-            azi_res = np.median(azi_vec[1:]-azi_vec[0:-1])
+            azi_res = np.median(azi_vec[1:] - azi_vec[0:-1])
             if radar.ray_angle_res is not None:
                 azi_res = np.min(
                     [radar.ray_angle_res['data'][0], azi_res])
 
-        azi_vec = np.append(azi_vec-azi_res/2., azi_vec[-1]+azi_res/2.)
+        azi_vec = np.append(azi_vec - azi_res / 2., azi_vec[-1] + azi_res / 2.)
 
         if ele_res is None:
-            ele_res = np.median(ele_vec[1:]-ele_vec[0:-1])
+            ele_res = np.median(ele_vec[1:] - ele_vec[0:-1])
             if radar.instrument_parameters is not None:
                 if 'radar_beam_width_h' in radar.instrument_parameters:
                     bwidth = radar.instrument_parameters[
@@ -1151,18 +1148,18 @@ def plot_fixed_rng_sun(radar, field_name, sun_hits, prdcfg, fname_list,
                         'radar_beam_width_v']['data'][0]
                     ele_res = np.min([bwidth, ele_res])
 
-        ele_vec = np.append(ele_vec-ele_res/2., ele_vec[-1]+ele_res/2.)
+        ele_vec = np.append(ele_vec - ele_res / 2., ele_vec[-1] + ele_res / 2.)
     else:
         if ele_res is None:
-            ele_res = np.median(ele_vec[1:]-ele_vec[0:-1])
+            ele_res = np.median(ele_vec[1:] - ele_vec[0:-1])
             if radar.ray_angle_res is not None:
                 ele_res = np.min(
                     [radar.ray_angle_res['data'][0], ele_res])
 
-        ele_vec = np.append(ele_vec-ele_res/2., ele_vec[-1]+ele_res/2.)
+        ele_vec = np.append(ele_vec - ele_res / 2., ele_vec[-1] + ele_res / 2.)
 
         if azi_res is None:
-            azi_res = np.median(azi_vec[1:]-azi_vec[0:-1])
+            azi_res = np.median(azi_vec[1:] - azi_vec[0:-1])
             if radar.instrument_parameters is not None:
                 if 'radar_beam_width_h' in radar.instrument_parameters:
                     bwidth = radar.instrument_parameters[
@@ -1173,7 +1170,7 @@ def plot_fixed_rng_sun(radar, field_name, sun_hits, prdcfg, fname_list,
                         'radar_beam_width_v']['data'][0]
                     azi_res = np.min([bwidth, azi_res])
 
-        azi_vec = np.append(azi_vec-azi_res/2., azi_vec[-1]+azi_res/2.)
+        azi_vec = np.append(azi_vec - azi_res / 2., azi_vec[-1] + azi_res / 2.)
 
     titl = generate_fixed_rng_title(radar, field_name, fixed_rng)
 
@@ -1231,8 +1228,8 @@ def plot_cappi(radar, field_name, altitude, prdcfg, fname_list,
     cappi_res = prdcfg.get('res', 500.)
 
     # number of grid points in cappi
-    ny = int((ymax-ymin)*1000./cappi_res)+1
-    nx = int((xmax-xmin)*1000./cappi_res)+1
+    ny = int((ymax - ymin) * 1000. / cappi_res) + 1
+    nx = int((xmax - xmin) * 1000. / cappi_res) + 1
 
     # parameters to determine the gates to use for each grid point
     if (radar.instrument_parameters is not None and
@@ -1251,10 +1248,10 @@ def plot_cappi(radar, field_name, altitude, prdcfg, fname_list,
     grid = pyart.map.grid_from_radars(
         (radar,), gridding_algo='map_to_grid', weighting_function=wfunc,
         roi_func='dist_beam', h_factor=1.0, nb=beamwidth, bsp=beam_spacing,
-        min_radius=cappi_res/2.,
+        min_radius=cappi_res / 2.,
         grid_shape=(1, ny, nx),
-        grid_limits=((altitude, altitude), (ymin*1000., ymax*1000.),
-                     (xmin*1000., xmax*1000.)),
+        grid_limits=((altitude, altitude), (ymin * 1000., ymax * 1000.),
+                     (xmin * 1000., xmax * 1000.)),
         grid_origin=(lat, lon), grid_origin_alt=alt,
         fields=[field_name])
 
@@ -1303,8 +1300,21 @@ def plot_cappi(radar, field_name, altitude, prdcfg, fname_list,
     return (fig, ax)
 
 
-def plot_xsection(radar, field_name, ref_points, step, vert_res, alt_max, beamwidth, 
-             dem, prdcfg, fname_list, titl=None, vmin=None, vmax=None, save_fig=True):
+def plot_xsection(
+        radar,
+        field_name,
+        ref_points,
+        step,
+        vert_res,
+        alt_max,
+        beamwidth,
+        dem,
+        prdcfg,
+        fname_list,
+        titl=None,
+        vmin=None,
+        vmax=None,
+        save_fig=True):
     """
     plots a cross-section on polar data
 
@@ -1315,16 +1325,16 @@ def plot_xsection(radar, field_name, ref_points, step, vert_res, alt_max, beamwi
     field_name : str
         name of the radar field to plot
     ref_points :  ndarray
-            N x 2 array containing the lon, lat coordinates of N reference 
+            N x 2 array containing the lon, lat coordinates of N reference
             points along the trajectory in WGS84 coordinates,
             for example [[11, 46], [10, 45], [9, 47]]
     step : int
             Step in meters to use between reference points to calculate
             the cross-section (i.e horizontal resolution).
     vert_res : int
-            Vertical resolution in meters used to calculate the cross-section 
+            Vertical resolution in meters used to calculate the cross-section
     alt_max : int
-        Maximum altitude of the vertical cross-section 
+        Maximum altitude of the vertical cross-section
     beamwidth : float
         3dB beamwidth in degrees to be used in the calculations
     dem : Grid
@@ -1370,9 +1380,22 @@ def plot_xsection(radar, field_name, ref_points, step, vert_res, alt_max, beamwi
     display = pyart.graph.RadarDisplay(radar)
 
     display.plot_xsection(
-        field_name, ref_points, step, vert_res, alt_max, beamwidth, dem, title=titl,
-        norm=norm, ticks=ticks, ticklabs=ticklabs, vmin=vmin, vmax=vmax,
-        colorbar_orient='horizontal',  fig=fig, ax=ax)
+        field_name,
+        ref_points,
+        step,
+        vert_res,
+        alt_max,
+        beamwidth,
+        dem,
+        title=titl,
+        norm=norm,
+        ticks=ticks,
+        ticklabs=ticklabs,
+        vmin=vmin,
+        vmax=vmax,
+        colorbar_orient='horizontal',
+        fig=fig,
+        ax=ax)
 
     # Turn on the grid
     ax.grid()
@@ -1390,6 +1413,7 @@ def plot_xsection(radar, field_name, ref_points, step, vert_res, alt_max, beamwi
     return (fig, ax)
 
     return fname_list
+
 
 def plot_traj(rng_traj, azi_traj, ele_traj, time_traj, prdcfg, fname_list,
               rad_alt=None, rad_tstart=None, ax=None, fig=None,
@@ -1446,11 +1470,11 @@ def plot_traj(rng_traj, azi_traj, ele_traj, time_traj, prdcfg, fname_list,
         color_ref = 'None'
 
     x, y, z = pyart.core.antenna_to_cartesian(
-        rng_traj/1000., azi_traj, ele_traj)
+        rng_traj / 1000., azi_traj, ele_traj)
 
     if color_ref == 'rel_altitude':
-        h = z+rad_alt
-        h_rel = h-prdcfg['altitude']
+        h = z + rad_alt
+        h_rel = h - prdcfg['altitude']
 
         marker = 'x'
         col = h_rel
@@ -1459,7 +1483,7 @@ def plot_traj(rng_traj, azi_traj, ele_traj, time_traj, prdcfg, fname_list,
         cb_label = 'Altitude relative to CAPPI [m]'
         plot_cb = True
     elif color_ref == 'altitude':
-        h = z+rad_alt
+        h = z + rad_alt
 
         marker = 'x'
         col = h
@@ -1468,7 +1492,7 @@ def plot_traj(rng_traj, azi_traj, ele_traj, time_traj, prdcfg, fname_list,
         cb_label = 'Altitude [m MSL]'
         plot_cb = True
     elif color_ref == 'time':
-        td_vec = time_traj-rad_tstart
+        td_vec = time_traj - rad_tstart
         tt_s = []
         for td in td_vec:
             tt_s.append(td.total_seconds())
@@ -1497,7 +1521,7 @@ def plot_traj(rng_traj, azi_traj, ele_traj, time_traj, prdcfg, fname_list,
         ax.autoscale(False)
 
     cax = ax.scatter(
-        x/1000., y/1000., c=col, marker=marker, alpha=0.5, cmap=cmap,
+        x / 1000., y / 1000., c=col, marker=marker, alpha=0.5, cmap=cmap,
         norm=norm)
 
     # plot colorbar
@@ -1572,13 +1596,13 @@ def plot_rhi_contour(radar, field_name, ind_az, prdcfg, fname_list,
     data = display._get_data(field_name, ind_az, None, True, None)
 
     x_edges, y_edges, z_edges = display._get_x_y_z(ind_az, True, True)
-    delta_x = x_edges[1:, 1:]-x_edges[:-1, :-1]
-    delta_y = y_edges[1:, 1:]-y_edges[:-1, :-1]
-    delta_z = z_edges[1:, 1:]-z_edges[:-1, :-1]
+    delta_x = x_edges[1:, 1:] - x_edges[:-1, :-1]
+    delta_y = y_edges[1:, 1:] - y_edges[:-1, :-1]
+    delta_z = z_edges[1:, 1:] - z_edges[:-1, :-1]
 
-    x = x_edges[:-1, :-1]+delta_x/2.
-    y = y_edges[:-1, :-1]+delta_y/2.
-    z = z_edges[:-1, :-1]+delta_z/2.
+    x = x_edges[:-1, :-1] + delta_x / 2.
+    y = y_edges[:-1, :-1] + delta_y / 2.
+    z = z_edges[:-1, :-1] + delta_z / 2.
 
     R = np.sqrt(x ** 2 + y ** 2) * np.sign(x)
 
@@ -1679,11 +1703,11 @@ def plot_ppi_contour(radar, field_name, ind_el, prdcfg, fname_list,
     data = display._get_data(field_name, ind_el, None, True, None)
 
     x_edges, y_edges = display._get_x_y(ind_el, True, True)
-    delta_x = x_edges[1:, 1:]-x_edges[:-1, :-1]
-    delta_y = y_edges[1:, 1:]-y_edges[:-1, :-1]
+    delta_x = x_edges[1:, 1:] - x_edges[:-1, :-1]
+    delta_y = y_edges[1:, 1:] - y_edges[:-1, :-1]
 
-    x = x_edges[:-1, :-1]+delta_x/2.
-    y = y_edges[:-1, :-1]+delta_y/2.
+    x = x_edges[:-1, :-1] + delta_x / 2.
+    y = y_edges[:-1, :-1] + delta_y / 2.
 
     # display data
     if fig is None:
@@ -1781,13 +1805,13 @@ def plot_roi_contour(roi_dict, prdcfg, fname_list, plot_center=True,
         max_lat = prdcfg['ppiMapImageConfig'].get('latmax', 49.5)
         resolution = prdcfg['ppiMapImageConfig'].get('mapres', '110m')
         if resolution not in ('110m', '50m', '10m'):
-            warn('Unknown map resolution: '+resolution)
+            warn('Unknown map resolution: ' + resolution)
             resolution = '110m'
         background_zoom = prdcfg['ppiMapImageConfig'].get(
             'background_zoom', 8)
 
-        lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon)+1, lonstep)
-        lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat)+1, latstep)
+        lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon) + 1, lonstep)
+        lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat) + 1, latstep)
         limits = [min_lon, max_lon, min_lat, max_lat]
 
         # get background map instance

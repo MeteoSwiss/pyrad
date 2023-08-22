@@ -120,11 +120,11 @@ def main(cfgfile, starttime=None, endtime=None, trajfile="", trajtype='plane',
     if (not MULTIPROCESSING_DSET and not MULTIPROCESSING_PROD and
             not USE_CHILD_PROCESS):
         PROFILE_MULTIPROCESSING = False
-    elif (int(MULTIPROCESSING_DSET)+int(MULTIPROCESSING_PROD) +
+    elif (int(MULTIPROCESSING_DSET) + int(MULTIPROCESSING_PROD) +
           int(USE_CHILD_PROCESS) > 1):
         PROFILE_MULTIPROCESSING = False
 
-    if (int(MULTIPROCESSING_DSET)+int(MULTIPROCESSING_PROD) +
+    if (int(MULTIPROCESSING_DSET) + int(MULTIPROCESSING_PROD) +
             int(USE_CHILD_PROCESS) > 1):
         # necessary to launch tasks from tasks
         Client()
@@ -151,9 +151,9 @@ def main(cfgfile, starttime=None, endtime=None, trajfile="", trajtype='plane',
 
     # get data types and levels
     datatypesdescr_list = list()
-    for i in range(1, cfg['NumRadars']+1):
+    for i in range(1, cfg['NumRadars'] + 1):
         datatypesdescr_list.append(
-            _get_datatype_list(cfg, radarnr='RADAR'+'{:03d}'.format(i)))
+            _get_datatype_list(cfg, radarnr='RADAR' + '{:03d}'.format(i)))
 
     dataset_levels = _get_datasets_list(cfg)
 
@@ -253,12 +253,12 @@ def main(cfgfile, starttime=None, endtime=None, trajfile="", trajtype='plane',
 
         bokeh_plot = visualize([prof, rprof, cprof], show=False, save=False)
 
-        profile_path = os.path.expanduser('~')+'/profiling/'
+        profile_path = os.path.expanduser('~') + '/profiling/'
         if not os.path.isdir(profile_path):
             os.makedirs(profile_path)
 
         export_png(bokeh_plot, filename=(
-            profile_path+datetime.utcnow().strftime('%Y%m%d%H%M%S') +
+            profile_path + datetime.utcnow().strftime('%Y%m%d%H%M%S') +
             '_profile.png'))
 
     print('- This is the end my friend! See you soon!')
@@ -287,7 +287,7 @@ def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
         value (in seconds) from start time has been exceeded
     hide_warnings : bool
         if set to true it will hide the warnings during the pyrad processing
-        this is useful when logging the outputs to log files, as they can 
+        this is useful when logging the outputs to log files, as they can
         become very large
 
     Returns
@@ -302,12 +302,13 @@ def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
     print("- PYART version: " + pyart_version)
 
     if hide_warnings:
-    	warnings.filterwarnings("ignore")
+        warnings.filterwarnings("ignore")
     else:
-    	# Define behaviour of warnings
-    	warnings.simplefilter('always')  # always print matching warnings
-    	# warnings.simplefilter('error')  # turn matching warnings into exceptions
-    	warnings.formatwarning = _warning_format  # define format
+        # Define behaviour of warnings
+        warnings.simplefilter('always')  # always print matching warnings
+        # warnings.simplefilter('error')  # turn matching warnings into
+        # exceptions
+        warnings.formatwarning = _warning_format  # define format
 
     # The processing will be allowed to run for a limited period
     if proc_finish is not None:
@@ -317,7 +318,7 @@ def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
         #     year=endtime.year, month=endtime.month, day=endtime.day)
         # startime_proc = startime_proc.replace(hour=10)
 
-        endtime_proc = startime_proc+timedelta(seconds=proc_finish)
+        endtime_proc = startime_proc + timedelta(seconds=proc_finish)
 
     if ALLOW_USER_BREAK:
         input_queue = _initialize_listener()
@@ -345,15 +346,15 @@ def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
         if last_processed is None:
             print('- last processed volume unknown')
         else:
-            print('- last processed volume: '+last_processed.strftime(
+            print('- last processed volume: ' + last_processed.strftime(
                 '%Y%m%d%H%M%S'))
         last_processed_list.append(last_processed)
 
         # get data types and levels
         datatypesdescr_list = list()
-        for i in range(1, cfg['NumRadars']+1):
+        for i in range(1, cfg['NumRadars'] + 1):
             datatypesdescr_list.append(
-                _get_datatype_list(cfg, radarnr='RADAR'+'{:03d}'.format(i)))
+                _get_datatype_list(cfg, radarnr='RADAR' + '{:03d}'.format(i)))
 
         dataset_levels = _get_datasets_list(cfg)
 
@@ -456,7 +457,7 @@ def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
             # get data of master radar
             radar_list = _get_radars_data(
                 master_voltime, datatypesdescr_list, datacfg,
-                           num_radars=datacfg['NumRadars'])
+                num_radars=datacfg['NumRadars'])
 
             # process all data sets
             dscfg, traj = _process_datasets(
@@ -487,7 +488,7 @@ def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
         #     year=endtime.year, month=endtime.month, day=endtime.day)
         # nowtime_new = nowtime_new.replace(hour=10)
 
-        proc_time = (nowtime_new-nowtime).total_seconds()
+        proc_time = (nowtime_new - nowtime).total_seconds()
         if vol_processed:
             print('Processing time %s s\n' % proc_time)
 
@@ -499,7 +500,7 @@ def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
                 break
 
         if proc_time < proc_period:
-            time.sleep(proc_period-proc_time)
+            time.sleep(proc_period - proc_time)
 
     # only do post processing if program properly terminated by user
     if end_proc:
@@ -570,9 +571,9 @@ def main_cosmo(cfgfile, starttime=None, endtime=None, trajfile="", infostr=""):
 
     # get data types and levels
     datatypesdescr_list = list()
-    for i in range(1, cfg['NumRadars']+1):
+    for i in range(1, cfg['NumRadars'] + 1):
         datatypesdescr_list.append(
-            _get_datatype_list(cfg, radarnr='RADAR'+'{:03d}'.format(i)))
+            _get_datatype_list(cfg, radarnr='RADAR' + '{:03d}'.format(i)))
 
     dataset_levels = _get_datasets_list(cfg)
 
@@ -658,7 +659,7 @@ def main_cosmo_rt(cfgfile_list, starttime=None, endtime=None,
         #     year=endtime.year, month=endtime.month, day=endtime.day)
         # startime_proc = startime_proc.replace(hour=10)
 
-        endtime_proc = startime_proc+timedelta(seconds=proc_finish)
+        endtime_proc = startime_proc + timedelta(seconds=proc_finish)
 
     if ALLOW_USER_BREAK:
         input_queue = _initialize_listener()
@@ -686,15 +687,15 @@ def main_cosmo_rt(cfgfile_list, starttime=None, endtime=None,
         if last_processed is None:
             print('- last processed volume unknown')
         else:
-            print('- last processed volume: '+last_processed.strftime(
+            print('- last processed volume: ' + last_processed.strftime(
                 '%Y%m%d%H%M%S'))
         last_processed_list.append(last_processed)
 
         # get data types and levels
         datatypesdescr_list = list()
-        for i in range(1, cfg['NumRadars']+1):
+        for i in range(1, cfg['NumRadars'] + 1):
             datatypesdescr_list.append(
-                _get_datatype_list(cfg, radarnr='RADAR'+'{:03d}'.format(i)))
+                _get_datatype_list(cfg, radarnr='RADAR' + '{:03d}'.format(i)))
 
         dataset_levels = _get_datasets_list(cfg)
 
@@ -822,7 +823,7 @@ def main_cosmo_rt(cfgfile_list, starttime=None, endtime=None,
         #     year=endtime.year, month=endtime.month, day=endtime.day)
         # nowtime_new = nowtime_new.replace(hour=10)
 
-        proc_time = (nowtime_new-nowtime).total_seconds()
+        proc_time = (nowtime_new - nowtime).total_seconds()
         if vol_processed:
             print('Processing time %s s\n' % proc_time)
 
@@ -834,7 +835,7 @@ def main_cosmo_rt(cfgfile_list, starttime=None, endtime=None,
                 break
 
         if proc_time < proc_period:
-            time.sleep(proc_period-proc_time)
+            time.sleep(proc_period - proc_time)
 
     print('- This is the end my friend! See you soon!')
 
@@ -895,9 +896,9 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
 
     # get data types and levels
     datatypesdescr_list = list()
-    for i in range(1, cfg['NumRadars']+1):
+    for i in range(1, cfg['NumRadars'] + 1):
         datatypesdescr_list.append(
-            _get_datatype_list(cfg, radarnr='RADAR'+'{:03d}'.format(i)))
+            _get_datatype_list(cfg, radarnr='RADAR' + '{:03d}'.format(i)))
 
     dataset_levels = _get_datasets_list(cfg)
 
@@ -963,7 +964,7 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
                     '"RadarPosition" with field "altitude", "latitude" '
                     'and "longitude" must be provided in the loc file')
             for k in dset['RadarPosition'].keys():
-                if type(dset['RadarPosition'][k]) != list:
+                if not isinstance(dset['RadarPosition'][k], list):
                     dset['RadarPosition'][k] = [dset['RadarPosition'][k]]
 
     # process all data sets
@@ -981,8 +982,9 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
                   gather_dir + '/ALL_FIGURES/'))
             for ex in img_ext:
                 if os.path.exists(gather_dir):
-                    cmd = ('cd {:s}; mkdir -p ALL_FIGURES; find . -type f -name "*.{:s}" '.format(gather_dir,
-                                       ex) + '-exec cp {} ALL_FIGURES \\;')
+                    cmd = (
+                        'cd {:s}; mkdir -p ALL_FIGURES; find . -type f -name "*.{:s}" '.format(
+                            gather_dir, ex) + '-exec cp {} ALL_FIGURES \\;')
                     subprocess.call(cmd, shell=True)
 
     print('- This is the end my friend! See you soon!')

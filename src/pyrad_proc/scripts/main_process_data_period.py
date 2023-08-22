@@ -88,7 +88,7 @@ def main():
         help='name of main post-processing configuration file')
     parser.add_argument(
         '--cfgpath', type=str,
-        default=os.path.expanduser('~')+'/pyrad/config/processing/',
+        default=os.path.expanduser('~') + '/pyrad/config/processing/',
         help='configuration file path')
 
     args = parser.parse_args()
@@ -98,13 +98,13 @@ def main():
     atexit.register(_print_end_msg,
                     "====== PYRAD data processing finished: ")
 
-    print('config path: '+args.cfgpath)
-    print('config file: '+args.proc_cfgfile)
-    print('postproc config file: '+str(args.postproc_cfgfile))
-    print('start date: '+args.startdate)
-    print('end date: '+args.enddate)
-    print('start time each day: '+args.starttime)
-    print('end time each day: '+args.endtime)
+    print('config path: ' + args.cfgpath)
+    print('config file: ' + args.proc_cfgfile)
+    print('postproc config file: ' + str(args.postproc_cfgfile))
+    print('start date: ' + args.startdate)
+    print('end date: ' + args.enddate)
+    print('start time each day: ' + args.starttime)
+    print('end time each day: ' + args.endtime)
     if args.MULTIPROCESSING_DSET:
         print('Dataset generation will be parallelized')
     if args.MULTIPROCESSING_PROD:
@@ -123,12 +123,12 @@ def main():
         hours=float(args.endtime[0:2]), minutes=float(args.endtime[2:4]),
         seconds=float(args.endtime[4:6]))
 
-    cfgfile_proc = args.cfgpath+args.proc_cfgfile
+    cfgfile_proc = args.cfgpath + args.proc_cfgfile
     if args.postproc_cfgfile is not None:
-        cfgfile_postproc = args.cfgpath+args.postproc_cfgfile
+        cfgfile_postproc = args.cfgpath + args.postproc_cfgfile
 
     ndays = (proc_enddate - proc_startdate).days + 1
-    print('Number of days to process: '+str(ndays)+'\n\n')
+    print('Number of days to process: ' + str(ndays) + '\n\n')
 
     if args.infostr == 'None':
         infostr = ''
@@ -146,11 +146,14 @@ def main():
                        MULTIPROCESSING_PROD=args.MULTIPROCESSING_PROD,
                        PROFILE_MULTIPROCESSING=args.PROFILE_MULTIPROCESSING)
             if args.postproc_cfgfile is not None:
-                pyrad_main(cfgfile_postproc, starttime=proc_startdatetime,
-                           endtime=proc_enddatetime, infostr=infostr,
-                           MULTIPROCESSING_DSET=args.MULTIPROCESSING_DSET,
-                           MULTIPROCESSING_PROD=args.MULTIPROCESSING_PROD,
-                           PROFILE_MULTIPROCESSING=args.PROFILE_MULTIPROCESSING)
+                pyrad_main(
+                    cfgfile_postproc,
+                    starttime=proc_startdatetime,
+                    endtime=proc_enddatetime,
+                    infostr=infostr,
+                    MULTIPROCESSING_DSET=args.MULTIPROCESSING_DSET,
+                    MULTIPROCESSING_PROD=args.MULTIPROCESSING_PROD,
+                    PROFILE_MULTIPROCESSING=args.PROFILE_MULTIPROCESSING)
         except ValueError:
             print(ValueError)
 

@@ -1,8 +1,6 @@
 # %%
 import pandas as pd
 import inspect
-import importlib
-import os
 from pathlib import Path
 
 from pyrad.io import io_aux
@@ -13,7 +11,7 @@ FUNCTIONS_TO_PARSE = ['get_fieldname_pyart',
                       'get_fieldname_cosmo']
 
 mainpath = Path(__file__).resolve().parent.parent
-OUT_DIRECTORY = str(Path(mainpath, 'doc', 'mappings'))
+OUT_DIRECTORY = str(Path(mainpath, 'doc', 'overview'))
 
 
 for fun_name in FUNCTIONS_TO_PARSE:
@@ -25,15 +23,17 @@ for fun_name in FUNCTIONS_TO_PARSE:
     srccode = srccode.split('\n')
     for line in srccode:
         if ('datatype' in line or 'field_name' in line) and '==' in line:
-            pyrad_dtypes.append(line.split('==')[1].split(':')[0].strip().replace("'",""))
+            pyrad_dtypes.append(line.split('==')[1].split(':')[
+                                0].strip().replace("'", ""))
         if 'return' in line:
-            returnline = line.replace('return','').strip()
-            
+            returnline = line.replace('return', '').strip()
+
     # Try to get output types from return statements of srccode
     all_values = []
     all_keys = []
     if '{' and '}' in returnline:
-        keyname, valname = returnline.replace('{','').replace('}','').split(':')
+        keyname, valname = returnline.replace(
+            '{', '').replace('}', '').split(':')
         keyname = keyname.strip()
         valname = valname.strip()
         if mapping not in keyname:
@@ -45,18 +45,18 @@ for fun_name in FUNCTIONS_TO_PARSE:
 
     for v in pyrad_dtypes:
         out = fun(v)
-        if type(out) == dict:
+        if isinstance(out, dict):
             all_keys.append(list(out.keys())[0])
             all_values.append(list(out.values())[0])
         else:
             all_values.append(out)
-    
+
     dic = {}
     dic['pyrad_name'] = pyrad_dtypes
     if len(all_keys):
         dic[keyname] = all_keys
     dic[valname] = all_values
-    
+
     df = pd.DataFrame(dic)
     df.to_csv(str(Path(OUT_DIRECTORY, 'pyrad_to_{:s}.txt'.format(mapping))),
-                       index=False)
+              index=False)

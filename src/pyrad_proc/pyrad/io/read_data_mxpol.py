@@ -135,7 +135,7 @@ class pyrad_MXPOL(pyart.core.Radar):
             sweep_stop_ray_index['data'].append(idx_stop)
             idx_start = idx_stop + 1
             elevations.extend(list(data['elevation']))
-            nyquist.extend([data['nyquist_vel']]*N_az)
+            nyquist.extend([data['nyquist_vel']] * N_az)
             azimuths.extend(list(data['azimuth']))
             ranges.extend(list(data['range']))
 
@@ -147,7 +147,7 @@ class pyrad_MXPOL(pyart.core.Radar):
                         fields[v]['data'] = row_stack(
                             fields[v]['data'], data[v])
                 else:
-                    print('Variable '+v+' was not found in file!')
+                    print('Variable ' + v + ' was not found in file!')
 
         # mask NaNs
 
@@ -169,7 +169,7 @@ class pyrad_MXPOL(pyart.core.Radar):
         altitude = {'data': np.asarray([data['altitude']]),
                     'units': data['alt_units']}
         sweep_number = {'data': np.arange(0, len(all_files))}
-        sweep_mode = {'data': np.asarray([scan_type]*N_sweeps)}
+        sweep_mode = {'data': np.asarray([scan_type] * N_sweeps)}
         instrument_parameters = {
             'nyquist_velocity': {'data': np.asarray(nyquist)}}
         azimuth = {'data': np.asarray(azimuths), 'units': data['azim_units']}
@@ -285,19 +285,19 @@ class pyrad_IDL(pyart.core.Radar):
             sweep_start_ray_index['data'].append(idx_start)
             sweep_stop_ray_index['data'].append(idx_stop)
             idx_start = idx_stop + 1
-            elevations.extend([data['elevation'][0]]*N_az)
-            nyquist.extend([data['nyquist_vel']]*N_az)
+            elevations.extend([data['elevation'][0]] * N_az)
+            nyquist.extend([data['nyquist_vel']] * N_az)
             azimuths.extend(list(data['azimuth']))
             warnings.warn(
                 "Warning, sweep rank could not be found, using first rank")
 
             starttime, endtime = findTimes(1)
-            interval = ((endtime-starttime)/N_az)
+            interval = ((endtime - starttime) / N_az)
             # time_lapse = np.arange(
             #     starttime+(0.5*interval), endtime, interval)
             # because this is a single sweep
-            time_lapse = np.around(
-                np.arange(0.+(0.5*interval), endtime-starttime, interval))
+            time_lapse = np.around(np.arange(
+                0. + (0.5 * interval), endtime - starttime, interval))
 
             for j, v in enumerate(varnames):
                 if v in data.keys():
@@ -307,7 +307,7 @@ class pyrad_IDL(pyart.core.Radar):
                         fields[v]['data'] = row_stack(
                             fields[v]['data'], data[v])
                 else:
-                    print('Variable '+v+' was not found in file!')
+                    print('Variable ' + v + ' was not found in file!')
 
         # mask NaNs
 
@@ -325,11 +325,11 @@ class pyrad_IDL(pyart.core.Radar):
         altitude = {'data': np.asarray([data['altitude']]),
                     'units': data['alt_units']}
         sweep_number = {'data': np.arange(0, len(all_files))}
-        sweep_mode = {'data': np.asarray([scan_type]*N_sweeps)}
+        sweep_mode = {'data': np.asarray([scan_type] * N_sweeps)}
         instrument_parameters = {
             'nyquist_velocity': {'data': np.asarray(nyquist)}}
         azimuth = {'data': np.asarray(azimuths), 'units': data['azim_units']}
-        rrange = {'data': np.arange(N_ranges)*data['resolution'],
+        rrange = {'data': np.arange(N_ranges) * data['resolution'],
                   'units': data['range_units']}
         elevation = {'data': np.asarray(elevations),
                      'units': data['elev_units']}
@@ -447,16 +447,16 @@ class pyrad_MCH(pyart.core.Radar):
             sweep_start_ray_index['data'].append(idx_start)
             sweep_stop_ray_index['data'].append(idx_stop)
             idx_start = idx_stop + 1
-            elevations.extend([data['elevation']]*N_az)
-            nyquist.extend([data['nyquist_vel']]*N_az)
+            elevations.extend([data['elevation']] * N_az)
+            nyquist.extend([data['nyquist_vel']] * N_az)
             azimuths.extend(list(data['azimuth']))
             # create list of times at the center of each ray
             sweep_rank = 1
             print()
             starttime, endtime = findTimes(sweep_rank)
-            interval = ((endtime-starttime)/len(list(data['azimuth'])))
+            interval = ((endtime - starttime) / len(list(data['azimuth'])))
             time_lapse.extend(np.arange(
-                starttime+(0.5*interval), endtime, interval))
+                starttime + (0.5 * interval), endtime, interval))
             for j, v in enumerate(varnames):
                 if fields[v]['data'].size == 0:
                     fields[v]['data'] = data[v].T
@@ -484,7 +484,7 @@ class pyrad_MCH(pyart.core.Radar):
         altitude = {'data': np.array([radar_info['altitude']]),
                     'units': "MetersAboveSeaLevel"}
         sweep_number = {'data': np.arange(0, len(all_files))}
-        sweep_mode = {'data': np.asarray(['ppi']*N_sweeps)}
+        sweep_mode = {'data': np.asarray(['ppi'] * N_sweeps)}
         instrument_parameters = {
             'nyquist_velocity': {'data': np.array(nyquist)}}
 
@@ -498,11 +498,11 @@ class pyrad_MCH(pyart.core.Radar):
         metadata['ContactInformation'] = "marc.schneebeli@meteosvizzera.ch"
 
         azimuth = {'data': np.array(azimuths), 'units': "Degrees"}
-        rrange = {'data': np.arange(N_ranges)*data['resolution'],
+        rrange = {'data': np.arange(N_ranges) * data['resolution'],
                   'units': "Meters"}
         elevation = {'data': np.array(elevations), 'units': "Degrees"}
 
-        time_units = 'seconds since '+str(scandate)
+        time_units = 'seconds since ' + str(scandate)
         time_lapse = np.asarray(time_lapse)
         scantime = {'data': time_lapse, 'units': time_units}
 
@@ -541,10 +541,10 @@ def row_stack(a1, a2):
     [N2, M2] = a2.shape
 
     if M1 > M2:
-        a2 = np.pad(a2, ((0, 0), (0, M1-M2)), mode='constant',
+        a2 = np.pad(a2, ((0, 0), (0, M1 - M2)), mode='constant',
                     constant_values=-9999999)
     elif M2 < M1:
-        a1 = np.pad(a2, ((0, 0), (0, M2-M1)), mode='constant',
+        a1 = np.pad(a2, ((0, 0), (0, M2 - M1)), mode='constant',
                     constant_values=-9999999)
 
     out = np.vstack((a1, a2))
@@ -617,21 +617,22 @@ def int2float_radar(data, varname, index_angle):
 
     output = np.zeros(data.shape)
     if varname in ['ZH', 'ZV', 'Z', 'ZHC']:
-        output[data != 0] = (data[data != 0]-64)*0.5
+        output[data != 0] = (data[data != 0] - 64) * 0.5
         output[data == 0] = float('nan')
     elif varname == 'VEL':
-        output[data != 0] = (data[data != 0]-128)/127*NYQUIST_VEL[index_angle]
+        output[data != 0] = (data[data != 0] - 128) / \
+            127 * NYQUIST_VEL[index_angle]
         output[data == 0] = float('nan')
     elif varname == 'WID':
-        output = data/255*NYQUIST_VEL[index_angle]
+        output = data / 255 * NYQUIST_VEL[index_angle]
     elif varname in ['ZDR', 'ZDRC']:
-        output[data != 0] = data[data != 0]*1.0/16.1259842 - 7.9375
+        output[data != 0] = data[data != 0] * 1.0 / 16.1259842 - 7.9375
         output[data == 0] = float('nan')
     elif varname == 'RHO':
-        output[data != 0] = 1.003-10**(-(data[data != 0]-1.0)/100)
+        output[data != 0] = 1.003 - 10**(-(data[data != 0] - 1.0) / 100)
         output[data == 0] = float('nan')
     elif varname == 'PHI':
-        output[data != 0] = (data[data != 0]-32768)/32767*180
+        output[data != 0] = (data[data != 0] - 32768) / 32767 * 180
         output[data == 0] = float('nan')
     elif varname == 'CLUT':
         output = data
@@ -826,12 +827,12 @@ def readCHRadData(filename, radar_name, variableList, radial_resolution,
 
     # Get dimensions
     siz = h5id['moments']['Z'].shape
-    rng = np.arange(0, siz[1])*radial_resolution
+    rng = np.arange(0, siz[1]) * radial_resolution
     idx2keep = np.where(np.logical_and(
         rng < max_range, rng > min_range))[0]
     rng = rng[idx2keep]
-    azimuth = np.arange(0, siz[0])*ANG_RES
-    index_angle = int(re.findall(r"\.([0-9]{3})\.", filename)[0])-1
+    azimuth = np.arange(0, siz[0]) * ANG_RES
+    index_angle = int(re.findall(r"\.([0-9]{3})\.", filename)[0]) - 1
     elevation = ELEVATION_ANGLES[index_angle]
     # Get variables in polar coordinates
     for varname in variableList:
@@ -845,7 +846,7 @@ def readCHRadData(filename, radar_name, variableList, radial_resolution,
         data = data[idx2keep, :]
         varPol[varname] = int2float_radar(data, varname, index_angle)
 
-    varPol['resolution'] = rng[3]-rng[2]
+    varPol['resolution'] = rng[3] - rng[2]
     varPol['range'] = rng
     varPol['azimuth'] = azimuth
     varPol['elevation'] = elevation

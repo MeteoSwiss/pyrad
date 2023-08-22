@@ -9,9 +9,6 @@ The core of the processing is performed by the module Py-ART.
 """
 
 import os
-import shutil
-import sys
-import re
 import subprocess
 import glob
 import builtins
@@ -84,10 +81,11 @@ def git_version():
     try:
         out = _minimal_ext_cmd(['git', 'rev-parse', 'HEAD'])
         GIT_REVISION = out.strip().decode('ascii')
-    except OSError as ee:
+    except OSError:
         GIT_REVISION = "Unknown"
 
     return GIT_REVISION
+
 
 # BEFORE importing distutils, remove MANIFEST. distutils doesn't properly
 # update it when the contents of directories change.
@@ -159,6 +157,7 @@ def configuration(parent_package='', top_path=None):
 
     return config
 
+
 if __name__ == '__main__':
     write_version_py()
     setup(
@@ -180,6 +179,3 @@ if __name__ == '__main__':
         version=VERSION,
         zip_safe=False,
     )
-
-
-

@@ -21,16 +21,13 @@ Functions for monitoring data quality and correct bias and noise effects
 from copy import deepcopy
 from warnings import warn
 import numpy as np
-import sys
+import importlib
 
-from scipy.constants import c as c_speed
 from netCDF4 import num2date
-from datetime import datetime as dt
 
-try:
-    import pysolar
+if importlib.util.find_spec('pysolar'):
     _PYSOLAR_AVAILABLE = True
-except ImportError:
+else:
     _PYSOLAR_AVAILABLE = False
 
 import pyart
@@ -79,7 +76,7 @@ def process_correct_bias(procstatus, dscfg, radar_list=None):
         break
     field_name = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -97,7 +94,7 @@ def process_correct_bias(procstatus, dscfg, radar_list=None):
     if field_name.startswith('corrected_'):
         new_field_name = field_name
     else:
-        new_field_name = 'corrected_'+field_name
+        new_field_name = 'corrected_' + field_name
 
     # prepare for exit
     new_dataset = {'radar_out': deepcopy(radar)}
@@ -152,7 +149,7 @@ def process_correct_noise_rhohv(procstatus, dscfg, radar_list=None):
         if datatype == 'Nv':
             nv = 'noisedBZ_vv'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -228,13 +225,13 @@ def process_gc_monitoring(procstatus, dscfg, radar_list=None):
             echoid_field = get_fieldname_pyart(datatype)
         else:
             field_name = get_fieldname_pyart(datatype)
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
 
     if procstatus == 0:
         savedir = dscfg['excessgatespath']
         fname = dscfg['excessgates_fname']
         ray_ind, rng_ind, ele, azi, rng, nsamples, occurrence, freq_occu = (
-            read_excess_gates(savedir+fname))
+            read_excess_gates(savedir + fname))
 
         dscfg['global_data'] = {
             'ray_ind': ray_ind,
@@ -259,7 +256,7 @@ def process_gc_monitoring(procstatus, dscfg, radar_list=None):
         radar = deepcopy(radar_list[ind_rad])
 
         if field_name not in radar.fields:
-            warn(field_name+' not available.')
+            warn(field_name + ' not available.')
             return None, None
 
         # filter out low values
@@ -291,17 +288,22 @@ def process_gc_monitoring(procstatus, dscfg, radar_list=None):
             if rmax_prec > 0.:
                 ngates = len(
                     radar.range['data'][radar.range['data'] < rmax_prec])
-            ngates_total = ngates*radar.nrays
+            ngates_total = ngates * radar.nrays
 
             prec_field = echoid[:, :ngates]
             ngates_prec = np.size(prec_field[prec_field == 3])
 
-            percent_prec = ngates_prec/ngates_total*100.
-            warn('Percent gates with precipitation: '+str(percent_prec)+'\n')
+            percent_prec = ngates_prec / ngates_total * 100.
+            warn(
+                'Percent gates with precipitation: ' +
+                str(percent_prec) +
+                '\n')
             if percent_prec > percent_prec_max:
                 if filter_prec == 'keep_dry':
-                    warn('Radar volume is precipitation contaminated.\n' +
-                         'Maximum percentage allowed: '+str(percent_prec_max))
+                    warn(
+                        'Radar volume is precipitation contaminated.\n' +
+                        'Maximum percentage allowed: ' +
+                        str(percent_prec_max))
                     return None, None
             else:
                 if filter_prec == 'keep_wet':
@@ -312,9 +314,9 @@ def process_gc_monitoring(procstatus, dscfg, radar_list=None):
 
         step = dscfg.get('step', None)
         bin_edges = get_histogram_bins(field_name, step=step)
-        nbins = len(bin_edges)-1
-        step = bin_edges[1]-bin_edges[0]
-        bin_centers = bin_edges[:-1]+step/2.
+        nbins = len(bin_edges) - 1
+        step = bin_edges[1] - bin_edges[0]
+        bin_centers = bin_edges[:-1] + step / 2.
 
         # create histogram object from radar object
         radar_aux = deepcopy(radar)
@@ -449,7 +451,7 @@ def process_occurrence(procstatus, dscfg, radar_list=None):
             echoid_field = get_fieldname_pyart(datatype)
         else:
             field_name = get_fieldname_pyart(datatype)
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
 
     if procstatus == 0:
         return None, None
@@ -461,7 +463,7 @@ def process_occurrence(procstatus, dscfg, radar_list=None):
         radar = radar_list[ind_rad]
 
         if field_name not in radar.fields:
-            warn(field_name+' not available.')
+            warn(field_name + ' not available.')
             return None, None
 
         # filter out low values
@@ -489,17 +491,22 @@ def process_occurrence(procstatus, dscfg, radar_list=None):
             if rmax_prec > 0.:
                 ngates = len(
                     radar.range['data'][radar.range['data'] < rmax_prec])
-            ngates_total = ngates*radar.nrays
+            ngates_total = ngates * radar.nrays
 
             prec_field = echoid[:, :ngates]
             ngates_prec = np.size(prec_field[prec_field == 3])
 
-            percent_prec = ngates_prec/ngates_total*100.
-            warn('Percent gates with precipitation: '+str(percent_prec)+'\n')
+            percent_prec = ngates_prec / ngates_total * 100.
+            warn(
+                'Percent gates with precipitation: ' +
+                str(percent_prec) +
+                '\n')
             if percent_prec > percent_prec_max:
                 if filter_prec == 'keep_dry':
-                    warn('Radar volume is precipitation contaminated.\n' +
-                         'Maximum percentage allowed: '+str(percent_prec_max))
+                    warn(
+                        'Radar volume is precipitation contaminated.\n' +
+                        'Maximum percentage allowed: ' +
+                        str(percent_prec_max))
                     return None, None
             else:
                 if filter_prec == 'keep_wet':
@@ -529,7 +536,7 @@ def process_occurrence(procstatus, dscfg, radar_list=None):
             ind_min = np.where(radar_aux.range['data'] < rmin)[0]
             if ind_min:
                 ind_min = ind_min[-1]
-                occu_dict['data'][:, 0:ind_min+1] = 0
+                occu_dict['data'][:, 0:ind_min + 1] = 0
         if rmax >= 0.:
             ind_max = np.where(radar_aux.range['data'] > rmax)[0]
             if ind_max:
@@ -566,7 +573,7 @@ def process_occurrence(procstatus, dscfg, radar_list=None):
             if radar_aux.nrays != dscfg['global_data']['radar_out'].nrays:
                 warn('Unable to accumulate radar object. ' +
                      'Number of rays of current radar different from ' +
-                     'reference. nrays current: '+str(radar_aux.nrays) +
+                     'reference. nrays current: ' + str(radar_aux.nrays) +
                      ' nrays ref: ' +
                      str(dscfg['global_data']['radar_out'].nrays))
                 return None, None
@@ -599,7 +606,7 @@ def process_occurrence(procstatus, dscfg, radar_list=None):
         radar = dscfg['global_data']['radar_out']
 
         freq_occu_dict = pyart.config.get_metadata('frequency_of_occurrence')
-        freq_occu_dict['data'] = (100.*radar.fields['occurrence']['data'] /
+        freq_occu_dict['data'] = (100. * radar.fields['occurrence']['data'] /
                                   radar.fields['number_of_samples']['data'])
 
         radar.add_field('frequency_of_occurrence', freq_occu_dict)
@@ -668,7 +675,7 @@ def process_time_avg_std(procstatus, dscfg, radar_list=None):
             refl_field = get_fieldname_pyart(datatype)
         else:
             field_name = get_fieldname_pyart(datatype)
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
 
     lin_trans = dscfg.get('lin_trans', 0)
 
@@ -682,7 +689,7 @@ def process_time_avg_std(procstatus, dscfg, radar_list=None):
         radar = radar_list[ind_rad]
 
         if field_name not in radar.fields:
-            warn(field_name+' not available.')
+            warn(field_name + ' not available.')
             return None, None
 
         # filter out low reflectivity values
@@ -710,17 +717,22 @@ def process_time_avg_std(procstatus, dscfg, radar_list=None):
             if rmax_prec > 0.:
                 ngates = len(
                     radar.range['data'][radar.range['data'] < rmax_prec])
-            ngates_total = ngates*radar.nrays
+            ngates_total = ngates * radar.nrays
 
             prec_field = echoid[:, :ngates]
             ngates_prec = np.size(prec_field[prec_field == 3])
 
-            percent_prec = ngates_prec/ngates_total*100.
-            warn('Percent gates with precipitation: '+str(percent_prec)+'\n')
+            percent_prec = ngates_prec / ngates_total * 100.
+            warn(
+                'Percent gates with precipitation: ' +
+                str(percent_prec) +
+                '\n')
             if percent_prec > percent_prec_max:
                 if filter_prec == 'keep_dry':
-                    warn('Radar volume is precipitation contaminated.\n' +
-                         'Maximum percentage allowed: '+str(percent_prec_max))
+                    warn(
+                        'Radar volume is precipitation contaminated.\n' +
+                        'Maximum percentage allowed: ' +
+                        str(percent_prec_max))
                     return None, None
             else:
                 if filter_prec == 'keep_wet':
@@ -736,7 +748,7 @@ def process_time_avg_std(procstatus, dscfg, radar_list=None):
             ind_min = np.where(radar.range['data'] < rmin)[0]
             if ind_min:
                 ind_min = ind_min[-1]
-                mask[:, 0:ind_min+1] = 1
+                mask[:, 0:ind_min + 1] = 1
         if rmax >= 0.:
             ind_max = np.where(radar.range['data'] > rmax)[0]
             if ind_max:
@@ -746,7 +758,7 @@ def process_time_avg_std(procstatus, dscfg, radar_list=None):
         # prepare field number of samples and values sum
         field = deepcopy(radar.fields[field_name]['data'])
         if lin_trans:
-            field = np.ma.power(10., 0.1*field)
+            field = np.ma.power(10., 0.1 * field)
 
         field = np.ma.masked_where(mask, field)
         field = np.ma.asarray(field)
@@ -759,7 +771,7 @@ def process_time_avg_std(procstatus, dscfg, radar_list=None):
         radar_aux.add_field('sum', sum_dict)
 
         sum2_dict = pyart.config.get_metadata('sum_squared')
-        sum2_dict['data'] = field*field
+        sum2_dict['data'] = field * field
         radar_aux.add_field('sum_squared', sum2_dict)
 
         npoints_dict = pyart.config.get_metadata('number_of_samples')
@@ -796,7 +808,7 @@ def process_time_avg_std(procstatus, dscfg, radar_list=None):
             if radar_aux.nrays != dscfg['global_data']['radar_out'].nrays:
                 warn('Unable to accumulate radar object. ' +
                      'Number of rays of current radar different from ' +
-                     'reference. nrays current: '+str(radar_aux.nrays) +
+                     'reference. nrays current: ' + str(radar_aux.nrays) +
                      ' nrays ref: ' +
                      str(dscfg['global_data']['radar_out'].nrays))
                 return None, None
@@ -836,10 +848,10 @@ def process_time_avg_std(procstatus, dscfg, radar_list=None):
         field_std = np.ma.sqrt(
             dscfg['global_data']['radar_out'].fields['sum_squared']['data'] /
             dscfg['global_data']['radar_out'].fields[
-                'number_of_samples']['data']-field_mean*field_mean)
+                'number_of_samples']['data'] - field_mean * field_mean)
         if lin_trans:
-            field_mean = 10.*np.ma.log10(field_mean)
-            field_std = 10.*np.ma.log10(field_std)
+            field_mean = 10. * np.ma.log10(field_mean)
+            field_std = 10. * np.ma.log10(field_std)
 
         radar = dscfg['global_data']['radar_out']
 
@@ -897,7 +909,7 @@ def process_occurrence_period(procstatus, dscfg, radar_list=None):
             occu_field = get_fieldname_pyart(datatype)
         elif datatype == 'nsamples':
             nsamples_field = get_fieldname_pyart(datatype)
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
 
     if procstatus == 0:
         return None, None
@@ -926,7 +938,7 @@ def process_occurrence_period(procstatus, dscfg, radar_list=None):
             ind_min = np.where(radar_aux.range['data'] < rmin)[0]
             if ind_min:
                 ind_min = ind_min[-1]
-                radar_aux.fields['occurrence']['data'][:, 0:ind_min+1] = 0
+                radar_aux.fields['occurrence']['data'][:, 0:ind_min + 1] = 0
         if rmax >= 0.:
             ind_max = np.where(radar_aux.range['data'] > rmax)[0]
             if ind_max:
@@ -962,7 +974,7 @@ def process_occurrence_period(procstatus, dscfg, radar_list=None):
             if radar_aux.nrays != dscfg['global_data']['radar_out'].nrays:
                 warn('Unable to accumulate radar object. ' +
                      'Number of rays of current radar different from ' +
-                     'reference. nrays current: '+str(radar_aux.nrays) +
+                     'reference. nrays current: ' + str(radar_aux.nrays) +
                      ' nrays ref: ' +
                      str(dscfg['global_data']['radar_out'].nrays))
                 return None, None
@@ -995,7 +1007,7 @@ def process_occurrence_period(procstatus, dscfg, radar_list=None):
         radar = dscfg['global_data']['radar_out']
 
         freq_occu_dict = pyart.config.get_metadata('frequency_of_occurrence')
-        freq_occu_dict['data'] = (100.*radar.fields['occurrence']['data'] /
+        freq_occu_dict['data'] = (100. * radar.fields['occurrence']['data'] /
                                   radar.fields['number_of_samples']['data'])
 
         radar.add_field('frequency_of_occurrence', freq_occu_dict)
@@ -1121,7 +1133,6 @@ def process_sun_hits(procstatus, dscfg, radar_list=None):
 
     """
 
-
     if procstatus == 0:
         return None, None
 
@@ -1139,7 +1150,7 @@ def process_sun_hits(procstatus, dscfg, radar_list=None):
             if datatype == 'ZDR':
                 zdr_field = 'differential_reflectivity'
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
         if radar_list[ind_rad] is None:
             warn('No valid radar')
             return None, None
@@ -1163,7 +1174,7 @@ def process_sun_hits(procstatus, dscfg, radar_list=None):
             if freq is None:
                 warn('Radar frequency unknown.')
             else:
-                radar_par.update({'wavelen': 3e8/freq})
+                radar_par.update({'wavelen': 3e8 / freq})
 
             beamwidth = dscfg.get('beamwidth', None)
             if beamwidth is None:
@@ -1263,7 +1274,6 @@ def process_sun_hits(procstatus, dscfg, radar_list=None):
                 sun_position=sun_position, pwrh_field=pwrh_field,
                 pwrv_field=pwrv_field, zdr_field=zdr_field)
 
-
         if sun_hits is None:
             return None, None
 
@@ -1279,7 +1289,7 @@ def process_sun_hits(procstatus, dscfg, radar_list=None):
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             break
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
 
         # user values
         az_width_co = dscfg.get('az_width_co', None)
@@ -1303,7 +1313,7 @@ def process_sun_hits(procstatus, dscfg, radar_list=None):
         if 'wavelen' in dscfg['global_data']:
 
             flx_dt, flx_val = read_solar_flux(
-                dscfg['solarfluxpath']+'fluxtable.txt')
+                dscfg['solarfluxpath'] + 'fluxtable.txt')
 
             if flx_dt is not None:
                 flx_dt_closest, flx_val_closest = get_closest_solar_flux(
@@ -1318,7 +1328,7 @@ def process_sun_hits(procstatus, dscfg, radar_list=None):
 
                 # scaling of the power to account for solar flux variations.
                 # The last sun hit is the reference. The scale factor is in dB
-                scale_factor = -10.*np.log10(sf_radar/sf_ref)
+                scale_factor = -10. * np.log10(sf_radar / sf_ref)
                 sun_pwr_h += scale_factor
                 sun_pwr_v += scale_factor
             else:
@@ -1393,7 +1403,7 @@ def process_sun_hits(procstatus, dscfg, radar_list=None):
                      'Missing radar parameters. ' +
                      'Antenna losses will be neglected')
                 lant = 0.
-            ptoa_h = sun_retrieval_h[0]+lant+3.
+            ptoa_h = sun_retrieval_h[0] + lant + 3.
 
             # compute observed solar flux
             if (('pulse_width' in dscfg['global_data']) and
@@ -1435,7 +1445,7 @@ def process_sun_hits(procstatus, dscfg, radar_list=None):
                 warn('Unable to estimate scanning losses. ' +
                      'Missing radar parameters. ' +
                      'Antenna losses will be neglected')
-            ptoa_v = sun_retrieval_v[0]+lant+3.
+            ptoa_v = sun_retrieval_v[0] + lant + 3.
 
             # compute observed solar flux
             if (('pulse_width' in dscfg['global_data']) and
@@ -1537,7 +1547,8 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
             'pysolar'
         sun_hit_method : str. Dataset keyword
             Method used to estimate the power of the sun hit. Should be PSR. HS
-            (Hildebrand and Sekhon 1974) or Ivic (Ivic 2013) are implemented but not tested.
+            (Hildebrand and Sekhon 1974) or Ivic (Ivic 2013) are implemented 
+            but not tested.
         n_noise_bins : int. Dataset keyword
             Number of bins to use for noise estimation
         noise_threshold : float. Dataset keyword
@@ -1686,7 +1697,7 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
             if datatype == 'ZDR':
                 zdr_field = 'differential_reflectivity'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
         return None, None
@@ -1711,7 +1722,7 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
         if freq is None:
             warn('Radar frequency unknown.')
         else:
-            radar_par.update({'wavelen': 3e8/freq})
+            radar_par.update({'wavelen': 3e8 / freq})
 
         beamwidth = dscfg.get('beamwidth', None)
         if beamwidth is None:
@@ -1794,7 +1805,7 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
         indsorted = np.ma.argsort(sunvol)
         valsorted = sunvol[indsorted]
         valmax = np.ma.max(valsorted)
-        noise_level1 = np.mean(valsorted[0:n_noise_bins-1])
+        noise_level1 = np.mean(valsorted[0:n_noise_bins - 1])
         noise_thres = noise_level1 + noise_threshold
         indval = np.ma.where(sunvol > noise_thres)
         nval = np.ma.size(indval)
@@ -1829,8 +1840,8 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
         iterations = dscfg.get('iterations', 10)
         max_std_zdr = dscfg.get('max_std_zdr', 2.)
 
-        r_res = radar.range['data'][1]-radar.range['data'][0]
-        flat_reg_wlen = int(flat_reg_wlen_rng/r_res)
+        r_res = radar.range['data'][1] - radar.range['data'][0]
+        flat_reg_wlen = int(flat_reg_wlen_rng / r_res)
 
         sun_hits, new_radar = pyart.correct.get_sun_hits_ivic(
             radar, delev_max=delev_max, dazim_max=dazim_max, elmin=elmin,
@@ -1848,7 +1859,7 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
     sun_pwr_h = sun_hits['dBm_sun_hit']
     sun_pwr_v = sun_hits['dBmv_sun_hit']
 
-    #Substraction of noise
+    # Substraction of noise
     vals_lin_h = 10. ** (sun_pwr_h / 10.)
     vals_lin_v = 10. ** (sun_pwr_v / 10.)
     noise_lin = 10. ** (noise_level1 / 10.)
@@ -1879,7 +1890,7 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
     if 'wavelen' in dscfg['global_data']:
 
         flx_dt, flx_val = read_solar_flux(
-            dscfg['solarfluxpath']+'fluxtable.txt')
+            dscfg['solarfluxpath'] + 'fluxtable.txt')
 
         if flx_dt is not None:
             flx_dt_closest, flx_val_closest = get_closest_solar_flux(
@@ -1894,7 +1905,7 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
 
             # scaling of the power to account for solar flux variations.
             # The last sun hit is the reference. The scale factor is in dB
-            scale_factor = -10.*np.log10(sf_radar/sf_ref)
+            scale_factor = -10. * np.log10(sf_radar / sf_ref)
             if sun_hit_method == 'PSR':
                 vals_nonoise_db += scale_factor
             else:
@@ -1913,10 +1924,16 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
     if sun_hit_method == 'PSR':
         if pwrh_field is not None:
             sun_retrieval_h = pyart.correct.sun_retrieval(
-                sun_hits['rad_az'], sun_hits['sun_az'], sun_hits['rad_el'], sun_hits['sun_el'],
-                vals_nonoise_db, sun_hits['std(dBm_sun_hit)'],
-                az_width_co=az_width_co, el_width_co=el_width_co,
-                az_width_cross=az_width_cross, el_width_cross=el_width_cross,
+                sun_hits['rad_az'],
+                sun_hits['sun_az'],
+                sun_hits['rad_el'],
+                sun_hits['sun_el'],
+                vals_nonoise_db,
+                sun_hits['std(dBm_sun_hit)'],
+                az_width_co=az_width_co,
+                el_width_co=el_width_co,
+                az_width_cross=az_width_cross,
+                el_width_cross=el_width_cross,
                 is_zdr=False)
 
             azoff = np.ma.asarray(sun_retrieval_h[2])
@@ -1928,10 +1945,16 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
 
         if pwrv_field is not None:
             sun_retrieval_v = pyart.correct.sun_retrieval(
-                sun_hits['rad_az'], sun_hits['sun_az'], sun_hits['rad_el'], sun_hits['sun_el'],
-                vals_nonoise_db, sun_hits['std(dBmv_sun_hit)'],
-                az_width_co=az_width_co, el_width_co=el_width_co,
-                az_width_cross=az_width_cross, el_width_cross=el_width_cross,
+                sun_hits['rad_az'],
+                sun_hits['sun_az'],
+                sun_hits['rad_el'],
+                sun_hits['sun_el'],
+                vals_nonoise_db,
+                sun_hits['std(dBmv_sun_hit)'],
+                az_width_co=az_width_co,
+                el_width_co=el_width_co,
+                az_width_cross=az_width_cross,
+                el_width_cross=el_width_cross,
                 is_zdr=False)
 
             azoff = np.ma.asarray(sun_retrieval_v[2])
@@ -1961,11 +1984,11 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
                     time[ray], radar.latitude['data'][0],
                     radar.longitude['data'][0], refraction=True)
 
-            #azshift?
-            delev = np.ma.abs(radar.elevation['data'][ray]-elev_sun)
+            # azshift?
+            delev = np.ma.abs(radar.elevation['data'][ray] - elev_sun)
             dazim = np.ma.abs(
-                (radar.azimuth['data'][ray]-azim_sun) *
-                np.ma.cos(elev_sun*np.pi/180.))
+                (radar.azimuth['data'][ray] - azim_sun) *
+                np.ma.cos(elev_sun * np.pi / 180.))
             if dazim > 360.:
                 dazim -= 360.
 
@@ -1976,12 +1999,13 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
             sunpos_el[ray] = elev_sun
             sunpos_az[ray] = azim_sun
 
-        #Second noise estimation: removal of sunpower influence
+        # Second noise estimation: removal of sunpower influence
         if do_second_noise_est == 'Yes':
-            #Find the samples most remote from the sun center
+            # Find the samples most remote from the sun center
             inddistsorted = np.argsort(sundist)[::-1]
-            indfar = inddistsorted[0:n_indfar_bins-1]
-            noise_far_lin = 10. ** (sunvalmat[indfar] / 10.) - 10. ** (sunpwrmat[indfar] / 10.)
+            indfar = inddistsorted[0:n_indfar_bins - 1]
+            noise_far_lin = 10. ** (sunvalmat[indfar] / 10.) - \
+                10. ** (sunpwrmat[indfar] / 10.)
             noise_level2 = 10. * np.log10(np.mean(noise_far_lin))
             noise_thres2 = noise_level2 + noise_threshold
 
@@ -1996,7 +2020,7 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
             sun_pwr_h = sun_hits['dBm_sun_hit']
             sun_pwr_v = sun_hits['dBmv_sun_hit']
 
-            #Substraction of noise
+            # Substraction of noise
             vals_lin_h = 10. ** (sun_pwr_h / 10.)
             vals_lin_v = 10. ** (sun_pwr_v / 10.)
             noise_lin = 10. ** (noise_level2 / 10.)
@@ -2027,7 +2051,7 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
             if 'wavelen' in dscfg['global_data']:
 
                 flx_dt, flx_val = read_solar_flux(
-                    dscfg['solarfluxpath']+'fluxtable.txt')
+                    dscfg['solarfluxpath'] + 'fluxtable.txt')
 
                 if flx_dt is not None:
                     flx_dt_closest, flx_val_closest = get_closest_solar_flux(
@@ -2041,8 +2065,9 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
                     ref_time = flx_dt_closest[-1]
 
                     # scaling of the power to account for solar flux variations.
-                    # The last sun hit is the reference. The scale factor is in dB
-                    scale_factor = -10.*np.log10(sf_radar/sf_ref)
+                    # The last sun hit is the reference. The scale factor is in
+                    # dB
+                    scale_factor = -10. * np.log10(sf_radar / sf_ref)
                     vals_nonoise_db += scale_factor
                 else:
                     warn('Unable to compute solar power reference. ' +
@@ -2056,18 +2081,30 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
 
             if pwrh_field is not None:
                 sun_retrieval_h = pyart.correct.sun_retrieval(
-                    sun_hits['rad_az'], sun_hits['sun_az'], sun_hits['rad_el'], sun_hits['sun_el'],
-                    vals_nonoise_db, sun_hits['std(dBm_sun_hit)'],
-                    az_width_co=az_width_co, el_width_co=el_width_co,
-                    az_width_cross=az_width_cross, el_width_cross=el_width_cross,
+                    sun_hits['rad_az'],
+                    sun_hits['sun_az'],
+                    sun_hits['rad_el'],
+                    sun_hits['sun_el'],
+                    vals_nonoise_db,
+                    sun_hits['std(dBm_sun_hit)'],
+                    az_width_co=az_width_co,
+                    el_width_co=el_width_co,
+                    az_width_cross=az_width_cross,
+                    el_width_cross=el_width_cross,
                     is_zdr=False)
 
             if pwrv_field is not None:
                 sun_retrieval_v = pyart.correct.sun_retrieval(
-                    sun_hits['rad_az'], sun_hits['sun_az'], sun_hits['rad_el'], sun_hits['sun_el'],
-                    vals_nonoise_db, sun_hits['std(dBmv_sun_hit)'],
-                    az_width_co=az_width_co, el_width_co=el_width_co,
-                    az_width_cross=az_width_cross, el_width_cross=el_width_cross,
+                    sun_hits['rad_az'],
+                    sun_hits['sun_az'],
+                    sun_hits['rad_el'],
+                    sun_hits['sun_el'],
+                    vals_nonoise_db,
+                    sun_hits['std(dBmv_sun_hit)'],
+                    az_width_co=az_width_co,
+                    el_width_co=el_width_co,
+                    az_width_cross=az_width_cross,
+                    el_width_cross=el_width_cross,
                     is_zdr=False)
 
     else:
@@ -2085,7 +2122,7 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
             az_width_cross=az_width_cross, el_width_cross=el_width_cross,
             is_zdr=False)
 
-        sun_retrieval_zdr = pyart.correct.sun_retrieval(
+        pyart.correct.sun_retrieval(
             sun_hits[4], sun_hits[6], sun_hits[3], sun_hits[5],
             sun_hits[15], sun_hits[16],
             az_width_co=az_width_co, el_width_co=el_width_co,
@@ -2143,7 +2180,7 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
                  'Missing radar parameters. ' +
                  'Antenna losses will be neglected')
             lant = 0.
-        ptoa_h = sun_retrieval_h[0]+lant+3.
+        ptoa_h = sun_retrieval_h[0] + lant + 3.
 
         # compute observed solar flux
         if (('pulse_width' in dscfg['global_data']) and
@@ -2159,7 +2196,8 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
             sf_h = np.ma.asarray(np.ma.masked)
 
         sun_retrieval_dict['sun_maxpwr_noise'] = np.ma.asarray(valmax)
-        sun_retrieval_dict['sun_maxpwr_nonoise'] = np.ma.asarray(valmax_nonoise)
+        sun_retrieval_dict['sun_maxpwr_nonoise'] = np.ma.asarray(
+            valmax_nonoise)
         if do_second_noise_est == 'Yes':
             sun_retrieval_dict['noise_pwr'] = np.ma.asarray(noise_level2)
         else:
@@ -2193,7 +2231,7 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
             warn('Unable to estimate scanning losses. ' +
                  'Missing radar parameters. ' +
                  'Antenna losses will be neglected')
-        ptoa_v = sun_retrieval_v[0]+lant+3.
+        ptoa_v = sun_retrieval_v[0] + lant + 3.
 
         # compute observed solar flux
         if (('pulse_width' in dscfg['global_data']) and
@@ -2209,7 +2247,8 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
             sf_v = np.ma.asarray(np.ma.masked)
 
         sun_retrieval_dict['sun_maxpwr_noise'] = np.ma.asarray(valmax)
-        sun_retrieval_dict['sun_maxpwr_nonoise'] = np.ma.asarray(valmax_nonoise)
+        sun_retrieval_dict['sun_maxpwr_nonoise'] = np.ma.asarray(
+            valmax_nonoise)
         if do_second_noise_est == 'Yes':
             sun_retrieval_dict['noise_pwr'] = np.ma.asarray(noise_level2)
         else:

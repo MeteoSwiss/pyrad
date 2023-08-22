@@ -25,6 +25,7 @@ from ..io.read_data_dem import read_dem, dem2radar_data
 
 # from memory_profiler import profile
 
+
 def process_dem(procstatus, dscfg, radar_list=None):
     """
     Gets DEM data and put it in radar coordinates
@@ -71,7 +72,7 @@ def process_dem(procstatus, dscfg, radar_list=None):
         radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
         break
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -81,7 +82,7 @@ def process_dem(procstatus, dscfg, radar_list=None):
     regular_grid = dscfg.get('regular_grid', 0)
     field_name = get_fieldname_pyart(dscfg['dem_field'])
 
-    fname = dscfg['dempath'][ind_rad]+dscfg['demfile']
+    fname = dscfg['dempath'][ind_rad] + dscfg['demfile']
 
     if keep_in_memory:
         if dscfg['initialized'] == 0:
@@ -159,7 +160,7 @@ def process_visibility(procstatus, dscfg, radar_list=None):
             minvisel_field = get_fieldname_pyart(datatype)
             break
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -167,13 +168,13 @@ def process_visibility(procstatus, dscfg, radar_list=None):
 
     offset = dscfg.get('offset', 0.)
 
-    minvisel_data = radar.fields[minvisel_field]['data']+offset
+    minvisel_data = radar.fields[minvisel_field]['data'] + offset
     ele_data = np.broadcast_to(
         radar.elevation['data'].reshape(radar.nrays, 1),
         (radar.nrays, radar.ngates))
 
     vis_dict = pyart.config.get_metadata('visibility')
-    vis_dict['data'] = 100.*np.ma.greater_equal(
+    vis_dict['data'] = 100. * np.ma.greater_equal(
         ele_data, minvisel_data, dtype=float)
 
     # if a gate has visibility 0 all the subsequent gates in the ray
@@ -225,7 +226,7 @@ def process_gecsx(procstatus, dscfg, radar_list=None):
     for datatypedescr in dscfg['datatype']:
         radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
 
     fname = dscfg['dempath'][ind_rad] + dscfg['demfile']
 
@@ -238,7 +239,7 @@ def process_gecsx(procstatus, dscfg, radar_list=None):
             # demproj is not an EPSG int
             pass
 
-    dem_data = read_dem(fname, projparams = demproj)
+    dem_data = read_dem(fname, projparams=demproj)
 
     # If no radar data is provided we create empty radar object from user
     # specification
@@ -252,14 +253,14 @@ def process_gecsx(procstatus, dscfg, radar_list=None):
         radar = pyart.testing.make_empty_ppi_radar(len(ranges), len(azimuths),
                                                    len(elevations))
         radar.latitude['data'] = np.array(dscfg['RadarPosition']
-                                           ['latitude'])
+                                          ['latitude'])
         radar.longitude['data'] = np.array(dscfg['RadarPosition']
                                            ['longitude'])
         radar.altitude['data'] = np.array(dscfg['RadarPosition']
-                                           ['altitude'])
+                                          ['altitude'])
         radar.azimuth['data'] = np.array(list(azimuths) * len(elevations))
-        radar.range['data'] =  ranges
-        radar.fixed_angle['data'] =  np.array(elevations)
+        radar.range['data'] = ranges
+        radar.fixed_angle['data'] = np.array(elevations)
         radar.elevation['data'] = np.array([len(azimuths) * [e]
                                             for e in elevations]).ravel()
         # change radar name
@@ -273,12 +274,12 @@ def process_gecsx(procstatus, dscfg, radar_list=None):
             # for example
             el1 = radar.fixed_angle['data'].astype(float)
             el2 = dscfg['antenna_elevations'].astype(float)
-            idx_to_process  = [i for i in range(len(el1))
-                               if np.any(np.isclose(el1[i], el2))]
+            idx_to_process = [i for i in range(len(el1))
+                              if np.any(np.isclose(el1[i], el2))]
 
             print('Radar elevations angles redefined in config file')
             print('Elevation angles {:s} will be processed'.format(
-                      str([el1[i] for i in idx_to_process])))
+                str([el1[i] for i in idx_to_process])))
             radar = radar.extract_sweeps(idx_to_process)
 
     # Create dict with radar specifications
@@ -291,7 +292,7 @@ def process_gecsx(procstatus, dscfg, radar_list=None):
     radar_specs['gain'] = dscfg['AntennaGainH'][ind_rad]
 
     az_conv = dscfg.get('AzimTol', 0)[ind_rad]
-    ke = dscfg.get('refcorr', 4/3.)[ind_rad]
+    ke = dscfg.get('refcorr', 4 / 3.)[ind_rad]
     atm_att = dscfg.get('attg', 0.012)[ind_rad]
     mosotti_kw = dscfg.get('mosotti_factor', 0.9644)[0]
     sigma0_method = dscfg.get('sigma0_method', 'Gabella')
@@ -302,20 +303,20 @@ def process_gecsx(procstatus, dscfg, radar_list=None):
     dr = dscfg.get('range_discretization', 100)
 
     gecsx_grid, gecsx_radar = pyart.retrieve.gecsx(radar,
-                                       radar_specs,
-                                       dem_data,
-                                       fill_value = None,
-                                       az_conv = az_conv ,
-                                       dr = dr,
-                                       daz = daz,
-                                       ke = ke,
-                                       atm_att = atm_att,
-                                       mosotti_kw = mosotti_kw,
-                                       raster_oversampling = raster_oversampling,
-                                       sigma0_method = sigma0_method,
-                                       clip = clip,
-                                       return_pyart_objects = True,
-                                       verbose = verbose)
-    new_dataset = [{'radar_out' : gecsx_grid}, {'radar_out' : gecsx_radar}]
+                                                   radar_specs,
+                                                   dem_data,
+                                                   fill_value=None,
+                                                   az_conv=az_conv,
+                                                   dr=dr,
+                                                   daz=daz,
+                                                   ke=ke,
+                                                   atm_att=atm_att,
+                                                   mosotti_kw=mosotti_kw,
+                                                   raster_oversampling=raster_oversampling,
+                                                   sigma0_method=sigma0_method,
+                                                   clip=clip,
+                                                   return_pyart_objects=True,
+                                                   verbose=verbose)
+    new_dataset = [{'radar_out': gecsx_grid}, {'radar_out': gecsx_radar}]
 
     return new_dataset, ind_rad

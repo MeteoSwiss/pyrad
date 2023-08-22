@@ -18,6 +18,7 @@ Functions for obtaining Pyrad products from the datasets
 
 """
 
+import matplotlib.pyplot as plt
 from copy import deepcopy
 from warnings import warn
 import os
@@ -43,7 +44,7 @@ from ..io.write_data import write_vpr_info
 from ..graph.plots import plot_sun_hits, plot_histogram2, plot_scatter
 from ..graph.plots import plot_centroids
 from ..graph.plots_timeseries import plot_sun_retrieval_ts, plot_ml_ts
-from ..graph.plots_vol import plot_fixed_rng, plot_fixed_rng_sun
+from ..graph.plots_vol import plot_fixed_rng_sun
 from ..graph.plots_vol import plot_along_coord
 
 from ..util.radar_utils import create_sun_hits_field, compute_histogram
@@ -54,9 +55,7 @@ mpl.use('Agg')
 
 # Increase a bit font size
 mpl.rcParams.update({'font.size': 16})
-mpl.rcParams.update({'font.family':  "sans-serif"})
-
-import matplotlib.pyplot as plt
+mpl.rcParams.update({'font.family': "sans-serif"})
 
 
 def generate_occurrence_products(dataset, prdcfg):
@@ -118,7 +117,7 @@ def generate_occurrence_products(dataset, prdcfg):
         ind_ray, ind_rng = np.where(freq_occu > quant_min)
         if ind_ray.size == 0:
             warn('No data exceeds the frequency of occurrence ' +
-                 str(quant_min)+' %')
+                 str(quant_min) + ' %')
             return None
 
         excess_dict = {
@@ -142,10 +141,10 @@ def generate_occurrence_products(dataset, prdcfg):
 
         fname = make_filename(
             'excess_gates', prdcfg['dstype'], prdcfg['prdname'], ['csv'],
-            prdcfginfo='quant'+'{:.1f}'.format(quant_min),
+            prdcfginfo='quant' + '{:.1f}'.format(quant_min),
             timeinfo=dataset['endtime'])
 
-        fname = savedir+fname[0]
+        fname = savedir + fname[0]
 
         fname = write_excess_gates(excess_dict, fname)
 
@@ -212,7 +211,7 @@ def generate_cosmo_coord_products(dataset, prdcfg):
             return None
 
         file_type = prdcfg.get('file_type', 'nc')
-        physical = prdcfg.get('physical', True)
+        prdcfg.get('physical', True)
         compression = prdcfg.get('compression', 'gzip')
         compression_opts = prdcfg.get('compression_opts', 6)
 
@@ -220,22 +219,23 @@ def generate_cosmo_coord_products(dataset, prdcfg):
         new_dataset.fields = dict()
         new_dataset.add_field(field_name, radar_obj.fields[field_name])
 
-        savedir = prdcfg['cosmopath'][ind_rad]+'rad2cosmo/'
-        fname = 'rad2cosmo_'+prdcfg['voltype']+'_'+prdcfg['procname']+'.nc'
+        savedir = prdcfg['cosmopath'][ind_rad] + 'rad2cosmo/'
+        fname = 'rad2cosmo_' + prdcfg['voltype'] + \
+            '_' + prdcfg['procname'] + '.nc'
 
         if file_type == 'nc':
             pyart.io.cfradial.write_cfradial(
-                savedir+fname, new_dataset)
+                savedir + fname, new_dataset)
         elif file_type == 'h5':
             pyart.aux_io.write_odim_h5(
-                savedir+fname, new_dataset,
+                savedir + fname, new_dataset,
                 compression=compression, compression_opts=compression_opts)
         else:
             warn('Data could not be saved. ' +
-                 'Unknown saving file type '+file_type)
+                 'Unknown saving file type ' + file_type)
             return None
 
-        print('saved file: {}'.format(savedir+fname))
+        print('saved file: {}'.format(savedir + fname))
 
         return fname
 
@@ -281,7 +281,7 @@ def generate_cosmo_to_radar_products(dataset, prdcfg):
 
     """
     time_index = prdcfg.get('cosmo_time_index', 0)
-    if time_index > len(dataset)-1:
+    if time_index > len(dataset) - 1:
         warn(
             'COSMO time index larger than available. Skipping product ' +
             prdcfg['type'])
@@ -301,7 +301,7 @@ def generate_cosmo_to_radar_products(dataset, prdcfg):
             return None
 
         file_type = prdcfg.get('file_type', 'nc')
-        physical = prdcfg.get('physical', True)
+        prdcfg.get('physical', True)
         compression = prdcfg.get('compression', 'gzip')
         compression_opts = prdcfg.get('compression_opts', 6)
 
@@ -310,29 +310,34 @@ def generate_cosmo_to_radar_products(dataset, prdcfg):
         new_dataset.add_field(field_name, radar_obj.fields[field_name])
 
         savedir = (
-            prdcfg['cosmopath'][ind_rad]+prdcfg['voltype']+'/radar/' +
-            prdcfg['timeinfo'].strftime('%Y-%m-%d')+'/'+prdcfg['procname']+'/')
+            prdcfg['cosmopath'][ind_rad] +
+            prdcfg['voltype'] +
+            '/radar/' +
+            prdcfg['timeinfo'].strftime('%Y-%m-%d') +
+            '/' +
+            prdcfg['procname'] +
+            '/')
         fname = (
-            prdcfg['voltype']+'_RUN' +
-            prdcfg['timeinfo'].strftime('%Y%m%d%H%M%S')+'_' +
-            radar_dataset['dtcosmo'].strftime('%Y%m%d%H%M%S')+'.nc')
+            prdcfg['voltype'] + '_RUN' +
+            prdcfg['timeinfo'].strftime('%Y%m%d%H%M%S') + '_' +
+            radar_dataset['dtcosmo'].strftime('%Y%m%d%H%M%S') + '.nc')
 
         if not os.path.isdir(savedir):
             os.makedirs(savedir)
 
         if file_type == 'nc':
             pyart.io.cfradial.write_cfradial(
-                savedir+fname, new_dataset)
+                savedir + fname, new_dataset)
         elif file_type == 'h5':
             pyart.aux_io.write_odim_h5(
-                savedir+fname, new_dataset,
+                savedir + fname, new_dataset,
                 compression=compression, compression_opts=compression_opts)
         else:
             warn('Data could not be saved. ' +
-                 'Unknown saving file type '+file_type)
+                 'Unknown saving file type ' + file_type)
             return None
 
-        print('saved file: {}'.format(savedir+fname))
+        print('saved file: {}'.format(savedir + fname))
 
         return fname
 
@@ -400,7 +405,7 @@ def generate_sun_hits_products(dataset, prdcfg):
             'info', prdcfg['dstype'], 'detected', ['csv'],
             timeinfo=dataset['timeinfo'], timeformat='%Y%m%d')[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         write_sun_hits(dataset['sun_hits'], fname)
 
@@ -431,7 +436,7 @@ def generate_sun_hits_products(dataset, prdcfg):
             timeformat='%Y%m%d')
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         field = create_sun_hits_field(
             dataset['sun_hits_final']['rad_el'],
@@ -443,13 +448,13 @@ def generate_sun_hits_products(dataset, prdcfg):
 
         if field is None:
             warn(
-                'Unable to create field '+prdcfg['voltype'] +
+                'Unable to create field ' + prdcfg['voltype'] +
                 ' Skipping product ' + prdcfg['type'])
             return None
 
         plot_sun_hits(field, field_name, fname_list, prdcfg)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -471,7 +476,7 @@ def generate_sun_hits_products(dataset, prdcfg):
             'info', prdcfg['dstype'], 'retrieval', ['csv'], timeinfo=timeinfo,
             timeformat=timeformat, runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         write_sun_retrieval(dataset['sun_retrieval'], fname)
 
@@ -508,7 +513,7 @@ def generate_sun_hits_products(dataset, prdcfg):
             timeformat='%Y%m%d')
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         if dataset['sun_retrieval'][par] is None:
             warn(
@@ -524,7 +529,7 @@ def generate_sun_hits_products(dataset, prdcfg):
         if field is not None:
             plot_sun_hits(field, field_name, fname_list, prdcfg)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -553,7 +558,7 @@ def generate_sun_hits_products(dataset, prdcfg):
 
         if sun_retrieval[0] is None:
             warn(
-                'Unable to read sun retrieval file '+fname)
+                'Unable to read sun retrieval file ' + fname)
             return None
 
         if len(sun_retrieval[0]) < 2:
@@ -572,10 +577,10 @@ def generate_sun_hits_products(dataset, prdcfg):
             timeformat=timeformat, runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
-        titl = (prdcfg['runinfo']+' Sun Retrieval ' +
-                sun_retrieval[1][0].strftime('%Y%m%d')+'-' +
+        titl = (prdcfg['runinfo'] + ' Sun Retrieval ' +
+                sun_retrieval[1][0].strftime('%Y%m%d') + '-' +
                 sun_retrieval[1][-1].strftime('%Y%m%d'))
         figfname = plot_sun_retrieval_ts(
             sun_retrieval, prdcfg['voltype'], fname_list, titl=titl, dpi=dpi)
@@ -583,7 +588,7 @@ def generate_sun_hits_products(dataset, prdcfg):
         if figfname is None:
             return None
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
         return fname_list
 
     if prdcfg['type'] == 'WRITE_SUNSCAN':
@@ -615,7 +620,7 @@ def generate_sun_hits_products(dataset, prdcfg):
             " Standard deviation (fit to samples)",
             "num_samples:        [#]"
             " Number of samples used for the sun power fitting"
-            ]
+        ]
 
         sunRdata = dataset['sun_retrieval']
 
@@ -637,7 +642,7 @@ def generate_sun_hits_products(dataset, prdcfg):
                     sunRdata['el_bias_h'], sunRdata['az_width_h'],
                     sunRdata['el_width_h'], sunRdata['std(dBm_sun_est)'],
                     sunRdata['nhits_h']]
-                }
+            }
         elif dataset['field_name'] == 'noisedBm_vv':
             data = {
                 'dstype': prdcfg['dstype'],
@@ -656,7 +661,7 @@ def generate_sun_hits_products(dataset, prdcfg):
                     sunRdata['el_bias_v'], sunRdata['az_width_v'],
                     sunRdata['el_width_v'], sunRdata['std(dBmv_sun_est)'],
                     sunRdata['nhits_v']]
-                }
+            }
         else:
             warn('ERROR: No valid datatype for WRITE_SUNSCAN product.')
 
@@ -669,7 +674,7 @@ def generate_sun_hits_products(dataset, prdcfg):
             timeinfo=prdcfg['timeinfo'], timeformat='%Y%m%d',
             runinfo=prdcfg['runinfo'])[0]
 
-        fname1 = savedir+fname1
+        fname1 = savedir + fname1
         write_timeseries_point(fname1, data, prdcfg['dstype'], text)
 
         print('saved sunscan file: {}'.format(fname1))
@@ -689,8 +694,8 @@ def generate_sun_hits_products(dataset, prdcfg):
             return None
 
         # user defined parameters
-        azi_res = prdcfg.get('azi_res', None)
-        ele_res = prdcfg.get('ele_res', None)
+        prdcfg.get('azi_res', None)
+        prdcfg.get('ele_res', None)
         vmin = prdcfg.get('vmin', None)
         vmax = prdcfg.get('vmax', None)
         angtol = prdcfg.get('ang_tol', 0.5)
@@ -702,18 +707,18 @@ def generate_sun_hits_products(dataset, prdcfg):
         fname_list = make_filename(
             'constr', prdcfg['dstype'], prdcfg['dsname'],
             prdcfg['imgformat'],
-            prdcfginfo='rng'+'{:.1f}'.format(
+            prdcfginfo='rng' + '{:.1f}'.format(
                 dataset['radar_out'].range['data'][0]),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_fixed_rng_sun(
             radar, field_name, sun_hits, prdcfg, fname_list, azi_res=None,
             ele_res=None, ang_tol=angtol, vmin=vmin, vmax=vmax)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -807,7 +812,7 @@ def generate_ml_products(dataset, prdcfg):
             'ts', prdcfg['dstype'], 'ml', ['csv'],
             timeinfo=prdcfg['timeinfo'], timeformat='%Y%m%d')[0]
 
-        csvfname = savedir+csvfname
+        csvfname = savedir + csvfname
 
         ml_bottom = dataset['ml_obj'].fields['melting_layer_height']['data'][
             :, 0]
@@ -815,7 +820,7 @@ def generate_ml_products(dataset, prdcfg):
 
         ml_top_avg = np.ma.asarray(np.ma.mean(ml_top))
         ml_top_std = np.ma.asarray(np.ma.std(ml_top))
-        thick = ml_top-ml_bottom
+        thick = ml_top - ml_bottom
         thick_avg = np.ma.asarray(np.ma.mean(thick))
         thick_std = np.ma.asarray(np.ma.std(thick))
         nrays_valid = thick.compressed().size
@@ -841,15 +846,15 @@ def generate_ml_products(dataset, prdcfg):
             timeinfo=dt_ml_arr[0], timeformat='%Y%m%d')
 
         for i, figfname in enumerate(figfname_list):
-            figfname_list[i] = savedir+figfname
+            figfname_list[i] = savedir + figfname
 
-        titl = dt_ml_arr[0].strftime('%Y-%m-%d')+' melting layer time series'
+        titl = dt_ml_arr[0].strftime('%Y-%m-%d') + ' melting layer time series'
 
         plot_ml_ts(
             dt_ml_arr, ml_top_avg_arr, ml_top_std_arr, thick_avg_arr,
             thick_std_arr, nrays_valid_arr, nrays_total_arr, figfname_list,
             labelx='Time UTC', titl=titl, dpi=dpi)
-        print('----- save to '+' '.join(figfname_list))
+        print('----- save to ' + ' '.join(figfname_list))
 
         return figfname_list
 
@@ -862,7 +867,7 @@ def generate_ml_products(dataset, prdcfg):
             'saveml', prdcfg['dstype'], 'ml_h', ['nc'],
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
         pyart.io.cfradial.write_cfradial(fname, dataset['ml_obj'])
         print('saved file: {}'.format(fname))
 
@@ -877,7 +882,7 @@ def generate_ml_products(dataset, prdcfg):
             'saveml_retrieved', prdcfg['dstype'], 'ml_h', ['nc'],
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
         pyart.io.cfradial.write_cfradial(fname, dataset['ml_retrieved'])
         print('saved file: {}'.format(fname))
 
@@ -935,7 +940,7 @@ def generate_vpr_products(dataset, prdcfg):
             'theo', prdcfg['dstype'], 'VPR', ['csv'],
             timeinfo=prdcfg['timeinfo'], timeformat='%Y%m%d%H%M%S')[0]
 
-        csvfname = savedir+csvfname
+        csvfname = savedir + csvfname
 
         write_rhi_profile(
             dataset['vpr_theo_dict']['altitude'],
@@ -949,7 +954,7 @@ def generate_vpr_products(dataset, prdcfg):
             timeinfo=prdcfg['timeinfo'], timeformat='%Y%m%d%H%M%S')
 
         for i, figfname in enumerate(figfname_list):
-            figfname_list[i] = savedir+figfname
+            figfname_list[i] = savedir + figfname
 
         titl = '{}\nRetrieved VPR profile'.format(
             prdcfg['timeinfo'].strftime('%Y-%m-%dT%H:%M:%S'))
@@ -960,7 +965,7 @@ def generate_vpr_products(dataset, prdcfg):
             labely='normalized reflectivity (-)', labels=None, title=titl,
             colors=None, linestyles=None, ymin=None, ymax=None, dpi=dpi,
             data_on_y=False, plot_legend=False)
-        print('----- save to '+' '.join(figfname_list))
+        print('----- save to ' + ' '.join(figfname_list))
 
         return figfname_list
 
@@ -973,7 +978,7 @@ def generate_vpr_products(dataset, prdcfg):
             'theo', prdcfg['dstype'], 'VPR', ['csv'],
             timeinfo=prdcfg['timeinfo'], timeformat='%Y%m%d%H%M%S')[0]
 
-        csvfname = savedir+csvfname
+        csvfname = savedir + csvfname
 
         write_vpr_theo_params(dataset['vpr_theo_dict'], csvfname)
 
@@ -994,7 +999,7 @@ def generate_vpr_products(dataset, prdcfg):
             'info', prdcfg['dstype'], 'VPR', ['csv'],
             timeinfo=prdcfg['timeinfo'], timeformat='%Y%m%d%H%M%S')[0]
 
-        csvfname = savedir+csvfname
+        csvfname = savedir + csvfname
 
         write_vpr_info(dataset['vpr_info'], csvfname)
 
@@ -1111,14 +1116,14 @@ def generate_centroids_products(dataset, prdcfg):
 
         timeformat = '%Y%m%d'
         timeinfo = data_dict['timeinfo'][0]
-        titl = timeinfo.strftime('%Y-%m-%d')+'\n'+voltype
+        titl = timeinfo.strftime('%Y-%m-%d') + '\n' + voltype
         data_vals = data_dict[voltype]
         if hist_type == 'instant':
             timeformat = '%Y%m%d%H%M%S'
             timeinfo = data_dict['timeinfo'][-1]
-            titl = timeinfo.strftime('%Y-%m-%d %H:%M:%S')+'\n'+voltype
+            titl = timeinfo.strftime('%Y-%m-%d %H:%M:%S') + '\n' + voltype
             nvols = data_dict['npoints'].size
-            ind_start = np.sum(data_dict['npoints'][0:nvols-2])
+            ind_start = np.sum(data_dict['npoints'][0:nvols - 2])
             data_vals = data_vals[ind_start:]
 
         savedir = get_save_dir(
@@ -1131,25 +1136,25 @@ def generate_centroids_products(dataset, prdcfg):
             timeinfo=timeinfo, timeformat=timeformat)
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         if '_std' in voltype:
-            bin_edges = np.arange(-1.-step/2., 1.+step/2+step, step)
+            bin_edges = np.arange(-1. - step / 2., 1. + step / 2 + step, step)
             values = data_vals
         else:
             field_name = get_fieldname_pyart(voltype)
             bin_edges, values = compute_histogram(
                 data_vals, field_name, step=step)
-        bin_centers = bin_edges[1:]-step/2
+        bin_centers = bin_edges[1:] - step / 2
         hist, bin_edges = np.histogram(values, bins=bin_edges)
         plot_histogram2(
             bin_centers, hist, fname_list, labelx=voltype,
             labely='Number of Samples', titl=titl)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         if write_data:
-            fname = savedir+make_filename(
+            fname = savedir + make_filename(
                 'histogram', prdcfg['dstype'], prdcfg['voltype'],
                 ['csv'], timeinfo=timeinfo, timeformat=timeformat)[0]
 
@@ -1191,17 +1196,20 @@ def generate_centroids_products(dataset, prdcfg):
         timeformat = '%Y%m%d'
         timeinfo = data_dict['timeinfo'][0]
         titl = (
-            timeinfo.strftime('%Y-%m-%d')+'\n'+voltype_x+'-'+voltype_y)
+            timeinfo.strftime('%Y-%m-%d') + '\n' + voltype_x + '-' + voltype_y)
         data_vals_x = data_dict[voltype_x]
         data_vals_y = data_dict[voltype_y]
         if hist_type == 'instant':
             timeformat = '%Y%m%d%H%M%S'
             timeinfo = data_dict['timeinfo'][-1]
             titl = (
-                timeinfo.strftime('%Y-%m-%d %H:%M:%S')+'\n'+voltype_x+'-' +
+                timeinfo.strftime('%Y-%m-%d %H:%M:%S') +
+                '\n' +
+                voltype_x +
+                '-' +
                 voltype_y)
             nvols = data_dict['npoints'].size
-            ind_start = np.sum(data_dict['npoints'][0:nvols-2])
+            ind_start = np.sum(data_dict['npoints'][0:nvols - 2])
             data_vals_x = data_vals_x[ind_start:]
             data_vals_y = data_vals_y[ind_start:]
 
@@ -1210,15 +1218,16 @@ def generate_centroids_products(dataset, prdcfg):
             prdcfg['prdname'], timeinfo=timeinfo)
 
         fname_list = make_filename(
-            '2Dhistogram', prdcfg['dstype'], voltype_x+'-'+voltype_y,
+            '2Dhistogram', prdcfg['dstype'], voltype_x + '-' + voltype_y,
             prdcfg['imgformat'],
             timeinfo=timeinfo, timeformat=timeformat)
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         if '_std' in voltype_x:
-            bin_edges_x = np.arange(-1.-step_x/2., 1.+step_x/2+step_x, step_x)
+            bin_edges_x = np.arange(-1. - step_x / 2.,
+                                    1. + step_x / 2 + step_x, step_x)
             values_x = data_vals_x
         else:
             field_name_x = get_fieldname_pyart(voltype_x)
@@ -1226,7 +1235,8 @@ def generate_centroids_products(dataset, prdcfg):
                 data_vals_x, field_name_x, step=step_x)
 
         if '_std' in voltype_y:
-            bin_edges_y = np.arange(-1.-step_y/2., 1.+step_y/2+step_y, step_y)
+            bin_edges_y = np.arange(-1. - step_y / 2.,
+                                    1. + step_y / 2 + step_y, step_y)
             values_y = data_vals_y
         else:
             field_name_y = get_fieldname_pyart(voltype_y)
@@ -1241,7 +1251,7 @@ def generate_centroids_products(dataset, prdcfg):
             voltype_y, fname_list, prdcfg, rad1_name='', rad2_name='',
             titl=titl, cmap='viridis')
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -1264,7 +1274,7 @@ def generate_centroids_products(dataset, prdcfg):
 
         timeformat = '%Y%m%d'
         timeinfo = data_dict['timeinfo'][0]
-        titl = timeinfo.strftime('%Y-%m-%d')+'\n'+voltype
+        titl = timeinfo.strftime('%Y-%m-%d') + '\n' + voltype
         data_vals = data_dict[voltype]
 
         savedir = get_save_dir(
@@ -1277,25 +1287,25 @@ def generate_centroids_products(dataset, prdcfg):
             timeinfo=timeinfo, timeformat=timeformat)
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         if '_std' in voltype:
-            bin_edges = np.arange(-1.-step/2., 1.+step/2+step, step)
+            bin_edges = np.arange(-1. - step / 2., 1. + step / 2 + step, step)
             values = data_vals
         else:
             field_name = get_fieldname_pyart(voltype)
             bin_edges, values = compute_histogram(
                 data_vals, field_name, step=step)
-        bin_centers = bin_edges[1:]-step/2
+        bin_centers = bin_edges[1:] - step / 2
         hist, bin_edges = np.histogram(values, bins=bin_edges)
         plot_histogram2(
             bin_centers, hist, fname_list, labelx=voltype,
             labely='Number of Samples', titl=titl)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         if write_data:
-            fname = savedir+make_filename(
+            fname = savedir + make_filename(
                 'histogram', prdcfg['dstype'], prdcfg['voltype'],
                 ['csv'], timeinfo=timeinfo, timeformat=timeformat)[0]
 
@@ -1321,7 +1331,7 @@ def generate_centroids_products(dataset, prdcfg):
                 prdcfg['type'])
             return None
         if hydro_type not in data_dict['medoids_dict']:
-            warn('No medoids where found for hydrometeor class '+hydro_type)
+            warn('No medoids where found for hydrometeor class ' + hydro_type)
             return None
         ind_hydro = np.where(
             np.array(data_dict['hydro_names']) == hydro_type)[0]
@@ -1336,7 +1346,8 @@ def generate_centroids_products(dataset, prdcfg):
 
         timeformat = '%Y%m%d'
         timeinfo = data_dict['timeinfo'][0]
-        titl = timeinfo.strftime('%Y-%m-%d')+'\n'+voltype+' '+hydro_type
+        titl = timeinfo.strftime('%Y-%m-%d') + '\n' + \
+            voltype + ' ' + hydro_type
         data_vals = data_dict[voltype]
         data_vals = data_vals[data_dict['labels'] == ind_hydro]
 
@@ -1344,7 +1355,7 @@ def generate_centroids_products(dataset, prdcfg):
         medoids = medoids[:, ind_medoid]
 
         if hydro_type not in data_dict['final_medoids_dict']:
-            warn('No medoid for hydrometeor class '+hydro_type)
+            warn('No medoid for hydrometeor class ' + hydro_type)
             fmedoid = None
         else:
             fmedoid = data_dict['final_medoids_dict'][hydro_type][ind_medoid]
@@ -1354,21 +1365,21 @@ def generate_centroids_products(dataset, prdcfg):
             prdcfg['prdname'], timeinfo=timeinfo)
 
         fname_list = make_filename(
-            'histogram', prdcfg['dstype'], hydro_type+_+prdcfg['voltype'],
+            'histogram', prdcfg['dstype'], hydro_type + '_' +prdcfg['voltype'],
             prdcfg['imgformat'],
             timeinfo=timeinfo, timeformat=timeformat)
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         if '_std' in voltype:
-            bin_edges = np.arange(-1.-step/2., 1.+step/2+step, step)
+            bin_edges = np.arange(-1. - step / 2., 1. + step / 2 + step, step)
             values = data_vals
         else:
             field_name = get_fieldname_pyart(voltype)
             bin_edges, values = compute_histogram(
                 data_vals, field_name, step=step)
-        bin_centers = bin_edges[1:]-step/2
+        bin_centers = bin_edges[1:] - step / 2
         hist, bin_edges = np.histogram(values, bins=bin_edges)
         pos_medoids = []
         for medoid in medoids:
@@ -1391,10 +1402,10 @@ def generate_centroids_products(dataset, prdcfg):
             fig.savefig(fname, dpi=dpi)
         plt.close(fig)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         if write_data:
-            fname = savedir+make_filename(
+            fname = savedir + make_filename(
                 'histogram', prdcfg['dstype'], prdcfg['voltype'],
                 ['csv'], timeinfo=timeinfo, timeformat=timeformat)[0]
 
@@ -1427,7 +1438,7 @@ def generate_centroids_products(dataset, prdcfg):
                 prdcfg['type'])
             return None
         if hydro_type not in labeled_data_dict['medoids_dict']:
-            warn('No medoids where found for hydrometeor class '+hydro_type)
+            warn('No medoids where found for hydrometeor class ' + hydro_type)
             return None
 
         ind_hydro = np.where(
@@ -1443,8 +1454,13 @@ def generate_centroids_products(dataset, prdcfg):
         timeformat = '%Y%m%d'
         timeinfo = labeled_data_dict['timeinfo'][0]
         titl = (
-            timeinfo.strftime('%Y-%m-%d')+'\n'+voltype_x+'-'+voltype_y +
-            ' '+hydro_type)
+            timeinfo.strftime('%Y-%m-%d') +
+            '\n' +
+            voltype_x +
+            '-' +
+            voltype_y +
+            ' ' +
+            hydro_type)
 
         data_vals_x = labeled_data_dict[voltype_x]
         data_vals_y = labeled_data_dict[voltype_y]
@@ -1457,7 +1473,7 @@ def generate_centroids_products(dataset, prdcfg):
         medoids_y = medoids[:, ind_medoid_y]
 
         if hydro_type not in labeled_data_dict['final_medoids_dict']:
-            warn('No medoid for hydrometeor class '+hydro_type)
+            warn('No medoid for hydrometeor class ' + hydro_type)
             fmedoid_x = None
             fmedoid_y = None
         else:
@@ -1471,15 +1487,23 @@ def generate_centroids_products(dataset, prdcfg):
             prdcfg['prdname'], timeinfo=timeinfo)
 
         fname_list = make_filename(
-            '2Dhistogram', prdcfg['dstype'],
-            hydro_type+'_'+voltype_x+'-'+voltype_y, prdcfg['imgformat'],
-            timeinfo=timeinfo, timeformat=timeformat)
+            '2Dhistogram',
+            prdcfg['dstype'],
+            hydro_type +
+            '_' +
+            voltype_x +
+            '-' +
+            voltype_y,
+            prdcfg['imgformat'],
+            timeinfo=timeinfo,
+            timeformat=timeformat)
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         if '_std' in voltype_x:
-            bin_edges_x = np.arange(-1.-step_x/2., 1.+step_x/2+step_x, step_x)
+            bin_edges_x = np.arange(-1. - step_x / 2.,
+                                    1. + step_x / 2 + step_x, step_x)
             values_x = data_vals_x
         else:
             field_name_x = get_fieldname_pyart(voltype_x)
@@ -1487,7 +1511,8 @@ def generate_centroids_products(dataset, prdcfg):
                 data_vals_x, field_name_x, step=step_x)
 
         if '_std' in voltype_y:
-            bin_edges_y = np.arange(-1.-step_y/2., 1.+step_y/2+step_y, step_y)
+            bin_edges_y = np.arange(-1. - step_y / 2.,
+                                    1. + step_y / 2 + step_y, step_y)
             values_y = data_vals_y
         else:
             field_name_y = get_fieldname_pyart(voltype_y)
@@ -1503,7 +1528,7 @@ def generate_centroids_products(dataset, prdcfg):
             medoids_y=medoids_y, fmedoid_x=fmedoid_x, fmedoid_y=fmedoid_y,
             cmap='viridis')
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -1523,7 +1548,7 @@ def generate_centroids_products(dataset, prdcfg):
             'centroids', prdcfg['dstype'], 'centroids',
             ['csv'], timeinfo=timeinfo, timeformat=timeformat)[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         write_centroids(
             fname, labeled_data_dict['final_medoids_dict'],
@@ -1548,7 +1573,7 @@ def generate_centroids_products(dataset, prdcfg):
             'data', prdcfg['dstype'], 'centroids_data', ['npz'],
             timeinfo=timeinfo)[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         np.savez_compressed(fname, centroids_data=data_dict)
 
@@ -1571,7 +1596,7 @@ def generate_centroids_products(dataset, prdcfg):
             'labeled_data', prdcfg['dstype'], 'centroids_data', ['npz'],
             timeinfo=timeinfo)[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         np.savez_compressed(fname, centroids_data=data_dict)
 

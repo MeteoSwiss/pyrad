@@ -83,10 +83,10 @@ def quantiles_weighted(values, weight_vector=None, quantiles=np.array([0.5]),
 
     if data_is_log:
         # Convert log to lin
-        values = 10.**(values/10.)
+        values = 10.**(values / 10.)
 
     # Average
-    avg = np.ma.sum(values*weight_vector) / total_weight
+    avg = np.ma.sum(values * weight_vector) / total_weight
 
     if weight_threshold is not None:
         if total_weight < weight_threshold:

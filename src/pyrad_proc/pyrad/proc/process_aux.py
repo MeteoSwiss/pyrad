@@ -36,7 +36,15 @@ from pyart.config import get_metadata
 from pyart.core import Radar, geographic_to_cartesian_aeqd
 from pyart.core import cartesian_to_geographic_aeqd
 from pyart.map import grid_from_radars
+try:
+    from pyart.util import compute_directional_stats
+    from pyart.util import compute_azimuthal_average
+    from pyart.util import find_neighbour_gates
+except ImportError:
+    warn('ARM version of Py-ART detected, you will not be able to use some products')
+    warn('Please use Py-ART MCH instead (https://github.com/MeteoSwiss/pyart)')
 
+from pyart.util import subset_radar
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from ..io.read_data_sensor import read_trt_traj_data
 from ..io.read_data_other import read_antenna_pattern
@@ -83,6 +91,7 @@ def get_process_func(dataset_type, dsname):
                 'FIELDS_DIFF': process_fields_diff
                 'FIXED_RNG': process_fixed_rng
                 'FIXED_RNG_SPAN': process_fixed_rng_span
+                'GATEFILTER': process_gatefilter
                 'GECSX' : process_gecsx
                 'hydroMF_to_hydro': process_hydro_mf_to_hydro
                 'hydroMF_to_SAN: process_hydro_mf_to_echo_id
@@ -147,6 +156,7 @@ def get_process_func(dataset_type, dsname):
                 'WBN': process_wbn_iq
                 'WIND_VEL': process_wind_vel
                 'WINDSHEAR': process_windshear
+                'WINDSHEAR_LIDAR': process_windshear_lidar
                 'ZDR': process_differential_reflectivity
                 'ZDR_IQ': process_differential_reflectivity_iq
                 'ZDR_PREC': process_zdr_precip
@@ -259,6 +269,8 @@ def get_process_func(dataset_type, dsname):
         func_name = 'process_radar_resampling'
     elif dataset_type == 'CCOR':
         func_name = 'process_ccor'
+    elif dataset_type == 'GATEFILTER':
+        func_name = 'process_gatefilter'
     elif dataset_type == 'GECSX':
         func_name = 'process_gecsx'
         dsformat = ['GRID', 'VOL']
@@ -456,6 +468,8 @@ def get_process_func(dataset_type, dsname):
         func_name = 'process_vad'
     elif dataset_type == 'WINDSHEAR':
         func_name = 'process_windshear'
+    elif dataset_type == 'WINDSHEAR_LIDAR':
+        func_name = 'process_windshear_lidar'    
     elif dataset_type == 'HYDROCLASS':
         func_name = 'process_hydroclass'
     elif dataset_type == 'CENTROIDS':
@@ -670,7 +684,8 @@ def process_raw(procstatus, dscfg, radar_list=None):
     for datatypedescr in dscfg['datatype']:
         radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
         break
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
+    
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
         return None, None
@@ -727,7 +742,7 @@ def process_vol_to_grid(procstatus, dscfg, radar_list=None):
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_names_aux.append(get_fieldname_pyart(datatype))
-        ind_rads_aux.append(int(radarnr[5:8])-1)
+        ind_rads_aux.append(int(radarnr[5:8]) - 1)
     field_names_aux = np.array(field_names_aux)
     field_names_aux = np.unique(field_names_aux)
     ind_rads_aux = np.array(ind_rads_aux)
@@ -753,7 +768,10 @@ def process_vol_to_grid(procstatus, dscfg, radar_list=None):
         nfields = 0
         for radar in radar_list_aux:
             if field_name not in radar.fields:
-                warn('Field name '+field_name+' not available in radar object')
+                warn(
+                    'Field name ' +
+                    field_name +
+                    ' not available in radar object')
                 continue
             nfields += 1
         if nfields == nrad:
@@ -778,9 +796,9 @@ def process_vol_to_grid(procstatus, dscfg, radar_list=None):
     wfunc = dscfg.get('wfunc', 'NEAREST')
 
     # number of grid points
-    ny = int((ymax-ymin)/hres)+1
-    nx = int((xmax-xmin)/hres)+1
-    nz = int((zmax-zmin)/vres)+1
+    ny = int((ymax - ymin) / hres) + 1
+    nx = int((xmax - xmin) / hres) + 1
+    nz = int((zmax - zmin) / vres) + 1
 
     # parameters to determine the gates to use for each grid point
     if (radar_list_aux[0].instrument_parameters is not None and
@@ -801,7 +819,7 @@ def process_vol_to_grid(procstatus, dscfg, radar_list=None):
     grid = grid_from_radars(
         radar_list_aux, gridding_algo='map_to_grid', weighting_function=wfunc,
         roi_func='dist_beam', h_factor=1.0, nb=beamwidth, bsp=beam_spacing,
-        min_radius=hres/2.,
+        min_radius=hres / 2.,
         grid_shape=(nz, ny, nx),
         grid_limits=((zmin, zmax), (ymin, ymax), (xmin, xmax)),
         grid_origin=(lat, lon), grid_origin_alt=alt,
@@ -841,7 +859,7 @@ def process_save_radar(procstatus, dscfg, radar_list=None):
     for datatypedescr in dscfg['datatype']:
         radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
         break
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
         return None, None
@@ -890,7 +908,7 @@ def process_fixed_rng(procstatus, dscfg, radar_list=None):
         radarnr, _, datatype, _, _ = get_datatype_fields(
             datatypedescr)
         field_names.append(get_fieldname_pyart(datatype))
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
 
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
@@ -955,7 +973,7 @@ def process_fixed_rng_span(procstatus, dscfg, radar_list=None):
         radarnr, _, datatype, _, _ = get_datatype_fields(
             datatypedescr)
         field_names.append(get_fieldname_pyart(datatype))
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
 
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
@@ -1040,7 +1058,7 @@ def process_roi(procstatus, dscfg, radar_list=None):
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_names_aux.append(get_fieldname_pyart(datatype))
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
         return None, None
@@ -1051,7 +1069,7 @@ def process_roi(procstatus, dscfg, radar_list=None):
     nfields_available = 0
     for field_name in field_names_aux:
         if field_name not in radar.fields:
-            warn('Field name '+field_name+' not available in radar object')
+            warn('Field name ' + field_name + ' not available in radar object')
             continue
         field_names.append(field_name)
         nfields_available += 1
@@ -1294,7 +1312,7 @@ def process_roi2(procstatus, dscfg, radar_list=None):
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_names_aux.append(get_fieldname_pyart(datatype))
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
         return None, None
@@ -1305,7 +1323,7 @@ def process_roi2(procstatus, dscfg, radar_list=None):
     nfields_available = 0
     for field_name in field_names_aux:
         if field_name not in radar.fields:
-            warn('Field name '+field_name+' not available in radar object')
+            warn('Field name ' + field_name + ' not available in radar object')
             continue
         field_names.append(field_name)
         nfields_available += 1
@@ -1438,7 +1456,7 @@ def process_roi2(procstatus, dscfg, radar_list=None):
     # prepare new radar object output
     new_dataset = {
         'radar_out': deepcopy(radar),
-        'rng_res': radar.range['data'][1]-radar.range['data'][0]
+        'rng_res': radar.range['data'][1] - radar.range['data'][0]
     }
 
     new_dataset['radar_out'].range['data'] = radar.range['data'][inds_rng]
@@ -1546,7 +1564,7 @@ def process_azimuthal_average(procstatus, dscfg, radar_list=None):
         datatypes_aux.append(datatype)
         field_names_aux.append(get_fieldname_pyart(datatype))
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
         return None, None
@@ -1558,7 +1576,7 @@ def process_azimuthal_average(procstatus, dscfg, radar_list=None):
     avg_type = dscfg.get('avg_type', 'mean')
     nvalid_min = dscfg.get('nvalid_min', 1)
     if avg_type not in ('mean', 'median'):
-        warn('Unsuported statistics '+avg_type)
+        warn('Unsuported statistics ' + avg_type)
         return None, None
 
     # keep only fields present in radar object
@@ -1570,7 +1588,7 @@ def process_azimuthal_average(procstatus, dscfg, radar_list=None):
     nfields_available = 0
     for field_name, datatype in zip(field_names_aux, datatypes_aux):
         if field_name not in radar.fields:
-            warn('Field name '+field_name+' not available in radar object')
+            warn('Field name ' + field_name + ' not available in radar object')
             continue
         field_names.append(field_name)
         datatypes.append(datatype)
@@ -1650,7 +1668,7 @@ def process_moving_azimuthal_average(procstatus, dscfg, radar_list=None):
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_names_aux.append(get_fieldname_pyart(datatype))
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
         return None, None
@@ -1661,7 +1679,7 @@ def process_moving_azimuthal_average(procstatus, dscfg, radar_list=None):
     avg_type = dscfg.get('avg_type', 'mean')
     nvalid_min = dscfg.get('nvalid_min', 1)
     if avg_type not in ('mean', 'median'):
-        warn('Unsuported statistics '+avg_type)
+        warn('Unsuported statistics ' + avg_type)
         return None, None
 
     # keep only fields present in radar object
@@ -1673,7 +1691,7 @@ def process_moving_azimuthal_average(procstatus, dscfg, radar_list=None):
     nfields_available = 0
     for field_name in field_names_aux:
         if field_name not in radar.fields:
-            warn('Field name '+field_name+' not available in radar object')
+            warn('Field name ' + field_name + ' not available in radar object')
             continue
         field_names.append(field_name)
         datatypes.append(datatype)
@@ -1711,7 +1729,7 @@ def process_moving_azimuthal_average(procstatus, dscfg, radar_list=None):
 
         for ind_ray_sweep, angle in enumerate(radar_aux.azimuth['data']):
             ind_ray = (
-                ind_ray_sweep+radar_out.sweep_start_ray_index['data'][sweep])
+                ind_ray_sweep + radar_out.sweep_start_ray_index['data'][sweep])
             # find neighbouring gates to be selected
             inds_ray, inds_rng = find_neighbour_gates(
                 radar_aux, angle, None, delta_azi=delta_azi, delta_rng=None)
@@ -1721,16 +1739,16 @@ def process_moving_azimuthal_average(procstatus, dscfg, radar_list=None):
                 field_aux = radar_aux.fields[field_name]['data'][:, inds_rng]
                 field_aux = field_aux[inds_ray, :]
                 if avg_type == 'mean':
-                    if lin_trans_aux[field_name]:
-                        field_aux = np.ma.power(10., 0.1*field_aux)
+                    if lin_trans[field_name]:
+                        field_aux = np.ma.power(10., 0.1 * field_aux)
 
                 vals, _ = compute_directional_stats(
                     field_aux, avg_type=avg_type, nvalid_min=nvalid_min,
                     axis=0)
 
                 if avg_type == 'mean':
-                    if lin_trans_aux[field_name]:
-                        vals = 10.*np.ma.log10(vals)
+                    if lin_trans[field_name]:
+                        vals = 10. * np.ma.log10(vals)
 
                 radar_out.fields[field_name]['data'][ind_ray, :] = vals
 
@@ -1847,7 +1865,7 @@ def process_radar_resampling(procstatus, dscfg, radar_list=None):
         field_names_aux.append(get_fieldname_pyart(datatype))
         datatypes.append(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if ((radar_list is None) or (radar_list[ind_rad] is None)):
         warn('ERROR: No valid radar found')
         return None, None
@@ -1856,7 +1874,7 @@ def process_radar_resampling(procstatus, dscfg, radar_list=None):
     field_names = []
     for field_name in field_names_aux:
         if field_name not in radar.fields:
-            warn('Field '+field_name+' not in observations radar object')
+            warn('Field ' + field_name + ' not in observations radar object')
             continue
         field_names.append(field_name)
 
@@ -1945,7 +1963,7 @@ def process_radar_resampling(procstatus, dscfg, radar_list=None):
         target_radar = _create_target_radar(
             radar, dscfg, fixed_angle_val, info, field_names,
             change_antenna_pattern=change_antenna_pattern,
-            quantiles=100*quants)
+            quantiles=100 * quants)
 
         # Get antenna pattern and make weight vector
         try:
@@ -1992,7 +2010,7 @@ def process_radar_resampling(procstatus, dscfg, radar_list=None):
                     data_is_log[field_name] = (
                         dscfg['data_is_log'][datatype] != 0)
                 else:
-                    warn('Units type for data type '+datatype +
+                    warn('Units type for data type ' + datatype +
                          ' not specified. Assumed linear')
 
             use_nans.update({field_name: False})
@@ -2001,15 +2019,15 @@ def process_radar_resampling(procstatus, dscfg, radar_list=None):
                     use_nans[field_name] = (
                         dscfg['use_nans'][datatype] != 0)
                 else:
-                    warn('Use of nans not specified for data type '+datatype +
-                         ' not specified. Assumed not used')
+                    warn('Use of nans not specified for data type ' +
+                         datatype + ' not specified. Assumed not used')
 
             nan_value.update({field_name: 0.})
             if 'nan_value' in dscfg:
                 if datatype in dscfg['nan_value']:
                     nan_value[field_name] = dscfg['nan_value'][datatype]
                 else:
-                    warn('NaN value not specified for data type '+datatype +
+                    warn('NaN value not specified for data type ' + datatype +
                          ' not specified. Assumed 0')
 
         # Persistent data structure
@@ -2042,9 +2060,9 @@ def process_radar_resampling(procstatus, dscfg, radar_list=None):
         # update time of target radar
         trdict['target_radar'].time = deepcopy(radar.time)
         time_data = np.sort(trdict['target_radar'].time['data'])
-        time_res = time_data[1]-time_data[0]
+        time_res = time_data[1] - time_data[0]
         trdict['target_radar'].time['data'] = np.arange(
-            trdict['target_radar'].nrays)*time_res
+            trdict['target_radar'].nrays) * time_res
 
         # reset field values
         for field_name in trdict['target_radar'].fields.keys():
@@ -2120,7 +2138,10 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
     if not change_antenna_pattern:
         for field_name in field_names:
             if field_name not in radar.fields:
-                warn('Field '+field_name+' not in observations radar object')
+                warn(
+                    'Field ' +
+                    field_name +
+                    ' not in observations radar object')
                 continue
 
             values = radar.fields[field_name]['data'].flatten()
@@ -2198,11 +2219,11 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
                     continue
 
                 # average field
-                target_radar.fields['avg_'+field_name]['data'][
+                target_radar.fields['avg_' + field_name]['data'][
                     trad_ind_ray, trad_ind_rng] = avg
 
                 # npoints field
-                target_radar.fields['npoints_'+field_name]['data'][
+                target_radar.fields['npoints_' + field_name]['data'][
                     trad_ind_ray, trad_ind_rng] = nvals_valid
 
                 # quantile fields
@@ -2210,7 +2231,7 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
                     if val is None:
                         continue
                     quant_field = (
-                        'quant'+'{:02d}'.format(int(100*quant))+'_' +
+                        'quant' + '{:02d}'.format(int(100 * quant)) + '_' +
                         field_name)
                     target_radar.fields[quant_field]['data'][
                         trad_ind_ray, trad_ind_rng] = val
@@ -2255,11 +2276,11 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
                     continue
 
                 # average field
-                target_radar.fields['avg_'+field_name]['data'][
+                target_radar.fields['avg_' + field_name]['data'][
                     trad_ind_ray, trad_ind_rng] = avg
 
                 # npoints field
-                target_radar.fields['npoints_'+field_name]['data'][
+                target_radar.fields['npoints_' + field_name]['data'][
                     trad_ind_ray, trad_ind_rng] = nvals_valid
 
                 # quantile fields
@@ -2267,7 +2288,7 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
                     if val is None:
                         continue
                     quant_field = (
-                        'quant'+'{:02d}'.format(int(100*quant))+'_' +
+                        'quant' + '{:02d}'.format(int(100 * quant)) + '_' +
                         field_name)
                     target_radar.fields[quant_field]['data'][
                         trad_ind_ray, trad_ind_rng] = val
@@ -2275,12 +2296,12 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
             tend = time()
 
             print(
-                'original radar indices (azi, rng): '+str(rad_ind_ray)+', ' +
+                'original radar indices (azi, rng): ' + str(rad_ind_ray) + ', ' +
                 str(rad_ind_rng) +
-                ' target radar indices (azi, rng): '+str(trad_ind_ray)+', ' +
+                ' target radar indices (azi, rng): ' + str(trad_ind_ray) + ', ' +
                 str(trad_ind_rng) +
-                ' Samples done: '+str(sample)+'/'+str(rad_ind_rngs.size) +
-                ' Time used: '+str(tend-tstart),
+                ' Samples done: ' + str(sample) + '/' + str(rad_ind_rngs.size) +
+                ' Time used: ' + str(tend - tstart),
                 end="\r", flush=True)
 
     return target_radar
@@ -2347,28 +2368,28 @@ def _create_target_radar(radar, dscfg, fixed_angle_val, info, field_names,
         altitude['data'] = np.array(
             [dscfg['target_radar_pos']['altitude']], dtype=np.float64)
 
-    _range['data'] = np.arange(rng_min, rng_max+rng_res, rng_res)
+    _range['data'] = np.arange(rng_min, rng_max + rng_res, rng_res)
     ngates = _range['data'].size
 
     fixed_angle['data'] = np.array(fixed_angle_val)
     nsweeps = fixed_angle['data'].size
     if info in ('parElAnt', 'asrLowBeamAnt', 'asrHighBeamAnt'):
         scan_type = 'ppi'
-        sweep_mode['data'] = np.array(nsweeps*['azimuth_surveillance'])
+        sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance'])
     else:
         scan_type = 'rhi'
-        sweep_mode['data'] = np.array(nsweeps*['elevation_surveillance'])
+        sweep_mode['data'] = np.array(nsweeps * ['elevation_surveillance'])
 
     moving_angle = np.arange(
-        moving_angle_min, moving_angle_max+ray_res, ray_res)
+        moving_angle_min, moving_angle_max + ray_res, ray_res)
 
-    nrays = moving_angle.size*nsweeps
+    nrays = moving_angle.size * nsweeps
     sweep_start_ray_index['data'] = np.empty((nsweeps), dtype=np.int32)
     sweep_end_ray_index['data'] = np.empty((nsweeps), dtype=np.int32)
     sweep_number['data'] = np.arange(nsweeps)
     for sweep in range(nsweeps):
-        sweep_start_ray_index['data'][sweep] = sweep*nrays
-        sweep_end_ray_index['data'][sweep] = (sweep+1)*(nrays-1)
+        sweep_start_ray_index['data'][sweep] = sweep * nrays
+        sweep_end_ray_index['data'][sweep] = (sweep + 1) * (nrays - 1)
 
     elevation['data'] = np.empty((nrays), dtype=float)
     azimuth['data'] = np.empty((nrays), dtype=float)
@@ -2376,20 +2397,20 @@ def _create_target_radar(radar, dscfg, fixed_angle_val, info, field_names,
         for sweep, (start_ray, end_ray) in enumerate(zip(
                 sweep_start_ray_index['data'],
                 sweep_end_ray_index['data'])):
-            azimuth['data'][start_ray:end_ray+1] = moving_angle
-            elevation['data'][start_ray:end_ray+1] = (
+            azimuth['data'][start_ray:end_ray + 1] = moving_angle
+            elevation['data'][start_ray:end_ray + 1] = (
                 fixed_angle['data'][sweep])
     else:
         for sweep, (start_ray, end_ray) in enumerate(zip(
                 sweep_start_ray_index['data'],
                 sweep_end_ray_index['data'])):
-            elevation['data'][start_ray:end_ray+1] = moving_angle
-            azimuth['data'][start_ray:end_ray+1] = fixed_angle['data'][sweep]
+            elevation['data'][start_ray:end_ray + 1] = moving_angle
+            azimuth['data'][start_ray:end_ray + 1] = fixed_angle['data'][sweep]
 
     _time = deepcopy(radar.time)
     time_data = np.sort(_time['data'])
-    time_res = time_data[1]-time_data[0]
-    _time['data'] = np.arange(nrays)*time_res
+    time_res = time_data[1] - time_data[0]
+    _time['data'] = np.arange(nrays) * time_res
 
     fields = dict()
     for field_name in field_names:
@@ -2399,12 +2420,12 @@ def _create_target_radar(radar, dscfg, fixed_angle_val, info, field_names,
             continue
 
         # average field
-        field_name_aux = 'avg_'+field_name
+        field_name_aux = 'avg_' + field_name
         fields.update({field_name_aux: get_metadata(field_name_aux)})
         fields[field_name_aux]['data'] = np.ma.masked_all((nrays, ngates))
 
         # npoints field
-        field_name_aux = 'npoints_'+field_name
+        field_name_aux = 'npoints_' + field_name
         fields.update({field_name_aux: get_metadata(field_name_aux)})
         fields[field_name_aux]['data'] = np.ma.zeros(
             (nrays, ngates), dtype=np.int32)
@@ -2412,7 +2433,7 @@ def _create_target_radar(radar, dscfg, fixed_angle_val, info, field_names,
         # quantile fields
         for quant in quantiles:
             field_name_aux = (
-                'quant'+'{:02d}'.format(int(quant))+'_'+field_name)
+                'quant' + '{:02d}'.format(int(quant)) + '_' + field_name)
             fields.update({field_name_aux: get_metadata(field_name_aux)})
             fields[field_name_aux]['data'] = np.ma.masked_all((nrays, ngates))
 

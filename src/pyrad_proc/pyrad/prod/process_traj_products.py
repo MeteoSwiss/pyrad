@@ -133,7 +133,7 @@ def generate_traj_product(traj, prdcfg):
 
         return None
 
-    if prdcfg['type'] == 'TRAJ_MAP': #Trajectory on a map
+    if prdcfg['type'] == 'TRAJ_MAP':  # Trajectory on a map
         timeinfo = traj.time_vector[0]
         savedir = get_save_dir(
             prdcfg['basepath'], prdcfg['procname'], dssavedir,
@@ -149,7 +149,7 @@ def generate_traj_product(traj, prdcfg):
 
         fname_list = fname
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         # Get traj
         lat = traj.wgs84_lat_deg

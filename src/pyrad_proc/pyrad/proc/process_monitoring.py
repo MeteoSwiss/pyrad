@@ -117,7 +117,7 @@ def process_selfconsistency_kdp_phidp(procstatus, dscfg, radar_list=None):
         if datatype == 'uRhoHV':
             rhohv = 'uncorrected_cross_correlation_ratio'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -159,7 +159,7 @@ def process_selfconsistency_kdp_phidp(procstatus, dscfg, radar_list=None):
         else:
             fzl = 2000.
             warn('Freezing level height not defined. Using default ' +
-                 str(fzl)+' m')
+                 str(fzl) + ' m')
 
     # get self-consistency parametrization or curves
     parametrization = dscfg.get('parametrization', 'None')
@@ -179,7 +179,10 @@ def process_selfconsistency_kdp_phidp(procstatus, dscfg, radar_list=None):
         if parametrization == 'None':
             # find unique elevations
             el_vec = np.unique(
-                (10.*np.round(radar.elevation['data'], decimals=1)).astype(int))
+                (10. *
+                 np.round(
+                     radar.elevation['data'],
+                     decimals=1)).astype(int))
             zdr_kdpzh_list = list()
             el_list = list()
             for el in el_vec:
@@ -189,15 +192,19 @@ def process_selfconsistency_kdp_phidp(procstatus, dscfg, radar_list=None):
                     selfcons_dir = dscfg['configpath'] + 'selfconsistency/'
                 fname = (
                     selfcons_dir +
-                    'selfconsistency_zdr_zhkdp_'+freq_band+'band_temp10_elev' +
-                    '{:03d}'.format(el)+'_mu05.txt')
+                    'selfconsistency_zdr_zhkdp_' +
+                    freq_band +
+                    'band_temp10_elev' +
+                    '{:03d}'.format(el) +
+                    '_mu05.txt')
                 zdr_kdpzh_table = read_selfconsistency(fname)
                 if zdr_kdpzh_table is not None:
                     zdr_kdpzh_list.append(zdr_kdpzh_table)
-                    el_list.append((el/10.).astype(int))
+                    el_list.append((el / 10.).astype(int))
             if not el_list:
-                warn('Unable to retrieve PhiDP and KDP using self-consistency. ' +
-                     'No selfconsistency files for the radar elevations.')
+                warn(
+                    'Unable to retrieve PhiDP and KDP using self-consistency. ' +
+                    'No selfconsistency files for the radar elevations.')
 
                 return None, None
             zdr_kdpzh_dict = {'zdr_kdpzh': zdr_kdpzh_list,
@@ -221,8 +228,8 @@ def process_selfconsistency_kdp_phidp(procstatus, dscfg, radar_list=None):
 
         kdpsim_field = 'specific_differential_phase'
         phidpsim_field = 'differential_phase'
-        r_res = radar.range['data'][1]-radar.range['data'][0]
-        smooth_wind_len = int(rsmooth/r_res)
+        r_res = radar.range['data'][1] - radar.range['data'][0]
+        smooth_wind_len = int(rsmooth / r_res)
 
         kdpsim, phidpsim = pyart.correct.selfconsistency_kdp_phidp(
             radar, dscfg['global_data'], min_rhohv=min_rhohv,
@@ -368,7 +375,7 @@ def process_selfconsistency_bias(procstatus, dscfg, radar_list=None):
         if datatype == 'uRhoHV':
             rhohv = 'uncorrected_cross_correlation_ratio'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -410,7 +417,7 @@ def process_selfconsistency_bias(procstatus, dscfg, radar_list=None):
         else:
             fzl = 2000.
             warn('Freezing level height not defined. Using default ' +
-                 str(fzl)+' m')
+                 str(fzl) + ' m')
 
     # get self-consistency parametrization or curves
     parametrization = dscfg.get('parametrization', 'None')
@@ -430,7 +437,10 @@ def process_selfconsistency_bias(procstatus, dscfg, radar_list=None):
         if parametrization == 'None':
             # find unique elevations
             el_vec = np.unique(
-                (10.*np.round(radar.elevation['data'], decimals=1)).astype(int))
+                (10. *
+                 np.round(
+                     radar.elevation['data'],
+                     decimals=1)).astype(int))
             zdr_kdpzh_list = list()
             el_list = list()
             for el in el_vec:
@@ -440,12 +450,15 @@ def process_selfconsistency_bias(procstatus, dscfg, radar_list=None):
                     selfcons_dir = dscfg['configpath'] + 'selfconsistency/'
                 fname = (
                     selfcons_dir +
-                    'selfconsistency_zdr_zhkdp_'+freq_band+'band_temp10_elev' +
-                    '{:03d}'.format(el)+'_mu05.txt')
+                    'selfconsistency_zdr_zhkdp_' +
+                    freq_band +
+                    'band_temp10_elev' +
+                    '{:03d}'.format(el) +
+                    '_mu05.txt')
                 zdr_kdpzh_table = read_selfconsistency(fname)
                 if zdr_kdpzh_table is not None:
                     zdr_kdpzh_list.append(zdr_kdpzh_table)
-                    el_list.append((el/10.).astype(int))
+                    el_list.append((el / 10.).astype(int))
             if not el_list:
                 warn('Unable to retrieve Zh bias using self-consistency. ' +
                      'No selfconsistency files for the radar elevations.')
@@ -485,16 +498,16 @@ def process_selfconsistency_bias(procstatus, dscfg, radar_list=None):
         wet_radome_refl = dscfg.get('wet_radome_refl', 25.)
         wet_radome_rng_min = dscfg.get('wet_radome_rng_min', 2000.)
         wet_radome_rng_max = dscfg.get('wet_radome_rng_max', 4000.)
-        wet_radome_ngates_min = dscfg.get('wet_radome_ngates_min', 180)
+        dscfg.get('wet_radome_ngates_min', 180)
         valid_gates_only = dscfg.get('valid_gates_only', False)
         rkdp = dscfg.get('rkdp', 6000.)
 
-        r_res = radar.range['data'][1]-radar.range['data'][0]
-        smooth_wind_len = int(rsmooth/r_res)
-        kdp_wind_len = int(rkdp/r_res)
-        min_rcons = int(rcell/r_res)
-        wet_radome_len_min = int(wet_radome_rng_min/r_res)
-        wet_radome_len_max = int(wet_radome_rng_max/r_res)
+        r_res = radar.range['data'][1] - radar.range['data'][0]
+        smooth_wind_len = int(rsmooth / r_res)
+        kdp_wind_len = int(rkdp / r_res)
+        min_rcons = int(rcell / r_res)
+        wet_radome_len_min = int(wet_radome_rng_min / r_res)
+        wet_radome_len_max = int(wet_radome_rng_max / r_res)
 
         refl_bias, selfconsistency_dict = pyart.correct.selfconsistency_bias(
             radar, dscfg['global_data']['zdr_kdpzh_dict'],
@@ -620,8 +633,8 @@ def process_selfconsistency_bias2(procstatus, dscfg, radar_list=None):
             kdp_sim = np.ma.array(
                 dscfg['global_data']['kdp_data_dict']['kdp_sim'])
             reflectivity_bias = {
-                'value': 10.*np.ma.log10(
-                    np.ma.sum(kdp_sim)/np.ma.sum(kdp_obs)),
+                'value': 10. * np.ma.log10(
+                    np.ma.sum(kdp_sim) / np.ma.sum(kdp_obs)),
                 'npoints': kdp_obs.size,
                 'timeinfo': dscfg['global_data']['kdp_data_dict']['timeinfo'],
                 'bias_type': 'cumulative'}
@@ -630,7 +643,7 @@ def process_selfconsistency_bias2(procstatus, dscfg, radar_list=None):
                 samples = ratio_bootstrapping(
                     kdp_sim, kdp_obs, nsamples=nsamples_confidence)
                 reflectivity_bias.update(
-                    {'samples': 10.*np.ma.log10(samples)})
+                    {'samples': 10. * np.ma.log10(samples)})
             dataset = {'reflectivity_bias': reflectivity_bias}
 
         if keep_points:
@@ -679,7 +692,7 @@ def process_selfconsistency_bias2(procstatus, dscfg, radar_list=None):
         if datatype == 'uRhoHV':
             rhohv = 'uncorrected_cross_correlation_ratio'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -721,7 +734,7 @@ def process_selfconsistency_bias2(procstatus, dscfg, radar_list=None):
         else:
             fzl = 2000.
             warn('Freezing level height not defined. Using default ' +
-                 str(fzl)+' m')
+                 str(fzl) + ' m')
 
     # get self-consistency parametrization or curves
     parametrization = dscfg.get('parametrization', 'None')
@@ -741,18 +754,25 @@ def process_selfconsistency_bias2(procstatus, dscfg, radar_list=None):
         if parametrization == 'None':
             # find unique elevations
             el_vec = np.unique(
-                (10.*np.round(radar.elevation['data'], decimals=1)).astype(int))
+                (10. *
+                 np.round(
+                     radar.elevation['data'],
+                     decimals=1)).astype(int))
             zdr_kdpzh_list = list()
             el_list = list()
             for el in el_vec:
                 fname = (
-                    dscfg['configpath'] + 'selfconsistency/' +
-                    'selfconsistency_zdr_zhkdp_'+freq_band+'band_temp10_elev' +
-                    '{:03d}'.format(el)+'_mu05.txt')
+                    dscfg['configpath'] +
+                    'selfconsistency/' +
+                    'selfconsistency_zdr_zhkdp_' +
+                    freq_band +
+                    'band_temp10_elev' +
+                    '{:03d}'.format(el) +
+                    '_mu05.txt')
                 zdr_kdpzh_table = read_selfconsistency(fname)
                 if zdr_kdpzh_table is not None:
                     zdr_kdpzh_list.append(zdr_kdpzh_table)
-                    el_list.append((el/10.).astype(int))
+                    el_list.append((el / 10.).astype(int))
             if not el_list:
                 warn('Unable to retrieve Zh bias using self-consistency. ' +
                      'No selfconsistency files for the radar elevations.')
@@ -797,14 +817,14 @@ def process_selfconsistency_bias2(procstatus, dscfg, radar_list=None):
         wet_radome_refl = dscfg.get('wet_radome_refl', 25.)
         wet_radome_rng_min = dscfg.get('wet_radome_rng_min', 2000.)
         wet_radome_rng_max = dscfg.get('wet_radome_rng_max', 4000.)
-        wet_radome_ngates_min = dscfg.get('wet_radome_ngates_min', 180)
+        dscfg.get('wet_radome_ngates_min', 180)
         bias_per_gate = dscfg.get('bias_per_gate', False)
 
-        r_res = radar.range['data'][1]-radar.range['data'][0]
-        smooth_wind_len = int(rsmooth/r_res)
-        min_rcons = int(rcell/r_res)
-        wet_radome_len_min = int(wet_radome_rng_min/r_res)
-        wet_radome_len_max = int(wet_radome_rng_max/r_res)
+        r_res = radar.range['data'][1] - radar.range['data'][0]
+        smooth_wind_len = int(rsmooth / r_res)
+        min_rcons = int(rcell / r_res)
+        wet_radome_len_min = int(wet_radome_rng_min / r_res)
+        wet_radome_len_max = int(wet_radome_rng_max / r_res)
 
         kdp_data_dict, refl_bias, selfcons_dict = pyart.correct.selfconsistency_bias2(
             radar, dscfg['global_data']['zdr_kdpzh_dict'],
@@ -849,15 +869,15 @@ def process_selfconsistency_bias2(procstatus, dscfg, radar_list=None):
                 kdp_obs = np.ma.array(kdp_data_dict['kdp_obs'])
                 kdp_sim = np.ma.array(kdp_data_dict['kdp_sim'])
 
-                reflectivity_bias['value'] = 10.*np.ma.log10(
-                    np.ma.sum(kdp_sim)/np.ma.sum(kdp_obs))
+                reflectivity_bias['value'] = 10. * np.ma.log10(
+                    np.ma.sum(kdp_sim) / np.ma.sum(kdp_obs))
                 reflectivity_bias['npoints'] = kdp_obs.size
 
                 if provide_confidence:
                     samples = ratio_bootstrapping(
                         kdp_sim, kdp_obs, iter=nsamples_confidence)
                     reflectivity_bias.update(
-                        {'samples': 10.*np.ma.log10(samples)})
+                        {'samples': 10. * np.ma.log10(samples)})
 
             dataset = {'reflectivity_bias': reflectivity_bias}
 
@@ -926,7 +946,7 @@ def process_estimate_phidp0(procstatus, dscfg, radar_list=None):
         if datatype == 'uPhiDP':
             psidp_field = 'uncorrected_differential_phase'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -938,8 +958,8 @@ def process_estimate_phidp0(procstatus, dscfg, radar_list=None):
 
     ind_rmin = np.where(radar.range['data'] > dscfg['rmin'])[0][0]
     ind_rmax = np.where(radar.range['data'] < dscfg['rmax'])[0][-1]
-    r_res = radar.range['data'][1]-radar.range['data'][0]
-    min_rcons = int(dscfg['rcell']/r_res)
+    r_res = radar.range['data'][1] - radar.range['data'][0]
+    min_rcons = int(dscfg['rcell'] / r_res)
 
     phidp0, first_gates = pyart.correct.det_sys_phase_ray(
         radar, ind_rmin=ind_rmin, ind_rmax=ind_rmax, min_rcons=min_rcons,
@@ -1021,7 +1041,7 @@ def process_rhohv_rain(procstatus, dscfg, radar_list=None):
         if datatype == 'H_ISO0':
             iso0_field = 'height_over_iso0'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -1059,7 +1079,7 @@ def process_rhohv_rain(procstatus, dscfg, radar_list=None):
         else:
             fzl = 2000.
             warn('Freezing level height not defined. Using default ' +
-                 str(fzl)+' m')
+                 str(fzl) + ' m')
 
     # default values
     rmin = 1000.
@@ -1183,7 +1203,7 @@ def process_zdr_precip(procstatus, dscfg, radar_list=None):
         if datatype == 'H_ISO0':
             iso0_field = 'height_over_iso0'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -1230,7 +1250,7 @@ def process_zdr_precip(procstatus, dscfg, radar_list=None):
             else:
                 fzl = 2000.
                 warn('Freezing level height not defined. Using default ' +
-                     str(fzl)+' m')
+                     str(fzl) + ' m')
     else:
         temp_ref = None
 
@@ -1384,7 +1404,7 @@ def process_zdr_snow(procstatus, dscfg, radar_list=None):
         if datatype == 'hydro':
             hydro_field = 'radar_echo_classification'
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -1477,23 +1497,23 @@ def process_monitoring(procstatus, dscfg, radar_list=None):
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             field_name = get_fieldname_pyart(datatype)
             break
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
         if radar_list[ind_rad] is None:
             warn('No valid radar')
             return None, None
         radar = radar_list[ind_rad]
 
         if field_name not in radar.fields:
-            warn(field_name+' not available.')
+            warn(field_name + ' not available.')
             return None, None
 
         step = dscfg.get('step', None)
         max_rays = dscfg.get('max_rays', 0)
 
         bin_edges = get_histogram_bins(field_name, step=step)
-        nbins = len(bin_edges)-1
-        step = bin_edges[1]-bin_edges[0]
-        bin_centers = bin_edges[:-1]+step/2.
+        nbins = len(bin_edges) - 1
+        step = bin_edges[1] - bin_edges[0]
+        bin_centers = bin_edges[:-1] + step / 2.
 
         radar_aux = deepcopy(radar)
         if max_rays > 0:
@@ -1503,12 +1523,12 @@ def process_monitoring(procstatus, dscfg, radar_list=None):
             if ind_above_max.size > 0:
                 radar_aux.rays_per_sweep['data'][ind_above_max] = max_rays
                 for ind in ind_above_max:
-                    excess_rays = radar.rays_per_sweep['data'][ind]-max_rays
+                    excess_rays = radar.rays_per_sweep['data'][ind] - max_rays
                     radar_aux.sweep_end_ray_index['data'][ind:] -= (
                         excess_rays)
-                    if ind < radar.nsweeps-1:
-                        radar_aux.sweep_start_ray_index['data'][ind+1:] = (
-                            radar_aux.sweep_end_ray_index['data'][ind:-1]+1)
+                    if ind < radar.nsweeps - 1:
+                        radar_aux.sweep_start_ray_index['data'][ind + 1:] = (
+                            radar_aux.sweep_end_ray_index['data'][ind:-1] + 1)
 
                 radar_aux.nrays = np.sum(radar_aux.rays_per_sweep['data'])
                 radar_aux.fields[field_name]['data'] = np.ma.masked_all(
@@ -1529,19 +1549,19 @@ def process_monitoring(procstatus, dscfg, radar_list=None):
                     ind_end_new = radar_aux.sweep_end_ray_index['data'][sweep]
 
                     radar_aux.fields[field_name]['data'][
-                        ind_start_new:ind_end_new+1, :] = (
+                        ind_start_new:ind_end_new + 1, :] = (
                             radar.fields[field_name]['data'][
-                                ind_start_old:ind_start_old+nrays_sweep, :])
-                    radar_aux.azimuth['data'][ind_start_new:ind_end_new+1] = (
+                                ind_start_old:ind_start_old + nrays_sweep, :])
+                    radar_aux.azimuth['data'][ind_start_new:ind_end_new + 1] = (
                         radar.azimuth['data'][
-                            ind_start_old:ind_start_old+nrays_sweep])
+                            ind_start_old:ind_start_old + nrays_sweep])
                     radar_aux.elevation['data'][
-                        ind_start_new:ind_end_new+1] = (
+                        ind_start_new:ind_end_new + 1] = (
                             radar.elevation['data'][
-                                ind_start_old:ind_start_old+nrays_sweep])
-                    radar_aux.time['data'][ind_start_new:ind_end_new+1] = (
+                                ind_start_old:ind_start_old + nrays_sweep])
+                    radar_aux.time['data'][ind_start_new:ind_end_new + 1] = (
                         radar.time['data'][
-                            ind_start_old:ind_start_old+nrays_sweep])
+                            ind_start_old:ind_start_old + nrays_sweep])
 
         radar_hist = deepcopy(radar_aux)
         radar_hist.fields = dict()
@@ -1555,10 +1575,10 @@ def process_monitoring(procstatus, dscfg, radar_list=None):
 
         # put gates with values off limits to limit
         mask = np.ma.getmaskarray(field)
-        ind = np.where(np.logical_and(mask == False, field < bin_centers[0]))
+        ind = np.where(np.logical_and(mask is False, field < bin_centers[0]))
         field[ind] = bin_centers[0]
 
-        ind = np.where(np.logical_and(mask == False, field > bin_centers[-1]))
+        ind = np.where(np.logical_and(mask is False, field > bin_centers[-1]))
         field[ind] = bin_centers[-1]
 
         for ray in range(radar_aux.nrays):
@@ -1597,7 +1617,7 @@ def process_monitoring(procstatus, dscfg, radar_list=None):
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             field_name = get_fieldname_pyart(datatype)
             break
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
 
         dataset = dict()
         dataset.update({'hist_obj': dscfg['global_data']['hist_obj']})

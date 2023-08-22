@@ -294,11 +294,11 @@ def generate_spectra_products(dataset, prdcfg):
                 ele_tol=ele_tol, azi_tol=azi_tol)
 
         if ind_ray is None:
-            warn('Ray azi='+str(azi)+', ele='+str(ele) +
+            warn('Ray azi=' + str(azi) + ', ele=' + str(ele) +
                  ' out of radar coverage')
             return None
 
-        gateinfo = 'az'+'{:.1f}'.format(azi)+'el'+'{:.1f}'.format(ele)
+        gateinfo = 'az' + '{:.1f}'.format(azi) + 'el' + '{:.1f}'.format(ele)
 
         xaxis_info = prdcfg.get('xaxis_info', 'Doppler_velocity')
         vmin = prdcfg.get('vmin', None)
@@ -314,7 +314,7 @@ def generate_spectra_products(dataset, prdcfg):
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         if dataset['radar_out'].ngates == 1:
             plot_Doppler(
@@ -325,7 +325,7 @@ def generate_spectra_products(dataset, prdcfg):
                 dataset['radar_out'], field_name, ind_ray, prdcfg, fname_list,
                 xaxis_info=xaxis_info, vmin=vmin, vmax=vmax)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -349,20 +349,20 @@ def generate_spectra_products(dataset, prdcfg):
             dataset['radar_out'].range['data'], rng, rng_tol=rng_tol)
 
         if ind_rng is None:
-            warn('No data at rng='+str(rng))
+            warn('No data at rng=' + str(rng))
             return None
 
         if along_azi:
             ind_rays = np.where(np.logical_and(
-                dataset['radar_out'].elevation['data'] <= ang+ang_tol,
-                dataset['radar_out'].elevation['data'] >= ang-ang_tol))[0]
+                dataset['radar_out'].elevation['data'] <= ang + ang_tol,
+                dataset['radar_out'].elevation['data'] >= ang - ang_tol))[0]
         else:
             ind_rays = np.where(np.logical_and(
-                dataset['radar_out'].azimuth['data'] <= ang+ang_tol,
-                dataset['radar_out'].azimuth['data'] >= ang-ang_tol))[0]
+                dataset['radar_out'].azimuth['data'] <= ang + ang_tol,
+                dataset['radar_out'].azimuth['data'] >= ang - ang_tol))[0]
 
         if ind_rays.size == 0:
-            warn('No data for angle '+str(ang))
+            warn('No data for angle ' + str(ang))
             return None
 
         # sort angles
@@ -374,9 +374,11 @@ def generate_spectra_products(dataset, prdcfg):
         ind_rays = ind_rays[np.argsort(ang_selected)]
 
         if along_azi:
-            gateinfo = 'azi'+'{:.1f}'.format(ang)+'rng'+'{:.1f}'.format(rng)
+            gateinfo = 'azi' + \
+                '{:.1f}'.format(ang) + 'rng' + '{:.1f}'.format(rng)
         else:
-            gateinfo = 'ele'+'{:.1f}'.format(ang)+'rng'+'{:.1f}'.format(rng)
+            gateinfo = 'ele' + \
+                '{:.1f}'.format(ang) + 'rng' + '{:.1f}'.format(rng)
 
         xaxis_info = prdcfg.get('xaxis_info', 'Doppler_velocity')
         vmin = prdcfg.get('vmin', None)
@@ -392,7 +394,7 @@ def generate_spectra_products(dataset, prdcfg):
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         if ind_rays.size == 1:
             plot_Doppler(
@@ -404,7 +406,7 @@ def generate_spectra_products(dataset, prdcfg):
                 prdcfg, fname_list, xaxis_info=xaxis_info,
                 along_azi=along_azi, vmin=vmin, vmax=vmax)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -434,7 +436,7 @@ def generate_spectra_products(dataset, prdcfg):
             az = '{:.1f}'.format(dataset['antenna_coordinates_az_el_r'][0])
             el = '{:.1f}'.format(dataset['antenna_coordinates_az_el_r'][1])
             r = '{:.1f}'.format(dataset['antenna_coordinates_az_el_r'][2])
-            gateinfo = ('az'+az+'r'+r+'el'+el)
+            gateinfo = ('az' + az + 'r' + r + 'el' + el)
         else:
             lon = '{:.3f}'.format(
                 dataset['point_coordinates_WGS84_lon_lat_alt'][0])
@@ -442,7 +444,7 @@ def generate_spectra_products(dataset, prdcfg):
                 dataset['point_coordinates_WGS84_lon_lat_alt'][1])
             alt = '{:.1f}'.format(
                 dataset['point_coordinates_WGS84_lon_lat_alt'][2])
-            gateinfo = ('lon'+lon+'lat'+lat+'alt'+alt)
+            gateinfo = ('lon' + lon + 'lat' + lat + 'alt' + alt)
 
         time_info = datetime_from_radar(dataset['radar_out'])
 
@@ -456,7 +458,7 @@ def generate_spectra_products(dataset, prdcfg):
             timeinfo=time_info, runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         if dataset['radar_out'].nrays == 1:
             plot_Doppler(
@@ -468,7 +470,7 @@ def generate_spectra_products(dataset, prdcfg):
                 xaxis_info=xaxis_info, vmin=vmin, vmax=vmax, xmin=xmin,
                 xmax=xmax, ymin=ymin, ymax=ymax)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -504,13 +506,19 @@ def generate_spectra_products(dataset, prdcfg):
                 dataset['radar_out'].range['data'], rng, rng_tol=rng_tol)
 
         if ind_rng is None or ind_ray is None:
-            warn('Point azi='+str(azi)+', ele='+str(ele)+', rng='+str(rng) +
-                 ' out of radar coverage')
+            warn(
+                'Point azi=' +
+                str(azi) +
+                ', ele=' +
+                str(ele) +
+                ', rng=' +
+                str(rng) +
+                ' out of radar coverage')
             return None
 
         gateinfo = (
-            'az'+'{:.1f}'.format(azi)+'el'+'{:.1f}'.format(ele) +
-            'r'+'{:.1f}'.format(rng))
+            'az' + '{:.1f}'.format(azi) + 'el' + '{:.1f}'.format(ele) +
+            'r' + '{:.1f}'.format(rng))
 
         xaxis_info = prdcfg.get('xaxis_info', 'Doppler_velocity')
         vmin = prdcfg.get('vmin', None)
@@ -526,13 +534,13 @@ def generate_spectra_products(dataset, prdcfg):
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_Doppler(
             dataset['radar_out'], field_name, ind_ray, ind_rng, prdcfg,
             fname_list, xaxis_info=xaxis_info, vmin=vmin, vmax=vmax)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -562,11 +570,11 @@ def generate_spectra_products(dataset, prdcfg):
                 ele_tol=ele_tol, azi_tol=azi_tol)
 
         if ind_ray is None:
-            warn('Ray azi='+str(azi)+', ele='+str(ele) +
+            warn('Ray azi=' + str(azi) + ', ele=' + str(ele) +
                  ' out of radar coverage')
             return None
 
-        gateinfo = 'az'+'{:.1f}'.format(azi)+'el'+'{:.1f}'.format(ele)
+        gateinfo = 'az' + '{:.1f}'.format(azi) + 'el' + '{:.1f}'.format(ele)
 
         xaxis_info = prdcfg.get('xaxis_info', 'Doppler_velocity')
         vmin = prdcfg.get('vmin', None)
@@ -582,7 +590,7 @@ def generate_spectra_products(dataset, prdcfg):
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         if dataset['radar_out'].ngates == 1:
             plot_complex_Doppler(
@@ -593,7 +601,7 @@ def generate_spectra_products(dataset, prdcfg):
                 dataset['radar_out'], field_name, ind_ray, prdcfg, fname_list,
                 xaxis_info=xaxis_info, vmin=vmin, vmax=vmax)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -617,20 +625,20 @@ def generate_spectra_products(dataset, prdcfg):
             dataset['radar_out'].range['data'], rng, rng_tol=rng_tol)
 
         if ind_rng is None:
-            warn('No data at rng='+str(rng))
+            warn('No data at rng=' + str(rng))
             return None
 
         if along_azi:
             ind_rays = np.where(np.logical_and(
-                dataset['radar_out'].elevation['data'] <= ang+ang_tol,
-                dataset['radar_out'].elevation['data'] >= ang-ang_tol))[0]
+                dataset['radar_out'].elevation['data'] <= ang + ang_tol,
+                dataset['radar_out'].elevation['data'] >= ang - ang_tol))[0]
         else:
             ind_rays = np.where(np.logical_and(
-                dataset['radar_out'].azimuth['data'] <= ang+ang_tol,
-                dataset['radar_out'].azimuth['data'] >= ang-ang_tol))[0]
+                dataset['radar_out'].azimuth['data'] <= ang + ang_tol,
+                dataset['radar_out'].azimuth['data'] >= ang - ang_tol))[0]
 
         if ind_rays.size == 0:
-            warn('No data for angle '+str(ang))
+            warn('No data for angle ' + str(ang))
             return None
 
         # sort angles
@@ -642,9 +650,11 @@ def generate_spectra_products(dataset, prdcfg):
         ind_rays = ind_rays[np.argsort(ang_selected)]
 
         if along_azi:
-            gateinfo = 'azi'+'{:.1f}'.format(ang)+'rng'+'{:.1f}'.format(rng)
+            gateinfo = 'azi' + \
+                '{:.1f}'.format(ang) + 'rng' + '{:.1f}'.format(rng)
         else:
-            gateinfo = 'ele'+'{:.1f}'.format(ang)+'rng'+'{:.1f}'.format(rng)
+            gateinfo = 'ele' + \
+                '{:.1f}'.format(ang) + 'rng' + '{:.1f}'.format(rng)
 
         xaxis_info = prdcfg.get('xaxis_info', 'Doppler_velocity')
         vmin = prdcfg.get('vmin', None)
@@ -660,7 +670,7 @@ def generate_spectra_products(dataset, prdcfg):
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         if ind_rays.size == 1:
             plot_complex_Doppler(
@@ -672,7 +682,7 @@ def generate_spectra_products(dataset, prdcfg):
                 prdcfg, fname_list, xaxis_info=xaxis_info,
                 along_azi=along_azi, vmin=vmin, vmax=vmax)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -698,7 +708,7 @@ def generate_spectra_products(dataset, prdcfg):
             az = '{:.1f}'.format(dataset['antenna_coordinates_az_el_r'][0])
             el = '{:.1f}'.format(dataset['antenna_coordinates_az_el_r'][1])
             r = '{:.1f}'.format(dataset['antenna_coordinates_az_el_r'][2])
-            gateinfo = ('az'+az+'r'+r+'el'+el)
+            gateinfo = ('az' + az + 'r' + r + 'el' + el)
         else:
             lon = '{:.3f}'.format(
                 dataset['point_coordinates_WGS84_lon_lat_alt'][0])
@@ -706,7 +716,7 @@ def generate_spectra_products(dataset, prdcfg):
                 dataset['point_coordinates_WGS84_lon_lat_alt'][1])
             alt = '{:.1f}'.format(
                 dataset['point_coordinates_WGS84_lon_lat_alt'][2])
-            gateinfo = ('lon'+lon+'lat'+lat+'alt'+alt)
+            gateinfo = ('lon' + lon + 'lat' + lat + 'alt' + alt)
 
         time_info = datetime_from_radar(dataset['radar_out'])
 
@@ -720,7 +730,7 @@ def generate_spectra_products(dataset, prdcfg):
             timeinfo=time_info, runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         if dataset['radar_out'].nrays == 1:
             plot_complex_Doppler(
@@ -731,7 +741,7 @@ def generate_spectra_products(dataset, prdcfg):
                 dataset['radar_out'], field_name, prdcfg, fname_list,
                 xaxis_info=xaxis_info, vmin=vmin, vmax=vmax)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -767,13 +777,19 @@ def generate_spectra_products(dataset, prdcfg):
                 dataset['radar_out'].range['data'], rng, rng_tol=rng_tol)
 
         if ind_rng is None or ind_ray is None:
-            warn('Point azi='+str(azi)+', ele='+str(ele)+', rng='+str(rng) +
-                 ' out of radar coverage')
+            warn(
+                'Point azi=' +
+                str(azi) +
+                ', ele=' +
+                str(ele) +
+                ', rng=' +
+                str(rng) +
+                ' out of radar coverage')
             return None
 
         gateinfo = (
-            'az'+'{:.1f}'.format(azi)+'el'+'{:.1f}'.format(ele) +
-            'r'+'{:.1f}'.format(rng))
+            'az' + '{:.1f}'.format(azi) + 'el' + '{:.1f}'.format(ele) +
+            'r' + '{:.1f}'.format(rng))
 
         xaxis_info = prdcfg.get('xaxis_info', 'Doppler_velocity')
         vmin = prdcfg.get('vmin', None)
@@ -789,13 +805,13 @@ def generate_spectra_products(dataset, prdcfg):
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_complex_Doppler(
             dataset['radar_out'], field_name, ind_ray, ind_rng, prdcfg,
             fname_list, xaxis_info=xaxis_info, vmin=vmin, vmax=vmax)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -831,13 +847,19 @@ def generate_spectra_products(dataset, prdcfg):
                 dataset['radar_out'].range['data'], rng, rng_tol=rng_tol)
 
         if ind_rng is None or ind_ray is None:
-            warn('Point azi='+str(azi)+', ele='+str(ele)+', rng='+str(rng) +
-                 ' out of radar coverage')
+            warn(
+                'Point azi=' +
+                str(azi) +
+                ', ele=' +
+                str(ele) +
+                ', rng=' +
+                str(rng) +
+                ' out of radar coverage')
             return None
 
         gateinfo = (
-            'az'+'{:.1f}'.format(azi)+'el'+'{:.1f}'.format(ele) +
-            'r'+'{:.1f}'.format(rng))
+            'az' + '{:.1f}'.format(azi) + 'el' + '{:.1f}'.format(ele) +
+            'r' + '{:.1f}'.format(rng))
 
         xaxis_info = prdcfg.get('xaxis_info', 'Doppler_velocity')
         ampli_vmin = prdcfg.get('ampli_vmin', None)
@@ -855,7 +877,7 @@ def generate_spectra_products(dataset, prdcfg):
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_amp_phase_Doppler(
             dataset['radar_out'], field_name, ind_ray, ind_rng, prdcfg,
@@ -863,7 +885,7 @@ def generate_spectra_products(dataset, prdcfg):
             ampli_vmax=ampli_vmax, phase_vmin=phase_vmin,
             phase_vmax=phase_vmax)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -893,11 +915,11 @@ def generate_spectra_products(dataset, prdcfg):
                 ele_tol=ele_tol, azi_tol=azi_tol)
 
         if ind_ray is None:
-            warn('Ray azi='+str(azi)+', ele='+str(ele) +
+            warn('Ray azi=' + str(azi) + ', ele=' + str(ele) +
                  ' out of radar coverage')
             return None
 
-        gateinfo = 'az'+'{:.1f}'.format(azi)+'el'+'{:.1f}'.format(ele)
+        gateinfo = 'az' + '{:.1f}'.format(azi) + 'el' + '{:.1f}'.format(ele)
 
         xaxis_info = prdcfg.get('xaxis_info', 'Doppler_velocity')
         ampli_vmin = prdcfg.get('ampli_vmin', None)
@@ -915,7 +937,7 @@ def generate_spectra_products(dataset, prdcfg):
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         if dataset['radar_out'].ngates == 1:
             plot_amp_phase_Doppler(
@@ -930,7 +952,7 @@ def generate_spectra_products(dataset, prdcfg):
                 ampli_vmax=ampli_vmax, phase_vmin=phase_vmin,
                 phase_vmax=phase_vmax)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -954,20 +976,20 @@ def generate_spectra_products(dataset, prdcfg):
             dataset['radar_out'].range['data'], rng, rng_tol=rng_tol)
 
         if ind_rng is None:
-            warn('No data at rng='+str(rng))
+            warn('No data at rng=' + str(rng))
             return None
 
         if along_azi:
             ind_rays = np.where(np.logical_and(
-                dataset['radar_out'].elevation['data'] <= ang+ang_tol,
-                dataset['radar_out'].elevation['data'] >= ang-ang_tol))[0]
+                dataset['radar_out'].elevation['data'] <= ang + ang_tol,
+                dataset['radar_out'].elevation['data'] >= ang - ang_tol))[0]
         else:
             ind_rays = np.where(np.logical_and(
-                dataset['radar_out'].azimuth['data'] <= ang+ang_tol,
-                dataset['radar_out'].azimuth['data'] >= ang-ang_tol))[0]
+                dataset['radar_out'].azimuth['data'] <= ang + ang_tol,
+                dataset['radar_out'].azimuth['data'] >= ang - ang_tol))[0]
 
         if ind_rays.size == 0:
-            warn('No data for angle '+str(ang))
+            warn('No data for angle ' + str(ang))
             return None
 
         # sort angles
@@ -979,9 +1001,11 @@ def generate_spectra_products(dataset, prdcfg):
         ind_rays = ind_rays[np.argsort(ang_selected)]
 
         if along_azi:
-            gateinfo = 'azi'+'{:.1f}'.format(ang)+'rng'+'{:.1f}'.format(rng)
+            gateinfo = 'azi' + \
+                '{:.1f}'.format(ang) + 'rng' + '{:.1f}'.format(rng)
         else:
-            gateinfo = 'ele'+'{:.1f}'.format(ang)+'rng'+'{:.1f}'.format(rng)
+            gateinfo = 'ele' + \
+                '{:.1f}'.format(ang) + 'rng' + '{:.1f}'.format(rng)
 
         xaxis_info = prdcfg.get('xaxis_info', 'Doppler_velocity')
         ampli_vmin = prdcfg.get('ampli_vmin', None)
@@ -999,7 +1023,7 @@ def generate_spectra_products(dataset, prdcfg):
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         if ind_rays.size == 1:
             plot_amp_phase_Doppler(
@@ -1015,7 +1039,7 @@ def generate_spectra_products(dataset, prdcfg):
                 ampli_vmax=ampli_vmax, phase_vmin=phase_vmin,
                 phase_vmax=phase_vmax)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -1043,7 +1067,7 @@ def generate_spectra_products(dataset, prdcfg):
             az = '{:.1f}'.format(dataset['antenna_coordinates_az_el_r'][0])
             el = '{:.1f}'.format(dataset['antenna_coordinates_az_el_r'][1])
             r = '{:.1f}'.format(dataset['antenna_coordinates_az_el_r'][2])
-            gateinfo = ('az'+az+'r'+r+'el'+el)
+            gateinfo = ('az' + az + 'r' + r + 'el' + el)
         else:
             lon = '{:.3f}'.format(
                 dataset['point_coordinates_WGS84_lon_lat_alt'][0])
@@ -1051,7 +1075,7 @@ def generate_spectra_products(dataset, prdcfg):
                 dataset['point_coordinates_WGS84_lon_lat_alt'][1])
             alt = '{:.1f}'.format(
                 dataset['point_coordinates_WGS84_lon_lat_alt'][2])
-            gateinfo = ('lon'+lon+'lat'+lat+'alt'+alt)
+            gateinfo = ('lon' + lon + 'lat' + lat + 'alt' + alt)
 
         time_info = datetime_from_radar(dataset['radar_out'])
 
@@ -1065,7 +1089,7 @@ def generate_spectra_products(dataset, prdcfg):
             timeinfo=time_info, runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         if dataset['radar_out'].nrays == 1:
             plot_amp_phase_Doppler(
@@ -1080,7 +1104,7 @@ def generate_spectra_products(dataset, prdcfg):
                 ampli_vmax=ampli_vmax, phase_vmin=phase_vmin,
                 phase_vmax=phase_vmax)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -1094,7 +1118,7 @@ def generate_spectra_products(dataset, prdcfg):
             return None
 
         file_type = prdcfg.get('file_type', 'nc')
-        physical = prdcfg.get('physical', True)
+        prdcfg.get('physical', True)
 
         new_dataset = deepcopy(dataset['radar_out'])
         new_dataset.fields = dict()
@@ -1109,18 +1133,18 @@ def generate_spectra_products(dataset, prdcfg):
             'savevol', prdcfg['dstype'], prdcfg['voltype'], [file_type],
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         pyart.aux_io.write_spectra(fname, new_dataset)
 
-        print('saved file: '+fname)
+        print('saved file: ' + fname)
 
         return fname
 
     if prdcfg['type'] == 'SAVEALL':
         file_type = prdcfg.get('file_type', 'nc')
         datatypes = prdcfg.get('datatypes', None)
-        physical = prdcfg.get('physical', True)
+        prdcfg.get('physical', True)
 
         savedir = get_save_dir(
             prdcfg['basepath'], prdcfg['procname'], dssavedir,
@@ -1130,7 +1154,7 @@ def generate_spectra_products(dataset, prdcfg):
             'savevol', prdcfg['dstype'], 'all_fields', [file_type],
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         field_names = None
         if datatypes is not None:
@@ -1143,7 +1167,7 @@ def generate_spectra_products(dataset, prdcfg):
             radar_aux.fields = dict()
             for field_name in field_names:
                 if field_name not in dataset['radar_out'].fields:
-                    warn(field_name+' not in radar object')
+                    warn(field_name + ' not in radar object')
                 else:
                     radar_aux.add_field(
                         field_name,
@@ -1152,7 +1176,7 @@ def generate_spectra_products(dataset, prdcfg):
             radar_aux = dataset['radar_out']
         pyart.aux_io.write_spectra(fname, radar_aux, )
 
-        print('saved file: '+fname)
+        print('saved file: ' + fname)
 
         return fname
 

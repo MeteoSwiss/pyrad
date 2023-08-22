@@ -28,7 +28,7 @@ Functions for reading data from other sensors
     read_coord_sensors
     read_disdro_scattering
     read_disdro
-
+    read_radiosounding
 """
 
 import os
@@ -38,7 +38,9 @@ import csv
 from warnings import warn
 from copy import deepcopy
 import re
-
+import pandas as pd
+import requests
+from io import StringIO
 import numpy as np
 
 from pyart.config import get_fillvalue
@@ -67,63 +69,63 @@ def read_windmills_data(fname):
                     not row.startswith('#') and
                     not row.startswith('@') and not row.startswith(" ")
                     and row)),
-#                fieldnames=[
-#                    'Datum(Remote)', 'Uhrzeit(Remote)', 'Datum(Server)',
-#                    'Uhrzeit(Server)', 'Zeitdifferenz', 'Windgeschwindigkeit',
-#                    'Windgeschwindigkeit Max', 'Windgeschwindigkeit Min',
-#                    'Rotordrehzahl', 'Rotordrehzahl Max', 'Rotordrehzahl Min',
-#                    'Leistung', 'Leistung Max', 'Leistung Min',
-#                    'Gondelposition', 'Windrichtung', 'Generator Umdr.',
-#                    'Stop Fault', 'T Aussen', 'T Getriebe', 'T Lager A',
-#                    'T Lager B', 'T Gondel', 'T Getriebelager',
-#                    'T Wellenlager', 'Scheinleistung', 'cos phi',
-#                    'Blindleistung', 'Spannung L1-N', 'Spannung L2-N',
-#                    'Spannung L3-N', 'Strom L1', 'Strom L2', 'Strom L3',
-#                    'Blattwinkel 1', 'Blattwinkel 2',  'Blattwinkel 3',
-#                    'Blattwinkel 1 (Soll)', 'Blattwinkel 2 (Soll)',
-#                    'Blattwinkel 3 (Soll)', 'cos phi (Soll)',
-#                    'Betriebszustand', 'T Getriebelager B', 'Netz Freq.',
-#                    'T Hydraulic Oil', 'T Gear Oil', 'Air Pressure',
-#                    'Leistung Vorgabe', 'Blindleistung Vorgabe',
-#                    'Statortemperatur L1', 'Statortemperatur L2',
-#                    'Statortemperatur L3', 'xxx', 't (Innerhalb Windgrenzen)',
-#                    'Active Power Reference Value', 'Exported active energy',
-#                    'Exported active energy (red. op-mode)',
-#                    'Setpoint in percent', 'Setpoint active power in percent',
-#                    'Internal setpoint max power',
-#                    'Internal setpoint stop WTG',
-#                    'Internal setpoint start WTG',
-#                    'Grid Possible Power (avg)',
-#                    'Max. Grid Active Power (Setpoint)',
-#                    'Min. Operatingstate', 'Wind Speed 2', 'Wind Speed 3',
-#                    'Wind Direction 2', 'Relative Humidity',
-#                    'T Generator Bearing DE', 'T Generator Bearing NDE',
-#                    'Wind Speed 4', 'Wind Speed 5', 'Wind Speed 6',
-#                    'Wind Speed 7', 'Wind Speed 8', 'Wind Direction 3',
-#                    'Wind Direction 4', 'T Outside 2',
-#                    'Wind Speed Sensor 1 (avg)', 'Wind Speed Sensor 1 (min)',
-#                    'Wind Speed Sensor 1 (max)',
-#                    'Wind Speed Sensor 1 (stddev)',
-#                    'Wind Speed Sensor 2 (avg)', 'Wind Speed Sensor 2 (min)',
-#                    'Wind Speed Sensor 2 (max)',
-#                    'Wind Speed Sensor 2 (stddev)',
-#                    'T Ground Controller (avg)', 'T Ground Controller (min)',
-#                    'T Ground Controller (max)', 'T Ground Controller (std)',
-#                    'T Top Controller (avg)', 'T Top Controller (min)',
-#                    'T Top Controller (max)', 'T Top Controller (stddev)',
-#                    'Ice Level', 'External setpoint power factor',
-#                    'Setpoint power from grid operator',
-#                    'Setpoint power from direct marketer',
-#                    'Setpoint power from customer',
-#                    'Setpoint active power controller',
-#                    'T Gear Oil Inlet (avg)', 'T Gear Oil Inlet (min)',
-#                    'T Gear Oil Inlet (max)', 'T Gear Oil Inlet (stddev)',
-#                    'Calculated By ROTORsoft'],
+                #                fieldnames=[
+                #                    'Datum(Remote)', 'Uhrzeit(Remote)', 'Datum(Server)',
+                #                    'Uhrzeit(Server)', 'Zeitdifferenz', 'Windgeschwindigkeit',
+                #                    'Windgeschwindigkeit Max', 'Windgeschwindigkeit Min',
+                #                    'Rotordrehzahl', 'Rotordrehzahl Max', 'Rotordrehzahl Min',
+                #                    'Leistung', 'Leistung Max', 'Leistung Min',
+                #                    'Gondelposition', 'Windrichtung', 'Generator Umdr.',
+                #                    'Stop Fault', 'T Aussen', 'T Getriebe', 'T Lager A',
+                #                    'T Lager B', 'T Gondel', 'T Getriebelager',
+                #                    'T Wellenlager', 'Scheinleistung', 'cos phi',
+                #                    'Blindleistung', 'Spannung L1-N', 'Spannung L2-N',
+                #                    'Spannung L3-N', 'Strom L1', 'Strom L2', 'Strom L3',
+                #                    'Blattwinkel 1', 'Blattwinkel 2',  'Blattwinkel 3',
+                #                    'Blattwinkel 1 (Soll)', 'Blattwinkel 2 (Soll)',
+                #                    'Blattwinkel 3 (Soll)', 'cos phi (Soll)',
+                #                    'Betriebszustand', 'T Getriebelager B', 'Netz Freq.',
+                #                    'T Hydraulic Oil', 'T Gear Oil', 'Air Pressure',
+                #                    'Leistung Vorgabe', 'Blindleistung Vorgabe',
+                #                    'Statortemperatur L1', 'Statortemperatur L2',
+                #                    'Statortemperatur L3', 'xxx', 't (Innerhalb Windgrenzen)',
+                #                    'Active Power Reference Value', 'Exported active energy',
+                #                    'Exported active energy (red. op-mode)',
+                #                    'Setpoint in percent', 'Setpoint active power in percent',
+                #                    'Internal setpoint max power',
+                #                    'Internal setpoint stop WTG',
+                #                    'Internal setpoint start WTG',
+                #                    'Grid Possible Power (avg)',
+                #                    'Max. Grid Active Power (Setpoint)',
+                #                    'Min. Operatingstate', 'Wind Speed 2', 'Wind Speed 3',
+                #                    'Wind Direction 2', 'Relative Humidity',
+                #                    'T Generator Bearing DE', 'T Generator Bearing NDE',
+                #                    'Wind Speed 4', 'Wind Speed 5', 'Wind Speed 6',
+                #                    'Wind Speed 7', 'Wind Speed 8', 'Wind Direction 3',
+                #                    'Wind Direction 4', 'T Outside 2',
+                #                    'Wind Speed Sensor 1 (avg)', 'Wind Speed Sensor 1 (min)',
+                #                    'Wind Speed Sensor 1 (max)',
+                #                    'Wind Speed Sensor 1 (stddev)',
+                #                    'Wind Speed Sensor 2 (avg)', 'Wind Speed Sensor 2 (min)',
+                #                    'Wind Speed Sensor 2 (max)',
+                #                    'Wind Speed Sensor 2 (stddev)',
+                #                    'T Ground Controller (avg)', 'T Ground Controller (min)',
+                #                    'T Ground Controller (max)', 'T Ground Controller (std)',
+                #                    'T Top Controller (avg)', 'T Top Controller (min)',
+                #                    'T Top Controller (max)', 'T Top Controller (stddev)',
+                #                    'Ice Level', 'External setpoint power factor',
+                #                    'Setpoint power from grid operator',
+                #                    'Setpoint power from direct marketer',
+                #                    'Setpoint power from customer',
+                #                    'Setpoint active power controller',
+                #                    'T Gear Oil Inlet (avg)', 'T Gear Oil Inlet (min)',
+                #                    'T Gear Oil Inlet (max)', 'T Gear Oil Inlet (stddev)',
+                #                    'Calculated By ROTORsoft'],
                 delimiter=';')
             nrows = sum(1 for row in reader)
 
             if nrows == 0:
-                warn('No data in file '+fname)
+                warn('No data in file ' + fname)
                 return None
 
             dt_remote = np.ma.masked_all(nrows, dtype=datetime.datetime)
@@ -145,71 +147,71 @@ def read_windmills_data(fname):
                     not row.startswith('#') and
                     not row.startswith('@') and not row.startswith(" ")
                     and row)),
-#                fieldnames=[
-#                    'Datum(Remote)', 'Uhrzeit(Remote)', 'Datum(Server)',
-#                    'Uhrzeit(Server)', 'Zeitdifferenz', 'Windgeschwindigkeit',
-#                    'Windgeschwindigkeit Max', 'Windgeschwindigkeit Min',
-#                    'Rotordrehzahl', 'Rotordrehzahl Max', 'Rotordrehzahl Min',
-#                    'Leistung', 'Leistung Max', 'Leistung Min',
-#                    'Gondelposition', 'Windrichtung', 'Generator Umdr.',
-#                    'Stop Fault', 'T Aussen', 'T Getriebe', 'T Lager A',
-#                    'T Lager B', 'T Gondel', 'T Getriebelager',
-#                    'T Wellenlager', 'Scheinleistung', 'cos phi',
-#                    'Blindleistung', 'Spannung L1-N', 'Spannung L2-N',
-#                    'Spannung L3-N', 'Strom L1', 'Strom L2', 'Strom L3',
-#                    'Blattwinkel 1', 'Blattwinkel 2',  'Blattwinkel 3',
-#                    'Blattwinkel 1 (Soll)', 'Blattwinkel 2 (Soll)',
-#                    'Blattwinkel 3 (Soll)', 'cos phi (Soll)',
-#                    'Betriebszustand', 'T Getriebelager B', 'Netz Freq.',
-#                    'T Hydraulic Oil', 'T Gear Oil', 'Air Pressure',
-#                    'Leistung Vorgabe', 'Blindleistung Vorgabe',
-#                    'Statortemperatur L1', 'Statortemperatur L2',
-#                    'Statortemperatur L3', 'xxx', 't (Innerhalb Windgrenzen)',
-#                    'Active Power Reference Value', 'Exported active energy',
-#                    'Exported active energy (red. op-mode)',
-#                    'Setpoint in percent', 'Setpoint active power in percent',
-#                    'Internal setpoint max power',
-#                    'Internal setpoint stop WTG',
-#                    'Internal setpoint start WTG',
-#                    'Grid Possible Power (avg)',
-#                    'Max. Grid Active Power (Setpoint)',
-#                    'Min. Operatingstate', 'Wind Speed 2', 'Wind Speed 3',
-#                    'Wind Direction 2', 'Relative Humidity',
-#                    'T Generator Bearing DE', 'T Generator Bearing NDE',
-#                    'Wind Speed 4', 'Wind Speed 5', 'Wind Speed 6',
-#                    'Wind Speed 7', 'Wind Speed 8', 'Wind Direction 3',
-#                    'Wind Direction 4', 'T Outside 2',
-#                    'Wind Speed Sensor 1 (avg)', 'Wind Speed Sensor 1 (min)',
-#                    'Wind Speed Sensor 1 (max)',
-#                    'Wind Speed Sensor 1 (stddev)',
-#                    'Wind Speed Sensor 2 (avg)', 'Wind Speed Sensor 2 (min)',
-#                    'Wind Speed Sensor 2 (max)',
-#                    'Wind Speed Sensor 2 (stddev)',
-#                    'T Ground Controller (avg)', 'T Ground Controller (min)',
-#                    'T Ground Controller (max)', 'T Ground Controller (std)',
-#                    'T Top Controller (avg)', 'T Top Controller (min)',
-#                    'T Top Controller (max)', 'T Top Controller (stddev)',
-#                    'Ice Level', 'External setpoint power factor',
-#                    'Setpoint power from grid operator',
-#                    'Setpoint power from direct marketer',
-#                    'Setpoint power from customer',
-#                    'Setpoint active power controller',
-#                    'T Gear Oil Inlet (avg)', 'T Gear Oil Inlet (min)',
-#                    'T Gear Oil Inlet (max)', 'T Gear Oil Inlet (stddev)',
-#                    'Calculated By ROTORsoft'],
+                #                fieldnames=[
+                #                    'Datum(Remote)', 'Uhrzeit(Remote)', 'Datum(Server)',
+                #                    'Uhrzeit(Server)', 'Zeitdifferenz', 'Windgeschwindigkeit',
+                #                    'Windgeschwindigkeit Max', 'Windgeschwindigkeit Min',
+                #                    'Rotordrehzahl', 'Rotordrehzahl Max', 'Rotordrehzahl Min',
+                #                    'Leistung', 'Leistung Max', 'Leistung Min',
+                #                    'Gondelposition', 'Windrichtung', 'Generator Umdr.',
+                #                    'Stop Fault', 'T Aussen', 'T Getriebe', 'T Lager A',
+                #                    'T Lager B', 'T Gondel', 'T Getriebelager',
+                #                    'T Wellenlager', 'Scheinleistung', 'cos phi',
+                #                    'Blindleistung', 'Spannung L1-N', 'Spannung L2-N',
+                #                    'Spannung L3-N', 'Strom L1', 'Strom L2', 'Strom L3',
+                #                    'Blattwinkel 1', 'Blattwinkel 2',  'Blattwinkel 3',
+                #                    'Blattwinkel 1 (Soll)', 'Blattwinkel 2 (Soll)',
+                #                    'Blattwinkel 3 (Soll)', 'cos phi (Soll)',
+                #                    'Betriebszustand', 'T Getriebelager B', 'Netz Freq.',
+                #                    'T Hydraulic Oil', 'T Gear Oil', 'Air Pressure',
+                #                    'Leistung Vorgabe', 'Blindleistung Vorgabe',
+                #                    'Statortemperatur L1', 'Statortemperatur L2',
+                #                    'Statortemperatur L3', 'xxx', 't (Innerhalb Windgrenzen)',
+                #                    'Active Power Reference Value', 'Exported active energy',
+                #                    'Exported active energy (red. op-mode)',
+                #                    'Setpoint in percent', 'Setpoint active power in percent',
+                #                    'Internal setpoint max power',
+                #                    'Internal setpoint stop WTG',
+                #                    'Internal setpoint start WTG',
+                #                    'Grid Possible Power (avg)',
+                #                    'Max. Grid Active Power (Setpoint)',
+                #                    'Min. Operatingstate', 'Wind Speed 2', 'Wind Speed 3',
+                #                    'Wind Direction 2', 'Relative Humidity',
+                #                    'T Generator Bearing DE', 'T Generator Bearing NDE',
+                #                    'Wind Speed 4', 'Wind Speed 5', 'Wind Speed 6',
+                #                    'Wind Speed 7', 'Wind Speed 8', 'Wind Direction 3',
+                #                    'Wind Direction 4', 'T Outside 2',
+                #                    'Wind Speed Sensor 1 (avg)', 'Wind Speed Sensor 1 (min)',
+                #                    'Wind Speed Sensor 1 (max)',
+                #                    'Wind Speed Sensor 1 (stddev)',
+                #                    'Wind Speed Sensor 2 (avg)', 'Wind Speed Sensor 2 (min)',
+                #                    'Wind Speed Sensor 2 (max)',
+                #                    'Wind Speed Sensor 2 (stddev)',
+                #                    'T Ground Controller (avg)', 'T Ground Controller (min)',
+                #                    'T Ground Controller (max)', 'T Ground Controller (std)',
+                #                    'T Top Controller (avg)', 'T Top Controller (min)',
+                #                    'T Top Controller (max)', 'T Top Controller (stddev)',
+                #                    'Ice Level', 'External setpoint power factor',
+                #                    'Setpoint power from grid operator',
+                #                    'Setpoint power from direct marketer',
+                #                    'Setpoint power from customer',
+                #                    'Setpoint active power controller',
+                #                    'T Gear Oil Inlet (avg)', 'T Gear Oil Inlet (min)',
+                #                    'T Gear Oil Inlet (max)', 'T Gear Oil Inlet (stddev)',
+                #                    'Calculated By ROTORsoft'],
                 delimiter=';')
 
             for i, row in enumerate(reader):
                 if 'Datum(Remote)' in row and 'Uhrzeit(Remote)' in row:
                     dt_remote[i] = datetime.datetime.strptime(
-                        row['Datum(Remote)']+' '+row['Uhrzeit(Remote)'],
+                        row['Datum(Remote)'] + ' ' + row['Uhrzeit(Remote)'],
                         '%d.%m.%Y %H:%M:%S')
                     dt_server[i] = datetime.datetime.strptime(
-                        row['Datum(Server)']+' '+row['Uhrzeit(Server)'],
+                        row['Datum(Server)'] + ' ' + row['Uhrzeit(Server)'],
                         '%d.%m.%Y %H:%M:%S')
                 else:
                     dt_remote[i] = datetime.datetime.strptime(
-                        row['Datum (Anlage)']+' '+row['Zeit (Anlage)'],
+                        row['Datum (Anlage)'] + ' ' + row['Zeit (Anlage)'],
                         '%d.%m.%Y %H:%M:%S')
                 rotor_speed_avg[i] = float(
                     row['Rotordrehzahl'].replace(',', '.'))
@@ -250,7 +252,7 @@ def read_windmills_data(fname):
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None
 
 
@@ -278,7 +280,7 @@ def read_thundertracking_info(fname):
             nrows = sum(1 for row in reader)
 
             if nrows == 0:
-                warn('No data in file '+fname)
+                warn('No data in file ' + fname)
                 return None, None, None, None, None
 
             cell_id = np.empty(nrows, dtype=int)
@@ -307,7 +309,7 @@ def read_thundertracking_info(fname):
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None, None, None, None, None
 
 
@@ -327,9 +329,9 @@ def read_trt_info_all(info_path):
     vel_x, vel_y, det
 
     """
-    file_list = glob.glob(info_path+'*.txt')
+    file_list = glob.glob(info_path + '*.txt')
     if not file_list:
-        warn('No info files in '+info_path)
+        warn('No info files in ' + info_path)
         return None
 
     trt_time = np.array([], dtype=datetime.datetime)
@@ -391,9 +393,9 @@ def read_trt_info_all2(info_path):
     vel_x, vel_y, det
 
     """
-    file_list = glob.glob(info_path+'*.txt')
+    file_list = glob.glob(info_path + '*.txt')
     if not file_list:
-        warn('No info files in '+info_path)
+        warn('No info files in ' + info_path)
         return None
 
     trt_time = np.ma.array([], dtype=datetime.datetime)
@@ -516,7 +518,7 @@ def read_trt_info(fname):
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return (
             None, None, None, None, None, None, None, None, None, None, None,
             None, None, None)
@@ -584,7 +586,7 @@ def read_trt_info2(fname):
                         lon_aux = np.ma.masked
                 elif fields[2] == ':START':
                     scan_time_aux = datetime.datetime.strptime(
-                        fields[0]+' '+fields[1], '%Y-%m-%d %H:%M:%S.%f')
+                        fields[0] + ' ' + fields[1], '%Y-%m-%d %H:%M:%S.%f')
 
                     cell_id = np.ma.append(cell_id, cell_id_aux)
                     azi = np.ma.append(azi, azi_aux)
@@ -602,7 +604,7 @@ def read_trt_info2(fname):
                     scan_time = np.ma.append(scan_time, scan_time_aux)
 
             if trt_time.size == 0:
-                warn('No valid X-band scans in '+fname)
+                warn('No valid X-band scans in ' + fname)
                 return (
                     None, None, None, None, None, None, None, None, None,
                     None, None, None, None, None)
@@ -613,7 +615,7 @@ def read_trt_info2(fname):
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return (
             None, None, None, None, None, None, None, None, None, None, None,
             None, None, None)
@@ -649,7 +651,7 @@ def read_trt_scores(fname):
             nrows = sum(1 for row in reader)
 
             if nrows == 0:
-                warn('No data in file '+fname)
+                warn('No data in file ' + fname)
                 return None, None, None, None, None, None, None, None
 
             traj_ID = np.empty(nrows, dtype=int)
@@ -691,7 +693,7 @@ def read_trt_scores(fname):
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None, None, None, None, None, None, None, None
 
 
@@ -727,7 +729,7 @@ def read_trt_cell_lightning(fname):
             nrows = sum(1 for row in reader)
 
             if nrows == 0:
-                warn('No data in file '+fname)
+                warn('No data in file ' + fname)
                 return None, None, None, None, None, None, None, None
 
             traj_ID = np.empty(nrows, dtype=int)
@@ -758,7 +760,8 @@ def read_trt_cell_lightning(fname):
             csvfile.close()
 
             nflashes_cell = np.ma.masked_values(nflashes_cell, get_fillvalue())
-            flash_dens_cell = np.ma.masked_values(flash_dens_cell, get_fillvalue())
+            flash_dens_cell = np.ma.masked_values(
+                flash_dens_cell, get_fillvalue())
 
             return (
                 traj_ID, time_cell, lon_cell, lat_cell, area_cell, rank_cell,
@@ -766,7 +769,7 @@ def read_trt_cell_lightning(fname):
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None, None, None, None, None, None, None, None
 
 
@@ -847,7 +850,7 @@ def read_trt_data(fname):
             nrows = sum(1 for row in reader)
 
             if nrows == 0:
-                warn('No data in file '+fname)
+                warn('No data in file ' + fname)
                 return (
                     None, None, None, None, None, None, None, None, None,
                     None, None, None, None, None, None, None, None, None,
@@ -929,7 +932,7 @@ def read_trt_data(fname):
                 Dvel_y[i] = float(row['Dvel_y'].strip())
 
                 cell_contour_list_aux = row['cell_contour_lon-lat']
-                nele = len(cell_contour_list_aux)-1
+                nele = len(cell_contour_list_aux) - 1
                 cell_contour_list = []
                 for j in range(nele):
                     cell_contour_list.append(
@@ -972,7 +975,7 @@ def read_trt_data(fname):
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return (
             None, None, None, None, None, None, None, None, None, None, None,
             None, None, None, None, None, None, None, None, None, None, None,
@@ -1151,7 +1154,7 @@ def read_trt_traj_data(fname):
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return (
             None, None, None, None, None, None, None, None, None, None, None,
             None, None, None, None, None, None, None, None, None, None, None,
@@ -1224,7 +1227,8 @@ def read_trt_thundertracking_traj_data(fname):
             nrows = sum(1 for row in reader)
 
             traj_ID = np.ma.masked_all(nrows, dtype=int)
-            scan_ordered_time = np.ma.masked_all(nrows, dtype=datetime.datetime)
+            scan_ordered_time = np.ma.masked_all(
+                nrows, dtype=datetime.datetime)
             scan_time = np.ma.masked_all(nrows, dtype=datetime.datetime)
             azi = np.ma.masked_all(nrows, dtype=float)
             rng = np.ma.masked_all(nrows, dtype=float)
@@ -1347,7 +1351,7 @@ def read_trt_thundertracking_traj_data(fname):
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return (
             None, None, None, None, None, None, None, None, None, None, None,
             None, None, None, None, None, None, None, None, None, None, None,
@@ -1410,7 +1414,7 @@ def read_lightning(fname, filter_data=True):
             time_data = list()
             for i, row in enumerate(reader):
                 flashnr[i] = int(row['flashnr'])
-                time_data.append(fdatetime+datetime.timedelta(
+                time_data.append(fdatetime + datetime.timedelta(
                     seconds=float(row['time'])))
                 time_in_flash[i] = float(row['time_in_flash'])
                 lat[i] = float(row['lat'])
@@ -1435,7 +1439,7 @@ def read_lightning(fname, filter_data=True):
             return flashnr, time_data, time_in_flash, lat, lon, alt, dBm
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None, None, None, None, None, None, None
 
 
@@ -1515,7 +1519,7 @@ def read_meteorage(fname):
                 ki2[i] = float(row['ki2'])
                 ecc[i] = float(row['ecc'])
                 incl[i] = float(row['incl'])
-                sind[i] = int(float(row['sind']))-1
+                sind[i] = int(float(row['sind'])) - 1
 
             csvfile.close()
 
@@ -1524,7 +1528,7 @@ def read_meteorage(fname):
                 incl, sind)
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return (
             None, None, None, None, None, None, None, None, None, None, None,
             None)
@@ -1587,7 +1591,7 @@ def read_lightning_traj(fname):
                 date_flash_aux = datetime.datetime.strptime(
                     row['Date'], '%d-%b-%Y')
                 time_flash_aux = float(row['UTC'])
-                time_flash[i] = date_flash_aux+datetime.timedelta(
+                time_flash[i] = date_flash_aux + datetime.timedelta(
                     seconds=time_flash_aux)
 
                 flashnr[i] = int(float(row['flashnr']))
@@ -1610,7 +1614,7 @@ def read_lightning_traj(fname):
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None, None, None, None, None, None, None, None
 
 
@@ -1668,7 +1672,8 @@ def read_lightning_all(fname,
 
             for i, row in enumerate(reader):
                 flashnr[i] = int(row['flashnr'])
-                time_data[i] = datetime.datetime.strptime(row['time_data'], '%Y-%m-%d %H:%M:%S.%f')
+                time_data[i] = datetime.datetime.strptime(
+                    row['time_data'], '%Y-%m-%d %H:%M:%S.%f')
                 time_in_flash[i] = float(row['time_in_flash'])
                 lat[i] = float(row['lat'])
                 lon[i] = float(row['lon'])
@@ -1681,12 +1686,13 @@ def read_lightning_all(fname,
             csvfile.close()
 
             for label in labels:
-                pol_vals_dict[label] = np.ma.masked_values(pol_vals_dict[label], get_fillvalue())
+                pol_vals_dict[label] = np.ma.masked_values(
+                    pol_vals_dict[label], get_fillvalue())
 
             return flashnr, time_data, time_in_flash, lat, lon, alt, dBm, pol_vals_dict
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None, None, None, None, None, None, None, None
 
 
@@ -1712,14 +1718,14 @@ def get_sensor_data(date, datatype, cfg):
 
     """
     if cfg['sensor'] == 'rgage':
-        datapath = cfg['smnpath']+date.strftime('%Y%m')+'/'
-        datafile = date.strftime('%Y%m%d')+'_' + cfg['sensorid']+'.csv'
+        datapath = cfg['smnpath'] + date.strftime('%Y%m') + '/'
+        datafile = date.strftime('%Y%m%d') + '_' + cfg['sensorid'] + '.csv'
         _, sensordate, _, _, _, sensorvalue, _, _ = read_smn(
-            datapath+datafile)
+            datapath + datafile)
         if sensordate is None:
             return None, None, None, None
         label = 'RG'
-        period = (sensordate[1]-sensordate[0]).total_seconds()
+        period = (sensordate[1] - sensordate[0]).total_seconds()
     elif cfg['sensor'] == 'disdro':
         if datatype in ('dBZ', 'dBZc'):
             sensor_datatype = 'dBZ'
@@ -1727,21 +1733,29 @@ def get_sensor_data(date, datatype, cfg):
             sensor_datatype = datatype
 
         datapath = (
-            cfg['disdropath']+cfg['sensorid']+'/scattering/' +
-            date.strftime('%Y')+'/'+date.strftime('%Y%m')+'/')
-        datafile = (
-            date.strftime('%Y%m%d')+'_'+cfg['sensorid']+'_'+cfg['location'] +
-            '_'+str(cfg['freq'])+'GHz_'+sensor_datatype+'_el'+str(cfg['ele']) +
-            '.csv')
+            cfg['disdropath'] + cfg['sensorid'] + '/scattering/' +
+            date.strftime('%Y') + '/' + date.strftime('%Y%m') + '/')
+        datafile = (date.strftime('%Y%m%d') +
+                    '_' +
+                    cfg['sensorid'] +
+                    '_' +
+                    cfg['location'] +
+                    '_' +
+                    str(cfg['freq']) +
+                    'GHz_' +
+                    sensor_datatype +
+                    '_el' +
+                    str(cfg['ele']) +
+                    '.csv')
 
-        sensordate, _, sensorvalue, _ = read_disdro(datapath+datafile)
+        sensordate, _, sensorvalue, _ = read_disdro(datapath + datafile)
         if sensordate is None:
             return None, None, None, None
         label = 'Disdro'
-        period = (sensordate[1]-sensordate[0]).total_seconds()
+        period = (sensordate[1] - sensordate[0]).total_seconds()
 
     else:
-        warn('Unknown sensor: '+cfg['sensor'])
+        warn('Unknown sensor: ' + cfg['sensor'])
         return None, None, None, None
 
     return sensordate, sensorvalue, label, period
@@ -1806,7 +1820,7 @@ def read_smn(fname):
             return smn_id, date, pressure, temp, rh, precip, wspeed, wdir
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None, None, None, None, None, None, None, None
 
 
@@ -1838,7 +1852,7 @@ def read_smn2(fname):
             nrows = sum(1 for row in reader)
 
             if nrows == 0:
-                warn('Empty file '+fname)
+                warn('Empty file ' + fname)
                 return None, None, None
             smn_id = np.ma.empty(nrows, dtype=int)
             value = np.ma.empty(nrows, dtype=float)
@@ -1864,7 +1878,7 @@ def read_smn2(fname):
             return smn_id, date, value
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None, None, None
 
 
@@ -1895,7 +1909,7 @@ def read_coord_sensors(fname):
             nrows = sum(1 for row in reader)
 
             if nrows == 0:
-                warn('Empty file '+fname)
+                warn('Empty file ' + fname)
                 return None, None, None
             lat = np.ma.empty(nrows, dtype=float)
             lon = np.ma.empty(nrows, dtype=float)
@@ -1919,7 +1933,7 @@ def read_coord_sensors(fname):
             return lat, lon, sensor_ID
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None, None, None
 
 
@@ -2001,7 +2015,7 @@ def read_disdro_scattering(fname):
                     adiff, kdp, deltaco, rhohv)
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return (None, None, None, None, None, None, None, None, None, None,
                 None, None, None)
 
@@ -2060,5 +2074,50 @@ def read_disdro(fname):
             return (date, preciptype, variable, scatt_temp)
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return (None, None, None, None)
+
+def read_radiosounding(station, datetime_obj):
+    """
+    Download radiosounding data from the University of Wyoming website.
+
+    Parameters:
+    - station (str): Radiosounding station code (e.g., "72776").
+    - datetime_obj (datetime.datetime): Datetime object specifying the desired date
+      and time.
+
+    Returns:
+    pandas.DataFrame: A DataFrame containing the radiosounding data with columns:
+    ['PRES', 'HGHT', 'TEMP', 'DWPT', 'RELH', 'MIXR', 'DRCT', 'SKNT', 'THTA',
+    'THTE', 'THTV]
+    """
+
+    base_url = "https://weather.uwyo.edu/cgi-bin/sounding"
+    query_params = {
+        "region": "naconf",
+        "TYPE": "TEXT:LIST",
+        "YEAR": datetime_obj.year,
+        "MONTH": f"{datetime_obj.month:02d}",
+        "FROM": f"{datetime_obj.hour:02d}00",
+        "TO": f"{datetime_obj.hour:02d}00",
+        "STNM": station
+    }
+
+    response = requests.get(base_url, params=query_params, verify = False)
+
+    if response.status_code != 200:
+        return None
+
+    # Extract and parse the data using pandas
+    start_idx = response.text.find("PRES")
+    end_idx = response.text.find("Station information and sounding indices")
+    data_str = response.text[start_idx:end_idx][0:-10]
+
+    data_io = StringIO(data_str)
+    data_df = pd.read_csv(data_io, sep='\s+', header=0, skiprows = [1,2],
+        error_bad_lines=False, 
+    )
+    for col in data_df.columns:
+        data_df[col] = pd.to_numeric(data_df[col])
+    return data_df
+

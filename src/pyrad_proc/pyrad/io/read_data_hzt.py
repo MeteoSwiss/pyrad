@@ -30,7 +30,7 @@ try:
     if platform.system() == 'Linux':
         METRANET_LIB = pyart.aux_io.get_library(momentms=True)
     _METRANETLIB_AVAILABLE = True
-except:
+except BaseException:
     # bare exception needed to capture error
     _METRANETLIB_AVAILABLE = False
 
@@ -71,7 +71,7 @@ def hzt2radar_data(radar, hzt_coord, hzt_data, slice_xy=True,
             x_radar, y_radar, hzt_coord, slice_xy=slice_xy))
 
     values = hzt_data['HZT']['data'][
-        ind_ymin:ind_ymax+1, ind_xmin:ind_xmax+1].flatten()
+        ind_ymin:ind_ymax + 1, ind_xmin:ind_xmax + 1].flatten()
     # find interpolation function
     interp_func = NearestNDInterpolator((y_hzt, x_hzt), values)
 
@@ -80,7 +80,7 @@ def hzt2radar_data(radar, hzt_coord, hzt_data, slice_xy=True,
 
     # put field
     field_dict = get_metadata(field_name)
-    field_dict['data'] = (z_radar-data_interp).astype(float)
+    field_dict['data'] = (z_radar - data_interp).astype(float)
 
     return field_dict
 
@@ -125,11 +125,11 @@ def hzt2radar_coord(radar, hzt_coord, slice_xy=True, field_name=None):
     # put the index in the original cosmo coordinates
     nx_hzt = len(hzt_coord['x']['data'])
 
-    nx = ind_xmax-ind_xmin+1
+    nx = ind_xmax - ind_xmin + 1
 
-    ind_y = (ind_vec/nx).astype(int)+ind_ymin
-    ind_x = (ind_vec % nx).astype(int)+ind_xmin
-    ind_hzt = (ind_x+nx_hzt*ind_y).astype(int)
+    ind_y = (ind_vec / nx).astype(int) + ind_ymin
+    ind_x = (ind_vec % nx).astype(int) + ind_xmin
+    ind_hzt = (ind_x + nx_hzt * ind_y).astype(int)
 
     hzt_ind_field = get_metadata(field_name)
     hzt_ind_field['data'] = ind_hzt.reshape(radar.nrays, radar.ngates)
@@ -162,7 +162,7 @@ def get_iso0_field(hzt_data, hzt_ind, z_radar, field_name='height_over_iso0'):
     nrays, ngates = np.shape(hzt_ind['data'])
     values = hzt_data['HZT']['data'][:, :].flatten()
     field_dict = get_metadata(field_name)
-    field_dict['data'] = z_radar-values[hzt_ind['data'].flatten()].reshape(
+    field_dict['data'] = z_radar - values[hzt_ind['data'].flatten()].reshape(
         nrays, ngates).astype(float)
 
     return field_dict
@@ -200,7 +200,7 @@ def read_hzt_data(fname, chy0=255., chx0=-160., read_lib='C'):
             fname, physic_value=True, masked_array=True)
 
     if ret is None:
-        warn('Unable to read HZT file '+fname)
+        warn('Unable to read HZT file ' + fname)
         return None
 
     var_data = {
@@ -212,9 +212,9 @@ def read_hzt_data(fname, chy0=255., chx0=-160., read_lib='C'):
     time_data = {
         'standard_name': 'time',
         'long_name': 'time',
-        'units': 'seconds since '+run_time.strftime('%Y-%m-%d %H:%M:%S'),
+        'units': 'seconds since ' + run_time.strftime('%Y-%m-%d %H:%M:%S'),
         'calendar': 'gregorian',
-        'data': [float(ret.header['usr_forecast_hour'])*3600.]
+        'data': [float(ret.header['usr_forecast_hour']) * 3600.]
     }
 
     x_1 = {
@@ -223,8 +223,8 @@ def read_hzt_data(fname, chy0=255., chx0=-160., read_lib='C'):
         'standard_name': "projection_x_coordinate",
         'units': "m",
         'data': ((np.arange(int(ret.header['column'])) *
-                  float(ret.header['rect_xres'])+chy0 +
-                  float(ret.header['rect_xres'])/2.)*1000.)
+                  float(ret.header['rect_xres']) + chy0 +
+                  float(ret.header['rect_xres']) / 2.) * 1000.)
     }
     y_1 = {
         'axis': "Y",
@@ -232,8 +232,8 @@ def read_hzt_data(fname, chy0=255., chx0=-160., read_lib='C'):
         'standard_name': "projection_y_coordinate",
         'units': "m",
         'data': ((np.arange(int(ret.header['row'])) *
-                  float(ret.header['rect_yres'])+chx0 +
-                  float(ret.header['rect_yres'])/2.)*1000.)
+                  float(ret.header['rect_yres']) + chx0 +
+                  float(ret.header['rect_yres']) / 2.) * 1000.)
     }
 
     hzt_data = {
@@ -290,7 +290,7 @@ def _prepare_for_interpolation(x_radar, y_radar, hzt_coord, slice_xy=True):
 
         ind_xmax = np.where(hzt_coord['x']['data'] > xmax)[0]
         if ind_xmax.size == 0:
-            ind_xmax = nx_hzt-1
+            ind_xmax = nx_hzt - 1
         else:
             ind_xmax = ind_xmax[0]
 
@@ -302,20 +302,20 @@ def _prepare_for_interpolation(x_radar, y_radar, hzt_coord, slice_xy=True):
 
         ind_ymax = np.where(hzt_coord['y']['data'] > ymax)[0]
         if ind_ymax.size == 0:
-            ind_ymax = ny_hzt-1
+            ind_ymax = ny_hzt - 1
         else:
             ind_ymax = ind_ymax[0]
     else:
         ind_xmin = 0
-        ind_xmax = nx_hzt-1
+        ind_xmax = nx_hzt - 1
         ind_ymin = 0
-        ind_ymax = ny_hzt-1
+        ind_ymax = ny_hzt - 1
 
-    nx = ind_xmax-ind_xmin+1
-    ny = ind_ymax-ind_ymin+1
+    nx = ind_xmax - ind_xmin + 1
+    ny = ind_ymax - ind_ymin + 1
 
-    x_hzt = hzt_coord['x']['data'][ind_xmin:ind_xmax+1]
-    y_hzt = hzt_coord['y']['data'][ind_ymin:ind_ymax+1]
+    x_hzt = hzt_coord['x']['data'][ind_xmin:ind_xmax + 1]
+    y_hzt = hzt_coord['y']['data'][ind_ymin:ind_ymax + 1]
 
     x_hzt = (
         np.broadcast_to(x_hzt.reshape(1, nx), (ny, nx))).flatten()

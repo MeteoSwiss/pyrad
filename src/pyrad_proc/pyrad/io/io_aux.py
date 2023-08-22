@@ -322,7 +322,9 @@ def get_rad4alp_prod_fname(datatype):
         termination = '.980'
 
     else:
-        raise ValueError('ERROR: Unknown rad4alp product data type '+datatype)
+        raise ValueError(
+            'ERROR: Unknown rad4alp product data type ' +
+            datatype)
 
     return acronym, termination
 
@@ -454,7 +456,7 @@ def mf_sname_to_wmo_number(radar_name):
     elif radar_name == 'VIAL':  # Vial
         radar_num = '07694'
     else:
-        warn('Unable to find radar number for radar name '+radar_name)
+        warn('Unable to find radar number for radar name ' + radar_name)
         radar_num = ''
 
     return radar_num
@@ -475,7 +477,7 @@ def map_Doppler(Doppler_data_bin, Nyquist_vel):
         The Doppler veloctiy in [m/s]
 
     """
-    Doppler_data = (Doppler_data_bin-128.)/127.*Nyquist_vel
+    Doppler_data = (Doppler_data_bin - 128.) / 127. * Nyquist_vel
 
     return Doppler_data
 
@@ -600,7 +602,7 @@ def generate_field_name_str(datatype):
     field_dic = get_metadata(field_name)
     field_str = field_dic['standard_name'].replace('_', ' ')
     field_str = field_str[0].upper() + field_str[1:]
-    field_str += ' ('+field_dic['units']+')'
+    field_str += ' (' + field_dic['units'] + ')'
 
     return field_str
 
@@ -704,7 +706,7 @@ def get_datatype_metranet(datatype):
         field_name = 'mean_phase'
     else:
         raise ValueError(
-            'ERROR: Metranet fields do not contain datatype '+datatype)
+            'ERROR: Metranet fields do not contain datatype ' + datatype)
 
     return {datatype_metranet: field_name}
 
@@ -1150,7 +1152,7 @@ def get_datatype_odim(datatype):
         datatype_odim = 'BIOLOGY'
     else:
         raise ValueError(
-            'ERROR: ODIM fields do not contain datatype '+datatype)
+            'ERROR: ODIM fields do not contain datatype ' + datatype)
 
     return {datatype_odim: field_name}
 
@@ -2176,7 +2178,7 @@ def get_fieldname_pyart(datatype):
         field_name = 'quant95_dealiased_velocity'
 
     else:
-        raise ValueError('ERROR: Unknown data type '+datatype)
+        raise ValueError('ERROR: Unknown data type ' + datatype)
 
     return field_name
 
@@ -2205,7 +2207,7 @@ def get_fieldname_cosmo(field_name):
     elif field_name == 'vertical_wind_shear':
         cosmo_name = 'WSHEAR'
     else:
-        raise ValueError('ERROR: Unknown field name '+field_name)
+        raise ValueError('ERROR: Unknown field name ' + field_name)
 
     return cosmo_name
 
@@ -2236,7 +2238,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
     radarnr, datagroup, datatype, dataset, product = get_datatype_fields(
         datadescriptor)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if datatype in ('Nh', 'Nv'):
         datatype = 'dBZ'
 
@@ -2245,7 +2247,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
         startdate = starttime.replace(
             hour=0, minute=0, second=0, microsecond=0)
         enddate = endtime.replace(hour=0, minute=0, second=0, microsecond=0)
-        ndays = int((enddate-startdate).days)+1
+        ndays = int((enddate - startdate).days) + 1
         t_filelist = []
         pattern = None
         for i in range(ndays):
@@ -2254,14 +2256,16 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     warn('Unknown scan name')
                     return []
                 daydir = (
-                    starttime+datetime.timedelta(days=i)).strftime('%Y-%m-%d')
-                dayinfo = (starttime+datetime.timedelta(days=i)).strftime(
+                    starttime +
+                    datetime.timedelta(
+                        days=i)).strftime('%Y-%m-%d')
+                dayinfo = (starttime + datetime.timedelta(days=i)).strftime(
                     '%Y%m%d')
                 datapath = cfg['datapath'][ind_rad] + scan + daydir + '/'
                 if not os.path.isdir(datapath):
                     warn("WARNING: Unknown datapath '%s'" % datapath)
                     continue
-                pattern = datapath+dayinfo+'*00'+datatype+'.*'
+                pattern = datapath + dayinfo + '*00' + datatype + '.*'
                 dayfilelist = glob.glob(pattern)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
@@ -2272,7 +2276,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
 
                 datapath, basename = get_rad4alp_dir(
                     cfg['datapath'][ind_rad],
-                    starttime+datetime.timedelta(days=i),
+                    starttime + datetime.timedelta(days=i),
                     radar_name=cfg['RadarName'][ind_rad],
                     radar_res=cfg['RadarRes'][ind_rad], scan=scan,
                     path_convention=cfg['path_convention'][ind_rad])
@@ -2280,15 +2284,15 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 if not os.path.isdir(datapath):
                     warn("WARNING: Unknown datapath '%s'" % datapath)
                     continue
-                pattern = datapath+basename+'*.'+scan+'*'
+                pattern = datapath + basename + '*.' + scan + '*'
                 dayfilelist = glob.glob(pattern)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
             elif datagroup in ('RAD4ALPGRID', 'RAD4ALPGIF', 'RAD4ALPBIN'):
                 acronym, termination = get_rad4alp_prod_fname(datatype)
-                dir_day = starttime+datetime.timedelta(days=i)
+                dir_day = starttime + datetime.timedelta(days=i)
                 dayinfo = dir_day.strftime('%y%j')
-                basename = acronym+dayinfo
+                basename = acronym + dayinfo
 
                 datapath = get_rad4alp_grid_dir(
                     cfg['datapath'][ind_rad], dir_day, datatype, acronym,
@@ -2297,7 +2301,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 if not os.path.isdir(datapath):
                     warn("WARNING: Unknown datapath '%s'" % datapath)
                     continue
-                pattern = datapath+basename+'*'+termination
+                pattern = datapath + basename + '*' + termination
                 dayfilelist = glob.glob(pattern)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
@@ -2305,13 +2309,13 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 daydir = (
                     starttime +
                     datetime.timedelta(days=i)).strftime('%Y/%m/%d/')
-                dayinfo = (starttime+datetime.timedelta(days=i)).strftime(
+                dayinfo = (starttime + datetime.timedelta(days=i)).strftime(
                     '%Y%m%d')
                 datapath = cfg['satpath'][ind_rad] + daydir
                 if not os.path.isdir(datapath):
                     # warn("WARNING: Unknown datapath '%s'" % datapath)
                     continue
-                pattern = datapath+'MSG?_ccs4_'+dayinfo+'*_rad_PLAX.nc'
+                pattern = datapath + 'MSG?_ccs4_' + dayinfo + '*_rad_PLAX.nc'
                 dayfilelist = glob.glob(pattern)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
@@ -2322,70 +2326,74 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     warn('Unknown scan name')
                     return []
                 if cfg['path_convention'][ind_rad] == 'MCH':
-                    dayinfo = (starttime+datetime.timedelta(days=i)).strftime(
-                        '%y%j')
-                    basename = ('M'+cfg['RadarRes'][ind_rad] +
-                                cfg['RadarName'][ind_rad]+dayinfo)
-                    datapath = (
-                        cfg['datapath'][ind_rad]+dayinfo+'/'+basename+'/')
+                    dayinfo = (
+                        starttime +
+                        datetime.timedelta(
+                            days=i)).strftime('%y%j')
+                    basename = ('M' + cfg['RadarRes'][ind_rad] +
+                                cfg['RadarName'][ind_rad] + dayinfo)
+                    datapath = (cfg['datapath'][ind_rad] +
+                                dayinfo + '/' + basename + '/')
 
                     # check that M files exist. if not search P files
-                    pattern = datapath+basename+'*'+scan+'*'
+                    pattern = datapath + basename + '*' + scan + '*'
                     dayfilelist = glob.glob(pattern)
                     if not dayfilelist:
-                        basename = ('P'+cfg['RadarRes'][ind_rad] +
-                                    cfg['RadarName'][ind_rad]+dayinfo)
-                        datapath = (cfg['datapath'][ind_rad]+dayinfo+'/' +
-                                    basename+'/')
+                        basename = ('P' + cfg['RadarRes'][ind_rad] +
+                                    cfg['RadarName'][ind_rad] + dayinfo)
+                        datapath = (cfg['datapath'][ind_rad] + dayinfo + '/' +
+                                    basename + '/')
                     if not os.path.isdir(datapath):
                         warn("WARNING: Unknown datapath '%s'" % datapath)
                         continue
                 elif cfg['path_convention'][ind_rad] == 'ODIM':
                     try:
                         fpath_strf = dataset[
-                            dataset.find("D")+2:dataset.find("F")-2]
+                            dataset.find("D") + 2:dataset.find("F") - 2]
                     except AttributeError:
                         warn('Unknown ODIM directory and/or date ' +
                              'convention, check product config file')
                     daydir = (
-                        starttime+datetime.timedelta(days=i)).strftime(
+                        starttime + datetime.timedelta(days=i)).strftime(
                             fpath_strf)
-                    datapath = (cfg['datapath'][ind_rad]+daydir+'/')
-                    pattern = datapath+'*'+scan+'*'
+                    datapath = (cfg['datapath'][ind_rad] + daydir + '/')
+                    pattern = datapath + '*' + scan + '*'
                     dayfilelist = glob.glob(pattern)
                 elif cfg['path_convention'][ind_rad] == 'RADARV':
                     try:
                         fpath_strf = dataset[
-                            dataset.find("D")+2:dataset.find("F")-2]
+                            dataset.find("D") + 2:dataset.find("F") - 2]
                     except AttributeError:
                         warn('Unknown ODIM directory and/or date ' +
                              'convention, check product config file')
                     daydir = (
-                        starttime+datetime.timedelta(days=i)).strftime(
+                        starttime + datetime.timedelta(days=i)).strftime(
                             fpath_strf)
-                    datapath = (cfg['datapath'][ind_rad]+scan+'/')
-                    pattern = datapath+'/'+daydir+'/*'
+                    datapath = (cfg['datapath'][ind_rad] + scan + '/')
+                    pattern = datapath + '/' + daydir + '/*'
                     dayfilelist = glob.glob(pattern)
                 else:
-                    dayinfo = (starttime+datetime.timedelta(days=i)).strftime(
-                        '%y%j')
-                    basename = ('M'+cfg['RadarRes'][ind_rad] +
-                                cfg['RadarName'][ind_rad]+dayinfo)
+                    dayinfo = (
+                        starttime +
+                        datetime.timedelta(
+                            days=i)).strftime('%y%j')
+                    basename = ('M' + cfg['RadarRes'][ind_rad] +
+                                cfg['RadarName'][ind_rad] + dayinfo)
                     datapath = (
-                        cfg['datapath'][ind_rad]+'M' +
-                        cfg['RadarRes'][ind_rad]+cfg['RadarName'][ind_rad] +
+                        cfg['datapath'][ind_rad] + 'M' +
+                        cfg['RadarRes'][ind_rad] + cfg['RadarName'][ind_rad] +
                         '/')
 
                     # check that M files exist. if not search P files
-                    pattern = datapath+basename+'*'+scan+'*'
+                    pattern = datapath + basename + '*' + scan + '*'
                     dayfilelist = glob.glob(pattern)
                     if not dayfilelist:
-                        basename = ('P'+cfg['RadarRes'][ind_rad] +
-                                    cfg['RadarName'][ind_rad]+dayinfo)
+                        basename = ('P' + cfg['RadarRes'][ind_rad] +
+                                    cfg['RadarName'][ind_rad] + dayinfo)
                         datapath = (
-                            cfg['datapath'][ind_rad]+'P' +
+                            cfg['datapath'][ind_rad] + 'P' +
                             cfg['RadarRes'][ind_rad] +
-                            cfg['RadarName'][ind_rad]+'/')
+                            cfg['RadarName'][ind_rad] + '/')
                     if not os.path.isdir(datapath):
                         warn("WARNING: Unknown datapath '%s'" % datapath)
                         continue
@@ -2401,31 +2409,32 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     termination = '.csv'
 
                 daydir = (
-                    starttime+datetime.timedelta(days=i)).strftime(
+                    starttime + datetime.timedelta(days=i)).strftime(
                         '%Y-%m-%d')
-                dayinfo = (starttime+datetime.timedelta(days=i)).strftime(
+                dayinfo = (starttime + datetime.timedelta(days=i)).strftime(
                     '%Y%m%d')
                 datapath = (
-                    cfg['loadbasepath'][ind_rad]+cfg['loadname'][ind_rad] +
-                    '/'+daydir+'/'+dataset+'/'+product+'/')
+                    cfg['loadbasepath'][ind_rad] + cfg['loadname'][ind_rad] +
+                    '/' + daydir + '/' + dataset + '/' + product + '/')
                 if not os.path.isdir(datapath):
                     warn("WARNING: Unknown datapath '%s'" % datapath)
                     continue
-                pattern = datapath+dayinfo+'*'+datatype+termination
+                pattern = datapath + dayinfo + '*' + datatype + termination
                 dayfilelist = glob.glob(pattern)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
             elif datagroup in ('GECSX'):
                 termination = '.nc'
-                # Choose any date 
-                import pdb; pdb.set_trace()
-                datapath = (cfg['gecsxbasepath'][ind_rad] + 
-                            cfg['gecsxname'][ind_rad] + '/' + 
-                            dataset +'/' + product+'/')
+                # Choose any date
+                import pdb
+                pdb.set_trace()
+                datapath = (cfg['gecsxbasepath'][ind_rad] +
+                            cfg['gecsxname'][ind_rad] + '/' +
+                            dataset + '/' + product + '/')
                 if not os.path.isdir(datapath):
                     warn("WARNING: Unknown datapath '%s'" % datapath)
                     continue
-                pattern = datapath+'*'+datatype+termination
+                pattern = datapath + '*' + datatype + termination
                 dayfilelist = glob.glob(pattern)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
@@ -2433,15 +2442,15 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                                'MFDAT', 'MFCF'):
                 try:
                     fpath_strf = dataset[
-                        dataset.find("D")+2:dataset.find("F")-2]
+                        dataset.find("D") + 2:dataset.find("F") - 2]
                 except AttributeError:
                     warn('Unknown directory and/or date ' +
                          'convention, check product config file')
                 daydir = (
-                    starttime+datetime.timedelta(days=i)).strftime(
+                    starttime + datetime.timedelta(days=i)).strftime(
                         fpath_strf)
-                datapath = (cfg['datapath'][ind_rad]+daydir+'/')
-                pattern = datapath+'*'+scan+'*'
+                datapath = (cfg['datapath'][ind_rad] + daydir + '/')
+                pattern = datapath + '*' + scan + '*'
                 dayfilelist = glob.glob(pattern)
 
                 for filename in dayfilelist:
@@ -2455,48 +2464,55 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     sub2 = starttime.strftime('%m')
                     sub3 = starttime.strftime('%d')
                     datapath = (
-                        cfg['datapath'][ind_rad]+'/'+sub1+'/'+sub2+'/'+sub3 +
+                        cfg['datapath'][ind_rad] +
+                        '/' +
+                        sub1 +
+                        '/' +
+                        sub2 +
+                        '/' +
+                        sub3 +
                         '/')
                     basename = (
-                        'MXPol-polar-'+starttime.strftime('%Y%m%d')+'-*-' +
-                        scan+'*')
-                    pattern = datapath+basename
+                        'MXPol-polar-' + starttime.strftime('%Y%m%d') + '-*-' +
+                        scan + '*')
+                    pattern = datapath + basename
                     dayfilelist = glob.glob(pattern)
                 else:
                     daydir = (
-                        starttime+datetime.timedelta(days=i)).strftime(
+                        starttime + datetime.timedelta(days=i)).strftime(
                             '%Y-%m-%d')
                     dayinfo = (
-                        starttime+datetime.timedelta(days=i)).strftime(
+                        starttime + datetime.timedelta(days=i)).strftime(
                             '%Y%m%d')
-                    datapath = cfg['datapath'][ind_rad]+scan+'/'+daydir+'/'
+                    datapath = cfg['datapath'][ind_rad] + \
+                        scan + '/' + daydir + '/'
                     if not os.path.isdir(datapath):
                         warn("WARNING: Unknown datapath '%s'" % datapath)
                         continue
-                    pattern = datapath+'MXPol-polar-'+dayinfo+'-*-'+scan+'.nc'
+                    pattern = datapath + 'MXPol-polar-' + dayinfo + '-*-' + scan + '.nc'
                     dayfilelist = glob.glob(pattern)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
             elif datagroup == 'COSMORAW':
-                daydir = (starttime+datetime.timedelta(days=i)).strftime(
+                daydir = (starttime + datetime.timedelta(days=i)).strftime(
                     '%Y-%m-%d')
-                dayinfo = (starttime+datetime.timedelta(days=i)).strftime(
+                dayinfo = (starttime + datetime.timedelta(days=i)).strftime(
                     '%Y%m%d')
 
                 # check that base directory exists
-                datapath = cfg['cosmopath'][ind_rad]+datatype+'/raw/'
+                datapath = cfg['cosmopath'][ind_rad] + datatype + '/raw/'
                 if not os.path.isdir(datapath):
-                    datapath = cfg['cosmopath'][ind_rad]+datatype+'/raw1/'
+                    datapath = cfg['cosmopath'][ind_rad] + datatype + '/raw1/'
                     if not os.path.isdir(datapath):
                         warn("WARNING: Unknown datapath '%s'" % datapath)
                         continue
                 if cfg['path_convention'][ind_rad] == 'MCH':
-                    datapath = datapath+daydir+'/'
+                    datapath = datapath + daydir + '/'
 
                 if not os.path.isdir(datapath):
                     warn("WARNING: Unknown datapath '%s'" % datapath)
                     continue
-                pattern = datapath+'*'+dayinfo+'*.nc'
+                pattern = datapath + '*' + dayinfo + '*.nc'
                 dayfilelist = glob.glob(pattern)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
@@ -2509,14 +2525,14 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     if starttime <= fdatetime <= endtime:
                         if filenamestr not in filelist:
                             filelist.append(filenamestr)
-        else: # For GECSX we ignore time, since the visibility is static
+        else:  # For GECSX we ignore time, since the visibility is static
             filelist = t_filelist
-            
+
         if not filelist:
-            if pattern != None:
-                warn("WARNING: No file with pattern {:s} could be found between ".format(pattern)+\
-                    "starttime {:s} and endtime {:s}".format(str(starttime),
-                                                                str(endtime)))
+            if pattern is not None:
+                warn("WARNING: No file with pattern {:s} could be found between ".format(pattern) +
+                     "starttime {:s} and endtime {:s}".format(str(starttime),
+                                                              str(endtime)))
     return sorted(filelist)
 
 
@@ -2549,35 +2565,35 @@ def get_rad4alp_dir(basepath, voltime, radar_name='A', radar_res='L',
 
     """
     dayinfo = voltime.strftime('%y%j')
-    basename = 'M'+radar_res+radar_name+dayinfo
+    basename = 'M' + radar_res + radar_name + dayinfo
     if path_convention == 'LTE':
         yy = dayinfo[0:2]
         dy = dayinfo[2:]
-        subf = 'M'+radar_res+radar_name+yy+'hdf'+dy
-        datapath = basepath+subf+'/'
+        subf = 'M' + radar_res + radar_name + yy + 'hdf' + dy
+        datapath = basepath + subf + '/'
 
         # check that M files exist. if not search P files
-        dayfilelist = glob.glob(datapath+basename+'*.'+scan+'*')
+        dayfilelist = glob.glob(datapath + basename + '*.' + scan + '*')
         if not dayfilelist:
-            subf = 'P'+radar_res+radar_name+yy+'hdf'+dy
-            datapath = basepath+subf+'/'
-            basename = 'P'+radar_res+radar_name+dayinfo
+            subf = 'P' + radar_res + radar_name + yy + 'hdf' + dy
+            datapath = basepath + subf + '/'
+            basename = 'P' + radar_res + radar_name + dayinfo
     elif path_convention == 'MCH':
-        datapath = basepath+dayinfo+'/'+basename+'/'
+        datapath = basepath + dayinfo + '/' + basename + '/'
 
         # check that M files exist. if not search P files
-        dayfilelist = glob.glob(datapath+basename+'*.'+scan+'*')
+        dayfilelist = glob.glob(datapath + basename + '*.' + scan + '*')
         if not dayfilelist:
-            basename = 'P'+radar_res+radar_name+dayinfo
-            datapath = basepath+dayinfo+'/'+basename+'/'
+            basename = 'P' + radar_res + radar_name + dayinfo
+            datapath = basepath + dayinfo + '/' + basename + '/'
     else:
-        datapath = basepath+'M'+radar_res+radar_name+'/'
+        datapath = basepath + 'M' + radar_res + radar_name + '/'
 
         # check that M files exist. if not search P files
-        dayfilelist = glob.glob(datapath+basename+'*.'+scan+'*')
+        dayfilelist = glob.glob(datapath + basename + '*.' + scan + '*')
         if not dayfilelist:
-            basename = 'P'+radar_res+radar_name+dayinfo
-            datapath = basepath+'P'+radar_res+radar_name+'/'
+            basename = 'P' + radar_res + radar_name + dayinfo
+            datapath = basepath + 'P' + radar_res + radar_name + '/'
 
     return datapath, basename
 
@@ -2625,23 +2641,23 @@ def get_rad4alp_grid_dir(basepath, voltime, datatype, acronym,
     elif datatype in nowpal:
         dirbase = 'nowpal'
     elif datatype.startswith('d') and datatype != 'dGZC':
-        dirbase = 'd'+acronym
+        dirbase = 'd' + acronym
         if datatype.endswith('H'):
-            dirbase = dirbase+'H'
+            dirbase = dirbase + 'H'
     elif datatype in cpch:
-        dirbase = acronym+'H'
+        dirbase = acronym + 'H'
     else:
         dirbase = acronym
 
     if path_convention == 'LTE':
         yy = dayinfo[0:2]
         dy = dayinfo[2:]
-        subf = acronym+yy+'hdf'+dy
-        datapath = basepath+subf+'/'
+        subf = acronym + yy + 'hdf' + dy
+        datapath = basepath + subf + '/'
     elif path_convention == 'MCH':
-        datapath = basepath+dayinfo+'/'+dirbase+dayinfo+'/'
+        datapath = basepath + dayinfo + '/' + dirbase + dayinfo + '/'
     else:
-        datapath = basepath+dirbase+'/'
+        datapath = basepath + dirbase + '/'
 
     return datapath
 
@@ -2667,15 +2683,15 @@ def get_trtfile_list(basepath, starttime, endtime):
     """
     startdate = starttime.date()
     enddate = endtime.date()
-    ndays = int((enddate-startdate).days)+1
+    ndays = int((enddate - startdate).days) + 1
 
     t_filelist = []
     for i in range(ndays):
-        daydir = (startdate+datetime.timedelta(days=i)).strftime('%y%j')
-        datapath = basepath+daydir+'/TRTC'+daydir+'/'
-        dayfilelist = glob.glob(datapath+'CZC*0T.trt')
+        daydir = (startdate + datetime.timedelta(days=i)).strftime('%y%j')
+        datapath = basepath + daydir + '/TRTC' + daydir + '/'
+        dayfilelist = glob.glob(datapath + 'CZC*0T.trt')
         if not dayfilelist:
-            warn('No TRT files in '+datapath)
+            warn('No TRT files in ' + datapath)
             continue
         t_filelist.extend(dayfilelist)
 
@@ -2722,7 +2738,7 @@ def get_scan_list(scandescriptor_list):
     scan_list = [[] for i in range(nradar)]
     for scandescriptor in scandescriptor_list:
         descrfields = scandescriptor.split(':')
-        ind_rad = int(descrfields[0][5:8])-1
+        ind_rad = int(descrfields[0][5:8]) - 1
         scan_list[ind_rad].append(descrfields[1])
 
     return scan_list
@@ -2753,8 +2769,14 @@ def get_new_rainbow_file_name(master_fname, master_datadescriptor, datatype):
     voltime = get_datetime(master_fname, master_datatype)
     voltype = os.path.basename(master_fname).split('.')[1]
 
-    return (datapath+'/'+voltime.strftime('%Y%m%d%H%M%S')+'00'+datatype+'.' +
-            voltype)
+    return (
+        datapath +
+        '/' +
+        voltime.strftime('%Y%m%d%H%M%S') +
+        '00' +
+        datatype +
+        '.' +
+        voltype)
 
 
 def get_datatype_fields(datadescriptor):
@@ -2894,7 +2916,7 @@ def get_dataset_fields(datasetdescr):
         proclevel = descrfields[0]
         dataset = descrfields[1]
         if len(proclevel) == 2:
-            proclevel = proclevel[0]+'0'+proclevel[1]
+            proclevel = proclevel[0] + '0' + proclevel[1]
 
     return proclevel, dataset
 
@@ -2945,26 +2967,33 @@ def find_cosmo_file(voltime, datatype, cfg, scanid, ind_rad=0):
 
     """
     # hour rounded date-time
-    fdatetime = voltime.strftime('%Y%m%d%H')+'000000'
+    fdatetime = voltime.strftime('%Y%m%d%H') + '000000'
 
     # initial run time to look for
     hvol = int(voltime.strftime('%H'))
-    runhour0 = int(hvol/cfg['CosmoRunFreq'])*cfg['CosmoRunFreq']
+    runhour0 = int(hvol / cfg['CosmoRunFreq']) * cfg['CosmoRunFreq']
     runtime0 = voltime.replace(hour=runhour0, minute=0, second=0)
 
     # look for cosmo file
     found = False
-    nruns_to_check = int((cfg['CosmoForecasted']-1)/cfg['CosmoRunFreq'])
+    nruns_to_check = int((cfg['CosmoForecasted'] - 1) / cfg['CosmoRunFreq'])
     for i in range(nruns_to_check):
-        runtime = runtime0-datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
-        runtimestr = runtime.strftime('%Y%m%d%H')+'000000'
+        runtime = runtime0 - datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
+        runtimestr = runtime.strftime('%Y%m%d%H') + '000000'
 
         daydir = runtime.strftime('%Y-%m-%d')
-        datapath = cfg['cosmopath'][ind_rad]+datatype+'/'+scanid+daydir+'/'
+        datapath = cfg['cosmopath'][ind_rad] + \
+            datatype + '/' + scanid + daydir + '/'
 
         search_name = (
-            datapath+datatype+'_RUN'+runtimestr+'_DX50'+fdatetime+'.*')
-        print('Looking for file: '+search_name)
+            datapath +
+            datatype +
+            '_RUN' +
+            runtimestr +
+            '_DX50' +
+            fdatetime +
+            '.*')
+        print('Looking for file: ' + search_name)
         fname = glob.glob(search_name)
         if fname:
             found = True
@@ -2973,7 +3002,7 @@ def find_cosmo_file(voltime, datatype, cfg, scanid, ind_rad=0):
     if found:
         return fname[0]
 
-    warn('WARNING: Unable to get COSMO '+datatype+' information')
+    warn('WARNING: Unable to get COSMO ' + datatype + ' information')
     return None
 
 
@@ -3001,26 +3030,26 @@ def find_pyradcosmo_file(basepath, voltime, datatype, cfg, dataset):
 
     """
     # hour rounded date-time
-    fdatetime = voltime.strftime('%Y%m%d%H')+'0000'
+    fdatetime = voltime.strftime('%Y%m%d%H') + '0000'
 
     # initial run time to look for
     hvol = int(voltime.strftime('%H'))
-    runhour0 = int(hvol/cfg['CosmoRunFreq'])*cfg['CosmoRunFreq']
+    runhour0 = int(hvol / cfg['CosmoRunFreq']) * cfg['CosmoRunFreq']
     runtime0 = voltime.replace(hour=runhour0, minute=0, second=0)
 
     # look for cosmo file
     found = False
-    nruns_to_check = int((cfg['CosmoForecasted']-1)/cfg['CosmoRunFreq'])
+    nruns_to_check = int((cfg['CosmoForecasted'] - 1) / cfg['CosmoRunFreq'])
     for i in range(nruns_to_check):
-        runtime = runtime0-datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
-        runtimestr = runtime.strftime('%Y%m%d%H')+'0000'
+        runtime = runtime0 - datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
+        runtimestr = runtime.strftime('%Y%m%d%H') + '0000'
 
         daydir = runtime.strftime('%Y-%m-%d')
-        datapath = basepath+datatype+'/radar/'+daydir+'/'+dataset+'/'
+        datapath = basepath + datatype + '/radar/' + daydir + '/' + dataset + '/'
 
         search_name = (
-            datapath+datatype+'_RUN'+runtimestr+'_'+fdatetime+'.*')
-        print('Looking for file: '+search_name)
+            datapath + datatype + '_RUN' + runtimestr + '_' + fdatetime + '.*')
+        print('Looking for file: ' + search_name)
         fname = glob.glob(search_name)
         if fname:
             found = True
@@ -3029,7 +3058,7 @@ def find_pyradcosmo_file(basepath, voltime, datatype, cfg, dataset):
     if found:
         return fname[0]
 
-    warn('WARNING: Unable to get COSMO '+datatype+' information')
+    warn('WARNING: Unable to get COSMO ' + datatype + ' information')
     return None
 
 
@@ -3055,26 +3084,37 @@ def find_raw_cosmo_file(voltime, datatype, cfg, ind_rad=0):
 
     """
     # initial run time to look for
-    runhour0 = int(voltime.hour/cfg['CosmoRunFreq'])*cfg['CosmoRunFreq']
+    runhour0 = int(voltime.hour / cfg['CosmoRunFreq']) * cfg['CosmoRunFreq']
     runtime0 = voltime.replace(hour=runhour0, minute=0, second=0)
 
     # look for cosmo file in raw
     found = False
-    nruns_to_check = int(cfg['CosmoForecasted']/cfg['CosmoRunFreq'])
+    nruns_to_check = int(cfg['CosmoForecasted'] / cfg['CosmoRunFreq'])
     for i in range(nruns_to_check):
-        runtime = runtime0-datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
+        runtime = runtime0 - datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
         runtimestr = runtime.strftime('%Y%m%d%H')
 
         daydir = runtime.strftime('%Y-%m-%d')
-        datapath = cfg['cosmopath'][ind_rad]+datatype+'/raw/'+daydir+'/'
+        datapath = cfg['cosmopath'][ind_rad] + \
+            datatype + '/raw/' + daydir + '/'
         for model in ('cosmo-1e', 'cosmo-1', 'cosmo-2', 'cosmo-7'):
             if datatype == 'TEMP':
-                search_name = (datapath+model+'_MDR_3D_'+runtimestr+'.nc')
+                search_name = (
+                    datapath +
+                    model +
+                    '_MDR_3D_' +
+                    runtimestr +
+                    '.nc')
             elif datatype == 'WIND':
-                search_name = (datapath+model+'_MDR_3DWIND_'+runtimestr+'.nc')
+                search_name = (
+                    datapath +
+                    model +
+                    '_MDR_3DWIND_' +
+                    runtimestr +
+                    '.nc')
             else:
-                warn('Unable to get COSMO '+datatype+'. Unknown variable')
-            print('Looking for file: '+search_name)
+                warn('Unable to get COSMO ' + datatype + '. Unknown variable')
+            print('Looking for file: ' + search_name)
             fname = glob.glob(search_name)
             if fname:
                 found = True
@@ -3089,19 +3129,30 @@ def find_raw_cosmo_file(voltime, datatype, cfg, ind_rad=0):
     # look for cosmo file in raw1
     found = False
     for i in range(nruns_to_check):
-        runtime = runtime0-datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
+        runtime = runtime0 - datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
         runtimestr = runtime.strftime('%Y%m%d%H')
 
         daydir = runtime.strftime('%Y-%m-%d')
-        datapath = cfg['cosmopath'][ind_rad]+datatype+'/raw1/'+daydir+'/'
+        datapath = cfg['cosmopath'][ind_rad] + \
+            datatype + '/raw1/' + daydir + '/'
         for model in ('cosmo-1e', 'cosmo-1', 'cosmo-2', 'cosmo-7'):
             if datatype == 'TEMP':
-                search_name = (datapath+model+'_MDR_3D_'+runtimestr+'.nc')
+                search_name = (
+                    datapath +
+                    model +
+                    '_MDR_3D_' +
+                    runtimestr +
+                    '.nc')
             elif datatype == 'WIND':
-                search_name = (datapath+model+'_MDR_3DWIND_'+runtimestr+'.nc')
+                search_name = (
+                    datapath +
+                    model +
+                    '_MDR_3DWIND_' +
+                    runtimestr +
+                    '.nc')
             else:
-                warn('Unable to get COSMO '+datatype+'. Unknown variable')
-            print('Looking for file: '+search_name)
+                warn('Unable to get COSMO ' + datatype + '. Unknown variable')
+            print('Looking for file: ' + search_name)
             fname = glob.glob(search_name)
             if fname:
                 found = True
@@ -3113,7 +3164,7 @@ def find_raw_cosmo_file(voltime, datatype, cfg, ind_rad=0):
     if found:
         return fname[0]
 
-    warn('WARNING: Unable to get COSMO '+datatype+' information')
+    warn('WARNING: Unable to get COSMO ' + datatype + ' information')
     return None
 
 
@@ -3137,26 +3188,26 @@ def find_hzt_file(voltime, cfg, ind_rad=0):
 
     """
     # initial run time to look for
-    runhour0 = int(voltime.hour/cfg['CosmoRunFreq'])*cfg['CosmoRunFreq']
+    runhour0 = int(voltime.hour / cfg['CosmoRunFreq']) * cfg['CosmoRunFreq']
     runtime0 = voltime.replace(hour=runhour0, minute=0, second=0)
 
     # look for cosmo file
     found = False
-    nruns_to_check = int((cfg['CosmoForecasted']-1)/cfg['CosmoRunFreq'])
+    nruns_to_check = int((cfg['CosmoForecasted'] - 1) / cfg['CosmoRunFreq'])
     for i in range(nruns_to_check):
-        runtime = runtime0-datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
+        runtime = runtime0 - datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
         target_hour = int((voltime - runtime).total_seconds() / 3600.)
         runtimestr = runtime.strftime('%y%j%H00')
 
         daydir = runtime.strftime('%y%j')
         if cfg['path_convention'][ind_rad] == 'RT':
-            datapath = cfg['cosmopath'][ind_rad]+'HZT/'
+            datapath = cfg['cosmopath'][ind_rad] + 'HZT/'
         else:
-            datapath = cfg['cosmopath'][ind_rad]+'HZT/'+daydir+'/'
-        search_name = datapath+'HZT'+runtimestr+'0L.8'+'{:02d}'.format(
+            datapath = cfg['cosmopath'][ind_rad] + 'HZT/' + daydir + '/'
+        search_name = datapath + 'HZT' + runtimestr + '0L.8' + '{:02d}'.format(
             target_hour)
 
-        print('Looking for file: '+search_name)
+        print('Looking for file: ' + search_name)
         fname = glob.glob(search_name)
         if fname:
             found = True
@@ -3189,24 +3240,24 @@ def find_iso0_file(voltime, cfg, ind_rad=0):
 
     """
     # initial run time to look for
-    runhour0 = int(voltime.hour/cfg['CosmoRunFreq'])*cfg['CosmoRunFreq']
+    runhour0 = int(voltime.hour / cfg['CosmoRunFreq']) * cfg['CosmoRunFreq']
     runtime0 = voltime.replace(hour=runhour0, minute=0, second=0)
 
     radar_name = mf_sname_to_wmo_number(cfg['RadarName'][ind_rad])
     # look for file
     found = False
-    nruns_to_check = int((cfg['CosmoForecasted'])/cfg['CosmoRunFreq'])
+    nruns_to_check = int((cfg['CosmoForecasted']) / cfg['CosmoRunFreq'])
     for i in range(nruns_to_check):
-        runtime = runtime0-datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
-        target_hour = int((voltime - runtime).total_seconds() / 3600.)
+        runtime = runtime0 - datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
+        int((voltime - runtime).total_seconds() / 3600.)
         runtimestr = runtime.strftime('%Y%m%d%H0000')
 
         datapath = cfg['cosmopath'][ind_rad]
         search_name = (
-            datapath+'bdap_iso0_'+radar_name+'_'+runtimestr +
+            datapath + 'bdap_iso0_' + radar_name + '_' + runtimestr +
             '.txt')
 
-        print('Looking for file: '+search_name)
+        print('Looking for file: ' + search_name)
         fname = glob.glob(search_name)
         if fname:
             found = True
@@ -3243,7 +3294,7 @@ def find_iso0_grib_file(voltime, cfg, ind_rad=0):
     if cfg['CosmoRunFreq'] == 0:
         # The date of the NWP file corresponds to the data of the radar
         runtimestr = voltime.strftime('%Y%m%d%H%M')
-        search_name = datapath+'ISO_T_PAROME_'+runtimestr+'*.grib'
+        search_name = datapath + 'ISO_T_PAROME_' + runtimestr + '*.grib'
         print('Looking for file: {}'.format(search_name))
         fname = glob.glob(search_name)
         if fname:
@@ -3251,17 +3302,17 @@ def find_iso0_grib_file(voltime, cfg, ind_rad=0):
         warn('WARNING: Unable to find iso0 file')
         return None
 
-    runhour0 = int(voltime.hour/cfg['CosmoRunFreq'])*cfg['CosmoRunFreq']
+    runhour0 = int(voltime.hour / cfg['CosmoRunFreq']) * cfg['CosmoRunFreq']
     runtime0 = voltime.replace(hour=runhour0, minute=0, second=0)
-    nruns_to_check = int((cfg['CosmoForecasted'])/cfg['CosmoRunFreq'])
+    nruns_to_check = int((cfg['CosmoForecasted']) / cfg['CosmoRunFreq'])
 
     # look for file
     found = False
     for i in range(nruns_to_check):
-        runtime = runtime0-datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
-        target_hour = int((voltime - runtime).total_seconds() / 3600.)
+        runtime = runtime0 - datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
+        int((voltime - runtime).total_seconds() / 3600.)
         runtimestr = runtime.strftime('%Y%m%d%H00')
-        search_name = datapath+'ISO_T_PAROME_'+runtimestr+'*.grib'
+        search_name = datapath + 'ISO_T_PAROME_' + runtimestr + '*.grib'
 
         print('Looking for file: {}'.format(search_name))
         fname = glob.glob(search_name)
@@ -3301,36 +3352,50 @@ def find_rad4alpcosmo_file(voltime, datatype, cfg, scanid, ind_rad=0):
 
     """
     # hour rounded date-time
-    fdatetime = voltime.strftime('%y%j%H')+'00'
+    fdatetime = voltime.strftime('%y%j%H') + '00'
 
     # initial run time to look for
     hvol = int(voltime.strftime('%H'))
-    runhour0 = int(hvol/cfg['CosmoRunFreq'])*cfg['CosmoRunFreq']
+    runhour0 = int(hvol / cfg['CosmoRunFreq']) * cfg['CosmoRunFreq']
     runtime0 = voltime.replace(hour=runhour0, minute=0, second=0)
 
     # look for cosmo file
     found = False
-    nruns_to_check = int((cfg['CosmoForecasted']-1)/cfg['CosmoRunFreq'])
-    rad_id = 'P'+cfg['RadarRes'][ind_rad]+cfg['RadarName'][ind_rad]
+    nruns_to_check = int((cfg['CosmoForecasted'] - 1) / cfg['CosmoRunFreq'])
+    rad_id = 'P' + cfg['RadarRes'][ind_rad] + cfg['RadarName'][ind_rad]
     for i in range(nruns_to_check):
-        runtime = runtime0-datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
-        runtimestr = runtime.strftime('%y%j%H')+'00'
+        runtime = runtime0 - datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
+        runtimestr = runtime.strftime('%y%j%H') + '00'
 
         daydir = runtime.strftime('%y%j')
         datapath = (
-            cfg['cosmopath'][ind_rad]+datatype+'/'+rad_id+'/'+daydir+'/')
+            cfg['cosmopath'][ind_rad] +
+            datatype +
+            '/' +
+            rad_id +
+            '/' +
+            daydir +
+            '/')
 
         search_name = (
-            datapath+datatype+'_RUN'+runtimestr+'_'+rad_id+fdatetime+'.' +
-            scanid+'.bin')
-        print('Looking for file: '+search_name)
+            datapath +
+            datatype +
+            '_RUN' +
+            runtimestr +
+            '_' +
+            rad_id +
+            fdatetime +
+            '.' +
+            scanid +
+            '.bin')
+        print('Looking for file: ' + search_name)
         fname = glob.glob(search_name)
         if fname:
             found = True
             break
 
     if not found:
-        warn('WARNING: Unable to get COSMO '+datatype+' information')
+        warn('WARNING: Unable to get COSMO ' + datatype + ' information')
         return None
 
     return fname[0]
@@ -3365,10 +3430,10 @@ def _get_datetime(fname, datagroup, ftime_format=None):
         timestr = bfile[8:12]
         if timestr != '2400':
             fdatetime = datetime.datetime.strptime(
-                datestr+timestr, '%y%j%H%M')
+                datestr + timestr, '%y%j%H%M')
         else:
             fdatetime = datetime.datetime.strptime(
-                datestr, '%y%j')+datetime.timedelta(days=1)
+                datestr, '%y%j') + datetime.timedelta(days=1)
     elif datagroup in ('ODIM', 'ODIMBIRDS', 'MFCFRADIAL', 'MFBIN',
                        'NEXRADII', 'MFPNG', 'MFGRIB', 'MFDAT', 'MFCF',
                        'CFRADIAL2', 'CF1', 'GAMIC', 'CFRADIAL', 'ODIMGRID'):
@@ -3378,7 +3443,7 @@ def _get_datetime(fname, datagroup, ftime_format=None):
             fdatetime = datetime.datetime.strptime(datetimestr, '%y%j%H%M')
         else:
             return find_date_in_file_name(
-                bfile, date_format=ftime_format[ftime_format.find("F")+2:-1])
+                bfile, date_format=ftime_format[ftime_format.find("F") + 2:-1])
     elif datagroup == 'MXPOL':
         datetimestr = re.findall(r"([0-9]{8}-[0-9]{6})", bfile)[0]
         fdatetime = datetime.datetime.strptime(datetimestr, '%Y%m%d-%H%M%S')
@@ -3420,10 +3485,10 @@ def find_date_in_file_name(filename, date_format='%Y%m%d%H%M%S'):
     while True:
         try:
             fdatetime = datetime.datetime.strptime(
-                bfile[count:count+len_datestr], date_format)
+                bfile[count:count + len_datestr], date_format)
         except ValueError:
             count += 1
-            if count+len_datestr > len(bfile):
+            if count + len_datestr > len(bfile):
                 warn(f'Unable to find date from string name. Date format '
                      f'{date_format}. File name {bfile}')
                 return None

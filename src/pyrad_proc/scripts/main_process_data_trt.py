@@ -84,7 +84,7 @@ def main():
 
     parser.add_argument(
         '--cfgpath', type=str,
-        default=os.path.expanduser('~')+'/pyrad/config/processing/',
+        default=os.path.expanduser('~') + '/pyrad/config/processing/',
         help='configuration file path')
 
     parser.add_argument(
@@ -111,12 +111,12 @@ def main():
     atexit.register(_print_end_msg,
                     "====== PYRAD TRT data processing finished: ")
 
-    print('config path: '+args.cfgpath)
-    print('config file: '+args.proc_cfgfile)
-    print('trt path: '+args.trtbase)
-    print('radar data path: '+args.radarbase)
+    print('config path: ' + args.cfgpath)
+    print('config file: ' + args.proc_cfgfile)
+    print('trt path: ' + args.trtbase)
+    print('radar data path: ' + args.radarbase)
 
-    cfgfile_proc = args.cfgpath+args.proc_cfgfile
+    cfgfile_proc = args.cfgpath + args.proc_cfgfile
     trajtype = 'trt'
 
     if args.days is not None:
@@ -153,7 +153,7 @@ def main():
 
         if np.size(datatype_list) != np.size(dataset_list):
             warn(
-                str(np.size(datatype_list))+' datatypes but ' +
+                str(np.size(datatype_list)) + ' datatypes but ' +
                 str(np.size(dataset_list)) +
                 ' dataset directories. Their number must be equal')
             return
@@ -163,23 +163,23 @@ def main():
     if args.days is not None:
         for time_dir in time_dir_list:
             trt_list.extend(glob.glob(
-                args.trtbase+time_dir+'/TRTC_cell_plots/All/*.trt'))
+                args.trtbase + time_dir + '/TRTC_cell_plots/All/*.trt'))
             trt_list.extend(glob.glob(
-                args.trtbase+time_dir+'/TRTC_cell_plots/Some/*.trt'))
+                args.trtbase + time_dir + '/TRTC_cell_plots/Some/*.trt'))
     else:
         for time_dir in time_dir_list:
             trt_list.extend(glob.glob(
-                args.trtbase+time_dir+'/TRTC_cell/*_tt.trt'))
+                args.trtbase + time_dir + '/TRTC_cell/*_tt.trt'))
 
     if len(trt_list) == 0:
-        warn('No valid TRT files found in '+args.trtbase)
+        warn('No valid TRT files found in ' + args.trtbase)
         return
 
     # Pyrad data processing
     trt_cell_id_list = []
     trt_file_list = []
     for fname in trt_list:
-        print('processing TRT cell file '+fname)
+        print('processing TRT cell file ' + fname)
         try:
             infostr = os.path.basename(fname).split('.')[0]
             infostr = infostr.replace('_tt', '')
@@ -189,7 +189,7 @@ def main():
             trt_cell_id_list.append(infostr)
             trt_file_list.append(fname)
         except Exception:
-            warn('Unable to process TRT cell file '+fname)
+            warn('Unable to process TRT cell file ' + fname)
 
     if not args.postproc:
         return
@@ -206,7 +206,7 @@ def main():
         rm_hmax_list = np.ma.asarray([], dtype=float)
 
     for i, trt_cell_id in enumerate(trt_cell_id_list):
-        print('\n\nPost-processing cell: '+trt_cell_id)
+        print('\n\nPost-processing cell: ' + trt_cell_id)
         dt_str = trt_cell_id[0:12]
         dt_cell = datetime.datetime.strptime(dt_str, "%Y%m%d%H%M")
         time_dir = dt_cell.strftime("%Y-%m-%d")
@@ -216,13 +216,13 @@ def main():
                 file_base2 = (
                     f'{args.radarbase}{time_dir}/{dataset}_trt_center_traj/')
             elif args.path_structure == 0:
-                file_base2 = args.radarbase+time_dir+'/'+dataset+'_trt_traj/'
+                file_base2 = args.radarbase + time_dir + '/' + dataset + '_trt_traj/'
             elif args.path_structure == 2:
-                file_base2 = args.radarbase+time_dir+'/trt_traj_tt/'
+                file_base2 = args.radarbase + time_dir + '/trt_traj_tt/'
 
             field_name = get_fieldname_pyart(datatype)
             field_dict = get_metadata(field_name)
-            titl = 'TRT cell '+trt_cell_id+'\n'+get_field_name(
+            titl = 'TRT cell ' + trt_cell_id + '\n' + get_field_name(
                 field_dict, field_name)
 
             # plot time-height
@@ -232,13 +232,13 @@ def main():
                     f'_rhi_profile_*_{datatype}_hres{args.hres}.csv')
             else:
                 flist = glob.glob(
-                    file_base2+'PROFILE/*_'+trt_cell_id+'_rhi_profile_*_' +
-                    datatype+'_hres'+str(int(args.hres))+'.csv')
+                    file_base2 + 'PROFILE/*_' + trt_cell_id + '_rhi_profile_*_' +
+                    datatype + '_hres' + str(int(args.hres)) + '.csv')
 
             if not flist:
-                warn('No profile files found in '+file_base2 +
+                warn('No profile files found in ' + file_base2 +
                      'PROFILE/ for TRT cell ' +
-                     trt_cell_id+' with resolution '+str(args.hres))
+                     trt_cell_id + ' with resolution ' + str(args.hres))
             else:
                 if args.path_structure == 1:
                     labels = ['Mean', 'Min', 'Max']
@@ -263,8 +263,8 @@ def main():
 
                 basepath_out = os.path.dirname(flist[0])
                 fname = (
-                    basepath_out+'/'+trt_cell_id+'_trt_TIME_HEIGHT_' +
-                    datatype+'_hres'+str(args.hres)+'.png')
+                    basepath_out + '/' + trt_cell_id + '_trt_TIME_HEIGHT_' +
+                    datatype + '_hres' + str(args.hres) + '.png')
 
                 vmin = vmax = None
                 if datatype == 'RhoHVc':
@@ -272,8 +272,7 @@ def main():
                     vmax = 1.00
 
                 xlabel = (
-                    'time (s from '+start_time.strftime("%Y-%m-%d %H:%M:%S") +
-                    ')')
+                    'time (s from ' + start_time.strftime("%Y-%m-%d %H:%M:%S") + ')')
                 _plot_time_range(
                     tbin_edges, hbin_edges, data_ma, field_name, [fname],
                     titl=titl, xlabel=xlabel, ylabel='height (m MSL)',
@@ -307,25 +306,32 @@ def main():
                     f'_histogram_*_{datatype}.csv')
             else:
                 flist = glob.glob(
-                    file_base2+'HISTOGRAM/*_'+trt_cell_id+'_histogram_*_' +
-                    datatype+'.csv')
+                    file_base2 +
+                    'HISTOGRAM/*_' +
+                    trt_cell_id +
+                    '_histogram_*_' +
+                    datatype +
+                    '.csv')
 
             if not flist:
-                warn('No histogram files found in '+file_base2 +
-                     'HISTOGRAM/ for TRT cell '+trt_cell_id)
+                warn('No histogram files found in ' + file_base2 +
+                     'HISTOGRAM/ for TRT cell ' + trt_cell_id)
             else:
                 tbin_edges, bin_edges, data_ma, start_time = read_histogram_ts(
                     flist, datatype, t_res=None)
 
                 basepath_out = os.path.dirname(flist[0])
                 fname = (
-                    basepath_out+'/'+trt_cell_id+'_trt_HISTOGRAM_'+datatype +
+                    basepath_out +
+                    '/' +
+                    trt_cell_id +
+                    '_trt_HISTOGRAM_' +
+                    datatype +
                     '.png')
 
                 data_ma[data_ma == 0.] = np.ma.masked
                 xlabel = (
-                    'time (s from '+start_time.strftime("%Y-%m-%d %H:%M:%S") +
-                    ')')
+                    'time (s from ' + start_time.strftime("%Y-%m-%d %H:%M:%S") + ')')
                 _plot_time_range(
                     tbin_edges, bin_edges, data_ma, 'frequency_of_occurrence',
                     [fname], titl=titl, xlabel=xlabel,
@@ -336,12 +342,12 @@ def main():
 
             # plot quantiles
             flist = glob.glob(
-                file_base2+'QUANTILES/*_'+trt_cell_id+'_quantiles_*_' +
-                datatype+'.csv')
+                file_base2 + 'QUANTILES/*_' + trt_cell_id + '_quantiles_*_' +
+                datatype + '.csv')
 
             if not flist:
-                warn('No quantiles files found in '+file_base2 +
-                     'QUANTILES/ for TRT cell '+trt_cell_id)
+                warn('No quantiles files found in ' + file_base2 +
+                     'QUANTILES/ for TRT cell ' + trt_cell_id)
                 continue
 
             tbin_edges, qbin_edges, data_ma, start_time = read_quantiles_ts(
@@ -349,7 +355,11 @@ def main():
 
             basepath_out = os.path.dirname(flist[0])
             fname = (
-                basepath_out+'/'+trt_cell_id+'_trt_QUANTILES_'+datatype +
+                basepath_out +
+                '/' +
+                trt_cell_id +
+                '_trt_QUANTILES_' +
+                datatype +
                 '.png')
 
             vmin = vmax = None
@@ -357,7 +367,7 @@ def main():
                 vmin = 0.95
                 vmax = 1.00
             xlabel = (
-                'time (s from '+start_time.strftime("%Y-%m-%d %H:%M:%S") +
+                'time (s from ' + start_time.strftime("%Y-%m-%d %H:%M:%S") +
                 ')')
             _plot_time_range(
                 tbin_edges, qbin_edges, data_ma, field_name, [fname],
@@ -367,7 +377,7 @@ def main():
             print("----- plot to '%s'" % fname)
 
     if 'hydro' in datatype_list:
-        fname = args.trtbase+'cell_rimed_particles_column.csv'
+        fname = args.trtbase + 'cell_rimed_particles_column.csv'
         write_trt_cell_lightning(
             cell_ID_list, time_list, lon_list, lat_list, area_list,
             rank_list, rm_hmin_list, rm_hmax_list, fname)

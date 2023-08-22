@@ -19,7 +19,6 @@ import datetime
 import atexit
 import numpy as np
 import pandas as pd
-from copy import deepcopy
 
 from pyrad.io import read_colocated_gates, write_colocated_gates
 
@@ -43,11 +42,11 @@ def main():
     for i, rad1 in enumerate(rad1_vec):
         rad2 = rad2_vec[i]
 
-        print('Radars: '+rad1+' '+rad2)
-        fname1 = (file_path+'PL'+rad1+'_'+'PL'+rad2 +
-                  '/info_COLOCATED_GATES_PL'+rad1+'_PL'+rad2+'.csv')
-        fname2 = (file_path+'PL'+rad2+'_'+'PL'+rad1 +
-                  '/info_COLOCATED_GATES_PL'+rad2+'_PL'+rad1+'.csv')
+        print('Radars: ' + rad1 + ' ' + rad2)
+        fname1 = (file_path + 'PL' + rad1 + '_' + 'PL' + rad2 +
+                  '/info_COLOCATED_GATES_PL' + rad1 + '_PL' + rad2 + '.csv')
+        fname2 = (file_path + 'PL' + rad2 + '_' + 'PL' + rad1 +
+                  '/info_COLOCATED_GATES_PL' + rad2 + '_PL' + rad1 + '.csv')
 
         (rad1_ray_ind, rad1_rng_ind, rad1_ele, rad1_azi, rad1_rng,
          rad2_ray_ind, rad2_rng_ind, rad2_ele, rad2_azi, rad2_rng) = (
@@ -101,11 +100,11 @@ def main():
 
         # write resultant output
         fname1_out = (
-            file_path+'PL'+rad1+'_'+'PL'+rad2 +
-            '/info_common_COLOCATED_GATES_PL'+rad1+'_PL'+rad2+'.csv')
+            file_path + 'PL' + rad1 + '_' + 'PL' + rad2 +
+            '/info_common_COLOCATED_GATES_PL' + rad1 + '_PL' + rad2 + '.csv')
         fname2_out = (
-            file_path+'PL'+rad2+'_'+'PL'+rad1 +
-            '/info_common_COLOCATED_GATES_PL'+rad2+'_PL'+rad1+'.csv')
+            file_path + 'PL' + rad2 + '_' + 'PL' + rad1 +
+            '/info_common_COLOCATED_GATES_PL' + rad2 + '_PL' + rad1 + '.csv')
 
         rad1_dict = {
             'rad1_ray_ind': np.asarray(common_dict['rad1_ray_ind']),
