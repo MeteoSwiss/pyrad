@@ -46,6 +46,7 @@ Radar Utilities
 
     quantiles_weighted
     ratio_bootstrapping
+    compute_average_vad
 """
 
 from .radar_utils import time_avg_range, get_closest_solar_flux # noqa
@@ -62,5 +63,6 @@ from .radar_utils import project_to_vertical, get_data_along_rng # noqa
 from .radar_utils import get_data_along_azi, get_data_along_ele # noqa
 from .radar_utils import get_fixed_rng_data, get_cercle_coords # noqa
 from .radar_utils import compute_profile_stats # noqa
+from .radar_utils import compute_average_vad # noqa
 
 __all__ = [s for s in dir() if not s.startswith('_')]

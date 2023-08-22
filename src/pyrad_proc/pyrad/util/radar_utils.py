@@ -40,7 +40,7 @@ Miscellaneous functions dealing with radar data
     quantize_field
     compute_profile_stats
     project_to_vertical
-
+    compute_average_vad
 """
 from warnings import warn
 from copy import deepcopy
@@ -1965,3 +1965,86 @@ def project_to_vertical(data_in, data_height, grid_height, interp_kind='none',
         data_out = np.ma.masked_values(f(grid_height), fill_value)
 
     return data_out
+
+
+def compute_average_vad(radar_list, z_want, signs, lat0, lon0):
+    """
+    Computes a profile of horizontal wind by averaging the VAD profiles of multiple
+    radars
+
+    Parameters
+    ----------
+    radar_list : list
+        list of all radar objects to consider
+    z_want : ndarray 1D
+        Heights for where to sample vads from.
+    signs : ndarray 1D
+        Sign convention which the radial velocities in the volume created
+        from the sounding data will will. This should match the convention
+        used in the radar data. A value of 1 represents when positive values
+        velocities are towards the radar, -1 represents when negative
+        velocities are towards the radar.
+    lat0 : float
+        Reference latitude, the weight of every radar in the average VAD
+        computation will be inversely proportional to its distance from the
+        point (lat0, lon0)
+    lat0 : float
+        Reference longitude, the weight of every radar in the average VAD
+        computation will be inversely proportional to its distance from the
+        point (lat0, lon0)
+
+    Returns
+    -------
+    vad_avg : pyart.core.HorizontalWindProfile
+        Vertical profile of horizontal wind computed by averaging the 
+        VAD from every radar
+
+    """
+
+    all_vad = []
+    distances_to_center = []
+    vel_fields = []
+    refl_fields = []
+    for i, radar in enumerate(radar_list):
+        # Find vel and refl fields
+        field_names_rad = radar.fields.keys()
+        vel_field = field_names_rad[[
+            'velocity' in vname for vname in field_names_rad][0]]
+        vel_fields.append(vel_field)
+        refl_field = field_names_rad[[
+            'reflectivity' in vname for vname in field_names_rad][0]]
+        refl_fields.append(refl_field)
+
+    
+        # Compute VAD
+        all_vad.append(
+            pyart.retrieve.vad_browning(
+                radar,
+                vel_field,
+                z_want=z_want,
+                sign=signs[i]))
+        dist = np.sqrt((radar.latitude['data'][0]
+                        - lat0)**2 +
+                       (radar.longitude['data'][0]
+                        - lon0)**2)
+        distances_to_center.append(dist)
+
+    # Compute VAD weights
+    distances_to_center = np.array(distances_to_center)
+    weights = 1 / distances_to_center
+    weights /= np.sum(weights)
+
+    # Now average the VADs
+    u_avg = []
+    v_avg = []
+    for i, vad in enumerate(all_vad):
+        u_avg.append(weights[i] * np.ma.filled(vad.u_wind, np.nan))
+        v_avg.append(weights[i] * np.ma.filled(vad.v_wind, np.nan))
+    u_avg = np.nansum(u_avg, axis=0)
+    v_avg = np.nansum(v_avg, axis=0)
+
+    vad_avg = pyart.core.HorizontalWindProfile.from_u_and_v(
+        z_want, np.ma.array(
+            u_avg, mask=np.isnan(u_avg)), np.ma.array(
+            v_avg, mask=np.isnan(v_avg)))
+    return vad_avg

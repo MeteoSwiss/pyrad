@@ -18,7 +18,7 @@ def funcpath_to_docpath(funcpath):
 
 def dict_to_restructured_text(yaml_data):
     rst_output = []
-    rst_output.append('List of pyrad processes')
+    rst_output.append('List of pyrad datasets')
     rst_output.append('==============================\n')
 
     for key, value in yaml_data.items():

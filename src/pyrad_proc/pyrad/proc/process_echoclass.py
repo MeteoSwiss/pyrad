@@ -621,6 +621,99 @@ def process_cdf(procstatus, dscfg, radar_list=None):
 
     return new_dataset, ind_rad
 
+def process_gatefilter(procstatus, dscfg, radar_list=None):
+    """
+    filters out all available moments based on specified upper/lower bounds for moments 
+    based on the Py-ART gatefilter. Every value below upper bound or above upper 
+    bound will be filtered. To ignore lower/upper bound enter an impossible 
+    value such as -9999 or 9999.
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration. Accepted Configuration Keywords::
+
+        datatype : list of string. Dataset keyword
+            The input data types
+        lower_bounds : list of float
+            The list of lower bounds for every input data type
+        upper_bounds : list of float
+            The list of upper bounds  for every input data type
+
+    radar_list : list of Radar objects
+        Optional. list of radar objects
+
+    Returns
+    -------
+    new_dataset : dict
+        dictionary containing the output
+    ind_rad : int
+        radar index
+
+    """
+
+    if procstatus != 1:
+        return None, None
+
+    field_names_aux = []
+    for datatypedescr in dscfg['datatype']:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        field_names_aux.append(get_fieldname_pyart(datatype))
+    
+    if len(field_names_aux) != len(dscfg['lower_bounds']):
+        warn('Number of provided lower bounds is different '+
+        'from number of data types')
+        return None, None
+
+    if len(field_names_aux) != len(dscfg['upper_bounds']):
+        warn('Number of provided upper bounds is different '+
+        'from number of data types')
+        return None, None    
+ 
+    lower_bounds = dscfg['lower_bounds']
+    upper_bounds = dscfg['upper_bounds']
+
+    ind_rad = int(radarnr[5:8]) - 1
+    if radar_list[ind_rad] is None:
+        warn('No valid radar')
+        return None, None
+    radar = radar_list[ind_rad]
+
+    new_dataset = {'radar_out': deepcopy(radar)}
+    new_dataset['radar_out'].fields = dict()
+
+    # filter gates based upon field parameters
+    radar_aux = deepcopy(radar)
+    gatefilter = pyart.filters.GateFilter(radar_aux)
+
+    for i, field in enumerate(field_names_aux):
+        gatefilter.exclude_below(field, lower_bounds[i])
+        gatefilter.exclude_above(field, upper_bounds[i])
+
+    is_invalid = gatefilter.gate_excluded == 1
+
+    for field_name in radar.fields.keys():
+
+        radar_field = deepcopy(radar.fields[field_name])
+        radar_field['data'] = np.ma.masked_where(
+            is_invalid, radar_field['data'])
+
+        if field_name.startswith('corrected_'):
+            new_field_name = field_name
+        elif field_name.startswith('uncorrected_'):
+            new_field_name = field_name.replace(
+                'uncorrected_', 'corrected_', 1)
+        else:
+            new_field_name = 'corrected_' + field_name
+        new_dataset['radar_out'].add_field(new_field_name, radar_field)
+
+    if not new_dataset['radar_out'].fields:
+        return None, None
+    return new_dataset, ind_rad
+
 
 def process_filter_snr(procstatus, dscfg, radar_list=None):
     """

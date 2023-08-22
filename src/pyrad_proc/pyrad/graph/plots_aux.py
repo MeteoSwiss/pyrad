@@ -238,9 +238,11 @@ def generate_dda_map_title(grid, field, level, datetime_format=None):
         time_str = begin_time.strftime(datetime_format)
     else:
         time_str = begin_time.isoformat() + 'Z'
-    radar_names = pyart.graph.common.generate_radar_name(grid)
+    radar_names = ''
 
     for mdata in grid.metadata['additional_radars']:
+        if isinstance(mdata['radar_name'], bytes):
+            mdata['radar_name'] = mdata['radar_name'].decode('utf-8')
         radar_names += '-' + mdata['radar_name']
     height = grid.z["data"][level] / 1000.0
     l1 = f"DDA: {radar_names} {height:.1f} km {time_str}"
@@ -278,9 +280,11 @@ def generate_dda_latitude_slice_title(grid, field, level, datetime_format=None,
         time_str = begin_time.strftime(datetime_format)
     else:
         time_str = begin_time.isoformat() + 'Z'
-    radar_names = pyart.graph.common.generate_radar_name(grid)
+    radar_names = ''
 
     for mdata in grid.metadata['additional_radars']:
+        if isinstance(mdata['radar_name'], bytes):
+            mdata['radar_name'] = mdata['radar_name'].decode('utf-8')
         radar_names += '-' + mdata['radar_name']
     disp = grid.x["data"][level] / 1000.0
     if disp >= 0:
@@ -329,9 +333,11 @@ def generate_dda_longitude_slice_title(grid, field, level,
         time_str = begin_time.strftime(datetime_format)
     else:
         time_str = begin_time.isoformat() + 'Z'
-    radar_names = pyart.graph.common.generate_radar_name(grid)
+    radar_names = ''
 
     for mdata in grid.metadata['additional_radars']:
+        if isinstance(mdata['radar_name'], bytes):
+            mdata['radar_name'] = mdata['radar_name'].decode('utf-8')
         radar_names += '-' + mdata['radar_name']
     disp = grid.x["data"][level] / 1000.0
     if disp >= 0:

@@ -38,8 +38,9 @@ except ImportError:
     _PYDDA_AVAILABLE = False
 
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
+from ..io import read_radiosounding
 from .process_grid import process_grid
-
+from ..util import compute_average_vad
 
 def process_turbulence(procstatus, dscfg, radar_list=None):
     """
@@ -781,56 +782,72 @@ def process_dda(procstatus, dscfg, radar_list=None):
 
         datatype : string. Dataset keyword
             The input data type
-
-        gridding  parameters:
-            gridconfig : dictionary. Dataset keyword
-                Dictionary containing some or all of this keywords:
-                xmin, xmax, ymin, ymax, zmin, zmax : floats
-                    minimum and maximum horizontal distance from grid origin [km]
-                    and minimum and maximum vertical distance from grid origin [m]
-                    Defaults -40, 40, -40, 40, 0., 10000.
-                latmin, latmax, lonmin, lonmax : floats
-                    minimum and maximum latitude and longitude [deg], if specified
-                    xmin, xmax, ymin, ymax will be ignored
-                hres, vres : floats
-                    horizontal and vertical grid resolution [m]
-                    Defaults 1000., 500.
-                latorig, lonorig, altorig : floats
-                    latitude and longitude of grid origin [deg] and altitude of
-                    grid origin [m MSL]
-                    Defaults the latitude, longitude and altitude of the radar
-            wfunc : str. Dataset keyword
-                the weighting function used to combine the radar gates close to a
-                grid point. Possible values BARNES, BARNES2, CRESSMAN, NEAREST
-                Default NEAREST
-            roif_func : str. Dataset keyword
-                the function used to compute the region of interest.
-                Possible values: dist_beam, constant
-            roi : float. Dataset keyword
-                the (minimum) radius of the region of interest in m. Default half
-                the largest resolution
-            beamwidth : float. Dataset keyword
-                the radar antenna beamwidth [deg]. If None that of the key
-                radar_beam_width_h in attribute instrument_parameters of the radar
-                object will be used. If the key or the attribute are not present
-                a default 1 deg value will be used
-            beam_spacing : float. Dataset keyword
-                the beam spacing, i.e. the ray angle resolution [deg]. If None,
-                that of the attribute ray_angle_res of the radar object will be
-                used. If the attribute is None a default 1 deg value will be used
-        dda parameters:
-            signs : list of integers
-                The sign of the velocity field for every radar object.
-                A value of 1 represents when
-                positive values velocities are towards the radar, -1 represents
-                when negative velocities are towards the radar.
-            Co : float
-                Weight for cost function related to observed radial velocities.
-                Default: 1.
-            Cm : float
-                Weight for cost function related to the mass continuity equation.
-                Default: 1500.
-
+        
+        gridconfig : dictionary. Dataset keyword
+            Dictionary containing some or all of this keywords:
+            xmin, xmax, ymin, ymax, zmin, zmax : floats
+                minimum and maximum horizontal distance from grid origin [km]
+                and minimum and maximum vertical distance from grid origin [m]
+                Defaults -40, 40, -40, 40, 0., 10000.
+            latmin, latmax, lonmin, lonmax : floats
+                minimum and maximum latitude and longitude [deg], if specified
+                xmin, xmax, ymin, ymax will be ignored
+            hres, vres : floats
+                horizontal and vertical grid resolution [m]
+                Defaults 1000., 500.
+            latorig, lonorig, altorig : floats
+                latitude and longitude of grid origin [deg] and altitude of
+                grid origin [m MSL]
+                Defaults the latitude, longitude and altitude of the radar
+        wfunc : str. Dataset keyword
+            the weighting function used to combine the radar gates close to a
+            grid point. Possible values BARNES, BARNES2, CRESSMAN, NEAREST
+            Default NEAREST
+        roif_func : str. Dataset keyword
+            the function used to compute the region of interest.
+            Possible values: dist_beam, constant
+        roi : float. Dataset keyword
+            the (minimum) radius of the region of interest in m. Default half
+            the largest resolution
+        beamwidth : float. Dataset keyword
+            the radar antenna beamwidth [deg]. If None that of the key
+            radar_beam_width_h in attribute instrument_parameters of the radar
+            object will be used. If the key or the attribute are not present
+            a default 1 deg value will be used
+        beam_spacing : float. Dataset keyword
+            the beam spacing, i.e. the ray angle resolution [deg]. If None,
+            that of the attribute ray_angle_res of the radar object will be
+            used. If the attribute is None a default 1 deg value will be used
+        signs : list of integers
+            The sign of the velocity field for every radar object.
+            A value of 1 represents when
+            positive values velocities are towards the radar, -1 represents
+            when negative velocities are towards the radar.
+        Co : float
+            Weight for cost function related to observed radial velocities.
+            Default: 1.
+        Cm : float
+            Weight for cost function related to the mass continuity equation.
+            Default: 1500.
+        Cx: float
+            Smoothing coefficient for x-direction
+        Cy: float
+            Smoothing coefficient for y-direction
+        Cz: float
+            Smoothing coefficient for z-direction
+        Cb: float
+            Coefficient for sounding constraint
+        Cv: float
+            Weight for cost function related to vertical vorticity equation.
+        Cmod: float
+            Coefficient for model constraint
+        Cpoint: float
+            Coefficient for point constraint    
+        wind_tol: float
+            Stop iterations after maximum change in winds is less than this value.
+        frz : float
+            The freezing level in meters. This is to tell PyDDA where to use 
+            ice particle fall speeds in the wind retrieval verus liquid.
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -866,22 +883,48 @@ def process_dda(procstatus, dscfg, radar_list=None):
     ind_radar_list = np.array(ind_radar_list)
     datatype_list = np.array(datatype_list)
     field_name_list = np.array(field_name_list)
-
+    
     # Get DDA numerical parameters
     Co = dscfg.get('Co', 1.)
     Cm = dscfg.get('Cm', 1500.)
+    Cx = dscfg.get('Cx', 0.)
+    Cy = dscfg.get('Cy', 0.)
+    Cz = dscfg.get('Cz', 0.)
+    Cb = dscfg.get('Cb', 0.)
+    Cv = dscfg.get('Cv', 0.)
+    frz = dscfg.get('frz', 4500.)
+    Cmod = dscfg.get('Cmod', 0.)
+    Cpoint = dscfg.get('Cpoint', 0.)
+    wind_tol = dscfg.get('wind_tol', 0.1)
 
-    # Compute VAD for every radar to initialize DDA
-    # z-vector for vad
-    z_want = np.arange(dscfg['gridConfig']['zmin'],
-                       dscfg['gridConfig']['zmax'] +
-                       dscfg['gridConfig']['vres'],
-                       dscfg['gridConfig']['vres'])
+    signs = dscfg.get('signs', [1]*len(set(ind_radar_list)))
+    sounding = dscfg.get('sounding', None)
+    if sounding:
+        dtime = pyart.graph.common.generate_radar_time_begin(radar_list[0])
+        sounding_data = read_radiosounding(sounding, dtime)
+    else:
+        sounding_data = None
 
-    all_vad = []
-    distances_to_center = []
-    vel_fields = []
+    if sounding_data is not None:
+        # Remove nan from souding
+        sounding_data = sounding_data.dropna()
+        # create wind profile from sounding
+        wind_prof = pyart.core.HorizontalWindProfile(sounding_data['HGHT'],
+            sounding_data['SKNT'] * 0.514, sounding_data['DRCT'])
+    else:    
+        # Compute VAD for every radar to initialize DDA
+        # z-vector for vad
+        z_want = np.arange(dscfg['gridConfig']['zmin'],
+                        dscfg['gridConfig']['zmax'] +
+                        dscfg['gridConfig']['vres'],
+                        dscfg['gridConfig']['vres'])
+
+        wind_prof = compute_average_vad(radar_list, z_want, signs, 
+            dscfg['gridConfig']['lonorig'], dscfg['gridConfig']['latorig'])
+        
+    # Get name of reflectivity and velocity fields for each radar
     refl_fields = []
+    vel_fields = []
     for i, radar in enumerate(radar_list):
         # Find vel and refl fields
         field_names_rad = field_name_list[ind_radar_list == i]
@@ -889,74 +932,42 @@ def process_dda(procstatus, dscfg, radar_list=None):
             'velocity' in vname for vname in field_name_list[ind_radar_list == i]]][0]
         vel_fields.append(vel_field)
         refl_field = field_names_rad[['reflectivity' in vname
-                                      for vname in field_name_list[ind_radar_list == i]]][0]
+                                for vname in field_name_list[ind_radar_list == i]]][0]
         refl_fields.append(refl_field)
-
-        # Compute VAD
-        all_vad.append(
-            pyart.retrieve.vad_browning(
-                radar,
-                vel_field,
-                z_want=z_want,
-                sign=dscfg['signs'][i]))
-        dist = np.sqrt((radar.latitude['data'][0]
-                        - dscfg['gridConfig']['latorig'])**2 +
-                       (radar.longitude['data'][0]
-                        - dscfg['gridConfig']['lonorig'])**2)
-        distances_to_center.append(dist)
-
-    # Compute VAD weights
-    distances_to_center = np.array(distances_to_center)
-    weights = 1 / distances_to_center
-    weights /= np.sum(weights)
-
-    # Now average the VADs
-    u_avg = []
-    v_avg = []
-    for i, vad in enumerate(all_vad):
-        u_avg.append(weights[i] * np.ma.filled(vad.u_wind, np.nan))
-        v_avg.append(weights[i] * np.ma.filled(vad.v_wind, np.nan))
-    u_avg = np.nansum(u_avg, axis=0)
-    v_avg = np.nansum(v_avg, axis=0)
-
-    vad_avg = pyart.core.HorizontalWindProfile.from_u_and_v(
-        z_want, np.ma.array(
-            u_avg, mask=np.isnan(u_avg)), np.ma.array(
-            v_avg, mask=np.isnan(v_avg)))
-
+    
+    # Grid the variables
     grids = []
     for i, radar in enumerate(radar_list):
         # Now we grid
         dscfg_grid = deepcopy(dscfg)
         dscfg_grid['datatype'] = np.array(dscfg['datatype'])[
             ind_radar_list == i]
+        import time
+        t0 = time.time()
         grids.append(process_grid(1, dscfg_grid, radar_list)[0]['radar_out'])
-
+        print(time.time() - t0)
     # Harmonize variables
     for i, grid in enumerate(grids):
         grid.fields['velocity'] = grid.fields.pop(vel_fields[i])
-        if dscfg['signs'][i] == 1:
+        if signs[i] == 1:
             grid.fields['velocity']['data'] *= -1
         grid.fields['reflectivity'] = grid.fields.pop(refl_fields[i])
 
     # DDA initialization
-    u_init, v_init, w_init = pydda.initialization.make_wind_field_from_profile(
-        grids[0], vad_avg, vel_field='velocity')
+    grids[0] = pydda.initialization.make_wind_field_from_profile(
+        grids[0], wind_prof, vel_field='velocity')
+    
 
     # Actual DDA computation
-    new_grids = pydda.retrieval.get_dd_wind_field(
+    new_grids, params = pydda.retrieval.get_dd_wind_field(
         grids,
-        u_init,
-        v_init,
-        w_init,
         vel_name='velocity',
         refl_field='reflectivity',
         mask_outside_opt=True,
-        wind_tol=0.01,
         engine='scipy',
-        Co=Co,
-        Cm=Cm)
-
+        Co=Co, Cm=Cm, Cx=Cx, Cy=Cy, Cz=Cz, Cb=Cb, Cv=Cv, Cmod=Cmod,
+        Cpoint=Cpoint, wind_tol=wind_tol, frz=frz)
+        
     # pyDDA returns as many grid objects as input radars
     # the idea here is to merge these grid objects into one
     # and to replace the homogeneized vel and refl fields by the

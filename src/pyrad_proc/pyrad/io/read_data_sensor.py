@@ -28,7 +28,7 @@ Functions for reading data from other sensors
     read_coord_sensors
     read_disdro_scattering
     read_disdro
-
+    read_radiosounding
 """
 
 import os
@@ -38,7 +38,9 @@ import csv
 from warnings import warn
 from copy import deepcopy
 import re
-
+import pandas as pd
+import requests
+from io import StringIO
 import numpy as np
 
 from pyart.config import get_fillvalue
@@ -2074,3 +2076,48 @@ def read_disdro(fname):
         warn(str(ee))
         warn('Unable to read file ' + fname)
         return (None, None, None, None)
+
+def read_radiosounding(station, datetime_obj):
+    """
+    Download radiosounding data from the University of Wyoming website.
+
+    Parameters:
+    - station (str): Radiosounding station code (e.g., "72776").
+    - datetime_obj (datetime.datetime): Datetime object specifying the desired date
+      and time.
+
+    Returns:
+    pandas.DataFrame: A DataFrame containing the radiosounding data with columns:
+    ['PRES', 'HGHT', 'TEMP', 'DWPT', 'RELH', 'MIXR', 'DRCT', 'SKNT', 'THTA',
+    'THTE', 'THTV]
+    """
+
+    base_url = "https://weather.uwyo.edu/cgi-bin/sounding"
+    query_params = {
+        "region": "naconf",
+        "TYPE": "TEXT:LIST",
+        "YEAR": datetime_obj.year,
+        "MONTH": f"{datetime_obj.month:02d}",
+        "FROM": f"{datetime_obj.hour:02d}00",
+        "TO": f"{datetime_obj.hour:02d}00",
+        "STNM": station
+    }
+
+    response = requests.get(base_url, params=query_params, verify = False)
+
+    if response.status_code != 200:
+        return None
+
+    # Extract and parse the data using pandas
+    start_idx = response.text.find("PRES")
+    end_idx = response.text.find("Station information and sounding indices")
+    data_str = response.text[start_idx:end_idx][0:-10]
+
+    data_io = StringIO(data_str)
+    data_df = pd.read_csv(data_io, sep='\s+', header=0, skiprows = [1,2],
+        error_bad_lines=False, 
+    )
+    for col in data_df.columns:
+        data_df[col] = pd.to_numeric(data_df[col])
+    return data_df
+

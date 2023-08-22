@@ -109,6 +109,7 @@ Echo classification and filtering
     process_cdf
     process_filter_snr
     process_filter_visibility
+    process_gatefilter
     process_outlier_filter
     process_filter_vol2bird
     process_gate_filter_vol2bird
@@ -314,6 +315,7 @@ from .process_echoclass import process_filter_vel_diff, process_zdr_column # noq
 from .process_echoclass import process_hydro_mf_to_echo_id # noqa
 from .process_echoclass import process_filter_vol2bird # noqa
 from .process_echoclass import process_gate_filter_vol2bird # noqa
+from .process_echoclass import process_gatefilter # noqa
 
 from .process_phase import process_correct_phidp0 # noqa
 from .process_phase import process_smooth_phidp_single_window # noqa

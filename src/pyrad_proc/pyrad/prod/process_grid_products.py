@@ -26,7 +26,7 @@ from ..io.write_data import write_histogram, write_ts_stats
 
 from ..graph.plots_grid import plot_surface, plot_surface_raw
 from ..graph.plots_grid import plot_longitude_slice, plot_latitude_slice
-from ..graph.plots_grid import plot_latlon_slice, plot_surface_contour
+from ..graph.plots_grid import plot_cross_section, plot_surface_contour
 from ..graph.plots_grid import plot_dda_map, plot_dda_slice
 
 from ..graph.plots_aux import get_colobar_label, get_field_name
@@ -668,8 +668,8 @@ def generate_grid_products(dataset, prdcfg):
             if 'lat' in prdcfg['coord2']:
                 lat2 = prdcfg['coord2']['lat']
 
-        coord1 = (lon1, lat1)
-        coord2 = (lon2, lat2)
+        coord1 = (lat1, lon1)
+        coord2 = (lat2, lon2)
 
         savedir = get_save_dir(
             prdcfg['basepath'], prdcfg['procname'], dssavedir,
@@ -686,7 +686,7 @@ def generate_grid_products(dataset, prdcfg):
         for i, fname in enumerate(fname_list):
             fname_list[i] = savedir + fname
 
-        plot_latlon_slice(
+        plot_cross_section(
             dataset['radar_out'], field_name, coord1, coord2, prdcfg,
             fname_list)
 
@@ -857,7 +857,6 @@ def generate_grid_products(dataset, prdcfg):
         # get bg field name given which radar serves as reference
         if bg_ref_rad != 0:
             bg_field_name += '_radar{:d}'.format(bg_ref_rad)
-
         if bg_field_name not in dataset['radar_out'].fields:
             warn(
                 ' Field type ' + field_name +

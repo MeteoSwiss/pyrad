@@ -36,10 +36,15 @@ from pyart.config import get_metadata
 from pyart.core import Radar, geographic_to_cartesian_aeqd
 from pyart.core import cartesian_to_geographic_aeqd
 from pyart.map import grid_from_radars
-from pyart.util import compute_directional_stats
-from pyart.util import compute_azimuthal_average, subset_radar
-from pyart.util import find_neighbour_gates
+try:
+    from pyart.util import compute_directional_stats
+    from pyart.util import compute_azimuthal_average
+    from pyart.util import find_neighbour_gates
+except ImportError:
+    warn('ARM version of Py-ART detected, you will not be able to use some products')
+    warn('Please use Py-ART MCH instead (https://github.com/MeteoSwiss/pyart)')
 
+from pyart.util import subset_radar
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from ..io.read_data_sensor import read_trt_traj_data
 from ..io.read_data_other import read_antenna_pattern
@@ -86,6 +91,7 @@ def get_process_func(dataset_type, dsname):
                 'FIELDS_DIFF': process_fields_diff
                 'FIXED_RNG': process_fixed_rng
                 'FIXED_RNG_SPAN': process_fixed_rng_span
+                'GATEFILTER': process_gatefilter
                 'GECSX' : process_gecsx
                 'hydroMF_to_hydro': process_hydro_mf_to_hydro
                 'hydroMF_to_SAN: process_hydro_mf_to_echo_id
@@ -262,6 +268,8 @@ def get_process_func(dataset_type, dsname):
         func_name = 'process_radar_resampling'
     elif dataset_type == 'CCOR':
         func_name = 'process_ccor'
+    elif dataset_type == 'GATEFILTER':
+        func_name = 'process_gatefilter'
     elif dataset_type == 'GECSX':
         func_name = 'process_gecsx'
         dsformat = ['GRID', 'VOL']
@@ -674,6 +682,7 @@ def process_raw(procstatus, dscfg, radar_list=None):
         radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
         break
     ind_rad = int(radarnr[5:8]) - 1
+    
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
         return None, None

@@ -640,7 +640,7 @@ def plot_longitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
     plt.close(fig)
 
 
-def plot_latlon_slice(grid, field_name, coord1, coord2, prdcfg, fname_list):
+def plot_cross_section(grid, field_name, coord1, coord2, prdcfg, fname_list):
     """
     plots a croos section crossing two points in the grid
 
@@ -682,8 +682,8 @@ def plot_latlon_slice(grid, field_name, coord1, coord2, prdcfg, fname_list):
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
     ax = fig.add_subplot(111, aspect='equal')
     display = pyart.graph.GridMapDisplay(grid)
-    display.plot_latlon_slice(
-        field_name, coord1=coord1, coord2=coord2, norm=norm,
+    display.plot_cross_section(
+        field_name, start=coord1, end=coord2, norm=norm,
         colorbar_orient='vertical', ticks=ticks, ticklabs=ticklabs, fig=fig,
         ax=ax, axislabels_flag=True, vmin=vmin, vmax=vmax)
     # ax.set_ylim(

@@ -110,7 +110,8 @@ Reading other data
     read_ml_ts
     read_windmills_data
     read_windcube
-
+    read_radiosounding
+    
 Writing data
 ==================
 
@@ -242,6 +243,7 @@ from .read_data_sensor import read_thundertracking_info, read_windmills_data # n
 from .read_data_sensor import read_trt_info2, read_trt_info_all2 # noqa
 from .read_data_sensor import read_trt_thundertracking_traj_data # noqa
 from .read_data_sensor import read_coord_sensors # noqa
+from .read_data_sensor import read_radiosounding # noqa
 
 from .read_data_sun import read_sun_hits_multiple_days, read_sun_hits # noqa
 from .read_data_sun import read_sun_retrieval, read_solar_flux # noqa
