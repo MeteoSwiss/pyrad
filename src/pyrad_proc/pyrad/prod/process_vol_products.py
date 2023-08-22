@@ -13,10 +13,12 @@ Functions for obtaining Pyrad products from a radar volume dataset
 
 from copy import deepcopy
 from warnings import warn
+import os
 
 import numpy as np
 import pyart
 from netCDF4 import num2date
+import importlib
 
 from ..io.io_aux import get_save_dir, make_filename, get_fieldname_pyart
 from ..io.io_aux import generate_field_name_str
@@ -28,7 +30,7 @@ from ..io.write_data import write_last_state, write_histogram, write_quantiles
 from ..io.write_data import write_fixed_angle, write_monitoring_ts
 from ..io.write_data import write_alarm_msg, write_timeseries_point, send_msg
 from ..io.write_data import write_vol_kml, write_vol_csv
-from ..io.read_data_dem import read_dem, dem2radar_data
+from ..io.read_data_dem import read_dem
 
 from ..io.read_data_other import read_monitoring_ts
 
@@ -51,12 +53,10 @@ from ..util.radar_utils import get_data_along_rng, get_data_along_azi
 from ..util.radar_utils import get_data_along_ele
 from ..util.stat_utils import quantiles_weighted
 
-try:
-    import simplekml
+if importlib.util.find_spec('simplekml'):
     _SIMPLEKML_AVAILABLE = True
-except ImportError:
+else:
     _SIMPLEKML_AVAILABLE = False
-
 
 def generate_vol_products(dataset, prdcfg):
     """
@@ -735,7 +735,7 @@ def generate_vol_products(dataset, prdcfg):
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         if datatype == 'EL':
             value = dataset['radar_out'].elevation['data']
@@ -759,7 +759,7 @@ def generate_vol_products(dataset, prdcfg):
         plot_timeseries(
             ray_time, [value], fname_list, labelx='Time UTC', labely=labely,
             title=titl, dpi=dpi)
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -782,11 +782,11 @@ def generate_vol_products(dataset, prdcfg):
 
         fname_list = make_filename(
             'ppi', prdcfg['dstype'], prdcfg['voltype'],
-            prdcfg['imgformat'], prdcfginfo='el'+'{:.1f}'.format(el),
+            prdcfg['imgformat'], prdcfginfo='el' + '{:.1f}'.format(el),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         step = prdcfg.get('step', None)
         quantiles = prdcfg.get('quantiles', None)
@@ -797,9 +797,9 @@ def generate_vol_products(dataset, prdcfg):
 
         fname_hist = None
         if write_data:
-            fname_hist = savedir+make_filename(
+            fname_hist = savedir + make_filename(
                 'ppi', prdcfg['dstype'], prdcfg['voltype'],
-                ['csv'], prdcfginfo='el'+'{:.1f}'.format(el),
+                ['csv'], prdcfginfo='el' + '{:.1f}'.format(el),
                 timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
 
         fname_list = plot_ppi(
@@ -807,7 +807,7 @@ def generate_vol_products(dataset, prdcfg):
             plot_type=plot_type, vmin=vmin, vmax=vmax, step=step,
             quantiles=quantiles, fname_hist=fname_hist)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -838,17 +838,17 @@ def generate_vol_products(dataset, prdcfg):
             fname_list = make_filename(
                 'ppi', prdcfg['dstype'], prdcfg['voltype'],
                 prdcfg['imgformat'],
-                prdcfginfo='el'+'{:.1f}'.format(prdcfg['angle']),
+                prdcfginfo='el' + '{:.1f}'.format(prdcfg['angle']),
                 timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
             for i, fname in enumerate(fname_list):
-                fname_list[i] = savedir+fname
+                fname_list[i] = savedir + fname
 
             plot_ppi(
                 xsect, field_name, 0, prdcfg, fname_list, plot_type=plot_type,
                 vmin=vmin, vmax=vmax, step=step, quantiles=quantiles)
 
-            print('----- save to '+' '.join(fname_list))
+            print('----- save to ' + ' '.join(fname_list))
 
             return fname_list
         except EnvironmentError:
@@ -878,16 +878,16 @@ def generate_vol_products(dataset, prdcfg):
 
         fname_list = make_filename(
             'ppi_map', prdcfg['dstype'], prdcfg['voltype'],
-            prdcfg['imgformat'], prdcfginfo='el'+'{:.1f}'.format(el),
+            prdcfg['imgformat'], prdcfginfo='el' + '{:.1f}'.format(el),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_ppi_map(
             dataset['radar_out'], field_name, ind_el, prdcfg, fname_list)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -921,12 +921,12 @@ def generate_vol_products(dataset, prdcfg):
 
         fname_list = make_filename(
             'ppi', prdcfg['dstype'],
-            prdcfg['voltype']+'-'+prdcfg['contourtype'],
-            prdcfg['imgformat'], prdcfginfo='el'+'{:.1f}'.format(el),
+            prdcfg['voltype'] + '-' + prdcfg['contourtype'],
+            prdcfg['imgformat'], prdcfginfo='el' + '{:.1f}'.format(el),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         titl = (
             pyart.graph.common.generate_title(
@@ -943,7 +943,7 @@ def generate_vol_products(dataset, prdcfg):
             dataset['radar_out'], contour_name, ind_el, prdcfg, fname_list,
             contour_values=contour_values, ax=ax, fig=fig, save_fig=True)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -979,11 +979,11 @@ def generate_vol_products(dataset, prdcfg):
 
         fname_list = make_filename(
             'ppi_map', prdcfg['dstype'], prdcfg['voltype'],
-            prdcfg['imgformat'], prdcfginfo='el'+'{:.1f}'.format(el),
+            prdcfg['imgformat'], prdcfginfo='el' + '{:.1f}'.format(el),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         fig, ax, _ = plot_ppi_map(
             dataset['radar_out'], field_name, ind_el, prdcfg, fname_list,
@@ -993,7 +993,7 @@ def generate_vol_products(dataset, prdcfg):
             roi_dict, prdcfg, fname_list, ax=ax, fig=fig,
             save_fig=True)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -1027,13 +1027,13 @@ def generate_vol_products(dataset, prdcfg):
 
             fname_list = make_filename(
                 'ppi', prdcfg['dstype'],
-                prdcfg['voltype']+'-'+prdcfg['contourtype'],
+                prdcfg['voltype'] + '-' + prdcfg['contourtype'],
                 prdcfg['imgformat'],
-                prdcfginfo='el'+'{:.1f}'.format(prdcfg['angle']),
+                prdcfginfo='el' + '{:.1f}'.format(prdcfg['angle']),
                 timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
             for i, fname in enumerate(fname_list):
-                fname_list[i] = savedir+fname
+                fname_list[i] = savedir + fname
 
             titl = (
                 pyart.graph.common.generate_title(xsect, field_name, 0) +
@@ -1047,7 +1047,7 @@ def generate_vol_products(dataset, prdcfg):
                 xsect, contour_name, 0, prdcfg, fname_list,
                 contour_values=contour_values, ax=ax, fig=fig, save_fig=True)
 
-            print('----- save to '+' '.join(fname_list))
+            print('----- save to ' + ' '.join(fname_list))
 
             return fname_list
         except EnvironmentError:
@@ -1078,17 +1078,17 @@ def generate_vol_products(dataset, prdcfg):
 
         fname_list = make_filename(
             'ppi', prdcfg['dstype'], prdcfg['voltype'],
-            prdcfg['imgformat'], prdcfginfo='el'+'{:.1f}'.format(el),
+            prdcfg['imgformat'], prdcfginfo='el' + '{:.1f}'.format(el),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         fname_list = plot_ppi_contour(
             dataset['radar_out'], field_name, ind_el, prdcfg, fname_list,
             contour_values=contour_values)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -1115,17 +1115,17 @@ def generate_vol_products(dataset, prdcfg):
             fname_list = make_filename(
                 'ppi', prdcfg['dstype'], prdcfg['voltype'],
                 prdcfg['imgformat'],
-                prdcfginfo='el'+'{:.1f}'.format(prdcfg['angle']),
+                prdcfginfo='el' + '{:.1f}'.format(prdcfg['angle']),
                 timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
             for i, fname in enumerate(fname_list):
-                fname_list[i] = savedir+fname
+                fname_list[i] = savedir + fname
 
             fname_list = plot_ppi_contour(
                 xsect, field_name, 0, prdcfg, fname_list,
                 contour_values=contour_values)
 
-            print('----- save to '+' '.join(fname_list))
+            print('----- save to ' + ' '.join(fname_list))
 
             return fname_list
         except EnvironmentError:
@@ -1154,11 +1154,11 @@ def generate_vol_products(dataset, prdcfg):
 
         fname_list = make_filename(
             'rhi', prdcfg['dstype'], prdcfg['voltype'],
-            prdcfg['imgformat'], prdcfginfo='az'+'{:.1f}'.format(az),
+            prdcfg['imgformat'], prdcfginfo='az' + '{:.1f}'.format(az),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         step = prdcfg.get('step', None)
         quantiles = prdcfg.get('quantiles', None)
@@ -1171,7 +1171,7 @@ def generate_vol_products(dataset, prdcfg):
             plot_type=plot_type, step=step, vmin=vmin, vmax=vmax,
             quantiles=quantiles)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -1202,24 +1202,24 @@ def generate_vol_products(dataset, prdcfg):
             fname_list = make_filename(
                 'rhi', prdcfg['dstype'], prdcfg['voltype'],
                 prdcfg['imgformat'],
-                prdcfginfo='az'+'{:.1f}'.format(prdcfg['angle']),
+                prdcfginfo='az' + '{:.1f}'.format(prdcfg['angle']),
                 timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
             for i, fname in enumerate(fname_list):
-                fname_list[i] = savedir+fname
+                fname_list[i] = savedir + fname
 
             plot_rhi(
                 xsect, field_name, 0, prdcfg, fname_list, vmin=vmin,
                 vmax=vmax, plot_type=plot_type, step=step,
                 quantiles=quantiles)
 
-            print('----- save to '+' '.join(fname_list))
+            print('----- save to ' + ' '.join(fname_list))
 
             return fname_list
         except EnvironmentError:
             warn(
                 ' No data found at azimuth ' +
-                str(prdcfg['angle'])+'. Skipping product ' +
+                str(prdcfg['angle']) + '. Skipping product ' +
                 prdcfg['type'])
             return None
 
@@ -1252,16 +1252,16 @@ def generate_vol_products(dataset, prdcfg):
 
         fname_list = make_filename(
             'rhi', prdcfg['dstype'],
-            prdcfg['voltype']+'-'+prdcfg['contourtype'],
-            prdcfg['imgformat'], prdcfginfo='az'+'{:.1f}'.format(az),
+            prdcfg['voltype'] + '-' + prdcfg['contourtype'],
+            prdcfg['imgformat'], prdcfginfo='az' + '{:.1f}'.format(az),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         titl = (
             pyart.graph.common.generate_title(dataset['radar_out'],
-                                              field_name, ind_az)+' - ' +
+                                              field_name, ind_az) + ' - ' +
             pyart.graph.common.generate_field_name(dataset['radar_out'],
                                                    contour_name))
 
@@ -1273,7 +1273,7 @@ def generate_vol_products(dataset, prdcfg):
             dataset['radar_out'], contour_name, ind_az, prdcfg, fname_list,
             contour_values=contour_values, ax=ax, fig=fig, save_fig=True)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -1307,13 +1307,13 @@ def generate_vol_products(dataset, prdcfg):
 
             fname_list = make_filename(
                 'rhi', prdcfg['dstype'],
-                prdcfg['voltype']+'-'+prdcfg['contourtype'],
+                prdcfg['voltype'] + '-' + prdcfg['contourtype'],
                 prdcfg['imgformat'],
-                prdcfginfo='az'+'{:.1f}'.format(prdcfg['angle']),
+                prdcfginfo='az' + '{:.1f}'.format(prdcfg['angle']),
                 timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
             for i, fname in enumerate(fname_list):
-                fname_list[i] = savedir+fname
+                fname_list[i] = savedir + fname
 
             titl = (
                 pyart.graph.common.generate_title(xsect, field_name, 0) +
@@ -1327,13 +1327,13 @@ def generate_vol_products(dataset, prdcfg):
                 xsect, contour_name, 0, prdcfg, fname_list,
                 contour_values=contour_values, ax=ax, fig=fig, save_fig=True)
 
-            print('----- save to '+' '.join(fname_list))
+            print('----- save to ' + ' '.join(fname_list))
 
             return fname_list
         except EnvironmentError:
             warn(
                 ' No data found at azimuth ' +
-                str(prdcfg['angle'])+'. Skipping product ' +
+                str(prdcfg['angle']) + '. Skipping product ' +
                 prdcfg['type'])
             return None
 
@@ -1359,17 +1359,17 @@ def generate_vol_products(dataset, prdcfg):
 
         fname_list = make_filename(
             'rhi', prdcfg['dstype'], prdcfg['voltype'],
-            prdcfg['imgformat'], prdcfginfo='az'+'{:.1f}'.format(az),
+            prdcfg['imgformat'], prdcfginfo='az' + '{:.1f}'.format(az),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         fname_list = plot_rhi_contour(
             dataset['radar_out'], field_name, ind_az, prdcfg, fname_list,
             contour_values=contour_values)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -1396,23 +1396,23 @@ def generate_vol_products(dataset, prdcfg):
             fname_list = make_filename(
                 'rhi', prdcfg['dstype'], prdcfg['voltype'],
                 prdcfg['imgformat'],
-                prdcfginfo='az'+'{:.1f}'.format(prdcfg['angle']),
+                prdcfginfo='az' + '{:.1f}'.format(prdcfg['angle']),
                 timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
             for i, fname in enumerate(fname_list):
-                fname_list[i] = savedir+fname
+                fname_list[i] = savedir + fname
 
             fname_list = plot_rhi_contour(
                 xsect, field_name, 0, prdcfg, fname_list,
                 contour_values=contour_values)
 
-            print('----- save to '+' '.join(fname_list))
+            print('----- save to ' + ' '.join(fname_list))
 
             return fname_list
         except EnvironmentError:
             warn(
                 ' No data found at azimuth ' +
-                str(prdcfg['angle'])+'. Skipping product ' +
+                str(prdcfg['angle']) + '. Skipping product ' +
                 prdcfg['type'])
             return None
 
@@ -1470,22 +1470,26 @@ def generate_vol_products(dataset, prdcfg):
         if hmin_user is None:
             minheight = (
                 round(np.min(dataset['radar_out'].gate_altitude['data']) /
-                      heightResolution)*heightResolution-heightResolution)
+                      heightResolution) * heightResolution - heightResolution)
         else:
             minheight = hmin_user
         if hmax_user is None:
             maxheight = (
                 round(np.max(dataset['radar_out'].gate_altitude['data']) /
-                      heightResolution)*heightResolution+heightResolution)
+                      heightResolution) * heightResolution + heightResolution)
         else:
             maxheight = hmax_user
-        nlevels = int((maxheight-minheight)/heightResolution)
+        nlevels = int((maxheight - minheight) / heightResolution)
 
         h_vec = (
-            minheight+np.arange(nlevels)*heightResolution+heightResolution/2.)
+            minheight +
+            np.arange(nlevels) *
+            heightResolution +
+            heightResolution /
+            2.)
         vals, val_valid = compute_profile_stats(
             field['data'], new_dataset.gate_altitude['data'], h_vec,
-            heightResolution, quantity=quantity, quantiles=quantiles/100.,
+            heightResolution, quantity=quantity, quantiles=quantiles / 100.,
             nvalid_min=nvalid_min, make_linear=make_linear,
             include_nans=include_nans)
 
@@ -1503,9 +1507,9 @@ def generate_vol_products(dataset, prdcfg):
         else:
             data = [vals[:, 1], vals[:, 0], vals[:, 2]]
             labels = [
-                str(quantiles[1])+'-percentile',
-                str(quantiles[0])+'-percentile',
-                str(quantiles[2])+'-percentile']
+                str(quantiles[1]) + '-percentile',
+                str(quantiles[0]) + '-percentile',
+                str(quantiles[2]) + '-percentile']
             colors = ['b', 'k', 'k']
             linestyles = ['-', '--', '--']
 
@@ -1521,28 +1525,29 @@ def generate_vol_products(dataset, prdcfg):
             prdcfg['basepath'], prdcfg['procname'], dssavedir,
             prdsavedir, timeinfo=prdcfg['timeinfo'])
 
-        prdcfginfo = 'az'+'{:.1f}'.format(az)+'hres'+str(int(heightResolution))
+        prdcfginfo = 'az' + \
+            '{:.1f}'.format(az) + 'hres' + str(int(heightResolution))
         fname_list = make_filename(
             'rhi_profile', prdcfg['dstype'], prdcfg['voltype'],
             prdcfg['imgformat'], prdcfginfo=prdcfginfo,
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_rhi_profile(
             data, h_vec, fname_list, labelx=labelx, labely='Height (m MSL)',
             labels=labels, title=titl, colors=colors,
             linestyles=linestyles)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         fname = make_filename(
             'rhi_profile', prdcfg['dstype'], prdcfg['voltype'],
             ['csv'], prdcfginfo=prdcfginfo,
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         if quantity == 'mode':
             data.append(vals[:, 1])
@@ -1561,7 +1566,7 @@ def generate_vol_products(dataset, prdcfg):
             h_vec, data, val_valid, labels, fname, datatype=labelx,
             timeinfo=prdcfg['timeinfo'], sector=sector)
 
-        print('----- save to '+fname)
+        print('----- save to ' + fname)
 
         # TODO: add Cartesian interpolation option
 
@@ -1605,22 +1610,26 @@ def generate_vol_products(dataset, prdcfg):
         if hmin_user is None:
             minheight = (round(
                 np.min(dataset['radar_out'].gate_altitude['data']) /
-                heightResolution)*heightResolution-heightResolution)
+                heightResolution) * heightResolution - heightResolution)
         else:
             minheight = hmin_user
         if hmax_user is None:
             maxheight = (round(
                 np.max(dataset['radar_out'].gate_altitude['data']) /
-                heightResolution)*heightResolution+heightResolution)
+                heightResolution) * heightResolution + heightResolution)
         else:
             maxheight = hmax_user
-        nlevels = int((maxheight-minheight)/heightResolution)
+        nlevels = int((maxheight - minheight) / heightResolution)
 
         h_vec = (
-            minheight+np.arange(nlevels)*heightResolution+heightResolution/2.)
+            minheight +
+            np.arange(nlevels) *
+            heightResolution +
+            heightResolution /
+            2.)
         vals, val_valid = compute_profile_stats(
             field, dataset['radar_out'].gate_altitude['data'], h_vec,
-            heightResolution, quantity=quantity, quantiles=quantiles/100.,
+            heightResolution, quantity=quantity, quantiles=quantiles / 100.,
             nvalid_min=nvalid_min, make_linear=make_linear,
             include_nans=include_nans)
 
@@ -1638,9 +1647,9 @@ def generate_vol_products(dataset, prdcfg):
         else:
             data = [vals[:, 1], vals[:, 0], vals[:, 2]]
             labels = [
-                str(quantiles[1])+'-percentile',
-                str(quantiles[0])+'-percentile',
-                str(quantiles[2])+'-percentile']
+                str(quantiles[1]) + '-percentile',
+                str(quantiles[0]) + '-percentile',
+                str(quantiles[2]) + '-percentile']
             colors = ['b', 'k', 'k']
             linestyles = ['-', '--', '--']
 
@@ -1656,14 +1665,14 @@ def generate_vol_products(dataset, prdcfg):
             prdcfg['basepath'], prdcfg['procname'], dssavedir,
             prdsavedir, timeinfo=prdcfg['timeinfo'])
 
-        prdcfginfo = 'hres'+str(int(heightResolution))
+        prdcfginfo = 'hres' + str(int(heightResolution))
         fname_list = make_filename(
             'rhi_profile', prdcfg['dstype'], prdcfg['voltype'],
             prdcfg['imgformat'], prdcfginfo=prdcfginfo,
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_rhi_profile(
             data, h_vec, fname_list, labelx=labelx, labely='Height (m MSL)',
@@ -1671,14 +1680,14 @@ def generate_vol_products(dataset, prdcfg):
             linestyles=linestyles, vmin=vmin, vmax=vmax,
             hmin=minheight, hmax=maxheight)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         fname = make_filename(
             'rhi_profile', prdcfg['dstype'], prdcfg['voltype'],
             ['csv'], prdcfginfo=prdcfginfo,
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         if quantity == 'mode':
             data.append(vals[:, 1])
@@ -1692,7 +1701,7 @@ def generate_vol_products(dataset, prdcfg):
             h_vec, data, val_valid, labels, fname, datatype=labelx,
             timeinfo=prdcfg['timeinfo'])
 
-        print('----- save to '+fname)
+        print('----- save to ' + fname)
 
         # TODO: add Cartesian interpolation option
 
@@ -1784,19 +1793,23 @@ def generate_vol_products(dataset, prdcfg):
         if hmin_user is None:
             minheight = (round(
                 np.min(dataset['radar_out'].gate_altitude['data']) /
-                heightResolution)*heightResolution-heightResolution)
+                heightResolution) * heightResolution - heightResolution)
         else:
             minheight = hmin_user
         if hmax_user is None:
             maxheight = (round(
                 np.max(dataset['radar_out'].gate_altitude['data']) /
-                heightResolution)*heightResolution+heightResolution)
+                heightResolution) * heightResolution + heightResolution)
         else:
             maxheight = hmax_user
-        nlevels = int((maxheight-minheight)/heightResolution)
+        nlevels = int((maxheight - minheight) / heightResolution)
 
         h_vec = (
-            minheight+np.arange(nlevels)*heightResolution+heightResolution/2.)
+            minheight +
+            np.arange(nlevels) *
+            heightResolution +
+            heightResolution /
+            2.)
 
         u_vals, val_valid = compute_profile_stats(
             u_vel_aux, gate_altitude_aux, h_vec, heightResolution,
@@ -1812,8 +1825,8 @@ def generate_vol_products(dataset, prdcfg):
             np_field=ngates_w_aux)
 
         # plot u wind data
-        u_data = [u_vals[:, 0], u_vals[:, 0]+u_vals[:, 1],
-                  u_vals[:, 0]-u_vals[:, 1]]
+        u_data = [u_vals[:, 0], u_vals[:, 0] + u_vals[:, 1],
+                  u_vals[:, 0] - u_vals[:, 1]]
         labels = ['Regression mean', '+std', '-std']
         colors = ['b', 'k', 'k']
         linestyles = ['-', '--', '--']
@@ -1832,14 +1845,14 @@ def generate_vol_products(dataset, prdcfg):
             prdcfg['basepath'], prdcfg['procname'], dssavedir,
             prdsavedir, timeinfo=prdcfg['timeinfo'])
 
-        prdcfginfo = 'hres'+str(int(heightResolution))
+        prdcfginfo = 'hres' + str(int(heightResolution))
         fname_list = make_filename(
             'wind_profile', prdcfg['dstype'], 'wind_vel_h_u',
             prdcfg['imgformat'], prdcfginfo=prdcfginfo,
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_rhi_profile(
             u_data, h_vec, fname_list, labelx=labelx, labely='Height (m MSL)',
@@ -1847,11 +1860,11 @@ def generate_vol_products(dataset, prdcfg):
             linestyles=linestyles, vmin=vmin, vmax=vmax,
             hmin=minheight, hmax=maxheight)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         # plot v wind data
-        v_data = [v_vals[:, 0], v_vals[:, 0]+v_vals[:, 1],
-                  v_vals[:, 0]-v_vals[:, 1]]
+        v_data = [v_vals[:, 0], v_vals[:, 0] + v_vals[:, 1],
+                  v_vals[:, 0] - v_vals[:, 1]]
         labels = ['Regression mean', '+std', '-std']
         colors = ['b', 'k', 'k']
         linestyles = ['-', '--', '--']
@@ -1870,14 +1883,14 @@ def generate_vol_products(dataset, prdcfg):
             prdcfg['basepath'], prdcfg['procname'], dssavedir,
             prdsavedir, timeinfo=prdcfg['timeinfo'])
 
-        prdcfginfo = 'hres'+str(int(heightResolution))
+        prdcfginfo = 'hres' + str(int(heightResolution))
         fname_list = make_filename(
             'wind_profile', prdcfg['dstype'], 'wind_vel_h_v',
             prdcfg['imgformat'], prdcfginfo=prdcfginfo,
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_rhi_profile(
             v_data, h_vec, fname_list, labelx=labelx, labely='Height (m MSL)',
@@ -1885,11 +1898,11 @@ def generate_vol_products(dataset, prdcfg):
             linestyles=linestyles, vmin=vmin, vmax=vmax,
             hmin=minheight, hmax=maxheight)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         # plot vertical wind data
-        w_data = [w_vals[:, 0], w_vals[:, 0]+w_vals[:, 1],
-                  w_vals[:, 0]-w_vals[:, 1]]
+        w_data = [w_vals[:, 0], w_vals[:, 0] + w_vals[:, 1],
+                  w_vals[:, 0] - w_vals[:, 1]]
         labels = ['Regression mean', '+std', '-std']
         colors = ['b', 'k', 'k']
         linestyles = ['-', '--', '--']
@@ -1908,14 +1921,14 @@ def generate_vol_products(dataset, prdcfg):
             prdcfg['basepath'], prdcfg['procname'], dssavedir,
             prdsavedir, timeinfo=prdcfg['timeinfo'])
 
-        prdcfginfo = 'hres'+str(int(heightResolution))
+        prdcfginfo = 'hres' + str(int(heightResolution))
         fname_list = make_filename(
             'wind_profile', prdcfg['dstype'], 'wind_vel_v',
             prdcfg['imgformat'], prdcfginfo=prdcfginfo,
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_rhi_profile(
             w_data, h_vec, fname_list, labelx=labelx, labely='Height (m MSL)',
@@ -1923,11 +1936,11 @@ def generate_vol_products(dataset, prdcfg):
             linestyles=linestyles, vmin=vmin, vmax=vmax,
             hmin=minheight, hmax=maxheight)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         # plot horizontal wind magnitude
         mag = np.ma.sqrt(
-            np.ma.power(u_vals[:, 0], 2.)+np.ma.power(v_vals[:, 0], 2.))
+            np.ma.power(u_vals[:, 0], 2.) + np.ma.power(v_vals[:, 0], 2.))
         mag_data = [mag]
         labels = ['Regression mean']
         colors = ['b']
@@ -1944,14 +1957,14 @@ def generate_vol_products(dataset, prdcfg):
             prdcfg['basepath'], prdcfg['procname'], dssavedir,
             prdsavedir, timeinfo=prdcfg['timeinfo'])
 
-        prdcfginfo = 'hres'+str(int(heightResolution))
+        prdcfginfo = 'hres' + str(int(heightResolution))
         fname_list = make_filename(
             'wind_profile', prdcfg['dstype'], 'WIND_SPEED',
             prdcfg['imgformat'], prdcfginfo=prdcfginfo,
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_rhi_profile(
             mag_data, h_vec, fname_list, labelx=labelx,
@@ -1959,13 +1972,13 @@ def generate_vol_products(dataset, prdcfg):
             linestyles=linestyles, vmin=vmin, vmax=vmax, hmin=minheight,
             hmax=maxheight)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         # plot horizontal wind direction
         wind_dir = (
-            90.-np.ma.arctan2(u_vals[:, 0]/mag, v_vals[:, 0]/mag)*180. /
-            np.pi+180.)
-        wind_dir[wind_dir >= 360.] = wind_dir[wind_dir >= 360.]-360.
+            90. - np.ma.arctan2(u_vals[:, 0] / mag, v_vals[:, 0] / mag) * 180. /
+            np.pi + 180.)
+        wind_dir[wind_dir >= 360.] = wind_dir[wind_dir >= 360.] - 360.
         dir_data = [wind_dir]
         labels = ['Regression mean']
         colors = ['b']
@@ -1982,14 +1995,14 @@ def generate_vol_products(dataset, prdcfg):
             prdcfg['basepath'], prdcfg['procname'], dssavedir,
             prdsavedir, timeinfo=prdcfg['timeinfo'])
 
-        prdcfginfo = 'hres'+str(int(heightResolution))
+        prdcfginfo = 'hres' + str(int(heightResolution))
         fname_list = make_filename(
             'wind_profile', prdcfg['dstype'], 'WIND_DIRECTION',
             prdcfg['imgformat'], prdcfginfo=prdcfginfo,
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_rhi_profile(
             dir_data, h_vec, fname_list, labelx=labelx,
@@ -1997,14 +2010,14 @@ def generate_vol_products(dataset, prdcfg):
             linestyles=linestyles, vmin=0., vmax=360.,
             hmin=minheight, hmax=maxheight)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         fname = make_filename(
             'wind_profile', prdcfg['dstype'], 'WIND',
             ['csv'], prdcfginfo=prdcfginfo,
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         data = [
             u_vals[:, 0], u_vals[:, 1], np.ma.asarray(val_valid),
@@ -2021,7 +2034,7 @@ def generate_vol_products(dataset, prdcfg):
             h_vec, data, val_valid, labels, fname, datatype=None,
             timeinfo=prdcfg['timeinfo'])
 
-        print('----- save to '+fname)
+        print('----- save to ' + fname)
 
         return fname
 
@@ -2046,15 +2059,15 @@ def generate_vol_products(dataset, prdcfg):
             fname_list = make_filename(
                 'ppi', prdcfg['dstype'], prdcfg['voltype'],
                 prdcfg['imgformat'],
-                prdcfginfo='el'+'{:.1f}'.format(prdcfg['angle']),
+                prdcfginfo='el' + '{:.1f}'.format(prdcfg['angle']),
                 timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
             for i, fname in enumerate(fname_list):
-                fname_list[i] = savedir+fname
+                fname_list[i] = savedir + fname
 
             plot_ppi_map(xsect, field_name, 0, prdcfg, fname_list)
 
-            print('----- save to '+' '.join(fname_list))
+            print('----- save to ' + ' '.join(fname_list))
 
             return fname_list
         except EnvironmentError:
@@ -2080,16 +2093,16 @@ def generate_vol_products(dataset, prdcfg):
         fname_list = make_filename(
             'cappi', prdcfg['dstype'], prdcfg['voltype'],
             prdcfg['imgformat'],
-            prdcfginfo='alt'+'{:.1f}'.format(prdcfg['altitude']),
+            prdcfginfo='alt' + '{:.1f}'.format(prdcfg['altitude']),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_cappi(
             dataset['radar_out'], field_name, prdcfg['altitude'], prdcfg,
             fname_list)
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -2157,18 +2170,18 @@ def generate_vol_products(dataset, prdcfg):
         fname_list = make_filename(
             'cross_section', prdcfg['dstype'], prdcfg['voltype'],
             prdcfg['imgformat'],
-            prdcfginfo='refpts_'+'{:s}'.format(ref_pts_str),
+            prdcfginfo='refpts_' + '{:s}'.format(ref_pts_str),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_xsection(
             dataset['radar_out'], field_name, ref_pts, step, vert_res,
             alt_max, beamwidth, dem, prdcfg, fname_list, vmin=vmin,
             vmax=vmax)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -2195,19 +2208,19 @@ def generate_vol_products(dataset, prdcfg):
         fname_list = make_filename(
             'fixed_rng', prdcfg['dstype'], prdcfg['voltype'],
             prdcfg['imgformat'],
-            prdcfginfo='rng'+'{:.1f}'.format(
+            prdcfginfo='rng' + '{:.1f}'.format(
                 dataset['radar_out'].range['data'][0]),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_fixed_rng(
             dataset['radar_out'], field_name, prdcfg, fname_list,
             azi_res=azi_res, ele_res=ele_res, ang_tol=ang_tol, vmin=vmin,
             vmax=vmax)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -2234,18 +2247,18 @@ def generate_vol_products(dataset, prdcfg):
             stat, prdcfg['dstype'], prdcfg['voltype'],
             prdcfg['imgformat'],
             prdcfginfo='rng' +
-            '{:.1f}'.format(dataset['radar_out'].range['data'][0])+'-' +
+            '{:.1f}'.format(dataset['radar_out'].range['data'][0]) + '-' +
             '{:.1f}'.format(dataset['radar_out'].range['data'][-1]),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_fixed_rng_span(
             dataset['radar_out'], field_name, prdcfg, fname_list,
             azi_res=azi_res, ele_res=ele_res, ang_tol=ang_tol, stat=stat)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -2303,7 +2316,10 @@ def generate_vol_products(dataset, prdcfg):
             labels = list()
             for ele, azi in zip(valid_ele, valid_azi):
                 labels.append(
-                    'azi '+'{:.1f}'.format(azi)+' ele '+'{:.1f}'.format(ele))
+                    'azi ' +
+                    '{:.1f}'.format(azi) +
+                    ' ele ' +
+                    '{:.1f}'.format(ele))
 
         elif prdcfg['mode'] == 'ALONG_AZI':
             value_start = prdcfg.get(
@@ -2327,7 +2343,10 @@ def generate_vol_products(dataset, prdcfg):
             labels = list()
             for ele, rng in zip(valid_ele, valid_rng):
                 labels.append(
-                    'rng '+'{:.1f}'.format(rng)+' ele '+'{:.1f}'.format(ele))
+                    'rng ' +
+                    '{:.1f}'.format(rng) +
+                    ' ele ' +
+                    '{:.1f}'.format(ele))
 
         elif prdcfg['mode'] == 'ALONG_ELE':
             value_start = prdcfg.get(
@@ -2351,9 +2370,12 @@ def generate_vol_products(dataset, prdcfg):
             labels = list()
             for azi, rng in zip(valid_azi, valid_rng):
                 labels.append(
-                    'rng '+'{:.1f}'.format(rng)+' azi '+'{:.1f}'.format(azi))
+                    'rng ' +
+                    '{:.1f}'.format(rng) +
+                    ' azi ' +
+                    '{:.1f}'.format(azi))
         else:
-            warn('Unknown plotting mode '+prdcfg['mode'])
+            warn('Unknown plotting mode ' + prdcfg['mode'])
             return None
 
         labely = get_colobar_label(
@@ -2374,14 +2396,14 @@ def generate_vol_products(dataset, prdcfg):
             runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_along_coord(
             xvals, yvals, fname_list, labelx=labelx, labely=labely,
             labels=labels, title=titl, colors=colors, data_on_y=data_on_y,
             plot_legend=plot_legend)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -2410,17 +2432,17 @@ def generate_vol_products(dataset, prdcfg):
         fname_list = make_filename(
             'constr', prdcfg['dstype'], prdcfg['dsname'],
             prdcfg['imgformat'],
-            prdcfginfo='rng'+'{:.1f}'.format(
+            prdcfginfo='rng' + '{:.1f}'.format(
                 dataset['radar_out'].range['data'][0]),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_fixed_rng(radar, field_name, prdcfg, fname_list, azi_res=None,
                        ele_res=None, ang_tol=angtol, vmin=vmin, vmax=vmax)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -2450,11 +2472,11 @@ def generate_vol_products(dataset, prdcfg):
         fname_list = make_filename(
             'b-scope', prdcfg['dstype'], prdcfg['voltype'],
             prdcfg['imgformat'],
-            prdcfginfo='ang'+'{:.1f}'.format(ang),
+            prdcfginfo='ang' + '{:.1f}'.format(ang),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         if dataset['radar_out'].rays_per_sweep['data'][ind_ang] > 1:
             plot_bscope(
@@ -2464,7 +2486,7 @@ def generate_vol_products(dataset, prdcfg):
             plot_ray(
                 dataset['radar_out'].extract_sweeps([ind_ang]), field_name, 0,
                 prdcfg, fname_list)
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -2492,11 +2514,11 @@ def generate_vol_products(dataset, prdcfg):
         fname_list = make_filename(
             'time-range', prdcfg['dstype'], prdcfg['voltype'],
             prdcfg['imgformat'],
-            prdcfginfo='ang'+'{:.1f}'.format(ang),
+            prdcfginfo='ang' + '{:.1f}'.format(ang),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         if dataset['radar_out'].scan_type == 'ALONG_AZI':
             ylabel = 'azimuth (deg)'
@@ -2510,7 +2532,7 @@ def generate_vol_products(dataset, prdcfg):
         plot_time_range(
             dataset['radar_out'], field_name, ind_ang, prdcfg, fname_list,
             vmin=vmin, vmax=vmax, ylabel=ylabel)
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -2538,7 +2560,7 @@ def generate_vol_products(dataset, prdcfg):
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         bin_edges, values = compute_histogram(
             dataset['radar_out'].fields[field_name]['data'], field_name,
@@ -2556,10 +2578,10 @@ def generate_vol_products(dataset, prdcfg):
         plot_histogram(bin_edges, values, fname_list, labelx=labelx,
                        labely='Number of Samples', titl=titl)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         if write_data:
-            fname = savedir+make_filename(
+            fname = savedir + make_filename(
                 'histogram', prdcfg['dstype'], prdcfg['voltype'],
                 ['csv'], timeinfo=prdcfg['timeinfo'],
                 runinfo=prdcfg['runinfo'])[0]
@@ -2567,7 +2589,7 @@ def generate_vol_products(dataset, prdcfg):
             hist, _ = np.histogram(values, bins=bin_edges)
             write_histogram(
                 bin_edges, hist, fname, datatype=prdcfg['voltype'], step=step)
-            print('----- save to '+fname)
+            print('----- save to ' + fname)
 
             return fname
 
@@ -2607,7 +2629,7 @@ def generate_vol_products(dataset, prdcfg):
             runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         bin_edges, values = compute_histogram(
             dataset[field_name]['samples'], field_name, step=step)
@@ -2617,10 +2639,10 @@ def generate_vol_products(dataset, prdcfg):
         plot_histogram(bin_edges, values, fname_list, labelx=labelx,
                        labely='Number of Samples', titl=titl)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         if write_data:
-            fname = savedir+make_filename(
+            fname = savedir + make_filename(
                 'histogram', prdcfg['dstype'], prdcfg['voltype'],
                 ['csv'], timeinfo=prdcfg['timeinfo'],
                 runinfo=prdcfg['runinfo'])[0]
@@ -2628,7 +2650,7 @@ def generate_vol_products(dataset, prdcfg):
             hist, _ = np.histogram(values, bins=bin_edges)
             write_histogram(
                 bin_edges, hist, fname, datatype=prdcfg['voltype'], step=step)
-            print('----- save to '+fname)
+            print('----- save to ' + fname)
 
             return fname
 
@@ -2672,7 +2694,7 @@ def generate_vol_products(dataset, prdcfg):
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         quantiles, values = compute_quantiles(field, quantiles=quantiles)
 
@@ -2688,17 +2710,17 @@ def generate_vol_products(dataset, prdcfg):
         plot_quantiles(quantiles, values, fname_list, labelx='quantile',
                        labely=labely, titl=titl, vmin=vmin, vmax=vmax)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         if write_data:
-            fname = savedir+make_filename(
+            fname = savedir + make_filename(
                 'quantiles', prdcfg['dstype'], prdcfg['voltype'],
                 ['csv'], timeinfo=prdcfg['timeinfo'],
                 runinfo=prdcfg['runinfo'])[0]
 
             write_quantiles(
                 quantiles, values, fname, datatype=prdcfg['voltype'])
-            print('----- save to '+fname)
+            print('----- save to ' + fname)
 
             return fname
 
@@ -2746,16 +2768,16 @@ def generate_vol_products(dataset, prdcfg):
         nvalid = ntotal - countzero
 
         text = ["Statistics of a region in a volume.",
-                "  Name      : "+field_name,
-                "  Azimuth   : "+str(azmin)+" - "+str(azmax)+" [deg]",
-                "  Elevation : "+str(elmin)+" - "+str(elmax)+" [deg]",
-                "  Range     : "+str(rmin)+" - "+str(rmax)+" [m]"]
+                "  Name      : " + field_name,
+                "  Azimuth   : " + str(azmin) + " - " + str(azmax) + " [deg]",
+                "  Elevation : " + str(elmin) + " - " + str(elmax) + " [deg]",
+                "  Range     : " + str(rmin) + " - " + str(rmax) + " [m]"]
 
         data = {'dstype': prdcfg['dstype'],
                 'unit': units,
-                'time':   prdcfg['timeinfo'],
+                'time': prdcfg['timeinfo'],
                 'label': ["Mean", "Median", "Stddev", "Nsamples", "Nvalid"],
-                'value':  [meanval, medianval, stdval, ntotal, nvalid]
+                'value': [meanval, medianval, stdval, ntotal, nvalid]
                 }
 
         savedir = get_save_dir(
@@ -2767,12 +2789,12 @@ def generate_vol_products(dataset, prdcfg):
             ['csv'], timeinfo=prdcfg['timeinfo'],
             timeformat='%Y%m%d', runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         write_timeseries_point(fname, data, field_name, text,
                                timeformat=None, timeinfo=prdcfg['timeinfo'])
 
-        print('----- save to '+fname)
+        print('----- save to ' + fname)
 
         return fname
 
@@ -2817,20 +2839,20 @@ def generate_vol_products(dataset, prdcfg):
                     dataset['radar_out'].range['data'][ind[0]])
 
         # group coverage per elevation sectors
-        nsteps = int((ele_max-ele_min)/ele_step)  # number of steps
-        nele = int(ele_step/ele_res)  # number of elev per step
-        ele_steps_vec = np.arange(nsteps)*ele_step+ele_min
+        nsteps = int((ele_max - ele_min) / ele_step)  # number of steps
+        nele = int(ele_step / ele_res)  # number of elev per step
+        ele_steps_vec = np.arange(nsteps) * ele_step + ele_min
 
         yval = []
         xval = []
         labels = []
-        for i in range(nsteps-1):
+        for i in range(nsteps - 1):
             yval_aux = np.ma.array([])
             xval_aux = np.array([])
             for j in range(nele):
-                ele_target = ele_steps_vec[i]+j*ele_res
+                ele_target = ele_steps_vec[i] + j * ele_res
                 d_ele = np.abs(
-                    dataset['radar_out'].elevation['data']-ele_target)
+                    dataset['radar_out'].elevation['data'] - ele_target)
                 ind_ele = np.where(d_ele < prdcfg['AngTol'])[0]
                 if ind_ele.size == 0:
                     continue
@@ -2840,8 +2862,8 @@ def generate_vol_products(dataset, prdcfg):
                     [xval_aux, dataset['radar_out'].azimuth['data'][ind_ele]])
             yval.append(yval_aux)
             xval.append(xval_aux)
-            labels.append('ele '+'{:.1f}'.format(ele_steps_vec[i])+'-' +
-                          '{:.1f}'.format(ele_steps_vec[i+1])+' deg')
+            labels.append('ele ' + '{:.1f}'.format(ele_steps_vec[i]) + '-' +
+                          '{:.1f}'.format(ele_steps_vec[i + 1]) + ' deg')
 
         # get mean value per azimuth for a specified elevation sector
         xmeanval = None
@@ -2856,22 +2878,22 @@ def generate_vol_products(dataset, prdcfg):
             azi_sector = dataset['radar_out'].azimuth['data'][ind_ele]
             nazi = int((np.max(dataset['radar_out'].azimuth['data']) -
                         np.min(dataset['radar_out'].azimuth['data'])) /
-                       azi_res+1)
+                       azi_res + 1)
 
-            xmeanval = np.arange(nazi)*azi_res+np.min(
+            xmeanval = np.arange(nazi) * azi_res + np.min(
                 dataset['radar_out'].azimuth['data'])
             ymeanval = np.ma.masked_all(nazi)
             for i in range(nazi):
-                d_azi = np.abs(azi_sector-xmeanval[i])
+                d_azi = np.abs(azi_sector - xmeanval[i])
                 ind_azi = np.where(d_azi < prdcfg['AngTol'])[0]
                 if ind_azi.size == 0:
                     continue
                 ymeanval[i] = np.ma.mean(field_coverage_sector[ind_azi])
-            labelmeanval = ('ele '+'{:.1f}'.format(ele_sect_start)+'-' +
-                            '{:.1f}'.format(ele_sect_stop)+' deg mean val')
+            labelmeanval = ('ele ' + '{:.1f}'.format(ele_sect_start) + '-' +
+                            '{:.1f}'.format(ele_sect_stop) + ' deg mean val')
 
             _, quantval, _ = quantiles_weighted(
-                field_coverage_sector, quantiles=quantiles/100.)
+                field_coverage_sector, quantiles=quantiles / 100.)
 
         # plot field coverage
         savedir = get_save_dir(
@@ -2884,7 +2906,7 @@ def generate_vol_products(dataset, prdcfg):
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         titl = (
             pyart.graph.common.generate_radar_time_begin(
@@ -2894,17 +2916,17 @@ def generate_vol_products(dataset, prdcfg):
 
         plot_field_coverage(
             xval, yval, fname_list, labels=labels, title=titl, ymin=0.,
-            ymax=np.max(dataset['radar_out'].range['data'])+60000.,
+            ymax=np.max(dataset['radar_out'].range['data']) + 60000.,
             xmeanval=xmeanval, ymeanval=ymeanval, labelmeanval=labelmeanval)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         fname = make_filename(
             'coverage', prdcfg['dstype'], prdcfg['voltype'],
             ['csv'], timeinfo=prdcfg['timeinfo'],
             runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         if quantval is not None:
             data_type = get_colobar_label(
@@ -2914,7 +2936,7 @@ def generate_vol_products(dataset, prdcfg):
                 np.min(xmeanval), np.max(xmeanval), threshold, nvalid_min,
                 data_type, prdcfg['timeinfo'], fname)
 
-            print('----- save to '+fname)
+            print('----- save to ' + fname)
 
         return fname
 
@@ -3031,7 +3053,7 @@ def generate_vol_products(dataset, prdcfg):
 
         nsmall = np.count_nonzero(data.compressed() < values_lim[0])
         nlarge = np.count_nonzero(data.compressed() > values_lim[1])
-        noutliers = nlarge+nsmall
+        noutliers = nlarge + nsmall
         data = data[np.logical_and(
             data >= values_lim[0], data <= values_lim[1])]
 
@@ -3051,7 +3073,7 @@ def generate_vol_products(dataset, prdcfg):
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         titl = (
             pyart.graph.common.generate_radar_time_begin(
@@ -3062,10 +3084,10 @@ def generate_vol_products(dataset, prdcfg):
         labelx = get_colobar_label(
             dataset['radar_out'].fields[field_name], field_name)
 
-        plot_quantiles(values, quantiles/100., fname_list, labelx=labelx,
+        plot_quantiles(values, quantiles / 100., fname_list, labelx=labelx,
                        labely='Cumulative probability', titl=titl)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         # store cdf values
         fname = make_filename(
@@ -3073,7 +3095,7 @@ def generate_vol_products(dataset, prdcfg):
             ['txt'], timeinfo=prdcfg['timeinfo'],
             runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         write_cdf(
             quantiles, values, ntot, nnan, nclut, nblocked, nprec_filter,
@@ -3081,7 +3103,7 @@ def generate_vol_products(dataset, prdcfg):
             filterprec=filterprec, vismin=vismin, sector=sector,
             datatype=labelx, timeinfo=prdcfg['timeinfo'])
 
-        print('----- save to '+fname)
+        print('----- save to ' + fname)
 
         return fname
 
@@ -3104,7 +3126,7 @@ def generate_vol_products(dataset, prdcfg):
             timeformat='%Y%m%d')
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         fname_list = plot_selfconsistency_instrument(
             np.array(dataset['selfconsistency_points']['zdr']),
@@ -3116,7 +3138,7 @@ def generate_vol_products(dataset, prdcfg):
             normalize=normalize, retrieve_relation=retrieve_relation,
             plot_theoretical=plot_theoretical)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -3137,19 +3159,19 @@ def generate_vol_products(dataset, prdcfg):
             timeformat='%Y%m%d')
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         fname_list = plot_selfconsistency_instrument2(
             np.array(dataset['selfconsistency_points']['zdr']),
             np.array(dataset['selfconsistency_points']['kdp']),
-            10.*np.ma.log10(np.array(dataset['selfconsistency_points']['zh'])),
+            10. * np.ma.log10(np.array(dataset['selfconsistency_points']['zh'])),
             fname_list,
             parametrization=dataset['selfconsistency_points'][
                 'parametrization'],
             zdr_kdpzh_dict=dataset['selfconsistency_points']['zdr_kdpzh_dict'],
             normalize=normalize)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -3194,7 +3216,7 @@ def generate_vol_products(dataset, prdcfg):
             timeinfo=csvtimeinfo_file, timeformat=timeformat,
             runinfo=prdcfg['runinfo'])[0]
 
-        csvfname = savedir+csvfname
+        csvfname = savedir + csvfname
 
         start_time = dataset[field_name]['timeinfo']
 
@@ -3210,7 +3232,7 @@ def generate_vol_products(dataset, prdcfg):
             start_time, dataset[field_name]['npoints'], values,
             [quantiles[0], 'value', quantiles[1]],
             prdcfg['voltype'], csvfname)
-        print('saved CSV file: '+csvfname)
+        print('saved CSV file: ' + csvfname)
 
         date, np_t_vec, cquant_vec, lquant_vec, hquant_vec = (
             read_monitoring_ts(csvfname, sort_by_date=sort_by_date))
@@ -3233,7 +3255,7 @@ def generate_vol_products(dataset, prdcfg):
             figtimeinfo = date[0]
             titldate = date[0].strftime('%Y-%m-%d')
         else:
-            titldate = (date[0].strftime('%Y%m%d')+'-' +
+            titldate = (date[0].strftime('%Y%m%d') + '-' +
                         date[-1].strftime('%Y%m%d'))
             if prdcfg.get('add_date_in_fname', False):
                 figtimeinfo = date[0]
@@ -3246,9 +3268,9 @@ def generate_vol_products(dataset, prdcfg):
             runinfo=prdcfg['runinfo'])
 
         for i, figfname in enumerate(figfname_list):
-            figfname_list[i] = savedir+figfname
+            figfname_list[i] = savedir + figfname
 
-        titl = (prdcfg['runinfo']+' Monitoring '+titldate)
+        titl = (prdcfg['runinfo'] + ' Monitoring ' + titldate)
 
         labely = generate_field_name_str(prdcfg['voltype'])
 
@@ -3260,7 +3282,7 @@ def generate_vol_products(dataset, prdcfg):
             date, np_t_vec, cquant_vec, lquant_vec, hquant_vec, field_name,
             figfname_list, ref_value=ref_value, vmin=vmin, vmax=vmax,
             np_min=np_min, labelx='Time UTC', labely=labely, titl=titl)
-        print('----- save to '+' '.join(figfname_list))
+        print('----- save to ' + ' '.join(figfname_list))
 
         # generate alarms if needed
         alarm = prdcfg.get('alarm', False)
@@ -3297,15 +3319,20 @@ def generate_vol_products(dataset, prdcfg):
         value_last = cquant_vec[-1]
 
         if np_last < np_min:
-            warn('No valid data on day '+date[-1].strftime('%d-%m-%Y'))
+            warn('No valid data on day ' + date[-1].strftime('%d-%m-%Y'))
             return None
 
         # check if absolute value exceeded
         abs_exceeded = False
-        if ((value_last > ref_value+tol_abs) or
-                (value_last < ref_value-tol_abs)):
-            warn('Value '+str(value_last)+' exceeds target '+str(ref_value) +
-                 ' +/- '+str(tol_abs))
+        if ((value_last > ref_value + tol_abs) or
+                (value_last < ref_value - tol_abs)):
+            warn(
+                'Value ' +
+                str(value_last) +
+                ' exceeds target ' +
+                str(ref_value) +
+                ' +/- ' +
+                str(tol_abs))
             abs_exceeded = True
 
         # compute trend and check if last value exceeds it
@@ -3318,44 +3345,44 @@ def generate_vol_products(dataset, prdcfg):
             np_trend = 0
             value_trend = np.ma.masked
         else:
-            np_trend_vec = np_t_vec[ind][-(nevents_min+1):-1]
-            data_trend_vec = cquant_vec[ind][-(nevents_min+1):-1]
+            np_trend_vec = np_t_vec[ind][-(nevents_min + 1):-1]
+            data_trend_vec = cquant_vec[ind][-(nevents_min + 1):-1]
 
             np_trend = np.sum(np_trend_vec)
-            value_trend = np.sum(data_trend_vec*np_trend_vec)/np_trend
+            value_trend = np.sum(data_trend_vec * np_trend_vec) / np_trend
 
         trend_exceeded = False
         if np_trend > 0:
-            if ((value_last > value_trend+tol_trend) or
-                    (value_last < value_trend-tol_trend)):
-                warn('Value '+str(value_last)+'exceeds trend ' +
-                     str(value_trend)+' +/- '+str(tol_trend))
+            if ((value_last > value_trend + tol_trend) or
+                    (value_last < value_trend - tol_trend)):
+                warn('Value ' + str(value_last) + 'exceeds trend ' +
+                     str(value_trend) + ' +/- ' + str(tol_trend))
                 trend_exceeded = True
 
         if abs_exceeded is False and trend_exceeded is False:
             return None
 
-        alarm_dir = savedir+'/alarms/'
+        alarm_dir = savedir + '/alarms/'
         if not os.path.isdir(alarm_dir):
             os.makedirs(alarm_dir)
         alarm_fname = make_filename(
             'alarm', prdcfg['dstype'], prdcfg['voltype'], ['txt'],
             timeinfo=start_time, timeformat='%Y%m%d')[0]
-        alarm_fname = alarm_dir+alarm_fname
+        alarm_fname = alarm_dir + alarm_fname
 
         field_dict = pyart.config.get_metadata(field_name)
         param_name = get_field_name(field_dict, field_name)
-        param_name_unit = param_name+' ['+field_dict['units']+']'
+        param_name_unit = param_name + ' [' + field_dict['units'] + ']'
 
         write_alarm_msg(
             prdcfg['RadarName'][0], param_name_unit, start_time, ref_value,
             tol_abs, np_trend, value_trend, tol_trend, nevents_min, np_last,
             value_last, alarm_fname)
 
-        print('----- saved monitoring alarm to '+alarm_fname)
+        print('----- saved monitoring alarm to ' + alarm_fname)
 
-        subject = ('NO REPLY: '+param_name+' monitoring alarm for radar ' +
-                   prdcfg['RadarName'][0]+' on day ' +
+        subject = ('NO REPLY: ' + param_name + ' monitoring alarm for radar ' +
+                   prdcfg['RadarName'][0] + ' on day ' +
                    start_time.strftime('%d-%m-%Y'))
         send_msg(sender, receiver_list, subject, alarm_fname)
 
@@ -3380,13 +3407,13 @@ def generate_vol_products(dataset, prdcfg):
             'savevol', prdcfg['dstype'], prdcfg['voltype'], ['csv'],
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         fname = write_vol_csv(
             fname, dataset['radar_out'], field_name,
             ignore_masked=ignore_masked)
 
-        print('saved file: '+fname)
+        print('saved file: ' + fname)
 
         return fname
 
@@ -3414,7 +3441,7 @@ def generate_vol_products(dataset, prdcfg):
             'savevol', prdcfg['dstype'], prdcfg['voltype'], ['kml'],
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         if azi_res is None:
             azi_res = 1.
@@ -3428,14 +3455,14 @@ def generate_vol_products(dataset, prdcfg):
             else:
                 azi_res = dataset['radar_out'].instrument_parameters[
                     'radar_beam_width_h']['data'][0]
-        rng_res_km = dataset['rng_res']/1000.
+        rng_res_km = dataset['rng_res'] / 1000.
 
         fname = write_vol_kml(
             fname, dataset['radar_out'], field_name,
             ignore_masked=ignore_masked, rng_res_km=rng_res_km,
             azi_res=azi_res)
 
-        print('saved file: '+fname)
+        print('saved file: ' + fname)
 
         return fname
 
@@ -3449,7 +3476,7 @@ def generate_vol_products(dataset, prdcfg):
             return None
 
         file_type = prdcfg.get('file_type', 'nc')
-        physical = prdcfg.get('physical', True)
+        prdcfg.get('physical', True)
         compression = prdcfg.get('compression', 'gzip')
         compression_opts = prdcfg.get('compression_opts', 6)
 
@@ -3466,7 +3493,7 @@ def generate_vol_products(dataset, prdcfg):
             'savevol', prdcfg['dstype'], prdcfg['voltype'], [file_type],
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         if file_type == 'nc':
             pyart.io.write_cfradial(fname, new_dataset)
@@ -3476,17 +3503,17 @@ def generate_vol_products(dataset, prdcfg):
                 compression=compression, compression_opts=compression_opts)
         else:
             warn('Data could not be saved. ' +
-                 'Unknown saving file type '+file_type)
+                 'Unknown saving file type ' + file_type)
             return None
 
-        print('saved file: '+fname)
+        print('saved file: ' + fname)
 
         return fname
 
     if prdcfg['type'] == 'SAVEALL' or prdcfg['type'] == 'SAVEALL_VOL':
         file_type = prdcfg.get('file_type', 'nc')
         datatypes = prdcfg.get('datatypes', None)
-        physical = prdcfg.get('physical', True)
+        prdcfg.get('physical', True)
         compression = prdcfg.get('compression', 'gzip')
         compression_opts = prdcfg.get('compression_opts', 6)
 
@@ -3498,7 +3525,7 @@ def generate_vol_products(dataset, prdcfg):
             'savevol', prdcfg['dstype'], 'all_fields', [file_type],
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         field_names = None
         if datatypes is not None:
@@ -3512,7 +3539,7 @@ def generate_vol_products(dataset, prdcfg):
                 radar_aux.fields = dict()
                 for field_name in field_names:
                     if field_name not in dataset['radar_out'].fields:
-                        warn(field_name+' not in radar object')
+                        warn(field_name + ' not in radar object')
                     else:
                         radar_aux.add_field(
                             field_name,
@@ -3527,9 +3554,9 @@ def generate_vol_products(dataset, prdcfg):
                 compression_opts=compression_opts)
         else:
             warn('Data could not be saved. ' +
-                 'Unknown saving file type '+file_type)
+                 'Unknown saving file type ' + file_type)
 
-        print('saved file: '+fname)
+        print('saved file: ' + fname)
 
         return fname
 
@@ -3552,14 +3579,14 @@ def generate_vol_products(dataset, prdcfg):
         last_date = num2date(max_time, units, calendar)
 
         write_last_state(last_date, prdcfg['lastStateFile'])
-        print('saved file: '+prdcfg['lastStateFile'])
+        print('saved file: ' + prdcfg['lastStateFile'])
 
         return prdcfg['lastStateFile']
 
     if prdcfg['type'] == 'SAVEPSEUDORHI':
         file_type = prdcfg.get('file_type', 'nc')
         datatypes = prdcfg.get('datatypes', None)
-        physical = prdcfg.get('physical', True)
+        prdcfg.get('physical', True)
         compression = prdcfg.get('compression', 'gzip')
         compression_opts = prdcfg.get('compression_opts', 6)
 
@@ -3571,7 +3598,7 @@ def generate_vol_products(dataset, prdcfg):
             'savepseudorhi', prdcfg['dstype'], 'all_fields', [file_type],
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         field_names = None
         if datatypes is not None:
@@ -3579,15 +3606,15 @@ def generate_vol_products(dataset, prdcfg):
             for datatype in datatypes:
                 field_names.append(get_fieldname_pyart(datatype))
         pseudorhi = pyart.util.cross_section_ppi(
-                dataset['radar_out'], [prdcfg['angle']],
-                az_tol=prdcfg['AziTol'])
+            dataset['radar_out'], [prdcfg['angle']],
+            az_tol=prdcfg['AziTol'])
         if file_type == 'nc':
             if field_names is not None:
                 radar_aux = deepcopy(pseudorhi)
                 radar_aux.fields = dict()
                 for field_name in field_names:
                     if field_name not in pseudorhi.fields:
-                        warn(field_name+' not in radar object')
+                        warn(field_name + ' not in radar object')
                     else:
                         radar_aux.add_field(
                             field_name,
@@ -3602,16 +3629,16 @@ def generate_vol_products(dataset, prdcfg):
                 compression_opts=compression_opts)
         else:
             warn('Data could not be saved. ' +
-                 'Unknown saving file type '+file_type)
+                 'Unknown saving file type ' + file_type)
 
-        print('saved file: '+fname)
+        print('saved file: ' + fname)
 
         return fname
 
     if prdcfg['type'] == 'SAVEPSEUDOPPI':
         file_type = prdcfg.get('file_type', 'nc')
         datatypes = prdcfg.get('datatypes', None)
-        physical = prdcfg.get('physical', True)
+        prdcfg.get('physical', True)
         compression = prdcfg.get('compression', 'gzip')
         compression_opts = prdcfg.get('compression_opts', 6)
 
@@ -3623,7 +3650,7 @@ def generate_vol_products(dataset, prdcfg):
             'savepseudorhi', prdcfg['dstype'], 'all_fields', [file_type],
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         field_names = None
         if datatypes is not None:
@@ -3632,8 +3659,8 @@ def generate_vol_products(dataset, prdcfg):
                 field_names.append(get_fieldname_pyart(datatype))
 
         pseudoppi = pyart.util.cross_section_rhi(
-                dataset['radar_out'], [prdcfg['angle']],
-                el_tol=prdcfg['EleTol'])
+            dataset['radar_out'], [prdcfg['angle']],
+            el_tol=prdcfg['EleTol'])
 
         if file_type == 'nc':
             if field_names is not None:
@@ -3641,7 +3668,7 @@ def generate_vol_products(dataset, prdcfg):
                 radar_aux.fields = dict()
                 for field_name in field_names:
                     if field_name not in pseudoppi.fields:
-                        warn(field_name+' not in radar object')
+                        warn(field_name + ' not in radar object')
                     else:
                         radar_aux.add_field(
                             field_name,
@@ -3656,16 +3683,16 @@ def generate_vol_products(dataset, prdcfg):
                 compression_opts=compression_opts)
         else:
             warn('Data could not be saved. ' +
-                 'Unknown saving file type '+file_type)
+                 'Unknown saving file type ' + file_type)
 
-        print('saved file: '+fname)
+        print('saved file: ' + fname)
 
         return fname
 
     if prdcfg['type'] == 'SAVEPSEUDORHI':
         file_type = prdcfg.get('file_type', 'nc')
         datatypes = prdcfg.get('datatypes', None)
-        physical = prdcfg.get('physical', True)
+        prdcfg.get('physical', True)
         compression = prdcfg.get('compression', 'gzip')
         compression_opts = prdcfg.get('compression_opts', 6)
 
@@ -3677,7 +3704,7 @@ def generate_vol_products(dataset, prdcfg):
             'savepseudorhi', prdcfg['dstype'], 'all_fields', [file_type],
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         field_names = None
         if datatypes is not None:
@@ -3692,7 +3719,7 @@ def generate_vol_products(dataset, prdcfg):
                 radar_aux.fields = dict()
                 for field_name in field_names:
                     if field_name not in pseudorhi.fields:
-                        warn(field_name+' not in radar object')
+                        warn(field_name + ' not in radar object')
                     else:
                         radar_aux.add_field(
                             field_name,
@@ -3707,16 +3734,16 @@ def generate_vol_products(dataset, prdcfg):
                 compression_opts=compression_opts)
         else:
             warn('Data could not be saved. ' +
-                 'Unknown saving file type '+file_type)
+                 'Unknown saving file type ' + file_type)
 
-        print('saved file: '+fname)
+        print('saved file: ' + fname)
 
         return fname
 
     if prdcfg['type'] == 'SAVEPSEUDOPPI':
         file_type = prdcfg.get('file_type', 'nc')
         datatypes = prdcfg.get('datatypes', None)
-        physical = prdcfg.get('physical', True)
+        prdcfg.get('physical', True)
         compression = prdcfg.get('compression', 'gzip')
         compression_opts = prdcfg.get('compression_opts', 6)
 
@@ -3728,7 +3755,7 @@ def generate_vol_products(dataset, prdcfg):
             'savepseudorhi', prdcfg['dstype'], 'all_fields', [file_type],
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         field_names = None
         if datatypes is not None:
@@ -3745,7 +3772,7 @@ def generate_vol_products(dataset, prdcfg):
                 radar_aux.fields = dict()
                 for field_name in field_names:
                     if field_name not in pseudoppi.fields:
-                        warn(field_name+' not in radar object')
+                        warn(field_name + ' not in radar object')
                     else:
                         radar_aux.add_field(
                             field_name,
@@ -3760,9 +3787,9 @@ def generate_vol_products(dataset, prdcfg):
                 compression_opts=compression_opts)
         else:
             warn('Data could not be saved. ' +
-                 'Unknown saving file type '+file_type)
+                 'Unknown saving file type ' + file_type)
 
-        print('saved file: '+fname)
+        print('saved file: ' + fname)
 
         return fname
 
@@ -3783,7 +3810,7 @@ def generate_vol_products(dataset, prdcfg):
             'ts', prdcfg['dstype'], 'fixed_angle', ['csv'],
             timeinfo=None, runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         write_fixed_angle(
             prdcfg['timeinfo'], dataset['radar_out'].fixed_angle['data'][0],
@@ -3791,7 +3818,7 @@ def generate_vol_products(dataset, prdcfg):
             dataset['radar_out'].longitude['data'][0],
             dataset['radar_out'].altitude['data'][0],
             fname)
-        print('saved file: '+fname)
+        print('saved file: ' + fname)
 
         return fname
 

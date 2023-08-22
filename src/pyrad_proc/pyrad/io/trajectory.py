@@ -140,7 +140,7 @@ class Trajectory():
             warn(str(ee))
             raise Exception(
                 "ERROR: Could not load trajectory data from file '" +
-                filename+"' into Trajectory object")
+                filename + "' into Trajectory object")
 
     def add_radar(self, radar):
         """
@@ -177,8 +177,8 @@ class Trajectory():
         # Note: Earth curvature not considered yet!
 
         (rvec, azvec, elvec) = pyart.core.cartesian_to_antenna(
-            self.swiss_chy-rad.ch_y, self.swiss_chx-rad.ch_x,
-            self.swiss_chh-rad.ch_alt)
+            self.swiss_chy - rad.ch_y, self.swiss_chx - rad.ch_x,
+            self.swiss_chh - rad.ch_alt)
 
         rad.assign_trajectory(elvec, azvec, rvec)
 
@@ -287,10 +287,11 @@ class Trajectory():
             tfile = open(self.filename, "r")
         except Exception:
             raise Exception("ERROR: Could not find|open trajectory file '" +
-                            self.filename+"'")
+                            self.filename + "'")
 
-        repat = re.compile("(\d+\-[A-Za-z]+\-\d+)\s+([\d\.]+)\s+"
-                           "([\-\d\.]+)\s+([\-\d\.]+)\s+([\-\d\.]+)")
+        repat = re.compile(
+            "(\\d+\\-[A-Za-z]+\\-\\d+)\\s+([\\d\\.]+)\\s+"
+            "([\\-\\d\\.]+)\\s+([\\-\\d\\.]+)\\s+([\\-\\d\\.]+)")
 
         try:
             loc_set = False
@@ -389,7 +390,7 @@ class Trajectory():
             tfile = open(self.filename, "r")
         except Exception:
             raise Exception("ERROR: Could not find|open trajectory file '" +
-                            self.filename+"'")
+                            self.filename + "'")
         tfile.close()
 
         try:
@@ -398,7 +399,7 @@ class Trajectory():
             data = data.drop(0)
             times = [
                 datetime.datetime.strptime(
-                    d+'_'+h+'0000', '%Y-%m-%d_%H:%M:%S.%f') for
+                    d + '_' + h + '0000', '%Y-%m-%d_%H:%M:%S.%f') for
                 d, h in zip(data['UTCDate'], data['UTCTime'])]
 
             self.time_vector = np.array(times)
@@ -434,7 +435,7 @@ class Trajectory():
 
         if flashnr_vec is None:
             raise Exception("ERROR: Could not find|open trajectory file '" +
-                            self.filename+"'")
+                            self.filename + "'")
 
         recording_started = True
         if self.starttime is not None:
@@ -523,7 +524,7 @@ class Trajectory():
             if traj_ID is None:
                 raise Exception(
                     "ERROR: Could not find|open trajectory file '" +
-                    self.filename+"'")
+                    self.filename + "'")
 
             valid = np.logical_not(np.ma.getmaskarray(yyyymmddHHMM))
             yyyymmddHHMM = yyyymmddHHMM[valid]
@@ -535,7 +536,7 @@ class Trajectory():
             if traj_ID.size == 0:
                 raise Exception(
                     "ERROR: No valid data in trajectory file '" +
-                    self.filename+"'")
+                    self.filename + "'")
 
         else:
             (traj_ID, yyyymmddHHMM, lon, lat, _, _, _, _, _, _, _, _, _, _, _,
@@ -545,7 +546,7 @@ class Trajectory():
             if traj_ID is None:
                 raise Exception(
                     "ERROR: Could not find|open trajectory file '" +
-                    self.filename+"'")
+                    self.filename + "'")
 
         recording_started = True
         if self.starttime is not None:
@@ -657,9 +658,9 @@ class _Radar_Trajectory:
         lon_tol = 0.002  # [deg]
         alt_tol = 2.0    # [m]
 
-        if ((np.abs(self.latitude-lat) > lat_tol) or
-                (np.abs(self.longitude-lon) > lon_tol) or
-                (np.abs(self.altitude-alt) > alt_tol)):
+        if ((np.abs(self.latitude - lat) > lat_tol) or
+                (np.abs(self.longitude - lon) > lon_tol) or
+                (np.abs(self.altitude - alt) > alt_tol)):
             return False
 
         return True

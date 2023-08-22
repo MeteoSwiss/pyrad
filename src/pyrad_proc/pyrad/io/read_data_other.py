@@ -76,7 +76,7 @@ def read_centroids_npz(fname):
             return npzfile['centroids_data'].item()
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None
 
 
@@ -102,7 +102,7 @@ def read_centroids(fname):
             reader = csv.DictReader(
                 row for row in csvfile if not row.startswith('#'))
             nhydro = sum(1 for row in reader)
-            nvars = len(reader.fieldnames)-1
+            nvars = len(reader.fieldnames) - 1
             mass_centers = np.empty((nhydro, nvars))
             hydro_names = []
             var_names = reader.fieldnames[1:]
@@ -119,7 +119,7 @@ def read_centroids(fname):
             return mass_centers, hydro_names, var_names
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None, None, None
 
 
@@ -161,7 +161,7 @@ def read_proc_periods(fname):
             return startimes, endtimes
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None, None
 
 
@@ -197,8 +197,8 @@ def read_profile_ts(fname_list, labels, hres=None, label_nr=0, t_res=300.):
             datetime_arr, _get_datetime(fname, 'RAINBOW'))
         height, np_t, vals = read_rhi_profile(fname, labels)
         if hres is None:
-            hres = np.mean(height[1:]-height[:-1])
-        hbin_edges = np.append(height-hres/2, height[-1]+hres/2)
+            hres = np.mean(height[1:] - height[:-1])
+        hbin_edges = np.append(height - hres / 2, height[-1] + hres / 2)
         val = vals[:, label_nr]
         data_ma.append(val)
         np_ma.append(np_t)
@@ -214,14 +214,14 @@ def read_profile_ts(fname_list, labels, hres=None, label_nr=0, t_res=300.):
     # put date time array as seconds from start of TRT cell
     dt_s = np.empty(datetime_arr.size, dtype=float)
     for j, dt in enumerate(datetime_arr):
-        dt_s[j] = (dt-datetime_arr[0]).total_seconds()
+        dt_s[j] = (dt - datetime_arr[0]).total_seconds()
 
     if t_res is None:
         if dt_s.size > 1:
-            t_res = np.median(dt_s[1:]-dt_s[:-1])
+            t_res = np.median(dt_s[1:] - dt_s[:-1])
         else:
             t_res = 300.
-    tbin_edges = np.append(dt_s-t_res, dt_s[-1])
+    tbin_edges = np.append(dt_s - t_res, dt_s[-1])
 
     return tbin_edges, hbin_edges, np_ma, data_ma, datetime_arr
 
@@ -259,7 +259,7 @@ def read_histogram_ts(fname_list, datatype, t_res=300.):
             bin_edges = bin_edges[bin_edges > 0.95]
         npoints = np.sum(hist)
         if npoints > 0:
-            data_ma.append(hist/np.sum(hist)*100.)
+            data_ma.append(hist / np.sum(hist) * 100.)
         else:
             data_ma.append(hist)
     data_ma = np.ma.asarray(data_ma)
@@ -272,14 +272,14 @@ def read_histogram_ts(fname_list, datatype, t_res=300.):
     # put date time array as seconds from start of TRT cell
     dt_s = np.empty(datetime_arr.size, dtype=float)
     for j, dt in enumerate(datetime_arr):
-        dt_s[j] = (dt-datetime_arr[0]).total_seconds()
+        dt_s[j] = (dt - datetime_arr[0]).total_seconds()
 
     if t_res is None:
         if dt_s.size > 1:
-            t_res = np.median(dt_s[1:]-dt_s[:-1])
+            t_res = np.median(dt_s[1:] - dt_s[:-1])
         else:
             t_res = 300.
-    tbin_edges = np.append(dt_s-t_res, dt_s[-1])
+    tbin_edges = np.append(dt_s - t_res, dt_s[-1])
 
     return tbin_edges, bin_edges, data_ma, datetime_arr
 
@@ -307,10 +307,10 @@ def read_quantiles_ts(fname_list, step=5., qmin=0., qmax=100., t_res=300.):
     data_ma = []
     datetime_arr = np.ma.array([], dtype=datetime.datetime)
     qbin_edges = np.arange(
-        qmin-step/2, qmax+step/2+step/2, step=step, dtype=float)
-    qbin_centers = np.arange(qmin, qmax+step/2, step=step)
+        qmin - step / 2, qmax + step / 2 + step / 2, step=step, dtype=float)
+    qbin_centers = np.arange(qmin, qmax + step / 2, step=step)
     for fname in fname_list:
-        values_aux = np.ma.masked_all(qbin_edges.size-1, dtype=float)
+        values_aux = np.ma.masked_all(qbin_edges.size - 1, dtype=float)
         datetime_arr = np.append(
             datetime_arr, _get_datetime(fname, 'RAINBOW'))
 
@@ -331,14 +331,14 @@ def read_quantiles_ts(fname_list, step=5., qmin=0., qmax=100., t_res=300.):
     # put date time array as seconds from start of TRT cell
     dt_s = np.empty(datetime_arr.size, dtype=float)
     for j, dt in enumerate(datetime_arr):
-        dt_s[j] = (dt-datetime_arr[0]).total_seconds()
+        dt_s[j] = (dt - datetime_arr[0]).total_seconds()
 
     if t_res is None:
         if dt_s.size > 1:
-            t_res = np.median(dt_s[1:]-dt_s[:-1])
+            t_res = np.median(dt_s[1:] - dt_s[:-1])
         else:
             t_res = 300.
-    tbin_edges = np.append(dt_s-t_res, dt_s[-1])
+    tbin_edges = np.append(dt_s - t_res, dt_s[-1])
 
     return tbin_edges, qbin_edges, data_ma, datetime_arr
 
@@ -368,7 +368,7 @@ def read_vpr_theo_parameters(fname):
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None
 
 
@@ -406,7 +406,7 @@ def read_rhi_profile(fname, labels=['50.0-percentile', '25.0-percentile',
             csvfile.seek(0)
             reader = csv.DictReader(
                 row for row in csvfile if not row.startswith('#')
-                )
+            )
             for i, row in enumerate(reader):
                 height[i] = float(row['Altitude [m MSL]'])
                 if 'N valid' in row:
@@ -419,7 +419,7 @@ def read_rhi_profile(fname, labels=['50.0-percentile', '25.0-percentile',
             return height, np_t, vals
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None, None, None
 
 
@@ -444,18 +444,18 @@ def read_last_state(fname):
             line = txtfile.readline()
             txtfile.close()
             if not line:
-                warn('File '+fname+' is empty.')
+                warn('File ' + fname + ' is empty.')
                 return None
             try:
                 last_state = datetime.datetime.strptime(
                     line, '%Y%m%d%H%M%S')
                 return last_state
             except ValueError:
-                warn('File '+fname+' does not contain a valid date.')
+                warn('File ' + fname + ' does not contain a valid date.')
                 return None
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None
 
 
@@ -486,14 +486,15 @@ def read_status(voltime, cfg, ind_rad=0):
 
     dayinfo = voltime.strftime('%y%j')
     timeinfo = voltime.strftime('%H%M')
-    basename = 'ST'+cfg['RadarName'][ind_rad]+dayinfo
+    basename = 'ST' + cfg['RadarName'][ind_rad] + dayinfo
     if cfg['path_convention'][ind_rad] == 'RT':
-        datapath = cfg['datapath'][ind_rad]+'ST'+cfg['RadarName'][ind_rad]+'/'
+        datapath = cfg['datapath'][ind_rad] + \
+            'ST' + cfg['RadarName'][ind_rad] + '/'
     else:
-        datapath = cfg['datapath'][ind_rad]+dayinfo+'/'+basename+'/'
-    filename = glob.glob(datapath+basename+timeinfo+'*.xml')
+        datapath = cfg['datapath'][ind_rad] + dayinfo + '/' + basename + '/'
+    filename = glob.glob(datapath + basename + timeinfo + '*.xml')
     if not filename:
-        warn('rad4alp status file '+datapath+basename+timeinfo +
+        warn('rad4alp status file ' + datapath + basename + timeinfo +
              '*.xml not found')
         return None
     try:
@@ -501,7 +502,7 @@ def read_status(voltime, cfg, ind_rad=0):
         return root
     except et.ParseError as ee:
         warn(str(ee))
-        warn('Unable to read file '+filename[0])
+        warn('Unable to read file ' + filename[0])
 
         return None
 
@@ -530,14 +531,14 @@ def read_rad4alp_cosmo(fname, datatype, ngates=0):
         bindata = np.fromfile(fname, dtype='uint8', count=-1)
         nbins = bindata.size
         naz = 360
-        nr = int(nbins/naz)
+        nr = int(nbins / naz)
         bindata = np.reshape(bindata, (naz, nr))
         mask = bindata == 0
 
         if datatype == 'TEMP':
             field_name = get_fieldname_pyart(datatype)
             field_data = np.ma.masked_where(
-                mask, (bindata-1).astype(float)*0.5-87.)
+                mask, (bindata - 1).astype(float) * 0.5 - 87.)
 
             field = get_metadata(field_name)
             field['data'] = field_data
@@ -546,7 +547,7 @@ def read_rad4alp_cosmo(fname, datatype, ngates=0):
             return field
         if datatype == 'ISO0':
             field_name = get_fieldname_pyart(datatype)
-            field_data = np.ma.masked_where(mask, (bindata-1).astype(float))
+            field_data = np.ma.masked_where(mask, (bindata - 1).astype(float))
 
             field = get_metadata(field_name)
             field['data'] = field_data
@@ -554,11 +555,11 @@ def read_rad4alp_cosmo(fname, datatype, ngates=0):
                 field['data'] = field['data'][:, :ngates]
             return field
 
-        warn('Unknown COSMO data type '+datatype)
+        warn('Unknown COSMO data type ' + datatype)
         return None
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None
 
 
@@ -581,7 +582,7 @@ def read_rad4alp_vis(fname, datatype):
 
     """
     if datatype != 'VIS':
-        warn('Unknown DEM data type '+datatype)
+        warn('Unknown DEM data type ' + datatype)
         return None
 
     header_size = 64
@@ -599,11 +600,11 @@ def read_rad4alp_vis(fname, datatype):
 
             sweep_start_index = 0
             for nrng in nrngs:
-                sweep_end_index = sweep_start_index+naz*nrng-1
+                sweep_end_index = sweep_start_index + naz * nrng - 1
                 field_data = np.reshape(
-                    bindata[sweep_start_index:sweep_end_index+1],
+                    bindata[sweep_start_index:sweep_end_index + 1],
                     (naz, nrng)).astype(float)
-                sweep_start_index = sweep_end_index+1
+                sweep_start_index = sweep_end_index + 1
 
                 field_name = get_fieldname_pyart(datatype)
                 field = get_metadata(field_name)
@@ -616,7 +617,7 @@ def read_rad4alp_vis(fname, datatype):
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None
 
 
@@ -640,7 +641,7 @@ def read_mf_vis(fname, datatype):
     """
     datatype = datatype.strip()
     if datatype != 'VIS':
-        warn('Unknown DEM data type '+datatype)
+        warn('Unknown DEM data type ' + datatype)
         return None
 
     try:
@@ -650,8 +651,8 @@ def read_mf_vis(fname, datatype):
                 bindata = np.reshape(bindata, (512, 512)).astype(float)
                 field_data = np.ma.masked_values(bindata, 255)
                 if 'coefmasqZ' not in fname:
-                    field_data = 100.*np.ma.power(field_data/100., 1.6)
-                field_data = 100. - ma_broadcast_to(
+                    field_data = 100. * np.ma.power(field_data / 100., 1.6)
+                field_data = 100. - np.broadcast_to(
                     field_data[::-1, :], (1, 512, 512))
             else:
                 bindata = 100. - np.fromfile(
@@ -668,7 +669,7 @@ def read_mf_vis(fname, datatype):
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None
 
 
@@ -693,7 +694,7 @@ def read_histogram(fname):
             reader = csv.DictReader(
                 row for row in csvfile if not row.startswith('#'))
             nrows = sum(1 for row in reader)
-            bin_edges = np.zeros(nrows+1, dtype=float)
+            bin_edges = np.zeros(nrows + 1, dtype=float)
             hist = np.zeros(nrows, dtype=float)
 
             # now read the data
@@ -702,13 +703,13 @@ def read_histogram(fname):
                 row for row in csvfile if not row.startswith('#'))
             for i, row in enumerate(reader):
                 bin_edges[i] = float(row['bin_edge_left'])
-                bin_edges[i+1] = float(row['bin_edge_right'])
+                bin_edges[i + 1] = float(row['bin_edge_right'])
                 hist[i] = float(row['value'])
 
             return hist, bin_edges
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None, None
 
 
@@ -747,7 +748,7 @@ def read_quantiles(fname):
             return quantiles, values
     except (EnvironmentError, ValueError) as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None, None
 
 
@@ -803,7 +804,7 @@ def read_excess_gates(fname):
                     freq_occu)
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None, None, None, None, None, None, None, None
 
 
@@ -862,7 +863,7 @@ def read_colocated_gates(fname):
                     rad2_ray_ind, rad2_rng_ind, rad2_ele, rad2_azi, rad2_rng)
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None, None, None, None, None, None, None, None, None, None
 
 
@@ -933,7 +934,7 @@ def read_colocated_data(fname):
                     rad2_ele, rad2_azi, rad2_rng, rad2_val)
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return (None, None, None, None, None, None, None, None, None, None,
                 None, None, None, None)
 
@@ -1014,7 +1015,7 @@ def read_colocated_data_time_avg(fname):
                     rad2_rng, rad2_dBZavg, rad2_PhiDPavg, rad2_Flagavg)
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return (None, None, None, None, None, None, None, None, None, None,
                 None, None, None, None, None, None, None, None)
 
@@ -1060,7 +1061,7 @@ def read_timeseries(fname):
             return date, value
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None, None
 
 
@@ -1111,7 +1112,7 @@ def read_ts_cum(fname):
             return date, np_radar, radar_value, np_sensor, sensor_value
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None, None, None, None, None
 
 
@@ -1170,7 +1171,7 @@ def read_ml_ts(fname):
                     nrays_valid, nrays_total)
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None, None, None, None, None, None, None
 
 
@@ -1201,8 +1202,9 @@ def read_monitoring_ts(fname, sort_by_date=False):
                     if e.errno == errno.EAGAIN:
                         time.sleep(0.1)
                     elif e.errno == errno.EBADF:
-                        warn("WARNING: No file locking is possible (NFS mount?), "+
-                             "expect strange issues with multiprocessing...")
+                        warn(
+                            "WARNING: No file locking is possible (NFS mount?), " +
+                            "expect strange issues with multiprocessing...")
                         break
                     else:
                         raise
@@ -1250,7 +1252,7 @@ def read_monitoring_ts(fname, sort_by_date=False):
             return date, np_t, central_quantile, low_quantile, high_quantile
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None, None, None, None, None
 
 
@@ -1301,7 +1303,7 @@ def read_monitoring_ts_old(fname):
             return date, np_t, central_quantile, low_quantile, high_quantile
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None, None, None, None, None
 
 
@@ -1334,12 +1336,13 @@ def read_intercomp_scores_ts(fname, sort_by_date=False):
                     if e.errno == errno.EAGAIN:
                         time.sleep(0.1)
                     elif e.errno == errno.EBADF:
-                        warn("WARNING: No file locking is possible (NFS mount?), "+
-                             "expect strange issues with multiprocessing...")
+                        warn(
+                            "WARNING: No file locking is possible (NFS mount?), " +
+                            "expect strange issues with multiprocessing...")
                         break
                     else:
                         raise
-                    
+
             # first count the lines
             reader = csv.DictReader(
                 row for row in csvfile if not row.startswith('#'))
@@ -1417,7 +1420,7 @@ def read_intercomp_scores_ts(fname, sort_by_date=False):
                     slope_vec, intercep_vec, intercep_slope1_vec)
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return (None, None, None, None, None, None, None, None, None, None,
                 None)
 
@@ -1495,7 +1498,7 @@ def read_intercomp_scores_ts_old(fname):
                     slope_vec, intercep_vec, intercep_slope1_vec)
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return (None, None, None, None, None, None, None, None, None, None,
                 None)
 
@@ -1556,8 +1559,8 @@ def read_intercomp_scores_ts_old_v0(fname, corr_min=0.6, np_min=9):
             np_vec = np.zeros(nelements, dtype=int)
             meanbias_vec = np.ma.empty(nelements, dtype=float)
             corr_vec = np.ma.empty(nelements, dtype=float)
-            for i in range(nelements-1):
-                ind_aux = np.arange(unique_ind[i], unique_ind[i+1])
+            for i in range(nelements - 1):
+                ind_aux = np.arange(unique_ind[i], unique_ind[i + 1])
                 np_aux = np_aux_vec[ind_aux]
                 meanbias_aux = meanbias_aux_vec[ind_aux]
                 corr_aux = corr_aux_vec[ind_aux]
@@ -1571,8 +1574,8 @@ def read_intercomp_scores_ts_old_v0(fname, corr_min=0.6, np_min=9):
                 np_vec[i] = np.sum(np_aux, dtype=int)
                 if np_vec[i] == 0:
                     continue
-                meanbias_vec[i] = np.sum(np_aux*meanbias_aux)/np_vec[i]
-                corr_vec[i] = np.sum(np_aux*corr_aux)/np_vec[i]
+                meanbias_vec[i] = np.sum(np_aux * meanbias_aux) / np_vec[i]
+                corr_vec[i] = np.sum(np_aux * corr_aux) / np_vec[i]
 
             # last date
             ind_aux = np.arange(unique_ind[-1], len(date_aux_vec))
@@ -1587,8 +1590,8 @@ def read_intercomp_scores_ts_old_v0(fname, corr_min=0.6, np_min=9):
             corr_aux = corr_aux[ind_valid]
             np_vec[-1] = np.sum(np_aux, dtype=int)
             if np_vec[-1] > 0:
-                meanbias_vec[-1] = np.sum(np_aux*meanbias_aux)/np_vec[-1]
-                corr_vec[-1] = np.sum(np_aux*corr_aux)/np_vec[-1]
+                meanbias_vec[-1] = np.sum(np_aux * meanbias_aux) / np_vec[-1]
+                corr_vec[-1] = np.sum(np_aux * corr_aux) / np_vec[-1]
 
             medianbias_vec = np.ma.masked_all(nelements, dtype=float)
             quant25bias_vec = np.ma.masked_all(nelements, dtype=float)
@@ -1603,7 +1606,7 @@ def read_intercomp_scores_ts_old_v0(fname, corr_min=0.6, np_min=9):
                     slope_vec, intercep_vec, intercep_slope1_vec)
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return (None, None, None, None, None, None, None, None, None, None,
                 None)
 
@@ -1647,7 +1650,7 @@ def read_selfconsistency(fname):
             return zdr_kdpzh_table
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None
 
 
@@ -1676,7 +1679,7 @@ def read_antenna_pattern(fname, linear=False, twoway=False):
     except EnvironmentError as ee:
         warn(str(ee))
         raise Exception("ERROR: Could not find|open antenna file '" +
-                        fname+"'")
+                        fname + "'")
 
     # Get array length
     linenum = 0
@@ -1707,6 +1710,6 @@ def read_antenna_pattern(fname, linear=False, twoway=False):
         pattern['attenuation'] = 2. * pattern['attenuation']
 
     if linear:
-        pattern['attenuation'] = 10.**(pattern['attenuation']/10.)
+        pattern['attenuation'] = 10.**(pattern['attenuation'] / 10.)
 
     return pattern

@@ -77,7 +77,7 @@ def process_ccor(procstatus, dscfg, radar_list=None):
         elif datatype in ('dBuZ', 'dBuZv'):
             unfilt_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -156,14 +156,14 @@ def process_signal_power(procstatus, dscfg, radar_list=None):
                         'dBuZvc'):
             refl_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
     radar = radar_list[ind_rad]
 
     if refl_field not in radar.fields:
-        warn('Unable to obtain signal power. Missing field '+refl_field)
+        warn('Unable to obtain signal power. Missing field ' + refl_field)
         return None, None
 
     lrx = 0.
@@ -268,14 +268,14 @@ def process_rcs_pr(procstatus, dscfg, radar_list=None):
                         'dBuZvc'):
             refl_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
     radar = radar_list[ind_rad]
 
     if refl_field not in radar.fields:
-        warn('Unable to obtain RCS. Missing field '+refl_field)
+        warn('Unable to obtain RCS. Missing field ' + refl_field)
         return None, None
 
     lrx = 0.
@@ -369,14 +369,14 @@ def process_rcs(procstatus, dscfg, radar_list=None):
                         'dBuZvc'):
             refl_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
     radar = radar_list[ind_rad]
 
     if refl_field not in radar.fields:
-        warn('Unable to obtain RCS. Missing field '+refl_field)
+        warn('Unable to obtain RCS. Missing field ' + refl_field)
         return None, None
 
     if refl_field.endswith('_vv'):
@@ -441,14 +441,14 @@ def process_vol_refl(procstatus, dscfg, radar_list=None):
                         'dBuZvc'):
             refl_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
     radar = radar_list[ind_rad]
 
     if refl_field not in radar.fields:
-        warn('Unable to obtain signal power. Missing field '+refl_field)
+        warn('Unable to obtain signal power. Missing field ' + refl_field)
         return None, None
 
     if refl_field.endswith('_vv'):
@@ -509,7 +509,7 @@ def process_snr(procstatus, dscfg, radar_list=None):
         elif datatype in ('Nh', 'Nv'):
             noise = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -580,7 +580,7 @@ def process_radial_noise_hs(procstatus, dscfg, radar_list=None):
     radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
     pwr_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -605,7 +605,7 @@ def process_radial_noise_hs(procstatus, dscfg, radar_list=None):
 
     ind_rmin = np.where(radar.range['data'] >= rmin)[0]
     if ind_rmin.size == 0:
-        warn('No data at ranges further than rmin '+str(rmin)+'  m.')
+        warn('No data at ranges further than rmin ' + str(rmin) + '  m.')
         return None, None
     ind_rmin = ind_rmin[0]
 
@@ -669,7 +669,7 @@ def process_radial_noise_ivic(procstatus, dscfg, radar_list=None):
     radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
     pwr_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -739,7 +739,7 @@ def process_l(procstatus, dscfg, radar_list=None):
     radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'])
     rhohv = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -749,7 +749,7 @@ def process_l(procstatus, dscfg, radar_list=None):
         print('Unable to compute L. Missing RhoHV field')
         return None, None
 
-    l = pyart.retrieve.compute_l(
+    comp_l = pyart.retrieve.compute_l(
         radar, rhohv_field=rhohv,
         l_field='logarithmic_cross_correlation_ratio')
 
@@ -757,7 +757,7 @@ def process_l(procstatus, dscfg, radar_list=None):
     new_dataset = {'radar_out': deepcopy(radar)}
     new_dataset['radar_out'].fields = dict()
     new_dataset['radar_out'].add_field(
-        'logarithmic_cross_correlation_ratio', l)
+        'logarithmic_cross_correlation_ratio', comp_l)
 
     return new_dataset, ind_rad
 
@@ -798,7 +798,7 @@ def process_cdr(procstatus, dscfg, radar_list=None):
         elif datatype in ('ZDR', 'ZDRc'):
             zdr = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -930,7 +930,7 @@ def process_vpr(procstatus, dscfg, radar_list=None):
         elif datatype in ('TEMP', 'TEMPc'):
             temp_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None
@@ -1020,9 +1020,9 @@ def process_vpr(procstatus, dscfg, radar_list=None):
                         radar_ml.fields['melting_layer_height']['data'][:, 1])
                     ml_bottom = np.ma.mean(
                         radar_ml.fields['melting_layer_height']['data'][:, 0])
-                    ml_thickness = iso0-ml_bottom
-                    ml_thickness_min = ml_thickness-ml_thickness_step
-                    ml_thickness_max = ml_thickness+ml_thickness_step
+                    ml_thickness = iso0 - ml_bottom
+                    ml_thickness_min = ml_thickness - ml_thickness_step
+                    ml_thickness_max = ml_thickness + ml_thickness_step
 
     radar_mem_list = None
     if vpr_memory_max > 0:
@@ -1033,8 +1033,8 @@ def process_vpr(procstatus, dscfg, radar_list=None):
             # get previous reflectivity files but do not include current one
             flist = get_file_list(
                 z_datatypedescr,
-                [dscfg['timeinfo']-datetime.timedelta(minutes=vpr_memory_max)],
-                [dscfg['timeinfo']-datetime.timedelta(seconds=1)], dscfg)
+                [dscfg['timeinfo'] - datetime.timedelta(minutes=vpr_memory_max)],
+                [dscfg['timeinfo'] - datetime.timedelta(seconds=1)], dscfg)
             if not flist:
                 warn('unable to find files containing reflectivity')
             else:
@@ -1060,7 +1060,7 @@ def process_vpr(procstatus, dscfg, radar_list=None):
                 vpr_theo_datatypedescr,
                 [dscfg['timeinfo']
                  - datetime.timedelta(minutes=filter_vpr_memory_max)],
-                [dscfg['timeinfo']-datetime.timedelta(seconds=1)], dscfg)
+                [dscfg['timeinfo'] - datetime.timedelta(seconds=1)], dscfg)
             if not flist:
                 warn('unable to find files containing retrieved VPR')
             else:
@@ -1090,7 +1090,7 @@ def process_vpr(procstatus, dscfg, radar_list=None):
             ml_peak_step=ml_peak_step, dr_min=dr_min, dr_max=dr_max,
             dr_step=dr_step, dr_default=dr_default, dr_alt=dr_alt,
             h_max=h_max, h_corr_max=h_corr_max, h_res=h_res,
-            max_weight=max_weight, rmin_obs=rmin_obs,  rmax_obs=rmax_obs,
+            max_weight=max_weight, rmin_obs=rmin_obs, rmax_obs=rmax_obs,
             iso0=iso0, correct_iso0=correct_iso0, weight_mem=weight_mem,
             vpr_theo_dict_mem=vpr_theo_dict_mem, radar_mem_list=radar_mem_list,
             refl_field=refl_field, corr_refl_field=corr_refl_field,
@@ -1193,7 +1193,7 @@ def process_rainrate(procstatus, dscfg, radar_list=None):
         radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
         refl_field = get_fieldname_pyart(datatype)
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
         if radar_list[ind_rad] is None:
             warn('No valid radar')
             return None, None
@@ -1215,7 +1215,7 @@ def process_rainrate(procstatus, dscfg, radar_list=None):
         radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
         refl_field = get_fieldname_pyart(datatype)
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
         if radar_list[ind_rad] is None:
             warn('No valid radar')
             return None, None
@@ -1232,7 +1232,7 @@ def process_rainrate(procstatus, dscfg, radar_list=None):
         radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
         kdp_field = get_fieldname_pyart(datatype)
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
         if radar_list[ind_rad] is None:
             warn('No valid radar')
             return None, None
@@ -1253,7 +1253,7 @@ def process_rainrate(procstatus, dscfg, radar_list=None):
         radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
         a_field = get_fieldname_pyart(datatype)
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
         if radar_list[ind_rad] is None:
             warn('No valid radar')
             return None, None
@@ -1278,7 +1278,7 @@ def process_rainrate(procstatus, dscfg, radar_list=None):
             elif datatype in ('KDP', 'KDPc'):
                 kdp_field = get_fieldname_pyart(datatype)
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
         if radar_list[ind_rad] is None:
             warn('No valid radar')
             return None, None
@@ -1310,7 +1310,7 @@ def process_rainrate(procstatus, dscfg, radar_list=None):
             elif datatype in ('Ah', 'Ahc'):
                 a_field = get_fieldname_pyart(datatype)
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
         if radar_list[ind_rad] is None:
             warn('No valid radar')
             return None, None
@@ -1343,7 +1343,7 @@ def process_rainrate(procstatus, dscfg, radar_list=None):
             elif datatype == 'hydro':
                 hydro_field = 'radar_echo_classification'
 
-        ind_rad = int(radarnr[5:8])-1
+        ind_rad = int(radarnr[5:8]) - 1
         if radar_list[ind_rad] is None:
             warn('No valid radar')
             return None, None
@@ -1436,7 +1436,7 @@ def process_rainfall_accumulation(procstatus, dscfg, radar_list=None):
         return None, None
     field_name = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
 
     start_average = dscfg.get('start_average', 0.)
     period = dscfg.get('period', 3600.)
@@ -1460,7 +1460,7 @@ def process_rainfall_accumulation(procstatus, dscfg, radar_list=None):
         if use_nan:
             field_data = np.ma.asarray(field_data.filled(nan_value))
 
-        field_data *= dscfg['ScanPeriod']*60./3600.
+        field_data *= dscfg['ScanPeriod'] * 60. / 3600.
 
         rr_acu_dict = pyart.config.get_metadata(rr_acu_name)
         rr_acu_dict['data'] = field_data
@@ -1477,10 +1477,10 @@ def process_rainfall_accumulation(procstatus, dscfg, radar_list=None):
                     hour=0, minute=0, second=0, microsecond=0)
 
                 avg_par.update(
-                    {'starttime': date_00+datetime.timedelta(
+                    {'starttime': date_00 + datetime.timedelta(
                         seconds=start_average)})
                 avg_par.update(
-                    {'endtime': avg_par['starttime']+datetime.timedelta(
+                    {'endtime': avg_par['starttime'] + datetime.timedelta(
                         seconds=period)})
             else:
                 avg_par.update({'starttime': dscfg['timeinfo']})
@@ -1615,7 +1615,7 @@ def process_bird_density(procstatus, dscfg, radar_list=None):
         if datatype in ('eta_h', 'eta_v'):
             vol_refl_field = get_fieldname_pyart(datatype)
 
-    ind_rad = int(radarnr[5:8])-1
+    ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn('No valid radar')
         return None, None

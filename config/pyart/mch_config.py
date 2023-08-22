@@ -153,7 +153,7 @@ unfiltered_spectral_differential_phase = (
 unfiltered_spectral_copolar_correlation_coefficient = (
     'unfiltered_spectral_copolar_correlation_coefficient')
 
-#IQ data
+# IQ data
 IQ_hh_ADU = 'IQ_hh_ADU'
 IQ_vv_ADU = 'IQ_vv_ADU'
 IQ_noise_power_hh_dBZ = 'IQ_noise_power_hh_dBZ'
@@ -923,20 +923,20 @@ DEFAULT_METADATA = {
     'target_scan_rate': {
         'long_name': 'Target scan rate for sweep',
         'units': 'degrees_per_second',
-        },
+    },
 
     'rays_are_indexed': {
         'long_name': 'Flag for indexed rays',
         'units': 'unitless',
         'options': ('true: rays are indexed to a regular grid, ' +
                     'false: rays are not indexed to a regular grid'),
-        },
+    },
 
     'ray_angle_res': {
         'long_name': 'Angular resolution between rays',
         'units': 'degrees',
         'comment': 'Only applicable when rays_are_indexed variable is true',
-        },
+    },
 
     # Metadata for radar location attributes
     'latitude': {
@@ -1404,19 +1404,19 @@ DEFAULT_METADATA = {
         'long_name': 'Wide band noise',
         'coordinates': 'elevation azimuth range'},
 
-    fields_difference:{
+    fields_difference: {
         'units': '-',
         'standard_name': 'fields_difference',
         'long_name': 'Fields difference',
         'coordinates': 'elevation azimuth range'},
 
-    field_texture:{
+    field_texture: {
         'units': '-',
         'standard_name': 'field_texture',
         'long_name': 'Field texture',
         'coordinates': 'elevation azimuth range'},
 
-    field_mask:{
+    field_mask: {
         'units': '-',
         'standard_name': 'field_mask',
         'long_name': 'Field mask',
@@ -1577,7 +1577,7 @@ DEFAULT_METADATA = {
         'long_name': 'Retrieved mean Doppler velocity standard deviation',
         'coordinates': 'elevation azimuth range'},
 
-    velocity_difference:{
+    velocity_difference: {
         'units': 'm/s',
         'standard_name': 'retrieved_mean_Doppler_velocity_difference',
         'long_name': 'Difference between retrieved and measured Doppler velocity',
@@ -1608,83 +1608,83 @@ DEFAULT_METADATA = {
         'long_name': 'Cubic Root of Eddy Dissipation Rate',
         'coordinates': 'elevation azimuth range'},
 
-  # Visibility processing fields
+    # Visibility processing fields
     terrain_altitude: {'units': 'meters',
-          'standard_name': 'terrain_altitude',
-          'long_name': 'Altitude',
-          'coordinates': 'x y'},
+                       'standard_name': 'terrain_altitude',
+                       'long_name': 'Altitude',
+                       'coordinates': 'x y'},
 
-   bent_terrain_altitude: {'units': 'meters',
-          'standard_name': 'bent_terrain_altitude',
-          'long_name': 'Altitude after refraction correction',
-          'coordinates': 'x y'},
+    bent_terrain_altitude: {'units': 'meters',
+                            'standard_name': 'bent_terrain_altitude',
+                            'long_name': 'Altitude after refraction correction',
+                            'coordinates': 'x y'},
 
     terrain_slope: {'units': 'degrees',
-          'standard_name': 'terrain_slope',
-          'long_name': 'Slope of the terrain',
-          'coordinates': 'x y'},
+                    'standard_name': 'terrain_slope',
+                    'long_name': 'Slope of the terrain',
+                    'coordinates': 'x y'},
 
     terrain_aspect: {'units': 'degrees',
-          'standard_name': 'terrain_aspect',
-          'long_name': 'Orientation of the terrain',
-          'coordinates': 'x y'},
+                     'standard_name': 'terrain_aspect',
+                     'long_name': 'Orientation of the terrain',
+                     'coordinates': 'x y'},
 
     elevation_angle: {'units': 'degrees',
-          'standard_name': 'elevation_angle',
-          'long_name': 'Elevation angle at terrain [deg]',
-          'coordinates': 'x y'},
+                      'standard_name': 'elevation_angle',
+                      'long_name': 'Elevation angle at terrain [deg]',
+                      'coordinates': 'x y'},
 
     visibility: {'units': '-',
-          'standard_name': 'visibility',
-          'long_name': 'Radar visibility',
-          'coordinates': 'x y'},
+                 'standard_name': 'visibility',
+                 'long_name': 'Radar visibility',
+                 'coordinates': 'x y'},
 
     min_vis_altitude: {'units': 'meters',
-          'standard_name': 'min_vis_altitude',
-          'long_name': 'Minimum visible altitude',
-          'coordinates': 'x y'},
+                       'standard_name': 'min_vis_altitude',
+                       'long_name': 'Minimum visible altitude',
+                       'coordinates': 'x y'},
 
     min_vis_elevation: {'units': 'degrees',
-          'standard_name': 'min_vis_elevation',
-          'long_name': 'Minimum visible elevation angle',
-          'coordinates': 'x y'},
+                        'standard_name': 'min_vis_elevation',
+                        'long_name': 'Minimum visible elevation angle',
+                        'coordinates': 'x y'},
 
     incident_angle: {'units': 'degrees',
-          'standard_name': 'incident_angle',
-          'long_name': 'Angle of incidence at terrain',
-          'coordinates': 'x y'},
+                     'standard_name': 'incident_angle',
+                     'long_name': 'Angle of incidence at terrain',
+                     'coordinates': 'x y'},
 
     effective_area: {'units': 'm',
-          'standard_name': 'effective_area',
-          'long_name': 'Effective backscattering area',
-          'coordinates': 'x y'},
+                     'standard_name': 'effective_area',
+                     'long_name': 'Effective backscattering area',
+                     'coordinates': 'x y'},
 
     sigma_0: {'units': '-',
-          'standard_name': 'sigma_0',
-          'long_name': 'ratio RCS/backscattering area',
-          'coordinates': 'x y'},
+              'standard_name': 'sigma_0',
+              'long_name': 'ratio RCS/backscattering area',
+              'coordinates': 'x y'},
 
 
     rcs_clutter: {'units': 'square meters',
-          'standard_name': 'rcs_clutter',
-          'long_name': 'RCS of the ground clutter',
-          'coordinates': 'elevation azimuth elevation'},
+                  'standard_name': 'rcs_clutter',
+                  'long_name': 'RCS of the ground clutter',
+                  'coordinates': 'elevation azimuth elevation'},
 
     dBm_clutter: {'units': 'dBm',
-          'standard_name': 'dBm_clutter',
-          'long_name': 'Ground clutter power signal',
-          'coordinates': 'elevation azimuth elevation'},
+                  'standard_name': 'dBm_clutter',
+                  'long_name': 'Ground clutter power signal',
+                  'coordinates': 'elevation azimuth elevation'},
 
     dBZ_clutter: {'units': 'dBZ',
-          'standard_name': 'dBZ_clutter',
-          'long_name': 'Ground clutter reflectivity',
-          'coordinates': 'elevation azimuth elevation'},
+                  'standard_name': 'dBZ_clutter',
+                  'long_name': 'Ground clutter reflectivity',
+                  'coordinates': 'elevation azimuth elevation'},
 
     visibility_polar: {'units': '%',
-          'standard_name': 'visibility_polar',
-          'long_name': 'Visibility',
-          'coordinates': 'elevation azimuth range'},
-                       
+                       'standard_name': 'visibility_polar',
+                       'long_name': 'Visibility',
+                       'coordinates': 'elevation azimuth range'},
+
     # Dual-polarization fields
     differential_reflectivity: {
         'units': 'dB',
@@ -2827,7 +2827,7 @@ DEFAULT_METADATA = {
 
     interpolated_profile: {
         'long_name': 'Interpolated profile',
-        'standard_name':  'interpolated_profile',
+        'standard_name': 'interpolated_profile',
         'units': 'unknown'},
 
     # wind lidar variables
@@ -3624,10 +3624,10 @@ def spectrum_width_limit(container=None, selection=0):
                 vel = container.get_nyquist_vel(0, check_uniform=False)
             return (0, vel)
         except LookupError:
-            #return (0., 4.)
+            # return (0., 4.)
             return (0., 15.8)
     else:
-        #return (0., 4.)
+        # return (0., 4.)
         return (0., 15.8)
 
 
@@ -3756,7 +3756,7 @@ DEFAULT_FIELD_COLORMAP = {
     unfiltered_spectral_differential_reflectivity: 'pyart_RefDiff',
 
     cross_correlation_ratio: 'pyart_RefDiff',
-    corrected_cross_correlation_ratio:  'pyart_RefDiff',
+    corrected_cross_correlation_ratio: 'pyart_RefDiff',
     unfiltered_cross_correlation_ratio: 'pyart_RefDiff',
     uncorrected_cross_correlation_ratio: 'pyart_RefDiff',
     logarithmic_cross_correlation_ratio: 'pyart_RefDiff',
@@ -3809,15 +3809,15 @@ DEFAULT_FIELD_COLORMAP = {
     radar_echo_classification: 'pyart_LangRainbow12',
     corrected_radar_echo_classification: 'pyart_LangRainbow12',
     hydroclass_entropy: 'pyart_LangRainbow12',
-    proportion_AG:  'pyart_LangRainbow12',
-    proportion_CR:  'pyart_LangRainbow12',
-    proportion_LR:  'pyart_LangRainbow12',
-    proportion_RP:  'pyart_LangRainbow12',
-    proportion_RN:  'pyart_LangRainbow12',
-    proportion_VI:  'pyart_LangRainbow12',
-    proportion_WS:  'pyart_LangRainbow12',
-    proportion_MH:  'pyart_LangRainbow12',
-    proportion_IH:  'pyart_LangRainbow12',
+    proportion_AG: 'pyart_LangRainbow12',
+    proportion_CR: 'pyart_LangRainbow12',
+    proportion_LR: 'pyart_LangRainbow12',
+    proportion_RP: 'pyart_LangRainbow12',
+    proportion_RN: 'pyart_LangRainbow12',
+    proportion_VI: 'pyart_LangRainbow12',
+    proportion_WS: 'pyart_LangRainbow12',
+    proportion_MH: 'pyart_LangRainbow12',
+    proportion_IH: 'pyart_LangRainbow12',
 
     radar_echo_id: 'pyart_LangRainbow12',
     clutter_exit_code: 'pyart_LangRainbow12',
@@ -3840,11 +3840,11 @@ DEFAULT_FIELD_COLORMAP = {
 
     height: 'pyart_SCook18',
     interpolated_profile: 'pyart_SCook18',
-    
+
     corrected_radial_wind_speed: 'pyart_BuDRd18',
     radial_wind_speed: 'pyart_BuDRd18',
-    #radial_wind_speed_ci:
-    #radial_wind_speed_status:
+    # radial_wind_speed_ci:
+    # radial_wind_speed_status:
 
     doppler_spectrum_width: 'pyart_NWS_SPW',
     # doppler_spectrum_mean_error:
@@ -3855,10 +3855,10 @@ DEFAULT_FIELD_COLORMAP = {
     cnr: 'pyart_Carbone17',
 
     # appropriate colors are matplotlib Greys, gray, etc.
-    HRV: 'Greys_r', # 'pyart_Gray9',
-    VIS006: 'Greys_r', # 'pyart_Gray9',
-    VIS008: 'Greys_r', # 'pyart_Gray9',
-    IR_016: 'Greys_r', # 'pyart_Gray9_r',
+    HRV: 'Greys_r',  # 'pyart_Gray9',
+    VIS006: 'Greys_r',  # 'pyart_Gray9',
+    VIS008: 'Greys_r',  # 'pyart_Gray9',
+    IR_016: 'Greys_r',  # 'pyart_Gray9_r',
 
     IR_039: 'pyart_NWSRef',
     WV_062: 'pyart_NWSRef',
@@ -3871,10 +3871,10 @@ DEFAULT_FIELD_COLORMAP = {
 
     CTH: 'pyart_NWSRef',
 
-    HRV_norm: 'Greys_r', # 'pyart_Gray9',
-    VIS006_norm: 'Greys_r', # 'pyart_Gray9',
-    VIS008_norm: 'Greys_r', # 'pyart_Gray9',
-    IR_016_norm: 'Greys_r', # 'pyart_Gray9_r',
+    HRV_norm: 'Greys_r',  # 'pyart_Gray9',
+    VIS006_norm: 'Greys_r',  # 'pyart_Gray9',
+    VIS008_norm: 'Greys_r',  # 'pyart_Gray9',
+    IR_016_norm: 'Greys_r',  # 'pyart_Gray9_r',
 
     # Additional reflectivity like fields
     'CZ': 'pyart_NWSRef',
@@ -3895,7 +3895,7 @@ DEFAULT_FIELD_COLORMAP = {
 
 DEFAULT_FIELD_LIMITS = {
     # field name : limits
-    #reflectivity: (-30., 75.),
+    # reflectivity: (-30., 75.),
     reflectivity: (-30., 85.),
     avg_reflectivity: (-30., 75.),
     quant05_reflectivity: (-30., 75.),
@@ -3910,7 +3910,7 @@ DEFAULT_FIELD_LIMITS = {
     total_power: (-30., 75.),
     # unfiltered_reflectivity: (-30., 75.),
     unfiltered_reflectivity: (-30., 85.),
-    corrected_unfiltered_reflectivity:  (-30., 75.),
+    corrected_unfiltered_reflectivity: (-30., 75.),
     # reflectivity_vv: (-30., 75.),
     reflectivity_vv: (-30., 85.),
     corrected_reflectivity_vv: (-30., 75.),
@@ -3981,7 +3981,7 @@ DEFAULT_FIELD_LIMITS = {
     velocity_difference: (-15., 15.),
     wind_speed: (0., 50.),
     wind_direction: (0., 360.),
-    
+
     spectrum_width: spectrum_width_limit,
     corrected_spectrum_width: spectrum_width_limit,
     unfiltered_spectrum_width: spectrum_width_limit,
@@ -3991,10 +3991,10 @@ DEFAULT_FIELD_LIMITS = {
 
     normalized_coherent_power: (0., 1.),
 
-    #differential_reflectivity: (-1., 8.),
+    # differential_reflectivity: (-1., 8.),
     differential_reflectivity: (-8., 12.),
     corrected_differential_reflectivity: (-1., 8.),
-    #unfiltered_differential_reflectivity: (-1., 8.),
+    # unfiltered_differential_reflectivity: (-1., 8.),
     unfiltered_differential_reflectivity: (-8., 12.),
     differential_reflectivity_in_precipitation: (-10., 10.),
     differential_reflectivity_in_snow: (-10., 10.),
@@ -4002,10 +4002,10 @@ DEFAULT_FIELD_LIMITS = {
     spectral_differential_reflectivity: (-1., 8.),
     unfiltered_spectral_differential_reflectivity: (-1., 8.),
 
-    #cross_correlation_ratio: (0.7, 1.),
+    # cross_correlation_ratio: (0.7, 1.),
     cross_correlation_ratio: (0., 1.),
     corrected_cross_correlation_ratio: (0.7, 1.),
-    #unfiltered_cross_correlation_ratio: (0.7, 1.),
+    # unfiltered_cross_correlation_ratio: (0.7, 1.),
     unfiltered_cross_correlation_ratio: (0., 1.),
     uncorrected_cross_correlation_ratio: (0.7, 1.),
     logarithmic_cross_correlation_ratio: (0, 4),
@@ -4128,14 +4128,14 @@ DEFAULT_FIELD_LIMITS = {
     IR_016_norm: (0., 30.),
 
     # radial_wind_speed: 'pyart_BuDRd18',
-    #radial_wind_speed_ci:
-    #radial_wind_speed_status:
+    # radial_wind_speed_ci:
+    # radial_wind_speed_status:
 
     # doppler_spectrum_width: 'pyart_NWS_SPW',
     # doppler_spectrum_mean_error:
 
     # atmospherical_structures_type: 'pyart_LangRainbow12',
-    #relative_beta: (0., 4e-6),
-    #absolute_beta: (0., 4e-6),
+    # relative_beta: (0., 4e-6),
+    # absolute_beta: (0., 4e-6),
     # cnr: 'pyart_Carbone17',
 }

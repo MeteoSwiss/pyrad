@@ -225,7 +225,7 @@ def generate_monitoring_products(dataset, prdcfg):
             timeinfo=dataset['timeinfo'], timeformat=timeformat)
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         labelx = get_colobar_label(hist_obj.fields[field_name], field_name)
 
@@ -235,20 +235,20 @@ def generate_monitoring_products(dataset, prdcfg):
             bin_centers, hist, fname_list, labelx=labelx,
             labely='Number of Samples', titl=titl)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         if write_data:
-            fname = savedir+make_filename(
+            fname = savedir + make_filename(
                 'histogram', prdcfg['dstype'], prdcfg['voltype'],
                 ['csv'], timeinfo=dataset['timeinfo'],
                 timeformat=timeformat)[0]
 
-            step = bin_centers[1]-bin_centers[0]
+            step = bin_centers[1] - bin_centers[0]
             bin_edges = np.append(
-                bin_centers-step/2., bin_centers[-1]+step/2.)
+                bin_centers - step / 2., bin_centers[-1] + step / 2.)
             write_histogram(
                 bin_edges, hist, fname, datatype=prdcfg['voltype'], step=step)
-            print('----- save to '+fname)
+            print('----- save to ' + fname)
 
             return fname
 
@@ -269,14 +269,14 @@ def generate_monitoring_products(dataset, prdcfg):
 
         timeformat = '%Y%m%d'
         titl = (
-            '{:.1f}'.format(el)+' Deg. ' +
+            '{:.1f}'.format(el) + ' Deg. ' +
             pyart.graph.common.generate_radar_time_begin(
                 hist_obj).strftime('%Y-%m-%d') + '\n' +
             get_field_name(hist_obj.fields[field_name], field_name))
         if hist_type == 'instant':
             timeformat = '%Y%m%d%H%M%S'
             titl = (
-                '{:.1f}'.format(el)+' Deg. ' +
+                '{:.1f}'.format(el) + ' Deg. ' +
                 pyart.graph.common.generate_radar_time_begin(
                     hist_obj).isoformat() + 'Z' + '\n' +
                 get_field_name(hist_obj.fields[field_name], field_name))
@@ -287,11 +287,11 @@ def generate_monitoring_products(dataset, prdcfg):
 
         fname_list = make_filename(
             'ppi', prdcfg['dstype'], prdcfg['voltype'],
-            prdcfg['imgformat'], prdcfginfo='el'+'{:.1f}'.format(el),
+            prdcfg['imgformat'], prdcfginfo='el' + '{:.1f}'.format(el),
             timeinfo=dataset['timeinfo'], timeformat=timeformat)
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         labelx = get_colobar_label(hist_obj.fields[field_name], field_name)
 
@@ -303,7 +303,7 @@ def generate_monitoring_products(dataset, prdcfg):
             fname_list, labelx=labelx, labely='Number of Samples',
             titl=titl)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -330,11 +330,11 @@ def generate_monitoring_products(dataset, prdcfg):
 
         fname_list = make_filename(
             'ppi', prdcfg['dstype'], prdcfg['voltype'],
-            prdcfg['imgformat'], prdcfginfo='el'+'{:.1f}'.format(el),
+            prdcfg['imgformat'], prdcfginfo='el' + '{:.1f}'.format(el),
             timeinfo=dataset['timeinfo'], timeformat=timeformat)
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         quantiles = prdcfg.get('quantiles', np.array([25., 50., 75.]))
         ref_value = prdcfg.get('ref_value', 0.)
@@ -345,7 +345,7 @@ def generate_monitoring_products(dataset, prdcfg):
             hist_obj, hist_type, field_name, ind_el, prdcfg, fname_list,
             quantiles=quantiles, ref_value=ref_value, vmin=vmin, vmax=vmax)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -374,7 +374,7 @@ def generate_monitoring_products(dataset, prdcfg):
         ref_value = prdcfg.get('ref_value', 0.)
         sort_by_date = prdcfg.get('sort_by_date', False)
         rewrite = prdcfg.get('rewrite', False)
-        plot_until_year_end = prdcfg.get('plot_until_year_end', False)        
+        plot_until_year_end = prdcfg.get('plot_until_year_end', False)
 
         savedir = get_save_dir(
             prdcfg['basepath'], prdcfg['procname'], dssavedir,
@@ -385,7 +385,7 @@ def generate_monitoring_products(dataset, prdcfg):
             timeinfo=csvtimeinfo_file, timeformat=timeformat,
             runinfo=prdcfg['runinfo'])[0]
 
-        csvfname = savedir+csvfname
+        csvfname = savedir + csvfname
 
         quantiles, values = compute_quantiles_from_hist(
             hist_obj.range['data'],
@@ -400,7 +400,7 @@ def generate_monitoring_products(dataset, prdcfg):
         write_monitoring_ts(
             start_time, np_t, values, quantiles, prdcfg['voltype'],
             csvfname)
-        print('saved CSV file: '+csvfname)
+        print('saved CSV file: ' + csvfname)
 
         date, np_t_vec, cquant_vec, lquant_vec, hquant_vec = (
             read_monitoring_ts(csvfname, sort_by_date=sort_by_date))
@@ -423,7 +423,7 @@ def generate_monitoring_products(dataset, prdcfg):
             figtimeinfo = date[0]
             titldate = date[0].strftime('%Y-%m-%d')
         else:
-            titldate = (date[0].strftime('%Y%m%d')+'-' +
+            titldate = (date[0].strftime('%Y%m%d') + '-' +
                         date[-1].strftime('%Y%m%d'))
             if prdcfg.get('add_date_in_fname', False):
                 figtimeinfo = date[0]
@@ -436,9 +436,9 @@ def generate_monitoring_products(dataset, prdcfg):
             runinfo=prdcfg['runinfo'])
 
         for i, figfname in enumerate(figfname_list):
-            figfname_list[i] = savedir+figfname
+            figfname_list[i] = savedir + figfname
 
-        titl = (prdcfg['runinfo']+' Monitoring '+titldate)
+        titl = (prdcfg['runinfo'] + ' Monitoring ' + titldate)
 
         labely = generate_field_name_str(prdcfg['voltype'])
 
@@ -450,8 +450,8 @@ def generate_monitoring_products(dataset, prdcfg):
             date, np_t_vec, cquant_vec, lquant_vec, hquant_vec, field_name,
             figfname_list, ref_value=ref_value, vmin=vmin, vmax=vmax,
             np_min=np_min, labelx='Time UTC', labely=labely, titl=titl,
-            plot_until_year_end = plot_until_year_end)
-        print('----- save to '+' '.join(figfname_list))
+            plot_until_year_end=plot_until_year_end)
+        print('----- save to ' + ' '.join(figfname_list))
 
         # generate alarms if needed
         alarm = prdcfg.get('alarm', False)
@@ -488,15 +488,20 @@ def generate_monitoring_products(dataset, prdcfg):
         value_last = cquant_vec[-1]
 
         if np_last < np_min:
-            warn('No valid data on day '+date[-1].strftime('%d-%m-%Y'))
+            warn('No valid data on day ' + date[-1].strftime('%d-%m-%Y'))
             return None
 
         # check if absolute value exceeded
         abs_exceeded = False
-        if ((value_last > ref_value+tol_abs) or
-                (value_last < ref_value-tol_abs)):
-            warn('Value '+str(value_last)+' exceeds target '+str(ref_value) +
-                 ' +/- '+str(tol_abs))
+        if ((value_last > ref_value + tol_abs) or
+                (value_last < ref_value - tol_abs)):
+            warn(
+                'Value ' +
+                str(value_last) +
+                ' exceeds target ' +
+                str(ref_value) +
+                ' +/- ' +
+                str(tol_abs))
             abs_exceeded = True
 
         # compute trend and check if last value exceeds it
@@ -509,44 +514,44 @@ def generate_monitoring_products(dataset, prdcfg):
             np_trend = 0
             value_trend = np.ma.masked
         else:
-            np_trend_vec = np_t_vec[ind][-(nevents_min+1):-1]
-            data_trend_vec = cquant_vec[ind][-(nevents_min+1):-1]
+            np_trend_vec = np_t_vec[ind][-(nevents_min + 1):-1]
+            data_trend_vec = cquant_vec[ind][-(nevents_min + 1):-1]
 
             np_trend = np.sum(np_trend_vec)
-            value_trend = np.sum(data_trend_vec*np_trend_vec)/np_trend
+            value_trend = np.sum(data_trend_vec * np_trend_vec) / np_trend
 
         trend_exceeded = False
         if np_trend > 0:
-            if ((value_last > value_trend+tol_trend) or
-                    (value_last < value_trend-tol_trend)):
-                warn('Value '+str(value_last)+'exceeds trend ' +
-                     str(value_trend)+' +/- '+str(tol_trend))
+            if ((value_last > value_trend + tol_trend) or
+                    (value_last < value_trend - tol_trend)):
+                warn('Value ' + str(value_last) + 'exceeds trend ' +
+                     str(value_trend) + ' +/- ' + str(tol_trend))
                 trend_exceeded = True
 
         if abs_exceeded is False and trend_exceeded is False:
             return None
 
-        alarm_dir = savedir+'/alarms/'
+        alarm_dir = savedir + '/alarms/'
         if not os.path.isdir(alarm_dir):
             os.makedirs(alarm_dir)
         alarm_fname = make_filename(
             'alarm', prdcfg['dstype'], prdcfg['voltype'], ['txt'],
             timeinfo=start_time, timeformat='%Y%m%d')[0]
-        alarm_fname = alarm_dir+alarm_fname
+        alarm_fname = alarm_dir + alarm_fname
 
         field_dict = pyart.config.get_metadata(field_name)
         param_name = get_field_name(field_dict, field_name)
-        param_name_unit = param_name+' ['+field_dict['units']+']'
+        param_name_unit = param_name + ' [' + field_dict['units'] + ']'
 
         write_alarm_msg(
             prdcfg['RadarName'][0], param_name_unit, start_time, ref_value,
             tol_abs, np_trend, value_trend, tol_trend, nevents_min, np_last,
             value_last, alarm_fname)
 
-        print('----- saved monitoring alarm to '+alarm_fname)
+        print('----- saved monitoring alarm to ' + alarm_fname)
 
-        subject = ('NO REPLY: '+param_name+' monitoring alarm for radar ' +
-                   prdcfg['RadarName'][0]+' on day ' +
+        subject = ('NO REPLY: ' + param_name + ' monitoring alarm for radar ' +
+                   prdcfg['RadarName'][0] + ' on day ' +
                    start_time.strftime('%d-%m-%Y'))
         send_msg(sender, receiver_list, subject, alarm_fname)
 
@@ -581,7 +586,7 @@ def generate_monitoring_products(dataset, prdcfg):
             timeinfo=csvtimeinfo_file, timeformat=timeformat,
             runinfo=prdcfg['runinfo'])[0]
 
-        csvfname = savedir+csvfname
+        csvfname = savedir + csvfname
 
         date, np_t_vec, cquant_vec, lquant_vec, hquant_vec = (
             read_monitoring_ts(csvfname))
@@ -616,11 +621,11 @@ def generate_monitoring_products(dataset, prdcfg):
             timeinfo=csvtimeinfo_file, timeformat=timeformat,
             runinfo=prdcfg['runinfo'])[0]
 
-        csvfname = savedir+csvfname
+        csvfname = savedir + csvfname
 
         write_monitoring_ts(
             start_time, np_t, values, quantiles, prdcfg['voltype'], csvfname)
-        print('saved CSV file: '+csvfname)
+        print('saved CSV file: ' + csvfname)
 
         date, np_t_vec, cquant_vec, lquant_vec, hquant_vec = (
             read_monitoring_ts(csvfname, sort_by_date=sort_by_date))
@@ -639,7 +644,7 @@ def generate_monitoring_products(dataset, prdcfg):
 
         figtimeinfo = None
         titldate = ''
-        titldate = (date[0].strftime('%Y%m%d')+'-' +
+        titldate = (date[0].strftime('%Y%m%d') + '-' +
                     date[-1].strftime('%Y%m%d'))
         if prdcfg.get('add_date_in_fname', False):
             figtimeinfo = date[0]
@@ -652,9 +657,9 @@ def generate_monitoring_products(dataset, prdcfg):
             runinfo=prdcfg['runinfo'])
 
         for i, figfname in enumerate(figfname_list):
-            figfname_list[i] = savedir+figfname
+            figfname_list[i] = savedir + figfname
 
-        titl = (prdcfg['runinfo']+' Monitoring '+titldate)
+        titl = (prdcfg['runinfo'] + ' Monitoring ' + titldate)
 
         labely = generate_field_name_str(prdcfg['voltype'])
 
@@ -666,8 +671,8 @@ def generate_monitoring_products(dataset, prdcfg):
             date, np_t_vec, cquant_vec, lquant_vec, hquant_vec, field_name,
             figfname_list, ref_value=ref_value, vmin=vmin, vmax=vmax,
             np_min=np_min, labelx='Time UTC', labely=labely, titl=titl,
-            plot_until_year_end = plot_until_year_end)
-        print('----- save to '+' '.join(figfname_list))
+            plot_until_year_end=plot_until_year_end)
+        print('----- save to ' + ' '.join(figfname_list))
 
         # generate alarms if needed
         alarm = prdcfg.get('alarm', 0)
@@ -704,15 +709,20 @@ def generate_monitoring_products(dataset, prdcfg):
         value_last = cquant_vec[-1]
 
         if np_last < np_min:
-            warn('No valid data on day '+date[-1].strftime('%d-%m-%Y'))
+            warn('No valid data on day ' + date[-1].strftime('%d-%m-%Y'))
             return None
 
         # check if absolute value exceeded
         abs_exceeded = False
-        if ((value_last > ref_value+tol_abs) or
-                (value_last < ref_value-tol_abs)):
-            warn('Value '+str(value_last)+' exceeds target '+str(ref_value) +
-                 ' +/- '+str(tol_abs))
+        if ((value_last > ref_value + tol_abs) or
+                (value_last < ref_value - tol_abs)):
+            warn(
+                'Value ' +
+                str(value_last) +
+                ' exceeds target ' +
+                str(ref_value) +
+                ' +/- ' +
+                str(tol_abs))
             abs_exceeded = True
 
         # compute trend and check if last value exceeds it
@@ -725,44 +735,44 @@ def generate_monitoring_products(dataset, prdcfg):
             np_trend = 0
             value_trend = np.ma.masked
         else:
-            np_trend_vec = np_t_vec[ind][-(nevents_min+1):-1]
-            data_trend_vec = cquant_vec[ind][-(nevents_min+1):-1]
+            np_trend_vec = np_t_vec[ind][-(nevents_min + 1):-1]
+            data_trend_vec = cquant_vec[ind][-(nevents_min + 1):-1]
 
             np_trend = np.sum(np_trend_vec)
-            value_trend = np.sum(data_trend_vec*np_trend_vec)/np_trend
+            value_trend = np.sum(data_trend_vec * np_trend_vec) / np_trend
 
         trend_exceeded = False
         if np_trend > 0:
-            if ((value_last > value_trend+tol_trend) or
-                    (value_last < value_trend-tol_trend)):
-                warn('Value '+str(value_last)+'exceeds trend ' +
-                     str(value_trend)+' +/- '+str(tol_trend))
+            if ((value_last > value_trend + tol_trend) or
+                    (value_last < value_trend - tol_trend)):
+                warn('Value ' + str(value_last) + 'exceeds trend ' +
+                     str(value_trend) + ' +/- ' + str(tol_trend))
                 trend_exceeded = True
 
         if abs_exceeded is False and trend_exceeded is False:
             return None
 
-        alarm_dir = savedir+'/alarms/'
+        alarm_dir = savedir + '/alarms/'
         if not os.path.isdir(alarm_dir):
             os.makedirs(alarm_dir)
         alarm_fname = make_filename(
             'alarm', prdcfg['dstype'], prdcfg['voltype'], ['txt'],
             timeinfo=start_time, timeformat='%Y%m%d')[0]
-        alarm_fname = alarm_dir+alarm_fname
+        alarm_fname = alarm_dir + alarm_fname
 
         field_dict = pyart.config.get_metadata(field_name)
         param_name = get_field_name(field_dict, field_name)
-        param_name_unit = param_name+' ['+field_dict['units']+']'
+        param_name_unit = param_name + ' [' + field_dict['units'] + ']'
 
         write_alarm_msg(
             prdcfg['RadarName'][0], param_name_unit, start_time, ref_value,
             tol_abs, np_trend, value_trend, tol_trend, nevents_min, np_last,
             value_last, alarm_fname)
 
-        print('----- saved monitoring alarm to '+alarm_fname)
+        print('----- saved monitoring alarm to ' + alarm_fname)
 
-        subject = ('NO REPLY: '+param_name+' monitoring alarm for radar ' +
-                   prdcfg['RadarName'][0]+' on day ' +
+        subject = ('NO REPLY: ' + param_name + ' monitoring alarm for radar ' +
+                   prdcfg['RadarName'][0] + ' on day ' +
                    start_time.strftime('%d-%m-%Y'))
         send_msg(sender, receiver_list, subject, alarm_fname)
 
@@ -789,10 +799,10 @@ def generate_monitoring_products(dataset, prdcfg):
             'savevol', prdcfg['dstype'], prdcfg['voltype'], ['nc'],
             timeinfo=dataset['timeinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         pyart.io.cfradial.write_cfradial(fname, new_dataset)
-        print('saved file: '+fname)
+        print('saved file: ' + fname)
 
         return fname
 

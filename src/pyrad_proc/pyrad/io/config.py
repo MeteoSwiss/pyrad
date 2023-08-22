@@ -18,9 +18,9 @@ Functions for reading pyrad config files
 """
 
 import os
-import re
 import numpy as np
 from warnings import warn
+
 
 def read_config(fname, cfg=None):
     """
@@ -46,7 +46,10 @@ def read_config(fname, cfg=None):
     try:
         cfgfile = open(fname, "r", encoding='utf-8', errors='ignore')
     except Exception:
-        raise Exception("ERROR: Could not find|open config file '"+fname+"'")
+        raise Exception(
+            "ERROR: Could not find|open config file '" +
+            fname +
+            "'")
 
     # if config dictionary does not exist yet create it
     if cfg is None:
@@ -67,10 +70,10 @@ def read_config(fname, cfg=None):
             # ignore comments
             if line.startswith('#'):
                 continue
-            
+
             line = line.partition('#')[0]  # Remove comments
             line = line.strip()
-            
+
             try:
                 vals = line.split()
 
@@ -90,17 +93,19 @@ def read_config(fname, cfg=None):
                 if nel > 0:
                     if isstruct:
                         pos = cfgfile.tell()
-                        fieldvalue, newpos = get_struct(cfgfile, pos, nel, fname)
+                        fieldvalue, newpos = get_struct(
+                            cfgfile, pos, nel, fname)
                         cfgfile.seek(newpos)
                     else:
                         pos = cfgfile.tell()
-                        fieldvalue, newpos = get_array(cfgfile, pos, nel, valtype)
+                        fieldvalue, newpos = get_array(
+                            cfgfile, pos, nel, valtype)
                         cfgfile.seek(newpos)
                 else:
                     fieldvalue = string_to_datatype(valtype, valuestr)
 
                 cfg.update({fieldname: fieldvalue})
-            except:
+            except BaseException:
                 if line != '':
                     warn('Parsing failed after line {:s}'.format(line))
                 raise
@@ -186,7 +191,7 @@ def string_to_datatype(dtype, strval):
         # Replace all environement variables
         return os.path.expandvars(str(strval[0]))
     else:
-        raise Exception("ERROR: Unexpected data type "+uptype)
+        raise Exception("ERROR: Unexpected data type " + uptype)
 
 
 def get_array(cfgfile, pos, nel, valtype):
@@ -306,14 +311,15 @@ def get_struct(cfgfile, pos, nels, fname):
                     cfgfile.seek(newpos)
                 else:
                     pos = cfgfile.tell()
-                    sfieldvalue, newpos = get_array(cfgfile, pos, nel, svaltype)
+                    sfieldvalue, newpos = get_array(
+                        cfgfile, pos, nel, svaltype)
                     cfgfile.seek(newpos)
             else:
                 newpos = cfgfile.tell()
                 sfieldvalue = string_to_datatype(svaltype, svaluestr)
 
             struct.update({sfieldname: sfieldvalue})
-        except:
+        except BaseException:
             if line != '':
                 warn('Parsing failed after line {:s}'.format(line))
             raise
@@ -356,7 +362,7 @@ def get_array_type(dtype):
     elif uptype == 'STRARR':
         return 'STRING'
     else:
-        raise Exception("ERROR: Unexpected data type "+uptype)
+        raise Exception("ERROR: Unexpected data type " + uptype)
 
 
 def init_array(nel, dtype):
@@ -396,4 +402,4 @@ def init_array(nel, dtype):
     elif uptype == 'STRING':
         return []
     else:
-        raise Exception("ERROR: Unexpected array data type "+uptype)
+        raise Exception("ERROR: Unexpected array data type " + uptype)

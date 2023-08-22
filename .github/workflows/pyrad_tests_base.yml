@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
          submodules: recursive
-         ref : dev
+         ref : master
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}

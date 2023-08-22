@@ -106,11 +106,11 @@ def generate_intercomp_products(dataset, prdcfg):
             ['csv'], timeinfo=dataset['timeinfo'],
             timeformat='%Y%m%d')
 
-        fname = savedir+fname[0]
+        fname = savedir + fname[0]
 
         write_colocated_data(dataset['intercomp_dict'], fname)
 
-        print('saved colocated data file: '+fname)
+        print('saved colocated data file: ' + fname)
 
         return fname
 
@@ -127,9 +127,9 @@ def generate_intercomp_products(dataset, prdcfg):
             ['csv'], timeinfo=dataset['timeinfo'],
             timeformat='%Y%m%d')
 
-        fname = savedir+fname[0]
+        fname = savedir + fname[0]
         write_colocated_data_time_avg(dataset['intercomp_dict'], fname)
-        print('saved colocated time averaged data file: '+fname)
+        print('saved colocated time averaged data file: ' + fname)
 
         return fname
 
@@ -153,10 +153,10 @@ def generate_intercomp_products(dataset, prdcfg):
             timeformat=timeformat)
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
-        titl='colocated radar gates' + ' \n ' \
+            fname_list[i] = savedir + fname
+        titl = 'colocated radar gates' + ' \n ' \
             + dataset['timeinfo'].strftime(timeformat)
-        
+
         step = prdcfg.get('step', None)
         hist_2d, bin_edges1, bin_edges2, stats = compute_2d_stats(
             np.ma.asarray(dataset['intercomp_dict']['rad1_val']),
@@ -165,25 +165,49 @@ def generate_intercomp_products(dataset, prdcfg):
         if hist_2d is None:
             return None
 
-        metadata = (
-            'npoints: '+str(stats['npoints'])+'\n' +
-            'mode bias: '+'{:.2f}'.format(float(stats['modebias']))+'\n' +
-            'median bias: '+'{:.2f}'.format(float(stats['medianbias']))+'\n' +
-            'mean bias: '+'{:.2f}'.format(float(stats['meanbias']))+'\n' +
-            'intercep slope 1: '+'{:.2f}'.format(
-                float(stats['intercep_slope_1']))+'\n' +
-            'corr: '+'{:.2f}'.format(float(stats['corr']))+'\n' +
-            'slope: '+'{:.2f}'.format(float(stats['slope']))+'\n' +
-            'intercep: '+'{:.2f}'.format(float(stats['intercep']))+'\n')
+        metadata = ('npoints: ' +
+                    str(stats['npoints']) +
+                    '\n' +
+                    'mode bias: ' +
+                    '{:.2f}'.format(float(stats['modebias'])) +
+                    '\n' +
+                    'median bias: ' +
+                    '{:.2f}'.format(float(stats['medianbias'])) +
+                    '\n' +
+                    'mean bias: ' +
+                    '{:.2f}'.format(float(stats['meanbias'])) +
+                    '\n' +
+                    'intercep slope 1: ' +
+                    '{:.2f}'.format(float(stats['intercep_slope_1'])) +
+                    '\n' +
+                    'corr: ' +
+                    '{:.2f}'.format(float(stats['corr'])) +
+                    '\n' +
+                    'slope: ' +
+                    '{:.2f}'.format(float(stats['slope'])) +
+                    '\n' +
+                    'intercep: ' +
+                    '{:.2f}'.format(float(stats['intercep'])) +
+                    '\n')
 
-        plot_scatter(bin_edges1, bin_edges2, np.ma.asarray(hist_2d), field_name,
-                     field_name, fname_list, prdcfg, titl=titl, metadata=metadata,
-                     lin_regr=[stats['slope'], stats['intercep']],
-                     lin_regr_slope1=stats['intercep_slope_1'],
-                     rad1_name=dataset['intercomp_dict']['rad1_name'],
-                     rad2_name=dataset['intercomp_dict']['rad2_name'])
+        plot_scatter(
+            bin_edges1,
+            bin_edges2,
+            np.ma.asarray(hist_2d),
+            field_name,
+            field_name,
+            fname_list,
+            prdcfg,
+            titl=titl,
+            metadata=metadata,
+            lin_regr=[
+                stats['slope'],
+                stats['intercep']],
+            lin_regr_slope1=stats['intercep_slope_1'],
+            rad1_name=dataset['intercomp_dict']['rad1_name'],
+            rad2_name=dataset['intercomp_dict']['rad2_name'])
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -222,15 +246,15 @@ def generate_intercomp_products(dataset, prdcfg):
 
         csvfname = make_filename(
             'ts', prdcfg['dstype'], prdcfg['voltype'], ['csv'],
-            prdcfginfo=rad1_name+'-'+rad2_name,
+            prdcfginfo=rad1_name + '-' + rad2_name,
             timeinfo=csvtimeinfo_file, timeformat=timeformat)[0]
 
-        csvfname = savedir+csvfname
+        csvfname = savedir + csvfname
 
         write_intercomp_scores_ts(
             dataset['timeinfo'], stats, field_name, csvfname,
             rad1_name=rad1_name, rad2_name=rad2_name)
-        print('saved CSV file: '+csvfname)
+        print('saved CSV file: ' + csvfname)
 
         (date_vec, np_vec, meanbias_vec, medianbias_vec, quant25bias_vec,
          quant75bias_vec, modebias_vec, corr_vec, slope_vec, intercep_vec,
@@ -265,7 +289,7 @@ def generate_intercomp_products(dataset, prdcfg):
                 rad1_name=rad1_name, rad2_name=rad2_name)
 
         figtimeinfo = None
-        titldate = (date_vec[0].strftime('%Y%m%d')+'-' +
+        titldate = (date_vec[0].strftime('%Y%m%d') + '-' +
                     date_vec[-1].strftime('%Y%m%d'))
         if 'add_date_in_fname' in prdcfg:
             if prdcfg['add_date_in_fname']:
@@ -274,23 +298,29 @@ def generate_intercomp_products(dataset, prdcfg):
 
         figfname_list = make_filename(
             'ts', prdcfg['dstype'], prdcfg['voltype'],
-            prdcfg['imgformat'], prdcfginfo=rad1_name+'-'+rad2_name,
+            prdcfg['imgformat'], prdcfginfo=rad1_name + '-' + rad2_name,
             timeinfo=figtimeinfo, timeformat=timeformat)
 
         for i, figfname in enumerate(figfname_list):
-            figfname_list[i] = savedir+figfname
+            figfname_list[i] = savedir + figfname
 
         np_min = prdcfg.get('npoints_min', 0)
         corr_min = prdcfg.get('corr_min', 0.)
 
-        titl = (rad1_name+'-'+rad2_name+' '+field_name+' intercomparison ' +
-                titldate)
+        titl = (
+            rad1_name +
+            '-' +
+            rad2_name +
+            ' ' +
+            field_name +
+            ' intercomparison ' +
+            titldate)
         plot_intercomp_scores_ts(
             date_vec, np_vec, meanbias_vec, medianbias_vec, quant25bias_vec,
             quant75bias_vec, modebias_vec, corr_vec, slope_vec, intercep_vec,
             intercep_slope1_vec, figfname_list, ref_value=0., np_min=np_min,
             corr_min=corr_min, labelx='Time UTC', titl=titl)
-        print('----- save to '+' '.join(figfname_list))
+        print('----- save to ' + ' '.join(figfname_list))
 
         return figfname_list
 
@@ -334,12 +364,12 @@ def generate_colocated_gates_products(dataset, prdcfg):
             'info', prdcfg['dstype'], prdcfg['prdname'], ['csv'],
             timeinfo=None)
 
-        fname = savedir+fname[0]
+        fname = savedir + fname[0]
 
         write_colocated_gates(
             dataset[prdcfg['radar']]['coloc_dict'], fname)
 
-        print('saved colocated gates file: '+fname)
+        print('saved colocated gates file: ' + fname)
 
         return fname
 

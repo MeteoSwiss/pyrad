@@ -124,7 +124,7 @@ class TimeSeries(object):
               self.time_vector[0].strftime("%Y-%m-%d %H:%M:%S"),
               file=tsfile)
         print("# End   : %s UTC" %
-              self.time_vector[self.num_el-1].strftime("%Y-%m-%d %H:%M:%S"),
+              self.time_vector[self.num_el - 1].strftime("%Y-%m-%d %H:%M:%S"),
               file=tsfile)
         print("# Header lines with comments are preceded by '#'", file=tsfile)
         for line in self.description:
@@ -146,8 +146,8 @@ class TimeSeries(object):
             if self.timeformat is None:
                 dt = self.time_vector[i]
                 daystr = dt.strftime("%d-%b-%Y")
-                secs = dt.hour*3600. + dt.minute*60. + dt.second + \
-                    dt.microsecond/1000000.
+                secs = dt.hour * 3600. + dt.minute * 60. + dt.second + \
+                    dt.microsecond / 1000000.
                 print("%s, %14.4f" % (daystr, secs), end="", file=tsfile)
             else:
                 print(self.time_vector[i].strftime(self.timeformat), end="",
@@ -206,7 +206,7 @@ class TimeSeries(object):
                 bins, values = compute_histogram(
                     ds.data[:self.num_el], get_fieldname_pyart(self.datatype),
                     step=step)
-                fname2 = fname.replace('.', '_'+ds.label+'.')
+                fname2 = fname.replace('.', '_' + ds.label + '.')
                 plot_histogram(
                     bins, values, [fname2],
                     labelx="%s [%s]" % (ds.unit_name, ds.unit),

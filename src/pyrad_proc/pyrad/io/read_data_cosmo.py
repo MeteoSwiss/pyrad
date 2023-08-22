@@ -83,11 +83,11 @@ def cosmo2radar_data(radar, cosmo_coord, cosmo_data, time_index=0,
     cosmo_fields = []
     for field in field_names:
         if field not in cosmo_data:
-            warn('COSMO field '+field+' data not available')
+            warn('COSMO field ' + field + ' data not available')
         else:
             values = cosmo_data[field]['data'][
-                time_index, ind_zmin:ind_zmax+1, ind_ymin:ind_ymax+1,
-                ind_xmin:ind_xmax+1].flatten()
+                time_index, ind_zmin:ind_zmax + 1, ind_ymin:ind_ymax + 1,
+                ind_xmin:ind_xmax + 1].flatten()
             # find interpolation function
             tree_options = {
                 'compact_nodes': False,
@@ -170,13 +170,19 @@ def cosmo2radar_coord(radar, cosmo_coord, slice_xy=True, slice_z=False,
     nx_cosmo = len(cosmo_coord['x']['data'])
     ny_cosmo = len(cosmo_coord['y']['data'])
 
-    nx = ind_xmax-ind_xmin+1
-    ny = ind_ymax-ind_ymin+1
+    nx = ind_xmax - ind_xmin + 1
+    ny = ind_ymax - ind_ymin + 1
 
-    ind_z = (ind_vec/(nx*ny)).astype(int)+ind_zmin
-    ind_y = ((ind_vec-nx*ny*ind_z)/nx).astype(int)+ind_ymin
-    ind_x = ((ind_vec-nx*ny*ind_z) % nx).astype(int)+ind_xmin
-    ind_cosmo = (ind_x+nx_cosmo*ind_y+nx_cosmo*ny_cosmo*ind_z).astype(int)
+    ind_z = (ind_vec / (nx * ny)).astype(int) + ind_zmin
+    ind_y = ((ind_vec - nx * ny * ind_z) / nx).astype(int) + ind_ymin
+    ind_x = ((ind_vec - nx * ny * ind_z) % nx).astype(int) + ind_xmin
+    ind_cosmo = (
+        ind_x +
+        nx_cosmo *
+        ind_y +
+        nx_cosmo *
+        ny_cosmo *
+        ind_z).astype(int)
 
     cosmo_ind_field = get_metadata(field_name)
     cosmo_ind_field['data'] = ind_cosmo.reshape(radar.nrays, radar.ngates)
@@ -215,7 +221,7 @@ def get_cosmo_fields(cosmo_data, cosmo_ind, time_index=0,
     cosmo_fields = []
     for field in field_names:
         if field not in cosmo_data:
-            warn('COSMO field '+field+' data not available')
+            warn('COSMO field ' + field + ' data not available')
         else:
             values = cosmo_data[field]['data'][time_index, :, :, :].flatten()
 
@@ -266,7 +272,7 @@ def read_cosmo_data(fname, field_names=['temperature'], celsius=True):
     for field in field_names:
         cosmo_name = get_fieldname_cosmo(field)
         if cosmo_name not in ncvars:
-            warn(field+' data not present in COSMO file '+fname)
+            warn(field + ' data not present in COSMO file ' + fname)
         else:
             var_data = _ncvar_to_dict(ncvars[cosmo_name], dtype='float16')
 
@@ -284,7 +290,7 @@ def read_cosmo_data(fname, field_names=['temperature'], celsius=True):
             found = True
             del var_data
     if not found:
-        warn('No field available in COSMO file '+fname)
+        warn('No field available in COSMO file ' + fname)
         ncobj.close()
         return None
 
@@ -370,7 +376,7 @@ def read_cosmo_coord(fname, zmin=None):
 
         return cosmo_coord
     except EnvironmentError:
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None
 
 
@@ -437,7 +443,7 @@ def _prepare_for_interpolation(x_radar, y_radar, z_radar, cosmo_coord,
 
         ind_xmax = np.where(cosmo_coord['x']['data'] > xmax)[0]
         if ind_xmax.size == 0:
-            ind_xmax = nx_cosmo-1
+            ind_xmax = nx_cosmo - 1
         else:
             ind_xmax = ind_xmax[0]
 
@@ -449,14 +455,14 @@ def _prepare_for_interpolation(x_radar, y_radar, z_radar, cosmo_coord,
 
         ind_ymax = np.where(cosmo_coord['y']['data'] > ymax)[0]
         if ind_ymax.size == 0:
-            ind_ymax = ny_cosmo-1
+            ind_ymax = ny_cosmo - 1
         else:
             ind_ymax = ind_ymax[0]
     else:
         ind_xmin = 0
-        ind_xmax = nx_cosmo-1
+        ind_xmax = nx_cosmo - 1
         ind_ymin = 0
-        ind_ymax = ny_cosmo-1
+        ind_ymax = ny_cosmo - 1
 
     if slice_z:
         zmin = np.min(z_radar)
@@ -469,21 +475,21 @@ def _prepare_for_interpolation(x_radar, y_radar, z_radar, cosmo_coord,
             ind_zmin = np.min(ind_z)
         ind_z, _, _ = np.where(cosmo_coord['hfl']['data'] > zmax)
         if ind_z.size == 0:
-            ind_zmax = nz_cosmo-1
+            ind_zmax = nz_cosmo - 1
         else:
             ind_zmax = np.max(ind_z)
     else:
         ind_zmin = 0
-        ind_zmax = nz_cosmo-1
+        ind_zmax = nz_cosmo - 1
 
-    nx = ind_xmax-ind_xmin+1
-    ny = ind_ymax-ind_ymin+1
-    nz = ind_zmax-ind_zmin+1
+    nx = ind_xmax - ind_xmin + 1
+    ny = ind_ymax - ind_ymin + 1
+    nz = ind_zmax - ind_zmin + 1
 
-    x_cosmo = cosmo_coord['x']['data'][ind_xmin:ind_xmax+1]
-    y_cosmo = cosmo_coord['y']['data'][ind_ymin:ind_ymax+1]
+    x_cosmo = cosmo_coord['x']['data'][ind_xmin:ind_xmax + 1]
+    y_cosmo = cosmo_coord['y']['data'][ind_ymin:ind_ymax + 1]
     z_cosmo = cosmo_coord['hfl']['data'][
-        ind_zmin:ind_zmax+1, ind_ymin:ind_ymax+1, ind_xmin:ind_xmax+1]
+        ind_zmin:ind_zmax + 1, ind_ymin:ind_ymax + 1, ind_xmin:ind_xmax + 1]
 
     x_cosmo = (
         np.broadcast_to(x_cosmo.reshape(1, 1, nx), (nz, ny, nx))).flatten()
@@ -515,8 +521,8 @@ def _put_radar_in_swiss_coord(radar):
         radar.longitude['data'][0], radar.latitude['data'][0],
         radar.altitude['data'][0], no_altitude_transform=True)
 
-    x_radar = radar.gate_x['data']+x0
-    y_radar = radar.gate_y['data']+y0
+    x_radar = radar.gate_x['data'] + x0
+    y_radar = radar.gate_y['data'] + y0
     z_radar = radar.gate_altitude['data']
 
     return x_radar, y_radar, z_radar

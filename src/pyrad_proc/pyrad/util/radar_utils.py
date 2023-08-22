@@ -40,7 +40,7 @@ Miscellaneous functions dealing with radar data
     quantize_field
     compute_profile_stats
     project_to_vertical
-
+    compute_average_vad
 """
 from warnings import warn
 from copy import deepcopy
@@ -153,7 +153,7 @@ def get_data_along_rng(radar, field_name, fix_elevations, fix_azimuths,
             ind_sweep = find_ang_index(
                 radar.fixed_angle['data'], ele, ang_tol=ang_tol)
             if ind_sweep is None:
-                warn('No elevation angle found for fix_elevation '+str(ele))
+                warn('No elevation angle found for fix_elevation ' + str(ele))
                 continue
             new_dataset = radar.extract_sweeps([ind_sweep])
 
@@ -161,8 +161,8 @@ def get_data_along_rng(radar, field_name, fix_elevations, fix_azimuths,
                 dataset_line = pyart.util.cross_section_ppi(
                     new_dataset, [azi], az_tol=ang_tol)
             except EnvironmentError:
-                warn(' No data found at azimuth '+str(azi) +
-                     ' and elevation '+str(ele))
+                warn(' No data found at azimuth ' + str(azi) +
+                     ' and elevation ' + str(ele))
                 continue
             if not use_altitude:
                 rng_mask = np.logical_and(
@@ -190,7 +190,7 @@ def get_data_along_rng(radar, field_name, fix_elevations, fix_azimuths,
         ind_sweep = find_ang_index(
             radar.fixed_angle['data'], azi, ang_tol=ang_tol)
         if ind_sweep is None:
-            warn('No azimuth angle found for fix_azimuth '+str(azi))
+            warn('No azimuth angle found for fix_azimuth ' + str(azi))
             continue
         new_dataset = radar.extract_sweeps([ind_sweep])
 
@@ -198,8 +198,8 @@ def get_data_along_rng(radar, field_name, fix_elevations, fix_azimuths,
             dataset_line = pyart.util.cross_section_rhi(
                 new_dataset, [ele], el_tol=ang_tol)
         except EnvironmentError:
-            warn(' No data found at azimuth '+str(azi) +
-                 ' and elevation '+str(ele))
+            warn(' No data found at azimuth ' + str(azi) +
+                 ' and elevation ' + str(ele))
             continue
         if not use_altitude:
             rng_mask = np.logical_and(
@@ -263,7 +263,7 @@ def get_data_along_azi(radar, field_name, fix_ranges, fix_elevations,
     for rng, ele in zip(fix_ranges, fix_elevations):
         ind_rng = find_rng_index(radar.range['data'], rng, rng_tol=rng_tol)
         if ind_rng is None:
-            warn('No range gate found for fix_range '+str(rng))
+            warn('No range gate found for fix_range ' + str(rng))
             continue
 
         if radar.scan_type == 'ppi':
@@ -280,8 +280,8 @@ def get_data_along_azi(radar, field_name, fix_ranges, fix_elevations,
                     radar, [ele], el_tol=ang_tol)
             except EnvironmentError:
                 warn(
-                    ' No data found at range '+str(rng) +
-                    ' and elevation '+str(ele))
+                    ' No data found at range ' + str(rng) +
+                    ' and elevation ' + str(ele))
                 continue
         if azi_start < azi_stop:
             azi_mask = np.logical_and(
@@ -343,7 +343,7 @@ def get_data_along_ele(radar, field_name, fix_ranges, fix_azimuths,
     for rng, azi in zip(fix_ranges, fix_azimuths):
         ind_rng = find_rng_index(radar.range['data'], rng, rng_tol=rng_tol)
         if ind_rng is None:
-            warn('No range gate found for fix_range '+str(rng))
+            warn('No range gate found for fix_range ' + str(rng))
             continue
 
         if radar.scan_type == 'ppi':
@@ -352,14 +352,14 @@ def get_data_along_ele(radar, field_name, fix_ranges, fix_azimuths,
                     radar, [azi], az_tol=ang_tol)
             except EnvironmentError:
                 warn(
-                    ' No data found at range '+str(rng) +
-                    ' and elevation '+str(azi))
+                    ' No data found at range ' + str(rng) +
+                    ' and elevation ' + str(azi))
                 continue
         else:
             ind_sweep = find_ang_index(
                 radar.fixed_angle['data'], azi, ang_tol=ang_tol)
             if ind_sweep is None:
-                warn('No azimuth angle found for fix_azimuth '+str(azi))
+                warn('No azimuth angle found for fix_azimuth ' + str(azi))
                 continue
             new_dataset = radar.extract_sweeps([ind_sweep])
 
@@ -471,8 +471,8 @@ def rainfall_accumulation(t_in_vec, val_in_vec, cum_time=3600.,
         t_in_vec, val_in_vec, avg_time=cum_time, base_time=base_time,
         method='sum', dropnan=dropnan)
 
-    t_sample = cum_time/np_vec  # find accumulation time of each sample
-    val_out_vec *= (t_sample/3600.)  # conversion to mm in cum_time period
+    t_sample = cum_time / np_vec  # find accumulation time of each sample
+    val_out_vec *= (t_sample / 3600.)  # conversion to mm in cum_time period
 
     val_out_vec = np.ma.asarray(val_out_vec)
     val_out_vec[np.isnan(val_out_vec)] = np.ma.masked
@@ -515,8 +515,8 @@ def time_series_statistics(t_in_vec, val_in_vec, avg_time=3600,
 
     df_in = pd.DataFrame(data=val_in_vec, index=pd.DatetimeIndex(t_in_vec))
     df_out = getattr(df_in.resample(
-        str(avg_time)+'S', closed='right', label='right', base=base_time),
-                     method)()
+        str(avg_time) + 'S', closed='right', label='right', base=base_time),
+        method)()
     if dropnan is True:
         df_out = df_out.dropna(how='any')
     t_out_vec = df_out.index.to_pydatetime()
@@ -554,20 +554,20 @@ def find_contiguous_times(times, step=600):
         else:
             run = [time]
             periods.append(run)
-        expect = time+datetime.timedelta(seconds=step)
+        expect = time + datetime.timedelta(seconds=step)
 
     if not periods:
         periods = [times]
     elif periods[0][0] != times[0]:
         periods.insert(0, [times[0]])
 
-    print('number of consecutive periods: '+str(len(periods)))
+    print('number of consecutive periods: ' + str(len(periods)))
 
     start_times = np.array([], dtype=datetime.datetime)
     end_times = np.array([], dtype=datetime.datetime)
     for period in periods:
         start_times = np.append(
-            start_times, period[0]-datetime.timedelta(seconds=step))
+            start_times, period[0] - datetime.timedelta(seconds=step))
         end_times = np.append(end_times, period[-1])
 
     return start_times, end_times
@@ -637,9 +637,9 @@ def get_range_bins_to_avg(rad1_rng, rad2_rng):
         the limits to the average (centered on each range gate)
 
     """
-    rad1_res = rad1_rng[1]-rad1_rng[0]
-    rad2_res = rad2_rng[1]-rad2_rng[0]
-    res_ratio = rad1_res/rad2_res
+    rad1_res = rad1_rng[1] - rad1_rng[0]
+    rad2_res = rad2_rng[1] - rad2_rng[0]
+    res_ratio = rad1_res / rad2_res
 
     avg_rad1 = False
     avg_rad2 = False
@@ -648,16 +648,16 @@ def get_range_bins_to_avg(rad1_rng, rad2_rng):
         avg_rad2 = True
         nbins = int(res_ratio)
         if nbins % 2 == 0:
-            avg_rad_lim = [-int(nbins/2)-1, int(nbins/2)]
+            avg_rad_lim = [-int(nbins / 2) - 1, int(nbins / 2)]
         else:
-            avg_rad_lim = [-int((nbins-1)/2), int((nbins-1)/2)]
-    elif res_ratio < 1./1.5:
+            avg_rad_lim = [-int((nbins - 1) / 2), int((nbins - 1) / 2)]
+    elif res_ratio < 1. / 1.5:
         avg_rad1 = True
-        nbins = int(1./res_ratio)
+        nbins = int(1. / res_ratio)
         if nbins % 2 == 0:
-            avg_rad_lim = [-int(nbins/2)-1, int(nbins/2)]
+            avg_rad_lim = [-int(nbins / 2) - 1, int(nbins / 2)]
         else:
-            avg_rad_lim = [-int((nbins-1)/2), int((nbins-1)/2)]
+            avg_rad_lim = [-int((nbins - 1) / 2), int((nbins - 1) / 2)]
 
     return avg_rad1, avg_rad2, avg_rad_lim
 
@@ -759,7 +759,7 @@ def belongs_roi_indices(lat, lon, roi, use_latlon=True):
                 inds.extend(ind)
         nroi = len(lat[inds])
         npoint = len(lat_list)
-        warn(str(nroi)+' points out of '+str(npoint) +
+        warn(str(nroi) + ' points out of ' + str(npoint) +
              ' in the region of interest')
         is_roi = 'Some'
 
@@ -790,8 +790,8 @@ def find_ray_index(ele_vec, azi_vec, ele, azi, ele_tol=0., azi_tol=0.,
 
     """
     ind_ray = np.where(np.logical_and(
-        np.logical_and(ele_vec <= ele+ele_tol, ele_vec >= ele-ele_tol),
-        np.logical_and(azi_vec <= azi+azi_tol, azi_vec >= azi-azi_tol)))[0]
+        np.logical_and(ele_vec <= ele + ele_tol, ele_vec >= ele - ele_tol),
+        np.logical_and(azi_vec <= azi + azi_tol, azi_vec >= azi - azi_tol)))[0]
 
     if ind_ray.size == 0:
         return None
@@ -799,9 +799,9 @@ def find_ray_index(ele_vec, azi_vec, ele, azi, ele_tol=0., azi_tol=0.,
         return ind_ray[0]
 
     if nearest == 'azi':
-        ind_min = np.argmin(np.abs(azi_vec[ind_ray]-azi))
+        ind_min = np.argmin(np.abs(azi_vec[ind_ray] - azi))
     else:
-        ind_min = np.argmin(np.abs(ele_vec[ind_ray]-ele))
+        ind_min = np.argmin(np.abs(ele_vec[ind_ray] - ele))
 
     return ind_ray[ind_min]
 
@@ -825,7 +825,7 @@ def find_rng_index(rng_vec, rng, rng_tol=0.):
         The range index
 
     """
-    dist = np.abs(rng_vec-rng)
+    dist = np.abs(rng_vec - rng)
     ind_rng = np.argmin(dist)
     if dist[ind_rng] > rng_tol:
         return None
@@ -852,7 +852,7 @@ def find_ang_index(ang_vec, ang, ang_tol=0.):
         The angle index
 
     """
-    dist = np.abs(ang_vec-ang)
+    dist = np.abs(ang_vec - ang)
     ind_ang = np.argmin(dist)
     if dist[ind_ang] > ang_tol:
         return None
@@ -884,22 +884,22 @@ def find_nearest_gate(radar, lat, lon, latlon_tol=0.0005):
     # find gates close to lat lon point
     inds_ray_aux, inds_rng_aux = np.where(np.logical_and(
         np.logical_and(
-            radar.gate_latitude['data'] < lat+latlon_tol,
-            radar.gate_latitude['data'] > lat-latlon_tol),
+            radar.gate_latitude['data'] < lat + latlon_tol,
+            radar.gate_latitude['data'] > lat - latlon_tol),
         np.logical_and(
-            radar.gate_longitude['data'] < lon+latlon_tol,
-            radar.gate_longitude['data'] > lon-latlon_tol)))
+            radar.gate_longitude['data'] < lon + latlon_tol,
+            radar.gate_longitude['data'] > lon - latlon_tol)))
 
     if inds_ray_aux.size == 0:
-        warn('No data found at point lat '+str(lat)+' +- ' +
-             str(latlon_tol)+' lon '+str(lon)+' +- ' +
-             str(latlon_tol)+' deg')
+        warn('No data found at point lat ' + str(lat) + ' +- ' +
+             str(latlon_tol) + ' lon ' + str(lon) + ' +- ' +
+             str(latlon_tol) + ' deg')
 
         return None, None, None, None
 
     # find closest latitude
     ind_min = np.argmin(np.abs(
-        radar.gate_latitude['data'][inds_ray_aux, inds_rng_aux]-lat))
+        radar.gate_latitude['data'][inds_ray_aux, inds_rng_aux] - lat))
     ind_ray = inds_ray_aux[ind_min]
     ind_rng = inds_rng_aux[ind_min]
 
@@ -1040,17 +1040,17 @@ def get_closest_solar_flux(hit_datetime_list, flux_datetime_list,
     i = 0
     for hit_dt in hit_datetime_list:
         flux_datetime_closest = min(
-            flux_datetime_list, key=lambda x: abs(x-hit_dt))
+            flux_datetime_list, key=lambda x: abs(x - hit_dt))
         flux_datetime_closest_list.append(flux_datetime_closest)
 
         # solar flux observation within 24h of sun hit
-        time_diff = abs(flux_datetime_closest-hit_dt).total_seconds()
+        time_diff = abs(flux_datetime_closest - hit_dt).total_seconds()
         if time_diff < 86400.:
             ind = flux_datetime_list.index(flux_datetime_closest)
             flux_value_closest_list[i] = flux_value_list[ind]
         else:
             warn('Nearest solar flux observation further than ' +
-                 str(time_diff)+' s in time')
+                 str(time_diff) + ' s in time')
         i += 1
 
     return flux_datetime_closest_list, flux_value_closest_list
@@ -1088,7 +1088,7 @@ def get_fixed_rng_data(radar, field_names, fixed_rng, rng_tol=50.,
         radar_aux.range['data'], fixed_rng, rng_tol=rng_tol)
 
     if ind_rng is None:
-        warn('No range bin at range '+str(fixed_rng)+' with tolerance ' +
+        warn('No range bin at range ' + str(fixed_rng) + ' with tolerance ' +
              str(rng_tol))
         return None, None, None
 
@@ -1118,7 +1118,7 @@ def get_fixed_rng_data(radar, field_names, fixed_rng, rng_tol=50.,
         ele_vec = ele_vec[
             np.logical_and(ele_vec >= ele_min, ele_vec <= ele_max)]
         if ele_vec is None:
-            warn('No elevation angles between '+str(ele_min)+' and ' +
+            warn('No elevation angles between ' + str(ele_min) + ' and ' +
                  str(ele_max))
             return None, None, None
 
@@ -1152,7 +1152,7 @@ def get_fixed_rng_data(radar, field_names, fixed_rng, rng_tol=50.,
                 np.sort(azi_vec[azi_vec >= azi_min]),
                 np.sort(azi_vec[azi_vec < azi_min]))
         if azi_vec is None:
-            warn('No azimuth angles between '+str(azi_min)+' and ' +
+            warn('No azimuth angles between ' + str(azi_min) + ' and ' +
                  str(azi_max))
             return None, None, None
 
@@ -1183,15 +1183,15 @@ def get_fixed_rng_data(radar, field_names, fixed_rng, rng_tol=50.,
             radar_aux.sweep_start_ray_index['data'][j] = 0
         else:
             radar_aux.sweep_start_ray_index['data'][j] = int(
-                radar_aux.sweep_end_ray_index['data'][j-1]+1)
+                radar_aux.sweep_end_ray_index['data'][j - 1] + 1)
         radar_aux.sweep_end_ray_index['data'][j] = (
-            radar_aux.sweep_start_ray_index['data'][j]+rays_in_sweep-1)
+            radar_aux.sweep_start_ray_index['data'][j] + rays_in_sweep - 1)
         nrays += rays_in_sweep
 
     # Get new fields
     for field_name in field_names:
         if field_name not in radar_aux.fields:
-            warn('Field '+field_name+' not available')
+            warn('Field ' + field_name + ' not available')
             continue
         radar_aux.fields[field_name]['data'] = (
             radar_aux.fields[field_name]['data'][:, ind_rng])
@@ -1250,15 +1250,15 @@ def create_sun_hits_field(rad_el, rad_az, sun_el, sun_az, data, imgcfg):
     sun_az = sun_az[~mask]
     data = data[~mask]
 
-    d_el = rad_el-sun_el
-    d_az = (rad_az-sun_az)*np.cos(sun_el*np.pi/180.)
+    d_el = rad_el - sun_el
+    d_az = (rad_az - sun_az) * np.cos(sun_el * np.pi / 180.)
 
-    npix_az = int((azmax-azmin)/azres)
-    npix_el = int((elmax-elmin)/elres)
+    npix_az = int((azmax - azmin) / azres)
+    npix_el = int((elmax - elmin) / elres)
     field = np.ma.masked_all((npix_az, npix_el))
 
-    ind_az = ((d_az+azmin)/azres).astype(int)
-    ind_el = ((d_el+elmin)/elres).astype(int)
+    ind_az = ((d_az + azmin) / azres).astype(int)
+    ind_el = ((d_el + elmin) / elres).astype(int)
 
     field[ind_az, ind_el] = data
 
@@ -1290,22 +1290,32 @@ def create_sun_retrieval_field(par, field_name, imgcfg, lant=0.):
     azres = imgcfg['azres']
     elres = imgcfg['elres']
 
-    npix_az = int((azmax-azmin)/azres)
-    npix_el = int((elmax-elmin)/elres)
+    npix_az = int((azmax - azmin) / azres)
+    npix_el = int((elmax - elmin) / elres)
 
     field = np.ma.masked_all((npix_az, npix_el))
 
-    d_az = np.array(np.array(range(npix_az))*azres+azmin)
-    d_el = np.array(np.array(range(npix_el))*elres+elmin)
+    d_az = np.array(np.array(range(npix_az)) * azres + azmin)
+    d_el = np.array(np.array(range(npix_el)) * elres + elmin)
 
     d_az_mat = np.broadcast_to(d_az.reshape(npix_az, 1), (npix_az, npix_el))
     d_el_mat = np.broadcast_to(d_el.reshape(1, npix_el), (npix_az, npix_el))
 
-    field = (par[0]+par[1]*d_az_mat+par[2]*d_el_mat+par[3]*d_az_mat*d_az_mat +
-             par[4]*d_el_mat*d_el_mat)
+    field = (
+        par[0] +
+        par[1] *
+        d_az_mat +
+        par[2] *
+        d_el_mat +
+        par[3] *
+        d_az_mat *
+        d_az_mat +
+        par[4] *
+        d_el_mat *
+        d_el_mat)
     if field_name in ('sun_est_power_h', 'sun_est_power_v'):
         # account for polarization of the antenna and scanning losses
-        field += 3.+lant
+        field += 3. + lant
 
     return field
 
@@ -1386,10 +1396,10 @@ def compute_quantiles_from_hist(bin_centers, hist, quantiles=None):
     if np_t < 10:
         return quantiles, values
 
-    freq = hist/np_t
+    freq = hist / np_t
     rel_freq = np.ma.cumsum(freq)
 
-    percentiles = quantiles/100.
+    percentiles = quantiles / 100.
     for i in range(nquantiles):
         values[i] = bin_centers[rel_freq >= percentiles[i]][0]
 
@@ -1424,7 +1434,7 @@ def compute_quantiles_sweep(field, ray_start, ray_end, quantiles=None):
     nquantiles = len(quantiles)
     values = np.ma.masked_all(nquantiles)
 
-    data_valid = field[ray_start:ray_end+1, :].compressed()
+    data_valid = field[ray_start:ray_end + 1, :].compressed()
     if np.size(data_valid) < 10:
         warn('Unable to compute quantiles. Not enough valid data')
         return quantiles, values
@@ -1471,13 +1481,13 @@ def compute_histogram(field, field_name, bin_edges=None, step=None,
             if vmax is None:
                 vmax = np.ma.max(field)
             if step is None:
-                step = (vmax-vmin)/100.
-            bin_edges = np.arange(vmin, vmax+step, step)
+                step = (vmax - vmin) / 100.
+            bin_edges = np.arange(vmin, vmax + step, step)
 
-    step_left = bin_edges[1]-bin_edges[0]
-    step_right = bin_edges[-1]-bin_edges[-2]
-    bin_center_left = bin_edges[0]+step_left/2.
-    bin_center_right = bin_edges[-1]-step_right/2.
+    step_left = bin_edges[1] - bin_edges[0]
+    step_right = bin_edges[-1] - bin_edges[-2]
+    bin_center_left = bin_edges[0] + step_left / 2.
+    bin_center_right = bin_edges[-1] - step_right / 2.
     values = np.ma.array(field).compressed()
     values[values < bin_center_left] = bin_center_left
     values[values > bin_center_right] = bin_center_right
@@ -1513,9 +1523,9 @@ def compute_histogram_sweep(field, ray_start, ray_end, field_name, step=None,
     """
     bin_edges = get_histogram_bins(
         field_name, step=step, vmin=vmin, vmax=vmax)
-    step_aux = bin_edges[1]-bin_edges[0]
-    bin_centers = bin_edges[:-1]+step_aux/2.
-    values = field[ray_start:ray_end+1, :].compressed()
+    step_aux = bin_edges[1] - bin_edges[0]
+    bin_centers = bin_edges[:-1] + step_aux / 2.
+    values = field[ray_start:ray_end + 1, :].compressed()
     values[values < bin_centers[0]] = bin_centers[0]
     values[values > bin_centers[-1]] = bin_centers[-1]
 
@@ -1553,11 +1563,11 @@ def get_histogram_bins(field_name, step=None, vmin=None, vmax=None):
         vmax = vmax_aux
 
     if step is None:
-        step = (vmax-vmin)/50.
-        warn('No step has been defined. Default '+str(step)+' will be used')
+        step = (vmax - vmin) / 50.
+        warn('No step has been defined. Default ' + str(step) + ' will be used')
 
     return np.linspace(
-        vmin-step/2., vmax+step/2., num=int((vmax-vmin)/step)+2)
+        vmin - step / 2., vmax + step / 2., num=int((vmax - vmin) / step) + 2)
 
 
 def compute_2d_stats(field1, field2, field_name1, field_name2, step1=None,
@@ -1602,22 +1612,22 @@ def compute_2d_stats(field1, field2, field_name1, field_name2, step1=None,
 
     hist_2d, bin_edges1, bin_edges2 = compute_2d_hist(
         field1, field2, field_name1, field_name2, step1=step1, step2=step2)
-    step_aux1 = bin_edges1[1]-bin_edges1[0]
-    bin_centers1 = bin_edges1[:-1]+step_aux1/2.
-    step_aux2 = bin_edges2[1]-bin_edges2[0]
-    bin_centers2 = bin_edges2[:-1]+step_aux2/2.
+    step_aux1 = bin_edges1[1] - bin_edges1[0]
+    bin_centers1 = bin_edges1[:-1] + step_aux1 / 2.
+    step_aux2 = bin_edges2[1] - bin_edges2[0]
+    bin_centers2 = bin_edges2[:-1] + step_aux2 / 2.
     npoints = len(field1)
-    meanbias = 10.*np.ma.log10(
-        np.ma.mean(np.ma.power(10., 0.1*field2)) /
-        np.ma.mean(np.ma.power(10., 0.1*field1)))
-    medianbias = np.ma.median(field2-field1)
-    quant25bias = np.percentile((field2-field1).compressed(), 25.)
-    quant75bias = np.percentile((field2-field1).compressed(), 75.)
+    meanbias = 10. * np.ma.log10(
+        np.ma.mean(np.ma.power(10., 0.1 * field2)) /
+        np.ma.mean(np.ma.power(10., 0.1 * field1)))
+    medianbias = np.ma.median(field2 - field1)
+    quant25bias = np.percentile((field2 - field1).compressed(), 25.)
+    quant75bias = np.percentile((field2 - field1).compressed(), 75.)
     ind_max_val1, ind_max_val2 = np.where(hist_2d == np.ma.amax(hist_2d))
-    modebias = bin_centers2[ind_max_val2[0]]-bin_centers1[ind_max_val1[0]]
+    modebias = bin_centers2[ind_max_val2[0]] - bin_centers1[ind_max_val1[0]]
     slope, intercep, corr, _, _ = scipy.stats.linregress(
         field1, y=field2)
-    intercep_slope_1 = np.ma.mean(field2-field1)
+    intercep_slope_1 = np.ma.mean(field2 - field1)
 
     stats = {
         'npoints': npoints,
@@ -1664,11 +1674,11 @@ def compute_1d_stats(field1, field2):
     npoints = len(field1)
     mean1 = np.ma.mean(field1)
     mean2 = np.ma.mean(field2)
-    nb = mean2/mean1-1
+    nb = mean2 / mean1 - 1
     _, _, corr, _, _ = scipy.stats.linregress(field1, y=field2)
-    rms = np.ma.sqrt(np.ma.sum(np.ma.power(field2-field1, 2.))/npoints)
-    nash = (1.-np.ma.sum(np.ma.power(field2-field1, 2.)) /
-            np.ma.sum(np.ma.power(field1-mean1, 2.)))
+    rms = np.ma.sqrt(np.ma.sum(np.ma.power(field2 - field1, 2.)) / npoints)
+    nash = (1. - np.ma.sum(np.ma.power(field2 - field1, 2.)) /
+            np.ma.sum(np.ma.power(field1 - mean1, 2.)))
 
     stats = {
         'npoints': npoints,
@@ -1704,11 +1714,11 @@ def compute_2d_hist(field1, field2, field_name1, field_name2, step1=None,
 
     """
     bin_edges1 = get_histogram_bins(field_name1, step=step1)
-    step_aux1 = bin_edges1[1]-bin_edges1[0]
-    bin_centers1 = bin_edges1[:-1]+step_aux1/2.
+    step_aux1 = bin_edges1[1] - bin_edges1[0]
+    bin_centers1 = bin_edges1[:-1] + step_aux1 / 2.
     bin_edges2 = get_histogram_bins(field_name2, step=step2)
-    step_aux2 = bin_edges2[1]-bin_edges2[0]
-    bin_centers2 = bin_edges2[:-1]+step_aux2/2.
+    step_aux2 = bin_edges2[1] - bin_edges2[0]
+    bin_centers2 = bin_edges2[:-1] + step_aux2 / 2.
 
     field1[field1 < bin_centers1[0]] = bin_centers1[0]
     field1[field1 > bin_centers1[-1]] = bin_centers1[-1]
@@ -1752,7 +1762,7 @@ def quantize_field(field, field_name, step, vmin=None, vmax=None):
         vmax = vmax_aux
     field[field < vmin] = vmin
     field[field > vmax] = vmax
-    fieldq = ((field+vmin)/step+1).astype(int)
+    fieldq = ((field + vmin) / step + 1).astype(int)
 
     return fieldq.filled(fill_value=0)
 
@@ -1822,7 +1832,7 @@ def compute_profile_stats(field, gate_altitude, h_vec, h_res,
     val_valid = np.zeros(nh, dtype=int)
     for i, h in enumerate(h_vec):
         data = field[np.logical_and(
-            gate_altitude >= h-h_res/2., gate_altitude < h+h_res/2.)]
+            gate_altitude >= h - h_res / 2., gate_altitude < h + h_res / 2.)]
         if include_nans:
             data[np.ma.getmaskarray(data)] = 0.
         if data.size == 0:
@@ -1832,10 +1842,10 @@ def compute_profile_stats(field, gate_altitude, h_vec, h_res,
             nvalid = np.count_nonzero(np.logical_not(mask))
             if nvalid >= nvalid_min:
                 if make_linear:
-                    data = np.ma.power(10., 0.1*data)
-                    vals[i, 0] = 10.*np.ma.log10(np.ma.mean(data))
-                    vals[i, 1] = 10.*np.ma.log10(np.ma.min(data))
-                    vals[i, 2] = 10.*np.ma.log10(np.ma.max(data))
+                    data = np.ma.power(10., 0.1 * data)
+                    vals[i, 0] = 10. * np.ma.log10(np.ma.mean(data))
+                    vals[i, 1] = 10. * np.ma.log10(np.ma.min(data))
+                    vals[i, 2] = 10. * np.ma.log10(np.ma.max(data))
                 else:
                     vals[i, 0] = np.ma.mean(data)
                     vals[i, 1] = np.ma.min(data)
@@ -1855,7 +1865,7 @@ def compute_profile_stats(field, gate_altitude, h_vec, h_res,
                 mode, count = scipy.stats.mode(
                     data, axis=None, nan_policy='omit')
                 vals[i, 0] = mode
-                vals[i, 1] = count/nvalid*100.
+                vals[i, 1] = count / nvalid * 100.
 
                 # get second most common
                 data = np.ma.masked_where(data == mode, data).compressed()
@@ -1864,7 +1874,7 @@ def compute_profile_stats(field, gate_altitude, h_vec, h_res,
                 mode, count = scipy.stats.mode(
                     data, axis=None, nan_policy='omit')
                 vals[i, 2] = mode
-                vals[i, 3] = count/nvalid*100.
+                vals[i, 3] = count / nvalid * 100.
 
                 # get third most common
                 data = np.ma.masked_where(data == mode, data).compressed()
@@ -1873,25 +1883,25 @@ def compute_profile_stats(field, gate_altitude, h_vec, h_res,
                 mode, count = scipy.stats.mode(
                     data, axis=None, nan_policy='omit')
                 vals[i, 4] = mode
-                vals[i, 5] = count/nvalid*100.
+                vals[i, 5] = count / nvalid * 100.
         elif quantity == 'regression_mean':
             if std_field is None or np_field is None:
                 warn('Unable to compute regression mean')
                 return None, None
             data_std = std_field[np.logical_and(
-                gate_altitude >= h-h_res/2., gate_altitude < h+h_res/2.)]
+                gate_altitude >= h - h_res / 2., gate_altitude < h + h_res / 2.)]
             data_np = np_field[np.logical_and(
-                gate_altitude >= h-h_res/2., gate_altitude < h+h_res/2.)]
+                gate_altitude >= h - h_res / 2., gate_altitude < h + h_res / 2.)]
 
             val_valid[i] = np.sum(data_np)
             if val_valid[i] == 0.:
                 continue
 
             data_var = np.ma.power(data_std, 2.)
-            weights = (data_np-1)/(data_var+0.01)
-            vals[i, 0] = np.ma.sum(weights*data)/np.ma.sum(weights)
+            weights = (data_np - 1) / (data_var + 0.01)
+            vals[i, 0] = np.ma.sum(weights * data) / np.ma.sum(weights)
             vals[i, 1] = np.ma.sqrt(
-                np.ma.sum((data_np-1)*data_var)/np.ma.sum(data_np-1))
+                np.ma.sum((data_np - 1) * data_var) / np.ma.sum(data_np - 1))
         else:
             _, quants, nvalid = quantiles_weighted(
                 data, quantiles=quantiles)
@@ -1932,10 +1942,10 @@ def project_to_vertical(data_in, data_height, grid_height, interp_kind='none',
         return data_out
 
     if interp_kind == 'none':
-        hres = grid_height[1]-grid_height[0]
+        hres = grid_height[1] - grid_height[0]
         data_out = np.ma.masked_all(grid_height.size)
         for ind_r, h in enumerate(grid_height):
-            ind_h = find_rng_index(data_height, h, rng_tol=hres/2.)
+            ind_h = find_rng_index(data_height, h, rng_tol=hres / 2.)
             if ind_h is None:
                 continue
             data_out[ind_r] = data_in[ind_h]
@@ -1955,3 +1965,86 @@ def project_to_vertical(data_in, data_height, grid_height, interp_kind='none',
         data_out = np.ma.masked_values(f(grid_height), fill_value)
 
     return data_out
+
+
+def compute_average_vad(radar_list, z_want, signs, lat0, lon0):
+    """
+    Computes a profile of horizontal wind by averaging the VAD profiles of multiple
+    radars
+
+    Parameters
+    ----------
+    radar_list : list
+        list of all radar objects to consider
+    z_want : ndarray 1D
+        Heights for where to sample vads from.
+    signs : ndarray 1D
+        Sign convention which the radial velocities in the volume created
+        from the sounding data will will. This should match the convention
+        used in the radar data. A value of 1 represents when positive values
+        velocities are towards the radar, -1 represents when negative
+        velocities are towards the radar.
+    lat0 : float
+        Reference latitude, the weight of every radar in the average VAD
+        computation will be inversely proportional to its distance from the
+        point (lat0, lon0)
+    lat0 : float
+        Reference longitude, the weight of every radar in the average VAD
+        computation will be inversely proportional to its distance from the
+        point (lat0, lon0)
+
+    Returns
+    -------
+    vad_avg : pyart.core.HorizontalWindProfile
+        Vertical profile of horizontal wind computed by averaging the 
+        VAD from every radar
+
+    """
+
+    all_vad = []
+    distances_to_center = []
+    vel_fields = []
+    refl_fields = []
+    for i, radar in enumerate(radar_list):
+        # Find vel and refl fields
+        field_names_rad = radar.fields.keys()
+        vel_field = field_names_rad[[
+            'velocity' in vname for vname in field_names_rad][0]]
+        vel_fields.append(vel_field)
+        refl_field = field_names_rad[[
+            'reflectivity' in vname for vname in field_names_rad][0]]
+        refl_fields.append(refl_field)
+
+    
+        # Compute VAD
+        all_vad.append(
+            pyart.retrieve.vad_browning(
+                radar,
+                vel_field,
+                z_want=z_want,
+                sign=signs[i]))
+        dist = np.sqrt((radar.latitude['data'][0]
+                        - lat0)**2 +
+                       (radar.longitude['data'][0]
+                        - lon0)**2)
+        distances_to_center.append(dist)
+
+    # Compute VAD weights
+    distances_to_center = np.array(distances_to_center)
+    weights = 1 / distances_to_center
+    weights /= np.sum(weights)
+
+    # Now average the VADs
+    u_avg = []
+    v_avg = []
+    for i, vad in enumerate(all_vad):
+        u_avg.append(weights[i] * np.ma.filled(vad.u_wind, np.nan))
+        v_avg.append(weights[i] * np.ma.filled(vad.v_wind, np.nan))
+    u_avg = np.nansum(u_avg, axis=0)
+    v_avg = np.nansum(v_avg, axis=0)
+
+    vad_avg = pyart.core.HorizontalWindProfile.from_u_and_v(
+        z_want, np.ma.array(
+            u_avg, mask=np.isnan(u_avg)), np.ma.array(
+            v_avg, mask=np.isnan(v_avg)))
+    return vad_avg

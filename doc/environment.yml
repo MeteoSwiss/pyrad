@@ -1,0 +1,39 @@
+name: pyart-docs
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - gdal
+  - numpy
+  - scipy
+  - matplotlib
+  - pandas
+  - netcdf4
+  - pytest
+  - wradlib
+  - metpy
+  - cartopy
+  - cvxopt
+  - xarray
+  - sphinx
+  - ipython
+  - pandoc
+  - pkg-config
+  - Cython
+  - fsspec
+  - s3fs
+  - glpk
+  - cftime
+  - shapely
+  - open-radar-data
+  - myst-nb
+  - pydata-sphinx-theme
+  - sphinx-gallery
+  - sphinx-design
+  - sphinx-copybutton
+  - nbsphinx
+  - pip
+  - pip:
+      - pooch
+      - versioneer
+      - ablog

@@ -45,7 +45,7 @@ def read_sun_hits_multiple_days(cfg, time_ref, nfiles=1):
         a variable
 
     """
-    timeinfo = time_ref - datetime.timedelta(days=nfiles-1)
+    timeinfo = time_ref - datetime.timedelta(days=nfiles - 1)
 
     date = list()
     ray = list()
@@ -79,7 +79,7 @@ def read_sun_hits_multiple_days(cfg, time_ref, nfiles=1):
         (date_aux, ray_aux, nrng_aux, rad_el_aux, rad_az_aux, sun_el_aux,
          sun_az_aux, ph_aux, ph_std_aux, nph_aux, nvalh_aux, pv_aux,
          pv_std_aux, npv_aux, nvalv_aux, zdr_aux, zdr_std_aux, nzdr_aux,
-         nvalzdr_aux) = read_sun_hits(savedir+fname[0])
+         nvalzdr_aux) = read_sun_hits(savedir + fname[0])
 
         if date_aux is None:
             return (None, None, None, None, None, None, None, None, None,
@@ -210,7 +210,7 @@ def read_sun_hits(fname):
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return (None, None, None, None, None, None, None, None, None, None,
                 None, None, None, None, None, None, None, None, None)
 
@@ -345,7 +345,7 @@ def read_sun_retrieval(fname):
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return (None, None, None, None, None, None, None, None, None, None,
                 None, None, None, None, None, None, None, None, None, None,
                 None, None, None)
@@ -398,7 +398,7 @@ def read_solar_flux(fname):
             flux_datetime = list()
             for i, row in enumerate(reader):
                 flux_datetime.append(datetime.datetime.strptime(
-                    row['fluxdate']+row['fluxtime'], '%Y%m%d%H%M%S'))
+                    row['fluxdate'] + row['fluxtime'], '%Y%m%d%H%M%S'))
                 flux_value[i] = float(row['fluxobsflux'])
 
             txtfile.close()
@@ -407,5 +407,5 @@ def read_solar_flux(fname):
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file '+fname)
+        warn('Unable to read file ' + fname)
         return None, None

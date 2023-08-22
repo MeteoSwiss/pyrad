@@ -26,7 +26,7 @@ from ..io.write_data import write_histogram, write_ts_stats
 
 from ..graph.plots_grid import plot_surface, plot_surface_raw
 from ..graph.plots_grid import plot_longitude_slice, plot_latitude_slice
-from ..graph.plots_grid import plot_latlon_slice, plot_surface_contour
+from ..graph.plots_grid import plot_cross_section, plot_surface_contour
 from ..graph.plots_grid import plot_dda_map, plot_dda_slice
 
 from ..graph.plots_aux import get_colobar_label, get_field_name
@@ -36,6 +36,7 @@ from ..graph.plots_aux import generate_dda_longitude_slice_title
 from ..graph.plots import plot_histogram, plot_pos
 
 from ..util.radar_utils import compute_histogram
+
 
 def generate_grid_time_avg_products(dataset, prdcfg):
     """
@@ -105,12 +106,12 @@ def generate_sparse_grid_products(dataset, prdcfg):
             runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         cb_label = get_colobar_label(
             dataset['radar_out']['fields'][field_name], field_name)
 
-        titl = (prdcfg['timeinfo'].strftime('%Y-%m-%dT%H:%M%SZ')+'\n' +
+        titl = (prdcfg['timeinfo'].strftime('%Y-%m-%dT%H:%M%SZ') + '\n' +
                 get_field_name(dataset['radar_out']['fields'][field_name],
                                field_name))
 
@@ -128,7 +129,7 @@ def generate_sparse_grid_products(dataset, prdcfg):
             titl=titl, limits=field_limits, vmin=vmin,
             vmax=vmax)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -233,7 +234,7 @@ def generate_grid_products(dataset, prdcfg):
                     width of the contour lines
                 colors : color string or sequence of colors
                     The contour colours
-        SURFACE_CONTOUR_OVERPLOT:
+        'SURFACE_CONTOUR_OVERPLOT':
             Plots a surface image of gridded data with a contour overplotted.
             User defined parameters:
                 level: int
@@ -250,7 +251,7 @@ def generate_grid_products(dataset, prdcfg):
                     width of the contour lines
                 colors : color string or sequence of colors
                     The contour colours
-        SURFACE_OVERPLOT:
+        'SURFACE_OVERPLOT':
             Plots on the same surface two images, one on top of the other.
             User defined parameters:
                 level: int
@@ -263,7 +264,7 @@ def generate_grid_products(dataset, prdcfg):
                     Py-ART config file. If 'boundaries' is not set the
                     countours are 10 values linearly distributed from vmin to
                     vmax
-        DDA_MAP:
+        'DDA_MAP':
             Plots wind vectors obtained from a DDA analysis. The pyDDA package is
             required
             User defined parameters:
@@ -337,7 +338,7 @@ def generate_grid_products(dataset, prdcfg):
             ['csv'], prdcfginfo=stat,
             timeinfo=None, runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         if stat == 'mean':
             value = np.ma.masked_all(1)
@@ -356,12 +357,12 @@ def generate_grid_products(dataset, prdcfg):
             value[0] = np.ma.max(
                 dataset['radar_out'].fields[field_name]['data'])
         else:
-            warn('Unsupported statistic '+stat)
+            warn('Unsupported statistic ' + stat)
             return None
 
         write_ts_stats(prdcfg['timeinfo'], value, fname, stat=stat)
 
-        print('----- save to '+fname)
+        print('----- save to ' + fname)
 
         return fname
 
@@ -383,16 +384,16 @@ def generate_grid_products(dataset, prdcfg):
 
         fname_list = make_filename(
             'surface', prdcfg['dstype'], prdcfg['voltype'],
-            prdcfg['imgformat'], prdcfginfo='l'+str(level),
+            prdcfg['imgformat'], prdcfginfo='l' + str(level),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_surface_raw(
             dataset['radar_out'], field_name, level, prdcfg, fname_list)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -414,16 +415,16 @@ def generate_grid_products(dataset, prdcfg):
 
         fname_list = make_filename(
             'surface', prdcfg['dstype'], prdcfg['voltype'],
-            prdcfg['imgformat'], prdcfginfo='l'+str(level),
+            prdcfg['imgformat'], prdcfginfo='l' + str(level),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_surface(
             dataset['radar_out'], field_name, level, prdcfg, fname_list)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -448,18 +449,18 @@ def generate_grid_products(dataset, prdcfg):
 
         fname_list = make_filename(
             'surface', prdcfg['dstype'], prdcfg['voltype'],
-            prdcfg['imgformat'], prdcfginfo='l'+str(level),
+            prdcfg['imgformat'], prdcfginfo='l' + str(level),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_surface_contour(
             dataset['radar_out'], field_name, level, prdcfg, fname_list,
             contour_values=contour_values, linewidths=linewidths,
             colors=colors)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -492,12 +493,12 @@ def generate_grid_products(dataset, prdcfg):
 
         fname_list = make_filename(
             'surface-contour', prdcfg['dstype'],
-            prdcfg['voltype']+'-'+prdcfg['contourtype'],
-            prdcfg['imgformat'], prdcfginfo='l'+str(level),
+            prdcfg['voltype'] + '-' + prdcfg['contourtype'],
+            prdcfg['imgformat'], prdcfginfo='l' + str(level),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         titl = (
             pyart.graph.common.generate_grid_title(
@@ -515,7 +516,7 @@ def generate_grid_products(dataset, prdcfg):
             fname_list, contour_values=contour_values, linewidths=linewidths,
             colors=colors, ax=ax, fig=fig, display=display, save_fig=True)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -546,12 +547,12 @@ def generate_grid_products(dataset, prdcfg):
 
         fname_list = make_filename(
             'surface_overplot', prdcfg['dstype'],
-            prdcfg['voltype_btm']+'-'+prdcfg['voltype_top'],
-            prdcfg['imgformat'], prdcfginfo='l'+str(level_btm),
+            prdcfg['voltype_btm'] + '-' + prdcfg['voltype_top'],
+            prdcfg['imgformat'], prdcfginfo='l' + str(level_btm),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         titl = (
             pyart.graph.common.generate_grid_title(
@@ -569,7 +570,7 @@ def generate_grid_products(dataset, prdcfg):
             fname_list, titl=titl, alpha=alpha, ax=ax, fig=fig,
             display=display, save_fig=True)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -594,16 +595,16 @@ def generate_grid_products(dataset, prdcfg):
 
         fname_list = make_filename(
             'lat_slice', prdcfg['dstype'], prdcfg['voltype'],
-            prdcfg['imgformat'], prdcfginfo='lat'+'{:.2f}'.format(lat),
+            prdcfg['imgformat'], prdcfginfo='lat' + '{:.2f}'.format(lat),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_latitude_slice(
             dataset['radar_out'], field_name, lon, lat, prdcfg, fname_list)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -628,16 +629,16 @@ def generate_grid_products(dataset, prdcfg):
 
         fname_list = make_filename(
             'lon_slice', prdcfg['dstype'], prdcfg['voltype'],
-            prdcfg['imgformat'], prdcfginfo='lon'+'{:.2f}'.format(lon),
+            prdcfg['imgformat'], prdcfginfo='lon' + '{:.2f}'.format(lon),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         plot_longitude_slice(
             dataset['radar_out'], field_name, lon, lat, prdcfg, fname_list)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -667,8 +668,8 @@ def generate_grid_products(dataset, prdcfg):
             if 'lat' in prdcfg['coord2']:
                 lat2 = prdcfg['coord2']['lat']
 
-        coord1 = (lon1, lat1)
-        coord2 = (lon2, lat2)
+        coord1 = (lat1, lon1)
+        coord2 = (lat2, lon2)
 
         savedir = get_save_dir(
             prdcfg['basepath'], prdcfg['procname'], dssavedir,
@@ -677,19 +678,19 @@ def generate_grid_products(dataset, prdcfg):
         fname_list = make_filename(
             'lonlat', prdcfg['dstype'], prdcfg['voltype'],
             prdcfg['imgformat'],
-            prdcfginfo='lon-lat1_'+'{:.2f}'.format(lon1)+'-' +
-            '{:.2f}'.format(lat1)+'_lon-lat2_' +
-            '{:.2f}'.format(lon2)+'-'+'{:.2f}'.format(lat2),
+            prdcfginfo='lon-lat1_' + '{:.2f}'.format(lon1) + '-' +
+            '{:.2f}'.format(lat1) + '_lon-lat2_' +
+            '{:.2f}'.format(lon2) + '-' + '{:.2f}'.format(lat2),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
-        plot_latlon_slice(
+        plot_cross_section(
             dataset['radar_out'], field_name, coord1, coord2, prdcfg,
             fname_list)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         return fname_list
 
@@ -719,7 +720,7 @@ def generate_grid_products(dataset, prdcfg):
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
         values = dataset['radar_out'].fields[field_name]['data']
         if mask_val is not None:
@@ -741,10 +742,10 @@ def generate_grid_products(dataset, prdcfg):
             labely='Number of Samples', titl=titl,
             binwidth_equal=binwidth_equal)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
         if write_data:
-            fname = savedir+make_filename(
+            fname = savedir + make_filename(
                 'histogram', prdcfg['dstype'], prdcfg['voltype'],
                 ['csv'], timeinfo=prdcfg['timeinfo'],
                 runinfo=prdcfg['runinfo'])[0]
@@ -752,7 +753,7 @@ def generate_grid_products(dataset, prdcfg):
             hist, _ = np.histogram(values, bins=bin_edges)
             write_histogram(
                 bin_edges, hist, fname, datatype=prdcfg['voltype'], step=step)
-            print('----- save to '+fname)
+            print('----- save to ' + fname)
 
             return fname
 
@@ -768,7 +769,7 @@ def generate_grid_products(dataset, prdcfg):
             return None
 
         file_type = prdcfg.get('file_type', 'nc')
-        physical = prdcfg.get('physical', True)
+        prdcfg.get('physical', True)
         compression = prdcfg.get('compression', 'gzip')
         compression_opts = prdcfg.get('compression_opts', 6)
 
@@ -790,7 +791,8 @@ def generate_grid_products(dataset, prdcfg):
             'savevol', prdcfg['dstype'], prdcfg['voltype'], [file_type],
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
+
         if file_type == 'nc':
             pyart.io.write_grid(
                 fname, new_dataset, write_point_x_y_z=True,
@@ -801,10 +803,10 @@ def generate_grid_products(dataset, prdcfg):
                 compression=compression, compression_opts=compression_opts)
         else:
             warn('Data could not be saved. ' +
-                 'Unknown saving file type '+file_type)
+                 'Unknown saving file type ' + file_type)
             return None
 
-        print('saved file: '+fname)
+        print('saved file: ' + fname)
 
         return fname
 
@@ -819,7 +821,7 @@ def generate_grid_products(dataset, prdcfg):
             'savevol', prdcfg['dstype'], 'all_fields', ['nc'],
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])[0]
 
-        fname = savedir+fname
+        fname = savedir + fname
 
         field_names = None
         if datatypes is not None:
@@ -832,7 +834,7 @@ def generate_grid_products(dataset, prdcfg):
             new_dataset.fields = dict()
             for field_name in field_names:
                 if field_name not in dataset['radar_out'].fields:
-                    warn(field_name+' not in grid object')
+                    warn(field_name + ' not in grid object')
                 else:
                     new_dataset.add_field(
                         field_name, dataset['radar_out'].fields[field_name])
@@ -841,7 +843,7 @@ def generate_grid_products(dataset, prdcfg):
 
         pyart.io.write_grid(fname, new_dataset, write_point_x_y_z=True,
                             write_point_lon_lat_alt=True)
-        print('saved file: '+fname)
+        print('saved file: ' + fname)
 
         return fname
 
@@ -860,7 +862,6 @@ def generate_grid_products(dataset, prdcfg):
         # get bg field name given which radar serves as reference
         if bg_ref_rad != 0:
             bg_field_name += '_radar{:d}'.format(bg_ref_rad)
-
         if bg_field_name not in dataset['radar_out'].fields:
             warn(
                 ' Field type ' + field_name +
@@ -878,19 +879,20 @@ def generate_grid_products(dataset, prdcfg):
 
         fname_list = make_filename(
             'dda_map', prdcfg['dstype'], prdcfg['voltype'],
-            prdcfg['imgformat'], prdcfginfo='l'+str(level),
+            prdcfg['imgformat'], prdcfginfo='l' + str(level),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
-        titl = generate_dda_map_title(dataset['radar_out'], bg_field_name, level)
+        titl = generate_dda_map_title(
+            dataset['radar_out'], bg_field_name, level)
 
         plot_dda_map(
             dataset['radar_out'], bg_field_name, level, prdcfg, fname_list,
-            alpha = alpha, display_type = display_type, titl = titl)
+            alpha=alpha, display_type=display_type, titl=titl)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
     if prdcfg['type'] == 'DDA_LONGITUDE_SLICE':
 
@@ -934,19 +936,28 @@ def generate_grid_products(dataset, prdcfg):
 
         fname_list = make_filename(
             'dda_lon_slice', prdcfg['dstype'], prdcfg['voltype'],
-            prdcfg['imgformat'], prdcfginfo='l'+str(level),
+            prdcfg['imgformat'], prdcfginfo='l' + str(level),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
-        titl = generate_dda_longitude_slice_title(dataset['radar_out'], bg_field_name, level)
+        titl = generate_dda_longitude_slice_title(
+            dataset['radar_out'], bg_field_name, level)
 
         plot_dda_slice(
-            dataset['radar_out'], bg_field_name, 'longitude', level, prdcfg, fname_list,
-            alpha = alpha, display_type = display_type, titl = titl, wind_vectors = wind_vectors)
+            dataset['radar_out'],
+            bg_field_name,
+            'longitude',
+            level,
+            prdcfg,
+            fname_list,
+            alpha=alpha,
+            display_type=display_type,
+            titl=titl,
+            wind_vectors=wind_vectors)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
     if prdcfg['type'] == 'DDA_LATITUDE_SLICE':
 
@@ -990,19 +1001,28 @@ def generate_grid_products(dataset, prdcfg):
 
         fname_list = make_filename(
             'dda_lat_slice', prdcfg['dstype'], prdcfg['voltype'],
-            prdcfg['imgformat'], prdcfginfo='l'+str(level),
+            prdcfg['imgformat'], prdcfginfo='l' + str(level),
             timeinfo=prdcfg['timeinfo'], runinfo=prdcfg['runinfo'])
 
         for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir+fname
+            fname_list[i] = savedir + fname
 
-        titl = generate_dda_latitude_slice_title(dataset['radar_out'], bg_field_name, level)
+        titl = generate_dda_latitude_slice_title(
+            dataset['radar_out'], bg_field_name, level)
 
         plot_dda_slice(
-            dataset['radar_out'], bg_field_name, 'latitude', level, prdcfg, fname_list,
-            alpha = alpha, display_type = display_type, titl = titl, wind_vectors = wind_vectors)
+            dataset['radar_out'],
+            bg_field_name,
+            'latitude',
+            level,
+            prdcfg,
+            fname_list,
+            alpha=alpha,
+            display_type=display_type,
+            titl=titl,
+            wind_vectors=wind_vectors)
 
-        print('----- save to '+' '.join(fname_list))
+        print('----- save to ' + ' '.join(fname_list))
 
     else:
         return None

@@ -72,7 +72,7 @@ def main():
         help='end time of the data to be processed. Format ''YYYYMMDDhhmmss''')
     parser.add_argument(
         '--cfgpath', type=str,
-        default=os.path.expanduser('~')+'/pyrad/config/processing/',
+        default=os.path.expanduser('~') + '/pyrad/config/processing/',
         help='configuration file path')
 
     parser.add_argument(
@@ -90,17 +90,17 @@ def main():
     atexit.register(_print_end_msg,
                     "====== PYRAD data processing finished: ")
 
-    print('config path: '+args.cfgpath)
+    print('config path: ' + args.cfgpath)
     cfgfile_list = []
     for ind, cfgfile in enumerate(args.cfgfiles):
-        print('config file '+str(ind)+': '+cfgfile)
-        cfgfile_list.append(args.cfgpath+cfgfile)
+        print('config file ' + str(ind) + ': ' + cfgfile)
+        cfgfile_list.append(args.cfgpath + cfgfile)
     if args.starttime is not None:
-        print('start time: '+args.starttime)
+        print('start time: ' + args.starttime)
     else:
         print('start time not defined by user')
     if args.endtime is not None:
-        print('end time: '+args.endtime)
+        print('end time: ' + args.endtime)
     else:
         print('end time not defined by user')
 
@@ -118,7 +118,7 @@ def main():
             end_proc = main_cosmo_rt(
                 cfgfile_list, starttime=proc_starttime, endtime=proc_endtime,
                 proc_period=args.proc_period, proc_finish=args.proc_finish)
-        except:
+        except BaseException:
             traceback.print_exc()
             if args.proc_finish is None:
                 warn("An exception occurred. " +
