@@ -17,9 +17,9 @@
 [![Ref doc](https://img.shields.io/badge/docs-users-4088b8.svg)](https://meteoswiss.github.io/pyrad/)
 
 
-![version](https://img.shields.io/badge/python-3.7-blue.svg)
 ![version](https://img.shields.io/badge/python-3.8-blue.svg)
 ![version](https://img.shields.io/badge/python-3.9-blue.svg)
+![version](https://img.shields.io/badge/python-3.10-blue.svg)
 
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/pyrad_mch/badges/version.svg)](https://anaconda.org/conda-forge/pyrad_mch)
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/pyrad_mch/badges/latest_release_date.svg)](https://anaconda.org/conda-forge/pyrad_mch)
