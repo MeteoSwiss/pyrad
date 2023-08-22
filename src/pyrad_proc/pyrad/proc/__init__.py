@@ -366,6 +366,5 @@ from .process_cosmo import process_hzt_lookup_table, process_hzt_coord # noqa
 from .process_cosmo import process_cosmo_to_radar, process_iso0_grib # noqa
 
 from .process_dem import process_dem, process_visibility, process_gecsx # noqa
->>>>>>> c3ed17103947ea4a54cfdd72a2308792e1a22eb0
 
 __all__ = [s for s in dir() if not s.startswith('_')]
