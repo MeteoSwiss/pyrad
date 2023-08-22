@@ -13,7 +13,7 @@ Auxiliary functions
 .. autosummary::
     :toctree: generated/
 
-    get_dsformat_func
+    get_prodgen_func
 
 Product generation
 ==================

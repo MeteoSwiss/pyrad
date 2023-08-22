@@ -359,6 +359,7 @@ from .process_Doppler import process_radial_velocity, process_dealias_fourdd # n
 from .process_Doppler import process_dealias_region_based # noqa
 from .process_Doppler import process_dealias_unwrap_phase # noqa
 from .process_Doppler import process_vad, process_turbulence, process_dda # noqa
+from .process_Doppler import process_windshear_lidar #noqa
 
 from .process_cosmo import process_cosmo, process_cosmo_lookup_table # noqa
 from .process_cosmo import process_cosmo_coord, process_hzt, process_iso0_mf # noqa

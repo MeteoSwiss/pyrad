@@ -109,7 +109,6 @@ Reading other data
     read_quantiles_ts
     read_ml_ts
     read_windmills_data
-    read_windcube
     read_radiosounding
     
 Writing data
@@ -214,6 +213,7 @@ from .read_data_cosmo import cosmo2radar_data, cosmo2radar_coord # noqa
 from .read_data_cosmo import get_cosmo_fields # noqa
 
 from .read_data_dem import read_idrisi_data, read_idrisi_metadata # noqa
+from .read_data_dem import dem2radar_coord #noqa
 
 from .read_data_hzt import read_hzt_data, hzt2radar_data, hzt2radar_coord # noqa
 from .read_data_hzt import get_iso0_field # noqa

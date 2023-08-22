@@ -65,4 +65,6 @@ from .radar_utils import get_fixed_rng_data, get_cercle_coords # noqa
 from .radar_utils import compute_profile_stats # noqa
 from .radar_utils import compute_average_vad # noqa
 
+from .stat_utils import quantiles_weighted, ratio_bootstrapping #noqa
+
 __all__ = [s for s in dir() if not s.startswith('_')]
