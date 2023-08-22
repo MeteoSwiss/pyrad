@@ -1,0 +1,340 @@
+﻿pyrad.proc
+==========
+
+.. rubric:: Description
+
+.. automodule:: pyrad.proc
+
+.. currentmodule:: pyrad.proc
+
+
+
+
+.. rubric:: Functions
+
+.. autosummary::
+    :toctree: .
+    
+    get_process_func
+    
+    process_Doppler_velocity
+    
+    process_Doppler_velocity_iq
+    
+    process_Doppler_width
+    
+    process_Doppler_width_iq
+    
+    process_attenuation
+    
+    process_azimuthal_average
+    
+    process_bird_density
+    
+    process_birds_id
+    
+    process_ccor
+    
+    process_cdf
+    
+    process_cdr
+    
+    process_centroids
+    
+    process_clt_to_echo_id
+    
+    process_colocated_gates
+    
+    process_correct_bias
+    
+    process_correct_noise_rhohv
+    
+    process_correct_phidp0
+    
+    process_cosmo
+    
+    process_cosmo_coord
+    
+    process_cosmo_lookup_table
+    
+    process_cosmo_to_radar
+    
+    process_dda
+    
+    process_dealias_fourdd
+    
+    process_dealias_region_based
+    
+    process_dealias_unwrap_phase
+    
+    process_dem
+    
+    process_differential_phase
+    
+    process_differential_phase_iq
+    
+    process_differential_reflectivity
+    
+    process_differential_reflectivity_iq
+    
+    process_echo_filter
+    
+    process_echo_id
+    
+    process_estimate_phidp0
+    
+    process_evp
+    
+    process_fft
+    
+    process_fields_diff
+    
+    process_filter_0Doppler
+    
+    process_filter_snr
+    
+    process_filter_spectra_noise
+    
+    process_filter_srhohv
+    
+    process_filter_vel_diff
+    
+    process_filter_visibility
+    
+    process_filter_vol2bird
+    
+    process_fixed_rng
+    
+    process_fixed_rng_span
+    
+    process_gate_filter_vol2bird
+    
+    process_gatefilter
+    
+    process_gc_monitoring
+    
+    process_gecsx
+    
+    process_grid
+    
+    process_grid_fields_diff
+    
+    process_grid_mask
+    
+    process_grid_multiple_points
+    
+    process_grid_point
+    
+    process_grid_rainfall_accumulation
+    
+    process_grid_texture
+    
+    process_grid_time_stats
+    
+    process_grid_time_stats2
+    
+    process_hydro_mf_to_echo_id
+    
+    process_hydro_mf_to_hydro
+    
+    process_hydroclass
+    
+    process_hzt
+    
+    process_hzt_coord
+    
+    process_hzt_lookup_table
+    
+    process_ifft
+    
+    process_intercomp
+    
+    process_intercomp_fields
+    
+    process_intercomp_time_avg
+    
+    process_iso0_grib
+    
+    process_iso0_mf
+    
+    process_kdp_leastsquare_double_window
+    
+    process_kdp_leastsquare_single_window
+    
+    process_l
+    
+    process_mean_phase_iq
+    
+    process_melting_layer
+    
+    process_monitoring
+    
+    process_moving_azimuthal_average
+    
+    process_multiple_points
+    
+    process_noise_power
+    
+    process_normalize_luminosity
+    
+    process_occurrence
+    
+    process_occurrence_period
+    
+    process_outlier_filter
+    
+    process_phidp_kdp_Kalman
+    
+    process_phidp_kdp_Maesaka
+    
+    process_phidp_kdp_Vulpiani
+    
+    process_phidp_kdp_lp
+    
+    process_pixel_filter
+    
+    process_point_measurement
+    
+    process_pol_variables
+    
+    process_pol_variables_iq
+    
+    process_qvp
+    
+    process_radar_resampling
+    
+    process_radial_noise_hs
+    
+    process_radial_noise_ivic
+    
+    process_radial_velocity
+    
+    process_rainfall_accumulation
+    
+    process_rainrate
+    
+    process_raw
+    
+    process_raw_grid
+    
+    process_raw_iq
+    
+    process_raw_spectra
+    
+    process_rcs
+    
+    process_rcs_pr
+    
+    process_reflectivity
+    
+    process_reflectivity_iq
+    
+    process_rhohv
+    
+    process_rhohv_iq
+    
+    process_rhohv_rain
+    
+    process_roi
+    
+    process_roi2
+    
+    process_rqvp
+    
+    process_save_radar
+    
+    process_selfconsistency_bias
+    
+    process_selfconsistency_bias2
+    
+    process_selfconsistency_kdp_phidp
+    
+    process_signal_power
+    
+    process_smooth_phidp_double_window
+    
+    process_smooth_phidp_single_window
+    
+    process_snr
+    
+    process_spectra_ang_avg
+    
+    process_spectra_point
+    
+    process_spectral_differential_phase
+    
+    process_spectral_differential_reflectivity
+    
+    process_spectral_noise
+    
+    process_spectral_phase
+    
+    process_spectral_power
+    
+    process_spectral_reflectivity
+    
+    process_spectral_rhohv
+    
+    process_st1_iq
+    
+    process_st2_iq
+    
+    process_sun_hits
+    
+    process_sunscan
+    
+    process_svp
+    
+    process_time_avg
+    
+    process_time_avg_flag
+    
+    process_time_avg_std
+    
+    process_time_height
+    
+    process_time_stats
+    
+    process_time_stats2
+    
+    process_traj_antenna_pattern
+    
+    process_traj_atplane
+    
+    process_traj_lightning
+    
+    process_traj_trt
+    
+    process_traj_trt_contour
+    
+    process_trajectory
+    
+    process_ts_along_coord
+    
+    process_turbulence
+    
+    process_vad
+    
+    process_visibility
+    
+    process_vol_refl
+    
+    process_vol_to_grid
+    
+    process_vpr
+    
+    process_wbn_iq
+    
+    process_weighted_time_avg
+    
+    process_wind_vel
+    
+    process_windshear
+    
+    process_zdr_column
+    
+    process_zdr_precip
+    
+    process_zdr_snow
+    
+

@@ -1,0 +1,6 @@
+pyrad.proc.process\_gatefilter
+==============================
+
+.. currentmodule:: pyrad.proc
+
+.. autofunction:: process_gatefilter

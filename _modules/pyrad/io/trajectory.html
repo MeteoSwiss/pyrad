@@ -1,0 +1,1146 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyrad.io.trajectory &#8212; Pyrad 1.8.3 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/design-tabs.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyrad/io/trajectory';</script>
+    <script src="../../../_static/doc_shared.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Pyrad 1.8.3 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../userguide/index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../API/index.html">
+                        API Reference Manual
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../overview/index.html">
+                        Features
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../userguide/index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../API/index.html">
+                        API Reference Manual
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../overview/index.html">
+                        Features
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">pyrad.io.trajectory</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+<h1>Source code for pyrad.io.trajectory</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">pyrad.io.trajectory</span>
+<span class="sd">===================</span>
+<span class="sd">Trajectory class implementation for reading trajectory file.</span>
+<span class="sd">Converting to different coordinate systems.</span>
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+<span class="sd">    Trajectory</span>
+<span class="sd">    _Radar_Trajectory</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">locale</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">pyart</span>
+
+<span class="kn">from</span> <span class="nn">..io.read_data_sensor</span> <span class="kn">import</span> <span class="n">read_lightning</span><span class="p">,</span> <span class="n">read_trt_traj_data</span>
+<span class="kn">from</span> <span class="nn">..io.read_data_sensor</span> <span class="kn">import</span> <span class="n">read_trt_thundertracking_traj_data</span>
+
+
+<div class="viewcode-block" id="Trajectory"><a class="viewcode-back" href="../../../API/generated/pyrad.io.Trajectory.html#pyrad.io.Trajectory">[docs]</a><span class="k">class</span> <span class="nc">Trajectory</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class for reading and handling trajectory data from a file.</span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        Path and name of the trajectory definition file</span>
+<span class="sd">    starttime : datetime</span>
+<span class="sd">        Start time of trajectory processing.</span>
+<span class="sd">    endtime : datetime</span>
+<span class="sd">        End time of trajectory processing.</span>
+<span class="sd">    trajtype : str</span>
+<span class="sd">    Type of trajectory. Can be &#39;plane&#39; or &#39;lightning&#39;</span>
+<span class="sd">    time_vector : Array of datetime objects</span>
+<span class="sd">        Array containing the trajectory time samples</span>
+<span class="sd">    wgs84_lat_deg : Array of floats</span>
+<span class="sd">        WGS84 latitude samples in deg</span>
+<span class="sd">    wgs84_lon_deg : Array of floats</span>
+<span class="sd">        WGS84 longitude samples in deg</span>
+<span class="sd">    wgs84_alt_m : Array of floats</span>
+<span class="sd">        WGS84 altitude samples in m</span>
+<span class="sd">    nsamples : int</span>
+<span class="sd">    Number of samples in the trajectory</span>
+<span class="sd">    _swiss_grid_done : Bool</span>
+<span class="sd">        Indicates that convertion to Swiss coordinates has been performed</span>
+<span class="sd">    swiss_chy, swiss_chx, swiss_chh : Array of floats</span>
+<span class="sd">        Swiss coordinates in m</span>
+<span class="sd">    radar_list : list</span>
+<span class="sd">          List of radars for which trajectories are going to be computed</span>
+<span class="sd">    flashnr : int</span>
+<span class="sd">          For &#39;lightning&#39; only. Number of flash for which trajectory data</span>
+<span class="sd">          is going to be computed. If 0 all all flashes are going to be</span>
+<span class="sd">          considered.</span>
+<span class="sd">    time_in_flash : array of floats</span>
+<span class="sd">          For &#39;lightning&#39; only. Time within flash (sec)</span>
+<span class="sd">    flashnr_vec : array of ints</span>
+<span class="sd">          For &#39;lightning&#39; only. Flash number of each data sample</span>
+<span class="sd">    dBm : array of floats</span>
+<span class="sd">          For &#39;lightning&#39; only. Lightning power (dBm)</span>
+<span class="sd">    Methods:</span>
+<span class="sd">    --------</span>
+<span class="sd">    add_radar : Add a radar</span>
+<span class="sd">    calculate_velocities : Computes velocities</span>
+<span class="sd">    get_start_time : Return time of first trajectory sample</span>
+<span class="sd">    get_end_time : Return time of last trajectory sample</span>
+<span class="sd">    get_samples_in_period : Get indices of samples within period</span>
+<span class="sd">    _convert_traj_to_swissgrid : convert data from WGS84 to Swiss coordinates</span>
+<span class="sd">    _read_traj : Read plane trajectory from file</span>
+<span class="sd">    _read_traj_flores : Read FLORAKO plane trajectory from file</span>
+<span class="sd">    _read_traj_trt : Read TRT trajectory from file</span>
+<span class="sd">    _read_traj_lightning : Read lightning trajectory from file</span>
+<span class="sd">    _get_total_seconds : Get the total time of the trajectory in seconds</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">starttime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">endtime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">trajtype</span><span class="o">=</span><span class="s1">&#39;plane&#39;</span><span class="p">,</span> <span class="n">flashnr</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initalize the object.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            Filename containing the trajectory samples.</span>
+<span class="sd">        starttime : datetime</span>
+<span class="sd">            Start time of trajectory processing. If not given, use</span>
+<span class="sd">            the time of the first trajectory sample.</span>
+<span class="sd">        endtime : datetime</span>
+<span class="sd">            End time of trajectory processing. If not given, use</span>
+<span class="sd">            the time of the last trajectory sample.</span>
+<span class="sd">        trajtype : str</span>
+<span class="sd">            type of trajectory. Can be plane or lightning</span>
+<span class="sd">        flashnr : int</span>
+<span class="sd">            If type of trajectory is lightning, the flash number to check the</span>
+<span class="sd">            trajectory. 0 means all flash numbers included</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">starttime</span> <span class="o">=</span> <span class="n">starttime</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endtime</span> <span class="o">=</span> <span class="n">endtime</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trajtype</span> <span class="o">=</span> <span class="n">trajtype</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lat_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lon_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nsamples</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_swiss_grid_done</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chy</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chh</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">radar_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajtype</span> <span class="o">==</span> <span class="s1">&#39;lightning&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">flashnr</span> <span class="o">=</span> <span class="n">flashnr</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">time_in_flash</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dBm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">flashnr_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajtype</span> <span class="o">==</span> <span class="s1">&#39;trt&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cell_contour</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajtype</span> <span class="o">==</span> <span class="s1">&#39;lightning&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_read_traj_lightning</span><span class="p">(</span><span class="n">flashnr</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajtype</span> <span class="o">==</span> <span class="s1">&#39;trt&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_read_traj_trt</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajtype</span> <span class="o">==</span> <span class="s1">&#39;plane_flores&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_read_traj_flores</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_read_traj</span><span class="p">()</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ee</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s2">&quot;ERROR: Could not load trajectory data from file &#39;&quot;</span> <span class="o">+</span>
+                <span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;&#39; into Trajectory object&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Trajectory.add_radar"><a class="viewcode-back" href="../../../API/generated/pyrad.io.Trajectory.add_radar.html#pyrad.io.Trajectory.add_radar">[docs]</a>    <span class="k">def</span> <span class="nf">add_radar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radar</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add the coordinates (WGS84 longitude, latitude and non WGS84 altitude)</span>
+<span class="sd">        of a radar to the radar_list.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        radar : pyart radar object</span>
+<span class="sd">            containing the radar coordinates</span>
+<span class="sd">        Return</span>
+<span class="sd">        ------</span>
+<span class="sd">        Radar object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Check if radar location is already in the radar list</span>
+        <span class="k">for</span> <span class="n">rad</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">radar_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">rad</span><span class="o">.</span><span class="n">location_is_equal</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                                      <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                                      <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])):</span>
+                <span class="c1"># warn(&quot;WARNING: Tried to add the same radar twice to the&quot;</span>
+                <span class="c1">#      &quot; radar list&quot;)</span>
+                <span class="k">return</span> <span class="n">rad</span>
+
+        <span class="n">rad</span> <span class="o">=</span> <span class="n">_Radar_Trajectory</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                                <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                                <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radar_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rad</span><span class="p">)</span>
+
+        <span class="c1"># Convert trajectory WGS84 points to polara radar coordinates</span>
+        <span class="n">rad</span><span class="o">.</span><span class="n">convert_radpos_to_swissgrid</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_convert_traj_to_swissgrid</span><span class="p">()</span>
+
+        <span class="c1"># Note: Earth curvature not considered yet!</span>
+
+        <span class="p">(</span><span class="n">rvec</span><span class="p">,</span> <span class="n">azvec</span><span class="p">,</span> <span class="n">elvec</span><span class="p">)</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">cartesian_to_antenna</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chy</span> <span class="o">-</span> <span class="n">rad</span><span class="o">.</span><span class="n">ch_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chx</span> <span class="o">-</span> <span class="n">rad</span><span class="o">.</span><span class="n">ch_x</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chh</span> <span class="o">-</span> <span class="n">rad</span><span class="o">.</span><span class="n">ch_alt</span><span class="p">)</span>
+
+        <span class="n">rad</span><span class="o">.</span><span class="n">assign_trajectory</span><span class="p">(</span><span class="n">elvec</span><span class="p">,</span> <span class="n">azvec</span><span class="p">,</span> <span class="n">rvec</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">rad</span></div>
+
+<div class="viewcode-block" id="Trajectory.calculate_velocities"><a class="viewcode-back" href="../../../API/generated/pyrad.io.Trajectory.calculate_velocities.html#pyrad.io.Trajectory.calculate_velocities">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_velocities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radar</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate velocities.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">radar</span><span class="o">.</span><span class="n">traj_assigned</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: No trajectory assigned to radar object&quot;</span><span class="p">)</span>
+
+        <span class="n">dt_secs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_total_seconds</span><span class="p">)</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">dt_secs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+
+        <span class="n">v_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsamples</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">v_r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_r</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="n">v_r</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range_vec</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="o">-</span> <span class="n">radar</span><span class="o">.</span><span class="n">range_vec</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="n">dt</span>
+
+        <span class="n">v_az</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsamples</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">v_az</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_az</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="n">daz</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth_vec</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="o">-</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth_vec</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">daz</span><span class="p">[</span><span class="n">daz</span> <span class="o">&gt;</span> <span class="mf">180.</span><span class="p">]</span> <span class="o">-=</span> <span class="mf">360.</span>
+        <span class="n">daz</span><span class="p">[</span><span class="n">daz</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">180.</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">360.</span>
+        <span class="n">v_az</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">daz</span> <span class="o">/</span> <span class="n">dt</span>
+
+        <span class="n">v_el</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsamples</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">v_el</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_el</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="n">v_el</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation_vec</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="o">-</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation_vec</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="n">dt</span>
+
+        <span class="n">v_abs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsamples</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">v_abs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_abs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_convert_traj_to_swissgrid</span><span class="p">()</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chy</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chy</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chx</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chx</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">dz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chh</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chh</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">v_abs</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">dy</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">dz</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">dt</span>
+
+        <span class="n">radar</span><span class="o">.</span><span class="n">assign_velocity_vecs</span><span class="p">(</span><span class="n">v_abs</span><span class="p">,</span> <span class="n">v_r</span><span class="p">,</span> <span class="n">v_el</span><span class="p">,</span> <span class="n">v_az</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Trajectory.get_samples_in_period"><a class="viewcode-back" href="../../../API/generated/pyrad.io.Trajectory.get_samples_in_period.html#pyrad.io.Trajectory.get_samples_in_period">[docs]</a>    <span class="k">def</span> <span class="nf">get_samples_in_period</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;&quot;</span>
+<span class="sd">        Get indices of samples of the trajectory within given time</span>
+<span class="sd">        period.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="p">((</span><span class="n">start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">end</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: Either start or end must be defined&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">end</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span> <span class="o">&gt;=</span> <span class="n">start</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span> <span class="o">&gt;=</span> <span class="n">start</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Trajectory.get_start_time"><a class="viewcode-back" href="../../../API/generated/pyrad.io.Trajectory.get_start_time.html#pyrad.io.Trajectory.get_start_time">[docs]</a>    <span class="k">def</span> <span class="nf">get_start_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get time of first trajectory sample.</span>
+<span class="sd">        Return</span>
+<span class="sd">        ------</span>
+<span class="sd">        datetime object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Trajectory.get_end_time"><a class="viewcode-back" href="../../../API/generated/pyrad.io.Trajectory.get_end_time.html#pyrad.io.Trajectory.get_end_time">[docs]</a>    <span class="k">def</span> <span class="nf">get_end_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get time of last trajectory sample.</span>
+<span class="sd">        Return</span>
+<span class="sd">        ------</span>
+<span class="sd">        datetime object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
+
+    <span class="k">def</span> <span class="nf">_convert_traj_to_swissgrid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert trajectory samples from WGS84 to Swiss CH1903 coordinates</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_swiss_grid_done</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swiss_chy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chh</span><span class="p">)</span> <span class="o">=</span> \
+            <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">wgs84_to_swissCH1903</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lon_deg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lat_deg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_swiss_grid_done</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">_read_traj</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read trajectory from file</span>
+<span class="sd">        File format</span>
+<span class="sd">        -----------</span>
+<span class="sd">        Comment symbol: &#39;#&#39;</span>
+<span class="sd">        Columns:</span>
+<span class="sd">        1. Day (UTC) format: DD-MMM-YYYY</span>
+<span class="sd">        2. Seconds since midnight (UTC)</span>
+<span class="sd">        3. WGS84 latitude [radians]</span>
+<span class="sd">        4. WGS84 longitude [radians]</span>
+<span class="sd">        5. WGS84 altitude [m]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># check if the file can be read</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">tfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: Could not find|open trajectory file &#39;&quot;</span> <span class="o">+</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+
+        <span class="n">repat</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="s2">&quot;(</span><span class="se">\\</span><span class="s2">d+</span><span class="se">\\</span><span class="s2">-[A-Za-z]+</span><span class="se">\\</span><span class="s2">-</span><span class="se">\\</span><span class="s2">d+)</span><span class="se">\\</span><span class="s2">s+([</span><span class="se">\\</span><span class="s2">d</span><span class="se">\\</span><span class="s2">.]+)</span><span class="se">\\</span><span class="s2">s+&quot;</span>
+            <span class="s2">&quot;([</span><span class="se">\\</span><span class="s2">-</span><span class="se">\\</span><span class="s2">d</span><span class="se">\\</span><span class="s2">.]+)</span><span class="se">\\</span><span class="s2">s+([</span><span class="se">\\</span><span class="s2">-</span><span class="se">\\</span><span class="s2">d</span><span class="se">\\</span><span class="s2">.]+)</span><span class="se">\\</span><span class="s2">s+([</span><span class="se">\\</span><span class="s2">-</span><span class="se">\\</span><span class="s2">d</span><span class="se">\\</span><span class="s2">.]+)&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">loc_set</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">loc</span> <span class="o">=</span> <span class="n">locale</span><span class="o">.</span><span class="n">getlocale</span><span class="p">()</span>  <span class="c1"># get current locale</span>
+            <span class="k">if</span> <span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;en_US&#39;</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">locale</span><span class="o">.</span><span class="n">setlocale</span><span class="p">(</span><span class="n">locale</span><span class="o">.</span><span class="n">LC_ALL</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;en_US&#39;</span><span class="p">,</span> <span class="s1">&#39;UTF-8&#39;</span><span class="p">))</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ee</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ERROR: Cannot set local &#39;en_US&#39;: </span><span class="si">{</span><span class="n">ee</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">loc_set</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="n">recording_started</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">starttime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">recording_started</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">recording_check_stop</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">endtime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">recording_check_stop</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">tfile</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># ignore comments</span>
+                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">):</span>
+                    <span class="k">continue</span>
+
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Remove comments</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+                <span class="n">mm</span> <span class="o">=</span> <span class="n">repat</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">mm</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;WARNING: Format error in trajectory file&quot;</span>
+                          <span class="sa">f</span><span class="s2">&quot; &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39; on line &#39;</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">,</span>
+                          <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># Get time stamp</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">sday</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">mm</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%b-%Y&quot;</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ee</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%b-%Y&quot;</span><span class="p">))</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;ERROR: Format error in traj file &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39; &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;on line &#39;</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&#39; (</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+                <span class="n">sday</span> <span class="o">+=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">mm</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">recording_started</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">sday</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">starttime</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="n">recording_started</span> <span class="o">=</span> <span class="kc">True</span>
+
+                <span class="k">if</span> <span class="n">recording_check_stop</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">sday</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">endtime</span><span class="p">:</span>
+                        <span class="k">break</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">,</span> <span class="p">[</span><span class="n">sday</span><span class="p">])</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lat_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lat_deg</span><span class="p">,</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">mm</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span> <span class="o">*</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lon_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lon_deg</span><span class="p">,</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">mm</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span> <span class="o">*</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span><span class="p">,</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">mm</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">5</span><span class="p">))])</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">tfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">loc_set</span><span class="p">:</span>
+                <span class="n">locale</span><span class="o">.</span><span class="n">setlocale</span><span class="p">(</span><span class="n">locale</span><span class="o">.</span><span class="n">LC_ALL</span><span class="p">,</span> <span class="n">loc</span><span class="p">)</span>  <span class="c1"># restore saved locale</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nsamples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_read_traj_flores</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read trajectory from FLORAKO file</span>
+<span class="sd">        File format</span>
+<span class="sd">        -----------</span>
+<span class="sd">        Column/Variable Contents, Units and Description:</span>
+<span class="sd">        01: UTCDate      Year-Month-Day                 Date of epoch or feature (UTC time)</span>
+<span class="sd">        02: UTCTime      HH:MM:SS.SS                    Time of epoch or feature - Receiver time frame (UTC)</span>
+<span class="sd">        03: Latitude     Decimal Degrees (signed)       North/South Geographic coordinate</span>
+<span class="sd">        04: Longitude    Decimal Degrees (signed)       East/West Geographic coordinate</span>
+<span class="sd">        05: H-MSL        Metres                         Height above the geoid</span>
+<span class="sd">        06: H-Ell        Metres                         Height above the current ellipsoid</span>
+<span class="sd">        07: Undulation   Metres                         Height of the ellipsoid above the geoid</span>
+<span class="sd">        08: PDOP                                        Position Dilution of Precision, which is a measure of X, Y, Z position geometry</span>
+<span class="sd">        09: HDOP                                        Horizontal Position Dilution of Precision, which is a measure of X, Y position geometry</span>
+<span class="sd">        10: VDOP                                        Vertical Position Dilution of Precision, which is a measure of Z position geometry</span>
+<span class="sd">        11: DopRms                                      Root mean square of all L1 Doppler measurement residuals</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># check if the file can be read</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">tfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: Could not find|open trajectory file &#39;&quot;</span> <span class="o">+</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+        <span class="n">tfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">28</span><span class="p">,</span>
+                               <span class="n">delim_whitespace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">times</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
+                    <span class="n">d</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">h</span> <span class="o">+</span> <span class="s1">&#39;0000&#39;</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">_%H:%M:%S.</span><span class="si">%f</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">for</span>
+                <span class="n">d</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;UTCDate&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;UTCTime&#39;</span><span class="p">])]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lat_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Latitude&#39;</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lon_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Longitude&#39;</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;H-MSL&#39;</span><span class="p">]))</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">raise</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nsamples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_read_traj_lightning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flashnr</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read trajectory from lightning file</span>
+<span class="sd">        File format</span>
+<span class="sd">        -----------</span>
+<span class="sd">        Columns:</span>
+<span class="sd">        1. flashnr (0=noise)</span>
+<span class="sd">        2. Seconds since midnight (UTC)</span>
+<span class="sd">        2. Time in flash (s)</span>
+<span class="sd">        3. WGS84 latitude [deg]</span>
+<span class="sd">        4. WGS84 longitude [deg]</span>
+<span class="sd">        5. WGS84 altitude [m]</span>
+<span class="sd">        6. Power [dBm]</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        flashnr : int</span>
+<span class="sd">            the flash number to keep. If 0 data from all flashes will be kept</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">flashnr_vec</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">time_in_flash</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">dBm</span> <span class="o">=</span> <span class="n">read_lightning</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">flashnr_vec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: Could not find|open trajectory file &#39;&quot;</span> <span class="o">+</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+
+        <span class="n">recording_started</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">starttime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">recording_started</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">recording_check_stop</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">endtime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">recording_check_stop</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="n">flashnr</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">flashnr_vec_aux</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">flashnr_vec</span><span class="p">)</span>
+            <span class="n">flashnr_vec</span> <span class="o">=</span> <span class="n">flashnr_vec</span><span class="p">[</span><span class="n">flashnr_vec_aux</span> <span class="o">==</span> <span class="n">flashnr</span><span class="p">]</span>
+            <span class="n">time</span> <span class="o">=</span> <span class="n">time</span><span class="p">[</span><span class="n">flashnr_vec_aux</span> <span class="o">==</span> <span class="n">flashnr</span><span class="p">]</span>
+            <span class="n">time_in_flash</span> <span class="o">=</span> <span class="n">time_in_flash</span><span class="p">[</span><span class="n">flashnr_vec_aux</span> <span class="o">==</span> <span class="n">flashnr</span><span class="p">]</span>
+            <span class="n">lat</span> <span class="o">=</span> <span class="n">lat</span><span class="p">[</span><span class="n">flashnr_vec_aux</span> <span class="o">==</span> <span class="n">flashnr</span><span class="p">]</span>
+            <span class="n">lon</span> <span class="o">=</span> <span class="n">lon</span><span class="p">[</span><span class="n">flashnr_vec_aux</span> <span class="o">==</span> <span class="n">flashnr</span><span class="p">]</span>
+            <span class="n">alt</span> <span class="o">=</span> <span class="n">alt</span><span class="p">[</span><span class="n">flashnr_vec_aux</span> <span class="o">==</span> <span class="n">flashnr</span><span class="p">]</span>
+            <span class="n">dBm</span> <span class="o">=</span> <span class="n">dBm</span><span class="p">[</span><span class="n">flashnr_vec_aux</span> <span class="o">==</span> <span class="n">flashnr</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dBm_val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dBm</span><span class="p">):</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">recording_started</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">time</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">starttime</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">recording_started</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="n">recording_check_stop</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">time</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">endtime</span><span class="p">:</span>
+                    <span class="k">break</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">flashnr_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flashnr_vec</span><span class="p">,</span> <span class="p">[</span><span class="n">flashnr_vec</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">,</span> <span class="p">[</span><span class="n">time</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">time_in_flash</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">time_in_flash</span><span class="p">,</span> <span class="p">[</span><span class="n">time_in_flash</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lat_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lat_deg</span><span class="p">,</span> <span class="p">[</span><span class="n">lat</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lon_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lon_deg</span><span class="p">,</span> <span class="p">[</span><span class="n">lon</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span><span class="p">,</span> <span class="p">[</span><span class="n">alt</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">dBm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dBm</span><span class="p">,</span> <span class="p">[</span><span class="n">dBm_val</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nsamples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_read_traj_trt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read trajectory from TRT file</span>
+<span class="sd">        File format</span>
+<span class="sd">        -----------</span>
+<span class="sd">        Columns:</span>
+<span class="sd">        1. traj_ID</span>
+<span class="sd">        2. yyyymmddHHMM (UTC)</span>
+<span class="sd">        2. lon (deg)</span>
+<span class="sd">        3. lat [deg]</span>
+<span class="sd">        4. ell_L</span>
+<span class="sd">        5. ell_S</span>
+<span class="sd">        6. ell_or</span>
+<span class="sd">        7. area</span>
+<span class="sd">        8. vel_x</span>
+<span class="sd">        9. vel_y</span>
+<span class="sd">        10. det</span>
+<span class="sd">        11. RANKr</span>
+<span class="sd">        12. CG_n</span>
+<span class="sd">        13. CG_p</span>
+<span class="sd">        14. CG</span>
+<span class="sd">        15. CG_percent_p</span>
+<span class="sd">        16. ET45</span>
+<span class="sd">        17. ET45m</span>
+<span class="sd">        18. ET15</span>
+<span class="sd">        19. ET15m</span>
+<span class="sd">        20. VIL</span>
+<span class="sd">        21. maxH</span>
+<span class="sd">        22. maxHm</span>
+<span class="sd">        23. POH</span>
+<span class="sd">        24. RANK</span>
+<span class="sd">        25. Dvel_x</span>
+<span class="sd">        26. Dvel_y</span>
+<span class="sd">        27. cell_contours</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;_tt.trt&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">traj_ID</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">yyyymmddHHMM</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span>
+             <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span>
+             <span class="n">cell_contours</span><span class="p">)</span> <span class="o">=</span> <span class="n">read_trt_thundertracking_traj_data</span><span class="p">(</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">traj_ID</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;ERROR: Could not find|open trajectory file &#39;&quot;</span> <span class="o">+</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+
+            <span class="n">valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">yyyymmddHHMM</span><span class="p">))</span>
+            <span class="n">yyyymmddHHMM</span> <span class="o">=</span> <span class="n">yyyymmddHHMM</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
+            <span class="n">traj_ID</span> <span class="o">=</span> <span class="n">traj_ID</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
+            <span class="n">lon</span> <span class="o">=</span> <span class="n">lon</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
+            <span class="n">lat</span> <span class="o">=</span> <span class="n">lat</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
+            <span class="n">cell_contours</span> <span class="o">=</span> <span class="n">cell_contours</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">traj_ID</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;ERROR: No valid data in trajectory file &#39;&quot;</span> <span class="o">+</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">traj_ID</span><span class="p">,</span> <span class="n">yyyymmddHHMM</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span>
+             <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">cell_contours</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span>
+                 <span class="n">read_trt_traj_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">traj_ID</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;ERROR: Could not find|open trajectory file &#39;&quot;</span> <span class="o">+</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+
+        <span class="n">recording_started</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">starttime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">recording_started</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">recording_check_stop</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">endtime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">recording_check_stop</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">cell_contour</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cell_contours</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">recording_started</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">yyyymmddHHMM</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">starttime</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">recording_started</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="n">recording_check_stop</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">yyyymmddHHMM</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">endtime</span><span class="p">:</span>
+                    <span class="k">break</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">,</span> <span class="p">[</span><span class="n">yyyymmddHHMM</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lat_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lat_deg</span><span class="p">,</span> <span class="p">[</span><span class="n">lat</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lon_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lon_deg</span><span class="p">,</span> <span class="p">[</span><span class="n">lon</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">cell_contour</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_contour</span><span class="p">,</span> <span class="p">[</span><span class="n">cell_contour</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nsamples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_total_seconds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return total seconds of timedelta object&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span></div>
+
+
+<span class="k">class</span> <span class="nc">_Radar_Trajectory</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class for holding the trajectory data assigned to a radar.</span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    latitude : float</span>
+<span class="sd">       WGS84 radar latitude [deg]</span>
+<span class="sd">    longitude : float</span>
+<span class="sd">       WGS84 radar longitude [deg]</span>
+<span class="sd">    altitude : float</span>
+<span class="sd">       radar altitude [m] (non WGS84)</span>
+<span class="sd">    ch_y, ch_x, ch_alt : float</span>
+<span class="sd">       radar coordinates in swiss CH1903 coordinates</span>
+<span class="sd">    elevation_vec : float list</span>
+<span class="sd">       Elevation values of the trajectory samples</span>
+<span class="sd">    azimuth_vec : float list</span>
+<span class="sd">       Azimuth values of the trajectory samples</span>
+<span class="sd">    range_vec : float list</span>
+<span class="sd">       Range values of the trajectory samples</span>
+<span class="sd">    v_abs, v_r, v_el, v_az : array-like</span>
+<span class="sd">       Velocity vectors of the absolute [m/s], radial [m/s], elevation [deg/s]</span>
+<span class="sd">       and azimuth [deg/s] velocities</span>
+<span class="sd">    Methods:</span>
+<span class="sd">    --------</span>
+<span class="sd">    location_is_equal</span>
+<span class="sd">    assign_trajectory</span>
+<span class="sd">    convert_radpos_to_swissgrid</span>
+<span class="sd">    assign_velocity_vecs</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">alt</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initalize the object.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        lat, lon , alt : radar location coordinates</span>
+<span class="sd">        nsamps : number of samples</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># radar position in lat, lon</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">latitude</span> <span class="o">=</span> <span class="n">lat</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">longitude</span> <span class="o">=</span> <span class="n">lon</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">altitude</span> <span class="o">=</span> <span class="n">alt</span>
+
+        <span class="c1"># radar position in swiss CH1903 coordinates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_swiss_coords_done</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ch_y</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ch_x</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ch_alt</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># trajectory in polar radar coordinates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">traj_assigned</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">elevation_vec</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">azimuth_vec</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">range_vec</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Velocity vectors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_velocity_vecs_assigned</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v_abs</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v_r</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v_el</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v_az</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">location_is_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">alt</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if the given coordinates are the same.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        lat, lon , alt : radar location coordinates</span>
+<span class="sd">        Return</span>
+<span class="sd">        ------</span>
+<span class="sd">        True if the radar location is equal, False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">lat_tol</span> <span class="o">=</span> <span class="mf">0.002</span>  <span class="c1"># [deg]</span>
+        <span class="n">lon_tol</span> <span class="o">=</span> <span class="mf">0.002</span>  <span class="c1"># [deg]</span>
+        <span class="n">alt_tol</span> <span class="o">=</span> <span class="mf">2.0</span>    <span class="c1"># [m]</span>
+
+        <span class="k">if</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latitude</span> <span class="o">-</span> <span class="n">lat</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">lat_tol</span><span class="p">)</span> <span class="ow">or</span>
+                <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">longitude</span> <span class="o">-</span> <span class="n">lon</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">lon_tol</span><span class="p">)</span> <span class="ow">or</span>
+                <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">altitude</span> <span class="o">-</span> <span class="n">alt</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">alt_tol</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">assign_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">az</span><span class="p">,</span> <span class="n">rr</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assign a trajectory to the radar in polar radar</span>
+<span class="sd">        coordinates.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        el, az, rr : array-like</span>
+<span class="sd">           elevation, azimuth and range vector</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">traj_assigned</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;WARNING: Trajectory already assigned&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">elevation_vec</span> <span class="o">=</span> <span class="n">el</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">azimuth_vec</span> <span class="o">=</span> <span class="n">az</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">range_vec</span> <span class="o">=</span> <span class="n">rr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">traj_assigned</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">convert_radpos_to_swissgrid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert the radar location (in WGS84 coordinates) to</span>
+<span class="sd">        swiss CH1903 coordinates.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_swiss_coords_done</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ch_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ch_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ch_alt</span><span class="p">)</span> <span class="o">=</span> \
+            <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">wgs84_to_swissCH1903</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">longitude</span><span class="p">,</span>
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">latitude</span><span class="p">,</span>
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">altitude</span><span class="p">,</span>
+                                            <span class="n">no_altitude_transform</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_swiss_coords_done</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">assign_velocity_vecs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v_abs</span><span class="p">,</span> <span class="n">v_r</span><span class="p">,</span> <span class="n">v_el</span><span class="p">,</span> <span class="n">v_az</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assign velocity vectors to the radar.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_velocity_vecs_assigned</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;WARNING: Trajectory velocity vectors already assigned&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">v_abs</span> <span class="o">=</span> <span class="n">v_abs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v_r</span> <span class="o">=</span> <span class="n">v_r</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v_az</span> <span class="o">=</span> <span class="n">v_az</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v_el</span> <span class="o">=</span> <span class="n">v_el</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_velocity_vecs_assigned</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+<div class="section ablog__blog_comments">
+  
+  
+</div>
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1519 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyrad.proc.process_Doppler &#8212; Pyrad 1.8.3 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/design-tabs.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyrad/proc/process_Doppler';</script>
+    <script src="../../../_static/doc_shared.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Pyrad 1.8.3 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../userguide/index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../API/index.html">
+                        API Reference Manual
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../overview/index.html">
+                        Features
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../userguide/index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../API/index.html">
+                        API Reference Manual
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../overview/index.html">
+                        Features
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">pyrad.proc.process_Doppler</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+<h1>Source code for pyrad.proc.process_Doppler</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">pyrad.proc.process_Doppler</span>
+<span class="sd">===========================</span>
+
+<span class="sd">Functions for processing Doppler related parameters</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    process_turbulence</span>
+<span class="sd">    process_dealias_fourdd</span>
+<span class="sd">    process_dealias_region_based</span>
+<span class="sd">    process_dealias_unwrap_phase</span>
+<span class="sd">    process_radial_velocity</span>
+<span class="sd">    process_wind_vel</span>
+<span class="sd">    process_windshear</span>
+<span class="sd">    process_windshear_lidar</span>
+<span class="sd">    process_vad</span>
+<span class="sd">    process_dda</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">pyart</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">pytda</span>
+    <span class="n">_PYTDA_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">_PYTDA_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">pydda</span>
+    <span class="n">_PYDDA_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">_PYDDA_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="kn">from</span> <span class="nn">..io.io_aux</span> <span class="kn">import</span> <span class="n">get_datatype_fields</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span>
+<span class="kn">from</span> <span class="nn">..io</span> <span class="kn">import</span> <span class="n">read_radiosounding</span>
+<span class="kn">from</span> <span class="nn">.process_grid</span> <span class="kn">import</span> <span class="n">process_grid</span>
+<span class="kn">from</span> <span class="nn">..util</span> <span class="kn">import</span> <span class="n">compute_average_vad</span>
+
+<div class="viewcode-block" id="process_turbulence"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_turbulence.html#pyrad.proc.process_turbulence">[docs]</a><span class="k">def</span> <span class="nf">process_turbulence</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes turbulence from the Doppler spectrum width and reflectivity using</span>
+<span class="sd">    the PyTDA package</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    procstatus : int</span>
+<span class="sd">        Processing status: 0 initializing, 1 processing volume,</span>
+<span class="sd">        2 post-processing</span>
+<span class="sd">    dscfg : dictionary of dictionaries</span>
+<span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
+
+<span class="sd">        datatype : string. Dataset keyword</span>
+<span class="sd">            The input data type</span>
+<span class="sd">        radius : float. Dataset keyword</span>
+<span class="sd">            Search radius for calculating Eddy Dissipation Rate (EDR).</span>
+<span class="sd">            Default 2</span>
+<span class="sd">        split_cut : Bool. Dataset keyword</span>
+<span class="sd">            Set to True for split-cut volumes. Default False</span>
+<span class="sd">        max_split_cut : Int. Dataset keyword</span>
+<span class="sd">            Total number of tilts that are affected by split cuts. Only</span>
+<span class="sd">            relevant if split_cut=True. Default 2</span>
+<span class="sd">        xran, yran : float array. Dataset keyword</span>
+<span class="sd">            Spatial range in X,Y to consider. Default [-100, 100] for both</span>
+<span class="sd">            X and Y</span>
+<span class="sd">        beamwidth : Float. Dataset keyword</span>
+<span class="sd">            Radar beamwidth. Default None. If None it will be obtained from</span>
+<span class="sd">            the radar object metadata. If cannot be obtained defaults to 1</span>
+<span class="sd">            deg.</span>
+<span class="sd">        compute_gate_pos : Bool. Dataset keyword</span>
+<span class="sd">            If True the gate position is going to be computed in PyTDA.</span>
+<span class="sd">            Otherwise the position from the radar object is used. Default</span>
+<span class="sd">            False</span>
+<span class="sd">        verbose : Bool. Dataset keyword</span>
+<span class="sd">            True for verbose output. Default False</span>
+
+<span class="sd">    radar_list : list of Radar objects</span>
+<span class="sd">        Optional. list of radar objects</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    new_dataset : dict</span>
+<span class="sd">        dictionary containing the output</span>
+<span class="sd">    ind_rad : int</span>
+<span class="sd">        radar index</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_PYTDA_AVAILABLE</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;PyTDA package not available. Unable to compute turbulence&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">width_field</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">refl_field</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+        <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;dBuZ&#39;</span><span class="p">,</span> <span class="s1">&#39;dBZ&#39;</span><span class="p">,</span> <span class="s1">&#39;dBZc&#39;</span><span class="p">,</span> <span class="s1">&#39;dBuZv&#39;</span><span class="p">,</span> <span class="s1">&#39;dBZv&#39;</span><span class="p">,</span> <span class="s1">&#39;dBZvc&#39;</span><span class="p">):</span>
+            <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;W&#39;</span><span class="p">,</span> <span class="s1">&#39;Wv&#39;</span><span class="p">,</span> <span class="s1">&#39;Wu&#39;</span><span class="p">,</span> <span class="s1">&#39;Wvu&#39;</span><span class="p">):</span>
+            <span class="n">width_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">width_field</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Reflectivity and spectrum width fields required&#39;</span>
+             <span class="s1">&#39; to estimate turbulence&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">width_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span> <span class="ow">or</span> <span class="n">refl_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to compute turbulence. Missing data&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="c1"># user defined parameters</span>
+    <span class="n">radius</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;radius&#39;</span><span class="p">,</span> <span class="mf">2.</span><span class="p">)</span>
+    <span class="n">split_cut</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;split_cut&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">xran</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;xran&#39;</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mf">100.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">])</span>
+    <span class="n">yran</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;yran&#39;</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mf">100.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">])</span>
+    <span class="n">max_split_cut</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;max_split_cut&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">beamwidth</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;beamwidth&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">verbose</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">compute_gate_pos</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;compute_gate_pos&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">beamwidth</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span>
+                <span class="s1">&#39;radar_beam_width_h&#39;</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">):</span>
+            <span class="n">beamwidth</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span>
+                <span class="s1">&#39;radar_beam_width_h&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unknown radar beamwidth. Default 1 deg will be used&#39;</span><span class="p">)</span>
+            <span class="n">beamwidth</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">rng_res</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1000.</span>
+
+    <span class="n">radar_out</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+    <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">radar_out</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">refl_field</span><span class="p">,</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">]))</span>
+    <span class="n">radar_out</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">width_field</span><span class="p">,</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">width_field</span><span class="p">]))</span>
+    <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">32768</span>
+    <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">width_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">width_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">32768</span>
+
+    <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s1">&#39;_FillValue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">32768</span>
+    <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">width_field</span><span class="p">][</span><span class="s1">&#39;_FillValue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">32768</span>
+
+    <span class="k">if</span> <span class="n">radar_out</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s1">&#39;ppi&#39;</span><span class="p">:</span>
+        <span class="n">pytda</span><span class="o">.</span><span class="n">calc_turb_vol</span><span class="p">(</span>
+            <span class="n">radar_out</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">split_cut</span><span class="o">=</span><span class="n">split_cut</span><span class="p">,</span> <span class="n">xran</span><span class="o">=</span><span class="n">xran</span><span class="p">,</span>
+            <span class="n">yran</span><span class="o">=</span><span class="n">yran</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">name_dz</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span>
+            <span class="n">name_sw</span><span class="o">=</span><span class="n">width_field</span><span class="p">,</span> <span class="n">turb_name</span><span class="o">=</span><span class="s1">&#39;turbulence&#39;</span><span class="p">,</span>
+            <span class="n">max_split_cut</span><span class="o">=</span><span class="n">max_split_cut</span><span class="p">,</span> <span class="n">use_ntda</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">beamwidth</span><span class="o">=</span><span class="n">beamwidth</span><span class="p">,</span>
+            <span class="n">gate_spacing</span><span class="o">=</span><span class="n">rng_res</span><span class="p">,</span> <span class="n">compute_gate_pos</span><span class="o">=</span><span class="n">compute_gate_pos</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">radar_out</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s1">&#39;rhi&#39;</span><span class="p">:</span>
+        <span class="n">pytda</span><span class="o">.</span><span class="n">calc_turb_rhi</span><span class="p">(</span>
+            <span class="n">radar_out</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">name_dz</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span>
+            <span class="n">name_sw</span><span class="o">=</span><span class="n">width_field</span><span class="p">,</span> <span class="n">turb_name</span><span class="o">=</span><span class="s1">&#39;turbulence&#39;</span><span class="p">,</span>
+            <span class="n">use_ntda</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">beamwidth</span><span class="o">=</span><span class="n">beamwidth</span><span class="p">,</span> <span class="n">gate_spacing</span><span class="o">=</span><span class="n">rng_res</span><span class="p">,</span>
+            <span class="n">compute_gate_pos</span><span class="o">=</span><span class="n">compute_gate_pos</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Radar volume of type &#39;</span> <span class="o">+</span> <span class="n">radar_out</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">+</span>
+             <span class="s1">&#39;. Only volumes of type PPI or RHI are allowed&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">del</span> <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">]</span>
+    <span class="k">del</span> <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">width_field</span><span class="p">]</span>
+
+    <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;turbulence&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span>
+        <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;turbulence&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="o">-</span><span class="mf">32768.</span><span class="p">)</span>
+
+    <span class="c1"># prepare for exit</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">radar_out</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
+
+
+<div class="viewcode-block" id="process_dealias_fourdd"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_dealias_fourdd.html#pyrad.proc.process_dealias_fourdd">[docs]</a><span class="k">def</span> <span class="nf">process_dealias_fourdd</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dealiases the Doppler velocity field using the 4DD technique</span>
+<span class="sd">    from Curtis and Houze, 2001</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    procstatus : int</span>
+<span class="sd">        Processing status: 0 initializing, 1 processing volume,</span>
+<span class="sd">        2 post-processing</span>
+<span class="sd">    dscfg : dictionary of dictionaries</span>
+<span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
+
+<span class="sd">        datatype : string. Dataset keyword</span>
+<span class="sd">            The input data type</span>
+<span class="sd">        filt : int. Dataset keyword</span>
+<span class="sd">            Flag controlling Bergen and Albers filter, 1 = yes, 0 = no.</span>
+<span class="sd">        sign : int. Dataset keyword</span>
+<span class="sd">            Sign convention which the radial velocities in the volume created</span>
+<span class="sd">            from the sounding data will will. This should match the</span>
+<span class="sd">            convention used in the radar data. A value of 1 represents when</span>
+<span class="sd">            positive values velocities are towards the radar, -1 represents</span>
+<span class="sd">            when negative velocities are towards the radar.</span>
+
+
+<span class="sd">    radar_list : list of Radar objects</span>
+<span class="sd">        Optional. list of radar objects</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    new_dataset : dict</span>
+<span class="sd">        dictionary containing the output</span>
+<span class="sd">    ind_rad : int</span>
+<span class="sd">        radar index</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">vel_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
+
+    <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">vel_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to correct Doppler aliasing. Missing data&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">corr_vel_field</span> <span class="o">=</span> <span class="s1">&#39;dealiased_&#39;</span> <span class="o">+</span> <span class="n">vel_field</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;initialized&#39;</span><span class="p">]:</span>
+        <span class="c1"># Use phase unwraping method to obtain first guess</span>
+
+        <span class="c1"># get user parameters</span>
+        <span class="n">interval_splits</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;interval_splits&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">skip_between_rays</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;skip_between_rays&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="n">skip_along_ray</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;skip_along_ray&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="n">centered</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;centered&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">corr_vel_dict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">dealias_region_based</span><span class="p">(</span>
+            <span class="n">radar</span><span class="p">,</span> <span class="n">ref_vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">interval_splits</span><span class="o">=</span><span class="n">interval_splits</span><span class="p">,</span>
+            <span class="n">interval_limits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">skip_between_rays</span><span class="o">=</span><span class="n">skip_between_rays</span><span class="p">,</span>
+            <span class="n">skip_along_ray</span><span class="o">=</span><span class="n">skip_along_ray</span><span class="p">,</span> <span class="n">centered</span><span class="o">=</span><span class="n">centered</span><span class="p">,</span>
+            <span class="n">nyquist_vel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">check_nyquist_uniform</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">rays_wrap_around</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keep_original</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">set_limits</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">vel_field</span><span class="o">=</span><span class="n">vel_field</span><span class="p">,</span> <span class="n">corr_vel_field</span><span class="o">=</span><span class="n">corr_vel_field</span><span class="p">)</span>
+
+        <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;initialized&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># get user parameters</span>
+        <span class="n">filt</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;filt&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">sign</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sign&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">keep_mask</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;keep_mask&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">last_radar</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">]</span>
+
+        <span class="n">corr_vel_dict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">dealias_fourdd</span><span class="p">(</span>
+            <span class="n">radar</span><span class="p">,</span> <span class="n">last_radar</span><span class="o">=</span><span class="n">last_radar</span><span class="p">,</span> <span class="n">sonde_profile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">gatefilter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">filt</span><span class="o">=</span><span class="n">filt</span><span class="p">,</span> <span class="n">rsl_badval</span><span class="o">=</span><span class="mf">131072.0</span><span class="p">,</span>
+            <span class="n">keep_original</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">set_limits</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="n">vel_field</span><span class="p">,</span>
+            <span class="n">corr_vel_field</span><span class="o">=</span><span class="n">corr_vel_field</span><span class="p">,</span> <span class="n">last_vel_field</span><span class="o">=</span><span class="n">corr_vel_field</span><span class="p">,</span>
+            <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="n">sign</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">keep_mask</span><span class="p">:</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+            <span class="n">corr_vel_dict</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span>
+                <span class="n">mask</span><span class="p">,</span> <span class="n">corr_vel_dict</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+
+    <span class="c1"># prepare for exit</span>
+    <span class="n">radar_out</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+    <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">radar_out</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">corr_vel_field</span><span class="p">,</span> <span class="n">corr_vel_dict</span><span class="p">)</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">radar_out</span><span class="p">}</span>
+
+    <span class="c1"># keep current corrected Doppler velocity field in memory</span>
+    <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar_out</span>
+
+    <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
+
+
+<div class="viewcode-block" id="process_dealias_region_based"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_dealias_region_based.html#pyrad.proc.process_dealias_region_based">[docs]</a><span class="k">def</span> <span class="nf">process_dealias_region_based</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dealiases the Doppler velocity field using a region based algorithm</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    procstatus : int</span>
+<span class="sd">        Processing status: 0 initializing, 1 processing volume,</span>
+<span class="sd">        2 post-processing</span>
+<span class="sd">    dscfg : dictionary of dictionaries</span>
+<span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
+
+<span class="sd">        datatype : string. Dataset keyword</span>
+<span class="sd">            The input data type</span>
+<span class="sd">        interval_splits : int, optional</span>
+<span class="sd">            Number of segments to split the nyquist interval into when finding</span>
+<span class="sd">            regions of similar velocity.  More splits creates a larger number</span>
+<span class="sd">            of initial regions which takes longer to process but may result in</span>
+<span class="sd">            better dealiasing.  The default value of 3 seems to be a good</span>
+<span class="sd">            compromise between performance and artifact free dealiasing. This</span>
+<span class="sd">            value is not used if the interval_limits parameter is not None.</span>
+<span class="sd">        skip_between_rays, skip_along_ray : int, optional</span>
+<span class="sd">            Maximum number of filtered gates to skip over when joining</span>
+<span class="sd">            regions, gaps between region larger than this will not be</span>
+<span class="sd">            connected. Parameters specify the maximum number of filtered gates</span>
+<span class="sd">            between and along a ray. Set these parameters to 0 to disable</span>
+<span class="sd">            unfolding across filtered gates.</span>
+<span class="sd">        centered : bool, optional</span>
+<span class="sd">            True to apply centering to each sweep after the dealiasing</span>
+<span class="sd">            algorithm so that the average number of unfolding is near 0. False</span>
+<span class="sd">            does not apply centering which may results in individual sweeps</span>
+<span class="sd">            under or over folded by the nyquist interval.</span>
+<span class="sd">        nyquist_vel : float, optional</span>
+<span class="sd">            Nyquist velocity of the aquired radar velocity.</span>
+<span class="sd">            Usually this parameter is provided in the</span>
+<span class="sd">            Radar object intrument_parameters. If it is not available it can</span>
+<span class="sd">            be provided as a keyword here.</span>
+<span class="sd">    radar_list : list of Radar objects</span>
+<span class="sd">        Optional. list of radar objects</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    new_dataset : dict</span>
+<span class="sd">        dictionary containing the output</span>
+<span class="sd">    ind_rad : int</span>
+<span class="sd">        radar index</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">vel_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
+
+    <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">vel_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to correct Doppler aliasing. Missing data&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">corr_vel_field</span> <span class="o">=</span> <span class="s1">&#39;dealiased_&#39;</span> <span class="o">+</span> <span class="n">vel_field</span>
+
+    <span class="c1"># get user parameters</span>
+    <span class="n">interval_splits</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;interval_splits&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">skip_between_rays</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;skip_between_rays&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">skip_along_ray</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;skip_along_ray&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">centered</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;centered&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">nyquist_vel</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;nyquist_vel&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">corr_vel_dict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">dealias_region_based</span><span class="p">(</span>
+        <span class="n">radar</span><span class="p">,</span> <span class="n">ref_vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">interval_splits</span><span class="o">=</span><span class="n">interval_splits</span><span class="p">,</span>
+        <span class="n">interval_limits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">skip_between_rays</span><span class="o">=</span><span class="n">skip_between_rays</span><span class="p">,</span>
+        <span class="n">skip_along_ray</span><span class="o">=</span><span class="n">skip_along_ray</span><span class="p">,</span> <span class="n">centered</span><span class="o">=</span><span class="n">centered</span><span class="p">,</span>
+        <span class="n">nyquist_vel</span><span class="o">=</span><span class="n">nyquist_vel</span><span class="p">,</span> <span class="n">check_nyquist_uniform</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">rays_wrap_around</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keep_original</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">set_limits</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">vel_field</span><span class="o">=</span><span class="n">vel_field</span><span class="p">,</span> <span class="n">corr_vel_field</span><span class="o">=</span><span class="n">corr_vel_field</span><span class="p">)</span>
+
+    <span class="c1"># prepare for exit</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">corr_vel_field</span><span class="p">,</span> <span class="n">corr_vel_dict</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
+
+
+<div class="viewcode-block" id="process_dealias_unwrap_phase"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_dealias_unwrap_phase.html#pyrad.proc.process_dealias_unwrap_phase">[docs]</a><span class="k">def</span> <span class="nf">process_dealias_unwrap_phase</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dealiases the Doppler velocity field using multi-dimensional phase</span>
+<span class="sd">    unwrapping</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    procstatus : int</span>
+<span class="sd">        Processing status: 0 initializing, 1 processing volume,</span>
+<span class="sd">        2 post-processing</span>
+<span class="sd">    dscfg : dictionary of dictionaries</span>
+<span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
+
+<span class="sd">        datatype : string. Dataset keyword</span>
+<span class="sd">            The input data type</span>
+<span class="sd">        unwrap_unit : {&#39;ray&#39;, &#39;sweep&#39;, &#39;volume&#39;}, optional</span>
+<span class="sd">            Unit to unwrap independently.  &#39;ray&#39; will unwrap each ray</span>
+<span class="sd">            individually, &#39;sweep&#39; each sweep, and &#39;volume&#39; will unwrap the</span>
+<span class="sd">            entire volume in a single pass.  &#39;sweep&#39;, the default, often gives</span>
+<span class="sd">            superior results when the lower sweeps of the radar volume are</span>
+<span class="sd">            contaminated by clutter. &#39;ray&#39; does not use the gatefilter</span>
+<span class="sd">            parameter and rays where gates ared masked will result in poor</span>
+<span class="sd">            dealiasing for that ray.</span>
+<span class="sd">    radar_list : list of Radar objects</span>
+<span class="sd">        Optional. list of radar objects</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    new_dataset : dict</span>
+<span class="sd">        dictionary containing the output</span>
+<span class="sd">    ind_rad : int</span>
+<span class="sd">        radar index</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">vel_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
+
+    <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">vel_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to correct Doppler aliasing. Missing data&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">corr_vel_field</span> <span class="o">=</span> <span class="s1">&#39;dealiased_&#39;</span> <span class="o">+</span> <span class="n">vel_field</span>
+
+    <span class="c1"># get user parameters</span>
+    <span class="n">unwrap_unit</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;unwrap_unit&#39;</span><span class="p">,</span> <span class="s1">&#39;sweep&#39;</span><span class="p">)</span>
+
+    <span class="n">corr_vel_dict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">dealias_unwrap_phase</span><span class="p">(</span>
+        <span class="n">radar</span><span class="p">,</span> <span class="n">unwrap_unit</span><span class="o">=</span><span class="n">unwrap_unit</span><span class="p">,</span> <span class="n">nyquist_vel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">check_nyquist_uniform</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">rays_wrap_around</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keep_original</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">set_limits</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">vel_field</span><span class="o">=</span><span class="n">vel_field</span><span class="p">,</span> <span class="n">corr_vel_field</span><span class="o">=</span><span class="n">corr_vel_field</span><span class="p">,</span> <span class="n">skip_checks</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># prepare for exit</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">corr_vel_field</span><span class="p">,</span> <span class="n">corr_vel_dict</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
+
+
+<div class="viewcode-block" id="process_radial_velocity"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_radial_velocity.html#pyrad.proc.process_radial_velocity">[docs]</a><span class="k">def</span> <span class="nf">process_radial_velocity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Estimates the radial velocity respect to the radar from the wind velocity</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    procstatus : int</span>
+<span class="sd">        Processing status: 0 initializing, 1 processing volume,</span>
+<span class="sd">        2 post-processing</span>
+<span class="sd">    dscfg : dictionary of dictionaries</span>
+<span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
+
+<span class="sd">        datatype : string. Dataset keyword</span>
+<span class="sd">            The input data type</span>
+<span class="sd">        latitude, longitude : float</span>
+<span class="sd">            arbitrary coordinates [deg] from where to compute the radial</span>
+<span class="sd">            velocity. If any of them is None it will be the radar position</span>
+<span class="sd">        altitude : float</span>
+<span class="sd">            arbitrary altitude [m MSL] from where to compute the radial</span>
+<span class="sd">            velocity. If None it will be the radar altitude</span>
+<span class="sd">    radar_list : list of Radar objects</span>
+<span class="sd">        Optional. list of radar objects</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    new_dataset : dict</span>
+<span class="sd">        dictionary containing the output</span>
+<span class="sd">    ind_rad : int</span>
+<span class="sd">        radar index</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">v_speed_field</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">h_speed_field</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">h_dir_field</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+        <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;wind_vel_v&#39;</span><span class="p">:</span>
+            <span class="n">v_speed_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;WIND_SPEED&#39;</span><span class="p">:</span>
+            <span class="n">h_speed_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;WIND_DIRECTION&#39;</span><span class="p">:</span>
+            <span class="n">h_dir_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">h_speed_field</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">h_dir_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Horizontal wind speed and direction fields required&#39;</span>
+             <span class="s1">&#39; to estimate radial velocity&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">h_speed_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span> <span class="ow">or</span> <span class="n">h_dir_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to estimate radial velocity. &#39;</span>
+             <span class="s1">&#39;Missing horizontal wind&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">h_speed</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">h_speed_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+    <span class="n">h_dir</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">h_dir_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">v_speed_field</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">v_speed_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unknown vertical wind speed. Assumed 0&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">v_speed_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">v_speed_field</span> <span class="o">==</span> <span class="s1">&#39;vertical_wind_component&#39;</span>
+
+        <span class="n">v_speed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">radar</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">ngates</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">v_speed</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">v_speed_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+
+    <span class="c1"># user defined parameters</span>
+    <span class="n">lat</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;latitude&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">lon</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;longitude&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">alt</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;altitude&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># get u and v wind components</span>
+    <span class="n">h_dir_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">h_dir</span><span class="p">)</span>
+    <span class="n">speed_h_u</span> <span class="o">=</span> <span class="n">h_speed</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">h_dir_rad</span><span class="p">)</span>  <span class="c1"># eastward component</span>
+    <span class="n">speed_h_v</span> <span class="o">=</span> <span class="n">h_speed</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">h_dir_rad</span><span class="p">)</span>  <span class="c1"># northward component</span>
+
+    <span class="k">if</span> <span class="n">lat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">lon</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">alt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># get antenna coordinates respect to new radar location</span>
+        <span class="k">if</span> <span class="n">lat</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lat</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">lon</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lon</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">alt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">alt</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">geographic_to_cartesian_aeqd</span><span class="p">(</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">gate_longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">lon</span><span class="p">,</span>
+            <span class="n">lat</span><span class="p">)</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">alt</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevations</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">cartesian_to_antenna</span><span class="p">(</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+        <span class="n">azi_2D_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">azimuths</span><span class="p">)</span>
+        <span class="n">ele_2D_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">elevations</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">azi_2D_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
+            <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">ngates</span><span class="p">))</span>
+        <span class="n">ele_2D_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
+            <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">ngates</span><span class="p">))</span>
+
+    <span class="n">r_speed</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;velocity&#39;</span><span class="p">)</span>
+
+    <span class="c1"># assuming no vertical velocity</span>
+    <span class="c1"># r_speed[&#39;data&#39;] = h_speed*np.cos(h_dir_rad-azi_2D_rad)*np.cos(ele_2D_rad)</span>
+
+    <span class="c1"># with vertical velocity included</span>
+    <span class="n">r_speed</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">speed_h_u</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">azi_2D_rad</span><span class="p">)</span> <span class="o">+</span> <span class="n">speed_h_v</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">azi_2D_rad</span><span class="p">))</span> <span class="o">*</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">ele_2D_rad</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ele_2D_rad</span><span class="p">)</span> <span class="o">*</span> <span class="n">v_speed</span><span class="p">)</span>
+
+    <span class="c1"># prepare for exit</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;velocity&#39;</span><span class="p">,</span> <span class="n">r_speed</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
+
+
+<div class="viewcode-block" id="process_wind_vel"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_wind_vel.html#pyrad.proc.process_wind_vel">[docs]</a><span class="k">def</span> <span class="nf">process_wind_vel</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Estimates the horizontal or vertical component of the wind from the</span>
+<span class="sd">    radial velocity</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    procstatus : int</span>
+<span class="sd">        Processing status: 0 initializing, 1 processing volume,</span>
+<span class="sd">        2 post-processing</span>
+<span class="sd">    dscfg : dictionary of dictionaries</span>
+<span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
+
+<span class="sd">        datatype : string. Dataset keyword</span>
+<span class="sd">            The input data type</span>
+<span class="sd">        vert_proj : Boolean</span>
+<span class="sd">            If true the vertical projection is computed. Otherwise the</span>
+<span class="sd">            horizontal projection is computed</span>
+<span class="sd">    radar_list : list of Radar objects</span>
+<span class="sd">        Optional. list of radar objects</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    new_dataset : dict</span>
+<span class="sd">        dictionary containing the output</span>
+<span class="sd">    ind_rad : int</span>
+<span class="sd">        radar index</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">vel_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
+
+    <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">vel_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to retrieve wind speed. Missing data&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">vert_proj</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;vert_proj&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">wind_field</span> <span class="o">=</span> <span class="s1">&#39;azimuthal_horizontal_wind_component&#39;</span>
+    <span class="k">if</span> <span class="n">vert_proj</span><span class="p">:</span>
+        <span class="n">wind_field</span> <span class="o">=</span> <span class="s1">&#39;vertical_wind_component&#39;</span>
+
+    <span class="n">wind</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">est_wind_vel</span><span class="p">(</span>
+        <span class="n">radar</span><span class="p">,</span> <span class="n">vert_proj</span><span class="o">=</span><span class="n">vert_proj</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="n">vel_field</span><span class="p">,</span>
+        <span class="n">wind_field</span><span class="o">=</span><span class="n">wind_field</span><span class="p">)</span>
+
+    <span class="c1"># prepare for exit</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">wind_field</span><span class="p">,</span> <span class="n">wind</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
+
+
+<div class="viewcode-block" id="process_windshear"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_windshear.html#pyrad.proc.process_windshear">[docs]</a><span class="k">def</span> <span class="nf">process_windshear</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Estimates the wind shear from the wind velocity</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    procstatus : int</span>
+<span class="sd">        Processing status: 0 initializing, 1 processing volume,</span>
+<span class="sd">        2 post-processing</span>
+<span class="sd">    dscfg : dictionary of dictionaries</span>
+<span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
+
+<span class="sd">        datatype : string. Dataset keyword</span>
+<span class="sd">            The input data type</span>
+<span class="sd">        az_tol : float</span>
+<span class="sd">            The tolerance in azimuth when looking for gates on top</span>
+<span class="sd">            of the gate when computation is performed</span>
+
+<span class="sd">    radar_list : list of Radar objects</span>
+<span class="sd">        Optional. list of radar objects</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    new_dataset : dict</span>
+<span class="sd">        dictionary containing the output</span>
+<span class="sd">    ind_rad : int</span>
+<span class="sd">        radar index</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">wind_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
+
+    <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">wind_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to retrieve wind shear. Missing data&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">az_tol</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;az_tol&#39;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">windshear_field</span> <span class="o">=</span> <span class="s1">&#39;vertical_wind_shear&#39;</span>
+
+    <span class="n">windshear</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">est_vertical_windshear</span><span class="p">(</span>
+        <span class="n">radar</span><span class="p">,</span> <span class="n">az_tol</span><span class="o">=</span><span class="n">az_tol</span><span class="p">,</span> <span class="n">wind_field</span><span class="o">=</span><span class="n">wind_field</span><span class="p">,</span>
+        <span class="n">windshear_field</span><span class="o">=</span><span class="n">windshear_field</span><span class="p">)</span>
+
+    <span class="c1"># prepare for exit</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">windshear_field</span><span class="p">,</span> <span class="n">windshear</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
+
+<span class="k">def</span> <span class="nf">process_windshear_lidar</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Estimates the wind shear from the wind velocity of lidar scans</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    procstatus : int</span>
+<span class="sd">        Processing status: 0 initializing, 1 processing volume,</span>
+<span class="sd">        2 post-processing</span>
+<span class="sd">    dscfg : dictionary of dictionaries</span>
+<span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
+
+<span class="sd">        datatype : string. Dataset keyword</span>
+<span class="sd">            The input data type</span>
+<span class="sd">        az_tol : float</span>
+<span class="sd">            The tolerance in azimuth when looking for gates on top</span>
+<span class="sd">            of the gate when computation is performed</span>
+
+<span class="sd">    radar_list : list of Radar objects</span>
+<span class="sd">        Optional. list of radar objects</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    new_dataset : dict</span>
+<span class="sd">        dictionary containing the output</span>
+<span class="sd">    ind_rad : int</span>
+<span class="sd">        radar index</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">wind_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
+
+    <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span><span class="o">-</span><span class="mi">1</span>
+    <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">wind_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to retrieve wind shear. Missing data&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">az_tol</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;az_tol&#39;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">windshear_field</span> <span class="o">=</span> <span class="s1">&#39;vertical_wind_shear&#39;</span>
+
+    <span class="n">windshear</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">est_vertical_windshear_lidar</span><span class="p">(</span>
+        <span class="n">radar</span><span class="p">,</span> <span class="n">az_tol</span><span class="o">=</span><span class="n">az_tol</span><span class="p">,</span> <span class="n">wind_field</span><span class="o">=</span><span class="n">wind_field</span><span class="p">,</span>
+        <span class="n">windshear_field</span><span class="o">=</span><span class="n">windshear_field</span><span class="p">)</span>
+
+    <span class="c1"># prepare for exit</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">windshear_field</span><span class="p">,</span> <span class="n">windshear</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span>
+
+<div class="viewcode-block" id="process_vad"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_vad.html#pyrad.proc.process_vad">[docs]</a><span class="k">def</span> <span class="nf">process_vad</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Estimates vertical wind profile using the VAD (velocity Azimuth Display)</span>
+<span class="sd">    technique</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    procstatus : int</span>
+<span class="sd">        Processing status: 0 initializing, 1 processing volume,</span>
+<span class="sd">        2 post-processing</span>
+<span class="sd">    dscfg : dictionary of dictionaries</span>
+<span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
+
+<span class="sd">        datatype : string. Dataset keyword</span>
+<span class="sd">            The input data type</span>
+<span class="sd">    radar_list : list of Radar objects</span>
+<span class="sd">        Optional. list of radar objects</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    new_dataset : dict</span>
+<span class="sd">        dictionary containing the output</span>
+<span class="sd">    ind_rad : int</span>
+<span class="sd">        radar index</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">vel_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
+
+    <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">vel_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to retrieve wind speed. Missing data&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="c1"># User defined parameters</span>
+    <span class="n">npoints_min</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;npoints_min&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="n">azi_spacing_max</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;azi_spacing_max&#39;</span><span class="p">,</span> <span class="mf">45.</span><span class="p">)</span>
+    <span class="n">vel_diff_max</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;vel_diff_max&#39;</span><span class="p">,</span> <span class="mf">10.</span><span class="p">)</span>
+
+    <span class="p">(</span><span class="n">u_vel_dict</span><span class="p">,</span> <span class="n">v_vel_dict</span><span class="p">,</span> <span class="n">w_vel_dict</span><span class="p">,</span> <span class="n">vel_est_dict</span><span class="p">,</span> <span class="n">vel_std_dict</span><span class="p">,</span>
+     <span class="n">vel_diff_dict</span><span class="p">)</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">est_wind_profile</span><span class="p">(</span>
+         <span class="n">radar</span><span class="p">,</span> <span class="n">npoints_min</span><span class="o">=</span><span class="n">npoints_min</span><span class="p">,</span> <span class="n">azi_spacing_max</span><span class="o">=</span><span class="n">azi_spacing_max</span><span class="p">,</span>
+         <span class="n">vel_diff_max</span><span class="o">=</span><span class="n">vel_diff_max</span><span class="p">,</span> <span class="n">rad_vel_field</span><span class="o">=</span><span class="n">vel_field</span><span class="p">,</span>
+         <span class="n">u_vel_field</span><span class="o">=</span><span class="s1">&#39;eastward_wind_component&#39;</span><span class="p">,</span>
+         <span class="n">v_vel_field</span><span class="o">=</span><span class="s1">&#39;northward_wind_component&#39;</span><span class="p">,</span>
+         <span class="n">w_vel_field</span><span class="o">=</span><span class="s1">&#39;vertical_wind_component&#39;</span><span class="p">,</span>
+         <span class="n">vel_est_field</span><span class="o">=</span><span class="s1">&#39;retrieved_velocity&#39;</span><span class="p">,</span>
+         <span class="n">vel_std_field</span><span class="o">=</span><span class="s1">&#39;retrieved_velocity_std&#39;</span><span class="p">,</span>
+         <span class="n">vel_diff_field</span><span class="o">=</span><span class="s1">&#39;velocity_difference&#39;</span><span class="p">)</span>
+
+    <span class="c1"># prepare for exit</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;eastward_wind_component&#39;</span><span class="p">,</span> <span class="n">u_vel_dict</span><span class="p">)</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;northward_wind_component&#39;</span><span class="p">,</span> <span class="n">v_vel_dict</span><span class="p">)</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;vertical_wind_component&#39;</span><span class="p">,</span> <span class="n">w_vel_dict</span><span class="p">)</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;retrieved_velocity&#39;</span><span class="p">,</span> <span class="n">vel_est_dict</span><span class="p">)</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;retrieved_velocity_std&#39;</span><span class="p">,</span> <span class="n">vel_std_dict</span><span class="p">)</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;velocity_difference&#39;</span><span class="p">,</span> <span class="n">vel_diff_dict</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
+
+
+<div class="viewcode-block" id="process_dda"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_dda.html#pyrad.proc.process_dda">[docs]</a><span class="k">def</span> <span class="nf">process_dda</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Estimates horizontal wind speed and direction with a multi-doppler approach</span>
+<span class="sd">    This method uses the python package pyDDA</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    procstatus : int</span>
+<span class="sd">        Processing status: 0 initializing, 1 processing volume,</span>
+<span class="sd">        2 post-processing</span>
+<span class="sd">    dscfg : dictionary of dictionaries</span>
+<span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
+
+<span class="sd">        datatype : string. Dataset keyword</span>
+<span class="sd">            The input data type</span>
+<span class="sd">        </span>
+<span class="sd">        gridconfig : dictionary. Dataset keyword</span>
+<span class="sd">            Dictionary containing some or all of this keywords:</span>
+<span class="sd">            xmin, xmax, ymin, ymax, zmin, zmax : floats</span>
+<span class="sd">                minimum and maximum horizontal distance from grid origin [km]</span>
+<span class="sd">                and minimum and maximum vertical distance from grid origin [m]</span>
+<span class="sd">                Defaults -40, 40, -40, 40, 0., 10000.</span>
+<span class="sd">            latmin, latmax, lonmin, lonmax : floats</span>
+<span class="sd">                minimum and maximum latitude and longitude [deg], if specified</span>
+<span class="sd">                xmin, xmax, ymin, ymax will be ignored</span>
+<span class="sd">            hres, vres : floats</span>
+<span class="sd">                horizontal and vertical grid resolution [m]</span>
+<span class="sd">                Defaults 1000., 500.</span>
+<span class="sd">            latorig, lonorig, altorig : floats</span>
+<span class="sd">                latitude and longitude of grid origin [deg] and altitude of</span>
+<span class="sd">                grid origin [m MSL]</span>
+<span class="sd">                Defaults the latitude, longitude and altitude of the radar</span>
+<span class="sd">        wfunc : str. Dataset keyword</span>
+<span class="sd">            the weighting function used to combine the radar gates close to a</span>
+<span class="sd">            grid point. Possible values BARNES, BARNES2, CRESSMAN, NEAREST</span>
+<span class="sd">            Default NEAREST</span>
+<span class="sd">        roif_func : str. Dataset keyword</span>
+<span class="sd">            the function used to compute the region of interest.</span>
+<span class="sd">            Possible values: dist_beam, constant</span>
+<span class="sd">        roi : float. Dataset keyword</span>
+<span class="sd">            the (minimum) radius of the region of interest in m. Default half</span>
+<span class="sd">            the largest resolution</span>
+<span class="sd">        beamwidth : float. Dataset keyword</span>
+<span class="sd">            the radar antenna beamwidth [deg]. If None that of the key</span>
+<span class="sd">            radar_beam_width_h in attribute instrument_parameters of the radar</span>
+<span class="sd">            object will be used. If the key or the attribute are not present</span>
+<span class="sd">            a default 1 deg value will be used</span>
+<span class="sd">        beam_spacing : float. Dataset keyword</span>
+<span class="sd">            the beam spacing, i.e. the ray angle resolution [deg]. If None,</span>
+<span class="sd">            that of the attribute ray_angle_res of the radar object will be</span>
+<span class="sd">            used. If the attribute is None a default 1 deg value will be used</span>
+<span class="sd">        signs : list of integers</span>
+<span class="sd">            The sign of the velocity field for every radar object.</span>
+<span class="sd">            A value of 1 represents when</span>
+<span class="sd">            positive values velocities are towards the radar, -1 represents</span>
+<span class="sd">            when negative velocities are towards the radar.</span>
+<span class="sd">        Co : float</span>
+<span class="sd">            Weight for cost function related to observed radial velocities.</span>
+<span class="sd">            Default: 1.</span>
+<span class="sd">        Cm : float</span>
+<span class="sd">            Weight for cost function related to the mass continuity equation.</span>
+<span class="sd">            Default: 1500.</span>
+<span class="sd">        Cx: float</span>
+<span class="sd">            Smoothing coefficient for x-direction</span>
+<span class="sd">        Cy: float</span>
+<span class="sd">            Smoothing coefficient for y-direction</span>
+<span class="sd">        Cz: float</span>
+<span class="sd">            Smoothing coefficient for z-direction</span>
+<span class="sd">        Cb: float</span>
+<span class="sd">            Coefficient for sounding constraint</span>
+<span class="sd">        Cv: float</span>
+<span class="sd">            Weight for cost function related to vertical vorticity equation.</span>
+<span class="sd">        Cmod: float</span>
+<span class="sd">            Coefficient for model constraint</span>
+<span class="sd">        Cpoint: float</span>
+<span class="sd">            Coefficient for point constraint    </span>
+<span class="sd">        wind_tol: float</span>
+<span class="sd">            Stop iterations after maximum change in winds is less than this value.</span>
+<span class="sd">        frz : float</span>
+<span class="sd">            The freezing level in meters. This is to tell PyDDA where to use </span>
+<span class="sd">            ice particle fall speeds in the wind retrieval verus liquid.</span>
+<span class="sd">    radar_list : list of Radar objects</span>
+<span class="sd">        Optional. list of radar objects</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    new_dataset : dict</span>
+<span class="sd">        dictionary containing the output</span>
+<span class="sd">    ind_rad : int</span>
+<span class="sd">        radar index</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_PYDDA_AVAILABLE</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;PyDDA package not available. Unable to compute wind fields&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">radar_list</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;DDA requires data from at least two different radars&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="c1"># check how many radars have to be compared and which datatype to use</span>
+    <span class="n">ind_radar_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">field_name_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">datatype_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+        <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
+        <span class="n">ind_radar_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">datatype_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
+        <span class="n">field_name_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
+    <span class="n">ind_radar_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ind_radar_list</span><span class="p">)</span>
+    <span class="n">datatype_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">datatype_list</span><span class="p">)</span>
+    <span class="n">field_name_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">field_name_list</span><span class="p">)</span>
+    
+    <span class="c1"># Get DDA numerical parameters</span>
+    <span class="n">Co</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Co&#39;</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
+    <span class="n">Cm</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Cm&#39;</span><span class="p">,</span> <span class="mf">1500.</span><span class="p">)</span>
+    <span class="n">Cx</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Cx&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+    <span class="n">Cy</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Cy&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+    <span class="n">Cz</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Cz&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+    <span class="n">Cb</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Cb&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+    <span class="n">Cv</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Cv&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+    <span class="n">frz</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;frz&#39;</span><span class="p">,</span> <span class="mf">4500.</span><span class="p">)</span>
+    <span class="n">Cmod</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Cmod&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+    <span class="n">Cpoint</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Cpoint&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+    <span class="n">wind_tol</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;wind_tol&#39;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+
+    <span class="n">signs</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;signs&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">ind_radar_list</span><span class="p">)))</span>
+    <span class="n">sounding</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sounding&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">sounding</span><span class="p">:</span>
+        <span class="n">dtime</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_radar_time_begin</span><span class="p">(</span><span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">sounding_data</span> <span class="o">=</span> <span class="n">read_radiosounding</span><span class="p">(</span><span class="n">sounding</span><span class="p">,</span> <span class="n">dtime</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sounding_data</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">sounding_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Remove nan from souding</span>
+        <span class="n">sounding_data</span> <span class="o">=</span> <span class="n">sounding_data</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+        <span class="c1"># create wind profile from sounding</span>
+        <span class="n">wind_prof</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">HorizontalWindProfile</span><span class="p">(</span><span class="n">sounding_data</span><span class="p">[</span><span class="s1">&#39;HGHT&#39;</span><span class="p">],</span>
+            <span class="n">sounding_data</span><span class="p">[</span><span class="s1">&#39;SKNT&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.514</span><span class="p">,</span> <span class="n">sounding_data</span><span class="p">[</span><span class="s1">&#39;DRCT&#39;</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>    
+        <span class="c1"># Compute VAD for every radar to initialize DDA</span>
+        <span class="c1"># z-vector for vad</span>
+        <span class="n">z_want</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;zmin&#39;</span><span class="p">],</span>
+                        <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;zmax&#39;</span><span class="p">]</span> <span class="o">+</span>
+                        <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;vres&#39;</span><span class="p">],</span>
+                        <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;vres&#39;</span><span class="p">])</span>
+
+        <span class="n">wind_prof</span> <span class="o">=</span> <span class="n">compute_average_vad</span><span class="p">(</span><span class="n">radar_list</span><span class="p">,</span> <span class="n">z_want</span><span class="p">,</span> <span class="n">signs</span><span class="p">,</span> 
+            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;lonorig&#39;</span><span class="p">],</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;latorig&#39;</span><span class="p">])</span>
+        
+    <span class="c1"># Get name of reflectivity and velocity fields for each radar</span>
+    <span class="n">refl_fields</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">vel_fields</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">radar</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">radar_list</span><span class="p">):</span>
+        <span class="c1"># Find vel and refl fields</span>
+        <span class="n">field_names_rad</span> <span class="o">=</span> <span class="n">field_name_list</span><span class="p">[</span><span class="n">ind_radar_list</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span>
+        <span class="n">vel_field</span> <span class="o">=</span> <span class="n">field_names_rad</span><span class="p">[[</span>
+            <span class="s1">&#39;velocity&#39;</span> <span class="ow">in</span> <span class="n">vname</span> <span class="k">for</span> <span class="n">vname</span> <span class="ow">in</span> <span class="n">field_name_list</span><span class="p">[</span><span class="n">ind_radar_list</span> <span class="o">==</span> <span class="n">i</span><span class="p">]]][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">vel_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vel_field</span><span class="p">)</span>
+        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">field_names_rad</span><span class="p">[[</span><span class="s1">&#39;reflectivity&#39;</span> <span class="ow">in</span> <span class="n">vname</span>
+                                <span class="k">for</span> <span class="n">vname</span> <span class="ow">in</span> <span class="n">field_name_list</span><span class="p">[</span><span class="n">ind_radar_list</span> <span class="o">==</span> <span class="n">i</span><span class="p">]]][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">refl_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">refl_field</span><span class="p">)</span>
+    
+    <span class="c1"># Grid the variables</span>
+    <span class="n">grids</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">radar</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">radar_list</span><span class="p">):</span>
+        <span class="c1"># Now we grid</span>
+        <span class="n">dscfg_grid</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">dscfg</span><span class="p">)</span>
+        <span class="n">dscfg_grid</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">])[</span>
+            <span class="n">ind_radar_list</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span>
+        <span class="n">grids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">process_grid</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dscfg_grid</span><span class="p">,</span> <span class="n">radar_list</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;radar_out&#39;</span><span class="p">])</span>
+    
+    <span class="c1"># Harmonize variables</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">grid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">grids</span><span class="p">):</span>
+        <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;velocity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">vel_fields</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">signs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;velocity&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">refl_fields</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="c1"># DDA initialization</span>
+
+    <span class="n">grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">make_wind_field_from_profile</span><span class="p">(</span>
+        <span class="n">grids</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">wind_prof</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="s1">&#39;velocity&#39;</span><span class="p">)</span>
+    
+
+    <span class="c1"># Actual DDA computation</span>
+    <span class="n">new_grids</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">(</span>
+        <span class="n">grids</span><span class="p">,</span>
+        <span class="n">vel_name</span><span class="o">=</span><span class="s1">&#39;velocity&#39;</span><span class="p">,</span>
+        <span class="n">refl_field</span><span class="o">=</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span>
+        <span class="n">mask_outside_opt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;scipy&#39;</span><span class="p">,</span>
+        <span class="n">Co</span><span class="o">=</span><span class="n">Co</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="n">Cm</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="n">Cx</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="n">Cy</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="n">Cz</span><span class="p">,</span> <span class="n">Cb</span><span class="o">=</span><span class="n">Cb</span><span class="p">,</span> <span class="n">Cv</span><span class="o">=</span><span class="n">Cv</span><span class="p">,</span> <span class="n">Cmod</span><span class="o">=</span><span class="n">Cmod</span><span class="p">,</span>
+        <span class="n">Cpoint</span><span class="o">=</span><span class="n">Cpoint</span><span class="p">,</span> <span class="n">wind_tol</span><span class="o">=</span><span class="n">wind_tol</span><span class="p">,</span> <span class="n">frz</span><span class="o">=</span><span class="n">frz</span><span class="p">)</span>
+        
+    <span class="c1"># pyDDA returns as many grid objects as input radars</span>
+    <span class="c1"># the idea here is to merge these grid objects into one</span>
+    <span class="c1"># and to replace the homogeneized vel and refl fields by the</span>
+    <span class="c1"># original ones</span>
+
+    <span class="c1"># create merged grid from first dda grid</span>
+    <span class="c1"># First radar will have normal field names</span>
+    <span class="c1"># Additional radars will have _radar1, radar_2, ..., radar_N</span>
+    <span class="c1"># appended to their field names</span>
+    <span class="n">merged_grid</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">new_grids</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;velocity&#39;</span><span class="p">:</span>
+                <span class="n">new_key</span> <span class="o">=</span> <span class="n">vel_fields</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;reflectivity&#39;</span><span class="p">:</span>
+                <span class="n">new_key</span> <span class="o">=</span> <span class="n">refl_fields</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_key</span> <span class="o">=</span> <span class="n">var</span>
+            <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">new_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+
+    <span class="c1"># add the other dda grids</span>
+    <span class="n">radar_metadata</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">additional_grid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">new_grids</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+        <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">additional_grid</span><span class="o">.</span><span class="n">fields</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">grids</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;velocity&#39;</span><span class="p">:</span>
+                    <span class="n">new_key</span> <span class="o">=</span> <span class="n">vel_fields</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;reflectivity&#39;</span><span class="p">:</span>
+                    <span class="n">new_key</span> <span class="o">=</span> <span class="n">refl_fields</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">new_key</span> <span class="o">=</span> <span class="n">var</span>
+                <span class="n">new_key</span> <span class="o">+=</span> <span class="s1">&#39;_radar</span><span class="si">{:d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">new_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">additional_grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">var</span><span class="p">]</span>
+
+        <span class="c1"># Get additional radar metadata</span>
+        <span class="n">mdata</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_longitude&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">additional_grid</span><span class="o">.</span><span class="n">radar_longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_latitude&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">additional_grid</span><span class="o">.</span><span class="n">radar_latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="c1"># Try to find name of radar</span>
+        <span class="k">if</span> <span class="n">additional_grid</span><span class="o">.</span><span class="n">radar_name</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">additional_grid</span><span class="o">.</span><span class="n">radar_name</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;RadarName&#39;</span><span class="p">][</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;RadarName&#39;</span><span class="p">][</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Unknown&#39;</span>
+
+        <span class="n">radar_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mdata</span><span class="p">)</span>
+
+    <span class="c1"># Rename DDA u, v, w fields to pyart names</span>
+    <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;eastward_wind_component&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;u&#39;</span><span class="p">)</span>
+    <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;northward_wind_component&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span>
+        <span class="s1">&#39;v&#39;</span><span class="p">)</span>
+    <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;vertical_wind_component&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Add coordinates of additional radars in metadata</span>
+    <span class="n">merged_grid</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;additional_radars&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar_metadata</span>
+
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_grid</span>
+
+    <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_radar_list</span></div>
+</pre></div>
+<div class="section ablog__blog_comments">
+  
+  
+</div>
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

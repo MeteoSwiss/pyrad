@@ -1,0 +1,1349 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>pyrad.io.read_mf_vis &#8212; Pyrad 1.8.3 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'API/generated/pyrad.io.read_mf_vis';</script>
+    <script src="../../_static/doc_shared.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="pyrad.io.read_ml_ts" href="pyrad.io.read_ml_ts.html" />
+    <link rel="prev" title="pyrad.io.read_meteorage" href="pyrad.io.read_meteorage.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Pyrad 1.8.3 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../userguide/index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        API Reference Manual
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../overview/index.html">
+                        Features
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../userguide/index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        API Reference Manual
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../overview/index.html">
+                        Features
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="pyrad.flow.html">pyrad.flow</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.flow.main.html">pyrad.flow.main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.flow.main_rt.html">pyrad.flow.main_rt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.flow.main.html">pyrad.flow.main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.flow.main_rt.html">pyrad.flow.main_rt</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="pyrad.graph.html">pyrad.graph</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_ray.html">pyrad.graph.plot_ray</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_surface_raw.html">pyrad.graph.plot_surface_raw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_surface.html">pyrad.graph.plot_surface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_latitude_slice.html">pyrad.graph.plot_latitude_slice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_longitude_slice.html">pyrad.graph.plot_longitude_slice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_dda_map.html">pyrad.graph.plot_dda_map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_ppi.html">pyrad.graph.plot_ppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_ppi_contour.html">pyrad.graph.plot_ppi_contour</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_ppi_map.html">pyrad.graph.plot_ppi_map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_rhi.html">pyrad.graph.plot_rhi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_rhi_contour.html">pyrad.graph.plot_rhi_contour</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_bscope.html">pyrad.graph.plot_bscope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_fixed_rng.html">pyrad.graph.plot_fixed_rng</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_fixed_rng_span.html">pyrad.graph.plot_fixed_rng_span</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_fixed_rng_sun.html">pyrad.graph.plot_fixed_rng_sun</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_time_range.html">pyrad.graph.plot_time_range</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_rhi_profile.html">pyrad.graph.plot_rhi_profile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_along_coord.html">pyrad.graph.plot_along_coord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_field_coverage.html">pyrad.graph.plot_field_coverage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_density.html">pyrad.graph.plot_density</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_scatter.html">pyrad.graph.plot_scatter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_centroids.html">pyrad.graph.plot_centroids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_cappi.html">pyrad.graph.plot_cappi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_traj.html">pyrad.graph.plot_traj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_pos.html">pyrad.graph.plot_pos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_pos_map.html">pyrad.graph.plot_pos_map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_quantiles.html">pyrad.graph.plot_quantiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_histogram.html">pyrad.graph.plot_histogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_histogram2.html">pyrad.graph.plot_histogram2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_antenna_pattern.html">pyrad.graph.plot_antenna_pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_selfconsistency.html">pyrad.graph.plot_selfconsistency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_selfconsistency_instrument.html">pyrad.graph.plot_selfconsistency_instrument</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_timeseries.html">pyrad.graph.plot_timeseries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_timeseries_comp.html">pyrad.graph.plot_timeseries_comp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_monitoring_ts.html">pyrad.graph.plot_monitoring_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_scatter_comp.html">pyrad.graph.plot_scatter_comp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_intercomp_scores_ts.html">pyrad.graph.plot_intercomp_scores_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_ml_ts.html">pyrad.graph.plot_ml_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_sun_hits.html">pyrad.graph.plot_sun_hits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_sun_retrieval_ts.html">pyrad.graph.plot_sun_retrieval_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_Doppler.html">pyrad.graph.plot_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_complex_Doppler.html">pyrad.graph.plot_complex_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_amp_phase_Doppler.html">pyrad.graph.plot_amp_phase_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_range_Doppler.html">pyrad.graph.plot_range_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_complex_range_Doppler.html">pyrad.graph.plot_complex_range_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_amp_phase_range_Doppler.html">pyrad.graph.plot_amp_phase_range_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_angle_Doppler.html">pyrad.graph.plot_angle_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_complex_angle_Doppler.html">pyrad.graph.plot_complex_angle_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_amp_phase_angle_Doppler.html">pyrad.graph.plot_amp_phase_angle_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_time_Doppler.html">pyrad.graph.plot_time_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_complex_time_Doppler.html">pyrad.graph.plot_complex_time_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_amp_phase_time_Doppler.html">pyrad.graph.plot_amp_phase_time_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.plot_roi_contour.html">pyrad.graph.plot_roi_contour</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.get_colobar_label.html">pyrad.graph.get_colobar_label</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph.get_field_name.html">pyrad.graph.get_field_name</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.graph._plot_time_range.html">pyrad.graph._plot_time_range</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.get_colobar_label.html">pyrad.graph.get_colobar_label</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.get_field_name.html">pyrad.graph.get_field_name</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_Doppler.html">pyrad.graph.plot_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_along_coord.html">pyrad.graph.plot_along_coord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_amp_phase_Doppler.html">pyrad.graph.plot_amp_phase_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_amp_phase_angle_Doppler.html">pyrad.graph.plot_amp_phase_angle_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_amp_phase_range_Doppler.html">pyrad.graph.plot_amp_phase_range_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_amp_phase_time_Doppler.html">pyrad.graph.plot_amp_phase_time_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_angle_Doppler.html">pyrad.graph.plot_angle_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_antenna_pattern.html">pyrad.graph.plot_antenna_pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_bscope.html">pyrad.graph.plot_bscope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_cappi.html">pyrad.graph.plot_cappi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_centroids.html">pyrad.graph.plot_centroids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_complex_Doppler.html">pyrad.graph.plot_complex_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_complex_angle_Doppler.html">pyrad.graph.plot_complex_angle_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_complex_range_Doppler.html">pyrad.graph.plot_complex_range_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_complex_time_Doppler.html">pyrad.graph.plot_complex_time_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_cross_section.html">pyrad.graph.plot_cross_section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_dda_map.html">pyrad.graph.plot_dda_map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_density.html">pyrad.graph.plot_density</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_field_coverage.html">pyrad.graph.plot_field_coverage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_fixed_rng.html">pyrad.graph.plot_fixed_rng</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_fixed_rng_span.html">pyrad.graph.plot_fixed_rng_span</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_fixed_rng_sun.html">pyrad.graph.plot_fixed_rng_sun</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_histogram.html">pyrad.graph.plot_histogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_histogram2.html">pyrad.graph.plot_histogram2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_intercomp_scores_ts.html">pyrad.graph.plot_intercomp_scores_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_latitude_slice.html">pyrad.graph.plot_latitude_slice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_longitude_slice.html">pyrad.graph.plot_longitude_slice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_ml_ts.html">pyrad.graph.plot_ml_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_monitoring_ts.html">pyrad.graph.plot_monitoring_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_pos.html">pyrad.graph.plot_pos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_pos_map.html">pyrad.graph.plot_pos_map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_ppi.html">pyrad.graph.plot_ppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_ppi_contour.html">pyrad.graph.plot_ppi_contour</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_ppi_map.html">pyrad.graph.plot_ppi_map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_quantiles.html">pyrad.graph.plot_quantiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_range_Doppler.html">pyrad.graph.plot_range_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_ray.html">pyrad.graph.plot_ray</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_rhi.html">pyrad.graph.plot_rhi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_rhi_contour.html">pyrad.graph.plot_rhi_contour</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_rhi_profile.html">pyrad.graph.plot_rhi_profile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_roi_contour.html">pyrad.graph.plot_roi_contour</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_scatter.html">pyrad.graph.plot_scatter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_scatter_comp.html">pyrad.graph.plot_scatter_comp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_selfconsistency.html">pyrad.graph.plot_selfconsistency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_selfconsistency_instrument.html">pyrad.graph.plot_selfconsistency_instrument</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_sun_hits.html">pyrad.graph.plot_sun_hits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_sun_retrieval_ts.html">pyrad.graph.plot_sun_retrieval_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_surface.html">pyrad.graph.plot_surface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_surface_raw.html">pyrad.graph.plot_surface_raw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_time_Doppler.html">pyrad.graph.plot_time_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_time_range.html">pyrad.graph.plot_time_range</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_timeseries.html">pyrad.graph.plot_timeseries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_timeseries_comp.html">pyrad.graph.plot_timeseries_comp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_traj.html">pyrad.graph.plot_traj</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="pyrad.io.html">pyrad.io</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_config.html">pyrad.io.read_config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_data.html">pyrad.io.get_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.cosmo2radar_data.html">pyrad.io.cosmo2radar_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.cosmo2radar_coord.html">pyrad.io.cosmo2radar_coord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.hzt2radar_data.html">pyrad.io.hzt2radar_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.hzt2radar_coord.html">pyrad.io.hzt2radar_coord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_cosmo_fields.html">pyrad.io.get_cosmo_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_iso0_field.html">pyrad.io.get_iso0_field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_cosmo_data.html">pyrad.io.read_cosmo_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_cosmo_coord.html">pyrad.io.read_cosmo_coord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_hzt_data.html">pyrad.io.read_hzt_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_iso0_mf_data.html">pyrad.io.read_iso0_mf_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_iso0_grib_data.html">pyrad.io.read_iso0_grib_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.iso2radar_data.html">pyrad.io.iso2radar_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.grib2radar_data.html">pyrad.io.grib2radar_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_iso0_ref.html">pyrad.io.get_iso0_ref</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_idrisi_data.html">pyrad.io.read_idrisi_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_idrisi_metadata.html">pyrad.io.read_idrisi_metadata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_centroids_npz.html">pyrad.io.read_centroids_npz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_centroids.html">pyrad.io.read_centroids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_proc_periods.html">pyrad.io.read_proc_periods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_last_state.html">pyrad.io.read_last_state</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_status.html">pyrad.io.read_status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_rad4alp_cosmo.html">pyrad.io.read_rad4alp_cosmo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_rad4alp_vis.html">pyrad.io.read_rad4alp_vis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_excess_gates.html">pyrad.io.read_excess_gates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_colocated_gates.html">pyrad.io.read_colocated_gates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_colocated_data.html">pyrad.io.read_colocated_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_timeseries.html">pyrad.io.read_timeseries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_ts_cum.html">pyrad.io.read_ts_cum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_monitoring_ts.html">pyrad.io.read_monitoring_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_intercomp_scores_ts.html">pyrad.io.read_intercomp_scores_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_sensor_data.html">pyrad.io.get_sensor_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_smn.html">pyrad.io.read_smn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_smn2.html">pyrad.io.read_smn2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_coord_sensors.html">pyrad.io.read_coord_sensors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_disdro_scattering.html">pyrad.io.read_disdro_scattering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_sun_hits.html">pyrad.io.read_sun_hits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_sun_hits_multiple_days.html">pyrad.io.read_sun_hits_multiple_days</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_sun_retrieval.html">pyrad.io.read_sun_retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_solar_flux.html">pyrad.io.read_solar_flux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_selfconsistency.html">pyrad.io.read_selfconsistency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_antenna_pattern.html">pyrad.io.read_antenna_pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_meteorage.html">pyrad.io.read_meteorage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_lightning.html">pyrad.io.read_lightning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_lightning_traj.html">pyrad.io.read_lightning_traj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_lightning_all.html">pyrad.io.read_lightning_all</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_trt_scores.html">pyrad.io.read_trt_scores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_trt_data.html">pyrad.io.read_trt_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_trt_traj_data.html">pyrad.io.read_trt_traj_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_trt_thundertracking_traj_data.html">pyrad.io.read_trt_thundertracking_traj_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_trt_cell_lightning.html">pyrad.io.read_trt_cell_lightning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_trt_info_all.html">pyrad.io.read_trt_info_all</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_trt_info_all2.html">pyrad.io.read_trt_info_all2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_trt_info.html">pyrad.io.read_trt_info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_trt_info2.html">pyrad.io.read_trt_info2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_thundertracking_info.html">pyrad.io.read_thundertracking_info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_rhi_profile.html">pyrad.io.read_rhi_profile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_vpr_theo_parameters.html">pyrad.io.read_vpr_theo_parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_histogram.html">pyrad.io.read_histogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_quantiles.html">pyrad.io.read_quantiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_profile_ts.html">pyrad.io.read_profile_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_histogram_ts.html">pyrad.io.read_histogram_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_quantiles_ts.html">pyrad.io.read_quantiles_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_ml_ts.html">pyrad.io.read_ml_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_windmills_data.html">pyrad.io.read_windmills_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_radiosounding.html">pyrad.io.read_radiosounding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_vol_csv.html">pyrad.io.write_vol_csv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_vol_kml.html">pyrad.io.write_vol_kml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_centroids.html">pyrad.io.write_centroids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_proc_periods.html">pyrad.io.write_proc_periods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_ts_lightning.html">pyrad.io.write_ts_lightning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.send_msg.html">pyrad.io.send_msg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_alarm_msg.html">pyrad.io.write_alarm_msg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_last_state.html">pyrad.io.write_last_state</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_smn.html">pyrad.io.write_smn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_trt_info.html">pyrad.io.write_trt_info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_trt_thundertracking_data.html">pyrad.io.write_trt_thundertracking_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_trt_cell_data.html">pyrad.io.write_trt_cell_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_trt_cell_scores.html">pyrad.io.write_trt_cell_scores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_trt_cell_lightning.html">pyrad.io.write_trt_cell_lightning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_trt_rpc.html">pyrad.io.write_trt_rpc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_vpr_theo_params.html">pyrad.io.write_vpr_theo_params</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_vpr_info.html">pyrad.io.write_vpr_info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_rhi_profile.html">pyrad.io.write_rhi_profile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_field_coverage.html">pyrad.io.write_field_coverage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_cdf.html">pyrad.io.write_cdf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_histogram.html">pyrad.io.write_histogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_quantiles.html">pyrad.io.write_quantiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_multiple_points.html">pyrad.io.write_multiple_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_multiple_points_grid.html">pyrad.io.write_multiple_points_grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_ts_polar_data.html">pyrad.io.write_ts_polar_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_ts_grid_data.html">pyrad.io.write_ts_grid_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_ts_cum.html">pyrad.io.write_ts_cum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_ts_stats.html">pyrad.io.write_ts_stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_monitoring_ts.html">pyrad.io.write_monitoring_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_excess_gates.html">pyrad.io.write_excess_gates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_intercomp_scores_ts.html">pyrad.io.write_intercomp_scores_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_colocated_gates.html">pyrad.io.write_colocated_gates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_colocated_data.html">pyrad.io.write_colocated_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_colocated_data_time_avg.html">pyrad.io.write_colocated_data_time_avg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_sun_hits.html">pyrad.io.write_sun_hits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_sun_retrieval.html">pyrad.io.write_sun_retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_fixed_angle.html">pyrad.io.write_fixed_angle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_rad4alp_prod_fname.html">pyrad.io.get_rad4alp_prod_fname</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.map_hydro.html">pyrad.io.map_hydro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.map_Doppler.html">pyrad.io.map_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_save_dir.html">pyrad.io.get_save_dir</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.make_filename.html">pyrad.io.make_filename</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.generate_field_name_str.html">pyrad.io.generate_field_name_str</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_fieldname_pyart.html">pyrad.io.get_fieldname_pyart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_fieldname_cosmo.html">pyrad.io.get_fieldname_cosmo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_field_unit.html">pyrad.io.get_field_unit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_file_list.html">pyrad.io.get_file_list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_rad4alp_dir.html">pyrad.io.get_rad4alp_dir</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_rad4alp_grid_dir.html">pyrad.io.get_rad4alp_grid_dir</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_trtfile_list.html">pyrad.io.get_trtfile_list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_new_rainbow_file_name.html">pyrad.io.get_new_rainbow_file_name</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_datatype_fields.html">pyrad.io.get_datatype_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_dataset_fields.html">pyrad.io.get_dataset_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_datetime.html">pyrad.io.get_datetime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.find_raw_cosmo_file.html">pyrad.io.find_raw_cosmo_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.find_hzt_file.html">pyrad.io.find_hzt_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.find_iso0_file.html">pyrad.io.find_iso0_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.find_iso0_grib_file.html">pyrad.io.find_iso0_grib_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.find_date_in_file_name.html">pyrad.io.find_date_in_file_name</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io._get_datetime.html">pyrad.io._get_datetime</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="generated/pyrad.io.Trajectory.html">pyrad.io.Trajectory</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pyrad.io.Trajectory.add_radar.html">pyrad.io.Trajectory.add_radar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pyrad.io.Trajectory.calculate_velocities.html">pyrad.io.Trajectory.calculate_velocities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pyrad.io.Trajectory.get_end_time.html">pyrad.io.Trajectory.get_end_time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pyrad.io.Trajectory.get_samples_in_period.html">pyrad.io.Trajectory.get_samples_in_period</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pyrad.io.Trajectory.get_start_time.html">pyrad.io.Trajectory.get_start_time</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="generated/pyrad.io.TimeSeries.html">pyrad.io.TimeSeries</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pyrad.io.TimeSeries.add_dataseries.html">pyrad.io.TimeSeries.add_dataseries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pyrad.io.TimeSeries.add_timesample.html">pyrad.io.TimeSeries.add_timesample</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pyrad.io.TimeSeries.plot.html">pyrad.io.TimeSeries.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pyrad.io.TimeSeries.plot_hist.html">pyrad.io.TimeSeries.plot_hist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pyrad.io.TimeSeries.write.html">pyrad.io.TimeSeries.write</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pyrad.io.TimeSeries.html">pyrad.io.TimeSeries</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyrad.io.TimeSeries.add_dataseries.html">pyrad.io.TimeSeries.add_dataseries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyrad.io.TimeSeries.add_timesample.html">pyrad.io.TimeSeries.add_timesample</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyrad.io.TimeSeries.plot.html">pyrad.io.TimeSeries.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyrad.io.TimeSeries.plot_hist.html">pyrad.io.TimeSeries.plot_hist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyrad.io.TimeSeries.write.html">pyrad.io.TimeSeries.write</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pyrad.io.Trajectory.html">pyrad.io.Trajectory</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyrad.io.Trajectory.add_radar.html">pyrad.io.Trajectory.add_radar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyrad.io.Trajectory.calculate_velocities.html">pyrad.io.Trajectory.calculate_velocities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyrad.io.Trajectory.get_end_time.html">pyrad.io.Trajectory.get_end_time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyrad.io.Trajectory.get_samples_in_period.html">pyrad.io.Trajectory.get_samples_in_period</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyrad.io.Trajectory.get_start_time.html">pyrad.io.Trajectory.get_start_time</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.add_field.html">pyrad.io.add_field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.cosmo2radar_coord.html">pyrad.io.cosmo2radar_coord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.cosmo2radar_data.html">pyrad.io.cosmo2radar_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.find_date_in_file_name.html">pyrad.io.find_date_in_file_name</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.find_hzt_file.html">pyrad.io.find_hzt_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.find_iso0_file.html">pyrad.io.find_iso0_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.find_iso0_grib_file.html">pyrad.io.find_iso0_grib_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.find_raw_cosmo_file.html">pyrad.io.find_raw_cosmo_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.generate_field_name_str.html">pyrad.io.generate_field_name_str</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_cosmo_fields.html">pyrad.io.get_cosmo_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_data.html">pyrad.io.get_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_dataset_fields.html">pyrad.io.get_dataset_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_datatype_fields.html">pyrad.io.get_datatype_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_datetime.html">pyrad.io.get_datetime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_field_unit.html">pyrad.io.get_field_unit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_fieldname_cosmo.html">pyrad.io.get_fieldname_cosmo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_fieldname_pyart.html">pyrad.io.get_fieldname_pyart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_file_list.html">pyrad.io.get_file_list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_iso0_field.html">pyrad.io.get_iso0_field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_iso0_ref.html">pyrad.io.get_iso0_ref</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_new_rainbow_file_name.html">pyrad.io.get_new_rainbow_file_name</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_rad4alp_dir.html">pyrad.io.get_rad4alp_dir</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_rad4alp_grid_dir.html">pyrad.io.get_rad4alp_grid_dir</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_rad4alp_prod_fname.html">pyrad.io.get_rad4alp_prod_fname</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_save_dir.html">pyrad.io.get_save_dir</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_sensor_data.html">pyrad.io.get_sensor_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_trtfile_list.html">pyrad.io.get_trtfile_list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.grib2radar_data.html">pyrad.io.grib2radar_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.hzt2radar_coord.html">pyrad.io.hzt2radar_coord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.hzt2radar_data.html">pyrad.io.hzt2radar_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.interpol_field.html">pyrad.io.interpol_field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.iso2radar_data.html">pyrad.io.iso2radar_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.make_filename.html">pyrad.io.make_filename</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.map_Doppler.html">pyrad.io.map_Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.map_hydro.html">pyrad.io.map_hydro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_antenna_pattern.html">pyrad.io.read_antenna_pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_centroids.html">pyrad.io.read_centroids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_centroids_npz.html">pyrad.io.read_centroids_npz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_colocated_data.html">pyrad.io.read_colocated_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_colocated_gates.html">pyrad.io.read_colocated_gates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_config.html">pyrad.io.read_config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_coord_sensors.html">pyrad.io.read_coord_sensors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_cosmo_coord.html">pyrad.io.read_cosmo_coord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_cosmo_data.html">pyrad.io.read_cosmo_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_disdro_scattering.html">pyrad.io.read_disdro_scattering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_excess_gates.html">pyrad.io.read_excess_gates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_histogram.html">pyrad.io.read_histogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_histogram_ts.html">pyrad.io.read_histogram_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_hzt_data.html">pyrad.io.read_hzt_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_idrisi_data.html">pyrad.io.read_idrisi_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_idrisi_metadata.html">pyrad.io.read_idrisi_metadata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_intercomp_scores_ts.html">pyrad.io.read_intercomp_scores_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_iso0_grib_data.html">pyrad.io.read_iso0_grib_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_iso0_mf_data.html">pyrad.io.read_iso0_mf_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_last_state.html">pyrad.io.read_last_state</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_lightning.html">pyrad.io.read_lightning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_lightning_all.html">pyrad.io.read_lightning_all</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_lightning_traj.html">pyrad.io.read_lightning_traj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_meteorage.html">pyrad.io.read_meteorage</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">pyrad.io.read_mf_vis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_ml_ts.html">pyrad.io.read_ml_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_monitoring_ts.html">pyrad.io.read_monitoring_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_proc_periods.html">pyrad.io.read_proc_periods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_profile_ts.html">pyrad.io.read_profile_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_quantiles.html">pyrad.io.read_quantiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_quantiles_ts.html">pyrad.io.read_quantiles_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_rad4alp_cosmo.html">pyrad.io.read_rad4alp_cosmo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_rad4alp_vis.html">pyrad.io.read_rad4alp_vis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_radiosounding.html">pyrad.io.read_radiosounding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_rhi_profile.html">pyrad.io.read_rhi_profile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_selfconsistency.html">pyrad.io.read_selfconsistency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_smn.html">pyrad.io.read_smn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_smn2.html">pyrad.io.read_smn2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_solar_flux.html">pyrad.io.read_solar_flux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_status.html">pyrad.io.read_status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_sun_hits.html">pyrad.io.read_sun_hits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_sun_hits_multiple_days.html">pyrad.io.read_sun_hits_multiple_days</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_sun_retrieval.html">pyrad.io.read_sun_retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_thundertracking_info.html">pyrad.io.read_thundertracking_info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_timeseries.html">pyrad.io.read_timeseries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_trt_cell_lightning.html">pyrad.io.read_trt_cell_lightning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_trt_data.html">pyrad.io.read_trt_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_trt_info.html">pyrad.io.read_trt_info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_trt_info2.html">pyrad.io.read_trt_info2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_trt_info_all.html">pyrad.io.read_trt_info_all</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_trt_info_all2.html">pyrad.io.read_trt_info_all2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_trt_scores.html">pyrad.io.read_trt_scores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_trt_thundertracking_traj_data.html">pyrad.io.read_trt_thundertracking_traj_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_trt_traj_data.html">pyrad.io.read_trt_traj_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_ts_cum.html">pyrad.io.read_ts_cum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_vpr_theo_parameters.html">pyrad.io.read_vpr_theo_parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_windmills_data.html">pyrad.io.read_windmills_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.send_msg.html">pyrad.io.send_msg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_alarm_msg.html">pyrad.io.write_alarm_msg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_cdf.html">pyrad.io.write_cdf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_centroids.html">pyrad.io.write_centroids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_colocated_data.html">pyrad.io.write_colocated_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_colocated_data_time_avg.html">pyrad.io.write_colocated_data_time_avg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_colocated_gates.html">pyrad.io.write_colocated_gates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_excess_gates.html">pyrad.io.write_excess_gates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_field_coverage.html">pyrad.io.write_field_coverage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_fixed_angle.html">pyrad.io.write_fixed_angle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_histogram.html">pyrad.io.write_histogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_intercomp_scores_ts.html">pyrad.io.write_intercomp_scores_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_last_state.html">pyrad.io.write_last_state</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_monitoring_ts.html">pyrad.io.write_monitoring_ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_multiple_points.html">pyrad.io.write_multiple_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_multiple_points_grid.html">pyrad.io.write_multiple_points_grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_proc_periods.html">pyrad.io.write_proc_periods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_quantiles.html">pyrad.io.write_quantiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_rhi_profile.html">pyrad.io.write_rhi_profile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_smn.html">pyrad.io.write_smn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_sun_hits.html">pyrad.io.write_sun_hits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_sun_retrieval.html">pyrad.io.write_sun_retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_trt_cell_data.html">pyrad.io.write_trt_cell_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_trt_cell_lightning.html">pyrad.io.write_trt_cell_lightning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_trt_cell_scores.html">pyrad.io.write_trt_cell_scores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_trt_info.html">pyrad.io.write_trt_info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_trt_rpc.html">pyrad.io.write_trt_rpc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_trt_thundertracking_data.html">pyrad.io.write_trt_thundertracking_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_ts_cum.html">pyrad.io.write_ts_cum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_ts_grid_data.html">pyrad.io.write_ts_grid_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_ts_lightning.html">pyrad.io.write_ts_lightning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_ts_polar_data.html">pyrad.io.write_ts_polar_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_ts_stats.html">pyrad.io.write_ts_stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_vol_csv.html">pyrad.io.write_vol_csv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_vol_kml.html">pyrad.io.write_vol_kml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_vpr_info.html">pyrad.io.write_vpr_info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_vpr_theo_params.html">pyrad.io.write_vpr_theo_params</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="pyrad.proc.html">pyrad.proc</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.get_process_func.html">pyrad.proc.get_process_func</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_raw.html">pyrad.proc.process_raw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_save_radar.html">pyrad.proc.process_save_radar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_fixed_rng.html">pyrad.proc.process_fixed_rng</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_fixed_rng_span.html">pyrad.proc.process_fixed_rng_span</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_roi.html">pyrad.proc.process_roi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_roi2.html">pyrad.proc.process_roi2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_azimuthal_average.html">pyrad.proc.process_azimuthal_average</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_moving_azimuthal_average.html">pyrad.proc.process_moving_azimuthal_average</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_radar_resampling.html">pyrad.proc.process_radar_resampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_vol_to_grid.html">pyrad.proc.process_vol_to_grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_raw_grid.html">pyrad.proc.process_raw_grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_grid.html">pyrad.proc.process_grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_grid_point.html">pyrad.proc.process_grid_point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_grid_multiple_points.html">pyrad.proc.process_grid_multiple_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_grid_time_stats.html">pyrad.proc.process_grid_time_stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_grid_time_stats2.html">pyrad.proc.process_grid_time_stats2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_grid_rainfall_accumulation.html">pyrad.proc.process_grid_rainfall_accumulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_grid_texture.html">pyrad.proc.process_grid_texture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_grid_fields_diff.html">pyrad.proc.process_grid_fields_diff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_grid_mask.html">pyrad.proc.process_grid_mask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_normalize_luminosity.html">pyrad.proc.process_normalize_luminosity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_pixel_filter.html">pyrad.proc.process_pixel_filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_raw_spectra.html">pyrad.proc.process_raw_spectra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_spectra_point.html">pyrad.proc.process_spectra_point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_filter_0Doppler.html">pyrad.proc.process_filter_0Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_filter_spectra_noise.html">pyrad.proc.process_filter_spectra_noise</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_filter_srhohv.html">pyrad.proc.process_filter_srhohv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_spectra_ang_avg.html">pyrad.proc.process_spectra_ang_avg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_spectral_power.html">pyrad.proc.process_spectral_power</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_spectral_noise.html">pyrad.proc.process_spectral_noise</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_spectral_phase.html">pyrad.proc.process_spectral_phase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_spectral_reflectivity.html">pyrad.proc.process_spectral_reflectivity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_spectral_differential_reflectivity.html">pyrad.proc.process_spectral_differential_reflectivity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_spectral_differential_phase.html">pyrad.proc.process_spectral_differential_phase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_spectral_rhohv.html">pyrad.proc.process_spectral_rhohv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_sunscan.html">pyrad.proc.process_sunscan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_pol_variables.html">pyrad.proc.process_pol_variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_noise_power.html">pyrad.proc.process_noise_power</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_reflectivity.html">pyrad.proc.process_reflectivity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_differential_reflectivity.html">pyrad.proc.process_differential_reflectivity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_differential_phase.html">pyrad.proc.process_differential_phase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_rhohv.html">pyrad.proc.process_rhohv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_Doppler_velocity.html">pyrad.proc.process_Doppler_velocity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_Doppler_width.html">pyrad.proc.process_Doppler_width</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_ifft.html">pyrad.proc.process_ifft</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_raw_iq.html">pyrad.proc.process_raw_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_pol_variables_iq.html">pyrad.proc.process_pol_variables_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_reflectivity_iq.html">pyrad.proc.process_reflectivity_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_st1_iq.html">pyrad.proc.process_st1_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_st2_iq.html">pyrad.proc.process_st2_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_wbn_iq.html">pyrad.proc.process_wbn_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_differential_reflectivity_iq.html">pyrad.proc.process_differential_reflectivity_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_mean_phase_iq.html">pyrad.proc.process_mean_phase_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_differential_phase_iq.html">pyrad.proc.process_differential_phase_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_rhohv_iq.html">pyrad.proc.process_rhohv_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_Doppler_velocity_iq.html">pyrad.proc.process_Doppler_velocity_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_Doppler_width_iq.html">pyrad.proc.process_Doppler_width_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_fft.html">pyrad.proc.process_fft</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_echo_id.html">pyrad.proc.process_echo_id</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_birds_id.html">pyrad.proc.process_birds_id</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_clt_to_echo_id.html">pyrad.proc.process_clt_to_echo_id</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_hydro_mf_to_echo_id.html">pyrad.proc.process_hydro_mf_to_echo_id</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_hydro_mf_to_hydro.html">pyrad.proc.process_hydro_mf_to_hydro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_echo_filter.html">pyrad.proc.process_echo_filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_cdf.html">pyrad.proc.process_cdf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_filter_snr.html">pyrad.proc.process_filter_snr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_filter_visibility.html">pyrad.proc.process_filter_visibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_gatefilter.html">pyrad.proc.process_gatefilter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_outlier_filter.html">pyrad.proc.process_outlier_filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_filter_vol2bird.html">pyrad.proc.process_filter_vol2bird</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_gate_filter_vol2bird.html">pyrad.proc.process_gate_filter_vol2bird</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_hydroclass.html">pyrad.proc.process_hydroclass</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_centroids.html">pyrad.proc.process_centroids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_melting_layer.html">pyrad.proc.process_melting_layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_filter_vel_diff.html">pyrad.proc.process_filter_vel_diff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_zdr_column.html">pyrad.proc.process_zdr_column</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_correct_phidp0.html">pyrad.proc.process_correct_phidp0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_smooth_phidp_single_window.html">pyrad.proc.process_smooth_phidp_single_window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_smooth_phidp_double_window.html">pyrad.proc.process_smooth_phidp_double_window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_kdp_leastsquare_single_window.html">pyrad.proc.process_kdp_leastsquare_single_window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_kdp_leastsquare_double_window.html">pyrad.proc.process_kdp_leastsquare_double_window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_phidp_kdp_Vulpiani.html">pyrad.proc.process_phidp_kdp_Vulpiani</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_phidp_kdp_Kalman.html">pyrad.proc.process_phidp_kdp_Kalman</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_phidp_kdp_Maesaka.html">pyrad.proc.process_phidp_kdp_Maesaka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_phidp_kdp_lp.html">pyrad.proc.process_phidp_kdp_lp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_attenuation.html">pyrad.proc.process_attenuation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_correct_bias.html">pyrad.proc.process_correct_bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_correct_noise_rhohv.html">pyrad.proc.process_correct_noise_rhohv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_rhohv_rain.html">pyrad.proc.process_rhohv_rain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_zdr_precip.html">pyrad.proc.process_zdr_precip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_zdr_snow.html">pyrad.proc.process_zdr_snow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_estimate_phidp0.html">pyrad.proc.process_estimate_phidp0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_sun_hits.html">pyrad.proc.process_sun_hits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_selfconsistency_kdp_phidp.html">pyrad.proc.process_selfconsistency_kdp_phidp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_selfconsistency_bias.html">pyrad.proc.process_selfconsistency_bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_selfconsistency_bias2.html">pyrad.proc.process_selfconsistency_bias2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_time_avg_std.html">pyrad.proc.process_time_avg_std</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_occurrence.html">pyrad.proc.process_occurrence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_occurrence_period.html">pyrad.proc.process_occurrence_period</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_monitoring.html">pyrad.proc.process_monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_gc_monitoring.html">pyrad.proc.process_gc_monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_time_avg.html">pyrad.proc.process_time_avg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_weighted_time_avg.html">pyrad.proc.process_weighted_time_avg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_time_avg_flag.html">pyrad.proc.process_time_avg_flag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_time_stats.html">pyrad.proc.process_time_stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_time_stats2.html">pyrad.proc.process_time_stats2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_colocated_gates.html">pyrad.proc.process_colocated_gates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_intercomp.html">pyrad.proc.process_intercomp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_intercomp_time_avg.html">pyrad.proc.process_intercomp_time_avg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_fields_diff.html">pyrad.proc.process_fields_diff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_intercomp_fields.html">pyrad.proc.process_intercomp_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_ccor.html">pyrad.proc.process_ccor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_signal_power.html">pyrad.proc.process_signal_power</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_rcs.html">pyrad.proc.process_rcs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_rcs_pr.html">pyrad.proc.process_rcs_pr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_radial_noise_hs.html">pyrad.proc.process_radial_noise_hs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_radial_noise_ivic.html">pyrad.proc.process_radial_noise_ivic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_snr.html">pyrad.proc.process_snr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_l.html">pyrad.proc.process_l</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_cdr.html">pyrad.proc.process_cdr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_rainrate.html">pyrad.proc.process_rainrate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_rainfall_accumulation.html">pyrad.proc.process_rainfall_accumulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_vol_refl.html">pyrad.proc.process_vol_refl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_bird_density.html">pyrad.proc.process_bird_density</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_vpr.html">pyrad.proc.process_vpr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_turbulence.html">pyrad.proc.process_turbulence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_dealias_fourdd.html">pyrad.proc.process_dealias_fourdd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_dealias_region_based.html">pyrad.proc.process_dealias_region_based</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_dealias_unwrap_phase.html">pyrad.proc.process_dealias_unwrap_phase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_radial_velocity.html">pyrad.proc.process_radial_velocity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_wind_vel.html">pyrad.proc.process_wind_vel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_windshear.html">pyrad.proc.process_windshear</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_vad.html">pyrad.proc.process_vad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_point_measurement.html">pyrad.proc.process_point_measurement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_multiple_points.html">pyrad.proc.process_multiple_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_qvp.html">pyrad.proc.process_qvp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_rqvp.html">pyrad.proc.process_rqvp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_svp.html">pyrad.proc.process_svp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_evp.html">pyrad.proc.process_evp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_time_height.html">pyrad.proc.process_time_height</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_ts_along_coord.html">pyrad.proc.process_ts_along_coord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_trajectory.html">pyrad.proc.process_trajectory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_traj_atplane.html">pyrad.proc.process_traj_atplane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_traj_antenna_pattern.html">pyrad.proc.process_traj_antenna_pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_traj_lightning.html">pyrad.proc.process_traj_lightning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_traj_trt.html">pyrad.proc.process_traj_trt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_traj_trt_contour.html">pyrad.proc.process_traj_trt_contour</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_cosmo.html">pyrad.proc.process_cosmo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_cosmo_lookup_table.html">pyrad.proc.process_cosmo_lookup_table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_cosmo_coord.html">pyrad.proc.process_cosmo_coord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_hzt.html">pyrad.proc.process_hzt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_hzt_lookup_table.html">pyrad.proc.process_hzt_lookup_table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_hzt_coord.html">pyrad.proc.process_hzt_coord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_iso0_mf.html">pyrad.proc.process_iso0_mf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_iso0_grib.html">pyrad.proc.process_iso0_grib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_cosmo_to_radar.html">pyrad.proc.process_cosmo_to_radar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_dem.html">pyrad.proc.process_dem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_visibility.html">pyrad.proc.process_visibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_gecsx.html">pyrad.proc.process_gecsx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.get_process_func.html">pyrad.proc.get_process_func</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_Doppler_velocity.html">pyrad.proc.process_Doppler_velocity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_Doppler_velocity_iq.html">pyrad.proc.process_Doppler_velocity_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_Doppler_width.html">pyrad.proc.process_Doppler_width</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_Doppler_width_iq.html">pyrad.proc.process_Doppler_width_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_attenuation.html">pyrad.proc.process_attenuation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_azimuthal_average.html">pyrad.proc.process_azimuthal_average</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_bird_density.html">pyrad.proc.process_bird_density</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_birds_id.html">pyrad.proc.process_birds_id</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_ccor.html">pyrad.proc.process_ccor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_cdf.html">pyrad.proc.process_cdf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_cdr.html">pyrad.proc.process_cdr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_centroids.html">pyrad.proc.process_centroids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_clt_to_echo_id.html">pyrad.proc.process_clt_to_echo_id</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_colocated_gates.html">pyrad.proc.process_colocated_gates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_correct_bias.html">pyrad.proc.process_correct_bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_correct_noise_rhohv.html">pyrad.proc.process_correct_noise_rhohv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_correct_phidp0.html">pyrad.proc.process_correct_phidp0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_cosmo.html">pyrad.proc.process_cosmo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_cosmo_coord.html">pyrad.proc.process_cosmo_coord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_cosmo_lookup_table.html">pyrad.proc.process_cosmo_lookup_table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_cosmo_to_radar.html">pyrad.proc.process_cosmo_to_radar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_dda.html">pyrad.proc.process_dda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_dealias_fourdd.html">pyrad.proc.process_dealias_fourdd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_dealias_region_based.html">pyrad.proc.process_dealias_region_based</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_dealias_unwrap_phase.html">pyrad.proc.process_dealias_unwrap_phase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_dem.html">pyrad.proc.process_dem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_differential_phase.html">pyrad.proc.process_differential_phase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_differential_phase_iq.html">pyrad.proc.process_differential_phase_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_differential_reflectivity.html">pyrad.proc.process_differential_reflectivity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_differential_reflectivity_iq.html">pyrad.proc.process_differential_reflectivity_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_echo_filter.html">pyrad.proc.process_echo_filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_echo_id.html">pyrad.proc.process_echo_id</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_estimate_phidp0.html">pyrad.proc.process_estimate_phidp0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_evp.html">pyrad.proc.process_evp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_fft.html">pyrad.proc.process_fft</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_fields_diff.html">pyrad.proc.process_fields_diff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_filter_0Doppler.html">pyrad.proc.process_filter_0Doppler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_filter_snr.html">pyrad.proc.process_filter_snr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_filter_spectra_noise.html">pyrad.proc.process_filter_spectra_noise</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_filter_srhohv.html">pyrad.proc.process_filter_srhohv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_filter_vel_diff.html">pyrad.proc.process_filter_vel_diff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_filter_visibility.html">pyrad.proc.process_filter_visibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_filter_vol2bird.html">pyrad.proc.process_filter_vol2bird</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_fixed_rng.html">pyrad.proc.process_fixed_rng</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_fixed_rng_span.html">pyrad.proc.process_fixed_rng_span</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_gate_filter_vol2bird.html">pyrad.proc.process_gate_filter_vol2bird</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_gatefilter.html">pyrad.proc.process_gatefilter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_gc_monitoring.html">pyrad.proc.process_gc_monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_gecsx.html">pyrad.proc.process_gecsx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid.html">pyrad.proc.process_grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_fields_diff.html">pyrad.proc.process_grid_fields_diff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_mask.html">pyrad.proc.process_grid_mask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_multiple_points.html">pyrad.proc.process_grid_multiple_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_point.html">pyrad.proc.process_grid_point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_rainfall_accumulation.html">pyrad.proc.process_grid_rainfall_accumulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_texture.html">pyrad.proc.process_grid_texture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_time_stats.html">pyrad.proc.process_grid_time_stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_time_stats2.html">pyrad.proc.process_grid_time_stats2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_hydro_mf_to_echo_id.html">pyrad.proc.process_hydro_mf_to_echo_id</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_hydro_mf_to_hydro.html">pyrad.proc.process_hydro_mf_to_hydro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_hydroclass.html">pyrad.proc.process_hydroclass</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_hzt.html">pyrad.proc.process_hzt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_hzt_coord.html">pyrad.proc.process_hzt_coord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_hzt_lookup_table.html">pyrad.proc.process_hzt_lookup_table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_ifft.html">pyrad.proc.process_ifft</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_intercomp.html">pyrad.proc.process_intercomp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_intercomp_fields.html">pyrad.proc.process_intercomp_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_intercomp_time_avg.html">pyrad.proc.process_intercomp_time_avg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_iso0_grib.html">pyrad.proc.process_iso0_grib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_iso0_mf.html">pyrad.proc.process_iso0_mf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_kdp_leastsquare_double_window.html">pyrad.proc.process_kdp_leastsquare_double_window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_kdp_leastsquare_single_window.html">pyrad.proc.process_kdp_leastsquare_single_window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_l.html">pyrad.proc.process_l</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_mean_phase_iq.html">pyrad.proc.process_mean_phase_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_melting_layer.html">pyrad.proc.process_melting_layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_monitoring.html">pyrad.proc.process_monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_moving_azimuthal_average.html">pyrad.proc.process_moving_azimuthal_average</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_multiple_points.html">pyrad.proc.process_multiple_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_noise_power.html">pyrad.proc.process_noise_power</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_normalize_luminosity.html">pyrad.proc.process_normalize_luminosity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_occurrence.html">pyrad.proc.process_occurrence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_occurrence_period.html">pyrad.proc.process_occurrence_period</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_outlier_filter.html">pyrad.proc.process_outlier_filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_phidp_kdp_Kalman.html">pyrad.proc.process_phidp_kdp_Kalman</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_phidp_kdp_Maesaka.html">pyrad.proc.process_phidp_kdp_Maesaka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_phidp_kdp_Vulpiani.html">pyrad.proc.process_phidp_kdp_Vulpiani</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_phidp_kdp_lp.html">pyrad.proc.process_phidp_kdp_lp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_pixel_filter.html">pyrad.proc.process_pixel_filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_point_measurement.html">pyrad.proc.process_point_measurement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_pol_variables.html">pyrad.proc.process_pol_variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_pol_variables_iq.html">pyrad.proc.process_pol_variables_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_qvp.html">pyrad.proc.process_qvp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_radar_resampling.html">pyrad.proc.process_radar_resampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_radial_noise_hs.html">pyrad.proc.process_radial_noise_hs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_radial_noise_ivic.html">pyrad.proc.process_radial_noise_ivic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_radial_velocity.html">pyrad.proc.process_radial_velocity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_rainfall_accumulation.html">pyrad.proc.process_rainfall_accumulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_rainrate.html">pyrad.proc.process_rainrate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_raw.html">pyrad.proc.process_raw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_raw_grid.html">pyrad.proc.process_raw_grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_raw_iq.html">pyrad.proc.process_raw_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_raw_spectra.html">pyrad.proc.process_raw_spectra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_rcs.html">pyrad.proc.process_rcs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_rcs_pr.html">pyrad.proc.process_rcs_pr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_reflectivity.html">pyrad.proc.process_reflectivity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_reflectivity_iq.html">pyrad.proc.process_reflectivity_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_rhohv.html">pyrad.proc.process_rhohv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_rhohv_iq.html">pyrad.proc.process_rhohv_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_rhohv_rain.html">pyrad.proc.process_rhohv_rain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_roi.html">pyrad.proc.process_roi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_roi2.html">pyrad.proc.process_roi2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_rqvp.html">pyrad.proc.process_rqvp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_save_radar.html">pyrad.proc.process_save_radar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_selfconsistency_bias.html">pyrad.proc.process_selfconsistency_bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_selfconsistency_bias2.html">pyrad.proc.process_selfconsistency_bias2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_selfconsistency_kdp_phidp.html">pyrad.proc.process_selfconsistency_kdp_phidp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_signal_power.html">pyrad.proc.process_signal_power</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_smooth_phidp_double_window.html">pyrad.proc.process_smooth_phidp_double_window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_smooth_phidp_single_window.html">pyrad.proc.process_smooth_phidp_single_window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_snr.html">pyrad.proc.process_snr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_spectra_ang_avg.html">pyrad.proc.process_spectra_ang_avg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_spectra_point.html">pyrad.proc.process_spectra_point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_spectral_differential_phase.html">pyrad.proc.process_spectral_differential_phase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_spectral_differential_reflectivity.html">pyrad.proc.process_spectral_differential_reflectivity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_spectral_noise.html">pyrad.proc.process_spectral_noise</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_spectral_phase.html">pyrad.proc.process_spectral_phase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_spectral_power.html">pyrad.proc.process_spectral_power</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_spectral_reflectivity.html">pyrad.proc.process_spectral_reflectivity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_spectral_rhohv.html">pyrad.proc.process_spectral_rhohv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_st1_iq.html">pyrad.proc.process_st1_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_st2_iq.html">pyrad.proc.process_st2_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_sun_hits.html">pyrad.proc.process_sun_hits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_sunscan.html">pyrad.proc.process_sunscan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_svp.html">pyrad.proc.process_svp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_time_avg.html">pyrad.proc.process_time_avg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_time_avg_flag.html">pyrad.proc.process_time_avg_flag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_time_avg_std.html">pyrad.proc.process_time_avg_std</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_time_height.html">pyrad.proc.process_time_height</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_time_stats.html">pyrad.proc.process_time_stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_time_stats2.html">pyrad.proc.process_time_stats2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_traj_antenna_pattern.html">pyrad.proc.process_traj_antenna_pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_traj_atplane.html">pyrad.proc.process_traj_atplane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_traj_lightning.html">pyrad.proc.process_traj_lightning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_traj_trt.html">pyrad.proc.process_traj_trt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_traj_trt_contour.html">pyrad.proc.process_traj_trt_contour</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_trajectory.html">pyrad.proc.process_trajectory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_ts_along_coord.html">pyrad.proc.process_ts_along_coord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_turbulence.html">pyrad.proc.process_turbulence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_vad.html">pyrad.proc.process_vad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_visibility.html">pyrad.proc.process_visibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_vol_refl.html">pyrad.proc.process_vol_refl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_vol_to_grid.html">pyrad.proc.process_vol_to_grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_vpr.html">pyrad.proc.process_vpr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_wbn_iq.html">pyrad.proc.process_wbn_iq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_weighted_time_avg.html">pyrad.proc.process_weighted_time_avg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_wind_vel.html">pyrad.proc.process_wind_vel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_windshear.html">pyrad.proc.process_windshear</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_zdr_column.html">pyrad.proc.process_zdr_column</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_zdr_precip.html">pyrad.proc.process_zdr_precip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_zdr_snow.html">pyrad.proc.process_zdr_snow</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="pyrad.prod.html">pyrad.prod</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_occurrence_products.html">pyrad.prod.generate_occurrence_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_cosmo_coord_products.html">pyrad.prod.generate_cosmo_coord_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_cosmo_to_radar_products.html">pyrad.prod.generate_cosmo_to_radar_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_sun_hits_products.html">pyrad.prod.generate_sun_hits_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_intercomp_products.html">pyrad.prod.generate_intercomp_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_colocated_gates_products.html">pyrad.prod.generate_colocated_gates_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_time_avg_products.html">pyrad.prod.generate_time_avg_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_qvp_products.html">pyrad.prod.generate_qvp_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_vol_products.html">pyrad.prod.generate_vol_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_timeseries_products.html">pyrad.prod.generate_timeseries_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_monitoring_products.html">pyrad.prod.generate_monitoring_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_spectra_products.html">pyrad.prod.generate_spectra_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_grid_products.html">pyrad.prod.generate_grid_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_grid_time_avg_products.html">pyrad.prod.generate_grid_time_avg_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_traj_product.html">pyrad.prod.generate_traj_product</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_ml_products.html">pyrad.prod.generate_ml_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_centroids_products.html">pyrad.prod.generate_centroids_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_centroids_products.html">pyrad.prod.generate_centroids_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_colocated_gates_products.html">pyrad.prod.generate_colocated_gates_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_cosmo_coord_products.html">pyrad.prod.generate_cosmo_coord_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_cosmo_to_radar_products.html">pyrad.prod.generate_cosmo_to_radar_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_grid_products.html">pyrad.prod.generate_grid_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_grid_time_avg_products.html">pyrad.prod.generate_grid_time_avg_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_intercomp_products.html">pyrad.prod.generate_intercomp_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_ml_products.html">pyrad.prod.generate_ml_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_monitoring_products.html">pyrad.prod.generate_monitoring_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_occurrence_products.html">pyrad.prod.generate_occurrence_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_qvp_products.html">pyrad.prod.generate_qvp_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_spectra_products.html">pyrad.prod.generate_spectra_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_sun_hits_products.html">pyrad.prod.generate_sun_hits_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_time_avg_products.html">pyrad.prod.generate_time_avg_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_timeseries_products.html">pyrad.prod.generate_timeseries_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_traj_product.html">pyrad.prod.generate_traj_product</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_vol_products.html">pyrad.prod.generate_vol_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.prod.get_prodgen_func.html">pyrad.prod.get_prodgen_func</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="pyrad.util.html">pyrad.util</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.get_data_along_rng.html">pyrad.util.get_data_along_rng</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.get_data_along_azi.html">pyrad.util.get_data_along_azi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.get_data_along_ele.html">pyrad.util.get_data_along_ele</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.get_ROI.html">pyrad.util.get_ROI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.rainfall_accumulation.html">pyrad.util.rainfall_accumulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.time_series_statistics.html">pyrad.util.time_series_statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.find_contiguous_times.html">pyrad.util.find_contiguous_times</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.join_time_series.html">pyrad.util.join_time_series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.get_range_bins_to_avg.html">pyrad.util.get_range_bins_to_avg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.find_ray_index.html">pyrad.util.find_ray_index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.find_rng_index.html">pyrad.util.find_rng_index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.find_nearest_gate.html">pyrad.util.find_nearest_gate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.find_colocated_indexes.html">pyrad.util.find_colocated_indexes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.get_fixed_rng_data.html">pyrad.util.get_fixed_rng_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.time_avg_range.html">pyrad.util.time_avg_range</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.get_closest_solar_flux.html">pyrad.util.get_closest_solar_flux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.create_sun_hits_field.html">pyrad.util.create_sun_hits_field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.create_sun_retrieval_field.html">pyrad.util.create_sun_retrieval_field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.compute_quantiles.html">pyrad.util.compute_quantiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.compute_quantiles_from_hist.html">pyrad.util.compute_quantiles_from_hist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.compute_quantiles_sweep.html">pyrad.util.compute_quantiles_sweep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.compute_2d_hist.html">pyrad.util.compute_2d_hist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.compute_1d_stats.html">pyrad.util.compute_1d_stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.compute_2d_stats.html">pyrad.util.compute_2d_stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.compute_histogram.html">pyrad.util.compute_histogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.compute_histogram_sweep.html">pyrad.util.compute_histogram_sweep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.belongs_roi_indices.html">pyrad.util.belongs_roi_indices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.get_cercle_coords.html">pyrad.util.get_cercle_coords</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.compute_profile_stats.html">pyrad.util.compute_profile_stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.project_to_vertical.html">pyrad.util.project_to_vertical</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.util.compute_average_vad.html">pyrad.util.compute_average_vad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.belongs_roi_indices.html">pyrad.util.belongs_roi_indices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.compute_1d_stats.html">pyrad.util.compute_1d_stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.compute_2d_hist.html">pyrad.util.compute_2d_hist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.compute_2d_stats.html">pyrad.util.compute_2d_stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.compute_average_vad.html">pyrad.util.compute_average_vad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.compute_histogram.html">pyrad.util.compute_histogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.compute_histogram_sweep.html">pyrad.util.compute_histogram_sweep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.compute_profile_stats.html">pyrad.util.compute_profile_stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.compute_quantiles.html">pyrad.util.compute_quantiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.compute_quantiles_from_hist.html">pyrad.util.compute_quantiles_from_hist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.compute_quantiles_sweep.html">pyrad.util.compute_quantiles_sweep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.create_sun_hits_field.html">pyrad.util.create_sun_hits_field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.create_sun_retrieval_field.html">pyrad.util.create_sun_retrieval_field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.find_colocated_indexes.html">pyrad.util.find_colocated_indexes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.find_contiguous_times.html">pyrad.util.find_contiguous_times</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.find_nearest_gate.html">pyrad.util.find_nearest_gate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.find_ray_index.html">pyrad.util.find_ray_index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.find_rng_index.html">pyrad.util.find_rng_index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.get_ROI.html">pyrad.util.get_ROI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.get_cercle_coords.html">pyrad.util.get_cercle_coords</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.get_closest_solar_flux.html">pyrad.util.get_closest_solar_flux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.get_data_along_azi.html">pyrad.util.get_data_along_azi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.get_data_along_ele.html">pyrad.util.get_data_along_ele</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.get_data_along_rng.html">pyrad.util.get_data_along_rng</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.get_fixed_rng_data.html">pyrad.util.get_fixed_rng_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.get_range_bins_to_avg.html">pyrad.util.get_range_bins_to_avg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.join_time_series.html">pyrad.util.join_time_series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.project_to_vertical.html">pyrad.util.project_to_vertical</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.rainfall_accumulation.html">pyrad.util.rainfall_accumulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.time_avg_range.html">pyrad.util.time_avg_range</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.time_series_statistics.html">pyrad.util.time_series_statistics</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">API Reference Manual</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="pyrad.io.html" class="nav-link">pyrad.io</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">pyrad.io.read_mf_vis</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+<section id="pyrad-io-read-mf-vis">
+<h1>pyrad.io.read_mf_vis<a class="headerlink" href="#pyrad-io-read-mf-vis" title="Permalink to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyrad.io.read_mf_vis">
+<span class="sig-prename descclassname"><span class="pre">pyrad.io.</span></span><span class="sig-name descname"><span class="pre">read_mf_vis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datatype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyrad/io/read_data_other.html#read_mf_vis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.io.read_mf_vis" title="Permalink to this definition">#</a></dt>
+<dd><p>Reads Météo-France visibility data binary file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fname</strong> (<em>str</em>) – name of the file to read</p></li>
+<li><p><strong>datatype</strong> (<em>str</em>) – name of the data type</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>field</strong> (<em>dict</em>) – A data field</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+<div class="section ablog__blog_comments">
+  
+  
+</div>
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="pyrad.io.read_meteorage.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">pyrad.io.read_meteorage</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="pyrad.io.read_ml_ts.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">pyrad.io.read_ml_ts</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyrad.io.read_mf_vis"><code class="docutils literal notranslate"><span class="pre">read_mf_vis()</span></code></a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/API/generated/pyrad.io.read_mf_vis.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

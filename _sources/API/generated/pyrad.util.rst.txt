@@ -1,0 +1,80 @@
+﻿pyrad.util
+==========
+
+.. rubric:: Description
+
+.. automodule:: pyrad.util
+
+.. currentmodule:: pyrad.util
+
+
+
+
+.. rubric:: Functions
+
+.. autosummary::
+    :toctree: .
+    
+    belongs_roi_indices
+    
+    compute_1d_stats
+    
+    compute_2d_hist
+    
+    compute_2d_stats
+    
+    compute_average_vad
+    
+    compute_histogram
+    
+    compute_histogram_sweep
+    
+    compute_profile_stats
+    
+    compute_quantiles
+    
+    compute_quantiles_from_hist
+    
+    compute_quantiles_sweep
+    
+    create_sun_hits_field
+    
+    create_sun_retrieval_field
+    
+    find_colocated_indexes
+    
+    find_contiguous_times
+    
+    find_nearest_gate
+    
+    find_ray_index
+    
+    find_rng_index
+    
+    get_ROI
+    
+    get_cercle_coords
+    
+    get_closest_solar_flux
+    
+    get_data_along_azi
+    
+    get_data_along_ele
+    
+    get_data_along_rng
+    
+    get_fixed_rng_data
+    
+    get_range_bins_to_avg
+    
+    join_time_series
+    
+    project_to_vertical
+    
+    rainfall_accumulation
+    
+    time_avg_range
+    
+    time_series_statistics
+    
+

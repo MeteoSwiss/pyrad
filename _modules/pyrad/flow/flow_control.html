@@ -1,0 +1,1420 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyrad.flow.flow_control &#8212; Pyrad 1.8.3 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/design-tabs.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyrad/flow/flow_control';</script>
+    <script src="../../../_static/doc_shared.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Pyrad 1.8.3 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../userguide/index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../API/index.html">
+                        API Reference Manual
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../overview/index.html">
+                        Features
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../userguide/index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../API/index.html">
+                        API Reference Manual
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../overview/index.html">
+                        Features
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">pyrad.flow.flow_control</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+<h1>Source code for pyrad.flow.flow_control</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">pyrad.flow.flow_control</span>
+<span class="sd">=======================</span>
+
+<span class="sd">functions to control the Pyrad data processing flow</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    main</span>
+<span class="sd">    main_rt</span>
+<span class="sd">    main_cosmo</span>
+<span class="sd">    main_cosmo_rt</span>
+<span class="sd">    main_gecsx</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">timedelta</span>
+<span class="kn">import</span> <span class="nn">gc</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">queue</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span> <span class="nn">pyart</span> <span class="kn">import</span> <span class="n">__version__</span> <span class="k">as</span> <span class="n">pyart_version</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">version</span> <span class="k">as</span> <span class="n">pyrad_version</span>
+
+<span class="kn">from</span> <span class="nn">.flow_aux</span> <span class="kn">import</span> <span class="n">_warning_format</span><span class="p">,</span> <span class="n">_initialize_listener</span>
+<span class="kn">from</span> <span class="nn">.flow_aux</span> <span class="kn">import</span> <span class="n">_create_cfg_dict</span><span class="p">,</span> <span class="n">_create_datacfg_dict</span>
+<span class="kn">from</span> <span class="nn">.flow_aux</span> <span class="kn">import</span> <span class="n">_get_times_and_traj</span><span class="p">,</span> <span class="n">_get_datatype_list</span>
+<span class="kn">from</span> <span class="nn">.flow_aux</span> <span class="kn">import</span> <span class="n">_get_datasets_list</span><span class="p">,</span> <span class="n">_get_masterfile_list</span>
+<span class="kn">from</span> <span class="nn">.flow_aux</span> <span class="kn">import</span> <span class="n">_wait_for_files</span><span class="p">,</span> <span class="n">_get_radars_data</span>
+<span class="kn">from</span> <span class="nn">.flow_aux</span> <span class="kn">import</span> <span class="n">_initialize_datasets</span>
+<span class="kn">from</span> <span class="nn">.flow_aux</span> <span class="kn">import</span> <span class="n">_process_datasets</span><span class="p">,</span> <span class="n">_postprocess_datasets</span>
+
+<span class="kn">from</span> <span class="nn">..io.io_aux</span> <span class="kn">import</span> <span class="n">get_datetime</span>
+<span class="kn">from</span> <span class="nn">..io.read_data_other</span> <span class="kn">import</span> <span class="n">read_last_state</span>
+<span class="kn">from</span> <span class="nn">..io.write_data</span> <span class="kn">import</span> <span class="n">write_last_state</span>
+
+<span class="n">ALLOW_USER_BREAK</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">dask</span>
+    <span class="kn">from</span> <span class="nn">dask.diagnostics</span> <span class="kn">import</span> <span class="n">Profiler</span><span class="p">,</span> <span class="n">ResourceProfiler</span><span class="p">,</span> <span class="n">CacheProfiler</span>
+    <span class="kn">from</span> <span class="nn">dask.diagnostics</span> <span class="kn">import</span> <span class="n">visualize</span>
+    <span class="kn">from</span> <span class="nn">distributed</span> <span class="kn">import</span> <span class="n">Client</span>
+    <span class="kn">from</span> <span class="nn">bokeh.io</span> <span class="kn">import</span> <span class="n">export_png</span>
+    <span class="n">_DASK_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;dask not available: The processing will not be parallelized&#39;</span><span class="p">)</span>
+    <span class="n">_DASK_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../API/generated/pyrad.flow.main.html#pyrad.flow.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">cfgfile</span><span class="p">,</span> <span class="n">starttime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">endtime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">trajfile</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">trajtype</span><span class="o">=</span><span class="s1">&#39;plane&#39;</span><span class="p">,</span>
+         <span class="n">flashnr</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">infostr</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">MULTIPROCESSING_DSET</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+         <span class="n">MULTIPROCESSING_PROD</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">PROFILE_MULTIPROCESSING</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+         <span class="n">USE_CHILD_PROCESS</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Main flow control. Processes radar data off-line over a period of time</span>
+<span class="sd">    given either by the user, a trajectory file, or determined by the last</span>
+<span class="sd">    volume processed and the current time. Multiple radars can be processed</span>
+<span class="sd">    simultaneously</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cfgfile : str</span>
+<span class="sd">        path of the main config file</span>
+<span class="sd">    starttime, endtime : datetime object</span>
+<span class="sd">        start and end time of the data to be processed</span>
+<span class="sd">    trajfile : str</span>
+<span class="sd">        path to file describing the trajectory</span>
+<span class="sd">    trajtype : str</span>
+<span class="sd">        type of trajectory file. Can be either &#39;plane&#39;, &#39;lightning&#39; or</span>
+<span class="sd">        &#39;proc_periods&#39;</span>
+<span class="sd">    flashnr : int</span>
+<span class="sd">        If larger than 0 will select a flash in a lightning trajectory file.</span>
+<span class="sd">        If 0 the data corresponding to the trajectory of all flashes will be</span>
+<span class="sd">        plotted</span>
+<span class="sd">    infostr : str</span>
+<span class="sd">        Information string about the actual data processing</span>
+<span class="sd">        (e.g. &#39;RUN57&#39;). This string is added to product files.</span>
+<span class="sd">    MULTIPROCESSING_DSET : Bool</span>
+<span class="sd">        If true the generation of datasets at the same processing level will</span>
+<span class="sd">        be parallelized</span>
+<span class="sd">    MULTIPROCESSING_PROD : Bool</span>
+<span class="sd">        If true the generation of products from each dataset will be</span>
+<span class="sd">        parallelized</span>
+<span class="sd">    PROFILE_MULTIPROCESSING : Bool</span>
+<span class="sd">        If true and code parallelized the multiprocessing is profiled</span>
+<span class="sd">    USE_CHILD_PROCESS : Bool</span>
+<span class="sd">        If true the reading and processing of the data will be performed by</span>
+<span class="sd">        a child process controlled by dask. This is done to make sure all</span>
+<span class="sd">        memory used is released.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- PYRAD version: </span><span class="si">{}</span><span class="s2"> (compiled </span><span class="si">{}</span><span class="s2"> by </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">pyrad_version</span><span class="o">.</span><span class="n">version</span><span class="p">,</span> <span class="n">pyrad_version</span><span class="o">.</span><span class="n">compile_date_time</span><span class="p">,</span>
+        <span class="n">pyrad_version</span><span class="o">.</span><span class="n">username</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- PYART version: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pyart_version</span><span class="p">))</span>
+
+    <span class="c1"># Define behaviour of warnings</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s1">&#39;always&#39;</span><span class="p">)</span>  <span class="c1"># always print matching warnings</span>
+    <span class="c1"># warnings.simplefilter(&#39;error&#39;)  # turn matching warnings into exceptions</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">formatwarning</span> <span class="o">=</span> <span class="n">_warning_format</span>  <span class="c1"># define format</span>
+
+    <span class="k">if</span> <span class="n">ALLOW_USER_BREAK</span><span class="p">:</span>
+        <span class="n">input_queue</span> <span class="o">=</span> <span class="n">_initialize_listener</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_DASK_AVAILABLE</span><span class="p">:</span>
+        <span class="n">MULTIPROCESSING_DSET</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">MULTIPROCESSING_PROD</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">PROFILE_MULTIPROCESSING</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">USE_CHILD_PROCESS</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="c1"># check if multiprocessing profiling is necessary</span>
+    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">MULTIPROCESSING_DSET</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">MULTIPROCESSING_PROD</span> <span class="ow">and</span>
+            <span class="ow">not</span> <span class="n">USE_CHILD_PROCESS</span><span class="p">):</span>
+        <span class="n">PROFILE_MULTIPROCESSING</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">MULTIPROCESSING_DSET</span><span class="p">)</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">MULTIPROCESSING_PROD</span><span class="p">)</span> <span class="o">+</span>
+          <span class="nb">int</span><span class="p">(</span><span class="n">USE_CHILD_PROCESS</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">PROFILE_MULTIPROCESSING</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">MULTIPROCESSING_DSET</span><span class="p">)</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">MULTIPROCESSING_PROD</span><span class="p">)</span> <span class="o">+</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">USE_CHILD_PROCESS</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="c1"># necessary to launch tasks from tasks</span>
+        <span class="n">Client</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">PROFILE_MULTIPROCESSING</span><span class="p">:</span>
+        <span class="n">prof</span> <span class="o">=</span> <span class="n">Profiler</span><span class="p">()</span>
+        <span class="n">rprof</span> <span class="o">=</span> <span class="n">ResourceProfiler</span><span class="p">()</span>
+        <span class="n">cprof</span> <span class="o">=</span> <span class="n">CacheProfiler</span><span class="p">()</span>
+
+        <span class="n">prof</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
+        <span class="n">rprof</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
+        <span class="n">cprof</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
+
+    <span class="n">cfg</span> <span class="o">=</span> <span class="n">_create_cfg_dict</span><span class="p">(</span><span class="n">cfgfile</span><span class="p">)</span>
+    <span class="n">datacfg</span> <span class="o">=</span> <span class="n">_create_datacfg_dict</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+
+    <span class="n">starttimes</span><span class="p">,</span> <span class="n">endtimes</span><span class="p">,</span> <span class="n">traj</span> <span class="o">=</span> <span class="n">_get_times_and_traj</span><span class="p">(</span>
+        <span class="n">trajfile</span><span class="p">,</span> <span class="n">starttime</span><span class="p">,</span> <span class="n">endtime</span><span class="p">,</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;ScanPeriod&#39;</span><span class="p">],</span>
+        <span class="n">last_state_file</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;lastStateFile&#39;</span><span class="p">],</span> <span class="n">trajtype</span><span class="o">=</span><span class="n">trajtype</span><span class="p">,</span>
+        <span class="n">flashnr</span><span class="o">=</span><span class="n">flashnr</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">infostr</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- Info string : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">infostr</span><span class="p">))</span>
+
+    <span class="c1"># get data types and levels</span>
+    <span class="n">datatypesdescr_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;NumRadars&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">datatypesdescr_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">_get_datatype_list</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">radarnr</span><span class="o">=</span><span class="s1">&#39;RADAR&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">{:03d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)))</span>
+
+    <span class="n">dataset_levels</span> <span class="o">=</span> <span class="n">_get_datasets_list</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+
+    <span class="n">masterfilelist</span><span class="p">,</span> <span class="n">masterdatatypedescr</span><span class="p">,</span> <span class="n">masterscan</span> <span class="o">=</span> <span class="n">_get_masterfile_list</span><span class="p">(</span>
+        <span class="n">datatypesdescr_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">starttimes</span><span class="p">,</span> <span class="n">endtimes</span><span class="p">,</span> <span class="n">datacfg</span><span class="p">,</span>
+        <span class="n">scan_list</span><span class="o">=</span><span class="n">datacfg</span><span class="p">[</span><span class="s1">&#39;ScanList&#39;</span><span class="p">])</span>
+
+    <span class="n">nvolumes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">masterfilelist</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nvolumes</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;ERROR: Could not find any valid volumes between &quot;</span>
+            <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> and </span><span class="si">{}</span><span class="s2"> for master scan &#39;</span><span class="si">{}</span><span class="s2">&#39; and master data type &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">starttimes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">),</span>
+                <span class="n">endtimes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">),</span> <span class="n">masterscan</span><span class="p">,</span>
+                <span class="n">masterdatatypedescr</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- Number of volumes to process: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nvolumes</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- Start time: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">starttimes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- end time: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">endtimes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)))</span>
+
+    <span class="c1"># initial processing of the datasets</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">- Initializing datasets:&#39;</span><span class="p">)</span>
+    <span class="n">dscfg</span><span class="p">,</span> <span class="n">traj</span> <span class="o">=</span> <span class="n">_initialize_datasets</span><span class="p">(</span>
+        <span class="n">dataset_levels</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span> <span class="n">infostr</span><span class="o">=</span><span class="n">infostr</span><span class="p">)</span>
+
+    <span class="c1"># process all data files in file list or until user interrupts processing</span>
+    <span class="k">for</span> <span class="n">masterfile</span> <span class="ow">in</span> <span class="n">masterfilelist</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ALLOW_USER_BREAK</span><span class="p">:</span>
+            <span class="c1"># check if user has requested exit</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">input_queue</span><span class="o">.</span><span class="n">get_nowait</span><span class="p">()</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Program terminated by user&#39;</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">except</span> <span class="n">queue</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">- master file: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">masterfile</span><span class="p">)))</span>
+
+        <span class="n">master_voltime</span> <span class="o">=</span> <span class="n">get_datetime</span><span class="p">(</span><span class="n">masterfile</span><span class="p">,</span> <span class="n">masterdatatypedescr</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">USE_CHILD_PROCESS</span><span class="p">:</span>
+            <span class="n">data_reading</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="n">_get_radars_data</span><span class="p">)(</span>
+                <span class="n">master_voltime</span><span class="p">,</span> <span class="n">datatypesdescr_list</span><span class="p">,</span> <span class="n">datacfg</span><span class="p">,</span>
+                <span class="n">num_radars</span><span class="o">=</span><span class="n">datacfg</span><span class="p">[</span><span class="s1">&#39;NumRadars&#39;</span><span class="p">])</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">radar_list</span> <span class="o">=</span> <span class="n">data_reading</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+                <span class="k">del</span> <span class="n">data_reading</span>
+
+                <span class="n">dscfg_aux</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="n">dscfg</span><span class="p">)</span>
+                <span class="n">traj_aux</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="n">traj</span><span class="p">)</span>
+                <span class="n">data_processing</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="n">_process_datasets</span><span class="p">)(</span>
+                    <span class="n">dataset_levels</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">dscfg_aux</span><span class="p">,</span> <span class="n">radar_list</span><span class="p">,</span>
+                    <span class="n">master_voltime</span><span class="p">,</span> <span class="n">traj</span><span class="o">=</span><span class="n">traj_aux</span><span class="p">,</span> <span class="n">infostr</span><span class="o">=</span><span class="n">infostr</span><span class="p">,</span>
+                    <span class="n">MULTIPROCESSING_DSET</span><span class="o">=</span><span class="n">MULTIPROCESSING_DSET</span><span class="p">,</span>
+                    <span class="n">MULTIPROCESSING_PROD</span><span class="o">=</span><span class="n">MULTIPROCESSING_PROD</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">dscfg</span><span class="p">,</span> <span class="n">traj</span> <span class="o">=</span> <span class="n">data_processing</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+                    <span class="k">del</span> <span class="n">data_processing</span>
+                    <span class="k">del</span> <span class="n">radar_list</span>
+                    <span class="k">del</span> <span class="n">dscfg_aux</span>
+                    <span class="k">del</span> <span class="n">traj_aux</span>
+
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ee</span><span class="p">:</span>
+                    <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">))</span>
+                    <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ee</span><span class="p">:</span>
+                <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">))</span>
+                <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">radar_list</span> <span class="o">=</span> <span class="n">_get_radars_data</span><span class="p">(</span>
+                <span class="n">master_voltime</span><span class="p">,</span> <span class="n">datatypesdescr_list</span><span class="p">,</span> <span class="n">datacfg</span><span class="p">,</span>
+                <span class="n">num_radars</span><span class="o">=</span><span class="n">datacfg</span><span class="p">[</span><span class="s1">&#39;NumRadars&#39;</span><span class="p">])</span>
+
+            <span class="c1"># process all data sets</span>
+            <span class="n">dscfg</span><span class="p">,</span> <span class="n">traj</span> <span class="o">=</span> <span class="n">_process_datasets</span><span class="p">(</span>
+                <span class="n">dataset_levels</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="p">,</span> <span class="n">master_voltime</span><span class="p">,</span>
+                <span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span> <span class="n">infostr</span><span class="o">=</span><span class="n">infostr</span><span class="p">,</span>
+                <span class="n">MULTIPROCESSING_DSET</span><span class="o">=</span><span class="n">MULTIPROCESSING_DSET</span><span class="p">,</span>
+                <span class="n">MULTIPROCESSING_PROD</span><span class="o">=</span><span class="n">MULTIPROCESSING_PROD</span><span class="p">)</span>
+
+            <span class="c1"># delete variables</span>
+            <span class="k">del</span> <span class="n">radar_list</span>
+
+        <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+
+    <span class="c1"># post-processing of the datasets</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">- Post-processing datasets:&#39;</span><span class="p">)</span>
+    <span class="n">dscfg</span><span class="p">,</span> <span class="n">traj</span> <span class="o">=</span> <span class="n">_postprocess_datasets</span><span class="p">(</span>
+        <span class="n">dataset_levels</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span> <span class="n">infostr</span><span class="o">=</span><span class="n">infostr</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">PROFILE_MULTIPROCESSING</span><span class="p">:</span>
+        <span class="n">prof</span><span class="o">.</span><span class="n">unregister</span><span class="p">()</span>
+        <span class="n">rprof</span><span class="o">.</span><span class="n">unregister</span><span class="p">()</span>
+        <span class="n">cprof</span><span class="o">.</span><span class="n">unregister</span><span class="p">()</span>
+
+        <span class="n">bokeh_plot</span> <span class="o">=</span> <span class="n">visualize</span><span class="p">([</span><span class="n">prof</span><span class="p">,</span> <span class="n">rprof</span><span class="p">,</span> <span class="n">cprof</span><span class="p">],</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">profile_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/profiling/&#39;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">profile_path</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">profile_path</span><span class="p">)</span>
+
+        <span class="n">export_png</span><span class="p">(</span><span class="n">bokeh_plot</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="p">(</span>
+            <span class="n">profile_path</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S&#39;</span><span class="p">)</span> <span class="o">+</span>
+            <span class="s1">&#39;_profile.png&#39;</span><span class="p">))</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- This is the end my friend! See you soon!&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="main_rt"><a class="viewcode-back" href="../../../API/generated/pyrad.flow.main_rt.html#pyrad.flow.main_rt">[docs]</a><span class="k">def</span> <span class="nf">main_rt</span><span class="p">(</span><span class="n">cfgfile_list</span><span class="p">,</span> <span class="n">starttime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">endtime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">infostr_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">proc_period</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">proc_finish</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hide_warnings</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    main flow control. Processes radar data in real time. The start and end</span>
+<span class="sd">    processing times can be determined by the user. This function is inteded</span>
+<span class="sd">    for a single radar</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cfgfile_list : list of str</span>
+<span class="sd">        path of the main config files</span>
+<span class="sd">    starttime, endtime : datetime object</span>
+<span class="sd">        start and end time of the data to be processed</span>
+<span class="sd">    infostr_list : list of str</span>
+<span class="sd">        Information string about the actual data processing</span>
+<span class="sd">        (e.g. &#39;RUN57&#39;). This string is added to product files.</span>
+<span class="sd">    proc_period : int</span>
+<span class="sd">        period of time before starting a new processing round (seconds)</span>
+<span class="sd">    proc_finish : int or None</span>
+<span class="sd">        if set to a value the program will be forced to shut down after the</span>
+<span class="sd">        value (in seconds) from start time has been exceeded</span>
+<span class="sd">    hide_warnings : bool</span>
+<span class="sd">        if set to true it will hide the warnings during the pyrad processing</span>
+<span class="sd">        this is useful when logging the outputs to log files, as they can</span>
+<span class="sd">        become very large</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    end_proc : Boolean</span>
+<span class="sd">        If true the program has ended successfully</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- PYRAD version: </span><span class="si">%s</span><span class="s2"> (compiled </span><span class="si">%s</span><span class="s2"> by </span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span>
+          <span class="p">(</span><span class="n">pyrad_version</span><span class="o">.</span><span class="n">version</span><span class="p">,</span> <span class="n">pyrad_version</span><span class="o">.</span><span class="n">compile_date_time</span><span class="p">,</span>
+           <span class="n">pyrad_version</span><span class="o">.</span><span class="n">username</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- PYART version: &quot;</span> <span class="o">+</span> <span class="n">pyart_version</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">hide_warnings</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Define behaviour of warnings</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s1">&#39;always&#39;</span><span class="p">)</span>  <span class="c1"># always print matching warnings</span>
+        <span class="c1"># warnings.simplefilter(&#39;error&#39;)  # turn matching warnings into</span>
+        <span class="c1"># exceptions</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">formatwarning</span> <span class="o">=</span> <span class="n">_warning_format</span>  <span class="c1"># define format</span>
+
+    <span class="c1"># The processing will be allowed to run for a limited period</span>
+    <span class="k">if</span> <span class="n">proc_finish</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">startime_proc</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+        <span class="c1"># for offline testing</span>
+        <span class="c1"># startime_proc = startime_proc.replace(</span>
+        <span class="c1">#     year=endtime.year, month=endtime.month, day=endtime.day)</span>
+        <span class="c1"># startime_proc = startime_proc.replace(hour=10)</span>
+
+        <span class="n">endtime_proc</span> <span class="o">=</span> <span class="n">startime_proc</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">proc_finish</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">ALLOW_USER_BREAK</span><span class="p">:</span>
+        <span class="n">input_queue</span> <span class="o">=</span> <span class="n">_initialize_listener</span><span class="p">()</span>
+
+    <span class="n">cfg_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">datacfg_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">dscfg_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">datatypesdescr_list_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">dataset_levels_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">last_processed_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">icfg</span><span class="p">,</span> <span class="n">cfgfile</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cfgfile_list</span><span class="p">):</span>
+        <span class="n">cfg</span> <span class="o">=</span> <span class="n">_create_cfg_dict</span><span class="p">(</span><span class="n">cfgfile</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">infostr_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">infostr</span> <span class="o">=</span> <span class="n">infostr_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">infostr</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">datacfg</span> <span class="o">=</span> <span class="n">_create_datacfg_dict</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">infostr</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- Info string : &#39;</span> <span class="o">+</span> <span class="n">infostr</span><span class="p">)</span>
+
+        <span class="c1"># find out last processed volume</span>
+        <span class="n">last_processed</span> <span class="o">=</span> <span class="n">read_last_state</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;lastStateFile&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">last_processed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- last processed volume unknown&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- last processed volume: &#39;</span> <span class="o">+</span> <span class="n">last_processed</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
+                <span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S&#39;</span><span class="p">))</span>
+        <span class="n">last_processed_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">last_processed</span><span class="p">)</span>
+
+        <span class="c1"># get data types and levels</span>
+        <span class="n">datatypesdescr_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;NumRadars&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">datatypesdescr_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">_get_datatype_list</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">radarnr</span><span class="o">=</span><span class="s1">&#39;RADAR&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">{:03d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)))</span>
+
+        <span class="n">dataset_levels</span> <span class="o">=</span> <span class="n">_get_datasets_list</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+
+        <span class="c1"># initial processing of the datasets</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">- Initializing datasets:&#39;</span><span class="p">)</span>
+        <span class="n">dscfg</span><span class="p">,</span> <span class="n">traj</span> <span class="o">=</span> <span class="n">_initialize_datasets</span><span class="p">(</span>
+            <span class="n">dataset_levels</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">infostr</span><span class="o">=</span><span class="n">infostr</span><span class="p">)</span>
+
+        <span class="n">cfg_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+        <span class="n">datacfg_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">datacfg</span><span class="p">)</span>
+        <span class="n">dscfg_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dscfg</span><span class="p">)</span>
+        <span class="n">datatypesdescr_list_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">datatypesdescr_list</span><span class="p">)</span>
+        <span class="n">dataset_levels_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset_levels</span><span class="p">)</span>
+
+        <span class="c1"># remove variables from memory</span>
+        <span class="k">del</span> <span class="n">cfg</span>
+        <span class="k">del</span> <span class="n">datacfg</span>
+        <span class="k">del</span> <span class="n">dscfg</span>
+        <span class="k">del</span> <span class="n">datatypesdescr_list</span>
+        <span class="k">del</span> <span class="n">dataset_levels</span>
+        <span class="k">del</span> <span class="n">last_processed</span>
+        <span class="k">del</span> <span class="n">traj</span>
+
+        <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+
+    <span class="n">end_proc</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">end_proc</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ALLOW_USER_BREAK</span><span class="p">:</span>
+            <span class="c1"># check if user has requested exit</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">user_input</span> <span class="o">=</span> <span class="n">input_queue</span><span class="o">.</span><span class="n">get_nowait</span><span class="p">()</span>
+                <span class="n">end_proc</span> <span class="o">=</span> <span class="n">user_input</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Program terminated by user&#39;</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">except</span> <span class="n">queue</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="n">nowtime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+        <span class="c1"># for offline testing</span>
+        <span class="c1"># nowtime = nowtime.replace(</span>
+        <span class="c1">#     year=endtime.year, month=endtime.month, day=endtime.day)</span>
+        <span class="c1"># nowtime = nowtime.replace(hour=10)</span>
+
+        <span class="c1"># if processing end time exceeded finalize processing</span>
+        <span class="k">if</span> <span class="n">proc_finish</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">nowtime</span> <span class="o">&gt;=</span> <span class="n">endtime_proc</span><span class="p">:</span>
+                <span class="n">end_proc</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Allowed processing time exceeded&#39;</span><span class="p">)</span>
+                <span class="k">break</span>
+
+        <span class="c1"># end time has been set and current time older than end time</span>
+        <span class="c1"># quit processing</span>
+        <span class="k">if</span> <span class="n">endtime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">nowtime</span> <span class="o">&gt;</span> <span class="n">endtime</span><span class="p">:</span>
+                <span class="n">end_proc</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span>
+
+        <span class="c1"># start time has been set. Check if current time has to be</span>
+        <span class="c1"># processed. If not sleep until next proc_period</span>
+        <span class="k">if</span> <span class="n">starttime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">nowtime</span> <span class="o">&lt;</span> <span class="n">starttime</span><span class="p">:</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">proc_period</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+        <span class="n">vol_processed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">icfg</span><span class="p">,</span> <span class="n">cfg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cfg_list</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">ALLOW_USER_BREAK</span><span class="p">:</span>
+                <span class="c1"># check if user has requested exit</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">user_input</span> <span class="o">=</span> <span class="n">input_queue</span><span class="o">.</span><span class="n">get_nowait</span><span class="p">()</span>
+                    <span class="n">end_proc</span> <span class="o">=</span> <span class="n">user_input</span>
+                    <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Program terminated by user&#39;</span><span class="p">)</span>
+                    <span class="k">break</span>
+                <span class="k">except</span> <span class="n">queue</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+            <span class="n">datacfg</span> <span class="o">=</span> <span class="n">datacfg_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
+            <span class="n">dscfg</span> <span class="o">=</span> <span class="n">dscfg_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
+            <span class="n">datatypesdescr_list</span> <span class="o">=</span> <span class="n">datatypesdescr_list_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
+            <span class="n">dataset_levels</span> <span class="o">=</span> <span class="n">dataset_levels_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
+            <span class="n">last_processed</span> <span class="o">=</span> <span class="n">last_processed_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">infostr_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">infostr</span> <span class="o">=</span> <span class="n">infostr_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">infostr</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+            <span class="c1"># wait until new files are available</span>
+            <span class="n">masterfile</span><span class="p">,</span> <span class="n">masterdatatypedescr</span><span class="p">,</span> <span class="n">last_processed</span> <span class="o">=</span> <span class="n">_wait_for_files</span><span class="p">(</span>
+                <span class="n">nowtime</span><span class="p">,</span> <span class="n">datacfg</span><span class="p">,</span> <span class="n">datatypesdescr_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">last_processed</span><span class="o">=</span><span class="n">last_processed</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">masterfile</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">last_processed_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span> <span class="o">=</span> <span class="n">last_processed</span>
+                <span class="k">if</span> <span class="n">last_processed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">write_last_state</span><span class="p">(</span><span class="n">last_processed</span><span class="p">,</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;lastStateFile&#39;</span><span class="p">])</span>
+                <span class="k">continue</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">- master file: &#39;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">masterfile</span><span class="p">))</span>
+            <span class="n">master_voltime</span> <span class="o">=</span> <span class="n">get_datetime</span><span class="p">(</span><span class="n">masterfile</span><span class="p">,</span> <span class="n">masterdatatypedescr</span><span class="p">)</span>
+
+            <span class="c1"># get data of master radar</span>
+            <span class="n">radar_list</span> <span class="o">=</span> <span class="n">_get_radars_data</span><span class="p">(</span>
+                <span class="n">master_voltime</span><span class="p">,</span> <span class="n">datatypesdescr_list</span><span class="p">,</span> <span class="n">datacfg</span><span class="p">,</span>
+                <span class="n">num_radars</span><span class="o">=</span><span class="n">datacfg</span><span class="p">[</span><span class="s1">&#39;NumRadars&#39;</span><span class="p">])</span>
+
+            <span class="c1"># process all data sets</span>
+            <span class="n">dscfg</span><span class="p">,</span> <span class="n">traj</span> <span class="o">=</span> <span class="n">_process_datasets</span><span class="p">(</span>
+                <span class="n">dataset_levels</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="p">,</span> <span class="n">master_voltime</span><span class="p">,</span>
+                <span class="n">infostr</span><span class="o">=</span><span class="n">infostr</span><span class="p">)</span>
+
+            <span class="n">last_processed_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span> <span class="o">=</span> <span class="n">master_voltime</span>
+            <span class="n">write_last_state</span><span class="p">(</span><span class="n">master_voltime</span><span class="p">,</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;lastStateFile&#39;</span><span class="p">])</span>
+            <span class="n">dscfg_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span> <span class="o">=</span> <span class="n">dscfg</span>
+
+            <span class="n">vol_processed</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="c1"># remove variables from memory</span>
+            <span class="k">del</span> <span class="n">radar_list</span>
+            <span class="k">del</span> <span class="n">cfg</span>
+            <span class="k">del</span> <span class="n">datacfg</span>
+            <span class="k">del</span> <span class="n">dscfg</span>
+            <span class="k">del</span> <span class="n">datatypesdescr_list</span>
+            <span class="k">del</span> <span class="n">dataset_levels</span>
+            <span class="k">del</span> <span class="n">last_processed</span>
+            <span class="k">del</span> <span class="n">traj</span>
+
+            <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+
+        <span class="n">nowtime_new</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+        <span class="c1"># for offline testing</span>
+        <span class="c1"># nowtime_new = nowtime_new.replace(</span>
+        <span class="c1">#     year=endtime.year, month=endtime.month, day=endtime.day)</span>
+        <span class="c1"># nowtime_new = nowtime_new.replace(hour=10)</span>
+
+        <span class="n">proc_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">nowtime_new</span> <span class="o">-</span> <span class="n">nowtime</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">vol_processed</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Processing time </span><span class="si">%s</span><span class="s1"> s</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">proc_time</span><span class="p">)</span>
+
+        <span class="c1"># if processing end time exceeded finalize processing</span>
+        <span class="k">if</span> <span class="n">proc_finish</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">nowtime_new</span> <span class="o">&gt;=</span> <span class="n">endtime_proc</span><span class="p">:</span>
+                <span class="n">end_proc</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Allowed processing time exceeded&#39;</span><span class="p">)</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="n">proc_time</span> <span class="o">&lt;</span> <span class="n">proc_period</span><span class="p">:</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">proc_period</span> <span class="o">-</span> <span class="n">proc_time</span><span class="p">)</span>
+
+    <span class="c1"># only do post processing if program properly terminated by user</span>
+    <span class="k">if</span> <span class="n">end_proc</span><span class="p">:</span>
+        <span class="c1"># post-processing of the datasets</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">- Post-processing datasets:&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">icfg</span><span class="p">,</span> <span class="n">cfg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cfg_list</span><span class="p">):</span>
+            <span class="n">dscfg</span> <span class="o">=</span> <span class="n">dscfg_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
+            <span class="n">dataset_levels</span> <span class="o">=</span> <span class="n">dataset_levels_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">infostr_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">infostr</span> <span class="o">=</span> <span class="n">infostr_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">infostr</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">dscfg</span><span class="p">,</span> <span class="n">traj</span> <span class="o">=</span> <span class="n">_postprocess_datasets</span><span class="p">(</span>
+                <span class="n">dataset_levels</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">infostr</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+            <span class="c1"># remove variables from memory</span>
+            <span class="k">del</span> <span class="n">cfg</span>
+            <span class="k">del</span> <span class="n">dscfg</span>
+            <span class="k">del</span> <span class="n">dataset_levels</span>
+            <span class="k">del</span> <span class="n">traj</span>
+
+            <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- This is the end my friend! See you soon!&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">end_proc</span></div>
+
+
+<span class="k">def</span> <span class="nf">main_cosmo</span><span class="p">(</span><span class="n">cfgfile</span><span class="p">,</span> <span class="n">starttime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">endtime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">trajfile</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">infostr</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Main flow control. Processes radar data off-line over a period of time</span>
+<span class="sd">    given either by the user, a trajectory file, or determined by the last</span>
+<span class="sd">    volume processed and the current time. Multiple radars can be processed</span>
+<span class="sd">    simultaneously</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cfgfile : str</span>
+<span class="sd">        path of the main config file</span>
+<span class="sd">    starttime, endtime : datetime object</span>
+<span class="sd">        start and end time of the data to be processed</span>
+<span class="sd">    trajfile : str</span>
+<span class="sd">        path to file describing the trajectory</span>
+<span class="sd">    infostr : str</span>
+<span class="sd">        Information string about the actual data processing</span>
+<span class="sd">        (e.g. &#39;RUN57&#39;). This string is added to product files.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- PYRAD version: </span><span class="si">{}</span><span class="s2"> (compiled </span><span class="si">{}</span><span class="s2"> by </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">pyrad_version</span><span class="o">.</span><span class="n">version</span><span class="p">,</span> <span class="n">pyrad_version</span><span class="o">.</span><span class="n">compile_date_time</span><span class="p">,</span>
+        <span class="n">pyrad_version</span><span class="o">.</span><span class="n">username</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- PYART version: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pyart_version</span><span class="p">))</span>
+
+    <span class="c1"># Define behaviour of warnings</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s1">&#39;always&#39;</span><span class="p">)</span>  <span class="c1"># always print matching warnings</span>
+    <span class="c1"># warnings.simplefilter(&#39;error&#39;)  # turn matching warnings into exceptions</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">formatwarning</span> <span class="o">=</span> <span class="n">_warning_format</span>  <span class="c1"># define format</span>
+
+    <span class="n">cfg</span> <span class="o">=</span> <span class="n">_create_cfg_dict</span><span class="p">(</span><span class="n">cfgfile</span><span class="p">)</span>
+    <span class="n">datacfg</span> <span class="o">=</span> <span class="n">_create_datacfg_dict</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+
+    <span class="n">starttimes</span><span class="p">,</span> <span class="n">endtimes</span><span class="p">,</span> <span class="n">traj</span> <span class="o">=</span> <span class="n">_get_times_and_traj</span><span class="p">(</span>
+        <span class="n">trajfile</span><span class="p">,</span> <span class="n">starttime</span><span class="p">,</span> <span class="n">endtime</span><span class="p">,</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;ScanPeriod&#39;</span><span class="p">],</span>
+        <span class="n">last_state_file</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;lastStateFile&#39;</span><span class="p">],</span> <span class="n">trajtype</span><span class="o">=</span><span class="s1">&#39;proc_periods&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">infostr</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- Info string : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">infostr</span><span class="p">))</span>
+
+    <span class="c1"># get data types and levels</span>
+    <span class="n">datatypesdescr_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;NumRadars&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">datatypesdescr_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">_get_datatype_list</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">radarnr</span><span class="o">=</span><span class="s1">&#39;RADAR&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">{:03d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)))</span>
+
+    <span class="n">dataset_levels</span> <span class="o">=</span> <span class="n">_get_datasets_list</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+
+    <span class="n">masterfilelist</span><span class="p">,</span> <span class="n">masterdatatypedescr</span><span class="p">,</span> <span class="n">masterscan</span> <span class="o">=</span> <span class="n">_get_masterfile_list</span><span class="p">(</span>
+        <span class="n">datatypesdescr_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">starttimes</span><span class="p">,</span> <span class="n">endtimes</span><span class="p">,</span> <span class="n">datacfg</span><span class="p">)</span>
+
+    <span class="n">nvolumes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">masterfilelist</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nvolumes</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;ERROR: Could not find any valid COSMO data between &quot;</span>
+            <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> and </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">starttimes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">),</span>
+                <span class="n">endtimes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- Number of volumes to process: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nvolumes</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- Start time: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">starttimes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- end time: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">endtimes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)))</span>
+
+    <span class="c1"># initial processing of the datasets</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">- Initializing datasets:&#39;</span><span class="p">)</span>
+    <span class="n">dscfg</span><span class="p">,</span> <span class="n">traj</span> <span class="o">=</span> <span class="n">_initialize_datasets</span><span class="p">(</span>
+        <span class="n">dataset_levels</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span> <span class="n">infostr</span><span class="o">=</span><span class="n">infostr</span><span class="p">)</span>
+
+    <span class="c1"># process all data files in file list</span>
+    <span class="k">for</span> <span class="n">masterfile</span> <span class="ow">in</span> <span class="n">masterfilelist</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">- master file: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">masterfile</span><span class="p">)))</span>
+
+        <span class="n">master_voltime</span> <span class="o">=</span> <span class="n">get_datetime</span><span class="p">(</span><span class="n">masterfile</span><span class="p">,</span> <span class="n">masterdatatypedescr</span><span class="p">)</span>
+
+        <span class="c1"># process all data sets</span>
+        <span class="n">dscfg</span><span class="p">,</span> <span class="n">traj</span> <span class="o">=</span> <span class="n">_process_datasets</span><span class="p">(</span>
+            <span class="n">dataset_levels</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">master_voltime</span><span class="p">,</span> <span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span>
+            <span class="n">infostr</span><span class="o">=</span><span class="n">infostr</span><span class="p">)</span>
+
+        <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- This is the end my friend! See you soon!&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">main_cosmo_rt</span><span class="p">(</span><span class="n">cfgfile_list</span><span class="p">,</span> <span class="n">starttime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">endtime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">infostr_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">proc_period</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">proc_finish</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    main flow control. Processes radar data in real time. The start and end</span>
+<span class="sd">    processing times can be determined by the user. This function is inteded</span>
+<span class="sd">    for a single radar</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cfgfile_list : list of str</span>
+<span class="sd">        path of the main config files</span>
+<span class="sd">    starttime, endtime : datetime object</span>
+<span class="sd">        start and end time of the data to be processed</span>
+<span class="sd">    infostr_list : list of str</span>
+<span class="sd">        Information string about the actual data processing</span>
+<span class="sd">        (e.g. &#39;RUN57&#39;). This string is added to product files.</span>
+<span class="sd">    proc_period : int</span>
+<span class="sd">        period of time before starting a new processing round (seconds)</span>
+<span class="sd">    proc_finish : int or None</span>
+<span class="sd">        if set to a value the program will be forced to shut down after the</span>
+<span class="sd">        value (in seconds) from start time has been exceeded</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    end_proc : Boolean</span>
+<span class="sd">        If true the program has ended successfully</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- PYRAD version: </span><span class="si">%s</span><span class="s2"> (compiled </span><span class="si">%s</span><span class="s2"> by </span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span>
+          <span class="p">(</span><span class="n">pyrad_version</span><span class="o">.</span><span class="n">version</span><span class="p">,</span> <span class="n">pyrad_version</span><span class="o">.</span><span class="n">compile_date_time</span><span class="p">,</span>
+           <span class="n">pyrad_version</span><span class="o">.</span><span class="n">username</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- PYART version: &quot;</span> <span class="o">+</span> <span class="n">pyart_version</span><span class="p">)</span>
+
+    <span class="c1"># Define behaviour of warnings</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s1">&#39;always&#39;</span><span class="p">)</span>  <span class="c1"># always print matching warnings</span>
+    <span class="c1"># warnings.simplefilter(&#39;error&#39;)  # turn matching warnings into exceptions</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">formatwarning</span> <span class="o">=</span> <span class="n">_warning_format</span>  <span class="c1"># define format</span>
+
+    <span class="c1"># The processing will be allowed to run for a limited period</span>
+    <span class="k">if</span> <span class="n">proc_finish</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">startime_proc</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+        <span class="c1"># for offline testing</span>
+        <span class="c1"># startime_proc = startime_proc.replace(</span>
+        <span class="c1">#     year=endtime.year, month=endtime.month, day=endtime.day)</span>
+        <span class="c1"># startime_proc = startime_proc.replace(hour=10)</span>
+
+        <span class="n">endtime_proc</span> <span class="o">=</span> <span class="n">startime_proc</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">proc_finish</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">ALLOW_USER_BREAK</span><span class="p">:</span>
+        <span class="n">input_queue</span> <span class="o">=</span> <span class="n">_initialize_listener</span><span class="p">()</span>
+
+    <span class="n">cfg_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">datacfg_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">dscfg_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">datatypesdescr_list_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">dataset_levels_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">last_processed_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">icfg</span><span class="p">,</span> <span class="n">cfgfile</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cfgfile_list</span><span class="p">):</span>
+        <span class="n">cfg</span> <span class="o">=</span> <span class="n">_create_cfg_dict</span><span class="p">(</span><span class="n">cfgfile</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">infostr_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">infostr</span> <span class="o">=</span> <span class="n">infostr_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">infostr</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">datacfg</span> <span class="o">=</span> <span class="n">_create_datacfg_dict</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">infostr</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- Info string : &#39;</span> <span class="o">+</span> <span class="n">infostr</span><span class="p">)</span>
+
+        <span class="c1"># find out last processed volume</span>
+        <span class="n">last_processed</span> <span class="o">=</span> <span class="n">read_last_state</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;lastStateFile&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">last_processed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- last processed volume unknown&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- last processed volume: &#39;</span> <span class="o">+</span> <span class="n">last_processed</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
+                <span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S&#39;</span><span class="p">))</span>
+        <span class="n">last_processed_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">last_processed</span><span class="p">)</span>
+
+        <span class="c1"># get data types and levels</span>
+        <span class="n">datatypesdescr_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;NumRadars&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">datatypesdescr_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">_get_datatype_list</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">radarnr</span><span class="o">=</span><span class="s1">&#39;RADAR&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">{:03d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)))</span>
+
+        <span class="n">dataset_levels</span> <span class="o">=</span> <span class="n">_get_datasets_list</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+
+        <span class="c1"># initial processing of the datasets</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">- Initializing datasets:&#39;</span><span class="p">)</span>
+        <span class="n">dscfg</span><span class="p">,</span> <span class="n">traj</span> <span class="o">=</span> <span class="n">_initialize_datasets</span><span class="p">(</span>
+            <span class="n">dataset_levels</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">infostr</span><span class="o">=</span><span class="n">infostr</span><span class="p">)</span>
+
+        <span class="n">cfg_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+        <span class="n">datacfg_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">datacfg</span><span class="p">)</span>
+        <span class="n">dscfg_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dscfg</span><span class="p">)</span>
+        <span class="n">datatypesdescr_list_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">datatypesdescr_list</span><span class="p">)</span>
+        <span class="n">dataset_levels_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset_levels</span><span class="p">)</span>
+
+        <span class="c1"># remove variables from memory</span>
+        <span class="k">del</span> <span class="n">cfg</span>
+        <span class="k">del</span> <span class="n">datacfg</span>
+        <span class="k">del</span> <span class="n">dscfg</span>
+        <span class="k">del</span> <span class="n">datatypesdescr_list</span>
+        <span class="k">del</span> <span class="n">dataset_levels</span>
+        <span class="k">del</span> <span class="n">last_processed</span>
+        <span class="k">del</span> <span class="n">traj</span>
+
+        <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+
+    <span class="n">end_proc</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">end_proc</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ALLOW_USER_BREAK</span><span class="p">:</span>
+            <span class="c1"># check if user has requested exit</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">user_input</span> <span class="o">=</span> <span class="n">input_queue</span><span class="o">.</span><span class="n">get_nowait</span><span class="p">()</span>
+                <span class="n">end_proc</span> <span class="o">=</span> <span class="n">user_input</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Program terminated by user&#39;</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">except</span> <span class="n">queue</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="n">nowtime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+        <span class="c1"># for offline testing</span>
+        <span class="c1"># nowtime = nowtime.replace(</span>
+        <span class="c1">#     year=endtime.year, month=endtime.month, day=endtime.day)</span>
+        <span class="c1"># nowtime = nowtime.replace(hour=10)</span>
+
+        <span class="c1"># if processing end time exceeded finalize processing</span>
+        <span class="k">if</span> <span class="n">proc_finish</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">nowtime</span> <span class="o">&gt;=</span> <span class="n">endtime_proc</span><span class="p">:</span>
+                <span class="n">end_proc</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Allowed processing time exceeded&#39;</span><span class="p">)</span>
+                <span class="k">break</span>
+
+        <span class="c1"># end time has been set and current time older than end time</span>
+        <span class="c1"># quit processing</span>
+        <span class="k">if</span> <span class="n">endtime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">nowtime</span> <span class="o">&gt;</span> <span class="n">endtime</span><span class="p">:</span>
+                <span class="n">end_proc</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span>
+
+        <span class="c1"># start time has been set. Check if current time has to be</span>
+        <span class="c1"># processed. If not sleep until next proc_period</span>
+        <span class="k">if</span> <span class="n">starttime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">nowtime</span> <span class="o">&lt;</span> <span class="n">starttime</span><span class="p">:</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">proc_period</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+        <span class="n">vol_processed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">icfg</span><span class="p">,</span> <span class="n">cfg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cfg_list</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">ALLOW_USER_BREAK</span><span class="p">:</span>
+                <span class="c1"># check if user has requested exit</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">user_input</span> <span class="o">=</span> <span class="n">input_queue</span><span class="o">.</span><span class="n">get_nowait</span><span class="p">()</span>
+                    <span class="n">end_proc</span> <span class="o">=</span> <span class="n">user_input</span>
+                    <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Program terminated by user&#39;</span><span class="p">)</span>
+                    <span class="k">break</span>
+                <span class="k">except</span> <span class="n">queue</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+            <span class="n">datacfg</span> <span class="o">=</span> <span class="n">datacfg_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
+            <span class="n">dscfg</span> <span class="o">=</span> <span class="n">dscfg_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
+            <span class="n">datatypesdescr_list</span> <span class="o">=</span> <span class="n">datatypesdescr_list_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
+            <span class="n">dataset_levels</span> <span class="o">=</span> <span class="n">dataset_levels_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
+            <span class="n">last_processed</span> <span class="o">=</span> <span class="n">last_processed_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">infostr_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">infostr</span> <span class="o">=</span> <span class="n">infostr_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">infostr</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+            <span class="c1"># wait until new files are available</span>
+            <span class="n">masterfile</span><span class="p">,</span> <span class="n">masterdatatypedescr</span><span class="p">,</span> <span class="n">last_processed</span> <span class="o">=</span> <span class="n">_wait_for_files</span><span class="p">(</span>
+                <span class="n">nowtime</span><span class="p">,</span> <span class="n">datacfg</span><span class="p">,</span> <span class="n">datatypesdescr_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">last_processed</span><span class="o">=</span><span class="n">last_processed</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">masterfile</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">last_processed_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span> <span class="o">=</span> <span class="n">last_processed</span>
+                <span class="k">if</span> <span class="n">last_processed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">write_last_state</span><span class="p">(</span><span class="n">last_processed</span><span class="p">,</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;lastStateFile&#39;</span><span class="p">])</span>
+                <span class="k">continue</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">- master file: &#39;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">masterfile</span><span class="p">))</span>
+            <span class="n">master_voltime</span> <span class="o">=</span> <span class="n">get_datetime</span><span class="p">(</span><span class="n">masterfile</span><span class="p">,</span> <span class="n">masterdatatypedescr</span><span class="p">)</span>
+
+            <span class="c1"># process all data sets</span>
+            <span class="n">dscfg</span><span class="p">,</span> <span class="n">traj</span> <span class="o">=</span> <span class="n">_process_datasets</span><span class="p">(</span>
+                <span class="n">dataset_levels</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">master_voltime</span><span class="p">,</span>
+                <span class="n">infostr</span><span class="o">=</span><span class="n">infostr</span><span class="p">)</span>
+
+            <span class="n">last_processed_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span> <span class="o">=</span> <span class="n">master_voltime</span>
+            <span class="n">write_last_state</span><span class="p">(</span><span class="n">master_voltime</span><span class="p">,</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;lastStateFile&#39;</span><span class="p">])</span>
+            <span class="n">dscfg_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span> <span class="o">=</span> <span class="n">dscfg</span>
+
+            <span class="n">vol_processed</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="c1"># remove variables from memory</span>
+            <span class="k">del</span> <span class="n">cfg</span>
+            <span class="k">del</span> <span class="n">datacfg</span>
+            <span class="k">del</span> <span class="n">dscfg</span>
+            <span class="k">del</span> <span class="n">datatypesdescr_list</span>
+            <span class="k">del</span> <span class="n">dataset_levels</span>
+            <span class="k">del</span> <span class="n">last_processed</span>
+            <span class="k">del</span> <span class="n">traj</span>
+
+            <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+
+        <span class="n">nowtime_new</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+        <span class="c1"># for offline testing</span>
+        <span class="c1"># nowtime_new = nowtime_new.replace(</span>
+        <span class="c1">#     year=endtime.year, month=endtime.month, day=endtime.day)</span>
+        <span class="c1"># nowtime_new = nowtime_new.replace(hour=10)</span>
+
+        <span class="n">proc_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">nowtime_new</span> <span class="o">-</span> <span class="n">nowtime</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">vol_processed</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Processing time </span><span class="si">%s</span><span class="s1"> s</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">proc_time</span><span class="p">)</span>
+
+        <span class="c1"># if processing end time exceeded finalize processing</span>
+        <span class="k">if</span> <span class="n">proc_finish</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">nowtime_new</span> <span class="o">&gt;=</span> <span class="n">endtime_proc</span><span class="p">:</span>
+                <span class="n">end_proc</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Allowed processing time exceeded&#39;</span><span class="p">)</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="n">proc_time</span> <span class="o">&lt;</span> <span class="n">proc_period</span><span class="p">:</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">proc_period</span> <span class="o">-</span> <span class="n">proc_time</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- This is the end my friend! See you soon!&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">end_proc</span>
+
+
+<span class="k">def</span> <span class="nf">main_gecsx</span><span class="p">(</span><span class="n">cfgfile</span><span class="p">,</span> <span class="n">starttime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">endtime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">infostr</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+               <span class="n">gather_plots</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Main flow control. Processes radar data off-line over a period of time</span>
+<span class="sd">    given either by the user, a trajectory file, or determined by the last</span>
+<span class="sd">    volume processed and the current time. Multiple radars can be processed</span>
+<span class="sd">    simultaneously</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cfgfile : str</span>
+<span class="sd">        path of the main config file</span>
+<span class="sd">    time, endtime : datetime object</span>
+<span class="sd">        start and end time of the radar data to be used as reference for</span>
+<span class="sd">        gecsx</span>
+<span class="sd">    infostr : str</span>
+<span class="sd">        Information string about the actual data processing</span>
+<span class="sd">        (e.g. &#39;RUN57&#39;). This string is added to product files.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">GECSX_MANDATORY</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;radar_beam_width_h&#39;</span><span class="p">,</span> <span class="s1">&#39;pulse_width&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;txpwrh&#39;</span><span class="p">,</span> <span class="s1">&#39;AntennaGainH&#39;</span><span class="p">,</span> <span class="s1">&#39;mflossh&#39;</span><span class="p">,</span> <span class="s1">&#39;lrxh&#39;</span><span class="p">]</span>
+
+    <span class="n">GECSX_OPTIONAL</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;attg&#39;</span><span class="p">,</span> <span class="s1">&#39;AzimTol&#39;</span><span class="p">,</span> <span class="s1">&#39;mosotti_factor&#39;</span><span class="p">,</span> <span class="s1">&#39;refcorr&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;RadarPosition&#39;</span><span class="p">]</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- PYRAD version: </span><span class="si">{}</span><span class="s2"> (compiled </span><span class="si">{}</span><span class="s2"> by </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">pyrad_version</span><span class="o">.</span><span class="n">version</span><span class="p">,</span> <span class="n">pyrad_version</span><span class="o">.</span><span class="n">compile_date_time</span><span class="p">,</span>
+        <span class="n">pyrad_version</span><span class="o">.</span><span class="n">username</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- PYART version: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pyart_version</span><span class="p">))</span>
+
+    <span class="c1"># Define behaviour of warnings</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s1">&#39;always&#39;</span><span class="p">)</span>  <span class="c1"># always print matching warnings</span>
+    <span class="c1"># warnings.simplefilter(&#39;error&#39;)  # turn matching warnings into exceptions</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">formatwarning</span> <span class="o">=</span> <span class="n">_warning_format</span>  <span class="c1"># define format</span>
+
+    <span class="n">cfg</span> <span class="o">=</span> <span class="n">_create_cfg_dict</span><span class="p">(</span><span class="n">cfgfile</span><span class="p">)</span>
+    <span class="n">datacfg</span> <span class="o">=</span> <span class="n">_create_datacfg_dict</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">starttime</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">starttime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">endtime</span> <span class="o">=</span> <span class="n">starttime</span>
+    <span class="k">if</span> <span class="n">endtime</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">endtime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">infostr</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- Info string : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">infostr</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;datapath&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">starttimes</span><span class="p">,</span> <span class="n">endtimes</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_get_times_and_traj</span><span class="p">(</span>
+            <span class="kc">None</span><span class="p">,</span> <span class="n">starttime</span><span class="p">,</span> <span class="n">endtime</span><span class="p">,</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;ScanPeriod&#39;</span><span class="p">],</span>
+            <span class="n">last_state_file</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;lastStateFile&#39;</span><span class="p">],</span> <span class="n">trajtype</span><span class="o">=</span><span class="s1">&#39;proc_periods&#39;</span><span class="p">)</span>
+
+    <span class="c1"># get data types and levels</span>
+    <span class="n">datatypesdescr_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;NumRadars&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">datatypesdescr_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">_get_datatype_list</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">radarnr</span><span class="o">=</span><span class="s1">&#39;RADAR&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">{:03d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)))</span>
+
+    <span class="n">dataset_levels</span> <span class="o">=</span> <span class="n">_get_datasets_list</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;datapath&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">masterfilelist</span><span class="p">,</span> <span class="n">masterdatatypedescr</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_get_masterfile_list</span><span class="p">(</span>
+            <span class="n">datatypesdescr_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">starttimes</span><span class="p">,</span> <span class="n">endtimes</span><span class="p">,</span> <span class="n">datacfg</span><span class="p">,</span>
+            <span class="n">datacfg</span><span class="p">[</span><span class="s1">&#39;ScanList&#39;</span><span class="p">])</span>
+
+        <span class="n">nvolumes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">masterfilelist</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">nvolumes</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;WARNING: Could not find any valid radar data between &quot;</span>
+                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">starttimes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> and &quot;</span>
+                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">endtimes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;WARNING: Proceeding without radar reference&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- Number of volumes to process: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nvolumes</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- Start time: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">starttimes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- end time: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">endtimes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span>
+                                      <span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">masterfilelist</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># For GECSX we treat only one master file, since the method does not</span>
+    <span class="c1"># depend on time</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">masterfilelist</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">masterfile</span> <span class="o">=</span> <span class="n">masterfilelist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">master_voltime</span> <span class="o">=</span> <span class="n">get_datetime</span><span class="p">(</span><span class="n">masterfile</span><span class="p">,</span> <span class="n">masterdatatypedescr</span><span class="p">)</span>
+
+        <span class="c1"># get data of master radar</span>
+        <span class="n">radar_list</span> <span class="o">=</span> <span class="n">_get_radars_data</span><span class="p">(</span>
+            <span class="n">master_voltime</span><span class="p">,</span> <span class="n">datatypesdescr_list</span><span class="p">,</span> <span class="n">datacfg</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">radar_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># initial processing of the datasets</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">- Initializing datasets:&#39;</span><span class="p">)</span>
+    <span class="n">dscfg</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_initialize_datasets</span><span class="p">(</span>
+        <span class="n">dataset_levels</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">infostr</span><span class="o">=</span><span class="n">infostr</span><span class="p">)</span>
+
+    <span class="c1"># For GECSX we copy some keys from the datacfg dict to the dataset dict</span>
+    <span class="k">for</span> <span class="n">dset</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">GECSX_MANDATORY</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">dset</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">continue</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">dset</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">datacfg</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Mandatory GECSX key </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1"> is missing from loc file&#39;</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">GECSX_OPTIONAL</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">datacfg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">dset</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">datacfg</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">radar_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">valid_radarpos</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="s1">&#39;RadarPosition&#39;</span> <span class="ow">in</span> <span class="n">dset</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;latitude&#39;</span> <span class="ow">in</span> <span class="n">dset</span><span class="p">[</span><span class="s1">&#39;RadarPosition&#39;</span><span class="p">]</span>
+                        <span class="ow">and</span> <span class="s1">&#39;longitude&#39;</span> <span class="ow">in</span> <span class="n">dset</span><span class="p">[</span><span class="s1">&#39;RadarPosition&#39;</span><span class="p">]</span>
+                        <span class="ow">and</span> <span class="s1">&#39;altitude&#39;</span> <span class="ow">in</span> <span class="n">dset</span><span class="p">[</span><span class="s1">&#39;RadarPosition&#39;</span><span class="p">]):</span>
+                    <span class="n">valid_radarpos</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_radarpos</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s1">&#39;When no radar data is provided, the structure &#39;</span>
+                    <span class="s1">&#39;&quot;RadarPosition&quot; with field &quot;altitude&quot;, &quot;latitude&quot; &#39;</span>
+                    <span class="s1">&#39;and &quot;longitude&quot; must be provided in the loc file&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">dset</span><span class="p">[</span><span class="s1">&#39;RadarPosition&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dset</span><span class="p">[</span><span class="s1">&#39;RadarPosition&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="n">dset</span><span class="p">[</span><span class="s1">&#39;RadarPosition&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">dset</span><span class="p">[</span><span class="s1">&#39;RadarPosition&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">]]</span>
+
+    <span class="c1"># process all data sets</span>
+    <span class="n">dscfg</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_process_datasets</span><span class="p">(</span>
+        <span class="n">dataset_levels</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">infostr</span><span class="o">=</span><span class="n">infostr</span><span class="p">)</span>
+
+    <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">gather_plots</span><span class="p">:</span>
+        <span class="n">img_ext</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;imgformat&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">dset</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">:</span>
+            <span class="n">gather_dir</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;saveimgbasepath&#39;</span><span class="p">],</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">dset</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Copying all generated figures into dir </span><span class="si">{:s}</span><span class="s1">...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                  <span class="n">gather_dir</span> <span class="o">+</span> <span class="s1">&#39;/ALL_FIGURES/&#39;</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">ex</span> <span class="ow">in</span> <span class="n">img_ext</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">gather_dir</span><span class="p">):</span>
+                    <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="s1">&#39;cd </span><span class="si">{:s}</span><span class="s1">; mkdir -p ALL_FIGURES; find . -type f -name &quot;*.</span><span class="si">{:s}</span><span class="s1">&quot; &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="n">gather_dir</span><span class="p">,</span> <span class="n">ex</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;-exec cp </span><span class="si">{}</span><span class="s1"> ALL_FIGURES </span><span class="se">\\</span><span class="s1">;&#39;</span><span class="p">)</span>
+                    <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- This is the end my friend! See you soon!&#39;</span><span class="p">)</span>
+</pre></div>
+<div class="section ablog__blog_comments">
+  
+  
+</div>
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

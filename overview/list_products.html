@@ -1,0 +1,2625 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>List of pyrad products &#8212; Pyrad 1.8.3 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pyart-theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/design-tabs.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'overview/list_products';</script>
+    <script src="../_static/doc_shared.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="List of pyrad variables" href="list_variables.html" />
+    <link rel="prev" title="List of pyrad processes" href="list_process.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Pyrad 1.8.3 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../userguide/index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../API/index.html">
+                        API Reference Manual
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="index.html">
+                        Features
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../userguide/index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../API/index.html">
+                        API Reference Manual
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="index.html">
+                        Features
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<div id="searchbox"></div></div>
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="list_process.html">List of pyrad processes</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">List of pyrad products</a></li>
+<li class="toctree-l1"><a class="reference internal" href="list_variables.html">List of pyrad variables</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Features</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">List of pyrad products</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+<section id="list-of-pyrad-products">
+<h1>List of pyrad products<a class="headerlink" href="#list-of-pyrad-products" title="Permalink to this heading">#</a></h1>
+<section id="vol">
+<h2>VOL<a class="headerlink" href="#vol" title="Permalink to this heading">#</a></h2>
+<section id="antenna-pos">
+<h3>ANTENNA_POS<a class="headerlink" href="#antenna-pos" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots time series of the antenna position with respect to elevation or azimuth</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L724">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>dpi float</dt><dd><p>dpi of the plot</p>
+</dd>
+<dt>datatype str</dt><dd><p>type of data to plot. Can be AZ or EL</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="cdf">
+<h3>CDF<a class="headerlink" href="#cdf" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>plots and writes the cumulative density function of data</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2943">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>quantiles list</dt><dd><p>of floats The quantiles to compute in percent. Default None</p>
+</dd>
+<dt>sector dict</dt><dd><p>dictionary defining the sector where to compute the CDF. Default is None and the CDF is computed over all the data May</p>
+</dd>
+<dt>contain rmin</dt><dd><p>,</p>
+</dd>
+<dt>rmax float</dt><dd><p>min and max range [m] azmin,</p>
+</dd>
+<dt>azmax float</dt><dd><p>min and max azimuth angle [deg] elmin,</p>
+</dd>
+<dt>elmax float</dt><dd><p>min and max elevation angle [deg] hmin,</p>
+</dd>
+<dt>hmax float</dt><dd><p>min and max altitude [m MSL]</p>
+</dd>
+<dt>vismin float</dt><dd><p>The minimum visibility to use the data. Default None</p>
+</dd>
+<dt>absolute Bool</dt><dd><p>If true the absolute values of the data will be used. Default False</p>
+</dd>
+<dt>use_nans Bool</dt><dd><p>If true NaN values will be used. Default False</p>
+</dd>
+<dt>nan_value Bool</dt><dd><p>The value by which the NaNs are substituted if NaN values are to be used in the computation</p>
+</dd>
+<dt>filterclt Bool</dt><dd><p>If True the gates containing clutter are filtered</p>
+</dd>
+<dt>filterprec list</dt><dd><p>of ints The hydrometeor types that are filtered from the analysis. Default empty list.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="bscope-image">
+<h3>BSCOPE_IMAGE<a class="headerlink" href="#bscope-image" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Creates a B-scope image (azimuth, range)</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2449">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>anglenr  int</dt><dd><p>The elevation angle number to use</p>
+</dd>
+<dt>ray_dim  str</dt><dd><p>the ray dimension. Can be ‘ang’ or ‘time’. Default ‘ang’</p>
+</dd>
+<dt>xaxis_rng  bool</dt><dd><p>if True the range will be in the x-axis. Otherwise it will be in the y-axis. Default True vmin,</p>
+</dd>
+<dt>vmax float</dt><dd><p>or None The minimum and maximum values of the color scale. If None the scale is going to be set according to the Py-ART config file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="cappi-image">
+<h3>CAPPI_IMAGE<a class="headerlink" href="#cappi-image" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Creates a CAPPI image</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2080">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>altitude flt</dt><dd><p>CAPPI altitude [m MSL]</p>
+</dd>
+<dt>wfunc str</dt><dd><p>The function used to produce the CAPPI as defined in pyart.map.grid_from_radars. Default ‘NEAREST’</p>
+</dd>
+<dt>cappi_res float</dt><dd><p>The CAPPI resolution [m]. Default 500.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="cross-section">
+<h3>CROSS_SECTION<a class="headerlink" href="#cross-section" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a cross-section of polar data through arbitrary coordinates</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2109">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>coordN dict</dt><dd><p>The two lat-lon coordinates marking the limits. They have the keywords ‘lat’ and ‘lon’ [degree].</p>
+</dd>
+<dt>step  int</dt><dd><p>Step in meters to use between reference points to calculate the cross-section (i.e horizontal resolution).</p>
+</dd>
+<dt>vert_res  int</dt><dd><p>Vertical resolution in meters used to calculate the cross-section</p>
+</dd>
+<dt>alt_max  int</dt><dd><p>Maximum altitude of the vertical cross-section</p>
+</dd>
+<dt>beamwidth  float</dt><dd><p>3dB beamwidth in degrees to be used in the calculations, if not provided will be read from the loc file</p>
+</dd>
+<dt>demfile  str</dt><dd><p>Name of the DEM file to use to plot the topography, it must be in the dempath specified in the main config file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="field-coverage">
+<h3>FIELD_COVERAGE<a class="headerlink" href="#field-coverage" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Gets the field coverage over a certain sector</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2801">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>threshold float</dt><dd><p>or None Minimum value to consider the data valid. Default None</p>
+</dd>
+<dt>nvalid_min float</dt><dd><p>Minimum number of valid gates in the ray to consider it valid. Default 5 ele_res,</p>
+</dd>
+<dt>azi_res float</dt><dd><p>Elevation and azimuth resolution of the sectors [deg]. Default 1. and 2. ele_min,</p>
+</dd>
+<dt>ele_max float</dt><dd><p>Min and max elevation angle defining the sector [deg]. Default 0. and 30.</p>
+</dd>
+<dt>ele_step float</dt><dd><p>Elevation step [deg]. Default 5. ele_sect_start,</p>
+</dd>
+<dt>ele_sect_stop float</dt><dd><p>or None start and stop angles of the sector coverage. Default None</p>
+</dd>
+<dt>quantiles list</dt><dd><p>of floats The quantiles to compute in the sector. Default 10. to 90. by steps of 10.</p>
+</dd>
+<dt>AngTol float</dt><dd><p>The tolerance in elevation angle when putting the data in a fixed grid</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="fixed-rng-image">
+<h3>FIXED_RNG_IMAGE<a class="headerlink" href="#fixed-rng-image" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a fixed range image</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2188">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>AngTol  float</dt><dd><p>The tolerance between the nominal angles and the actual radar angles. Default 1. ele_res,</p>
+</dd>
+<dt>azi_res float</dt><dd><p>or None The resolution of the fixed grid [deg]. If None it will be obtained from the separation between angles vmin,</p>
+</dd>
+<dt>vmax  float</dt><dd><p>or None Min and Max values of the color scale. If None the values are taken from the Py-ART config file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="fixed-rng-span-image">
+<h3>FIXED_RNG_SPAN_IMAGE<a class="headerlink" href="#fixed-rng-span-image" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a user-defined statistic over a fixed range image</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2227">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>AngTol  float</dt><dd><p>The tolerance between the nominal angles and the actual radar angles. Default 1. ele_res,</p>
+</dd>
+<dt>azi_res float</dt><dd><p>or None The resolution of the fixed grid [deg]. If None it will be obtained from the separation between angles</p>
+</dd>
+<dt>stat  str</dt><dd><p>The statistic to compute. Can be ‘min’, ‘max’, ‘mean’, ‘mode’. Default ‘max’</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="histogram">
+<h3>HISTOGRAM<a class="headerlink" href="#histogram" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Computes a histogram of the radar volum data</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2598">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>step float</dt><dd><p>or None the data quantization step. If none it will be obtained from the Py-ART configuration file</p>
+</dd>
+<dt>write_data Bool</dt><dd><p>If true the histogram data is written in a csv file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="plot-along-coord">
+<h3>PLOT_ALONG_COORD<a class="headerlink" href="#plot-along-coord" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots the radar volume data along a particular coordinate</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2265">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>colors list</dt><dd><p>of str or None The colors of each ploted line</p>
+</dd>
+<dt>data_on_y  bool</dt><dd><p>If True the x-axis is the coordinates, and the y the data values. False swaps the axis. Default True</p>
+</dd>
+<dt>plot_legend  bool</dt><dd><p>If True a legend will be plotted. Default True</p>
+</dd>
+<dt>mode str</dt><dd><p>Ploting mode. Can be ‘ALONG_RNG’, ‘ALONG_AZI’ or ‘ALONG_ELE’ value_start,</p>
+</dd>
+<dt>value_stop float</dt><dd><p>The starting and ending points of the data to plot. According to the mode it may refer to the range, azimuth or elevation. If not specified the minimum and maximum possible values are used fix_elevations, fix_azimuths,</p>
+</dd>
+<dt>fix_ranges list</dt><dd><p>of floats The elevations, azimuths or ranges to plot for each mode. ‘ALONG_RNG’ would use fix_elevations and fix_azimuths ‘ALONG_AZI’ fix_ranges and fix_elevations ‘ALONG_ELE’ fix_ranges and fix_azimuths</p>
+</dd>
+<dt>AngTol float</dt><dd><p>The tolerance to match the radar angle to the fixed angles Default 1.</p>
+</dd>
+<dt>RngTol float</dt><dd><p>The tolerance to match the radar range to the fixed ranges Default 50.</p>
+</dd>
+<dt>use_altitude  bool</dt><dd><p>If true and in ALON_RNG mode the coordinate used is the gate altitude. Otherwise is the range. Default False</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="ppi-contour">
+<h3>PPI_CONTOUR<a class="headerlink" href="#ppi-contour" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a PPI countour plot</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1095">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>contour_values list</dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
+</dd>
+<dt>anglenr float</dt><dd><p>The elevation angle number</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="ppi-contour-overplot">
+<h3>PPI_CONTOUR_OVERPLOT<a class="headerlink" href="#ppi-contour-overplot" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a PPI of a field with another field overplotted as a contour plot.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1000">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>contour_values list</dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
+</dd>
+<dt>anglenr float</dt><dd><p>The elevation angle number</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="ppi-image">
+<h3>PPI_IMAGE<a class="headerlink" href="#ppi-image" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a PPI image. It can also plot the histogram and the quantiles of the data in the PPI.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2080">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>anglenr float</dt><dd><p>The elevation angle number</p>
+</dd>
+<dt>plot_type str</dt><dd><p>The type of plot to perform. Can be ‘PPI’, ‘QUANTILES’ or ‘HISTOGRAM’</p>
+</dd>
+<dt>write_data Bool</dt><dd><p>If True the histrogram will be also written in a csv file</p>
+</dd>
+<dt>step float</dt><dd><p>or None If the plot type is ‘HISTOGRAM’, the width of the histogram bin. If None it will be obtained from the Py-ART config file</p>
+</dd>
+<dt>quantiles list</dt><dd><p>of float or None If the plot type is ‘QUANTILES’, the list of quantiles to compute. If None a default list of quantiles will be computed vmin,</p>
+</dd>
+<dt>vmax float</dt><dd><p>or None The minimum and maximum values of the color scale. If None the scale is going to be set according to the Py-ART config file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="ppi-map">
+<h3>PPI_MAP<a class="headerlink" href="#ppi-map" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a PPI image over a map. The map resolution and the type of maps used are defined in the variables ‘mapres’ and ‘maps’ in ‘ppiMapImageConfig’ in the loc config file.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2041">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>anglenr float</dt><dd><p>The elevation angle number</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="ppimap-roi-overplot">
+<h3>PPIMAP_ROI_OVERPLOT<a class="headerlink" href="#ppimap-roi-overplot" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Over plots a polygon delimiting a region of interest on a PPI map. The map resolution and the type of maps used are defined in the variables ‘mapres’ and ‘maps’ in ‘ppiMapImageConfig’ in the loc config file.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L950">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>anglenr float</dt><dd><p>The elevation angle number</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="profile-stats">
+<h3>PROFILE_STATS<a class="headerlink" href="#profile-stats" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Computes and plots a vertical profile statistics. The statistics are saved in a csv file</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1575">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>heightResolution float</dt><dd><p>The height resolution of the profile [m]. Default 100. heightMin,</p>
+</dd>
+<dt>heightMax float</dt><dd><p>or None The minimum and maximum altitude of the profile [m MSL]. If None the values will be obtained from the minimum and maximum gate altitude.</p>
+</dd>
+<dt>quantity str</dt><dd><p>The type of statistics to plot. Can be ‘quantiles’, ‘mode’, ‘reqgression_mean’ or ‘mean’.</p>
+</dd>
+<dt>quantiles list</dt><dd><p>of floats If quantity type is ‘quantiles’ the list of quantiles to compute. Default 25., 50., 75.</p>
+</dd>
+<dt>nvalid_min int</dt><dd><p>The minimum number of valid points to consider the statistic valid. Default 4</p>
+</dd>
+<dt>make_linear Bool</dt><dd><p>If true the data is converted from log to linear before computing the stats</p>
+</dd>
+<dt>include_nans Bool</dt><dd><p>If true NaN values are included in the statistics</p>
+</dd>
+<dt>fixed_span Bool</dt><dd><p>If true the profile plot has a fix X-axis vmin,</p>
+</dd>
+<dt>vmax float</dt><dd><p>or None If fixed_span is set, the minimum and maximum values of the X-axis. If None, they are obtained from the Py-ART config file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="pseudoppi-contour">
+<h3>PSEUDOPPI_CONTOUR<a class="headerlink" href="#pseudoppi-contour" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a pseudo-PPI countour plot</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1095">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>contour_values list</dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
+</dd>
+<dt>angle float</dt><dd><p>The elevation angle at which compute the PPI</p>
+</dd>
+<dt>EleTol float</dt><dd><p>The tolerance between the actual radar elevation angle and the nominal pseudo-PPI elevation angle.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="pseudoppi-contour-overplot">
+<h3>PSEUDOPPI_CONTOUR_OVERPLOT<a class="headerlink" href="#pseudoppi-contour-overplot" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a pseudo-PPI of a field with another field over-plotted as a contour plot</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1000">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>contour_values list</dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
+</dd>
+<dt>angle float</dt><dd><p>The elevation angle at which compute the PPI</p>
+</dd>
+<dt>EleTol float</dt><dd><p>The tolerance between the actual radar elevation angle and the nominal pseudo-PPI elevation angle.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="pseudoppi-image">
+<h3>PSEUDOPPI_IMAGE<a class="headerlink" href="#pseudoppi-image" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a pseudo-PPI image. It can also plot the histogram and the quantiles of the data in the pseudo-PPI.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L814">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>angle float</dt><dd><p>The elevation angle of the pseudo-PPI</p>
+</dd>
+<dt>EleTol float</dt><dd><p>The tolerance between the actual radar elevation angle and the nominal pseudo-PPI elevation angle.</p>
+</dd>
+<dt>plot_type str</dt><dd><p>The type of plot to perform. Can be ‘PPI’, ‘QUANTILES’ or ‘HISTOGRAM’</p>
+</dd>
+<dt>step float</dt><dd><p>or None If the plot type is ‘HISTOGRAM’, the width of the histogram bin. If None it will be obtained from the Py-ART config file</p>
+</dd>
+<dt>quantiles list</dt><dd><p>of float or None If the plot type is ‘QUANTILES’, the list of quantiles to compute. If None a default list of quantiles will be computed vmin,</p>
+</dd>
+<dt>vmax  float</dt><dd><p>or None Min and Max values of the color scale. If None the values are taken from the Py-ART config file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="pseudoppi-map">
+<h3>PSEUDOPPI_MAP<a class="headerlink" href="#pseudoppi-map" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a pseudo-PPI image over a map. The map resolution and the type of maps used are defined in the variables ‘mapres’ and ‘maps’ in ‘ppiMapImageConfig’ in the loc config file.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2041">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>angle float</dt><dd><p>The elevation angle of the pseudo-PPI</p>
+</dd>
+<dt>EleTol float</dt><dd><p>The tolerance between the actual radar elevation angle and the nominal pseudo-PPI elevation angle.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="pseudorhi-contour">
+<h3>PSEUDORHI_CONTOUR<a class="headerlink" href="#pseudorhi-contour" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a pseudo-RHI countour plot</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1376">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>contour_values list</dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
+</dd>
+<dt>angle float</dt><dd><p>The azimuth angle at which to compute the RPI</p>
+</dd>
+<dt>AziTol float</dt><dd><p>The tolerance between the actual radar azimuth angle and the nominal pseudo-RHI azimuth angle.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="pseudorhi-contour-overplot">
+<h3>PSEUDORHI_CONTOUR_OVERPLOT<a class="headerlink" href="#pseudorhi-contour-overplot" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a pseudo-RHI of a field with another field over-plotted as a contour plot</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1280">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>contour_values list</dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
+</dd>
+<dt>angle float</dt><dd><p>The azimuth angle at which to compute the RPI</p>
+</dd>
+<dt>AziTol float</dt><dd><p>The tolerance between the actual radar azimuth angle and the nominal pseudo-RHI azimuth angle.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="pseudorhi-image">
+<h3>PSEUDORHI_IMAGE<a class="headerlink" href="#pseudorhi-image" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a pseudo-RHI image. It can also plot the histogram and the quantiles of the data in the pseudo-RHI.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1178">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>angle float</dt><dd><p>The azimuth angle at which to compute the RPI</p>
+</dd>
+<dt>AziTol float</dt><dd><p>The tolerance between the actual radar azimuth angle and the nominal pseudo-RHI azimuth angle.</p>
+</dd>
+<dt>plot_type str</dt><dd><p>The type of plot to perform. Can be ‘RHI’, ‘QUANTILES’ or ‘HISTOGRAM’</p>
+</dd>
+<dt>step float</dt><dd><p>or None If the plot type is ‘HISTOGRAM’, the width of the histogram bin. If None it will be obtained from the Py-ART config file</p>
+</dd>
+<dt>quantiles list</dt><dd><p>of float or None If the plot type is ‘QUANTILES’, the list of quantiles to compute. If None a default list of quantiles will be computed vmin,</p>
+</dd>
+<dt>vmax  float</dt><dd><p>or None Min and Max values of the color scale. If None the values are taken from the Py-ART config file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="quantiles">
+<h3>QUANTILES<a class="headerlink" href="#quantiles" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots and writes the quantiles of a radar volume</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2659">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>quantiles list</dt><dd><p>of floats or None the list of quantiles to compute. If None a default list of quantiles will be computed.</p>
+</dd>
+<dt>write_data Bool</dt><dd><p>If True the computed data will be also written in a csv file</p>
+</dd>
+<dt>fixed_span Bool</dt><dd><p>If true the quantile plot has a fix Y-axis vmin,</p>
+</dd>
+<dt>vmax float</dt><dd><p>or None If fixed_span is set, the minimum and maximum values of the Y-axis. If None, they are obtained from the Py-ART config file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="rhi-contour">
+<h3>RHI_CONTOUR<a class="headerlink" href="#rhi-contour" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots an RHI countour plot</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1376">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>contour_values list</dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
+</dd>
+<dt>anglenr int</dt><dd><p>The azimuth angle number</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="rhi-contour-overplot">
+<h3>RHI_CONTOUR_OVERPLOT<a class="headerlink" href="#rhi-contour-overplot" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots an RHI of a field with another field over-plotted as a contour plot</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1280">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>contour_values list</dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
+</dd>
+<dt>anglenr int</dt><dd><p>The azimuth angle number</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="rhi-image">
+<h3>RHI_IMAGE<a class="headerlink" href="#rhi-image" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots an RHI image. It can also plot the histogram and the quantiles of the data in the RHI.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1178">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>anglenr int</dt><dd><p>The azimuth angle number</p>
+</dd>
+<dt>plot_type str</dt><dd><p>The type of plot to perform. Can be ‘RHI’, ‘QUANTILES’ or ‘HISTOGRAM’</p>
+</dd>
+<dt>step float</dt><dd><p>or None If the plot type is ‘HISTOGRAM’, the width of the histogram bin. If None it will be obtained from the Py-ART config file</p>
+</dd>
+<dt>quantiles list</dt><dd><p>of float or None If the plot type is ‘QUANTILES’, the list of quantiles to compute. If None a default list of quantiles will be computed vmin,</p>
+</dd>
+<dt>vmax float</dt><dd><p>or None The minimum and maximum values of the color scale. If None the scale is going to be set according to the Py-ART config file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="rhi-profile">
+<h3>RHI_PROFILE<a class="headerlink" href="#rhi-profile" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Computes and plots a vertical profile statistics out of an RHI. The statistics are saved in a csv file</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1419">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>rangeStop float</dt><dd><p>The range start and stop of the data to extract from the RHI to compute the statistics [m]. Default 0., 25000.</p>
+</dd>
+<dt>heightResolution float</dt><dd><p>The height resolution of the profile [m]. Default 100. heightMin,</p>
+</dd>
+<dt>heightMax float</dt><dd><p>or None The minimum and maximum altitude of the profile [m MSL]. If None the values will be obtained from the minimum and maximum gate altitude.</p>
+</dd>
+<dt>quantity str</dt><dd><p>The type of statistics to plot. Can be ‘quantiles’, ‘mode’, ‘reqgression_mean’ or ‘mean’.</p>
+</dd>
+<dt>quantiles list</dt><dd><p>of floats If quantity type is ‘quantiles’ the list of quantiles to compute. Default 25., 50., 75.</p>
+</dd>
+<dt>nvalid_min int</dt><dd><p>The minimum number of valid points to consider the statistic valid. Default 4</p>
+</dd>
+<dt>make_linear Bool</dt><dd><p>If true the data is converted from log to linear before computing the stats</p>
+</dd>
+<dt>include_nans Bool</dt><dd><p>If true NaN values are included in the statistics</p>
+</dd>
+<dt>fixed_span Bool</dt><dd><p>If true the profile plot has a fix X-axis vmin,</p>
+</dd>
+<dt>vmax float</dt><dd><p>or None If fixed_span is set, the minimum and maximum values of the X-axis. If None, they are obtained from the Py-ART config file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="saveall">
+<h3>SAVEALL<a class="headerlink" href="#saveall" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Saves radar volume data including all or a list of user- defined fields in a C/F radial or ODIM file</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3513">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>file_type str</dt><dd><p>The type of file used to save the data. Can be ‘nc’ or ‘h5’. Default ‘nc’</p>
+</dd>
+<dt>datatypes list</dt><dd><p>of str or None The list of data types to save. If it is None, all fields in the radar object will be saved</p>
+</dd>
+<dt>physical Bool</dt><dd><p>If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary</p>
+</dd>
+<dt>compression str</dt><dd><p>For ODIM file formats, the type of compression. Can be any of the allowed compression types for hdf5 files. Default gzip</p>
+</dd>
+<dt>compression_opts any</dt><dd><p>The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="savevol">
+<h3>SAVEVOL<a class="headerlink" href="#savevol" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Saves one field of a radar volume data in a C/F radial or ODIM file</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3469">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>file_type str</dt><dd><p>The type of file used to save the data. Can be ‘nc’ or ‘h5’. Default ‘nc’</p>
+</dd>
+<dt>physical Bool</dt><dd><p>If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary. Default True</p>
+</dd>
+<dt>compression str</dt><dd><p>For ODIM file formats, the type of compression. Can be any of the allowed compression types for hdf5 files. Default gzip</p>
+</dd>
+<dt>compression_opts any</dt><dd><p>The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="savevol-csv">
+<h3>SAVEVOL_CSV<a class="headerlink" href="#savevol-csv" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Saves one field of a radar volume data in a CSV file</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3391">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>ignore_masked bool</dt><dd><p>If True masked values will not be saved. Default False</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="savevol-kml">
+<h3>SAVEVOL_KML<a class="headerlink" href="#savevol-kml" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Saves one field of a radar volume data in a KML file</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3420">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>ignore_masked bool</dt><dd><p>If True masked values will not be saved. Default False</p>
+</dd>
+<dt>azi_res  float</dt><dd><p>or None azimuthal resolution of the range bins. If None the antenna beamwidth is going to be used to determine the resolution</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="selfconsistency">
+<h3>SELFCONSISTENCY<a class="headerlink" href="#selfconsistency" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a ZDR versus KDP/ZH histogram of data.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3145">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>retrieve_relation  bool</dt><dd><p>If True plots also the retrieved relationship. Default True</p>
+</dd>
+<dt>plot_theoretical  bool</dt><dd><p>If True plots also the theoretical relationship. Default True</p>
+</dd>
+<dt>normalize  bool</dt><dd><p>If True the occurrence density of ZK/KDP for each ZDR bin is going to be represented. Otherwise it will show the number of gates at each bin. Default True</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="selfconsistency2">
+<h3>SELFCONSISTENCY2<a class="headerlink" href="#selfconsistency2" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a ZH measured versus ZH inferred from a self-consistency relation histogram of data.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3145">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>normalize  bool</dt><dd><p>If True the occurrence density of ZK/KDP for each ZDR bin is going to be represented. Otherwise it will show the number of gates at each bin. Default True</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="time-range">
+<h3>TIME_RANGE<a class="headerlink" href="#time-range" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a time-range/azimuth/elevation plot</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2493">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>anglenr float</dt><dd><p>The number of the fixed angle to plot vmin,</p>
+</dd>
+<dt>vmax float</dt><dd><p>or None The minimum and maximum values of the color scale. If None the scale is going to be set according to the Py-ART config file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="vol-ts">
+<h3>VOL_TS<a class="headerlink" href="#vol-ts" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Writes and plots a value corresponding to a time series. Meant primarily for writing and plotting the results of the SELFCONSISTENCY2 algorithm</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3178">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>ref_value float</dt><dd><p>The reference value. Default 0</p>
+</dd>
+<dt>sort_by_date Bool</dt><dd><p>If true when reading the csv file containing the statistics the data is sorted by date. Default False</p>
+</dd>
+<dt>rewrite Bool</dt><dd><p>If true the csv file containing the statistics is rewritten</p>
+</dd>
+<dt>add_data_in_fname Bool</dt><dd><p>If true and the data used is cumulative the year is written in the csv file name and the plot file name</p>
+</dd>
+<dt>npoints_min int</dt><dd><p>Minimum number of points to use the data point in the plotting and to send an alarm. Default 0 vmin,</p>
+</dd>
+<dt>vmax float</dt><dd><p>or None Limits of the Y-axis (data value). If None the limits are obtained from the Py-ART config file</p>
+</dd>
+<dt>alarm Bool</dt><dd><p>If true an alarm is sent</p>
+</dd>
+<dt>tol_abs float</dt><dd><p>Margin of tolerance from the reference value. If the current value is above this margin an alarm is sent. If the margin is not specified it is not possible to send any alarm</p>
+</dd>
+<dt>tol_trend float</dt><dd><p>Margin of tolerance from the reference value. If the trend of the last X events is above this margin an alarm is sent. If the margin is not specified it is not possible to send any alarm</p>
+</dd>
+<dt>nevents_min int</dt><dd><p>Minimum number of events with sufficient points to send an alarm related to the trend. If not specified it is not possible to send any alarm</p>
+</dd>
+<dt>sender str</dt><dd><p>The mail of the alarm sender. If not specified it is not possible to send any alarm</p>
+</dd>
+<dt>receiver_list list</dt><dd><p>of str The list of emails of the people that will receive the alarm.. If not specified it is not possible to send any alarm</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="wind-profile">
+<h3>WIND_PROFILE<a class="headerlink" href="#wind-profile" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots vertical profile of wind data (U, V, W components and wind velocity and direction) out of a radar volume containing the retrieved U,V and W components of the wind, the standard deviation of the retrieval and the velocity difference between the estimated radial velocity (assuming the wind to be uniform) and the actual measured radial velocity.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1710">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>heightResolution float</dt><dd><p>The height resolution of the profile [m]. Default 100. heightMin,</p>
+</dd>
+<dt>heightMax float</dt><dd><p>or None The minimum and maximum altitude of the profile [m MSL]. If None the values will be obtained from the minimum and maximum gate altitude.</p>
+</dd>
+<dt>min_ele float</dt><dd><p>The minimum elevation to be used in the computation of the vertical velocities. Default 5.</p>
+</dd>
+<dt>max_ele float</dt><dd><p>The maximum elevation to be used in the computation of the horizontal velocities. Default 85.</p>
+</dd>
+<dt>fixed_span Bool</dt><dd><p>If true the profile plot has a fix X-axis vmin,</p>
+</dd>
+<dt>vmax float</dt><dd><p>or None If fixed_span is set, the minimum and maximum values of the X-axis. If None, they are obtained from the span of the U component defined in the Py-ART config file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</section>
+<section id="centroids">
+<h2>CENTROIDS<a class="headerlink" href="#centroids" title="Permalink to this heading">#</a></h2>
+<section id="id37">
+<h3>HISTOGRAM<a class="headerlink" href="#id37" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots the histogram of one of the variables used for centroids computation.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L1419">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>voltype  str</dt><dd><p>The name of the variable to plot. Can be dBZ, ZDR, KDP, RhoHV, H_ISO0 and its standardized form (e.g. dBZ_std)</p>
+</dd>
+<dt>write_data  Bool</dt><dd><p>If true writes the histogram in a .csv file. Default True</p>
+</dd>
+<dt>step  float</dt><dd><p>bin size. Default 0.1</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="histogram2d">
+<h3>HISTOGRAM2D<a class="headerlink" href="#histogram2d" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots the 2D- histogram of two of the variables used for centroids computation.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L1419">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>voltype_y  str</dt><dd><p>The name of the variables to plot. Can be dBZ, ZDR, KDP, RhoHV, H_ISO0 and its standardized form (e.g. dBZ_std) step_x,</p>
+</dd>
+<dt>step_y  float</dt><dd><p>bin size. Default 0.1</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="histogram-labeled">
+<h3>HISTOGRAM_LABELED<a class="headerlink" href="#histogram-labeled" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots the histogram of one of the variables used for centroids computation. Only plots labeled data.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L1258">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>voltype  str</dt><dd><p>The name of the variable to plot. Can be dBZ, ZDR, KDP, RhoHV, H_ISO0 and its standardized form (e.g. dBZ_std)</p>
+</dd>
+<dt>write_data  Bool</dt><dd><p>If true writes the histogram in a .csv file. Default True</p>
+</dd>
+<dt>step  float</dt><dd><p>bin size. Default 0.1</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="histogram-centroids">
+<h3>HISTOGRAM_CENTROIDS<a class="headerlink" href="#histogram-centroids" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots the histogram of one of the variables used for centroids computation corresponding to a particular hydrometeor type, the intermediate centroids and the final centroid</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L1319">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>voltype  str</dt><dd><p>The name of the variable to plot. Can be dBZ, ZDR, KDP, RhoHV, H_ISO0 and its standardized form (e.g. dBZ_std)</p>
+</dd>
+<dt>hydro_type  str</dt><dd><p>The name of the hydrometeor type.</p>
+</dd>
+<dt>write_data  Bool</dt><dd><p>If true writes the histogram in a .csv file. Default True</p>
+</dd>
+<dt>step  float</dt><dd><p>bin size. Default 0.1</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="histogram2d-centroids">
+<h3>HISTOGRAM2D_CENTROIDS<a class="headerlink" href="#histogram2d-centroids" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots the 2D- histogram of two of the variables used for centroids computatio ncorresponding to a particular hydrometeor type, the intermediate centroids and the final centroid</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L1419">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>voltype_y  str</dt><dd><p>The name of the variables to plot. Can be dBZ, ZDR, KDP, RhoHV, H_ISO0 and its standardized form (e.g. dBZ_std)</p>
+</dd>
+<dt>hydro_type  str</dt><dd><p>The name of the hydrometeor type. step_x,</p>
+</dd>
+<dt>step_y  float</dt><dd><p>bin size. Default 0.1</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</section>
+<section id="colocated-gates">
+<h2>COLOCATED_GATES<a class="headerlink" href="#colocated-gates" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="cosmo-coord">
+<h2>COSMO_COORD<a class="headerlink" href="#cosmo-coord" title="Permalink to this heading">#</a></h2>
+<section id="id43">
+<h3>SAVEVOL<a class="headerlink" href="#id43" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Save an object containing the index of the COSMO model grid that corresponds to each radar gate in a C/F radial file.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L201">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>file_type str</dt><dd><p>The type of file used to save the data. Can be ‘nc’ or ‘h5’. Default ‘nc’</p>
+</dd>
+<dt>physical Bool</dt><dd><p>If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary</p>
+</dd>
+<dt>compression str</dt><dd><p>For ODIM file formats, the type of compression. Can be any of the allowed compression types for hdf5 files. Default gzip</p>
+</dd>
+<dt>compression_opts any</dt><dd><p>The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</section>
+<section id="cosmo2radar">
+<h2>COSMO2RADAR<a class="headerlink" href="#cosmo2radar" title="Permalink to this heading">#</a></h2>
+<section id="id45">
+<h3>SAVEVOL<a class="headerlink" href="#id45" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Save an object containing the COSMO data in radar coordinatesin a C/F radial or ODIM file.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L291">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>file_type str</dt><dd><p>The type of file used to save the data. Can be ‘nc’ or ‘h5’. Default ‘nc’</p>
+</dd>
+<dt>physical Bool</dt><dd><p>If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary</p>
+</dd>
+<dt>compression str</dt><dd><p>For ODIM file formats, the type of compression. Can be any of the allowed compression types for hdf5 files. Default gzip</p>
+</dd>
+<dt>compression_opts any</dt><dd><p>The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level). All the products of the ‘VOL’ dataset group</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</section>
+<section id="grid">
+<h2>GRID<a class="headerlink" href="#grid" title="Permalink to this heading">#</a></h2>
+<section id="id47">
+<h3>CROSS_SECTION<a class="headerlink" href="#id47" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a cross-section of gridded data</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L645">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>dict</dt><dd><p>The two lat-lon coordinates marking the limits. They have the keywords ‘lat’ and ‘lon’ [degree]. The altitude limits are defined by the parameters in ‘xsecImageConfig’ in the ‘loc’ configuration file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="id49">
+<h3>HISTOGRAM<a class="headerlink" href="#id49" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Computes a histogram of the radar volum data</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L697">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>step float</dt><dd><p>or None the data quantization step. If none it will be obtained from the Py-ART configuration file vmin,</p>
+</dd>
+<dt>vmax float</dt><dd><p>or None The minimum and maximum values. If None they will be obtained from the Py-ART configuration file</p>
+</dd>
+<dt>mask_val float</dt><dd><p>or None A value to mask.</p>
+</dd>
+<dt>write_data Bool</dt><dd><p>If true the histogram data is written in a csv file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="latitude-slice">
+<h3>LATITUDE_SLICE<a class="headerlink" href="#latitude-slice" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a cross-section of gridded data over a constant latitude.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L962">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>lat floats</dt><dd><p>The starting point of the cross-section. The ending point is defined by the parameters in ‘xsecImageConfig’ in the ‘loc’ configuration file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="longitude-slice">
+<h3>LONGITUDE_SLICE<a class="headerlink" href="#longitude-slice" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a cross-ection of gridded data over a constant longitude.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L897">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>lat floats</dt><dd><p>The starting point of the cross-section. The ending point is defined by the parameters in ‘xsecImageConfig’ in the ‘loc’ configuration file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="id53">
+<h3>SAVEALL<a class="headerlink" href="#id53" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Saves a gridded data object including all or a list of user-defined fields in a netcdf file</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L813">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>datatypes list</dt><dd><p>of str or None The list of data types to save. If it is None, all fields in the radar object will be saved</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="id55">
+<h3>SAVEVOL<a class="headerlink" href="#id55" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Saves on field of a gridded data object in a netcdf file.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L762">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>file_type str</dt><dd><p>The type of file used to save the data. Can be ‘nc’ or ‘h5’. Default ‘nc’</p>
+</dd>
+<dt>physical Bool</dt><dd><p>If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary. Default True</p>
+</dd>
+<dt>compression str</dt><dd><p>For ODIM file formats, the type of compression. Can be any of the allowed compression types for hdf5 files. Default gzip</p>
+</dd>
+<dt>compression_opts any</dt><dd><p>The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="stats">
+<h3>STATS<a class="headerlink" href="#stats" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Computes statistics over the whole images and stores them in a file.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L320">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>stat str</dt><dd><p>The statistic used. Can be mean, median, min, max</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="surface-raw">
+<h3>SURFACE_RAW<a class="headerlink" href="#surface-raw" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a surface image of gridded data without projecting it into a map</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L369">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>level int</dt><dd><p>The altitude level to plot. The rest of the parameters are defined by the parameters in ‘ppiImageConfig’ and ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="surface-image">
+<h3>SURFACE_IMAGE<a class="headerlink" href="#surface-image" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a surface image of gridded data.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L400">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>level int</dt><dd><p>The altitude level to plot. The rest of the parameters are defined by the parameters in ‘ppiImageConfig’ and ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="surface-contour">
+<h3>SURFACE_CONTOUR<a class="headerlink" href="#surface-contour" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a surface image of contour gridded data.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L467">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>level int</dt><dd><p>The altitude level to plot. The rest of the parameters are defined by the parameters in ‘ppiImageConfig’ and ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
+</dd>
+<dt>contour_values  float</dt><dd><p>array or None The contour values. If None the values are taken from the ‘boundaries’ keyword in the field description in the Py-ART config file. If ‘boundaries’ is not set the countours are 10 values linearly distributed from vmin to vmax</p>
+</dd>
+<dt>linewidths  float</dt><dd><p>width of the contour lines</p>
+</dd>
+<dt>colors  color</dt><dd><p>string or sequence of colors The contour colours</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="surface-contour-overplot">
+<h3>SURFACE_CONTOUR_OVERPLOT<a class="headerlink" href="#surface-contour-overplot" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a surface image of gridded data with a contour overplotted.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L467">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>level int</dt><dd><p>The altitude level to plot. The rest of the parameters are defined by the parameters in ‘ppiImageConfig’ and ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
+</dd>
+<dt>contour_values  float</dt><dd><p>array or None The contour values. If None the values are taken from the ‘boundaries’ keyword in the field description in the Py-ART config file. If ‘boundaries’ is not set the countours are 10 values linearly distributed from vmin to vmax</p>
+</dd>
+<dt>linewidths  float</dt><dd><p>width of the contour lines</p>
+</dd>
+<dt>colors  color</dt><dd><p>string or sequence of colors The contour colours</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="surface-overplot">
+<h3>SURFACE_OVERPLOT<a class="headerlink" href="#surface-overplot" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots on the same surface two images, one on top of the other.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L523">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>level int</dt><dd><p>The altitude level to plot. The rest of the parameters are defined by the parameters in ‘ppiImageConfig’ and ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
+</dd>
+<dt>contour_values  float</dt><dd><p>array or None The contour values. If None the values are taken from the ‘boundaries’ keyword in the field description in the Py-ART config file. If ‘boundaries’ is not set the countours are 10 values linearly distributed from vmin to vmax</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="dda-map">
+<h3>DDA_MAP<a class="headerlink" href="#dda-map" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots wind vectors obtained from a DDA analysis. The pyDDA package is required</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L850">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>level int</dt><dd><p>The altitude level to plot. The rest of the parameters are defined by the parameters in ‘ppiImageConfig’ and ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
+</dd>
+<dt>display_type str</dt><dd><p>Display method for the wind vectors, can be either ‘streamline’, ‘quiver’ or ‘barbs’</p>
+</dd>
+<dt>bg_ref_rad int</dt><dd><p>Which radar to use as reference to display the background voltype.</p>
+</dd>
+<dt>u_vel_contours list</dt><dd><p>of int The contours to use for plotting contours of u. Set to None to not display such contours.</p>
+</dd>
+<dt>v_vel_contours list</dt><dd><p>of int The contours to use for plotting contours of v. Set to None to not display such contours.</p>
+</dd>
+<dt>w_vel_contours list</dt><dd><p>of int The contours to use for plotting contours of w. Set to None to not display such contours.</p>
+</dd>
+<dt>vector_spacing_km float</dt><dd><p>Spacing in km between wind vectors in x and y axis (only used for barbs and quiver plots)</p>
+</dd>
+<dt>quiver_len float</dt><dd><p>Length to use for the quiver key in m/s. (only used for quiver plots)</p>
+</dd>
+<dt>streamline_arrowsize float</dt><dd><p>Factor scale arrow size for streamlines. (only used for streamline plots)</p>
+</dd>
+<dt>linewidth float</dt><dd><p>Linewidths for streamlines. (only used for streamline plots)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</section>
+<section id="spectra">
+<h2>SPECTRA<a class="headerlink" href="#spectra" title="Permalink to this heading">#</a></h2>
+<section id="amplitude-phase-angle-doppler">
+<h3>AMPLITUDE_PHASE_ANGLE_DOPPLER<a class="headerlink" href="#amplitude-phase-angle-doppler" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Makes an angle Doppler plot of complex spectra or IQ data. The plot can be along azimuth or along range. It is plotted separately the module and the phase of the signal.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L959">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>along_azi  bool</dt><dd><p>If true the plot is performed along azimuth, otherwise along elevation. Default true</p>
+</dd>
+<dt>ang  float</dt><dd><p>The fixed angle (deg). Default 0.</p>
+</dd>
+<dt>rng  float</dt><dd><p>The fixed range (m). Default 0.</p>
+</dd>
+<dt>ang_tol  float</dt><dd><p>The fixed angle tolerance (deg). Default 1.</p>
+</dd>
+<dt>rng_tol  float</dt><dd><p>The fixed range tolerance (m). Default 50.</p>
+</dd>
+<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ ampli_vmin, ampli_vmax, phase_vmin,</p>
+</dd>
+<dt>phase_vmax  float</dt><dd><p>or None Minimum and maximum of the color scale for the module and phase</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="amplitude-phase-doppler">
+<h3>AMPLITUDE_PHASE_DOPPLER<a class="headerlink" href="#amplitude-phase-doppler" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a complex Doppler spectrum or IQ data making two separate plots for the module and phase of the signal</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L818">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>rng  float</dt><dd><p>azimuth and elevation (deg) and range (m) of the ray to plot azi_to, ele_tol,</p>
+</dd>
+<dt>rng_tol  float</dt><dd><p>azimuth and elevation (deg) and range (m) tolerance respect to nominal position to plot. Default 1, 1, 50. ind_ray,</p>
+</dd>
+<dt>ind_rng  int</dt><dd><p>index of the ray and range to plot. Alternative to defining its antenna coordinates</p>
+</dd>
+<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ ampli_vmin, ampli_vmax, phase_vmin,</p>
+</dd>
+<dt>phase_vmax  float</dt><dd><p>or None Minimum and maximum of the color scale for the module and phase</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="amplitude-phase-range-doppler">
+<h3>AMPLITUDE_PHASE_RANGE_DOPPLER<a class="headerlink" href="#amplitude-phase-range-doppler" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a complex spectra or IQ data range-Doppler making two separate plots for the module and phase</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L892">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>ele  float</dt><dd><p>azimuth and elevation (deg) of the ray to plot azi_to,</p>
+</dd>
+<dt>ele_tol  float</dt><dd><p>azimuth and elevation (deg) tolerance respect to nominal position to plot. Default 1, 1.</p>
+</dd>
+<dt>ind_ray  int</dt><dd><p>index of the ray to plot. Alternative to defining its antenna coordinates</p>
+</dd>
+<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ ampli_vmin, ampli_vmax, phase_vmin,</p>
+</dd>
+<dt>phase_vmax  float</dt><dd><p>or None Minimum and maximum of the color scale for the module and phase</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="amplitude-phase-time-doppler">
+<h3>AMPLITUDE_PHASE_TIME_DOPPLER<a class="headerlink" href="#amplitude-phase-time-doppler" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a complex spectra or IQ data time-Doppler making two separate plots for the module and phase of the signal</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1046">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’ or ‘Doppler frequency’ ampli_vmin, ampli_vmax, phase_vmin,</p>
+</dd>
+<dt>phase_vmax  float</dt><dd><p>or None Minimum and maximum of the color scale for the module and phase</p>
+</dd>
+<dt>plot_type  str</dt><dd><p>Can be ‘final’ or ‘temporal’. If final the data is only plotted at the end of the processing</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="angle-doppler">
+<h3>ANGLE_DOPPLER<a class="headerlink" href="#angle-doppler" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Makes an angle Doppler plot. The plot can be along azimuth or along range</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L959">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>along_azi  bool</dt><dd><p>If true the plot is performed along azimuth, otherwise along elevation. Default true</p>
+</dd>
+<dt>ang  float</dt><dd><p>The fixed angle (deg). Default 0.</p>
+</dd>
+<dt>rng  float</dt><dd><p>The fixed range (m). Default 0.</p>
+</dd>
+<dt>ang_tol  float</dt><dd><p>The fixed angle tolerance (deg). Default 1.</p>
+</dd>
+<dt>rng_tol  float</dt><dd><p>The fixed range tolerance (m). Default 50.</p>
+</dd>
+<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ vmin,</p>
+</dd>
+<dt>vmax  float</dt><dd><p>or None Minimum and maximum of the color scale</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="complex-angle-doppler">
+<h3>COMPLEX_ANGLE_DOPPLER<a class="headerlink" href="#complex-angle-doppler" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Makes an angle Doppler plot of complex spectra or IQ data. The plot can be along azimuth or along range. The real and imaginary parts are plotted separately</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L608">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>along_azi  bool</dt><dd><p>If true the plot is performed along azimuth, otherwise along elevation. Default true</p>
+</dd>
+<dt>ang  float</dt><dd><p>The fixed angle (deg). Default 0.</p>
+</dd>
+<dt>rng  float</dt><dd><p>The fixed range (m). Default 0.</p>
+</dd>
+<dt>ang_tol  float</dt><dd><p>The fixed angle tolerance (deg). Default 1.</p>
+</dd>
+<dt>rng_tol  float</dt><dd><p>The fixed range tolerance (m). Default 50.</p>
+</dd>
+<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ vmin,</p>
+</dd>
+<dt>vmax  float</dt><dd><p>or None Minimum and maximum of the color scale</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="complex-doppler">
+<h3>COMPLEX_DOPPLER<a class="headerlink" href="#complex-doppler" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a complex Doppler spectrum or IQ data making two separate plots for the real and imaginary parts</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L748">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>rng  float</dt><dd><p>azimuth and elevation (deg) and range (m) of the ray to plot azi_to, ele_tol,</p>
+</dd>
+<dt>rng_tol  float</dt><dd><p>azimuth and elevation (deg) and range (m) tolerance respect to nominal position to plot. Default 1, 1, 50. ind_ray,</p>
+</dd>
+<dt>ind_rng  int</dt><dd><p>index of the ray and range to plot. Alternative to defining its antenna coordinates</p>
+</dd>
+<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ vmin,</p>
+</dd>
+<dt>vmax  float</dt><dd><p>or None Minimum and maximum of the color scale</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="complex-range-doppler">
+<h3>COMPLEX_RANGE_DOPPLER<a class="headerlink" href="#complex-range-doppler" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots the complex spectra or IQ data range-Doppler making two separate plots for the real and imaginary parts</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L547">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>ele  float</dt><dd><p>azimuth and elevation (deg) of the ray to plot azi_to,</p>
+</dd>
+<dt>ele_tol  float</dt><dd><p>azimuth and elevation (deg) tolerance respect to nominal position to plot. Default 1, 1.</p>
+</dd>
+<dt>ind_ray  int</dt><dd><p>index of the ray to plot. Alternative to defining its antenna coordinates</p>
+</dd>
+<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ vmin,</p>
+</dd>
+<dt>vmax  float</dt><dd><p>or None Minimum and maximum of the color scale</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="complex-time-doppler">
+<h3>COMPLEX_TIME_DOPPLER<a class="headerlink" href="#complex-time-doppler" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots the complex spectra or IQ data time-Doppler making two separate plots for the real and imaginary parts</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L689">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’ or ‘Doppler frequency’ vmin,</p>
+</dd>
+<dt>vmax  float</dt><dd><p>or None Minimum and maximum of the color scale</p>
+</dd>
+<dt>plot_type  str</dt><dd><p>Can be ‘final’ or ‘temporal’. If final the data is only plotted at the end of the processing</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="doppler">
+<h3>DOPPLER<a class="headerlink" href="#doppler" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a Doppler spectrum variable or IQ data variable</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1046">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>rng  float</dt><dd><p>azimuth and elevation (deg) and range (m) of the ray to plot azi_to, ele_tol,</p>
+</dd>
+<dt>rng_tol  float</dt><dd><p>azimuth and elevation (deg) and range (m) tolerance respect to nominal position to plot. Default 1, 1, 50. ind_ray,</p>
+</dd>
+<dt>ind_rng  int</dt><dd><p>index of the ray and range to plot. Alternative to defining its antenna coordinates</p>
+</dd>
+<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ vmin,</p>
+</dd>
+<dt>vmax  float</dt><dd><p>or None Minimum and maximum of the color scale</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="range-doppler">
+<h3>RANGE_DOPPLER<a class="headerlink" href="#range-doppler" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Makes a range-Doppler plot of spectral or IQ data</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L892">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>ele  float</dt><dd><p>azimuth and elevation (deg) of the ray to plot azi_to,</p>
+</dd>
+<dt>ele_tol  float</dt><dd><p>azimuth and elevation (deg) tolerance respect to nominal position to plot. Default 1, 1.</p>
+</dd>
+<dt>ind_ray  int</dt><dd><p>index of the ray to plot. Alternative to defining its antenna coordinates</p>
+</dd>
+<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ vmin,</p>
+</dd>
+<dt>vmax  float</dt><dd><p>or None Minimum and maximum of the color scale</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="id75">
+<h3>SAVEALL<a class="headerlink" href="#id75" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Saves radar spectra or IQ volume data including all or a list of userdefined fields in a netcdf file</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1144">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>datatypes list</dt><dd><p>of str or None The list of data types to save. If it is None, all fields in the radar object will be saved</p>
+</dd>
+<dt>physical Bool</dt><dd><p>If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="id77">
+<h3>SAVEVOL<a class="headerlink" href="#id77" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Saves one field of a radar spectra or IQ volume data in a netcdf file</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1111">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>physical Bool</dt><dd><p>If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="time-doppler">
+<h3>TIME_DOPPLER<a class="headerlink" href="#time-doppler" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Makes a time-Doppler plot of spectral or IQ data at a point of interest.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1046">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ vmin,</p>
+</dd>
+<dt>vmax  float</dt><dd><p>or None Minimum and maximum of the color scale</p>
+</dd>
+<dt>plot_type  str</dt><dd><p>Can be ‘final’ or ‘temporal’. If final the data is only plotted at the end of the processing</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</section>
+<section id="grid-timeavg">
+<h2>GRID_TIMEAVG<a class="headerlink" href="#grid-timeavg" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="intercomp">
+<h2>INTERCOMP<a class="headerlink" href="#intercomp" title="Permalink to this heading">#</a></h2>
+<section id="plot-and-write-intercomp-ts">
+<h3>PLOT_AND_WRITE_INTERCOMP_TS<a class="headerlink" href="#plot-and-write-intercomp-ts" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Writes statistics of radar intercomparison in a file and plots the time series of the statistics.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L214">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>Bool</dt><dd><p>If true adds the year in the csv file containing the statistics. Default False ‘sort_by_date’: Bool If true sorts the statistics by date when reading the csv file containing the statistics. Default False ‘rewrite’: Bool If true rewrites the csv file containing the statistics. Default False ‘npoints_min’</p>
+</dd>
+<dt>int</dt><dd><p>The minimum number of points to consider the statistics valid and therefore use the data point in the plotting. Default 0 ‘corr_min’</p>
+</dd>
+<dt>float</dt><dd><p>The minimum correlation to consider the statistics valid and therefore use the data point in the plotting. Default 0.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="plot-scatter-intercomp">
+<h3>PLOT_SCATTER_INTERCOMP<a class="headerlink" href="#plot-scatter-intercomp" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a density plot with the points of radar 1 versus the points of radar 2</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L136">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>float</dt><dd><p>The quantization step of the data. If none it will be computed using the Py-ART config file. Default None ‘scatter_type’</p>
+</dd>
+<dt>str</dt><dd><p>Type of scatter plot. Can be a plot for each radar volume (‘instant’) or at the end of the processing period (‘cumulative’). Default is ‘cumulative’</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</section>
+<section id="ml">
+<h2>ML<a class="headerlink" href="#ml" title="Permalink to this heading">#</a></h2>
+<section id="ml-ts">
+<h3>ML_TS<a class="headerlink" href="#ml-ts" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots and writes a time series of the melting layer, i.e. the evolution of the average and standard deviation of the melting layer top and thickness and the the number of rays used in the retrieval.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L804">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>dpi int</dt><dd><p>The pixel density of the plot. Default 72</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</section>
+<section id="monitoring">
+<h2>MONITORING<a class="headerlink" href="#monitoring" title="Permalink to this heading">#</a></h2>
+<section id="angular-density">
+<h3>ANGULAR_DENSITY<a class="headerlink" href="#angular-density" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>For a specified elevation angle, plots a 2D histogram with the azimuth angle in the X-axis and the data values in the Y-axis. The reference values and the user defined quantiles are also plot on the same figure</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L310">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>anglenr int</dt><dd><p>The elevation angle number to plot</p>
+</dd>
+<dt>quantiles list</dt><dd><p>of floats The quantiles to plot. Default 25., 50., 75.</p>
+</dd>
+<dt>ref_value float</dt><dd><p>The reference value vmin,</p>
+</dd>
+<dt>vmax  floats</dt><dd><p>or None The minimum and maximum values of the data points. If not specified they are obtained from the Py-ART config file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="cumul-vol-ts">
+<h3>CUMUL_VOL_TS<a class="headerlink" href="#cumul-vol-ts" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots time series of the average of instantaneous quantiles stored in a csv file.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L560">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>quantiles list</dt><dd><p>of 3 floats the quantiles to compute. Default 25., 50., 75.</p>
+</dd>
+<dt>ref_value float</dt><dd><p>The reference value. Default 0</p>
+</dd>
+<dt>sort_by_date Bool</dt><dd><p>If true when reading the csv file containing the statistics the data is sorted by date. Default False</p>
+</dd>
+<dt>rewrite Bool</dt><dd><p>If true the csv file containing the statistics is rewritten</p>
+</dd>
+<dt>add_data_in_fname Bool</dt><dd><p>If true and the data used is cumulative the year is written in the csv file name and the plot file name</p>
+</dd>
+<dt>npoints_min int</dt><dd><p>Minimum number of points to use the data point in the plotting and to send an alarm. Default 0 vmin,</p>
+</dd>
+<dt>vmax float</dt><dd><p>or None Limits of the Y-axis (data value). If None the limits are obtained from the Py-ART config file</p>
+</dd>
+<dt>alarm Bool</dt><dd><p>If true an alarm is sent</p>
+</dd>
+<dt>tol_abs float</dt><dd><p>Margin of tolerance from the reference value. If the current value is above this margin an alarm is sent. If the margin is not specified it is not possible to send any alarm</p>
+</dd>
+<dt>tol_trend float</dt><dd><p>Margin of tolerance from the reference value. If the trend of the last X events is above this margin an alarm is sent. If the margin is not specified it is not possible to send any alarm</p>
+</dd>
+<dt>plot_until_year_end Bool</dt><dd><p>If true will always set the xmax of the timeseries to the end of the current year</p>
+</dd>
+<dt>nevents_min int</dt><dd><p>Minimum number of events with sufficient points to send an alarm related to the trend. If not specified it is not possible to send any alarm</p>
+</dd>
+<dt>sender str</dt><dd><p>The mail of the alarm sender. If not specified it is not possible to send any alarm</p>
+</dd>
+<dt>receiver_list list</dt><dd><p>of str The list of emails of the people that will receive the alarm.. If not specified it is not possible to send any alarm</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="ppi-histogram">
+<h3>PPI_HISTOGRAM<a class="headerlink" href="#ppi-histogram" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a histogram of data at a particular elevation angle.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L257">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>anglenr int</dt><dd><p>The elevation angle number to plot</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="vol-histogram">
+<h3>VOL_HISTOGRAM<a class="headerlink" href="#vol-histogram" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a histogram of data collected from all the radar volume.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L195">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>write_data bool</dt><dd><p>If true the resultant histogram is also saved in a csv file. Default True.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="id87">
+<h3>VOL_TS<a class="headerlink" href="#id87" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Computes statistics of the gathered data and writes them in a csv file and plots a time series of those statistics.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L560">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>quantiles list</dt><dd><p>of 3 floats the quantiles to compute. Default 25., 50., 75.</p>
+</dd>
+<dt>ref_value float</dt><dd><p>The reference value. Default 0</p>
+</dd>
+<dt>sort_by_date Bool</dt><dd><p>If true when reading the csv file containing the statistics the data is sorted by date. Default False</p>
+</dd>
+<dt>rewrite Bool</dt><dd><p>If true the csv file containing the statistics is rewritten</p>
+</dd>
+<dt>add_data_in_fname Bool</dt><dd><p>If true and the data used is cumulative the year is written in the csv file name and the plot file name</p>
+</dd>
+<dt>npoints_min int</dt><dd><p>Minimum number of points to use the data point in the plotting and to send an alarm. Default 0 vmin,</p>
+</dd>
+<dt>vmax float</dt><dd><p>or None Limits of the Y-axis (data value). If None the limits are obtained from the Py-ART config file</p>
+</dd>
+<dt>alarm Bool</dt><dd><p>If true an alarm is sent</p>
+</dd>
+<dt>tol_abs float</dt><dd><p>Margin of tolerance from the reference value. If the current value is above this margin an alarm is sent. If the margin is not specified it is not possible to send any alarm</p>
+</dd>
+<dt>tol_trend float</dt><dd><p>Margin of tolerance from the reference value. If the trend of the last X events is above this margin an alarm is sent. If the margin is not specified it is not possible to send any alarm</p>
+</dd>
+<dt>plot_until_year_end Bool</dt><dd><p>If true will always set the xmax of the timeseries to the end of the current year</p>
+</dd>
+<dt>nevents_min int</dt><dd><p>Minimum number of events with sufficient points to send an alarm related to the trend. If not specified it is not possible to send any alarm</p>
+</dd>
+<dt>sender str</dt><dd><p>The mail of the alarm sender. If not specified it is not possible to send any alarm</p>
+</dd>
+<dt>receiver_list list</dt><dd><p>of str The list of emails of the people that will receive the alarm.. If not specified it is not possible to send any alarm</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</section>
+<section id="occurrence">
+<h2>OCCURRENCE<a class="headerlink" href="#occurrence" title="Permalink to this heading">#</a></h2>
+<section id="write-excess-gates">
+<h3>WRITE_EXCESS_GATES<a class="headerlink" href="#write-excess-gates" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Write the data that identifies radar gates with clutter that has a frequency of occurrence above a certain threshold.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L94">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>quant_min float</dt><dd><p>Minimum frequency of occurrence in percentage to keep the gate as valid. Default 95. All the products of the ‘VOL’ dataset group</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</section>
+<section id="qvp">
+<h2>QVP<a class="headerlink" href="#qvp" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="sparse-grid">
+<h2>SPARSE_GRID<a class="headerlink" href="#sparse-grid" title="Permalink to this heading">#</a></h2>
+<section id="id90">
+<h3>SURFACE_IMAGE<a class="headerlink" href="#id90" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Generates a surface image</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L90">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>list</dt><dd><p>of floats The limits of the surface to plot [deg] lon0, lon1, lat0, lat1</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</section>
+<section id="sun-hits">
+<h2>SUN_HITS<a class="headerlink" href="#sun-hits" title="Permalink to this heading">#</a></h2>
+<section id="plot-sun-retrieval-ts">
+<h3>PLOT_SUN_RETRIEVAL_TS<a class="headerlink" href="#plot-sun-retrieval-ts" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots time series of the retrieved sun pattern parameters</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L536">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>dpi int</dt><dd><p>The pixel density of the plot. Default 72</p>
+</dd>
+<dt>add_date_in_fname Bool</dt><dd><p>If true the year is added in the plot file name</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="write-sun-retrieval">
+<h3>WRITE_SUN_RETRIEVAL<a class="headerlink" href="#write-sun-retrieval" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Writes the retrieved sun pattern parameters in a csv file.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L461">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>add_date_in_fname Bool</dt><dd><p>If true the year is added in the csv file name</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</section>
+<section id="timeavg">
+<h2>TIMEAVG<a class="headerlink" href="#timeavg" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="timeseries">
+<h2>TIMESERIES<a class="headerlink" href="#timeseries" title="Permalink to this heading">#</a></h2>
+<section id="compare-cumulative-point">
+<h3>COMPARE_CUMULATIVE_POINT<a class="headerlink" href="#compare-cumulative-point" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots in the same graph 2 time series of data accumulation (tipically rainfall rate). One time series is a point measurement of radar data while the other is from a co-located instrument (rain gauge or disdrometer)</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L472">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>dpi int</dt><dd><p>The pixel density of the plot. Default 72 vmin,</p>
+</dd>
+<dt>vmax float</dt><dd><p>The limits of the Y-axis. If none they will be obtained from the Py-ART config file.</p>
+</dd>
+<dt>sensor str</dt><dd><p>The sensor type. Can be ‘rgage’ or ‘disdro’</p>
+</dd>
+<dt>sensorid str</dt><dd><p>The sensor ID.</p>
+</dd>
+<dt>location str</dt><dd><p>A string identifying the location of the disdrometer</p>
+</dd>
+<dt>freq float</dt><dd><p>The frequency used to retrieve the polarimetric variables of a disdrometer</p>
+</dd>
+<dt>ele float</dt><dd><p>The elevation angle used to retrieve the polarimetric variables of a disdrometer</p>
+</dd>
+<dt>ScanPeriod float</dt><dd><p>The scaning period of the radar in seconds. This parameter is defined in the ‘loc’ config file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="compare-point">
+<h3>COMPARE_POINT<a class="headerlink" href="#compare-point" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots in the same graph 2 time series of data . One time series is a point measurement of radar data while the other is from a co-located instrument (rain gauge or disdrometer)</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L381">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>dpi int</dt><dd><p>The pixel density of the plot. Default 72 vmin,</p>
+</dd>
+<dt>vmax float</dt><dd><p>The limits of the Y-axis. If none they will be obtained from the Py-ART config file.</p>
+</dd>
+<dt>sensor str</dt><dd><p>The sensor type. Can be ‘rgage’ or ‘disdro’</p>
+</dd>
+<dt>sensorid str</dt><dd><p>The sensor ID.</p>
+</dd>
+<dt>location str</dt><dd><p>A string identifying the location of the disdrometer</p>
+</dd>
+<dt>freq float</dt><dd><p>The frequency used to retrieve the polarimetric variables of a disdrometer</p>
+</dd>
+<dt>ele float</dt><dd><p>The elevation angle used to retrieve the polarimetric variables of a disdrometer</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="compare-time-avg">
+<h3>COMPARE_TIME_AVG<a class="headerlink" href="#compare-time-avg" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Creates a scatter plot of average radar data versus average sensor data.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L566">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>dpi int</dt><dd><p>The pixel density of the plot. Default 72</p>
+</dd>
+<dt>sensor str</dt><dd><p>The sensor type. Can be ‘rgage’ or ‘disdro’</p>
+</dd>
+<dt>sensorid str</dt><dd><p>The sensor ID.</p>
+</dd>
+<dt>location str</dt><dd><p>A string identifying the location of the disdrometer</p>
+</dd>
+<dt>freq float</dt><dd><p>The frequency used to retrieve the polarimetric variables of a disdrometer</p>
+</dd>
+<dt>ele float</dt><dd><p>The elevation angle used to retrieve the polarimetric variables of a disdrometer</p>
+</dd>
+<dt>cum_time float</dt><dd><p>Data accumulation time [s]. Default 3600.</p>
+</dd>
+<dt>base_time float</dt><dd><p>Starting moment of the accumulation [s from midnight]. Default 0.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="plot-and-write">
+<h3>PLOT_AND_WRITE<a class="headerlink" href="#plot-and-write" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Writes and plots a trajectory time series.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L674">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>ymax float</dt><dd><p>The minimum and maximum value of the Y-axis. If none it will be obtained from the Py-ART config file.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="plot-and-write-point">
+<h3>PLOT_AND_WRITE_POINT<a class="headerlink" href="#plot-and-write-point" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots and writes a time series of radar data at a particular point</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L214">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>dpi int</dt><dd><p>The pixel density of the plot. Default 72 vmin,</p>
+</dd>
+<dt>vmax float</dt><dd><p>The limits of the Y-axis. If none they will be obtained from the Py-ART config file.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="plot-cumulative-point">
+<h3>PLOT_CUMULATIVE_POINT<a class="headerlink" href="#plot-cumulative-point" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots a time series of radar data accumulation at a particular point.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L301">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>dpi int</dt><dd><p>The pixel density of the plot. Default 72 vmin,</p>
+</dd>
+<dt>vmax float</dt><dd><p>The limits of the Y-axis. If none they will be obtained from the Py-ART config file.</p>
+</dd>
+<dt>ScanPeriod float</dt><dd><p>The scaning period of the radar in seconds. This parameter is defined in the ‘loc’ config file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="plot-hist">
+<h3>PLOT_HIST<a class="headerlink" href="#plot-hist" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>plots and writes a histogram of all the data gathered during the trajectory processing</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L715">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>step float</dt><dd><p>or None The quantization step of the data. If None it will be obtained from the Py-ART config file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="traj-cappi-image">
+<h3>TRAJ_CAPPI_IMAGE<a class="headerlink" href="#traj-cappi-image" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Creates a CAPPI image with the trajectory position overplot on it.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L748">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>color_ref str</dt><dd><p>The meaning of the color code with which the trajectory is plotted. Can be ‘None’, ‘altitude’ (the absolute altitude), ‘rel_altitude’ (altitude relative to the CAPPI altitude), ‘time’ (trajectory time respect of the start of the radar scan leading to the CAPPI)</p>
+</dd>
+<dt>altitude float</dt><dd><p>The CAPPI altitude [m]</p>
+</dd>
+<dt>wfunc str</dt><dd><p>Function used in the gridding of the radar data. The function types are defined in pyart.map.grid_from_radars. Default ‘NEAREST’</p>
+</dd>
+<dt>res float</dt><dd><p>The CAPPI resolution [m]. Default 500.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</section>
+<section id="traj-only">
+<h2>TRAJ_ONLY<a class="headerlink" href="#traj-only" title="Permalink to this heading">#</a></h2>
+<section id="traj-plot">
+<h3>TRAJ_PLOT<a class="headerlink" href="#traj-plot" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots time series of the trajectory respect to the radar elevation, azimuth or range</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_traj_products.py#L50">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>str</dt><dd><p>The type of</p>
+</dd>
+<dt>parameter</dt><dd><p>‘EL’, ‘AZ’, or ‘RANGE’</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</section>
+<section id="vpr">
+<h2>VPR<a class="headerlink" href="#vpr" title="Permalink to this heading">#</a></h2>
+<section id="plot-vpr-theo">
+<h3>PLOT_VPR_THEO<a class="headerlink" href="#plot-vpr-theo" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Plots and writes the retrieved theoretical VPR</p>
+</div></blockquote>
+<p><a class="reference external" href="https://github.com/wolfidan/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L932">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>dpi int</dt><dd><p>The pixel density of the plot. Default 72</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+
+<div class="section ablog__blog_comments">
+  
+  
+</div>
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="list_process.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">List of pyrad processes</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="list_variables.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">List of pyrad variables</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vol">VOL</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#antenna-pos">ANTENNA_POS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cdf">CDF</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bscope-image">BSCOPE_IMAGE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cappi-image">CAPPI_IMAGE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cross-section">CROSS_SECTION</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#field-coverage">FIELD_COVERAGE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed-rng-image">FIXED_RNG_IMAGE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed-rng-span-image">FIXED_RNG_SPAN_IMAGE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#histogram">HISTOGRAM</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-along-coord">PLOT_ALONG_COORD</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ppi-contour">PPI_CONTOUR</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ppi-contour-overplot">PPI_CONTOUR_OVERPLOT</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ppi-image">PPI_IMAGE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ppi-map">PPI_MAP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ppimap-roi-overplot">PPIMAP_ROI_OVERPLOT</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#profile-stats">PROFILE_STATS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pseudoppi-contour">PSEUDOPPI_CONTOUR</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pseudoppi-contour-overplot">PSEUDOPPI_CONTOUR_OVERPLOT</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pseudoppi-image">PSEUDOPPI_IMAGE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pseudoppi-map">PSEUDOPPI_MAP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pseudorhi-contour">PSEUDORHI_CONTOUR</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pseudorhi-contour-overplot">PSEUDORHI_CONTOUR_OVERPLOT</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pseudorhi-image">PSEUDORHI_IMAGE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quantiles">QUANTILES</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rhi-contour">RHI_CONTOUR</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rhi-contour-overplot">RHI_CONTOUR_OVERPLOT</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rhi-image">RHI_IMAGE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rhi-profile">RHI_PROFILE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#saveall">SAVEALL</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#savevol">SAVEVOL</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#savevol-csv">SAVEVOL_CSV</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#savevol-kml">SAVEVOL_KML</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#selfconsistency">SELFCONSISTENCY</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#selfconsistency2">SELFCONSISTENCY2</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#time-range">TIME_RANGE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vol-ts">VOL_TS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wind-profile">WIND_PROFILE</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#centroids">CENTROIDS</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id37">HISTOGRAM</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#histogram2d">HISTOGRAM2D</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#histogram-labeled">HISTOGRAM_LABELED</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#histogram-centroids">HISTOGRAM_CENTROIDS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#histogram2d-centroids">HISTOGRAM2D_CENTROIDS</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#colocated-gates">COLOCATED_GATES</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cosmo-coord">COSMO_COORD</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id43">SAVEVOL</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cosmo2radar">COSMO2RADAR</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id45">SAVEVOL</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#grid">GRID</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id47">CROSS_SECTION</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id49">HISTOGRAM</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#latitude-slice">LATITUDE_SLICE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#longitude-slice">LONGITUDE_SLICE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id53">SAVEALL</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id55">SAVEVOL</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stats">STATS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#surface-raw">SURFACE_RAW</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#surface-image">SURFACE_IMAGE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#surface-contour">SURFACE_CONTOUR</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#surface-contour-overplot">SURFACE_CONTOUR_OVERPLOT</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#surface-overplot">SURFACE_OVERPLOT</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dda-map">DDA_MAP</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spectra">SPECTRA</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#amplitude-phase-angle-doppler">AMPLITUDE_PHASE_ANGLE_DOPPLER</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#amplitude-phase-doppler">AMPLITUDE_PHASE_DOPPLER</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#amplitude-phase-range-doppler">AMPLITUDE_PHASE_RANGE_DOPPLER</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#amplitude-phase-time-doppler">AMPLITUDE_PHASE_TIME_DOPPLER</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#angle-doppler">ANGLE_DOPPLER</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#complex-angle-doppler">COMPLEX_ANGLE_DOPPLER</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#complex-doppler">COMPLEX_DOPPLER</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#complex-range-doppler">COMPLEX_RANGE_DOPPLER</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#complex-time-doppler">COMPLEX_TIME_DOPPLER</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#doppler">DOPPLER</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#range-doppler">RANGE_DOPPLER</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id75">SAVEALL</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id77">SAVEVOL</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#time-doppler">TIME_DOPPLER</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#grid-timeavg">GRID_TIMEAVG</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intercomp">INTERCOMP</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-and-write-intercomp-ts">PLOT_AND_WRITE_INTERCOMP_TS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-scatter-intercomp">PLOT_SCATTER_INTERCOMP</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ml">ML</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ml-ts">ML_TS</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#monitoring">MONITORING</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#angular-density">ANGULAR_DENSITY</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cumul-vol-ts">CUMUL_VOL_TS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ppi-histogram">PPI_HISTOGRAM</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vol-histogram">VOL_HISTOGRAM</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id87">VOL_TS</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#occurrence">OCCURRENCE</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#write-excess-gates">WRITE_EXCESS_GATES</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#qvp">QVP</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sparse-grid">SPARSE_GRID</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id90">SURFACE_IMAGE</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sun-hits">SUN_HITS</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-sun-retrieval-ts">PLOT_SUN_RETRIEVAL_TS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#write-sun-retrieval">WRITE_SUN_RETRIEVAL</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#timeavg">TIMEAVG</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#timeseries">TIMESERIES</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compare-cumulative-point">COMPARE_CUMULATIVE_POINT</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compare-point">COMPARE_POINT</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compare-time-avg">COMPARE_TIME_AVG</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-and-write">PLOT_AND_WRITE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-and-write-point">PLOT_AND_WRITE_POINT</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-cumulative-point">PLOT_CUMULATIVE_POINT</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-hist">PLOT_HIST</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#traj-cappi-image">TRAJ_CAPPI_IMAGE</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#traj-only">TRAJ_ONLY</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#traj-plot">TRAJ_PLOT</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vpr">VPR</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-vpr-theo">PLOT_VPR_THEO</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../_sources/overview/list_products.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
