@@ -53,6 +53,8 @@
     
     plot_dda_map
     
+    plot_dda_slice
+    
     plot_density
     
     plot_field_coverage

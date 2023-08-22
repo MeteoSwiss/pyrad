@@ -32,6 +32,8 @@
     
     cosmo2radar_data
     
+    dem2radar_data
+    
     find_date_in_file_name
     
     find_hzt_file

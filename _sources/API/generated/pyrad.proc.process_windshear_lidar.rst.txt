@@ -1,0 +1,6 @@
+pyrad.proc.process\_windshear\_lidar
+====================================
+
+.. currentmodule:: pyrad.proc
+
+.. autofunction:: process_windshear_lidar

@@ -331,6 +331,8 @@
     
     process_windshear
     
+    process_windshear_lidar
+    
     process_zdr_column
     
     process_zdr_precip

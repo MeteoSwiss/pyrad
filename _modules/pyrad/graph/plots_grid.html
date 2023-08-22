@@ -374,7 +374,7 @@ document.write(`
 <span class="sd">    plot_surface_contour</span>
 <span class="sd">    plot_latitude_slice</span>
 <span class="sd">    plot_longitude_slice</span>
-<span class="sd">    plot_latlon_slice</span>
+<span class="sd">    plot_cross_section</span>
 <span class="sd">    plot_dda_map</span>
 <span class="sd">    plot_dda_latitude_slice</span>
 <span class="sd">    plot_dda_longitude_slice</span>
@@ -1312,7 +1312,7 @@ document.write(`
     <span class="k">return</span> <span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">display</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">plot_dda_slice</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">bg_field_name</span><span class="p">,</span> <span class="n">slice_type</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span>
+<div class="viewcode-block" id="plot_dda_slice"><a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_dda_slice.html#pyrad.graph.plot_dda_slice">[docs]</a><span class="k">def</span> <span class="nf">plot_dda_slice</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">bg_field_name</span><span class="p">,</span> <span class="n">slice_type</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span>
                    <span class="n">titl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">save_fig</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">display_type</span><span class="o">=</span><span class="s1">&#39;quiver&#39;</span><span class="p">,</span> <span class="n">wind_vectors</span><span class="o">=</span><span class="s1">&#39;hor&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1517,7 +1517,7 @@ document.write(`
 
         <span class="k">return</span> <span class="n">fname_list</span>
 
-    <span class="k">return</span> <span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">display</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">display</span><span class="p">)</span></div>
 </pre></div>
 <div class="section ablog__blog_comments">
   

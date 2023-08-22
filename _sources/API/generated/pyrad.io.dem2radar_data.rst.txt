@@ -1,0 +1,6 @@
+pyrad.io.dem2radar\_data
+========================
+
+.. currentmodule:: pyrad.io
+
+.. autofunction:: dem2radar_data

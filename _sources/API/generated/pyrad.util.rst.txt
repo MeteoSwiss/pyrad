@@ -71,7 +71,11 @@
     
     project_to_vertical
     
+    quantiles_weighted
+    
     rainfall_accumulation
+    
+    ratio_bootstrapping
     
     time_avg_range
     

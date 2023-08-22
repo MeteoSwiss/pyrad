@@ -1,0 +1,6 @@
+pyrad.graph.plot\_cross\_section
+================================
+
+.. currentmodule:: pyrad.graph
+
+.. autofunction:: plot_cross_section
