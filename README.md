@@ -1,5 +1,3 @@
-# This branch is intended for MeteoSwiss Py-ART developers. Pull requests should target this branch!
-
 **Master branch**
 
 [![Test pyrad](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_base.yml/badge.svg)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests.yml)
