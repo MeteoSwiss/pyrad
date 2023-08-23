@@ -12,7 +12,7 @@ Functions to plot data in a Cartesian grid format
     plot_surface_contour
     plot_latitude_slice
     plot_longitude_slice
-    plot_latlon_slice
+    plot_cross_section
     plot_dda_map
     plot_dda_latitude_slice
     plot_dda_longitude_slice
