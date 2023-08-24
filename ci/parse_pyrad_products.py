@@ -37,7 +37,10 @@ def dict_to_restructured_text(yaml_data):
         rst_output.append("-----------------------------")
 
         for key2, value2 in yaml_data[key].items():
-            print(key2)
+            if key2 == 'all_products':
+                 rst_output.append(f'All products of the {value2} type')
+                 rst_output.append('')
+                 continue
             if 'description' not in value2.keys():
                 continue
             rst_output.append(f"{key2}")
@@ -66,6 +69,9 @@ def process_file(filepath):
         if 'def generate' in line:
             function = line.split('def')[1].split('(')[0].strip()
             all_products[function] = {}
+        if 'All the products of the' in line:
+            all_products[function]['all_products'] = line.split("'")[1]
+            print(all_products[function]['all_products'])
         if 'Accepted product types:' in line:
             started = True
             reading_params = False
@@ -93,8 +99,6 @@ def process_file(filepath):
                 all_products[function][product]['parameters'] += " " + \
                     " ".join(line.replace('\n', ' ').split())
         if "prdcfg['type']" in line and '==' in line:
-            print(i)
-            print(filepath)
             for product in all_products[function].keys():
                 if product in line:
                     all_products[function][product]['link'] = (funcpath_to_docpath(filepath) +
