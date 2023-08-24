@@ -649,6 +649,8 @@ parameters
 
 COLOCATED_GATES
 -----------------------------
+All products of the VOL type
+
 COSMO_COORD
 -----------------------------
 SAVEVOL
@@ -682,6 +684,8 @@ parameters
         For ODIM file formats, the type of compression. Can be any of the allowed compression types for hdf5 files. Default gzip 
    compression_opts any
         The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level). All the products of the 'VOL' dataset group 
+
+All products of the VOL type
 
 GRID
 -----------------------------
@@ -1074,6 +1078,8 @@ parameters
 
 GRID_TIMEAVG
 -----------------------------
+All products of the VOL type
+
 INTERCOMP
 -----------------------------
 PLOT_AND_WRITE_INTERCOMP_TS
@@ -1110,6 +1116,8 @@ description
 parameters
    dpi int
         The pixel density of the plot. Default 72
+
+All products of the VOL type
 
 MONITORING
 -----------------------------
@@ -1227,8 +1235,12 @@ parameters
    quant_min float
         Minimum frequency of occurrence in percentage to keep the gate as valid. Default 95. All the products of the 'VOL' dataset group 
 
+All products of the VOL type
+
 QVP
 -----------------------------
+All products of the VOL type
+
 SPARSE_GRID
 -----------------------------
 SURFACE_IMAGE
@@ -1262,8 +1274,12 @@ parameters
    add_date_in_fname Bool
         If true the year is added in the csv file name
 
+All products of the VOL type
+
 TIMEAVG
 -----------------------------
+All products of the VOL type
+
 TIMESERIES
 -----------------------------
 COMPARE_CUMULATIVE_POINT
@@ -1413,3 +1429,5 @@ description
 parameters
    dpi int
         The pixel density of the plot. Default 72
+
+All products of the VOL type

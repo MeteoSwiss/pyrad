@@ -61,6 +61,4 @@ The core of Pyrad is based on Py-ART. Py-ART was originally developed in the con
 Disclaimer
 =============
 
-The software is still in a development stage. Please let us know if you would like to test it.
-
 MeteoSwiss cannot be held responsible for errors in the code or problems that could arise from its use.
