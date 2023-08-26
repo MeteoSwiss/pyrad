@@ -2115,7 +2115,7 @@ def read_radiosounding(station, datetime_obj):
 
     data_io = StringIO(data_str)
     data_df = pd.read_csv(data_io, sep='\s+', header=0, skiprows = [1,2],
-        error_bad_lines=False, 
+        on_bad_lines='warn', 
     )
     for col in data_df.columns:
         data_df[col] = pd.to_numeric(data_df[col])
