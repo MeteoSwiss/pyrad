@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyrad.io.read_data_sensor &#8212; Pyrad 1.8.5 documentation</title>
+    <title>pyrad.io.read_data_sensor &#8212; Pyrad 1.8.6 documentation</title>
   
   
   
@@ -118,7 +118,7 @@
   
   
   
-    <p class="title logo__title">Pyrad 1.8.5 documentation</p>
+    <p class="title logo__title">Pyrad 1.8.6 documentation</p>
   
 </a></div>
     
@@ -2477,7 +2477,7 @@ document.write(`
 
     <span class="n">data_io</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">(</span><span class="n">data_str</span><span class="p">)</span>
     <span class="n">data_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_io</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;\s+&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">skiprows</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span>
-        <span class="n">error_bad_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+        <span class="n">on_bad_lines</span><span class="o">=</span><span class="s1">&#39;warn&#39;</span><span class="p">,</span> 
     <span class="p">)</span>
     <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
         <span class="n">data_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">data_df</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
