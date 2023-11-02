@@ -43,6 +43,7 @@ from ..io import read_radiosounding
 from .process_grid import process_grid
 from ..util import compute_average_vad
 
+
 def process_turbulence(procstatus, dscfg, radar_list=None):
     """
     Computes turbulence from the Doppler spectrum width and reflectivity using
@@ -69,6 +70,9 @@ def process_turbulence(procstatus, dscfg, radar_list=None):
         xran, yran : float array. Dataset keyword
             Spatial range in X,Y to consider. Default [-100, 100] for both
             X and Y
+        use_ntda : Bool. Dataset keyword
+            Wether to use NCAR Turbulence Detection Algorithm (NTDA). Default
+            True
         beamwidth : Float. Dataset keyword
             Radar beamwidth. Default None. If None it will be obtained from
             the radar object metadata. If cannot be obtained defaults to 1
@@ -102,9 +106,10 @@ def process_turbulence(procstatus, dscfg, radar_list=None):
     refl_field = None
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype in ('dBuZ', 'dBZ', 'dBZc', 'dBuZv', 'dBZv', 'dBZvc'):
+        if datatype in ('dBuZ', 'dBZ', 'dBZc', 'dBuZv', 'dBZv', 'dBZvc',
+                        'CNRc'):
             refl_field = get_fieldname_pyart(datatype)
-        if datatype in ('W', 'Wv', 'Wu', 'Wvu'):
+        if datatype in ('W', 'Wv', 'Wu', 'Wvu', 'WD', 'WDc'):
             width_field = get_fieldname_pyart(datatype)
 
     if width_field is None or refl_field is None:
@@ -128,6 +133,7 @@ def process_turbulence(procstatus, dscfg, radar_list=None):
     xran = dscfg.get('xran', [-100., 100.])
     yran = dscfg.get('yran', [-100., 100.])
     max_split_cut = dscfg.get('max_split_cut', 2)
+    use_ntda = dscfg.get('use_ntda', True)
     beamwidth = dscfg.get('beamwidth', None)
     verbose = dscfg.get('verbose', False)
     compute_gate_pos = dscfg.get('compute_gate_pos', False)
@@ -160,13 +166,14 @@ def process_turbulence(procstatus, dscfg, radar_list=None):
             radar_out, radius=radius, split_cut=split_cut, xran=xran,
             yran=yran, verbose=verbose, name_dz=refl_field,
             name_sw=width_field, turb_name='turbulence',
-            max_split_cut=max_split_cut, use_ntda=True, beamwidth=beamwidth,
-            gate_spacing=rng_res, compute_gate_pos=compute_gate_pos)
+            max_split_cut=max_split_cut, use_ntda=use_ntda,
+            beamwidth=beamwidth, gate_spacing=rng_res,
+            compute_gate_pos=compute_gate_pos)
     elif radar_out.scan_type == 'rhi':
         pytda.calc_turb_rhi(
             radar_out, radius=radius, verbose=verbose, name_dz=refl_field,
             name_sw=width_field, turb_name='turbulence',
-            use_ntda=True, beamwidth=beamwidth, gate_spacing=rng_res,
+            use_ntda=use_ntda, beamwidth=beamwidth, gate_spacing=rng_res,
             compute_gate_pos=compute_gate_pos)
     else:
         warn('Radar volume of type ' + radar_out.scan_type +
@@ -696,6 +703,7 @@ def process_windshear(procstatus, dscfg, radar_list=None):
 
     return new_dataset, ind_rad
 
+
 def process_windshear_lidar(procstatus, dscfg, radar_list=None):
     """
     Estimates the wind shear from the wind velocity of lidar scans
@@ -754,6 +762,7 @@ def process_windshear_lidar(procstatus, dscfg, radar_list=None):
     new_dataset['radar_out'].add_field(windshear_field, windshear)
 
     return new_dataset, ind_rad
+
 
 def process_vad(procstatus, dscfg, radar_list=None):
     """
@@ -841,7 +850,7 @@ def process_dda(procstatus, dscfg, radar_list=None):
 
         datatype : string. Dataset keyword
             The input data type
-        
+
         gridconfig : dictionary. Dataset keyword
             Dictionary containing some or all of this keywords:
             xmin, xmax, ymin, ymax, zmin, zmax : floats
@@ -901,11 +910,12 @@ def process_dda(procstatus, dscfg, radar_list=None):
         Cmod: float
             Coefficient for model constraint
         Cpoint: float
-            Coefficient for point constraint    
+            Coefficient for point constraint
         wind_tol: float
-            Stop iterations after maximum change in winds is less than this value.
+            Stop iterations after maximum change in winds is less than this
+            value.
         frz : float
-            The freezing level in meters. This is to tell PyDDA where to use 
+            The freezing level in meters. This is to tell PyDDA where to use
             ice particle fall speeds in the wind retrieval verus liquid.
     radar_list : list of Radar objects
         Optional. list of radar objects
@@ -942,7 +952,7 @@ def process_dda(procstatus, dscfg, radar_list=None):
     ind_radar_list = np.array(ind_radar_list)
     datatype_list = np.array(datatype_list)
     field_name_list = np.array(field_name_list)
-    
+
     # Get DDA numerical parameters
     Co = dscfg.get('Co', 1.)
     Cm = dscfg.get('Cm', 1500.)
@@ -968,19 +978,21 @@ def process_dda(procstatus, dscfg, radar_list=None):
         # Remove nan from souding
         sounding_data = sounding_data.dropna()
         # create wind profile from sounding
-        wind_prof = pyart.core.HorizontalWindProfile(sounding_data['HGHT'],
-            sounding_data['SKNT'] * 0.514, sounding_data['DRCT'])
-    else:    
+        wind_prof = pyart.core.HorizontalWindProfile(
+            sounding_data['HGHT'], sounding_data['SKNT'] * 0.514,
+            sounding_data['DRCT'])
+    else:
         # Compute VAD for every radar to initialize DDA
         # z-vector for vad
-        z_want = np.arange(dscfg['gridConfig']['zmin'],
-                        dscfg['gridConfig']['zmax'] +
-                        dscfg['gridConfig']['vres'],
-                        dscfg['gridConfig']['vres'])
+        z_want = np.arange(
+            dscfg['gridConfig']['zmin'],
+            dscfg['gridConfig']['zmax'] + dscfg['gridConfig']['vres'],
+            dscfg['gridConfig']['vres'])
 
-        wind_prof = compute_average_vad(radar_list, z_want, signs, 
-            dscfg['gridConfig']['lonorig'], dscfg['gridConfig']['latorig'])
-        
+        wind_prof = compute_average_vad(
+            radar_list, z_want, signs, dscfg['gridConfig']['lonorig'],
+            dscfg['gridConfig']['latorig'])
+
     # Get name of reflectivity and velocity fields for each radar
     refl_fields = []
     vel_fields = []
@@ -988,12 +1000,14 @@ def process_dda(procstatus, dscfg, radar_list=None):
         # Find vel and refl fields
         field_names_rad = field_name_list[ind_radar_list == i]
         vel_field = field_names_rad[[
-            'velocity' in vname for vname in field_name_list[ind_radar_list == i]]][0]
+            'velocity' in vname for vname in field_name_list[
+                ind_radar_list == i]]][0]
         vel_fields.append(vel_field)
-        refl_field = field_names_rad[['reflectivity' in vname
-                                for vname in field_name_list[ind_radar_list == i]]][0]
+        refl_field = field_names_rad[[
+            'reflectivity' in vname for vname in field_name_list[
+                ind_radar_list == i]]][0]
         refl_fields.append(refl_field)
-    
+
     # Grid the variables
     grids = []
     for i, radar in enumerate(radar_list):
@@ -1002,7 +1016,7 @@ def process_dda(procstatus, dscfg, radar_list=None):
         dscfg_grid['datatype'] = np.array(dscfg['datatype'])[
             ind_radar_list == i]
         grids.append(process_grid(1, dscfg_grid, radar_list)[0]['radar_out'])
-    
+
     # Harmonize variables
     for i, grid in enumerate(grids):
         grid.fields['velocity'] = grid.fields.pop(vel_fields[i])
@@ -1014,7 +1028,6 @@ def process_dda(procstatus, dscfg, radar_list=None):
 
     grids[0] = pydda.initialization.make_wind_field_from_profile(
         grids[0], wind_prof, vel_field='velocity')
-    
 
     # Actual DDA computation
     new_grids, params = pydda.retrieval.get_dd_wind_field(
@@ -1025,7 +1038,7 @@ def process_dda(procstatus, dscfg, radar_list=None):
         engine='scipy',
         Co=Co, Cm=Cm, Cx=Cx, Cy=Cy, Cz=Cz, Cb=Cb, Cv=Cv, Cmod=Cmod,
         Cpoint=Cpoint, wind_tol=wind_tol, frz=frz)
-        
+
     # pyDDA returns as many grid objects as input radars
     # the idea here is to merge these grid objects into one
     # and to replace the homogeneized vel and refl fields by the

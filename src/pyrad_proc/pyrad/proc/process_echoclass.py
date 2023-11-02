@@ -10,6 +10,7 @@ Functions for echo classification and filtering
     process_echo_id
     process_birds_id
     process_clt_to_echo_id
+    process_vstatus_to_echo_id
     process_hydro_mf_to_echo_id
     process_hydro_mf_to_hydro
     process_echo_filter
@@ -43,8 +44,8 @@ from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from ..io.io_aux import get_file_list, get_datetime
 from ..io.read_data_other import read_centroids
 
-if (importlib.util.find_spec('sklearn_extra') and 
-    importlib.util.find_spec('sklearn')):
+if (importlib.util.find_spec('sklearn_extra') and
+        importlib.util.find_spec('sklearn')):
     _SKLEARN_AVAILABLE = True
 else:
     _SKLEARN_AVAILABLE = False
@@ -294,6 +295,66 @@ def process_clt_to_echo_id(procstatus, dscfg, radar_list=None):
     clt = radar.fields[clt_field]['data']
     echo_id[clt == 1] = 1
     echo_id[clt >= 100] = 2
+
+    id_field = pyart.config.get_metadata('radar_echo_id')
+    id_field['data'] = echo_id
+
+    # prepare for exit
+    new_dataset = {'radar_out': deepcopy(radar)}
+    new_dataset['radar_out'].fields = dict()
+    new_dataset['radar_out'].add_field('radar_echo_id', id_field)
+
+    return new_dataset, ind_rad
+
+
+def process_vstatus_to_echo_id(procstatus, dscfg, radar_list=None):
+    """
+    Converts velocity status from lidar data into pyrad echo ID
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration. Accepted Configuration Keywords::
+
+        datatype : list of string. Dataset keyword
+            The input data types
+    radar_list : list of Radar objects
+        Optional. list of radar objects
+
+    Returns
+    -------
+    new_dataset : dict
+        dictionary containing the output
+    ind_rad : int
+        radar index
+
+    """
+
+    if procstatus != 1:
+        return None, None
+
+    for datatypedescr in dscfg['datatype']:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        if datatype == 'wind_vel_rad_status':
+            vstatus_field = get_fieldname_pyart(datatype)
+            break
+
+    ind_rad = int(radarnr[5:8]) - 1
+    if radar_list[ind_rad] is None:
+        warn('No valid radar')
+        return None, None
+    radar = radar_list[ind_rad]
+
+    if vstatus_field not in radar.fields:
+        warn('Velocity status not present. Unable to obtain echoID')
+        return None, None
+
+    echo_id = np.zeros((radar.nrays, radar.ngates), dtype=np.uint8) + 3
+    vstatus = radar.fields[vstatus_field]['data']
+    echo_id[vstatus == 0] = 1
 
     id_field = pyart.config.get_metadata('radar_echo_id')
     id_field['data'] = echo_id
@@ -621,12 +682,13 @@ def process_cdf(procstatus, dscfg, radar_list=None):
 
     return new_dataset, ind_rad
 
+
 def process_gatefilter(procstatus, dscfg, radar_list=None):
     """
-    filters out all available moments based on specified upper/lower bounds for moments 
-    based on the Py-ART gatefilter. Every value below upper bound or above upper 
-    bound will be filtered. To ignore lower/upper bound enter an impossible 
-    value such as -9999 or 9999.
+    filters out all available moments based on specified upper/lower bounds
+    for moments based on the Py-ART gatefilter. Every value below upper bound
+    or above upper bound will be filtered. To ignore lower/upper bound enter
+    an impossible value such as -9999 or 9999.
 
     Parameters
     ----------
@@ -662,17 +724,17 @@ def process_gatefilter(procstatus, dscfg, radar_list=None):
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_names_aux.append(get_fieldname_pyart(datatype))
-    
+
     if len(field_names_aux) != len(dscfg['lower_bounds']):
-        warn('Number of provided lower bounds is different '+
-        'from number of data types')
+        warn('Number of provided lower bounds is different '
+             'from number of data types')
         return None, None
 
     if len(field_names_aux) != len(dscfg['upper_bounds']):
-        warn('Number of provided upper bounds is different '+
-        'from number of data types')
-        return None, None    
- 
+        warn('Number of provided upper bounds is different '
+             'from number of data types')
+        return None, None
+
     lower_bounds = dscfg['lower_bounds']
     upper_bounds = dscfg['upper_bounds']
 

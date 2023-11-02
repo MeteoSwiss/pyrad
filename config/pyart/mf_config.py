@@ -399,6 +399,7 @@ radial_wind_speed_ci = 'radial_wind_speed_ci'
 radial_wind_speed_status = 'radial_wind_speed_status'
 
 doppler_spectrum_width = 'doppler_spectrum_width'
+corrected_doppler_spectrum_width = 'corrected_doppler_spectrum_width'
 doppler_spectrum_mean_error = 'doppler_spectrum_mean_error'
 
 atmospherical_structures_type = 'atmospherical_structures_type'
@@ -406,6 +407,7 @@ relative_beta = 'relative_beta'
 absolute_beta = 'absolute_beta'
 
 cnr = 'cnr'
+corrected_cnr = 'corrected_cnr'
 
 avg_reflectivity = 'avg_reflectivity'
 npoints_reflectivity = 'npoints_reflectivity'
@@ -779,11 +781,13 @@ DEFAULT_FIELD_NAMES = {
     'radial_wind_speed_ci': radial_wind_speed_ci,
     'radial_wind_speed_status': radial_wind_speed_status,
     'doppler_spectrum_width': doppler_spectrum_width,
+    'corrected_doppler_spectrum_width': corrected_doppler_spectrum_width,
     'doppler_spectrum_mean_error': doppler_spectrum_mean_error,
     'atmospherical_structures_type': atmospherical_structures_type,
     'relative_beta': relative_beta,
     'absolute_beta': absolute_beta,
     'cnr': cnr,
+    'corrected_cnr': corrected_cnr,
     'avg_reflectivity': avg_reflectivity,
     'npoints_reflectivity': npoints_reflectivity,
     'quant05_reflectivity': quant05_reflectivity,
@@ -4054,12 +4058,14 @@ DEFAULT_FIELD_COLORMAP = {
     # radial_wind_speed_status:
 
     doppler_spectrum_width: 'pyart_NWS_SPW',
+    corrected_doppler_spectrum_width: 'pyart_NWS_SPW',
     # doppler_spectrum_mean_error:
 
     atmospherical_structures_type: 'pyart_LangRainbow12',
     relative_beta: 'pyart_NWSRef',
     absolute_beta: 'pyart_NWSRef',
     cnr: 'pyart_Carbone17',
+    corrected_cnr: 'pyart_Carbone17',
 
     # appropriate colors are matplotlib Greys, gray, etc.
     HRV: 'Greys_r',  # 'pyart_Gray9',

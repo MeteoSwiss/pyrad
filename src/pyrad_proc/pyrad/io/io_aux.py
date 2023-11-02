@@ -1905,6 +1905,8 @@ def get_fieldname_pyart(datatype):
         field_name = 'radial_wind_speed_status'
     elif datatype == 'WD':
         field_name = 'doppler_spectrum_width'
+    elif datatype == 'WDc':
+        field_name = 'corrected_doppler_spectrum_width'
     elif datatype == 'WD_err':
         field_name = 'doppler_spectrum_mean_error'
     elif datatype == 'atmos_type':
@@ -1915,6 +1917,8 @@ def get_fieldname_pyart(datatype):
         field_name = 'absolute_beta'
     elif datatype == 'CNR':
         field_name = 'cnr'
+    elif datatype == 'CNRc':
+        field_name = 'corrected_cnr'
 
     # satellite names
     elif datatype == 'HRV':
@@ -2489,7 +2493,9 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     if not os.path.isdir(datapath):
                         warn("WARNING: Unknown datapath '%s'" % datapath)
                         continue
-                    pattern = datapath + 'MXPol-polar-' + dayinfo + '-*-' + scan + '.nc'
+                    pattern = (
+                        datapath + 'MXPol-polar-' + dayinfo + '-*-' + scan
+                        + '.nc')
                     dayfilelist = glob.glob(pattern)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
@@ -3045,7 +3051,8 @@ def find_pyradcosmo_file(basepath, voltime, datatype, cfg, dataset):
         runtimestr = runtime.strftime('%Y%m%d%H') + '0000'
 
         daydir = runtime.strftime('%Y-%m-%d')
-        datapath = basepath + datatype + '/radar/' + daydir + '/' + dataset + '/'
+        datapath = (
+            basepath + datatype + '/radar/' + daydir + '/' + dataset + '/')
 
         search_name = (
             datapath + datatype + '_RUN' + runtimestr + '_' + fdatetime + '.*')

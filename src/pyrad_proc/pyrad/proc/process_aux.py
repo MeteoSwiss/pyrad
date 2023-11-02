@@ -153,6 +153,7 @@ def get_process_func(dataset_type, dsname):
                 'VOL_REFL': process_vol_refl
                 'VOL2BIRD_FILTER': process_filter_vol2bird
                 'VOL2BIRD_GATE_FILTER': process_gate_filter_vol2bird
+                'VSTATUS_TO_SAN': process_vstatus_to_echo_id
                 'WBN': process_wbn_iq
                 'WIND_VEL': process_wind_vel
                 'WINDSHEAR': process_windshear
@@ -404,6 +405,8 @@ def get_process_func(dataset_type, dsname):
         func_name = 'process_birds_id'
     elif dataset_type == 'CLT_TO_SAN':
         func_name = 'process_clt_to_echo_id'
+    elif dataset_type == 'VSTATUS_TO_SAN':
+        func_name = 'process_vstatus_to_echo_id'
     elif dataset_type == 'hydroMF_to_hydro':
         func_name = 'process_hydro_mf_to_hydro'
     elif dataset_type == 'hydroMF_to_SAN':
@@ -469,7 +472,7 @@ def get_process_func(dataset_type, dsname):
     elif dataset_type == 'WINDSHEAR':
         func_name = 'process_windshear'
     elif dataset_type == 'WINDSHEAR_LIDAR':
-        func_name = 'process_windshear_lidar'    
+        func_name = 'process_windshear_lidar'
     elif dataset_type == 'HYDROCLASS':
         func_name = 'process_hydroclass'
     elif dataset_type == 'CENTROIDS':
@@ -685,7 +688,7 @@ def process_raw(procstatus, dscfg, radar_list=None):
         radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
         break
     ind_rad = int(radarnr[5:8]) - 1
-    
+
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn('ERROR: No valid radar')
         return None, None
@@ -2296,12 +2299,11 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
             tend = time()
 
             print(
-                'original radar indices (azi, rng): ' + str(rad_ind_ray) + ', ' +
-                str(rad_ind_rng) +
-                ' target radar indices (azi, rng): ' + str(trad_ind_ray) + ', ' +
-                str(trad_ind_rng) +
-                ' Samples done: ' + str(sample) + '/' + str(rad_ind_rngs.size) +
-                ' Time used: ' + str(tend - tstart),
+                'original radar indices (azi, rng): ' + str(rad_ind_ray) + ', '
+                + str(rad_ind_rng) + ' target radar indices (azi, rng): '
+                + str(trad_ind_ray) + ', ' + str(trad_ind_rng)
+                + ' Samples done: ' + str(sample) + '/'
+                + str(rad_ind_rngs.size) + ' Time used: ' + str(tend - tstart),
                 end="\r", flush=True)
 
     return target_radar
