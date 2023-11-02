@@ -1,0 +1,1255 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>List of pyrad input data descriptors &#8212; Pyrad 1.8.6 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pyart-theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/design-tabs.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'overview/list_datadescriptors';</script>
+    <script src="../_static/doc_shared.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="List of pyrad variables" href="list_variables.html" />
+    <link rel="prev" title="List of pyrad products" href="list_products.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Pyrad 1.8.6 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../userguide/index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../API/index.html">
+                        API Reference Manual
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="index.html">
+                        Features
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../userguide/index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../API/index.html">
+                        API Reference Manual
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="index.html">
+                        Features
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<div id="searchbox"></div></div>
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="list_process.html">List of pyrad datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="list_products.html">List of pyrad products</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">List of pyrad input data descriptors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="list_variables.html">List of pyrad variables</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Features</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">List of...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+<section id="list-of-pyrad-input-data-descriptors">
+<h1>List of pyrad input data descriptors<a class="headerlink" href="#list-of-pyrad-input-data-descriptors" title="Permalink to this heading">#</a></h1>
+<section id="general">
+<h2>General<a class="headerlink" href="#general" title="Permalink to this heading">#</a></h2>
+<section id="cf1">
+<h3>CF1<a class="headerlink" href="#cf1" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><p>Reads polar radar data in the CF1 NetCDF format. See the data descriptor <em>ODIM</em> for usage and example as it works exactly in the same way.</p>
+</dd>
+<dt>usage</dt><dd><p><em>CF1:datatype,dataset</em>
+See the data descriptor <em>ODIM</em> for usage info as it works exactly in the same way.</p>
+</dd>
+<dt>example</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Zg</span> <span class="n">STRUCT</span> <span class="mi">3</span>
+        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">RAW</span>
+        <span class="n">datatype</span> <span class="n">STRING</span> <span class="n">CF1</span><span class="p">:</span><span class="n">Zg</span><span class="p">,</span><span class="n">D</span><span class="p">{}</span><span class="o">-</span><span class="n">F</span><span class="p">{</span><span class="o">%</span><span class="n">Y</span><span class="o">%</span><span class="n">m</span><span class="o">%</span><span class="n">d_</span><span class="o">%</span><span class="n">H</span><span class="o">%</span><span class="n">M</span><span class="p">}</span>
+        <span class="n">products</span> <span class="n">STRUCT</span> <span class="mi">1</span>
+                <span class="n">BSCOPE</span> <span class="n">STRUCT</span> <span class="mi">5</span>
+                        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">BSCOPE_IMAGE</span>
+                        <span class="n">voltype</span> <span class="n">STRING</span> <span class="n">Zg</span>
+                        <span class="n">ray_dim</span> <span class="n">STRING</span> <span class="n">time</span>
+                        <span class="n">xaxis_rng</span> <span class="n">INT</span> <span class="mi">0</span>
+                        <span class="n">anglenr</span> <span class="n">INT</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="cfradial">
+<h3>CFRADIAL<a class="headerlink" href="#cfradial" title="Permalink to this heading">#</a></h3>
+<dl class="simple">
+<dt>description</dt><dd><p>Reads polar radar data in the CFRadial-1 NetCDF format. See the data descriptor <em>ODIM</em> for usage and example as it works exactly in the same way.</p>
+</dd>
+<dt>usage</dt><dd><p><em>CFRADIAL:datatype,dataset</em>
+See the data descriptor <em>ODIM</em> for usage info as it works exactly in the same way.</p>
+</dd>
+</dl>
+</section>
+<section id="cfradial2">
+<h3>CFRADIAL2<a class="headerlink" href="#cfradial2" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><p>Reads polar radar data in the CFRadial-2 NetCDF format. See the data descriptor <em>ODIM</em> for usage and example as it works exactly in the same way.</p>
+</dd>
+<dt>usage</dt><dd><p><em>CFRADIAL2:datatype,dataset</em>
+See the data descriptor <em>ODIM</em> for usage info as it works exactly in the same way.</p>
+</dd>
+<dt>example</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wind_raw</span> <span class="n">STRUCT</span> <span class="mi">4</span>
+        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">RAW</span>
+        <span class="n">datatype</span> <span class="n">STRARR</span> <span class="mi">1</span>
+                <span class="n">CFRADIAL2</span><span class="p">:</span><span class="n">wind_vel_rad</span><span class="p">,</span><span class="n">D</span><span class="p">{</span><span class="o">%</span><span class="n">Y</span><span class="o">-%</span><span class="n">m</span><span class="o">-%</span><span class="n">d</span><span class="p">}</span><span class="o">-</span><span class="n">F</span><span class="p">{</span><span class="o">%</span><span class="n">Y</span><span class="o">-%</span><span class="n">m</span><span class="o">-%</span><span class="n">d_</span><span class="o">%</span><span class="n">H</span><span class="o">-%</span><span class="n">M</span><span class="o">-%</span><span class="n">S</span><span class="p">}</span>
+        <span class="n">products</span> <span class="n">STRUCT</span> <span class="mi">1</span>
+                <span class="n">SAVESTATE</span> <span class="n">STRUCT</span> <span class="mi">2</span>
+                        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">SAVESTATE</span>
+                        <span class="n">voltype</span> <span class="n">STRING</span> <span class="n">wind_vel_rad</span>
+        <span class="n">MAKE_GLOBAL</span> <span class="n">INT</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="cfradialpyrad">
+<h3>CFRADIALPYRAD<a class="headerlink" href="#cfradialpyrad" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><p>Reads pyrad outputs in the netCDF CFRadial format previously generated with the SAVEVOL or SAVEALL product types. This data descriptor can be used to reuse data generated in pyrad workflow A within pyrad workflow B, in order to divide complex processing tasks in multiple product configuration files. This data descriptor relies on the keywords <em>loadbasepath</em> and <em>loadname</em> in the main configuration file. <em>loadbasepath</em> is used to specify the root directory from where to read the pyrad outputs (usually this corresponds to the <em>saveimgbasepath</em> key of pyrad workflow A) and <em>loadname</em> to the output name of the pyrad workflow from where to reuse the outputs (this corresponds to the main <em>name</em> key of pyrad workflow A).</p>
+</dd>
+<dt>usage</dt><dd><p><em>CFRADIALPYRAD:datatype,dataset,product</em></p>
+<dl class="simple">
+<dt>where</dt><dd><ul class="simple">
+<li><p>datatype is a pyrad variable name as listed <a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/doc/source/overview/list_variables.rst">here</a></p></li>
+<li><p>dataset is the name of the pyrad dataset for which the SAVEVOL or SAVEALL product has been generated</p></li>
+<li><p>product is the name of the SAVEVOL or SAVEALL product</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt>example</dt><dd><p><em>CFRADIALPYRAD:KDPc,KDPc_Vulpiani,SAVEVOL_KDPc</em> will read the corrected KDP generated by the product SAVEVOL_KDPc within the dataset KDPc_Vulpiani. This will in fact read  the file loadbasepath/loadname/YYYY-mm-dd/dataset/product/YYYYmmddHHMMSS_savevol_dataset_datatype.nc. For example in pyrad workflow A, this dataset could look like this</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">KDPc_Vulpiani</span> <span class="n">STRUCT</span> <span class="mi">9</span>
+<span class="nb">type</span> <span class="n">STRING</span> <span class="n">PHIDP_KDP_VULPIANI</span>
+<span class="n">datatype</span> <span class="n">STRARR</span> <span class="mi">1</span>
+    <span class="n">PROC</span><span class="p">:</span><span class="n">PhiDPc</span>
+<span class="n">rwind</span> <span class="n">FLOAT</span> <span class="mf">1000.</span>
+<span class="n">n_iter</span> <span class="n">INT</span> <span class="mi">6</span>
+<span class="n">interp</span> <span class="n">INT</span> <span class="mi">0</span>
+<span class="n">parallel</span> <span class="n">INT</span> <span class="mi">0</span>
+<span class="n">get_phidp</span> <span class="n">INT</span> <span class="mi">0</span>
+<span class="n">MAKE_GLOBAL</span> <span class="n">INT</span> <span class="mi">1</span>
+<span class="n">products</span> <span class="n">STRUCT</span> <span class="mi">3</span>
+  <span class="n">EL001</span> <span class="n">STRUCT</span> <span class="mi">3</span>
+     <span class="nb">type</span>  <span class="n">STRING</span> <span class="n">PPI_IMAGE</span>
+     <span class="n">anglenr</span> <span class="n">INT</span> <span class="mi">2</span>
+     <span class="n">voltype</span> <span class="n">STRING</span> <span class="n">KDPc</span>
+  <span class="n">AZ093</span> <span class="n">STRUCT</span> <span class="mi">4</span>
+     <span class="nb">type</span>  <span class="n">STRING</span> <span class="n">PSEUDORHI_IMAGE</span>
+     <span class="n">angle</span> <span class="n">FLOAT</span> <span class="mf">93.</span>
+     <span class="n">AziTol</span> <span class="n">FLOAT</span> <span class="mf">1.</span>
+     <span class="n">voltype</span> <span class="n">STRING</span> <span class="n">KDPc</span>
+  <span class="n">SAVEVOL_KDPc</span> <span class="n">STRUCT</span> <span class="mi">2</span>
+        <span class="nb">type</span>   <span class="n">STRING</span> <span class="n">SAVEVOL</span>
+        <span class="n">voltype</span> <span class="n">STRING</span> <span class="n">KDPc</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="csv">
+<h3>CSV<a class="headerlink" href="#csv" title="Permalink to this heading">#</a></h3>
+<dl class="simple">
+<dt>description</dt><dd><p>Reads CSV outputs previously generated by pyrad. See the data descriptor <em>PYRADGRID</em> for usage and example as it works exactly in the same way.</p>
+</dd>
+</dl>
+</section>
+<section id="dem">
+<h3>DEM<a class="headerlink" href="#dem" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><p>Reads visibility data saved in Rainbow file format. For this to work you will need to define the variable <em>dempath</em> in the main pyrad configuration file.</p>
+</dd>
+<dt>usage</dt><dd><p><em>DEM:VIS</em></p>
+</dd>
+<dt>example</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DX50_PLD_coloc_gates</span> <span class="n">STRUCT</span> <span class="mi">13</span>
+        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">COLOCATED_GATES</span>
+        <span class="n">datatype</span> <span class="n">STRARR</span> <span class="mi">4</span>
+                <span class="n">RADAR001</span><span class="p">:</span><span class="n">dBZ</span>
+                <span class="n">RADAR001</span><span class="p">:</span><span class="n">DEM</span><span class="p">:</span><span class="n">VIS</span>
+                <span class="n">RADAR002</span><span class="p">:</span><span class="n">RAD4ALP</span><span class="p">:</span><span class="n">dBZ</span>
+                <span class="n">RADAR002</span><span class="p">:</span><span class="n">RAD4ALPDEM</span><span class="p">:</span><span class="n">VIS</span>
+        <span class="n">h_tol</span> <span class="n">FLOAT</span> <span class="mf">100.</span>
+        <span class="n">latlon_tol</span> <span class="n">FLOAT</span> <span class="mf">0.005</span>  <span class="c1"># approx. 500 m tolerance</span>
+        <span class="n">vol_d_tol</span> <span class="n">FLOAT</span> <span class="mf">100.</span>
+        <span class="n">vismin</span> <span class="n">FLOAT</span> <span class="mf">99.</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="gamic">
+<h3>GAMIC<a class="headerlink" href="#gamic" title="Permalink to this heading">#</a></h3>
+<dl class="simple">
+<dt>description</dt><dd><p>Reads polar radar data in GAMIC proprietary radar format. See the data descriptor <em>ODIM</em> for usage and example as it works exactly in the same way.</p>
+</dd>
+</dl>
+</section>
+<section id="gecsx">
+<h3>GECSX<a class="headerlink" href="#gecsx" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><p>Reads outputs of the GECSX visibility algorithms generated by pyrad</p>
+</dd>
+<dt>usage</dt><dd><blockquote>
+<div><p><em>GECSX:datatype,dataset,product</em></p>
+</div></blockquote>
+<dl class="simple">
+<dt>where</dt><dd><ul class="simple">
+<li><p>datatype is a pyrad variable name as listed <a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/doc/source/overview/list_variables.rst">here</a></p></li>
+<li><p>dataset is the name of the GECSX pyrad dataset for which the SAVEVOL or SAVEALL product has been generated</p></li>
+<li><p>product is the name of the SAVEVOL or SAVEALL product</p></li>
+</ul>
+</dd>
+</dl>
+<p>Note that this works exactly as the CFRADIALPYRAD data descriptor, the only exception is that it does completely ignore any reference to time within the retrieved files as the GECSX outputs are supposed to be static (dates within directories and time within filenames are ignored). Moreover, it relies on the keys <em>gecsxbasepath</em> and <em>gecsxname</em> in the main config file instead as <em>loadbasepath</em> and <em>loadname</em>.</p>
+</dd>
+<dt>example</dt><dd><p><em>GECSX:visibility_polar,gecsx_50DX,visibility</em> will read the <em>visibility_polar</em> field generated by the product visibility within the dataset gecsx_50DX. This will in fact read the file gecsxbasepath/gecsxname/dataset/product/savevol_dataset_datatype.nc (notice the absence of time reference). For example in the GECSX workflow used to generate this file, the gecsx_50DX could look like this.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gecsx_DX50</span> <span class="n">STRUCT</span> <span class="mi">13</span>
+<span class="nb">type</span> <span class="n">STRING</span> <span class="n">GECSX</span>
+<span class="n">datatype</span> <span class="n">STRING</span> <span class="n">dBZ</span>
+<span class="n">demfile</span> <span class="n">STRING</span> <span class="n">swisstopo_DHM25_50m</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">demproj</span> <span class="n">STRING</span> <span class="mi">21781</span> <span class="c1"># EPSG code, a OGC WKT or Proj4 string, required if projection is not available in demfile metadata</span>
+<span class="n">az_discretization</span>    <span class="n">FLOAT</span> <span class="mi">5</span>   <span class="c1"># numerical step in azimuth in Cartesian visibility estimation [degree]</span>
+<span class="n">range_discretization</span> <span class="n">FLOAT</span> <span class="mi">1000</span>   <span class="c1"># numerical step in range in Cartesian visibility estimation [m]</span>
+<span class="n">do_range_weighting</span> <span class="n">INT</span> <span class="mi">1</span>
+<span class="n">raster_oversampling</span> <span class="n">INT</span> <span class="mi">0</span>
+<span class="n">verbose</span> <span class="n">INT</span> <span class="mi">1</span>
+<span class="n">clip</span> <span class="n">INT</span> <span class="mi">1</span>
+<span class="n">sigma0_method</span> <span class="n">STRING</span> <span class="n">Gabella</span>
+<span class="n">antenna_elevations</span> <span class="n">FLTARR</span> <span class="mi">2</span> <span class="c1"># You can choose here to use only a subset of all available antenna elevations from the radar file (to save time and because you are likely not interested in high elevations, where ivsibility should be good anyway)</span>
+ <span class="mf">1.</span>
+ <span class="mf">1.8</span>
+<span class="n">products</span> <span class="n">STRUCT</span> <span class="mi">3</span>
+    <span class="n">visibility</span> <span class="n">STRUCT</span> <span class="mi">2</span>
+        <span class="n">voltype</span> <span class="n">STRING</span> <span class="n">visibility_polar</span>
+        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">SAVEVOL</span>
+    <span class="n">NC_POL</span> <span class="n">STRUCT</span> <span class="mi">1</span>
+        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">SAVEALL_VOL</span>
+    <span class="n">NC_CART</span> <span class="n">STRUCT</span> <span class="mi">1</span>
+        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">SAVEALL_GRID</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="netcdfspectra">
+<h3>NETCDFSPECTRA<a class="headerlink" href="#netcdfspectra" title="Permalink to this heading">#</a></h3>
+<dl class="simple">
+<dt>description</dt><dd><p>Reads pyrad netCDF spectra outputs previously generated with the SAVEVOL or SAVEALL product types (when the dataset is of <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_process.html#spectra">spectra</a> type and <em>file_type</em> h5 is specified). See the data descriptor <em>PYRADGRID</em> for usage and example as it works exactly in the same way.</p>
+</dd>
+</dl>
+</section>
+<section id="nexradii">
+<h3>NEXRADII<a class="headerlink" href="#nexradii" title="Permalink to this heading">#</a></h3>
+<dl class="simple">
+<dt>description</dt><dd><p>Reads polar radar data from the NEXRAD radar network. See the data descriptor <em>ODIM</em> for usage and example as it works exactly in the same way.</p>
+</dd>
+</dl>
+</section>
+<section id="odim">
+<h3>ODIM<a class="headerlink" href="#odim" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><p>Reads polar radar data in the ODIM HDF5 format.</p>
+</dd>
+<dt>usage</dt><dd><p><em>ODIM:datatype,dataset</em></p>
+<dl class="simple">
+<dt>where</dt><dd><ul class="simple">
+<li><p>datatype is a pyrad variable name as listed <a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/doc/source/overview/list_variables.rst">here</a></p></li>
+<li><p>dataset is an optional descriptor used to describe where the data is stored, it has the format “<em>D{time_descr_folder}-F{time_descr_file}</em>”, where <em>time_descr_folder</em> is a datetime descriptor used to name the parent directory of the radar files, and <em>time_descr_file</em> is a datetime descriptor used to name the radar files. <em>time_descr_folder</em> can be left empty if wanted.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt>example</dt><dd><p><em>ODIM:ZDR,D{%Y%m%d}-F{%Y%m%d%H%M00}</em> will attempt to read the differential reflectivity from the h5 file located under <em>datapath/ScanList/day_dir/filename</em> where <em>datapath</em> and <em>ScanList</em> are as defined in the main and loc configuration files and <em>day_dir</em> contains the datetime format string <em>%Y%m%d</em> and filename contains the datetime format <em>%Y%m%d%H%M00</em>.</p>
+<p><em>ODIM:dBZ,D{}-F{%Y%m%d%H%}</em> will attempt to read the horizontal reflectivity from the h5 file located under <em>datapath/ScanList/filename</em> where filename contains the datetime format <em>%Y%m%d%H%M00</em> (notice the omission of the <em>day_dir</em> folder which is expected not to be present.</p>
+<p>An example of use is the following dataset:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>dBuZ STRUCT 3
+        type STRING RAW
+        datatype STRING ODIM:dBuZ,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+        products STRUCT 1
+                PPI_EL00 STRUCT 3
+                        type STRING PPI_IMAGE
+                        voltype STRING dBuZ
+                        anglenr INT 0
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="odimbirds">
+<h3>ODIMBIRDS<a class="headerlink" href="#odimbirds" title="Permalink to this heading">#</a></h3>
+<dl class="simple">
+<dt>description</dt><dd><p>Reads VOL2BIRD data in the ODIM HDF5 format. See the data descriptor <em>ODIM</em> for usage and example as it works exactly in the same way.</p>
+</dd>
+</dl>
+</section>
+<section id="odimgrid">
+<h3>ODIMGRID<a class="headerlink" href="#odimgrid" title="Permalink to this heading">#</a></h3>
+<dl class="simple">
+<dt>description</dt><dd><p>Reads Cartesian gridded data in the ODIM HDF5 format. See the data descriptor <em>ODIM</em> for usage and example as it works exactly in the same way.</p>
+</dd>
+</dl>
+</section>
+<section id="odimpyrad">
+<h3>ODIMPYRAD<a class="headerlink" href="#odimpyrad" title="Permalink to this heading">#</a></h3>
+<dl class="simple">
+<dt>description</dt><dd><p>Reads pyrad outputs in the HDF5 ODIM format previously generated with the SAVEVOL or SAVEALL product types (when <em>file_type</em> h5 is specified). See the data descriptor <em>CFRADIALPYRAD</em> for usage and example as it works exactly in the same way.</p>
+</dd>
+</dl>
+</section>
+<section id="odimpyradgrid">
+<h3>ODIMPYRADGRID<a class="headerlink" href="#odimpyradgrid" title="Permalink to this heading">#</a></h3>
+<dl class="simple">
+<dt>description</dt><dd><p>Reads pyrad HDF5 ODIM grid outputs previously generated with the SAVEVOL or SAVEALL product types (when the dataset is of <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_process.html#vol">grid</a> type and <em>file_type</em> h5 is specified). See the data descriptor <em>PYRADGRID</em> for usage and example as it works exactly in the same way.</p>
+</dd>
+</dl>
+</section>
+<section id="proc">
+<h3>PROC<a class="headerlink" href="#proc" title="Permalink to this heading">#</a></h3>
+<dl class="simple">
+<dt>description</dt><dd><p>Loads a datatype that has been generated during a previous pyrad processing level (within the same configuration file)</p>
+</dd>
+<dt>usage</dt><dd><p><em>PROC:datatype</em>
+where datatype is a pyrad variable name as listed <a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/doc/source/overview/list_variables.rst">here</a></p>
+</dd>
+<dt>example</dt><dd><p><em>PROC:dBZc</em> will read a corrected reflectivity field generated during a previous pyrad processing step (for example with the <a class="reference external" href="https://meteoswiss.github.io/pyrad/API/generated/generated/pyrad.proc.process_echo_filter.html">echo_filter</a> dataset)</p>
+</dd>
+</dl>
+</section>
+<section id="psr">
+<h3>PSR<a class="headerlink" href="#psr" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><p>Reads Rainbow PSR data file (spectral) to extract range gate information(Noise and transmitted power)</p>
+</dd>
+<dt>usage</dt><dd><p><em>PSR:datatype</em> where datatype is a pyrad variable name as listed <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_variables.html#py-art-to-pyrad">here</a>.</p>
+</dd>
+<dt>example</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">noise_v</span> <span class="n">STRUCT</span> <span class="mi">10</span>
+        <span class="nb">type</span>     <span class="n">STRING</span> <span class="n">SUNSCAN</span>
+        <span class="n">datatype</span> <span class="n">STRING</span> <span class="n">PSR</span><span class="p">:</span><span class="n">NdBmv</span>
+        <span class="n">sun_hit_method</span> <span class="n">STRING</span> <span class="n">PSR</span>
+        <span class="n">elmin</span> <span class="n">FLOAT</span> <span class="mf">5.0</span>
+        <span class="n">n_noise_bins</span> <span class="n">INT</span> <span class="mi">8</span>
+        <span class="n">noise_threshold</span> <span class="n">FLOAT</span> <span class="mf">1.5</span>
+        <span class="n">max_fit_stddev</span> <span class="n">FLOAT</span> <span class="mf">0.8</span>
+        <span class="n">do_second_noise_est</span> <span class="n">STRING</span> <span class="n">Yes</span>
+        <span class="n">n_indfar_bins</span> <span class="n">INT</span> <span class="mi">10</span>
+        <span class="n">products</span> <span class="n">STRUCT</span> <span class="mi">2</span>
+                <span class="n">SUNLOG</span> <span class="n">STRUCT</span> <span class="mi">1</span>
+                        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">WRITE_SUNSCAN</span>
+                <span class="n">AZ_EL</span> <span class="n">STRUCT</span> <span class="mi">3</span>
+                        <span class="nb">type</span>  <span class="n">STRING</span> <span class="n">PLOT_SUNSCAN</span>
+                        <span class="n">vmin</span> <span class="n">FLOAT</span> <span class="o">-</span><span class="mf">108.</span>
+                        <span class="n">vmax</span> <span class="n">FLOAT</span> <span class="o">-</span><span class="mf">102.</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="pyradgrid">
+<h3>PYRADGRID<a class="headerlink" href="#pyradgrid" title="Permalink to this heading">#</a></h3>
+<dl class="simple">
+<dt>description</dt><dd><p>Reads pyrad netCDF grid outputs previously generated with the SAVEVOL or SAVEALL product types (when the dataset is of <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_process.html#vol">grid</a> type). See the data descriptor <em>PYRADGRID</em> for usage and example as it works exactly in the same way.</p>
+</dd>
+</dl>
+</section>
+<section id="rainbow">
+<h3>RAINBOW<a class="headerlink" href="#rainbow" title="Permalink to this heading">#</a></h3>
+<dl class="simple">
+<dt>description</dt><dd><p>Loads a field from a Rainbow file (Leonardo/Selex proprietary file format)</p>
+</dd>
+<dt>usage</dt><dd><p><em>RAINBOW:datatype</em>
+where datatype is a pyrad variable name as listed <a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/doc/source/overview/list_variables.rst">here</a></p>
+</dd>
+<dt>example</dt><dd><p><em>RAINBOW:dBZ</em> will read the reflectivity from the corresponding Rainbow file</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="meteoswiss-specific">
+<h2>MeteoSwiss specific<a class="headerlink" href="#meteoswiss-specific" title="Permalink to this heading">#</a></h2>
+<section id="cosmo">
+<h3>COSMO<a class="headerlink" href="#cosmo" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><p>Reads data from the COSMO model, previously ingested by pyrad and converted to polar coordinates with the <a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_cosmo_lookup_table">COSMO_LOOKUP dataset</a>.
+For this to work you will need to define the variable <em>cosmopath</em> in the main pyrad configuration file.</p>
+</dd>
+<dt>usage</dt><dd><p><em>COSMO:datatype</em> where datatype is a pyrad variable name as listed <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_variables.html#cosmo-to-pyrad">here</a>.</p>
+</dd>
+<dt>example</dt><dd><p><em>COSMO:TEMP</em> will use the COSMO temperature field as generated by the COSMO_LOOKUP dataset. This can be used for example in the HYDROCLASS dataset.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TEMP</span> <span class="n">STRUCT</span> <span class="mi">6</span>
+</pre></div>
+</div>
+<p>type STRING COSMO_LOOKUP
+datatype STRARR 1</p>
+<blockquote>
+<div><p>dBZ</p>
+</div></blockquote>
+<p>cosmo_type STRING TEMP
+regular_grid INT 0
+lookup_table INT 1
+MAKE_GLOBAL INT 1</p>
+<blockquote>
+<div><p>hydroclass STRUCT 6</p>
+</div></blockquote>
+<p>type STRING HYDROCLASS
+datatype STRARR 5</p>
+<blockquote>
+<div><p>PROC:dBZc
+PROC:ZDRc
+PROC:RhoHVc
+PROC:KDPc
+COSMO:TEMP</p>
+</div></blockquote>
+<p>HYDRO_METHOD STRING SEMISUPERVISED
+RADARCENTROIDS STRING DX50</p>
+</dd>
+</dl>
+</section>
+<section id="cfradialcosmo">
+<h3>CFRADIALCOSMO<a class="headerlink" href="#cfradialcosmo" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><p>Used to read COSMO data interpolated to radar coordinates in a CFRadial file format.</p>
+</dd>
+<dt>usage</dt><dd><p><em>CFRADIALCOSMO:datatype,dataset</em>
+where</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>datatype is a pyrad variable name as listed <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_variables.html#cosmo-to-pyrad">here</a></p></li>
+<li><p>dataset is the name of the GECSX pyrad dataset for which the SAVEVOL or SAVEALL product has been generated</p></li>
+</ul>
+</div></blockquote>
+</dd>
+<dt>example</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DX50_PLA_coloc_gates</span> <span class="n">STRUCT</span> <span class="mi">9</span>
+        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">COLOCATED_GATES</span>
+        <span class="n">datatype</span> <span class="n">STRARR</span> <span class="mi">4</span>
+                <span class="n">RADAR001</span><span class="p">:</span><span class="n">CFRADIAL</span><span class="p">:</span><span class="n">dBZc</span><span class="p">,</span><span class="n">dBZ_avg</span><span class="p">,</span><span class="n">SAVEVOL</span>
+                <span class="n">RADAR001</span><span class="p">:</span><span class="n">DEM</span><span class="p">:</span><span class="n">VIS</span>
+                <span class="n">RADAR002</span><span class="p">:</span><span class="n">CFRADIAL</span><span class="p">:</span><span class="n">dBZc</span><span class="p">,</span><span class="n">dBZ_avg</span><span class="p">,</span><span class="n">SAVEVOL</span>
+                <span class="n">RADAR002</span><span class="p">:</span><span class="n">RAD4ALPDEM</span><span class="p">:</span><span class="n">VIS</span>
+        <span class="n">h_tol</span> <span class="n">FLOAT</span> <span class="mf">100.</span>
+        <span class="n">latlon_tol</span> <span class="n">FLOAT</span> <span class="mf">0.005</span>  <span class="c1"># approx. 500 m tolerance</span>
+        <span class="n">vol_d_tol</span> <span class="n">FLOAT</span> <span class="mf">100.</span>
+        <span class="n">vismin</span> <span class="n">FLOAT</span> <span class="mf">99.</span>
+        <span class="n">hmax</span> <span class="n">FLOAT</span> <span class="mf">10000.</span>
+        <span class="n">elmax</span> <span class="n">FLOAT</span> <span class="mf">20.</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="rad4alp">
+<h3>RAD4ALP<a class="headerlink" href="#rad4alp" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><p>Reads a METRANET format file used for the operational MeteoSwiss polar radar data.</p>
+</dd>
+<dt>usage</dt><dd><p><em>RAD4ALP:datatype</em> where datatype is a pyrad variable name as listed <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_variables.html#metranet-swiss-radars-to-pyrad">here</a>.</p>
+</dd>
+<dt>example</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RhoHV</span> <span class="n">STRUCT</span> <span class="mi">3</span>
+        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">RHOHV_CORRECTION</span>
+        <span class="n">datatype</span> <span class="n">STRARR</span> <span class="mi">5</span>
+                <span class="n">RAD4ALP</span><span class="p">:</span><span class="n">uRhoHV</span>
+                <span class="n">RAD4ALP</span><span class="p">:</span><span class="n">ZDR</span>
+                <span class="n">RAD4ALP</span><span class="p">:</span><span class="n">Nh</span>
+                <span class="n">RAD4ALP</span><span class="p">:</span><span class="n">Nv</span>
+                <span class="n">PROC</span><span class="p">:</span><span class="n">SNRh</span>
+<span class="n">MAKE_GLOBAL</span> <span class="n">INT</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="rad4alpdem">
+<h3>RAD4ALPDEM<a class="headerlink" href="#rad4alpdem" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><p>Used to read visibility data saved in a binary format used by operational MeteoSwiss radars</p>
+</dd>
+<dt>usage</dt><dd><p><em>RAD4ALPDEM:VIS</em></p>
+</dd>
+<dt>example</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DX50_PLA_coloc_gates</span> <span class="n">STRUCT</span> <span class="mi">9</span>
+        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">COLOCATED_GATES</span>
+        <span class="n">datatype</span> <span class="n">STRARR</span> <span class="mi">4</span>
+                <span class="n">RADAR001</span><span class="p">:</span><span class="n">CFRADIAL</span><span class="p">:</span><span class="n">dBZc</span><span class="p">,</span><span class="n">dBZ_avg</span><span class="p">,</span><span class="n">SAVEVOL</span>
+                <span class="n">RADAR001</span><span class="p">:</span><span class="n">DEM</span><span class="p">:</span><span class="n">VIS</span>
+                <span class="n">RADAR002</span><span class="p">:</span><span class="n">CFRADIAL</span><span class="p">:</span><span class="n">dBZc</span><span class="p">,</span><span class="n">dBZ_avg</span><span class="p">,</span><span class="n">SAVEVOL</span>
+                <span class="n">RADAR002</span><span class="p">:</span><span class="n">RAD4ALPDEM</span><span class="p">:</span><span class="n">VIS</span>
+        <span class="n">h_tol</span> <span class="n">FLOAT</span> <span class="mf">100.</span>
+        <span class="n">latlon_tol</span> <span class="n">FLOAT</span> <span class="mf">0.005</span>  <span class="c1"># approx. 500 m tolerance</span>
+        <span class="n">vol_d_tol</span> <span class="n">FLOAT</span> <span class="mf">100.</span>
+        <span class="n">vismin</span> <span class="n">FLOAT</span> <span class="mf">99.</span>
+        <span class="n">hmax</span> <span class="n">FLOAT</span> <span class="mf">10000.</span>
+        <span class="n">elmax</span> <span class="n">FLOAT</span> <span class="mf">20.</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="rad4alpbin">
+<h3>RAD4ALPBIN<a class="headerlink" href="#rad4alpbin" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><p>Used to read data from  operational MeteoSwiss Cartesian products stored as binary files (e.g. ).</p>
+</dd>
+<dt>usage</dt><dd><p><em>RAD4ALPBIN:datatype</em> where datatype is a pyrad variable name as listed <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_variables.html#py-art-to-pyrad">here</a>.</p>
+</dd>
+<dt>example</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dACC</span> <span class="n">STRUCT</span> <span class="mi">3</span>
+        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">RAW_GRID</span>
+        <span class="n">datatype</span> <span class="n">STRING</span> <span class="n">RAD4ALPBIN</span><span class="p">:</span><span class="n">dACC</span>
+        <span class="n">products</span> <span class="n">STRUCT</span> <span class="mi">1</span>
+                <span class="n">SURFACE</span> <span class="n">STRUCT</span> <span class="mi">3</span>
+                        <span class="nb">type</span>  <span class="n">STRING</span> <span class="n">SURFACE_IMAGE</span>
+                        <span class="n">voltype</span> <span class="n">STRING</span> <span class="n">Raccu</span>
+                        <span class="n">level</span> <span class="n">INT</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="rad4alpdoppler">
+<h3>RAD4ALPDOPPLER<a class="headerlink" href="#rad4alpdoppler" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><p>Used to read the MeteoSwiss operational dealiased Doppler velocity</p>
+</dd>
+<dt>usage</dt><dd><p><em>RAD4ALPDOPPLER:dealV</em></p>
+</dd>
+<dt>example</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dealV</span> <span class="n">STRUCT</span> <span class="mi">3</span>
+        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">RAW</span>
+        <span class="n">datatype</span> <span class="n">STRARR</span> <span class="mi">1</span>
+                <span class="n">RAD4ALPDOPPLER</span><span class="p">:</span><span class="n">dealV</span>
+        <span class="n">MAKE_GLOBAL</span> <span class="n">INT</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="rad4alpgif">
+<h3>RAD4ALPGIF<a class="headerlink" href="#rad4alpgif" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><p>Used to read data from  operational MeteoSwiss Cartesian products stored as gif files (e.g. CPC).</p>
+</dd>
+<dt>usage</dt><dd><p><em>RAD4ALPGIF:datatype</em> where datatype is a pyrad variable name as listed <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_variables.html#py-art-to-pyrad">here</a>.
+From this list of variables you will typically use the CPC variables: CPC* (CPC0005, CPC0060, …)</p>
+</dd>
+<dt>example</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CPC0060</span> <span class="n">STRUCT</span> <span class="mi">3</span>
+        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">RAW_GRID</span>
+        <span class="n">datatype</span> <span class="n">STRING</span> <span class="n">RAD4ALPGIF</span><span class="p">:</span><span class="n">CPC0060</span>
+        <span class="n">products</span> <span class="n">STRUCT</span> <span class="mi">1</span>
+                <span class="n">SURFACE</span> <span class="n">STRUCT</span> <span class="mi">3</span>
+                        <span class="nb">type</span>  <span class="n">STRING</span> <span class="n">SURFACE_IMAGE</span>
+                        <span class="n">voltype</span> <span class="n">STRING</span> <span class="n">Raccu</span>
+                        <span class="n">level</span> <span class="n">INT</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="rad4alpgrid">
+<h3>RAD4ALPGRID<a class="headerlink" href="#rad4alpgrid" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><p>Used to read data from operational MeteoSwiss Cartesian products stored in METRANET format.</p>
+</dd>
+<dt>usage</dt><dd><p><em>RAD4ALPGRID:datatype</em> where datatype is a pyrad variable name as listed <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_variables.html#py-art-to-pyrad">here</a>.</p>
+</dd>
+<dt>example</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EZC15</span> <span class="n">STRUCT</span> <span class="mi">3</span>
+        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">RAW_GRID</span>
+        <span class="n">datatype</span> <span class="n">STRING</span> <span class="n">RAD4ALPGRID</span><span class="p">:</span><span class="n">EZC15</span>
+        <span class="n">products</span> <span class="n">STRUCT</span> <span class="mi">2</span>
+                <span class="n">SURFACE</span> <span class="n">STRUCT</span> <span class="mi">4</span>
+                        <span class="nb">type</span>  <span class="n">STRING</span> <span class="n">SURFACE_IMAGE</span>
+                        <span class="n">voltype</span> <span class="n">STRING</span> <span class="n">ETOP15</span>
+                        <span class="n">vmin</span> <span class="n">FLOAT</span> <span class="mi">2</span>
+                        <span class="n">vmax</span> <span class="n">FLOAT</span> <span class="mi">8</span>
+                <span class="n">HISTOGRAM</span> <span class="n">STRUCT</span> <span class="mi">3</span>
+                        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">HISTOGRAM</span>
+                        <span class="n">voltype</span> <span class="n">STRING</span> <span class="n">ETOP15</span>
+                        <span class="n">write_data</span> <span class="n">INT</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="rad4alphydro">
+<h3>RAD4ALPHYDRO<a class="headerlink" href="#rad4alphydro" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><p>Used to read the MeteoSwiss operational hydrometeor classification.</p>
+</dd>
+<dt>usage</dt><dd><p><em>RAD4ALPHYDRO:hydro</em></p>
+</dd>
+<dt>example</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rainrate</span> <span class="n">STRUCT</span> <span class="mi">6</span>
+        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">RAINRATE</span>
+        <span class="n">datatype</span> <span class="n">STRARR</span> <span class="mi">3</span>
+                <span class="n">PROC</span><span class="p">:</span><span class="n">dBZc</span>
+                <span class="n">PROC</span><span class="p">:</span><span class="n">Ah</span>
+                <span class="n">RAD4ALPHYDRO</span><span class="p">:</span><span class="n">hydro</span>
+        <span class="n">RR_METHOD</span> <span class="n">STRING</span> <span class="n">hydro</span>
+        <span class="n">MAKE_GLOBAL</span> <span class="n">INT</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="rad4alpiq">
+<h3>RAD4ALPIQ<a class="headerlink" href="#rad4alpiq" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><p>Used to read raw IQ data from the Swiss operational rad4alp network.</p>
+</dd>
+<dt>usage</dt><dd><p><em>RAD4ALPIQ:datatype</em> where datatype is a pyrad variable name as listed <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_variables.html#py-art-to-pyrad">here</a>.</p>
+</dd>
+<dt>example</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dBZ</span> <span class="n">STRUCT</span> <span class="mi">4</span>
+        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">REFLECTIVITY_IQ</span>
+        <span class="n">datatype</span> <span class="n">STRARR</span> <span class="mi">2</span>
+                <span class="n">RAD4ALPIQ</span><span class="p">:</span><span class="n">IQhhADU</span>
+                <span class="n">RAD4ALPIQ</span><span class="p">:</span><span class="n">IQNADUh</span>
+        <span class="n">subtract_noise</span> <span class="n">INT</span> <span class="mi">1</span>
+        <span class="n">products</span> <span class="n">STRUCT</span> <span class="mi">2</span>
+                <span class="n">ELN00_2</span> <span class="n">STRUCT</span> <span class="mi">3</span>
+                        <span class="nb">type</span>  <span class="n">STRING</span> <span class="n">PPI_IMAGE</span>
+                        <span class="n">anglenr</span> <span class="n">INT</span> <span class="mi">0</span>
+                        <span class="n">voltype</span> <span class="n">STRING</span> <span class="n">dBZ</span>
+                <span class="n">SAVEVOL</span> <span class="n">STRUCT</span> <span class="mi">2</span>
+                        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">SAVEVOL</span>
+                        <span class="n">voltype</span> <span class="n">STRING</span> <span class="n">dBZ</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="satgrid">
+<h3>SATGRID<a class="headerlink" href="#satgrid" title="Permalink to this heading">#</a></h3>
+<dl class="simple">
+<dt>description</dt><dd><p>Used to read CF Netcdf used for the MeteoSat satellite data in the CCS4 (Swiss Radar composite) grid.</p>
+</dd>
+<dt>usage</dt><dd><p><em>SATGRID:datatype</em> where datatype is a pyrad variable name as listed <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_variables.html#py-art-to-pyrad">here</a>.</p>
+</dd>
+</dl>
+</section>
+<section id="mfcfradial">
+<h3>MFCFRADIAL<a class="headerlink" href="#mfcfradial" title="Permalink to this heading">#</a></h3>
+<dl class="simple">
+<dt>description</dt><dd><p>Used to read radar data from MeteoFrance written in CFRadial</p>
+</dd>
+<dt>usage</dt><dd><p><em>MFCFRADIAL:datatype,dataset</em>
+See the data descriptor <em>ODIM</em> for usage info as it works exactly in the same way.</p>
+</dd>
+<dt>example</dt><dd></dd>
+</dl>
+</section>
+</section>
+<section id="meteofrance-specific">
+<h2>MeteoFrance specific<a class="headerlink" href="#meteofrance-specific" title="Permalink to this heading">#</a></h2>
+<section id="mfbin">
+<h3>MFBIN<a class="headerlink" href="#mfbin" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><p>Used to read data from some MeteoFrance products stored as binary files</p>
+</dd>
+<dt>usage</dt><dd><p><em>MFBIN:datatype,dataset</em>
+See the data descriptor <em>ODIM</em> for usage info as it works exactly in the same way.</p>
+</dd>
+<dt>example</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dBZ</span> <span class="n">STRUCT</span> <span class="mi">3</span>
+        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">RAW_GRID</span>
+        <span class="n">datatype</span> <span class="n">STRING</span> <span class="n">MFBIN</span><span class="p">:</span><span class="n">dBZ</span><span class="p">,</span><span class="n">D</span><span class="p">{</span><span class="o">%</span><span class="n">Y</span><span class="o">/%</span><span class="n">m</span><span class="o">/%</span><span class="n">d</span><span class="p">}</span><span class="o">-</span><span class="n">F</span><span class="p">{</span><span class="o">%</span><span class="n">Y</span><span class="o">%</span><span class="n">m</span><span class="o">%</span><span class="n">d</span><span class="o">%</span><span class="n">H</span><span class="o">%</span><span class="n">M</span><span class="o">%</span><span class="n">S</span><span class="p">}</span>
+        <span class="n">products</span> <span class="n">STRUCT</span> <span class="mi">1</span>
+                <span class="n">SURFACE_RAW</span> <span class="n">STRUCT</span> <span class="mi">3</span>
+                        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">SURFACE_RAW</span>
+                        <span class="n">voltype</span> <span class="n">STRING</span> <span class="n">dBZ</span>
+                        <span class="n">anglenr</span> <span class="n">INT</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="mfcf">
+<h3>MFCF<a class="headerlink" href="#mfcf" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><p>Used to read data from some MeteoFrance products stored as netCDF CF files</p>
+</dd>
+<dt>usage</dt><dd><p><em>MFCF:datatype,dataset</em>
+See the data descriptor <em>ODIM</em> for usage info as it works exactly in the same way.</p>
+</dd>
+<dt>example</dt><dd><dl>
+<dt>RR STRUCT 3</dt><dd><p>type STRING RAW_GRID
+datatype STRING MFCF:RR,D{%Y/%m/%d}-F{%Y%m%d%H%M}
+products STRUCT 1</p>
+<blockquote>
+<div><dl class="simple">
+<dt>HISTOGRAM STRUCT 4</dt><dd><p>type STRING HISTOGRAM
+voltype STRING RR
+binwidth_equal INT 1
+write_data INT 1</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="mfdat">
+<h3>MFDAT<a class="headerlink" href="#mfdat" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><p>Used to read data from some MeteoFrance products stored as DAT (text) files</p>
+</dd>
+<dt>usage</dt><dd><p><em>MFDAT:datatype,dataset</em>
+See the data descriptor <em>ODIM</em> for usage info as it works exactly in the same way.</p>
+</dd>
+<dt>example</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RR</span> <span class="n">STRUCT</span> <span class="mi">3</span>
+        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">RAW_GRID</span>
+        <span class="n">datatype</span> <span class="n">STRING</span> <span class="n">MFDAT</span><span class="p">:</span><span class="n">RR</span><span class="p">,</span><span class="n">D</span><span class="p">{}</span><span class="o">-</span><span class="n">F</span><span class="p">{</span><span class="o">%</span><span class="n">Y</span><span class="o">%</span><span class="n">m</span><span class="o">%</span><span class="n">d</span><span class="o">%</span><span class="n">H</span><span class="o">%</span><span class="n">M</span><span class="p">}</span>
+        <span class="n">products</span> <span class="n">STRUCT</span> <span class="mi">1</span>
+                <span class="n">HISTOGRAM</span> <span class="n">STRUCT</span> <span class="mi">4</span>
+                        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">HISTOGRAM</span>
+                        <span class="n">voltype</span> <span class="n">STRING</span> <span class="n">RR</span>
+                        <span class="n">binwidth_equal</span> <span class="n">INT</span> <span class="mi">1</span>
+                        <span class="n">write_data</span> <span class="n">INT</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="mfgrib">
+<h3>MFGRIB<a class="headerlink" href="#mfgrib" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><p>Used to read data from some MeteoFrance products stored as GRIB files.</p>
+</dd>
+<dt>usage</dt><dd><blockquote>
+<div><p><em>MFGRIB:datatype,dataset</em></p>
+</div></blockquote>
+<p>See the data descriptor <em>ODIM</em> for usage info as it works exactly in the same way.</p>
+</dd>
+<dt>example</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">HYDRE</span> <span class="n">STRUCT</span> <span class="mi">3</span>
+        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">RAW_GRID</span>
+        <span class="n">datatype</span> <span class="n">STRING</span> <span class="n">MFGRIB</span><span class="p">:</span><span class="n">prec_type</span><span class="p">,</span><span class="n">D</span><span class="p">{</span><span class="o">%</span><span class="n">Y</span><span class="o">/%</span><span class="n">m</span><span class="o">/%</span><span class="n">d</span><span class="p">}</span><span class="o">-</span><span class="n">F</span><span class="p">{</span><span class="o">%</span><span class="n">Y</span><span class="o">%</span><span class="n">m</span><span class="o">%</span><span class="n">d_</span><span class="o">%</span><span class="n">H</span><span class="o">%</span><span class="n">M</span><span class="p">}</span>
+        <span class="n">products</span> <span class="n">STRUCT</span> <span class="mi">1</span>
+                <span class="n">HISTOGRAM</span> <span class="n">STRUCT</span> <span class="mi">4</span>
+                        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">HISTOGRAM</span>
+                        <span class="n">voltype</span> <span class="n">STRING</span> <span class="n">prec_type</span>
+                        <span class="n">binwidth_equal</span> <span class="n">INT</span> <span class="mi">1</span>
+                        <span class="n">write_data</span> <span class="n">INT</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="mfpng">
+<h3>MFPNG<a class="headerlink" href="#mfpng" title="Permalink to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><p>Used to read data from some MeteoFrance products stored as png files.</p>
+</dd>
+<dt>usage</dt><dd><p><em>MFPNG:datatype,dataset</em>
+See the data descriptor <em>ODIM</em> for usage info as it works exactly in the same way.</p>
+</dd>
+<dt>example</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">HAIL</span> <span class="n">STRUCT</span> <span class="mi">3</span>
+        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">RAW_GRID</span>
+        <span class="n">datatype</span> <span class="n">STRING</span> <span class="n">MFPNG</span><span class="p">:</span><span class="n">prec_type</span><span class="p">,</span><span class="n">D</span><span class="p">{</span><span class="o">%</span><span class="n">Y</span><span class="o">/%</span><span class="n">m</span><span class="o">/%</span><span class="n">d</span><span class="p">}</span><span class="o">-</span><span class="n">F</span><span class="p">{</span><span class="o">%</span><span class="n">Y</span><span class="o">%</span><span class="n">m</span><span class="o">%</span><span class="n">d</span><span class="p">}</span>
+        <span class="n">products</span> <span class="n">STRUCT</span> <span class="mi">1</span>
+                <span class="n">HISTOGRAM</span> <span class="n">STRUCT</span> <span class="mi">4</span>
+                        <span class="nb">type</span> <span class="n">STRING</span> <span class="n">HISTOGRAM</span>
+                        <span class="n">voltype</span> <span class="n">STRING</span> <span class="n">prec_type</span>
+                        <span class="n">binwidth_equal</span> <span class="n">INT</span> <span class="mi">1</span>
+                        <span class="n">write_data</span> <span class="n">INT</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+
+<div class="section ablog__blog_comments">
+  
+  
+</div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="list_products.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">List of pyrad products</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="list_variables.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">List of pyrad variables</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general">General</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cf1">CF1</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cfradial">CFRADIAL</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cfradial2">CFRADIAL2</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cfradialpyrad">CFRADIALPYRAD</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#csv">CSV</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dem">DEM</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gamic">GAMIC</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gecsx">GECSX</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#netcdfspectra">NETCDFSPECTRA</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nexradii">NEXRADII</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#odim">ODIM</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#odimbirds">ODIMBIRDS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#odimgrid">ODIMGRID</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#odimpyrad">ODIMPYRAD</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#odimpyradgrid">ODIMPYRADGRID</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#proc">PROC</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#psr">PSR</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyradgrid">PYRADGRID</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rainbow">RAINBOW</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#meteoswiss-specific">MeteoSwiss specific</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cosmo">COSMO</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cfradialcosmo">CFRADIALCOSMO</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rad4alp">RAD4ALP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rad4alpdem">RAD4ALPDEM</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rad4alpbin">RAD4ALPBIN</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rad4alpdoppler">RAD4ALPDOPPLER</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rad4alpgif">RAD4ALPGIF</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rad4alpgrid">RAD4ALPGRID</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rad4alphydro">RAD4ALPHYDRO</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rad4alpiq">RAD4ALPIQ</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#satgrid">SATGRID</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mfcfradial">MFCFRADIAL</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#meteofrance-specific">MeteoFrance specific</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mfbin">MFBIN</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mfcf">MFCF</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mfdat">MFDAT</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mfgrib">MFGRIB</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mfpng">MFPNG</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../_sources/overview/list_datadescriptors.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
