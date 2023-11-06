@@ -147,7 +147,7 @@ def process_turbulence(procstatus, dscfg, radar_list=None):
             warn('Unknown radar beamwidth. Default 1 deg will be used')
             beamwidth = 1
 
-    rng_res = radar.range['data'][1] - radar.range['data'][0] / 1000.
+    rng_res = (radar.range['data'][1] - radar.range['data'][0]) / 1000.
 
     radar_out = deepcopy(radar)
     radar_out.fields = dict()
@@ -173,8 +173,7 @@ def process_turbulence(procstatus, dscfg, radar_list=None):
         pytda.calc_turb_rhi(
             radar_out, radius=radius, verbose=verbose, name_dz=refl_field,
             name_sw=width_field, turb_name='turbulence',
-            use_ntda=use_ntda, beamwidth=beamwidth, gate_spacing=rng_res,
-            compute_gate_pos=compute_gate_pos)
+            use_ntda=use_ntda, beamwidth=beamwidth, gate_spacing=rng_res)
     else:
         warn('Radar volume of type ' + radar_out.scan_type +
              '. Only volumes of type PPI or RHI are allowed')

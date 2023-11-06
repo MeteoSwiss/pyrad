@@ -1625,6 +1625,18 @@ DEFAULT_METADATA = {
         'coordinates': 'elevation azimuth range'},
 
     # Spectrum width fields
+    doppler_spectrum_width: {
+        'units': 'm/s',
+        'standard_name': 'Doppler_spectrum_width',
+        'long_name': 'Doppler spectrum width',
+        'coordinates': 'elevation azimuth range'},
+        
+    corrected_doppler_spectrum_width: {
+        'units': 'm/s',
+        'standard_name': 'Doppler_spectrum_width',
+        'long_name': 'Corrected Doppler spectrum width',
+        'coordinates': 'elevation azimuth range'},
+        
     spectrum_width: {
         'units': 'm/s',
         'standard_name': 'Doppler_spectrum_width',
@@ -4203,7 +4215,7 @@ DEFAULT_FIELD_LIMITS = {
     unfiltered_spectrum_width: spectrum_width_limit,
     spectrum_width_vv: spectrum_width_limit,
     unfiltered_spectrum_width_vv: spectrum_width_limit,
-    turbulence: (0., 0.2),
+    turbulence: (0., 0.5),
 
     normalized_coherent_power: (0., 1.),
 
