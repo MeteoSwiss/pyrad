@@ -48,6 +48,8 @@ unfiltered_reflectivity_vv = 'unfiltered_reflectivity_vv'
 reflectivity = 'reflectivity'
 reflectivity_vv = 'reflectivity_vv'
 
+reflectivity_flag = 'reflectivity_flag'
+
 normalized_reflectivity = 'normalized_reflectivity'
 linear_reflectivity = 'linear_reflectivity'
 
@@ -314,6 +316,7 @@ radar_estimated_rain_rate = 'radar_estimated_rain_rate'
 corrected_radar_estimated_rain_rate = 'corrected_radar_estimated_rain_rate'
 rainfall_accumulation = 'rainfall_accumulation'
 radar_rainrate_relation = 'radar_rainrate_relation'
+radar_estimated_rain_rate_flag = 'radar_estimated_rain_rate_flag'
 
 # melting layer
 melting_layer = 'melting_layer'
@@ -537,6 +540,7 @@ DEFAULT_FIELD_NAMES = {
     'unfiltered_reflectivity': unfiltered_reflectivity,
     'corrected_unfiltered_reflectivity': corrected_unfiltered_reflectivity,
     'reflectivity_vv': reflectivity_vv,
+    'reflectivity_flag': reflectivity_flag,
     'corrected_reflectivity_vv': corrected_reflectivity_vv,
     'unfiltered_reflectivity_vv': unfiltered_reflectivity_vv,
     'clutter_correction_ratio_hh': clutter_correction_ratio_hh,
@@ -696,6 +700,7 @@ DEFAULT_FIELD_NAMES = {
     'corrected_radar_estimated_rain_rate': corrected_radar_estimated_rain_rate,
     'rainfall_accumulation': rainfall_accumulation,
     'radar_rainrate_relation': radar_rainrate_relation,
+    'radar_estimated_rain_rate_flag': radar_estimated_rain_rate_flag,
     'precipitation_type': precipitation_type,
     'radar_echo_classification': radar_echo_classification,
     'corrected_radar_echo_classification': corrected_radar_echo_classification,
@@ -1312,6 +1317,15 @@ DEFAULT_METADATA = {
         'long_name': 'Vertical Reflectivity',
         'coordinates': 'elevation azimuth range'},
 
+    reflectivity_flag: {
+        'units': '-',
+        'standard_name': 'reflectivity_flag',
+        'long_name': 'Horizontal Reflectivity Flag',
+        'labels': ['hydrometeors', 'clutter', 'saturated', 'interpolated data', 'no data'],
+        'ticks': [0, 1, 2, 3, 4],
+        'boundaries': [-0.5, 0.5, 1.5, 2.5, 3.5, 4.5],
+        'coordinates': 'elevation azimuth range'},
+
     unfiltered_reflectivity_vv: {
         'units': 'dBZ',
         'standard_name': 'vertical_reflectivity',
@@ -1630,13 +1644,13 @@ DEFAULT_METADATA = {
         'standard_name': 'Doppler_spectrum_width',
         'long_name': 'Doppler spectrum width',
         'coordinates': 'elevation azimuth range'},
-        
+
     corrected_doppler_spectrum_width: {
         'units': 'm/s',
         'standard_name': 'Doppler_spectrum_width',
         'long_name': 'Corrected Doppler spectrum width',
         'coordinates': 'elevation azimuth range'},
-        
+
     spectrum_width: {
         'units': 'm/s',
         'standard_name': 'Doppler_spectrum_width',
@@ -2375,6 +2389,19 @@ DEFAULT_METADATA = {
         'labels': ['None', 'Z-R', 'Z-S', 'KDP-R'],
         'ticks': [1, 2, 3, 4],
         'boundaries': [0.5, 1.5, 2.5, 3.5, 4.5],
+        'coordinates': 'elevation azimuth range',
+        'scale_factor': 1,
+        'add_offset': 0,
+        '_FillValue': 0,
+        '_Write_as_dtype': 'uint8'},
+
+    radar_estimated_rain_rate_flag: {
+        'units': '-',
+        'standard_name': 'radar_estimated_rain_rate_flag',
+        'long_name': 'Radar rain rate flag',
+        'labels': ['KDP-R', 'Z-R', 'interpol', 'No data'],
+        'ticks': [0, 1, 2, 3],
+        'boundaries': [-0.5, 0.5, 1.5, 2.5, 3.5],
         'coordinates': 'elevation azimuth range',
         'scale_factor': 1,
         'add_offset': 0,

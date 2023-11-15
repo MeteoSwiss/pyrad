@@ -15,6 +15,7 @@ Auxiliary functions for reading/writing files
     make_filename
     generate_field_name_str
     get_datatype_metranet
+    get_datatype_skyecho
     get_datatype_odim
     get_fieldname_pyart
     get_fieldname_cosmo
@@ -52,6 +53,7 @@ from copy import deepcopy
 import numpy as np
 
 from pyart.config import get_metadata
+from pyart.aux_io import get_sweep_time_coverage
 
 
 def get_rad4alp_prod_fname(datatype):
@@ -711,6 +713,113 @@ def get_datatype_metranet(datatype):
     return {datatype_metranet: field_name}
 
 
+def get_datatype_skyecho(datatype):
+    """
+    maps de config file radar data type name into the corresponding SKYECHO
+    data type name and Py-ART field name
+
+    Parameters
+    ----------
+    datatype : str
+        config file radar data type name
+
+    Returns
+    -------
+    skyecho type : dict
+        dictionary containing the skyecho data type name and its
+        corresponding Py-ART field name
+
+    """
+    if datatype == 'dBZ':
+        datatype_skyecho = 'equivalent_reflectivity_factor_HH'
+        field_name = 'reflectivity'
+    elif datatype == 'dBZ_flag':
+        datatype_skyecho = 'equivalent_reflectivity_factor_HH_flag'
+        field_name = 'reflectivity_flag'
+    elif datatype == 'dBZv':
+        datatype_skyecho = 'equivalent_reflectivity_factor_VV'
+        field_name = 'reflectivity_vv'
+    elif datatype == 'dBZhv':
+        datatype_skyecho = 'equivalent_reflectivity_factor_HV'
+        field_name = 'reflectivity_hv'
+    elif datatype == 'dBZvh':
+        datatype_skyecho = 'equivalent_reflectivity_factor_VH'
+        field_name = 'reflectivity_vh'
+
+    elif datatype == 'V':
+        datatype_skyecho = 'velocity_HH'
+        field_name = 'velocity'
+    elif datatype == 'Vv':
+        datatype_skyecho = 'velocity_VV'
+        field_name = 'velocity_vv'
+    elif datatype == 'Vhv':
+        datatype_skyecho = 'velocity_HV'
+        field_name = 'velocity_hv'
+    elif datatype == 'Vvh':
+        datatype_skyecho = 'velocity_VH'
+        field_name = 'velocity_vh'
+
+    elif datatype == 'W':
+        datatype_skyecho = 'spectrum_width_HH'
+        field_name = 'spectrum_width'
+    elif datatype == 'Wv':
+        datatype_skyecho = 'spectrum_width_VV'
+        field_name = 'spectrum_width_vv'
+    elif datatype == 'Whv':
+        datatype_skyecho = 'spectrum_width_HV'
+        field_name = 'spectrum_width_hv'
+    elif datatype == 'Wvh':
+        datatype_skyecho = 'spectrum_width_VH'
+        field_name = 'spectrum_width_vh'
+
+    elif datatype == 'Nh':
+        datatype_skyecho = 'noise_level_HH'
+        field_name = 'noisedBZ_hh'
+    elif datatype == 'Nv':
+        datatype_skyecho = 'noise_level_VV'
+        field_name = 'noisedBZ_vv'
+
+    elif datatype == 'Nclip_h':
+        datatype_skyecho = 'noise_clipping_level_HH'
+        field_name = 'noise_clipping_level_hh_dBZ'
+    elif datatype == 'Nclip_v':
+        datatype_skyecho = 'noise_clipping_level_VV'
+        field_name = 'noise_clipping_level_vv_dBZ'
+
+    elif datatype == 'PhiDP':
+        datatype_skyecho = 'phidp'
+        field_name = 'differential_phase'
+    elif datatype == 'ZDR':
+        datatype_skyecho = 'ZDR'
+        field_name = 'differential_reflectivity'
+    elif datatype == 'LDRhv':
+        datatype_skyecho = 'LDR_HV'
+        field_name = 'linear_depolariztion_ratio_hv'
+    elif datatype == 'LDRvh':
+        datatype_skyecho = 'LDR_VH'
+        field_name = 'linear_depolariztion_ratio_vh'
+
+    elif datatype == 'RR':
+        datatype_skyecho = 'rainfall_rate'
+        field_name = 'radar_estimated_rain_rate'
+    elif datatype == 'RR_MP':
+        datatype_skyecho = 'rainfall_rate_mp1948'
+        field_name = 'Marshall_Palmer_radar_estimated_rain_rate'
+    elif datatype == 'RR_flag':
+        datatype_skyecho = 'rainfall_rate_flag'
+        field_name = 'radar_estimated_rain_rate_flag'
+
+    elif datatype == 'EDR':
+        datatype_skyecho = 'EDR13'
+        field_name = 'turbulence'
+
+    else:
+        raise ValueError(
+            'ERROR: Metranet fields do not contain datatype ' + datatype)
+
+    return {datatype_skyecho: field_name}
+
+
 def get_datatype_odim(datatype):
     """
     maps the config file radar data type name into the corresponding odim
@@ -1175,6 +1284,8 @@ def get_fieldname_pyart(datatype):
     """
     if datatype == 'dBZ':
         field_name = 'reflectivity'
+    elif datatype == 'dBZ_flag':
+        field_name = 'reflectivity_flag'
     elif datatype == 'dBZ_MF':
         field_name = 'reflectivity'
     elif datatype == 'Zn':
@@ -1195,6 +1306,10 @@ def get_fieldname_pyart(datatype):
         field_name = 'unfiltered_reflectivity_vv'
     elif datatype == 'dBuZvc':
         field_name = 'corrected_unfiltered_reflectivity_vv'
+    elif datatype == 'dBZhv':
+        field_name = 'reflectivity_hv'
+    elif datatype == 'dBZvh':
+        field_name = 'reflectivity_vh'
     elif datatype == 'dBZ_bias':
         field_name = 'reflectivity_bias'
     elif datatype == 'eta_h':
@@ -1228,6 +1343,11 @@ def get_fieldname_pyart(datatype):
     elif datatype == 'ZDR_col':
         field_name = 'differential_reflectivity_column_height'
 
+    elif datatype == 'LDRhv':
+        field_name = 'linear_depolarization_ratio_hv'
+    elif datatype == 'LDRvh':
+        field_name = 'linear_depolarization_ratio_vh'
+
     elif datatype == 'dBm':
         field_name = 'signal_power_hh'
     elif datatype == 'dBmv':
@@ -1253,6 +1373,10 @@ def get_fieldname_pyart(datatype):
         field_name = 'noise_pos_h'
     elif datatype == 'noise_pos_v':
         field_name = 'noise_pos_v'
+    elif datatype == 'Nclip_h':
+        field_name = 'noise_clipping_level_hh_dBZ'
+    elif datatype == 'Nclip_v':
+        field_name = 'noise_clipping_level_vv_dBZ'
     elif datatype == 'WBN':
         field_name = 'wide_band_noise'
     elif datatype == 'WBNc':
@@ -1346,6 +1470,10 @@ def get_fieldname_pyart(datatype):
         field_name = 'velocity'
     elif datatype == 'Vv':
         field_name = 'velocity_vv'
+    elif datatype == 'Vhv':
+        field_name = 'velocity_hv'
+    elif datatype == 'Vvh':
+        field_name = 'velocity_vh'
     elif datatype == 'Vu':
         field_name = 'unfiltered_velocity'
     elif datatype == 'dealV':
@@ -1360,10 +1488,15 @@ def get_fieldname_pyart(datatype):
         field_name = 'retrieved_velocity_std'
     elif datatype == 'diffV':
         field_name = 'velocity_difference'
+
     elif datatype == 'W':
         field_name = 'spectrum_width'
     elif datatype == 'Wv':
         field_name = 'spectrum_width_vv'
+    elif datatype == 'Whv':
+        field_name = 'spectrum_width_hv'
+    elif datatype == 'Wvh':
+        field_name = 'spectrum_width_vh'
     elif datatype == 'Wu':
         field_name = 'unfiltered_spectrum_width'
     elif datatype == 'Wc':
@@ -1466,6 +1599,10 @@ def get_fieldname_pyart(datatype):
         field_name = 'frequency_of_occurrence'
     elif datatype == 'RR':
         field_name = 'radar_estimated_rain_rate'
+    elif datatype == 'RR_MP':
+        field_name = 'Marshall_Palmer_radar_estimated_rain_rate'
+    elif datatype == 'RR_flag':
+        field_name = 'radar_estimated_rain_rate_flag'
     elif datatype == 'RRc':
         field_name = 'corrected_radar_estimated_rain_rate'
     elif datatype == 'Raccu':
@@ -2323,7 +2460,21 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 dayfilelist = glob.glob(pattern)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
-
+            elif datagroup == 'SKYECHO':
+                try:
+                    fpath_strf = dataset[
+                        dataset.find("D") + 2:dataset.find("F") - 2]
+                except AttributeError:
+                    warn('Unknown directory and/or date ' +
+                         'convention, check product config file')
+                daydir = (
+                    starttime + datetime.timedelta(days=i)).strftime(
+                        fpath_strf)
+                datapath = (cfg['datapath'][ind_rad] + daydir + '/')
+                pattern = datapath + '*' + scan + '*'
+                dayfilelist = glob.glob(pattern)
+                for filename in dayfilelist:
+                    t_filelist.append(filename)
             elif datagroup in ('ODIM', 'ODIMBIRDS', 'CFRADIAL', 'CFRADIAL2',
                                'CF1', 'NEXRADII', 'GAMIC', 'ODIMGRID'):
                 if scan is None:
@@ -2523,7 +2674,18 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 for filename in dayfilelist:
                     t_filelist.append(filename)
 
-        if datagroup != 'GECSX':
+        if datagroup == 'GECSX':
+            # For GECSX we ignore time, since the visibility is static
+            filelist = t_filelist
+        elif datagroup == 'SKYECHO':
+            # Each file contains multiple scans
+            for filename in t_filelist:
+                _, tend_sweeps, _, _ = get_sweep_time_coverage(filename)
+                for tend in tend_sweeps:
+                    if starttime <= tend <= endtime:
+                        filelist.append(
+                            f"{str(filename)}::{tend.strftime('%Y-%m-%dT%H:%M:%S.%f')}")
+        else:
             for filename in t_filelist:
                 filenamestr = str(filename)
                 fdatetime = get_datetime(filenamestr, datadescriptor)
@@ -2531,8 +2693,6 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     if starttime <= fdatetime <= endtime:
                         if filenamestr not in filelist:
                             filelist.append(filenamestr)
-        else:  # For GECSX we ignore time, since the visibility is static
-            filelist = t_filelist
 
         if not filelist:
             if pattern is not None:
@@ -2844,7 +3004,7 @@ def get_datatype_fields(datadescriptor):
             elif datagroup in ('ODIM', 'ODIMBIRDS', 'MFCFRADIAL', 'MFBIN',
                                'CFRADIAL2', 'CF1', 'NEXRADII', 'MFPNG',
                                'MFGRIB', 'MFDAT', 'MFCF', 'GAMIC', 'CFRADIAL',
-                               'ODIMGRID'):
+                               'ODIMGRID', 'SKYECHO'):
                 descrfields2 = descrfields[2].split(',')
                 datatype = descrfields2[0]
                 product = None
@@ -2876,7 +3036,7 @@ def get_datatype_fields(datadescriptor):
         elif datagroup in ('ODIM', 'ODIMBIRDS', 'MFCFRADIAL', 'MFBIN',
                            'NEXRADII', 'MFPNG', 'MFGRIB', 'MFDAT', 'MFCF',
                            'CFRADIAL2', 'CF1', 'GAMIC', 'CFRADIAL',
-                           'ODIMGRID'):
+                           'ODIMGRID', 'SKYECHO'):
             descrfields2 = descrfields[1].split(',')
             # warn(" descrfields2:  '%s'" % descrfields2[1])
             if len(descrfields2) == 2:
@@ -3460,6 +3620,10 @@ def _get_datetime(fname, datagroup, ftime_format=None):
     elif datagroup == 'SATGRID':
         datetimestr = bfile[10:22]
         fdatetime = datetime.datetime.strptime(datetimestr, '%Y%m%d%H%M')
+    elif datagroup == 'SKYECHO':
+        datetimestr = bfile.split('::')[1]
+        fdatetime = datetime.datetime.strptime(
+            datetimestr, '%Y-%m-%dT%H:%M:%S.%f')
     else:
         warn('unknown data group')
         return None

@@ -21,6 +21,7 @@ Functions for reading radar data files
     merge_scans_nexrad2
     merge_scans_cfradial
     merge_scans_cfradial2
+    merge_scans_skyecho
     merge_scans_cf1
     merge_scans_mxpol
     merge_scans_cosmo
@@ -87,7 +88,7 @@ from .io_aux import get_datatype_metranet, get_fieldname_pyart, get_file_list
 from .io_aux import get_datatype_odim, find_date_in_file_name
 from .io_aux import get_datatype_fields, get_datetime, map_hydro, map_Doppler
 from .io_aux import find_cosmo_file, find_rad4alpcosmo_file
-from .io_aux import find_pyradcosmo_file
+from .io_aux import find_pyradcosmo_file, get_datatype_skyecho
 from .io_aux import get_rad4alp_prod_fname, get_rad4alp_grid_dir
 from .io_aux import get_rad4alp_dir
 
@@ -153,9 +154,11 @@ def get_data(voltime, datatypesdescr, cfg):
 
             'CFRADIAL': CFRADIAL file format. For such types 'dataset'
                 specifies the directory and file name date convention.
-                Example: ODIM:dBZ,D{%Y-%m-%d}-F{%Y%m%d%H%M%S}. To find out
-                which datatype to use to match a particular ODIM field name
-                check the function 'get_datatype_odim' in pyrad/io/io_aux.py
+                Example: CFRADIAL:dBZ,D{%Y-%m-%d}-F{%Y%m%d%H%M%S}.
+
+            'SKYECHO': SKYECHO netcdf file format. For such types 'dataset'
+                specifies the directory and file name date convention.
+                Example: SKYECHO:dBZ,D{%Y-%m-%d}-F{%Y%m%d%H%M%S}.
 
             'CF1': CF1 file format. For such types 'dataset'
                 specifies the directory and file name date convention.
@@ -259,6 +262,8 @@ def get_data(voltime, datatypesdescr, cfg):
     product_cfradialpyrad = list()
     datatype_cfradial = list()
     dataset_cfradial = list()
+    datatype_skyecho = list()
+    dataset_skyecho = list()
     datatype_cfradial2 = list()
     dataset_cfradial2 = list()
     datatype_cf1 = list()
@@ -337,6 +342,9 @@ def get_data(voltime, datatypesdescr, cfg):
         elif datagroup == 'CFRADIAL':
             datatype_cfradial.append(datatype)
             dataset_cfradial.append(dataset)
+        elif datagroup == 'SKYECHO':
+            datatype_skyecho.append(datatype)
+            dataset_skyecho.append(dataset)
         elif datagroup == 'CFRADIAL2':
             datatype_cfradial2.append(datatype)
             dataset_cfradial2.append(dataset)
@@ -419,6 +427,7 @@ def get_data(voltime, datatypesdescr, cfg):
     ndatatypes_mfcfradial = len(datatype_mfcfradial)
     ndatatypes_nexrad2 = len(datatype_nexrad2)
     ndatatypes_cfradial = len(datatype_cfradial)
+    ndatatypes_skyecho = len(datatype_skyecho)
     ndatatypes_cfradialpyrad = len(datatype_cfradialpyrad)
     ndatatypes_cfradial2 = len(datatype_cfradial2)
     ndatatypes_cf1 = len(datatype_cf1)
@@ -539,6 +548,17 @@ def get_data(voltime, datatypesdescr, cfg):
             cfg['datapath'][ind_rad], cfg['ScanList'][ind_rad], radar_name,
             radar_res, voltime, datatype_cfradial, dataset_cfradial, cfg,
             ind_rad=ind_rad)
+
+    elif ndatatypes_skyecho > 0:
+        try:
+            radar_name = cfg['RadarName'][ind_rad]
+            radar_res = cfg['RadarRes'][ind_rad]
+        except TypeError:
+            radar_name = None
+            radar_res = None
+        radar = merge_scans_skyecho(
+            cfg['datapath'][ind_rad], cfg['ScanList'][ind_rad], voltime,
+            datatype_skyecho, dataset_skyecho, cfg, ind_rad=ind_rad)
 
     elif ndatatypes_cfradial2 > 0:
         try:
@@ -2223,6 +2243,10 @@ def merge_scans_nexrad2(basepath, scan_list, radar_name, radar_res, voltime,
         base path of nexrad radar data
     scan_list : list
         list of scans
+    radar_name : str
+        radar name
+    radar_res : str
+        radar resolution type
     voltime: datetime object
         reference time of the scan
     datatype_list : list
@@ -2333,6 +2357,10 @@ def merge_scans_cfradial(basepath, scan_list, radar_name, radar_res, voltime,
         base path of CFRADIAL radar data
     scan_list : list
         list of scans
+    radar_name : str
+        radar name
+    radar_res : str
+        radar resolution type
     voltime: datetime object
         reference time of the scan
     datatype_list : list
@@ -2488,6 +2516,10 @@ def merge_scans_cfradial2(basepath, scan_list, radar_name, radar_res, voltime,
         base path of CFRADIAL2 radar data
     scan_list : list
         list of scans
+    radar_name : str
+        radar name
+    radar_res : str
+        radar resolution type
     voltime: datetime object
         reference time of the scan
     datatype_list : list
@@ -2669,6 +2701,89 @@ def merge_scans_cfradial2(basepath, scan_list, radar_name, radar_res, voltime,
         ele_min=elmin, ele_max=elmax, azi_min=azmin, azi_max=azmax)
 
 
+def merge_scans_skyecho(basepath, scan_list, voltime, datatype_list,
+                        dataset_list, cfg, ind_rad=0):
+    """
+    merge SKYECHO data.
+
+    Parameters
+    ----------
+    basepath : str
+        base path of CFRADIAL radar data
+    scan_list : list
+        list of scans
+    voltime: datetime object
+        reference time of the scan
+    datatype_list : list
+        lists of data types to get
+    dataset_list : list
+        list of datasets. Used to get path
+    cfg : dict
+        configuration dictionary
+    ind_rad : int
+        radar index
+
+    Returns
+    -------
+    radar : Radar
+        radar object
+
+    """
+    skyecho_field_names = dict()
+    for datatype in datatype_list:
+        skyecho_field_names.update(get_datatype_skyecho(datatype))
+
+    radar = None
+
+    fpath_strf = (
+        dataset_list[0][
+            dataset_list[0].find("D") + 2:dataset_list[0].find("F") - 2])
+    fdate_strf = dataset_list[0][dataset_list[0].find("F") + 2:-1]
+    datapath = (basepath + voltime.strftime(fpath_strf) + '/')
+    filenames = glob.glob(datapath + '*' + scan_list[0] + '*')
+    filename = []
+    time_ref = datetime.datetime.strptime(
+        voltime.strftime('%Y%m%d000000'), '%Y%m%d%H%M%S')
+    for filename_aux in filenames:
+        fdatetime = find_date_in_file_name(
+            filename_aux, date_format=fdate_strf)
+        if fdatetime == time_ref:
+            filename = [filename_aux]
+
+    if not filename:
+        warn('No file found in ' + datapath[0] + basename + timeinfo + '*.*')
+    else:
+        radar = pyart.aux_io.read_skyecho(
+            filename[0], sweep_end_time=voltime,
+            field_names=skyecho_field_names)
+
+    rmin = None
+    rmax = None
+    elmin = None
+    elmax = None
+    azmin = None
+    azmax = None
+    if cfg['rmin'] is not None:
+        rmin = cfg['rmin'][ind_rad]
+    if cfg['rmax'] is not None:
+        rmax = cfg['rmax'][ind_rad]
+    if cfg['elmin'] is not None:
+        elmin = cfg['elmin'][ind_rad]
+    if cfg['elmax'] is not None:
+        elmax = cfg['elmax'][ind_rad]
+    if cfg['azmin'] is not None:
+        azmin = cfg['azmin'][ind_rad]
+    if cfg['azmax'] is not None:
+        azmax = cfg['azmax'][ind_rad]
+
+    if radar is None:
+        return radar
+
+    return pyart.util.subset_radar(
+        radar, radar.fields.keys(), rng_min=rmin, rng_max=rmax,
+        ele_min=elmin, ele_max=elmax, azi_min=azmin, azi_max=azmax)
+
+
 def merge_scans_cf1(basepath, scan_list, radar_name, radar_res, voltime,
                     datatype_list, dataset_list, cfg, ind_rad=0):
     """
@@ -2680,6 +2795,10 @@ def merge_scans_cf1(basepath, scan_list, radar_name, radar_res, voltime,
         base path of CF1 radar data
     scan_list : list
         list of scans
+    radar_name : str
+        radar name
+    radar_res : str
+        radar resolution type
     voltime: datetime object
         reference time of the scan
     datatype_list : list
