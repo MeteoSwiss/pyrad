@@ -53,8 +53,13 @@ from copy import deepcopy
 import numpy as np
 
 from pyart.config import get_metadata
-from pyart.aux_io import get_sweep_time_coverage
 
+try:
+   from pyart.aux_io import get_sweep_time_coverage
+except ImportError:
+   warn('Could not get the get_sweep_time_coverage from pyart')
+   warn('You are likely using ARM Py-ART and not the MCH fork')
+   warn('You will not be able to read skyecho data') 
 
 def get_rad4alp_prod_fname(datatype):
     """
@@ -2581,8 +2586,6 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
             elif datagroup in ('GECSX'):
                 termination = '.nc'
                 # Choose any date
-                import pdb
-                pdb.set_trace()
                 datapath = (cfg['gecsxbasepath'][ind_rad] +
                             cfg['gecsxname'][ind_rad] + '/' +
                             dataset + '/' + product + '/')
