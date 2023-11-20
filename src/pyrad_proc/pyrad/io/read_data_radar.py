@@ -2751,7 +2751,7 @@ def merge_scans_skyecho(basepath, scan_list, voltime, datatype_list,
             filename = [filename_aux]
 
     if not filename:
-        warn('No file found in ' + datapath[0] + basename + timeinfo + '*.*')
+        warn('No file found in ' + datapath + '*.*')
     else:
         radar = pyart.aux_io.read_skyecho(
             filename[0], sweep_end_time=voltime,
