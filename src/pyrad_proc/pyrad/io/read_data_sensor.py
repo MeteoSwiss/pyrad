@@ -28,6 +28,7 @@ Functions for reading data from other sensors
     read_coord_sensors
     read_disdro_scattering
     read_disdro
+    read_disdro_parsivel
     read_radiosounding
 """
 
@@ -38,9 +39,9 @@ import csv
 from warnings import warn
 from copy import deepcopy
 import re
+from io import StringIO
 import pandas as pd
 import requests
-from io import StringIO
 import numpy as np
 
 from pyart.config import get_fillvalue
@@ -1411,7 +1412,7 @@ def read_lightning(fname, filter_data=True):
                                      'lat', 'lon', 'alt', 'dBm'],
                 delimiter=' ')
 
-            time_data = list()
+            time_data = []
             for i, row in enumerate(reader):
                 flashnr[i] = int(row['flashnr'])
                 time_data.append(fdatetime + datetime.timedelta(
@@ -1661,7 +1662,7 @@ def read_lightning_all(fname,
             lon = np.ma.empty(nrows, dtype=float)
             alt = np.ma.empty(nrows, dtype=float)
             dBm = np.ma.empty(nrows, dtype=float)
-            pol_vals_dict = dict()
+            pol_vals_dict = {}
             for label in labels:
                 pol_vals_dict.update({label: np.ma.empty(nrows, dtype=float)})
 
@@ -1753,7 +1754,35 @@ def get_sensor_data(date, datatype, cfg):
             return None, None, None, None
         label = 'Disdro'
         period = (sensordate[1] - sensordate[0]).total_seconds()
+    elif cfg['sensor'] == 'disdro_parsivel':
+        if datatype in ('dBZ', 'dBZc'):
+            sensor_datatype = 'dBZ'
+        else:
+            sensor_datatype = datatype
 
+        datapath = (
+            f'{cfg["disdropath"]}{cfg["sensorid"]}/disdro-1min/'
+            f'{date.strftime("%Y")}/')
+        datafile = f'{date.strftime("%Y%m%d")}.csv'
+
+        df_disdro = read_disdro_parsivel(datapath + datafile)
+        sensordate = df_disdro['t_0'].values
+        if datatype in ('dBZ', 'dBZc'):
+            substr = 'Disdro_RadarRef_Q5'
+        else:
+            substr = 'Disdro_Intensity_Q5'
+
+        sensorvalue = None
+        for col in df_disdro.columns:
+            if substr in col:
+                sensorvalue = df_disdro[col].values
+        if sensorvalue is None:
+            warn(f'No data in file {datapath}{datafile}')
+            return None, None, None, None
+
+        label = 'Disdro'
+        period = (
+            df_disdro['t_0'][1] - df_disdro['t_0'][0]).total_seconds()
     else:
         warn('Unknown sensor: ' + cfg['sensor'])
         return None, None, None, None
@@ -1793,7 +1822,7 @@ def read_smn(fname):
             # now read the data
             csvfile.seek(0)
             reader = csv.DictReader(csvfile)
-            date = list()
+            date = []
             for i, row in enumerate(reader):
                 smn_id[i] = float(row['StationID'])
                 date.append(datetime.datetime.strptime(
@@ -1866,7 +1895,7 @@ def read_smn2(fname):
 
             reader = csv.DictReader(
                 csvfile, fieldnames=['StationID', 'DateTime', 'Value'])
-            date = list()
+            date = []
             for i, row in enumerate(reader):
                 smn_id[i] = float(row['StationID'])
                 date.append(datetime.datetime.strptime(
@@ -1991,7 +2020,7 @@ def read_disdro_scattering(fname):
                                      'zv', 'zdr', 'ldr', 'ah', 'av', 'adiff',
                                      'kdp', 'deltaco', 'rhohv'],
                 dialect='excel-tab')
-            date = list()
+            date = []
             for i, row in enumerate(reader):
                 date.append(datetime.datetime.strptime(
                     row['date'], '%Y-%m-%d %H:%M:%S'))
@@ -2058,8 +2087,8 @@ def read_disdro(fname):
                 (row for row in csvfile if not row.startswith('#')),
                 delimiter=',')
             i = 0
-            date = list()
-            preciptype = list()
+            date = []
+            preciptype = []
             for row in reader:
                 date.append(datetime.datetime.strptime(
                     row['date'], '%Y-%m-%d %H:%M:%S'))
@@ -2077,17 +2106,40 @@ def read_disdro(fname):
         warn('Unable to read file ' + fname)
         return (None, None, None, None)
 
+
+def read_disdro_parsivel(fname):
+    """
+    Reads data collected by a parsivel disdrometer and stored in a csv file
+
+    Parameters
+    ----------
+    fname : str
+        csv file name
+
+    Returns
+    -------
+    df_disdro: Pandas DataFrame
+        DataFrame containing the read values
+
+    """
+    df_disdro = pd.read_csv(fname, sep=';')
+    df_disdro['t_0'] = pd.to_datetime(
+        df_disdro['t_0'], format='%Y-%m-%d %H:%M:%S')
+    return df_disdro
+
+
 def read_radiosounding(station, datetime_obj):
     """
     Download radiosounding data from the University of Wyoming website.
 
     Parameters:
     - station (str): Radiosounding station code (e.g., "72776").
-    - datetime_obj (datetime.datetime): Datetime object specifying the desired date
-      and time.
+    - datetime_obj (datetime.datetime): Datetime object specifying the desired
+    date and time.
 
     Returns:
-    pandas.DataFrame: A DataFrame containing the radiosounding data with columns:
+    pandas.DataFrame: A DataFrame containing the radiosounding data with
+    columns:
     ['PRES', 'HGHT', 'TEMP', 'DWPT', 'RELH', 'MIXR', 'DRCT', 'SKNT', 'THTA',
     'THTE', 'THTV]
     """
@@ -2103,7 +2155,7 @@ def read_radiosounding(station, datetime_obj):
         "STNM": station
     }
 
-    response = requests.get(base_url, params=query_params, verify = False)
+    response = requests.get(base_url, params=query_params, verify=False)
 
     if response.status_code != 200:
         return None
@@ -2114,10 +2166,9 @@ def read_radiosounding(station, datetime_obj):
     data_str = response.text[start_idx:end_idx][0:-10]
 
     data_io = StringIO(data_str)
-    data_df = pd.read_csv(data_io, sep='\s+', header=0, skiprows = [1,2],
-        error_bad_lines=False, 
-    )
+    data_df = pd.read_csv(
+        data_io, sep='\s+', header=0, skiprows=[1, 2],
+        error_bad_lines=False,)
     for col in data_df.columns:
         data_df[col] = pd.to_numeric(data_df[col])
     return data_df
-

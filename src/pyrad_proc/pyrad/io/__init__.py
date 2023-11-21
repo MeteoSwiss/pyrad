@@ -79,6 +79,7 @@ Reading other data
     read_smn2
     read_coord_sensors
     read_disdro_scattering
+    read_disdro_parsivel
     read_sun_hits
     read_sun_hits_multiple_days
     read_sun_retrieval
@@ -109,7 +110,7 @@ Reading other data
     read_ml_ts
     read_windmills_data
     read_radiosounding
-    
+
 Writing data
 ==================
 
@@ -241,7 +242,7 @@ from .read_data_sensor import read_meteorage, read_trt_info_all, read_trt_info #
 from .read_data_sensor import read_thundertracking_info, read_windmills_data # noqa
 from .read_data_sensor import read_trt_info2, read_trt_info_all2 # noqa
 from .read_data_sensor import read_trt_thundertracking_traj_data # noqa
-from .read_data_sensor import read_coord_sensors # noqa
+from .read_data_sensor import read_coord_sensors, read_disdro_parsivel # noqa
 from .read_data_sensor import read_radiosounding # noqa
 
 from .read_data_sun import read_sun_hits_multiple_days, read_sun_hits # noqa
@@ -268,7 +269,7 @@ from .io_aux import get_save_dir, make_filename, get_new_rainbow_file_name # noq
 from .io_aux import get_datetime, get_dataset_fields, map_hydro, map_Doppler # noqa
 from .io_aux import get_file_list, get_trtfile_list, get_datatype_fields # noqa
 from .io_aux import get_fieldname_pyart, get_field_unit, get_fieldname_cosmo # noqa
-from .io_aux import generate_field_name_str, find_raw_cosmo_file # noqa 
+from .io_aux import generate_field_name_str, find_raw_cosmo_file # noqa
 from .io_aux import find_hzt_file, _get_datetime, get_rad4alp_prod_fname # noqa
 from .io_aux import get_rad4alp_dir, get_rad4alp_grid_dir, find_iso0_file # noqa
 from .io_aux import find_iso0_grib_file, find_date_in_file_name # noqa
