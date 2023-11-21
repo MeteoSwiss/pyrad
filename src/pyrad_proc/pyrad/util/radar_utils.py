@@ -2007,12 +2007,12 @@ def compute_average_vad(radar_list, z_want, signs, lat0, lon0):
     refl_fields = []
     for i, radar in enumerate(radar_list):
         # Find vel and refl fields
-        field_names_rad = radar.fields.keys()
-        vel_field = field_names_rad[[
-            'velocity' in vname for vname in field_names_rad][0]]
+        field_names_rad = list(radar.fields.keys())
+        vel_field = field_names_rad[np.where([
+            'velocity' in vname for vname in field_names_rad])[0][0]]
         vel_fields.append(vel_field)
-        refl_field = field_names_rad[[
-            'reflectivity' in vname for vname in field_names_rad][0]]
+        refl_field = field_names_rad[np.where([
+            'reflectivity' in vname for vname in field_names_rad])[0][0]]
         refl_fields.append(refl_field)
 
     
