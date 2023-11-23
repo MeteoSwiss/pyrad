@@ -32,26 +32,22 @@ def dict_to_restructured_text(yaml_data):
     rst_output.append('List of pyrad products')
     rst_output.append('==============================\n')
 
-    for key, value in yaml_data.items():
-        rst_output.append(f"{key}")
+    for datasettype, value in yaml_data.items():
+        rst_output.append(f"{datasettype}")
         rst_output.append("-----------------------------")
 
-        for key2, value2 in yaml_data[key].items():
-            if key2 == 'all_products':
-                 rst_output.append(f'All products of the {value2} type')
-                 rst_output.append('')
-                 continue
-            if 'description' not in value2.keys():
+        for product, prodinfo in yaml_data[datasettype].items():
+            if 'description' not in prodinfo.keys():
                 continue
-            rst_output.append(f"{key2}")
+            rst_output.append(f"{product}")
             rst_output.append('""""""""""""""""""""""""""""""')
             rst_output.append('description')
-            rst_output.append('   ' + value2['description'] + f'\n `[Source] <{value2["link"]}>`_' )
+            rst_output.append('   ' + prodinfo['description'] + f'\n `[Source] <{prodinfo["link"]}>`_' )
             rst_output.append('parameters')
-            params = parameters_to_dict(value2['parameters'])
-            for key3, value3 in params.items():
-                rst_output.append('   ' + key3)
-                rst_output.append('       ' + value3)
+            params = parameters_to_dict(prodinfo['parameters'])
+            for param, paraminfo in params.items():
+                rst_output.append('   ' + param)
+                rst_output.append('       ' + paraminfo)
             rst_output.append('')
             # rst_output.append(f"\n\n{value2['parameters']}\n\n")
     return '\n'.join(rst_output)
@@ -63,25 +59,26 @@ def process_file(filepath):
     all_products = {}
     started = False
     product = None
-    reading_title = False
-    reading_params = False
     for i,line in enumerate(content):
         if 'def generate' in line:
             function = line.split('def')[1].split('(')[0].strip()
             all_products[function] = {}
-        if 'All the products of the' in line:
-            all_products[function]['all_products'] = line.split("'")[1]
-            print(all_products[function]['all_products'])
+            reading_title = False
+            reading_params = False
         if 'Accepted product types:' in line:
             started = True
             reading_params = False
         if started:
             match = re.findall("^'[A-Z0-9_]*'\\s*:\\d*", line.strip())
-            if 'Parameters' in line:
+            if 'Parameters' in line: # End of block with product list
                 reading_params = False
             if len(match):
                 reading_params = False
                 reading_title = True
+                if product in all_products[function]:
+                    all_products[function][product]['description'] = " ".join(
+                        descr.replace('\n', '').split())
+
                 product = match[0].replace("'", "").split(':')[0].strip()
                 descr = line.split(':')[1].strip()
                 all_products[function][product] = {}
