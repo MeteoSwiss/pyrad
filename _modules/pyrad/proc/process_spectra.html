@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -28,30 +27,27 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../_static/clipboard.min.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
-    <script src="../../../_static/design-tabs.js"></script>
+    <script src="../../../_static/documentation_options.js?v=daef7da6"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyrad/proc/process_spectra';</script>
-    <script src="../../../_static/doc_shared.js"></script>
+    <script src="../../../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 
@@ -419,7 +415,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">..io.io_aux</span> <span class="kn">import</span> <span class="n">get_datatype_fields</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span>
 
 
-<div class="viewcode-block" id="process_raw_spectra"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_raw_spectra.html#pyrad.proc.process_raw_spectra">[docs]</a><span class="k">def</span> <span class="nf">process_raw_spectra</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="process_raw_spectra">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_raw_spectra.html#pyrad.proc.process_raw_spectra">[docs]</a>
+<span class="k">def</span> <span class="nf">process_raw_spectra</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dummy function that returns the initial input data set</span>
 
@@ -457,7 +455,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_ifft"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_ifft.html#pyrad.proc.process_ifft">[docs]</a><span class="k">def</span> <span class="nf">process_ifft</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_ifft">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_ifft.html#pyrad.proc.process_ifft">[docs]</a>
+<span class="k">def</span> <span class="nf">process_ifft</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the Doppler spectrum width from the spectral reflectivity</span>
 
@@ -540,7 +541,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_spectra_point"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectra_point.html#pyrad.proc.process_spectra_point">[docs]</a><span class="k">def</span> <span class="nf">process_spectra_point</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_spectra_point">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectra_point.html#pyrad.proc.process_spectra_point">[docs]</a>
+<span class="k">def</span> <span class="nf">process_spectra_point</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Obtains the spectra or IQ data at a point location.</span>
 
@@ -897,7 +901,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_filter_0Doppler"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_filter_0Doppler.html#pyrad.proc.process_filter_0Doppler">[docs]</a><span class="k">def</span> <span class="nf">process_filter_0Doppler</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_filter_0Doppler">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_filter_0Doppler.html#pyrad.proc.process_filter_0Doppler">[docs]</a>
+<span class="k">def</span> <span class="nf">process_filter_0Doppler</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function to filter the 0-Doppler line bin and neighbours of the</span>
 <span class="sd">    Doppler spectra</span>
@@ -975,7 +982,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_filter_srhohv"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_filter_srhohv.html#pyrad.proc.process_filter_srhohv">[docs]</a><span class="k">def</span> <span class="nf">process_filter_srhohv</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_filter_srhohv">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_filter_srhohv.html#pyrad.proc.process_filter_srhohv">[docs]</a>
+<span class="k">def</span> <span class="nf">process_filter_srhohv</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Filter Doppler spectra as a function of spectral RhoHV</span>
 
@@ -1057,7 +1067,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_filter_spectra_noise"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_filter_spectra_noise.html#pyrad.proc.process_filter_spectra_noise">[docs]</a><span class="k">def</span> <span class="nf">process_filter_spectra_noise</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_filter_spectra_noise">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_filter_spectra_noise.html#pyrad.proc.process_filter_spectra_noise">[docs]</a>
+<span class="k">def</span> <span class="nf">process_filter_spectra_noise</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Filter the noise of the Doppler spectra by clipping any data below</span>
 <span class="sd">    the noise level plus a margin</span>
@@ -1146,7 +1159,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_spectra_ang_avg"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectra_ang_avg.html#pyrad.proc.process_spectra_ang_avg">[docs]</a><span class="k">def</span> <span class="nf">process_spectra_ang_avg</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_spectra_ang_avg">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectra_ang_avg.html#pyrad.proc.process_spectra_ang_avg">[docs]</a>
+<span class="k">def</span> <span class="nf">process_spectra_ang_avg</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function to average the spectra over the rays. This function is</span>
 <span class="sd">    intended mainly for vertically pointing scans. The function assumes</span>
@@ -1246,7 +1262,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_spectral_power"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectral_power.html#pyrad.proc.process_spectral_power">[docs]</a><span class="k">def</span> <span class="nf">process_spectral_power</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_spectral_power">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectral_power.html#pyrad.proc.process_spectral_power">[docs]</a>
+<span class="k">def</span> <span class="nf">process_spectral_power</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the spectral power</span>
 
@@ -1318,7 +1337,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_spectral_noise"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectral_noise.html#pyrad.proc.process_spectral_noise">[docs]</a><span class="k">def</span> <span class="nf">process_spectral_noise</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_spectral_noise">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectral_noise.html#pyrad.proc.process_spectral_noise">[docs]</a>
+<span class="k">def</span> <span class="nf">process_spectral_noise</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the spectral noise</span>
 
@@ -1389,7 +1411,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_spectral_phase"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectral_phase.html#pyrad.proc.process_spectral_phase">[docs]</a><span class="k">def</span> <span class="nf">process_spectral_phase</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_spectral_phase">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectral_phase.html#pyrad.proc.process_spectral_phase">[docs]</a>
+<span class="k">def</span> <span class="nf">process_spectral_phase</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the spectral phase</span>
 
@@ -1445,7 +1470,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_spectral_reflectivity"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectral_reflectivity.html#pyrad.proc.process_spectral_reflectivity">[docs]</a><span class="k">def</span> <span class="nf">process_spectral_reflectivity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_spectral_reflectivity">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectral_reflectivity.html#pyrad.proc.process_spectral_reflectivity">[docs]</a>
+<span class="k">def</span> <span class="nf">process_spectral_reflectivity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes spectral reflectivity</span>
 
@@ -1531,7 +1559,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_spectral_differential_reflectivity"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectral_differential_reflectivity.html#pyrad.proc.process_spectral_differential_reflectivity">[docs]</a><span class="k">def</span> <span class="nf">process_spectral_differential_reflectivity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span>
+
+<div class="viewcode-block" id="process_spectral_differential_reflectivity">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectral_differential_reflectivity.html#pyrad.proc.process_spectral_differential_reflectivity">[docs]</a>
+<span class="k">def</span> <span class="nf">process_spectral_differential_reflectivity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span>
                                                <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes spectral differential reflectivity</span>
@@ -1626,7 +1657,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_spectral_differential_phase"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectral_differential_phase.html#pyrad.proc.process_spectral_differential_phase">[docs]</a><span class="k">def</span> <span class="nf">process_spectral_differential_phase</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_spectral_differential_phase">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectral_differential_phase.html#pyrad.proc.process_spectral_differential_phase">[docs]</a>
+<span class="k">def</span> <span class="nf">process_spectral_differential_phase</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the spectral differential phase</span>
 
@@ -1699,7 +1733,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_spectral_rhohv"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectral_rhohv.html#pyrad.proc.process_spectral_rhohv">[docs]</a><span class="k">def</span> <span class="nf">process_spectral_rhohv</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_spectral_rhohv">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectral_rhohv.html#pyrad.proc.process_spectral_rhohv">[docs]</a>
+<span class="k">def</span> <span class="nf">process_spectral_rhohv</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the spectral RhoHV</span>
 
@@ -1769,7 +1806,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_pol_variables"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_pol_variables.html#pyrad.proc.process_pol_variables">[docs]</a><span class="k">def</span> <span class="nf">process_pol_variables</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_pol_variables">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_pol_variables.html#pyrad.proc.process_pol_variables">[docs]</a>
+<span class="k">def</span> <span class="nf">process_pol_variables</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the polarimetric variables from the complex spectra</span>
 
@@ -1871,7 +1911,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_noise_power"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_noise_power.html#pyrad.proc.process_noise_power">[docs]</a><span class="k">def</span> <span class="nf">process_noise_power</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_noise_power">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_noise_power.html#pyrad.proc.process_noise_power">[docs]</a>
+<span class="k">def</span> <span class="nf">process_noise_power</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the noise power from the spectra</span>
 
@@ -1941,7 +1984,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_reflectivity"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_reflectivity.html#pyrad.proc.process_reflectivity">[docs]</a><span class="k">def</span> <span class="nf">process_reflectivity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_reflectivity">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_reflectivity.html#pyrad.proc.process_reflectivity">[docs]</a>
+<span class="k">def</span> <span class="nf">process_reflectivity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes reflectivity from the spectral reflectivity</span>
 
@@ -2003,7 +2049,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_differential_reflectivity"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_differential_reflectivity.html#pyrad.proc.process_differential_reflectivity">[docs]</a><span class="k">def</span> <span class="nf">process_differential_reflectivity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_differential_reflectivity">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_differential_reflectivity.html#pyrad.proc.process_differential_reflectivity">[docs]</a>
+<span class="k">def</span> <span class="nf">process_differential_reflectivity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes differential reflectivity from the horizontal and vertical</span>
 <span class="sd">    spectral reflectivity</span>
@@ -2065,7 +2114,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_differential_phase"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_differential_phase.html#pyrad.proc.process_differential_phase">[docs]</a><span class="k">def</span> <span class="nf">process_differential_phase</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_differential_phase">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_differential_phase.html#pyrad.proc.process_differential_phase">[docs]</a>
+<span class="k">def</span> <span class="nf">process_differential_phase</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the differential phase from the spectral differential phase and</span>
 <span class="sd">    the spectral reflectivity</span>
@@ -2126,7 +2178,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_rhohv"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_rhohv.html#pyrad.proc.process_rhohv">[docs]</a><span class="k">def</span> <span class="nf">process_rhohv</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_rhohv">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_rhohv.html#pyrad.proc.process_rhohv">[docs]</a>
+<span class="k">def</span> <span class="nf">process_rhohv</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes RhoHV from the complex spectras</span>
 
@@ -2224,7 +2279,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_Doppler_velocity"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_Doppler_velocity.html#pyrad.proc.process_Doppler_velocity">[docs]</a><span class="k">def</span> <span class="nf">process_Doppler_velocity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_Doppler_velocity">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_Doppler_velocity.html#pyrad.proc.process_Doppler_velocity">[docs]</a>
+<span class="k">def</span> <span class="nf">process_Doppler_velocity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the Doppler velocity from the spectral reflectivity</span>
 
@@ -2285,7 +2343,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_Doppler_width"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_Doppler_width.html#pyrad.proc.process_Doppler_width">[docs]</a><span class="k">def</span> <span class="nf">process_Doppler_width</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_Doppler_width">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_Doppler_width.html#pyrad.proc.process_Doppler_width">[docs]</a>
+<span class="k">def</span> <span class="nf">process_Doppler_width</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the Doppler spectrum width from the spectral reflectivity</span>
 
@@ -2344,6 +2405,7 @@ document.write(`
     <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">width_field</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
+
 </pre></div>
 <div class="section ablog__blog_comments">
   
@@ -2387,7 +2449,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
   </p>
 </div>

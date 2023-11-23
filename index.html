@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -7,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Pyrad: Python Radar Data Processing &#8212; Pyrad 1.8.6 documentation</title>
   
@@ -29,30 +28,27 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="_static/pyart-theme.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="_static/pyart-theme.css?v=40b48845" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/clipboard.min.js"></script>
-    <script src="_static/copybutton.js"></script>
-    <script src="_static/design-tabs.js"></script>
+    <script src="_static/documentation_options.js?v=daef7da6"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
-    <script src="_static/doc_shared.js"></script>
+    <script src="_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="User Guide" href="userguide/index.html" />
@@ -352,7 +348,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
 <section id="pyrad-python-radar-data-processing">
-<h1>Pyrad: Python Radar Data Processing<a class="headerlink" href="#pyrad-python-radar-data-processing" title="Permalink to this heading">#</a></h1>
+<h1>Pyrad: Python Radar Data Processing<a class="headerlink" href="#pyrad-python-radar-data-processing" title="Link to this heading">#</a></h1>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
@@ -360,7 +356,7 @@ document.write(`
 <div class="toctree-wrapper compound">
 </div>
 <section id="about-pyrad">
-<h2>About Pyrad<a class="headerlink" href="#about-pyrad" title="Permalink to this heading">#</a></h2>
+<h2>About Pyrad<a class="headerlink" href="#about-pyrad" title="Link to this heading">#</a></h2>
 <p>Pyrad is a real-time data processing framework developed by MeteoSwiss and MeteoFrance. The framework is aimed at processing and visualizing polar data from individual weather radars as well as composite Cartesian products both off-line and in real time. It is written in the Python language. The framework is version controlled and automatic documentation is generated based on doc-strings. It is capable of ingesting data from all the weather radars in Switzerland, namely the operational MeteoSwiss C-band rad4alp radar network, the MeteoSwiss X-band DX50 radar and the EPFL MXPol radar and radar data in the OPERA file format. Additionally, it can ingest C/FRadial and NEXRAD level 2 files.</p>
 <p>The processing flow is controlled by 3 simple configuration files. Multiple levels of processing can be performed. At each level new datasets (e.g. attenuation corrected reflectivity) are created which can be stored in a file and/or used in the next processing level (for example, creating a rainfall rate dataset from the corrected reflectivity). Multiple products can be generated from each dataset (e.g. PPI, RHI images, histograms, etc.). In the off-line mode, data from multiple radars can be ingested in order to obtain products such as the inter-comparison of reflectivity values at co-located range gates.</p>
 <p>The framework is able to ingest polarimetric and Doppler radar moments as well as auxiliary data such as numerical weather prediction parameters (e.g. temperature, wind speed, etc.), DEM-based visibility and data used in the generation of the products such as rain gauge measurements, disdrometer measurements, solar flux, etc. It can as well work with I/Q data, spectral data and Cartesian data.</p>
@@ -368,13 +364,13 @@ document.write(`
 <p>The processing framework has multiple and expanding capabilities, include various forms of echo classification and filtering, differential phase and specific differential phase estimation, attenuation correction, data quality monitoring, multiple rainfall rate algorithms, etc. In addition time series of data in points, regions or trajectories of interest can be extracted and comparisons can be performed with other sensors. This is particularly useful when performing measurement campaigns where remote sensing retrievals are validated with in-situ airplane or ground-based measurements.</p>
 </section>
 <section id="development">
-<h2>Development<a class="headerlink" href="#development" title="Permalink to this heading">#</a></h2>
+<h2>Development<a class="headerlink" href="#development" title="Link to this heading">#</a></h2>
 <p>We welcome contributions, suggestions of developments and bug reports.</p>
 <p>Suggestions of developments and bug reports should use the Issues page of the <a class="reference external" href="https://github.com/Meteoswiss/pyrad/issues">github repository</a>.</p>
 <p>The process to contribute by partners external to MeteoSwiss is described in the <a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/additional_doc/pyrad_user_manual.pdf">user manual</a>.</p>
 </section>
 <section id="citing-pyrad">
-<h2>Citing Pyrad<a class="headerlink" href="#citing-pyrad" title="Permalink to this heading">#</a></h2>
+<h2>Citing Pyrad<a class="headerlink" href="#citing-pyrad" title="Link to this heading">#</a></h2>
 <p>The core of Pyrad is based on Py-ART. Py-ART was originally developed in the context of the ARM Research Facility. If you use Pyrad for your work, please cite BOTH Py-ART and Pyrad papers in your paper:</p>
 <ul class="simple">
 <li><p>J.J. Helmus, S.M. Collis, (2016). The Python ARM Radar Toolkit (Py-ART), a Library for Working with Weather Radar Data in the Python Programming Language. Journal of Open Research Software. 4(1), p.e25. DOI: <a class="reference external" href="http://doi.org/10.5334/jors.119">http://doi.org/10.5334/jors.119</a></p></li>
@@ -385,7 +381,7 @@ document.write(`
 </ul>
 </section>
 <section id="disclaimer">
-<h2>Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this heading">#</a></h2>
+<h2>Disclaimer<a class="headerlink" href="#disclaimer" title="Link to this heading">#</a></h2>
 <p>MeteoSwiss cannot be held responsible for errors in the code or problems that could arise from its use.</p>
 </section>
 </section>
@@ -466,7 +462,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
   </p>
 </div>

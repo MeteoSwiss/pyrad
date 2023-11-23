@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -28,30 +27,27 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../_static/clipboard.min.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
-    <script src="../../../_static/design-tabs.js"></script>
+    <script src="../../../_static/documentation_options.js?v=daef7da6"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyrad/io/read_data_iso0_mf';</script>
-    <script src="../../../_static/doc_shared.js"></script>
+    <script src="../../../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 
@@ -408,7 +404,9 @@ document.write(`
     <span class="n">_PYGRIB_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 
-<div class="viewcode-block" id="iso2radar_data"><a class="viewcode-back" href="../../../API/generated/pyrad.io.iso2radar_data.html#pyrad.io.iso2radar_data">[docs]</a><span class="k">def</span> <span class="nf">iso2radar_data</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">iso0_data</span><span class="p">,</span> <span class="n">time_info</span><span class="p">,</span> <span class="n">iso0_statistic</span><span class="o">=</span><span class="s1">&#39;avg_by_dist&#39;</span><span class="p">,</span>
+<div class="viewcode-block" id="iso2radar_data">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.iso2radar_data.html#pyrad.io.iso2radar_data">[docs]</a>
+<span class="k">def</span> <span class="nf">iso2radar_data</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">iso0_data</span><span class="p">,</span> <span class="n">time_info</span><span class="p">,</span> <span class="n">iso0_statistic</span><span class="o">=</span><span class="s1">&#39;avg_by_dist&#39;</span><span class="p">,</span>
                    <span class="n">field_name</span><span class="o">=</span><span class="s1">&#39;height_over_iso0&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    get the iso0 value corresponding to each radar gate</span>
@@ -479,7 +477,10 @@ document.write(`
     <span class="k">return</span> <span class="n">field_dict</span></div>
 
 
-<div class="viewcode-block" id="grib2radar_data"><a class="viewcode-back" href="../../../API/generated/pyrad.io.grib2radar_data.html#pyrad.io.grib2radar_data">[docs]</a><span class="k">def</span> <span class="nf">grib2radar_data</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">iso0_data</span><span class="p">,</span> <span class="n">time_info</span><span class="p">,</span> <span class="n">time_interp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+
+<div class="viewcode-block" id="grib2radar_data">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.grib2radar_data.html#pyrad.io.grib2radar_data">[docs]</a>
+<span class="k">def</span> <span class="nf">grib2radar_data</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">iso0_data</span><span class="p">,</span> <span class="n">time_info</span><span class="p">,</span> <span class="n">time_interp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                     <span class="n">field_name</span><span class="o">=</span><span class="s1">&#39;height_over_iso0&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    get the iso0 value corresponding to each radar gate</span>
@@ -567,7 +568,10 @@ document.write(`
     <span class="k">return</span> <span class="n">field_dict</span></div>
 
 
-<div class="viewcode-block" id="get_iso0_ref"><a class="viewcode-back" href="../../../API/generated/pyrad.io.get_iso0_ref.html#pyrad.io.get_iso0_ref">[docs]</a><span class="k">def</span> <span class="nf">get_iso0_ref</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">iso0_data</span><span class="p">,</span> <span class="n">time_index</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="s1">&#39;avg_by_dist&#39;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_iso0_ref">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.get_iso0_ref.html#pyrad.io.get_iso0_ref">[docs]</a>
+<span class="k">def</span> <span class="nf">get_iso0_ref</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">iso0_data</span><span class="p">,</span> <span class="n">time_index</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="s1">&#39;avg_by_dist&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    gets the is0 that has to be taken as reference. The iso0 is an average of</span>
 <span class="sd">    the iso0 points available weighted by the distance to the radar. If no</span>
@@ -621,7 +625,10 @@ document.write(`
         <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dist_iso</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="read_iso0_mf_data"><a class="viewcode-back" href="../../../API/generated/pyrad.io.read_iso0_mf_data.html#pyrad.io.read_iso0_mf_data">[docs]</a><span class="k">def</span> <span class="nf">read_iso0_mf_data</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+
+<div class="viewcode-block" id="read_iso0_mf_data">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.read_iso0_mf_data.html#pyrad.io.read_iso0_mf_data">[docs]</a>
+<span class="k">def</span> <span class="nf">read_iso0_mf_data</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads iso-0 degree data from a MF NWP in text format</span>
 
@@ -718,7 +725,10 @@ document.write(`
     <span class="k">return</span> <span class="n">iso0_data</span></div>
 
 
-<div class="viewcode-block" id="read_iso0_grib_data"><a class="viewcode-back" href="../../../API/generated/pyrad.io.read_iso0_grib_data.html#pyrad.io.read_iso0_grib_data">[docs]</a><span class="k">def</span> <span class="nf">read_iso0_grib_data</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+
+<div class="viewcode-block" id="read_iso0_grib_data">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.read_iso0_grib_data.html#pyrad.io.read_iso0_grib_data">[docs]</a>
+<span class="k">def</span> <span class="nf">read_iso0_grib_data</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a 2D field of iso-0 degree data from a MF NWP in GRIB format</span>
 
@@ -757,6 +767,7 @@ document.write(`
         <span class="s1">&#39;lats&#39;</span><span class="p">:</span> <span class="n">lats</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">iso0_data</span></div>
+
 </pre></div>
 <div class="section ablog__blog_comments">
   
@@ -800,7 +811,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
   </p>
 </div>

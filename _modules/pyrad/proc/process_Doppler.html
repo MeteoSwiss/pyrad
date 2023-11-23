@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -28,30 +27,27 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../_static/clipboard.min.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
-    <script src="../../../_static/design-tabs.js"></script>
+    <script src="../../../_static/documentation_options.js?v=daef7da6"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyrad/proc/process_Doppler';</script>
-    <script src="../../../_static/doc_shared.js"></script>
+    <script src="../../../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 
@@ -420,7 +416,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.process_grid</span> <span class="kn">import</span> <span class="n">process_grid</span>
 <span class="kn">from</span> <span class="nn">..util</span> <span class="kn">import</span> <span class="n">compute_average_vad</span>
 
-<div class="viewcode-block" id="process_turbulence"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_turbulence.html#pyrad.proc.process_turbulence">[docs]</a><span class="k">def</span> <span class="nf">process_turbulence</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="process_turbulence">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_turbulence.html#pyrad.proc.process_turbulence">[docs]</a>
+<span class="k">def</span> <span class="nf">process_turbulence</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes turbulence from the Doppler spectrum width and reflectivity using</span>
 <span class="sd">    the PyTDA package</span>
@@ -562,7 +560,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_dealias_fourdd"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_dealias_fourdd.html#pyrad.proc.process_dealias_fourdd">[docs]</a><span class="k">def</span> <span class="nf">process_dealias_fourdd</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_dealias_fourdd">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_dealias_fourdd.html#pyrad.proc.process_dealias_fourdd">[docs]</a>
+<span class="k">def</span> <span class="nf">process_dealias_fourdd</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dealiases the Doppler velocity field using the 4DD technique</span>
 <span class="sd">    from Curtis and Houze, 2001</span>
@@ -666,7 +667,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_dealias_region_based"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_dealias_region_based.html#pyrad.proc.process_dealias_region_based">[docs]</a><span class="k">def</span> <span class="nf">process_dealias_region_based</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_dealias_region_based">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_dealias_region_based.html#pyrad.proc.process_dealias_region_based">[docs]</a>
+<span class="k">def</span> <span class="nf">process_dealias_region_based</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dealiases the Doppler velocity field using a region based algorithm</span>
 
@@ -755,7 +759,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_dealias_unwrap_phase"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_dealias_unwrap_phase.html#pyrad.proc.process_dealias_unwrap_phase">[docs]</a><span class="k">def</span> <span class="nf">process_dealias_unwrap_phase</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_dealias_unwrap_phase">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_dealias_unwrap_phase.html#pyrad.proc.process_dealias_unwrap_phase">[docs]</a>
+<span class="k">def</span> <span class="nf">process_dealias_unwrap_phase</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dealiases the Doppler velocity field using multi-dimensional phase</span>
 <span class="sd">    unwrapping</span>
@@ -824,7 +831,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_radial_velocity"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_radial_velocity.html#pyrad.proc.process_radial_velocity">[docs]</a><span class="k">def</span> <span class="nf">process_radial_velocity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_radial_velocity">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_radial_velocity.html#pyrad.proc.process_radial_velocity">[docs]</a>
+<span class="k">def</span> <span class="nf">process_radial_velocity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates the radial velocity respect to the radar from the wind velocity</span>
 
@@ -952,7 +962,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_wind_vel"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_wind_vel.html#pyrad.proc.process_wind_vel">[docs]</a><span class="k">def</span> <span class="nf">process_wind_vel</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_wind_vel">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_wind_vel.html#pyrad.proc.process_wind_vel">[docs]</a>
+<span class="k">def</span> <span class="nf">process_wind_vel</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates the horizontal or vertical component of the wind from the</span>
 <span class="sd">    radial velocity</span>
@@ -1014,7 +1027,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_windshear"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_windshear.html#pyrad.proc.process_windshear">[docs]</a><span class="k">def</span> <span class="nf">process_windshear</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_windshear">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_windshear.html#pyrad.proc.process_windshear">[docs]</a>
+<span class="k">def</span> <span class="nf">process_windshear</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates the wind shear from the wind velocity</span>
 
@@ -1073,7 +1089,10 @@ document.write(`
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
-<div class="viewcode-block" id="process_windshear_lidar"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_windshear_lidar.html#pyrad.proc.process_windshear_lidar">[docs]</a><span class="k">def</span> <span class="nf">process_windshear_lidar</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_windshear_lidar">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_windshear_lidar.html#pyrad.proc.process_windshear_lidar">[docs]</a>
+<span class="k">def</span> <span class="nf">process_windshear_lidar</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates the wind shear from the wind velocity of lidar scans</span>
 
@@ -1132,7 +1151,10 @@ document.write(`
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
-<div class="viewcode-block" id="process_vad"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_vad.html#pyrad.proc.process_vad">[docs]</a><span class="k">def</span> <span class="nf">process_vad</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_vad">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_vad.html#pyrad.proc.process_vad">[docs]</a>
+<span class="k">def</span> <span class="nf">process_vad</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates vertical wind profile using the VAD (velocity Azimuth Display)</span>
 <span class="sd">    technique</span>
@@ -1203,7 +1225,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_dda"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_dda.html#pyrad.proc.process_dda">[docs]</a><span class="k">def</span> <span class="nf">process_dda</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_dda">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_dda.html#pyrad.proc.process_dda">[docs]</a>
+<span class="k">def</span> <span class="nf">process_dda</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates horizontal wind speed and direction with a multi-doppler approach</span>
 <span class="sd">    This method uses the python package pyDDA</span>
@@ -1464,6 +1489,7 @@ document.write(`
     <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_grid</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_radar_list</span></div>
+
 </pre></div>
 <div class="section ablog__blog_comments">
   
@@ -1507,7 +1533,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
   </p>
 </div>

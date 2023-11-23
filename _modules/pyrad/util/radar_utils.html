@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -28,30 +27,27 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../_static/clipboard.min.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
-    <script src="../../../_static/design-tabs.js"></script>
+    <script src="../../../_static/documentation_options.js?v=daef7da6"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyrad/util/radar_utils';</script>
-    <script src="../../../_static/doc_shared.js"></script>
+    <script src="../../../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 
@@ -445,7 +441,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.stat_utils</span> <span class="kn">import</span> <span class="n">quantiles_weighted</span>
 
 
-<div class="viewcode-block" id="get_data_along_rng"><a class="viewcode-back" href="../../../API/generated/pyrad.util.get_data_along_rng.html#pyrad.util.get_data_along_rng">[docs]</a><span class="k">def</span> <span class="nf">get_data_along_rng</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">fix_elevations</span><span class="p">,</span> <span class="n">fix_azimuths</span><span class="p">,</span>
+<div class="viewcode-block" id="get_data_along_rng">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.get_data_along_rng.html#pyrad.util.get_data_along_rng">[docs]</a>
+<span class="k">def</span> <span class="nf">get_data_along_rng</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">fix_elevations</span><span class="p">,</span> <span class="n">fix_azimuths</span><span class="p">,</span>
                        <span class="n">ang_tol</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">rmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_altitude</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get data at particular (azimuths, elevations)</span>
@@ -597,7 +595,10 @@ document.write(`
     <span class="k">return</span> <span class="n">xvals</span><span class="p">,</span> <span class="n">yvals</span><span class="p">,</span> <span class="n">valid_azi</span><span class="p">,</span> <span class="n">valid_ele</span></div>
 
 
-<div class="viewcode-block" id="get_data_along_azi"><a class="viewcode-back" href="../../../API/generated/pyrad.util.get_data_along_azi.html#pyrad.util.get_data_along_azi">[docs]</a><span class="k">def</span> <span class="nf">get_data_along_azi</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">fix_ranges</span><span class="p">,</span> <span class="n">fix_elevations</span><span class="p">,</span>
+
+<div class="viewcode-block" id="get_data_along_azi">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.get_data_along_azi.html#pyrad.util.get_data_along_azi">[docs]</a>
+<span class="k">def</span> <span class="nf">get_data_along_azi</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">fix_ranges</span><span class="p">,</span> <span class="n">fix_elevations</span><span class="p">,</span>
                        <span class="n">rng_tol</span><span class="o">=</span><span class="mf">50.</span><span class="p">,</span> <span class="n">ang_tol</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">azi_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">azi_stop</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -677,7 +678,10 @@ document.write(`
     <span class="k">return</span> <span class="n">xvals</span><span class="p">,</span> <span class="n">yvals</span><span class="p">,</span> <span class="n">valid_rng</span><span class="p">,</span> <span class="n">valid_ele</span></div>
 
 
-<div class="viewcode-block" id="get_data_along_ele"><a class="viewcode-back" href="../../../API/generated/pyrad.util.get_data_along_ele.html#pyrad.util.get_data_along_ele">[docs]</a><span class="k">def</span> <span class="nf">get_data_along_ele</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">fix_ranges</span><span class="p">,</span> <span class="n">fix_azimuths</span><span class="p">,</span>
+
+<div class="viewcode-block" id="get_data_along_ele">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.get_data_along_ele.html#pyrad.util.get_data_along_ele">[docs]</a>
+<span class="k">def</span> <span class="nf">get_data_along_ele</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">fix_ranges</span><span class="p">,</span> <span class="n">fix_azimuths</span><span class="p">,</span>
                        <span class="n">rng_tol</span><span class="o">=</span><span class="mf">50.</span><span class="p">,</span> <span class="n">ang_tol</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">ele_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">ele_max</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -752,7 +756,10 @@ document.write(`
     <span class="k">return</span> <span class="n">xvals</span><span class="p">,</span> <span class="n">yvals</span><span class="p">,</span> <span class="n">valid_rng</span><span class="p">,</span> <span class="n">valid_azi</span></div>
 
 
-<div class="viewcode-block" id="get_ROI"><a class="viewcode-back" href="../../../API/generated/pyrad.util.get_ROI.html#pyrad.util.get_ROI">[docs]</a><span class="k">def</span> <span class="nf">get_ROI</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">fieldname</span><span class="p">,</span> <span class="n">sector</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_ROI">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.get_ROI.html#pyrad.util.get_ROI">[docs]</a>
+<span class="k">def</span> <span class="nf">get_ROI</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">fieldname</span><span class="p">,</span> <span class="n">sector</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    filter out any data outside the region of interest defined by sector</span>
 
@@ -808,7 +815,10 @@ document.write(`
     <span class="k">return</span> <span class="n">roi_flag</span></div>
 
 
-<div class="viewcode-block" id="rainfall_accumulation"><a class="viewcode-back" href="../../../API/generated/pyrad.util.rainfall_accumulation.html#pyrad.util.rainfall_accumulation">[docs]</a><span class="k">def</span> <span class="nf">rainfall_accumulation</span><span class="p">(</span><span class="n">t_in_vec</span><span class="p">,</span> <span class="n">val_in_vec</span><span class="p">,</span> <span class="n">cum_time</span><span class="o">=</span><span class="mf">3600.</span><span class="p">,</span>
+
+<div class="viewcode-block" id="rainfall_accumulation">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.rainfall_accumulation.html#pyrad.util.rainfall_accumulation">[docs]</a>
+<span class="k">def</span> <span class="nf">rainfall_accumulation</span><span class="p">(</span><span class="n">t_in_vec</span><span class="p">,</span> <span class="n">val_in_vec</span><span class="p">,</span> <span class="n">cum_time</span><span class="o">=</span><span class="mf">3600.</span><span class="p">,</span>
                           <span class="n">base_time</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">dropnan</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the rainfall accumulation of a time series over a given period</span>
@@ -857,7 +867,10 @@ document.write(`
     <span class="k">return</span> <span class="n">t_out_vec</span><span class="p">,</span> <span class="n">val_out_vec</span><span class="p">,</span> <span class="n">np_vec</span></div>
 
 
-<div class="viewcode-block" id="time_series_statistics"><a class="viewcode-back" href="../../../API/generated/pyrad.util.time_series_statistics.html#pyrad.util.time_series_statistics">[docs]</a><span class="k">def</span> <span class="nf">time_series_statistics</span><span class="p">(</span><span class="n">t_in_vec</span><span class="p">,</span> <span class="n">val_in_vec</span><span class="p">,</span> <span class="n">avg_time</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span>
+
+<div class="viewcode-block" id="time_series_statistics">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.time_series_statistics.html#pyrad.util.time_series_statistics">[docs]</a>
+<span class="k">def</span> <span class="nf">time_series_statistics</span><span class="p">(</span><span class="n">t_in_vec</span><span class="p">,</span> <span class="n">val_in_vec</span><span class="p">,</span> <span class="n">avg_time</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span>
                            <span class="n">base_time</span><span class="o">=</span><span class="mi">1800</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">dropnan</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes statistics over a time-averaged series. Only of package pandas is</span>
@@ -902,7 +915,10 @@ document.write(`
     <span class="k">return</span> <span class="n">t_out_vec</span><span class="p">,</span> <span class="n">val_out_vec</span></div>
 
 
-<div class="viewcode-block" id="find_contiguous_times"><a class="viewcode-back" href="../../../API/generated/pyrad.util.find_contiguous_times.html#pyrad.util.find_contiguous_times">[docs]</a><span class="k">def</span> <span class="nf">find_contiguous_times</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">600</span><span class="p">):</span>
+
+<div class="viewcode-block" id="find_contiguous_times">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.find_contiguous_times.html#pyrad.util.find_contiguous_times">[docs]</a>
+<span class="k">def</span> <span class="nf">find_contiguous_times</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">600</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given and array of ordered times, find those contiguous according to</span>
 <span class="sd">    a maximum time step</span>
@@ -950,7 +966,10 @@ document.write(`
     <span class="k">return</span> <span class="n">start_times</span><span class="p">,</span> <span class="n">end_times</span></div>
 
 
-<div class="viewcode-block" id="join_time_series"><a class="viewcode-back" href="../../../API/generated/pyrad.util.join_time_series.html#pyrad.util.join_time_series">[docs]</a><span class="k">def</span> <span class="nf">join_time_series</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">val1</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">val2</span><span class="p">,</span> <span class="n">dropnan</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+<div class="viewcode-block" id="join_time_series">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.join_time_series.html#pyrad.util.join_time_series">[docs]</a>
+<span class="k">def</span> <span class="nf">join_time_series</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">val1</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">val2</span><span class="p">,</span> <span class="n">dropnan</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    joins time_series. Only of package pandas is available otherwise returns</span>
 <span class="sd">    None.</span>
@@ -994,7 +1013,10 @@ document.write(`
     <span class="k">return</span> <span class="n">t_out_vec</span><span class="p">,</span> <span class="n">val1_out_vec</span><span class="p">,</span> <span class="n">val2_out_vec</span></div>
 
 
-<div class="viewcode-block" id="get_range_bins_to_avg"><a class="viewcode-back" href="../../../API/generated/pyrad.util.get_range_bins_to_avg.html#pyrad.util.get_range_bins_to_avg">[docs]</a><span class="k">def</span> <span class="nf">get_range_bins_to_avg</span><span class="p">(</span><span class="n">rad1_rng</span><span class="p">,</span> <span class="n">rad2_rng</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_range_bins_to_avg">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.get_range_bins_to_avg.html#pyrad.util.get_range_bins_to_avg">[docs]</a>
+<span class="k">def</span> <span class="nf">get_range_bins_to_avg</span><span class="p">(</span><span class="n">rad1_rng</span><span class="p">,</span> <span class="n">rad2_rng</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compares the resolution of two radars and determines if and which radar</span>
 <span class="sd">    has to be averaged and the length of the averaging window</span>
@@ -1039,7 +1061,10 @@ document.write(`
     <span class="k">return</span> <span class="n">avg_rad1</span><span class="p">,</span> <span class="n">avg_rad2</span><span class="p">,</span> <span class="n">avg_rad_lim</span></div>
 
 
-<div class="viewcode-block" id="get_cercle_coords"><a class="viewcode-back" href="../../../API/generated/pyrad.util.get_cercle_coords.html#pyrad.util.get_cercle_coords">[docs]</a><span class="k">def</span> <span class="nf">get_cercle_coords</span><span class="p">(</span><span class="n">x_centre</span><span class="p">,</span> <span class="n">y_centre</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">1000.</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_cercle_coords">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.get_cercle_coords.html#pyrad.util.get_cercle_coords">[docs]</a>
+<span class="k">def</span> <span class="nf">get_cercle_coords</span><span class="p">(</span><span class="n">x_centre</span><span class="p">,</span> <span class="n">y_centre</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">1000.</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the points defining a cercle from the position of its centre and the</span>
 <span class="sd">    radius</span>
@@ -1074,7 +1099,10 @@ document.write(`
     <span class="k">return</span> <span class="n">x_roi</span><span class="p">,</span> <span class="n">y_roi</span></div>
 
 
-<div class="viewcode-block" id="belongs_roi_indices"><a class="viewcode-back" href="../../../API/generated/pyrad.util.belongs_roi_indices.html#pyrad.util.belongs_roi_indices">[docs]</a><span class="k">def</span> <span class="nf">belongs_roi_indices</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">roi</span><span class="p">,</span> <span class="n">use_latlon</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+<div class="viewcode-block" id="belongs_roi_indices">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.belongs_roi_indices.html#pyrad.util.belongs_roi_indices">[docs]</a>
+<span class="k">def</span> <span class="nf">belongs_roi_indices</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">roi</span><span class="p">,</span> <span class="n">use_latlon</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the indices of points that belong to roi in a list of points</span>
 
@@ -1143,7 +1171,10 @@ document.write(`
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">inds</span><span class="p">),</span> <span class="n">is_roi</span></div>
 
 
-<div class="viewcode-block" id="find_ray_index"><a class="viewcode-back" href="../../../API/generated/pyrad.util.find_ray_index.html#pyrad.util.find_ray_index">[docs]</a><span class="k">def</span> <span class="nf">find_ray_index</span><span class="p">(</span><span class="n">ele_vec</span><span class="p">,</span> <span class="n">azi_vec</span><span class="p">,</span> <span class="n">ele</span><span class="p">,</span> <span class="n">azi</span><span class="p">,</span> <span class="n">ele_tol</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">azi_tol</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+
+<div class="viewcode-block" id="find_ray_index">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.find_ray_index.html#pyrad.util.find_ray_index">[docs]</a>
+<span class="k">def</span> <span class="nf">find_ray_index</span><span class="p">(</span><span class="n">ele_vec</span><span class="p">,</span> <span class="n">azi_vec</span><span class="p">,</span> <span class="n">ele</span><span class="p">,</span> <span class="n">azi</span><span class="p">,</span> <span class="n">ele_tol</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">azi_tol</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
                    <span class="n">nearest</span><span class="o">=</span><span class="s1">&#39;azi&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find the ray index corresponding to a particular elevation and azimuth</span>
@@ -1183,7 +1214,10 @@ document.write(`
     <span class="k">return</span> <span class="n">ind_ray</span><span class="p">[</span><span class="n">ind_min</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="find_rng_index"><a class="viewcode-back" href="../../../API/generated/pyrad.util.find_rng_index.html#pyrad.util.find_rng_index">[docs]</a><span class="k">def</span> <span class="nf">find_rng_index</span><span class="p">(</span><span class="n">rng_vec</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">rng_tol</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
+
+<div class="viewcode-block" id="find_rng_index">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.find_rng_index.html#pyrad.util.find_rng_index">[docs]</a>
+<span class="k">def</span> <span class="nf">find_rng_index</span><span class="p">(</span><span class="n">rng_vec</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">rng_tol</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find the range index corresponding to a particular range</span>
 
@@ -1208,6 +1242,7 @@ document.write(`
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">return</span> <span class="n">ind_rng</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">find_ang_index</span><span class="p">(</span><span class="n">ang_vec</span><span class="p">,</span> <span class="n">ang</span><span class="p">,</span> <span class="n">ang_tol</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
@@ -1237,7 +1272,9 @@ document.write(`
     <span class="k">return</span> <span class="n">ind_ang</span>
 
 
-<div class="viewcode-block" id="find_nearest_gate"><a class="viewcode-back" href="../../../API/generated/pyrad.util.find_nearest_gate.html#pyrad.util.find_nearest_gate">[docs]</a><span class="k">def</span> <span class="nf">find_nearest_gate</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">latlon_tol</span><span class="o">=</span><span class="mf">0.0005</span><span class="p">):</span>
+<div class="viewcode-block" id="find_nearest_gate">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.find_nearest_gate.html#pyrad.util.find_nearest_gate">[docs]</a>
+<span class="k">def</span> <span class="nf">find_nearest_gate</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">latlon_tol</span><span class="o">=</span><span class="mf">0.0005</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find the radar gate closest to a lat,lon point</span>
 
@@ -1286,7 +1323,10 @@ document.write(`
     <span class="k">return</span> <span class="n">ind_ray</span><span class="p">,</span> <span class="n">ind_rng</span><span class="p">,</span> <span class="n">azi</span><span class="p">,</span> <span class="n">rng</span></div>
 
 
-<div class="viewcode-block" id="find_colocated_indexes"><a class="viewcode-back" href="../../../API/generated/pyrad.util.find_colocated_indexes.html#pyrad.util.find_colocated_indexes">[docs]</a><span class="k">def</span> <span class="nf">find_colocated_indexes</span><span class="p">(</span><span class="n">radar1</span><span class="p">,</span> <span class="n">radar2</span><span class="p">,</span> <span class="n">rad1_ele</span><span class="p">,</span> <span class="n">rad1_azi</span><span class="p">,</span> <span class="n">rad1_rng</span><span class="p">,</span>
+
+<div class="viewcode-block" id="find_colocated_indexes">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.find_colocated_indexes.html#pyrad.util.find_colocated_indexes">[docs]</a>
+<span class="k">def</span> <span class="nf">find_colocated_indexes</span><span class="p">(</span><span class="n">radar1</span><span class="p">,</span> <span class="n">radar2</span><span class="p">,</span> <span class="n">rad1_ele</span><span class="p">,</span> <span class="n">rad1_azi</span><span class="p">,</span> <span class="n">rad1_rng</span><span class="p">,</span>
                            <span class="n">rad2_ele</span><span class="p">,</span> <span class="n">rad2_azi</span><span class="p">,</span> <span class="n">rad2_rng</span><span class="p">,</span> <span class="n">ele_tol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
                            <span class="n">azi_tol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">rng_tol</span><span class="o">=</span><span class="mf">50.</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1352,7 +1392,10 @@ document.write(`
     <span class="k">return</span> <span class="n">ind_ray_rad1</span><span class="p">,</span> <span class="n">ind_rng_rad1</span><span class="p">,</span> <span class="n">ind_ray_rad2</span><span class="p">,</span> <span class="n">ind_rng_rad2</span></div>
 
 
-<div class="viewcode-block" id="time_avg_range"><a class="viewcode-back" href="../../../API/generated/pyrad.util.time_avg_range.html#pyrad.util.time_avg_range">[docs]</a><span class="k">def</span> <span class="nf">time_avg_range</span><span class="p">(</span><span class="n">timeinfo</span><span class="p">,</span> <span class="n">avg_starttime</span><span class="p">,</span> <span class="n">avg_endtime</span><span class="p">,</span> <span class="n">period</span><span class="p">):</span>
+
+<div class="viewcode-block" id="time_avg_range">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.time_avg_range.html#pyrad.util.time_avg_range">[docs]</a>
+<span class="k">def</span> <span class="nf">time_avg_range</span><span class="p">(</span><span class="n">timeinfo</span><span class="p">,</span> <span class="n">avg_starttime</span><span class="p">,</span> <span class="n">avg_endtime</span><span class="p">,</span> <span class="n">period</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    finds the new start and end time of an averaging</span>
 
@@ -1389,7 +1432,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_starttime</span><span class="p">,</span> <span class="n">new_endtime</span></div>
 
 
-<div class="viewcode-block" id="get_closest_solar_flux"><a class="viewcode-back" href="../../../API/generated/pyrad.util.get_closest_solar_flux.html#pyrad.util.get_closest_solar_flux">[docs]</a><span class="k">def</span> <span class="nf">get_closest_solar_flux</span><span class="p">(</span><span class="n">hit_datetime_list</span><span class="p">,</span> <span class="n">flux_datetime_list</span><span class="p">,</span>
+
+<div class="viewcode-block" id="get_closest_solar_flux">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.get_closest_solar_flux.html#pyrad.util.get_closest_solar_flux">[docs]</a>
+<span class="k">def</span> <span class="nf">get_closest_solar_flux</span><span class="p">(</span><span class="n">hit_datetime_list</span><span class="p">,</span> <span class="n">flux_datetime_list</span><span class="p">,</span>
                            <span class="n">flux_value_list</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    finds the solar flux measurement closest to the sun hit</span>
@@ -1433,7 +1479,10 @@ document.write(`
     <span class="k">return</span> <span class="n">flux_datetime_closest_list</span><span class="p">,</span> <span class="n">flux_value_closest_list</span></div>
 
 
-<div class="viewcode-block" id="get_fixed_rng_data"><a class="viewcode-back" href="../../../API/generated/pyrad.util.get_fixed_rng_data.html#pyrad.util.get_fixed_rng_data">[docs]</a><span class="k">def</span> <span class="nf">get_fixed_rng_data</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_names</span><span class="p">,</span> <span class="n">fixed_rng</span><span class="p">,</span> <span class="n">rng_tol</span><span class="o">=</span><span class="mf">50.</span><span class="p">,</span>
+
+<div class="viewcode-block" id="get_fixed_rng_data">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.get_fixed_rng_data.html#pyrad.util.get_fixed_rng_data">[docs]</a>
+<span class="k">def</span> <span class="nf">get_fixed_rng_data</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_names</span><span class="p">,</span> <span class="n">fixed_rng</span><span class="p">,</span> <span class="n">rng_tol</span><span class="o">=</span><span class="mf">50.</span><span class="p">,</span>
                        <span class="n">ele_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ele_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">azi_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">azi_max</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1589,7 +1638,10 @@ document.write(`
     <span class="k">return</span> <span class="n">radar_aux</span></div>
 
 
-<div class="viewcode-block" id="create_sun_hits_field"><a class="viewcode-back" href="../../../API/generated/pyrad.util.create_sun_hits_field.html#pyrad.util.create_sun_hits_field">[docs]</a><span class="k">def</span> <span class="nf">create_sun_hits_field</span><span class="p">(</span><span class="n">rad_el</span><span class="p">,</span> <span class="n">rad_az</span><span class="p">,</span> <span class="n">sun_el</span><span class="p">,</span> <span class="n">sun_az</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">imgcfg</span><span class="p">):</span>
+
+<div class="viewcode-block" id="create_sun_hits_field">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.create_sun_hits_field.html#pyrad.util.create_sun_hits_field">[docs]</a>
+<span class="k">def</span> <span class="nf">create_sun_hits_field</span><span class="p">(</span><span class="n">rad_el</span><span class="p">,</span> <span class="n">rad_az</span><span class="p">,</span> <span class="n">sun_el</span><span class="p">,</span> <span class="n">sun_az</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">imgcfg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    creates a sun hits field from the position and power of the sun hits</span>
 
@@ -1642,7 +1694,10 @@ document.write(`
     <span class="k">return</span> <span class="n">field</span></div>
 
 
-<div class="viewcode-block" id="create_sun_retrieval_field"><a class="viewcode-back" href="../../../API/generated/pyrad.util.create_sun_retrieval_field.html#pyrad.util.create_sun_retrieval_field">[docs]</a><span class="k">def</span> <span class="nf">create_sun_retrieval_field</span><span class="p">(</span><span class="n">par</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">imgcfg</span><span class="p">,</span> <span class="n">lant</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
+
+<div class="viewcode-block" id="create_sun_retrieval_field">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.create_sun_retrieval_field.html#pyrad.util.create_sun_retrieval_field">[docs]</a>
+<span class="k">def</span> <span class="nf">create_sun_retrieval_field</span><span class="p">(</span><span class="n">par</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">imgcfg</span><span class="p">,</span> <span class="n">lant</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    creates a sun retrieval field from the retrieval parameters</span>
 
@@ -1697,7 +1752,10 @@ document.write(`
     <span class="k">return</span> <span class="n">field</span></div>
 
 
-<div class="viewcode-block" id="compute_quantiles"><a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_quantiles.html#pyrad.util.compute_quantiles">[docs]</a><span class="k">def</span> <span class="nf">compute_quantiles</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="compute_quantiles">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_quantiles.html#pyrad.util.compute_quantiles">[docs]</a>
+<span class="k">def</span> <span class="nf">compute_quantiles</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    computes quantiles</span>
 
@@ -1736,7 +1794,10 @@ document.write(`
     <span class="k">return</span> <span class="n">quantiles</span><span class="p">,</span> <span class="n">values</span></div>
 
 
-<div class="viewcode-block" id="compute_quantiles_from_hist"><a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_quantiles_from_hist.html#pyrad.util.compute_quantiles_from_hist">[docs]</a><span class="k">def</span> <span class="nf">compute_quantiles_from_hist</span><span class="p">(</span><span class="n">bin_centers</span><span class="p">,</span> <span class="n">hist</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="compute_quantiles_from_hist">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_quantiles_from_hist.html#pyrad.util.compute_quantiles_from_hist">[docs]</a>
+<span class="k">def</span> <span class="nf">compute_quantiles_from_hist</span><span class="p">(</span><span class="n">bin_centers</span><span class="p">,</span> <span class="n">hist</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    computes quantiles from histograms</span>
 
@@ -1783,7 +1844,10 @@ document.write(`
     <span class="k">return</span> <span class="n">quantiles</span><span class="p">,</span> <span class="n">values</span></div>
 
 
-<div class="viewcode-block" id="compute_quantiles_sweep"><a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_quantiles_sweep.html#pyrad.util.compute_quantiles_sweep">[docs]</a><span class="k">def</span> <span class="nf">compute_quantiles_sweep</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">ray_start</span><span class="p">,</span> <span class="n">ray_end</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="compute_quantiles_sweep">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_quantiles_sweep.html#pyrad.util.compute_quantiles_sweep">[docs]</a>
+<span class="k">def</span> <span class="nf">compute_quantiles_sweep</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">ray_start</span><span class="p">,</span> <span class="n">ray_end</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    computes quantiles of a particular sweep</span>
 
@@ -1822,7 +1886,10 @@ document.write(`
     <span class="k">return</span> <span class="n">quantiles</span><span class="p">,</span> <span class="n">values</span></div>
 
 
-<div class="viewcode-block" id="compute_histogram"><a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_histogram.html#pyrad.util.compute_histogram">[docs]</a><span class="k">def</span> <span class="nf">compute_histogram</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">bin_edges</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+
+<div class="viewcode-block" id="compute_histogram">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_histogram.html#pyrad.util.compute_histogram">[docs]</a>
+<span class="k">def</span> <span class="nf">compute_histogram</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">bin_edges</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                       <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    computes histogram of the data</span>
@@ -1872,7 +1939,10 @@ document.write(`
     <span class="k">return</span> <span class="n">bin_edges</span><span class="p">,</span> <span class="n">values</span></div>
 
 
-<div class="viewcode-block" id="compute_histogram_sweep"><a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_histogram_sweep.html#pyrad.util.compute_histogram_sweep">[docs]</a><span class="k">def</span> <span class="nf">compute_histogram_sweep</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">ray_start</span><span class="p">,</span> <span class="n">ray_end</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+
+<div class="viewcode-block" id="compute_histogram_sweep">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_histogram_sweep.html#pyrad.util.compute_histogram_sweep">[docs]</a>
+<span class="k">def</span> <span class="nf">compute_histogram_sweep</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">ray_start</span><span class="p">,</span> <span class="n">ray_end</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                             <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    computes histogram of the data in a particular sweep</span>
@@ -1907,6 +1977,7 @@ document.write(`
     <span class="n">values</span><span class="p">[</span><span class="n">values</span> <span class="o">&gt;</span> <span class="n">bin_centers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">bin_centers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">bin_edges</span><span class="p">,</span> <span class="n">values</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">get_histogram_bins</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -1947,7 +2018,9 @@ document.write(`
         <span class="n">vmin</span> <span class="o">-</span> <span class="n">step</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">+</span> <span class="n">step</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="nb">int</span><span class="p">((</span><span class="n">vmax</span> <span class="o">-</span> <span class="n">vmin</span><span class="p">)</span> <span class="o">/</span> <span class="n">step</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="compute_2d_stats"><a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_2d_stats.html#pyrad.util.compute_2d_stats">[docs]</a><span class="k">def</span> <span class="nf">compute_2d_stats</span><span class="p">(</span><span class="n">field1</span><span class="p">,</span> <span class="n">field2</span><span class="p">,</span> <span class="n">field_name1</span><span class="p">,</span> <span class="n">field_name2</span><span class="p">,</span> <span class="n">step1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="compute_2d_stats">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_2d_stats.html#pyrad.util.compute_2d_stats">[docs]</a>
+<span class="k">def</span> <span class="nf">compute_2d_stats</span><span class="p">(</span><span class="n">field1</span><span class="p">,</span> <span class="n">field2</span><span class="p">,</span> <span class="n">field_name1</span><span class="p">,</span> <span class="n">field_name2</span><span class="p">,</span> <span class="n">step1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="n">step2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    computes a 2D histogram and statistics of the data</span>
@@ -2022,7 +2095,10 @@ document.write(`
     <span class="k">return</span> <span class="n">hist_2d</span><span class="p">,</span> <span class="n">bin_edges1</span><span class="p">,</span> <span class="n">bin_edges2</span><span class="p">,</span> <span class="n">stats</span></div>
 
 
-<div class="viewcode-block" id="compute_1d_stats"><a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_1d_stats.html#pyrad.util.compute_1d_stats">[docs]</a><span class="k">def</span> <span class="nf">compute_1d_stats</span><span class="p">(</span><span class="n">field1</span><span class="p">,</span> <span class="n">field2</span><span class="p">):</span>
+
+<div class="viewcode-block" id="compute_1d_stats">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_1d_stats.html#pyrad.util.compute_1d_stats">[docs]</a>
+<span class="k">def</span> <span class="nf">compute_1d_stats</span><span class="p">(</span><span class="n">field1</span><span class="p">,</span> <span class="n">field2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    returns statistics of data</span>
 
@@ -2068,7 +2144,10 @@ document.write(`
     <span class="k">return</span> <span class="n">stats</span></div>
 
 
-<div class="viewcode-block" id="compute_2d_hist"><a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_2d_hist.html#pyrad.util.compute_2d_hist">[docs]</a><span class="k">def</span> <span class="nf">compute_2d_hist</span><span class="p">(</span><span class="n">field1</span><span class="p">,</span> <span class="n">field2</span><span class="p">,</span> <span class="n">field_name1</span><span class="p">,</span> <span class="n">field_name2</span><span class="p">,</span> <span class="n">step1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+
+<div class="viewcode-block" id="compute_2d_hist">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_2d_hist.html#pyrad.util.compute_2d_hist">[docs]</a>
+<span class="k">def</span> <span class="nf">compute_2d_hist</span><span class="p">(</span><span class="n">field1</span><span class="p">,</span> <span class="n">field2</span><span class="p">,</span> <span class="n">field_name1</span><span class="p">,</span> <span class="n">field_name2</span><span class="p">,</span> <span class="n">step1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                     <span class="n">step2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    computes a 2D histogram of the data</span>
@@ -2109,6 +2188,7 @@ document.write(`
         <span class="n">field2</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="n">fill_value</span><span class="p">),</span> <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="n">bin_edges1</span><span class="p">,</span> <span class="n">bin_edges2</span><span class="p">])</span></div>
 
 
+
 <span class="k">def</span> <span class="nf">quantize_field</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    quantizes data</span>
@@ -2144,7 +2224,9 @@ document.write(`
     <span class="k">return</span> <span class="n">fieldq</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="compute_profile_stats"><a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_profile_stats.html#pyrad.util.compute_profile_stats">[docs]</a><span class="k">def</span> <span class="nf">compute_profile_stats</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">gate_altitude</span><span class="p">,</span> <span class="n">h_vec</span><span class="p">,</span> <span class="n">h_res</span><span class="p">,</span>
+<div class="viewcode-block" id="compute_profile_stats">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_profile_stats.html#pyrad.util.compute_profile_stats">[docs]</a>
+<span class="k">def</span> <span class="nf">compute_profile_stats</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">gate_altitude</span><span class="p">,</span> <span class="n">h_vec</span><span class="p">,</span> <span class="n">h_res</span><span class="p">,</span>
                           <span class="n">quantity</span><span class="o">=</span><span class="s1">&#39;quantiles&#39;</span><span class="p">,</span>
                           <span class="n">quantiles</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">]),</span>
                           <span class="n">nvalid_min</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">std_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">np_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -2290,7 +2372,10 @@ document.write(`
     <span class="k">return</span> <span class="n">vals</span><span class="p">,</span> <span class="n">val_valid</span></div>
 
 
-<div class="viewcode-block" id="project_to_vertical"><a class="viewcode-back" href="../../../API/generated/pyrad.util.project_to_vertical.html#pyrad.util.project_to_vertical">[docs]</a><span class="k">def</span> <span class="nf">project_to_vertical</span><span class="p">(</span><span class="n">data_in</span><span class="p">,</span> <span class="n">data_height</span><span class="p">,</span> <span class="n">grid_height</span><span class="p">,</span> <span class="n">interp_kind</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span>
+
+<div class="viewcode-block" id="project_to_vertical">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.project_to_vertical.html#pyrad.util.project_to_vertical">[docs]</a>
+<span class="k">def</span> <span class="nf">project_to_vertical</span><span class="p">(</span><span class="n">data_in</span><span class="p">,</span> <span class="n">data_height</span><span class="p">,</span> <span class="n">grid_height</span><span class="p">,</span> <span class="n">interp_kind</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span>
                         <span class="n">fill_value</span><span class="o">=-</span><span class="mf">9999.</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Projects radar data to a regular vertical grid</span>
@@ -2344,7 +2429,10 @@ document.write(`
     <span class="k">return</span> <span class="n">data_out</span></div>
 
 
-<div class="viewcode-block" id="compute_average_vad"><a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_average_vad.html#pyrad.util.compute_average_vad">[docs]</a><span class="k">def</span> <span class="nf">compute_average_vad</span><span class="p">(</span><span class="n">radar_list</span><span class="p">,</span> <span class="n">z_want</span><span class="p">,</span> <span class="n">signs</span><span class="p">,</span> <span class="n">lat0</span><span class="p">,</span> <span class="n">lon0</span><span class="p">):</span>
+
+<div class="viewcode-block" id="compute_average_vad">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_average_vad.html#pyrad.util.compute_average_vad">[docs]</a>
+<span class="k">def</span> <span class="nf">compute_average_vad</span><span class="p">(</span><span class="n">radar_list</span><span class="p">,</span> <span class="n">z_want</span><span class="p">,</span> <span class="n">signs</span><span class="p">,</span> <span class="n">lat0</span><span class="p">,</span> <span class="n">lon0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes a profile of horizontal wind by averaging the VAD profiles of multiple</span>
 <span class="sd">    radars</span>
@@ -2425,6 +2513,7 @@ document.write(`
             <span class="n">u_avg</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">u_avg</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
             <span class="n">v_avg</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">v_avg</span><span class="p">)))</span>
     <span class="k">return</span> <span class="n">vad_avg</span></div>
+
 </pre></div>
 <div class="section ablog__blog_comments">
   
@@ -2468,7 +2557,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
   </p>
 </div>

@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -28,30 +27,27 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../_static/clipboard.min.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
-    <script src="../../../_static/design-tabs.js"></script>
+    <script src="../../../_static/documentation_options.js?v=daef7da6"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyrad/io/io_aux';</script>
-    <script src="../../../_static/doc_shared.js"></script>
+    <script src="../../../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 
@@ -431,7 +427,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">pyart.config</span> <span class="kn">import</span> <span class="n">get_metadata</span>
 
 
-<div class="viewcode-block" id="get_rad4alp_prod_fname"><a class="viewcode-back" href="../../../API/generated/pyrad.io.get_rad4alp_prod_fname.html#pyrad.io.get_rad4alp_prod_fname">[docs]</a><span class="k">def</span> <span class="nf">get_rad4alp_prod_fname</span><span class="p">(</span><span class="n">datatype</span><span class="p">):</span>
+<div class="viewcode-block" id="get_rad4alp_prod_fname">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.get_rad4alp_prod_fname.html#pyrad.io.get_rad4alp_prod_fname">[docs]</a>
+<span class="k">def</span> <span class="nf">get_rad4alp_prod_fname</span><span class="p">(</span><span class="n">datatype</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given a datatype find the corresponding start and termination of the</span>
 <span class="sd">    METRANET product file name</span>
@@ -706,7 +704,10 @@ document.write(`
     <span class="k">return</span> <span class="n">acronym</span><span class="p">,</span> <span class="n">termination</span></div>
 
 
-<div class="viewcode-block" id="map_hydro"><a class="viewcode-back" href="../../../API/generated/pyrad.io.map_hydro.html#pyrad.io.map_hydro">[docs]</a><span class="k">def</span> <span class="nf">map_hydro</span><span class="p">(</span><span class="n">hydro_data_op</span><span class="p">):</span>
+
+<div class="viewcode-block" id="map_hydro">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.map_hydro.html#pyrad.io.map_hydro">[docs]</a>
+<span class="k">def</span> <span class="nf">map_hydro</span><span class="p">(</span><span class="n">hydro_data_op</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    maps the operational hydrometeor classification identifiers to the ones</span>
 <span class="sd">    used by Py-ART</span>
@@ -733,6 +734,7 @@ document.write(`
     <span class="n">hydro_data_py</span><span class="p">[</span><span class="n">hydro_data_op</span> <span class="o">==</span> <span class="mi">200</span><span class="p">]</span> <span class="o">=</span> <span class="mi">9</span>  <span class="c1"># melting hail</span>
 
     <span class="k">return</span> <span class="n">hydro_data_py</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">mf_sname_to_wmo_number</span><span class="p">(</span><span class="n">radar_name</span><span class="p">):</span>
@@ -839,7 +841,9 @@ document.write(`
     <span class="k">return</span> <span class="n">radar_num</span>
 
 
-<div class="viewcode-block" id="map_Doppler"><a class="viewcode-back" href="../../../API/generated/pyrad.io.map_Doppler.html#pyrad.io.map_Doppler">[docs]</a><span class="k">def</span> <span class="nf">map_Doppler</span><span class="p">(</span><span class="n">Doppler_data_bin</span><span class="p">,</span> <span class="n">Nyquist_vel</span><span class="p">):</span>
+<div class="viewcode-block" id="map_Doppler">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.map_Doppler.html#pyrad.io.map_Doppler">[docs]</a>
+<span class="k">def</span> <span class="nf">map_Doppler</span><span class="p">(</span><span class="n">Doppler_data_bin</span><span class="p">,</span> <span class="n">Nyquist_vel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    maps the binary METRANET Doppler data to actual Doppler velocity</span>
 
@@ -859,7 +863,10 @@ document.write(`
     <span class="k">return</span> <span class="n">Doppler_data</span></div>
 
 
-<div class="viewcode-block" id="get_save_dir"><a class="viewcode-back" href="../../../API/generated/pyrad.io.get_save_dir.html#pyrad.io.get_save_dir">[docs]</a><span class="k">def</span> <span class="nf">get_save_dir</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="n">procname</span><span class="p">,</span> <span class="n">dsname</span><span class="p">,</span> <span class="n">prdname</span><span class="p">,</span> <span class="n">timeinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+
+<div class="viewcode-block" id="get_save_dir">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.get_save_dir.html#pyrad.io.get_save_dir">[docs]</a>
+<span class="k">def</span> <span class="nf">get_save_dir</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="n">procname</span><span class="p">,</span> <span class="n">dsname</span><span class="p">,</span> <span class="n">prdname</span><span class="p">,</span> <span class="n">timeinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">timeformat</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">create_dir</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    obtains the path to a product directory and eventually creates it</span>
@@ -904,7 +911,10 @@ document.write(`
     <span class="k">return</span> <span class="n">savedir</span></div>
 
 
-<div class="viewcode-block" id="make_filename"><a class="viewcode-back" href="../../../API/generated/pyrad.io.make_filename.html#pyrad.io.make_filename">[docs]</a><span class="k">def</span> <span class="nf">make_filename</span><span class="p">(</span><span class="n">prdtype</span><span class="p">,</span> <span class="n">dstype</span><span class="p">,</span> <span class="n">dsname</span><span class="p">,</span> <span class="n">ext_list</span><span class="p">,</span> <span class="n">prdcfginfo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+
+<div class="viewcode-block" id="make_filename">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.make_filename.html#pyrad.io.make_filename">[docs]</a>
+<span class="k">def</span> <span class="nf">make_filename</span><span class="p">(</span><span class="n">prdtype</span><span class="p">,</span> <span class="n">dstype</span><span class="p">,</span> <span class="n">dsname</span><span class="p">,</span> <span class="n">ext_list</span><span class="p">,</span> <span class="n">prdcfginfo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">timeinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeformat</span><span class="o">=</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S&#39;</span><span class="p">,</span>
                   <span class="n">runinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -960,7 +970,10 @@ document.write(`
     <span class="k">return</span> <span class="n">fname_list</span></div>
 
 
-<div class="viewcode-block" id="generate_field_name_str"><a class="viewcode-back" href="../../../API/generated/pyrad.io.generate_field_name_str.html#pyrad.io.generate_field_name_str">[docs]</a><span class="k">def</span> <span class="nf">generate_field_name_str</span><span class="p">(</span><span class="n">datatype</span><span class="p">):</span>
+
+<div class="viewcode-block" id="generate_field_name_str">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.generate_field_name_str.html#pyrad.io.generate_field_name_str">[docs]</a>
+<span class="k">def</span> <span class="nf">generate_field_name_str</span><span class="p">(</span><span class="n">datatype</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates a field name in a nice to read format.</span>
 
@@ -982,6 +995,7 @@ document.write(`
     <span class="n">field_str</span> <span class="o">+=</span> <span class="s1">&#39; (&#39;</span> <span class="o">+</span> <span class="n">field_dic</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span>
 
     <span class="k">return</span> <span class="n">field_str</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">get_field_name</span><span class="p">(</span><span class="n">datatype</span><span class="p">):</span>
@@ -1007,7 +1021,9 @@ document.write(`
     <span class="k">return</span> <span class="n">name</span>
 
 
-<div class="viewcode-block" id="get_field_unit"><a class="viewcode-back" href="../../../API/generated/pyrad.io.get_field_unit.html#pyrad.io.get_field_unit">[docs]</a><span class="k">def</span> <span class="nf">get_field_unit</span><span class="p">(</span><span class="n">datatype</span><span class="p">):</span>
+<div class="viewcode-block" id="get_field_unit">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.get_field_unit.html#pyrad.io.get_field_unit">[docs]</a>
+<span class="k">def</span> <span class="nf">get_field_unit</span><span class="p">(</span><span class="n">datatype</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return unit of datatype.</span>
 
@@ -1026,6 +1042,7 @@ document.write(`
     <span class="n">field_dic</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">field_dic</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">get_datatype_metranet</span><span class="p">(</span><span class="n">datatype</span><span class="p">):</span>
@@ -1534,7 +1551,9 @@ document.write(`
     <span class="k">return</span> <span class="p">{</span><span class="n">datatype_odim</span><span class="p">:</span> <span class="n">field_name</span><span class="p">}</span>
 
 
-<div class="viewcode-block" id="get_fieldname_pyart"><a class="viewcode-back" href="../../../API/generated/pyrad.io.get_fieldname_pyart.html#pyrad.io.get_fieldname_pyart">[docs]</a><span class="k">def</span> <span class="nf">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">):</span>
+<div class="viewcode-block" id="get_fieldname_pyart">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.get_fieldname_pyart.html#pyrad.io.get_fieldname_pyart">[docs]</a>
+<span class="k">def</span> <span class="nf">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    maps the config file radar data type name into the corresponding rainbow</span>
 <span class="sd">    Py-ART field name</span>
@@ -2560,7 +2579,10 @@ document.write(`
     <span class="k">return</span> <span class="n">field_name</span></div>
 
 
-<div class="viewcode-block" id="get_fieldname_cosmo"><a class="viewcode-back" href="../../../API/generated/pyrad.io.get_fieldname_cosmo.html#pyrad.io.get_fieldname_cosmo">[docs]</a><span class="k">def</span> <span class="nf">get_fieldname_cosmo</span><span class="p">(</span><span class="n">field_name</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_fieldname_cosmo">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.get_fieldname_cosmo.html#pyrad.io.get_fieldname_cosmo">[docs]</a>
+<span class="k">def</span> <span class="nf">get_fieldname_cosmo</span><span class="p">(</span><span class="n">field_name</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    maps the Py-ART field name into the corresponding COSMO variable name</span>
 
@@ -2589,7 +2611,10 @@ document.write(`
     <span class="k">return</span> <span class="n">cosmo_name</span></div>
 
 
-<div class="viewcode-block" id="get_file_list"><a class="viewcode-back" href="../../../API/generated/pyrad.io.get_file_list.html#pyrad.io.get_file_list">[docs]</a><span class="k">def</span> <span class="nf">get_file_list</span><span class="p">(</span><span class="n">datadescriptor</span><span class="p">,</span> <span class="n">starttimes</span><span class="p">,</span> <span class="n">endtimes</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">scan</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_file_list">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.get_file_list.html#pyrad.io.get_file_list">[docs]</a>
+<span class="k">def</span> <span class="nf">get_file_list</span><span class="p">(</span><span class="n">datadescriptor</span><span class="p">,</span> <span class="n">starttimes</span><span class="p">,</span> <span class="n">endtimes</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">scan</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    gets the list of files with a time period</span>
 
@@ -2913,7 +2938,10 @@ document.write(`
     <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">filelist</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_rad4alp_dir"><a class="viewcode-back" href="../../../API/generated/pyrad.io.get_rad4alp_dir.html#pyrad.io.get_rad4alp_dir">[docs]</a><span class="k">def</span> <span class="nf">get_rad4alp_dir</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">radar_name</span><span class="o">=</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="n">radar_res</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">,</span>
+
+<div class="viewcode-block" id="get_rad4alp_dir">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.get_rad4alp_dir.html#pyrad.io.get_rad4alp_dir">[docs]</a>
+<span class="k">def</span> <span class="nf">get_rad4alp_dir</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">radar_name</span><span class="o">=</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="n">radar_res</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">,</span>
                     <span class="n">scan</span><span class="o">=</span><span class="s1">&#39;001&#39;</span><span class="p">,</span> <span class="n">path_convention</span><span class="o">=</span><span class="s1">&#39;MCH&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    gets the directory where rad4alp data is stored</span>
@@ -2975,7 +3003,10 @@ document.write(`
     <span class="k">return</span> <span class="n">datapath</span><span class="p">,</span> <span class="n">basename</span></div>
 
 
-<div class="viewcode-block" id="get_rad4alp_grid_dir"><a class="viewcode-back" href="../../../API/generated/pyrad.io.get_rad4alp_grid_dir.html#pyrad.io.get_rad4alp_grid_dir">[docs]</a><span class="k">def</span> <span class="nf">get_rad4alp_grid_dir</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">acronym</span><span class="p">,</span>
+
+<div class="viewcode-block" id="get_rad4alp_grid_dir">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.get_rad4alp_grid_dir.html#pyrad.io.get_rad4alp_grid_dir">[docs]</a>
+<span class="k">def</span> <span class="nf">get_rad4alp_grid_dir</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">acronym</span><span class="p">,</span>
                          <span class="n">path_convention</span><span class="o">=</span><span class="s1">&#39;MCH&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    gets the directory where rad4alp grid data is stored</span>
@@ -3039,7 +3070,10 @@ document.write(`
     <span class="k">return</span> <span class="n">datapath</span></div>
 
 
-<div class="viewcode-block" id="get_trtfile_list"><a class="viewcode-back" href="../../../API/generated/pyrad.io.get_trtfile_list.html#pyrad.io.get_trtfile_list">[docs]</a><span class="k">def</span> <span class="nf">get_trtfile_list</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="n">starttime</span><span class="p">,</span> <span class="n">endtime</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_trtfile_list">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.get_trtfile_list.html#pyrad.io.get_trtfile_list">[docs]</a>
+<span class="k">def</span> <span class="nf">get_trtfile_list</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="n">starttime</span><span class="p">,</span> <span class="n">endtime</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    gets the list of TRT files with a time period</span>
 
@@ -3084,6 +3118,7 @@ document.write(`
     <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">filelist</span><span class="p">)</span></div>
 
 
+
 <span class="k">def</span> <span class="nf">get_scan_list</span><span class="p">(</span><span class="n">scandescriptor_list</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    determine which is the scan list for each radar</span>
@@ -3121,7 +3156,9 @@ document.write(`
     <span class="k">return</span> <span class="n">scan_list</span>
 
 
-<div class="viewcode-block" id="get_new_rainbow_file_name"><a class="viewcode-back" href="../../../API/generated/pyrad.io.get_new_rainbow_file_name.html#pyrad.io.get_new_rainbow_file_name">[docs]</a><span class="k">def</span> <span class="nf">get_new_rainbow_file_name</span><span class="p">(</span><span class="n">master_fname</span><span class="p">,</span> <span class="n">master_datadescriptor</span><span class="p">,</span> <span class="n">datatype</span><span class="p">):</span>
+<div class="viewcode-block" id="get_new_rainbow_file_name">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.get_new_rainbow_file_name.html#pyrad.io.get_new_rainbow_file_name">[docs]</a>
+<span class="k">def</span> <span class="nf">get_new_rainbow_file_name</span><span class="p">(</span><span class="n">master_fname</span><span class="p">,</span> <span class="n">master_datadescriptor</span><span class="p">,</span> <span class="n">datatype</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    get the rainbow file name containing datatype from a master file name</span>
 <span class="sd">    and data type</span>
@@ -3156,7 +3193,10 @@ document.write(`
         <span class="n">voltype</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_datatype_fields"><a class="viewcode-back" href="../../../API/generated/pyrad.io.get_datatype_fields.html#pyrad.io.get_datatype_fields">[docs]</a><span class="k">def</span> <span class="nf">get_datatype_fields</span><span class="p">(</span><span class="n">datadescriptor</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_datatype_fields">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.get_datatype_fields.html#pyrad.io.get_datatype_fields">[docs]</a>
+<span class="k">def</span> <span class="nf">get_datatype_fields</span><span class="p">(</span><span class="n">datadescriptor</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    splits the data type descriptor and provides each individual member</span>
 
@@ -3267,7 +3307,10 @@ document.write(`
     <span class="k">return</span> <span class="n">radarnr</span><span class="p">,</span> <span class="n">datagroup</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">product</span></div>
 
 
-<div class="viewcode-block" id="get_dataset_fields"><a class="viewcode-back" href="../../../API/generated/pyrad.io.get_dataset_fields.html#pyrad.io.get_dataset_fields">[docs]</a><span class="k">def</span> <span class="nf">get_dataset_fields</span><span class="p">(</span><span class="n">datasetdescr</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_dataset_fields">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.get_dataset_fields.html#pyrad.io.get_dataset_fields">[docs]</a>
+<span class="k">def</span> <span class="nf">get_dataset_fields</span><span class="p">(</span><span class="n">datasetdescr</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    splits the dataset type descriptor and provides each individual member</span>
 
@@ -3298,7 +3341,10 @@ document.write(`
     <span class="k">return</span> <span class="n">proclevel</span><span class="p">,</span> <span class="n">dataset</span></div>
 
 
-<div class="viewcode-block" id="get_datetime"><a class="viewcode-back" href="../../../API/generated/pyrad.io.get_datetime.html#pyrad.io.get_datetime">[docs]</a><span class="k">def</span> <span class="nf">get_datetime</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">datadescriptor</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_datetime">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.get_datetime.html#pyrad.io.get_datetime">[docs]</a>
+<span class="k">def</span> <span class="nf">get_datetime</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">datadescriptor</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given a data descriptor gets date and time from file name</span>
 
@@ -3318,6 +3364,7 @@ document.write(`
     <span class="n">_</span><span class="p">,</span> <span class="n">datagroup</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datadescriptor</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">_get_datetime</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">datagroup</span><span class="p">,</span> <span class="n">ftime_format</span><span class="o">=</span><span class="n">dataset</span><span class="p">)</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">find_cosmo_file</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">scanid</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
@@ -3439,7 +3486,9 @@ document.write(`
     <span class="k">return</span> <span class="kc">None</span>
 
 
-<div class="viewcode-block" id="find_raw_cosmo_file"><a class="viewcode-back" href="../../../API/generated/pyrad.io.find_raw_cosmo_file.html#pyrad.io.find_raw_cosmo_file">[docs]</a><span class="k">def</span> <span class="nf">find_raw_cosmo_file</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="find_raw_cosmo_file">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.find_raw_cosmo_file.html#pyrad.io.find_raw_cosmo_file">[docs]</a>
+<span class="k">def</span> <span class="nf">find_raw_cosmo_file</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Search a COSMO file in netcdf format</span>
 
@@ -3545,7 +3594,10 @@ document.write(`
     <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="find_hzt_file"><a class="viewcode-back" href="../../../API/generated/pyrad.io.find_hzt_file.html#pyrad.io.find_hzt_file">[docs]</a><span class="k">def</span> <span class="nf">find_hzt_file</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+
+<div class="viewcode-block" id="find_hzt_file">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.find_hzt_file.html#pyrad.io.find_hzt_file">[docs]</a>
+<span class="k">def</span> <span class="nf">find_hzt_file</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Search an ISO-0 degree file in HZT format</span>
 
@@ -3597,7 +3649,10 @@ document.write(`
     <span class="k">return</span> <span class="n">fname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="find_iso0_file"><a class="viewcode-back" href="../../../API/generated/pyrad.io.find_iso0_file.html#pyrad.io.find_iso0_file">[docs]</a><span class="k">def</span> <span class="nf">find_iso0_file</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+
+<div class="viewcode-block" id="find_iso0_file">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.find_iso0_file.html#pyrad.io.find_iso0_file">[docs]</a>
+<span class="k">def</span> <span class="nf">find_iso0_file</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Search an ISO-0 degree file in text format</span>
 
@@ -3647,7 +3702,10 @@ document.write(`
     <span class="k">return</span> <span class="n">fname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="find_iso0_grib_file"><a class="viewcode-back" href="../../../API/generated/pyrad.io.find_iso0_grib_file.html#pyrad.io.find_iso0_grib_file">[docs]</a><span class="k">def</span> <span class="nf">find_iso0_grib_file</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+
+<div class="viewcode-block" id="find_iso0_grib_file">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.find_iso0_grib_file.html#pyrad.io.find_iso0_grib_file">[docs]</a>
+<span class="k">def</span> <span class="nf">find_iso0_grib_file</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Search an ISO-0 degree file in text format</span>
 
@@ -3702,6 +3760,7 @@ document.write(`
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">return</span> <span class="n">fname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">find_rad4alpcosmo_file</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">scanid</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
@@ -3778,7 +3837,9 @@ document.write(`
     <span class="k">return</span> <span class="n">fname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="_get_datetime"><a class="viewcode-back" href="../../../API/generated/generated/pyrad.io._get_datetime.html#pyrad.io._get_datetime">[docs]</a><span class="k">def</span> <span class="nf">_get_datetime</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">datagroup</span><span class="p">,</span> <span class="n">ftime_format</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="_get_datetime">
+<a class="viewcode-back" href="../../../API/generated/generated/pyrad.io._get_datetime.html#pyrad.io._get_datetime">[docs]</a>
+<span class="k">def</span> <span class="nf">_get_datetime</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">datagroup</span><span class="p">,</span> <span class="n">ftime_format</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given a data group gets date and time from file name</span>
 
@@ -3837,7 +3898,10 @@ document.write(`
     <span class="k">return</span> <span class="n">fdatetime</span></div>
 
 
-<div class="viewcode-block" id="find_date_in_file_name"><a class="viewcode-back" href="../../../API/generated/pyrad.io.find_date_in_file_name.html#pyrad.io.find_date_in_file_name">[docs]</a><span class="k">def</span> <span class="nf">find_date_in_file_name</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">date_format</span><span class="o">=</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S&#39;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="find_date_in_file_name">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.find_date_in_file_name.html#pyrad.io.find_date_in_file_name">[docs]</a>
+<span class="k">def</span> <span class="nf">find_date_in_file_name</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">date_format</span><span class="o">=</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find a date with date format defined in date_format in a file name.</span>
 <span class="sd">    If no date is found returns None</span>
@@ -3874,6 +3938,7 @@ document.write(`
             <span class="k">break</span>
 
     <span class="k">return</span> <span class="n">fdatetime</span></div>
+
 </pre></div>
 <div class="section ablog__blog_comments">
   
@@ -3917,7 +3982,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
   </p>
 </div>

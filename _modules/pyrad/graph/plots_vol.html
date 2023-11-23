@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -28,30 +27,27 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../_static/clipboard.min.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
-    <script src="../../../_static/design-tabs.js"></script>
+    <script src="../../../_static/documentation_options.js?v=daef7da6"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyrad/graph/plots_vol';</script>
-    <script src="../../../_static/doc_shared.js"></script>
+    <script src="../../../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 
@@ -444,7 +440,9 @@ document.write(`
 <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;font.family&#39;</span><span class="p">:</span> <span class="s2">&quot;sans-serif&quot;</span><span class="p">})</span>
 
 
-<div class="viewcode-block" id="plot_ray"><a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_ray.html#pyrad.graph.plot_ray">[docs]</a><span class="k">def</span> <span class="nf">plot_ray</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">ind_ray</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span> <span class="n">titl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="plot_ray">
+<a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_ray.html#pyrad.graph.plot_ray">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_ray</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">ind_ray</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span> <span class="n">titl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
              <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_fig</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    plots a ray</span>
@@ -516,7 +514,10 @@ document.write(`
     <span class="k">return</span> <span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="plot_ppi"><a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_ppi.html#pyrad.graph.plot_ppi">[docs]</a><span class="k">def</span> <span class="nf">plot_ppi</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">ind_el</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span> <span class="n">plot_type</span><span class="o">=</span><span class="s1">&#39;PPI&#39;</span><span class="p">,</span>
+
+<div class="viewcode-block" id="plot_ppi">
+<a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_ppi.html#pyrad.graph.plot_ppi">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_ppi</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">ind_el</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span> <span class="n">plot_type</span><span class="o">=</span><span class="s1">&#39;PPI&#39;</span><span class="p">,</span>
              <span class="n">titl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
              <span class="n">save_fig</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fname_hist</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -640,7 +641,10 @@ document.write(`
     <span class="k">return</span> <span class="n">fname_list</span></div>
 
 
-<div class="viewcode-block" id="plot_ppi_map"><a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_ppi_map.html#pyrad.graph.plot_ppi_map">[docs]</a><span class="k">def</span> <span class="nf">plot_ppi_map</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">ind_el</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span>
+
+<div class="viewcode-block" id="plot_ppi_map">
+<a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_ppi_map.html#pyrad.graph.plot_ppi_map">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_ppi_map</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">ind_el</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span>
                  <span class="n">save_fig</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    plots a PPI on a geographic map</span>
@@ -813,7 +817,10 @@ document.write(`
     <span class="k">return</span> <span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">display_map</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="plot_rhi"><a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_rhi.html#pyrad.graph.plot_rhi">[docs]</a><span class="k">def</span> <span class="nf">plot_rhi</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">ind_az</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span> <span class="n">plot_type</span><span class="o">=</span><span class="s1">&#39;RHI&#39;</span><span class="p">,</span>
+
+<div class="viewcode-block" id="plot_rhi">
+<a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_rhi.html#pyrad.graph.plot_rhi">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_rhi</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">ind_az</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span> <span class="n">plot_type</span><span class="o">=</span><span class="s1">&#39;RHI&#39;</span><span class="p">,</span>
              <span class="n">titl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
              <span class="n">save_fig</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -934,7 +941,10 @@ document.write(`
     <span class="k">return</span> <span class="n">fname_list</span></div>
 
 
-<div class="viewcode-block" id="plot_bscope"><a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_bscope.html#pyrad.graph.plot_bscope">[docs]</a><span class="k">def</span> <span class="nf">plot_bscope</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">ind_sweep</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span>
+
+<div class="viewcode-block" id="plot_bscope">
+<a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_bscope.html#pyrad.graph.plot_bscope">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_bscope</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">ind_sweep</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span>
                 <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ray_dim</span><span class="o">=</span><span class="s1">&#39;ang&#39;</span><span class="p">,</span> <span class="n">xaxis_rng</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    plots a B-Scope (angle-range representation)</span>
@@ -1060,7 +1070,10 @@ document.write(`
     <span class="k">return</span> <span class="n">fname_list</span></div>
 
 
-<div class="viewcode-block" id="plot_time_range"><a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_time_range.html#pyrad.graph.plot_time_range">[docs]</a><span class="k">def</span> <span class="nf">plot_time_range</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">ind_sweep</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span>
+
+<div class="viewcode-block" id="plot_time_range">
+<a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_time_range.html#pyrad.graph.plot_time_range">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_time_range</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">ind_sweep</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span>
                     <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;range (Km)&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    plots a time-range plot</span>
@@ -1112,7 +1125,10 @@ document.write(`
         <span class="n">ylabel</span><span class="o">=</span><span class="n">ylabel</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span><span class="p">],</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="plot_fixed_rng"><a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_fixed_rng.html#pyrad.graph.plot_fixed_rng">[docs]</a><span class="k">def</span> <span class="nf">plot_fixed_rng</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span> <span class="n">azi_res</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+
+<div class="viewcode-block" id="plot_fixed_rng">
+<a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_fixed_rng.html#pyrad.graph.plot_fixed_rng">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_fixed_rng</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span> <span class="n">azi_res</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">ele_res</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ang_tol</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    plots a fixed range plot</span>
@@ -1248,7 +1264,10 @@ document.write(`
         <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span><span class="p">],</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="plot_fixed_rng_span"><a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_fixed_rng_span.html#pyrad.graph.plot_fixed_rng_span">[docs]</a><span class="k">def</span> <span class="nf">plot_fixed_rng_span</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span> <span class="n">azi_res</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+
+<div class="viewcode-block" id="plot_fixed_rng_span">
+<a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_fixed_rng_span.html#pyrad.graph.plot_fixed_rng_span">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_fixed_rng_span</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span> <span class="n">azi_res</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="n">ele_res</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ang_tol</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="s1">&#39;max&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    plots a fixed range plot</span>
@@ -1424,7 +1443,10 @@ document.write(`
         <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span><span class="p">],</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="plot_fixed_rng_sun"><a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_fixed_rng_sun.html#pyrad.graph.plot_fixed_rng_sun">[docs]</a><span class="k">def</span> <span class="nf">plot_fixed_rng_sun</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">sun_hits</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span>
+
+<div class="viewcode-block" id="plot_fixed_rng_sun">
+<a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_fixed_rng_sun.html#pyrad.graph.plot_fixed_rng_sun">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_fixed_rng_sun</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">sun_hits</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span>
                        <span class="n">azi_res</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ele_res</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ang_tol</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1561,7 +1583,10 @@ document.write(`
         <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span><span class="p">],</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="plot_cappi"><a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_cappi.html#pyrad.graph.plot_cappi">[docs]</a><span class="k">def</span> <span class="nf">plot_cappi</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">altitude</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span>
+
+<div class="viewcode-block" id="plot_cappi">
+<a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_cappi.html#pyrad.graph.plot_cappi">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_cappi</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">altitude</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span>
                <span class="n">beamwidth</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">beam_spacing</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">save_fig</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    plots a Constant Altitude Plan Position Indicator CAPPI</span>
@@ -1675,6 +1700,7 @@ document.write(`
         <span class="k">return</span> <span class="n">fname_list</span>
 
     <span class="k">return</span> <span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">plot_xsection</span><span class="p">(</span>
@@ -1792,7 +1818,9 @@ document.write(`
     <span class="k">return</span> <span class="n">fname_list</span>
 
 
-<div class="viewcode-block" id="plot_traj"><a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_traj.html#pyrad.graph.plot_traj">[docs]</a><span class="k">def</span> <span class="nf">plot_traj</span><span class="p">(</span><span class="n">rng_traj</span><span class="p">,</span> <span class="n">azi_traj</span><span class="p">,</span> <span class="n">ele_traj</span><span class="p">,</span> <span class="n">time_traj</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span>
+<div class="viewcode-block" id="plot_traj">
+<a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_traj.html#pyrad.graph.plot_traj">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_traj</span><span class="p">(</span><span class="n">rng_traj</span><span class="p">,</span> <span class="n">azi_traj</span><span class="p">,</span> <span class="n">ele_traj</span><span class="p">,</span> <span class="n">time_traj</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span>
               <span class="n">rad_alt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rad_tstart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
               <span class="n">save_fig</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1916,7 +1944,10 @@ document.write(`
     <span class="k">return</span> <span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="plot_rhi_contour"><a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_rhi_contour.html#pyrad.graph.plot_rhi_contour">[docs]</a><span class="k">def</span> <span class="nf">plot_rhi_contour</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">ind_az</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span>
+
+<div class="viewcode-block" id="plot_rhi_contour">
+<a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_rhi_contour.html#pyrad.graph.plot_rhi_contour">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_rhi_contour</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">ind_az</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span>
                      <span class="n">contour_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="n">save_fig</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2023,7 +2054,10 @@ document.write(`
     <span class="k">return</span> <span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="plot_ppi_contour"><a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_ppi_contour.html#pyrad.graph.plot_ppi_contour">[docs]</a><span class="k">def</span> <span class="nf">plot_ppi_contour</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">ind_el</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span>
+
+<div class="viewcode-block" id="plot_ppi_contour">
+<a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_ppi_contour.html#pyrad.graph.plot_ppi_contour">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_ppi_contour</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">ind_el</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span>
                      <span class="n">contour_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="n">save_fig</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2126,7 +2160,10 @@ document.write(`
     <span class="k">return</span> <span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="plot_roi_contour"><a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_roi_contour.html#pyrad.graph.plot_roi_contour">[docs]</a><span class="k">def</span> <span class="nf">plot_roi_contour</span><span class="p">(</span><span class="n">roi_dict</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span> <span class="n">plot_center</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+
+<div class="viewcode-block" id="plot_roi_contour">
+<a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_roi_contour.html#pyrad.graph.plot_roi_contour">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_roi_contour</span><span class="p">(</span><span class="n">roi_dict</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span> <span class="n">plot_center</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                      <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Lon [Deg]&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Lat [Deg]&#39;</span><span class="p">,</span>
                      <span class="n">titl</span><span class="o">=</span><span class="s1">&#39;TRT cell position&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_fig</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -2246,7 +2283,10 @@ document.write(`
     <span class="k">return</span> <span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="plot_rhi_profile"><a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_rhi_profile.html#pyrad.graph.plot_rhi_profile">[docs]</a><span class="k">def</span> <span class="nf">plot_rhi_profile</span><span class="p">(</span><span class="n">data_list</span><span class="p">,</span> <span class="n">hvec</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span> <span class="n">labelx</span><span class="o">=</span><span class="s1">&#39;Value&#39;</span><span class="p">,</span>
+
+<div class="viewcode-block" id="plot_rhi_profile">
+<a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_rhi_profile.html#pyrad.graph.plot_rhi_profile">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_rhi_profile</span><span class="p">(</span><span class="n">data_list</span><span class="p">,</span> <span class="n">hvec</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span> <span class="n">labelx</span><span class="o">=</span><span class="s1">&#39;Value&#39;</span><span class="p">,</span>
                      <span class="n">labely</span><span class="o">=</span><span class="s1">&#39;Height (m MSL)&#39;</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;Mean&#39;</span><span class="p">),</span>
                      <span class="n">title</span><span class="o">=</span><span class="s1">&#39;RHI profile&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">72</span><span class="p">):</span>
@@ -2318,7 +2358,10 @@ document.write(`
     <span class="k">return</span> <span class="n">fname_list</span></div>
 
 
-<div class="viewcode-block" id="plot_along_coord"><a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_along_coord.html#pyrad.graph.plot_along_coord">[docs]</a><span class="k">def</span> <span class="nf">plot_along_coord</span><span class="p">(</span><span class="n">xval_list</span><span class="p">,</span> <span class="n">yval_list</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span> <span class="n">labelx</span><span class="o">=</span><span class="s1">&#39;coord&#39;</span><span class="p">,</span>
+
+<div class="viewcode-block" id="plot_along_coord">
+<a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_along_coord.html#pyrad.graph.plot_along_coord">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_along_coord</span><span class="p">(</span><span class="n">xval_list</span><span class="p">,</span> <span class="n">yval_list</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span> <span class="n">labelx</span><span class="o">=</span><span class="s1">&#39;coord&#39;</span><span class="p">,</span>
                      <span class="n">labely</span><span class="o">=</span><span class="s1">&#39;Value&#39;</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Plot along coordinate&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="n">linestyles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">72</span><span class="p">,</span>
@@ -2400,7 +2443,10 @@ document.write(`
     <span class="k">return</span> <span class="n">fname_list</span></div>
 
 
-<div class="viewcode-block" id="plot_field_coverage"><a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_field_coverage.html#pyrad.graph.plot_field_coverage">[docs]</a><span class="k">def</span> <span class="nf">plot_field_coverage</span><span class="p">(</span><span class="n">xval_list</span><span class="p">,</span> <span class="n">yval_list</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span>
+
+<div class="viewcode-block" id="plot_field_coverage">
+<a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_field_coverage.html#pyrad.graph.plot_field_coverage">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_field_coverage</span><span class="p">(</span><span class="n">xval_list</span><span class="p">,</span> <span class="n">yval_list</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span>
                         <span class="n">labelx</span><span class="o">=</span><span class="s1">&#39;Azimuth (deg)&#39;</span><span class="p">,</span> <span class="n">labely</span><span class="o">=</span><span class="s1">&#39;Range extension [m]&#39;</span><span class="p">,</span>
                         <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Field coverage&#39;</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="n">ymax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xmeanval</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymeanval</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -2466,6 +2512,7 @@ document.write(`
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">fname_list</span></div>
+
 </pre></div>
 <div class="section ablog__blog_comments">
   
@@ -2509,7 +2556,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
   </p>
 </div>

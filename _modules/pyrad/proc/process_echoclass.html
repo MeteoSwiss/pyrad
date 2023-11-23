@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -28,30 +27,27 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../_static/clipboard.min.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
-    <script src="../../../_static/design-tabs.js"></script>
+    <script src="../../../_static/documentation_options.js?v=daef7da6"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyrad/proc/process_echoclass';</script>
-    <script src="../../../_static/doc_shared.js"></script>
+    <script src="../../../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 
@@ -427,7 +423,9 @@ document.write(`
     <span class="n">_SKLEARN_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 
-<div class="viewcode-block" id="process_echo_id"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_echo_id.html#pyrad.proc.process_echo_id">[docs]</a><span class="k">def</span> <span class="nf">process_echo_id</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="process_echo_id">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_echo_id.html#pyrad.proc.process_echo_id">[docs]</a>
+<span class="k">def</span> <span class="nf">process_echo_id</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    identifies echoes as 0: No data, 1: Noise, 2: Clutter,</span>
 <span class="sd">    3: Precipitation</span>
@@ -532,7 +530,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_birds_id"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_birds_id.html#pyrad.proc.process_birds_id">[docs]</a><span class="k">def</span> <span class="nf">process_birds_id</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_birds_id">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_birds_id.html#pyrad.proc.process_birds_id">[docs]</a>
+<span class="k">def</span> <span class="nf">process_birds_id</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    identifies echoes as 0: No data, 1: Noise, 2: Clutter,</span>
 <span class="sd">    3: Birds</span>
@@ -622,7 +623,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_clt_to_echo_id"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_clt_to_echo_id.html#pyrad.proc.process_clt_to_echo_id">[docs]</a><span class="k">def</span> <span class="nf">process_clt_to_echo_id</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_clt_to_echo_id">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_clt_to_echo_id.html#pyrad.proc.process_clt_to_echo_id">[docs]</a>
+<span class="k">def</span> <span class="nf">process_clt_to_echo_id</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts clutter exit code from rad4alp into pyrad echo ID</span>
 
@@ -683,7 +687,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_hydro_mf_to_echo_id"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_hydro_mf_to_echo_id.html#pyrad.proc.process_hydro_mf_to_echo_id">[docs]</a><span class="k">def</span> <span class="nf">process_hydro_mf_to_echo_id</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_hydro_mf_to_echo_id">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_hydro_mf_to_echo_id.html#pyrad.proc.process_hydro_mf_to_echo_id">[docs]</a>
+<span class="k">def</span> <span class="nf">process_hydro_mf_to_echo_id</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts MF hydrometeor classification into pyrad echo ID</span>
 
@@ -747,7 +754,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_hydro_mf_to_hydro"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_hydro_mf_to_hydro.html#pyrad.proc.process_hydro_mf_to_hydro">[docs]</a><span class="k">def</span> <span class="nf">process_hydro_mf_to_hydro</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_hydro_mf_to_hydro">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_hydro_mf_to_hydro.html#pyrad.proc.process_hydro_mf_to_hydro">[docs]</a>
+<span class="k">def</span> <span class="nf">process_hydro_mf_to_hydro</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts the hydrometeor classification from Météo France to</span>
 <span class="sd">    that of MeteoSwiss</span>
@@ -827,7 +837,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_echo_filter"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_echo_filter.html#pyrad.proc.process_echo_filter">[docs]</a><span class="k">def</span> <span class="nf">process_echo_filter</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_echo_filter">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_echo_filter.html#pyrad.proc.process_echo_filter">[docs]</a>
+<span class="k">def</span> <span class="nf">process_echo_filter</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Masks all echo types that are not of the class specified in</span>
 <span class="sd">    keyword echo_type</span>
@@ -919,7 +932,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_cdf"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_cdf.html#pyrad.proc.process_cdf">[docs]</a><span class="k">def</span> <span class="nf">process_cdf</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_cdf">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_cdf.html#pyrad.proc.process_cdf">[docs]</a>
+<span class="k">def</span> <span class="nf">process_cdf</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Collects the fields necessary to compute the Cumulative Distribution</span>
 <span class="sd">    Function</span>
@@ -998,7 +1014,10 @@ document.write(`
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
-<div class="viewcode-block" id="process_gatefilter"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_gatefilter.html#pyrad.proc.process_gatefilter">[docs]</a><span class="k">def</span> <span class="nf">process_gatefilter</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_gatefilter">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_gatefilter.html#pyrad.proc.process_gatefilter">[docs]</a>
+<span class="k">def</span> <span class="nf">process_gatefilter</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    filters out all available moments based on specified upper/lower bounds for moments </span>
 <span class="sd">    based on the Py-ART gatefilter. Every value below upper bound or above upper </span>
@@ -1092,7 +1111,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_filter_snr"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_filter_snr.html#pyrad.proc.process_filter_snr">[docs]</a><span class="k">def</span> <span class="nf">process_filter_snr</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_filter_snr">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_filter_snr.html#pyrad.proc.process_filter_snr">[docs]</a>
+<span class="k">def</span> <span class="nf">process_filter_snr</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    filters out low SNR echoes</span>
 
@@ -1194,7 +1216,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_filter_vel_diff"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_filter_vel_diff.html#pyrad.proc.process_filter_vel_diff">[docs]</a><span class="k">def</span> <span class="nf">process_filter_vel_diff</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_filter_vel_diff">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_filter_vel_diff.html#pyrad.proc.process_filter_vel_diff">[docs]</a>
+<span class="k">def</span> <span class="nf">process_filter_vel_diff</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    filters out range gates that could not be used for Doppler velocity</span>
 <span class="sd">    estimation</span>
@@ -1276,7 +1301,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_filter_visibility"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_filter_visibility.html#pyrad.proc.process_filter_visibility">[docs]</a><span class="k">def</span> <span class="nf">process_filter_visibility</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_filter_visibility">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_filter_visibility.html#pyrad.proc.process_filter_visibility">[docs]</a>
+<span class="k">def</span> <span class="nf">process_filter_visibility</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    filters out rays gates with low visibility and corrects the reflectivity</span>
 
@@ -1370,7 +1398,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_outlier_filter"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_outlier_filter.html#pyrad.proc.process_outlier_filter">[docs]</a><span class="k">def</span> <span class="nf">process_outlier_filter</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_outlier_filter">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_outlier_filter.html#pyrad.proc.process_outlier_filter">[docs]</a>
+<span class="k">def</span> <span class="nf">process_outlier_filter</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    filters out gates which are outliers respect to the surrounding</span>
 
@@ -1492,7 +1523,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_filter_vol2bird"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_filter_vol2bird.html#pyrad.proc.process_filter_vol2bird">[docs]</a><span class="k">def</span> <span class="nf">process_filter_vol2bird</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_filter_vol2bird">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_filter_vol2bird.html#pyrad.proc.process_filter_vol2bird">[docs]</a>
+<span class="k">def</span> <span class="nf">process_filter_vol2bird</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Masks all echo types that have been identified as non-biological by</span>
 <span class="sd">    vol2bird</span>
@@ -1576,7 +1610,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_gate_filter_vol2bird"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_gate_filter_vol2bird.html#pyrad.proc.process_gate_filter_vol2bird">[docs]</a><span class="k">def</span> <span class="nf">process_gate_filter_vol2bird</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_gate_filter_vol2bird">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_gate_filter_vol2bird.html#pyrad.proc.process_gate_filter_vol2bird">[docs]</a>
+<span class="k">def</span> <span class="nf">process_gate_filter_vol2bird</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Adds filter on range gate values to the vol2bird filter</span>
 
@@ -1670,7 +1707,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_hydroclass"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_hydroclass.html#pyrad.proc.process_hydroclass">[docs]</a><span class="k">def</span> <span class="nf">process_hydroclass</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_hydroclass">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_hydroclass.html#pyrad.proc.process_hydroclass">[docs]</a>
+<span class="k">def</span> <span class="nf">process_hydroclass</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Classifies precipitation echoes</span>
 
@@ -2019,7 +2059,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_centroids"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_centroids.html#pyrad.proc.process_centroids">[docs]</a><span class="k">def</span> <span class="nf">process_centroids</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_centroids">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_centroids.html#pyrad.proc.process_centroids">[docs]</a>
+<span class="k">def</span> <span class="nf">process_centroids</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes centroids for the semi-supervised hydrometeor classification</span>
 
@@ -2368,7 +2411,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_melting_layer"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_melting_layer.html#pyrad.proc.process_melting_layer">[docs]</a><span class="k">def</span> <span class="nf">process_melting_layer</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_melting_layer">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_melting_layer.html#pyrad.proc.process_melting_layer">[docs]</a>
+<span class="k">def</span> <span class="nf">process_melting_layer</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Detects the melting layer</span>
 
@@ -2765,7 +2811,10 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
-<div class="viewcode-block" id="process_zdr_column"><a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_zdr_column.html#pyrad.proc.process_zdr_column">[docs]</a><span class="k">def</span> <span class="nf">process_zdr_column</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="process_zdr_column">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_zdr_column.html#pyrad.proc.process_zdr_column">[docs]</a>
+<span class="k">def</span> <span class="nf">process_zdr_column</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Detects ZDR columns</span>
 
@@ -2943,6 +2992,7 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
+
 <span class="k">class</span> <span class="nc">ScanObject</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;generates scan object containing all required radar parameters&quot;&quot;&quot;</span>
 
@@ -3025,7 +3075,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
   </p>
 </div>

@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -28,30 +27,27 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../_static/clipboard.min.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
-    <script src="../../../_static/design-tabs.js"></script>
+    <script src="../../../_static/documentation_options.js?v=daef7da6"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyrad/io/read_data_radar';</script>
-    <script src="../../../_static/doc_shared.js"></script>
+    <script src="../../../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 
@@ -469,7 +465,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.io_aux</span> <span class="kn">import</span> <span class="n">get_rad4alp_dir</span>
 
 
-<div class="viewcode-block" id="get_data"><a class="viewcode-back" href="../../../API/generated/pyrad.io.get_data.html#pyrad.io.get_data">[docs]</a><span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">datatypesdescr</span><span class="p">,</span> <span class="n">cfg</span><span class="p">):</span>
+<div class="viewcode-block" id="get_data">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.get_data.html#pyrad.io.get_data">[docs]</a>
+<span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">datatypesdescr</span><span class="p">,</span> <span class="n">cfg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads pyrad input data.</span>
 
@@ -1538,6 +1536,7 @@ document.write(`
                 <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;dBADUtodBmv&#39;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">])</span>
 
     <span class="k">return</span> <span class="n">radar</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">merge_scans_rainbow</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="n">scan_list</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">scan_period</span><span class="p">,</span>
@@ -5373,7 +5372,9 @@ document.write(`
     <span class="k">return</span> <span class="n">radar</span>
 
 
-<div class="viewcode-block" id="add_field"><a class="viewcode-back" href="../../../API/generated/pyrad.io.add_field.html#pyrad.io.add_field">[docs]</a><span class="k">def</span> <span class="nf">add_field</span><span class="p">(</span><span class="n">radar_dest</span><span class="p">,</span> <span class="n">radar_orig</span><span class="p">):</span>
+<div class="viewcode-block" id="add_field">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.add_field.html#pyrad.io.add_field">[docs]</a>
+<span class="k">def</span> <span class="nf">add_field</span><span class="p">(</span><span class="n">radar_dest</span><span class="p">,</span> <span class="n">radar_orig</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    adds the fields from orig radar into dest radar. If they are not in the</span>
 <span class="sd">    same grid, interpolates them to dest grid</span>
@@ -5421,7 +5422,10 @@ document.write(`
     <span class="k">return</span> <span class="n">radar_dest</span></div>
 
 
-<div class="viewcode-block" id="interpol_field"><a class="viewcode-back" href="../../../API/generated/pyrad.io.interpol_field.html#pyrad.io.interpol_field">[docs]</a><span class="k">def</span> <span class="nf">interpol_field</span><span class="p">(</span><span class="n">radar_dest</span><span class="p">,</span> <span class="n">radar_orig</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+
+<div class="viewcode-block" id="interpol_field">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.interpol_field.html#pyrad.io.interpol_field">[docs]</a>
+<span class="k">def</span> <span class="nf">interpol_field</span><span class="p">(</span><span class="n">radar_dest</span><span class="p">,</span> <span class="n">radar_orig</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">ang_tol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    interpolates field field_name contained in radar_orig to the grid in</span>
@@ -5522,6 +5526,7 @@ document.write(`
             <span class="n">field_dest_sweep</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">field_dest</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">crop_grid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">lat_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lat_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lon_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lon_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -5852,7 +5857,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
   </p>
 </div>
