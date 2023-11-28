@@ -25,6 +25,7 @@ Functions for reading data from other sensors
     get_sensor_data
     read_smn
     read_smn2
+    read_knmi
     read_coord_sensors
     read_disdro_scattering
     read_disdro
@@ -1727,6 +1728,25 @@ def get_sensor_data(date, datatype, cfg):
             return None, None, None, None
         label = 'RG'
         period = (sensordate[1] - sensordate[0]).total_seconds()
+    elif cfg['sensor'] == 'rgage_knmi':
+        datapath = f"{cfg['smnpath']}{date.strftime('%Y')}/"
+        datafile = f"kis_tor_{date.strftime('%Y%m')}.gz"
+        df_rg = read_knmi(f'{datapath}{datafile}')
+        # extract data corresponding to desired sensor
+        df_rg = df_rg[df_rg['id'] == cfg['sensorid']]
+
+        # extract data corresponding to desired time
+        t_start = date.replace(hour=0, minute=0, second=0)
+        t_end = t_start + datetime.timedelta(days=1)
+        mask = ((df_rg['time_stamp'] > t_start) & (df_rg['time_stamp'] <= t_end))
+        df_rg = df_rg.loc[mask]
+        df_rg.reset_index(inplace=True)
+
+        sensordate = df_rg['time_stamp'].values
+        sensorvalue = df_rg['ri_rg_10'].values
+
+        label = 'RG'
+        period = (df_rg['time_stamp'][1] - df_rg['time_stamp'][0]).total_seconds()
     elif cfg['sensor'] == 'disdro':
         if datatype in ('dBZ', 'dBZc'):
             sensor_datatype = 'dBZ'
@@ -1909,6 +1929,50 @@ def read_smn2(fname):
         warn(str(ee))
         warn('Unable to read file ' + fname)
         return None, None, None
+
+
+def read_knmi(fname, col_names=None):
+    """
+    Reads a file containing precipitation data from sensors retrieved from the
+    KNMI archive. There is data from Present Weather Sensors (PWS) and rain
+    gauges (RG). The file contains:
+    - time_stamp
+    - id: of the station
+    - name: of the station
+    - lat, lon alt: of the station
+    - dr_pws_10: period within 10 min in which the PWS detected rain (s)
+    - dr_rg_10: period within 10 min in which the RG detected rain (s)
+    - ww_cor_10: PWS code
+    - ri_pws_10: rain intensity registered by the PWS over the 10 min period
+    (mm/h)
+    - ri_rg_10: rain intensity registered by the RG over the 10 min period
+    (mm/h)
+
+    Parameters
+    ----------
+    fname : str
+        file name
+    col_names : list of strings or None
+        name of the columns contained in the file. If None default names are
+        given
+
+    Returns
+    -------
+    lat, lon , sensor_ID : tupple
+        The read values
+
+    """
+    if col_names is None:
+        col_names = [
+            'time_stamp', 'id', 'name', 'lat', 'lon', 'alt', 'dr_pws_10',
+            'dr_rg_10', 'ww_cor_10', 'ri_pws_10', 'ri_rg_10']
+    df_prec = pd.read_table(
+        fname, compression='gzip', comment='#', header=None, names=col_names,
+        sep="\s{2,}", engine="python")
+    df_prec['time_stamp'] = pd.to_datetime(
+        df_prec['time_stamp'], format='%Y-%m-%d %H:%M:%S')
+
+    return df_prec
 
 
 def read_coord_sensors(fname):

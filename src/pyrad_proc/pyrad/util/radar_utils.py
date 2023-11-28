@@ -119,10 +119,9 @@ def get_data_along_rng(radar, field_name, fix_elevations, fix_azimuths,
                 ind_sweep = find_ang_index(
                     radar.fixed_angle['data'], ele, ang_tol=ang_tol)
                 if ind_sweep is None:
-                    warn('No elevation angle found '
-                         'for fix_elevation {}'.format(ele))
+                    warn(f'No elevation angle found for fix_elevation {ele}')
                     continue
-                if 'vertical_pointing':
+                if radar.scan_type == 'vertical_pointing':
                     new_dataset = deepcopy(radar)
                 else:
                     new_dataset = radar.extract_sweeps([ind_sweep])
@@ -483,7 +482,7 @@ def rainfall_accumulation(t_in_vec, val_in_vec, cum_time=3600.,
 def time_series_statistics(t_in_vec, val_in_vec, avg_time=3600,
                            base_time=1800, method='mean', dropnan=False):
     """
-    Computes statistics over a time-averaged series. Only of package pandas is
+    Computes statistics over a time-averaged series. Only if package pandas is
     available otherwise returns None
 
     Parameters
@@ -515,7 +514,7 @@ def time_series_statistics(t_in_vec, val_in_vec, avg_time=3600,
 
     df_in = pd.DataFrame(data=val_in_vec, index=pd.DatetimeIndex(t_in_vec))
     df_out = getattr(df_in.resample(
-        str(avg_time) + 'S', closed='right', label='right', base=base_time),
+        str(avg_time) + 'S', closed='right', label='right', offset=base_time),
         method)()
     if dropnan is True:
         df_out = df_out.dropna(how='any')
@@ -1034,7 +1033,7 @@ def get_closest_solar_flux(hit_datetime_list, flux_datetime_list,
         the solar flux values closest to the sun hit time
 
     """
-    flux_datetime_closest_list = list()
+    flux_datetime_closest_list = []
     flux_value_closest_list = np.ma.masked_all(len(hit_datetime_list))
 
     i = 0
@@ -1564,7 +1563,7 @@ def get_histogram_bins(field_name, step=None, vmin=None, vmax=None):
 
     if step is None:
         step = (vmax - vmin) / 50.
-        warn('No step has been defined. Default ' + str(step) + ' will be used')
+        warn(f'No step has been defined. Default {step} will be used')
 
     return np.linspace(
         vmin - step / 2., vmax + step / 2., num=int((vmax - vmin) / step) + 2)
@@ -1889,9 +1888,11 @@ def compute_profile_stats(field, gate_altitude, h_vec, h_res,
                 warn('Unable to compute regression mean')
                 return None, None
             data_std = std_field[np.logical_and(
-                gate_altitude >= h - h_res / 2., gate_altitude < h + h_res / 2.)]
+                gate_altitude >= h - h_res / 2.,
+                gate_altitude < h + h_res / 2.)]
             data_np = np_field[np.logical_and(
-                gate_altitude >= h - h_res / 2., gate_altitude < h + h_res / 2.)]
+                gate_altitude >= h - h_res / 2.,
+                gate_altitude < h + h_res / 2.)]
 
             val_valid[i] = np.sum(data_np)
             if val_valid[i] == 0.:
@@ -1969,8 +1970,8 @@ def project_to_vertical(data_in, data_height, grid_height, interp_kind='none',
 
 def compute_average_vad(radar_list, z_want, signs, lat0, lon0):
     """
-    Computes a profile of horizontal wind by averaging the VAD profiles of multiple
-    radars
+    Computes a profile of horizontal wind by averaging the VAD profiles of
+    multiple radars
 
     Parameters
     ----------
@@ -1996,7 +1997,7 @@ def compute_average_vad(radar_list, z_want, signs, lat0, lon0):
     Returns
     -------
     vad_avg : pyart.core.HorizontalWindProfile
-        Vertical profile of horizontal wind computed by averaging the 
+        Vertical profile of horizontal wind computed by averaging the
         VAD from every radar
 
     """
@@ -2015,7 +2016,6 @@ def compute_average_vad(radar_list, z_want, signs, lat0, lon0):
             'reflectivity' in vname for vname in field_names_rad])[0][0]]
         refl_fields.append(refl_field)
 
-    
         # Compute VAD
         all_vad.append(
             pyart.retrieve.vad_browning(
