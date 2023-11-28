@@ -1958,8 +1958,8 @@ def read_knmi(fname, col_names=None):
 
     Returns
     -------
-    lat, lon , sensor_ID : tupple
-        The read values
+    df_prec : Pandas DataFrame
+        DataFrame containing the data
 
     """
     if col_names is None:

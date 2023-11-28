@@ -80,6 +80,7 @@ Reading other data
     read_coord_sensors
     read_disdro_scattering
     read_disdro_parsivel
+    read_knmi
     read_sun_hits
     read_sun_hits_multiple_days
     read_sun_retrieval
