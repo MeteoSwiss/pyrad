@@ -30,7 +30,8 @@ Functions for reading data from other sensors
     read_disdro_scattering
     read_disdro
     read_disdro_parsivel
-    read_radiosounding
+    read_radiosounding_wyoming
+    read_radiosounding_igra
 """
 
 import os
@@ -40,10 +41,11 @@ import csv
 from warnings import warn
 from copy import deepcopy
 import re
-from io import StringIO
+from io import StringIO, BytesIO
 import pandas as pd
 import requests
 import numpy as np
+from zipfile import ZipFile
 
 from pyart.config import get_fillvalue
 
@@ -2192,7 +2194,7 @@ def read_disdro_parsivel(fname):
     return df_disdro
 
 
-def read_radiosounding(station, datetime_obj):
+def read_radiosounding_wyoming(station, datetime_obj):
     """
     Download radiosounding data from the University of Wyoming website.
 
@@ -2236,3 +2238,110 @@ def read_radiosounding(station, datetime_obj):
     for col in data_df.columns:
         data_df[col] = pd.to_numeric(data_df[col])
     return data_df
+
+def read_radiosounding_igra(station, datetime_obj):
+    """
+    Download radiosounding data from the Integrated Global Radiosonde Archive 
+    (IGRA)
+
+    Parameters:
+    - station (str): Radiosounding station code (e.g., "72776").
+    - datetime_obj (datetime.datetime): Datetime object specifying the desired
+    date and time.
+
+    Returns:
+    pandas.DataFrame: A DataFrame containing the radiosounding data with
+    columns:
+    ['LVLTYPE1', 'LVLTYPE2','ETIME', 'PRESS', 'PFLAG', 'GPH','ZFLAG', 'TEMP',
+    'TFLAG', 'RH','DPDP','WDIR','WSPD']
+
+    Please see this link for a description of the columns
+    https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive/
+    doc/igra2-data-format.txt
+    """
+
+    COLUMNS_SOUNDING = ['LVLTYPE1', 'LVLTYPE2','ETIME', 'PRESS', 'PFLAG', 'GPH',
+            'ZFLAG', 'TEMP', 'TFLAG', 'RH','DPDP','WDIR','WSPD']
+    COLUMNS_STATION_LIST = ['CODE', 'LATITUDE', 'LONGITUDE', 'ELEVATION',
+         'NAME', 'START', 'END', 'ID']
+
+    # Start by getting the list of stations
+    # URL of the station list
+    url = "https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive" + \
+        "/doc/igra2-station-list.txt"
+
+    stations_ref = pd.read_fwf(url,
+        names=COLUMNS_STATION_LIST)
+
+    # get igra code
+    code = stations_ref['CODE'][stations_ref['CODE'].str.contains(station)].iloc[0]
+
+    url2 = 'https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive' + \
+        '/access/data-y2d/'
+
+    response = requests.get(url2)
+    links = re.findall(r'<a\s+(?:[^>]*?\s+)?href="([^"]*)"', response.text)
+
+    for link in links:
+        if code in link:
+            mylink = link
+
+    url = url2 + mylink
+    # Send a GET request to the URL
+    response = requests.get(url)
+
+    # Check if the request was successful (status code 200)
+    if response.status_code == 200:
+        # Open the zip file from the response content
+        with ZipFile(BytesIO(response.content)) as zip_file:
+            # List the files in the zip file (optional)
+            file_list = zip_file.namelist()
+            file_name = file_list[0] # only one file
+            file_content = [line.decode('utf-8') for line in
+                zip_file.open(file_name).readlines()]
+    else:
+        warn(f"Failed to retrieve the file. Status code: {response.status_code}")
+
+    # Now parse file and separate entries by sounding date
+    all_soundings = {}
+    for line in file_content:
+        if '#' in line:
+            # New sounding found
+            year, month, day, hour = line.split(' ')[1:5]
+            time_sounding = datetime.datetime(int(year), 
+                                            int(month),
+                                            int(day),
+                                            int(hour))
+            all_soundings[time_sounding] = []
+        else:
+            # Get row
+            lvltyp1 = int(line[0])  
+            lvltyp2 = int(line[1])  
+            etime = int(line[3:8]) 
+            press = int(line[9:15]) 
+            pflag = line[15] 
+            gph = int(line[16:21])
+            zflag = line[21]
+            temp = int(line[22:27]) / 10. 
+            tflag = line[27] 
+            rh = int(line[28:33]) / 10. 
+            dpdp = int(line[34:39]) / 10. 
+            wdir = int(line[40:45]) 
+            wspd = int(line[46:51]) / 10. 
+            all_soundings[time_sounding].append((lvltyp1, lvltyp2, 
+                etime, press, pflag, gph, zflag, temp, 
+                tflag, rh, dpdp, wdir, wspd))
+
+    # Convert to pandas DataFrame
+    for date in all_soundings:
+        all_soundings[date] = pd.DataFrame(all_soundings[date], 
+            columns = COLUMNS_SOUNDING)
+
+    # Find radiosounding closest in time to datetime_obj
+    offsets = [np.abs((datetime_obj - d).total_seconds()) 
+        for d in all_soundings.keys()]
+    idx = np.argsort(offsets)
+    closest = list(all_soundings.keys())[idx[0]]
+        
+    return all_soundings[closest]
+

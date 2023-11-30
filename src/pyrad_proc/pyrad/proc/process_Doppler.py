@@ -39,7 +39,7 @@ except ImportError:
     _PYDDA_AVAILABLE = False
 
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
-from ..io import read_radiosounding
+from ..io import read_radiosounding_igra
 from .process_grid import process_grid
 from ..util import compute_average_vad
 
@@ -969,7 +969,7 @@ def process_dda(procstatus, dscfg, radar_list=None):
     sounding = dscfg.get('sounding', None)
     if sounding:
         dtime = pyart.graph.common.generate_radar_time_begin(radar_list[0])
-        sounding_data = read_radiosounding(sounding, dtime)
+        sounding_data = read_radiosounding_igra(sounding, dtime)
     else:
         sounding_data = None
 
@@ -978,8 +978,8 @@ def process_dda(procstatus, dscfg, radar_list=None):
         sounding_data = sounding_data.dropna()
         # create wind profile from sounding
         wind_prof = pyart.core.HorizontalWindProfile(
-            sounding_data['HGHT'], sounding_data['SKNT'] * 0.514,
-            sounding_data['DRCT'])
+            sounding_data['GPH'], sounding_data['WSPD'],
+            sounding_data['WDIR'])
     else:
         # Compute VAD for every radar to initialize DDA
         # z-vector for vad
