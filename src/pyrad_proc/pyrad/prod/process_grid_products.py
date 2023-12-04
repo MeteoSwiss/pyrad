@@ -864,7 +864,7 @@ def generate_grid_products(dataset, prdcfg):
             bg_field_name += '_radar{:d}'.format(bg_ref_rad)
         if bg_field_name not in dataset['radar_out'].fields:
             warn(
-                ' Field type ' + field_name +
+                ' Field type ' + bg_field_name +
                 ' not available in data set. Skipping product ' +
                 prdcfg['type'])
             return None
