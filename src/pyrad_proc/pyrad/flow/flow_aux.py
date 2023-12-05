@@ -1086,6 +1086,8 @@ def _create_cfg_dict(cfgfile):
     if 'RadarPosition' in cfg:
         fltarr_list = ['latitude', 'longitude', 'altitude']
         for param in fltarr_list:
+            if param not in cfg['RadarPosition']:
+                continue
             if isinstance(cfg['RadarPosition'][param], float):
                 cfg['RadarPosition'][param] = [cfg['RadarPosition'][param]]
 
