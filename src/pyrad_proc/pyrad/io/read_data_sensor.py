@@ -2232,9 +2232,9 @@ def read_radiosounding_wyoming(station, datetime_obj):
     data_str = response.text[start_idx:end_idx][0:-10]
 
     data_io = StringIO(data_str)
-    data_df = pd.read_csv(
-        data_io, sep='\s+', header=0, skiprows=[1, 2],
-        error_bad_lines=False,)
+    data_df = pd.read_csv(data_io, sep='\s+', header=0, skiprows = [1,2],
+        on_bad_lines='warn', 
+    )
     for col in data_df.columns:
         data_df[col] = pd.to_numeric(data_df[col])
     return data_df
