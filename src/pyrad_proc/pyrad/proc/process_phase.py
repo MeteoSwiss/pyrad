@@ -30,7 +30,7 @@ import numpy as np
 import pyart
 
 from ..io.io_aux import get_datatype_fields
-
+from ..io.read_data_sensor import read_fzl_igra
 
 def process_correct_phidp0(procstatus, dscfg, radar_list=None):
     """
@@ -371,6 +371,11 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
             The maximum reflectivity [dBZ]. Default 40
         fzl : float. Dataset keyword
             The freezing level height [m]. Default 2000.
+        sounding : str. Dataset keyword
+            The nearest radiosounding WMO code (5 int digits). It will be used to
+            compute the freezing level, if no temperature field name is specified,
+            if the temperature field isin the radar object or if no freezing_level
+            is explicitely defined.
         ml_thickness : float. Dataset keyword
             The melting layer thickness in meters. Default 700.
         beamwidth : float. Dataset keyword
@@ -433,33 +438,31 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
     thickness = dscfg.get('ml_thickness', 700.)
 
     # determine which freezing level reference
-    temp_ref = 'temperature'
-    if temp_field is None and iso0_field is None:
-        warn('Field to obtain the freezing level was not specified. ' +
-             'Using fixed freezing level height')
-        temp_ref = 'fixed_fzl'
-    elif temp_field is not None:
-        if temp_field not in radar.fields:
-            warn('COSMO temperature field not available. ' +
-                 'Using fixed freezing level height')
-            temp_ref = 'fixed_fzl'
-    elif iso0_field is not None:
-        if iso0_field not in radar.fields:
-            warn('Height over iso0 field not available. ' +
-                 'Using fixed freezing level height')
-            temp_ref = 'fixed_fzl'
+    if temp_field is not None:
+        if temp_field in radar.fields:
+            temp_ref = 'temperature'
         else:
+            warn('COSMO temperature field not available. ' +
+                 'Using fixed freezing level height to determine liquid phase')
+    elif iso0_field is not None:
+        if iso0_field in radar.fields:
             temp_ref = 'height_over_iso0'
-
-    # determine freezing level height if necessary
-    fzl = None
-    if temp_ref == 'fixed_fzl':
+        else:
+            warn('Height over iso0 field not available. ' +
+                 'Using fixed freezing level height to determine liquid phase')
+    else:
+        # determine freezing level height if necessary
+        temp_ref = 'fixed_fzl'
         if 'fzl' in dscfg:
             fzl = dscfg['fzl']
+        elif 'sounding' in dscfg:
+            sounding_code = dscfg['sounding']
+            t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
+            fzl = read_fzl_igra(sounding_code, t0)
         else:
-            fzl = 2000.
             warn('Freezing level height not defined. Using default ' +
                  str(fzl) + ' m')
+            fzl = 2000
 
     phidp_field = 'corrected_differential_phase'
     kdp_field = 'corrected_specific_differential_phase'
@@ -553,6 +556,11 @@ def process_phidp_kdp_lp(procstatus, dscfg, radar_list=None):
             The input data types
         fzl : float. Dataset keyword
             The freezing level height [m]. Default 2000.
+        sounding : str. Dataset keyword
+            The nearest radiosounding WMO code (5 int digits). It will be used to
+            compute the freezing level, if no temperature field name is specified,
+            if the temperature field isin the radar object or if no freezing_level
+            is explicitely defined.
         ml_thickness : float. Dataset keyword
             The melting layer thickness in meters. Default 700.
         beamwidth : float. Dataset keyword
@@ -615,33 +623,31 @@ def process_phidp_kdp_lp(procstatus, dscfg, radar_list=None):
         return None, None
 
     # determine which freezing level reference
-    temp_ref = 'temperature'
-    if temp_field is None and iso0_field is None:
-        warn('Field to obtain the freezing level was not specified. ' +
-             'Using fixed freezing level height')
-        temp_ref = 'fixed_fzl'
-    elif temp_field is not None:
-        if temp_field not in radar.fields:
-            warn('COSMO temperature field not available. ' +
-                 'Using fixed freezing level height')
-            temp_ref = 'fixed_fzl'
-    elif iso0_field is not None:
-        if iso0_field not in radar.fields:
-            warn('Height over iso0 field not available. ' +
-                 'Using fixed freezing level height')
-            temp_ref = 'fixed_fzl'
+    if temp_field is not None:
+        if temp_field in radar.fields:
+            temp_ref = 'temperature'
         else:
+            warn('COSMO temperature field not available. ' +
+                 'Using fixed freezing level height to determine liquid phase')
+    elif iso0_field is not None:
+        if iso0_field in radar.fields:
             temp_ref = 'height_over_iso0'
-
-    # determine freezing level height if necessary
-    fzl = None
-    if temp_ref == 'fixed_fzl':
+        else:
+            warn('Height over iso0 field not available. ' +
+                 'Using fixed freezing level height to determine liquid phase')
+    else:
+        # determine freezing level height if necessary
+        temp_ref = 'fixed_fzl'
         if 'fzl' in dscfg:
             fzl = dscfg['fzl']
+        elif 'sounding' in dscfg:
+            sounding_code = dscfg['sounding']
+            t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
+            fzl = read_fzl_igra(sounding_code, t0)
         else:
-            fzl = 2000.
             warn('Freezing level height not defined. Using default ' +
                  str(fzl) + ' m')
+            fzl = 2000
 
     radar_aux = deepcopy(radar)
 
@@ -1107,6 +1113,11 @@ def process_attenuation(procstatus, dscfg, radar_list=None):
             The default freezing level height. It will be used if no
             temperature field name is specified or the temperature field is
             not in the radar object. Default 2000.
+        sounding : str. Dataset keyword
+            The nearest radiosounding WMO code (5 int digits). It will be used to
+            compute the freezing level, if no temperature field name is specified,
+            if the temperature field isin the radar object or if no freezing_level
+            is explicitely defined.
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -1155,33 +1166,31 @@ def process_attenuation(procstatus, dscfg, radar_list=None):
         return None, None
 
     # determine which freezing level reference
-    temp_ref = 'temperature'
-    if temp is None and iso0 is None:
-        warn('Field to obtain the freezing level was not specified. ' +
-             'Using fixed freezing level height')
-        temp_ref = 'fixed_fzl'
-    elif temp is not None:
-        if temp not in radar.fields:
-            warn('COSMO temperature field not available. ' +
-                 'Using fixed freezing level height')
-            temp_ref = 'fixed_fzl'
-    elif iso0 is not None:
-        if iso0 not in radar.fields:
-            warn('Height over iso0 field not available. ' +
-                 'Using fixed freezing level height')
-            temp_ref = 'fixed_fzl'
+    if temp is not None:
+        if temp in radar.fields:
+            temp_ref = 'temperature'
         else:
+            warn('COSMO temperature field not available. ' +
+                 'Using fixed freezing level height to determine liquid phase')
+    elif iso0 is not None:
+        if iso0 in radar.fields:
             temp_ref = 'height_over_iso0'
-
-    # determine freezing level height if necessary
-    fzl = None
-    if temp_ref == 'fixed_fzl':
+        else:
+            warn('Height over iso0 field not available. ' +
+                 'Using fixed freezing level height to determine liquid phase')
+    else:
+        # determine freezing level height if necessary
+        temp_ref = 'fixed_fzl'
         if 'fzl' in dscfg:
             fzl = dscfg['fzl']
+        elif 'sounding' in dscfg:
+            sounding_code = dscfg['sounding']
+            t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
+            fzl = read_fzl_igra(sounding_code, t0)
         else:
-            fzl = 2000.
             warn('Freezing level height not defined. Using default ' +
                  str(fzl) + ' m')
+            fzl = 2000
 
     att_method = dscfg.get('ATT_METHOD', 'ZPhi')
     if att_method not in ('ZPhi', 'Philin'):
