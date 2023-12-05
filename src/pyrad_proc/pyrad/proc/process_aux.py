@@ -15,6 +15,7 @@ determined points or regions of interest.
     process_save_radar
     process_fixed_rng
     process_fixed_rng_span
+    process_keep_roi
     process_roi
     process_roi2
     process_azimuthal_average
@@ -51,6 +52,7 @@ from ..io.read_data_other import read_antenna_pattern
 from ..io.read_data_cosmo import _put_radar_in_swiss_coord
 from ..util.radar_utils import belongs_roi_indices
 from ..util.radar_utils import get_fixed_rng_data, get_cercle_coords
+from ..util.radar_utils import get_box_coords
 from ..util.stat_utils import quantiles_weighted
 from ..proc.process_traj import _get_gates_antenna_pattern
 
@@ -102,6 +104,7 @@ def get_process_func(dataset_type, dsname):
                 'ISO0_MF': process_iso0_mf
                 'KDP_LEASTSQUARE_1W': process_kdp_leastsquare_single_window
                 'KDP_LEASTSQUARE_2W': process_kdp_leastsquare_double_window
+                'KEEP_ROI': process_keep_roi
                 'L': process_l
                 'MEAN_PHASE_IQ': process_mean_phase_iq
                 'NCVOL': process_save_radar
@@ -631,6 +634,8 @@ def get_process_func(dataset_type, dsname):
         func_name = process_roi
     elif dataset_type == 'ROI2':
         func_name = process_roi2
+    elif dataset_type == 'KEEP_ROI':
+        func_name = process_keep_roi
     elif dataset_type == 'TRAJ':
         func_name = 'process_trajectory'
         dsformat = 'TRAJ_ONLY'
@@ -1003,10 +1008,9 @@ def process_fixed_rng_span(procstatus, dscfg, radar_list=None):
     return new_dataset, ind_rad
 
 
-def process_roi(procstatus, dscfg, radar_list=None):
+def process_keep_roi(procstatus, dscfg, radar_list=None):
     """
-    Obtains the radar data at a region of interest defined by a TRT file or
-    by the user.
+    keep only data within a region of interest and mask anything else
 
     Parameters
     ----------
@@ -1032,11 +1036,30 @@ def process_roi(procstatus, dscfg, radar_list=None):
             If True the region of interest is going to be defined as a cercle
             centered at a particular point. Default False
         lon_centre, lat_centre : Float. Dataset keyword
-            The position of the centre of the cercle
+            The position of the centre of the cercle. If None, that of the
+            radar will be used
         rad_cercle : Float. Dataset keyword
             The radius of the cercle in m. Default 1000.
         res_cercle : int. Dataset keyword
             Number of points used to define a quarter of cercle. Default 16
+        box : boolean. Dataset keyword
+            If True the region of interest is going to be defined by a
+            rectangle
+        lon_point, lat point : Float
+            The position of the point of rotation of the box. If None the
+            position of the radar is going to be used
+        rotation : float
+            The angle of rotation. Positive is counterclockwise from North in
+            deg. Default 0.
+        we_offset, sn_offset : float
+            west-east and south-north offset from rotation position in m.
+            Default 0
+        we_length, sn_length : float
+            west-east and south-north rectangle lengths in m. Default 1000.
+        origin : str
+            origin of rotation. Can be center: center of the rectangle or
+            mid_south. East-west mid-point at the south of the rectangle.
+            Default center
         use_latlon : Bool. Dataset keyword
             If True the coordinates used to find the radar gates within the
             ROI will be lat/lon. If false it will use Cartesian Coordinates
@@ -1083,6 +1106,7 @@ def process_roi(procstatus, dscfg, radar_list=None):
 
     # Choose origin of ROI definition
     cercle = dscfg.get('cercle', False)
+    box = dscfg.get('box', False)
     use_latlon = dscfg.get('use_latlon', True)
     if 'trtfile' in dscfg:
         (_, yyyymmddHHMM, lon, lat, _, _, _, _, _, _, _, _, _, _, _, _, _, _,
@@ -1111,15 +1135,303 @@ def process_roi(procstatus, dscfg, radar_list=None):
         res_cercle = dscfg.get('res_cercle', 16)
 
         if lon_centre is None or lat_centre is None:
-            warn('Undefined ROI')
-            return None, None
+            warn('cercle position undefined. '
+                 'The radar position will be used')
+            lon_centre = radar.longitude['data'][0]
+            lat_centre = radar.latitude['data'][0]
 
         # put data as x,y coordinates
         x_centre, y_centre = geographic_to_cartesian_aeqd(
             lon_centre, lat_centre, radar.longitude['data'][0],
             radar.latitude['data'][0])
         x_roi, y_roi = get_cercle_coords(
-            x_centre, y_centre, radius=rad_cercle, resolution=res_cercle)
+            x_centre[0], y_centre[0], radius=rad_cercle,
+            resolution=res_cercle)
+        if x_roi is None:
+            return None, None
+        lon_roi, lat_roi = cartesian_to_geographic_aeqd(
+            x_roi, y_roi, radar.longitude['data'][0],
+            radar.latitude['data'][0])
+    elif box:
+        lon_point = dscfg.get('lon', None)
+        lat_point = dscfg.get('lat', None)
+        rotation = dscfg.get('rotation', 0)  # deg from north
+        origin = dscfg.get('origin', 'center')  # origin of rotation
+        we_offset = dscfg.get('we_offset', 0.)  # m
+        sn_offset = dscfg.get('sn_offset', 0.)  # m
+        we_length = dscfg.get('we_length', 1000.)   # m
+        sn_length = dscfg.get('sn_length', 1000.)   # m
+
+        if lon_point is None or lat_point is None:
+            warn('box position undefined. '
+                 'The radar position will be used')
+            lon_point = radar.longitude['data'][0]
+            lat_point = radar.latitude['data'][0]
+
+        # put data as x,y coordinates
+        x_point, y_point = geographic_to_cartesian_aeqd(
+            lon_point, lat_point, radar.longitude['data'][0],
+            radar.latitude['data'][0])
+        x_roi, y_roi = get_box_coords(
+            x_point[0], y_point[0], we_length=we_length, sn_length=sn_length,
+            rotation=rotation, origin=origin, we_offset=we_offset,
+            sn_offset=sn_offset)
+        if x_roi is None:
+            return None, None
+        lon_roi, lat_roi = cartesian_to_geographic_aeqd(
+            x_roi, y_roi, radar.longitude['data'][0],
+            radar.latitude['data'][0])
+    else:
+        lon_roi = dscfg.get('lon_roi', None)
+        lat_roi = dscfg.get('lat_roi', None)
+
+        if lon_roi is None or lat_roi is None:
+            warn('Undefined ROI')
+            return None, None
+        x_roi, y_roi = geographic_to_cartesian_aeqd(
+            lon_roi, lat_roi, radar.longitude['data'][0],
+            radar.latitude['data'][0])
+
+    alt_min = dscfg.get('alt_min', None)
+    alt_max = dscfg.get('alt_max', None)
+
+    roi_dict = {
+        'lon': lon_roi,
+        'lat': lat_roi,
+        'x': x_roi,
+        'y': y_roi,
+        'alt_min': alt_min,
+        'alt_max': alt_max}
+
+    # extract the data within the ROI boundaries
+    inds_ray, inds_rng = np.indices(np.shape(radar.gate_longitude['data']))
+
+    if use_latlon:
+        mask = np.logical_and(
+            np.logical_and(
+                radar.gate_latitude['data'] >= roi_dict['lat'].min(),
+                radar.gate_latitude['data'] <= roi_dict['lat'].max()),
+            np.logical_and(
+                radar.gate_longitude['data'] >= roi_dict['lon'].min(),
+                radar.gate_longitude['data'] <= roi_dict['lon'].max()))
+    else:
+        mask = np.logical_and(
+            np.logical_and(
+                radar.gate_y['data'] >= roi_dict['y'].min(),
+                radar.gate_y['data'] <= roi_dict['y'].max()),
+            np.logical_and(
+                radar.gate_x['data'] >= roi_dict['x'].min(),
+                radar.gate_x['data'] <= roi_dict['x'].max()))
+
+    if alt_min is not None:
+        mask[radar.gate_altitude['data'] < alt_min] = 0
+    if alt_max is not None:
+        mask[radar.gate_altitude['data'] > alt_max] = 0
+
+    if np.all(mask == 0):
+        warn('No values within ROI')
+        return None, None
+
+    inds_ray = inds_ray[mask]
+    inds_rng = inds_rng[mask]
+
+    # extract the data inside the ROI
+    lat = radar.gate_latitude['data'][mask]
+    lon = radar.gate_longitude['data'][mask]
+    if use_latlon:
+        inds, is_roi = belongs_roi_indices(
+            lat, lon, roi_dict, use_latlon=use_latlon)
+    else:
+        y = radar.gate_y['data'][mask]
+        x = radar.gate_x['data'][mask]
+        inds, is_roi = belongs_roi_indices(
+            y, x, roi_dict, use_latlon=use_latlon)
+
+    if is_roi == 'None':
+        warn('No values within ROI')
+        return None, None
+
+    inds_ray = inds_ray[inds]
+    inds_rng = inds_rng[inds]
+
+    # prepare new radar object output
+    new_dataset = {'radar_out': deepcopy(radar)}
+    new_dataset['radar_out'].fields = dict()
+    for field_name in field_names:
+        field_dict = deepcopy(radar.fields[field_name])
+        field_dict['data'][:] = np.ma.masked
+        field_dict['data'][inds_ray, inds_rng] = (
+            radar.fields[field_name]['data'][inds_ray, inds_rng])
+        new_dataset['radar_out'].add_field(field_name, field_dict)
+
+    return new_dataset, ind_rad
+
+
+def process_roi(procstatus, dscfg, radar_list=None):
+    """
+    Obtains the radar data at a region of interest defined by a TRT file or
+    by the user.
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration. Accepted Configuration Keywords::
+
+        datatype : string. Dataset keyword
+            The data type where we want to extract the point measurement
+        trtfile : str. Dataset keyword
+            TRT file from which to extract the region of interest
+        time_tol : float. Dataset keyword
+            Time tolerance between the TRT file date and the nominal radar
+            volume time
+        lon_roi, lat_roi : float array. Dataset keyword
+            latitude and longitude positions defining a region of interest
+        alt_min, alt_max : float. Dataset keyword
+            Minimum and maximum altitude of the region of interest. Can be
+            None
+        cercle : boolean. Dataset keyword
+            If True the region of interest is going to be defined as a cercle
+            centered at a particular point. Default False
+        lon_centre, lat_centre : Float. Dataset keyword
+            The position of the centre of the cercle
+        rad_cercle : Float. Dataset keyword
+            The radius of the cercle in m. Default 1000.
+        res_cercle : int. Dataset keyword
+            Number of points used to define a quarter of cercle. Default 16
+        lon_point, lat point : Float
+            The position of the point of rotation of the box. If None the
+            position of the radar is going to be used
+        rotation : float
+            The angle of rotation. Positive is counterclockwise from North in
+            deg. Default 0.
+        we_offset, sn_offset : float
+            west-east and south-north offset from rotation position in m.
+            Default 0
+        we_length, sn_length : float
+            west-east and south-north rectangle lengths in m. Default 1000.
+        origin : str
+            origin of rotation. Can be center: center of the rectangle or
+            mid_south. East-west mid-point at the south of the rectangle.
+            Default center
+        use_latlon : Bool. Dataset keyword
+            If True the coordinates used to find the radar gates within the
+            ROI will be lat/lon. If false it will use Cartesian Coordinates
+            with origin the radar position. Default True
+
+    radar_list : list of Radar objects
+          Optional. list of radar objects
+
+    Returns
+    -------
+    new_dataset : dict
+        dictionary containing the data and metadata at the point of interest
+    ind_rad : int
+        radar index
+
+    """
+    if procstatus != 1:
+        return None, None
+
+    field_names_aux = []
+    for datatypedescr in dscfg['datatype']:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        field_names_aux.append(get_fieldname_pyart(datatype))
+
+    ind_rad = int(radarnr[5:8]) - 1
+    if (radar_list is None) or (radar_list[ind_rad] is None):
+        warn('ERROR: No valid radar')
+        return None, None
+    radar = radar_list[ind_rad]
+
+    # keep only fields present in radar object
+    field_names = []
+    nfields_available = 0
+    for field_name in field_names_aux:
+        if field_name not in radar.fields:
+            warn('Field name ' + field_name + ' not available in radar object')
+            continue
+        field_names.append(field_name)
+        nfields_available += 1
+
+    if nfields_available == 0:
+        warn("Fields not available in radar data")
+        return None, None
+
+    # Choose origin of ROI definition
+    cercle = dscfg.get('cercle', False)
+    box = dscfg.get('box', False)
+    use_latlon = dscfg.get('use_latlon', True)
+    if 'trtfile' in dscfg:
+        (_, yyyymmddHHMM, lon, lat, _, _, _, _, _, _, _, _, _, _, _, _, _, _,
+         _, _, _, _, _, _, _, _, _, cell_contour) = read_trt_traj_data(
+             dscfg['trtfile'])
+
+        time_tol = dscfg.get('TimeTol', 100.)
+        dt = np.empty(yyyymmddHHMM.size, dtype=float)
+        for i, time_traj in enumerate(yyyymmddHHMM):
+            dt[i] = np.abs((dscfg['timeinfo'] - time_traj).total_seconds())
+        if dt.min() > time_tol:
+            warn('No TRT data for radar volume time')
+            return None, None
+
+        ind = np.argmin(dt)
+        lon_roi = cell_contour[ind]['lon']
+        lat_roi = cell_contour[ind]['lat']
+
+        x_roi, y_roi = geographic_to_cartesian_aeqd(
+            lon_roi, lat_roi, radar.longitude['data'][0],
+            radar.longitude['data'][0])
+    elif cercle:
+        lon_centre = dscfg.get('lon_centre', None)
+        lat_centre = dscfg.get('lat_centre', None)
+        rad_cercle = dscfg.get('rad_cercle', 1000.)  # m
+        res_cercle = dscfg.get('res_cercle', 16)
+
+        if lon_centre is None or lat_centre is None:
+            warn('cercle position undefined. '
+                 'The radar position will be used')
+            lon_centre = radar.longitude['data'][0]
+            lat_centre = radar.latitude['data'][0]
+
+        # put data as x,y coordinates
+        x_centre, y_centre = geographic_to_cartesian_aeqd(
+            lon_centre, lat_centre, radar.longitude['data'][0],
+            radar.latitude['data'][0])
+        x_roi, y_roi = get_cercle_coords(
+            x_centre[0], y_centre[0], radius=rad_cercle,
+            resolution=res_cercle)
+        if x_roi is None:
+            return None, None
+        lon_roi, lat_roi = cartesian_to_geographic_aeqd(
+            x_roi, y_roi, radar.longitude['data'][0],
+            radar.latitude['data'][0])
+    elif box:
+        lon_point = dscfg.get('lon', None)
+        lat_point = dscfg.get('lat', None)
+        rotation = dscfg.get('rotation', 0)  # deg from north
+        origin = dscfg.get('origin', 'center')  # origin of rotation
+        we_offset = dscfg.get('we_offset', 0.)  # m
+        sn_offset = dscfg.get('sn_offset', 0.)  # m
+        we_length = dscfg.get('we_length', 1000.)   # m
+        sn_length = dscfg.get('sn_length', 1000.)   # m
+
+        if lon_point is None or lat_point is None:
+            warn('box position undefined. '
+                 'The radar position will be used')
+            lon_point = radar.longitude['data'][0]
+            lat_point = radar.latitude['data'][0]
+
+        # put data as x,y coordinates
+        x_point, y_point = geographic_to_cartesian_aeqd(
+            lon_point, lat_point, radar.longitude['data'][0],
+            radar.latitude['data'][0])
+        x_roi, y_roi = get_box_coords(
+            x_point[0], y_point[0], we_length=we_length, sn_length=sn_length,
+            rotation=rotation, origin=origin, we_offset=we_offset,
+            sn_offset=sn_offset)
         if x_roi is None:
             return None, None
         lon_roi, lat_roi = cartesian_to_geographic_aeqd(
@@ -1291,6 +1603,24 @@ def process_roi2(procstatus, dscfg, radar_list=None):
             The radius of the cercle in m. Default 1000.
         res_cercle : int. Dataset keyword
             Number of points used to define a quarter of cercle. Default 16
+        box : boolean. Dataset keyword
+            If True the region of interest is going to be defined by a
+            rectangle
+        lon_point, lat point : Float
+            The position of the point of rotation of the box. If None the
+            position of the radar is going to be used
+        rotation : float
+            The angle of rotation. Positive is counterclockwise from North in
+            deg. Default 0.
+        we_offset, sn_offset : float
+            west-east and south-north offset from rotation position in m.
+            Default 0
+        we_length, sn_length : float
+            west-east and south-north rectangle lengths in m. Default 1000.
+        origin : str
+            origin of rotation. Can be center: center of the rectangle or
+            mid_south. East-west mid-point at the south of the rectangle.
+            Default center
         use_latlon : Bool. Dataset keyword
             If True the coordinates used to find the radar gates within the
             ROI will be lat/lon. If false it will use Cartesian Coordinates
@@ -1365,15 +1695,47 @@ def process_roi2(procstatus, dscfg, radar_list=None):
         res_cercle = dscfg.get('res_cercle', 16)
 
         if lon_centre is None or lat_centre is None:
-            warn('Undefined ROI')
-            return None, None
+            warn('cercle position undefined. '
+                 'The radar position will be used')
+            lon_centre = radar.longitude['data'][0]
+            lat_centre = radar.latitude['data'][0]
 
         # put data as x,y coordinates
         x_centre, y_centre = geographic_to_cartesian_aeqd(
             lon_centre, lat_centre, radar.longitude['data'][0],
             radar.latitude['data'][0])
         x_roi, y_roi = get_cercle_coords(
-            x_centre, y_centre, radius=rad_cercle, resolution=res_cercle)
+            x_centre[0], y_centre[0], radius=rad_cercle,
+            resolution=res_cercle)
+        if x_roi is None:
+            return None, None
+        lon_roi, lat_roi = cartesian_to_geographic_aeqd(
+            x_roi, y_roi, radar.longitude['data'][0],
+            radar.latitude['data'][0])
+    elif box:
+        lon_point = dscfg.get('lon', None)
+        lat_point = dscfg.get('lat', None)
+        rotation = dscfg.get('rotation', 0)  # deg from north
+        origin = dscfg.get('origin', 'center')  # origin of rotation
+        we_offset = dscfg.get('we_offset', 0.)  # m
+        sn_offset = dscfg.get('sn_offset', 0.)  # m
+        we_length = dscfg.get('we_length', 1000.)   # m
+        sn_length = dscfg.get('sn_length', 1000.)   # m
+
+        if lon_point is None or lat_point is None:
+            warn('box position undefined. '
+                 'The radar position will be used')
+            lon_point = radar.longitude['data'][0]
+            lat_point = radar.latitude['data'][0]
+
+        # put data as x,y coordinates
+        x_point, y_point = geographic_to_cartesian_aeqd(
+            lon_point, lat_point, radar.longitude['data'][0],
+            radar.latitude['data'][0])
+        x_roi, y_roi = get_box_coords(
+            x_point[0], y_point[0], we_length=we_length, sn_length=sn_length,
+            rotation=rotation, origin=origin, we_offset=we_offset,
+            sn_offset=sn_offset)
         if x_roi is None:
             return None, None
         lon_roi, lat_roi = cartesian_to_geographic_aeqd(

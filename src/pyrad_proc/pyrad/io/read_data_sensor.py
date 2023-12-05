@@ -1781,7 +1781,7 @@ def get_sensor_data(date, datatype, cfg):
             sensor_datatype = datatype
 
         datapath = (
-            f'{cfg["disdropath"]}{cfg["sensorid"]}/disdro-1min/'
+            f'{cfg["disdropath"]}{cfg["sensorid"]}/Disdro-1min/'
             f'{date.strftime("%Y")}/')
         datafile = f'{date.strftime("%Y%m%d")}.csv'
 

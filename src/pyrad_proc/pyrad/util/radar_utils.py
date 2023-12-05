@@ -17,6 +17,7 @@ Miscellaneous functions dealing with radar data
     join_time_series
     get_range_bins_to_avg
     get_cercle_coords
+    get_box_coords
     belongs_roi_indices
     find_ray_index
     find_rng_index
@@ -696,6 +697,61 @@ def get_cercle_coords(x_centre, y_centre, radius=1000., resolution=16):
     return x_roi, y_roi
 
 
+def get_box_coords(x_point, y_point, we_length=1000., sn_length=1000.,
+                   rotation=0., origin='center', we_offset=0., sn_offset=0.):
+    """
+    Get the points defining a rectangle from the position of its centre and the
+    radius
+
+    Parameters
+    ----------
+    x_point, y_point : float
+        The Cartesian coordinates of the point at which the rectangle will
+        rotate. Typically in m
+    we_length, sn_length : float
+        west-east and south-north rectangle lengths
+    rotation : float
+         The angle of rotation. Positive is counterclockwise from North in
+         deg.
+    origin : str
+        The number of points used to define a quarter of the cercle
+    we_offset, sn_offset : float
+        west-east and south-north offset from rotation position
+
+    Returns
+    -------
+    x_roi, y_roi : array of floats
+        The position of the points defining the box
+
+    """
+    if not _SHAPELY_AVAILABLE:
+        warn('shapely package not available. ' +
+             'Unable to determine Region Of Interest')
+        return None, None
+
+    if origin == 'center':
+        minx = x_point-we_length/2.
+        miny = y_point-sn_length/2.
+        maxx = x_point+we_length/2.
+        maxy = y_point+sn_length/2.
+        orig_aux = 'center'
+    elif origin == 'mid_south':
+        minx = x_point-we_length/2.+we_offset
+        miny = y_point+sn_offset
+        maxx = x_point+we_length/2.+we_offset
+        maxy = y_point+sn_length+sn_offset
+        orig_aux = (x_point, y_point)
+
+    box = shapely.geometry.box(minx, miny, maxx, maxy)
+    box = shapely.affinity.rotate(box, rotation, origin=orig_aux)
+    box = list(box.exterior.coords)
+    xy_roi = list(zip(*box))
+    x_roi = np.array(xy_roi[0])
+    y_roi = np.array(xy_roi[1])
+
+    return x_roi, y_roi
+
+
 def belongs_roi_indices(lat, lon, roi, use_latlon=True):
     """
     Get the indices of points that belong to roi in a list of points
@@ -750,7 +806,7 @@ def belongs_roi_indices(lat, lon, roi, use_latlon=True):
                 ind = ind[0]
             inds.extend(ind)
         else:
-            points_roi_list = list(points_roi)
+            points_roi_list = list(points_roi.geoms)
             for point in points_roi_list:
                 ind = np.where(np.logical_and(lon == point.x, lat == point.y))
                 if len(ind) == 1:
