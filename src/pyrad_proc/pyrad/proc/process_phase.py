@@ -437,6 +437,7 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
     zmax = dscfg.get('Zmax', 40.)
     thickness = dscfg.get('ml_thickness', 700.)
 
+    fzl = None
     # determine which freezing level reference
     if temp_field is not None:
         if temp_field in radar.fields:
@@ -622,6 +623,7 @@ def process_phidp_kdp_lp(procstatus, dscfg, radar_list=None):
              'Missing data')
         return None, None
 
+    fzl = None
     # determine which freezing level reference
     if temp_field is not None:
         if temp_field in radar.fields:
@@ -1166,6 +1168,7 @@ def process_attenuation(procstatus, dscfg, radar_list=None):
         return None, None
 
     # determine which freezing level reference
+    fzl = None
     if temp is not None:
         if temp in radar.fields:
             temp_ref = 'temperature'

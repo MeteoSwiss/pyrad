@@ -137,6 +137,7 @@ def process_selfconsistency_kdp_phidp(procstatus, dscfg, radar_list=None):
              'Missing data')
         return None, None
 
+    fzl = None
     # determine which freezing level reference
     if temp is not None:
         if temp in radar.fields:
@@ -397,6 +398,7 @@ def process_selfconsistency_bias(procstatus, dscfg, radar_list=None):
              'Missing data')
         return None, None
 
+    fzl = None
     # determine which freezing level reference
     if temp is not None:
         if temp in radar.fields:
@@ -716,6 +718,7 @@ def process_selfconsistency_bias2(procstatus, dscfg, radar_list=None):
              'Missing data')
         return None, None
 
+    fzl = None
     # determine which freezing level reference
     if temp is not None:
         if temp in radar.fields:
@@ -1064,6 +1067,7 @@ def process_rhohv_rain(procstatus, dscfg, radar_list=None):
         warn('Unable to estimate RhoHV in rain. Missing data')
         return None, None
 
+    fzl = None
     # determine which freezing level reference
     if temp_field is not None:
         if temp_field in radar.fields:

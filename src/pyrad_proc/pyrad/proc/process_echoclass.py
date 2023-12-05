@@ -1622,6 +1622,8 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
 
         ml_depth = dscfg.get('ml_depth', 0.5)
         perturb_ml_depth = dscfg.get('perturb_ml_depth', 0)
+        
+        freezing_level = None
         if 'freezing_level' in dscfg:
             freezing_level = dscfg['freezing_level']
         elif 'sounding' in dscfg:
