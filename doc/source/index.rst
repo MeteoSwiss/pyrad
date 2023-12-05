@@ -1,6 +1,6 @@
-=====================================
-The Python ARM Radar Toolkit - Py-ART
-=====================================
+=======================================
+Pyrad: Python Radar Data Processing
+=======================================
 
 .. toctree::
    :maxdepth: 2
@@ -43,8 +43,7 @@ Development
 
 We welcome contributions, suggestions of developments and bug reports.
 
-Suggestions of developments and bug reports should use the Issues page of the `github repository <https://github.com/Meteoswiss/pyrad/issues
->`_.
+Suggestions of developments and bug reports should use the Issues page of the `github repository <https://github.com/Meteoswiss/pyrad/issues>`_.
 
 
 The process to contribute by partners external to MeteoSwiss is described in the `user manual <https://github.com/MeteoSwiss/pyrad/blob/master/additional_doc/pyrad_user_manual.pdf>`_.
@@ -55,13 +54,11 @@ Citing Pyrad
 
 The core of Pyrad is based on Py-ART. Py-ART was originally developed in the context of the ARM Research Facility. If you use Pyrad for your work, please cite BOTH Py-ART and Pyrad papers in your paper:
 
-J.J. Helmus, S.M. Collis, (2016). The Python ARM Radar Toolkit (Py-ART), a Library for Working with Weather Radar Data in the Python Programming Language. Journal of Open Research Software. 4(1), p.e25. DOI: http://doi.org/10.5334/jors.119
+* J.J. Helmus, S.M. Collis, (2016). The Python ARM Radar Toolkit (Py-ART), a Library for Working with Weather Radar Data in the Python Programming Language. Journal of Open Research Software. 4(1), p.e25. DOI: http://doi.org/10.5334/jors.119
 
-J. Figueras i Ventura, M. Lainer, Z. Schauwecker, J. Grazioli, U. Germann, (2020). Pyrad: A Real-Time Weather Radar Data Processing Framework Based on Py-ART. Journal of Open Research Software, 8(1), p.28. DOI: http://doi.org/10.5334/jors.330
+* J. Figueras i Ventura, M. Lainer, Z. Schauwecker, J. Grazioli, U. Germann, (2020). Pyrad: A Real-Time Weather Radar Data Processing Framework Based on Py-ART. Journal of Open Research Software, 8(1), p.28. DOI: http://doi.org/10.5334/jors.330
 
 Disclaimer
 =============
-
-The software is still in a development stage. Please let us know if you would like to test it.
 
 MeteoSwiss cannot be held responsible for errors in the code or problems that could arise from its use.
