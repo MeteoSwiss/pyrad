@@ -32,6 +32,7 @@ Functions for reading data from other sensors
     read_disdro_parsivel
     read_radiosounding_wyoming
     read_radiosounding_igra
+    read_fzl_igra
 """
 
 import os
