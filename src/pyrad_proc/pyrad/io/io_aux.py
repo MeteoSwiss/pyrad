@@ -15,6 +15,7 @@ Auxiliary functions for reading/writing files
     make_filename
     generate_field_name_str
     get_datatype_metranet
+    get_datatype_knmi
     get_datatype_skyecho
     get_datatype_odim
     get_fieldname_pyart
@@ -55,11 +56,12 @@ import numpy as np
 from pyart.config import get_metadata
 
 try:
-   from pyart.aux_io import get_sweep_time_coverage
+    from pyart.aux_io import get_sweep_time_coverage
 except ImportError:
-   warn('Could not get the get_sweep_time_coverage from pyart')
-   warn('You are likely using ARM Py-ART and not the MCH fork')
-   warn('You will not be able to read skyecho data') 
+    warn('Could not get the get_sweep_time_coverage from pyart')
+    warn('You are likely using ARM Py-ART and not the MCH fork')
+    warn('You will not be able to read skyecho data')
+
 
 def get_rad4alp_prod_fname(datatype):
     """
@@ -718,6 +720,42 @@ def get_datatype_metranet(datatype):
     return {datatype_metranet: field_name}
 
 
+def get_datatype_knmi(datatype):
+    """
+    maps de config file radar data type name into the corresponding KNMI
+    data type name and Py-ART field name
+
+    Parameters
+    ----------
+    datatype : str
+        config file radar data type name
+
+    Returns
+    -------
+    knmi type : dict
+        dictionary containing the KNMI data type name and its
+        corresponding Py-ART field name
+
+    """
+    if datatype == 'Raccu':
+        datatype_knmi = 'ACCUMULATION_[MM]'
+        field_name = 'rainfall_accumulation'
+    elif datatype == 'QI':
+        datatype_knmi = 'QUALITY_[-]'
+        field_name = 'signal_quality_index'
+    elif datatype == 'AF':
+        datatype_knmi = 'ADJUSTMENT_FACTOR_[DB]'
+        field_name = 'adjustment_factor'
+    elif datatype == 'RR':
+        datatype_knmi = 'RAINFALL_RATE_[MM/H]'
+        field_name = 'radar_estimated_rain_rate'
+    else:
+        raise ValueError(
+            f'ERROR: KNMI fields do not contain datatype {datatype}')
+
+    return {datatype_knmi: field_name}
+
+
 def get_datatype_skyecho(datatype):
     """
     maps de config file radar data type name into the corresponding SKYECHO
@@ -820,7 +858,7 @@ def get_datatype_skyecho(datatype):
 
     else:
         raise ValueError(
-            'ERROR: Metranet fields do not contain datatype ' + datatype)
+            'ERROR: SKYECHO fields do not contain datatype ' + datatype)
 
     return {datatype_skyecho: field_name}
 
@@ -1616,6 +1654,10 @@ def get_fieldname_pyart(datatype):
         field_name = 'rainfall_accumulation'
     elif datatype == 'QIMF':
         field_name = 'signal_quality_index'
+    elif datatype == 'QI':
+        field_name = 'signal_quality_index'
+    elif datatype == 'AF':
+        field_name = 'adjustment_factor'
     elif datatype == 'radar_R_rel':
         field_name = 'radar_rainrate_relation'
 
@@ -2481,7 +2523,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 for filename in dayfilelist:
                     t_filelist.append(filename)
             elif datagroup in ('ODIM', 'ODIMBIRDS', 'CFRADIAL', 'CFRADIAL2',
-                               'CF1', 'NEXRADII', 'GAMIC', 'ODIMGRID'):
+                               'CF1', 'NEXRADII', 'GAMIC', 'ODIMGRID',
+                               'KNMIH5GRID'):
                 if scan is None:
                     warn('Unknown scan name')
                     return []
@@ -3007,7 +3050,7 @@ def get_datatype_fields(datadescriptor):
             elif datagroup in ('ODIM', 'ODIMBIRDS', 'MFCFRADIAL', 'MFBIN',
                                'CFRADIAL2', 'CF1', 'NEXRADII', 'MFPNG',
                                'MFGRIB', 'MFDAT', 'MFCF', 'GAMIC', 'CFRADIAL',
-                               'ODIMGRID', 'SKYECHO'):
+                               'ODIMGRID', 'SKYECHO', 'KNMIH5GRID'):
                 descrfields2 = descrfields[2].split(',')
                 datatype = descrfields2[0]
                 product = None
@@ -3039,7 +3082,7 @@ def get_datatype_fields(datadescriptor):
         elif datagroup in ('ODIM', 'ODIMBIRDS', 'MFCFRADIAL', 'MFBIN',
                            'NEXRADII', 'MFPNG', 'MFGRIB', 'MFDAT', 'MFCF',
                            'CFRADIAL2', 'CF1', 'GAMIC', 'CFRADIAL',
-                           'ODIMGRID', 'SKYECHO'):
+                           'ODIMGRID', 'SKYECHO', 'KNMIH5GRID'):
             descrfields2 = descrfields[1].split(',')
             # warn(" descrfields2:  '%s'" % descrfields2[1])
             if len(descrfields2) == 2:
@@ -3606,7 +3649,8 @@ def _get_datetime(fname, datagroup, ftime_format=None):
                 datestr, '%y%j') + datetime.timedelta(days=1)
     elif datagroup in ('ODIM', 'ODIMBIRDS', 'MFCFRADIAL', 'MFBIN',
                        'NEXRADII', 'MFPNG', 'MFGRIB', 'MFDAT', 'MFCF',
-                       'CFRADIAL2', 'CF1', 'GAMIC', 'CFRADIAL', 'ODIMGRID'):
+                       'CFRADIAL2', 'CF1', 'GAMIC', 'CFRADIAL', 'ODIMGRID',
+                       'KNMIH5GRID'):
         if ftime_format is None:
             # we assume is rad4alp format
             datetimestr = bfile[3:12]

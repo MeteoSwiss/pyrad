@@ -1951,9 +1951,10 @@ def write_ts_cum(dataset, fname):
         csvfile.write(
             '# Location [lon, lat, alt]: ' +
             str(dataset['point_coordinates_WGS84_lon_lat_alt']) + '\n')
-        csvfile.write(
-            '# Nominal antenna coordinates used [az, el, r]: ' +
-            str(dataset['antenna_coordinates_az_el_r']) + '\n')
+        if 'antenna_coordinates_az_el_r' in dataset:
+            csvfile.write(
+                '# Nominal antenna coordinates used [az, el, r]: ' +
+                str(dataset['antenna_coordinates_az_el_r']) + '\n')
         csvfile.write('# sensor type: ' + dataset['sensor'] + '\n')
         csvfile.write('# sensor ID: ' + dataset['sensorid'] + '\n')
         csvfile.write('# Data: Precipitation accumulation over ' +

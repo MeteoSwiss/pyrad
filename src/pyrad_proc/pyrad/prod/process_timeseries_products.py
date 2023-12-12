@@ -572,10 +572,19 @@ def generate_timeseries_products(dataset, prdcfg):
         if not plot_only_final and dataset['final']:
             return None
 
-        az = '{:.1f}'.format(dataset['antenna_coordinates_az_el_r'][0])
-        el = '{:.1f}'.format(dataset['antenna_coordinates_az_el_r'][1])
-        r = '{:.1f}'.format(dataset['antenna_coordinates_az_el_r'][2])
-        gateinfo = ('az' + az + 'r' + r + 'el' + el)
+        if 'antenna_coordinates_az_el_r' in dataset:
+            az = '{:.1f}'.format(dataset['antenna_coordinates_az_el_r'][0])
+            el = '{:.1f}'.format(dataset['antenna_coordinates_az_el_r'][1])
+            r = '{:.1f}'.format(dataset['antenna_coordinates_az_el_r'][2])
+            gateinfo = ('az' + az + 'r' + r + 'el' + el)
+        else:
+            lon = '{:.3f}'.format(
+                dataset['point_coordinates_WGS84_lon_lat_alt'][0])
+            lat = '{:.3f}'.format(
+                dataset['point_coordinates_WGS84_lon_lat_alt'][1])
+            alt = '{:.1f}'.format(
+                dataset['point_coordinates_WGS84_lon_lat_alt'][2])
+            gateinfo = ('lon' + lon + 'lat' + lat + 'alt' + alt)
 
         savedir_ts = get_save_dir(
             prdcfg['basepath'], prdcfg['procname'], dssavedir,
@@ -658,7 +667,10 @@ def generate_timeseries_products(dataset, prdcfg):
             figfname_list[i] = savedir + figfname
 
         labelx = sensortype + ' ' + prdcfg['sensorid'] + ' (mm)'
-        labely = 'Radar (az, el, r): (' + az + ', ' + el + ', ' + r + ') (mm)'
+        if 'antenna_coordinates_az_el_r' in dataset:
+            labely = 'Radar (az, el, r): (' + az + ', ' + el + ', ' + r + ') (mm)'
+        else:
+            labely = 'Radar (lon, lat, alt): (' + lon + ', ' + lat + ', ' + alt + ') (mm)'
         titl = (str(cum_time) + 's Acc. Comp. ' +
                 radardate_cum[0].strftime('%Y-%m-%d'))
 

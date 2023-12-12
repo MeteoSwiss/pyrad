@@ -18,13 +18,16 @@ Functions to plot data in a Cartesian grid format
     plot_dda_longitude_slice
 """
 
-from .plots_aux import get_norm
-import pyart
-import matplotlib.pyplot as plt
 from warnings import warn
 from copy import deepcopy
 
 import numpy as np
+
+import matplotlib.pyplot as plt
+
+import pyart
+
+from .plots_aux import get_norm
 
 try:
     import cartopy
@@ -93,7 +96,7 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
     mask_outside = prdcfg.get('mask_outside', False)
 
     norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name], isxarray=True)
+        field_name, field_dict=grid.fields[field_name], isxarray=False)
 
     xsize = prdcfg['gridMapImageConfig']['xsize']
     ysize = prdcfg['gridMapImageConfig']['ysize']
@@ -337,7 +340,7 @@ def plot_surface_raw(grid, field_name, level, prdcfg, fname_list, titl=None,
     vmax = prdcfg.get('vmax', None)
 
     norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name], isxarray=True)
+        field_name, field_dict=grid.fields[field_name], isxarray=False)
 
     xsize = prdcfg['gridMapImageConfig']['xsize']
     ysize = prdcfg['gridMapImageConfig']['ysize']

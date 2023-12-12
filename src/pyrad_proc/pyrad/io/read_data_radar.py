@@ -15,6 +15,7 @@ Functions for reading radar data files
     merge_scans_rad4alp
     merge_scans_odim
     merge_scans_odimgrid
+    merge_scans_knmih5_grid
     merge_scans_odimbirds
     merge_scans_gamic
     merge_scans_mfcfradial
@@ -85,7 +86,7 @@ from .read_data_other import read_status, read_rad4alp_cosmo, read_rad4alp_vis
 from .read_data_mxpol import pyrad_MXPOL, pyrad_MCH
 
 from .io_aux import get_datatype_metranet, get_fieldname_pyart, get_file_list
-from .io_aux import get_datatype_odim, find_date_in_file_name
+from .io_aux import get_datatype_odim, get_datatype_knmi, find_date_in_file_name
 from .io_aux import get_datatype_fields, get_datetime, map_hydro, map_Doppler
 from .io_aux import find_cosmo_file, find_rad4alpcosmo_file
 from .io_aux import find_pyradcosmo_file, get_datatype_skyecho
@@ -135,6 +136,7 @@ def get_data(voltime, datatypesdescr, cfg):
                 Example: ODIM:dBZ,D{%Y-%m-%d}-F{%Y%m%d%H%M%S}. To find out
                 which datatype to use to match a particular ODIM field name
                 check the function 'get_datatype_odim' in pyrad/io/io_aux.py
+
             'ODIMBIRDS': Output of vol2bird algorithm in ODIM convention
                 format.For such types 'dataset' specifies the directory and
                 file name date convention.
@@ -204,6 +206,9 @@ def get_data(voltime, datatypesdescr, cfg):
             'ODIMGRID': Gridded data in ODIM format. For such types 'dataset'
                 specifies the directory and file name date convention.
                 Example: ODIMGRID:dBZ,D{%Y-%m-%d}-F{%Y%m%d%H%M%S}.
+            'KNMIH5GRID': KNMI gridded data in an H5 file. For such types
+                'dataset' specifies the directory and file name date
+                convention.
             'SATGRID': CF Netcdf from used for the MeteoSat satellite data
                 in the CCS4 (Radar composite) grid.
             'MFBIN': Format used by some MeteoFrance products stored as binary
@@ -303,6 +308,8 @@ def get_data(voltime, datatypesdescr, cfg):
     product_odimpyradgrid = list()
     datatype_odimgrid = list()
     dataset_odimgrid = list()
+    datatype_knmih5grid = list()
+    dataset_knmih5grid = list()
     datatype_psr = list()
     datatype_psrspectra = list()
     datatype_netcdfspectra = list()
@@ -406,6 +413,9 @@ def get_data(voltime, datatypesdescr, cfg):
         elif datagroup == 'ODIMGRID':
             datatype_odimgrid.append(datatype)
             dataset_odimgrid.append(dataset)
+        elif datagroup == 'KNMIH5GRID':
+            datatype_knmih5grid.append(datatype)
+            dataset_knmih5grid.append(dataset)
         elif datagroup == 'SATGRID':
             datatype_satgrid.append(datatype)
         elif datagroup == 'PSR':
@@ -453,6 +463,7 @@ def get_data(voltime, datatypesdescr, cfg):
     ndatatypes_pyradgrid = len(datatype_pyradgrid)
     ndatatypes_odimpyradgrid = len(datatype_odimpyradgrid)
     ndatatypes_odimgrid = len(datatype_odimgrid)
+    ndatatypes_knmih5grid = len(datatype_knmih5grid)
     ndatatypes_psr = len(datatype_psr)
     ndatatypes_psrspectra = len(datatype_psrspectra)
     ndatatypes_netcdfspectra = len(datatype_netcdfspectra)
@@ -706,6 +717,16 @@ def get_data(voltime, datatypesdescr, cfg):
         radar_aux = merge_scans_odimgrid(
             cfg['datapath'][ind_rad], cfg['ScanList'][ind_rad], voltime,
             datatype_odimgrid, dataset_odimgrid, cfg)
+        if radar_aux is not None:
+            if radar is not None:
+                radar = merge_grids(radar, radar_aux)
+            else:
+                radar = radar_aux
+
+    if ndatatypes_knmih5grid > 0:
+        radar_aux = merge_scans_knmih5_grid(
+            cfg['datapath'][ind_rad], cfg['ScanList'][ind_rad], voltime,
+            datatype_knmih5grid, dataset_knmih5grid, cfg)
         if radar_aux is not None:
             if radar is not None:
                 radar = merge_grids(radar, radar_aux)
@@ -1762,7 +1783,7 @@ def merge_scans_odim(basepath, scan_list, radar_name, radar_res, voltime,
 def merge_scans_odimgrid(basepath, scan_list, voltime, datatype_list,
                          dataset_list, cfg, ind_rad=0):
     """
-    merge odim  grid data.
+    merge odim grid data.
 
     Parameters
     ----------
@@ -1812,6 +1833,95 @@ def merge_scans_odimgrid(basepath, scan_list, voltime, datatype_list,
 
         grid_aux = get_data_odimgrid(
             filename[0], datatype_list, mf_scale=cfg['MFScale'])
+
+        if grid_aux is None:
+            continue
+
+        if grid is None:
+            grid = grid_aux
+        else:
+            for prod_field in grid_aux.fields.keys():
+                grid.add_field(prod_field, grid_aux.fields[prod_field])
+
+    if grid is None:
+        return grid
+
+    # Crop the data
+    lat_min = cfg.get('latmin', None)
+    lat_max = cfg.get('latmax', None)
+    lon_min = cfg.get('lonmin', None)
+    lon_max = cfg.get('lonmax', None)
+    alt_min = cfg.get('altmin', None)
+    alt_max = cfg.get('altmax', None)
+    ix_min = cfg.get('ixmin', None)
+    iy_min = cfg.get('iymin', None)
+    iz_min = cfg.get('izmin', None)
+    nx = cfg.get('nx', None)
+    ny = cfg.get('ny', None)
+    nz = cfg.get('nz', None)
+
+    return crop_grid(
+        grid, lat_min=lat_min, lat_max=lat_max, lon_min=lon_min,
+        lon_max=lon_max, alt_min=alt_min, alt_max=alt_max, nx=nx, ny=ny,
+        nz=nz, ix_min=ix_min, iy_min=iy_min, iz_min=iz_min)
+
+
+def merge_scans_knmih5_grid(basepath, scan_list, voltime, datatype_list,
+                            dataset_list, cfg, ind_rad=0):
+    """
+    merge KNMI H5 grid data.
+
+    Parameters
+    ----------
+    basepath : str
+        base path of odim radar data
+    scan_list : list
+        list of scans
+    voltime: datetime object
+        reference time of the scan
+    datatype_list : list
+        lists of data types to get
+    dataset_list : list
+        list of datasets. Used to get path
+    cfg : dict
+        configuration dictionary
+    ind_rad : int
+        radar index
+
+    Returns
+    -------
+    radar : Radar
+        radar object
+
+    """
+    grid = None
+    if cfg['path_convention'][ind_rad] != 'ODIM':
+        raise ValueError(
+            'ERROR: required path convention ODIM for files of type KNMIH5GRID')
+
+    fpath_strf = dataset_list[0][
+        dataset_list[0].find("D") + 2:dataset_list[0].find("F") - 2]
+    fdate_strf = dataset_list[0][dataset_list[0].find("F") + 2:-1]
+    datapath = f'{basepath}{voltime.strftime(fpath_strf)}/'
+    for scan in scan_list:
+        filenames = glob.glob(f'{datapath}*{scan}*')
+        filename = []
+        for filename_aux in filenames:
+            fdatetime = find_date_in_file_name(
+                filename_aux, date_format=fdate_strf)
+            if fdatetime == voltime:
+                filename = [filename_aux]
+                break
+
+        if not filename:
+            warn(f'No file found in {datapath}*{scan}*')
+            continue
+
+        odim_field_names = {}
+        for datatype in datatype_list:
+            odim_field_names.update(get_datatype_knmi(datatype))
+        grid_aux = pyart.aux_io.read_knmi_grid_h5(
+            filename[0], field_names=odim_field_names)
 
         if grid_aux is None:
             continue
