@@ -1,0 +1,6 @@
+pyrad.io.read\_disdro\_parsivel
+===============================
+
+.. currentmodule:: pyrad.io
+
+.. autofunction:: read_disdro_parsivel

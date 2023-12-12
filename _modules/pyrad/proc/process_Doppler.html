@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-theme="light">
+<html lang="en" data-content_root="../../../" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
@@ -17,12 +17,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -35,9 +35,9 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
     <script src="../../../_static/documentation_options.js?v=daef7da6"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
@@ -117,6 +117,7 @@
   <div class="col-lg-3 navbar-header-items__start">
     
       <div class="navbar-item">
+
   
 
 <a class="navbar-brand logo" href="../../../index.html">
@@ -136,7 +137,8 @@
     
     <div class="me-auto navbar-header-items__center">
       
-        <div class="navbar-item"><nav class="navbar-nav">
+        <div class="navbar-item">
+<nav class="navbar-nav">
   <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
@@ -165,6 +167,13 @@
                       </a>
                     </li>
                 
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../changelog.html">
+                        Changelog
+                      </a>
+                    </li>
+                
   </ul>
 </nav></div>
       
@@ -175,6 +184,7 @@
       
         <div class="navbar-item navbar-persistent--container">
           
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -188,6 +198,7 @@
       
       
         <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -220,6 +231,7 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -249,7 +261,8 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item"><nav class="navbar-nav">
+          <div class="navbar-item">
+<nav class="navbar-nav">
   <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
@@ -278,6 +291,13 @@ document.write(`
                       </a>
                     </li>
                 
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../changelog.html">
+                        Changelog
+                      </a>
+                    </li>
+                
   </ul>
 </nav></div>
         
@@ -288,6 +308,7 @@ document.write(`
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -412,9 +433,10 @@ document.write(`
     <span class="n">_PYDDA_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="kn">from</span> <span class="nn">..io.io_aux</span> <span class="kn">import</span> <span class="n">get_datatype_fields</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span>
-<span class="kn">from</span> <span class="nn">..io</span> <span class="kn">import</span> <span class="n">read_radiosounding</span>
+<span class="kn">from</span> <span class="nn">..io</span> <span class="kn">import</span> <span class="n">read_radiosounding_igra</span>
 <span class="kn">from</span> <span class="nn">.process_grid</span> <span class="kn">import</span> <span class="n">process_grid</span>
 <span class="kn">from</span> <span class="nn">..util</span> <span class="kn">import</span> <span class="n">compute_average_vad</span>
+
 
 <div class="viewcode-block" id="process_turbulence">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_turbulence.html#pyrad.proc.process_turbulence">[docs]</a>
@@ -444,6 +466,9 @@ document.write(`
 <span class="sd">        xran, yran : float array. Dataset keyword</span>
 <span class="sd">            Spatial range in X,Y to consider. Default [-100, 100] for both</span>
 <span class="sd">            X and Y</span>
+<span class="sd">        use_ntda : Bool. Dataset keyword</span>
+<span class="sd">            Wether to use NCAR Turbulence Detection Algorithm (NTDA). Default</span>
+<span class="sd">            True</span>
 <span class="sd">        beamwidth : Float. Dataset keyword</span>
 <span class="sd">            Radar beamwidth. Default None. If None it will be obtained from</span>
 <span class="sd">            the radar object metadata. If cannot be obtained defaults to 1</span>
@@ -477,9 +502,10 @@ document.write(`
     <span class="n">refl_field</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;dBuZ&#39;</span><span class="p">,</span> <span class="s1">&#39;dBZ&#39;</span><span class="p">,</span> <span class="s1">&#39;dBZc&#39;</span><span class="p">,</span> <span class="s1">&#39;dBuZv&#39;</span><span class="p">,</span> <span class="s1">&#39;dBZv&#39;</span><span class="p">,</span> <span class="s1">&#39;dBZvc&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;dBuZ&#39;</span><span class="p">,</span> <span class="s1">&#39;dBZ&#39;</span><span class="p">,</span> <span class="s1">&#39;dBZc&#39;</span><span class="p">,</span> <span class="s1">&#39;dBuZv&#39;</span><span class="p">,</span> <span class="s1">&#39;dBZv&#39;</span><span class="p">,</span> <span class="s1">&#39;dBZvc&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;CNRc&#39;</span><span class="p">):</span>
             <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;W&#39;</span><span class="p">,</span> <span class="s1">&#39;Wv&#39;</span><span class="p">,</span> <span class="s1">&#39;Wu&#39;</span><span class="p">,</span> <span class="s1">&#39;Wvu&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;W&#39;</span><span class="p">,</span> <span class="s1">&#39;Wv&#39;</span><span class="p">,</span> <span class="s1">&#39;Wu&#39;</span><span class="p">,</span> <span class="s1">&#39;Wvu&#39;</span><span class="p">,</span> <span class="s1">&#39;WD&#39;</span><span class="p">,</span> <span class="s1">&#39;WDc&#39;</span><span class="p">):</span>
             <span class="n">width_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">width_field</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -503,6 +529,7 @@ document.write(`
     <span class="n">xran</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;xran&#39;</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mf">100.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">])</span>
     <span class="n">yran</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;yran&#39;</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mf">100.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">])</span>
     <span class="n">max_split_cut</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;max_split_cut&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">use_ntda</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;use_ntda&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
     <span class="n">beamwidth</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;beamwidth&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="n">verbose</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
     <span class="n">compute_gate_pos</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;compute_gate_pos&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
@@ -516,7 +543,7 @@ document.write(`
             <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unknown radar beamwidth. Default 1 deg will be used&#39;</span><span class="p">)</span>
             <span class="n">beamwidth</span> <span class="o">=</span> <span class="mi">1</span>
 
-    <span class="n">rng_res</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1000.</span>
+    <span class="n">rng_res</span> <span class="o">=</span> <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1000.</span>
 
     <span class="n">radar_out</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
     <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -535,14 +562,14 @@ document.write(`
             <span class="n">radar_out</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">split_cut</span><span class="o">=</span><span class="n">split_cut</span><span class="p">,</span> <span class="n">xran</span><span class="o">=</span><span class="n">xran</span><span class="p">,</span>
             <span class="n">yran</span><span class="o">=</span><span class="n">yran</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">name_dz</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span>
             <span class="n">name_sw</span><span class="o">=</span><span class="n">width_field</span><span class="p">,</span> <span class="n">turb_name</span><span class="o">=</span><span class="s1">&#39;turbulence&#39;</span><span class="p">,</span>
-            <span class="n">max_split_cut</span><span class="o">=</span><span class="n">max_split_cut</span><span class="p">,</span> <span class="n">use_ntda</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">beamwidth</span><span class="o">=</span><span class="n">beamwidth</span><span class="p">,</span>
-            <span class="n">gate_spacing</span><span class="o">=</span><span class="n">rng_res</span><span class="p">,</span> <span class="n">compute_gate_pos</span><span class="o">=</span><span class="n">compute_gate_pos</span><span class="p">)</span>
+            <span class="n">max_split_cut</span><span class="o">=</span><span class="n">max_split_cut</span><span class="p">,</span> <span class="n">use_ntda</span><span class="o">=</span><span class="n">use_ntda</span><span class="p">,</span>
+            <span class="n">beamwidth</span><span class="o">=</span><span class="n">beamwidth</span><span class="p">,</span> <span class="n">gate_spacing</span><span class="o">=</span><span class="n">rng_res</span><span class="p">,</span>
+            <span class="n">compute_gate_pos</span><span class="o">=</span><span class="n">compute_gate_pos</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">radar_out</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s1">&#39;rhi&#39;</span><span class="p">:</span>
         <span class="n">pytda</span><span class="o">.</span><span class="n">calc_turb_rhi</span><span class="p">(</span>
             <span class="n">radar_out</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">name_dz</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span>
             <span class="n">name_sw</span><span class="o">=</span><span class="n">width_field</span><span class="p">,</span> <span class="n">turb_name</span><span class="o">=</span><span class="s1">&#39;turbulence&#39;</span><span class="p">,</span>
-            <span class="n">use_ntda</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">beamwidth</span><span class="o">=</span><span class="n">beamwidth</span><span class="p">,</span> <span class="n">gate_spacing</span><span class="o">=</span><span class="n">rng_res</span><span class="p">,</span>
-            <span class="n">compute_gate_pos</span><span class="o">=</span><span class="n">compute_gate_pos</span><span class="p">)</span>
+            <span class="n">use_ntda</span><span class="o">=</span><span class="n">use_ntda</span><span class="p">,</span> <span class="n">beamwidth</span><span class="o">=</span><span class="n">beamwidth</span><span class="p">,</span> <span class="n">gate_spacing</span><span class="o">=</span><span class="n">rng_res</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Radar volume of type &#39;</span> <span class="o">+</span> <span class="n">radar_out</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">+</span>
              <span class="s1">&#39;. Only volumes of type PPI or RHI are allowed&#39;</span><span class="p">)</span>
@@ -1090,6 +1117,7 @@ document.write(`
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
+
 <div class="viewcode-block" id="process_windshear_lidar">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_windshear_lidar.html#pyrad.proc.process_windshear_lidar">[docs]</a>
 <span class="k">def</span> <span class="nf">process_windshear_lidar</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -1150,6 +1178,7 @@ document.write(`
     <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">windshear_field</span><span class="p">,</span> <span class="n">windshear</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
+
 
 
 <div class="viewcode-block" id="process_vad">
@@ -1243,7 +1272,7 @@ document.write(`
 
 <span class="sd">        datatype : string. Dataset keyword</span>
 <span class="sd">            The input data type</span>
-<span class="sd">        </span>
+
 <span class="sd">        gridconfig : dictionary. Dataset keyword</span>
 <span class="sd">            Dictionary containing some or all of this keywords:</span>
 <span class="sd">            xmin, xmax, ymin, ymax, zmin, zmax : floats</span>
@@ -1303,11 +1332,12 @@ document.write(`
 <span class="sd">        Cmod: float</span>
 <span class="sd">            Coefficient for model constraint</span>
 <span class="sd">        Cpoint: float</span>
-<span class="sd">            Coefficient for point constraint    </span>
+<span class="sd">            Coefficient for point constraint</span>
 <span class="sd">        wind_tol: float</span>
-<span class="sd">            Stop iterations after maximum change in winds is less than this value.</span>
+<span class="sd">            Stop iterations after maximum change in winds is less than this</span>
+<span class="sd">            value.</span>
 <span class="sd">        frz : float</span>
-<span class="sd">            The freezing level in meters. This is to tell PyDDA where to use </span>
+<span class="sd">            The freezing level in meters. This is to tell PyDDA where to use</span>
 <span class="sd">            ice particle fall speeds in the wind retrieval verus liquid.</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
@@ -1344,7 +1374,7 @@ document.write(`
     <span class="n">ind_radar_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ind_radar_list</span><span class="p">)</span>
     <span class="n">datatype_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">datatype_list</span><span class="p">)</span>
     <span class="n">field_name_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">field_name_list</span><span class="p">)</span>
-    
+
     <span class="c1"># Get DDA numerical parameters</span>
     <span class="n">Co</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Co&#39;</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
     <span class="n">Cm</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Cm&#39;</span><span class="p">,</span> <span class="mf">1500.</span><span class="p">)</span>
@@ -1362,7 +1392,7 @@ document.write(`
     <span class="n">sounding</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sounding&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">sounding</span><span class="p">:</span>
         <span class="n">dtime</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_radar_time_begin</span><span class="p">(</span><span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">sounding_data</span> <span class="o">=</span> <span class="n">read_radiosounding</span><span class="p">(</span><span class="n">sounding</span><span class="p">,</span> <span class="n">dtime</span><span class="p">)</span>
+        <span class="n">sounding_data</span> <span class="o">=</span> <span class="n">read_radiosounding_igra</span><span class="p">(</span><span class="n">sounding</span><span class="p">,</span> <span class="n">dtime</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">sounding_data</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -1370,19 +1400,21 @@ document.write(`
         <span class="c1"># Remove nan from souding</span>
         <span class="n">sounding_data</span> <span class="o">=</span> <span class="n">sounding_data</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
         <span class="c1"># create wind profile from sounding</span>
-        <span class="n">wind_prof</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">HorizontalWindProfile</span><span class="p">(</span><span class="n">sounding_data</span><span class="p">[</span><span class="s1">&#39;HGHT&#39;</span><span class="p">],</span>
-            <span class="n">sounding_data</span><span class="p">[</span><span class="s1">&#39;SKNT&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.514</span><span class="p">,</span> <span class="n">sounding_data</span><span class="p">[</span><span class="s1">&#39;DRCT&#39;</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>    
+        <span class="n">wind_prof</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">HorizontalWindProfile</span><span class="p">(</span>
+            <span class="n">sounding_data</span><span class="p">[</span><span class="s1">&#39;GPH&#39;</span><span class="p">],</span> <span class="n">sounding_data</span><span class="p">[</span><span class="s1">&#39;WSPD&#39;</span><span class="p">],</span>
+            <span class="n">sounding_data</span><span class="p">[</span><span class="s1">&#39;WDIR&#39;</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Compute VAD for every radar to initialize DDA</span>
         <span class="c1"># z-vector for vad</span>
-        <span class="n">z_want</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;zmin&#39;</span><span class="p">],</span>
-                        <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;zmax&#39;</span><span class="p">]</span> <span class="o">+</span>
-                        <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;vres&#39;</span><span class="p">],</span>
-                        <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;vres&#39;</span><span class="p">])</span>
+        <span class="n">z_want</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;zmin&#39;</span><span class="p">],</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;zmax&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;vres&#39;</span><span class="p">],</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;vres&#39;</span><span class="p">])</span>
 
-        <span class="n">wind_prof</span> <span class="o">=</span> <span class="n">compute_average_vad</span><span class="p">(</span><span class="n">radar_list</span><span class="p">,</span> <span class="n">z_want</span><span class="p">,</span> <span class="n">signs</span><span class="p">,</span> 
-            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;lonorig&#39;</span><span class="p">],</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;latorig&#39;</span><span class="p">])</span>
-        
+        <span class="n">wind_prof</span> <span class="o">=</span> <span class="n">compute_average_vad</span><span class="p">(</span>
+            <span class="n">radar_list</span><span class="p">,</span> <span class="n">z_want</span><span class="p">,</span> <span class="n">signs</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;lonorig&#39;</span><span class="p">],</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;latorig&#39;</span><span class="p">])</span>
+
     <span class="c1"># Get name of reflectivity and velocity fields for each radar</span>
     <span class="n">refl_fields</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">vel_fields</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1390,12 +1422,14 @@ document.write(`
         <span class="c1"># Find vel and refl fields</span>
         <span class="n">field_names_rad</span> <span class="o">=</span> <span class="n">field_name_list</span><span class="p">[</span><span class="n">ind_radar_list</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span>
         <span class="n">vel_field</span> <span class="o">=</span> <span class="n">field_names_rad</span><span class="p">[[</span>
-            <span class="s1">&#39;velocity&#39;</span> <span class="ow">in</span> <span class="n">vname</span> <span class="k">for</span> <span class="n">vname</span> <span class="ow">in</span> <span class="n">field_name_list</span><span class="p">[</span><span class="n">ind_radar_list</span> <span class="o">==</span> <span class="n">i</span><span class="p">]]][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="s1">&#39;velocity&#39;</span> <span class="ow">in</span> <span class="n">vname</span> <span class="k">for</span> <span class="n">vname</span> <span class="ow">in</span> <span class="n">field_name_list</span><span class="p">[</span>
+                <span class="n">ind_radar_list</span> <span class="o">==</span> <span class="n">i</span><span class="p">]]][</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">vel_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vel_field</span><span class="p">)</span>
-        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">field_names_rad</span><span class="p">[[</span><span class="s1">&#39;reflectivity&#39;</span> <span class="ow">in</span> <span class="n">vname</span>
-                                <span class="k">for</span> <span class="n">vname</span> <span class="ow">in</span> <span class="n">field_name_list</span><span class="p">[</span><span class="n">ind_radar_list</span> <span class="o">==</span> <span class="n">i</span><span class="p">]]][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">field_names_rad</span><span class="p">[[</span>
+            <span class="s1">&#39;reflectivity&#39;</span> <span class="ow">in</span> <span class="n">vname</span> <span class="k">for</span> <span class="n">vname</span> <span class="ow">in</span> <span class="n">field_name_list</span><span class="p">[</span>
+                <span class="n">ind_radar_list</span> <span class="o">==</span> <span class="n">i</span><span class="p">]]][</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">refl_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">refl_field</span><span class="p">)</span>
-    
+
     <span class="c1"># Grid the variables</span>
     <span class="n">grids</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">radar</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">radar_list</span><span class="p">):</span>
@@ -1404,7 +1438,7 @@ document.write(`
         <span class="n">dscfg_grid</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">])[</span>
             <span class="n">ind_radar_list</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span>
         <span class="n">grids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">process_grid</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dscfg_grid</span><span class="p">,</span> <span class="n">radar_list</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;radar_out&#39;</span><span class="p">])</span>
-    
+
     <span class="c1"># Harmonize variables</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">grid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">grids</span><span class="p">):</span>
         <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;velocity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">vel_fields</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
@@ -1416,7 +1450,6 @@ document.write(`
 
     <span class="n">grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">make_wind_field_from_profile</span><span class="p">(</span>
         <span class="n">grids</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">wind_prof</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="s1">&#39;velocity&#39;</span><span class="p">)</span>
-    
 
     <span class="c1"># Actual DDA computation</span>
     <span class="n">new_grids</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">(</span>
@@ -1427,7 +1460,7 @@ document.write(`
         <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;scipy&#39;</span><span class="p">,</span>
         <span class="n">Co</span><span class="o">=</span><span class="n">Co</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="n">Cm</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="n">Cx</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="n">Cy</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="n">Cz</span><span class="p">,</span> <span class="n">Cb</span><span class="o">=</span><span class="n">Cb</span><span class="p">,</span> <span class="n">Cv</span><span class="o">=</span><span class="n">Cv</span><span class="p">,</span> <span class="n">Cmod</span><span class="o">=</span><span class="n">Cmod</span><span class="p">,</span>
         <span class="n">Cpoint</span><span class="o">=</span><span class="n">Cpoint</span><span class="p">,</span> <span class="n">wind_tol</span><span class="o">=</span><span class="n">wind_tol</span><span class="p">,</span> <span class="n">frz</span><span class="o">=</span><span class="n">frz</span><span class="p">)</span>
-        
+
     <span class="c1"># pyDDA returns as many grid objects as input radars</span>
     <span class="c1"># the idea here is to merge these grid objects into one</span>
     <span class="c1"># and to replace the homogeneized vel and refl fields by the</span>
@@ -1503,7 +1536,7 @@ document.write(`
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
 </div>
                 </footer>
@@ -1523,8 +1556,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1532,6 +1565,7 @@ document.write(`
     <div class="footer-items__start">
       
         <div class="footer-item">
+
   <p class="sphinx-version">
     Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
@@ -1544,8 +1578,9 @@ document.write(`
   
     <div class="footer-items__end">
       
-        <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.3.
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
 </p></div>
       
     </div>

@@ -1,0 +1,623 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Changelog &#8212; Pyrad 1.8.6 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="_static/pyart-theme.css?v=40b48845" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script src="_static/documentation_options.js?v=daef7da6"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/design-tabs.js?v=36754332"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'changelog';</script>
+    <script src="_static/doc_shared.js?v=6c7402a7"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="List of pyrad input data descriptors" href="overview/list_datadescriptors.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Pyrad 1.8.6 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="userguide/index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="API/index.html">
+                        API Reference Manual
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="overview/index.html">
+                        Features
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="#">
+                        Changelog
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="userguide/index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="API/index.html">
+                        API Reference Manual
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="overview/index.html">
+                        Features
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="#">
+                        Changelog
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Changelog</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+<section class="tex2jax_ignore mathjax_ignore" id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h1>
+<section id="v1-8-6">
+<h2>v1.8.6<a class="headerlink" href="#v1-8-6" title="Link to this heading">#</a></h2>
+<p><strong>Bug corrections</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/a3ef19b556994bf1e2b792e360e1eb2dfdbd7908">fixed old pandas command in read_radiosounding</a></p></li>
+</ul>
+</section>
+<section id="v1-8-5">
+<h2>v1.8.5<a class="headerlink" href="#v1-8-5" title="Link to this heading">#</a></h2>
+<p><strong>Bug corrections</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/b8404ca22550e331495e520446ebb0e61959ca76">added missing functions in <strong>init</strong>.py files</a></p></li>
+</ul>
+</section>
+<section id="v1-8-4">
+<h2>v1.8.4<a class="headerlink" href="#v1-8-4" title="Link to this heading">#</a></h2>
+<p><strong>Bug corrections</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/31cc9d2a3dd915a3dbe05f9aade9f7f5dbc50ecb">fix of a bug where vmin and vmax were not applied to lat/lon grid profiles</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/44bd2310fe683541d34f32c0762c9633203df73a"> fix in plots_grid.py for barbs DDA plots</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/95cd7e19059b4b6eb85cf67fb45287808e229fa8">fix for file locking issue on NFS systems for timeseries csv files</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/e5865f3f05c96762e8f0917018e12e7644e380dd">deprecation fixes for latest numpy version</a></p></li>
+</ul>
+<p><strong>New additions</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/861bb8b015d9417767216980450b779c1f909643">added support for multi radar in rt processing</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/93745298fc42afa2c2c88d78af4a673cb5aa61b2">Added new Product WINDSHEAR_LIDAR</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/e1bac0f0b07f2b7e7e0f11a2e6f0acce22c6ce3d">made pyDDA wrapper compatible with new pyDDA version</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/90641235e496fe6bf3928f9502e1cb9d24c2054f">added GATEFILTER dataset which reproduces Py-ART gatefilter in pyrad + fixes in DDA processing</a></p></li>
+</ul>
+</section>
+<section id="v1-8-3">
+<h2>v1.8.3<a class="headerlink" href="#v1-8-3" title="Link to this heading">#</a></h2>
+<p><strong>Bug corrections</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/ef4b0fbd99d1dadffff1f8f96aabd8dae2ec46ff">various fixes to be able to use GECSX products as visibility inputs</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/a540c0133246e6385c7919d2545ecf3c30f8a527">fix in merge_cfradial2 for RADARV convention</a></p></li>
+</ul>
+<p><strong>New additions</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/3b60e3129cf100ae72e3854fbba4efd2d547bc54">added time tolerance when merging cfradial2 scans with RADARV convention</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/e48ef9e9e959ad0ae13699fe84ed4f264e48f7d6">added possibility to suppress warnings in rt processing</a></p></li>
+</ul>
+</section>
+<section id="v1-8-2">
+<h2>v1.8.2<a class="headerlink" href="#v1-8-2" title="Link to this heading">#</a></h2>
+<p><strong>New additions:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/e48ef9e9e959ad0ae13699fe84ed4f264e48f7d6">added possibility to suppress warnings in rt processing</a></p></li>
+</ul>
+</section>
+<section id="v1-8-1">
+<h2>v1.8.1<a class="headerlink" href="#v1-8-1" title="Link to this heading">#</a></h2>
+<p><strong>Bug fixes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/a1155f0dbf3cf2d7eeae72014fd7d0312d6968fc">fixed issue with list instead of dict in merge_scans_cfradial2</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/cadff8eed43b9b4d77d9e5fa45343cf1da305313">bug correction in overplotting of grid data. Improvements in the reading of user-defined parameters</a></p></li>
+</ul>
+</section>
+<section id="v1-8">
+<h2>v1.8<a class="headerlink" href="#v1-8" title="Link to this heading">#</a></h2>
+<p><strong>Bug fixes:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/e7eaac19f03d4e3ff6bb6fc7bf4afefb3a0250aa">correction of a bug in function process_vol2grid. Added xsecImageConfig</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/6b3f78df7d4b68f74dbc06a6ec472b4e4233c2e3">redesigned dem readers so they output proj read from file if possible</a></p></li>
+</ul>
+<p><strong>New additions:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/5bbb84d9f752a8466ce450bc9cc378366cad8e93">added DDA process and DDA_LONGITUDE_SLICE DDA_LATITUDE_SLICE DDA_MAP products</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/f05f3d7a9772383c5bf8ba7edda8372239267c15">added possibility to specify selfconsistencypath + added poor support of NFS mounts in file locking</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/1bd4b4789193894456a2b2c14a62b53ecc5cdbe7">added exact_limits keyword in loc file to display exactly user-specified lon_lines and lat_lines</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/ce67680ee9faee6b466e16d95382543e42ff0285">added info on searched file directory if no file was found</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/052ea9a228a44b9a7f7e48e364083264ff4e8808">added RADARV path convention for windcube lidar data (CFRADIAL2)</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/837c2622da247ddd75aadab9bdf948afb01423c3">added script under ci that generates pyrad var name mappings references under doc/mappings</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/522ab3e056b5891846da1827a0337efbc025d807">added possibility to specify nyquist velo in process_dealias_region_based</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/6fa2d8fd4c028dea0bc1eb6d8bef85a7a164a1e8">added the GECSX datatype to read pyrad GECSX input for visibility filter</a></p></li>
+</ul>
+</section>
+<section id="v1-7">
+<h2>v1.7<a class="headerlink" href="#v1-7" title="Link to this heading">#</a></h2>
+<p><strong>New additions:</strong></p>
+<ul class="simple">
+<li><p>New polar product: <em>CROSS_SECTION</em> in <em>RadarDisplay</em> which can be used to display a cross-section of polar data between arbitrary coordinates</p></li>
+<li><p>Added possibility to overplot of a trajectory in a PPI map</p></li>
+<li><p>Output data from regions of interest in a radar volume as kml and csv files</p></li>
+<li><p>Added some output on the location where the parsing of the config files fails (it is fails)</p></li>
+</ul>
+</section>
+<section id="v1-6-2">
+<h2>v1.6.2<a class="headerlink" href="#v1-6-2" title="Link to this heading">#</a></h2>
+<p><strong>New additions:</strong></p>
+<ul class="simple">
+<li><p>Added the possibility to create Cartesian ODIM outputs with the ODIMPYRADGRID keyword</p></li>
+</ul>
+</section>
+<section id="v1-6">
+<h2>v1.6<a class="headerlink" href="#v1-6" title="Link to this heading">#</a></h2>
+<p><strong>Bug fixes:</strong></p>
+<ul class="simple">
+<li><p>changed the number of colors from cmap.N to len(boundaries) – 1 in get_cmap to avoid colorbar issues with discrete colorbars</p></li>
+<li><p>fixed a bug that made it impossible to use any other method than main in flow_control.py</p></li>
+<li><p>set xlim and ylim of grid surface plots to the min/max of user defined lat/lon (this step was missing since the last release)</p></li>
+<li><p>correction of a bug that did not allow import of pyrad when the metranet library was mssing</p></li>
+</ul>
+<p><strong>New additions:</strong></p>
+<ul class="simple">
+<li><p>change in function process_point_measurement: When Truealt is false input keyword alt is not required and the output alt will be determined by the elevation angle</p></li>
+<li><p>added new user-defined parameters in VPR correction scheme</p></li>
+<li><p>modifications to allow to read multiple ODIM files containing parameters and scan</p></li>
+<li><p>changed keyword add_lines to add_grid_lines to be consistent with Py-ART</p></li>
+<li><p>new functions to accumulate gridded data and get data at multiple points in a grid</p></li>
+<li><p>added ODIMGRID keyword to be able to ingest gridded data from ODIM files</p></li>
+<li><p>added keyword MasterScanTimeTol that allows to combine ODIM files from different scans not having the same nominal time in file name</p></li>
+</ul>
+</section>
+</section>
+
+<div class="section ablog__blog_comments">
+  
+  
+</div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="overview/list_datadescriptors.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">List of pyrad input data descriptors</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-8-6">v1.8.6</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-8-5">v1.8.5</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-8-4">v1.8.4</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-8-3">v1.8.3</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-8-2">v1.8.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-8-1">v1.8.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-8">v1.8</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-7">v1.7</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-6-2">v1.6.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-6">v1.6</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="_sources/changelog.md.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -53,6 +53,8 @@
     
     get_ROI
     
+    get_box_coords
+    
     get_cercle_coords
     
     get_closest_solar_flux

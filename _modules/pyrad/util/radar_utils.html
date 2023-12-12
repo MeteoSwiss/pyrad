@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-theme="light">
+<html lang="en" data-content_root="../../../" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
@@ -17,12 +17,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -35,9 +35,9 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
     <script src="../../../_static/documentation_options.js?v=daef7da6"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
@@ -117,6 +117,7 @@
   <div class="col-lg-3 navbar-header-items__start">
     
       <div class="navbar-item">
+
   
 
 <a class="navbar-brand logo" href="../../../index.html">
@@ -136,7 +137,8 @@
     
     <div class="me-auto navbar-header-items__center">
       
-        <div class="navbar-item"><nav class="navbar-nav">
+        <div class="navbar-item">
+<nav class="navbar-nav">
   <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
@@ -165,6 +167,13 @@
                       </a>
                     </li>
                 
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../changelog.html">
+                        Changelog
+                      </a>
+                    </li>
+                
   </ul>
 </nav></div>
       
@@ -175,6 +184,7 @@
       
         <div class="navbar-item navbar-persistent--container">
           
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -188,6 +198,7 @@
       
       
         <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -220,6 +231,7 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -249,7 +261,8 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item"><nav class="navbar-nav">
+          <div class="navbar-item">
+<nav class="navbar-nav">
   <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
@@ -278,6 +291,13 @@ document.write(`
                       </a>
                     </li>
                 
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../changelog.html">
+                        Changelog
+                      </a>
+                    </li>
+                
   </ul>
 </nav></div>
         
@@ -288,6 +308,7 @@ document.write(`
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -390,6 +411,7 @@ document.write(`
 <span class="sd">    join_time_series</span>
 <span class="sd">    get_range_bins_to_avg</span>
 <span class="sd">    get_cercle_coords</span>
+<span class="sd">    get_box_coords</span>
 <span class="sd">    belongs_roi_indices</span>
 <span class="sd">    find_ray_index</span>
 <span class="sd">    find_rng_index</span>
@@ -494,10 +516,9 @@ document.write(`
                 <span class="n">ind_sweep</span> <span class="o">=</span> <span class="n">find_ang_index</span><span class="p">(</span>
                     <span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">ele</span><span class="p">,</span> <span class="n">ang_tol</span><span class="o">=</span><span class="n">ang_tol</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">ind_sweep</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No elevation angle found &#39;</span>
-                         <span class="s1">&#39;for fix_elevation </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ele</span><span class="p">))</span>
+                    <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;No elevation angle found for fix_elevation </span><span class="si">{</span><span class="n">ele</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
                     <span class="k">continue</span>
-                <span class="k">if</span> <span class="s1">&#39;vertical_pointing&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s1">&#39;vertical_pointing&#39;</span><span class="p">:</span>
                     <span class="n">new_dataset</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">new_dataset</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">extract_sweeps</span><span class="p">([</span><span class="n">ind_sweep</span><span class="p">])</span>
@@ -873,7 +894,7 @@ document.write(`
 <span class="k">def</span> <span class="nf">time_series_statistics</span><span class="p">(</span><span class="n">t_in_vec</span><span class="p">,</span> <span class="n">val_in_vec</span><span class="p">,</span> <span class="n">avg_time</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span>
                            <span class="n">base_time</span><span class="o">=</span><span class="mi">1800</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">dropnan</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Computes statistics over a time-averaged series. Only of package pandas is</span>
+<span class="sd">    Computes statistics over a time-averaged series. Only if package pandas is</span>
 <span class="sd">    available otherwise returns None</span>
 
 <span class="sd">    Parameters</span>
@@ -905,7 +926,7 @@ document.write(`
 
     <span class="n">df_in</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">val_in_vec</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">(</span><span class="n">t_in_vec</span><span class="p">))</span>
     <span class="n">df_out</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">df_in</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span>
-        <span class="nb">str</span><span class="p">(</span><span class="n">avg_time</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="n">closed</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">base_time</span><span class="p">),</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">avg_time</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="n">closed</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">base_time</span><span class="p">),</span>
         <span class="n">method</span><span class="p">)()</span>
     <span class="k">if</span> <span class="n">dropnan</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">df_out</span> <span class="o">=</span> <span class="n">df_out</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s1">&#39;any&#39;</span><span class="p">)</span>
@@ -1100,6 +1121,64 @@ document.write(`
 
 
 
+<div class="viewcode-block" id="get_box_coords">
+<a class="viewcode-back" href="../../../API/generated/pyrad.util.get_box_coords.html#pyrad.util.get_box_coords">[docs]</a>
+<span class="k">def</span> <span class="nf">get_box_coords</span><span class="p">(</span><span class="n">x_point</span><span class="p">,</span> <span class="n">y_point</span><span class="p">,</span> <span class="n">we_length</span><span class="o">=</span><span class="mf">1000.</span><span class="p">,</span> <span class="n">sn_length</span><span class="o">=</span><span class="mf">1000.</span><span class="p">,</span>
+                   <span class="n">rotation</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">we_offset</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">sn_offset</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the points defining a rectangle from the position of its centre and the</span>
+<span class="sd">    radius</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x_point, y_point : float</span>
+<span class="sd">        The Cartesian coordinates of the point at which the rectangle will</span>
+<span class="sd">        rotate. Typically in m</span>
+<span class="sd">    we_length, sn_length : float</span>
+<span class="sd">        west-east and south-north rectangle lengths</span>
+<span class="sd">    rotation : float</span>
+<span class="sd">         The angle of rotation. Positive is counterclockwise from North in</span>
+<span class="sd">         deg.</span>
+<span class="sd">    origin : str</span>
+<span class="sd">        The number of points used to define a quarter of the cercle</span>
+<span class="sd">    we_offset, sn_offset : float</span>
+<span class="sd">        west-east and south-north offset from rotation position</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    x_roi, y_roi : array of floats</span>
+<span class="sd">        The position of the points defining the box</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_SHAPELY_AVAILABLE</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;shapely package not available. &#39;</span> <span class="o">+</span>
+             <span class="s1">&#39;Unable to determine Region Of Interest&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">origin</span> <span class="o">==</span> <span class="s1">&#39;center&#39;</span><span class="p">:</span>
+        <span class="n">minx</span> <span class="o">=</span> <span class="n">x_point</span><span class="o">-</span><span class="n">we_length</span><span class="o">/</span><span class="mf">2.</span>
+        <span class="n">miny</span> <span class="o">=</span> <span class="n">y_point</span><span class="o">-</span><span class="n">sn_length</span><span class="o">/</span><span class="mf">2.</span>
+        <span class="n">maxx</span> <span class="o">=</span> <span class="n">x_point</span><span class="o">+</span><span class="n">we_length</span><span class="o">/</span><span class="mf">2.</span>
+        <span class="n">maxy</span> <span class="o">=</span> <span class="n">y_point</span><span class="o">+</span><span class="n">sn_length</span><span class="o">/</span><span class="mf">2.</span>
+        <span class="n">orig_aux</span> <span class="o">=</span> <span class="s1">&#39;center&#39;</span>
+    <span class="k">elif</span> <span class="n">origin</span> <span class="o">==</span> <span class="s1">&#39;mid_south&#39;</span><span class="p">:</span>
+        <span class="n">minx</span> <span class="o">=</span> <span class="n">x_point</span><span class="o">-</span><span class="n">we_length</span><span class="o">/</span><span class="mf">2.</span><span class="o">+</span><span class="n">we_offset</span>
+        <span class="n">miny</span> <span class="o">=</span> <span class="n">y_point</span><span class="o">+</span><span class="n">sn_offset</span>
+        <span class="n">maxx</span> <span class="o">=</span> <span class="n">x_point</span><span class="o">+</span><span class="n">we_length</span><span class="o">/</span><span class="mf">2.</span><span class="o">+</span><span class="n">we_offset</span>
+        <span class="n">maxy</span> <span class="o">=</span> <span class="n">y_point</span><span class="o">+</span><span class="n">sn_length</span><span class="o">+</span><span class="n">sn_offset</span>
+        <span class="n">orig_aux</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_point</span><span class="p">,</span> <span class="n">y_point</span><span class="p">)</span>
+
+    <span class="n">box</span> <span class="o">=</span> <span class="n">shapely</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">box</span><span class="p">(</span><span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span><span class="p">)</span>
+    <span class="n">box</span> <span class="o">=</span> <span class="n">shapely</span><span class="o">.</span><span class="n">affinity</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">box</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">orig_aux</span><span class="p">)</span>
+    <span class="n">box</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">box</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
+    <span class="n">xy_roi</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">box</span><span class="p">))</span>
+    <span class="n">x_roi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xy_roi</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">y_roi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xy_roi</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">x_roi</span><span class="p">,</span> <span class="n">y_roi</span></div>
+
+
+
 <div class="viewcode-block" id="belongs_roi_indices">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.belongs_roi_indices.html#pyrad.util.belongs_roi_indices">[docs]</a>
 <span class="k">def</span> <span class="nf">belongs_roi_indices</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">roi</span><span class="p">,</span> <span class="n">use_latlon</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -1156,7 +1235,7 @@ document.write(`
                 <span class="n">ind</span> <span class="o">=</span> <span class="n">ind</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">inds</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">points_roi_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">points_roi</span><span class="p">)</span>
+            <span class="n">points_roi_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">points_roi</span><span class="o">.</span><span class="n">geoms</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">points_roi_list</span><span class="p">:</span>
                 <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">lon</span> <span class="o">==</span> <span class="n">point</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">lat</span> <span class="o">==</span> <span class="n">point</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -1457,7 +1536,7 @@ document.write(`
 <span class="sd">        the solar flux values closest to the sun hit time</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">flux_datetime_closest_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">flux_datetime_closest_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">flux_value_closest_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_all</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hit_datetime_list</span><span class="p">))</span>
 
     <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
@@ -2012,7 +2091,7 @@ document.write(`
 
     <span class="k">if</span> <span class="n">step</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">step</span> <span class="o">=</span> <span class="p">(</span><span class="n">vmax</span> <span class="o">-</span> <span class="n">vmin</span><span class="p">)</span> <span class="o">/</span> <span class="mf">50.</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No step has been defined. Default &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">step</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; will be used&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;No step has been defined. Default </span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s1"> will be used&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
         <span class="n">vmin</span> <span class="o">-</span> <span class="n">step</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">+</span> <span class="n">step</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="nb">int</span><span class="p">((</span><span class="n">vmax</span> <span class="o">-</span> <span class="n">vmin</span><span class="p">)</span> <span class="o">/</span> <span class="n">step</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
@@ -2348,9 +2427,11 @@ document.write(`
                 <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to compute regression mean&#39;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
             <span class="n">data_std</span> <span class="o">=</span> <span class="n">std_field</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
-                <span class="n">gate_altitude</span> <span class="o">&gt;=</span> <span class="n">h</span> <span class="o">-</span> <span class="n">h_res</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">gate_altitude</span> <span class="o">&lt;</span> <span class="n">h</span> <span class="o">+</span> <span class="n">h_res</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)]</span>
+                <span class="n">gate_altitude</span> <span class="o">&gt;=</span> <span class="n">h</span> <span class="o">-</span> <span class="n">h_res</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span>
+                <span class="n">gate_altitude</span> <span class="o">&lt;</span> <span class="n">h</span> <span class="o">+</span> <span class="n">h_res</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)]</span>
             <span class="n">data_np</span> <span class="o">=</span> <span class="n">np_field</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
-                <span class="n">gate_altitude</span> <span class="o">&gt;=</span> <span class="n">h</span> <span class="o">-</span> <span class="n">h_res</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">gate_altitude</span> <span class="o">&lt;</span> <span class="n">h</span> <span class="o">+</span> <span class="n">h_res</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)]</span>
+                <span class="n">gate_altitude</span> <span class="o">&gt;=</span> <span class="n">h</span> <span class="o">-</span> <span class="n">h_res</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span>
+                <span class="n">gate_altitude</span> <span class="o">&lt;</span> <span class="n">h</span> <span class="o">+</span> <span class="n">h_res</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)]</span>
 
             <span class="n">val_valid</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data_np</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">val_valid</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.</span><span class="p">:</span>
@@ -2434,8 +2515,8 @@ document.write(`
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_average_vad.html#pyrad.util.compute_average_vad">[docs]</a>
 <span class="k">def</span> <span class="nf">compute_average_vad</span><span class="p">(</span><span class="n">radar_list</span><span class="p">,</span> <span class="n">z_want</span><span class="p">,</span> <span class="n">signs</span><span class="p">,</span> <span class="n">lat0</span><span class="p">,</span> <span class="n">lon0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Computes a profile of horizontal wind by averaging the VAD profiles of multiple</span>
-<span class="sd">    radars</span>
+<span class="sd">    Computes a profile of horizontal wind by averaging the VAD profiles of</span>
+<span class="sd">    multiple radars</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -2461,7 +2542,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    vad_avg : pyart.core.HorizontalWindProfile</span>
-<span class="sd">        Vertical profile of horizontal wind computed by averaging the </span>
+<span class="sd">        Vertical profile of horizontal wind computed by averaging the</span>
 <span class="sd">        VAD from every radar</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -2472,15 +2553,14 @@ document.write(`
     <span class="n">refl_fields</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">radar</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">radar_list</span><span class="p">):</span>
         <span class="c1"># Find vel and refl fields</span>
-        <span class="n">field_names_rad</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-        <span class="n">vel_field</span> <span class="o">=</span> <span class="n">field_names_rad</span><span class="p">[[</span>
-            <span class="s1">&#39;velocity&#39;</span> <span class="ow">in</span> <span class="n">vname</span> <span class="k">for</span> <span class="n">vname</span> <span class="ow">in</span> <span class="n">field_names_rad</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">field_names_rad</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">vel_field</span> <span class="o">=</span> <span class="n">field_names_rad</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">([</span>
+            <span class="s1">&#39;velocity&#39;</span> <span class="ow">in</span> <span class="n">vname</span> <span class="k">for</span> <span class="n">vname</span> <span class="ow">in</span> <span class="n">field_names_rad</span><span class="p">])[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
         <span class="n">vel_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vel_field</span><span class="p">)</span>
-        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">field_names_rad</span><span class="p">[[</span>
-            <span class="s1">&#39;reflectivity&#39;</span> <span class="ow">in</span> <span class="n">vname</span> <span class="k">for</span> <span class="n">vname</span> <span class="ow">in</span> <span class="n">field_names_rad</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">field_names_rad</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">([</span>
+            <span class="s1">&#39;reflectivity&#39;</span> <span class="ow">in</span> <span class="n">vname</span> <span class="k">for</span> <span class="n">vname</span> <span class="ow">in</span> <span class="n">field_names_rad</span><span class="p">])[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
         <span class="n">refl_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">refl_field</span><span class="p">)</span>
 
-    
         <span class="c1"># Compute VAD</span>
         <span class="n">all_vad</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">vad_browning</span><span class="p">(</span>
@@ -2527,7 +2607,7 @@ document.write(`
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
 </div>
                 </footer>
@@ -2547,8 +2627,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2556,6 +2636,7 @@ document.write(`
     <div class="footer-items__start">
       
         <div class="footer-item">
+
   <p class="sphinx-version">
     Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
@@ -2568,8 +2649,9 @@ document.write(`
   
     <div class="footer-items__end">
       
-        <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.3.
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
 </p></div>
       
     </div>

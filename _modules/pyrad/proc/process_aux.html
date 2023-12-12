@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-theme="light">
+<html lang="en" data-content_root="../../../" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
@@ -17,12 +17,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -35,9 +35,9 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
     <script src="../../../_static/documentation_options.js?v=daef7da6"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
@@ -117,6 +117,7 @@
   <div class="col-lg-3 navbar-header-items__start">
     
       <div class="navbar-item">
+
   
 
 <a class="navbar-brand logo" href="../../../index.html">
@@ -136,7 +137,8 @@
     
     <div class="me-auto navbar-header-items__center">
       
-        <div class="navbar-item"><nav class="navbar-nav">
+        <div class="navbar-item">
+<nav class="navbar-nav">
   <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
@@ -165,6 +167,13 @@
                       </a>
                     </li>
                 
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../changelog.html">
+                        Changelog
+                      </a>
+                    </li>
+                
   </ul>
 </nav></div>
       
@@ -175,6 +184,7 @@
       
         <div class="navbar-item navbar-persistent--container">
           
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -188,6 +198,7 @@
       
       
         <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -220,6 +231,7 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -249,7 +261,8 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item"><nav class="navbar-nav">
+          <div class="navbar-item">
+<nav class="navbar-nav">
   <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
@@ -278,6 +291,13 @@ document.write(`
                       </a>
                     </li>
                 
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../changelog.html">
+                        Changelog
+                      </a>
+                    </li>
+                
   </ul>
 </nav></div>
         
@@ -288,6 +308,7 @@ document.write(`
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -388,6 +409,7 @@ document.write(`
 <span class="sd">    process_save_radar</span>
 <span class="sd">    process_fixed_rng</span>
 <span class="sd">    process_fixed_rng_span</span>
+<span class="sd">    process_keep_roi</span>
 <span class="sd">    process_roi</span>
 <span class="sd">    process_roi2</span>
 <span class="sd">    process_azimuthal_average</span>
@@ -424,6 +446,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">..io.read_data_cosmo</span> <span class="kn">import</span> <span class="n">_put_radar_in_swiss_coord</span>
 <span class="kn">from</span> <span class="nn">..util.radar_utils</span> <span class="kn">import</span> <span class="n">belongs_roi_indices</span>
 <span class="kn">from</span> <span class="nn">..util.radar_utils</span> <span class="kn">import</span> <span class="n">get_fixed_rng_data</span><span class="p">,</span> <span class="n">get_cercle_coords</span>
+<span class="kn">from</span> <span class="nn">..util.radar_utils</span> <span class="kn">import</span> <span class="n">get_box_coords</span>
 <span class="kn">from</span> <span class="nn">..util.stat_utils</span> <span class="kn">import</span> <span class="n">quantiles_weighted</span>
 <span class="kn">from</span> <span class="nn">..proc.process_traj</span> <span class="kn">import</span> <span class="n">_get_gates_antenna_pattern</span>
 
@@ -477,6 +500,7 @@ document.write(`
 <span class="sd">                &#39;ISO0_MF&#39;: process_iso0_mf</span>
 <span class="sd">                &#39;KDP_LEASTSQUARE_1W&#39;: process_kdp_leastsquare_single_window</span>
 <span class="sd">                &#39;KDP_LEASTSQUARE_2W&#39;: process_kdp_leastsquare_double_window</span>
+<span class="sd">                &#39;KEEP_ROI&#39;: process_keep_roi</span>
 <span class="sd">                &#39;L&#39;: process_l</span>
 <span class="sd">                &#39;MEAN_PHASE_IQ&#39;: process_mean_phase_iq</span>
 <span class="sd">                &#39;NCVOL&#39;: process_save_radar</span>
@@ -528,6 +552,7 @@ document.write(`
 <span class="sd">                &#39;VOL_REFL&#39;: process_vol_refl</span>
 <span class="sd">                &#39;VOL2BIRD_FILTER&#39;: process_filter_vol2bird</span>
 <span class="sd">                &#39;VOL2BIRD_GATE_FILTER&#39;: process_gate_filter_vol2bird</span>
+<span class="sd">                &#39;VSTATUS_TO_SAN&#39;: process_vstatus_to_echo_id</span>
 <span class="sd">                &#39;WBN&#39;: process_wbn_iq</span>
 <span class="sd">                &#39;WIND_VEL&#39;: process_wind_vel</span>
 <span class="sd">                &#39;WINDSHEAR&#39;: process_windshear</span>
@@ -779,6 +804,8 @@ document.write(`
         <span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;process_birds_id&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;CLT_TO_SAN&#39;</span><span class="p">:</span>
         <span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;process_clt_to_echo_id&#39;</span>
+    <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;VSTATUS_TO_SAN&#39;</span><span class="p">:</span>
+        <span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;process_vstatus_to_echo_id&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;hydroMF_to_hydro&#39;</span><span class="p">:</span>
         <span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;process_hydro_mf_to_hydro&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;hydroMF_to_SAN&#39;</span><span class="p">:</span>
@@ -844,7 +871,7 @@ document.write(`
     <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;WINDSHEAR&#39;</span><span class="p">:</span>
         <span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;process_windshear&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;WINDSHEAR_LIDAR&#39;</span><span class="p">:</span>
-        <span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;process_windshear_lidar&#39;</span>    
+        <span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;process_windshear_lidar&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;HYDROCLASS&#39;</span><span class="p">:</span>
         <span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;process_hydroclass&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;CENTROIDS&#39;</span><span class="p">:</span>
@@ -1003,6 +1030,8 @@ document.write(`
         <span class="n">func_name</span> <span class="o">=</span> <span class="n">process_roi</span>
     <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;ROI2&#39;</span><span class="p">:</span>
         <span class="n">func_name</span> <span class="o">=</span> <span class="n">process_roi2</span>
+    <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;KEEP_ROI&#39;</span><span class="p">:</span>
+        <span class="n">func_name</span> <span class="o">=</span> <span class="n">process_keep_roi</span>
     <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;TRAJ&#39;</span><span class="p">:</span>
         <span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;process_trajectory&#39;</span>
         <span class="n">dsformat</span> <span class="o">=</span> <span class="s1">&#39;TRAJ_ONLY&#39;</span>
@@ -1063,7 +1092,7 @@ document.write(`
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
         <span class="k">break</span>
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
-    
+
     <span class="k">if</span> <span class="p">(</span><span class="n">radar_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;ERROR: No valid radar&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
@@ -1391,12 +1420,9 @@ document.write(`
 
 
 
-<div class="viewcode-block" id="process_roi">
-<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_roi.html#pyrad.proc.process_roi">[docs]</a>
-<span class="k">def</span> <span class="nf">process_roi</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">process_keep_roi</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Obtains the radar data at a region of interest defined by a TRT file or</span>
-<span class="sd">    by the user.</span>
+<span class="sd">    keep only data within a region of interest and mask anything else</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1422,11 +1448,30 @@ document.write(`
 <span class="sd">            If True the region of interest is going to be defined as a cercle</span>
 <span class="sd">            centered at a particular point. Default False</span>
 <span class="sd">        lon_centre, lat_centre : Float. Dataset keyword</span>
-<span class="sd">            The position of the centre of the cercle</span>
+<span class="sd">            The position of the centre of the cercle. If None, that of the</span>
+<span class="sd">            radar will be used</span>
 <span class="sd">        rad_cercle : Float. Dataset keyword</span>
 <span class="sd">            The radius of the cercle in m. Default 1000.</span>
 <span class="sd">        res_cercle : int. Dataset keyword</span>
 <span class="sd">            Number of points used to define a quarter of cercle. Default 16</span>
+<span class="sd">        box : boolean. Dataset keyword</span>
+<span class="sd">            If True the region of interest is going to be defined by a</span>
+<span class="sd">            rectangle</span>
+<span class="sd">        lon_point, lat point : Float</span>
+<span class="sd">            The position of the point of rotation of the box. If None the</span>
+<span class="sd">            position of the radar is going to be used</span>
+<span class="sd">        rotation : float</span>
+<span class="sd">            The angle of rotation. Positive is counterclockwise from North in</span>
+<span class="sd">            deg. Default 0.</span>
+<span class="sd">        we_offset, sn_offset : float</span>
+<span class="sd">            west-east and south-north offset from rotation position in m.</span>
+<span class="sd">            Default 0</span>
+<span class="sd">        we_length, sn_length : float</span>
+<span class="sd">            west-east and south-north rectangle lengths in m. Default 1000.</span>
+<span class="sd">        origin : str</span>
+<span class="sd">            origin of rotation. Can be center: center of the rectangle or</span>
+<span class="sd">            mid_south. East-west mid-point at the south of the rectangle.</span>
+<span class="sd">            Default center</span>
 <span class="sd">        use_latlon : Bool. Dataset keyword</span>
 <span class="sd">            If True the coordinates used to find the radar gates within the</span>
 <span class="sd">            ROI will be lat/lon. If false it will use Cartesian Coordinates</span>
@@ -1473,6 +1518,7 @@ document.write(`
 
     <span class="c1"># Choose origin of ROI definition</span>
     <span class="n">cercle</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cercle&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">box</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;box&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
     <span class="n">use_latlon</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;use_latlon&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
     <span class="k">if</span> <span class="s1">&#39;trtfile&#39;</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">:</span>
         <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">yyyymmddHHMM</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span>
@@ -1501,15 +1547,305 @@ document.write(`
         <span class="n">res_cercle</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;res_cercle&#39;</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">lon_centre</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">lat_centre</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Undefined ROI&#39;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;cercle position undefined. &#39;</span>
+                 <span class="s1">&#39;The radar position will be used&#39;</span><span class="p">)</span>
+            <span class="n">lon_centre</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">lat_centre</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="c1"># put data as x,y coordinates</span>
         <span class="n">x_centre</span><span class="p">,</span> <span class="n">y_centre</span> <span class="o">=</span> <span class="n">geographic_to_cartesian_aeqd</span><span class="p">(</span>
             <span class="n">lon_centre</span><span class="p">,</span> <span class="n">lat_centre</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
             <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">x_roi</span><span class="p">,</span> <span class="n">y_roi</span> <span class="o">=</span> <span class="n">get_cercle_coords</span><span class="p">(</span>
-            <span class="n">x_centre</span><span class="p">,</span> <span class="n">y_centre</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">rad_cercle</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="n">res_cercle</span><span class="p">)</span>
+            <span class="n">x_centre</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_centre</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">radius</span><span class="o">=</span><span class="n">rad_cercle</span><span class="p">,</span>
+            <span class="n">resolution</span><span class="o">=</span><span class="n">res_cercle</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">x_roi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="n">lon_roi</span><span class="p">,</span> <span class="n">lat_roi</span> <span class="o">=</span> <span class="n">cartesian_to_geographic_aeqd</span><span class="p">(</span>
+            <span class="n">x_roi</span><span class="p">,</span> <span class="n">y_roi</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="n">box</span><span class="p">:</span>
+        <span class="n">lon_point</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">lat_point</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">rotation</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rotation&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># deg from north</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;origin&#39;</span><span class="p">,</span> <span class="s1">&#39;center&#39;</span><span class="p">)</span>  <span class="c1"># origin of rotation</span>
+        <span class="n">we_offset</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;we_offset&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>  <span class="c1"># m</span>
+        <span class="n">sn_offset</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sn_offset&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>  <span class="c1"># m</span>
+        <span class="n">we_length</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;we_length&#39;</span><span class="p">,</span> <span class="mf">1000.</span><span class="p">)</span>   <span class="c1"># m</span>
+        <span class="n">sn_length</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sn_length&#39;</span><span class="p">,</span> <span class="mf">1000.</span><span class="p">)</span>   <span class="c1"># m</span>
+
+        <span class="k">if</span> <span class="n">lon_point</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">lat_point</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;box position undefined. &#39;</span>
+                 <span class="s1">&#39;The radar position will be used&#39;</span><span class="p">)</span>
+            <span class="n">lon_point</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">lat_point</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># put data as x,y coordinates</span>
+        <span class="n">x_point</span><span class="p">,</span> <span class="n">y_point</span> <span class="o">=</span> <span class="n">geographic_to_cartesian_aeqd</span><span class="p">(</span>
+            <span class="n">lon_point</span><span class="p">,</span> <span class="n">lat_point</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">x_roi</span><span class="p">,</span> <span class="n">y_roi</span> <span class="o">=</span> <span class="n">get_box_coords</span><span class="p">(</span>
+            <span class="n">x_point</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_point</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">we_length</span><span class="o">=</span><span class="n">we_length</span><span class="p">,</span> <span class="n">sn_length</span><span class="o">=</span><span class="n">sn_length</span><span class="p">,</span>
+            <span class="n">rotation</span><span class="o">=</span><span class="n">rotation</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span> <span class="n">we_offset</span><span class="o">=</span><span class="n">we_offset</span><span class="p">,</span>
+            <span class="n">sn_offset</span><span class="o">=</span><span class="n">sn_offset</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">x_roi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="n">lon_roi</span><span class="p">,</span> <span class="n">lat_roi</span> <span class="o">=</span> <span class="n">cartesian_to_geographic_aeqd</span><span class="p">(</span>
+            <span class="n">x_roi</span><span class="p">,</span> <span class="n">y_roi</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lon_roi</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lon_roi&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">lat_roi</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lat_roi&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">lon_roi</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">lat_roi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Undefined ROI&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="n">x_roi</span><span class="p">,</span> <span class="n">y_roi</span> <span class="o">=</span> <span class="n">geographic_to_cartesian_aeqd</span><span class="p">(</span>
+            <span class="n">lon_roi</span><span class="p">,</span> <span class="n">lat_roi</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">alt_min</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;alt_min&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">alt_max</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;alt_max&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">roi_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;lon&#39;</span><span class="p">:</span> <span class="n">lon_roi</span><span class="p">,</span>
+        <span class="s1">&#39;lat&#39;</span><span class="p">:</span> <span class="n">lat_roi</span><span class="p">,</span>
+        <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">x_roi</span><span class="p">,</span>
+        <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">y_roi</span><span class="p">,</span>
+        <span class="s1">&#39;alt_min&#39;</span><span class="p">:</span> <span class="n">alt_min</span><span class="p">,</span>
+        <span class="s1">&#39;alt_max&#39;</span><span class="p">:</span> <span class="n">alt_max</span><span class="p">}</span>
+
+    <span class="c1"># extract the data within the ROI boundaries</span>
+    <span class="n">inds_ray</span><span class="p">,</span> <span class="n">inds_rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">indices</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">gate_longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]))</span>
+
+    <span class="k">if</span> <span class="n">use_latlon</span><span class="p">:</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                <span class="n">radar</span><span class="o">.</span><span class="n">gate_latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">roi_dict</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+                <span class="n">radar</span><span class="o">.</span><span class="n">gate_latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">roi_dict</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                <span class="n">radar</span><span class="o">.</span><span class="n">gate_longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">roi_dict</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+                <span class="n">radar</span><span class="o">.</span><span class="n">gate_longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">roi_dict</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                <span class="n">radar</span><span class="o">.</span><span class="n">gate_y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">roi_dict</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+                <span class="n">radar</span><span class="o">.</span><span class="n">gate_y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">roi_dict</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                <span class="n">radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">roi_dict</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+                <span class="n">radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">roi_dict</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+
+    <span class="k">if</span> <span class="n">alt_min</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">mask</span><span class="p">[</span><span class="n">radar</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">alt_min</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">alt_max</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">mask</span><span class="p">[</span><span class="n">radar</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">alt_max</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">mask</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No values within ROI&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">inds_ray</span> <span class="o">=</span> <span class="n">inds_ray</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="n">inds_rng</span> <span class="o">=</span> <span class="n">inds_rng</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+
+    <span class="c1"># extract the data inside the ROI</span>
+    <span class="n">lat</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">mask</span><span class="p">]</span>
+    <span class="n">lon</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">mask</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">use_latlon</span><span class="p">:</span>
+        <span class="n">inds</span><span class="p">,</span> <span class="n">is_roi</span> <span class="o">=</span> <span class="n">belongs_roi_indices</span><span class="p">(</span>
+            <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">roi_dict</span><span class="p">,</span> <span class="n">use_latlon</span><span class="o">=</span><span class="n">use_latlon</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">mask</span><span class="p">]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">mask</span><span class="p">]</span>
+        <span class="n">inds</span><span class="p">,</span> <span class="n">is_roi</span> <span class="o">=</span> <span class="n">belongs_roi_indices</span><span class="p">(</span>
+            <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">roi_dict</span><span class="p">,</span> <span class="n">use_latlon</span><span class="o">=</span><span class="n">use_latlon</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">is_roi</span> <span class="o">==</span> <span class="s1">&#39;None&#39;</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No values within ROI&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">inds_ray</span> <span class="o">=</span> <span class="n">inds_ray</span><span class="p">[</span><span class="n">inds</span><span class="p">]</span>
+    <span class="n">inds_rng</span> <span class="o">=</span> <span class="n">inds_rng</span><span class="p">[</span><span class="n">inds</span><span class="p">]</span>
+
+    <span class="c1"># prepare new radar object output</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="n">field_names</span><span class="p">:</span>
+        <span class="n">field_dict</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">])</span>
+        <span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
+        <span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">inds_ray</span><span class="p">,</span> <span class="n">inds_rng</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">inds_ray</span><span class="p">,</span> <span class="n">inds_rng</span><span class="p">])</span>
+        <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">field_dict</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span>
+
+
+<div class="viewcode-block" id="process_roi">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_roi.html#pyrad.proc.process_roi">[docs]</a>
+<span class="k">def</span> <span class="nf">process_roi</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Obtains the radar data at a region of interest defined by a TRT file or</span>
+<span class="sd">    by the user.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    procstatus : int</span>
+<span class="sd">        Processing status: 0 initializing, 1 processing volume,</span>
+<span class="sd">        2 post-processing</span>
+<span class="sd">    dscfg : dictionary of dictionaries</span>
+<span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
+
+<span class="sd">        datatype : string. Dataset keyword</span>
+<span class="sd">            The data type where we want to extract the point measurement</span>
+<span class="sd">        trtfile : str. Dataset keyword</span>
+<span class="sd">            TRT file from which to extract the region of interest</span>
+<span class="sd">        time_tol : float. Dataset keyword</span>
+<span class="sd">            Time tolerance between the TRT file date and the nominal radar</span>
+<span class="sd">            volume time</span>
+<span class="sd">        lon_roi, lat_roi : float array. Dataset keyword</span>
+<span class="sd">            latitude and longitude positions defining a region of interest</span>
+<span class="sd">        alt_min, alt_max : float. Dataset keyword</span>
+<span class="sd">            Minimum and maximum altitude of the region of interest. Can be</span>
+<span class="sd">            None</span>
+<span class="sd">        cercle : boolean. Dataset keyword</span>
+<span class="sd">            If True the region of interest is going to be defined as a cercle</span>
+<span class="sd">            centered at a particular point. Default False</span>
+<span class="sd">        lon_centre, lat_centre : Float. Dataset keyword</span>
+<span class="sd">            The position of the centre of the cercle</span>
+<span class="sd">        rad_cercle : Float. Dataset keyword</span>
+<span class="sd">            The radius of the cercle in m. Default 1000.</span>
+<span class="sd">        res_cercle : int. Dataset keyword</span>
+<span class="sd">            Number of points used to define a quarter of cercle. Default 16</span>
+<span class="sd">        lon_point, lat point : Float</span>
+<span class="sd">            The position of the point of rotation of the box. If None the</span>
+<span class="sd">            position of the radar is going to be used</span>
+<span class="sd">        rotation : float</span>
+<span class="sd">            The angle of rotation. Positive is counterclockwise from North in</span>
+<span class="sd">            deg. Default 0.</span>
+<span class="sd">        we_offset, sn_offset : float</span>
+<span class="sd">            west-east and south-north offset from rotation position in m.</span>
+<span class="sd">            Default 0</span>
+<span class="sd">        we_length, sn_length : float</span>
+<span class="sd">            west-east and south-north rectangle lengths in m. Default 1000.</span>
+<span class="sd">        origin : str</span>
+<span class="sd">            origin of rotation. Can be center: center of the rectangle or</span>
+<span class="sd">            mid_south. East-west mid-point at the south of the rectangle.</span>
+<span class="sd">            Default center</span>
+<span class="sd">        use_latlon : Bool. Dataset keyword</span>
+<span class="sd">            If True the coordinates used to find the radar gates within the</span>
+<span class="sd">            ROI will be lat/lon. If false it will use Cartesian Coordinates</span>
+<span class="sd">            with origin the radar position. Default True</span>
+
+<span class="sd">    radar_list : list of Radar objects</span>
+<span class="sd">          Optional. list of radar objects</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    new_dataset : dict</span>
+<span class="sd">        dictionary containing the data and metadata at the point of interest</span>
+<span class="sd">    ind_rad : int</span>
+<span class="sd">        radar index</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">field_names_aux</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+        <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
+        <span class="n">field_names_aux</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">))</span>
+
+    <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">radar_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;ERROR: No valid radar&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
+
+    <span class="c1"># keep only fields present in radar object</span>
+    <span class="n">field_names</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">nfields_available</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="n">field_names_aux</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Field name &#39;</span> <span class="o">+</span> <span class="n">field_name</span> <span class="o">+</span> <span class="s1">&#39; not available in radar object&#39;</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">field_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
+        <span class="n">nfields_available</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">nfields_available</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Fields not available in radar data&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="c1"># Choose origin of ROI definition</span>
+    <span class="n">cercle</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cercle&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">box</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;box&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">use_latlon</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;use_latlon&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">&#39;trtfile&#39;</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">:</span>
+        <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">yyyymmddHHMM</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span>
+         <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">cell_contour</span><span class="p">)</span> <span class="o">=</span> <span class="n">read_trt_traj_data</span><span class="p">(</span>
+             <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;trtfile&#39;</span><span class="p">])</span>
+
+        <span class="n">time_tol</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;TimeTol&#39;</span><span class="p">,</span> <span class="mf">100.</span><span class="p">)</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">yyyymmddHHMM</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">time_traj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">yyyymmddHHMM</span><span class="p">):</span>
+            <span class="n">dt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">((</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">time_traj</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">dt</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">time_tol</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No TRT data for radar volume time&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+        <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+        <span class="n">lon_roi</span> <span class="o">=</span> <span class="n">cell_contour</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span>
+        <span class="n">lat_roi</span> <span class="o">=</span> <span class="n">cell_contour</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="s1">&#39;lat&#39;</span><span class="p">]</span>
+
+        <span class="n">x_roi</span><span class="p">,</span> <span class="n">y_roi</span> <span class="o">=</span> <span class="n">geographic_to_cartesian_aeqd</span><span class="p">(</span>
+            <span class="n">lon_roi</span><span class="p">,</span> <span class="n">lat_roi</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="n">cercle</span><span class="p">:</span>
+        <span class="n">lon_centre</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lon_centre&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">lat_centre</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lat_centre&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">rad_cercle</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rad_cercle&#39;</span><span class="p">,</span> <span class="mf">1000.</span><span class="p">)</span>  <span class="c1"># m</span>
+        <span class="n">res_cercle</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;res_cercle&#39;</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">lon_centre</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">lat_centre</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;cercle position undefined. &#39;</span>
+                 <span class="s1">&#39;The radar position will be used&#39;</span><span class="p">)</span>
+            <span class="n">lon_centre</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">lat_centre</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># put data as x,y coordinates</span>
+        <span class="n">x_centre</span><span class="p">,</span> <span class="n">y_centre</span> <span class="o">=</span> <span class="n">geographic_to_cartesian_aeqd</span><span class="p">(</span>
+            <span class="n">lon_centre</span><span class="p">,</span> <span class="n">lat_centre</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">x_roi</span><span class="p">,</span> <span class="n">y_roi</span> <span class="o">=</span> <span class="n">get_cercle_coords</span><span class="p">(</span>
+            <span class="n">x_centre</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_centre</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">radius</span><span class="o">=</span><span class="n">rad_cercle</span><span class="p">,</span>
+            <span class="n">resolution</span><span class="o">=</span><span class="n">res_cercle</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">x_roi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="n">lon_roi</span><span class="p">,</span> <span class="n">lat_roi</span> <span class="o">=</span> <span class="n">cartesian_to_geographic_aeqd</span><span class="p">(</span>
+            <span class="n">x_roi</span><span class="p">,</span> <span class="n">y_roi</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="n">box</span><span class="p">:</span>
+        <span class="n">lon_point</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">lat_point</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">rotation</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rotation&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># deg from north</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;origin&#39;</span><span class="p">,</span> <span class="s1">&#39;center&#39;</span><span class="p">)</span>  <span class="c1"># origin of rotation</span>
+        <span class="n">we_offset</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;we_offset&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>  <span class="c1"># m</span>
+        <span class="n">sn_offset</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sn_offset&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>  <span class="c1"># m</span>
+        <span class="n">we_length</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;we_length&#39;</span><span class="p">,</span> <span class="mf">1000.</span><span class="p">)</span>   <span class="c1"># m</span>
+        <span class="n">sn_length</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sn_length&#39;</span><span class="p">,</span> <span class="mf">1000.</span><span class="p">)</span>   <span class="c1"># m</span>
+
+        <span class="k">if</span> <span class="n">lon_point</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">lat_point</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;box position undefined. &#39;</span>
+                 <span class="s1">&#39;The radar position will be used&#39;</span><span class="p">)</span>
+            <span class="n">lon_point</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">lat_point</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># put data as x,y coordinates</span>
+        <span class="n">x_point</span><span class="p">,</span> <span class="n">y_point</span> <span class="o">=</span> <span class="n">geographic_to_cartesian_aeqd</span><span class="p">(</span>
+            <span class="n">lon_point</span><span class="p">,</span> <span class="n">lat_point</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">x_roi</span><span class="p">,</span> <span class="n">y_roi</span> <span class="o">=</span> <span class="n">get_box_coords</span><span class="p">(</span>
+            <span class="n">x_point</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_point</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">we_length</span><span class="o">=</span><span class="n">we_length</span><span class="p">,</span> <span class="n">sn_length</span><span class="o">=</span><span class="n">sn_length</span><span class="p">,</span>
+            <span class="n">rotation</span><span class="o">=</span><span class="n">rotation</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span> <span class="n">we_offset</span><span class="o">=</span><span class="n">we_offset</span><span class="p">,</span>
+            <span class="n">sn_offset</span><span class="o">=</span><span class="n">sn_offset</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">x_roi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
         <span class="n">lon_roi</span><span class="p">,</span> <span class="n">lat_roi</span> <span class="o">=</span> <span class="n">cartesian_to_geographic_aeqd</span><span class="p">(</span>
@@ -1684,6 +2020,24 @@ document.write(`
 <span class="sd">            The radius of the cercle in m. Default 1000.</span>
 <span class="sd">        res_cercle : int. Dataset keyword</span>
 <span class="sd">            Number of points used to define a quarter of cercle. Default 16</span>
+<span class="sd">        box : boolean. Dataset keyword</span>
+<span class="sd">            If True the region of interest is going to be defined by a</span>
+<span class="sd">            rectangle</span>
+<span class="sd">        lon_point, lat point : Float</span>
+<span class="sd">            The position of the point of rotation of the box. If None the</span>
+<span class="sd">            position of the radar is going to be used</span>
+<span class="sd">        rotation : float</span>
+<span class="sd">            The angle of rotation. Positive is counterclockwise from North in</span>
+<span class="sd">            deg. Default 0.</span>
+<span class="sd">        we_offset, sn_offset : float</span>
+<span class="sd">            west-east and south-north offset from rotation position in m.</span>
+<span class="sd">            Default 0</span>
+<span class="sd">        we_length, sn_length : float</span>
+<span class="sd">            west-east and south-north rectangle lengths in m. Default 1000.</span>
+<span class="sd">        origin : str</span>
+<span class="sd">            origin of rotation. Can be center: center of the rectangle or</span>
+<span class="sd">            mid_south. East-west mid-point at the south of the rectangle.</span>
+<span class="sd">            Default center</span>
 <span class="sd">        use_latlon : Bool. Dataset keyword</span>
 <span class="sd">            If True the coordinates used to find the radar gates within the</span>
 <span class="sd">            ROI will be lat/lon. If false it will use Cartesian Coordinates</span>
@@ -1730,6 +2084,7 @@ document.write(`
 
     <span class="c1"># Choose origin of ROI definition</span>
     <span class="n">cercle</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cercle&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">box</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;box&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
     <span class="n">use_latlon</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;use_latlon&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
     <span class="k">if</span> <span class="s1">&#39;trtfile&#39;</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">:</span>
         <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">yyyymmddHHMM</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span>
@@ -1758,15 +2113,47 @@ document.write(`
         <span class="n">res_cercle</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;res_cercle&#39;</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">lon_centre</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">lat_centre</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Undefined ROI&#39;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;cercle position undefined. &#39;</span>
+                 <span class="s1">&#39;The radar position will be used&#39;</span><span class="p">)</span>
+            <span class="n">lon_centre</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">lat_centre</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="c1"># put data as x,y coordinates</span>
         <span class="n">x_centre</span><span class="p">,</span> <span class="n">y_centre</span> <span class="o">=</span> <span class="n">geographic_to_cartesian_aeqd</span><span class="p">(</span>
             <span class="n">lon_centre</span><span class="p">,</span> <span class="n">lat_centre</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
             <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">x_roi</span><span class="p">,</span> <span class="n">y_roi</span> <span class="o">=</span> <span class="n">get_cercle_coords</span><span class="p">(</span>
-            <span class="n">x_centre</span><span class="p">,</span> <span class="n">y_centre</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">rad_cercle</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="n">res_cercle</span><span class="p">)</span>
+            <span class="n">x_centre</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_centre</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">radius</span><span class="o">=</span><span class="n">rad_cercle</span><span class="p">,</span>
+            <span class="n">resolution</span><span class="o">=</span><span class="n">res_cercle</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">x_roi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="n">lon_roi</span><span class="p">,</span> <span class="n">lat_roi</span> <span class="o">=</span> <span class="n">cartesian_to_geographic_aeqd</span><span class="p">(</span>
+            <span class="n">x_roi</span><span class="p">,</span> <span class="n">y_roi</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="n">box</span><span class="p">:</span>
+        <span class="n">lon_point</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">lat_point</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">rotation</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rotation&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># deg from north</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;origin&#39;</span><span class="p">,</span> <span class="s1">&#39;center&#39;</span><span class="p">)</span>  <span class="c1"># origin of rotation</span>
+        <span class="n">we_offset</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;we_offset&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>  <span class="c1"># m</span>
+        <span class="n">sn_offset</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sn_offset&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>  <span class="c1"># m</span>
+        <span class="n">we_length</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;we_length&#39;</span><span class="p">,</span> <span class="mf">1000.</span><span class="p">)</span>   <span class="c1"># m</span>
+        <span class="n">sn_length</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sn_length&#39;</span><span class="p">,</span> <span class="mf">1000.</span><span class="p">)</span>   <span class="c1"># m</span>
+
+        <span class="k">if</span> <span class="n">lon_point</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">lat_point</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;box position undefined. &#39;</span>
+                 <span class="s1">&#39;The radar position will be used&#39;</span><span class="p">)</span>
+            <span class="n">lon_point</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">lat_point</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># put data as x,y coordinates</span>
+        <span class="n">x_point</span><span class="p">,</span> <span class="n">y_point</span> <span class="o">=</span> <span class="n">geographic_to_cartesian_aeqd</span><span class="p">(</span>
+            <span class="n">lon_point</span><span class="p">,</span> <span class="n">lat_point</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">x_roi</span><span class="p">,</span> <span class="n">y_roi</span> <span class="o">=</span> <span class="n">get_box_coords</span><span class="p">(</span>
+            <span class="n">x_point</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_point</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">we_length</span><span class="o">=</span><span class="n">we_length</span><span class="p">,</span> <span class="n">sn_length</span><span class="o">=</span><span class="n">sn_length</span><span class="p">,</span>
+            <span class="n">rotation</span><span class="o">=</span><span class="n">rotation</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span> <span class="n">we_offset</span><span class="o">=</span><span class="n">we_offset</span><span class="p">,</span>
+            <span class="n">sn_offset</span><span class="o">=</span><span class="n">sn_offset</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">x_roi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
         <span class="n">lon_roi</span><span class="p">,</span> <span class="n">lat_roi</span> <span class="o">=</span> <span class="n">cartesian_to_geographic_aeqd</span><span class="p">(</span>
@@ -2702,12 +3089,11 @@ document.write(`
             <span class="n">tend</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
 
             <span class="nb">print</span><span class="p">(</span>
-                <span class="s1">&#39;original radar indices (azi, rng): &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rad_ind_ray</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span>
-                <span class="nb">str</span><span class="p">(</span><span class="n">rad_ind_rng</span><span class="p">)</span> <span class="o">+</span>
-                <span class="s1">&#39; target radar indices (azi, rng): &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">trad_ind_ray</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span>
-                <span class="nb">str</span><span class="p">(</span><span class="n">trad_ind_rng</span><span class="p">)</span> <span class="o">+</span>
-                <span class="s1">&#39; Samples done: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rad_ind_rngs</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="o">+</span>
-                <span class="s1">&#39; Time used: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">tend</span> <span class="o">-</span> <span class="n">tstart</span><span class="p">),</span>
+                <span class="s1">&#39;original radar indices (azi, rng): &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rad_ind_ray</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rad_ind_rng</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; target radar indices (azi, rng): &#39;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">trad_ind_ray</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">trad_ind_rng</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s1">&#39; Samples done: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rad_ind_rngs</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; Time used: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">tend</span> <span class="o">-</span> <span class="n">tstart</span><span class="p">),</span>
                 <span class="n">end</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">target_radar</span>
@@ -2862,7 +3248,7 @@ document.write(`
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
 </div>
                 </footer>
@@ -2882,8 +3268,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2891,6 +3277,7 @@ document.write(`
     <div class="footer-items__start">
       
         <div class="footer-item">
+
   <p class="sphinx-version">
     Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
@@ -2903,8 +3290,9 @@ document.write(`
   
     <div class="footer-items__end">
       
-        <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.3.
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
 </p></div>
       
     </div>

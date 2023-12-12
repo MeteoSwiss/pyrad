@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-theme="light">
+<html lang="en" data-content_root="../../../" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
@@ -17,12 +17,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -35,9 +35,9 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
     <script src="../../../_static/documentation_options.js?v=daef7da6"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
@@ -117,6 +117,7 @@
   <div class="col-lg-3 navbar-header-items__start">
     
       <div class="navbar-item">
+
   
 
 <a class="navbar-brand logo" href="../../../index.html">
@@ -136,7 +137,8 @@
     
     <div class="me-auto navbar-header-items__center">
       
-        <div class="navbar-item"><nav class="navbar-nav">
+        <div class="navbar-item">
+<nav class="navbar-nav">
   <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
@@ -165,6 +167,13 @@
                       </a>
                     </li>
                 
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../changelog.html">
+                        Changelog
+                      </a>
+                    </li>
+                
   </ul>
 </nav></div>
       
@@ -175,6 +184,7 @@
       
         <div class="navbar-item navbar-persistent--container">
           
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -188,6 +198,7 @@
       
       
         <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -220,6 +231,7 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -249,7 +261,8 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item"><nav class="navbar-nav">
+          <div class="navbar-item">
+<nav class="navbar-nav">
   <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
@@ -278,6 +291,13 @@ document.write(`
                       </a>
                     </li>
                 
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../changelog.html">
+                        Changelog
+                      </a>
+                    </li>
+                
   </ul>
 </nav></div>
         
@@ -288,6 +308,7 @@ document.write(`
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -388,6 +409,8 @@ document.write(`
 <span class="sd">    make_filename</span>
 <span class="sd">    generate_field_name_str</span>
 <span class="sd">    get_datatype_metranet</span>
+<span class="sd">    get_datatype_knmi</span>
+<span class="sd">    get_datatype_skyecho</span>
 <span class="sd">    get_datatype_odim</span>
 <span class="sd">    get_fieldname_pyart</span>
 <span class="sd">    get_fieldname_cosmo</span>
@@ -425,6 +448,13 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">pyart.config</span> <span class="kn">import</span> <span class="n">get_metadata</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyart.aux_io</span> <span class="kn">import</span> <span class="n">get_sweep_time_coverage</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Could not get the get_sweep_time_coverage from pyart&#39;</span><span class="p">)</span>
+    <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;You are likely using ARM Py-ART and not the MCH fork&#39;</span><span class="p">)</span>
+    <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;You will not be able to read skyecho data&#39;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="get_rad4alp_prod_fname">
@@ -1105,6 +1135,149 @@ document.write(`
     <span class="k">return</span> <span class="p">{</span><span class="n">datatype_metranet</span><span class="p">:</span> <span class="n">field_name</span><span class="p">}</span>
 
 
+<span class="k">def</span> <span class="nf">get_datatype_knmi</span><span class="p">(</span><span class="n">datatype</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    maps de config file radar data type name into the corresponding KNMI</span>
+<span class="sd">    data type name and Py-ART field name</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    datatype : str</span>
+<span class="sd">        config file radar data type name</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    knmi type : dict</span>
+<span class="sd">        dictionary containing the KNMI data type name and its</span>
+<span class="sd">        corresponding Py-ART field name</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Raccu&#39;</span><span class="p">:</span>
+        <span class="n">datatype_knmi</span> <span class="o">=</span> <span class="s1">&#39;ACCUMULATION_[MM]&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;rainfall_accumulation&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;QI&#39;</span><span class="p">:</span>
+        <span class="n">datatype_knmi</span> <span class="o">=</span> <span class="s1">&#39;QUALITY_[-]&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;signal_quality_index&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;AF&#39;</span><span class="p">:</span>
+        <span class="n">datatype_knmi</span> <span class="o">=</span> <span class="s1">&#39;ADJUSTMENT_FACTOR_[DB]&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;adjustment_factor&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;RR&#39;</span><span class="p">:</span>
+        <span class="n">datatype_knmi</span> <span class="o">=</span> <span class="s1">&#39;RAINFALL_RATE_[MM/H]&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;radar_estimated_rain_rate&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s1">&#39;ERROR: KNMI fields do not contain datatype </span><span class="si">{</span><span class="n">datatype</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="n">datatype_knmi</span><span class="p">:</span> <span class="n">field_name</span><span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">get_datatype_skyecho</span><span class="p">(</span><span class="n">datatype</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    maps de config file radar data type name into the corresponding SKYECHO</span>
+<span class="sd">    data type name and Py-ART field name</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    datatype : str</span>
+<span class="sd">        config file radar data type name</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    skyecho type : dict</span>
+<span class="sd">        dictionary containing the skyecho data type name and its</span>
+<span class="sd">        corresponding Py-ART field name</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;dBZ&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;equivalent_reflectivity_factor_HH&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;reflectivity&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;dBZ_flag&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;equivalent_reflectivity_factor_HH_flag&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;reflectivity_flag&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;dBZv&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;equivalent_reflectivity_factor_VV&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;reflectivity_vv&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;dBZhv&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;equivalent_reflectivity_factor_HV&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;reflectivity_hv&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;dBZvh&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;equivalent_reflectivity_factor_VH&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;reflectivity_vh&#39;</span>
+
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;V&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;velocity_HH&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;velocity&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Vv&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;velocity_VV&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;velocity_vv&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Vhv&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;velocity_HV&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;velocity_hv&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Vvh&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;velocity_VH&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;velocity_vh&#39;</span>
+
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;W&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;spectrum_width_HH&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;spectrum_width&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Wv&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;spectrum_width_VV&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;spectrum_width_vv&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Whv&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;spectrum_width_HV&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;spectrum_width_hv&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Wvh&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;spectrum_width_VH&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;spectrum_width_vh&#39;</span>
+
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Nh&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;noise_level_HH&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;noisedBZ_hh&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Nv&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;noise_level_VV&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;noisedBZ_vv&#39;</span>
+
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Nclip_h&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;noise_clipping_level_HH&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;noise_clipping_level_hh_dBZ&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Nclip_v&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;noise_clipping_level_VV&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;noise_clipping_level_vv_dBZ&#39;</span>
+
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;PhiDP&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;phidp&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;differential_phase&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;ZDR&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;ZDR&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;differential_reflectivity&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;LDRhv&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;LDR_HV&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;linear_depolariztion_ratio_hv&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;LDRvh&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;LDR_VH&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;linear_depolariztion_ratio_vh&#39;</span>
+
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;RR&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;rainfall_rate&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;radar_estimated_rain_rate&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;RR_MP&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;rainfall_rate_mp1948&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;Marshall_Palmer_radar_estimated_rain_rate&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;RR_flag&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;rainfall_rate_flag&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;radar_estimated_rain_rate_flag&#39;</span>
+
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;EDR&#39;</span><span class="p">:</span>
+        <span class="n">datatype_skyecho</span> <span class="o">=</span> <span class="s1">&#39;EDR13&#39;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;turbulence&#39;</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;ERROR: SKYECHO fields do not contain datatype &#39;</span> <span class="o">+</span> <span class="n">datatype</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="n">datatype_skyecho</span><span class="p">:</span> <span class="n">field_name</span><span class="p">}</span>
+
+
 <span class="k">def</span> <span class="nf">get_datatype_odim</span><span class="p">(</span><span class="n">datatype</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    maps the config file radar data type name into the corresponding odim</span>
@@ -1571,6 +1744,8 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;dBZ&#39;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;reflectivity&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;dBZ_flag&#39;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;reflectivity_flag&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;dBZ_MF&#39;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;reflectivity&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Zn&#39;</span><span class="p">:</span>
@@ -1591,6 +1766,10 @@ document.write(`
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;unfiltered_reflectivity_vv&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;dBuZvc&#39;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;corrected_unfiltered_reflectivity_vv&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;dBZhv&#39;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;reflectivity_hv&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;dBZvh&#39;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;reflectivity_vh&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;dBZ_bias&#39;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;reflectivity_bias&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;eta_h&#39;</span><span class="p">:</span>
@@ -1624,6 +1803,11 @@ document.write(`
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;ZDR_col&#39;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;differential_reflectivity_column_height&#39;</span>
 
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;LDRhv&#39;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;linear_depolarization_ratio_hv&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;LDRvh&#39;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;linear_depolarization_ratio_vh&#39;</span>
+
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;dBm&#39;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;signal_power_hh&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;dBmv&#39;</span><span class="p">:</span>
@@ -1649,6 +1833,10 @@ document.write(`
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;noise_pos_h&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;noise_pos_v&#39;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;noise_pos_v&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Nclip_h&#39;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;noise_clipping_level_hh_dBZ&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Nclip_v&#39;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;noise_clipping_level_vv_dBZ&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;WBN&#39;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;wide_band_noise&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;WBNc&#39;</span><span class="p">:</span>
@@ -1742,6 +1930,10 @@ document.write(`
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;velocity&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Vv&#39;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;velocity_vv&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Vhv&#39;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;velocity_hv&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Vvh&#39;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;velocity_vh&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Vu&#39;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;unfiltered_velocity&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;dealV&#39;</span><span class="p">:</span>
@@ -1756,10 +1948,15 @@ document.write(`
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;retrieved_velocity_std&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;diffV&#39;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;velocity_difference&#39;</span>
+
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;W&#39;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;spectrum_width&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Wv&#39;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;spectrum_width_vv&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Whv&#39;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;spectrum_width_hv&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Wvh&#39;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;spectrum_width_vh&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Wu&#39;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;unfiltered_spectrum_width&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Wc&#39;</span><span class="p">:</span>
@@ -1862,6 +2059,10 @@ document.write(`
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;frequency_of_occurrence&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;RR&#39;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;radar_estimated_rain_rate&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;RR_MP&#39;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;Marshall_Palmer_radar_estimated_rain_rate&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;RR_flag&#39;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;radar_estimated_rain_rate_flag&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;RRc&#39;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;corrected_radar_estimated_rain_rate&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;Raccu&#39;</span><span class="p">:</span>
@@ -1870,6 +2071,10 @@ document.write(`
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;rainfall_accumulation&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;QIMF&#39;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;signal_quality_index&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;QI&#39;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;signal_quality_index&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;AF&#39;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;adjustment_factor&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;radar_R_rel&#39;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;radar_rainrate_relation&#39;</span>
 
@@ -2301,6 +2506,8 @@ document.write(`
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;radial_wind_speed_status&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;WD&#39;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;doppler_spectrum_width&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;WDc&#39;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;corrected_doppler_spectrum_width&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;WD_err&#39;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;doppler_spectrum_mean_error&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;atmos_type&#39;</span><span class="p">:</span>
@@ -2311,6 +2518,8 @@ document.write(`
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;absolute_beta&#39;</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;CNR&#39;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;cnr&#39;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;CNRc&#39;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s1">&#39;corrected_cnr&#39;</span>
 
     <span class="c1"># satellite names</span>
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;HRV&#39;</span><span class="p">:</span>
@@ -2721,9 +2930,24 @@ document.write(`
                 <span class="n">dayfilelist</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">dayfilelist</span><span class="p">:</span>
                     <span class="n">t_filelist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-
+            <span class="k">elif</span> <span class="n">datagroup</span> <span class="o">==</span> <span class="s1">&#39;SKYECHO&#39;</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">fpath_strf</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span>
+                        <span class="n">dataset</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;D&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">:</span><span class="n">dataset</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;F&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span>
+                <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                    <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unknown directory and/or date &#39;</span> <span class="o">+</span>
+                         <span class="s1">&#39;convention, check product config file&#39;</span><span class="p">)</span>
+                <span class="n">daydir</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">starttime</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">i</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
+                        <span class="n">fpath_strf</span><span class="p">)</span>
+                <span class="n">datapath</span> <span class="o">=</span> <span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;datapath&#39;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> <span class="n">daydir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span>
+                <span class="n">pattern</span> <span class="o">=</span> <span class="n">datapath</span> <span class="o">+</span> <span class="s1">&#39;*&#39;</span> <span class="o">+</span> <span class="n">scan</span> <span class="o">+</span> <span class="s1">&#39;*&#39;</span>
+                <span class="n">dayfilelist</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">dayfilelist</span><span class="p">:</span>
+                    <span class="n">t_filelist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">datagroup</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;ODIM&#39;</span><span class="p">,</span> <span class="s1">&#39;ODIMBIRDS&#39;</span><span class="p">,</span> <span class="s1">&#39;CFRADIAL&#39;</span><span class="p">,</span> <span class="s1">&#39;CFRADIAL2&#39;</span><span class="p">,</span>
-                               <span class="s1">&#39;CF1&#39;</span><span class="p">,</span> <span class="s1">&#39;NEXRADII&#39;</span><span class="p">,</span> <span class="s1">&#39;GAMIC&#39;</span><span class="p">,</span> <span class="s1">&#39;ODIMGRID&#39;</span><span class="p">):</span>
+                               <span class="s1">&#39;CF1&#39;</span><span class="p">,</span> <span class="s1">&#39;NEXRADII&#39;</span><span class="p">,</span> <span class="s1">&#39;GAMIC&#39;</span><span class="p">,</span> <span class="s1">&#39;ODIMGRID&#39;</span><span class="p">,</span>
+                               <span class="s1">&#39;KNMIH5GRID&#39;</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">scan</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unknown scan name&#39;</span><span class="p">)</span>
                     <span class="k">return</span> <span class="p">[]</span>
@@ -2828,8 +3052,6 @@ document.write(`
             <span class="k">elif</span> <span class="n">datagroup</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;GECSX&#39;</span><span class="p">):</span>
                 <span class="n">termination</span> <span class="o">=</span> <span class="s1">&#39;.nc&#39;</span>
                 <span class="c1"># Choose any date</span>
-                <span class="kn">import</span> <span class="nn">pdb</span>
-                <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
                 <span class="n">datapath</span> <span class="o">=</span> <span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;gecsxbasepath&#39;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span>
                             <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;gecsxname&#39;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span>
                             <span class="n">dataset</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">product</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span>
@@ -2891,7 +3113,9 @@ document.write(`
                     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">datapath</span><span class="p">):</span>
                         <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;WARNING: Unknown datapath &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">datapath</span><span class="p">)</span>
                         <span class="k">continue</span>
-                    <span class="n">pattern</span> <span class="o">=</span> <span class="n">datapath</span> <span class="o">+</span> <span class="s1">&#39;MXPol-polar-&#39;</span> <span class="o">+</span> <span class="n">dayinfo</span> <span class="o">+</span> <span class="s1">&#39;-*-&#39;</span> <span class="o">+</span> <span class="n">scan</span> <span class="o">+</span> <span class="s1">&#39;.nc&#39;</span>
+                    <span class="n">pattern</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">datapath</span> <span class="o">+</span> <span class="s1">&#39;MXPol-polar-&#39;</span> <span class="o">+</span> <span class="n">dayinfo</span> <span class="o">+</span> <span class="s1">&#39;-*-&#39;</span> <span class="o">+</span> <span class="n">scan</span>
+                        <span class="o">+</span> <span class="s1">&#39;.nc&#39;</span><span class="p">)</span>
                     <span class="n">dayfilelist</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">dayfilelist</span><span class="p">:</span>
                     <span class="n">t_filelist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
@@ -2919,7 +3143,18 @@ document.write(`
                 <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">dayfilelist</span><span class="p">:</span>
                     <span class="n">t_filelist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">datagroup</span> <span class="o">!=</span> <span class="s1">&#39;GECSX&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datagroup</span> <span class="o">==</span> <span class="s1">&#39;GECSX&#39;</span><span class="p">:</span>
+            <span class="c1"># For GECSX we ignore time, since the visibility is static</span>
+            <span class="n">filelist</span> <span class="o">=</span> <span class="n">t_filelist</span>
+        <span class="k">elif</span> <span class="n">datagroup</span> <span class="o">==</span> <span class="s1">&#39;SKYECHO&#39;</span><span class="p">:</span>
+            <span class="c1"># Each file contains multiple scans</span>
+            <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">t_filelist</span><span class="p">:</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">tend_sweeps</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_sweep_time_coverage</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">tend</span> <span class="ow">in</span> <span class="n">tend_sweeps</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">starttime</span> <span class="o">&lt;=</span> <span class="n">tend</span> <span class="o">&lt;=</span> <span class="n">endtime</span><span class="p">:</span>
+                        <span class="n">filelist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="si">}</span><span class="s2">::</span><span class="si">{</span><span class="n">tend</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S.</span><span class="si">%f</span><span class="s1">&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">t_filelist</span><span class="p">:</span>
                 <span class="n">filenamestr</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
                 <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">get_datetime</span><span class="p">(</span><span class="n">filenamestr</span><span class="p">,</span> <span class="n">datadescriptor</span><span class="p">)</span>
@@ -2927,8 +3162,6 @@ document.write(`
                     <span class="k">if</span> <span class="n">starttime</span> <span class="o">&lt;=</span> <span class="n">fdatetime</span> <span class="o">&lt;=</span> <span class="n">endtime</span><span class="p">:</span>
                         <span class="k">if</span> <span class="n">filenamestr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">filelist</span><span class="p">:</span>
                             <span class="n">filelist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filenamestr</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>  <span class="c1"># For GECSX we ignore time, since the visibility is static</span>
-            <span class="n">filelist</span> <span class="o">=</span> <span class="n">t_filelist</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">filelist</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">pattern</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -3255,7 +3488,7 @@ document.write(`
             <span class="k">elif</span> <span class="n">datagroup</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;ODIM&#39;</span><span class="p">,</span> <span class="s1">&#39;ODIMBIRDS&#39;</span><span class="p">,</span> <span class="s1">&#39;MFCFRADIAL&#39;</span><span class="p">,</span> <span class="s1">&#39;MFBIN&#39;</span><span class="p">,</span>
                                <span class="s1">&#39;CFRADIAL2&#39;</span><span class="p">,</span> <span class="s1">&#39;CF1&#39;</span><span class="p">,</span> <span class="s1">&#39;NEXRADII&#39;</span><span class="p">,</span> <span class="s1">&#39;MFPNG&#39;</span><span class="p">,</span>
                                <span class="s1">&#39;MFGRIB&#39;</span><span class="p">,</span> <span class="s1">&#39;MFDAT&#39;</span><span class="p">,</span> <span class="s1">&#39;MFCF&#39;</span><span class="p">,</span> <span class="s1">&#39;GAMIC&#39;</span><span class="p">,</span> <span class="s1">&#39;CFRADIAL&#39;</span><span class="p">,</span>
-                               <span class="s1">&#39;ODIMGRID&#39;</span><span class="p">):</span>
+                               <span class="s1">&#39;ODIMGRID&#39;</span><span class="p">,</span> <span class="s1">&#39;SKYECHO&#39;</span><span class="p">,</span> <span class="s1">&#39;KNMIH5GRID&#39;</span><span class="p">):</span>
                 <span class="n">descrfields2</span> <span class="o">=</span> <span class="n">descrfields</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
                 <span class="n">datatype</span> <span class="o">=</span> <span class="n">descrfields2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">product</span> <span class="o">=</span> <span class="kc">None</span>
@@ -3287,7 +3520,7 @@ document.write(`
         <span class="k">elif</span> <span class="n">datagroup</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;ODIM&#39;</span><span class="p">,</span> <span class="s1">&#39;ODIMBIRDS&#39;</span><span class="p">,</span> <span class="s1">&#39;MFCFRADIAL&#39;</span><span class="p">,</span> <span class="s1">&#39;MFBIN&#39;</span><span class="p">,</span>
                            <span class="s1">&#39;NEXRADII&#39;</span><span class="p">,</span> <span class="s1">&#39;MFPNG&#39;</span><span class="p">,</span> <span class="s1">&#39;MFGRIB&#39;</span><span class="p">,</span> <span class="s1">&#39;MFDAT&#39;</span><span class="p">,</span> <span class="s1">&#39;MFCF&#39;</span><span class="p">,</span>
                            <span class="s1">&#39;CFRADIAL2&#39;</span><span class="p">,</span> <span class="s1">&#39;CF1&#39;</span><span class="p">,</span> <span class="s1">&#39;GAMIC&#39;</span><span class="p">,</span> <span class="s1">&#39;CFRADIAL&#39;</span><span class="p">,</span>
-                           <span class="s1">&#39;ODIMGRID&#39;</span><span class="p">):</span>
+                           <span class="s1">&#39;ODIMGRID&#39;</span><span class="p">,</span> <span class="s1">&#39;SKYECHO&#39;</span><span class="p">,</span> <span class="s1">&#39;KNMIH5GRID&#39;</span><span class="p">):</span>
             <span class="n">descrfields2</span> <span class="o">=</span> <span class="n">descrfields</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
             <span class="c1"># warn(&quot; descrfields2:  &#39;%s&#39;&quot; % descrfields2[1])</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">descrfields2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
@@ -3469,7 +3702,8 @@ document.write(`
         <span class="n">runtimestr</span> <span class="o">=</span> <span class="n">runtime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;0000&#39;</span>
 
         <span class="n">daydir</span> <span class="o">=</span> <span class="n">runtime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
-        <span class="n">datapath</span> <span class="o">=</span> <span class="n">basepath</span> <span class="o">+</span> <span class="n">datatype</span> <span class="o">+</span> <span class="s1">&#39;/radar/&#39;</span> <span class="o">+</span> <span class="n">daydir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">dataset</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span>
+        <span class="n">datapath</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">basepath</span> <span class="o">+</span> <span class="n">datatype</span> <span class="o">+</span> <span class="s1">&#39;/radar/&#39;</span> <span class="o">+</span> <span class="n">daydir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">dataset</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span>
 
         <span class="n">search_name</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">datapath</span> <span class="o">+</span> <span class="n">datatype</span> <span class="o">+</span> <span class="s1">&#39;_RUN&#39;</span> <span class="o">+</span> <span class="n">runtimestr</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">fdatetime</span> <span class="o">+</span> <span class="s1">&#39;.*&#39;</span><span class="p">)</span>
@@ -3874,7 +4108,8 @@ document.write(`
                 <span class="n">datestr</span><span class="p">,</span> <span class="s1">&#39;%y%j&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">datagroup</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;ODIM&#39;</span><span class="p">,</span> <span class="s1">&#39;ODIMBIRDS&#39;</span><span class="p">,</span> <span class="s1">&#39;MFCFRADIAL&#39;</span><span class="p">,</span> <span class="s1">&#39;MFBIN&#39;</span><span class="p">,</span>
                        <span class="s1">&#39;NEXRADII&#39;</span><span class="p">,</span> <span class="s1">&#39;MFPNG&#39;</span><span class="p">,</span> <span class="s1">&#39;MFGRIB&#39;</span><span class="p">,</span> <span class="s1">&#39;MFDAT&#39;</span><span class="p">,</span> <span class="s1">&#39;MFCF&#39;</span><span class="p">,</span>
-                       <span class="s1">&#39;CFRADIAL2&#39;</span><span class="p">,</span> <span class="s1">&#39;CF1&#39;</span><span class="p">,</span> <span class="s1">&#39;GAMIC&#39;</span><span class="p">,</span> <span class="s1">&#39;CFRADIAL&#39;</span><span class="p">,</span> <span class="s1">&#39;ODIMGRID&#39;</span><span class="p">):</span>
+                       <span class="s1">&#39;CFRADIAL2&#39;</span><span class="p">,</span> <span class="s1">&#39;CF1&#39;</span><span class="p">,</span> <span class="s1">&#39;GAMIC&#39;</span><span class="p">,</span> <span class="s1">&#39;CFRADIAL&#39;</span><span class="p">,</span> <span class="s1">&#39;ODIMGRID&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;KNMIH5GRID&#39;</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">ftime_format</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># we assume is rad4alp format</span>
             <span class="n">datetimestr</span> <span class="o">=</span> <span class="n">bfile</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">12</span><span class="p">]</span>
@@ -3891,6 +4126,10 @@ document.write(`
     <span class="k">elif</span> <span class="n">datagroup</span> <span class="o">==</span> <span class="s1">&#39;SATGRID&#39;</span><span class="p">:</span>
         <span class="n">datetimestr</span> <span class="o">=</span> <span class="n">bfile</span><span class="p">[</span><span class="mi">10</span><span class="p">:</span><span class="mi">22</span><span class="p">]</span>
         <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">datetimestr</span><span class="p">,</span> <span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H%M&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">datagroup</span> <span class="o">==</span> <span class="s1">&#39;SKYECHO&#39;</span><span class="p">:</span>
+        <span class="n">datetimestr</span> <span class="o">=</span> <span class="n">bfile</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;::&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
+            <span class="n">datetimestr</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S.</span><span class="si">%f</span><span class="s1">&#39;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;unknown data group&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
@@ -3952,7 +4191,7 @@ document.write(`
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
 </div>
                 </footer>
@@ -3972,8 +4211,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -3981,6 +4220,7 @@ document.write(`
     <div class="footer-items__start">
       
         <div class="footer-item">
+
   <p class="sphinx-version">
     Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
@@ -3993,8 +4233,9 @@ document.write(`
   
     <div class="footer-items__end">
       
-        <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.3.
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
 </p></div>
       
     </div>

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-theme="light">
+<html lang="en" data-content_root="../../../" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
@@ -17,12 +17,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -35,9 +35,9 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
     <script src="../../../_static/documentation_options.js?v=daef7da6"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
@@ -117,6 +117,7 @@
   <div class="col-lg-3 navbar-header-items__start">
     
       <div class="navbar-item">
+
   
 
 <a class="navbar-brand logo" href="../../../index.html">
@@ -136,7 +137,8 @@
     
     <div class="me-auto navbar-header-items__center">
       
-        <div class="navbar-item"><nav class="navbar-nav">
+        <div class="navbar-item">
+<nav class="navbar-nav">
   <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
@@ -165,6 +167,13 @@
                       </a>
                     </li>
                 
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../changelog.html">
+                        Changelog
+                      </a>
+                    </li>
+                
   </ul>
 </nav></div>
       
@@ -175,6 +184,7 @@
       
         <div class="navbar-item navbar-persistent--container">
           
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -188,6 +198,7 @@
       
       
         <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -220,6 +231,7 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -249,7 +261,8 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item"><nav class="navbar-nav">
+          <div class="navbar-item">
+<nav class="navbar-nav">
   <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
@@ -278,6 +291,13 @@ document.write(`
                       </a>
                     </li>
                 
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../changelog.html">
+                        Changelog
+                      </a>
+                    </li>
+                
   </ul>
 </nav></div>
         
@@ -288,6 +308,7 @@ document.write(`
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -947,10 +968,19 @@ document.write(`
         <span class="k">if</span> <span class="ow">not</span> <span class="n">plot_only_final</span> <span class="ow">and</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;final&#39;</span><span class="p">]:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="n">az</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:.1f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;antenna_coordinates_az_el_r&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">el</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:.1f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;antenna_coordinates_az_el_r&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:.1f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;antenna_coordinates_az_el_r&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
-        <span class="n">gateinfo</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;az&#39;</span> <span class="o">+</span> <span class="n">az</span> <span class="o">+</span> <span class="s1">&#39;r&#39;</span> <span class="o">+</span> <span class="n">r</span> <span class="o">+</span> <span class="s1">&#39;el&#39;</span> <span class="o">+</span> <span class="n">el</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;antenna_coordinates_az_el_r&#39;</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">:</span>
+            <span class="n">az</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:.1f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;antenna_coordinates_az_el_r&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">el</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:.1f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;antenna_coordinates_az_el_r&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:.1f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;antenna_coordinates_az_el_r&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">gateinfo</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;az&#39;</span> <span class="o">+</span> <span class="n">az</span> <span class="o">+</span> <span class="s1">&#39;r&#39;</span> <span class="o">+</span> <span class="n">r</span> <span class="o">+</span> <span class="s1">&#39;el&#39;</span> <span class="o">+</span> <span class="n">el</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lon</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;point_coordinates_WGS84_lon_lat_alt&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">lat</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;point_coordinates_WGS84_lon_lat_alt&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">alt</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:.1f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;point_coordinates_WGS84_lon_lat_alt&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">gateinfo</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;lon&#39;</span> <span class="o">+</span> <span class="n">lon</span> <span class="o">+</span> <span class="s1">&#39;lat&#39;</span> <span class="o">+</span> <span class="n">lat</span> <span class="o">+</span> <span class="s1">&#39;alt&#39;</span> <span class="o">+</span> <span class="n">alt</span><span class="p">)</span>
 
         <span class="n">savedir_ts</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;basepath&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;procname&#39;</span><span class="p">],</span> <span class="n">dssavedir</span><span class="p">,</span>
@@ -1033,7 +1063,10 @@ document.write(`
             <span class="n">figfname_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">figfname</span>
 
         <span class="n">labelx</span> <span class="o">=</span> <span class="n">sensortype</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;sensorid&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; (mm)&#39;</span>
-        <span class="n">labely</span> <span class="o">=</span> <span class="s1">&#39;Radar (az, el, r): (&#39;</span> <span class="o">+</span> <span class="n">az</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="n">el</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="n">r</span> <span class="o">+</span> <span class="s1">&#39;) (mm)&#39;</span>
+        <span class="k">if</span> <span class="s1">&#39;antenna_coordinates_az_el_r&#39;</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">:</span>
+            <span class="n">labely</span> <span class="o">=</span> <span class="s1">&#39;Radar (az, el, r): (&#39;</span> <span class="o">+</span> <span class="n">az</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="n">el</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="n">r</span> <span class="o">+</span> <span class="s1">&#39;) (mm)&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">labely</span> <span class="o">=</span> <span class="s1">&#39;Radar (lon, lat, alt): (&#39;</span> <span class="o">+</span> <span class="n">lon</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="n">lat</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="n">alt</span> <span class="o">+</span> <span class="s1">&#39;) (mm)&#39;</span>
         <span class="n">titl</span> <span class="o">=</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">cum_time</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;s Acc. Comp. &#39;</span> <span class="o">+</span>
                 <span class="n">radardate_cum</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">))</span>
 
@@ -1191,7 +1224,7 @@ document.write(`
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
 </div>
                 </footer>
@@ -1211,8 +1244,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1220,6 +1253,7 @@ document.write(`
     <div class="footer-items__start">
       
         <div class="footer-item">
+
   <p class="sphinx-version">
     Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
@@ -1232,8 +1266,9 @@ document.write(`
   
     <div class="footer-items__end">
       
-        <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.3.
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
 </p></div>
       
     </div>

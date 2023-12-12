@@ -323,6 +323,8 @@
     
     process_vpr
     
+    process_vstatus_to_echo_id
+    
     process_wbn_iq
     
     process_weighted_time_avg

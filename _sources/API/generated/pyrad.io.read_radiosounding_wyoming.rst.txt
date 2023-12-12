@@ -1,0 +1,6 @@
+pyrad.io.read\_radiosounding\_wyoming
+=====================================
+
+.. currentmodule:: pyrad.io
+
+.. autofunction:: read_radiosounding_wyoming

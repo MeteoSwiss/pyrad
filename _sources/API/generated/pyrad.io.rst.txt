@@ -116,9 +116,13 @@
     
     read_cosmo_data
     
+    read_disdro_parsivel
+    
     read_disdro_scattering
     
     read_excess_gates
+    
+    read_fzl_igra
     
     read_histogram
     
@@ -135,6 +139,8 @@
     read_iso0_grib_data
     
     read_iso0_mf_data
+    
+    read_knmi
     
     read_last_state
     
@@ -164,7 +170,9 @@
     
     read_rad4alp_vis
     
-    read_radiosounding
+    read_radiosounding_igra
+    
+    read_radiosounding_wyoming
     
     read_rhi_profile
     

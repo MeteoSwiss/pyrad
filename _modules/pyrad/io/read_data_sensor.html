@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-theme="light">
+<html lang="en" data-content_root="../../../" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
@@ -17,12 +17,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -35,9 +35,9 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
     <script src="../../../_static/documentation_options.js?v=daef7da6"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
@@ -117,6 +117,7 @@
   <div class="col-lg-3 navbar-header-items__start">
     
       <div class="navbar-item">
+
   
 
 <a class="navbar-brand logo" href="../../../index.html">
@@ -136,7 +137,8 @@
     
     <div class="me-auto navbar-header-items__center">
       
-        <div class="navbar-item"><nav class="navbar-nav">
+        <div class="navbar-item">
+<nav class="navbar-nav">
   <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
@@ -165,6 +167,13 @@
                       </a>
                     </li>
                 
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../changelog.html">
+                        Changelog
+                      </a>
+                    </li>
+                
   </ul>
 </nav></div>
       
@@ -175,6 +184,7 @@
       
         <div class="navbar-item navbar-persistent--container">
           
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -188,6 +198,7 @@
       
       
         <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -220,6 +231,7 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -249,7 +261,8 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item"><nav class="navbar-nav">
+          <div class="navbar-item">
+<nav class="navbar-nav">
   <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
@@ -278,6 +291,13 @@ document.write(`
                       </a>
                     </li>
                 
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../changelog.html">
+                        Changelog
+                      </a>
+                    </li>
+                
   </ul>
 </nav></div>
         
@@ -288,6 +308,7 @@ document.write(`
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -398,10 +419,14 @@ document.write(`
 <span class="sd">    get_sensor_data</span>
 <span class="sd">    read_smn</span>
 <span class="sd">    read_smn2</span>
+<span class="sd">    read_knmi</span>
 <span class="sd">    read_coord_sensors</span>
 <span class="sd">    read_disdro_scattering</span>
 <span class="sd">    read_disdro</span>
-<span class="sd">    read_radiosounding</span>
+<span class="sd">    read_disdro_parsivel</span>
+<span class="sd">    read_radiosounding_wyoming</span>
+<span class="sd">    read_radiosounding_igra</span>
+<span class="sd">    read_fzl_igra</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
@@ -411,10 +436,11 @@ document.write(`
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span><span class="p">,</span> <span class="n">BytesIO</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">zipfile</span> <span class="kn">import</span> <span class="n">ZipFile</span>
 
 <span class="kn">from</span> <span class="nn">pyart.config</span> <span class="kn">import</span> <span class="n">get_fillvalue</span>
 
@@ -1819,7 +1845,7 @@ document.write(`
                                      <span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;alt&#39;</span><span class="p">,</span> <span class="s1">&#39;dBm&#39;</span><span class="p">],</span>
                 <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
 
-            <span class="n">time_data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">time_data</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">reader</span><span class="p">):</span>
                 <span class="n">flashnr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;flashnr&#39;</span><span class="p">])</span>
                 <span class="n">time_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fdatetime</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span>
@@ -2078,7 +2104,7 @@ document.write(`
             <span class="n">lon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
             <span class="n">alt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
             <span class="n">dBm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-            <span class="n">pol_vals_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="n">pol_vals_dict</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
                 <span class="n">pol_vals_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">label</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)})</span>
 
@@ -2146,6 +2172,25 @@ document.write(`
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
         <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;RG&#39;</span>
         <span class="n">period</span> <span class="o">=</span> <span class="p">(</span><span class="n">sensordate</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">sensordate</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;sensor&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;rgage_knmi&#39;</span><span class="p">:</span>
+        <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;smnpath&#39;</span><span class="p">]</span><span class="si">}{</span><span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">/&quot;</span>
+        <span class="n">datafile</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;kis_tor_</span><span class="si">{</span><span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">.gz&quot;</span>
+        <span class="n">df_rg</span> <span class="o">=</span> <span class="n">read_knmi</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">datafile</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="c1"># extract data corresponding to desired sensor</span>
+        <span class="n">df_rg</span> <span class="o">=</span> <span class="n">df_rg</span><span class="p">[</span><span class="n">df_rg</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;sensorid&#39;</span><span class="p">]]</span>
+
+        <span class="c1"># extract data corresponding to desired time</span>
+        <span class="n">t_start</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">hour</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">minute</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">second</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">t_end</span> <span class="o">=</span> <span class="n">t_start</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="p">((</span><span class="n">df_rg</span><span class="p">[</span><span class="s1">&#39;time_stamp&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">t_start</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df_rg</span><span class="p">[</span><span class="s1">&#39;time_stamp&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">t_end</span><span class="p">))</span>
+        <span class="n">df_rg</span> <span class="o">=</span> <span class="n">df_rg</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+        <span class="n">df_rg</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">sensordate</span> <span class="o">=</span> <span class="n">df_rg</span><span class="p">[</span><span class="s1">&#39;time_stamp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">sensorvalue</span> <span class="o">=</span> <span class="n">df_rg</span><span class="p">[</span><span class="s1">&#39;ri_rg_10&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;RG&#39;</span>
+        <span class="n">period</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_rg</span><span class="p">[</span><span class="s1">&#39;time_stamp&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_rg</span><span class="p">[</span><span class="s1">&#39;time_stamp&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
     <span class="k">elif</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;sensor&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;disdro&#39;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;dBZ&#39;</span><span class="p">,</span> <span class="s1">&#39;dBZc&#39;</span><span class="p">):</span>
             <span class="n">sensor_datatype</span> <span class="o">=</span> <span class="s1">&#39;dBZ&#39;</span>
@@ -2173,7 +2218,35 @@ document.write(`
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
         <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Disdro&#39;</span>
         <span class="n">period</span> <span class="o">=</span> <span class="p">(</span><span class="n">sensordate</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">sensordate</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;sensor&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;disdro_parsivel&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;dBZ&#39;</span><span class="p">,</span> <span class="s1">&#39;dBZc&#39;</span><span class="p">):</span>
+            <span class="n">sensor_datatype</span> <span class="o">=</span> <span class="s1">&#39;dBZ&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sensor_datatype</span> <span class="o">=</span> <span class="n">datatype</span>
 
+        <span class="n">datapath</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;disdropath&quot;</span><span class="p">]</span><span class="si">}{</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensorid&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">/Disdro-1min/&#39;</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y&quot;</span><span class="p">)</span><span class="si">}</span><span class="s1">/&#39;</span><span class="p">)</span>
+        <span class="n">datafile</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span><span class="si">}</span><span class="s1">.csv&#39;</span>
+
+        <span class="n">df_disdro</span> <span class="o">=</span> <span class="n">read_disdro_parsivel</span><span class="p">(</span><span class="n">datapath</span> <span class="o">+</span> <span class="n">datafile</span><span class="p">)</span>
+        <span class="n">sensordate</span> <span class="o">=</span> <span class="n">df_disdro</span><span class="p">[</span><span class="s1">&#39;t_0&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;dBZ&#39;</span><span class="p">,</span> <span class="s1">&#39;dBZc&#39;</span><span class="p">):</span>
+            <span class="n">substr</span> <span class="o">=</span> <span class="s1">&#39;Disdro_RadarRef_Q5&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">substr</span> <span class="o">=</span> <span class="s1">&#39;Disdro_Intensity_Q5&#39;</span>
+
+        <span class="n">sensorvalue</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_disdro</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">substr</span> <span class="ow">in</span> <span class="n">col</span><span class="p">:</span>
+                <span class="n">sensorvalue</span> <span class="o">=</span> <span class="n">df_disdro</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="k">if</span> <span class="n">sensorvalue</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;No data in file </span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">datafile</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+        <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Disdro&#39;</span>
+        <span class="n">period</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">df_disdro</span><span class="p">[</span><span class="s1">&#39;t_0&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_disdro</span><span class="p">[</span><span class="s1">&#39;t_0&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unknown sensor: &#39;</span> <span class="o">+</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;sensor&#39;</span><span class="p">])</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
@@ -2216,7 +2289,7 @@ document.write(`
             <span class="c1"># now read the data</span>
             <span class="n">csvfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
-            <span class="n">date</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">date</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">reader</span><span class="p">):</span>
                 <span class="n">smn_id</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;StationID&#39;</span><span class="p">])</span>
                 <span class="n">date</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
@@ -2292,7 +2365,7 @@ document.write(`
 
             <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span>
                 <span class="n">csvfile</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;StationID&#39;</span><span class="p">,</span> <span class="s1">&#39;DateTime&#39;</span><span class="p">,</span> <span class="s1">&#39;Value&#39;</span><span class="p">])</span>
-            <span class="n">date</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">date</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">reader</span><span class="p">):</span>
                 <span class="n">smn_id</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;StationID&#39;</span><span class="p">])</span>
                 <span class="n">date</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
@@ -2306,6 +2379,53 @@ document.write(`
         <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">))</span>
         <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to read file &#39;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="read_knmi">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.read_knmi.html#pyrad.io.read_knmi">[docs]</a>
+<span class="k">def</span> <span class="nf">read_knmi</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">col_names</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads a file containing precipitation data from sensors retrieved from the</span>
+<span class="sd">    KNMI archive. There is data from Present Weather Sensors (PWS) and rain</span>
+<span class="sd">    gauges (RG). The file contains:</span>
+<span class="sd">    - time_stamp</span>
+<span class="sd">    - id: of the station</span>
+<span class="sd">    - name: of the station</span>
+<span class="sd">    - lat, lon alt: of the station</span>
+<span class="sd">    - dr_pws_10: period within 10 min in which the PWS detected rain (s)</span>
+<span class="sd">    - dr_rg_10: period within 10 min in which the RG detected rain (s)</span>
+<span class="sd">    - ww_cor_10: PWS code</span>
+<span class="sd">    - ri_pws_10: rain intensity registered by the PWS over the 10 min period</span>
+<span class="sd">    (mm/h)</span>
+<span class="sd">    - ri_rg_10: rain intensity registered by the RG over the 10 min period</span>
+<span class="sd">    (mm/h)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fname : str</span>
+<span class="sd">        file name</span>
+<span class="sd">    col_names : list of strings or None</span>
+<span class="sd">        name of the columns contained in the file. If None default names are</span>
+<span class="sd">        given</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    df_prec : Pandas DataFrame</span>
+<span class="sd">        DataFrame containing the data</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">col_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">col_names</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;time_stamp&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;alt&#39;</span><span class="p">,</span> <span class="s1">&#39;dr_pws_10&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;dr_rg_10&#39;</span><span class="p">,</span> <span class="s1">&#39;ww_cor_10&#39;</span><span class="p">,</span> <span class="s1">&#39;ri_pws_10&#39;</span><span class="p">,</span> <span class="s1">&#39;ri_rg_10&#39;</span><span class="p">]</span>
+    <span class="n">df_prec</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span>
+        <span class="n">fname</span><span class="p">,</span> <span class="n">compression</span><span class="o">=</span><span class="s1">&#39;gzip&#39;</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s1">&#39;#&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="n">col_names</span><span class="p">,</span>
+        <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;\s{2,}&quot;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">)</span>
+    <span class="n">df_prec</span><span class="p">[</span><span class="s1">&#39;time_stamp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span>
+        <span class="n">df_prec</span><span class="p">[</span><span class="s1">&#39;time_stamp&#39;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df_prec</span></div>
 
 
 
@@ -2423,7 +2543,7 @@ document.write(`
                                      <span class="s1">&#39;zv&#39;</span><span class="p">,</span> <span class="s1">&#39;zdr&#39;</span><span class="p">,</span> <span class="s1">&#39;ldr&#39;</span><span class="p">,</span> <span class="s1">&#39;ah&#39;</span><span class="p">,</span> <span class="s1">&#39;av&#39;</span><span class="p">,</span> <span class="s1">&#39;adiff&#39;</span><span class="p">,</span>
                                      <span class="s1">&#39;kdp&#39;</span><span class="p">,</span> <span class="s1">&#39;deltaco&#39;</span><span class="p">,</span> <span class="s1">&#39;rhohv&#39;</span><span class="p">],</span>
                 <span class="n">dialect</span><span class="o">=</span><span class="s1">&#39;excel-tab&#39;</span><span class="p">)</span>
-            <span class="n">date</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">date</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">reader</span><span class="p">):</span>
                 <span class="n">date</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
                     <span class="n">row</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">],</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">))</span>
@@ -2491,8 +2611,8 @@ document.write(`
                 <span class="p">(</span><span class="n">row</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">csvfile</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">row</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">)),</span>
                 <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
             <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="n">date</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-            <span class="n">preciptype</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">date</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">preciptype</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
                 <span class="n">date</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
                     <span class="n">row</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">],</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">))</span>
@@ -2510,35 +2630,61 @@ document.write(`
         <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to read file &#39;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-<div class="viewcode-block" id="read_radiosounding">
-<a class="viewcode-back" href="../../../API/generated/pyrad.io.read_radiosounding.html#pyrad.io.read_radiosounding">[docs]</a>
-<span class="k">def</span> <span class="nf">read_radiosounding</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">datetime_obj</span><span class="p">):</span>
+
+<div class="viewcode-block" id="read_disdro_parsivel">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.read_disdro_parsivel.html#pyrad.io.read_disdro_parsivel">[docs]</a>
+<span class="k">def</span> <span class="nf">read_disdro_parsivel</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads data collected by a parsivel disdrometer and stored in a csv file</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fname : str</span>
+<span class="sd">        csv file name</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    df_disdro: Pandas DataFrame</span>
+<span class="sd">        DataFrame containing the read values</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df_disdro</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+    <span class="n">df_disdro</span><span class="p">[</span><span class="s1">&#39;t_0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span>
+        <span class="n">df_disdro</span><span class="p">[</span><span class="s1">&#39;t_0&#39;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df_disdro</span></div>
+
+
+
+<div class="viewcode-block" id="read_radiosounding_wyoming">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.read_radiosounding_wyoming.html#pyrad.io.read_radiosounding_wyoming">[docs]</a>
+<span class="k">def</span> <span class="nf">read_radiosounding_wyoming</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">dtime</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Download radiosounding data from the University of Wyoming website.</span>
 
 <span class="sd">    Parameters:</span>
-<span class="sd">    - station (str): Radiosounding station code (e.g., &quot;72776&quot;).</span>
-<span class="sd">    - datetime_obj (datetime.datetime): Datetime object specifying the desired date</span>
-<span class="sd">      and time.</span>
+<span class="sd">        station : str</span>
+<span class="sd">            Radiosounding station 5 digits WMO code (e.g., &quot;72776&quot;).</span>
+<span class="sd">        dtime : datetime.datetime</span>
+<span class="sd">            Datetime object specifying the desired date and time.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">    pandas.DataFrame: A DataFrame containing the radiosounding data with columns:</span>
-<span class="sd">    [&#39;PRES&#39;, &#39;HGHT&#39;, &#39;TEMP&#39;, &#39;DWPT&#39;, &#39;RELH&#39;, &#39;MIXR&#39;, &#39;DRCT&#39;, &#39;SKNT&#39;, &#39;THTA&#39;,</span>
-<span class="sd">    &#39;THTE&#39;, &#39;THTV]</span>
+<span class="sd">        pandas.DataFrame: A DataFrame containing the radiosounding data with</span>
+<span class="sd">        columns: [&#39;PRES&#39;, &#39;HGHT&#39;, &#39;TEMP&#39;, &#39;DWPT&#39;, &#39;RELH&#39;, &#39;MIXR&#39;, &#39;DRCT&#39;, </span>
+<span class="sd">                  &#39;SKNT&#39;, &#39;THTA&#39;, &#39;THTE&#39;, &#39;THTV]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">base_url</span> <span class="o">=</span> <span class="s2">&quot;https://weather.uwyo.edu/cgi-bin/sounding&quot;</span>
     <span class="n">query_params</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;region&quot;</span><span class="p">:</span> <span class="s2">&quot;naconf&quot;</span><span class="p">,</span>
         <span class="s2">&quot;TYPE&quot;</span><span class="p">:</span> <span class="s2">&quot;TEXT:LIST&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;YEAR&quot;</span><span class="p">:</span> <span class="n">datetime_obj</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
-        <span class="s2">&quot;MONTH&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datetime_obj</span><span class="o">.</span><span class="n">month</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;FROM&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datetime_obj</span><span class="o">.</span><span class="n">hour</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">00&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;TO&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datetime_obj</span><span class="o">.</span><span class="n">hour</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">00&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;YEAR&quot;</span><span class="p">:</span> <span class="n">dtime</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
+        <span class="s2">&quot;MONTH&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dtime</span><span class="o">.</span><span class="n">month</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;FROM&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dtime</span><span class="o">.</span><span class="n">hour</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">00&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;TO&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dtime</span><span class="o">.</span><span class="n">hour</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">00&quot;</span><span class="p">,</span>
         <span class="s2">&quot;STNM&quot;</span><span class="p">:</span> <span class="n">station</span>
     <span class="p">}</span>
 
-    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">base_url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">query_params</span><span class="p">,</span> <span class="n">verify</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">base_url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">query_params</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
@@ -2557,6 +2703,150 @@ document.write(`
     <span class="k">return</span> <span class="n">data_df</span></div>
 
 
+<div class="viewcode-block" id="read_radiosounding_igra">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.read_radiosounding_igra.html#pyrad.io.read_radiosounding_igra">[docs]</a>
+<span class="k">def</span> <span class="nf">read_radiosounding_igra</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">dtime</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Download radiosounding data from  from the Integrated Global Radiosonde Archive </span>
+<span class="sd">    (IGRA)</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        station : str</span>
+<span class="sd">            Radiosounding station 5 digits WMO code (e.g., &quot;72776&quot;).</span>
+<span class="sd">        dtime : datetime.datetime</span>
+<span class="sd">            Datetime object specifying the desired date and time.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pandas.DataFrame: A DataFrame containing the radiosounding data with</span>
+<span class="sd">        [&#39;LVLTYPE1&#39;, &#39;LVLTYPE2&#39;,&#39;ETIME&#39;, &#39;PRESS&#39;, &#39;PFLAG&#39;, &#39;GPH&#39;,&#39;ZFLAG&#39;, &#39;TEMP&#39;,</span>
+<span class="sd">        &#39;TFLAG&#39;, &#39;RH&#39;,&#39;DPDP&#39;,&#39;WDIR&#39;,&#39;WSPD&#39;]</span>
+
+<span class="sd">    Please see this link for a description of the columns</span>
+<span class="sd">    https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive/</span>
+<span class="sd">    doc/igra2-data-format.txt</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">COLUMNS_SOUNDING</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;LVLTYPE1&#39;</span><span class="p">,</span> <span class="s1">&#39;LVLTYPE2&#39;</span><span class="p">,</span><span class="s1">&#39;ETIME&#39;</span><span class="p">,</span> <span class="s1">&#39;PRESS&#39;</span><span class="p">,</span> <span class="s1">&#39;PFLAG&#39;</span><span class="p">,</span> <span class="s1">&#39;GPH&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;ZFLAG&#39;</span><span class="p">,</span> <span class="s1">&#39;TEMP&#39;</span><span class="p">,</span> <span class="s1">&#39;TFLAG&#39;</span><span class="p">,</span> <span class="s1">&#39;RH&#39;</span><span class="p">,</span><span class="s1">&#39;DPDP&#39;</span><span class="p">,</span><span class="s1">&#39;WDIR&#39;</span><span class="p">,</span><span class="s1">&#39;WSPD&#39;</span><span class="p">]</span>
+    <span class="n">COLUMNS_STATION_LIST</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CODE&#39;</span><span class="p">,</span> <span class="s1">&#39;LATITUDE&#39;</span><span class="p">,</span> <span class="s1">&#39;LONGITUDE&#39;</span><span class="p">,</span> <span class="s1">&#39;ELEVATION&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;NAME&#39;</span><span class="p">,</span> <span class="s1">&#39;START&#39;</span><span class="p">,</span> <span class="s1">&#39;END&#39;</span><span class="p">,</span> <span class="s1">&#39;ID&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Start by getting the list of stations</span>
+    <span class="c1"># URL of the station list</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive&quot;</span> <span class="o">+</span> \
+        <span class="s2">&quot;/doc/igra2-station-list.txt&quot;</span>
+
+    <span class="n">stations_ref</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_fwf</span><span class="p">(</span><span class="n">url</span><span class="p">,</span>
+        <span class="n">names</span><span class="o">=</span><span class="n">COLUMNS_STATION_LIST</span><span class="p">)</span>
+
+    <span class="c1"># get igra code</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="n">stations_ref</span><span class="p">[</span><span class="s1">&#39;CODE&#39;</span><span class="p">][</span><span class="n">stations_ref</span><span class="p">[</span><span class="s1">&#39;CODE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">station</span><span class="p">)]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">url2</span> <span class="o">=</span> <span class="s1">&#39;https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive&#39;</span> <span class="o">+</span> \
+        <span class="s1">&#39;/access/data-y2d/&#39;</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url2</span><span class="p">)</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&lt;a\s+(?:[^&gt;]*?\s+)?href=&quot;([^&quot;]*)&quot;&#39;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">link</span><span class="p">:</span>
+            <span class="n">mylink</span> <span class="o">=</span> <span class="n">link</span>
+
+    <span class="n">url</span> <span class="o">=</span> <span class="n">url2</span> <span class="o">+</span> <span class="n">mylink</span>
+    <span class="c1"># Send a GET request to the URL</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="c1"># Check if the request was successful (status code 200)</span>
+    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+        <span class="c1"># Open the zip file from the response content</span>
+        <span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">))</span> <span class="k">as</span> <span class="n">zip_file</span><span class="p">:</span>
+            <span class="c1"># List the files in the zip file (optional)</span>
+            <span class="n">file_list</span> <span class="o">=</span> <span class="n">zip_file</span><span class="o">.</span><span class="n">namelist</span><span class="p">()</span>
+            <span class="n">file_name</span> <span class="o">=</span> <span class="n">file_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># only one file</span>
+            <span class="n">file_content</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span>
+                <span class="n">zip_file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to retrieve the sounding file. Status code: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># Now parse file and separate entries by sounding date</span>
+    <span class="n">all_soundings</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">file_content</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;#&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="c1"># New sounding found</span>
+            <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">,</span> <span class="n">hour</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+            <span class="n">time_sounding</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">year</span><span class="p">),</span> 
+                                            <span class="nb">int</span><span class="p">(</span><span class="n">month</span><span class="p">),</span>
+                                            <span class="nb">int</span><span class="p">(</span><span class="n">day</span><span class="p">),</span>
+                                            <span class="nb">int</span><span class="p">(</span><span class="n">hour</span><span class="p">))</span>
+            <span class="n">all_soundings</span><span class="p">[</span><span class="n">time_sounding</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Get row</span>
+            <span class="n">lvltyp1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  
+            <span class="n">lvltyp2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>  
+            <span class="n">etime</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> 
+            <span class="n">press</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">9</span><span class="p">:</span><span class="mi">15</span><span class="p">])</span> 
+            <span class="n">pflag</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">15</span><span class="p">]</span> 
+            <span class="n">gph</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">16</span><span class="p">:</span><span class="mi">21</span><span class="p">])</span>
+            <span class="n">zflag</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">21</span><span class="p">]</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">22</span><span class="p">:</span><span class="mi">27</span><span class="p">])</span> <span class="o">/</span> <span class="mf">10.</span> 
+            <span class="n">tflag</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">27</span><span class="p">]</span> 
+            <span class="n">rh</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">28</span><span class="p">:</span><span class="mi">33</span><span class="p">])</span> <span class="o">/</span> <span class="mf">10.</span> 
+            <span class="n">dpdp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">34</span><span class="p">:</span><span class="mi">39</span><span class="p">])</span> <span class="o">/</span> <span class="mf">10.</span> 
+            <span class="n">wdir</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">40</span><span class="p">:</span><span class="mi">45</span><span class="p">])</span> 
+            <span class="n">wspd</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">46</span><span class="p">:</span><span class="mi">51</span><span class="p">])</span> <span class="o">/</span> <span class="mf">10.</span> 
+            <span class="n">all_soundings</span><span class="p">[</span><span class="n">time_sounding</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">lvltyp1</span><span class="p">,</span> <span class="n">lvltyp2</span><span class="p">,</span> 
+                <span class="n">etime</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">pflag</span><span class="p">,</span> <span class="n">gph</span><span class="p">,</span> <span class="n">zflag</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> 
+                <span class="n">tflag</span><span class="p">,</span> <span class="n">rh</span><span class="p">,</span> <span class="n">dpdp</span><span class="p">,</span> <span class="n">wdir</span><span class="p">,</span> <span class="n">wspd</span><span class="p">))</span>
+
+    <span class="c1"># Convert to pandas DataFrame</span>
+    <span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="n">all_soundings</span><span class="p">:</span>
+        <span class="n">all_soundings</span><span class="p">[</span><span class="n">date</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">all_soundings</span><span class="p">[</span><span class="n">date</span><span class="p">],</span> 
+            <span class="n">columns</span> <span class="o">=</span> <span class="n">COLUMNS_SOUNDING</span><span class="p">)</span>
+
+    <span class="c1"># Find radiosounding closest in time to datetime_obj</span>
+    <span class="n">offsets</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">((</span><span class="n">dtime</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">())</span> 
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">all_soundings</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">offsets</span><span class="p">)</span>
+    <span class="n">closest</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">all_soundings</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        
+    <span class="k">return</span> <span class="n">all_soundings</span><span class="p">[</span><span class="n">closest</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="read_fzl_igra">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.read_fzl_igra.html#pyrad.io.read_fzl_igra">[docs]</a>
+<span class="k">def</span> <span class="nf">read_fzl_igra</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">dtime</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get an estimation of the freezing level height from the</span>
+<span class="sd">    Integrated Global Radiosonde Archive (IGRA)</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        station : str</span>
+<span class="sd">            Radiosounding station 5 digits WMO code (e.g., &quot;72776&quot;).</span>
+<span class="sd">        dtime : datetime.datetime</span>
+<span class="sd">            Datetime object specifying the desired date and time.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        fzl : float</span>
+<span class="sd">            Interpolated freezing level height (a.s.l) obtained</span>
+<span class="sd">            from the nearest in time IGRA sounding</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">sounding</span> <span class="o">=</span> <span class="n">read_radiosounding_igra</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">dtime</span><span class="p">)</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="n">sounding</span><span class="p">[</span><span class="s1">&#39;GPH&#39;</span><span class="p">]</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">sounding</span><span class="p">[</span><span class="s1">&#39;TEMP&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">999.9</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">temp</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">height</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">slope</span> <span class="o">=</span> <span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">height</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">height</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">fzl</span> <span class="o">=</span> <span class="o">-</span> <span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">slope</span> <span class="o">+</span> <span class="n">height</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">fzl</span></div>
+
 </pre></div>
 <div class="section ablog__blog_comments">
   
@@ -2570,7 +2860,7 @@ document.write(`
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
 </div>
                 </footer>
@@ -2590,8 +2880,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2599,6 +2889,7 @@ document.write(`
     <div class="footer-items__start">
       
         <div class="footer-item">
+
   <p class="sphinx-version">
     Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
@@ -2611,8 +2902,9 @@ document.write(`
   
     <div class="footer-items__end">
       
-        <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.3.
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
 </p></div>
       
     </div>
