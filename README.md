@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-# This branch is intended for Pyrad developers. Pull requests should target this branch!
-
-=======
->>>>>>> master
+# Note that pull requests should target the dev branch!
 **Master branch**
 
 [![Test pyrad](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_base.yml/badge.svg)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests.yml)
