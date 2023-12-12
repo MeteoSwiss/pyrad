@@ -23,6 +23,13 @@ Pyrad: Python Radar Data Processing
 
    overview/index.rst
 
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+   :caption: Changelog
+
+   changelog.md
+
 
 About Pyrad
 ===============
