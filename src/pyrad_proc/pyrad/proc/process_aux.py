@@ -1667,6 +1667,7 @@ def process_roi2(procstatus, dscfg, radar_list=None):
 
     # Choose origin of ROI definition
     cercle = dscfg.get('cercle', False)
+    box = dscfg.get('box', False)
     use_latlon = dscfg.get('use_latlon', True)
     if 'trtfile' in dscfg:
         (_, yyyymmddHHMM, lon, lat, _, _, _, _, _, _, _, _, _, _, _, _, _, _,

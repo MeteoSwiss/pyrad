@@ -32,6 +32,7 @@ Functions for reading data from other sensors
     read_disdro_parsivel
     read_radiosounding_wyoming
     read_radiosounding_igra
+    read_fzl_igra
 """
 
 import os
@@ -2194,30 +2195,30 @@ def read_disdro_parsivel(fname):
     return df_disdro
 
 
-def read_radiosounding_wyoming(station, datetime_obj):
+def read_radiosounding_wyoming(station, dtime):
     """
     Download radiosounding data from the University of Wyoming website.
 
     Parameters:
-    - station (str): Radiosounding station code (e.g., "72776").
-    - datetime_obj (datetime.datetime): Datetime object specifying the desired
-    date and time.
+        station : str
+            Radiosounding station 5 digits WMO code (e.g., "72776").
+        dtime : datetime.datetime
+            Datetime object specifying the desired date and time.
 
     Returns:
-    pandas.DataFrame: A DataFrame containing the radiosounding data with
-    columns:
-    ['PRES', 'HGHT', 'TEMP', 'DWPT', 'RELH', 'MIXR', 'DRCT', 'SKNT', 'THTA',
-    'THTE', 'THTV]
+        pandas.DataFrame: A DataFrame containing the radiosounding data with
+        columns: ['PRES', 'HGHT', 'TEMP', 'DWPT', 'RELH', 'MIXR', 'DRCT', 
+                  'SKNT', 'THTA', 'THTE', 'THTV]
     """
 
     base_url = "https://weather.uwyo.edu/cgi-bin/sounding"
     query_params = {
         "region": "naconf",
         "TYPE": "TEXT:LIST",
-        "YEAR": datetime_obj.year,
-        "MONTH": f"{datetime_obj.month:02d}",
-        "FROM": f"{datetime_obj.hour:02d}00",
-        "TO": f"{datetime_obj.hour:02d}00",
+        "YEAR": dtime.year,
+        "MONTH": f"{dtime.month:02d}",
+        "FROM": f"{dtime.hour:02d}00",
+        "TO": f"{dtime.hour:02d}00",
         "STNM": station
     }
 
@@ -2239,21 +2240,21 @@ def read_radiosounding_wyoming(station, datetime_obj):
         data_df[col] = pd.to_numeric(data_df[col])
     return data_df
 
-def read_radiosounding_igra(station, datetime_obj):
+def read_radiosounding_igra(station, dtime):
     """
-    Download radiosounding data from the Integrated Global Radiosonde Archive 
+    Download radiosounding data from  from the Integrated Global Radiosonde Archive 
     (IGRA)
 
     Parameters:
-    - station (str): Radiosounding station code (e.g., "72776").
-    - datetime_obj (datetime.datetime): Datetime object specifying the desired
-    date and time.
+        station : str
+            Radiosounding station 5 digits WMO code (e.g., "72776").
+        dtime : datetime.datetime
+            Datetime object specifying the desired date and time.
 
     Returns:
-    pandas.DataFrame: A DataFrame containing the radiosounding data with
-    columns:
-    ['LVLTYPE1', 'LVLTYPE2','ETIME', 'PRESS', 'PFLAG', 'GPH','ZFLAG', 'TEMP',
-    'TFLAG', 'RH','DPDP','WDIR','WSPD']
+        pandas.DataFrame: A DataFrame containing the radiosounding data with
+        ['LVLTYPE1', 'LVLTYPE2','ETIME', 'PRESS', 'PFLAG', 'GPH','ZFLAG', 'TEMP',
+        'TFLAG', 'RH','DPDP','WDIR','WSPD']
 
     Please see this link for a description of the columns
     https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive/
@@ -2300,7 +2301,8 @@ def read_radiosounding_igra(station, datetime_obj):
             file_content = [line.decode('utf-8') for line in
                 zip_file.open(file_name).readlines()]
     else:
-        warn(f"Failed to retrieve the file. Status code: {response.status_code}")
+        warn(f"Failed to retrieve the sounding file. Status code: {response.status_code}")
+        return None
 
     # Now parse file and separate entries by sounding date
     all_soundings = {}
@@ -2338,10 +2340,41 @@ def read_radiosounding_igra(station, datetime_obj):
             columns = COLUMNS_SOUNDING)
 
     # Find radiosounding closest in time to datetime_obj
-    offsets = [np.abs((datetime_obj - d).total_seconds()) 
+    offsets = [np.abs((dtime - d).total_seconds()) 
         for d in all_soundings.keys()]
     idx = np.argsort(offsets)
     closest = list(all_soundings.keys())[idx[0]]
         
     return all_soundings[closest]
 
+def read_fzl_igra(station, dtime):
+    """
+    Get an estimation of the freezing level height from the
+    Integrated Global Radiosonde Archive (IGRA)
+
+    Parameters:
+        station : str
+            Radiosounding station 5 digits WMO code (e.g., "72776").
+        dtime : datetime.datetime
+            Datetime object specifying the desired date and time.
+
+    Returns:
+        fzl : float
+            Interpolated freezing level height (a.s.l) obtained
+            from the nearest in time IGRA sounding
+    """
+
+    sounding = read_radiosounding_igra(station, dtime)
+    height = sounding['GPH']
+    temp = sounding['TEMP']
+
+    if temp[0] <= 0 and temp[0] > -999.9:
+        return 0
+
+    for i in range(1, len(temp)):
+        if height[i] < 0:
+            continue
+        if temp[i] < 0:
+            slope = (temp[i] - temp[i-1])/(height[i] - height[i-1])
+            fzl = - temp[i] / slope + height[i]
+            return fzl

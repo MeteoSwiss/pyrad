@@ -112,6 +112,7 @@ Reading other data
     read_windmills_data
     read_radiosounding_wyoming
     read_radiosounding_igra
+    read_fzl_igra
 
 Writing data
 ==================
@@ -247,6 +248,7 @@ from .read_data_sensor import read_trt_thundertracking_traj_data # noqa
 from .read_data_sensor import read_coord_sensors, read_disdro_parsivel # noqa
 from .read_data_sensor import read_knmi # noqa
 from .read_data_sensor import read_radiosounding_wyoming, read_radiosounding_igra # noqa
+from .read_data_sensor import read_fzl_igra # noqa
 
 from .read_data_sun import read_sun_hits_multiple_days, read_sun_hits # noqa
 from .read_data_sun import read_sun_retrieval, read_solar_flux # noqa

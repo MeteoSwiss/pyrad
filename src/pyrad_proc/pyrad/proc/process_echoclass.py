@@ -43,6 +43,7 @@ import pyart
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from ..io.io_aux import get_file_list, get_datetime
 from ..io.read_data_other import read_centroids
+from ..io.read_data_sensor import read_fzl_igra
 
 if (importlib.util.find_spec('sklearn_extra') and
         importlib.util.find_spec('sklearn')):
@@ -1408,6 +1409,11 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
             Used with HYDRO_METHOD UKMO. if desired, a single freezing level
             height can be specified for the entire PPI domain - this will
             over-ride any field found within the input file. Default None
+        sounding : str. Dataset keyword
+            The nearest radiosounding WMO code (5 int digits). It will be used to
+            compute the freezing level, if no temperature field name is specified,
+            if the temperature field isin the radar object or if no freezing_level
+            is explicitely defined.
         use_dualpol: Bool. Dataset keyword
             Used with HYDRO_METHOD UKMO. If false no radar data is used and
             the classification is performed using temperature information
@@ -1616,7 +1622,14 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
 
         ml_depth = dscfg.get('ml_depth', 0.5)
         perturb_ml_depth = dscfg.get('perturb_ml_depth', 0)
-        freezing_level = dscfg.get('freezing_level', None)
+        
+        freezing_level = None
+        if 'freezing_level' in dscfg:
+            freezing_level = dscfg['freezing_level']
+        elif 'sounding' in dscfg:
+            sounding_code = dscfg['sounding']
+            t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
+            freezing_level = read_fzl_igra(sounding_code, t0)
 
         use_dualpol = dscfg.get('use_dualpol', True)
         use_temperature = dscfg.get('use_temperature', True)

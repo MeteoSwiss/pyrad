@@ -26,6 +26,7 @@ import pyart
 
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from ..io.read_data_other import read_selfconsistency
+from ..io.read_data_sensor import read_fzl_igra
 from ..io.read_data_radar import interpol_field
 
 from ..util.radar_utils import get_histogram_bins
@@ -67,6 +68,11 @@ def process_selfconsistency_kdp_phidp(procstatus, dscfg, radar_list=None):
             The default freezing level height. It will be used if no
             temperature field name is specified or the temperature field is
             not in the radar object. Default 2000.
+        sounding : str. Dataset keyword
+            The nearest radiosounding WMO code (5 int digits). It will be used to
+            compute the freezing level, if no temperature field name is specified,
+            if the temperature field isin the radar object or if no freezing_level
+            is explicitely defined.
         frequency : float. Dataset keyword
             the radar frequency [Hz]. If None that of the key
             frequency in attribute instrument_parameters of the radar
@@ -131,6 +137,7 @@ def process_selfconsistency_kdp_phidp(procstatus, dscfg, radar_list=None):
              'Missing data')
         return None, None
 
+    fzl = None
     # determine which freezing level reference
     if temp is not None:
         if temp in radar.fields:
@@ -138,29 +145,26 @@ def process_selfconsistency_kdp_phidp(procstatus, dscfg, radar_list=None):
         else:
             warn('COSMO temperature field not available. ' +
                  'Using fixed freezing level height to determine liquid phase')
-            temp_ref = 'fixed_fzl'
     elif iso0 is not None:
         if iso0 in radar.fields:
             temp_ref = 'height_over_iso0'
         else:
             warn('Height over iso0 field not available. ' +
                  'Using fixed freezing level height to determine liquid phase')
-            temp_ref = 'fixed_fzl'
     else:
-        warn('Field to obtain the freezing level was not specified. ' +
-             'Using fixed freezing level height')
+        # determine freezing level height if necessary
         temp_ref = 'fixed_fzl'
-
-    # determine freezing level height if necessary
-    fzl = None
-    if temp_ref == 'fixed_fzl':
         if 'fzl' in dscfg:
             fzl = dscfg['fzl']
+        elif 'sounding' in dscfg:
+            sounding_code = dscfg['sounding']
+            t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
+            fzl = read_fzl_igra(sounding_code, t0)
         else:
-            fzl = 2000.
             warn('Freezing level height not defined. Using default ' +
                  str(fzl) + ' m')
-
+            fzl = 2000
+                  
     # get self-consistency parametrization or curves
     parametrization = dscfg.get('parametrization', 'None')
     if dscfg['initialized'] == 0:
@@ -273,6 +277,11 @@ def process_selfconsistency_bias(procstatus, dscfg, radar_list=None):
             'None' will use tables from config files. Default 'None'.
         fzl : float. Dataset keyword
             Default freezing level height. Default 2000.
+        sounding : str. Dataset keyword
+            The nearest radiosounding WMO code (5 int digits). It will be used to
+            compute the freezing level, if no temperature field name is specified,
+            if the temperature field isin the radar object or if no freezing_level
+            is explicitely defined.
         rsmooth : float. Dataset keyword
             length of the smoothing window [m]. Default 2000.
         min_rhohv : float. Dataset keyword
@@ -389,6 +398,7 @@ def process_selfconsistency_bias(procstatus, dscfg, radar_list=None):
              'Missing data')
         return None, None
 
+    fzl = None
     # determine which freezing level reference
     if temp is not None:
         if temp in radar.fields:
@@ -396,28 +406,25 @@ def process_selfconsistency_bias(procstatus, dscfg, radar_list=None):
         else:
             warn('COSMO temperature field not available. ' +
                  'Using fixed freezing level height to determine liquid phase')
-            temp_ref = 'fixed_fzl'
     elif iso0 is not None:
         if iso0 in radar.fields:
             temp_ref = 'height_over_iso0'
         else:
             warn('Height over iso0 field not available. ' +
                  'Using fixed freezing level height to determine liquid phase')
-            temp_ref = 'fixed_fzl'
     else:
-        warn('Field to obtain the freezing level was not specified. ' +
-             'Using fixed freezing level height')
+        # determine freezing level height if necessary
         temp_ref = 'fixed_fzl'
-
-    # determine freezing level height if necessary
-    fzl = None
-    if temp_ref == 'fixed_fzl':
         if 'fzl' in dscfg:
             fzl = dscfg['fzl']
+        elif 'sounding' in dscfg:
+            sounding_code = dscfg['sounding']
+            t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
+            fzl = read_fzl_igra(sounding_code, t0)
         else:
-            fzl = 2000.
             warn('Freezing level height not defined. Using default ' +
                  str(fzl) + ' m')
+            fzl = 2000
 
     # get self-consistency parametrization or curves
     parametrization = dscfg.get('parametrization', 'None')
@@ -565,6 +572,11 @@ def process_selfconsistency_bias2(procstatus, dscfg, radar_list=None):
             'None' will use tables from config files. Default 'None'.
         fzl : float. Dataset keyword
             Default freezing level height. Default 2000.
+        sounding : str. Dataset keyword
+            The nearest radiosounding WMO code (5 int digits). It will be used to
+            compute the freezing level, if no temperature field name is specified,
+            if the temperature field isin the radar object or if no freezing_level
+            is explicitely defined.
         rsmooth : float. Dataset keyword
             length of the smoothing window [m]. Default 2000.
         min_rhohv : float. Dataset keyword
@@ -706,6 +718,7 @@ def process_selfconsistency_bias2(procstatus, dscfg, radar_list=None):
              'Missing data')
         return None, None
 
+    fzl = None
     # determine which freezing level reference
     if temp is not None:
         if temp in radar.fields:
@@ -713,28 +726,25 @@ def process_selfconsistency_bias2(procstatus, dscfg, radar_list=None):
         else:
             warn('COSMO temperature field not available. ' +
                  'Using fixed freezing level height to determine liquid phase')
-            temp_ref = 'fixed_fzl'
     elif iso0 is not None:
         if iso0 in radar.fields:
             temp_ref = 'height_over_iso0'
         else:
             warn('Height over iso0 field not available. ' +
                  'Using fixed freezing level height to determine liquid phase')
-            temp_ref = 'fixed_fzl'
     else:
-        warn('Field to obtain the freezing level was not specified. ' +
-             'Using fixed freezing level height')
+        # determine freezing level height if necessary
         temp_ref = 'fixed_fzl'
-
-    # determine freezing level height if necessary
-    fzl = None
-    if temp_ref == 'fixed_fzl':
         if 'fzl' in dscfg:
             fzl = dscfg['fzl']
+        elif 'sounding' in dscfg:
+            sounding_code = dscfg['sounding']
+            t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
+            fzl = read_fzl_igra(sounding_code, t0)
         else:
-            fzl = 2000.
             warn('Freezing level height not defined. Using default ' +
                  str(fzl) + ' m')
+            fzl = 2000
 
     # get self-consistency parametrization or curves
     parametrization = dscfg.get('parametrization', 'None')
@@ -1007,6 +1017,11 @@ def process_rhohv_rain(procstatus, dscfg, radar_list=None):
             The default freezing level height. It will be used if no
             temperature field name is specified or the temperature field is
             not in the radar object. Default 2000.
+        sounding : str. Dataset keyword
+            The nearest radiosounding WMO code (5 int digits). It will be used to
+            compute the freezing level, if no temperature field name is specified,
+            if the temperature field isin the radar object or if no freezing_level
+            is explicitely defined.
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -1052,34 +1067,33 @@ def process_rhohv_rain(procstatus, dscfg, radar_list=None):
         warn('Unable to estimate RhoHV in rain. Missing data')
         return None, None
 
-    # determine which freezing level reference
-    temp_ref = 'temperature'
-    if temp_field is None and iso0_field is None:
-        warn('Field to obtain the freezing level was not specified. ' +
-             'Using fixed freezing level height')
-        temp_ref = 'fixed_fzl'
-    elif temp_field is not None:
-        if temp_field not in radar.fields:
-            warn('COSMO temperature field not available. ' +
-                 'Using fixed freezing level height')
-            temp_ref = 'fixed_fzl'
-    elif iso0_field is not None:
-        if iso0_field not in radar.fields:
-            warn('Height over iso0 field not available. ' +
-                 'Using fixed freezing level height')
-            temp_ref = 'fixed_fzl'
-        else:
-            temp_ref = 'height_over_iso0'
-
-    # determine freezing level height if necessary
     fzl = None
-    if temp_ref == 'fixed_fzl':
+    # determine which freezing level reference
+    if temp_field is not None:
+        if temp_field in radar.fields:
+            temp_ref = 'temperature'
+        else:
+            warn('COSMO temperature field not available. ' +
+                 'Using fixed freezing level height to determine liquid phase')
+    elif iso0_field is not None:
+        if iso0_field in radar.fields:
+            temp_ref = 'height_over_iso0'
+        else:
+            warn('Height over iso0 field not available. ' +
+                 'Using fixed freezing level height to determine liquid phase')
+    else:
+        # determine freezing level height if necessary
+        temp_ref = 'fixed_fzl'
         if 'fzl' in dscfg:
             fzl = dscfg['fzl']
+        elif 'sounding' in dscfg:
+            sounding_code = dscfg['sounding']
+            t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
+            fzl = read_fzl_igra(sounding_code, t0)
         else:
-            fzl = 2000.
             warn('Freezing level height not defined. Using default ' +
                  str(fzl) + ' m')
+            fzl = 2000
 
     # default values
     rmin = 1000.
@@ -1161,6 +1175,11 @@ def process_zdr_precip(procstatus, dscfg, radar_list=None):
             The default freezing level height. It will be used if no
             temperature field name is specified or the temperature field is
             not in the radar object. Default 2000.
+        sounding : str. Dataset keyword
+            The nearest radiosounding WMO code (5 int digits). It will be used to
+            compute the freezing level, if no temperature field name is specified,
+            if the temperature field isin the radar object or if no freezing_level
+            is explicitely defined.
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -1225,32 +1244,31 @@ def process_zdr_precip(procstatus, dscfg, radar_list=None):
 
     if ml_filter:
         # determine which freezing level reference
-        temp_ref = 'temperature'
-        if temp_field is None and iso0_field is None:
-            warn('Field to obtain the freezing level was not specified. ' +
-                 'Using fixed freezing level height')
-            temp_ref = 'fixed_fzl'
-        elif temp_field is not None:
-            if temp_field not in radar.fields:
-                warn('COSMO temperature field not available. ' +
-                     'Using fixed freezing level height')
-                temp_ref = 'fixed_fzl'
-        elif iso0_field is not None:
-            if iso0_field not in radar.fields:
-                warn('Height over iso0 field not available. ' +
-                     'Using fixed freezing level height')
-                temp_ref = 'fixed_fzl'
+        if temp_field is not None:
+            if temp_field in radar.fields:
+                temp_ref = 'temperature'
             else:
+                warn('COSMO temperature field not available. ' +
+                    'Using fixed freezing level height to determine liquid phase')
+        elif iso0_field is not None:
+            if iso0_field in radar.fields:
                 temp_ref = 'height_over_iso0'
-
-        # determine freezing level height if necessary
-        if temp_ref == 'fixed_fzl':
+            else:
+                warn('Height over iso0 field not available. ' +
+                    'Using fixed freezing level height to determine liquid phase')
+        else:
+            # determine freezing level height if necessary
+            temp_ref = 'fixed_fzl'
             if 'fzl' in dscfg:
                 fzl = dscfg['fzl']
+            elif 'sounding' in dscfg:
+                sounding_code = dscfg['sounding']
+                t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
+                fzl = read_fzl_igra(sounding_code, t0)
             else:
-                fzl = 2000.
                 warn('Freezing level height not defined. Using default ' +
-                     str(fzl) + ' m')
+                    str(fzl) + ' m')
+            fzl = 2000
     else:
         temp_ref = None
 
