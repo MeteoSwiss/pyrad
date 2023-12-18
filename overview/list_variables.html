@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Features &#8212; Pyrad 1.8.6 documentation</title>
+    <title>List of pyrad variables &#8212; Pyrad 1.8.6 documentation</title>
   
   
   
@@ -47,12 +47,12 @@
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'overview/index';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'overview/list_variables';</script>
     <script src="../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="List of pyrad datasets" href="list_process.html" />
-    <link rel="prev" title="pyrad.util.time_series_statistics" href="../API/generated/pyrad.util.time_series_statistics.html" />
+    <link rel="next" title="Changelog" href="../changelog.html" />
+    <link rel="prev" title="List of pyrad input data descriptors" href="list_datadescriptors.html" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -165,7 +165,7 @@
                 
 
                     <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="#">
+                      <a class="nav-link nav-internal" href="index.html">
                         Features
                       </a>
                     </li>
@@ -293,7 +293,7 @@ document.write(`
                 
 
                     <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="#">
+                      <a class="nav-link nav-internal" href="index.html">
                         Features
                       </a>
                     </li>
@@ -353,11 +353,11 @@ document.write(`
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="list_process.html">List of pyrad datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="list_products.html">List of pyrad products</a></li>
 <li class="toctree-l1"><a class="reference internal" href="list_datadescriptors.html">List of pyrad input data descriptors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="list_variables.html">List of pyrad variables</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">List of pyrad variables</a></li>
 </ul>
 </div>
 </nav></div>
@@ -395,7 +395,10 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page">Features</li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Features</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">List of...</li>
   </ul>
 </nav>
 </div>
@@ -412,33 +415,20 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-<section id="features">
-<span id="api"></span><h1>Features<a class="headerlink" href="#features" title="Link to this heading">#</a></h1>
-<dl class="field-list simple">
-<dt class="field-odd">Release<span class="colon">:</span></dt>
-<dd class="field-odd"><p>1.8.6</p>
-</dd>
-<dt class="field-even">Date<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dec 18, 2023</p>
-</dd>
-</dl>
-<p>This guide provides an overview of all available Pyrad features.
-It gives as list of all possible dataset and products types, as well as all variable names and datadescriptors that are currently supported.</p>
-<p>Remember that pyrad relies on the sequential processing of datasets. An example of dataset is shown in the image below. This dataset is called <em>ml_hydro</em> which is an arbitrary user-chosen name and is of type <em>ML_DETECTION</em>.
-This dataset uses a previously computed hydrometeor classification as input. It relies on the <em>PROC</em> datadescriptor and uses the variable <em>hydro</em>. It then generates four different products. which all have arbitrary names and are of the types
-<em>PPI_IMAGE</em>, <em>PSEUDORHI_IMAGE</em>, <em>ML_TS</em> and <em>SAVE_ML</em>. Some products apply only to specific variables (voltype), for example <em>PPI_IMAGE</em> and <em>PSEUDORHI_IMAGE</em> use the variable <em>H_ISO0</em> for the plots.</p>
-<a class="reference internal image-reference" href="../_images/pyrad_explanation_names.png"><img alt="Explanation of the pyrad type names" src="../_images/pyrad_explanation_names.png" style="width: 400px;" /></a>
-<p>Note that datasets types are separated by the nature of their output object (e.g. VOL, GRID, SPECTRA,…).
-For every output object type, a certain number of products can be generated. Hence similarly, all available product types are separated by the nature of the dataset output object to which they apply.</p>
-<p>To take an example, the ATTENUATION dataset returns an object of the VOL type. For the VOL type, many products are available, for example CAPPI_IMAGE or PPI_MAP, but not SURFACE_RAW (for example) which is a product that operates on GRID objects only.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="list_process.html">List of pyrad datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="list_products.html">List of pyrad products</a></li>
-<li class="toctree-l1"><a class="reference internal" href="list_datadescriptors.html">List of pyrad input data descriptors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="list_variables.html">List of pyrad variables</a></li>
-</ul>
-</div>
+<section id="list-of-pyrad-variables">
+<h1>List of pyrad variables<a class="headerlink" href="#list-of-pyrad-variables" title="Link to this heading">#</a></h1>
+<section id="odim-to-pyrad">
+<h2>ODIM to Pyrad<a class="headerlink" href="#odim-to-pyrad" title="Link to this heading">#</a></h2>
+</section>
+<section id="py-art-to-pyrad">
+<h2>Py-ART to Pyrad<a class="headerlink" href="#py-art-to-pyrad" title="Link to this heading">#</a></h2>
+</section>
+<section id="cosmo-to-pyrad">
+<h2>COSMO to Pyrad<a class="headerlink" href="#cosmo-to-pyrad" title="Link to this heading">#</a></h2>
+</section>
+<section id="metranet-swiss-radars-to-pyrad">
+<h2>Metranet (Swiss radars) to Pyrad<a class="headerlink" href="#metranet-swiss-radars-to-pyrad" title="Link to this heading">#</a></h2>
+</section>
 </section>
 
 <div class="section ablog__blog_comments">
@@ -456,20 +446,20 @@ For every output object type, a certain number of products can be generated. Hen
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../API/generated/pyrad.util.time_series_statistics.html"
+       href="list_datadescriptors.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">pyrad.util.time_series_statistics</p>
+        <p class="prev-next-title">List of pyrad input data descriptors</p>
       </div>
     </a>
     <a class="right-next"
-       href="list_process.html"
+       href="../changelog.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">List of pyrad datasets</p>
+        <p class="prev-next-title">Changelog</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -484,8 +474,22 @@ For every output object type, a certain number of products can be generated. Hen
 
   <div class="sidebar-secondary-item">
 
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#odim-to-pyrad">ODIM to Pyrad</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#py-art-to-pyrad">Py-ART to Pyrad</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cosmo-to-pyrad">COSMO to Pyrad</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metranet-swiss-radars-to-pyrad">Metranet (Swiss radars) to Pyrad</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
   <div class="tocsection sourcelink">
-    <a href="../_sources/overview/index.rst.txt">
+    <a href="../_sources/overview/list_variables.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>
