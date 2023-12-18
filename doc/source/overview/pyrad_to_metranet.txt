@@ -1,0 +1,13 @@
+pyrad_name,datatype_metranet,field_name_metranet
+dBZ,ZH,reflectivity
+dBZv,ZV,reflectivity_vv
+ZDR,ZDR,differential_reflectivity
+uRhoHV,RHO,uncorrected_cross_correlation_ratio
+uPhiDP,PHI,uncorrected_differential_phase
+V,VEL,velocity
+W,WID,spectrum_width
+CLT,CLT,clutter_exit_code
+ST1,ST1,stat_test_lag1
+ST2,ST2,stat_test_lag2
+WBN,WBN,wide_band_noise
+MPH,MPH,mean_phase
