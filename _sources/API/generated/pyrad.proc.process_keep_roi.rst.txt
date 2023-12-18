@@ -1,0 +1,6 @@
+pyrad.proc.process\_keep\_roi
+=============================
+
+.. currentmodule:: pyrad.proc
+
+.. autofunction:: process_keep_roi

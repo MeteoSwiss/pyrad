@@ -161,6 +161,8 @@
     
     process_kdp_leastsquare_single_window
     
+    process_keep_roi
+    
     process_l
     
     process_mean_phase_iq

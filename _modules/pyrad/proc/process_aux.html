@@ -1420,6 +1420,8 @@ document.write(`
 
 
 
+<div class="viewcode-block" id="process_keep_roi">
+<a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_keep_roi.html#pyrad.proc.process_keep_roi">[docs]</a>
 <span class="k">def</span> <span class="nf">process_keep_roi</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    keep only data within a region of interest and mask anything else</span>
@@ -1676,7 +1678,8 @@ document.write(`
             <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">inds_ray</span><span class="p">,</span> <span class="n">inds_rng</span><span class="p">])</span>
         <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">field_dict</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span>
+    <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
+
 
 
 <div class="viewcode-block" id="process_roi">
