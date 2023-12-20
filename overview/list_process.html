@@ -893,6 +893,22 @@ document.write(`
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
 </dd>
+<dt>range_discretization<span class="classifier">float. Dataset keyword</span></dt><dd><p>Range discretization used when computing the Cartesian visibility field the larger the better but the slower the processing will be</p>
+</dd>
+<dt>az_discretization<span class="classifier">float. Dataset keyword</span></dt><dd><p>Azimuth discretization used when computing the Cartesian visibility field, the larger the better but the slower the processing will be</p>
+</dd>
+<dt>ke<span class="classifier">float. Dataset keyword</span></dt><dd><p>Equivalent earth-radius factor used in the computation of the radar beam refraction</p>
+</dd>
+<dt>atm_att<span class="classifier">float. Dataset keyword</span></dt><dd><p>One-way atmospheric refraction in db / km</p>
+</dd>
+<dt>mosotti_kw<span class="classifier">float. Dataset keyword</span></dt><dd><p>Clausius-Mosotti factor K, depends on material (water) and wavelength for water = sqrt(0.93)</p>
+</dd>
+<dt>raster_oversampling<span class="classifier">int. Dataset keyword</span></dt><dd><p>The raster resolution of the DEM should be smaller than the range resolution of the radar (defined by the pulse length). If this is not the case, this keyword can be set to increase the raster resolution. The values for the elevation, sigma naught, visibility are repeated. The other values are recalculated. Values for raster_oversampling: 0 or undefined: No oversampling is done 1: Oversampling is done. The factor N is automatically calculated such that 2*dx/N &lt; pulse length 2 or larger: Oversampling is done with this value as N</p>
+</dd>
+<dt>sigma0_method<span class="classifier">string. Dataset keyword</span></dt><dd><p>Which estimation method to use, either ‘Gabella’ or ‘Delrieu’</p>
+</dd>
+<dt>clip<span class="classifier">int. Dataset keyword</span></dt><dd><p>If set to true, the provided DEM will be clipped to the extent of the polar radar domain. Increases computation speed a lot but Cartesian output fields will be available only over radar domain</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -2846,6 +2862,22 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+</dd>
+<dt>range_discretization<span class="classifier">float. Dataset keyword</span></dt><dd><p>Range discretization used when computing the Cartesian visibility field the larger the better but the slower the processing will be</p>
+</dd>
+<dt>az_discretization<span class="classifier">float. Dataset keyword</span></dt><dd><p>Azimuth discretization used when computing the Cartesian visibility field, the larger the better but the slower the processing will be</p>
+</dd>
+<dt>ke<span class="classifier">float. Dataset keyword</span></dt><dd><p>Equivalent earth-radius factor used in the computation of the radar beam refraction</p>
+</dd>
+<dt>atm_att<span class="classifier">float. Dataset keyword</span></dt><dd><p>One-way atmospheric refraction in db / km</p>
+</dd>
+<dt>mosotti_kw<span class="classifier">float. Dataset keyword</span></dt><dd><p>Clausius-Mosotti factor K, depends on material (water) and wavelength for water = sqrt(0.93)</p>
+</dd>
+<dt>raster_oversampling<span class="classifier">int. Dataset keyword</span></dt><dd><p>The raster resolution of the DEM should be smaller than the range resolution of the radar (defined by the pulse length). If this is not the case, this keyword can be set to increase the raster resolution. The values for the elevation, sigma naught, visibility are repeated. The other values are recalculated. Values for raster_oversampling: 0 or undefined: No oversampling is done 1: Oversampling is done. The factor N is automatically calculated such that 2*dx/N &lt; pulse length 2 or larger: Oversampling is done with this value as N</p>
+</dd>
+<dt>sigma0_method<span class="classifier">string. Dataset keyword</span></dt><dd><p>Which estimation method to use, either ‘Gabella’ or ‘Delrieu’</p>
+</dd>
+<dt>clip<span class="classifier">int. Dataset keyword</span></dt><dd><p>If set to true, the provided DEM will be clipped to the extent of the polar radar domain. Increases computation speed a lot but Cartesian output fields will be available only over radar domain</p>
 </dd>
 </dl>
 </dd>
