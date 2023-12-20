@@ -2333,7 +2333,7 @@ def merge_scans_mfcfradial(basepath, scan_list, voltime, datatype_list,
 
     if cfg['DataTypeID'] is None:
         for fname, scan in zip(flist, scan_list_aux):
-            radar_aux = pyart.io.read_cfradial(fname, ield_names=field_names)
+            radar_aux = pyart.io.read_cfradial(fname, field_names=field_names)
             if radar_aux is None:
                 continue
             if radar is None:
