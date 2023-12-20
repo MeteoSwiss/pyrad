@@ -207,7 +207,38 @@ def process_gecsx(procstatus, dscfg, radar_list=None):
 
         datatype : list of string. Dataset keyword
             The input data types
-
+        range_discretization : float. Dataset keyword
+            Range discretization used when computing the Cartesian visibility field
+            the larger the better but the slower the processing will be
+        az_discretization : float. Dataset keyword
+            Azimuth discretization used when computing the Cartesian visibility
+            field, the larger the better but the slower the processing will be
+        ke : float. Dataset keyword
+            Equivalent earth-radius factor used in the computation of the radar
+            beam refraction
+        atm_att : float. Dataset keyword
+            One-way atmospheric refraction in db / km
+        mosotti_kw : float. Dataset keyword
+            Clausius-Mosotti factor K, depends on material (water) and wavelength
+            for water = sqrt(0.93)
+        raster_oversampling : int. Dataset keyword
+            The raster resolution of the DEM should be smaller than
+            the range resolution of the radar (defined by the pulse length).
+            If this is not the case, this keyword can be set to increase the
+            raster resolution. The values for the elevation, sigma naught,
+            visibility are repeated. The other values are recalculated.
+            Values for raster_oversampling:
+            0 or undefined: No oversampling is done
+            1: Oversampling is done. The factor N is automatically calculated
+            such that 2*dx/N < pulse length
+            2 or larger: Oversampling is done with this value as N
+        sigma0_method : string. Dataset keyword
+            Which estimation method to use, either 'Gabella' or 'Delrieu'
+        clip : int. Dataset keyword
+            If set to true, the provided DEM will be clipped to the extent
+            of the polar radar domain. Increases computation speed a lot but
+            Cartesian output fields will be available only over radar domain
+        
     radar_list : list of Radar objects
         Optional. list of radar objects
 
