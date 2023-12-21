@@ -102,7 +102,6 @@ def process_file(filepath):
                         f'#L{i+1}')
     return all_products
 
-
 products = {}
 for root, _, files in os.walk(prodpath):
     for file in files:

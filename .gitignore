@@ -92,7 +92,6 @@ src/pyrad_proc/pyrad/version.py
 #######################
 doc/source/overview/list_products.rst
 doc/source/overview/list_process.rst
-doc/source/overview/list_variables.rst
 
 # radar data files #
 ####################

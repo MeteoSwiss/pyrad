@@ -43,8 +43,15 @@ jobs:
       - name: Run mapping codes
         working-directory: ${{github.workspace}}/ci/
         run: |
+          set -e
           bash run_all.sh
-
+      - name: Check mapping Code Result
+        run: |
+          if [ $? -ne 0 ]; then
+            echo "Error: Python code failed"
+            exit 1
+          fi
+        shell: bash
       # Build the website
       - name: Build the site
         run: |

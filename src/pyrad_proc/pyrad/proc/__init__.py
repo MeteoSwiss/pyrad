@@ -19,6 +19,7 @@ Auxiliary functions
     process_fixed_rng
     process_fixed_rng_span
     process_roi
+    process_keep_roi
     process_roi2
     process_azimuthal_average
     process_moving_azimuthal_average
@@ -264,6 +265,7 @@ DEM data
 
 from .process_aux import get_process_func, process_raw, process_save_radar  # noqa
 from .process_aux import process_roi, process_roi2, process_azimuthal_average  # noqa
+from .process_aux import process_keep_roi # noqa
 from .process_aux import process_fixed_rng, process_fixed_rng_span  # noqa
 from .process_aux import process_radar_resampling, process_vol_to_grid  # noqa
 from .process_aux import process_moving_azimuthal_average  # noqa
