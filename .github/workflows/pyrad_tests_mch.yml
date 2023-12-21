@@ -1,7 +1,7 @@
 name: Test pyrad mch
 env:
   MINIMAL_DEPENDENCIES: Cython numpy cartopy
-  TEST_DEPENDENCIES: pytest imageio
+  TEST_DEPENDENCIES: pytest imageio gdal
 
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
