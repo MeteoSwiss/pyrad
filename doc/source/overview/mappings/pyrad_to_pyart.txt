@@ -1,5 +1,6 @@
 pyrad_name,field_name_pyart
 dBZ,reflectivity
+dBZ_flag,reflectivity_flag
 dBZ_MF,reflectivity
 Zn,normalized_reflectivity
 Zlin,linear_reflectivity
@@ -10,6 +11,8 @@ dBZv,reflectivity_vv
 dBZvc,corrected_reflectivity_vv
 dBuZv,unfiltered_reflectivity_vv
 dBuZvc,corrected_unfiltered_reflectivity_vv
+dBZhv,reflectivity_hv
+dBZvh,reflectivity_vh
 dBZ_bias,reflectivity_bias
 eta_h,volumetric_reflectivity
 eta_v,volumetric_reflectivity_vv
@@ -25,6 +28,8 @@ ZDRuc,corrected_unfiltered_differential_reflectivity
 ZDR_prec,differential_reflectivity_in_precipitation
 ZDR_snow,differential_reflectivity_in_snow
 ZDR_col,differential_reflectivity_column_height
+LDRhv,linear_depolarization_ratio_hv
+LDRvh,linear_depolarization_ratio_vh
 dBm,signal_power_hh
 dBmv,signal_power_vv
 Nh,noisedBZ_hh
@@ -37,6 +42,8 @@ NADUh,noiseADU_hh
 NADUv,noiseADU_vv
 noise_pos_h,noise_pos_h
 noise_pos_v,noise_pos_v
+Nclip_h,noise_clipping_level_hh_dBZ
+Nclip_v,noise_clipping_level_vv_dBZ
 WBN,wide_band_noise
 WBNc,corrected_wide_band_noise
 ST1,stat_test_lag1
@@ -80,6 +87,8 @@ MPH,mean_phase
 MPHc,corrected_mean_phase
 V,velocity
 Vv,velocity_vv
+Vhv,velocity_hv
+Vvh,velocity_vh
 Vu,unfiltered_velocity
 dealV,dealiased_velocity
 Vc,corrected_velocity
@@ -89,6 +98,8 @@ stdV,retrieved_velocity_std
 diffV,velocity_difference
 W,spectrum_width
 Wv,spectrum_width_vv
+Whv,spectrum_width_hv
+Wvh,spectrum_width_vh
 Wu,unfiltered_spectrum_width
 Wc,corrected_spectrum_width
 wind_vel_h_az,azimuthal_horizontal_wind_component
@@ -138,10 +149,14 @@ CLT,clutter_exit_code
 occurrence,occurrence
 freq_occu,frequency_of_occurrence
 RR,radar_estimated_rain_rate
+RR_MP,Marshall_Palmer_radar_estimated_rain_rate
+RR_flag,radar_estimated_rain_rate_flag
 RRc,corrected_radar_estimated_rain_rate
 Raccu,rainfall_accumulation
 RaccuMF,rainfall_accumulation
 QIMF,signal_quality_index
+QI,signal_quality_index
+AF,adjustment_factor
 radar_R_rel,radar_rainrate_relation
 prec_type,precipitation_type
 hydro,radar_echo_classification
@@ -342,11 +357,13 @@ wind_vel_rad_filtered,corrected_radial_wind_speed
 wind_vel_rad_ci,radial_wind_speed_ci
 wind_vel_rad_status,radial_wind_speed_status
 WD,doppler_spectrum_width
+WDc,corrected_doppler_spectrum_width
 WD_err,doppler_spectrum_mean_error
 atmos_type,atmospherical_structures_type
 beta_rel,relative_beta
 beta_abs,absolute_beta
 CNR,cnr
+CNRc,corrected_cnr
 HRV,HRV
 VIS006,VIS006
 VIS008,VIS008
