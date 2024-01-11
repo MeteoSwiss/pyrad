@@ -1,5 +1,27 @@
 # Changelog
 
+## v1.8.7
+**Bug fixes:**
+- [bug correction in function to read MFCFRADIAL data](https://github.com/MeteoSwiss/pyrad/commit/dfacd71c301d3ee37e7c6c002b2b54bc347a2480)
+- [fix bug due to missing fzl in some routines](https://github.com/MeteoSwiss/pyrad/commit/02aae44c72d5bb7c2e140a68504c8e00066309d0)
+- [fix for missing box variable in process_roi2](https://github.com/MeteoSwiss/pyrad/commit/997db1f956aad6e348f1d92ae75882e7296fc22f)
+- [Fix in process_grid_products.py for wrong warning message when bg DDA field is missing](https://github.com/MeteoSwiss/pyrad/commit/a8ee6c7d96da3932724f5e5775482ca5289f326d)
+- [bug correction in read_knmi](https://github.com/MeteoSwiss/pyrad/commit/af5a2e2acfb7f6f4e0fd76f643860f04a55acb80)
+- [bug correction in function process_turbulence in process_Doppler.py](https://github.com/MeteoSwiss/pyrad/commit/ed44ae9fa062df8a8c868c10abdf8081590c5d24)
+- [fixed old pandas command in read_radiosounding](https://github.com/MeteoSwiss/pyrad/commit/a3ef19b556994bf1e2b792e360e1eb2dfdbd7908)
+
+**New additions**
+- [modified function merge_scans_mfcfradial in read_data_radar.py to allow ingesting CFRadial files containing individual parameters and scans](https://github.com/MeteoSwiss/pyrad/commit/3050ffe8590206c4fb7776cfcd10fc497449bb3b)
+- [ingestion of KNMI H5 radar data files and minor adaptations](https://github.com/MeteoSwiss/pyrad/commit/ad8bba2367479ed54d2b4f84aafda34dcf42e62a)
+- [add possibility to use sounding data for fzl estimation](https://github.com/MeteoSwiss/pyrad/commit/59311182cabd0a79352964b7547a75ec8374d733)
+- [added function to mask all data not belonging to a ROI. Added rectangular ROI.](https://github.com/MeteoSwiss/pyrad/commit/2555e68ac7c3e67ab468dff0a243fd9e11c89232)
+- [modified function read_knmi of read_data_sensor.py](https://github.com/MeteoSwiss/pyrad/commit/4f43bf9051bdfd082d1b11299b8866cb5a2d98e3)
+- [added IGRA sounding reader + support for IGRA sounding in DDA wrapper](https://github.com/MeteoSwiss/pyrad/commit/fe98f900d30b67c3e9d50fa277f34428079e46c5)
+- [modified function read_knmi of read_data_sensor.py](https://github.com/MeteoSwiss/pyrad/commit/4f43bf9051bdfd082d1b11299b8866cb5a2d98e3)
+- [new functions to read parsivel disdrometer data and compare to radar data](https://github.com/MeteoSwiss/pyrad/commit/28bb465287017ca28e9f146df4aa8c83cad5bb50)
+- [ingestion of data from SkyEcho proprietary netcdf files](https://github.com/MeteoSwiss/pyrad/commit/45d3cb2873d72f2cb1fa6e25449dcf98176b7c30)
+- [adaptation of turbulence retrieval to accept lidar data](https://github.com/MeteoSwiss/pyrad/commit/76673e0837f8c323c32e365361c064a666397d15)
+
 ## v1.8.6
 
 **Bug corrections**
