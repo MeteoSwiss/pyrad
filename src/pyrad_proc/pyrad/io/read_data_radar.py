@@ -2253,9 +2253,26 @@ def merge_scans_mfcfradial(basepath, scan_list, voltime, datatype_list,
         radar object
 
     """
+    # Mapping of MeteoFrance and JMA field names to Py-ART field names
+    field_names = {
+        'DBZH': 'reflectivity',  # JMA
+        'TH': 'unfiltered_reflectivity',  # MF
+        'ZDR': 'differential_reflectivity',  # MF & JMA
+        'RHOHV': 'cross_correlation_ratio',  # MF & JMA
+        'PHIDP': 'uncorrected_differential_phase',  # MF
+        'PSIDP': 'differential_phase',  # JMA
+        'KDP': 'specific_differential_phase',  # JMA
+        'VRAD': 'velocity',  # MF
+        'VEL': 'velocity',  # JMA
+        'WIDTH': 'spectrum_width',  # JMA
+        'SIGMA': 'sigma_zh'  # MF
+    }
 
     radar = None
-    voltime.strftime('%H%M')
+
+    # get list of files to combine
+    flist = []
+    scan_list_aux = []
 
     fpath_strf = (
         dataset_list[0][
@@ -2269,20 +2286,106 @@ def merge_scans_mfcfradial(basepath, scan_list, voltime, datatype_list,
             filename_aux, date_format=fdate_strf)
         if fdatetime == voltime:
             filename = [filename_aux]
-
-    # Mapping of MeteoFrance field names to Py-ART field names
-    field_names = {
-        'RHOHV': 'uncorrected_cross_correlation_ratio',
-        'TH': 'unfiltered_reflectivity',
-        'PHIDP': 'uncorrected_differential_phase',
-        'ZDR': 'unfiltered_differential_reflectivity',
-        'VRAD': 'velocity',
-        'SIGMA': 'sigma_zh'}
+            break
 
     if not filename:
-        warn('No file found in ' + datapath)
+        warn(f'No file found in {datapath} for scan {scan_list[0]}'
+             f' and time {voltime}')
     else:
-        radar = pyart.io.read_cfradial(filename[0], field_names=field_names)
+        flist.append(filename[0])
+        scan_list_aux.append(scan_list[0])
+
+    if len(scan_list) > 1:
+        # merge the elevations into a single radar instance
+        for scan in scan_list[1:]:
+            filenames = glob.glob(f'{datapath}*{scan}*')
+            filename = []
+            for filename_aux in filenames:
+                fdatetime = find_date_in_file_name(
+                    filename_aux, date_format=fdate_strf)
+                if cfg['MasterScanTimeTol'][ind_rad] == 0:
+                    if fdatetime == voltime:
+                        filename = [filename_aux]
+                        break
+                elif cfg['MasterScanTimeTol'][ind_rad] == 1:
+                    if (voltime <= fdatetime < voltime
+                            + datetime.timedelta(
+                                minutes=cfg['ScanPeriod'])):
+                        filename = [filename_aux]
+                        print(os.path.basename(filename[0]))
+                        break
+                else:
+                    if (voltime
+                        - datetime.timedelta(minutes=cfg['ScanPeriod'])
+                            < fdatetime <= voltime):
+                        filename = [filename_aux]
+                        print(os.path.basename(filename[0]))
+                        break
+            if not filename:
+                warn(f'No file found in {datapath} for scan {scan}'
+                     f' and time {voltime}')
+                continue
+            flist.append(filename[0])
+            scan_list_aux.append(scan)
+
+    if not flist:
+        return radar
+
+    if cfg['DataTypeID'] is None:
+        for fname, scan in zip(flist, scan_list_aux):
+            radar_aux = pyart.io.read_cfradial(fname, field_names=field_names)
+            if radar_aux is None:
+                continue
+            if radar is None:
+                radar = radar_aux
+                continue
+            radar = pyart.util.radar_utils.join_radar(radar, radar_aux)
+    else:
+        for datatype in datatype_list:
+            if datatype not in cfg['DataTypeID'].keys():
+                warn(f'No file contains data type {datatype}')
+                continue
+            nscans = 0
+            radar_aux = None
+            for fname, scan in zip(flist, scan_list_aux):
+                if cfg['DataTypeID'][datatype] not in os.path.basename(fname):
+                    continue
+                radar_aux2 = pyart.io.read_cfradial(
+                    fname, field_names=field_names)
+                if radar_aux2 is None:
+                    continue
+                if radar_aux is None:
+                    radar_aux = radar_aux2
+                    nscans += 1
+                    continue
+                radar_aux = pyart.util.radar_utils.join_radar(
+                    radar_aux, radar_aux2)
+                nscans += 1
+            if radar is None:
+                radar = radar_aux
+                nscans_expected = nscans
+                continue
+            if nscans != nscans_expected:
+                warn(f'Unable to merge datatype {datatype} into radar object.'
+                     f' Number of scans containing the datatype {nscans}'
+                     f' different from number of scans expected'
+                     f' {nscans_expected}')
+                continue
+            field_name = get_fieldname_pyart(datatype)
+            try:
+                radar.add_field(field_name, radar_aux.fields[field_name])
+            except ValueError:
+                if radar.nrays * radar.ngates > radar_aux.nrays * radar_aux.ngates:
+                    warn(f'Field {field_name} will be interpolated')
+                    radar = add_field(radar, radar_aux)
+                else:
+                    warn(
+                        f'Fields will be adapted to {field_name} field size')
+                    radar = add_field(radar_aux, radar)
+                print(f'nrays: {radar.nrays} ngates: {radar.ngates}')
+
+    if radar is None:
+        return radar
 
     rmin = None
     rmax = None
@@ -2303,43 +2406,9 @@ def merge_scans_mfcfradial(basepath, scan_list, voltime, datatype_list,
     if cfg['azmax'] is not None:
         azmax = cfg['azmax'][ind_rad]
 
-    if len(scan_list) == 1:
-        if radar is None:
-            return radar
-
-        return pyart.util.subset_radar(
-            radar, radar.fields.keys(), rng_min=rmin, rng_max=rmax,
-            ele_min=elmin, ele_max=elmax, azi_min=azmin, azi_max=azmax)
-
-    # merge the elevations into a single radar instance
-    for scan in scan_list[1:]:
-        filenames = glob.glob(datapath + '*' + scan + '*')
-        filename = []
-        for filename_aux in filenames:
-            fdatetime = find_date_in_file_name(
-                filename_aux, date_format=fdate_strf)
-            if fdatetime == voltime:
-                filename = [filename_aux]
-                break
-        if not filename:
-            warn('No file found in ' + datapath)
-        else:
-            radar_aux = pyart.io.read_cfradial(
-                filename[0], field_names=field_names)
-            if radar_aux is None:
-                continue
-
-            if radar is None:
-                radar = radar_aux
-            else:
-                radar = pyart.util.radar_utils.join_radar(radar, radar_aux)
-
-    if radar is None:
-        return radar
-
     return pyart.util.subset_radar(
-        radar, radar.fields.keys(), rng_min=rmin, rng_max=rmax,
-        ele_min=elmin, ele_max=elmax, azi_min=azmin, azi_max=azmax)
+        radar, radar.fields.keys(), rng_min=rmin, rng_max=rmax, ele_min=elmin,
+        ele_max=elmax, azi_min=azmin, azi_max=azmax)
 
 
 def merge_scans_nexrad2(basepath, scan_list, radar_name, radar_res, voltime,

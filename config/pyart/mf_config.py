@@ -317,6 +317,7 @@ corrected_radar_estimated_rain_rate = 'corrected_radar_estimated_rain_rate'
 rainfall_accumulation = 'rainfall_accumulation'
 radar_rainrate_relation = 'radar_rainrate_relation'
 radar_estimated_rain_rate_flag = 'radar_estimated_rain_rate_flag'
+adjustment_factor = 'adjustment_factor'
 
 # melting layer
 melting_layer = 'melting_layer'
@@ -696,6 +697,7 @@ DEFAULT_FIELD_NAMES = {
     'sun_hit_h': sun_hit_h,
     'sun_hit_v': sun_hit_v,
     'sun_hit_zdr': sun_hit_zdr,
+    'adjustment_factor': adjustment_factor,
     'radar_estimated_rain_rate': radar_estimated_rain_rate,
     'corrected_radar_estimated_rain_rate': corrected_radar_estimated_rain_rate,
     'rainfall_accumulation': rainfall_accumulation,
@@ -2250,6 +2252,12 @@ DEFAULT_METADATA = {
         'long_name': 'Birds Density',
         'coordinates': 'elevation azimuth range'},
 
+    adjustment_factor: {        
+        'units': 'dB',
+        'standard_name': 'adjustment_factor',
+        'long_name': 'Adjustment Factor',
+        'coordinates': 'elevation azimuth range'},
+        
     radar_estimated_rain_rate: {
         'units': 'mm/h',
         'standard_name': 'radar_estimated_rain_rate',
@@ -3967,6 +3975,7 @@ DEFAULT_FIELD_COLORMAP = {
     quant90_corrected_velocity: 'pyart_BuDRd18',
     quant95_corrected_velocity: 'pyart_BuDRd18',
     vpr_correction: 'pyart_BuDRd18',
+    adjustment_factor: 'pyart_BuDRd18',
 
     spectrum_width: 'pyart_NWS_SPW',
     corrected_spectrum_width: 'pyart_NWS_SPW',
@@ -4236,6 +4245,7 @@ DEFAULT_FIELD_LIMITS = {
     velocity_difference: (-15., 15.),
     wind_speed: (0., 50.),
     wind_direction: (0., 360.),
+    adjustment_factor: (-5., 5),
 
     spectrum_width: spectrum_width_limit,
     corrected_spectrum_width: spectrum_width_limit,
