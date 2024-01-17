@@ -21,6 +21,11 @@ Functions for PhiDP and KDP processing and attenuation correction
     process_attenuation
 
 """
+import warnings
+# Ignore warning in process_phidp_kdp_Maesaka
+warnings.filterwarnings("ignore", 
+    message=".*'partition' will ignore the 'mask' of the MaskedArray.*", 
+    category=UserWarning)
 
 from copy import deepcopy
 from warnings import warn
