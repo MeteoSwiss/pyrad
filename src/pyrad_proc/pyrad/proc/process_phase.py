@@ -22,10 +22,6 @@ Functions for PhiDP and KDP processing and attenuation correction
 
 """
 import warnings
-# Ignore warning in process_phidp_kdp_Maesaka
-warnings.filterwarnings("ignore", 
-    message=".*'partition' will ignore the 'mask' of the MaskedArray.*", 
-    category=UserWarning)
 
 from copy import deepcopy
 from warnings import warn
@@ -36,6 +32,11 @@ import pyart
 
 from ..io.io_aux import get_datatype_fields
 from ..io.read_data_sensor import read_fzl_igra
+
+# Ignore warning in process_phidp_kdp_Maesaka
+warnings.filterwarnings("ignore", 
+    message=".*'partition' will ignore the 'mask' of the MaskedArray.*", 
+    category=UserWarning)
 
 def process_correct_phidp0(procstatus, dscfg, radar_list=None):
     """
