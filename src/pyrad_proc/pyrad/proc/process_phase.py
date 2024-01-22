@@ -21,6 +21,7 @@ Functions for PhiDP and KDP processing and attenuation correction
     process_attenuation
 
 """
+import warnings
 
 from copy import deepcopy
 from warnings import warn
@@ -31,6 +32,11 @@ import pyart
 
 from ..io.io_aux import get_datatype_fields
 from ..io.read_data_sensor import read_fzl_igra
+
+# Ignore warning in process_phidp_kdp_Maesaka
+warnings.filterwarnings("ignore", 
+    message=".*'partition' will ignore the 'mask' of the MaskedArray.*", 
+    category=UserWarning)
 
 def process_correct_phidp0(procstatus, dscfg, radar_list=None):
     """
@@ -438,6 +444,7 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
     thickness = dscfg.get('ml_thickness', 700.)
 
     fzl = None
+    temp_ref = 'fixed_fzl'
     # determine which freezing level reference
     if temp_field is not None:
         if temp_field in radar.fields:
@@ -624,6 +631,7 @@ def process_phidp_kdp_lp(procstatus, dscfg, radar_list=None):
         return None, None
 
     fzl = None
+    temp_ref = 'fixed_fzl'
     # determine which freezing level reference
     if temp_field is not None:
         if temp_field in radar.fields:
@@ -1169,6 +1177,7 @@ def process_attenuation(procstatus, dscfg, radar_list=None):
 
     # determine which freezing level reference
     fzl = None
+    temp_ref = 'fixed_fzl'
     if temp is not None:
         if temp in radar.fields:
             temp_ref = 'temperature'

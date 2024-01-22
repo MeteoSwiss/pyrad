@@ -449,7 +449,7 @@ def get_norm(field_name, field_dict={}, isxarray=False):
     ticklabs = None
 
     ref_dict = pyart.config.get_metadata(field_name)
-    cmap = mpl.cm.get_cmap(pyart.config.get_field_colormap(field_name))
+    cmap = mpl.colormaps.get_cmap(pyart.config.get_field_colormap(field_name))
 
     if field_dict is not None and 'boundaries' in field_dict:
         if isxarray:

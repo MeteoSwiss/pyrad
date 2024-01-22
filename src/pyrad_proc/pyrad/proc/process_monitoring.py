@@ -138,6 +138,7 @@ def process_selfconsistency_kdp_phidp(procstatus, dscfg, radar_list=None):
         return None, None
 
     fzl = None
+    temp_ref ='fixed_fzl'
     # determine which freezing level reference
     if temp is not None:
         if temp in radar.fields:
@@ -399,6 +400,7 @@ def process_selfconsistency_bias(procstatus, dscfg, radar_list=None):
         return None, None
 
     fzl = None
+    temp_ref ='fixed_fzl'
     # determine which freezing level reference
     if temp is not None:
         if temp in radar.fields:
@@ -719,6 +721,7 @@ def process_selfconsistency_bias2(procstatus, dscfg, radar_list=None):
         return None, None
 
     fzl = None
+    temp_ref ='fixed_fzl'
     # determine which freezing level reference
     if temp is not None:
         if temp in radar.fields:
@@ -1068,6 +1071,7 @@ def process_rhohv_rain(procstatus, dscfg, radar_list=None):
         return None, None
 
     fzl = None
+    temp_ref ='fixed_fzl'
     # determine which freezing level reference
     if temp_field is not None:
         if temp_field in radar.fields:
@@ -1238,6 +1242,7 @@ def process_zdr_precip(procstatus, dscfg, radar_list=None):
     # if data in and above the melting layer has to be filtered determine the
     # field to use
     fzl = None
+    temp_ref = 'fixed_fzl'
     ml_filter = True
     if 'ml_filter' in dscfg:
         ml_filter = dscfg['ml_filter']
