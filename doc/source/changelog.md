@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.8.8
+**Bug corrections**
+
+- [bug fix for crash when temp_ref is not defined](https://github.com/MeteoSwiss/pyrad/commit/8877fc18ec598a16aa472ea4f2706c8309861571)
+- [fix deprecation warning in get_cmap](https://github.com/MeteoSwiss/pyrad/commit/ca965ce702d80dcd35d44f90f04e7931c8fd3f30)
+
+
 ## v1.8.7
 **Bug fixes:**
 - [bug correction in function to read MFCFRADIAL data](https://github.com/MeteoSwiss/pyrad/commit/dfacd71c301d3ee37e7c6c002b2b54bc347a2480)
