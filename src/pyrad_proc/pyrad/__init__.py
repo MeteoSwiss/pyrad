@@ -3,7 +3,6 @@ Pyrad: The Python Radar Toolkit
 =====================================
 
 """
-
 # Detect if we're being called as part of Pyrad's setup procedure
 try:
     __PYRAD_SETUP__
@@ -19,7 +18,7 @@ else:
     # Make sure that deprecation warnings get printed by default
     import warnings as _warnings
     _warnings.simplefilter("always", DeprecationWarning)
-
+    
     # print out helpful message if build fails or importing from source tree
     # fvj built not checked for the moment
     # from . import __check_build
