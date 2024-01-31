@@ -17,7 +17,7 @@ Functions for reading auxiliary data
     read_rhi_profile
     read_last_state
     read_status
-    read_mch_vad
+    read_mch_xml_vad
     read_rad4alp_cosmo
     read_rad4alp_vis
     read_mf_vis
@@ -53,7 +53,7 @@ import errno
 import numpy as np
 
 from pyart.config import get_fillvalue, get_metadata
-from pyart.core import HorizontalWindProfile
+from pyart.aux_io import read_mch_vad
 
 from .io_aux import get_fieldname_pyart, _get_datetime
 
@@ -508,7 +508,7 @@ def read_status(voltime, cfg, ind_rad=0):
 
         return None
 
-def read_mch_vad(voltime, cfg, ind_rad=0):
+def read_mch_xml_vad(voltime, cfg, ind_rad=0):
     """
     Reads a MeteoSwiss VAD file (VAx xml files)
 
@@ -544,7 +544,7 @@ def read_mch_vad(voltime, cfg, ind_rad=0):
         datapath = cfg['datapath'][ind_rad] + dayinfo + '/' + basename + '/'
     filename = glob.glob(datapath + basename + timeinfo + '*.xml')
 
-    return pyart.aux_io.read_mch_vad(filename)
+    return read_mch_vad(filename)
 
 def read_rad4alp_cosmo(fname, datatype, ngates=0):
     """
