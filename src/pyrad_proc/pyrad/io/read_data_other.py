@@ -17,6 +17,7 @@ Functions for reading auxiliary data
     read_rhi_profile
     read_last_state
     read_status
+    read_mch_vad
     read_rad4alp_cosmo
     read_rad4alp_vis
     read_mf_vis
@@ -52,6 +53,7 @@ import errno
 import numpy as np
 
 from pyart.config import get_fillvalue, get_metadata
+from pyart.core import HorizontalWindProfile
 
 from .io_aux import get_fieldname_pyart, _get_datetime
 
@@ -506,6 +508,43 @@ def read_status(voltime, cfg, ind_rad=0):
 
         return None
 
+def read_mch_vad(voltime, cfg, ind_rad=0):
+    """
+    Reads a MeteoSwiss VAD file (VAx xml files)
+
+    Parameters
+    ----------
+    voltime : datetime object
+        volume scan time
+
+    cfg: dictionary of dictionaries
+        configuration info to figure out where the data is
+    ind_rad: int
+        radar index
+
+    Returns
+    -------
+    pyart.core.HorizontalWindProfile 
+        pyart Wind profile object containing the VAD data
+
+    """
+
+    if cfg['RadarName'] is None:
+        raise ValueError(
+            'ERROR: Radar Name not specified in config file. \
+            Unable to read status data')
+
+    dayinfo = voltime.strftime('%y%j')
+    timeinfo = voltime.strftime('%H%M')
+    basename = 'VA' + cfg['RadarName'][ind_rad] + dayinfo
+    if cfg['path_convention'][ind_rad] == 'RT':
+        datapath = cfg['datapath'][ind_rad] + \
+            'VA' + cfg['RadarName'][ind_rad] + '/'
+    else:
+        datapath = cfg['datapath'][ind_rad] + dayinfo + '/' + basename + '/'
+    filename = glob.glob(datapath + basename + timeinfo + '*.xml')
+
+    return pyart.aux_io.read_mch_vad(filename)
 
 def read_rad4alp_cosmo(fname, datatype, ngates=0):
     """
