@@ -113,6 +113,7 @@ Reading other data
     read_radiosounding_wyoming
     read_radiosounding_igra
     read_fzl_igra
+    read_meteoswiss_xml_vad
 
 Writing data
 ==================
@@ -235,6 +236,7 @@ from .read_data_other import read_profile_ts, read_histogram_ts # noqa
 from .read_data_other import read_quantiles_ts, read_ml_ts, read_proc_periods # noqa
 from .read_data_other import read_centroids_npz, read_mf_vis # noqa
 from .read_data_other import read_vpr_theo_parameters # noqa
+from .read_data_other import read_mch_xml_vad # noqa
 
 from .read_data_sensor import read_lightning, read_lightning_traj # noqa
 from .read_data_sensor import get_sensor_data, read_smn, read_smn2 # noqa

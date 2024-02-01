@@ -13,6 +13,7 @@ Functions to processes spectral data.
     process_filter_0Doppler
     process_filter_srhohv
     process_filter_spectra_noise
+    process_dealias_spectra
     process_spectra_ang_avg
     process_spectral_power
     process_spectral_noise
@@ -765,6 +766,90 @@ def process_filter_spectra_noise(procstatus, dscfg, radar_list=None):
             field_name, psr.fields[field_name])
         new_dataset['radar_out'].fields[field_name]['data'][mask] = (
             np.ma.masked)
+
+    return new_dataset, ind_rad
+
+def process_dealias_spectra(procstatus, dscfg, radar_list=None):
+    """
+    Performs a dealiasing of spectra data, assuming at most one fold
+
+    The method is quite simple and works in the following way at every
+    radar gate
+
+    - aliasing check
+        check if there is no noise either on the left of the right of the spectrum
+    - left/right tail computation
+        identify left and right tail of the aliased spectrum
+    - detect direction of aliasing
+        compute Doppler mean velocity with right or left shift of the spectrum,
+        perform the shift which minimizes the difference in Doppler velocity to
+        previous range bin
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration. Accepted configuration keywords::
+
+        datatype : list of string. Dataset keyword
+            The input data types
+
+    radar_list : list of spectra objects
+        Optional. list of spectra objects
+
+    Returns
+    -------
+    new_dataset : dict
+        dictionary containing the output
+    ind_rad : int
+        radar index
+
+    """
+
+    if procstatus != 1:
+        return None, None
+
+    field_name_list = []
+    signal_found = False
+    noise_found = False
+    for datatypedescr in dscfg['datatype']:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        if (datatype in ('ShhADU', 'SvvADU', 'ShhADUu', 'SvvADUu') and
+                not signal_found):
+            signal_field = get_fieldname_pyart(datatype)
+            signal_found = True
+        elif datatype in ('sNADUh', 'sNADUv') and not noise_found:
+            noise_field = get_fieldname_pyart(datatype)
+            noise_found = True
+        else:
+            field_name_list.append(get_fieldname_pyart(datatype))
+
+    if not signal_found or not noise_found:
+        warn('Signal and noise fields are required for noise filtering')
+        return None, None
+
+    ind_rad = int(radarnr[5:8]) - 1
+    if (radar_list is None) or (radar_list[ind_rad] is None):
+        warn('ERROR: No valid radar')
+        return None, None
+    psr = radar_list[ind_rad]
+
+    if signal_field not in psr.fields or noise_field not in psr.fields:
+        warn('Unable to obtain apply spectral noise filter. Missing fields')
+        return None, None
+
+    s_pwr = pyart.retrieve.compute_spectral_power(
+        psr, units='ADU', signal_field=signal_field,
+        noise_field=noise_field)
+
+    # Add spectral power field
+    psr.fields['spectral_power'] = s_pwr
+
+    # Dealias dataset
+    new_dataset = pyart.retrieve.spectra.dealias_spectra(psr, 'spectral_power',
+        field_name_list)
 
     return new_dataset, ind_rad
 

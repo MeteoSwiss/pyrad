@@ -712,22 +712,23 @@ def process_vol_to_grid(procstatus, dscfg, radar_list=None):
         Processing status: 0 initializing, 1 processing volume,
         2 post-processing
     dscfg : dictionary of dictionaries
-        data set configuration
+        data set configuration. Accepted Configuration Keywords::
+
+        xmin, xmax, ymin, ymax : float
+            Horizontal limits of the grid [m from origin]. Default +-20000.
+        zmin, zmax : float
+            vertical limits of the grid [masl]. Default 1000.
+        hres, vres : float
+            horizontal and vertical resolution [m]. Default 1000.
+        lat0, lon0 : float
+            Grid origin [deg]. The default will be the radar position
+        alt0 : float
+            Grid origin altitude [masl]. Default is 0
+        wfunc : str
+            Weighting function. Default NEAREST
     radar_list : list of Radar objects
         Optional. list of radar objects
-    xmin, xmax, ymin, ymax : float
-        Horizontal limits of the grid [m from origin]. Default +-20000.
-    zmin, zmax : float
-        vertical limits of the grid [masl]. Default 1000.
-    hres, vres : float
-        horizontal and vertical resolution [m]. Default 1000.
-    lat0, lon0 : float
-        Grid origin [deg]. The default will be the radar position
-    alt0 : float
-        Grid origin altitude [masl]. Default is 0
-    wfunc : str
-        Weighting function. Default NEAREST
-
+    
 
     Returns
     -------

@@ -234,6 +234,22 @@ signal_quality_index_vv = 'signal_quality_index_vv'
 unfiltered_signal_quality_index = 'unfiltered_signal_quality_index'
 unfiltered_signal_quality_index_vv = 'unfiltered_signal_quality_index_vv'
 
+# visibility processing fields
+terrain_altitude = 'terrain_altitude'
+bent_terrain_altitude = 'bent_terrain_altitude'
+terrain_slope = 'terrain_slope'
+terrain_aspect = 'terrain_aspect'
+elevation_angle = 'elevation_angle'
+visibility = 'visibility'
+min_vis_altitude = 'min_vis_altitude'
+min_vis_elevation = 'min_vis_elevation'
+incident_angle = 'incident_angle'
+effective_area = 'effective_area'
+sigma_0 = 'sigma_0'
+rcs_clutter = 'rcs_clutter'
+dBm_clutter = 'dBm_clutter'
+dBZ_clutter = 'dBZ_clutter'
+visibility_polar = 'visibility_polar'
 
 # Differential phase shift, PhiDP
 mean_phase = 'mean_phase'
@@ -692,6 +708,21 @@ DEFAULT_FIELD_NAMES = {
     'IQ_noise_power_vv_dBADU': IQ_noise_power_vv_dBADU,
     'IQ_noise_power_hh_ADU': IQ_noise_power_hh_ADU,
     'IQ_noise_power_vv_ADU': IQ_noise_power_vv_ADU,
+    'terrain_altitude': terrain_altitude,
+    'bent_terrain_altitude': bent_terrain_altitude,
+    'terrain_slope': terrain_slope,
+    'terrain_aspect': terrain_aspect,
+    'elevation_angle': elevation_angle,
+    'visibility': visibility,
+    'min_vis_altitude': min_vis_altitude,
+    'min_vis_elevation': min_vis_elevation,
+    'incident_angle': incident_angle,
+    'effective_area': effective_area,
+    'sigma_0': sigma_0,
+    'rcs_clutter': rcs_clutter,
+    'dBm_clutter': dBm_clutter,
+    'dBZ_clutter': dBZ_clutter,
+    'visibility_polar': visibility_polar,
     'rain_rate': rain_rate,
     'bird_density': bird_density,
     'sun_hit_h': sun_hit_h,
@@ -1677,6 +1708,83 @@ DEFAULT_METADATA = {
         'long_name': 'Cubic Root of Eddy Dissipation Rate',
         'coordinates': 'elevation azimuth range'},
 
+   # Visibility processing fields
+    terrain_altitude: {'units': 'meters',
+                       'standard_name': 'terrain_altitude',
+                       'long_name': 'Altitude',
+                       'coordinates': 'x y'},
+
+    bent_terrain_altitude: {'units': 'meters',
+                            'standard_name': 'bent_terrain_altitude',
+                            'long_name': 'Altitude after refraction correction',
+                            'coordinates': 'x y'},
+
+    terrain_slope: {'units': 'degrees',
+                    'standard_name': 'terrain_slope',
+                    'long_name': 'Slope of the terrain',
+                    'coordinates': 'x y'},
+
+    terrain_aspect: {'units': 'degrees',
+                     'standard_name': 'terrain_aspect',
+                     'long_name': 'Orientation of the terrain',
+                     'coordinates': 'x y'},
+
+    elevation_angle: {'units': 'degrees',
+                      'standard_name': 'elevation_angle',
+                      'long_name': 'Elevation angle at terrain [deg]',
+                      'coordinates': 'x y'},
+
+    visibility: {'units': '-',
+                 'standard_name': 'visibility',
+                 'long_name': 'Radar visibility',
+                 'coordinates': 'x y'},
+
+    min_vis_altitude: {'units': 'meters',
+                       'standard_name': 'min_vis_altitude',
+                       'long_name': 'Minimum visible altitude',
+                       'coordinates': 'x y'},
+
+    min_vis_elevation: {'units': 'degrees',
+                        'standard_name': 'min_vis_elevation',
+                        'long_name': 'Minimum visible elevation angle',
+                        'coordinates': 'x y'},
+
+    incident_angle: {'units': 'degrees',
+                     'standard_name': 'incident_angle',
+                     'long_name': 'Angle of incidence at terrain',
+                     'coordinates': 'x y'},
+
+    effective_area: {'units': 'm',
+                     'standard_name': 'effective_area',
+                     'long_name': 'Effective backscattering area',
+                     'coordinates': 'x y'},
+
+    sigma_0: {'units': '-',
+              'standard_name': 'sigma_0',
+              'long_name': 'ratio RCS/backscattering area',
+              'coordinates': 'x y'},
+
+
+    rcs_clutter: {'units': 'square meters',
+                  'standard_name': 'rcs_clutter',
+                  'long_name': 'RCS of the ground clutter',
+                  'coordinates': 'elevation azimuth elevation'},
+
+    dBm_clutter: {'units': 'dBm',
+                  'standard_name': 'dBm_clutter',
+                  'long_name': 'Ground clutter power signal',
+                  'coordinates': 'elevation azimuth elevation'},
+
+    dBZ_clutter: {'units': 'dBZ',
+                  'standard_name': 'dBZ_clutter',
+                  'long_name': 'Ground clutter reflectivity',
+                  'coordinates': 'elevation azimuth elevation'},
+
+    visibility_polar: {'units': '%',
+                       'standard_name': 'visibility_polar',
+                       'long_name': 'Visibility',
+                       'coordinates': 'elevation azimuth range'},
+                       
     # Dual-polarization fields
     differential_reflectivity: {
         'units': 'dB',
