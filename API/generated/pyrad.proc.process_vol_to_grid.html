@@ -695,6 +695,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_lightning.html">pyrad.io.read_lightning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_lightning_all.html">pyrad.io.read_lightning_all</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_lightning_traj.html">pyrad.io.read_lightning_traj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_mch_xml_vad.html">pyrad.io.read_mch_xml_vad</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_meteorage.html">pyrad.io.read_meteorage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_mf_vis.html">pyrad.io.read_mf_vis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_ml_ts.html">pyrad.io.read_ml_ts</a></li>
@@ -1275,19 +1276,29 @@ document.write(`
 <dt class="sig sig-object py" id="pyrad.proc.process_vol_to_grid">
 <span class="sig-prename descclassname"><span class="pre">pyrad.proc.</span></span><span class="sig-name descname"><span class="pre">process_vol_to_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">procstatus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dscfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radar_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyrad/proc/process_aux.html#process_vol_to_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.proc.process_vol_to_grid" title="Link to this definition">#</a></dt>
 <dd><p>Function to convert polar data into a Cartesian grid</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
+<dd class="field-odd"><ul>
 <li><p><strong>procstatus</strong> (<em>int</em>) – Processing status: 0 initializing, 1 processing volume,
 2 post-processing</p></li>
-<li><p><strong>dscfg</strong> (<em>dictionary of dictionaries</em>) – data set configuration</p></li>
+<li><p><strong>dscfg</strong> (<em>dictionary of dictionaries</em>) –</p>
+<p>data set configuration. Accepted Configuration Keywords:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="p">:</span> <span class="nb">float</span>
+    <span class="n">Horizontal</span> <span class="n">limits</span> <span class="n">of</span> <span class="n">the</span> <span class="n">grid</span> <span class="p">[</span><span class="n">m</span> <span class="kn">from</span> <span class="nn">origin</span><span class="p">]</span><span class="o">.</span> <span class="n">Default</span> <span class="o">+-</span><span class="mf">20000.</span>
+<span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span> <span class="p">:</span> <span class="nb">float</span>
+    <span class="n">vertical</span> <span class="n">limits</span> <span class="n">of</span> <span class="n">the</span> <span class="n">grid</span> <span class="p">[</span><span class="n">masl</span><span class="p">]</span><span class="o">.</span> <span class="n">Default</span> <span class="mf">1000.</span>
+<span class="n">hres</span><span class="p">,</span> <span class="n">vres</span> <span class="p">:</span> <span class="nb">float</span>
+    <span class="n">horizontal</span> <span class="ow">and</span> <span class="n">vertical</span> <span class="n">resolution</span> <span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span> <span class="n">Default</span> <span class="mf">1000.</span>
+<span class="n">lat0</span><span class="p">,</span> <span class="n">lon0</span> <span class="p">:</span> <span class="nb">float</span>
+    <span class="n">Grid</span> <span class="n">origin</span> <span class="p">[</span><span class="n">deg</span><span class="p">]</span><span class="o">.</span> <span class="n">The</span> <span class="n">default</span> <span class="n">will</span> <span class="n">be</span> <span class="n">the</span> <span class="n">radar</span> <span class="n">position</span>
+<span class="n">alt0</span> <span class="p">:</span> <span class="nb">float</span>
+    <span class="n">Grid</span> <span class="n">origin</span> <span class="n">altitude</span> <span class="p">[</span><span class="n">masl</span><span class="p">]</span><span class="o">.</span> <span class="n">Default</span> <span class="ow">is</span> <span class="mi">0</span>
+<span class="n">wfunc</span> <span class="p">:</span> <span class="nb">str</span>
+    <span class="n">Weighting</span> <span class="n">function</span><span class="o">.</span> <span class="n">Default</span> <span class="n">NEAREST</span>
+</pre></div>
+</div>
+</li>
 <li><p><strong>radar_list</strong> (<em>list of Radar objects</em>) – Optional. list of radar objects</p></li>
-<li><p><strong>xmin, xmax, ymin, ymax</strong> (<em>float</em>) – Horizontal limits of the grid [m from origin]. Default +-20000.</p></li>
-<li><p><strong>zmin, zmax</strong> (<em>float</em>) – vertical limits of the grid [masl]. Default 1000.</p></li>
-<li><p><strong>hres, vres</strong> (<em>float</em>) – horizontal and vertical resolution [m]. Default 1000.</p></li>
-<li><p><strong>lat0, lon0</strong> (<em>float</em>) – Grid origin [deg]. The default will be the radar position</p></li>
-<li><p><strong>alt0</strong> (<em>float</em>) – Grid origin altitude [masl]. Default is 0</p></li>
-<li><p><strong>wfunc</strong> (<em>str</em>) – Weighting function. Default NEAREST</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

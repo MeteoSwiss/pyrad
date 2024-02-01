@@ -150,6 +150,8 @@
     
     read_lightning_traj
     
+    read_mch_xml_vad
+    
     read_meteorage
     
     read_mf_vis

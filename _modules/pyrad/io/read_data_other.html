@@ -403,6 +403,7 @@ document.write(`
 <span class="sd">    read_rhi_profile</span>
 <span class="sd">    read_last_state</span>
 <span class="sd">    read_status</span>
+<span class="sd">    read_mch_xml_vad</span>
 <span class="sd">    read_rad4alp_cosmo</span>
 <span class="sd">    read_rad4alp_vis</span>
 <span class="sd">    read_mf_vis</span>
@@ -437,6 +438,7 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+<span class="kn">import</span> <span class="nn">pyart</span>
 <span class="kn">from</span> <span class="nn">pyart.config</span> <span class="kn">import</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
 
 <span class="kn">from</span> <span class="nn">.io_aux</span> <span class="kn">import</span> <span class="n">get_fieldname_pyart</span><span class="p">,</span> <span class="n">_get_datetime</span>
@@ -921,6 +923,46 @@ document.write(`
 
         <span class="k">return</span> <span class="kc">None</span></div>
 
+
+<div class="viewcode-block" id="read_mch_xml_vad">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.read_mch_xml_vad.html#pyrad.io.read_mch_xml_vad">[docs]</a>
+<span class="k">def</span> <span class="nf">read_mch_xml_vad</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads a MeteoSwiss VAD file (VAx xml files)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    voltime : datetime object</span>
+<span class="sd">        volume scan time</span>
+
+<span class="sd">    cfg: dictionary of dictionaries</span>
+<span class="sd">        configuration info to figure out where the data is</span>
+<span class="sd">    ind_rad: int</span>
+<span class="sd">        radar index</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pyart.core.HorizontalWindProfile </span>
+<span class="sd">        pyart Wind profile object containing the VAD data</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;RadarName&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;ERROR: Radar Name not specified in config file. </span><span class="se">\</span>
+<span class="s1">            Unable to read status data&#39;</span><span class="p">)</span>
+
+    <span class="n">dayinfo</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%y%j&#39;</span><span class="p">)</span>
+    <span class="n">timeinfo</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H%M&#39;</span><span class="p">)</span>
+    <span class="n">basename</span> <span class="o">=</span> <span class="s1">&#39;VA&#39;</span> <span class="o">+</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;RadarName&#39;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> <span class="n">dayinfo</span>
+    <span class="k">if</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;path_convention&#39;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;RT&#39;</span><span class="p">:</span>
+        <span class="n">datapath</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;datapath&#39;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> \
+            <span class="s1">&#39;VA&#39;</span> <span class="o">+</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;RadarName&#39;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">datapath</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;datapath&#39;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> <span class="n">dayinfo</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">basename</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">datapath</span> <span class="o">+</span> <span class="n">basename</span> <span class="o">+</span> <span class="n">timeinfo</span> <span class="o">+</span> <span class="s1">&#39;*.xml&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pyart</span><span class="o">.</span><span class="n">aux_io</span><span class="o">.</span><span class="n">read_mch_vad</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="read_rad4alp_cosmo">

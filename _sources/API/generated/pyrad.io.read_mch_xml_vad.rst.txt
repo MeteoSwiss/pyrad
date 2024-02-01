@@ -1,0 +1,6 @@
+pyrad.io.read\_mch\_xml\_vad
+============================
+
+.. currentmodule:: pyrad.io
+
+.. autofunction:: read_mch_xml_vad

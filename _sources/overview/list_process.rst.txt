@@ -1901,8 +1901,18 @@ description
    Function to convert polar data into a Cartesian grid
  `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_vol_to_grid>`_
 parameters
-   
-       
+   xmin, xmax, ymin, ymax : float
+       Horizontal limits of the grid [m from origin]. Default +-20000.
+   zmin, zmax : float
+       vertical limits of the grid [masl]. Default 1000.
+   hres, vres : float
+       horizontal and vertical resolution [m]. Default 1000.
+   lat0, lon0 : float
+       Grid origin [deg]. The default will be the radar position
+   alt0 : float
+       Grid origin altitude [masl]. Default is 0
+   wfunc : str
+       Weighting function. Default NEAREST
 
 DDA
 """"""""""""""""""""""""""""""

@@ -399,6 +399,7 @@ document.write(`
 <span class="sd">    process_filter_0Doppler</span>
 <span class="sd">    process_filter_srhohv</span>
 <span class="sd">    process_filter_spectra_noise</span>
+<span class="sd">    process_dealias_spectra</span>
 <span class="sd">    process_spectra_ang_avg</span>
 <span class="sd">    process_spectral_power</span>
 <span class="sd">    process_spectral_noise</span>
@@ -1171,6 +1172,90 @@ document.write(`
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
+
+<span class="k">def</span> <span class="nf">process_dealias_spectra</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Performs a dealiasing of spectra data, assuming at most one fold</span>
+
+<span class="sd">    The method is quite simple and works in the following way at every</span>
+<span class="sd">    radar gate</span>
+
+<span class="sd">    - aliasing check</span>
+<span class="sd">        check if there is no noise either on the left of the right of the spectrum</span>
+<span class="sd">    - left/right tail computation</span>
+<span class="sd">        identify left and right tail of the aliased spectrum</span>
+<span class="sd">    - detect direction of aliasing</span>
+<span class="sd">        compute Doppler mean velocity with right or left shift of the spectrum,</span>
+<span class="sd">        perform the shift which minimizes the difference in Doppler velocity to</span>
+<span class="sd">        previous range bin</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    procstatus : int</span>
+<span class="sd">        Processing status: 0 initializing, 1 processing volume,</span>
+<span class="sd">        2 post-processing</span>
+<span class="sd">    dscfg : dictionary of dictionaries</span>
+<span class="sd">        data set configuration. Accepted configuration keywords::</span>
+
+<span class="sd">        datatype : list of string. Dataset keyword</span>
+<span class="sd">            The input data types</span>
+
+<span class="sd">    radar_list : list of spectra objects</span>
+<span class="sd">        Optional. list of spectra objects</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    new_dataset : dict</span>
+<span class="sd">        dictionary containing the output</span>
+<span class="sd">    ind_rad : int</span>
+<span class="sd">        radar index</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">field_name_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">signal_found</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">noise_found</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+        <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;ShhADU&#39;</span><span class="p">,</span> <span class="s1">&#39;SvvADU&#39;</span><span class="p">,</span> <span class="s1">&#39;ShhADUu&#39;</span><span class="p">,</span> <span class="s1">&#39;SvvADUu&#39;</span><span class="p">)</span> <span class="ow">and</span>
+                <span class="ow">not</span> <span class="n">signal_found</span><span class="p">):</span>
+            <span class="n">signal_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
+            <span class="n">signal_found</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;sNADUh&#39;</span><span class="p">,</span> <span class="s1">&#39;sNADUv&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">noise_found</span><span class="p">:</span>
+            <span class="n">noise_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
+            <span class="n">noise_found</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">field_name_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">signal_found</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">noise_found</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Signal and noise fields are required for noise filtering&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">radar_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;ERROR: No valid radar&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="n">psr</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">signal_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">psr</span><span class="o">.</span><span class="n">fields</span> <span class="ow">or</span> <span class="n">noise_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">psr</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to obtain apply spectral noise filter. Missing fields&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">s_pwr</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">compute_spectral_power</span><span class="p">(</span>
+        <span class="n">psr</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;ADU&#39;</span><span class="p">,</span> <span class="n">signal_field</span><span class="o">=</span><span class="n">signal_field</span><span class="p">,</span>
+        <span class="n">noise_field</span><span class="o">=</span><span class="n">noise_field</span><span class="p">)</span>
+
+    <span class="c1"># Add spectral power field</span>
+    <span class="n">psr</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;spectral_power&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">s_pwr</span>
+
+    <span class="c1"># Dealias dataset</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">spectra</span><span class="o">.</span><span class="n">dealias_spectra</span><span class="p">(</span><span class="n">psr</span><span class="p">,</span> <span class="s1">&#39;spectral_power&#39;</span><span class="p">,</span>
+        <span class="n">field_name_list</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span>
 
 
 <div class="viewcode-block" id="process_spectra_ang_avg">

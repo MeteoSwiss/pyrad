@@ -2979,8 +2979,22 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_vol_to_grid">[Source]</a></p>
 </dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>xmin, xmax, ymin, ymax<span class="classifier">float</span></dt><dd><p>Horizontal limits of the grid [m from origin]. Default +-20000.</p>
+</dd>
+<dt>zmin, zmax<span class="classifier">float</span></dt><dd><p>vertical limits of the grid [masl]. Default 1000.</p>
+</dd>
+<dt>hres, vres<span class="classifier">float</span></dt><dd><p>horizontal and vertical resolution [m]. Default 1000.</p>
+</dd>
+<dt>lat0, lon0<span class="classifier">float</span></dt><dd><p>Grid origin [deg]. The default will be the radar position</p>
+</dd>
+<dt>alt0<span class="classifier">float</span></dt><dd><p>Grid origin altitude [masl]. Default is 0</p>
+</dd>
+<dt>wfunc<span class="classifier">str</span></dt><dd><p>Weighting function. Default NEAREST</p>
+</dd>
 </dl>
-<p>parameters</p>
+</dd>
+</dl>
 </section>
 <section id="dda">
 <h3>DDA<a class="headerlink" href="#dda" title="Link to this heading">#</a></h3>

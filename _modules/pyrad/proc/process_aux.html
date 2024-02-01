@@ -1106,22 +1106,23 @@ document.write(`
 <span class="sd">        Processing status: 0 initializing, 1 processing volume,</span>
 <span class="sd">        2 post-processing</span>
 <span class="sd">    dscfg : dictionary of dictionaries</span>
-<span class="sd">        data set configuration</span>
+<span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
+
+<span class="sd">        xmin, xmax, ymin, ymax : float</span>
+<span class="sd">            Horizontal limits of the grid [m from origin]. Default +-20000.</span>
+<span class="sd">        zmin, zmax : float</span>
+<span class="sd">            vertical limits of the grid [masl]. Default 1000.</span>
+<span class="sd">        hres, vres : float</span>
+<span class="sd">            horizontal and vertical resolution [m]. Default 1000.</span>
+<span class="sd">        lat0, lon0 : float</span>
+<span class="sd">            Grid origin [deg]. The default will be the radar position</span>
+<span class="sd">        alt0 : float</span>
+<span class="sd">            Grid origin altitude [masl]. Default is 0</span>
+<span class="sd">        wfunc : str</span>
+<span class="sd">            Weighting function. Default NEAREST</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
-<span class="sd">    xmin, xmax, ymin, ymax : float</span>
-<span class="sd">        Horizontal limits of the grid [m from origin]. Default +-20000.</span>
-<span class="sd">    zmin, zmax : float</span>
-<span class="sd">        vertical limits of the grid [masl]. Default 1000.</span>
-<span class="sd">    hres, vres : float</span>
-<span class="sd">        horizontal and vertical resolution [m]. Default 1000.</span>
-<span class="sd">    lat0, lon0 : float</span>
-<span class="sd">        Grid origin [deg]. The default will be the radar position</span>
-<span class="sd">    alt0 : float</span>
-<span class="sd">        Grid origin altitude [masl]. Default is 0</span>
-<span class="sd">    wfunc : str</span>
-<span class="sd">        Weighting function. Default NEAREST</span>
-
+<span class="sd">    </span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
