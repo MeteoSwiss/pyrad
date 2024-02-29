@@ -35,6 +35,10 @@ the script/session or until a new configuration is loaded.
 # The default fill value for masked arrays and _FillValue keys
 fill_value = -9999.0
 
+# The default equivalent earth radius factor used in atm. refraction 
+# computations
+KE = 4/3.
+
 # Field names used when reading in radar files and in the various correction
 # and retrieval algorithms. The comments in this section provide additional
 # information about the fields in that section.
