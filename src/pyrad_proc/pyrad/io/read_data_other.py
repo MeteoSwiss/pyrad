@@ -46,7 +46,12 @@ import datetime
 import csv
 import xml.etree.ElementTree as et
 from warnings import warn
-import fcntl
+try:
+    import fcntl
+    FCNTL_AVAIL = True
+except ModuleNotFoundError:
+    import msvcrt # For windows
+    FCNTL_AVAIL = False
 import time
 import errno
 
@@ -1233,14 +1238,30 @@ def read_monitoring_ts(fname, sort_by_date=False):
     """
     try:
         with open(fname, 'r', newline='') as csvfile:
-            while True:
+            if FCNTL_AVAIL:
+                while True:
+                    try:
+                        fcntl.flock(csvfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                        break
+                    except OSError as e:
+                        if e.errno == errno.EAGAIN:
+                            time.sleep(0.1)
+                        elif e.errno == errno.EBADF:
+                            warn(
+                                "WARNING: No file locking is possible (NFS mount?), " +
+                                "expect strange issues with multiprocessing...")
+                            break
+                        else:
+                            raise
+            else:
                 try:
-                    fcntl.flock(csvfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    # Attempt to acquire an exclusive lock on the file
+                    msvcrt.locking(os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0)
                     break
                 except OSError as e:
-                    if e.errno == errno.EAGAIN:
+                    if e.errno == 13:  # Permission denied
                         time.sleep(0.1)
-                    elif e.errno == errno.EBADF:
+                    elif e.errno == 13:  # No such file or directory
                         warn(
                             "WARNING: No file locking is possible (NFS mount?), " +
                             "expect strange issues with multiprocessing...")
@@ -1270,7 +1291,11 @@ def read_monitoring_ts(fname, sort_by_date=False):
                 low_quantile[i] = float(row['low_quantile'])
                 high_quantile[i] = float(row['high_quantile'])
 
-            fcntl.flock(csvfile, fcntl.LOCK_UN)
+            if FCNTL_AVAIL:
+                fcntl.flock(csvfile, fcntl.LOCK_UN)
+            else:
+                msvcrt.locking(csvfile.fileno(), msvcrt.LK_UNLCK, os.path.getsize(csvfile))
+
             csvfile.close()
 
             central_quantile = np.ma.masked_values(
@@ -1367,14 +1392,30 @@ def read_intercomp_scores_ts(fname, sort_by_date=False):
     """
     try:
         with open(fname, 'r', newline='') as csvfile:
-            while True:
+            if FCNTL_AVAIL:
+                while True:
+                    try:
+                        fcntl.flock(csvfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                        break
+                    except OSError as e:
+                        if e.errno == errno.EAGAIN:
+                            time.sleep(0.1)
+                        elif e.errno == errno.EBADF:
+                            warn(
+                                "WARNING: No file locking is possible (NFS mount?), " +
+                                "expect strange issues with multiprocessing...")
+                            break
+                        else:
+                            raise
+            else:
                 try:
-                    fcntl.flock(csvfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    # Attempt to acquire an exclusive lock on the file
+                    msvcrt.locking(os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0)
                     break
                 except OSError as e:
-                    if e.errno == errno.EAGAIN:
+                    if e.errno == 13:  # Permission denied
                         time.sleep(0.1)
-                    elif e.errno == errno.EBADF:
+                    elif e.errno == 13:  # No such file or directory
                         warn(
                             "WARNING: No file locking is possible (NFS mount?), " +
                             "expect strange issues with multiprocessing...")
