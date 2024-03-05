@@ -832,15 +832,28 @@ def get_datatype_skyecho(datatype):
     elif datatype == 'PhiDP':
         datatype_skyecho = 'phidp'
         field_name = 'differential_phase'
+    elif datatype == 'PhiDPc':
+        datatype_skyecho = 'phidp_cor'
+        field_name = 'corrected_differential_phase'
+    elif datatype == 'KDP':
+        datatype_skyecho = 'kdp'
+        field_name = 'specific_differential_phase'
+    elif datatype == 'KDPc':
+        datatype_skyecho = 'kdp_cor'
+        field_name = 'corrected_specific_differential_phase'
     elif datatype == 'ZDR':
         datatype_skyecho = 'ZDR'
         field_name = 'differential_reflectivity'
     elif datatype == 'LDRhv':
         datatype_skyecho = 'LDR_HV'
-        field_name = 'linear_depolariztion_ratio_hv'
+        field_name = 'linear_depolarization_ratio_hv'
     elif datatype == 'LDRvh':
         datatype_skyecho = 'LDR_VH'
-        field_name = 'linear_depolariztion_ratio_vh'
+        field_name = 'linear_depolarization_ratio_vh'
+
+    elif datatype == 'Ah':
+        datatype_skyecho = 'attenuationRain'
+        field_name = 'specific_attenuation'
 
     elif datatype == 'RR':
         datatype_skyecho = 'rainfall_rate'
