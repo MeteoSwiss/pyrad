@@ -1254,20 +1254,21 @@ def read_monitoring_ts(fname, sort_by_date=False):
                         else:
                             raise
             else:
-                try:
-                    # Attempt to acquire an exclusive lock on the file
-                    msvcrt.locking(os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0)
-                    break
-                except OSError as e:
-                    if e.errno == 13:  # Permission denied
-                        time.sleep(0.1)
-                    elif e.errno == 13:  # No such file or directory
-                        warn(
-                            "WARNING: No file locking is possible (NFS mount?), " +
-                            "expect strange issues with multiprocessing...")
+                while True:
+                    try:
+                        # Attempt to acquire an exclusive lock on the file
+                        msvcrt.locking(os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0)
                         break
-                    else:
-                        raise
+                    except OSError as e:
+                        if e.errno == 13:  # Permission denied
+                            time.sleep(0.1)
+                        elif e.errno == 13:  # No such file or directory
+                            warn(
+                                "WARNING: No file locking is possible (NFS mount?), " +
+                                "expect strange issues with multiprocessing...")
+                            break
+                        else:
+                            raise
 
             # first count the lines
             reader = csv.DictReader(
@@ -1408,20 +1409,21 @@ def read_intercomp_scores_ts(fname, sort_by_date=False):
                         else:
                             raise
             else:
-                try:
-                    # Attempt to acquire an exclusive lock on the file
-                    msvcrt.locking(os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0)
-                    break
-                except OSError as e:
-                    if e.errno == 13:  # Permission denied
-                        time.sleep(0.1)
-                    elif e.errno == 13:  # No such file or directory
-                        warn(
-                            "WARNING: No file locking is possible (NFS mount?), " +
-                            "expect strange issues with multiprocessing...")
+                while True:
+                    try:
+                        # Attempt to acquire an exclusive lock on the file
+                        msvcrt.locking(os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0)
                         break
-                    else:
-                        raise
+                    except OSError as e:
+                        if e.errno == 13:  # Permission denied
+                            time.sleep(0.1)
+                        elif e.errno == 13:  # No such file or directory
+                            warn(
+                                "WARNING: No file locking is possible (NFS mount?), " +
+                                "expect strange issues with multiprocessing...")
+                            break
+                        else:
+                            raise
 
             # first count the lines
             reader = csv.DictReader(
