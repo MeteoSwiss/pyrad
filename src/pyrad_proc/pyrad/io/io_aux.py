@@ -861,6 +861,12 @@ def get_datatype_skyecho(datatype):
     elif datatype == 'RR_MP':
         datatype_skyecho = 'rainfall_rate_mp1948'
         field_name = 'Marshall_Palmer_radar_estimated_rain_rate'
+    elif datatype == 'RR_Z':
+        datatype_skyecho = 'rainfall_rate_from_z'
+        field_name = 'radar_reflectivity_estimated_rain_rate'
+    elif datatype == 'RR_KDP':
+        datatype_skyecho = 'rainfall_rate_from_kdp'
+        field_name = 'radar_kdp_estimated_rain_rate'
     elif datatype == 'RR_flag':
         datatype_skyecho = 'rainfall_rate_flag'
         field_name = 'radar_estimated_rain_rate_flag'
@@ -1657,6 +1663,10 @@ def get_fieldname_pyart(datatype):
         field_name = 'radar_estimated_rain_rate'
     elif datatype == 'RR_MP':
         field_name = 'Marshall_Palmer_radar_estimated_rain_rate'
+    elif datatype == 'RR_Z':
+        field_name = 'radar_reflectivity_estimated_rain_rate'
+    elif datatype == 'RR_KDP':
+        field_name = 'radar_kdp_estimated_rain_rate'
     elif datatype == 'RR_flag':
         field_name = 'radar_estimated_rain_rate_flag'
     elif datatype == 'RRc':

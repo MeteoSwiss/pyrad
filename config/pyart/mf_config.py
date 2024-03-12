@@ -333,6 +333,7 @@ mininum_visible_elevation = 'mininum_visible_elevation'
 # precipitation
 rain_rate = 'rain_rate'
 radar_estimated_rain_rate = 'radar_estimated_rain_rate'
+radar_reflectivity_estimated_rain_rate = 'radar_reflectivity_estimated_rain_rate'
 corrected_radar_estimated_rain_rate = 'corrected_radar_estimated_rain_rate'
 rainfall_accumulation = 'rainfall_accumulation'
 radar_rainrate_relation = 'radar_rainrate_relation'
@@ -734,6 +735,7 @@ DEFAULT_FIELD_NAMES = {
     'sun_hit_zdr': sun_hit_zdr,
     'adjustment_factor': adjustment_factor,
     'radar_estimated_rain_rate': radar_estimated_rain_rate,
+    'radar_reflectivity_estimated_rain_rate': radar_reflectivity_estimated_rain_rate,
     'corrected_radar_estimated_rain_rate': corrected_radar_estimated_rain_rate,
     'rainfall_accumulation': rainfall_accumulation,
     'radar_rainrate_relation': radar_rainrate_relation,
@@ -2374,6 +2376,18 @@ DEFAULT_METADATA = {
         'units': 'mm/h',
         'standard_name': 'radar_estimated_rain_rate',
         'long_name': 'Radar estimated rain rate',
+        'labels': ['0.', '0.4', '0.63', '1.', '1.6', '2.5', '4.0', '6.3',
+                   '10.', '16.', '25.', '40.', '63.', '100.', '160.', '250.'],
+        'ticks': [0., 0.4, 0.63, 1., 1.6, 2.5, 4.0, 6.3, 10., 16., 25.,
+                  40., 63., 100., 160., 250.],
+        'boundaries': [0., 0.4, 0.63, 1., 1.6, 2.5, 4.0, 6.3, 10., 16., 25.,
+                       40., 63., 100., 160., 250., 500.],
+        'coordinates': 'elevation azimuth range'},
+
+     radar_reflectivity_estimated_rain_rate: {
+        'units': 'mm/h',
+        'standard_name': 'radar_reflectivity_estimated_rain_rate',
+        'long_name': 'Radar reflectivity estimated rain rate',
         'labels': ['0.', '0.4', '0.63', '1.', '1.6', '2.5', '4.0', '6.3',
                    '10.', '16.', '25.', '40.', '63.', '100.', '160.', '250.'],
         'ticks': [0., 0.4, 0.63, 1., 1.6, 2.5, 4.0, 6.3, 10., 16., 25.,
