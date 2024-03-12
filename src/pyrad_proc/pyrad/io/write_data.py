@@ -57,7 +57,12 @@ import os
 from warnings import warn
 import smtplib
 from email.message import EmailMessage
-import fcntl
+try:
+    import fcntl
+    FCNTL_AVAIL = True
+except ModuleNotFoundError:
+    import msvcrt # For windows
+    FCNTL_AVAIL = False
 import errno
 import time
 from datetime import datetime as dt
@@ -2031,15 +2036,37 @@ def write_monitoring_ts(start_time, np_t, values, quantiles, datatype, fname,
 
     if not file_exists:
         with open(fname, 'w', newline='') as csvfile:
-            while True:
-                try:
-                    fcntl.flock(csvfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                    break
-                except OSError as e:
-                    if e.errno != errno.EAGAIN:
-                        raise
-                    else:
-                        time.sleep(0.1)
+            if FCNTL_AVAIL:
+                while True:
+                    try:
+                        fcntl.flock(csvfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                        break
+                    except OSError as e:
+                        if e.errno == errno.EAGAIN:
+                            time.sleep(0.1)
+                        elif e.errno == errno.EBADF:
+                            warn(
+                                "WARNING: No file locking is possible (NFS mount?), " +
+                                "expect strange issues with multiprocessing...")
+                            break
+                        else:
+                            raise
+            else:
+                while True:
+                    try:
+                        # Attempt to acquire an exclusive lock on the file
+                        msvcrt.locking(os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0)
+                        break
+                    except OSError as e:
+                        if e.errno == 13:  # Permission denied
+                            time.sleep(0.1)
+                        elif e.errno == 13:  # No such file or directory
+                            warn(
+                                "WARNING: No file locking is possible (NFS mount?), " +
+                                "expect strange issues with multiprocessing...")
+                            break
+                        else:
+                            raise
 
             csvfile.write('# Weather radar monitoring timeseries data file\n' +
                           '# Comment lines are preceded by "#"\n' +
@@ -2075,19 +2102,45 @@ def write_monitoring_ts(start_time, np_t, values, quantiles, datatype, fname,
                     'low_quantile': values_aux[i, 0],
                     'high_quantile': values_aux[i, 2]})
 
-            fcntl.flock(csvfile, fcntl.LOCK_UN)
+            if FCNTL_AVAIL:
+                fcntl.flock(csvfile, fcntl.LOCK_UN)
+            else:
+                msvcrt.locking(csvfile.fileno(), msvcrt.LK_UNLCK, os.path.getsize(csvfile))
+
             csvfile.close()
     else:
         with open(fname, 'a', newline='') as csvfile:
-            while True:
-                try:
-                    fcntl.flock(csvfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                    break
-                except OSError as e:
-                    if e.errno != errno.EAGAIN:
-                        raise
-                    else:
-                        time.sleep(0.1)
+            if FCNTL_AVAIL:
+                while True:
+                    try:
+                        fcntl.flock(csvfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                        break
+                    except OSError as e:
+                        if e.errno == errno.EAGAIN:
+                            time.sleep(0.1)
+                        elif e.errno == errno.EBADF:
+                            warn(
+                                "WARNING: No file locking is possible (NFS mount?), " +
+                                "expect strange issues with multiprocessing...")
+                            break
+                        else:
+                            raise
+            else:
+                while True:
+                    try:
+                        # Attempt to acquire an exclusive lock on the file
+                        msvcrt.locking(os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0)
+                        break
+                    except OSError as e:
+                        if e.errno == 13:  # Permission denied
+                            time.sleep(0.1)
+                        elif e.errno == 13:  # No such file or directory
+                            warn(
+                                "WARNING: No file locking is possible (NFS mount?), " +
+                                "expect strange issues with multiprocessing...")
+                            break
+                        else:
+                            raise
 
             fieldnames = ['date', 'NP', 'central_quantile', 'low_quantile',
                           'high_quantile']
@@ -2099,7 +2152,10 @@ def write_monitoring_ts(start_time, np_t, values, quantiles, datatype, fname,
                     'central_quantile': values_aux[i, 1],
                     'low_quantile': values_aux[i, 0],
                     'high_quantile': values_aux[i, 2]})
-            fcntl.flock(csvfile, fcntl.LOCK_UN)
+            if FCNTL_AVAIL:
+                fcntl.flock(csvfile, fcntl.LOCK_UN)
+            else:
+                msvcrt.locking(csvfile.fileno(), msvcrt.LK_UNLCK, os.path.getsize(csvfile))
             csvfile.close()
     return fname
 
@@ -2224,15 +2280,38 @@ def write_intercomp_scores_ts(start_time, stats, field_name, fname,
 
     if not file_exists:
         with open(fname, 'w', newline='') as csvfile:
-            while True:
-                try:
-                    fcntl.flock(csvfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                    break
-                except OSError as e:
-                    if e.errno != errno.EAGAIN:
-                        raise
-                    else:
-                        time.sleep(0.1)
+            if FCNTL_AVAIL:
+                while True:
+                    try:
+                        fcntl.flock(csvfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                        break
+                    except OSError as e:
+                        if e.errno == errno.EAGAIN:
+                            time.sleep(0.1)
+                        elif e.errno == errno.EBADF:
+                            warn(
+                                "WARNING: No file locking is possible (NFS mount?), " +
+                                "expect strange issues with multiprocessing...")
+                            break
+                        else:
+                            raise
+            else:
+                while True:
+                    try:
+                        # Attempt to acquire an exclusive lock on the file
+                        msvcrt.locking(os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0)
+                        break
+                    except OSError as e:
+                        if e.errno == 13:  # Permission denied
+                            time.sleep(0.1)
+                        elif e.errno == 13:  # No such file or directory
+                            warn(
+                                "WARNING: No file locking is possible (NFS mount?), " +
+                                "expect strange issues with multiprocessing...")
+                            break
+                        else:
+                            raise
+
 
             csvfile.write(
                 '# Weather radar intercomparison scores timeseries file\n' +
@@ -2275,15 +2354,38 @@ def write_intercomp_scores_ts(start_time, stats, field_name, fname,
             csvfile.close()
     else:
         with open(fname, 'a', newline='') as csvfile:
-            while True:
-                try:
-                    fcntl.flock(csvfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                    break
-                except OSError as e:
-                    if e.errno != errno.EAGAIN:
-                        raise
-                    else:
-                        time.sleep(0.1)
+            if FCNTL_AVAIL:
+                while True:
+                    try:
+                        fcntl.flock(csvfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                        break
+                    except OSError as e:
+                        if e.errno == errno.EAGAIN:
+                            time.sleep(0.1)
+                        elif e.errno == errno.EBADF:
+                            warn(
+                                "WARNING: No file locking is possible (NFS mount?), " +
+                                "expect strange issues with multiprocessing...")
+                            break
+                        else:
+                            raise
+            else:
+                while True:
+                    try:
+                        # Attempt to acquire an exclusive lock on the file
+                        msvcrt.locking(os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0)
+                        break
+                    except OSError as e:
+                        if e.errno == 13:  # Permission denied
+                            time.sleep(0.1)
+                        elif e.errno == 13:  # No such file or directory
+                            warn(
+                                "WARNING: No file locking is possible (NFS mount?), " +
+                                "expect strange issues with multiprocessing...")
+                            break
+                        else:
+                            raise
+
 
             fieldnames = ['date', 'NP', 'mean_bias', 'median_bias',
                           'quant25_bias', 'quant75_bias', 'mode_bias', 'corr',
@@ -2306,7 +2408,10 @@ def write_intercomp_scores_ts(start_time, stats, field_name, fname,
                     'intercep_of_linear_regression_of_slope_1': (
                         intercep_slope_1[i])
                 })
-            fcntl.flock(csvfile, fcntl.LOCK_UN)
+            if FCNTL_AVAIL:
+                fcntl.flock(csvfile, fcntl.LOCK_UN)
+            else:
+                msvcrt.locking(csvfile.fileno(), msvcrt.LK_UNLCK, os.path.getsize(csvfile))
             csvfile.close()
 
     return fname
