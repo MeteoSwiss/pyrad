@@ -1725,10 +1725,13 @@ def get_sensor_data(date, datatype, cfg):
     if cfg['sensor'] == 'rgage':
         datapath = cfg['smnpath'] + date.strftime('%Y%m') + '/'
         datafile = date.strftime('%Y%m%d') + '_' + cfg['sensorid'] + '.csv'
-        _, sensordate, _, _, _, sensorvalue, _, _ = read_smn(
-            datapath + datafile)
-        if sensordate is None:
-            return None, None, None, None
+        try:
+            _, sensordate, _, _, _, sensorvalue, _, _ = read_smn(
+                datapath + datafile)
+        except Exception:
+            _, sensordate, sensorvalue = read_smn2(datapath + datafile)
+            if sensordate is None:
+                return None, None, None, None
         label = 'RG'
         period = (sensordate[1] - sensordate[0]).total_seconds()
     elif cfg['sensor'] == 'rgage_knmi':
