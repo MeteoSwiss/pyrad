@@ -117,7 +117,7 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
         lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon) + 1, lonstep)
         lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat) + 1, latstep)
 
-    if use_basemap:
+    if use_basemap or not _CARTOPY_AVAILABLE:
         resolution = prdcfg['gridMapImageConfig'].get('mapres', 'l')
         if resolution not in ('c', 'l', 'i', 'h', 'f'):
             warn('Unknown map resolution: ' + resolution)
@@ -153,7 +153,7 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
     if fig is None:
         fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
 
-        if use_basemap:
+        if use_basemap or not _CARTOPY_AVAILABLE:
             display = pyart.graph.GridMapDisplayBasemap(grid)
             display.plot_basemap(
                 lat_lines=lat_lines, lon_lines=lon_lines,
@@ -179,7 +179,7 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
             # ax.set_extent([min_lon, max_lon, min_lat, max_lat])
             # display.plot_crosshairs(lon=lon, lat=lat)
     else:
-        if use_basemap:
+        if use_basemap or not _CARTOPY_AVAILABLE:
             display.plot_grid(
                 field_name, level=level, norm=norm, ticks=ticks,
                 lat_lines=lat_lines, lon_lines=lon_lines, title=titl,
@@ -865,7 +865,7 @@ def plot_dda_map(grid, bg_field_name, level, prdcfg, fname_list, titl=None,
     ax.set_xlim([lon_lines[0], lon_lines[-1]])
     ax.set_ylim([lat_lines[0], lat_lines[-1]])
 
-    if embellish:
+    if embellish and _CARTOPY_AVAILABLE:
         for cartomap in maps_list:
             if cartomap == 'countries':
                 # add countries
