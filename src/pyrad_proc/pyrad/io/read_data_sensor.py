@@ -1725,13 +1725,10 @@ def get_sensor_data(date, datatype, cfg):
     if cfg['sensor'] == 'rgage':
         datapath = cfg['smnpath'] + date.strftime('%Y%m') + '/'
         datafile = date.strftime('%Y%m%d') + '_' + cfg['sensorid'] + '.csv'
-        try:
-            _, sensordate, _, _, _, sensorvalue, _, _ = read_smn(
-                datapath + datafile)
-        except Exception:
-            _, sensordate, sensorvalue = read_smn2(datapath + datafile)
-            if sensordate is None:
-                return None, None, None, None
+        _, sensordate, _, _, _, sensorvalue, _, _ = read_smn(
+            datapath + datafile)
+        if sensordate is None:
+            return None, None, None, None
         label = 'RG'
         period = (sensordate[1] - sensordate[0]).total_seconds()
     elif cfg['sensor'] == 'rgage_knmi':
@@ -1974,7 +1971,7 @@ def read_knmi(fname, col_names=None):
             'dr_rg_10', 'ww_cor_10', 'ri_pws_10', 'ri_rg_10']
     df_prec = pd.read_table(
         fname, compression='gzip', comment='#', header=None, names=col_names,
-        sep="\s{2,}", engine="python")
+        sep=r"\s{2,}", engine="python")
     df_prec['time_stamp'] = pd.to_datetime(
         df_prec['time_stamp'], format='%Y-%m-%d %H:%M:%S')
 
@@ -2236,7 +2233,7 @@ def read_radiosounding_wyoming(station, dtime):
     data_str = response.text[start_idx:end_idx][0:-10]
 
     data_io = StringIO(data_str)
-    data_df = pd.read_csv(data_io, sep='\s+', header=0, skiprows = [1,2],
+    data_df = pd.read_csv(data_io, sep=r'\s+', header=0, skiprows = [1,2],
         on_bad_lines='warn', 
     )
     for col in data_df.columns:
