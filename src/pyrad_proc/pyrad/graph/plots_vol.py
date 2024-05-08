@@ -325,7 +325,8 @@ def plot_ppi_map(radar, field_name, ind_el, prdcfg, fname_list, vmin=None, vmax=
         field_name, vmin = vmin, vmax = vmax, sweep=ind_el, norm=norm, ticks=ticks, 
         ticklabs=ticklabs, min_lon=min_lon, max_lon=max_lon, min_lat=min_lat, 
         max_lat=max_lat, lat_lines=lat_lines, lon_lines=lon_lines, 
-        projection=projection, fig=fig, embellish=False, colorbar_flag=True, 
+        single_grid_lines_labels = True, projection=projection,
+        fig=fig, embellish=False, colorbar_flag=True, 
         alpha=1)
 
     ax = display_map.ax
