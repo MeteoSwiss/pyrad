@@ -59,6 +59,15 @@ except ImportError:
     warn('shapely not available')
     _SHAPELY_AVAILABLE = False
 
+# Test whether ARM or MCH fork of pyart
+if  hasattr(pyart, '__ismchfordk__'):
+    _PYARTMCH_AVAILABLE = True
+else:
+    warn('MCH version of pyart not installed, some features' + \
+        ' of pyrad are not supported by ARM pyart!')
+    _PYARTMCH_AVAILABLE = False
+
+
 import matplotlib as mpl
 mpl.use('Agg')
 
@@ -321,14 +330,21 @@ def plot_ppi_map(radar, field_name, ind_el, prdcfg, fname_list, vmin=None, vmax=
 
     projection = cartopy.crs.PlateCarree()
     display_map = pyart.graph.RadarMapDisplay(radar)
-    display_map.plot_ppi_map(
-        field_name, vmin = vmin, vmax = vmax, sweep=ind_el, norm=norm, ticks=ticks, 
-        ticklabs=ticklabs, min_lon=min_lon, max_lon=max_lon, min_lat=min_lat, 
-        max_lat=max_lat, lat_lines=lat_lines, lon_lines=lon_lines, 
-        single_grid_lines_labels = True, projection=projection,
-        fig=fig, embellish=False, colorbar_flag=True, 
-        alpha=1)
-
+    if _PYARTMCH_AVAILABLE:
+        display_map.plot_ppi_map(
+            field_name, vmin = vmin, vmax = vmax, sweep=ind_el, norm=norm, ticks=ticks, 
+            ticklabs=ticklabs, min_lon=min_lon, max_lon=max_lon, min_lat=min_lat, 
+            max_lat=max_lat, lat_lines=lat_lines, lon_lines=lon_lines, 
+            single_grid_lines_labels = True, projection=projection,
+            fig=fig, embellish=False, colorbar_flag=True, 
+            alpha=1)
+    else:
+        display_map.plot_ppi_map(
+            field_name, vmin = vmin, vmax = vmax, sweep=ind_el, norm=norm, ticks=ticks, 
+            ticklabs=ticklabs, min_lon=min_lon, max_lon=max_lon, min_lat=min_lat, 
+            max_lat=max_lat, lat_lines=lat_lines, lon_lines=lon_lines, 
+            projection=projection, fig=fig, embellish=False, 
+            colorbar_flag=True, alpha=1)        
     ax = display_map.ax
 
     if 'maps' in prdcfg['ppiMapImageConfig']:
