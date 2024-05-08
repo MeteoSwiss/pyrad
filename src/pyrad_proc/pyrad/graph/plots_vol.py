@@ -263,7 +263,7 @@ def plot_ppi(radar, field_name, ind_el, prdcfg, fname_list, plot_type='PPI',
     return fname_list
 
 
-def plot_ppi_map(radar, field_name, ind_el, prdcfg, fname_list,
+def plot_ppi_map(radar, field_name, ind_el, prdcfg, fname_list, vmin=None, vmax=None,
                  save_fig=True):
     """
     plots a PPI on a geographic map
@@ -322,10 +322,11 @@ def plot_ppi_map(radar, field_name, ind_el, prdcfg, fname_list,
     projection = cartopy.crs.PlateCarree()
     display_map = pyart.graph.RadarMapDisplay(radar)
     display_map.plot_ppi_map(
-        field_name, sweep=ind_el, norm=norm, ticks=ticks, ticklabs=ticklabs,
-        min_lon=min_lon, max_lon=max_lon, min_lat=min_lat, max_lat=max_lat,
-        lat_lines=lat_lines, lon_lines=lon_lines, projection=projection,
-        fig=fig, embellish=False, colorbar_flag=True, alpha=1)
+        field_name, vmin = vmin, vmax = vmax, sweep=ind_el, norm=norm, ticks=ticks, 
+        ticklabs=ticklabs, min_lon=min_lon, max_lon=max_lon, min_lat=min_lat, 
+        max_lat=max_lat, lat_lines=lat_lines, lon_lines=lon_lines, 
+        projection=projection, fig=fig, embellish=False, colorbar_flag=True, 
+        alpha=1)
 
     ax = display_map.ax
 
