@@ -88,7 +88,7 @@ try:
     import boto3
     _BOTO3_AVAILABLE = True
 except ImportError:
-    warn('Boto3 is not installed, no copy to S3 bucket will be performed!')
+    warn('boto3 is not installed, no copy to S3 bucket will be performed!')
     _BOTO3_AVAILABLE = False
 
 
@@ -111,7 +111,10 @@ def write_to_s3(fname, basepath, s3copypath, s3accesspolicy = None):
         S3 access policy can be either private or public-read
         Default is to use nothing which will inherit the policy of the bucket
     """
-    
+    if not _BOTO3_AVAILABLE:
+        warn('boto3 not installed, aborting writing to s3')
+        return
+
     try:
         aws_key = os.environ['AWS_KEY']
         aws_secret = os.environ['AWS_SECRET']
