@@ -7,6 +7,7 @@ Functions for writing pyrad output data
 .. autosummary::
     :toctree: generated/
 
+    write_to_s3
     write_vol_csv
     write_vol_kml
     write_centroids
@@ -77,7 +78,61 @@ try:
 except ImportError:
     _SIMPLEKML_AVAILABLE = False
 
+try:
+    import boto3
+    _BOTO3_AVAILABLE = True
+except ImportError:
+    warn('Boto3 is not installed, no copy to S3 bucket will be performed!')
+    _BOTO3_AVAILABLE = False
 
+
+def write_to_s3(fname, basepath, s3copypath, s3accesspolicy = None):
+    """
+    Copies a locally stored product to a S3 bucket
+
+    Parameters
+    ----------
+    fname : str
+        filename of the product on the local storage
+    basepath : str
+        basepath of pyrad products as provided with datapath key in
+        the main conf file
+    s3copypath : str
+        s3 bucket path, in the format
+        https://bucket_name.endpoint.domain for example
+        https://tests.fr-par-1.linodeobjects.com/
+    s3accesspolicy : str
+        S3 access policy can be either private or public-read
+        Default is to use nothing which will inherit the policy of the bucket
+    """
+    
+    try:
+        aws_key = os.environ['AWS_KEY']
+        aws_secret = os.environ['AWS_SECRET']
+    except KeyError:
+        warn('In order to be able to save to an S3 bucket')
+        warn('you need to define the environment variables AWS_KEY and AWS_SECRET')
+        warn('Saving to S3 failed...')
+        return
+
+    bucket = s3copypath.split('//')[1].split('.')[0]
+    endpoint = s3copypath.replace(bucket + '.', '')
+    s3fname = fname.replace(basepath, '')
+    if s3fname.startswith('/'): # Remove leading /
+        s3fname = s3fname[1:]
+    linode_obj_config = {
+        "aws_access_key_id": aws_key,
+        "endpoint_url": endpoint,
+        "aws_secret_access_key": aws_secret}
+    
+    s3_client = boto3.client("s3", **linode_obj_config, verify = False)
+    if s3accesspolicy:
+        ExtraArgs = {'ACL': s3accesspolicy}
+    else:
+        ExtraArgs = None
+    s3_client.upload_file(fname, bucket, s3fname, ExtraArgs=ExtraArgs)
+    print(f'----- copying {fname} to {s3copypath + s3fname}')
+    
 def write_vol_csv(fname, radar, field_name, ignore_masked=False):
     """
     Creates a kml file with the radar volume data

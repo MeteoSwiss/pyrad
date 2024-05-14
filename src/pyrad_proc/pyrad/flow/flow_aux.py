@@ -56,6 +56,7 @@ from pyrad import proc
 
 from ..io.config import read_config
 from ..io.read_data_radar import get_data
+from ..io.write_data import write_to_s3
 from ..io.io_aux import get_datetime, get_file_list, get_scan_list
 from ..io.io_aux import get_dataset_fields, get_datatype_fields
 from ..io.io_aux import get_new_rainbow_file_name, get_fieldname_pyart
@@ -892,7 +893,13 @@ def _generate_prod(dataset, cfg, prdname, prdfunc, dsname, voltime,
     prdcfg = _create_prdcfg_dict(
         cfg, dsname, prdname, voltime, runinfo=runinfo)
     try:
-        prdfunc(dataset, prdcfg)
+        filenames = prdfunc(dataset, prdcfg)
+        if 's3copypath' in prdcfg: # copy to S3
+            s3AccessPolicy = (prdcfg['s3AccessPolicy'] if 's3AccessPolicy' 
+                                in prdcfg else None)
+            for fname in filenames:
+                write_to_s3(fname, prdcfg['basepath'], prdcfg['s3copypath'],
+                s3AccessPolicy)
         return False
     except Exception as inst:
         warn(str(inst))
@@ -1427,6 +1434,12 @@ def _create_prdcfg_dict(cfg, dataset, product, voltime, runinfo=None):
     prdcfg.update({'ScanPeriod': cfg['ScanPeriod']})
     prdcfg.update({'imgformat': cfg['imgformat']})
     prdcfg.update({'RadarName': cfg['RadarName']})
+    
+    if 's3copypath' in cfg:
+        prdcfg.update({'s3copypath': cfg['s3copypath']})
+    if 's3AccessPolicy' in cfg:
+        prdcfg.update({'s3AccessPolicy': cfg['s3AccessPolicy']})
+
     if 'RadarBeamwidth' in cfg:
         prdcfg.update({'RadarBeamwidth': cfg['RadarBeamwidth']})
     if 'ppiImageConfig' in cfg:
@@ -1446,6 +1459,7 @@ def _create_prdcfg_dict(cfg, dataset, product, voltime, runinfo=None):
     prdcfg.update({'prdname': product})
     prdcfg.update({'timeinfo': voltime})
     prdcfg.update({'runinfo': runinfo})
+    
     if 'dssavename' in cfg[dataset]:
         prdcfg.update({'dssavename': cfg[dataset]['dssavename']})
 
