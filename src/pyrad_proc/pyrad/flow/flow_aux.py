@@ -898,8 +898,9 @@ def _generate_prod(dataset, cfg, prdname, prdfunc, dsname, voltime,
             s3AccessPolicy = (prdcfg['s3AccessPolicy'] if 's3AccessPolicy' 
                                 in prdcfg else None)
             for fname in filenames:
-                write_to_s3(fname, prdcfg['basepath'], prdcfg['s3copypath'],
-                s3AccessPolicy)
+                if prdcfg['basepath'] in fname: # only products saved to standard basepath
+                    write_to_s3(fname, prdcfg['basepath'], prdcfg['s3copypath'],
+                    s3AccessPolicy)
         return False
     except Exception as inst:
         warn(str(inst))
