@@ -55,6 +55,7 @@ import glob
 import csv
 import os
 
+from urllib.parse import urlparse
 from warnings import warn
 import smtplib
 from email.message import EmailMessage
@@ -114,10 +115,12 @@ def write_to_s3(fname, basepath, s3copypath, s3accesspolicy = None):
         warn('you need to define the environment variables AWS_KEY and AWS_SECRET')
         warn('Saving to S3 failed...')
         return
-
+    
     bucket = s3copypath.split('//')[1].split('.')[0]
-    endpoint = s3copypath.replace(bucket + '.', '')
-    s3fname = fname.replace(basepath, '')
+    endpoint_raw = s3copypath.replace(bucket + '.', '')
+    add_path = endpoint_raw.replace(urlparse(endpoint_raw).netloc, '').split('///')[1]
+    endpoint = endpoint_raw.replace(add_path, '')
+    s3fname = add_path + fname.replace(basepath, '')
     if s3fname.startswith('/'): # Remove leading /
         s3fname = s3fname[1:]
     linode_obj_config = {
