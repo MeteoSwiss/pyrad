@@ -832,15 +832,28 @@ def get_datatype_skyecho(datatype):
     elif datatype == 'PhiDP':
         datatype_skyecho = 'phidp'
         field_name = 'differential_phase'
+    elif datatype == 'PhiDPc':
+        datatype_skyecho = 'phidp_cor'
+        field_name = 'corrected_differential_phase'
+    elif datatype == 'KDP':
+        datatype_skyecho = 'kdp'
+        field_name = 'specific_differential_phase'
+    elif datatype == 'KDPc':
+        datatype_skyecho = 'kdp_cor'
+        field_name = 'corrected_specific_differential_phase'
     elif datatype == 'ZDR':
         datatype_skyecho = 'ZDR'
         field_name = 'differential_reflectivity'
     elif datatype == 'LDRhv':
         datatype_skyecho = 'LDR_HV'
-        field_name = 'linear_depolariztion_ratio_hv'
+        field_name = 'linear_depolarization_ratio_hv'
     elif datatype == 'LDRvh':
         datatype_skyecho = 'LDR_VH'
-        field_name = 'linear_depolariztion_ratio_vh'
+        field_name = 'linear_depolarization_ratio_vh'
+
+    elif datatype == 'Ah':
+        datatype_skyecho = 'attenuationRain'
+        field_name = 'specific_attenuation'
 
     elif datatype == 'RR':
         datatype_skyecho = 'rainfall_rate'
@@ -848,6 +861,12 @@ def get_datatype_skyecho(datatype):
     elif datatype == 'RR_MP':
         datatype_skyecho = 'rainfall_rate_mp1948'
         field_name = 'Marshall_Palmer_radar_estimated_rain_rate'
+    elif datatype == 'RR_Z':
+        datatype_skyecho = 'rainfall_rate_from_z'
+        field_name = 'radar_reflectivity_estimated_rain_rate'
+    elif datatype == 'RR_KDP':
+        datatype_skyecho = 'rainfall_rate_from_kdp'
+        field_name = 'radar_kdp_estimated_rain_rate'
     elif datatype == 'RR_flag':
         datatype_skyecho = 'rainfall_rate_flag'
         field_name = 'radar_estimated_rain_rate_flag'
@@ -1644,6 +1663,10 @@ def get_fieldname_pyart(datatype):
         field_name = 'radar_estimated_rain_rate'
     elif datatype == 'RR_MP':
         field_name = 'Marshall_Palmer_radar_estimated_rain_rate'
+    elif datatype == 'RR_Z':
+        field_name = 'radar_reflectivity_estimated_rain_rate'
+    elif datatype == 'RR_KDP':
+        field_name = 'radar_kdp_estimated_rain_rate'
     elif datatype == 'RR_flag':
         field_name = 'radar_estimated_rain_rate_flag'
     elif datatype == 'RRc':

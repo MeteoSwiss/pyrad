@@ -418,7 +418,7 @@ def process_traj_lightning(procstatus, dscfg, radar_list=None,
         warn("Fields not available in radar data")
         return None, None
 
-    ttask_start = radar.time['data'].min()
+    ttask_start = radar.time['data'].max()
     dt_task_start = num2date(ttask_start, radar.time['units'],
                              radar.time['calendar'])
 
@@ -489,14 +489,12 @@ def process_traj_lightning(procstatus, dscfg, radar_list=None,
 
     traj_time_vec = date2num(trajectory.time_vector, radar.time['units'],
                              radar.time['calendar'])
-
     if np.size(traj_ind) == 0:
         warn('No trajectory samples within current period')
 
         trajdict['radar_old2'] = trajdict['radar_old']
         trajdict['radar_old'] = radar
         return None, None
-
     # User defined parameter
     ang_tol = dscfg.get('ang_tol', 1.2)
     az_tol = dscfg.get('az_tol', 3.)
@@ -740,7 +738,6 @@ def process_traj_atplane(procstatus, dscfg, radar_list=None, trajectory=None):
 
     traj_time_vec = date2num(trajectory.time_vector, radar.time['units'],
                              radar.time['calendar'])
-
     if np.size(traj_ind) == 0:
         warn('No trajectory samples within current period')
 

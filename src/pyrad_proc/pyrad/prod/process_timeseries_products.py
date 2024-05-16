@@ -48,7 +48,8 @@ def generate_timeseries_products(dataset, prdcfg):
                     The limits of the Y-axis. If none they will be obtained
                     from the Py-ART config file.
                 sensor: str
-                    The sensor type. Can be 'rgage' or 'disdro'
+                    The sensor type. Can be 'rgage', 'rgage_knmi', 'disdro'
+                    or 'disdro_parsivel'
                 sensorid: str
                     The sensor ID.
                 location: str
@@ -73,7 +74,8 @@ def generate_timeseries_products(dataset, prdcfg):
                     The limits of the Y-axis. If none they will be obtained
                     from the Py-ART config file.
                 sensor: str
-                    The sensor type. Can be 'rgage' or 'disdro'
+                    The sensor type. Can be 'rgage', 'rgage_knmi', 'disdro'
+                    or 'disdro_parsivel'
                 sensorid: str
                     The sensor ID.
                 location: str
@@ -90,7 +92,8 @@ def generate_timeseries_products(dataset, prdcfg):
                 dpi: int
                     The pixel density of the plot. Default 72
                 sensor: str
-                    The sensor type. Can be 'rgage' or 'disdro'
+                    The sensor type. Can be 'rgage', 'rgage_knmi', 'disdro'
+                    or 'disdro_parsivel'
                 sensorid: str
                     The sensor ID.
                 location: str

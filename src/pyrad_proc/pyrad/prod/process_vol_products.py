@@ -867,6 +867,8 @@ def generate_vol_products(dataset, prdcfg):
                 prdcfg['type'])
             return None
 
+        vmin = prdcfg.get('vmin', None)
+        vmax = prdcfg.get('vmax', None)
         el_vec = np.sort(dataset['radar_out'].fixed_angle['data'])
         el = el_vec[prdcfg['anglenr']]
         ind_el = np.where(
@@ -885,7 +887,8 @@ def generate_vol_products(dataset, prdcfg):
             fname_list[i] = savedir + fname
 
         plot_ppi_map(
-            dataset['radar_out'], field_name, ind_el, prdcfg, fname_list)
+            dataset['radar_out'], field_name, ind_el, prdcfg, fname_list,
+                vmin = vmin, vmax = vmax)
 
         print('----- save to ' + ' '.join(fname_list))
 

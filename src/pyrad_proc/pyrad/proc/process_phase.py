@@ -34,9 +34,11 @@ from ..io.io_aux import get_datatype_fields
 from ..io.read_data_sensor import read_fzl_igra
 
 # Ignore warning in process_phidp_kdp_Maesaka
-warnings.filterwarnings("ignore", 
-    message=".*'partition' will ignore the 'mask' of the MaskedArray.*", 
+warnings.filterwarnings(
+    "ignore",
+    message=".*'partition' will ignore the 'mask' of the MaskedArray.*",
     category=UserWarning)
+
 
 def process_correct_phidp0(procstatus, dscfg, radar_list=None):
     """
@@ -378,10 +380,10 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
         fzl : float. Dataset keyword
             The freezing level height [m]. Default 2000.
         sounding : str. Dataset keyword
-            The nearest radiosounding WMO code (5 int digits). It will be used to
-            compute the freezing level, if no temperature field name is specified,
-            if the temperature field isin the radar object or if no freezing_level
-            is explicitely defined.
+            The nearest radiosounding WMO code (5 int digits). It will be used
+            to compute the freezing level, if no temperature field name is
+            specified, if the temperature field isin the radar object or if no
+            freezing_level is explicitely defined.
         ml_thickness : float. Dataset keyword
             The melting layer thickness in meters. Default 700.
         beamwidth : float. Dataset keyword
@@ -550,7 +552,22 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
 def process_phidp_kdp_lp(procstatus, dscfg, radar_list=None):
     """
     Estimates PhiDP and KDP using a linear programming algorithm.
-    This method only retrieves data in rain (i.e. below the melting layer)
+
+    This method only retrieves data in rain (i.e. below the melting layer).
+
+    The method has 3 steps: PhiDP unfolding (including clutter suppression),
+    Processing PhiDP using the LP algorithm, Obtaining KDP by convoluting
+    PhiDP with a Sobel window.
+
+    Required inputs for the LP algorithm are PsiDP and reflectivity.
+
+    RhoHV and SNR are used for the clutter suppression in the PhiDP unfolding
+    step (note that SNR is used instead of Normalized Coherent Power used by
+    the original algorithm). If they are not provided a gate_filter based on
+    the values of reflectivity is used instead.
+
+    Freezing level height can be retrieved from iso-0 or temperature fields,
+    from radio sounding or set by the user.
 
     Parameters
     ----------
@@ -565,10 +582,10 @@ def process_phidp_kdp_lp(procstatus, dscfg, radar_list=None):
         fzl : float. Dataset keyword
             The freezing level height [m]. Default 2000.
         sounding : str. Dataset keyword
-            The nearest radiosounding WMO code (5 int digits). It will be used to
-            compute the freezing level, if no temperature field name is specified,
-            if the temperature field isin the radar object or if no freezing_level
-            is explicitely defined.
+            The nearest radiosounding WMO code (5 int digits). It will be used
+            to compute the freezing level, if no temperature field name is
+            specified, if the temperature field is not in the radar object or
+            if no freezing_level is explicitely defined.
         ml_thickness : float. Dataset keyword
             The melting layer thickness in meters. Default 700.
         beamwidth : float. Dataset keyword
@@ -576,6 +593,55 @@ def process_phidp_kdp_lp(procstatus, dscfg, radar_list=None):
             radar_beam_width_h or radar_beam_width_v in attribute
             instrument_parameters of the radar object will be used. If the key
             or the attribute are not present the beamwidth will be set to None
+        LP_solver : str.
+            The LP solver to use. Can be pyglpk, cvxopt, cylp, cylp_mp.
+            Default cvxopt
+        proc : int
+            Number of worker processes. Only used when LP_solver is cylp_mp.
+            Default 1
+        min_snr, min_rhv : float
+            Minimum SNR and RhoHV. Used to filter out non-meteorological
+            echoes when performing the unfolding of the differential phase.
+            Default 10 and 0.6
+        sys_phase : float
+            Default system differential phase offset in deg. Default 0.
+        overide_sys_phase : bool
+            If True the dynamic sys_phase not computed and the default
+            sys_phase is used. If false a dynamic sys_phase is computed. If
+            no dynamic value is found the default sys_phase is used.
+            Default False
+        first_gate_sysp : int
+            First gate to use when determining the system differential phase
+            offset. Default 0
+        nowrap : int or None
+            Gate number where to begin the phase unwrapping. None will unwrap
+            from gate 0. Default None
+        ncpts : int
+            Minimum number of continuous valid PhiDP points. Segments below
+            this number or starting at a gate below this number are going to
+            be excluded from the unfolding. Default 2.
+        z_bias : float
+            reflectivity bias. Default 0 dBZ
+        low_z, high_z : float
+            mininum and maximum reflectivity values. Values beyond this range
+            are going to be set to this range limits. The modified
+            reflectivity is used in the LP algorithm. Default 10 and 53 dBZ
+        min_phidp : float
+            minimum differential phase. PhiDP values below this threshold are
+            going to be set to the threshold values. The modified PhiDP is
+            used in the LP algorithm. Default 0.1 deg
+        doc : int
+            Number of gates to doc at the end of the ray. Used in the LP
+            algorithm. Default 0
+        self_const : float
+            selfconsistency factor. Used in the LP algorithm. Default 60000
+        coef : float
+            Exponent linking Z to KDP in selfconsistency. Used in the LP
+            algorithm. kdp = (10**(0.1z))**coef. Default 0.914
+        window_len : int
+            Length of Sobel Window applied to PhiDP field before computing
+            KDP. Default 35
+
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -593,6 +659,8 @@ def process_phidp_kdp_lp(procstatus, dscfg, radar_list=None):
 
     temp_field = None
     iso0_field = None
+    rhv_field = None
+    snr_field = None
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         if datatype == 'PhiDP':
@@ -623,11 +691,9 @@ def process_phidp_kdp_lp(procstatus, dscfg, radar_list=None):
     radar = radar_list[ind_rad]
 
     if ((refl_field not in radar.fields) or
-            (psidp_field not in radar.fields) or
-            (rhv_field not in radar.fields) or
-            (snr_field not in radar.fields)):
+            (psidp_field not in radar.fields)):
         warn('Unable to retrieve PhiDP and KDP using the LP approach. ' +
-             'Missing data')
+             'Missing reflectivity and/or PsiDP data')
         return None, None
 
     fzl = None
@@ -655,15 +721,31 @@ def process_phidp_kdp_lp(procstatus, dscfg, radar_list=None):
             t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
             fzl = read_fzl_igra(sounding_code, t0)
         else:
+            fzl = 2000
             warn('Freezing level height not defined. Using default ' +
                  str(fzl) + ' m')
-            fzl = 2000
 
     radar_aux = deepcopy(radar)
 
     # user config
     LP_solver = dscfg.get('LP_solver', 'cvxopt')
     thickness = dscfg.get('ml_thickness', 700.)
+    offset = - dscfg.get('z_bias', 0.)
+    self_const = dscfg.get('self_const', 60000.)
+    low_z = dscfg.get('low_z', 10.)
+    high_z = dscfg.get('high_z', 53.)
+    min_phidp = dscfg.get('min_phidp', 0.01)
+    min_ncp = dscfg.get('min_snr', 10.)
+    min_rhv = dscfg.get('min_rhv', 0.6)
+    sys_phase = dscfg.get('sys_phase', 0.)
+    first_gate_sysp = dscfg.get('first_gate_sysp', 0)
+    ncpts = dscfg.get('ncpts', 2)
+    overide_sys_phase = dscfg.get('overide_sys_phase', False)
+    nowrap = dscfg.get('nowrap', None)
+    window_len = dscfg.get('window_len', 35)
+    proc = dscfg.get('proc', 1)
+    coef = dscfg.get('coef', 0.914)
+    doc = dscfg.get('doc', 0)
 
     # filter out data in an above the melting layer
     mask = np.ma.getmaskarray(radar_aux.fields[psidp_field]['data'])
@@ -695,14 +777,37 @@ def process_phidp_kdp_lp(procstatus, dscfg, radar_list=None):
     phidp_field = 'corrected_differential_phase'
     kdp_field = 'corrected_specific_differential_phase'
 
-    phidp, kdp = pyart.correct.phase_proc_lp(
-        radar_aux, 0, debug=False, self_const=60000.0,
-        low_z=10.0, high_z=53.0, min_phidp=0.01, min_ncp=10.,
-        min_rhv=0.6, fzl=4000.0, sys_phase=0.0,
-        overide_sys_phase=True, nowrap=None, really_verbose=False,
-        LP_solver=LP_solver, refl_field=refl_field, ncp_field=snr_field,
-        rhv_field=rhv_field, phidp_field=psidp_field, kdp_field=kdp_field,
-        unf_field=phidp_field, window_len=35, proc=1)
+    # fzl is None meaning temperature fields could be used:
+    # set fzl to an arbitrary high value
+    if fzl is None:
+        fzl = 5000.
+
+    if rhv_field is not None and snr_field is not None:
+        phidp, kdp = pyart.correct.phase_proc_lp(
+            radar_aux, offset, debug=False, self_const=self_const,
+            low_z=low_z, high_z=high_z, min_phidp=min_phidp, min_ncp=min_ncp,
+            min_rhv=min_rhv, fzl=fzl, sys_phase=sys_phase, ncpts=ncpts,
+            overide_sys_phase=overide_sys_phase, nowrap=nowrap,
+            really_verbose=False, LP_solver=LP_solver, refl_field=refl_field,
+            ncp_field=snr_field, rhv_field=rhv_field, phidp_field=psidp_field,
+            kdp_field=kdp_field, unf_field=phidp_field, window_len=window_len,
+            proc=proc, coef=coef)
+    else:
+        if not overide_sys_phase:
+            sys_phase = None
+
+        gatefilter = pyart.filters.GateFilter(radar_aux)
+        gatefilter.exclude_masked(psidp_field)
+
+        phidp, kdp = pyart.correct.phase_proc_lp_gf(
+            radar_aux, offset=offset, gatefilter=gatefilter, debug=False,
+            self_const=self_const, low_z=low_z, high_z=high_z,
+            min_phidp=min_phidp, fzl=fzl, system_phase=sys_phase, ncpts=ncpts,
+            first_gate_sysp=first_gate_sysp, nowrap=nowrap,
+            really_verbose=False, LP_solver=LP_solver, refl_field=refl_field,
+            phidp_field=psidp_field, kdp_field=kdp_field,
+            unf_field=phidp_field, window_len=window_len, proc=proc,
+            coef=coef, doc=doc)
 
     kdp['data'] = np.ma.masked_where(mask, kdp['data'])
     phidp['data'] = np.ma.masked_where(mask, phidp['data'])
@@ -1124,10 +1229,10 @@ def process_attenuation(procstatus, dscfg, radar_list=None):
             temperature field name is specified or the temperature field is
             not in the radar object. Default 2000.
         sounding : str. Dataset keyword
-            The nearest radiosounding WMO code (5 int digits). It will be used to
-            compute the freezing level, if no temperature field name is specified,
-            if the temperature field isin the radar object or if no freezing_level
-            is explicitely defined.
+            The nearest radiosounding WMO code (5 int digits). It will be used
+            to compute the freezing level, if no temperature field name is
+            specified, if the temperature field is in the radar object or if
+            no freezing_level is explicitely defined.
     radar_list : list of Radar objects
         Optional. list of radar objects
 

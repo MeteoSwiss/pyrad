@@ -32,7 +32,7 @@ ppiImageConfig        STRUCT   Structure defining the PPI image generating (PPI_
 - xmax                FLOAT    Distance of the right image boundary to the radar in km.
 - ymin                FLOAT    Distance of the lower image boundary to the radar in km.
 - ymax                FLOAT    Distance of the upper image boundary to the radar in km.
-- dpi				  INT      Resolution of the image in dots per inch.
+- dpi	              INT      Resolution of the image in dots per inch.
 rhiImageConfig        STRUCT   Structure defining the RHI image generating (RHI_IMAGE or PSEUDORHI_IMAGE products). The following 6 fields are described below:
 - xsize               INT      Number of horizontal pixels of the picture (without frame).
 - ysize               INT      Number of vertical pixels of the picture (without frame).
@@ -40,7 +40,7 @@ rhiImageConfig        STRUCT   Structure defining the RHI image generating (RHI_
 - xmax                FLOAT    Distance of the right image boundary to the radar in km.
 - ymin                FLOAT    Distance of the lower image boundary (vertical direction) to the radar in km.
 - ymax                FLOAT    Distance of the upper image boundary (vertical direction) to the radar in km.
-- dpi				  INT      Resolution of the image in dots per inch.
+- dpi		      INT      Resolution of the image in dots per inch.
 ppiMapImageConfig     STRUCT   Structure defining the PPI image overlaid on a map (PPI_MAP product). The following 9 fields are described below:
 - rngRing             FLOAT    Distance between range rings (0 means no range ring) [km].
 - xsize               FLOAT    Image size (inches) [inch].
@@ -53,8 +53,9 @@ ppiMapImageConfig     STRUCT   Structure defining the PPI image overlaid on a ma
 - lonstep             FLOAT    Step in longitude [°] used in the map gridlines.
 - exact_limits	      INT      If set to 1 will use exactly the user-specified latmin/latmax, lonmin/lonmax, if set to 0 will round them to the nearest integer.
 - mapres              STRING   Map resolution. Accepted strings are: “10m”, “50m”, “110m”.
-- maps                STRARR   String array of possible maps to overplot. Accepted entries include: relief, countries, provinces, urban_areas, roads, railroads, coastline, lakes, lakes_europe, rivers, rivers_europe.
-- dpi				  INT      Resolution of the image in dots per inch.
+- maps                STRARR   String array of possible maps to overplot. Accepted entries include: relief, countries, provinces, 
+                                 urban_areas, roads, railroads, coastline, lakes, lakes_europe, rivers, rivers_europe.
+- dpi		      INT      Resolution of the image in dots per inch.
 gridMapImageConfig    STRUCT   Structure defining the display of gridded data overlaid on a map (SURFACE_IMAGE product).
 - xsize               FLOAT    Image size (inches) [inch].
 - ysize               FLOAT    Image size (inches) [inch].
@@ -66,8 +67,9 @@ gridMapImageConfig    STRUCT   Structure defining the display of gridded data ov
 - lonstep             FLOAT    Step in longitude [°] used in the map gridlines.
 - exact_limits	      INT      If set to 1 will use exactly the user-specified latmin/latmax, lonmin/lonmax, if set to 0 will round them to the nearest integer.
 - mapres              STRING   Map resolution. Accepted strings are: “10m”, “50m”, “110m”.
-- maps                STRARR   String array of possible maps to overplot. Accepted entries include: relief, countries, provinces, urban_areas, roads, railroads, coastline, lakes, lakes_europe, rivers, rivers_europe
-- dpi				  INT      Resolution of the image in dots per inch.
+- maps                STRARR   String array of possible maps to overplot. Accepted entries include: relief, countries, provinces, 
+                               urban_areas, roads, railroads, coastline, lakes, lakes_europe, rivers, rivers_europe
+- dpi		      INT      Resolution of the image in dots per inch.
 xsecImageConfig       STRUCT   Structure defining the cross-section images generated from gridded data (CROSS_SECTION, LATITUDE_SLICE and LONGITUDE_SLICE products)
 - xsize               INT      Number of horizontal pixels of the picture (without frame).
 - ysize               INT      Number of vertical pixels of the picture (without frame).
@@ -75,7 +77,7 @@ xsecImageConfig       STRUCT   Structure defining the cross-section images gener
 - xmax                FLOAT    Distance of the right image boundary to the radar in km.
 - ymin                FLOAT    Distance of the lower image boundary (vertical direction) to the radar in km.
 - ymax                FLOAT    Distance of the upper image boundary (vertical direction) to the radar in km.
-- dpi				  INT      Resolution of the image in dots per inch.
+- dpi                 INT      Resolution of the image in dots per inch.
 sunhitsImageConfig    STRUCT   Structure defining the sun hits image. The following 6 fields are described below:
 - xsize               INT      Number of horizontal pixels of the picture (without frame).
 - ysize               INT      Number of vertical pixels of the picture (without frame).
