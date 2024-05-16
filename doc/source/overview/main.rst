@@ -1,3 +1,6 @@
+Main configuration file
+==============================
+
 The main configuration file is used to define the global settings, notably the paths to the different sources of data. The parameters of the main configuration file are described in Table 2.
 
 Table 2: Configuration parameters of the main configuration file
