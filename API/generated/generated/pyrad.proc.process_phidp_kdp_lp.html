@@ -579,6 +579,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_sun_retrieval.html">pyrad.io.write_sun_retrieval</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_fixed_angle.html">pyrad.io.write_fixed_angle</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_rad4alp_prod_fname.html">pyrad.io.get_rad4alp_prod_fname</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_datatype_skyecho.html">pyrad.io.get_datatype_skyecho</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.map_hydro.html">pyrad.io.map_hydro</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.map_Doppler.html">pyrad.io.map_Doppler</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_save_dir.html">pyrad.io.get_save_dir</a></li>
@@ -647,6 +648,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.get_data.html">pyrad.io.get_data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.get_dataset_fields.html">pyrad.io.get_dataset_fields</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.get_datatype_fields.html">pyrad.io.get_datatype_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pyrad.io.get_datatype_skyecho.html">pyrad.io.get_datatype_skyecho</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.get_datetime.html">pyrad.io.get_datetime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.get_field_unit.html">pyrad.io.get_field_unit</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.get_fieldname_cosmo.html">pyrad.io.get_fieldname_cosmo</a></li>
@@ -1275,8 +1277,18 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pyrad.proc.process_phidp_kdp_lp">
 <span class="sig-prename descclassname"><span class="pre">pyrad.proc.</span></span><span class="sig-name descname"><span class="pre">process_phidp_kdp_lp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">procstatus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dscfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radar_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyrad/proc/process_phase.html#process_phidp_kdp_lp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.proc.process_phidp_kdp_lp" title="Link to this definition">#</a></dt>
-<dd><p>Estimates PhiDP and KDP using a linear programming algorithm.
-This method only retrieves data in rain (i.e. below the melting layer)</p>
+<dd><p>Estimates PhiDP and KDP using a linear programming algorithm.</p>
+<p>This method only retrieves data in rain (i.e. below the melting layer).</p>
+<p>The method has 3 steps: PhiDP unfolding (including clutter suppression),
+Processing PhiDP using the LP algorithm, Obtaining KDP by convoluting
+PhiDP with a Sobel window.</p>
+<p>Required inputs for the LP algorithm are PsiDP and reflectivity.</p>
+<p>RhoHV and SNR are used for the clutter suppression in the PhiDP unfolding
+step (note that SNR is used instead of Normalized Coherent Power used by
+the original algorithm). If they are not provided a gate_filter based on
+the values of reflectivity is used instead.</p>
+<p>Freezing level height can be retrieved from iso-0 or temperature fields,
+from radio sounding or set by the user.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul>
@@ -1289,10 +1301,10 @@ This method only retrieves data in rain (i.e. below the melting layer)</p>
 <span class="n">fzl</span> <span class="p">:</span> <span class="nb">float</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
     <span class="n">The</span> <span class="n">freezing</span> <span class="n">level</span> <span class="n">height</span> <span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span> <span class="n">Default</span> <span class="mf">2000.</span>
 <span class="n">sounding</span> <span class="p">:</span> <span class="nb">str</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
-    <span class="n">The</span> <span class="n">nearest</span> <span class="n">radiosounding</span> <span class="n">WMO</span> <span class="n">code</span> <span class="p">(</span><span class="mi">5</span> <span class="nb">int</span> <span class="n">digits</span><span class="p">)</span><span class="o">.</span> <span class="n">It</span> <span class="n">will</span> <span class="n">be</span> <span class="n">used</span> <span class="n">to</span>
-    <span class="n">compute</span> <span class="n">the</span> <span class="n">freezing</span> <span class="n">level</span><span class="p">,</span> <span class="k">if</span> <span class="n">no</span> <span class="n">temperature</span> <span class="n">field</span> <span class="n">name</span> <span class="ow">is</span> <span class="n">specified</span><span class="p">,</span>
-    <span class="k">if</span> <span class="n">the</span> <span class="n">temperature</span> <span class="n">field</span> <span class="n">isin</span> <span class="n">the</span> <span class="n">radar</span> <span class="nb">object</span> <span class="ow">or</span> <span class="k">if</span> <span class="n">no</span> <span class="n">freezing_level</span>
-    <span class="ow">is</span> <span class="n">explicitely</span> <span class="n">defined</span><span class="o">.</span>
+    <span class="n">The</span> <span class="n">nearest</span> <span class="n">radiosounding</span> <span class="n">WMO</span> <span class="n">code</span> <span class="p">(</span><span class="mi">5</span> <span class="nb">int</span> <span class="n">digits</span><span class="p">)</span><span class="o">.</span> <span class="n">It</span> <span class="n">will</span> <span class="n">be</span> <span class="n">used</span>
+    <span class="n">to</span> <span class="n">compute</span> <span class="n">the</span> <span class="n">freezing</span> <span class="n">level</span><span class="p">,</span> <span class="k">if</span> <span class="n">no</span> <span class="n">temperature</span> <span class="n">field</span> <span class="n">name</span> <span class="ow">is</span>
+    <span class="n">specified</span><span class="p">,</span> <span class="k">if</span> <span class="n">the</span> <span class="n">temperature</span> <span class="n">field</span> <span class="ow">is</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">radar</span> <span class="nb">object</span> <span class="ow">or</span>
+    <span class="k">if</span> <span class="n">no</span> <span class="n">freezing_level</span> <span class="ow">is</span> <span class="n">explicitely</span> <span class="n">defined</span><span class="o">.</span>
 <span class="n">ml_thickness</span> <span class="p">:</span> <span class="nb">float</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
     <span class="n">The</span> <span class="n">melting</span> <span class="n">layer</span> <span class="n">thickness</span> <span class="ow">in</span> <span class="n">meters</span><span class="o">.</span> <span class="n">Default</span> <span class="mf">700.</span>
 <span class="n">beamwidth</span> <span class="p">:</span> <span class="nb">float</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
@@ -1300,6 +1312,54 @@ This method only retrieves data in rain (i.e. below the melting layer)</p>
     <span class="n">radar_beam_width_h</span> <span class="ow">or</span> <span class="n">radar_beam_width_v</span> <span class="ow">in</span> <span class="n">attribute</span>
     <span class="n">instrument_parameters</span> <span class="n">of</span> <span class="n">the</span> <span class="n">radar</span> <span class="nb">object</span> <span class="n">will</span> <span class="n">be</span> <span class="n">used</span><span class="o">.</span> <span class="n">If</span> <span class="n">the</span> <span class="n">key</span>
     <span class="ow">or</span> <span class="n">the</span> <span class="n">attribute</span> <span class="n">are</span> <span class="ow">not</span> <span class="n">present</span> <span class="n">the</span> <span class="n">beamwidth</span> <span class="n">will</span> <span class="n">be</span> <span class="nb">set</span> <span class="n">to</span> <span class="kc">None</span>
+<span class="n">LP_solver</span> <span class="p">:</span> <span class="nb">str</span><span class="o">.</span>
+    <span class="n">The</span> <span class="n">LP</span> <span class="n">solver</span> <span class="n">to</span> <span class="n">use</span><span class="o">.</span> <span class="n">Can</span> <span class="n">be</span> <span class="n">pyglpk</span><span class="p">,</span> <span class="n">cvxopt</span><span class="p">,</span> <span class="n">cylp</span><span class="p">,</span> <span class="n">cylp_mp</span><span class="o">.</span>
+    <span class="n">Default</span> <span class="n">cvxopt</span>
+<span class="n">proc</span> <span class="p">:</span> <span class="nb">int</span>
+    <span class="n">Number</span> <span class="n">of</span> <span class="n">worker</span> <span class="n">processes</span><span class="o">.</span> <span class="n">Only</span> <span class="n">used</span> <span class="n">when</span> <span class="n">LP_solver</span> <span class="ow">is</span> <span class="n">cylp_mp</span><span class="o">.</span>
+    <span class="n">Default</span> <span class="mi">1</span>
+<span class="n">min_snr</span><span class="p">,</span> <span class="n">min_rhv</span> <span class="p">:</span> <span class="nb">float</span>
+    <span class="n">Minimum</span> <span class="n">SNR</span> <span class="ow">and</span> <span class="n">RhoHV</span><span class="o">.</span> <span class="n">Used</span> <span class="n">to</span> <span class="nb">filter</span> <span class="n">out</span> <span class="n">non</span><span class="o">-</span><span class="n">meteorological</span>
+    <span class="n">echoes</span> <span class="n">when</span> <span class="n">performing</span> <span class="n">the</span> <span class="n">unfolding</span> <span class="n">of</span> <span class="n">the</span> <span class="n">differential</span> <span class="n">phase</span><span class="o">.</span>
+    <span class="n">Default</span> <span class="mi">10</span> <span class="ow">and</span> <span class="mf">0.6</span>
+<span class="n">sys_phase</span> <span class="p">:</span> <span class="nb">float</span>
+    <span class="n">Default</span> <span class="n">system</span> <span class="n">differential</span> <span class="n">phase</span> <span class="n">offset</span> <span class="ow">in</span> <span class="n">deg</span><span class="o">.</span> <span class="n">Default</span> <span class="mf">0.</span>
+<span class="n">overide_sys_phase</span> <span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">If</span> <span class="kc">True</span> <span class="n">the</span> <span class="n">dynamic</span> <span class="n">sys_phase</span> <span class="ow">not</span> <span class="n">computed</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">default</span>
+    <span class="n">sys_phase</span> <span class="ow">is</span> <span class="n">used</span><span class="o">.</span> <span class="n">If</span> <span class="n">false</span> <span class="n">a</span> <span class="n">dynamic</span> <span class="n">sys_phase</span> <span class="ow">is</span> <span class="n">computed</span><span class="o">.</span> <span class="n">If</span>
+    <span class="n">no</span> <span class="n">dynamic</span> <span class="n">value</span> <span class="ow">is</span> <span class="n">found</span> <span class="n">the</span> <span class="n">default</span> <span class="n">sys_phase</span> <span class="ow">is</span> <span class="n">used</span><span class="o">.</span>
+    <span class="n">Default</span> <span class="kc">False</span>
+<span class="n">first_gate_sysp</span> <span class="p">:</span> <span class="nb">int</span>
+    <span class="n">First</span> <span class="n">gate</span> <span class="n">to</span> <span class="n">use</span> <span class="n">when</span> <span class="n">determining</span> <span class="n">the</span> <span class="n">system</span> <span class="n">differential</span> <span class="n">phase</span>
+    <span class="n">offset</span><span class="o">.</span> <span class="n">Default</span> <span class="mi">0</span>
+<span class="n">nowrap</span> <span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="kc">None</span>
+    <span class="n">Gate</span> <span class="n">number</span> <span class="n">where</span> <span class="n">to</span> <span class="n">begin</span> <span class="n">the</span> <span class="n">phase</span> <span class="n">unwrapping</span><span class="o">.</span> <span class="kc">None</span> <span class="n">will</span> <span class="n">unwrap</span>
+    <span class="kn">from</span> <span class="nn">gate</span> <span class="mf">0.</span> <span class="n">Default</span> <span class="kc">None</span>
+<span class="n">ncpts</span> <span class="p">:</span> <span class="nb">int</span>
+    <span class="n">Minimum</span> <span class="n">number</span> <span class="n">of</span> <span class="n">continuous</span> <span class="n">valid</span> <span class="n">PhiDP</span> <span class="n">points</span><span class="o">.</span> <span class="n">Segments</span> <span class="n">below</span>
+    <span class="n">this</span> <span class="n">number</span> <span class="ow">or</span> <span class="n">starting</span> <span class="n">at</span> <span class="n">a</span> <span class="n">gate</span> <span class="n">below</span> <span class="n">this</span> <span class="n">number</span> <span class="n">are</span> <span class="n">going</span> <span class="n">to</span>
+    <span class="n">be</span> <span class="n">excluded</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">unfolding</span><span class="o">.</span> <span class="n">Default</span> <span class="mf">2.</span>
+<span class="n">z_bias</span> <span class="p">:</span> <span class="nb">float</span>
+    <span class="n">reflectivity</span> <span class="n">bias</span><span class="o">.</span> <span class="n">Default</span> <span class="mi">0</span> <span class="n">dBZ</span>
+<span class="n">low_z</span><span class="p">,</span> <span class="n">high_z</span> <span class="p">:</span> <span class="nb">float</span>
+    <span class="n">mininum</span> <span class="ow">and</span> <span class="n">maximum</span> <span class="n">reflectivity</span> <span class="n">values</span><span class="o">.</span> <span class="n">Values</span> <span class="n">beyond</span> <span class="n">this</span> <span class="nb">range</span>
+    <span class="n">are</span> <span class="n">going</span> <span class="n">to</span> <span class="n">be</span> <span class="nb">set</span> <span class="n">to</span> <span class="n">this</span> <span class="nb">range</span> <span class="n">limits</span><span class="o">.</span> <span class="n">The</span> <span class="n">modified</span>
+    <span class="n">reflectivity</span> <span class="ow">is</span> <span class="n">used</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">LP</span> <span class="n">algorithm</span><span class="o">.</span> <span class="n">Default</span> <span class="mi">10</span> <span class="ow">and</span> <span class="mi">53</span> <span class="n">dBZ</span>
+<span class="n">min_phidp</span> <span class="p">:</span> <span class="nb">float</span>
+    <span class="n">minimum</span> <span class="n">differential</span> <span class="n">phase</span><span class="o">.</span> <span class="n">PhiDP</span> <span class="n">values</span> <span class="n">below</span> <span class="n">this</span> <span class="n">threshold</span> <span class="n">are</span>
+    <span class="n">going</span> <span class="n">to</span> <span class="n">be</span> <span class="nb">set</span> <span class="n">to</span> <span class="n">the</span> <span class="n">threshold</span> <span class="n">values</span><span class="o">.</span> <span class="n">The</span> <span class="n">modified</span> <span class="n">PhiDP</span> <span class="ow">is</span>
+    <span class="n">used</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">LP</span> <span class="n">algorithm</span><span class="o">.</span> <span class="n">Default</span> <span class="mf">0.1</span> <span class="n">deg</span>
+<span class="n">doc</span> <span class="p">:</span> <span class="nb">int</span>
+    <span class="n">Number</span> <span class="n">of</span> <span class="n">gates</span> <span class="n">to</span> <span class="n">doc</span> <span class="n">at</span> <span class="n">the</span> <span class="n">end</span> <span class="n">of</span> <span class="n">the</span> <span class="n">ray</span><span class="o">.</span> <span class="n">Used</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">LP</span>
+    <span class="n">algorithm</span><span class="o">.</span> <span class="n">Default</span> <span class="mi">0</span>
+<span class="n">self_const</span> <span class="p">:</span> <span class="nb">float</span>
+    <span class="n">selfconsistency</span> <span class="n">factor</span><span class="o">.</span> <span class="n">Used</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">LP</span> <span class="n">algorithm</span><span class="o">.</span> <span class="n">Default</span> <span class="mi">60000</span>
+<span class="n">coef</span> <span class="p">:</span> <span class="nb">float</span>
+    <span class="n">Exponent</span> <span class="n">linking</span> <span class="n">Z</span> <span class="n">to</span> <span class="n">KDP</span> <span class="ow">in</span> <span class="n">selfconsistency</span><span class="o">.</span> <span class="n">Used</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">LP</span>
+    <span class="n">algorithm</span><span class="o">.</span> <span class="n">kdp</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="mf">0.1</span><span class="n">z</span><span class="p">))</span><span class="o">**</span><span class="n">coef</span><span class="o">.</span> <span class="n">Default</span> <span class="mf">0.914</span>
+<span class="n">window_len</span> <span class="p">:</span> <span class="nb">int</span>
+    <span class="n">Length</span> <span class="n">of</span> <span class="n">Sobel</span> <span class="n">Window</span> <span class="n">applied</span> <span class="n">to</span> <span class="n">PhiDP</span> <span class="n">field</span> <span class="n">before</span> <span class="n">computing</span>
+    <span class="n">KDP</span><span class="o">.</span> <span class="n">Default</span> <span class="mi">35</span>
 </pre></div>
 </div>
 </li>

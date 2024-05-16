@@ -505,7 +505,7 @@ document.write(`
         <span class="n">lon_lines</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">min_lon</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">max_lon</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">lonstep</span><span class="p">)</span>
         <span class="n">lat_lines</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">min_lat</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">max_lat</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">latstep</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">use_basemap</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">use_basemap</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">_CARTOPY_AVAILABLE</span><span class="p">:</span>
         <span class="n">resolution</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;gridMapImageConfig&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mapres&#39;</span><span class="p">,</span> <span class="s1">&#39;l&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">resolution</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unknown map resolution: &#39;</span> <span class="o">+</span> <span class="n">resolution</span><span class="p">)</span>
@@ -541,7 +541,7 @@ document.write(`
     <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span><span class="p">],</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">use_basemap</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">use_basemap</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">_CARTOPY_AVAILABLE</span><span class="p">:</span>
             <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">GridMapDisplayBasemap</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
             <span class="n">display</span><span class="o">.</span><span class="n">plot_basemap</span><span class="p">(</span>
                 <span class="n">lat_lines</span><span class="o">=</span><span class="n">lat_lines</span><span class="p">,</span> <span class="n">lon_lines</span><span class="o">=</span><span class="n">lon_lines</span><span class="p">,</span>
@@ -567,7 +567,7 @@ document.write(`
             <span class="c1"># ax.set_extent([min_lon, max_lon, min_lat, max_lat])</span>
             <span class="c1"># display.plot_crosshairs(lon=lon, lat=lat)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">use_basemap</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">use_basemap</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">_CARTOPY_AVAILABLE</span><span class="p">:</span>
             <span class="n">display</span><span class="o">.</span><span class="n">plot_grid</span><span class="p">(</span>
                 <span class="n">field_name</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="n">ticks</span><span class="p">,</span>
                 <span class="n">lat_lines</span><span class="o">=</span><span class="n">lat_lines</span><span class="p">,</span> <span class="n">lon_lines</span><span class="o">=</span><span class="n">lon_lines</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">titl</span><span class="p">,</span>
@@ -1268,7 +1268,7 @@ document.write(`
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="n">lon_lines</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lon_lines</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="n">lat_lines</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lat_lines</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
 
-    <span class="k">if</span> <span class="n">embellish</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">embellish</span> <span class="ow">and</span> <span class="n">_CARTOPY_AVAILABLE</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">cartomap</span> <span class="ow">in</span> <span class="n">maps_list</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s1">&#39;countries&#39;</span><span class="p">:</span>
                 <span class="c1"># add countries</span>

@@ -16,7 +16,7 @@ parameters
    fzl : float. Dataset keyword
        The default freezing level height. It will be used if no temperature field name is specified or the temperature field is not in the radar object. Default 2000.
    sounding : str. Dataset keyword
-       The nearest radiosounding WMO code (5 int digits). It will be used to compute the freezing level, if no temperature field name is specified, if the temperature field isin the radar object or if no freezing_level is explicitely defined.
+       The nearest radiosounding WMO code (5 int digits). It will be used to compute the freezing level, if no temperature field name is specified, if the temperature field is in the radar object or if no freezing_level is explicitely defined.
 
 AZI_AVG
 """"""""""""""""""""""""""""""
@@ -628,7 +628,7 @@ parameters
 PHIDP_KDP_LP
 """"""""""""""""""""""""""""""
 description
-   Estimates PhiDP and KDP using a linear programming algorithm. This method only retrieves data in rain (i.e. below the melting layer)
+   Estimates PhiDP and KDP using a linear programming algorithm. This method only retrieves data in rain (i.e. below the melting layer). The method has 3 steps: PhiDP unfolding (including clutter suppression), Processing PhiDP using the LP algorithm, Obtaining KDP by convoluting PhiDP with a Sobel window. Required inputs for the LP algorithm are PsiDP and reflectivity. RhoHV and SNR are used for the clutter suppression in the PhiDP unfolding step (note that SNR is used instead of Normalized Coherent Power used by the original algorithm). If they are not provided a gate_filter based on the values of reflectivity is used instead. Freezing level height can be retrieved from iso-0 or temperature fields, from radio sounding or set by the user.
  `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_phidp_kdp_lp>`_
 parameters
    datatype : list of string. Dataset keyword
@@ -636,11 +636,41 @@ parameters
    fzl : float. Dataset keyword
        The freezing level height [m]. Default 2000.
    sounding : str. Dataset keyword
-       The nearest radiosounding WMO code (5 int digits). It will be used to compute the freezing level, if no temperature field name is specified, if the temperature field isin the radar object or if no freezing_level is explicitely defined.
+       The nearest radiosounding WMO code (5 int digits). It will be used to compute the freezing level, if no temperature field name is specified, if the temperature field is not in the radar object or if no freezing_level is explicitely defined.
    ml_thickness : float. Dataset keyword
        The melting layer thickness in meters. Default 700.
    beamwidth : float. Dataset keyword
        the antenna beamwidth [deg]. If None that of the keys radar_beam_width_h or radar_beam_width_v in attribute instrument_parameters of the radar object will be used. If the key or the attribute are not present the beamwidth will be set to None
+   LP_solver : str.
+       The LP solver to use. Can be pyglpk, cvxopt, cylp, cylp_mp. Default cvxopt
+   proc : int
+       Number of worker processes. Only used when LP_solver is cylp_mp. Default 1
+   min_snr, min_rhv : float
+       Minimum SNR and RhoHV. Used to filter out non-meteorological echoes when performing the unfolding of the differential phase. Default 10 and 0.6
+   sys_phase : float
+       Default system differential phase offset in deg. Default 0.
+   overide_sys_phase : bool
+       If True the dynamic sys_phase not computed and the default sys_phase is used. If false a dynamic sys_phase is computed. If no dynamic value is found the default sys_phase is used. Default False
+   first_gate_sysp : int
+       First gate to use when determining the system differential phase offset. Default 0
+   nowrap : int or None
+       Gate number where to begin the phase unwrapping. None will unwrap from gate 0. Default None
+   ncpts : int
+       Minimum number of continuous valid PhiDP points. Segments below this number or starting at a gate below this number are going to be excluded from the unfolding. Default 2.
+   z_bias : float
+       reflectivity bias. Default 0 dBZ
+   low_z, high_z : float
+       mininum and maximum reflectivity values. Values beyond this range are going to be set to this range limits. The modified reflectivity is used in the LP algorithm. Default 10 and 53 dBZ
+   min_phidp : float
+       minimum differential phase. PhiDP values below this threshold are going to be set to the threshold values. The modified PhiDP is used in the LP algorithm. Default 0.1 deg
+   doc : int
+       Number of gates to doc at the end of the ray. Used in the LP algorithm. Default 0
+   self_const : float
+       selfconsistency factor. Used in the LP algorithm. Default 60000
+   coef : float
+       Exponent linking Z to KDP in selfconsistency. Used in the LP algorithm. kdp = (10**(0.1z))**coef. Default 0.914
+   window_len : int
+       Length of Sobel Window applied to PhiDP field before computing KDP. Default 35
 
 PHIDP_KDP_VULPIANI
 """"""""""""""""""""""""""""""

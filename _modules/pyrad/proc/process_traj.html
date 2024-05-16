@@ -815,7 +815,7 @@ document.write(`
         <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Fields not available in radar data&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">ttask_start</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+    <span class="n">ttask_start</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
     <span class="n">dt_task_start</span> <span class="o">=</span> <span class="n">num2date</span><span class="p">(</span><span class="n">ttask_start</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">],</span>
                              <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s1">&#39;calendar&#39;</span><span class="p">])</span>
 
@@ -886,14 +886,12 @@ document.write(`
 
     <span class="n">traj_time_vec</span> <span class="o">=</span> <span class="n">date2num</span><span class="p">(</span><span class="n">trajectory</span><span class="o">.</span><span class="n">time_vector</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">],</span>
                              <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s1">&#39;calendar&#39;</span><span class="p">])</span>
-
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">traj_ind</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No trajectory samples within current period&#39;</span><span class="p">)</span>
 
         <span class="n">trajdict</span><span class="p">[</span><span class="s1">&#39;radar_old2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">trajdict</span><span class="p">[</span><span class="s1">&#39;radar_old&#39;</span><span class="p">]</span>
         <span class="n">trajdict</span><span class="p">[</span><span class="s1">&#39;radar_old&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
-
     <span class="c1"># User defined parameter</span>
     <span class="n">ang_tol</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ang_tol&#39;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
     <span class="n">az_tol</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;az_tol&#39;</span><span class="p">,</span> <span class="mf">3.</span><span class="p">)</span>
@@ -1140,7 +1138,6 @@ document.write(`
 
     <span class="n">traj_time_vec</span> <span class="o">=</span> <span class="n">date2num</span><span class="p">(</span><span class="n">trajectory</span><span class="o">.</span><span class="n">time_vector</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">],</span>
                              <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s1">&#39;calendar&#39;</span><span class="p">])</span>
-
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">traj_ind</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No trajectory samples within current period&#39;</span><span class="p">)</span>
 

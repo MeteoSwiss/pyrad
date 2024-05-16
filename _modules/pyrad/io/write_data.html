@@ -393,6 +393,7 @@ document.write(`
 <span class="sd">.. autosummary::</span>
 <span class="sd">    :toctree: generated/</span>
 
+<span class="sd">    write_to_s3</span>
 <span class="sd">    write_vol_csv</span>
 <span class="sd">    write_vol_kml</span>
 <span class="sd">    write_centroids</span>
@@ -440,10 +441,16 @@ document.write(`
 <span class="kn">import</span> <span class="nn">csv</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlparse</span>
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 <span class="kn">import</span> <span class="nn">smtplib</span>
 <span class="kn">from</span> <span class="nn">email.message</span> <span class="kn">import</span> <span class="n">EmailMessage</span>
-<span class="kn">import</span> <span class="nn">fcntl</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">fcntl</span>
+    <span class="n">FCNTL_AVAIL</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">msvcrt</span> <span class="c1"># For windows</span>
+    <span class="n">FCNTL_AVAIL</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="kn">import</span> <span class="nn">errno</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span> <span class="k">as</span> <span class="n">dt</span>
@@ -463,7 +470,66 @@ document.write(`
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_SIMPLEKML_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">boto3</span>
+    <span class="n">_BOTO3_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;boto3 is not installed, no copy to S3 bucket will be performed!&#39;</span><span class="p">)</span>
+    <span class="n">_BOTO3_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
+
+<span class="k">def</span> <span class="nf">write_to_s3</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">basepath</span><span class="p">,</span> <span class="n">s3copypath</span><span class="p">,</span> <span class="n">s3accesspolicy</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Copies a locally stored product to a S3 bucket</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fname : str</span>
+<span class="sd">        filename of the product on the local storage</span>
+<span class="sd">    basepath : str</span>
+<span class="sd">        basepath of pyrad products as provided with datapath key in</span>
+<span class="sd">        the main conf file</span>
+<span class="sd">    s3copypath : str</span>
+<span class="sd">        s3 bucket path, in the format</span>
+<span class="sd">        https://bucket_name.endpoint.domain for example</span>
+<span class="sd">        https://tests.fr-par-1.linodeobjects.com/</span>
+<span class="sd">    s3accesspolicy : str</span>
+<span class="sd">        S3 access policy can be either private or public-read</span>
+<span class="sd">        Default is to use nothing which will inherit the policy of the bucket</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;boto3 not installed, aborting writing to s3&#39;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">aws_key</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;AWS_KEY&#39;</span><span class="p">]</span>
+        <span class="n">aws_secret</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;AWS_SECRET&#39;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;In order to be able to save to an S3 bucket&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;you need to define the environment variables AWS_KEY and AWS_SECRET&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Saving to S3 failed...&#39;</span><span class="p">)</span>
+        <span class="k">return</span>
+    
+    <span class="n">bucket</span> <span class="o">=</span> <span class="n">s3copypath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;//&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">endpoint_raw</span> <span class="o">=</span> <span class="n">s3copypath</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">bucket</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">add_path</span> <span class="o">=</span> <span class="n">endpoint_raw</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">urlparse</span><span class="p">(</span><span class="n">endpoint_raw</span><span class="p">)</span><span class="o">.</span><span class="n">netloc</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;///&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">endpoint</span> <span class="o">=</span> <span class="n">endpoint_raw</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">add_path</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">s3fname</span> <span class="o">=</span> <span class="n">add_path</span> <span class="o">+</span> <span class="n">fname</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">s3fname</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">):</span> <span class="c1"># Remove leading /</span>
+        <span class="n">s3fname</span> <span class="o">=</span> <span class="n">s3fname</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">linode_obj_config</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;aws_access_key_id&quot;</span><span class="p">:</span> <span class="n">aws_key</span><span class="p">,</span>
+        <span class="s2">&quot;endpoint_url&quot;</span><span class="p">:</span> <span class="n">endpoint</span><span class="p">,</span>
+        <span class="s2">&quot;aws_secret_access_key&quot;</span><span class="p">:</span> <span class="n">aws_secret</span><span class="p">}</span>
+    
+    <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span><span class="s2">&quot;s3&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">linode_obj_config</span><span class="p">,</span> <span class="n">verify</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">s3accesspolicy</span><span class="p">:</span>
+        <span class="n">ExtraArgs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ACL&#39;</span><span class="p">:</span> <span class="n">s3accesspolicy</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ExtraArgs</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">s3_client</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">bucket</span><span class="p">,</span> <span class="n">s3fname</span><span class="p">,</span> <span class="n">ExtraArgs</span><span class="o">=</span><span class="n">ExtraArgs</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;----- copying </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s1"> to </span><span class="si">{</span><span class="n">s3copypath</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">s3fname</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    
 <div class="viewcode-block" id="write_vol_csv">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_vol_csv.html#pyrad.io.write_vol_csv">[docs]</a>
 <span class="k">def</span> <span class="nf">write_vol_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">ignore_masked</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -2506,15 +2572,37 @@ document.write(`
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">file_exists</span><span class="p">:</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_EX</span> <span class="o">|</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_NB</span><span class="p">)</span>
-                    <span class="k">break</span>
-                <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">errno</span><span class="o">.</span><span class="n">EAGAIN</span><span class="p">:</span>
-                        <span class="k">raise</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">FCNTL_AVAIL</span><span class="p">:</span>
+                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_EX</span> <span class="o">|</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_NB</span><span class="p">)</span>
+                        <span class="k">break</span>
+                    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EAGAIN</span><span class="p">:</span>
+                            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EBADF</span><span class="p">:</span>
+                            <span class="n">warn</span><span class="p">(</span>
+                                <span class="s2">&quot;WARNING: No file locking is possible (NFS mount?), &quot;</span> <span class="o">+</span>
+                                <span class="s2">&quot;expect strange issues with multiprocessing...&quot;</span><span class="p">)</span>
+                            <span class="k">break</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">raise</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="c1"># Attempt to acquire an exclusive lock on the file</span>
+                        <span class="n">msvcrt</span><span class="o">.</span><span class="n">locking</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">O_RDWR</span> <span class="o">|</span> <span class="n">os</span><span class="o">.</span><span class="n">O_CREAT</span><span class="p">),</span> <span class="n">msvcrt</span><span class="o">.</span><span class="n">LK_NBLCK</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="k">break</span>
+                    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>  <span class="c1"># Permission denied</span>
+                            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>  <span class="c1"># No such file or directory</span>
+                            <span class="n">warn</span><span class="p">(</span>
+                                <span class="s2">&quot;WARNING: No file locking is possible (NFS mount?), &quot;</span> <span class="o">+</span>
+                                <span class="s2">&quot;expect strange issues with multiprocessing...&quot;</span><span class="p">)</span>
+                            <span class="k">break</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">raise</span>
 
             <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;# Weather radar monitoring timeseries data file</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span>
                           <span class="s1">&#39;# Comment lines are preceded by &quot;#&quot;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span>
@@ -2550,19 +2638,45 @@ document.write(`
                     <span class="s1">&#39;low_quantile&#39;</span><span class="p">:</span> <span class="n">values_aux</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
                     <span class="s1">&#39;high_quantile&#39;</span><span class="p">:</span> <span class="n">values_aux</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">]})</span>
 
-            <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_UN</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">FCNTL_AVAIL</span><span class="p">:</span>
+                <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_UN</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">msvcrt</span><span class="o">.</span><span class="n">locking</span><span class="p">(</span><span class="n">csvfile</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="n">msvcrt</span><span class="o">.</span><span class="n">LK_UNLCK</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">csvfile</span><span class="p">))</span>
+
             <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_EX</span> <span class="o">|</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_NB</span><span class="p">)</span>
-                    <span class="k">break</span>
-                <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">errno</span><span class="o">.</span><span class="n">EAGAIN</span><span class="p">:</span>
-                        <span class="k">raise</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">FCNTL_AVAIL</span><span class="p">:</span>
+                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_EX</span> <span class="o">|</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_NB</span><span class="p">)</span>
+                        <span class="k">break</span>
+                    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EAGAIN</span><span class="p">:</span>
+                            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EBADF</span><span class="p">:</span>
+                            <span class="n">warn</span><span class="p">(</span>
+                                <span class="s2">&quot;WARNING: No file locking is possible (NFS mount?), &quot;</span> <span class="o">+</span>
+                                <span class="s2">&quot;expect strange issues with multiprocessing...&quot;</span><span class="p">)</span>
+                            <span class="k">break</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">raise</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="c1"># Attempt to acquire an exclusive lock on the file</span>
+                        <span class="n">msvcrt</span><span class="o">.</span><span class="n">locking</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">O_RDWR</span> <span class="o">|</span> <span class="n">os</span><span class="o">.</span><span class="n">O_CREAT</span><span class="p">),</span> <span class="n">msvcrt</span><span class="o">.</span><span class="n">LK_NBLCK</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="k">break</span>
+                    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>  <span class="c1"># Permission denied</span>
+                            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>  <span class="c1"># No such file or directory</span>
+                            <span class="n">warn</span><span class="p">(</span>
+                                <span class="s2">&quot;WARNING: No file locking is possible (NFS mount?), &quot;</span> <span class="o">+</span>
+                                <span class="s2">&quot;expect strange issues with multiprocessing...&quot;</span><span class="p">)</span>
+                            <span class="k">break</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">raise</span>
 
             <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;NP&#39;</span><span class="p">,</span> <span class="s1">&#39;central_quantile&#39;</span><span class="p">,</span> <span class="s1">&#39;low_quantile&#39;</span><span class="p">,</span>
                           <span class="s1">&#39;high_quantile&#39;</span><span class="p">]</span>
@@ -2574,7 +2688,10 @@ document.write(`
                     <span class="s1">&#39;central_quantile&#39;</span><span class="p">:</span> <span class="n">values_aux</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
                     <span class="s1">&#39;low_quantile&#39;</span><span class="p">:</span> <span class="n">values_aux</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
                     <span class="s1">&#39;high_quantile&#39;</span><span class="p">:</span> <span class="n">values_aux</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">]})</span>
-            <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_UN</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">FCNTL_AVAIL</span><span class="p">:</span>
+                <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_UN</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">msvcrt</span><span class="o">.</span><span class="n">locking</span><span class="p">(</span><span class="n">csvfile</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="n">msvcrt</span><span class="o">.</span><span class="n">LK_UNLCK</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">csvfile</span><span class="p">))</span>
             <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">fname</span></div>
 
@@ -2705,15 +2822,38 @@ document.write(`
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">file_exists</span><span class="p">:</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_EX</span> <span class="o">|</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_NB</span><span class="p">)</span>
-                    <span class="k">break</span>
-                <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">errno</span><span class="o">.</span><span class="n">EAGAIN</span><span class="p">:</span>
-                        <span class="k">raise</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">FCNTL_AVAIL</span><span class="p">:</span>
+                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_EX</span> <span class="o">|</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_NB</span><span class="p">)</span>
+                        <span class="k">break</span>
+                    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EAGAIN</span><span class="p">:</span>
+                            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EBADF</span><span class="p">:</span>
+                            <span class="n">warn</span><span class="p">(</span>
+                                <span class="s2">&quot;WARNING: No file locking is possible (NFS mount?), &quot;</span> <span class="o">+</span>
+                                <span class="s2">&quot;expect strange issues with multiprocessing...&quot;</span><span class="p">)</span>
+                            <span class="k">break</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">raise</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="c1"># Attempt to acquire an exclusive lock on the file</span>
+                        <span class="n">msvcrt</span><span class="o">.</span><span class="n">locking</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">O_RDWR</span> <span class="o">|</span> <span class="n">os</span><span class="o">.</span><span class="n">O_CREAT</span><span class="p">),</span> <span class="n">msvcrt</span><span class="o">.</span><span class="n">LK_NBLCK</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="k">break</span>
+                    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>  <span class="c1"># Permission denied</span>
+                            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>  <span class="c1"># No such file or directory</span>
+                            <span class="n">warn</span><span class="p">(</span>
+                                <span class="s2">&quot;WARNING: No file locking is possible (NFS mount?), &quot;</span> <span class="o">+</span>
+                                <span class="s2">&quot;expect strange issues with multiprocessing...&quot;</span><span class="p">)</span>
+                            <span class="k">break</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">raise</span>
+
 
             <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
                 <span class="s1">&#39;# Weather radar intercomparison scores timeseries file</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span>
@@ -2756,15 +2896,38 @@ document.write(`
             <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_EX</span> <span class="o">|</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_NB</span><span class="p">)</span>
-                    <span class="k">break</span>
-                <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">errno</span><span class="o">.</span><span class="n">EAGAIN</span><span class="p">:</span>
-                        <span class="k">raise</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">FCNTL_AVAIL</span><span class="p">:</span>
+                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_EX</span> <span class="o">|</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_NB</span><span class="p">)</span>
+                        <span class="k">break</span>
+                    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EAGAIN</span><span class="p">:</span>
+                            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EBADF</span><span class="p">:</span>
+                            <span class="n">warn</span><span class="p">(</span>
+                                <span class="s2">&quot;WARNING: No file locking is possible (NFS mount?), &quot;</span> <span class="o">+</span>
+                                <span class="s2">&quot;expect strange issues with multiprocessing...&quot;</span><span class="p">)</span>
+                            <span class="k">break</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">raise</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="c1"># Attempt to acquire an exclusive lock on the file</span>
+                        <span class="n">msvcrt</span><span class="o">.</span><span class="n">locking</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">O_RDWR</span> <span class="o">|</span> <span class="n">os</span><span class="o">.</span><span class="n">O_CREAT</span><span class="p">),</span> <span class="n">msvcrt</span><span class="o">.</span><span class="n">LK_NBLCK</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="k">break</span>
+                    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>  <span class="c1"># Permission denied</span>
+                            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>  <span class="c1"># No such file or directory</span>
+                            <span class="n">warn</span><span class="p">(</span>
+                                <span class="s2">&quot;WARNING: No file locking is possible (NFS mount?), &quot;</span> <span class="o">+</span>
+                                <span class="s2">&quot;expect strange issues with multiprocessing...&quot;</span><span class="p">)</span>
+                            <span class="k">break</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">raise</span>
+
 
             <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;NP&#39;</span><span class="p">,</span> <span class="s1">&#39;mean_bias&#39;</span><span class="p">,</span> <span class="s1">&#39;median_bias&#39;</span><span class="p">,</span>
                           <span class="s1">&#39;quant25_bias&#39;</span><span class="p">,</span> <span class="s1">&#39;quant75_bias&#39;</span><span class="p">,</span> <span class="s1">&#39;mode_bias&#39;</span><span class="p">,</span> <span class="s1">&#39;corr&#39;</span><span class="p">,</span>
@@ -2787,7 +2950,10 @@ document.write(`
                     <span class="s1">&#39;intercep_of_linear_regression_of_slope_1&#39;</span><span class="p">:</span> <span class="p">(</span>
                         <span class="n">intercep_slope_1</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
                 <span class="p">})</span>
-            <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_UN</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">FCNTL_AVAIL</span><span class="p">:</span>
+                <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_UN</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">msvcrt</span><span class="o">.</span><span class="n">locking</span><span class="p">(</span><span class="n">csvfile</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="n">msvcrt</span><span class="o">.</span><span class="n">LK_UNLCK</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">csvfile</span><span class="p">))</span>
             <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">fname</span></div>

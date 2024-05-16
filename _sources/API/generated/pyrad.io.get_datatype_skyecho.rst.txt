@@ -1,0 +1,6 @@
+pyrad.io.get\_datatype\_skyecho
+===============================
+
+.. currentmodule:: pyrad.io
+
+.. autofunction:: get_datatype_skyecho

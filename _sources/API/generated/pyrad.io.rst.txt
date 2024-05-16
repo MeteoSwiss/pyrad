@@ -54,6 +54,8 @@
     
     get_datatype_fields
     
+    get_datatype_skyecho
+    
     get_datetime
     
     get_field_unit

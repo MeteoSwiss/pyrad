@@ -579,6 +579,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_sun_retrieval.html">pyrad.io.write_sun_retrieval</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_fixed_angle.html">pyrad.io.write_fixed_angle</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_rad4alp_prod_fname.html">pyrad.io.get_rad4alp_prod_fname</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_datatype_skyecho.html">pyrad.io.get_datatype_skyecho</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.map_hydro.html">pyrad.io.map_hydro</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.map_Doppler.html">pyrad.io.map_Doppler</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_save_dir.html">pyrad.io.get_save_dir</a></li>
@@ -647,6 +648,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_data.html">pyrad.io.get_data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_dataset_fields.html">pyrad.io.get_dataset_fields</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_datatype_fields.html">pyrad.io.get_datatype_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_datatype_skyecho.html">pyrad.io.get_datatype_skyecho</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_datetime.html">pyrad.io.get_datetime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_field_unit.html">pyrad.io.get_field_unit</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_fieldname_cosmo.html">pyrad.io.get_fieldname_cosmo</a></li>
@@ -1300,10 +1302,10 @@ retrieves data in rain (i.e. below the melting layer)</p>
 <span class="n">fzl</span> <span class="p">:</span> <span class="nb">float</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
     <span class="n">The</span> <span class="n">freezing</span> <span class="n">level</span> <span class="n">height</span> <span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span> <span class="n">Default</span> <span class="mf">2000.</span>
 <span class="n">sounding</span> <span class="p">:</span> <span class="nb">str</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
-    <span class="n">The</span> <span class="n">nearest</span> <span class="n">radiosounding</span> <span class="n">WMO</span> <span class="n">code</span> <span class="p">(</span><span class="mi">5</span> <span class="nb">int</span> <span class="n">digits</span><span class="p">)</span><span class="o">.</span> <span class="n">It</span> <span class="n">will</span> <span class="n">be</span> <span class="n">used</span> <span class="n">to</span>
-    <span class="n">compute</span> <span class="n">the</span> <span class="n">freezing</span> <span class="n">level</span><span class="p">,</span> <span class="k">if</span> <span class="n">no</span> <span class="n">temperature</span> <span class="n">field</span> <span class="n">name</span> <span class="ow">is</span> <span class="n">specified</span><span class="p">,</span>
-    <span class="k">if</span> <span class="n">the</span> <span class="n">temperature</span> <span class="n">field</span> <span class="n">isin</span> <span class="n">the</span> <span class="n">radar</span> <span class="nb">object</span> <span class="ow">or</span> <span class="k">if</span> <span class="n">no</span> <span class="n">freezing_level</span>
-    <span class="ow">is</span> <span class="n">explicitely</span> <span class="n">defined</span><span class="o">.</span>
+    <span class="n">The</span> <span class="n">nearest</span> <span class="n">radiosounding</span> <span class="n">WMO</span> <span class="n">code</span> <span class="p">(</span><span class="mi">5</span> <span class="nb">int</span> <span class="n">digits</span><span class="p">)</span><span class="o">.</span> <span class="n">It</span> <span class="n">will</span> <span class="n">be</span> <span class="n">used</span>
+    <span class="n">to</span> <span class="n">compute</span> <span class="n">the</span> <span class="n">freezing</span> <span class="n">level</span><span class="p">,</span> <span class="k">if</span> <span class="n">no</span> <span class="n">temperature</span> <span class="n">field</span> <span class="n">name</span> <span class="ow">is</span>
+    <span class="n">specified</span><span class="p">,</span> <span class="k">if</span> <span class="n">the</span> <span class="n">temperature</span> <span class="n">field</span> <span class="n">isin</span> <span class="n">the</span> <span class="n">radar</span> <span class="nb">object</span> <span class="ow">or</span> <span class="k">if</span> <span class="n">no</span>
+    <span class="n">freezing_level</span> <span class="ow">is</span> <span class="n">explicitely</span> <span class="n">defined</span><span class="o">.</span>
 <span class="n">ml_thickness</span> <span class="p">:</span> <span class="nb">float</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
     <span class="n">The</span> <span class="n">melting</span> <span class="n">layer</span> <span class="n">thickness</span> <span class="ow">in</span> <span class="n">meters</span><span class="o">.</span> <span class="n">Default</span> <span class="mf">700.</span>
 <span class="n">beamwidth</span> <span class="p">:</span> <span class="nb">float</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>

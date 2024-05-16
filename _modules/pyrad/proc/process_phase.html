@@ -420,9 +420,11 @@ document.write(`
 <span class="kn">from</span> <span class="nn">..io.read_data_sensor</span> <span class="kn">import</span> <span class="n">read_fzl_igra</span>
 
 <span class="c1"># Ignore warning in process_phidp_kdp_Maesaka</span>
-<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> 
-    <span class="n">message</span><span class="o">=</span><span class="s2">&quot;.*&#39;partition&#39; will ignore the &#39;mask&#39; of the MaskedArray.*&quot;</span><span class="p">,</span> 
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
+    <span class="s2">&quot;ignore&quot;</span><span class="p">,</span>
+    <span class="n">message</span><span class="o">=</span><span class="s2">&quot;.*&#39;partition&#39; will ignore the &#39;mask&#39; of the MaskedArray.*&quot;</span><span class="p">,</span>
     <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
+
 
 <div class="viewcode-block" id="process_correct_phidp0">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_correct_phidp0.html#pyrad.proc.process_correct_phidp0">[docs]</a>
@@ -775,10 +777,10 @@ document.write(`
 <span class="sd">        fzl : float. Dataset keyword</span>
 <span class="sd">            The freezing level height [m]. Default 2000.</span>
 <span class="sd">        sounding : str. Dataset keyword</span>
-<span class="sd">            The nearest radiosounding WMO code (5 int digits). It will be used to</span>
-<span class="sd">            compute the freezing level, if no temperature field name is specified,</span>
-<span class="sd">            if the temperature field isin the radar object or if no freezing_level</span>
-<span class="sd">            is explicitely defined.</span>
+<span class="sd">            The nearest radiosounding WMO code (5 int digits). It will be used</span>
+<span class="sd">            to compute the freezing level, if no temperature field name is</span>
+<span class="sd">            specified, if the temperature field isin the radar object or if no</span>
+<span class="sd">            freezing_level is explicitely defined.</span>
 <span class="sd">        ml_thickness : float. Dataset keyword</span>
 <span class="sd">            The melting layer thickness in meters. Default 700.</span>
 <span class="sd">        beamwidth : float. Dataset keyword</span>
@@ -950,7 +952,22 @@ document.write(`
 <span class="k">def</span> <span class="nf">process_phidp_kdp_lp</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates PhiDP and KDP using a linear programming algorithm.</span>
-<span class="sd">    This method only retrieves data in rain (i.e. below the melting layer)</span>
+
+<span class="sd">    This method only retrieves data in rain (i.e. below the melting layer).</span>
+
+<span class="sd">    The method has 3 steps: PhiDP unfolding (including clutter suppression),</span>
+<span class="sd">    Processing PhiDP using the LP algorithm, Obtaining KDP by convoluting</span>
+<span class="sd">    PhiDP with a Sobel window.</span>
+
+<span class="sd">    Required inputs for the LP algorithm are PsiDP and reflectivity.</span>
+
+<span class="sd">    RhoHV and SNR are used for the clutter suppression in the PhiDP unfolding</span>
+<span class="sd">    step (note that SNR is used instead of Normalized Coherent Power used by</span>
+<span class="sd">    the original algorithm). If they are not provided a gate_filter based on</span>
+<span class="sd">    the values of reflectivity is used instead.</span>
+
+<span class="sd">    Freezing level height can be retrieved from iso-0 or temperature fields,</span>
+<span class="sd">    from radio sounding or set by the user.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -965,10 +982,10 @@ document.write(`
 <span class="sd">        fzl : float. Dataset keyword</span>
 <span class="sd">            The freezing level height [m]. Default 2000.</span>
 <span class="sd">        sounding : str. Dataset keyword</span>
-<span class="sd">            The nearest radiosounding WMO code (5 int digits). It will be used to</span>
-<span class="sd">            compute the freezing level, if no temperature field name is specified,</span>
-<span class="sd">            if the temperature field isin the radar object or if no freezing_level</span>
-<span class="sd">            is explicitely defined.</span>
+<span class="sd">            The nearest radiosounding WMO code (5 int digits). It will be used</span>
+<span class="sd">            to compute the freezing level, if no temperature field name is</span>
+<span class="sd">            specified, if the temperature field is not in the radar object or</span>
+<span class="sd">            if no freezing_level is explicitely defined.</span>
 <span class="sd">        ml_thickness : float. Dataset keyword</span>
 <span class="sd">            The melting layer thickness in meters. Default 700.</span>
 <span class="sd">        beamwidth : float. Dataset keyword</span>
@@ -976,6 +993,55 @@ document.write(`
 <span class="sd">            radar_beam_width_h or radar_beam_width_v in attribute</span>
 <span class="sd">            instrument_parameters of the radar object will be used. If the key</span>
 <span class="sd">            or the attribute are not present the beamwidth will be set to None</span>
+<span class="sd">        LP_solver : str.</span>
+<span class="sd">            The LP solver to use. Can be pyglpk, cvxopt, cylp, cylp_mp.</span>
+<span class="sd">            Default cvxopt</span>
+<span class="sd">        proc : int</span>
+<span class="sd">            Number of worker processes. Only used when LP_solver is cylp_mp.</span>
+<span class="sd">            Default 1</span>
+<span class="sd">        min_snr, min_rhv : float</span>
+<span class="sd">            Minimum SNR and RhoHV. Used to filter out non-meteorological</span>
+<span class="sd">            echoes when performing the unfolding of the differential phase.</span>
+<span class="sd">            Default 10 and 0.6</span>
+<span class="sd">        sys_phase : float</span>
+<span class="sd">            Default system differential phase offset in deg. Default 0.</span>
+<span class="sd">        overide_sys_phase : bool</span>
+<span class="sd">            If True the dynamic sys_phase not computed and the default</span>
+<span class="sd">            sys_phase is used. If false a dynamic sys_phase is computed. If</span>
+<span class="sd">            no dynamic value is found the default sys_phase is used.</span>
+<span class="sd">            Default False</span>
+<span class="sd">        first_gate_sysp : int</span>
+<span class="sd">            First gate to use when determining the system differential phase</span>
+<span class="sd">            offset. Default 0</span>
+<span class="sd">        nowrap : int or None</span>
+<span class="sd">            Gate number where to begin the phase unwrapping. None will unwrap</span>
+<span class="sd">            from gate 0. Default None</span>
+<span class="sd">        ncpts : int</span>
+<span class="sd">            Minimum number of continuous valid PhiDP points. Segments below</span>
+<span class="sd">            this number or starting at a gate below this number are going to</span>
+<span class="sd">            be excluded from the unfolding. Default 2.</span>
+<span class="sd">        z_bias : float</span>
+<span class="sd">            reflectivity bias. Default 0 dBZ</span>
+<span class="sd">        low_z, high_z : float</span>
+<span class="sd">            mininum and maximum reflectivity values. Values beyond this range</span>
+<span class="sd">            are going to be set to this range limits. The modified</span>
+<span class="sd">            reflectivity is used in the LP algorithm. Default 10 and 53 dBZ</span>
+<span class="sd">        min_phidp : float</span>
+<span class="sd">            minimum differential phase. PhiDP values below this threshold are</span>
+<span class="sd">            going to be set to the threshold values. The modified PhiDP is</span>
+<span class="sd">            used in the LP algorithm. Default 0.1 deg</span>
+<span class="sd">        doc : int</span>
+<span class="sd">            Number of gates to doc at the end of the ray. Used in the LP</span>
+<span class="sd">            algorithm. Default 0</span>
+<span class="sd">        self_const : float</span>
+<span class="sd">            selfconsistency factor. Used in the LP algorithm. Default 60000</span>
+<span class="sd">        coef : float</span>
+<span class="sd">            Exponent linking Z to KDP in selfconsistency. Used in the LP</span>
+<span class="sd">            algorithm. kdp = (10**(0.1z))**coef. Default 0.914</span>
+<span class="sd">        window_len : int</span>
+<span class="sd">            Length of Sobel Window applied to PhiDP field before computing</span>
+<span class="sd">            KDP. Default 35</span>
+
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 
@@ -993,6 +1059,8 @@ document.write(`
 
     <span class="n">temp_field</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">iso0_field</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">rhv_field</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">snr_field</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;PhiDP&#39;</span><span class="p">:</span>
@@ -1023,11 +1091,9 @@ document.write(`
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="p">((</span><span class="n">refl_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span> <span class="ow">or</span>
-            <span class="p">(</span><span class="n">psidp_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span> <span class="ow">or</span>
-            <span class="p">(</span><span class="n">rhv_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span> <span class="ow">or</span>
-            <span class="p">(</span><span class="n">snr_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">)):</span>
+            <span class="p">(</span><span class="n">psidp_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">)):</span>
         <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to retrieve PhiDP and KDP using the LP approach. &#39;</span> <span class="o">+</span>
-             <span class="s1">&#39;Missing data&#39;</span><span class="p">)</span>
+             <span class="s1">&#39;Missing reflectivity and/or PsiDP data&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="n">fzl</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1055,15 +1121,31 @@ document.write(`
             <span class="n">t0</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">datetime_utils</span><span class="o">.</span><span class="n">datetime_from_radar</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
             <span class="n">fzl</span> <span class="o">=</span> <span class="n">read_fzl_igra</span><span class="p">(</span><span class="n">sounding_code</span><span class="p">,</span> <span class="n">t0</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
+            <span class="n">fzl</span> <span class="o">=</span> <span class="mi">2000</span>
             <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Freezing level height not defined. Using default &#39;</span> <span class="o">+</span>
                  <span class="nb">str</span><span class="p">(</span><span class="n">fzl</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; m&#39;</span><span class="p">)</span>
-            <span class="n">fzl</span> <span class="o">=</span> <span class="mi">2000</span>
 
     <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 
     <span class="c1"># user config</span>
     <span class="n">LP_solver</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;LP_solver&#39;</span><span class="p">,</span> <span class="s1">&#39;cvxopt&#39;</span><span class="p">)</span>
     <span class="n">thickness</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ml_thickness&#39;</span><span class="p">,</span> <span class="mf">700.</span><span class="p">)</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="o">-</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;z_bias&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+    <span class="n">self_const</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;self_const&#39;</span><span class="p">,</span> <span class="mf">60000.</span><span class="p">)</span>
+    <span class="n">low_z</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;low_z&#39;</span><span class="p">,</span> <span class="mf">10.</span><span class="p">)</span>
+    <span class="n">high_z</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;high_z&#39;</span><span class="p">,</span> <span class="mf">53.</span><span class="p">)</span>
+    <span class="n">min_phidp</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;min_phidp&#39;</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+    <span class="n">min_ncp</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;min_snr&#39;</span><span class="p">,</span> <span class="mf">10.</span><span class="p">)</span>
+    <span class="n">min_rhv</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;min_rhv&#39;</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">)</span>
+    <span class="n">sys_phase</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sys_phase&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+    <span class="n">first_gate_sysp</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;first_gate_sysp&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">ncpts</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ncpts&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">overide_sys_phase</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;overide_sys_phase&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">nowrap</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;nowrap&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">window_len</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;window_len&#39;</span><span class="p">,</span> <span class="mi">35</span><span class="p">)</span>
+    <span class="n">proc</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;proc&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">coef</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;coef&#39;</span><span class="p">,</span> <span class="mf">0.914</span><span class="p">)</span>
+    <span class="n">doc</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;doc&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
     <span class="c1"># filter out data in an above the melting layer</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">radar_aux</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">psidp_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
@@ -1095,14 +1177,37 @@ document.write(`
     <span class="n">phidp_field</span> <span class="o">=</span> <span class="s1">&#39;corrected_differential_phase&#39;</span>
     <span class="n">kdp_field</span> <span class="o">=</span> <span class="s1">&#39;corrected_specific_differential_phase&#39;</span>
 
-    <span class="n">phidp</span><span class="p">,</span> <span class="n">kdp</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">phase_proc_lp</span><span class="p">(</span>
-        <span class="n">radar_aux</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">self_const</span><span class="o">=</span><span class="mf">60000.0</span><span class="p">,</span>
-        <span class="n">low_z</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">high_z</span><span class="o">=</span><span class="mf">53.0</span><span class="p">,</span> <span class="n">min_phidp</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">min_ncp</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span>
-        <span class="n">min_rhv</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">fzl</span><span class="o">=</span><span class="mf">4000.0</span><span class="p">,</span> <span class="n">sys_phase</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-        <span class="n">overide_sys_phase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nowrap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">really_verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">LP_solver</span><span class="o">=</span><span class="n">LP_solver</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span> <span class="n">ncp_field</span><span class="o">=</span><span class="n">snr_field</span><span class="p">,</span>
-        <span class="n">rhv_field</span><span class="o">=</span><span class="n">rhv_field</span><span class="p">,</span> <span class="n">phidp_field</span><span class="o">=</span><span class="n">psidp_field</span><span class="p">,</span> <span class="n">kdp_field</span><span class="o">=</span><span class="n">kdp_field</span><span class="p">,</span>
-        <span class="n">unf_field</span><span class="o">=</span><span class="n">phidp_field</span><span class="p">,</span> <span class="n">window_len</span><span class="o">=</span><span class="mi">35</span><span class="p">,</span> <span class="n">proc</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># fzl is None meaning temperature fields could be used:</span>
+    <span class="c1"># set fzl to an arbitrary high value</span>
+    <span class="k">if</span> <span class="n">fzl</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fzl</span> <span class="o">=</span> <span class="mf">5000.</span>
+
+    <span class="k">if</span> <span class="n">rhv_field</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">snr_field</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">phidp</span><span class="p">,</span> <span class="n">kdp</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">phase_proc_lp</span><span class="p">(</span>
+            <span class="n">radar_aux</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">self_const</span><span class="o">=</span><span class="n">self_const</span><span class="p">,</span>
+            <span class="n">low_z</span><span class="o">=</span><span class="n">low_z</span><span class="p">,</span> <span class="n">high_z</span><span class="o">=</span><span class="n">high_z</span><span class="p">,</span> <span class="n">min_phidp</span><span class="o">=</span><span class="n">min_phidp</span><span class="p">,</span> <span class="n">min_ncp</span><span class="o">=</span><span class="n">min_ncp</span><span class="p">,</span>
+            <span class="n">min_rhv</span><span class="o">=</span><span class="n">min_rhv</span><span class="p">,</span> <span class="n">fzl</span><span class="o">=</span><span class="n">fzl</span><span class="p">,</span> <span class="n">sys_phase</span><span class="o">=</span><span class="n">sys_phase</span><span class="p">,</span> <span class="n">ncpts</span><span class="o">=</span><span class="n">ncpts</span><span class="p">,</span>
+            <span class="n">overide_sys_phase</span><span class="o">=</span><span class="n">overide_sys_phase</span><span class="p">,</span> <span class="n">nowrap</span><span class="o">=</span><span class="n">nowrap</span><span class="p">,</span>
+            <span class="n">really_verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">LP_solver</span><span class="o">=</span><span class="n">LP_solver</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span>
+            <span class="n">ncp_field</span><span class="o">=</span><span class="n">snr_field</span><span class="p">,</span> <span class="n">rhv_field</span><span class="o">=</span><span class="n">rhv_field</span><span class="p">,</span> <span class="n">phidp_field</span><span class="o">=</span><span class="n">psidp_field</span><span class="p">,</span>
+            <span class="n">kdp_field</span><span class="o">=</span><span class="n">kdp_field</span><span class="p">,</span> <span class="n">unf_field</span><span class="o">=</span><span class="n">phidp_field</span><span class="p">,</span> <span class="n">window_len</span><span class="o">=</span><span class="n">window_len</span><span class="p">,</span>
+            <span class="n">proc</span><span class="o">=</span><span class="n">proc</span><span class="p">,</span> <span class="n">coef</span><span class="o">=</span><span class="n">coef</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">overide_sys_phase</span><span class="p">:</span>
+            <span class="n">sys_phase</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">gatefilter</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">radar_aux</span><span class="p">)</span>
+        <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_masked</span><span class="p">(</span><span class="n">psidp_field</span><span class="p">)</span>
+
+        <span class="n">phidp</span><span class="p">,</span> <span class="n">kdp</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">phase_proc_lp_gf</span><span class="p">(</span>
+            <span class="n">radar_aux</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">self_const</span><span class="o">=</span><span class="n">self_const</span><span class="p">,</span> <span class="n">low_z</span><span class="o">=</span><span class="n">low_z</span><span class="p">,</span> <span class="n">high_z</span><span class="o">=</span><span class="n">high_z</span><span class="p">,</span>
+            <span class="n">min_phidp</span><span class="o">=</span><span class="n">min_phidp</span><span class="p">,</span> <span class="n">fzl</span><span class="o">=</span><span class="n">fzl</span><span class="p">,</span> <span class="n">system_phase</span><span class="o">=</span><span class="n">sys_phase</span><span class="p">,</span> <span class="n">ncpts</span><span class="o">=</span><span class="n">ncpts</span><span class="p">,</span>
+            <span class="n">first_gate_sysp</span><span class="o">=</span><span class="n">first_gate_sysp</span><span class="p">,</span> <span class="n">nowrap</span><span class="o">=</span><span class="n">nowrap</span><span class="p">,</span>
+            <span class="n">really_verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">LP_solver</span><span class="o">=</span><span class="n">LP_solver</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span>
+            <span class="n">phidp_field</span><span class="o">=</span><span class="n">psidp_field</span><span class="p">,</span> <span class="n">kdp_field</span><span class="o">=</span><span class="n">kdp_field</span><span class="p">,</span>
+            <span class="n">unf_field</span><span class="o">=</span><span class="n">phidp_field</span><span class="p">,</span> <span class="n">window_len</span><span class="o">=</span><span class="n">window_len</span><span class="p">,</span> <span class="n">proc</span><span class="o">=</span><span class="n">proc</span><span class="p">,</span>
+            <span class="n">coef</span><span class="o">=</span><span class="n">coef</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="n">doc</span><span class="p">)</span>
 
     <span class="n">kdp</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">kdp</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
     <span class="n">phidp</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">phidp</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
@@ -1539,10 +1644,10 @@ document.write(`
 <span class="sd">            temperature field name is specified or the temperature field is</span>
 <span class="sd">            not in the radar object. Default 2000.</span>
 <span class="sd">        sounding : str. Dataset keyword</span>
-<span class="sd">            The nearest radiosounding WMO code (5 int digits). It will be used to</span>
-<span class="sd">            compute the freezing level, if no temperature field name is specified,</span>
-<span class="sd">            if the temperature field isin the radar object or if no freezing_level</span>
-<span class="sd">            is explicitely defined.</span>
+<span class="sd">            The nearest radiosounding WMO code (5 int digits). It will be used</span>
+<span class="sd">            to compute the freezing level, if no temperature field name is</span>
+<span class="sd">            specified, if the temperature field is in the radar object or if</span>
+<span class="sd">            no freezing_level is explicitely defined.</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 
