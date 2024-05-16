@@ -53,8 +53,7 @@ ppiMapImageConfig     STRUCT   Structure defining the PPI image overlaid on a ma
 - lonstep             FLOAT    Step in longitude [°] used in the map gridlines.
 - exact_limits	      INT      If set to 1 will use exactly the user-specified latmin/latmax, lonmin/lonmax, if set to 0 will round them to the nearest integer.
 - mapres              STRING   Map resolution. Accepted strings are: “10m”, “50m”, “110m”.
-- maps                STRARR   String array of possible maps to overplot. Accepted entries include: relief, countries, provinces, 
-                                 urban_areas, roads, railroads, coastline, lakes, lakes_europe, rivers, rivers_europe.
+- maps                STRARR   String array of possible maps to overplot. Accepted entries include: relief, countries, provinces, urban_areas, roads, railroads, coastline, lakes, lakes_europe, rivers, rivers_europe.
 - dpi				  INT      Resolution of the image in dots per inch.
 gridMapImageConfig    STRUCT   Structure defining the display of gridded data overlaid on a map (SURFACE_IMAGE product).
 - xsize               FLOAT    Image size (inches) [inch].
@@ -67,8 +66,7 @@ gridMapImageConfig    STRUCT   Structure defining the display of gridded data ov
 - lonstep             FLOAT    Step in longitude [°] used in the map gridlines.
 - exact_limits	      INT      If set to 1 will use exactly the user-specified latmin/latmax, lonmin/lonmax, if set to 0 will round them to the nearest integer.
 - mapres              STRING   Map resolution. Accepted strings are: “10m”, “50m”, “110m”.
-- maps                STRARR   String array of possible maps to overplot. Accepted entries include: relief, countries, provinces, 
-                                 urban_areas, roads, railroads, coastline, lakes, lakes_europe, rivers, rivers_europe
+- maps                STRARR   String array of possible maps to overplot. Accepted entries include: relief, countries, provinces, urban_areas, roads, railroads, coastline, lakes, lakes_europe, rivers, rivers_europe
 - dpi				  INT      Resolution of the image in dots per inch.
 xsecImageConfig       STRUCT   Structure defining the cross-section images generated from gridded data (CROSS_SECTION, LATITUDE_SLICE and LONGITUDE_SLICE products)
 - xsize               INT      Number of horizontal pixels of the picture (without frame).

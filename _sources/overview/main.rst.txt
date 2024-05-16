@@ -21,9 +21,8 @@ imgformat             STRING/  File format(s) of the images. The following forma
 saveimgbasepath       STRING   Base directory for the images to save. The directory structure looks as follows:
                                ``<saveimgbasepath>/<name>/<YYYY-MM-DD>/<datasetname>/<prodname>/<outputname>``
                                If ``saveimg`` is set to 0, this field is not used.
-s3copypath			  STRING   OPTIONAL. Path to an S3 bucket. If provided all generated products will be written there as well using the same data structure. The format must be
-							   https://bucket_name.endpoint.domain for example https://tests.fr-par-1.linodeobjects.com/. The S3 copy procedure will only work if the environment variables
-							   AWS_KEY and AWS_SECRET are defined in the pyrad scope. AWS_KEY contains the S3 bucket AWS key and AWS_SECRET the associated secret.
+s3copypath	      STRING   OPTIONAL. Path to an S3 bucket. If provided all generated products will be written there as well using the same data structure. The format must be                                          https://bucket_name.endpoint.domain, for example https://tests.fr-par-1.linodeobjects.com/. The S3 copy procedure will only work if the 
+                               environment variables AWS_KEY and AWS_SECRET are defined in the pyrad scope. AWS_KEY contains the S3 bucket AWS key and AWS_SECRET the associated secret.
 loadbasepath          STRING   OPTIONAL. Base path of saved data. By default, this field is set to ``saveimgbasepath``.
 loadname              STRING   OPTIONAL. Name of the saved data processing. Used for saved volume loading. By default, this field is set to ``name``.
 dempath               STRING   OPTIONAL. Base directory of the Digital Elevation Model (DEM) files. Basically to load the radar visibility (Optional).
