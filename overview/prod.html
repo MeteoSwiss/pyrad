@@ -344,6 +344,7 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="main.html">Main configuration file</a></li>
 <li class="toctree-l1"><a class="reference internal" href="loc.html">Location configuration file</a></li>
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Product configuration file</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="list_process.html">List of pyrad datasets</a></li>
@@ -421,7 +422,7 @@ From a dataset the products are generated. What products can be generated from a
 depends on the type (volume, volume composite, trajectory or time series) of the dataset.
 The figure below shows a schema of an example of the basic concept of the product generation. From
 different input data a dataset is generated and from this dataset m products are created.</p>
-<a class="reference internal image-reference" href="overview/explanation_prod.png"><img alt="Basic concept for product generation from input (also called raw) data" src="overview/explanation_prod.png" style="width: 400px;" />
+<a class="reference internal image-reference" href="../_images/explanation_prod.png"><img alt="Basic concept for product generation from input (also called raw) data" src="../_images/explanation_prod.png" style="width: 400px;" />
 </a>
 <p>pyrad relies on the sequential processing of datasets. An example of dataset is shown in the image below. This dataset is called <em>ml_hydro</em> which is an arbitrary user-chosen name and is of type <em>ML_DETECTION</em>.
 This dataset uses a previously computed hydrometeor classification as input. It relies on the <em>PROC</em> datadescriptor and uses the variable <em>hydro</em>. It then generates four different products. which all have arbitrary names and are of the types
