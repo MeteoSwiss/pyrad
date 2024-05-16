@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Features &#8212; Pyrad 1.8.8 documentation</title>
+    <title>Pyrad configuration files &#8212; Pyrad 1.8.8 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
     <script src="../_static/documentation_options.js?v=968d5a7d"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
@@ -51,7 +51,7 @@
     <script src="../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="List of pyrad datasets" href="list_process.html" />
+    <link rel="next" title="&lt;no title&gt;" href="main.html" />
     <link rel="prev" title="pyrad.util.time_series_statistics" href="../API/generated/pyrad.util.time_series_statistics.html" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -159,7 +159,7 @@
 
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="#">
-                        Features
+                        Pyrad configuration files
                       </a>
                     </li>
                 
@@ -284,7 +284,7 @@ document.write(`
 
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="#">
-                        Features
+                        Pyrad configuration files
                       </a>
                     </li>
                 
@@ -344,10 +344,14 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="list_process.html">List of pyrad datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="list_products.html">List of pyrad products</a></li>
-<li class="toctree-l1"><a class="reference internal" href="list_datadescriptors.html">List of pyrad input data descriptors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="list_variables.html">List of pyrad variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="loc.html">Location configuration file</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="prod.html">Product configuration file</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="list_process.html">List of pyrad datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="list_products.html">List of pyrad products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="list_datadescriptors.html">List of pyrad input data descriptors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="list_variables.html">List of pyrad variables</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </nav></div>
@@ -385,7 +389,7 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page">Features</li>
+    <li class="breadcrumb-item active" aria-current="page">Pyrad...</li>
   </ul>
 </nav>
 </div>
@@ -402,31 +406,15 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-<section id="features">
-<span id="api"></span><h1>Features<a class="headerlink" href="#features" title="Link to this heading">#</a></h1>
-<dl class="field-list simple">
-<dt class="field-odd">Release<span class="colon">:</span></dt>
-<dd class="field-odd"><p>1.8.8</p>
-</dd>
-<dt class="field-even">Date<span class="colon">:</span></dt>
-<dd class="field-even"><p>Mar 04, 2024</p>
-</dd>
-</dl>
-<p>This guide provides an overview of all available Pyrad features.
-It gives as list of all possible dataset and products types, as well as all variable names and datadescriptors that are currently supported.</p>
-<p>Remember that pyrad relies on the sequential processing of datasets. An example of dataset is shown in the image below. This dataset is called <em>ml_hydro</em> which is an arbitrary user-chosen name and is of type <em>ML_DETECTION</em>.
-This dataset uses a previously computed hydrometeor classification as input. It relies on the <em>PROC</em> datadescriptor and uses the variable <em>hydro</em>. It then generates four different products. which all have arbitrary names and are of the types
-<em>PPI_IMAGE</em>, <em>PSEUDORHI_IMAGE</em>, <em>ML_TS</em> and <em>SAVE_ML</em>. Some products apply only to specific variables (voltype), for example <em>PPI_IMAGE</em> and <em>PSEUDORHI_IMAGE</em> use the variable <em>H_ISO0</em> for the plots.</p>
-<a class="reference internal image-reference" href="../_images/pyrad_explanation_names.png"><img alt="Explanation of the pyrad type names" src="../_images/pyrad_explanation_names.png" style="width: 400px;" /></a>
-<p>Note that datasets types are separated by the nature of their output object (e.g. VOL, GRID, SPECTRA,…).
-For every output object type, a certain number of products can be generated. Hence similarly, all available product types are separated by the nature of the dataset output object to which they apply.</p>
-<p>To take an example, the ATTENUATION dataset returns an object of the VOL type. For the VOL type, many products are available, for example CAPPI_IMAGE or PPI_MAP, but not SURFACE_RAW (for example) which is a product that operates on GRID objects only.</p>
+<section id="pyrad-configuration-files">
+<h1>Pyrad configuration files<a class="headerlink" href="#pyrad-configuration-files" title="Link to this heading">#</a></h1>
+<p>The configuration of the data processing in pyrad is divided into three files. The main configuration file, the location configuration file describing the location of the
+weather radar and the used scans. Finally, the product configuration file describes the datasets and
+products.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="list_process.html">List of pyrad datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="list_products.html">List of pyrad products</a></li>
-<li class="toctree-l1"><a class="reference internal" href="list_datadescriptors.html">List of pyrad input data descriptors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="list_variables.html">List of pyrad variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="loc.html">Location configuration file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prod.html">Product configuration file</a></li>
 </ul>
 </div>
 </section>
@@ -455,11 +443,11 @@ For every output object type, a certain number of products can be generated. Hen
       </div>
     </a>
     <a class="right-next"
-       href="list_process.html"
+       href="main.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">List of pyrad datasets</p>
+        <p class="prev-next-title">&lt;no title&gt;</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -506,7 +494,7 @@ For every output object type, a certain number of products can be generated. Hen
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     <br/>
   </p>
 </div>

@@ -1,0 +1,1006 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Location configuration file &#8212; Pyrad 1.8.8 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../_static/pyart-theme.css?v=40b48845" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../_static/documentation_options.js?v=968d5a7d"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'overview/loc';</script>
+    <script src="../_static/doc_shared.js?v=6c7402a7"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Product configuration file" href="prod.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="main.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Pyrad 1.8.8 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../userguide/index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../API/index.html">
+                        API Reference Manual
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="index.html">
+                        Pyrad configuration files
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../changelog.html">
+                        Changelog
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../userguide/index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../API/index.html">
+                        API Reference Manual
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="index.html">
+                        Pyrad configuration files
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../changelog.html">
+                        Changelog
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<div id="searchbox"></div></div>
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Location configuration file</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="prod.html">Product configuration file</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="list_process.html">List of pyrad datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="list_products.html">List of pyrad products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="list_datadescriptors.html">List of pyrad input data descriptors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="list_variables.html">List of pyrad variables</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Pyrad configuration files</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Location...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+<section id="location-configuration-file">
+<h1>Location configuration file<a class="headerlink" href="#location-configuration-file" title="Link to this heading">#</a></h1>
+<p>The location configuration files describes some parameters that are depending on the specific
+location of a radar (type of scans we want to measure, radar name, etc ). The location of the
+weather radar (its position) itself, is instead usually read from the radar metadata directly and
+it is not necessarily defined in this file. The fields are described in the table below.</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>RadarName</p></td>
+<td><p>STRING</p></td>
+<td><p>Short version name of a C-band radar (i.e., A, D, L, P) or DX50, MXPol for the X-band radars.</p></td>
+</tr>
+<tr class="row-odd"><td><p>RadarRes</p></td>
+<td><p>STRING</p></td>
+<td><p>rad4alp radar resolution (H or L). Only necessary if rad4alp (swiss C-band) data is processed.</p></td>
+</tr>
+<tr class="row-even"><td><p>RadarBeamwidth</p></td>
+<td><p>FLOAT</p></td>
+<td><p>Radar antenna beam width [Deg].</p></td>
+</tr>
+<tr class="row-odd"><td><p>AntennaGaindB</p></td>
+<td><p>FLOAT</p></td>
+<td><p>Antenna gain [dB].</p></td>
+</tr>
+<tr class="row-even"><td><p>ScanList</p></td>
+<td><p>STRARR</p></td>
+<td><p>A list with the scans used for this data processing. Note that the first scan in this list is used as master scan. The master scan must be the first (temporal) scan of the corresponding rainbow task. In case of composite volumes the master scan is usually a PPI and the following are RHIs. If the radar processed is MCH C-band the scan list consists of the radar elevation (i.e., from 001 to 020). All scan names must have a trailing ‘/’ except if rad4alp data is processed.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ScanPeriod</p></td>
+<td><p>FLOAT</p></td>
+<td><p>Repetition period of each scan in minutes.</p></td>
+</tr>
+<tr class="row-even"><td><p>Azimtol</p></td>
+<td><p>FLOAT</p></td>
+<td><p>Tolerance in azimuth for irregular data. (0.5 is a good value).</p></td>
+</tr>
+<tr class="row-odd"><td><p>clutterMap</p></td>
+<td><p>STRING</p></td>
+<td><p>Clutter map of the data processing. The clutter map is located at <code class="docutils literal notranslate"><span class="pre">&lt;configpath&gt;/clutter/&lt;clutterMap&gt;</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>AntennaGain</p></td>
+<td><p>FLOAT</p></td>
+<td><p>Radar antenna gain. Not used for X-band MCH data.</p></td>
+</tr>
+<tr class="row-odd"><td><p>radarconsth(v)</p></td>
+<td><p>FLOAT</p></td>
+<td><p>Radar constant h (v). Not mandatory.</p></td>
+</tr>
+<tr class="row-even"><td><p>mflossh(v)</p></td>
+<td><p>FLOAT</p></td>
+<td><p>Matched filter losses h (v). Not mandatory.</p></td>
+</tr>
+<tr class="row-odd"><td><p>attg</p></td>
+<td><p>FLOAT</p></td>
+<td><p>Gas attenuation coefficient (units? (1 way attenuation)).</p></td>
+</tr>
+<tr class="row-even"><td><p>CosmoRunFreq</p></td>
+<td><p>INT</p></td>
+<td><p>Frequency of a COSMO model run in hours.</p></td>
+</tr>
+<tr class="row-odd"><td><p>CosmoForecasted</p></td>
+<td><p>INT</p></td>
+<td><p>Hours forecasted by the COSMO model.</p></td>
+</tr>
+<tr class="row-even"><td><p>rmax</p></td>
+<td><p>FLOAT</p></td>
+<td><p>For C-band data, the maximum range in [m] to be considered. Useful for speed considerations.</p></td>
+</tr>
+<tr class="row-odd"><td><p>elmax</p></td>
+<td><p>FLOAT</p></td>
+<td><p>Maximum elevation [°] to consider.</p></td>
+</tr>
+<tr class="row-even"><td><p>ppiImageConfig</p></td>
+<td><p>STRUCT</p></td>
+<td><p>Structure defining the PPI image generating (PPI_IMAGE or PSEUDOPPI_IMAGE products). The following 6 fields are described below:</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>xsize</p></li>
+</ul>
+</td>
+<td><p>INT</p></td>
+<td><p>Number of horizontal pixels of the picture (without frame).</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>ysize</p></li>
+</ul>
+</td>
+<td><p>INT</p></td>
+<td><p>Number of vertical pixels of the picture (without frame).</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>xmin</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Distance of the left image boundary to the radar in km.</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>xmax</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Distance of the right image boundary to the radar in km.</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>ymin</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Distance of the lower image boundary to the radar in km.</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>ymax</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Distance of the upper image boundary to the radar in km.</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>dpi</p></li>
+</ul>
+</td>
+<td></td>
+<td><p>INT      Resolution of the image in dots per inch.</p></td>
+</tr>
+<tr class="row-even"><td><p>rhiImageConfig</p></td>
+<td><p>STRUCT</p></td>
+<td><p>Structure defining the RHI image generating (RHI_IMAGE or PSEUDORHI_IMAGE products). The following 6 fields are described below:</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>xsize</p></li>
+</ul>
+</td>
+<td><p>INT</p></td>
+<td><p>Number of horizontal pixels of the picture (without frame).</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>ysize</p></li>
+</ul>
+</td>
+<td><p>INT</p></td>
+<td><p>Number of vertical pixels of the picture (without frame).</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>xmin</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Distance of the left image boundary to the radar in km.</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>xmax</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Distance of the right image boundary to the radar in km.</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>ymin</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Distance of the lower image boundary (vertical direction) to the radar in km.</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>ymax</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Distance of the upper image boundary (vertical direction) to the radar in km.</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>dpi</p></li>
+</ul>
+</td>
+<td></td>
+<td><p>INT      Resolution of the image in dots per inch.</p></td>
+</tr>
+<tr class="row-even"><td><p>ppiMapImageConfig</p></td>
+<td><p>STRUCT</p></td>
+<td><p>Structure defining the PPI image overlaid on a map (PPI_MAP product). The following 9 fields are described below:</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>rngRing</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Distance between range rings (0 means no range ring) [km].</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>xsize</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Image size (inches) [inch].</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>ysize</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Image size (inches) [inch].</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>lonmin</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Minimum WGS84 longitude [°].</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>lonmax</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Maximum WGS84 longitude [°].</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>latmin</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Minimum WGS84 latitude [°].</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>latmax</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Maximum WGS84 latitude [°].</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>latstep</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Step in latitude [°] used in the map gridlines.</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>lonstep</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Step in longitude [°] used in the map gridlines.</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>exact_limits</p></li>
+</ul>
+</td>
+<td><p>INT</p></td>
+<td><p>If set to 1 will use exactly the user-specified latmin/latmax, lonmin/lonmax, if set to 0 will round them to the nearest integer.</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>mapres</p></li>
+</ul>
+</td>
+<td><p>STRING</p></td>
+<td><p>Map resolution. Accepted strings are: “10m”, “50m”, “110m”.</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>maps</p></li>
+</ul>
+</td>
+<td><p>STRARR</p></td>
+<td><dl class="simple">
+<dt>String array of possible maps to overplot. Accepted entries include: relief, countries, provinces,</dt><dd><p>urban_areas, roads, railroads, coastline, lakes, lakes_europe, rivers, rivers_europe.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>dpi</p></li>
+</ul>
+</td>
+<td></td>
+<td><p>INT      Resolution of the image in dots per inch.</p></td>
+</tr>
+<tr class="row-even"><td><p>gridMapImageConfig</p></td>
+<td><p>STRUCT</p></td>
+<td><p>Structure defining the display of gridded data overlaid on a map (SURFACE_IMAGE product).</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>xsize</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Image size (inches) [inch].</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>ysize</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Image size (inches) [inch].</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>lonmin</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Minimum WGS84 longitude [°].</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>lonmax</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Maximum WGS84 longitude [°].</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>latmin</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Minimum WGS84 latitude [°].</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>latmax</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Maximum WGS84 latitude [°].</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>latstep</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Step in latitude [°] used in the map gridlines.</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>lonstep</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Step in longitude [°] used in the map gridlines.</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>exact_limits</p></li>
+</ul>
+</td>
+<td><p>INT</p></td>
+<td><p>If set to 1 will use exactly the user-specified latmin/latmax, lonmin/lonmax, if set to 0 will round them to the nearest integer.</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>mapres</p></li>
+</ul>
+</td>
+<td><p>STRING</p></td>
+<td><p>Map resolution. Accepted strings are: “10m”, “50m”, “110m”.</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>maps</p></li>
+</ul>
+</td>
+<td><p>STRARR</p></td>
+<td><dl class="simple">
+<dt>String array of possible maps to overplot. Accepted entries include: relief, countries, provinces,</dt><dd><p>urban_areas, roads, railroads, coastline, lakes, lakes_europe, rivers, rivers_europe</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>dpi</p></li>
+</ul>
+</td>
+<td></td>
+<td><p>INT      Resolution of the image in dots per inch.</p></td>
+</tr>
+<tr class="row-odd"><td><p>xsecImageConfig</p></td>
+<td><p>STRUCT</p></td>
+<td><p>Structure defining the cross-section images generated from gridded data (CROSS_SECTION, LATITUDE_SLICE and LONGITUDE_SLICE products)</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>xsize</p></li>
+</ul>
+</td>
+<td><p>INT</p></td>
+<td><p>Number of horizontal pixels of the picture (without frame).</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>ysize</p></li>
+</ul>
+</td>
+<td><p>INT</p></td>
+<td><p>Number of vertical pixels of the picture (without frame).</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>xmin</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Distance of the left image boundary to the radar in km.</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>xmax</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Distance of the right image boundary to the radar in km.</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>ymin</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Distance of the lower image boundary (vertical direction) to the radar in km.</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>ymax</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Distance of the upper image boundary (vertical direction) to the radar in km.</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>dpi</p></li>
+</ul>
+</td>
+<td></td>
+<td><p>INT      Resolution of the image in dots per inch.</p></td>
+</tr>
+<tr class="row-odd"><td><p>sunhitsImageConfig</p></td>
+<td><p>STRUCT</p></td>
+<td><p>Structure defining the sun hits image. The following 6 fields are described below:</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>xsize</p></li>
+</ul>
+</td>
+<td><p>INT</p></td>
+<td><p>Number of horizontal pixels of the picture (without frame).</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>ysize</p></li>
+</ul>
+</td>
+<td><p>INT</p></td>
+<td><p>Number of vertical pixels of the picture (without frame).</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>xmin</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Minimum azimuth angle difference (between sun and radar).</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>xmax</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Maximum azimuth angle difference (between sun and radar).</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>ymin</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Minimum elevation angle difference (between sun and radar).</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>ymax</p></li>
+</ul>
+</td>
+<td><p>FLOAT</p></td>
+<td><p>Maximum azimuth angle difference (between sun and radar).</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>dpi</p></li>
+</ul>
+</td>
+<td></td>
+<td><p>INT      Resolution of the image in dots per inch.</p></td>
+</tr>
+<tr class="row-odd"><td><p>azPatternFile</p></td>
+<td><p>STRING</p></td>
+<td><p>Name of the azimuth pattern file of the antenna. This file and path must be <code class="docutils literal notranslate"><span class="pre">&lt;configpath&gt;/antenna/&lt;azPatternFile&gt;</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>elPatternFile</p></td>
+<td><p>STRING</p></td>
+<td><p>Name of the elevation pattern file of the antenna. This file and path must be <code class="docutils literal notranslate"><span class="pre">&lt;configpath&gt;/antenna/&lt;elPatternFile&gt;</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>fixed_angle</p></td>
+<td><p>FLOAT</p></td>
+<td><p>Fixed angle of a PAR antenna in degrees. For the PAR azimuth antenna this is the elevation angle. For the elevation antenna it is the azimuth angle.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+<div class="section ablog__blog_comments">
+  
+  
+</div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="main.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">&lt;no title&gt;</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="prod.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Product configuration file</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/overview/loc.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
