@@ -1282,7 +1282,11 @@ def process_colocated_gates(procstatus, dscfg, radar_list=None):
     visib_field = None
     if 'visibility' in radarnr_dict['RADAR' + '{:03d}'.format(
             ind_radar_list[0] + 1)]:
-        visib_field = 'visibility'
+        visib_field = 'visibility' # older IDL visibility codes
+    elif 'visibility_polar' in radarnr_dict['RADAR' + '{:03d}'.format(
+            ind_radar_list[0] + 1)]:
+        visib_field = 'visibility_polar' # GECSX format
+
     if vismin is not None and visib_field is None:
         warn('Unable to filter data according to visibility. ' +
              'Visibility field for RADAR' + '{:03d}'.format(
@@ -1298,7 +1302,10 @@ def process_colocated_gates(procstatus, dscfg, radar_list=None):
     visib_field = None
     if 'visibility' in radarnr_dict['RADAR' + '{:03d}'.format(
             ind_radar_list[1] + 1)]:
-        visib_field = 'visibility'
+        visib_field = 'visibility'  # older IDL visibility codes
+    elif 'visibility_polar' in radarnr_dict['RADAR' + '{:03d}'.format(
+            ind_radar_list[1] + 1)]:
+        visib_field = 'visibility_polar' # GECSX format
 
     if vismin is not None and visib_field is None:
         warn('Unable to filter data according to visibility. ' +
