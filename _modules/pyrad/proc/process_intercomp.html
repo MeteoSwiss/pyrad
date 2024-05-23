@@ -1685,7 +1685,11 @@ document.write(`
     <span class="n">visib_field</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="s1">&#39;visibility&#39;</span> <span class="ow">in</span> <span class="n">radarnr_dict</span><span class="p">[</span><span class="s1">&#39;RADAR&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">{:03d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">ind_radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]:</span>
-        <span class="n">visib_field</span> <span class="o">=</span> <span class="s1">&#39;visibility&#39;</span>
+        <span class="n">visib_field</span> <span class="o">=</span> <span class="s1">&#39;visibility&#39;</span> <span class="c1"># older IDL visibility codes</span>
+    <span class="k">elif</span> <span class="s1">&#39;visibility_polar&#39;</span> <span class="ow">in</span> <span class="n">radarnr_dict</span><span class="p">[</span><span class="s1">&#39;RADAR&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">{:03d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">ind_radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]:</span>
+        <span class="n">visib_field</span> <span class="o">=</span> <span class="s1">&#39;visibility_polar&#39;</span> <span class="c1"># GECSX format</span>
+
     <span class="k">if</span> <span class="n">vismin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">visib_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to filter data according to visibility. &#39;</span> <span class="o">+</span>
              <span class="s1">&#39;Visibility field for RADAR&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">{:03d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -1701,7 +1705,10 @@ document.write(`
     <span class="n">visib_field</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="s1">&#39;visibility&#39;</span> <span class="ow">in</span> <span class="n">radarnr_dict</span><span class="p">[</span><span class="s1">&#39;RADAR&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">{:03d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">ind_radar_list</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]:</span>
-        <span class="n">visib_field</span> <span class="o">=</span> <span class="s1">&#39;visibility&#39;</span>
+        <span class="n">visib_field</span> <span class="o">=</span> <span class="s1">&#39;visibility&#39;</span>  <span class="c1"># older IDL visibility codes</span>
+    <span class="k">elif</span> <span class="s1">&#39;visibility_polar&#39;</span> <span class="ow">in</span> <span class="n">radarnr_dict</span><span class="p">[</span><span class="s1">&#39;RADAR&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">{:03d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">ind_radar_list</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]:</span>
+        <span class="n">visib_field</span> <span class="o">=</span> <span class="s1">&#39;visibility_polar&#39;</span> <span class="c1"># GECSX format</span>
 
     <span class="k">if</span> <span class="n">vismin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">visib_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to filter data according to visibility. &#39;</span> <span class="o">+</span>
