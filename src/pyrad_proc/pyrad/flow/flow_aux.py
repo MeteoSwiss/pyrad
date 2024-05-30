@@ -894,6 +894,8 @@ def _generate_prod(dataset, cfg, prdname, prdfunc, dsname, voltime,
         cfg, dsname, prdname, voltime, runinfo=runinfo)
     try:
         filenames = prdfunc(dataset, prdcfg)
+        if isinstance(filenames, str): # convert to list if needed
+            filenames = [filenames]
         if 's3copypath' in prdcfg and filenames is not None: # copy to S3
             s3AccessPolicy = (prdcfg['s3AccessPolicy'] if 's3AccessPolicy' 
                                 in prdcfg else None)
