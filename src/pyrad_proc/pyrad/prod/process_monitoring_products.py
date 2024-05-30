@@ -250,7 +250,7 @@ def generate_monitoring_products(dataset, prdcfg):
                 bin_edges, hist, fname, datatype=prdcfg['voltype'], step=step)
             print('----- save to ' + fname)
 
-            return fname
+            fname_list.append(fname)
 
         return fname_list
 
