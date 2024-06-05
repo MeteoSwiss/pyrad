@@ -17,15 +17,15 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -35,9 +35,9 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
-  <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
     <script src="../../../_static/documentation_options.js?v=968d5a7d"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
@@ -63,27 +63,23 @@
 
   
   
-  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>
-    Back to top
-  </button>
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
@@ -105,12 +101,17 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <label class="sidebar-toggle primary-toggle" for="__primary">
+  <button class="sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
-  </label>
+  </button>
   
   
   <div class="col-lg-3 navbar-header-items__start">
@@ -140,33 +141,33 @@
 <nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../userguide/index.html">
-                        User Guide
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../userguide/index.html">
+    User Guide
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../API/index.html">
-                        API Reference Manual
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../overview/index.html">
-                        Pyrad configuration files
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../API/index.html">
+    API Reference Manual
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../changelog.html">
-                        Changelog
-                      </a>
-                    </li>
-                
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../overview/index.html">
+    Pyrad configuration files
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -259,39 +260,42 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item">
+          
+          
+            <div class="navbar-item">
 <nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../userguide/index.html">
-                        User Guide
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../userguide/index.html">
+    User Guide
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../API/index.html">
-                        API Reference Manual
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../overview/index.html">
-                        Pyrad configuration files
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../API/index.html">
+    API Reference Manual
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../changelog.html">
-                        Changelog
-                      </a>
-                    </li>
-                
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../overview/index.html">
+    Pyrad configuration files
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
   </ul>
 </nav></div>
+          
         
       </div>
     
@@ -340,13 +344,13 @@ document.write(`
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
@@ -355,7 +359,7 @@ document.write(`
 
 
 
-<nav aria-label="Breadcrumb">
+<nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
     <li class="breadcrumb-item breadcrumb-home">
@@ -451,14 +455,26 @@ document.write(`
 <span class="sd">        &#39;AMPLITUDE_PHASE_DOPPLER&#39;: Plots a complex Doppler spectrum or IQ data</span>
 <span class="sd">            making two separate plots for the module and phase of the signal</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                azi, ele, rng : float</span>
-<span class="sd">                    azimuth and elevation (deg) and range (m) of the ray to</span>
-<span class="sd">                    plot</span>
-<span class="sd">                azi_to, ele_tol, rng_tol : float</span>
-<span class="sd">                    azimuth and elevation (deg) and range (m) tolerance</span>
-<span class="sd">                    respect to nominal position to plot. Default 1, 1, 50.</span>
-<span class="sd">                ind_ray, ind_rng : int</span>
-<span class="sd">                    index of the ray and range to plot. Alternative to</span>
+<span class="sd">                azi : float</span>
+<span class="sd">                    azimuth (deg) of the ray to plot</span>
+<span class="sd">                ele : float</span>
+<span class="sd">                    elevation (deg) of the ray to plot</span>
+<span class="sd">                rng : float</span>
+<span class="sd">                   range (m) of the ray to plot</span>
+<span class="sd">                azi_tol : float</span>
+<span class="sd">                    azimuth (deg) tolerance respect to nominal position to plot. </span>
+<span class="sd">                    Default 1.</span>
+<span class="sd">                ele_tol : float</span>
+<span class="sd">                    elevation (deg) tolerance respect to nominal position to plot. </span>
+<span class="sd">                    Default 1.</span>
+<span class="sd">                rng_tol : float</span>
+<span class="sd">                    elevation (deg) tolerance respect to nominal position to plot. </span>
+<span class="sd">                    Default 50.</span>
+<span class="sd">                ind_ray : int</span>
+<span class="sd">                    index of the ray to plot. Alternative to</span>
+<span class="sd">                    defining its antenna coordinates</span>
+<span class="sd">                ind_rng : int</span>
+<span class="sd">                    index of the range to plot. Alternative to</span>
 <span class="sd">                    defining its antenna coordinates</span>
 <span class="sd">                xaxis_info : str</span>
 <span class="sd">                    The xaxis type. Can be &#39;Doppler_velocity&#39;,</span>
@@ -469,11 +485,16 @@ document.write(`
 <span class="sd">        &#39;AMPLITUDE_PHASE_RANGE_DOPPLER&#39;: Plots a complex spectra or IQ data</span>
 <span class="sd">            range-Doppler making two separate plots for the module and phase</span>
 <span class="sd">            of the signal User defined parameters:</span>
-<span class="sd">                azi, ele : float</span>
-<span class="sd">                    azimuth and elevation (deg) of the ray to plot</span>
-<span class="sd">                azi_to, ele_tol : float</span>
-<span class="sd">                    azimuth and elevation (deg) tolerance respect to nominal</span>
-<span class="sd">                    position to plot. Default 1, 1.</span>
+<span class="sd">                azi : float</span>
+<span class="sd">                    azimuth (deg) of the ray to plot</span>
+<span class="sd">                ele : float</span>
+<span class="sd">                    elevation (deg) of the ray to plot</span>
+<span class="sd">                azi_tol : float</span>
+<span class="sd">                    azimuth (deg) tolerance respect to nominal position to plot. </span>
+<span class="sd">                    Default 1.</span>
+<span class="sd">                ele_tol : float</span>
+<span class="sd">                    elevation (deg) tolerance respect to nominal position to plot. </span>
+<span class="sd">                    Default 1.</span>
 <span class="sd">                ind_ray : int</span>
 <span class="sd">                    index of the ray to plot. Alternative to</span>
 <span class="sd">                    defining its antenna coordinates</span>
@@ -490,9 +511,14 @@ document.write(`
 <span class="sd">                xaxis_info : str</span>
 <span class="sd">                    The xaxis type. Can be &#39;Doppler_velocity&#39; or</span>
 <span class="sd">                    &#39;Doppler frequency&#39;</span>
-<span class="sd">                ampli_vmin, ampli_vmax, phase_vmin, phase_vmax : float or None</span>
-<span class="sd">                    Minimum and maximum of the color scale for the module and</span>
-<span class="sd">                    phase</span>
+<span class="sd">                ampli_vmin : float or None</span>
+<span class="sd">                    Minimum of the color scale for the module</span>
+<span class="sd">                ampli_vmax : float or None</span>
+<span class="sd">                    Maximum of the color scale for the module</span>
+<span class="sd">                phase_vmin : float or None</span>
+<span class="sd">                    Minimum of the color scale for the module</span>
+<span class="sd">                phase_vmax : float or None</span>
+<span class="sd">                    Minimum of the color scale for the phase</span>
 <span class="sd">                plot_type : str</span>
 <span class="sd">                    Can be &#39;final&#39; or &#39;temporal&#39;. If final the data is only</span>
 <span class="sd">                    plotted at the end of the processing</span>
@@ -513,8 +539,10 @@ document.write(`
 <span class="sd">                xaxis_info : str</span>
 <span class="sd">                    The xaxis type. Can be &#39;Doppler_velocity&#39;,</span>
 <span class="sd">                    &#39;Doppler_frequency&#39; or &#39;pulse_number&#39;</span>
-<span class="sd">                vmin, vmax : float or None</span>
-<span class="sd">                    Minimum and maximum of the color scale</span>
+<span class="sd">                vmin : float or None</span>
+<span class="sd">                    Minimum of the color scale</span>
+<span class="sd">                vmax : float or None</span>
+<span class="sd">                    Maximum of the color scale</span>
 <span class="sd">        &#39;COMPLEX_ANGLE_DOPPLER&#39;: Makes an angle Doppler plot of complex</span>
 <span class="sd">            spectra or IQ data. The plot can be along azimuth or along range.</span>
 <span class="sd">            The real and imaginary parts are plotted separately</span>
@@ -533,42 +561,70 @@ document.write(`
 <span class="sd">                xaxis_info : str</span>
 <span class="sd">                    The xaxis type. Can be &#39;Doppler_velocity&#39;,</span>
 <span class="sd">                    &#39;Doppler_frequency&#39; or &#39;pulse_number&#39;</span>
-<span class="sd">                vmin, vmax : float or None</span>
-<span class="sd">                    Minimum and maximum of the color scale</span>
+<span class="sd">                vmin : float or None</span>
+<span class="sd">                    Minimum of the color scale</span>
+<span class="sd">                vmax : float or None</span>
+<span class="sd">                    Maximum of the color scale</span>
 <span class="sd">        &#39;COMPLEX_DOPPLER&#39;: Plots a complex Doppler spectrum or IQ data making</span>
 <span class="sd">            two separate plots for the real and imaginary parts</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                azi, ele, rng : float</span>
-<span class="sd">                    azimuth and elevation (deg) and range (m) of the ray to</span>
-<span class="sd">                    plot</span>
-<span class="sd">                azi_to, ele_tol, rng_tol : float</span>
-<span class="sd">                    azimuth and elevation (deg) and range (m) tolerance</span>
-<span class="sd">                    respect to nominal position to plot. Default 1, 1, 50.</span>
-<span class="sd">                ind_ray, ind_rng : int</span>
-<span class="sd">                    index of the ray and range to plot. Alternative to</span>
+<span class="sd">                azi : float</span>
+<span class="sd">                    azimuth (deg) of the ray to plot</span>
+<span class="sd">                ele : float</span>
+<span class="sd">                    elevation (deg) of the ray to plot</span>
+<span class="sd">                rng : float</span>
+<span class="sd">                   range (m) of the ray to plot</span>
+<span class="sd">                azi_tol : float</span>
+<span class="sd">                    azimuth (deg) tolerance respect to nominal position to plot. </span>
+<span class="sd">                    Default 1.</span>
+<span class="sd">                ele_tol : float</span>
+<span class="sd">                    elevation (deg) tolerance respect to nominal position to plot. </span>
+<span class="sd">                    Default 1.</span>
+<span class="sd">                rng_tol : float</span>
+<span class="sd">                    elevation (deg) tolerance respect to nominal position to plot. </span>
+<span class="sd">                    Default 50.</span>
+<span class="sd">                ind_ray : int</span>
+<span class="sd">                    index of the ray to plot. Alternative to</span>
+<span class="sd">                    defining its antenna coordinates</span>
+<span class="sd">                ind_rng : int</span>
+<span class="sd">                    index of the range to plot. Alternative to</span>
 <span class="sd">                    defining its antenna coordinates</span>
 <span class="sd">                xaxis_info : str</span>
 <span class="sd">                    The xaxis type. Can be &#39;Doppler_velocity&#39;,</span>
 <span class="sd">                    &#39;Doppler_frequency&#39; or &#39;pulse_number&#39;</span>
-<span class="sd">                vmin, vmax : float or None</span>
-<span class="sd">                    Minimum and maximum of the color scale</span>
+<span class="sd">                vmin : float or None</span>
+<span class="sd">                    Minimum of the color scale</span>
+<span class="sd">                vmax : float or None</span>
+<span class="sd">                    Maximum of the color scale</span>
 <span class="sd">        &#39;COMPLEX_RANGE_DOPPLER&#39;: Plots the complex spectra or IQ data</span>
 <span class="sd">            range-Doppler making two separate plots for the real and imaginary</span>
 <span class="sd">            parts</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                azi, ele : float</span>
-<span class="sd">                    azimuth and elevation (deg) of the ray to plot</span>
-<span class="sd">                azi_to, ele_tol : float</span>
-<span class="sd">                    azimuth and elevation (deg) tolerance respect to nominal</span>
-<span class="sd">                    position to plot. Default 1, 1.</span>
+<span class="sd">                azi : float</span>
+<span class="sd">                    azimuth (deg) of the ray to plot</span>
+<span class="sd">                ele : float</span>
+<span class="sd">                    elevation (deg) of the ray to plot</span>
+<span class="sd">                rng : float</span>
+<span class="sd">                   range (m) of the ray to plot</span>
+<span class="sd">                azi_tol : float</span>
+<span class="sd">                    azimuth (deg) tolerance respect to nominal position to plot. </span>
+<span class="sd">                    Default 1.</span>
+<span class="sd">                ele_tol : float</span>
+<span class="sd">                    elevation (deg) tolerance respect to nominal position to plot. </span>
+<span class="sd">                    Default 1.</span>
+<span class="sd">                rng_tol : float</span>
+<span class="sd">                    elevation (deg) tolerance respect to nominal position to plot. </span>
+<span class="sd">                    Default 50.</span>
 <span class="sd">                ind_ray : int</span>
 <span class="sd">                    index of the ray to plot. Alternative to</span>
 <span class="sd">                    defining its antenna coordinates</span>
 <span class="sd">                xaxis_info : str</span>
 <span class="sd">                    The xaxis type. Can be &#39;Doppler_velocity&#39;,</span>
 <span class="sd">                    &#39;Doppler_frequency&#39; or &#39;pulse_number&#39;</span>
-<span class="sd">                vmin, vmax : float or None</span>
-<span class="sd">                    Minimum and maximum of the color scale</span>
+<span class="sd">                vmin : float or None</span>
+<span class="sd">                    Minimum of the color scale</span>
+<span class="sd">                vmax : float or None</span>
+<span class="sd">                    Maximum of the color scale</span>
 <span class="sd">        &#39;COMPLEX_TIME_DOPPLER&#39;: Plots the complex spectra or IQ data</span>
 <span class="sd">            time-Doppler making two separate plots for the real and imaginary</span>
 <span class="sd">            parts</span>
@@ -576,42 +632,62 @@ document.write(`
 <span class="sd">                xaxis_info : str</span>
 <span class="sd">                    The xaxis type. Can be &#39;Doppler_velocity&#39; or</span>
 <span class="sd">                    &#39;Doppler frequency&#39;</span>
-<span class="sd">                vmin, vmax : float or None</span>
-<span class="sd">                    Minimum and maximum of the color scale</span>
+<span class="sd">                vmin : float or None</span>
+<span class="sd">                    Minimum of the color scale</span>
+<span class="sd">                vmax : float or None</span>
+<span class="sd">                    Maximum of the color scale</span>
 <span class="sd">                plot_type : str</span>
 <span class="sd">                    Can be &#39;final&#39; or &#39;temporal&#39;. If final the data is only</span>
 <span class="sd">                    plotted at the end of the processing</span>
 <span class="sd">        &#39;DOPPLER&#39;: Plots a Doppler spectrum variable or IQ data variable</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                azi, ele, rng : float</span>
-<span class="sd">                    azimuth and elevation (deg) and range (m) of the ray to</span>
-<span class="sd">                    plot</span>
-<span class="sd">                azi_to, ele_tol, rng_tol : float</span>
-<span class="sd">                    azimuth and elevation (deg) and range (m) tolerance</span>
-<span class="sd">                    respect to nominal position to plot. Default 1, 1, 50.</span>
-<span class="sd">                ind_ray, ind_rng : int</span>
-<span class="sd">                    index of the ray and range to plot. Alternative to</span>
-<span class="sd">                    defining its antenna coordinates</span>
-<span class="sd">                xaxis_info : str</span>
-<span class="sd">                    The xaxis type. Can be &#39;Doppler_velocity&#39;,</span>
-<span class="sd">                    &#39;Doppler_frequency&#39; or &#39;pulse_number&#39;</span>
-<span class="sd">                vmin, vmax : float or None</span>
-<span class="sd">                    Minimum and maximum of the color scale</span>
-<span class="sd">        &#39;RANGE_DOPPLER&#39;: Makes a range-Doppler plot of spectral or IQ data</span>
-<span class="sd">            User defined parameters:</span>
-<span class="sd">                azi, ele : float</span>
-<span class="sd">                    azimuth and elevation (deg) of the ray to plot</span>
-<span class="sd">                azi_to, ele_tol : float</span>
-<span class="sd">                    azimuth and elevation (deg) tolerance respect to nominal</span>
-<span class="sd">                    position to plot. Default 1, 1.</span>
+<span class="sd">                azi : float</span>
+<span class="sd">                    azimuth (deg) of the ray to plot</span>
+<span class="sd">                ele : float</span>
+<span class="sd">                    elevation (deg) of the ray to plot</span>
+<span class="sd">                rng : float</span>
+<span class="sd">                   range (m) of the ray to plot</span>
+<span class="sd">                azi_tol : float</span>
+<span class="sd">                    azimuth (deg) tolerance respect to nominal position to plot. </span>
+<span class="sd">                    Default 1.</span>
+<span class="sd">                ele_tol : float</span>
+<span class="sd">                    elevation (deg) tolerance respect to nominal position to plot. </span>
+<span class="sd">                    Default 1.</span>
+<span class="sd">                rng_tol : float</span>
+<span class="sd">                    elevation (deg) tolerance respect to nominal position to plot. </span>
+<span class="sd">                    Default 50.</span>
 <span class="sd">                ind_ray : int</span>
 <span class="sd">                    index of the ray to plot. Alternative to</span>
 <span class="sd">                    defining its antenna coordinates</span>
 <span class="sd">                xaxis_info : str</span>
 <span class="sd">                    The xaxis type. Can be &#39;Doppler_velocity&#39;,</span>
 <span class="sd">                    &#39;Doppler_frequency&#39; or &#39;pulse_number&#39;</span>
-<span class="sd">                vmin, vmax : float or None</span>
-<span class="sd">                    Minimum and maximum of the color scale</span>
+<span class="sd">                vmin : float or None</span>
+<span class="sd">                    Minimum of the color scale</span>
+<span class="sd">                vmax : float or None</span>
+<span class="sd">                    Maximum of the color scale</span>
+<span class="sd">        &#39;RANGE_DOPPLER&#39;: Makes a range-Doppler plot of spectral or IQ data</span>
+<span class="sd">            User defined parameters:</span>
+<span class="sd">                azi : float</span>
+<span class="sd">                    azimuth (deg) of the ray to plot</span>
+<span class="sd">                ele : float</span>
+<span class="sd">                    elevation (deg) of the ray to plot</span>
+<span class="sd">                azi_tol : float</span>
+<span class="sd">                    azimuth (deg) tolerance respect to nominal position to plot. </span>
+<span class="sd">                    Default 1.</span>
+<span class="sd">                ele_tol : float</span>
+<span class="sd">                    elevation (deg) tolerance respect to nominal position to plot. </span>
+<span class="sd">                    Default 1.</span>
+<span class="sd">                ind_ray : int</span>
+<span class="sd">                    index of the ray to plot. Alternative to</span>
+<span class="sd">                    defining its antenna coordinates</span>
+<span class="sd">                xaxis_info : str</span>
+<span class="sd">                    The xaxis type. Can be &#39;Doppler_velocity&#39;,</span>
+<span class="sd">                    &#39;Doppler_frequency&#39; or &#39;pulse_number&#39;</span>
+<span class="sd">                vmin : float or None</span>
+<span class="sd">                    Minimum of the color scale</span>
+<span class="sd">                vmax : float or None</span>
+<span class="sd">                    Maximum of the color scale</span>
 <span class="sd">        &#39;SAVEALL&#39;: Saves radar spectra or IQ volume data including all or a</span>
 <span class="sd">            list of userdefined fields in a netcdf file</span>
 <span class="sd">            User defined parameters:</span>
@@ -633,8 +709,10 @@ document.write(`
 <span class="sd">                xaxis_info : str</span>
 <span class="sd">                    The xaxis type. Can be &#39;Doppler_velocity&#39;,</span>
 <span class="sd">                    &#39;Doppler_frequency&#39; or &#39;pulse_number&#39;</span>
-<span class="sd">                vmin, vmax : float or None</span>
-<span class="sd">                    Minimum and maximum of the color scale</span>
+<span class="sd">                vmin : float or None</span>
+<span class="sd">                    Minimum of the color scale</span>
+<span class="sd">                vmax : float or None</span>
+<span class="sd">                    Maximum of the color scale</span>
 <span class="sd">                plot_type : str</span>
 <span class="sd">                    Can be &#39;final&#39; or &#39;temporal&#39;. If final the data is only</span>
 <span class="sd">                    plotted at the end of the processing</span>
@@ -1583,7 +1661,7 @@ document.write(`
               
               
               
-                <footer class="prev-next-footer">
+                <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
 </div>
@@ -1592,8 +1670,6 @@ document.write(`
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"></div>
               
             
           </div>
@@ -1606,8 +1682,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1630,7 +1706,7 @@ document.write(`
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.3.
 </p></div>
       
     </div>

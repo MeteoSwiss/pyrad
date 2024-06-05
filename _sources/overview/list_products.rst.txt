@@ -929,7 +929,7 @@ AMPLITUDE_PHASE_ANGLE_DOPPLER
 """"""""""""""""""""""""""""""
 description
    Makes an angle Doppler plot of complex spectra or IQ data. The plot can be along azimuth or along range. It is plotted separately the module and the phase of the signal.
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L959>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1033>`_
 parameters
    along_azi  bool
         If true the plot is performed along azimuth, otherwise along elevation. Default true 
@@ -950,14 +950,24 @@ AMPLITUDE_PHASE_DOPPLER
 """"""""""""""""""""""""""""""
 description
    Plots a complex Doppler spectrum or IQ data making two separate plots for the module and phase of the signal
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L818>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L892>`_
 parameters
+   azi  float
+        azimuth (deg) of the ray to plot 
+   ele  float
+        elevation (deg) of the ray to plot 
    rng  float
-        azimuth and elevation (deg) and range (m) of the ray to plot azi_to, ele_tol, 
+        range (m) of the ray to plot 
+   azi_tol  float
+        azimuth (deg) tolerance respect to nominal position to plot. Default 1. 
+   ele_tol  float
+        elevation (deg) tolerance respect to nominal position to plot. Default 1. 
    rng_tol  float
-        azimuth and elevation (deg) and range (m) tolerance respect to nominal position to plot. Default 1, 1, 50. ind_ray, 
+        elevation (deg) tolerance respect to nominal position to plot. Default 50. 
+   ind_ray  int
+        index of the ray to plot. Alternative to defining its antenna coordinates 
    ind_rng  int
-        index of the ray and range to plot. Alternative to defining its antenna coordinates 
+        index of the range to plot. Alternative to defining its antenna coordinates 
    xaxis_info  str
         The xaxis type. Can be 'Doppler_velocity', 'Doppler_frequency' or 'pulse_number' ampli_vmin, ampli_vmax, phase_vmin, 
    phase_vmax  float
@@ -967,12 +977,16 @@ AMPLITUDE_PHASE_RANGE_DOPPLER
 """"""""""""""""""""""""""""""
 description
    Plots a complex spectra or IQ data range-Doppler making two separate plots for the module and phase
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L892>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L966>`_
 parameters
+   azi  float
+        azimuth (deg) of the ray to plot 
    ele  float
-        azimuth and elevation (deg) of the ray to plot azi_to, 
+        elevation (deg) of the ray to plot 
+   azi_tol  float
+        azimuth (deg) tolerance respect to nominal position to plot. Default 1. 
    ele_tol  float
-        azimuth and elevation (deg) tolerance respect to nominal position to plot. Default 1, 1. 
+        elevation (deg) tolerance respect to nominal position to plot. Default 1. 
    ind_ray  int
         index of the ray to plot. Alternative to defining its antenna coordinates 
    xaxis_info  str
@@ -984,12 +998,18 @@ AMPLITUDE_PHASE_TIME_DOPPLER
 """"""""""""""""""""""""""""""
 description
    Plots a complex spectra or IQ data time-Doppler making two separate plots for the module and phase of the signal
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1046>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1120>`_
 parameters
    xaxis_info  str
-        The xaxis type. Can be 'Doppler_velocity' or 'Doppler frequency' ampli_vmin, ampli_vmax, phase_vmin, 
+        The xaxis type. Can be 'Doppler_velocity' or 'Doppler frequency' 
+   ampli_vmin  float
+        or None Minimum of the color scale for the module 
+   ampli_vmax  float
+        or None Maximum of the color scale for the module 
+   phase_vmin  float
+        or None Minimum of the color scale for the module 
    phase_vmax  float
-        or None Minimum and maximum of the color scale for the module and phase 
+        or None Minimum of the color scale for the phase 
    plot_type  str
         Can be 'final' or 'temporal'. If final the data is only plotted at the end of the processing
 
@@ -997,7 +1017,7 @@ ANGLE_DOPPLER
 """"""""""""""""""""""""""""""
 description
    Makes an angle Doppler plot. The plot can be along azimuth or along range
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L959>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1033>`_
 parameters
    along_azi  bool
         If true the plot is performed along azimuth, otherwise along elevation. Default true 
@@ -1010,15 +1030,17 @@ parameters
    rng_tol  float
         The fixed range tolerance (m). Default 50. 
    xaxis_info  str
-        The xaxis type. Can be 'Doppler_velocity', 'Doppler_frequency' or 'pulse_number' vmin, 
+        The xaxis type. Can be 'Doppler_velocity', 'Doppler_frequency' or 'pulse_number' 
+   vmin  float
+        or None Minimum of the color scale 
    vmax  float
-        or None Minimum and maximum of the color scale
+        or None Maximum of the color scale
 
 COMPLEX_ANGLE_DOPPLER
 """"""""""""""""""""""""""""""
 description
    Makes an angle Doppler plot of complex spectra or IQ data. The plot can be along azimuth or along range. The real and imaginary parts are plotted separately
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L608>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L682>`_
 parameters
    along_azi  bool
         If true the plot is performed along azimuth, otherwise along elevation. Default true 
@@ -1031,54 +1053,80 @@ parameters
    rng_tol  float
         The fixed range tolerance (m). Default 50. 
    xaxis_info  str
-        The xaxis type. Can be 'Doppler_velocity', 'Doppler_frequency' or 'pulse_number' vmin, 
+        The xaxis type. Can be 'Doppler_velocity', 'Doppler_frequency' or 'pulse_number' 
+   vmin  float
+        or None Minimum of the color scale 
    vmax  float
-        or None Minimum and maximum of the color scale
+        or None Maximum of the color scale
 
 COMPLEX_DOPPLER
 """"""""""""""""""""""""""""""
 description
    Plots a complex Doppler spectrum or IQ data making two separate plots for the real and imaginary parts
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L748>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L822>`_
 parameters
+   azi  float
+        azimuth (deg) of the ray to plot 
+   ele  float
+        elevation (deg) of the ray to plot 
    rng  float
-        azimuth and elevation (deg) and range (m) of the ray to plot azi_to, ele_tol, 
+        range (m) of the ray to plot 
+   azi_tol  float
+        azimuth (deg) tolerance respect to nominal position to plot. Default 1. 
+   ele_tol  float
+        elevation (deg) tolerance respect to nominal position to plot. Default 1. 
    rng_tol  float
-        azimuth and elevation (deg) and range (m) tolerance respect to nominal position to plot. Default 1, 1, 50. ind_ray, 
+        elevation (deg) tolerance respect to nominal position to plot. Default 50. 
+   ind_ray  int
+        index of the ray to plot. Alternative to defining its antenna coordinates 
    ind_rng  int
-        index of the ray and range to plot. Alternative to defining its antenna coordinates 
+        index of the range to plot. Alternative to defining its antenna coordinates 
    xaxis_info  str
-        The xaxis type. Can be 'Doppler_velocity', 'Doppler_frequency' or 'pulse_number' vmin, 
+        The xaxis type. Can be 'Doppler_velocity', 'Doppler_frequency' or 'pulse_number' 
+   vmin  float
+        or None Minimum of the color scale 
    vmax  float
-        or None Minimum and maximum of the color scale
+        or None Maximum of the color scale
 
 COMPLEX_RANGE_DOPPLER
 """"""""""""""""""""""""""""""
 description
    Plots the complex spectra or IQ data range-Doppler making two separate plots for the real and imaginary parts
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L547>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L621>`_
 parameters
+   azi  float
+        azimuth (deg) of the ray to plot 
    ele  float
-        azimuth and elevation (deg) of the ray to plot azi_to, 
+        elevation (deg) of the ray to plot 
+   rng  float
+        range (m) of the ray to plot 
+   azi_tol  float
+        azimuth (deg) tolerance respect to nominal position to plot. Default 1. 
    ele_tol  float
-        azimuth and elevation (deg) tolerance respect to nominal position to plot. Default 1, 1. 
+        elevation (deg) tolerance respect to nominal position to plot. Default 1. 
+   rng_tol  float
+        elevation (deg) tolerance respect to nominal position to plot. Default 50. 
    ind_ray  int
         index of the ray to plot. Alternative to defining its antenna coordinates 
    xaxis_info  str
-        The xaxis type. Can be 'Doppler_velocity', 'Doppler_frequency' or 'pulse_number' vmin, 
+        The xaxis type. Can be 'Doppler_velocity', 'Doppler_frequency' or 'pulse_number' 
+   vmin  float
+        or None Minimum of the color scale 
    vmax  float
-        or None Minimum and maximum of the color scale
+        or None Maximum of the color scale
 
 COMPLEX_TIME_DOPPLER
 """"""""""""""""""""""""""""""
 description
    Plots the complex spectra or IQ data time-Doppler making two separate plots for the real and imaginary parts
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L689>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L763>`_
 parameters
    xaxis_info  str
-        The xaxis type. Can be 'Doppler_velocity' or 'Doppler frequency' vmin, 
+        The xaxis type. Can be 'Doppler_velocity' or 'Doppler frequency' 
+   vmin  float
+        or None Minimum of the color scale 
    vmax  float
-        or None Minimum and maximum of the color scale 
+        or None Maximum of the color scale 
    plot_type  str
         Can be 'final' or 'temporal'. If final the data is only plotted at the end of the processing
 
@@ -1086,41 +1134,57 @@ DOPPLER
 """"""""""""""""""""""""""""""
 description
    Plots a Doppler spectrum variable or IQ data variable
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1046>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1120>`_
 parameters
+   azi  float
+        azimuth (deg) of the ray to plot 
+   ele  float
+        elevation (deg) of the ray to plot 
    rng  float
-        azimuth and elevation (deg) and range (m) of the ray to plot azi_to, ele_tol, 
+        range (m) of the ray to plot 
+   azi_tol  float
+        azimuth (deg) tolerance respect to nominal position to plot. Default 1. 
+   ele_tol  float
+        elevation (deg) tolerance respect to nominal position to plot. Default 1. 
    rng_tol  float
-        azimuth and elevation (deg) and range (m) tolerance respect to nominal position to plot. Default 1, 1, 50. ind_ray, 
-   ind_rng  int
-        index of the ray and range to plot. Alternative to defining its antenna coordinates 
+        elevation (deg) tolerance respect to nominal position to plot. Default 50. 
+   ind_ray  int
+        index of the ray to plot. Alternative to defining its antenna coordinates 
    xaxis_info  str
-        The xaxis type. Can be 'Doppler_velocity', 'Doppler_frequency' or 'pulse_number' vmin, 
+        The xaxis type. Can be 'Doppler_velocity', 'Doppler_frequency' or 'pulse_number' 
+   vmin  float
+        or None Minimum of the color scale 
    vmax  float
-        or None Minimum and maximum of the color scale
+        or None Maximum of the color scale
 
 RANGE_DOPPLER
 """"""""""""""""""""""""""""""
 description
    Makes a range-Doppler plot of spectral or IQ data
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L892>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L966>`_
 parameters
+   azi  float
+        azimuth (deg) of the ray to plot 
    ele  float
-        azimuth and elevation (deg) of the ray to plot azi_to, 
+        elevation (deg) of the ray to plot 
+   azi_tol  float
+        azimuth (deg) tolerance respect to nominal position to plot. Default 1. 
    ele_tol  float
-        azimuth and elevation (deg) tolerance respect to nominal position to plot. Default 1, 1. 
+        elevation (deg) tolerance respect to nominal position to plot. Default 1. 
    ind_ray  int
         index of the ray to plot. Alternative to defining its antenna coordinates 
    xaxis_info  str
-        The xaxis type. Can be 'Doppler_velocity', 'Doppler_frequency' or 'pulse_number' vmin, 
+        The xaxis type. Can be 'Doppler_velocity', 'Doppler_frequency' or 'pulse_number' 
+   vmin  float
+        or None Minimum of the color scale 
    vmax  float
-        or None Minimum and maximum of the color scale
+        or None Maximum of the color scale
 
 SAVEALL
 """"""""""""""""""""""""""""""
 description
    Saves radar spectra or IQ volume data including all or a list of userdefined fields in a netcdf file
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1144>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1218>`_
 parameters
    datatypes list
         of str or None The list of data types to save. If it is None, all fields in the radar object will be saved 
@@ -1131,7 +1195,7 @@ SAVEVOL
 """"""""""""""""""""""""""""""
 description
    Saves one field of a radar spectra or IQ volume data in a netcdf file
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1111>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1185>`_
 parameters
    physical Bool
         If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary
@@ -1140,12 +1204,14 @@ TIME_DOPPLER
 """"""""""""""""""""""""""""""
 description
    Makes a time-Doppler plot of spectral or IQ data at a point of interest.
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1046>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1120>`_
 parameters
    xaxis_info  str
-        The xaxis type. Can be 'Doppler_velocity', 'Doppler_frequency' or 'pulse_number' vmin, 
+        The xaxis type. Can be 'Doppler_velocity', 'Doppler_frequency' or 'pulse_number' 
+   vmin  float
+        or None Minimum of the color scale 
    vmax  float
-        or None Minimum and maximum of the color scale 
+        or None Maximum of the color scale 
    plot_type  str
         Can be 'final' or 'temporal'. If final the data is only plotted at the end of the processing 
 

@@ -18,15 +18,15 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
@@ -36,9 +36,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/pyart-theme.css?v=40b48845" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
-  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
     <script src="../_static/documentation_options.js?v=968d5a7d"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
@@ -66,27 +66,23 @@
 
   
   
-  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>
-    Back to top
-  </button>
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
@@ -108,12 +104,17 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <label class="sidebar-toggle primary-toggle" for="__primary">
+  <button class="sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
-  </label>
+  </button>
   
   
   <div class="col-lg-3 navbar-header-items__start">
@@ -143,33 +144,33 @@
 <nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../userguide/index.html">
-                        User Guide
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../userguide/index.html">
+    User Guide
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../API/index.html">
-                        API Reference Manual
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="index.html">
-                        Pyrad configuration files
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../API/index.html">
+    API Reference Manual
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../changelog.html">
-                        Changelog
-                      </a>
-                    </li>
-                
+
+<li class="nav-item pst-header-nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Pyrad configuration files
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -241,9 +242,9 @@ document.write(`
   
 
   
-    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+    <button class="sidebar-toggle secondary-toggle" aria-label="On this page">
       <span class="fa-solid fa-outdent"></span>
-    </label>
+    </button>
   
 </div>
 
@@ -264,39 +265,42 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item">
+          
+          
+            <div class="navbar-item">
 <nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../userguide/index.html">
-                        User Guide
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../userguide/index.html">
+    User Guide
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../API/index.html">
-                        API Reference Manual
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="index.html">
-                        Pyrad configuration files
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../API/index.html">
+    API Reference Manual
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../changelog.html">
-                        Changelog
-                      </a>
-                    </li>
-                
+
+<li class="nav-item pst-header-nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Pyrad configuration files
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
   </ul>
 </nav></div>
+          
         
       </div>
     
@@ -346,13 +350,13 @@ document.write(`
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="main.html">Main configuration file</a></li>
 <li class="toctree-l1"><a class="reference internal" href="loc.html">Location configuration file</a></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="prod.html">Product configuration file</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="prod.html">Product configuration file</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="list_process.html">List of pyrad datasets</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">List of pyrad products</a></li>
 <li class="toctree-l2"><a class="reference internal" href="list_datadescriptors.html">List of pyrad input data descriptors</a></li>
 <li class="toctree-l2"><a class="reference internal" href="list_variables.html">List of pyrad variables</a></li>
 </ul>
-</li>
+</details></li>
 </ul>
 </div>
 </nav></div>
@@ -367,13 +371,13 @@ document.write(`
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
@@ -382,7 +386,7 @@ document.write(`
 
 
 
-<nav aria-label="Breadcrumb">
+<nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
     <li class="breadcrumb-item breadcrumb-home">
@@ -1737,7 +1741,7 @@ document.write(`
 <dt>description</dt><dd><blockquote>
 <div><p>Makes an angle Doppler plot of complex spectra or IQ data. The plot can be along azimuth or along range. It is plotted separately the module and the phase of the signal.</p>
 </div></blockquote>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L959">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1033">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>along_azi  bool</dt><dd><p>If true the plot is performed along azimuth, otherwise along elevation. Default true</p>
@@ -1764,14 +1768,24 @@ document.write(`
 <dt>description</dt><dd><blockquote>
 <div><p>Plots a complex Doppler spectrum or IQ data making two separate plots for the module and phase of the signal</p>
 </div></blockquote>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L818">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L892">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>rng  float</dt><dd><p>azimuth and elevation (deg) and range (m) of the ray to plot azi_to, ele_tol,</p>
+<dt>azi  float</dt><dd><p>azimuth (deg) of the ray to plot</p>
 </dd>
-<dt>rng_tol  float</dt><dd><p>azimuth and elevation (deg) and range (m) tolerance respect to nominal position to plot. Default 1, 1, 50. ind_ray,</p>
+<dt>ele  float</dt><dd><p>elevation (deg) of the ray to plot</p>
 </dd>
-<dt>ind_rng  int</dt><dd><p>index of the ray and range to plot. Alternative to defining its antenna coordinates</p>
+<dt>rng  float</dt><dd><p>range (m) of the ray to plot</p>
+</dd>
+<dt>azi_tol  float</dt><dd><p>azimuth (deg) tolerance respect to nominal position to plot. Default 1.</p>
+</dd>
+<dt>ele_tol  float</dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 1.</p>
+</dd>
+<dt>rng_tol  float</dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 50.</p>
+</dd>
+<dt>ind_ray  int</dt><dd><p>index of the ray to plot. Alternative to defining its antenna coordinates</p>
+</dd>
+<dt>ind_rng  int</dt><dd><p>index of the range to plot. Alternative to defining its antenna coordinates</p>
 </dd>
 <dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ ampli_vmin, ampli_vmax, phase_vmin,</p>
 </dd>
@@ -1787,12 +1801,16 @@ document.write(`
 <dt>description</dt><dd><blockquote>
 <div><p>Plots a complex spectra or IQ data range-Doppler making two separate plots for the module and phase</p>
 </div></blockquote>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L892">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L966">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>ele  float</dt><dd><p>azimuth and elevation (deg) of the ray to plot azi_to,</p>
+<dt>azi  float</dt><dd><p>azimuth (deg) of the ray to plot</p>
 </dd>
-<dt>ele_tol  float</dt><dd><p>azimuth and elevation (deg) tolerance respect to nominal position to plot. Default 1, 1.</p>
+<dt>ele  float</dt><dd><p>elevation (deg) of the ray to plot</p>
+</dd>
+<dt>azi_tol  float</dt><dd><p>azimuth (deg) tolerance respect to nominal position to plot. Default 1.</p>
+</dd>
+<dt>ele_tol  float</dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 1.</p>
 </dd>
 <dt>ind_ray  int</dt><dd><p>index of the ray to plot. Alternative to defining its antenna coordinates</p>
 </dd>
@@ -1810,12 +1828,18 @@ document.write(`
 <dt>description</dt><dd><blockquote>
 <div><p>Plots a complex spectra or IQ data time-Doppler making two separate plots for the module and phase of the signal</p>
 </div></blockquote>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1046">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1120">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’ or ‘Doppler frequency’ ampli_vmin, ampli_vmax, phase_vmin,</p>
+<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’ or ‘Doppler frequency’</p>
 </dd>
-<dt>phase_vmax  float</dt><dd><p>or None Minimum and maximum of the color scale for the module and phase</p>
+<dt>ampli_vmin  float</dt><dd><p>or None Minimum of the color scale for the module</p>
+</dd>
+<dt>ampli_vmax  float</dt><dd><p>or None Maximum of the color scale for the module</p>
+</dd>
+<dt>phase_vmin  float</dt><dd><p>or None Minimum of the color scale for the module</p>
+</dd>
+<dt>phase_vmax  float</dt><dd><p>or None Minimum of the color scale for the phase</p>
 </dd>
 <dt>plot_type  str</dt><dd><p>Can be ‘final’ or ‘temporal’. If final the data is only plotted at the end of the processing</p>
 </dd>
@@ -1829,7 +1853,7 @@ document.write(`
 <dt>description</dt><dd><blockquote>
 <div><p>Makes an angle Doppler plot. The plot can be along azimuth or along range</p>
 </div></blockquote>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L959">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1033">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>along_azi  bool</dt><dd><p>If true the plot is performed along azimuth, otherwise along elevation. Default true</p>
@@ -1842,9 +1866,11 @@ document.write(`
 </dd>
 <dt>rng_tol  float</dt><dd><p>The fixed range tolerance (m). Default 50.</p>
 </dd>
-<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ vmin,</p>
+<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’</p>
 </dd>
-<dt>vmax  float</dt><dd><p>or None Minimum and maximum of the color scale</p>
+<dt>vmin  float</dt><dd><p>or None Minimum of the color scale</p>
+</dd>
+<dt>vmax  float</dt><dd><p>or None Maximum of the color scale</p>
 </dd>
 </dl>
 </dd>
@@ -1856,7 +1882,7 @@ document.write(`
 <dt>description</dt><dd><blockquote>
 <div><p>Makes an angle Doppler plot of complex spectra or IQ data. The plot can be along azimuth or along range. The real and imaginary parts are plotted separately</p>
 </div></blockquote>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L608">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L682">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>along_azi  bool</dt><dd><p>If true the plot is performed along azimuth, otherwise along elevation. Default true</p>
@@ -1869,9 +1895,11 @@ document.write(`
 </dd>
 <dt>rng_tol  float</dt><dd><p>The fixed range tolerance (m). Default 50.</p>
 </dd>
-<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ vmin,</p>
+<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’</p>
 </dd>
-<dt>vmax  float</dt><dd><p>or None Minimum and maximum of the color scale</p>
+<dt>vmin  float</dt><dd><p>or None Minimum of the color scale</p>
+</dd>
+<dt>vmax  float</dt><dd><p>or None Maximum of the color scale</p>
 </dd>
 </dl>
 </dd>
@@ -1883,18 +1911,30 @@ document.write(`
 <dt>description</dt><dd><blockquote>
 <div><p>Plots a complex Doppler spectrum or IQ data making two separate plots for the real and imaginary parts</p>
 </div></blockquote>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L748">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L822">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>rng  float</dt><dd><p>azimuth and elevation (deg) and range (m) of the ray to plot azi_to, ele_tol,</p>
+<dt>azi  float</dt><dd><p>azimuth (deg) of the ray to plot</p>
 </dd>
-<dt>rng_tol  float</dt><dd><p>azimuth and elevation (deg) and range (m) tolerance respect to nominal position to plot. Default 1, 1, 50. ind_ray,</p>
+<dt>ele  float</dt><dd><p>elevation (deg) of the ray to plot</p>
 </dd>
-<dt>ind_rng  int</dt><dd><p>index of the ray and range to plot. Alternative to defining its antenna coordinates</p>
+<dt>rng  float</dt><dd><p>range (m) of the ray to plot</p>
 </dd>
-<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ vmin,</p>
+<dt>azi_tol  float</dt><dd><p>azimuth (deg) tolerance respect to nominal position to plot. Default 1.</p>
 </dd>
-<dt>vmax  float</dt><dd><p>or None Minimum and maximum of the color scale</p>
+<dt>ele_tol  float</dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 1.</p>
+</dd>
+<dt>rng_tol  float</dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 50.</p>
+</dd>
+<dt>ind_ray  int</dt><dd><p>index of the ray to plot. Alternative to defining its antenna coordinates</p>
+</dd>
+<dt>ind_rng  int</dt><dd><p>index of the range to plot. Alternative to defining its antenna coordinates</p>
+</dd>
+<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’</p>
+</dd>
+<dt>vmin  float</dt><dd><p>or None Minimum of the color scale</p>
+</dd>
+<dt>vmax  float</dt><dd><p>or None Maximum of the color scale</p>
 </dd>
 </dl>
 </dd>
@@ -1906,18 +1946,28 @@ document.write(`
 <dt>description</dt><dd><blockquote>
 <div><p>Plots the complex spectra or IQ data range-Doppler making two separate plots for the real and imaginary parts</p>
 </div></blockquote>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L547">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L621">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>ele  float</dt><dd><p>azimuth and elevation (deg) of the ray to plot azi_to,</p>
+<dt>azi  float</dt><dd><p>azimuth (deg) of the ray to plot</p>
 </dd>
-<dt>ele_tol  float</dt><dd><p>azimuth and elevation (deg) tolerance respect to nominal position to plot. Default 1, 1.</p>
+<dt>ele  float</dt><dd><p>elevation (deg) of the ray to plot</p>
+</dd>
+<dt>rng  float</dt><dd><p>range (m) of the ray to plot</p>
+</dd>
+<dt>azi_tol  float</dt><dd><p>azimuth (deg) tolerance respect to nominal position to plot. Default 1.</p>
+</dd>
+<dt>ele_tol  float</dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 1.</p>
+</dd>
+<dt>rng_tol  float</dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 50.</p>
 </dd>
 <dt>ind_ray  int</dt><dd><p>index of the ray to plot. Alternative to defining its antenna coordinates</p>
 </dd>
-<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ vmin,</p>
+<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’</p>
 </dd>
-<dt>vmax  float</dt><dd><p>or None Minimum and maximum of the color scale</p>
+<dt>vmin  float</dt><dd><p>or None Minimum of the color scale</p>
+</dd>
+<dt>vmax  float</dt><dd><p>or None Maximum of the color scale</p>
 </dd>
 </dl>
 </dd>
@@ -1929,12 +1979,14 @@ document.write(`
 <dt>description</dt><dd><blockquote>
 <div><p>Plots the complex spectra or IQ data time-Doppler making two separate plots for the real and imaginary parts</p>
 </div></blockquote>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L689">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L763">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’ or ‘Doppler frequency’ vmin,</p>
+<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’ or ‘Doppler frequency’</p>
 </dd>
-<dt>vmax  float</dt><dd><p>or None Minimum and maximum of the color scale</p>
+<dt>vmin  float</dt><dd><p>or None Minimum of the color scale</p>
+</dd>
+<dt>vmax  float</dt><dd><p>or None Maximum of the color scale</p>
 </dd>
 <dt>plot_type  str</dt><dd><p>Can be ‘final’ or ‘temporal’. If final the data is only plotted at the end of the processing</p>
 </dd>
@@ -1948,18 +2000,28 @@ document.write(`
 <dt>description</dt><dd><blockquote>
 <div><p>Plots a Doppler spectrum variable or IQ data variable</p>
 </div></blockquote>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1046">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1120">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>rng  float</dt><dd><p>azimuth and elevation (deg) and range (m) of the ray to plot azi_to, ele_tol,</p>
+<dt>azi  float</dt><dd><p>azimuth (deg) of the ray to plot</p>
 </dd>
-<dt>rng_tol  float</dt><dd><p>azimuth and elevation (deg) and range (m) tolerance respect to nominal position to plot. Default 1, 1, 50. ind_ray,</p>
+<dt>ele  float</dt><dd><p>elevation (deg) of the ray to plot</p>
 </dd>
-<dt>ind_rng  int</dt><dd><p>index of the ray and range to plot. Alternative to defining its antenna coordinates</p>
+<dt>rng  float</dt><dd><p>range (m) of the ray to plot</p>
 </dd>
-<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ vmin,</p>
+<dt>azi_tol  float</dt><dd><p>azimuth (deg) tolerance respect to nominal position to plot. Default 1.</p>
 </dd>
-<dt>vmax  float</dt><dd><p>or None Minimum and maximum of the color scale</p>
+<dt>ele_tol  float</dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 1.</p>
+</dd>
+<dt>rng_tol  float</dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 50.</p>
+</dd>
+<dt>ind_ray  int</dt><dd><p>index of the ray to plot. Alternative to defining its antenna coordinates</p>
+</dd>
+<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’</p>
+</dd>
+<dt>vmin  float</dt><dd><p>or None Minimum of the color scale</p>
+</dd>
+<dt>vmax  float</dt><dd><p>or None Maximum of the color scale</p>
 </dd>
 </dl>
 </dd>
@@ -1971,18 +2033,24 @@ document.write(`
 <dt>description</dt><dd><blockquote>
 <div><p>Makes a range-Doppler plot of spectral or IQ data</p>
 </div></blockquote>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L892">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L966">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>ele  float</dt><dd><p>azimuth and elevation (deg) of the ray to plot azi_to,</p>
+<dt>azi  float</dt><dd><p>azimuth (deg) of the ray to plot</p>
 </dd>
-<dt>ele_tol  float</dt><dd><p>azimuth and elevation (deg) tolerance respect to nominal position to plot. Default 1, 1.</p>
+<dt>ele  float</dt><dd><p>elevation (deg) of the ray to plot</p>
+</dd>
+<dt>azi_tol  float</dt><dd><p>azimuth (deg) tolerance respect to nominal position to plot. Default 1.</p>
+</dd>
+<dt>ele_tol  float</dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 1.</p>
 </dd>
 <dt>ind_ray  int</dt><dd><p>index of the ray to plot. Alternative to defining its antenna coordinates</p>
 </dd>
-<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ vmin,</p>
+<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’</p>
 </dd>
-<dt>vmax  float</dt><dd><p>or None Minimum and maximum of the color scale</p>
+<dt>vmin  float</dt><dd><p>or None Minimum of the color scale</p>
+</dd>
+<dt>vmax  float</dt><dd><p>or None Maximum of the color scale</p>
 </dd>
 </dl>
 </dd>
@@ -1994,7 +2062,7 @@ document.write(`
 <dt>description</dt><dd><blockquote>
 <div><p>Saves radar spectra or IQ volume data including all or a list of userdefined fields in a netcdf file</p>
 </div></blockquote>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1144">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1218">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatypes list</dt><dd><p>of str or None The list of data types to save. If it is None, all fields in the radar object will be saved</p>
@@ -2011,7 +2079,7 @@ document.write(`
 <dt>description</dt><dd><blockquote>
 <div><p>Saves one field of a radar spectra or IQ volume data in a netcdf file</p>
 </div></blockquote>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1111">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1185">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>physical Bool</dt><dd><p>If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary</p>
@@ -2026,12 +2094,14 @@ document.write(`
 <dt>description</dt><dd><blockquote>
 <div><p>Makes a time-Doppler plot of spectral or IQ data at a point of interest.</p>
 </div></blockquote>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1046">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1120">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ vmin,</p>
+<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’</p>
 </dd>
-<dt>vmax  float</dt><dd><p>or None Minimum and maximum of the color scale</p>
+<dt>vmin  float</dt><dd><p>or None Minimum of the color scale</p>
+</dd>
+<dt>vmax  float</dt><dd><p>or None Maximum of the color scale</p>
 </dd>
 <dt>plot_type  str</dt><dd><p>Can be ‘final’ or ‘temporal’. If final the data is only plotted at the end of the processing</p>
 </dd>
@@ -2649,7 +2719,7 @@ document.write(`
               
               
               
-                <footer class="prev-next-footer">
+                <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
     <a class="left-prev"
@@ -2876,8 +2946,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2900,7 +2970,7 @@ document.write(`
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.3.
 </p></div>
       
     </div>
