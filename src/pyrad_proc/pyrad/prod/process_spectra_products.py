@@ -63,14 +63,26 @@ def generate_spectra_products(dataset, prdcfg):
         'AMPLITUDE_PHASE_DOPPLER': Plots a complex Doppler spectrum or IQ data
             making two separate plots for the module and phase of the signal
             User defined parameters:
-                azi, ele, rng : float
-                    azimuth and elevation (deg) and range (m) of the ray to
-                    plot
-                azi_to, ele_tol, rng_tol : float
-                    azimuth and elevation (deg) and range (m) tolerance
-                    respect to nominal position to plot. Default 1, 1, 50.
-                ind_ray, ind_rng : int
-                    index of the ray and range to plot. Alternative to
+                azi : float
+                    azimuth (deg) of the ray to plot
+                ele : float
+                    elevation (deg) of the ray to plot
+                rng : float
+                   range (m) of the ray to plot
+                azi_tol : float
+                    azimuth (deg) tolerance respect to nominal position to plot. 
+                    Default 1.
+                ele_tol : float
+                    elevation (deg) tolerance respect to nominal position to plot. 
+                    Default 1.
+                rng_tol : float
+                    elevation (deg) tolerance respect to nominal position to plot. 
+                    Default 50.
+                ind_ray : int
+                    index of the ray to plot. Alternative to
+                    defining its antenna coordinates
+                ind_rng : int
+                    index of the range to plot. Alternative to
                     defining its antenna coordinates
                 xaxis_info : str
                     The xaxis type. Can be 'Doppler_velocity',
@@ -81,11 +93,16 @@ def generate_spectra_products(dataset, prdcfg):
         'AMPLITUDE_PHASE_RANGE_DOPPLER': Plots a complex spectra or IQ data
             range-Doppler making two separate plots for the module and phase
             of the signal User defined parameters:
-                azi, ele : float
-                    azimuth and elevation (deg) of the ray to plot
-                azi_to, ele_tol : float
-                    azimuth and elevation (deg) tolerance respect to nominal
-                    position to plot. Default 1, 1.
+                azi : float
+                    azimuth (deg) of the ray to plot
+                ele : float
+                    elevation (deg) of the ray to plot
+                azi_tol : float
+                    azimuth (deg) tolerance respect to nominal position to plot. 
+                    Default 1.
+                ele_tol : float
+                    elevation (deg) tolerance respect to nominal position to plot. 
+                    Default 1.
                 ind_ray : int
                     index of the ray to plot. Alternative to
                     defining its antenna coordinates
@@ -102,9 +119,14 @@ def generate_spectra_products(dataset, prdcfg):
                 xaxis_info : str
                     The xaxis type. Can be 'Doppler_velocity' or
                     'Doppler frequency'
-                ampli_vmin, ampli_vmax, phase_vmin, phase_vmax : float or None
-                    Minimum and maximum of the color scale for the module and
-                    phase
+                ampli_vmin : float or None
+                    Minimum of the color scale for the module
+                ampli_vmax : float or None
+                    Maximum of the color scale for the module
+                phase_vmin : float or None
+                    Minimum of the color scale for the module
+                phase_vmax : float or None
+                    Minimum of the color scale for the phase
                 plot_type : str
                     Can be 'final' or 'temporal'. If final the data is only
                     plotted at the end of the processing
@@ -125,8 +147,10 @@ def generate_spectra_products(dataset, prdcfg):
                 xaxis_info : str
                     The xaxis type. Can be 'Doppler_velocity',
                     'Doppler_frequency' or 'pulse_number'
-                vmin, vmax : float or None
-                    Minimum and maximum of the color scale
+                vmin : float or None
+                    Minimum of the color scale
+                vmax : float or None
+                    Maximum of the color scale
         'COMPLEX_ANGLE_DOPPLER': Makes an angle Doppler plot of complex
             spectra or IQ data. The plot can be along azimuth or along range.
             The real and imaginary parts are plotted separately
@@ -145,42 +169,70 @@ def generate_spectra_products(dataset, prdcfg):
                 xaxis_info : str
                     The xaxis type. Can be 'Doppler_velocity',
                     'Doppler_frequency' or 'pulse_number'
-                vmin, vmax : float or None
-                    Minimum and maximum of the color scale
+                vmin : float or None
+                    Minimum of the color scale
+                vmax : float or None
+                    Maximum of the color scale
         'COMPLEX_DOPPLER': Plots a complex Doppler spectrum or IQ data making
             two separate plots for the real and imaginary parts
             User defined parameters:
-                azi, ele, rng : float
-                    azimuth and elevation (deg) and range (m) of the ray to
-                    plot
-                azi_to, ele_tol, rng_tol : float
-                    azimuth and elevation (deg) and range (m) tolerance
-                    respect to nominal position to plot. Default 1, 1, 50.
-                ind_ray, ind_rng : int
-                    index of the ray and range to plot. Alternative to
+                azi : float
+                    azimuth (deg) of the ray to plot
+                ele : float
+                    elevation (deg) of the ray to plot
+                rng : float
+                   range (m) of the ray to plot
+                azi_tol : float
+                    azimuth (deg) tolerance respect to nominal position to plot. 
+                    Default 1.
+                ele_tol : float
+                    elevation (deg) tolerance respect to nominal position to plot. 
+                    Default 1.
+                rng_tol : float
+                    elevation (deg) tolerance respect to nominal position to plot. 
+                    Default 50.
+                ind_ray : int
+                    index of the ray to plot. Alternative to
+                    defining its antenna coordinates
+                ind_rng : int
+                    index of the range to plot. Alternative to
                     defining its antenna coordinates
                 xaxis_info : str
                     The xaxis type. Can be 'Doppler_velocity',
                     'Doppler_frequency' or 'pulse_number'
-                vmin, vmax : float or None
-                    Minimum and maximum of the color scale
+                vmin : float or None
+                    Minimum of the color scale
+                vmax : float or None
+                    Maximum of the color scale
         'COMPLEX_RANGE_DOPPLER': Plots the complex spectra or IQ data
             range-Doppler making two separate plots for the real and imaginary
             parts
             User defined parameters:
-                azi, ele : float
-                    azimuth and elevation (deg) of the ray to plot
-                azi_to, ele_tol : float
-                    azimuth and elevation (deg) tolerance respect to nominal
-                    position to plot. Default 1, 1.
+                azi : float
+                    azimuth (deg) of the ray to plot
+                ele : float
+                    elevation (deg) of the ray to plot
+                rng : float
+                   range (m) of the ray to plot
+                azi_tol : float
+                    azimuth (deg) tolerance respect to nominal position to plot. 
+                    Default 1.
+                ele_tol : float
+                    elevation (deg) tolerance respect to nominal position to plot. 
+                    Default 1.
+                rng_tol : float
+                    elevation (deg) tolerance respect to nominal position to plot. 
+                    Default 50.
                 ind_ray : int
                     index of the ray to plot. Alternative to
                     defining its antenna coordinates
                 xaxis_info : str
                     The xaxis type. Can be 'Doppler_velocity',
                     'Doppler_frequency' or 'pulse_number'
-                vmin, vmax : float or None
-                    Minimum and maximum of the color scale
+                vmin : float or None
+                    Minimum of the color scale
+                vmax : float or None
+                    Maximum of the color scale
         'COMPLEX_TIME_DOPPLER': Plots the complex spectra or IQ data
             time-Doppler making two separate plots for the real and imaginary
             parts
@@ -188,42 +240,62 @@ def generate_spectra_products(dataset, prdcfg):
                 xaxis_info : str
                     The xaxis type. Can be 'Doppler_velocity' or
                     'Doppler frequency'
-                vmin, vmax : float or None
-                    Minimum and maximum of the color scale
+                vmin : float or None
+                    Minimum of the color scale
+                vmax : float or None
+                    Maximum of the color scale
                 plot_type : str
                     Can be 'final' or 'temporal'. If final the data is only
                     plotted at the end of the processing
         'DOPPLER': Plots a Doppler spectrum variable or IQ data variable
             User defined parameters:
-                azi, ele, rng : float
-                    azimuth and elevation (deg) and range (m) of the ray to
-                    plot
-                azi_to, ele_tol, rng_tol : float
-                    azimuth and elevation (deg) and range (m) tolerance
-                    respect to nominal position to plot. Default 1, 1, 50.
-                ind_ray, ind_rng : int
-                    index of the ray and range to plot. Alternative to
-                    defining its antenna coordinates
-                xaxis_info : str
-                    The xaxis type. Can be 'Doppler_velocity',
-                    'Doppler_frequency' or 'pulse_number'
-                vmin, vmax : float or None
-                    Minimum and maximum of the color scale
-        'RANGE_DOPPLER': Makes a range-Doppler plot of spectral or IQ data
-            User defined parameters:
-                azi, ele : float
-                    azimuth and elevation (deg) of the ray to plot
-                azi_to, ele_tol : float
-                    azimuth and elevation (deg) tolerance respect to nominal
-                    position to plot. Default 1, 1.
+                azi : float
+                    azimuth (deg) of the ray to plot
+                ele : float
+                    elevation (deg) of the ray to plot
+                rng : float
+                   range (m) of the ray to plot
+                azi_tol : float
+                    azimuth (deg) tolerance respect to nominal position to plot. 
+                    Default 1.
+                ele_tol : float
+                    elevation (deg) tolerance respect to nominal position to plot. 
+                    Default 1.
+                rng_tol : float
+                    elevation (deg) tolerance respect to nominal position to plot. 
+                    Default 50.
                 ind_ray : int
                     index of the ray to plot. Alternative to
                     defining its antenna coordinates
                 xaxis_info : str
                     The xaxis type. Can be 'Doppler_velocity',
                     'Doppler_frequency' or 'pulse_number'
-                vmin, vmax : float or None
-                    Minimum and maximum of the color scale
+                vmin : float or None
+                    Minimum of the color scale
+                vmax : float or None
+                    Maximum of the color scale
+        'RANGE_DOPPLER': Makes a range-Doppler plot of spectral or IQ data
+            User defined parameters:
+                azi : float
+                    azimuth (deg) of the ray to plot
+                ele : float
+                    elevation (deg) of the ray to plot
+                azi_tol : float
+                    azimuth (deg) tolerance respect to nominal position to plot. 
+                    Default 1.
+                ele_tol : float
+                    elevation (deg) tolerance respect to nominal position to plot. 
+                    Default 1.
+                ind_ray : int
+                    index of the ray to plot. Alternative to
+                    defining its antenna coordinates
+                xaxis_info : str
+                    The xaxis type. Can be 'Doppler_velocity',
+                    'Doppler_frequency' or 'pulse_number'
+                vmin : float or None
+                    Minimum of the color scale
+                vmax : float or None
+                    Maximum of the color scale
         'SAVEALL': Saves radar spectra or IQ volume data including all or a
             list of userdefined fields in a netcdf file
             User defined parameters:
@@ -245,8 +317,10 @@ def generate_spectra_products(dataset, prdcfg):
                 xaxis_info : str
                     The xaxis type. Can be 'Doppler_velocity',
                     'Doppler_frequency' or 'pulse_number'
-                vmin, vmax : float or None
-                    Minimum and maximum of the color scale
+                vmin : float or None
+                    Minimum of the color scale
+                vmax : float or None
+                    Maximum of the color scale
                 plot_type : str
                     Can be 'final' or 'temporal'. If final the data is only
                     plotted at the end of the processing
