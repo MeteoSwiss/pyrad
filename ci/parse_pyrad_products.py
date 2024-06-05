@@ -46,7 +46,10 @@ def dict_to_restructured_text(yaml_data):
             rst_output.append('parameters')
             params = parameters_to_dict(prodinfo['parameters'])
             for param, paraminfo in params.items():
-                rst_output.append('   ' + param)
+                try:
+                    rst_output.append(f'   {param.split()[0]} : *{param.split()[1]}*')
+                except IndexError:
+                    rst_output.append(f'   {param}')
                 rst_output.append('       ' + paraminfo)
             rst_output.append('')
             # rst_output.append(f"\n\n{value2['parameters']}\n\n")
