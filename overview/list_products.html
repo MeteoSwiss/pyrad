@@ -429,10 +429,10 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L724">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>dpi float</dt><dd><p>dpi of the plot</p>
+<dt>parameters</dt><dd><dl>
+<dt>dpi<span class="classifier"><em>float</em></span></dt><dd><p>dpi of the plot</p>
 </dd>
-<dt>datatype str</dt><dd><p>type of data to plot. Can be AZ or EL</p>
+<dt>datatype<span class="classifier"><em>str</em></span></dt><dd><p>type of data to plot. Can be AZ or EL</p>
 </dd>
 </dl>
 </dd>
@@ -446,32 +446,32 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2946">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>quantiles list</dt><dd><p>of floats The quantiles to compute in percent. Default None</p>
+<dt>parameters</dt><dd><dl>
+<dt>quantiles<span class="classifier"><em>list</em></span></dt><dd><p>of floats The quantiles to compute in percent. Default None</p>
 </dd>
-<dt>sector dict</dt><dd><p>dictionary defining the sector where to compute the CDF. Default is None and the CDF is computed over all the data May</p>
+<dt>sector<span class="classifier"><em>dict</em></span></dt><dd><p>dictionary defining the sector where to compute the CDF. Default is None and the CDF is computed over all the data May</p>
 </dd>
-<dt>contain rmin</dt><dd><p>,</p>
+<dt>contain<span class="classifier"><em>rmin</em></span></dt><dd><p>,</p>
 </dd>
-<dt>rmax float</dt><dd><p>min and max range [m] azmin,</p>
+<dt>rmax<span class="classifier"><em>float</em></span></dt><dd><p>min and max range [m] azmin,</p>
 </dd>
-<dt>azmax float</dt><dd><p>min and max azimuth angle [deg] elmin,</p>
+<dt>azmax<span class="classifier"><em>float</em></span></dt><dd><p>min and max azimuth angle [deg] elmin,</p>
 </dd>
-<dt>elmax float</dt><dd><p>min and max elevation angle [deg] hmin,</p>
+<dt>elmax<span class="classifier"><em>float</em></span></dt><dd><p>min and max elevation angle [deg] hmin,</p>
 </dd>
-<dt>hmax float</dt><dd><p>min and max altitude [m MSL]</p>
+<dt>hmax<span class="classifier"><em>float</em></span></dt><dd><p>min and max altitude [m MSL]</p>
 </dd>
-<dt>vismin float</dt><dd><p>The minimum visibility to use the data. Default None</p>
+<dt>vismin<span class="classifier"><em>float</em></span></dt><dd><p>The minimum visibility to use the data. Default None</p>
 </dd>
-<dt>absolute Bool</dt><dd><p>If true the absolute values of the data will be used. Default False</p>
+<dt>absolute<span class="classifier"><em>Bool</em></span></dt><dd><p>If true the absolute values of the data will be used. Default False</p>
 </dd>
-<dt>use_nans Bool</dt><dd><p>If true NaN values will be used. Default False</p>
+<dt>use_nans<span class="classifier"><em>Bool</em></span></dt><dd><p>If true NaN values will be used. Default False</p>
 </dd>
-<dt>nan_value Bool</dt><dd><p>The value by which the NaNs are substituted if NaN values are to be used in the computation</p>
+<dt>nan_value<span class="classifier"><em>Bool</em></span></dt><dd><p>The value by which the NaNs are substituted if NaN values are to be used in the computation</p>
 </dd>
-<dt>filterclt Bool</dt><dd><p>If True the gates containing clutter are filtered</p>
+<dt>filterclt<span class="classifier"><em>Bool</em></span></dt><dd><p>If True the gates containing clutter are filtered</p>
 </dd>
-<dt>filterprec list</dt><dd><p>of ints The hydrometeor types that are filtered from the analysis. Default empty list.</p>
+<dt>filterprec<span class="classifier"><em>list</em></span></dt><dd><p>of ints The hydrometeor types that are filtered from the analysis. Default empty list.</p>
 </dd>
 </dl>
 </dd>
@@ -485,14 +485,14 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2452">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>anglenr  int</dt><dd><p>The elevation angle number to use</p>
+<dt>parameters</dt><dd><dl>
+<dt>anglenr<span class="classifier"><em>int</em></span></dt><dd><p>The elevation angle number to use</p>
 </dd>
-<dt>ray_dim  str</dt><dd><p>the ray dimension. Can be ‘ang’ or ‘time’. Default ‘ang’</p>
+<dt>ray_dim<span class="classifier"><em>str</em></span></dt><dd><p>the ray dimension. Can be ‘ang’ or ‘time’. Default ‘ang’</p>
 </dd>
-<dt>xaxis_rng  bool</dt><dd><p>if True the range will be in the x-axis. Otherwise it will be in the y-axis. Default True vmin,</p>
+<dt>xaxis_rng<span class="classifier"><em>bool</em></span></dt><dd><p>if True the range will be in the x-axis. Otherwise it will be in the y-axis. Default True vmin,</p>
 </dd>
-<dt>vmax float</dt><dd><p>or None The minimum and maximum values of the color scale. If None the scale is going to be set according to the Py-ART config file</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None The minimum and maximum values of the color scale. If None the scale is going to be set according to the Py-ART config file</p>
 </dd>
 </dl>
 </dd>
@@ -506,12 +506,12 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2083">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>altitude flt</dt><dd><p>CAPPI altitude [m MSL]</p>
+<dt>parameters</dt><dd><dl>
+<dt>altitude<span class="classifier"><em>flt</em></span></dt><dd><p>CAPPI altitude [m MSL]</p>
 </dd>
-<dt>wfunc str</dt><dd><p>The function used to produce the CAPPI as defined in pyart.map.grid_from_radars. Default ‘NEAREST’</p>
+<dt>wfunc<span class="classifier"><em>str</em></span></dt><dd><p>The function used to produce the CAPPI as defined in pyart.map.grid_from_radars. Default ‘NEAREST’</p>
 </dd>
-<dt>cappi_res float</dt><dd><p>The CAPPI resolution [m]. Default 500.</p>
+<dt>cappi_res<span class="classifier"><em>float</em></span></dt><dd><p>The CAPPI resolution [m]. Default 500.</p>
 </dd>
 </dl>
 </dd>
@@ -525,18 +525,18 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2112">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>coordN dict</dt><dd><p>The two lat-lon coordinates marking the limits. They have the keywords ‘lat’ and ‘lon’ [degree].</p>
+<dt>parameters</dt><dd><dl>
+<dt>coordN<span class="classifier"><em>dict</em></span></dt><dd><p>The two lat-lon coordinates marking the limits. They have the keywords ‘lat’ and ‘lon’ [degree].</p>
 </dd>
-<dt>step  int</dt><dd><p>Step in meters to use between reference points to calculate the cross-section (i.e horizontal resolution).</p>
+<dt>step<span class="classifier"><em>int</em></span></dt><dd><p>Step in meters to use between reference points to calculate the cross-section (i.e horizontal resolution).</p>
 </dd>
-<dt>vert_res  int</dt><dd><p>Vertical resolution in meters used to calculate the cross-section</p>
+<dt>vert_res<span class="classifier"><em>int</em></span></dt><dd><p>Vertical resolution in meters used to calculate the cross-section</p>
 </dd>
-<dt>alt_max  int</dt><dd><p>Maximum altitude of the vertical cross-section</p>
+<dt>alt_max<span class="classifier"><em>int</em></span></dt><dd><p>Maximum altitude of the vertical cross-section</p>
 </dd>
-<dt>beamwidth  float</dt><dd><p>3dB beamwidth in degrees to be used in the calculations, if not provided will be read from the loc file</p>
+<dt>beamwidth<span class="classifier"><em>float</em></span></dt><dd><p>3dB beamwidth in degrees to be used in the calculations, if not provided will be read from the loc file</p>
 </dd>
-<dt>demfile  str</dt><dd><p>Name of the DEM file to use to plot the topography, it must be in the dempath specified in the main config file</p>
+<dt>demfile<span class="classifier"><em>str</em></span></dt><dd><p>Name of the DEM file to use to plot the topography, it must be in the dempath specified in the main config file</p>
 </dd>
 </dl>
 </dd>
@@ -550,22 +550,22 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2804">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>threshold float</dt><dd><p>or None Minimum value to consider the data valid. Default None</p>
+<dt>parameters</dt><dd><dl>
+<dt>threshold<span class="classifier"><em>float</em></span></dt><dd><p>or None Minimum value to consider the data valid. Default None</p>
 </dd>
-<dt>nvalid_min float</dt><dd><p>Minimum number of valid gates in the ray to consider it valid. Default 5 ele_res,</p>
+<dt>nvalid_min<span class="classifier"><em>float</em></span></dt><dd><p>Minimum number of valid gates in the ray to consider it valid. Default 5 ele_res,</p>
 </dd>
-<dt>azi_res float</dt><dd><p>Elevation and azimuth resolution of the sectors [deg]. Default 1. and 2. ele_min,</p>
+<dt>azi_res<span class="classifier"><em>float</em></span></dt><dd><p>Elevation and azimuth resolution of the sectors [deg]. Default 1. and 2. ele_min,</p>
 </dd>
-<dt>ele_max float</dt><dd><p>Min and max elevation angle defining the sector [deg]. Default 0. and 30.</p>
+<dt>ele_max<span class="classifier"><em>float</em></span></dt><dd><p>Min and max elevation angle defining the sector [deg]. Default 0. and 30.</p>
 </dd>
-<dt>ele_step float</dt><dd><p>Elevation step [deg]. Default 5. ele_sect_start,</p>
+<dt>ele_step<span class="classifier"><em>float</em></span></dt><dd><p>Elevation step [deg]. Default 5. ele_sect_start,</p>
 </dd>
-<dt>ele_sect_stop float</dt><dd><p>or None start and stop angles of the sector coverage. Default None</p>
+<dt>ele_sect_stop<span class="classifier"><em>float</em></span></dt><dd><p>or None start and stop angles of the sector coverage. Default None</p>
 </dd>
-<dt>quantiles list</dt><dd><p>of floats The quantiles to compute in the sector. Default 10. to 90. by steps of 10.</p>
+<dt>quantiles<span class="classifier"><em>list</em></span></dt><dd><p>of floats The quantiles to compute in the sector. Default 10. to 90. by steps of 10.</p>
 </dd>
-<dt>AngTol float</dt><dd><p>The tolerance in elevation angle when putting the data in a fixed grid</p>
+<dt>AngTol<span class="classifier"><em>float</em></span></dt><dd><p>The tolerance in elevation angle when putting the data in a fixed grid</p>
 </dd>
 </dl>
 </dd>
@@ -579,12 +579,12 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2191">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>AngTol  float</dt><dd><p>The tolerance between the nominal angles and the actual radar angles. Default 1. ele_res,</p>
+<dt>parameters</dt><dd><dl>
+<dt>AngTol<span class="classifier"><em>float</em></span></dt><dd><p>The tolerance between the nominal angles and the actual radar angles. Default 1. ele_res,</p>
 </dd>
-<dt>azi_res float</dt><dd><p>or None The resolution of the fixed grid [deg]. If None it will be obtained from the separation between angles vmin,</p>
+<dt>azi_res<span class="classifier"><em>float</em></span></dt><dd><p>or None The resolution of the fixed grid [deg]. If None it will be obtained from the separation between angles vmin,</p>
 </dd>
-<dt>vmax  float</dt><dd><p>or None Min and Max values of the color scale. If None the values are taken from the Py-ART config file</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None Min and Max values of the color scale. If None the values are taken from the Py-ART config file</p>
 </dd>
 </dl>
 </dd>
@@ -598,12 +598,12 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2230">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>AngTol  float</dt><dd><p>The tolerance between the nominal angles and the actual radar angles. Default 1. ele_res,</p>
+<dt>parameters</dt><dd><dl>
+<dt>AngTol<span class="classifier"><em>float</em></span></dt><dd><p>The tolerance between the nominal angles and the actual radar angles. Default 1. ele_res,</p>
 </dd>
-<dt>azi_res float</dt><dd><p>or None The resolution of the fixed grid [deg]. If None it will be obtained from the separation between angles</p>
+<dt>azi_res<span class="classifier"><em>float</em></span></dt><dd><p>or None The resolution of the fixed grid [deg]. If None it will be obtained from the separation between angles</p>
 </dd>
-<dt>stat  str</dt><dd><p>The statistic to compute. Can be ‘min’, ‘max’, ‘mean’, ‘mode’. Default ‘max’</p>
+<dt>stat<span class="classifier"><em>str</em></span></dt><dd><p>The statistic to compute. Can be ‘min’, ‘max’, ‘mean’, ‘mode’. Default ‘max’</p>
 </dd>
 </dl>
 </dd>
@@ -617,10 +617,10 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2601">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>step float</dt><dd><p>or None the data quantization step. If none it will be obtained from the Py-ART configuration file</p>
+<dt>parameters</dt><dd><dl>
+<dt>step<span class="classifier"><em>float</em></span></dt><dd><p>or None the data quantization step. If none it will be obtained from the Py-ART configuration file</p>
 </dd>
-<dt>write_data Bool</dt><dd><p>If true the histogram data is written in a csv file</p>
+<dt>write_data<span class="classifier"><em>Bool</em></span></dt><dd><p>If true the histogram data is written in a csv file</p>
 </dd>
 </dl>
 </dd>
@@ -634,24 +634,24 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2268">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>colors list</dt><dd><p>of str or None The colors of each ploted line</p>
+<dt>parameters</dt><dd><dl>
+<dt>colors<span class="classifier"><em>list</em></span></dt><dd><p>of str or None The colors of each ploted line</p>
 </dd>
-<dt>data_on_y  bool</dt><dd><p>If True the x-axis is the coordinates, and the y the data values. False swaps the axis. Default True</p>
+<dt>data_on_y<span class="classifier"><em>bool</em></span></dt><dd><p>If True the x-axis is the coordinates, and the y the data values. False swaps the axis. Default True</p>
 </dd>
-<dt>plot_legend  bool</dt><dd><p>If True a legend will be plotted. Default True</p>
+<dt>plot_legend<span class="classifier"><em>bool</em></span></dt><dd><p>If True a legend will be plotted. Default True</p>
 </dd>
-<dt>mode str</dt><dd><p>Ploting mode. Can be ‘ALONG_RNG’, ‘ALONG_AZI’ or ‘ALONG_ELE’ value_start,</p>
+<dt>mode<span class="classifier"><em>str</em></span></dt><dd><p>Ploting mode. Can be ‘ALONG_RNG’, ‘ALONG_AZI’ or ‘ALONG_ELE’ value_start,</p>
 </dd>
-<dt>value_stop float</dt><dd><p>The starting and ending points of the data to plot. According to the mode it may refer to the range, azimuth or elevation. If not specified the minimum and maximum possible values are used fix_elevations, fix_azimuths,</p>
+<dt>value_stop<span class="classifier"><em>float</em></span></dt><dd><p>The starting and ending points of the data to plot. According to the mode it may refer to the range, azimuth or elevation. If not specified the minimum and maximum possible values are used fix_elevations, fix_azimuths,</p>
 </dd>
-<dt>fix_ranges list</dt><dd><p>of floats The elevations, azimuths or ranges to plot for each mode. ‘ALONG_RNG’ would use fix_elevations and fix_azimuths ‘ALONG_AZI’ fix_ranges and fix_elevations ‘ALONG_ELE’ fix_ranges and fix_azimuths</p>
+<dt>fix_ranges<span class="classifier"><em>list</em></span></dt><dd><p>of floats The elevations, azimuths or ranges to plot for each mode. ‘ALONG_RNG’ would use fix_elevations and fix_azimuths ‘ALONG_AZI’ fix_ranges and fix_elevations ‘ALONG_ELE’ fix_ranges and fix_azimuths</p>
 </dd>
-<dt>AngTol float</dt><dd><p>The tolerance to match the radar angle to the fixed angles Default 1.</p>
+<dt>AngTol<span class="classifier"><em>float</em></span></dt><dd><p>The tolerance to match the radar angle to the fixed angles Default 1.</p>
 </dd>
-<dt>RngTol float</dt><dd><p>The tolerance to match the radar range to the fixed ranges Default 50.</p>
+<dt>RngTol<span class="classifier"><em>float</em></span></dt><dd><p>The tolerance to match the radar range to the fixed ranges Default 50.</p>
 </dd>
-<dt>use_altitude  bool</dt><dd><p>If true and in ALON_RNG mode the coordinate used is the gate altitude. Otherwise is the range. Default False</p>
+<dt>use_altitude<span class="classifier"><em>bool</em></span></dt><dd><p>If true and in ALON_RNG mode the coordinate used is the gate altitude. Otherwise is the range. Default False</p>
 </dd>
 </dl>
 </dd>
@@ -676,10 +676,10 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1098">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>contour_values list</dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
+<dt>parameters</dt><dd><dl>
+<dt>contour_values<span class="classifier"><em>list</em></span></dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
 </dd>
-<dt>anglenr float</dt><dd><p>The elevation angle number</p>
+<dt>anglenr<span class="classifier"><em>float</em></span></dt><dd><p>The elevation angle number</p>
 </dd>
 </dl>
 </dd>
@@ -693,10 +693,10 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1003">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>contour_values list</dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
+<dt>parameters</dt><dd><dl>
+<dt>contour_values<span class="classifier"><em>list</em></span></dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
 </dd>
-<dt>anglenr float</dt><dd><p>The elevation angle number</p>
+<dt>anglenr<span class="classifier"><em>float</em></span></dt><dd><p>The elevation angle number</p>
 </dd>
 </dl>
 </dd>
@@ -710,18 +710,18 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2083">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>anglenr float</dt><dd><p>The elevation angle number</p>
+<dt>parameters</dt><dd><dl>
+<dt>anglenr<span class="classifier"><em>float</em></span></dt><dd><p>The elevation angle number</p>
 </dd>
-<dt>plot_type str</dt><dd><p>The type of plot to perform. Can be ‘PPI’, ‘QUANTILES’ or ‘HISTOGRAM’</p>
+<dt>plot_type<span class="classifier"><em>str</em></span></dt><dd><p>The type of plot to perform. Can be ‘PPI’, ‘QUANTILES’ or ‘HISTOGRAM’</p>
 </dd>
-<dt>write_data Bool</dt><dd><p>If True the histrogram will be also written in a csv file</p>
+<dt>write_data<span class="classifier"><em>Bool</em></span></dt><dd><p>If True the histrogram will be also written in a csv file</p>
 </dd>
-<dt>step float</dt><dd><p>or None If the plot type is ‘HISTOGRAM’, the width of the histogram bin. If None it will be obtained from the Py-ART config file</p>
+<dt>step<span class="classifier"><em>float</em></span></dt><dd><p>or None If the plot type is ‘HISTOGRAM’, the width of the histogram bin. If None it will be obtained from the Py-ART config file</p>
 </dd>
-<dt>quantiles list</dt><dd><p>of float or None If the plot type is ‘QUANTILES’, the list of quantiles to compute. If None a default list of quantiles will be computed vmin,</p>
+<dt>quantiles<span class="classifier"><em>list</em></span></dt><dd><p>of float or None If the plot type is ‘QUANTILES’, the list of quantiles to compute. If None a default list of quantiles will be computed vmin,</p>
 </dd>
-<dt>vmax float</dt><dd><p>or None The minimum and maximum values of the color scale. If None the scale is going to be set according to the Py-ART config file</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None The minimum and maximum values of the color scale. If None the scale is going to be set according to the Py-ART config file</p>
 </dd>
 </dl>
 </dd>
@@ -735,8 +735,8 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2044">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>anglenr float</dt><dd><p>The elevation angle number</p>
+<dt>parameters</dt><dd><dl>
+<dt>anglenr<span class="classifier"><em>float</em></span></dt><dd><p>The elevation angle number</p>
 </dd>
 </dl>
 </dd>
@@ -750,8 +750,8 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L953">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>anglenr float</dt><dd><p>The elevation angle number</p>
+<dt>parameters</dt><dd><dl>
+<dt>anglenr<span class="classifier"><em>float</em></span></dt><dd><p>The elevation angle number</p>
 </dd>
 </dl>
 </dd>
@@ -765,24 +765,24 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1578">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>heightResolution float</dt><dd><p>The height resolution of the profile [m]. Default 100. heightMin,</p>
+<dt>parameters</dt><dd><dl>
+<dt>heightResolution<span class="classifier"><em>float</em></span></dt><dd><p>The height resolution of the profile [m]. Default 100. heightMin,</p>
 </dd>
-<dt>heightMax float</dt><dd><p>or None The minimum and maximum altitude of the profile [m MSL]. If None the values will be obtained from the minimum and maximum gate altitude.</p>
+<dt>heightMax<span class="classifier"><em>float</em></span></dt><dd><p>or None The minimum and maximum altitude of the profile [m MSL]. If None the values will be obtained from the minimum and maximum gate altitude.</p>
 </dd>
-<dt>quantity str</dt><dd><p>The type of statistics to plot. Can be ‘quantiles’, ‘mode’, ‘reqgression_mean’ or ‘mean’.</p>
+<dt>quantity<span class="classifier"><em>str</em></span></dt><dd><p>The type of statistics to plot. Can be ‘quantiles’, ‘mode’, ‘reqgression_mean’ or ‘mean’.</p>
 </dd>
-<dt>quantiles list</dt><dd><p>of floats If quantity type is ‘quantiles’ the list of quantiles to compute. Default 25., 50., 75.</p>
+<dt>quantiles<span class="classifier"><em>list</em></span></dt><dd><p>of floats If quantity type is ‘quantiles’ the list of quantiles to compute. Default 25., 50., 75.</p>
 </dd>
-<dt>nvalid_min int</dt><dd><p>The minimum number of valid points to consider the statistic valid. Default 4</p>
+<dt>nvalid_min<span class="classifier"><em>int</em></span></dt><dd><p>The minimum number of valid points to consider the statistic valid. Default 4</p>
 </dd>
-<dt>make_linear Bool</dt><dd><p>If true the data is converted from log to linear before computing the stats</p>
+<dt>make_linear<span class="classifier"><em>Bool</em></span></dt><dd><p>If true the data is converted from log to linear before computing the stats</p>
 </dd>
-<dt>include_nans Bool</dt><dd><p>If true NaN values are included in the statistics</p>
+<dt>include_nans<span class="classifier"><em>Bool</em></span></dt><dd><p>If true NaN values are included in the statistics</p>
 </dd>
-<dt>fixed_span Bool</dt><dd><p>If true the profile plot has a fix X-axis vmin,</p>
+<dt>fixed_span<span class="classifier"><em>Bool</em></span></dt><dd><p>If true the profile plot has a fix X-axis vmin,</p>
 </dd>
-<dt>vmax float</dt><dd><p>or None If fixed_span is set, the minimum and maximum values of the X-axis. If None, they are obtained from the Py-ART config file</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None If fixed_span is set, the minimum and maximum values of the X-axis. If None, they are obtained from the Py-ART config file</p>
 </dd>
 </dl>
 </dd>
@@ -796,12 +796,12 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1098">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>contour_values list</dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
+<dt>parameters</dt><dd><dl>
+<dt>contour_values<span class="classifier"><em>list</em></span></dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
 </dd>
-<dt>angle float</dt><dd><p>The elevation angle at which compute the PPI</p>
+<dt>angle<span class="classifier"><em>float</em></span></dt><dd><p>The elevation angle at which compute the PPI</p>
 </dd>
-<dt>EleTol float</dt><dd><p>The tolerance between the actual radar elevation angle and the nominal pseudo-PPI elevation angle.</p>
+<dt>EleTol<span class="classifier"><em>float</em></span></dt><dd><p>The tolerance between the actual radar elevation angle and the nominal pseudo-PPI elevation angle.</p>
 </dd>
 </dl>
 </dd>
@@ -815,12 +815,12 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1003">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>contour_values list</dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
+<dt>parameters</dt><dd><dl>
+<dt>contour_values<span class="classifier"><em>list</em></span></dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
 </dd>
-<dt>angle float</dt><dd><p>The elevation angle at which compute the PPI</p>
+<dt>angle<span class="classifier"><em>float</em></span></dt><dd><p>The elevation angle at which compute the PPI</p>
 </dd>
-<dt>EleTol float</dt><dd><p>The tolerance between the actual radar elevation angle and the nominal pseudo-PPI elevation angle.</p>
+<dt>EleTol<span class="classifier"><em>float</em></span></dt><dd><p>The tolerance between the actual radar elevation angle and the nominal pseudo-PPI elevation angle.</p>
 </dd>
 </dl>
 </dd>
@@ -834,18 +834,18 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L814">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>angle float</dt><dd><p>The elevation angle of the pseudo-PPI</p>
+<dt>parameters</dt><dd><dl>
+<dt>angle<span class="classifier"><em>float</em></span></dt><dd><p>The elevation angle of the pseudo-PPI</p>
 </dd>
-<dt>EleTol float</dt><dd><p>The tolerance between the actual radar elevation angle and the nominal pseudo-PPI elevation angle.</p>
+<dt>EleTol<span class="classifier"><em>float</em></span></dt><dd><p>The tolerance between the actual radar elevation angle and the nominal pseudo-PPI elevation angle.</p>
 </dd>
-<dt>plot_type str</dt><dd><p>The type of plot to perform. Can be ‘PPI’, ‘QUANTILES’ or ‘HISTOGRAM’</p>
+<dt>plot_type<span class="classifier"><em>str</em></span></dt><dd><p>The type of plot to perform. Can be ‘PPI’, ‘QUANTILES’ or ‘HISTOGRAM’</p>
 </dd>
-<dt>step float</dt><dd><p>or None If the plot type is ‘HISTOGRAM’, the width of the histogram bin. If None it will be obtained from the Py-ART config file</p>
+<dt>step<span class="classifier"><em>float</em></span></dt><dd><p>or None If the plot type is ‘HISTOGRAM’, the width of the histogram bin. If None it will be obtained from the Py-ART config file</p>
 </dd>
-<dt>quantiles list</dt><dd><p>of float or None If the plot type is ‘QUANTILES’, the list of quantiles to compute. If None a default list of quantiles will be computed vmin,</p>
+<dt>quantiles<span class="classifier"><em>list</em></span></dt><dd><p>of float or None If the plot type is ‘QUANTILES’, the list of quantiles to compute. If None a default list of quantiles will be computed vmin,</p>
 </dd>
-<dt>vmax  float</dt><dd><p>or None Min and Max values of the color scale. If None the values are taken from the Py-ART config file</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None Min and Max values of the color scale. If None the values are taken from the Py-ART config file</p>
 </dd>
 </dl>
 </dd>
@@ -859,10 +859,10 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2044">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>angle float</dt><dd><p>The elevation angle of the pseudo-PPI</p>
+<dt>parameters</dt><dd><dl>
+<dt>angle<span class="classifier"><em>float</em></span></dt><dd><p>The elevation angle of the pseudo-PPI</p>
 </dd>
-<dt>EleTol float</dt><dd><p>The tolerance between the actual radar elevation angle and the nominal pseudo-PPI elevation angle.</p>
+<dt>EleTol<span class="classifier"><em>float</em></span></dt><dd><p>The tolerance between the actual radar elevation angle and the nominal pseudo-PPI elevation angle.</p>
 </dd>
 </dl>
 </dd>
@@ -876,12 +876,12 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1379">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>contour_values list</dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
+<dt>parameters</dt><dd><dl>
+<dt>contour_values<span class="classifier"><em>list</em></span></dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
 </dd>
-<dt>angle float</dt><dd><p>The azimuth angle at which to compute the RPI</p>
+<dt>angle<span class="classifier"><em>float</em></span></dt><dd><p>The azimuth angle at which to compute the RPI</p>
 </dd>
-<dt>AziTol float</dt><dd><p>The tolerance between the actual radar azimuth angle and the nominal pseudo-RHI azimuth angle.</p>
+<dt>AziTol<span class="classifier"><em>float</em></span></dt><dd><p>The tolerance between the actual radar azimuth angle and the nominal pseudo-RHI azimuth angle.</p>
 </dd>
 </dl>
 </dd>
@@ -895,12 +895,12 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1283">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>contour_values list</dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
+<dt>parameters</dt><dd><dl>
+<dt>contour_values<span class="classifier"><em>list</em></span></dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
 </dd>
-<dt>angle float</dt><dd><p>The azimuth angle at which to compute the RPI</p>
+<dt>angle<span class="classifier"><em>float</em></span></dt><dd><p>The azimuth angle at which to compute the RPI</p>
 </dd>
-<dt>AziTol float</dt><dd><p>The tolerance between the actual radar azimuth angle and the nominal pseudo-RHI azimuth angle.</p>
+<dt>AziTol<span class="classifier"><em>float</em></span></dt><dd><p>The tolerance between the actual radar azimuth angle and the nominal pseudo-RHI azimuth angle.</p>
 </dd>
 </dl>
 </dd>
@@ -914,18 +914,18 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1181">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>angle float</dt><dd><p>The azimuth angle at which to compute the RPI</p>
+<dt>parameters</dt><dd><dl>
+<dt>angle<span class="classifier"><em>float</em></span></dt><dd><p>The azimuth angle at which to compute the RPI</p>
 </dd>
-<dt>AziTol float</dt><dd><p>The tolerance between the actual radar azimuth angle and the nominal pseudo-RHI azimuth angle.</p>
+<dt>AziTol<span class="classifier"><em>float</em></span></dt><dd><p>The tolerance between the actual radar azimuth angle and the nominal pseudo-RHI azimuth angle.</p>
 </dd>
-<dt>plot_type str</dt><dd><p>The type of plot to perform. Can be ‘RHI’, ‘QUANTILES’ or ‘HISTOGRAM’</p>
+<dt>plot_type<span class="classifier"><em>str</em></span></dt><dd><p>The type of plot to perform. Can be ‘RHI’, ‘QUANTILES’ or ‘HISTOGRAM’</p>
 </dd>
-<dt>step float</dt><dd><p>or None If the plot type is ‘HISTOGRAM’, the width of the histogram bin. If None it will be obtained from the Py-ART config file</p>
+<dt>step<span class="classifier"><em>float</em></span></dt><dd><p>or None If the plot type is ‘HISTOGRAM’, the width of the histogram bin. If None it will be obtained from the Py-ART config file</p>
 </dd>
-<dt>quantiles list</dt><dd><p>of float or None If the plot type is ‘QUANTILES’, the list of quantiles to compute. If None a default list of quantiles will be computed vmin,</p>
+<dt>quantiles<span class="classifier"><em>list</em></span></dt><dd><p>of float or None If the plot type is ‘QUANTILES’, the list of quantiles to compute. If None a default list of quantiles will be computed vmin,</p>
 </dd>
-<dt>vmax  float</dt><dd><p>or None Min and Max values of the color scale. If None the values are taken from the Py-ART config file</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None Min and Max values of the color scale. If None the values are taken from the Py-ART config file</p>
 </dd>
 </dl>
 </dd>
@@ -939,14 +939,14 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2662">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>quantiles list</dt><dd><p>of floats or None the list of quantiles to compute. If None a default list of quantiles will be computed.</p>
+<dt>parameters</dt><dd><dl>
+<dt>quantiles<span class="classifier"><em>list</em></span></dt><dd><p>of floats or None the list of quantiles to compute. If None a default list of quantiles will be computed.</p>
 </dd>
-<dt>write_data Bool</dt><dd><p>If True the computed data will be also written in a csv file</p>
+<dt>write_data<span class="classifier"><em>Bool</em></span></dt><dd><p>If True the computed data will be also written in a csv file</p>
 </dd>
-<dt>fixed_span Bool</dt><dd><p>If true the quantile plot has a fix Y-axis vmin,</p>
+<dt>fixed_span<span class="classifier"><em>Bool</em></span></dt><dd><p>If true the quantile plot has a fix Y-axis vmin,</p>
 </dd>
-<dt>vmax float</dt><dd><p>or None If fixed_span is set, the minimum and maximum values of the Y-axis. If None, they are obtained from the Py-ART config file</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None If fixed_span is set, the minimum and maximum values of the Y-axis. If None, they are obtained from the Py-ART config file</p>
 </dd>
 </dl>
 </dd>
@@ -960,10 +960,10 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1379">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>contour_values list</dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
+<dt>parameters</dt><dd><dl>
+<dt>contour_values<span class="classifier"><em>list</em></span></dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
 </dd>
-<dt>anglenr int</dt><dd><p>The azimuth angle number</p>
+<dt>anglenr<span class="classifier"><em>int</em></span></dt><dd><p>The azimuth angle number</p>
 </dd>
 </dl>
 </dd>
@@ -977,10 +977,10 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1283">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>contour_values list</dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
+<dt>parameters</dt><dd><dl>
+<dt>contour_values<span class="classifier"><em>list</em></span></dt><dd><p>of floats or None The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key ‘contour_values’ or from the minimum and maximum values of the field with an assumed division of 10 levels.</p>
 </dd>
-<dt>anglenr int</dt><dd><p>The azimuth angle number</p>
+<dt>anglenr<span class="classifier"><em>int</em></span></dt><dd><p>The azimuth angle number</p>
 </dd>
 </dl>
 </dd>
@@ -994,16 +994,16 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1181">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>anglenr int</dt><dd><p>The azimuth angle number</p>
+<dt>parameters</dt><dd><dl>
+<dt>anglenr<span class="classifier"><em>int</em></span></dt><dd><p>The azimuth angle number</p>
 </dd>
-<dt>plot_type str</dt><dd><p>The type of plot to perform. Can be ‘RHI’, ‘QUANTILES’ or ‘HISTOGRAM’</p>
+<dt>plot_type<span class="classifier"><em>str</em></span></dt><dd><p>The type of plot to perform. Can be ‘RHI’, ‘QUANTILES’ or ‘HISTOGRAM’</p>
 </dd>
-<dt>step float</dt><dd><p>or None If the plot type is ‘HISTOGRAM’, the width of the histogram bin. If None it will be obtained from the Py-ART config file</p>
+<dt>step<span class="classifier"><em>float</em></span></dt><dd><p>or None If the plot type is ‘HISTOGRAM’, the width of the histogram bin. If None it will be obtained from the Py-ART config file</p>
 </dd>
-<dt>quantiles list</dt><dd><p>of float or None If the plot type is ‘QUANTILES’, the list of quantiles to compute. If None a default list of quantiles will be computed vmin,</p>
+<dt>quantiles<span class="classifier"><em>list</em></span></dt><dd><p>of float or None If the plot type is ‘QUANTILES’, the list of quantiles to compute. If None a default list of quantiles will be computed vmin,</p>
 </dd>
-<dt>vmax float</dt><dd><p>or None The minimum and maximum values of the color scale. If None the scale is going to be set according to the Py-ART config file</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None The minimum and maximum values of the color scale. If None the scale is going to be set according to the Py-ART config file</p>
 </dd>
 </dl>
 </dd>
@@ -1017,26 +1017,26 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1422">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>rangeStop float</dt><dd><p>The range start and stop of the data to extract from the RHI to compute the statistics [m]. Default 0., 25000.</p>
+<dt>parameters</dt><dd><dl>
+<dt>rangeStop<span class="classifier"><em>float</em></span></dt><dd><p>The range start and stop of the data to extract from the RHI to compute the statistics [m]. Default 0., 25000.</p>
 </dd>
-<dt>heightResolution float</dt><dd><p>The height resolution of the profile [m]. Default 100. heightMin,</p>
+<dt>heightResolution<span class="classifier"><em>float</em></span></dt><dd><p>The height resolution of the profile [m]. Default 100. heightMin,</p>
 </dd>
-<dt>heightMax float</dt><dd><p>or None The minimum and maximum altitude of the profile [m MSL]. If None the values will be obtained from the minimum and maximum gate altitude.</p>
+<dt>heightMax<span class="classifier"><em>float</em></span></dt><dd><p>or None The minimum and maximum altitude of the profile [m MSL]. If None the values will be obtained from the minimum and maximum gate altitude.</p>
 </dd>
-<dt>quantity str</dt><dd><p>The type of statistics to plot. Can be ‘quantiles’, ‘mode’, ‘reqgression_mean’ or ‘mean’.</p>
+<dt>quantity<span class="classifier"><em>str</em></span></dt><dd><p>The type of statistics to plot. Can be ‘quantiles’, ‘mode’, ‘reqgression_mean’ or ‘mean’.</p>
 </dd>
-<dt>quantiles list</dt><dd><p>of floats If quantity type is ‘quantiles’ the list of quantiles to compute. Default 25., 50., 75.</p>
+<dt>quantiles<span class="classifier"><em>list</em></span></dt><dd><p>of floats If quantity type is ‘quantiles’ the list of quantiles to compute. Default 25., 50., 75.</p>
 </dd>
-<dt>nvalid_min int</dt><dd><p>The minimum number of valid points to consider the statistic valid. Default 4</p>
+<dt>nvalid_min<span class="classifier"><em>int</em></span></dt><dd><p>The minimum number of valid points to consider the statistic valid. Default 4</p>
 </dd>
-<dt>make_linear Bool</dt><dd><p>If true the data is converted from log to linear before computing the stats</p>
+<dt>make_linear<span class="classifier"><em>Bool</em></span></dt><dd><p>If true the data is converted from log to linear before computing the stats</p>
 </dd>
-<dt>include_nans Bool</dt><dd><p>If true NaN values are included in the statistics</p>
+<dt>include_nans<span class="classifier"><em>Bool</em></span></dt><dd><p>If true NaN values are included in the statistics</p>
 </dd>
-<dt>fixed_span Bool</dt><dd><p>If true the profile plot has a fix X-axis vmin,</p>
+<dt>fixed_span<span class="classifier"><em>Bool</em></span></dt><dd><p>If true the profile plot has a fix X-axis vmin,</p>
 </dd>
-<dt>vmax float</dt><dd><p>or None If fixed_span is set, the minimum and maximum values of the X-axis. If None, they are obtained from the Py-ART config file</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None If fixed_span is set, the minimum and maximum values of the X-axis. If None, they are obtained from the Py-ART config file</p>
 </dd>
 </dl>
 </dd>
@@ -1050,16 +1050,16 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3516">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>file_type str</dt><dd><p>The type of file used to save the data. Can be ‘nc’ or ‘h5’. Default ‘nc’</p>
+<dt>parameters</dt><dd><dl>
+<dt>file_type<span class="classifier"><em>str</em></span></dt><dd><p>The type of file used to save the data. Can be ‘nc’ or ‘h5’. Default ‘nc’</p>
 </dd>
-<dt>datatypes list</dt><dd><p>of str or None The list of data types to save. If it is None, all fields in the radar object will be saved</p>
+<dt>datatypes<span class="classifier"><em>list</em></span></dt><dd><p>of str or None The list of data types to save. If it is None, all fields in the radar object will be saved</p>
 </dd>
-<dt>physical Bool</dt><dd><p>If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary</p>
+<dt>physical<span class="classifier"><em>Bool</em></span></dt><dd><p>If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary</p>
 </dd>
-<dt>compression str</dt><dd><p>For ODIM file formats, the type of compression. Can be any of the allowed compression types for hdf5 files. Default gzip</p>
+<dt>compression<span class="classifier"><em>str</em></span></dt><dd><p>For ODIM file formats, the type of compression. Can be any of the allowed compression types for hdf5 files. Default gzip</p>
 </dd>
-<dt>compression_opts any</dt><dd><p>The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level).</p>
+<dt>compression_opts<span class="classifier"><em>any</em></span></dt><dd><p>The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level).</p>
 </dd>
 </dl>
 </dd>
@@ -1117,14 +1117,14 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3472">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>file_type str</dt><dd><p>The type of file used to save the data. Can be ‘nc’ or ‘h5’. Default ‘nc’</p>
+<dt>parameters</dt><dd><dl>
+<dt>file_type<span class="classifier"><em>str</em></span></dt><dd><p>The type of file used to save the data. Can be ‘nc’ or ‘h5’. Default ‘nc’</p>
 </dd>
-<dt>physical Bool</dt><dd><p>If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary. Default True</p>
+<dt>physical<span class="classifier"><em>Bool</em></span></dt><dd><p>If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary. Default True</p>
 </dd>
-<dt>compression str</dt><dd><p>For ODIM file formats, the type of compression. Can be any of the allowed compression types for hdf5 files. Default gzip</p>
+<dt>compression<span class="classifier"><em>str</em></span></dt><dd><p>For ODIM file formats, the type of compression. Can be any of the allowed compression types for hdf5 files. Default gzip</p>
 </dd>
-<dt>compression_opts any</dt><dd><p>The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level).</p>
+<dt>compression_opts<span class="classifier"><em>any</em></span></dt><dd><p>The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level).</p>
 </dd>
 </dl>
 </dd>
@@ -1138,8 +1138,8 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3394">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>ignore_masked bool</dt><dd><p>If True masked values will not be saved. Default False</p>
+<dt>parameters</dt><dd><dl>
+<dt>ignore_masked<span class="classifier"><em>bool</em></span></dt><dd><p>If True masked values will not be saved. Default False</p>
 </dd>
 </dl>
 </dd>
@@ -1153,10 +1153,10 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3423">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>ignore_masked bool</dt><dd><p>If True masked values will not be saved. Default False</p>
+<dt>parameters</dt><dd><dl>
+<dt>ignore_masked<span class="classifier"><em>bool</em></span></dt><dd><p>If True masked values will not be saved. Default False</p>
 </dd>
-<dt>azi_res  float</dt><dd><p>or None azimuthal resolution of the range bins. If None the antenna beamwidth is going to be used to determine the resolution</p>
+<dt>azi_res<span class="classifier"><em>float</em></span></dt><dd><p>or None azimuthal resolution of the range bins. If None the antenna beamwidth is going to be used to determine the resolution</p>
 </dd>
 </dl>
 </dd>
@@ -1192,12 +1192,12 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3148">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>retrieve_relation  bool</dt><dd><p>If True plots also the retrieved relationship. Default True</p>
+<dt>parameters</dt><dd><dl>
+<dt>retrieve_relation<span class="classifier"><em>bool</em></span></dt><dd><p>If True plots also the retrieved relationship. Default True</p>
 </dd>
-<dt>plot_theoretical  bool</dt><dd><p>If True plots also the theoretical relationship. Default True</p>
+<dt>plot_theoretical<span class="classifier"><em>bool</em></span></dt><dd><p>If True plots also the theoretical relationship. Default True</p>
 </dd>
-<dt>normalize  bool</dt><dd><p>If True the occurrence density of ZK/KDP for each ZDR bin is going to be represented. Otherwise it will show the number of gates at each bin. Default True</p>
+<dt>normalize<span class="classifier"><em>bool</em></span></dt><dd><p>If True the occurrence density of ZK/KDP for each ZDR bin is going to be represented. Otherwise it will show the number of gates at each bin. Default True</p>
 </dd>
 </dl>
 </dd>
@@ -1211,8 +1211,8 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3148">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>normalize  bool</dt><dd><p>If True the occurrence density of ZK/KDP for each ZDR bin is going to be represented. Otherwise it will show the number of gates at each bin. Default True</p>
+<dt>parameters</dt><dd><dl>
+<dt>normalize<span class="classifier"><em>bool</em></span></dt><dd><p>If True the occurrence density of ZK/KDP for each ZDR bin is going to be represented. Otherwise it will show the number of gates at each bin. Default True</p>
 </dd>
 </dl>
 </dd>
@@ -1226,10 +1226,10 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2496">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>anglenr float</dt><dd><p>The number of the fixed angle to plot vmin,</p>
+<dt>parameters</dt><dd><dl>
+<dt>anglenr<span class="classifier"><em>float</em></span></dt><dd><p>The number of the fixed angle to plot vmin,</p>
 </dd>
-<dt>vmax float</dt><dd><p>or None The minimum and maximum values of the color scale. If None the scale is going to be set according to the Py-ART config file</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None The minimum and maximum values of the color scale. If None the scale is going to be set according to the Py-ART config file</p>
 </dd>
 </dl>
 </dd>
@@ -1243,30 +1243,30 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3181">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>ref_value float</dt><dd><p>The reference value. Default 0</p>
+<dt>parameters</dt><dd><dl>
+<dt>ref_value<span class="classifier"><em>float</em></span></dt><dd><p>The reference value. Default 0</p>
 </dd>
-<dt>sort_by_date Bool</dt><dd><p>If true when reading the csv file containing the statistics the data is sorted by date. Default False</p>
+<dt>sort_by_date<span class="classifier"><em>Bool</em></span></dt><dd><p>If true when reading the csv file containing the statistics the data is sorted by date. Default False</p>
 </dd>
-<dt>rewrite Bool</dt><dd><p>If true the csv file containing the statistics is rewritten</p>
+<dt>rewrite<span class="classifier"><em>Bool</em></span></dt><dd><p>If true the csv file containing the statistics is rewritten</p>
 </dd>
-<dt>add_data_in_fname Bool</dt><dd><p>If true and the data used is cumulative the year is written in the csv file name and the plot file name</p>
+<dt>add_data_in_fname<span class="classifier"><em>Bool</em></span></dt><dd><p>If true and the data used is cumulative the year is written in the csv file name and the plot file name</p>
 </dd>
-<dt>npoints_min int</dt><dd><p>Minimum number of points to use the data point in the plotting and to send an alarm. Default 0 vmin,</p>
+<dt>npoints_min<span class="classifier"><em>int</em></span></dt><dd><p>Minimum number of points to use the data point in the plotting and to send an alarm. Default 0 vmin,</p>
 </dd>
-<dt>vmax float</dt><dd><p>or None Limits of the Y-axis (data value). If None the limits are obtained from the Py-ART config file</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None Limits of the Y-axis (data value). If None the limits are obtained from the Py-ART config file</p>
 </dd>
-<dt>alarm Bool</dt><dd><p>If true an alarm is sent</p>
+<dt>alarm<span class="classifier"><em>Bool</em></span></dt><dd><p>If true an alarm is sent</p>
 </dd>
-<dt>tol_abs float</dt><dd><p>Margin of tolerance from the reference value. If the current value is above this margin an alarm is sent. If the margin is not specified it is not possible to send any alarm</p>
+<dt>tol_abs<span class="classifier"><em>float</em></span></dt><dd><p>Margin of tolerance from the reference value. If the current value is above this margin an alarm is sent. If the margin is not specified it is not possible to send any alarm</p>
 </dd>
-<dt>tol_trend float</dt><dd><p>Margin of tolerance from the reference value. If the trend of the last X events is above this margin an alarm is sent. If the margin is not specified it is not possible to send any alarm</p>
+<dt>tol_trend<span class="classifier"><em>float</em></span></dt><dd><p>Margin of tolerance from the reference value. If the trend of the last X events is above this margin an alarm is sent. If the margin is not specified it is not possible to send any alarm</p>
 </dd>
-<dt>nevents_min int</dt><dd><p>Minimum number of events with sufficient points to send an alarm related to the trend. If not specified it is not possible to send any alarm</p>
+<dt>nevents_min<span class="classifier"><em>int</em></span></dt><dd><p>Minimum number of events with sufficient points to send an alarm related to the trend. If not specified it is not possible to send any alarm</p>
 </dd>
-<dt>sender str</dt><dd><p>The mail of the alarm sender. If not specified it is not possible to send any alarm</p>
+<dt>sender<span class="classifier"><em>str</em></span></dt><dd><p>The mail of the alarm sender. If not specified it is not possible to send any alarm</p>
 </dd>
-<dt>receiver_list list</dt><dd><p>of str The list of emails of the people that will receive the alarm.. If not specified it is not possible to send any alarm</p>
+<dt>receiver_list<span class="classifier"><em>list</em></span></dt><dd><p>of str The list of emails of the people that will receive the alarm.. If not specified it is not possible to send any alarm</p>
 </dd>
 </dl>
 </dd>
@@ -1280,18 +1280,18 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1713">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>heightResolution float</dt><dd><p>The height resolution of the profile [m]. Default 100. heightMin,</p>
+<dt>parameters</dt><dd><dl>
+<dt>heightResolution<span class="classifier"><em>float</em></span></dt><dd><p>The height resolution of the profile [m]. Default 100. heightMin,</p>
 </dd>
-<dt>heightMax float</dt><dd><p>or None The minimum and maximum altitude of the profile [m MSL]. If None the values will be obtained from the minimum and maximum gate altitude.</p>
+<dt>heightMax<span class="classifier"><em>float</em></span></dt><dd><p>or None The minimum and maximum altitude of the profile [m MSL]. If None the values will be obtained from the minimum and maximum gate altitude.</p>
 </dd>
-<dt>min_ele float</dt><dd><p>The minimum elevation to be used in the computation of the vertical velocities. Default 5.</p>
+<dt>min_ele<span class="classifier"><em>float</em></span></dt><dd><p>The minimum elevation to be used in the computation of the vertical velocities. Default 5.</p>
 </dd>
-<dt>max_ele float</dt><dd><p>The maximum elevation to be used in the computation of the horizontal velocities. Default 85.</p>
+<dt>max_ele<span class="classifier"><em>float</em></span></dt><dd><p>The maximum elevation to be used in the computation of the horizontal velocities. Default 85.</p>
 </dd>
-<dt>fixed_span Bool</dt><dd><p>If true the profile plot has a fix X-axis vmin,</p>
+<dt>fixed_span<span class="classifier"><em>Bool</em></span></dt><dd><p>If true the profile plot has a fix X-axis vmin,</p>
 </dd>
-<dt>vmax float</dt><dd><p>or None If fixed_span is set, the minimum and maximum values of the X-axis. If None, they are obtained from the span of the U component defined in the Py-ART config file</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None If fixed_span is set, the minimum and maximum values of the X-axis. If None, they are obtained from the span of the U component defined in the Py-ART config file</p>
 </dd>
 </dl>
 </dd>
@@ -1308,12 +1308,12 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L1419">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>voltype  str</dt><dd><p>The name of the variable to plot. Can be dBZ, ZDR, KDP, RhoHV, H_ISO0 and its standardized form (e.g. dBZ_std)</p>
+<dt>parameters</dt><dd><dl>
+<dt>voltype<span class="classifier"><em>str</em></span></dt><dd><p>The name of the variable to plot. Can be dBZ, ZDR, KDP, RhoHV, H_ISO0 and its standardized form (e.g. dBZ_std)</p>
 </dd>
-<dt>write_data  Bool</dt><dd><p>If true writes the histogram in a .csv file. Default True</p>
+<dt>write_data<span class="classifier"><em>Bool</em></span></dt><dd><p>If true writes the histogram in a .csv file. Default True</p>
 </dd>
-<dt>step  float</dt><dd><p>bin size. Default 0.1</p>
+<dt>step<span class="classifier"><em>float</em></span></dt><dd><p>bin size. Default 0.1</p>
 </dd>
 </dl>
 </dd>
@@ -1327,10 +1327,10 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L1419">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>voltype_y  str</dt><dd><p>The name of the variables to plot. Can be dBZ, ZDR, KDP, RhoHV, H_ISO0 and its standardized form (e.g. dBZ_std) step_x,</p>
+<dt>parameters</dt><dd><dl>
+<dt>voltype_y<span class="classifier"><em>str</em></span></dt><dd><p>The name of the variables to plot. Can be dBZ, ZDR, KDP, RhoHV, H_ISO0 and its standardized form (e.g. dBZ_std) step_x,</p>
 </dd>
-<dt>step_y  float</dt><dd><p>bin size. Default 0.1</p>
+<dt>step_y<span class="classifier"><em>float</em></span></dt><dd><p>bin size. Default 0.1</p>
 </dd>
 </dl>
 </dd>
@@ -1344,12 +1344,12 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L1258">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>voltype  str</dt><dd><p>The name of the variable to plot. Can be dBZ, ZDR, KDP, RhoHV, H_ISO0 and its standardized form (e.g. dBZ_std)</p>
+<dt>parameters</dt><dd><dl>
+<dt>voltype<span class="classifier"><em>str</em></span></dt><dd><p>The name of the variable to plot. Can be dBZ, ZDR, KDP, RhoHV, H_ISO0 and its standardized form (e.g. dBZ_std)</p>
 </dd>
-<dt>write_data  Bool</dt><dd><p>If true writes the histogram in a .csv file. Default True</p>
+<dt>write_data<span class="classifier"><em>Bool</em></span></dt><dd><p>If true writes the histogram in a .csv file. Default True</p>
 </dd>
-<dt>step  float</dt><dd><p>bin size. Default 0.1</p>
+<dt>step<span class="classifier"><em>float</em></span></dt><dd><p>bin size. Default 0.1</p>
 </dd>
 </dl>
 </dd>
@@ -1363,14 +1363,14 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L1319">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>voltype  str</dt><dd><p>The name of the variable to plot. Can be dBZ, ZDR, KDP, RhoHV, H_ISO0 and its standardized form (e.g. dBZ_std)</p>
+<dt>parameters</dt><dd><dl>
+<dt>voltype<span class="classifier"><em>str</em></span></dt><dd><p>The name of the variable to plot. Can be dBZ, ZDR, KDP, RhoHV, H_ISO0 and its standardized form (e.g. dBZ_std)</p>
 </dd>
-<dt>hydro_type  str</dt><dd><p>The name of the hydrometeor type.</p>
+<dt>hydro_type<span class="classifier"><em>str</em></span></dt><dd><p>The name of the hydrometeor type.</p>
 </dd>
-<dt>write_data  Bool</dt><dd><p>If true writes the histogram in a .csv file. Default True</p>
+<dt>write_data<span class="classifier"><em>Bool</em></span></dt><dd><p>If true writes the histogram in a .csv file. Default True</p>
 </dd>
-<dt>step  float</dt><dd><p>bin size. Default 0.1</p>
+<dt>step<span class="classifier"><em>float</em></span></dt><dd><p>bin size. Default 0.1</p>
 </dd>
 </dl>
 </dd>
@@ -1384,12 +1384,12 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L1419">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>voltype_y  str</dt><dd><p>The name of the variables to plot. Can be dBZ, ZDR, KDP, RhoHV, H_ISO0 and its standardized form (e.g. dBZ_std)</p>
+<dt>parameters</dt><dd><dl>
+<dt>voltype_y<span class="classifier"><em>str</em></span></dt><dd><p>The name of the variables to plot. Can be dBZ, ZDR, KDP, RhoHV, H_ISO0 and its standardized form (e.g. dBZ_std)</p>
 </dd>
-<dt>hydro_type  str</dt><dd><p>The name of the hydrometeor type. step_x,</p>
+<dt>hydro_type<span class="classifier"><em>str</em></span></dt><dd><p>The name of the hydrometeor type. step_x,</p>
 </dd>
-<dt>step_y  float</dt><dd><p>bin size. Default 0.1</p>
+<dt>step_y<span class="classifier"><em>float</em></span></dt><dd><p>bin size. Default 0.1</p>
 </dd>
 </dl>
 </dd>
@@ -1431,14 +1431,14 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L201">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>file_type str</dt><dd><p>The type of file used to save the data. Can be ‘nc’ or ‘h5’. Default ‘nc’</p>
+<dt>parameters</dt><dd><dl>
+<dt>file_type<span class="classifier"><em>str</em></span></dt><dd><p>The type of file used to save the data. Can be ‘nc’ or ‘h5’. Default ‘nc’</p>
 </dd>
-<dt>physical Bool</dt><dd><p>If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary</p>
+<dt>physical<span class="classifier"><em>Bool</em></span></dt><dd><p>If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary</p>
 </dd>
-<dt>compression str</dt><dd><p>For ODIM file formats, the type of compression. Can be any of the allowed compression types for hdf5 files. Default gzip</p>
+<dt>compression<span class="classifier"><em>str</em></span></dt><dd><p>For ODIM file formats, the type of compression. Can be any of the allowed compression types for hdf5 files. Default gzip</p>
 </dd>
-<dt>compression_opts any</dt><dd><p>The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level).</p>
+<dt>compression_opts<span class="classifier"><em>any</em></span></dt><dd><p>The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level).</p>
 </dd>
 </dl>
 </dd>
@@ -1455,14 +1455,14 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L291">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>file_type str</dt><dd><p>The type of file used to save the data. Can be ‘nc’ or ‘h5’. Default ‘nc’</p>
+<dt>parameters</dt><dd><dl>
+<dt>file_type<span class="classifier"><em>str</em></span></dt><dd><p>The type of file used to save the data. Can be ‘nc’ or ‘h5’. Default ‘nc’</p>
 </dd>
-<dt>physical Bool</dt><dd><p>If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary</p>
+<dt>physical<span class="classifier"><em>Bool</em></span></dt><dd><p>If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary</p>
 </dd>
-<dt>compression str</dt><dd><p>For ODIM file formats, the type of compression. Can be any of the allowed compression types for hdf5 files. Default gzip</p>
+<dt>compression<span class="classifier"><em>str</em></span></dt><dd><p>For ODIM file formats, the type of compression. Can be any of the allowed compression types for hdf5 files. Default gzip</p>
 </dd>
-<dt>compression_opts any</dt><dd><p>The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level). All the products of the ‘VOL’ dataset group</p>
+<dt>compression_opts<span class="classifier"><em>any</em></span></dt><dd><p>The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level). All the products of the ‘VOL’ dataset group</p>
 </dd>
 </dl>
 </dd>
@@ -1494,14 +1494,14 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L697">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>step float</dt><dd><p>or None the data quantization step. If none it will be obtained from the Py-ART configuration file vmin,</p>
+<dt>parameters</dt><dd><dl>
+<dt>step<span class="classifier"><em>float</em></span></dt><dd><p>or None the data quantization step. If none it will be obtained from the Py-ART configuration file vmin,</p>
 </dd>
-<dt>vmax float</dt><dd><p>or None The minimum and maximum values. If None they will be obtained from the Py-ART configuration file</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None The minimum and maximum values. If None they will be obtained from the Py-ART configuration file</p>
 </dd>
-<dt>mask_val float</dt><dd><p>or None A value to mask.</p>
+<dt>mask_val<span class="classifier"><em>float</em></span></dt><dd><p>or None A value to mask.</p>
 </dd>
-<dt>write_data Bool</dt><dd><p>If true the histogram data is written in a csv file</p>
+<dt>write_data<span class="classifier"><em>Bool</em></span></dt><dd><p>If true the histogram data is written in a csv file</p>
 </dd>
 </dl>
 </dd>
@@ -1515,8 +1515,8 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L962">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>lat floats</dt><dd><p>The starting point of the cross-section. The ending point is defined by the parameters in ‘xsecImageConfig’ in the ‘loc’ configuration file</p>
+<dt>parameters</dt><dd><dl>
+<dt>lat<span class="classifier"><em>floats</em></span></dt><dd><p>The starting point of the cross-section. The ending point is defined by the parameters in ‘xsecImageConfig’ in the ‘loc’ configuration file</p>
 </dd>
 </dl>
 </dd>
@@ -1530,8 +1530,8 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L897">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>lat floats</dt><dd><p>The starting point of the cross-section. The ending point is defined by the parameters in ‘xsecImageConfig’ in the ‘loc’ configuration file</p>
+<dt>parameters</dt><dd><dl>
+<dt>lat<span class="classifier"><em>floats</em></span></dt><dd><p>The starting point of the cross-section. The ending point is defined by the parameters in ‘xsecImageConfig’ in the ‘loc’ configuration file</p>
 </dd>
 </dl>
 </dd>
@@ -1545,8 +1545,8 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L813">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>datatypes list</dt><dd><p>of str or None The list of data types to save. If it is None, all fields in the radar object will be saved</p>
+<dt>parameters</dt><dd><dl>
+<dt>datatypes<span class="classifier"><em>list</em></span></dt><dd><p>of str or None The list of data types to save. If it is None, all fields in the radar object will be saved</p>
 </dd>
 </dl>
 </dd>
@@ -1571,14 +1571,14 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L762">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>file_type str</dt><dd><p>The type of file used to save the data. Can be ‘nc’ or ‘h5’. Default ‘nc’</p>
+<dt>parameters</dt><dd><dl>
+<dt>file_type<span class="classifier"><em>str</em></span></dt><dd><p>The type of file used to save the data. Can be ‘nc’ or ‘h5’. Default ‘nc’</p>
 </dd>
-<dt>physical Bool</dt><dd><p>If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary. Default True</p>
+<dt>physical<span class="classifier"><em>Bool</em></span></dt><dd><p>If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary. Default True</p>
 </dd>
-<dt>compression str</dt><dd><p>For ODIM file formats, the type of compression. Can be any of the allowed compression types for hdf5 files. Default gzip</p>
+<dt>compression<span class="classifier"><em>str</em></span></dt><dd><p>For ODIM file formats, the type of compression. Can be any of the allowed compression types for hdf5 files. Default gzip</p>
 </dd>
-<dt>compression_opts any</dt><dd><p>The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level).</p>
+<dt>compression_opts<span class="classifier"><em>any</em></span></dt><dd><p>The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level).</p>
 </dd>
 </dl>
 </dd>
@@ -1603,8 +1603,8 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L320">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>stat str</dt><dd><p>The statistic used. Can be mean, median, min, max</p>
+<dt>parameters</dt><dd><dl>
+<dt>stat<span class="classifier"><em>str</em></span></dt><dd><p>The statistic used. Can be mean, median, min, max</p>
 </dd>
 </dl>
 </dd>
@@ -1618,8 +1618,8 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L369">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>level int</dt><dd><p>The altitude level to plot. The rest of the parameters are defined by the parameters in ‘ppiImageConfig’ and ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
+<dt>parameters</dt><dd><dl>
+<dt>level<span class="classifier"><em>int</em></span></dt><dd><p>The altitude level to plot. The rest of the parameters are defined by the parameters in ‘ppiImageConfig’ and ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
 </dd>
 </dl>
 </dd>
@@ -1633,8 +1633,8 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L400">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>level int</dt><dd><p>The altitude level to plot. The rest of the parameters are defined by the parameters in ‘ppiImageConfig’ and ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
+<dt>parameters</dt><dd><dl>
+<dt>level<span class="classifier"><em>int</em></span></dt><dd><p>The altitude level to plot. The rest of the parameters are defined by the parameters in ‘ppiImageConfig’ and ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
 </dd>
 </dl>
 </dd>
@@ -1648,14 +1648,14 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L467">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>level int</dt><dd><p>The altitude level to plot. The rest of the parameters are defined by the parameters in ‘ppiImageConfig’ and ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
+<dt>parameters</dt><dd><dl>
+<dt>level<span class="classifier"><em>int</em></span></dt><dd><p>The altitude level to plot. The rest of the parameters are defined by the parameters in ‘ppiImageConfig’ and ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
 </dd>
-<dt>contour_values  float</dt><dd><p>array or None The contour values. If None the values are taken from the ‘boundaries’ keyword in the field description in the Py-ART config file. If ‘boundaries’ is not set the countours are 10 values linearly distributed from vmin to vmax</p>
+<dt>contour_values<span class="classifier"><em>float</em></span></dt><dd><p>array or None The contour values. If None the values are taken from the ‘boundaries’ keyword in the field description in the Py-ART config file. If ‘boundaries’ is not set the countours are 10 values linearly distributed from vmin to vmax</p>
 </dd>
-<dt>linewidths  float</dt><dd><p>width of the contour lines</p>
+<dt>linewidths<span class="classifier"><em>float</em></span></dt><dd><p>width of the contour lines</p>
 </dd>
-<dt>colors  color</dt><dd><p>string or sequence of colors The contour colours</p>
+<dt>colors<span class="classifier"><em>color</em></span></dt><dd><p>string or sequence of colors The contour colours</p>
 </dd>
 </dl>
 </dd>
@@ -1669,14 +1669,14 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L467">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>level int</dt><dd><p>The altitude level to plot. The rest of the parameters are defined by the parameters in ‘ppiImageConfig’ and ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
+<dt>parameters</dt><dd><dl>
+<dt>level<span class="classifier"><em>int</em></span></dt><dd><p>The altitude level to plot. The rest of the parameters are defined by the parameters in ‘ppiImageConfig’ and ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
 </dd>
-<dt>contour_values  float</dt><dd><p>array or None The contour values. If None the values are taken from the ‘boundaries’ keyword in the field description in the Py-ART config file. If ‘boundaries’ is not set the countours are 10 values linearly distributed from vmin to vmax</p>
+<dt>contour_values<span class="classifier"><em>float</em></span></dt><dd><p>array or None The contour values. If None the values are taken from the ‘boundaries’ keyword in the field description in the Py-ART config file. If ‘boundaries’ is not set the countours are 10 values linearly distributed from vmin to vmax</p>
 </dd>
-<dt>linewidths  float</dt><dd><p>width of the contour lines</p>
+<dt>linewidths<span class="classifier"><em>float</em></span></dt><dd><p>width of the contour lines</p>
 </dd>
-<dt>colors  color</dt><dd><p>string or sequence of colors The contour colours</p>
+<dt>colors<span class="classifier"><em>color</em></span></dt><dd><p>string or sequence of colors The contour colours</p>
 </dd>
 </dl>
 </dd>
@@ -1690,10 +1690,10 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L523">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>level int</dt><dd><p>The altitude level to plot. The rest of the parameters are defined by the parameters in ‘ppiImageConfig’ and ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
+<dt>parameters</dt><dd><dl>
+<dt>level<span class="classifier"><em>int</em></span></dt><dd><p>The altitude level to plot. The rest of the parameters are defined by the parameters in ‘ppiImageConfig’ and ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
 </dd>
-<dt>contour_values  float</dt><dd><p>array or None The contour values. If None the values are taken from the ‘boundaries’ keyword in the field description in the Py-ART config file. If ‘boundaries’ is not set the countours are 10 values linearly distributed from vmin to vmax</p>
+<dt>contour_values<span class="classifier"><em>float</em></span></dt><dd><p>array or None The contour values. If None the values are taken from the ‘boundaries’ keyword in the field description in the Py-ART config file. If ‘boundaries’ is not set the countours are 10 values linearly distributed from vmin to vmax</p>
 </dd>
 </dl>
 </dd>
@@ -1707,26 +1707,26 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L850">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>level int</dt><dd><p>The altitude level to plot. The rest of the parameters are defined by the parameters in ‘ppiImageConfig’ and ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
+<dt>parameters</dt><dd><dl>
+<dt>level<span class="classifier"><em>int</em></span></dt><dd><p>The altitude level to plot. The rest of the parameters are defined by the parameters in ‘ppiImageConfig’ and ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
 </dd>
-<dt>display_type str</dt><dd><p>Display method for the wind vectors, can be either ‘streamline’, ‘quiver’ or ‘barbs’</p>
+<dt>display_type<span class="classifier"><em>str</em></span></dt><dd><p>Display method for the wind vectors, can be either ‘streamline’, ‘quiver’ or ‘barbs’</p>
 </dd>
-<dt>bg_ref_rad int</dt><dd><p>Which radar to use as reference to display the background voltype.</p>
+<dt>bg_ref_rad<span class="classifier"><em>int</em></span></dt><dd><p>Which radar to use as reference to display the background voltype.</p>
 </dd>
-<dt>u_vel_contours list</dt><dd><p>of int The contours to use for plotting contours of u. Set to None to not display such contours.</p>
+<dt>u_vel_contours<span class="classifier"><em>list</em></span></dt><dd><p>of int The contours to use for plotting contours of u. Set to None to not display such contours.</p>
 </dd>
-<dt>v_vel_contours list</dt><dd><p>of int The contours to use for plotting contours of v. Set to None to not display such contours.</p>
+<dt>v_vel_contours<span class="classifier"><em>list</em></span></dt><dd><p>of int The contours to use for plotting contours of v. Set to None to not display such contours.</p>
 </dd>
-<dt>w_vel_contours list</dt><dd><p>of int The contours to use for plotting contours of w. Set to None to not display such contours.</p>
+<dt>w_vel_contours<span class="classifier"><em>list</em></span></dt><dd><p>of int The contours to use for plotting contours of w. Set to None to not display such contours.</p>
 </dd>
-<dt>vector_spacing_km float</dt><dd><p>Spacing in km between wind vectors in x and y axis (only used for barbs and quiver plots)</p>
+<dt>vector_spacing_km<span class="classifier"><em>float</em></span></dt><dd><p>Spacing in km between wind vectors in x and y axis (only used for barbs and quiver plots)</p>
 </dd>
-<dt>quiver_len float</dt><dd><p>Length to use for the quiver key in m/s. (only used for quiver plots)</p>
+<dt>quiver_len<span class="classifier"><em>float</em></span></dt><dd><p>Length to use for the quiver key in m/s. (only used for quiver plots)</p>
 </dd>
-<dt>streamline_arrowsize float</dt><dd><p>Factor scale arrow size for streamlines. (only used for streamline plots)</p>
+<dt>streamline_arrowsize<span class="classifier"><em>float</em></span></dt><dd><p>Factor scale arrow size for streamlines. (only used for streamline plots)</p>
 </dd>
-<dt>linewidth float</dt><dd><p>Linewidths for streamlines. (only used for streamline plots)</p>
+<dt>linewidth<span class="classifier"><em>float</em></span></dt><dd><p>Linewidths for streamlines. (only used for streamline plots)</p>
 </dd>
 </dl>
 </dd>
@@ -1743,20 +1743,20 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1033">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>along_azi  bool</dt><dd><p>If true the plot is performed along azimuth, otherwise along elevation. Default true</p>
+<dt>parameters</dt><dd><dl>
+<dt>along_azi<span class="classifier"><em>bool</em></span></dt><dd><p>If true the plot is performed along azimuth, otherwise along elevation. Default true</p>
 </dd>
-<dt>ang  float</dt><dd><p>The fixed angle (deg). Default 0.</p>
+<dt>ang<span class="classifier"><em>float</em></span></dt><dd><p>The fixed angle (deg). Default 0.</p>
 </dd>
-<dt>rng  float</dt><dd><p>The fixed range (m). Default 0.</p>
+<dt>rng<span class="classifier"><em>float</em></span></dt><dd><p>The fixed range (m). Default 0.</p>
 </dd>
-<dt>ang_tol  float</dt><dd><p>The fixed angle tolerance (deg). Default 1.</p>
+<dt>ang_tol<span class="classifier"><em>float</em></span></dt><dd><p>The fixed angle tolerance (deg). Default 1.</p>
 </dd>
-<dt>rng_tol  float</dt><dd><p>The fixed range tolerance (m). Default 50.</p>
+<dt>rng_tol<span class="classifier"><em>float</em></span></dt><dd><p>The fixed range tolerance (m). Default 50.</p>
 </dd>
-<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ ampli_vmin, ampli_vmax, phase_vmin,</p>
+<dt>xaxis_info<span class="classifier"><em>str</em></span></dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ ampli_vmin, ampli_vmax, phase_vmin,</p>
 </dd>
-<dt>phase_vmax  float</dt><dd><p>or None Minimum and maximum of the color scale for the module and phase</p>
+<dt>phase_vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None Minimum and maximum of the color scale for the module and phase</p>
 </dd>
 </dl>
 </dd>
@@ -1770,26 +1770,26 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L892">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>azi  float</dt><dd><p>azimuth (deg) of the ray to plot</p>
+<dt>parameters</dt><dd><dl>
+<dt>azi<span class="classifier"><em>float</em></span></dt><dd><p>azimuth (deg) of the ray to plot</p>
 </dd>
-<dt>ele  float</dt><dd><p>elevation (deg) of the ray to plot</p>
+<dt>ele<span class="classifier"><em>float</em></span></dt><dd><p>elevation (deg) of the ray to plot</p>
 </dd>
-<dt>rng  float</dt><dd><p>range (m) of the ray to plot</p>
+<dt>rng<span class="classifier"><em>float</em></span></dt><dd><p>range (m) of the ray to plot</p>
 </dd>
-<dt>azi_tol  float</dt><dd><p>azimuth (deg) tolerance respect to nominal position to plot. Default 1.</p>
+<dt>azi_tol<span class="classifier"><em>float</em></span></dt><dd><p>azimuth (deg) tolerance respect to nominal position to plot. Default 1.</p>
 </dd>
-<dt>ele_tol  float</dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 1.</p>
+<dt>ele_tol<span class="classifier"><em>float</em></span></dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 1.</p>
 </dd>
-<dt>rng_tol  float</dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 50.</p>
+<dt>rng_tol<span class="classifier"><em>float</em></span></dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 50.</p>
 </dd>
-<dt>ind_ray  int</dt><dd><p>index of the ray to plot. Alternative to defining its antenna coordinates</p>
+<dt>ind_ray<span class="classifier"><em>int</em></span></dt><dd><p>index of the ray to plot. Alternative to defining its antenna coordinates</p>
 </dd>
-<dt>ind_rng  int</dt><dd><p>index of the range to plot. Alternative to defining its antenna coordinates</p>
+<dt>ind_rng<span class="classifier"><em>int</em></span></dt><dd><p>index of the range to plot. Alternative to defining its antenna coordinates</p>
 </dd>
-<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ ampli_vmin, ampli_vmax, phase_vmin,</p>
+<dt>xaxis_info<span class="classifier"><em>str</em></span></dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ ampli_vmin, ampli_vmax, phase_vmin,</p>
 </dd>
-<dt>phase_vmax  float</dt><dd><p>or None Minimum and maximum of the color scale for the module and phase</p>
+<dt>phase_vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None Minimum and maximum of the color scale for the module and phase</p>
 </dd>
 </dl>
 </dd>
@@ -1803,20 +1803,20 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L966">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>azi  float</dt><dd><p>azimuth (deg) of the ray to plot</p>
+<dt>parameters</dt><dd><dl>
+<dt>azi<span class="classifier"><em>float</em></span></dt><dd><p>azimuth (deg) of the ray to plot</p>
 </dd>
-<dt>ele  float</dt><dd><p>elevation (deg) of the ray to plot</p>
+<dt>ele<span class="classifier"><em>float</em></span></dt><dd><p>elevation (deg) of the ray to plot</p>
 </dd>
-<dt>azi_tol  float</dt><dd><p>azimuth (deg) tolerance respect to nominal position to plot. Default 1.</p>
+<dt>azi_tol<span class="classifier"><em>float</em></span></dt><dd><p>azimuth (deg) tolerance respect to nominal position to plot. Default 1.</p>
 </dd>
-<dt>ele_tol  float</dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 1.</p>
+<dt>ele_tol<span class="classifier"><em>float</em></span></dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 1.</p>
 </dd>
-<dt>ind_ray  int</dt><dd><p>index of the ray to plot. Alternative to defining its antenna coordinates</p>
+<dt>ind_ray<span class="classifier"><em>int</em></span></dt><dd><p>index of the ray to plot. Alternative to defining its antenna coordinates</p>
 </dd>
-<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ ampli_vmin, ampli_vmax, phase_vmin,</p>
+<dt>xaxis_info<span class="classifier"><em>str</em></span></dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’ ampli_vmin, ampli_vmax, phase_vmin,</p>
 </dd>
-<dt>phase_vmax  float</dt><dd><p>or None Minimum and maximum of the color scale for the module and phase</p>
+<dt>phase_vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None Minimum and maximum of the color scale for the module and phase</p>
 </dd>
 </dl>
 </dd>
@@ -1830,18 +1830,18 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1120">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’ or ‘Doppler frequency’</p>
+<dt>parameters</dt><dd><dl>
+<dt>xaxis_info<span class="classifier"><em>str</em></span></dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’ or ‘Doppler frequency’</p>
 </dd>
-<dt>ampli_vmin  float</dt><dd><p>or None Minimum of the color scale for the module</p>
+<dt>ampli_vmin<span class="classifier"><em>float</em></span></dt><dd><p>or None Minimum of the color scale for the module</p>
 </dd>
-<dt>ampli_vmax  float</dt><dd><p>or None Maximum of the color scale for the module</p>
+<dt>ampli_vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None Maximum of the color scale for the module</p>
 </dd>
-<dt>phase_vmin  float</dt><dd><p>or None Minimum of the color scale for the module</p>
+<dt>phase_vmin<span class="classifier"><em>float</em></span></dt><dd><p>or None Minimum of the color scale for the module</p>
 </dd>
-<dt>phase_vmax  float</dt><dd><p>or None Minimum of the color scale for the phase</p>
+<dt>phase_vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None Minimum of the color scale for the phase</p>
 </dd>
-<dt>plot_type  str</dt><dd><p>Can be ‘final’ or ‘temporal’. If final the data is only plotted at the end of the processing</p>
+<dt>plot_type<span class="classifier"><em>str</em></span></dt><dd><p>Can be ‘final’ or ‘temporal’. If final the data is only plotted at the end of the processing</p>
 </dd>
 </dl>
 </dd>
@@ -1855,22 +1855,22 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1033">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>along_azi  bool</dt><dd><p>If true the plot is performed along azimuth, otherwise along elevation. Default true</p>
+<dt>parameters</dt><dd><dl>
+<dt>along_azi<span class="classifier"><em>bool</em></span></dt><dd><p>If true the plot is performed along azimuth, otherwise along elevation. Default true</p>
 </dd>
-<dt>ang  float</dt><dd><p>The fixed angle (deg). Default 0.</p>
+<dt>ang<span class="classifier"><em>float</em></span></dt><dd><p>The fixed angle (deg). Default 0.</p>
 </dd>
-<dt>rng  float</dt><dd><p>The fixed range (m). Default 0.</p>
+<dt>rng<span class="classifier"><em>float</em></span></dt><dd><p>The fixed range (m). Default 0.</p>
 </dd>
-<dt>ang_tol  float</dt><dd><p>The fixed angle tolerance (deg). Default 1.</p>
+<dt>ang_tol<span class="classifier"><em>float</em></span></dt><dd><p>The fixed angle tolerance (deg). Default 1.</p>
 </dd>
-<dt>rng_tol  float</dt><dd><p>The fixed range tolerance (m). Default 50.</p>
+<dt>rng_tol<span class="classifier"><em>float</em></span></dt><dd><p>The fixed range tolerance (m). Default 50.</p>
 </dd>
-<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’</p>
+<dt>xaxis_info<span class="classifier"><em>str</em></span></dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’</p>
 </dd>
-<dt>vmin  float</dt><dd><p>or None Minimum of the color scale</p>
+<dt>vmin<span class="classifier"><em>float</em></span></dt><dd><p>or None Minimum of the color scale</p>
 </dd>
-<dt>vmax  float</dt><dd><p>or None Maximum of the color scale</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None Maximum of the color scale</p>
 </dd>
 </dl>
 </dd>
@@ -1884,22 +1884,22 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L682">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>along_azi  bool</dt><dd><p>If true the plot is performed along azimuth, otherwise along elevation. Default true</p>
+<dt>parameters</dt><dd><dl>
+<dt>along_azi<span class="classifier"><em>bool</em></span></dt><dd><p>If true the plot is performed along azimuth, otherwise along elevation. Default true</p>
 </dd>
-<dt>ang  float</dt><dd><p>The fixed angle (deg). Default 0.</p>
+<dt>ang<span class="classifier"><em>float</em></span></dt><dd><p>The fixed angle (deg). Default 0.</p>
 </dd>
-<dt>rng  float</dt><dd><p>The fixed range (m). Default 0.</p>
+<dt>rng<span class="classifier"><em>float</em></span></dt><dd><p>The fixed range (m). Default 0.</p>
 </dd>
-<dt>ang_tol  float</dt><dd><p>The fixed angle tolerance (deg). Default 1.</p>
+<dt>ang_tol<span class="classifier"><em>float</em></span></dt><dd><p>The fixed angle tolerance (deg). Default 1.</p>
 </dd>
-<dt>rng_tol  float</dt><dd><p>The fixed range tolerance (m). Default 50.</p>
+<dt>rng_tol<span class="classifier"><em>float</em></span></dt><dd><p>The fixed range tolerance (m). Default 50.</p>
 </dd>
-<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’</p>
+<dt>xaxis_info<span class="classifier"><em>str</em></span></dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’</p>
 </dd>
-<dt>vmin  float</dt><dd><p>or None Minimum of the color scale</p>
+<dt>vmin<span class="classifier"><em>float</em></span></dt><dd><p>or None Minimum of the color scale</p>
 </dd>
-<dt>vmax  float</dt><dd><p>or None Maximum of the color scale</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None Maximum of the color scale</p>
 </dd>
 </dl>
 </dd>
@@ -1913,28 +1913,28 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L822">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>azi  float</dt><dd><p>azimuth (deg) of the ray to plot</p>
+<dt>parameters</dt><dd><dl>
+<dt>azi<span class="classifier"><em>float</em></span></dt><dd><p>azimuth (deg) of the ray to plot</p>
 </dd>
-<dt>ele  float</dt><dd><p>elevation (deg) of the ray to plot</p>
+<dt>ele<span class="classifier"><em>float</em></span></dt><dd><p>elevation (deg) of the ray to plot</p>
 </dd>
-<dt>rng  float</dt><dd><p>range (m) of the ray to plot</p>
+<dt>rng<span class="classifier"><em>float</em></span></dt><dd><p>range (m) of the ray to plot</p>
 </dd>
-<dt>azi_tol  float</dt><dd><p>azimuth (deg) tolerance respect to nominal position to plot. Default 1.</p>
+<dt>azi_tol<span class="classifier"><em>float</em></span></dt><dd><p>azimuth (deg) tolerance respect to nominal position to plot. Default 1.</p>
 </dd>
-<dt>ele_tol  float</dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 1.</p>
+<dt>ele_tol<span class="classifier"><em>float</em></span></dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 1.</p>
 </dd>
-<dt>rng_tol  float</dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 50.</p>
+<dt>rng_tol<span class="classifier"><em>float</em></span></dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 50.</p>
 </dd>
-<dt>ind_ray  int</dt><dd><p>index of the ray to plot. Alternative to defining its antenna coordinates</p>
+<dt>ind_ray<span class="classifier"><em>int</em></span></dt><dd><p>index of the ray to plot. Alternative to defining its antenna coordinates</p>
 </dd>
-<dt>ind_rng  int</dt><dd><p>index of the range to plot. Alternative to defining its antenna coordinates</p>
+<dt>ind_rng<span class="classifier"><em>int</em></span></dt><dd><p>index of the range to plot. Alternative to defining its antenna coordinates</p>
 </dd>
-<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’</p>
+<dt>xaxis_info<span class="classifier"><em>str</em></span></dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’</p>
 </dd>
-<dt>vmin  float</dt><dd><p>or None Minimum of the color scale</p>
+<dt>vmin<span class="classifier"><em>float</em></span></dt><dd><p>or None Minimum of the color scale</p>
 </dd>
-<dt>vmax  float</dt><dd><p>or None Maximum of the color scale</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None Maximum of the color scale</p>
 </dd>
 </dl>
 </dd>
@@ -1948,26 +1948,26 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L621">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>azi  float</dt><dd><p>azimuth (deg) of the ray to plot</p>
+<dt>parameters</dt><dd><dl>
+<dt>azi<span class="classifier"><em>float</em></span></dt><dd><p>azimuth (deg) of the ray to plot</p>
 </dd>
-<dt>ele  float</dt><dd><p>elevation (deg) of the ray to plot</p>
+<dt>ele<span class="classifier"><em>float</em></span></dt><dd><p>elevation (deg) of the ray to plot</p>
 </dd>
-<dt>rng  float</dt><dd><p>range (m) of the ray to plot</p>
+<dt>rng<span class="classifier"><em>float</em></span></dt><dd><p>range (m) of the ray to plot</p>
 </dd>
-<dt>azi_tol  float</dt><dd><p>azimuth (deg) tolerance respect to nominal position to plot. Default 1.</p>
+<dt>azi_tol<span class="classifier"><em>float</em></span></dt><dd><p>azimuth (deg) tolerance respect to nominal position to plot. Default 1.</p>
 </dd>
-<dt>ele_tol  float</dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 1.</p>
+<dt>ele_tol<span class="classifier"><em>float</em></span></dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 1.</p>
 </dd>
-<dt>rng_tol  float</dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 50.</p>
+<dt>rng_tol<span class="classifier"><em>float</em></span></dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 50.</p>
 </dd>
-<dt>ind_ray  int</dt><dd><p>index of the ray to plot. Alternative to defining its antenna coordinates</p>
+<dt>ind_ray<span class="classifier"><em>int</em></span></dt><dd><p>index of the ray to plot. Alternative to defining its antenna coordinates</p>
 </dd>
-<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’</p>
+<dt>xaxis_info<span class="classifier"><em>str</em></span></dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’</p>
 </dd>
-<dt>vmin  float</dt><dd><p>or None Minimum of the color scale</p>
+<dt>vmin<span class="classifier"><em>float</em></span></dt><dd><p>or None Minimum of the color scale</p>
 </dd>
-<dt>vmax  float</dt><dd><p>or None Maximum of the color scale</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None Maximum of the color scale</p>
 </dd>
 </dl>
 </dd>
@@ -1981,14 +1981,14 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L763">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’ or ‘Doppler frequency’</p>
+<dt>parameters</dt><dd><dl>
+<dt>xaxis_info<span class="classifier"><em>str</em></span></dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’ or ‘Doppler frequency’</p>
 </dd>
-<dt>vmin  float</dt><dd><p>or None Minimum of the color scale</p>
+<dt>vmin<span class="classifier"><em>float</em></span></dt><dd><p>or None Minimum of the color scale</p>
 </dd>
-<dt>vmax  float</dt><dd><p>or None Maximum of the color scale</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None Maximum of the color scale</p>
 </dd>
-<dt>plot_type  str</dt><dd><p>Can be ‘final’ or ‘temporal’. If final the data is only plotted at the end of the processing</p>
+<dt>plot_type<span class="classifier"><em>str</em></span></dt><dd><p>Can be ‘final’ or ‘temporal’. If final the data is only plotted at the end of the processing</p>
 </dd>
 </dl>
 </dd>
@@ -2002,26 +2002,26 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1120">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>azi  float</dt><dd><p>azimuth (deg) of the ray to plot</p>
+<dt>parameters</dt><dd><dl>
+<dt>azi<span class="classifier"><em>float</em></span></dt><dd><p>azimuth (deg) of the ray to plot</p>
 </dd>
-<dt>ele  float</dt><dd><p>elevation (deg) of the ray to plot</p>
+<dt>ele<span class="classifier"><em>float</em></span></dt><dd><p>elevation (deg) of the ray to plot</p>
 </dd>
-<dt>rng  float</dt><dd><p>range (m) of the ray to plot</p>
+<dt>rng<span class="classifier"><em>float</em></span></dt><dd><p>range (m) of the ray to plot</p>
 </dd>
-<dt>azi_tol  float</dt><dd><p>azimuth (deg) tolerance respect to nominal position to plot. Default 1.</p>
+<dt>azi_tol<span class="classifier"><em>float</em></span></dt><dd><p>azimuth (deg) tolerance respect to nominal position to plot. Default 1.</p>
 </dd>
-<dt>ele_tol  float</dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 1.</p>
+<dt>ele_tol<span class="classifier"><em>float</em></span></dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 1.</p>
 </dd>
-<dt>rng_tol  float</dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 50.</p>
+<dt>rng_tol<span class="classifier"><em>float</em></span></dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 50.</p>
 </dd>
-<dt>ind_ray  int</dt><dd><p>index of the ray to plot. Alternative to defining its antenna coordinates</p>
+<dt>ind_ray<span class="classifier"><em>int</em></span></dt><dd><p>index of the ray to plot. Alternative to defining its antenna coordinates</p>
 </dd>
-<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’</p>
+<dt>xaxis_info<span class="classifier"><em>str</em></span></dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’</p>
 </dd>
-<dt>vmin  float</dt><dd><p>or None Minimum of the color scale</p>
+<dt>vmin<span class="classifier"><em>float</em></span></dt><dd><p>or None Minimum of the color scale</p>
 </dd>
-<dt>vmax  float</dt><dd><p>or None Maximum of the color scale</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None Maximum of the color scale</p>
 </dd>
 </dl>
 </dd>
@@ -2035,22 +2035,22 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L966">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>azi  float</dt><dd><p>azimuth (deg) of the ray to plot</p>
+<dt>parameters</dt><dd><dl>
+<dt>azi<span class="classifier"><em>float</em></span></dt><dd><p>azimuth (deg) of the ray to plot</p>
 </dd>
-<dt>ele  float</dt><dd><p>elevation (deg) of the ray to plot</p>
+<dt>ele<span class="classifier"><em>float</em></span></dt><dd><p>elevation (deg) of the ray to plot</p>
 </dd>
-<dt>azi_tol  float</dt><dd><p>azimuth (deg) tolerance respect to nominal position to plot. Default 1.</p>
+<dt>azi_tol<span class="classifier"><em>float</em></span></dt><dd><p>azimuth (deg) tolerance respect to nominal position to plot. Default 1.</p>
 </dd>
-<dt>ele_tol  float</dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 1.</p>
+<dt>ele_tol<span class="classifier"><em>float</em></span></dt><dd><p>elevation (deg) tolerance respect to nominal position to plot. Default 1.</p>
 </dd>
-<dt>ind_ray  int</dt><dd><p>index of the ray to plot. Alternative to defining its antenna coordinates</p>
+<dt>ind_ray<span class="classifier"><em>int</em></span></dt><dd><p>index of the ray to plot. Alternative to defining its antenna coordinates</p>
 </dd>
-<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’</p>
+<dt>xaxis_info<span class="classifier"><em>str</em></span></dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’</p>
 </dd>
-<dt>vmin  float</dt><dd><p>or None Minimum of the color scale</p>
+<dt>vmin<span class="classifier"><em>float</em></span></dt><dd><p>or None Minimum of the color scale</p>
 </dd>
-<dt>vmax  float</dt><dd><p>or None Maximum of the color scale</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None Maximum of the color scale</p>
 </dd>
 </dl>
 </dd>
@@ -2064,10 +2064,10 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1218">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>datatypes list</dt><dd><p>of str or None The list of data types to save. If it is None, all fields in the radar object will be saved</p>
+<dt>parameters</dt><dd><dl>
+<dt>datatypes<span class="classifier"><em>list</em></span></dt><dd><p>of str or None The list of data types to save. If it is None, all fields in the radar object will be saved</p>
 </dd>
-<dt>physical Bool</dt><dd><p>If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary</p>
+<dt>physical<span class="classifier"><em>Bool</em></span></dt><dd><p>If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary</p>
 </dd>
 </dl>
 </dd>
@@ -2081,8 +2081,8 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1185">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>physical Bool</dt><dd><p>If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary</p>
+<dt>parameters</dt><dd><dl>
+<dt>physical<span class="classifier"><em>Bool</em></span></dt><dd><p>If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary</p>
 </dd>
 </dl>
 </dd>
@@ -2096,14 +2096,14 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1120">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>xaxis_info  str</dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’</p>
+<dt>parameters</dt><dd><dl>
+<dt>xaxis_info<span class="classifier"><em>str</em></span></dt><dd><p>The xaxis type. Can be ‘Doppler_velocity’, ‘Doppler_frequency’ or ‘pulse_number’</p>
 </dd>
-<dt>vmin  float</dt><dd><p>or None Minimum of the color scale</p>
+<dt>vmin<span class="classifier"><em>float</em></span></dt><dd><p>or None Minimum of the color scale</p>
 </dd>
-<dt>vmax  float</dt><dd><p>or None Maximum of the color scale</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None Maximum of the color scale</p>
 </dd>
-<dt>plot_type  str</dt><dd><p>Can be ‘final’ or ‘temporal’. If final the data is only plotted at the end of the processing</p>
+<dt>plot_type<span class="classifier"><em>str</em></span></dt><dd><p>Can be ‘final’ or ‘temporal’. If final the data is only plotted at the end of the processing</p>
 </dd>
 </dl>
 </dd>
@@ -2173,8 +2173,8 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L804">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>dpi int</dt><dd><p>The pixel density of the plot. Default 72</p>
+<dt>parameters</dt><dd><dl>
+<dt>dpi<span class="classifier"><em>int</em></span></dt><dd><p>The pixel density of the plot. Default 72</p>
 </dd>
 </dl>
 </dd>
@@ -2202,14 +2202,14 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L310">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>anglenr int</dt><dd><p>The elevation angle number to plot</p>
+<dt>parameters</dt><dd><dl>
+<dt>anglenr<span class="classifier"><em>int</em></span></dt><dd><p>The elevation angle number to plot</p>
 </dd>
-<dt>quantiles list</dt><dd><p>of floats The quantiles to plot. Default 25., 50., 75.</p>
+<dt>quantiles<span class="classifier"><em>list</em></span></dt><dd><p>of floats The quantiles to plot. Default 25., 50., 75.</p>
 </dd>
-<dt>ref_value float</dt><dd><p>The reference value vmin,</p>
+<dt>ref_value<span class="classifier"><em>float</em></span></dt><dd><p>The reference value vmin,</p>
 </dd>
-<dt>vmax  floats</dt><dd><p>or None The minimum and maximum values of the data points. If not specified they are obtained from the Py-ART config file</p>
+<dt>vmax<span class="classifier"><em>floats</em></span></dt><dd><p>or None The minimum and maximum values of the data points. If not specified they are obtained from the Py-ART config file</p>
 </dd>
 </dl>
 </dd>
@@ -2223,34 +2223,34 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L560">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>quantiles list</dt><dd><p>of 3 floats the quantiles to compute. Default 25., 50., 75.</p>
+<dt>parameters</dt><dd><dl>
+<dt>quantiles<span class="classifier"><em>list</em></span></dt><dd><p>of 3 floats the quantiles to compute. Default 25., 50., 75.</p>
 </dd>
-<dt>ref_value float</dt><dd><p>The reference value. Default 0</p>
+<dt>ref_value<span class="classifier"><em>float</em></span></dt><dd><p>The reference value. Default 0</p>
 </dd>
-<dt>sort_by_date Bool</dt><dd><p>If true when reading the csv file containing the statistics the data is sorted by date. Default False</p>
+<dt>sort_by_date<span class="classifier"><em>Bool</em></span></dt><dd><p>If true when reading the csv file containing the statistics the data is sorted by date. Default False</p>
 </dd>
-<dt>rewrite Bool</dt><dd><p>If true the csv file containing the statistics is rewritten</p>
+<dt>rewrite<span class="classifier"><em>Bool</em></span></dt><dd><p>If true the csv file containing the statistics is rewritten</p>
 </dd>
-<dt>add_data_in_fname Bool</dt><dd><p>If true and the data used is cumulative the year is written in the csv file name and the plot file name</p>
+<dt>add_data_in_fname<span class="classifier"><em>Bool</em></span></dt><dd><p>If true and the data used is cumulative the year is written in the csv file name and the plot file name</p>
 </dd>
-<dt>npoints_min int</dt><dd><p>Minimum number of points to use the data point in the plotting and to send an alarm. Default 0 vmin,</p>
+<dt>npoints_min<span class="classifier"><em>int</em></span></dt><dd><p>Minimum number of points to use the data point in the plotting and to send an alarm. Default 0 vmin,</p>
 </dd>
-<dt>vmax float</dt><dd><p>or None Limits of the Y-axis (data value). If None the limits are obtained from the Py-ART config file</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None Limits of the Y-axis (data value). If None the limits are obtained from the Py-ART config file</p>
 </dd>
-<dt>alarm Bool</dt><dd><p>If true an alarm is sent</p>
+<dt>alarm<span class="classifier"><em>Bool</em></span></dt><dd><p>If true an alarm is sent</p>
 </dd>
-<dt>tol_abs float</dt><dd><p>Margin of tolerance from the reference value. If the current value is above this margin an alarm is sent. If the margin is not specified it is not possible to send any alarm</p>
+<dt>tol_abs<span class="classifier"><em>float</em></span></dt><dd><p>Margin of tolerance from the reference value. If the current value is above this margin an alarm is sent. If the margin is not specified it is not possible to send any alarm</p>
 </dd>
-<dt>tol_trend float</dt><dd><p>Margin of tolerance from the reference value. If the trend of the last X events is above this margin an alarm is sent. If the margin is not specified it is not possible to send any alarm</p>
+<dt>tol_trend<span class="classifier"><em>float</em></span></dt><dd><p>Margin of tolerance from the reference value. If the trend of the last X events is above this margin an alarm is sent. If the margin is not specified it is not possible to send any alarm</p>
 </dd>
-<dt>plot_until_year_end Bool</dt><dd><p>If true will always set the xmax of the timeseries to the end of the current year</p>
+<dt>plot_until_year_end<span class="classifier"><em>Bool</em></span></dt><dd><p>If true will always set the xmax of the timeseries to the end of the current year</p>
 </dd>
-<dt>nevents_min int</dt><dd><p>Minimum number of events with sufficient points to send an alarm related to the trend. If not specified it is not possible to send any alarm</p>
+<dt>nevents_min<span class="classifier"><em>int</em></span></dt><dd><p>Minimum number of events with sufficient points to send an alarm related to the trend. If not specified it is not possible to send any alarm</p>
 </dd>
-<dt>sender str</dt><dd><p>The mail of the alarm sender. If not specified it is not possible to send any alarm</p>
+<dt>sender<span class="classifier"><em>str</em></span></dt><dd><p>The mail of the alarm sender. If not specified it is not possible to send any alarm</p>
 </dd>
-<dt>receiver_list list</dt><dd><p>of str The list of emails of the people that will receive the alarm.. If not specified it is not possible to send any alarm</p>
+<dt>receiver_list<span class="classifier"><em>list</em></span></dt><dd><p>of str The list of emails of the people that will receive the alarm.. If not specified it is not possible to send any alarm</p>
 </dd>
 </dl>
 </dd>
@@ -2264,8 +2264,8 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L257">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>anglenr int</dt><dd><p>The elevation angle number to plot</p>
+<dt>parameters</dt><dd><dl>
+<dt>anglenr<span class="classifier"><em>int</em></span></dt><dd><p>The elevation angle number to plot</p>
 </dd>
 </dl>
 </dd>
@@ -2290,8 +2290,8 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L195">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>write_data bool</dt><dd><p>If true the resultant histogram is also saved in a csv file. Default True.</p>
+<dt>parameters</dt><dd><dl>
+<dt>write_data<span class="classifier"><em>bool</em></span></dt><dd><p>If true the resultant histogram is also saved in a csv file. Default True.</p>
 </dd>
 </dl>
 </dd>
@@ -2305,34 +2305,34 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L560">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>quantiles list</dt><dd><p>of 3 floats the quantiles to compute. Default 25., 50., 75.</p>
+<dt>parameters</dt><dd><dl>
+<dt>quantiles<span class="classifier"><em>list</em></span></dt><dd><p>of 3 floats the quantiles to compute. Default 25., 50., 75.</p>
 </dd>
-<dt>ref_value float</dt><dd><p>The reference value. Default 0</p>
+<dt>ref_value<span class="classifier"><em>float</em></span></dt><dd><p>The reference value. Default 0</p>
 </dd>
-<dt>sort_by_date Bool</dt><dd><p>If true when reading the csv file containing the statistics the data is sorted by date. Default False</p>
+<dt>sort_by_date<span class="classifier"><em>Bool</em></span></dt><dd><p>If true when reading the csv file containing the statistics the data is sorted by date. Default False</p>
 </dd>
-<dt>rewrite Bool</dt><dd><p>If true the csv file containing the statistics is rewritten</p>
+<dt>rewrite<span class="classifier"><em>Bool</em></span></dt><dd><p>If true the csv file containing the statistics is rewritten</p>
 </dd>
-<dt>add_data_in_fname Bool</dt><dd><p>If true and the data used is cumulative the year is written in the csv file name and the plot file name</p>
+<dt>add_data_in_fname<span class="classifier"><em>Bool</em></span></dt><dd><p>If true and the data used is cumulative the year is written in the csv file name and the plot file name</p>
 </dd>
-<dt>npoints_min int</dt><dd><p>Minimum number of points to use the data point in the plotting and to send an alarm. Default 0 vmin,</p>
+<dt>npoints_min<span class="classifier"><em>int</em></span></dt><dd><p>Minimum number of points to use the data point in the plotting and to send an alarm. Default 0 vmin,</p>
 </dd>
-<dt>vmax float</dt><dd><p>or None Limits of the Y-axis (data value). If None the limits are obtained from the Py-ART config file</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>or None Limits of the Y-axis (data value). If None the limits are obtained from the Py-ART config file</p>
 </dd>
-<dt>alarm Bool</dt><dd><p>If true an alarm is sent</p>
+<dt>alarm<span class="classifier"><em>Bool</em></span></dt><dd><p>If true an alarm is sent</p>
 </dd>
-<dt>tol_abs float</dt><dd><p>Margin of tolerance from the reference value. If the current value is above this margin an alarm is sent. If the margin is not specified it is not possible to send any alarm</p>
+<dt>tol_abs<span class="classifier"><em>float</em></span></dt><dd><p>Margin of tolerance from the reference value. If the current value is above this margin an alarm is sent. If the margin is not specified it is not possible to send any alarm</p>
 </dd>
-<dt>tol_trend float</dt><dd><p>Margin of tolerance from the reference value. If the trend of the last X events is above this margin an alarm is sent. If the margin is not specified it is not possible to send any alarm</p>
+<dt>tol_trend<span class="classifier"><em>float</em></span></dt><dd><p>Margin of tolerance from the reference value. If the trend of the last X events is above this margin an alarm is sent. If the margin is not specified it is not possible to send any alarm</p>
 </dd>
-<dt>plot_until_year_end Bool</dt><dd><p>If true will always set the xmax of the timeseries to the end of the current year</p>
+<dt>plot_until_year_end<span class="classifier"><em>Bool</em></span></dt><dd><p>If true will always set the xmax of the timeseries to the end of the current year</p>
 </dd>
-<dt>nevents_min int</dt><dd><p>Minimum number of events with sufficient points to send an alarm related to the trend. If not specified it is not possible to send any alarm</p>
+<dt>nevents_min<span class="classifier"><em>int</em></span></dt><dd><p>Minimum number of events with sufficient points to send an alarm related to the trend. If not specified it is not possible to send any alarm</p>
 </dd>
-<dt>sender str</dt><dd><p>The mail of the alarm sender. If not specified it is not possible to send any alarm</p>
+<dt>sender<span class="classifier"><em>str</em></span></dt><dd><p>The mail of the alarm sender. If not specified it is not possible to send any alarm</p>
 </dd>
-<dt>receiver_list list</dt><dd><p>of str The list of emails of the people that will receive the alarm.. If not specified it is not possible to send any alarm</p>
+<dt>receiver_list<span class="classifier"><em>list</em></span></dt><dd><p>of str The list of emails of the people that will receive the alarm.. If not specified it is not possible to send any alarm</p>
 </dd>
 </dl>
 </dd>
@@ -2349,8 +2349,8 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L94">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>quant_min float</dt><dd><p>Minimum frequency of occurrence in percentage to keep the gate as valid. Default 95. All the products of the ‘VOL’ dataset group</p>
+<dt>parameters</dt><dd><dl>
+<dt>quant_min<span class="classifier"><em>float</em></span></dt><dd><p>Minimum frequency of occurrence in percentage to keep the gate as valid. Default 95. All the products of the ‘VOL’ dataset group</p>
 </dd>
 </dl>
 </dd>
@@ -2410,10 +2410,10 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L536">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>dpi int</dt><dd><p>The pixel density of the plot. Default 72</p>
+<dt>parameters</dt><dd><dl>
+<dt>dpi<span class="classifier"><em>int</em></span></dt><dd><p>The pixel density of the plot. Default 72</p>
 </dd>
-<dt>add_date_in_fname Bool</dt><dd><p>If true the year is added in the plot file name</p>
+<dt>add_date_in_fname<span class="classifier"><em>Bool</em></span></dt><dd><p>If true the year is added in the plot file name</p>
 </dd>
 </dl>
 </dd>
@@ -2449,8 +2449,8 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L461">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>add_date_in_fname Bool</dt><dd><p>If true the year is added in the csv file name</p>
+<dt>parameters</dt><dd><dl>
+<dt>add_date_in_fname<span class="classifier"><em>Bool</em></span></dt><dd><p>If true the year is added in the csv file name</p>
 </dd>
 </dl>
 </dd>
@@ -2470,22 +2470,22 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L475">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>dpi int</dt><dd><p>The pixel density of the plot. Default 72 vmin,</p>
+<dt>parameters</dt><dd><dl>
+<dt>dpi<span class="classifier"><em>int</em></span></dt><dd><p>The pixel density of the plot. Default 72 vmin,</p>
 </dd>
-<dt>vmax float</dt><dd><p>The limits of the Y-axis. If none they will be obtained from the Py-ART config file.</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>The limits of the Y-axis. If none they will be obtained from the Py-ART config file.</p>
 </dd>
-<dt>sensor str</dt><dd><p>The sensor type. Can be ‘rgage’, ‘rgage_knmi’, ‘disdro’ or ‘disdro_parsivel’</p>
+<dt>sensor<span class="classifier"><em>str</em></span></dt><dd><p>The sensor type. Can be ‘rgage’, ‘rgage_knmi’, ‘disdro’ or ‘disdro_parsivel’</p>
 </dd>
-<dt>sensorid str</dt><dd><p>The sensor ID.</p>
+<dt>sensorid<span class="classifier"><em>str</em></span></dt><dd><p>The sensor ID.</p>
 </dd>
-<dt>location str</dt><dd><p>A string identifying the location of the disdrometer</p>
+<dt>location<span class="classifier"><em>str</em></span></dt><dd><p>A string identifying the location of the disdrometer</p>
 </dd>
-<dt>freq float</dt><dd><p>The frequency used to retrieve the polarimetric variables of a disdrometer</p>
+<dt>freq<span class="classifier"><em>float</em></span></dt><dd><p>The frequency used to retrieve the polarimetric variables of a disdrometer</p>
 </dd>
-<dt>ele float</dt><dd><p>The elevation angle used to retrieve the polarimetric variables of a disdrometer</p>
+<dt>ele<span class="classifier"><em>float</em></span></dt><dd><p>The elevation angle used to retrieve the polarimetric variables of a disdrometer</p>
 </dd>
-<dt>ScanPeriod float</dt><dd><p>The scaning period of the radar in seconds. This parameter is defined in the ‘loc’ config file</p>
+<dt>ScanPeriod<span class="classifier"><em>float</em></span></dt><dd><p>The scaning period of the radar in seconds. This parameter is defined in the ‘loc’ config file</p>
 </dd>
 </dl>
 </dd>
@@ -2499,20 +2499,20 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L384">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>dpi int</dt><dd><p>The pixel density of the plot. Default 72 vmin,</p>
+<dt>parameters</dt><dd><dl>
+<dt>dpi<span class="classifier"><em>int</em></span></dt><dd><p>The pixel density of the plot. Default 72 vmin,</p>
 </dd>
-<dt>vmax float</dt><dd><p>The limits of the Y-axis. If none they will be obtained from the Py-ART config file.</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>The limits of the Y-axis. If none they will be obtained from the Py-ART config file.</p>
 </dd>
-<dt>sensor str</dt><dd><p>The sensor type. Can be ‘rgage’, ‘rgage_knmi’, ‘disdro’ or ‘disdro_parsivel’</p>
+<dt>sensor<span class="classifier"><em>str</em></span></dt><dd><p>The sensor type. Can be ‘rgage’, ‘rgage_knmi’, ‘disdro’ or ‘disdro_parsivel’</p>
 </dd>
-<dt>sensorid str</dt><dd><p>The sensor ID.</p>
+<dt>sensorid<span class="classifier"><em>str</em></span></dt><dd><p>The sensor ID.</p>
 </dd>
-<dt>location str</dt><dd><p>A string identifying the location of the disdrometer</p>
+<dt>location<span class="classifier"><em>str</em></span></dt><dd><p>A string identifying the location of the disdrometer</p>
 </dd>
-<dt>freq float</dt><dd><p>The frequency used to retrieve the polarimetric variables of a disdrometer</p>
+<dt>freq<span class="classifier"><em>float</em></span></dt><dd><p>The frequency used to retrieve the polarimetric variables of a disdrometer</p>
 </dd>
-<dt>ele float</dt><dd><p>The elevation angle used to retrieve the polarimetric variables of a disdrometer</p>
+<dt>ele<span class="classifier"><em>float</em></span></dt><dd><p>The elevation angle used to retrieve the polarimetric variables of a disdrometer</p>
 </dd>
 </dl>
 </dd>
@@ -2526,22 +2526,22 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L569">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>dpi int</dt><dd><p>The pixel density of the plot. Default 72</p>
+<dt>parameters</dt><dd><dl>
+<dt>dpi<span class="classifier"><em>int</em></span></dt><dd><p>The pixel density of the plot. Default 72</p>
 </dd>
-<dt>sensor str</dt><dd><p>The sensor type. Can be ‘rgage’, ‘rgage_knmi’, ‘disdro’ or ‘disdro_parsivel’</p>
+<dt>sensor<span class="classifier"><em>str</em></span></dt><dd><p>The sensor type. Can be ‘rgage’, ‘rgage_knmi’, ‘disdro’ or ‘disdro_parsivel’</p>
 </dd>
-<dt>sensorid str</dt><dd><p>The sensor ID.</p>
+<dt>sensorid<span class="classifier"><em>str</em></span></dt><dd><p>The sensor ID.</p>
 </dd>
-<dt>location str</dt><dd><p>A string identifying the location of the disdrometer</p>
+<dt>location<span class="classifier"><em>str</em></span></dt><dd><p>A string identifying the location of the disdrometer</p>
 </dd>
-<dt>freq float</dt><dd><p>The frequency used to retrieve the polarimetric variables of a disdrometer</p>
+<dt>freq<span class="classifier"><em>float</em></span></dt><dd><p>The frequency used to retrieve the polarimetric variables of a disdrometer</p>
 </dd>
-<dt>ele float</dt><dd><p>The elevation angle used to retrieve the polarimetric variables of a disdrometer</p>
+<dt>ele<span class="classifier"><em>float</em></span></dt><dd><p>The elevation angle used to retrieve the polarimetric variables of a disdrometer</p>
 </dd>
-<dt>cum_time float</dt><dd><p>Data accumulation time [s]. Default 3600.</p>
+<dt>cum_time<span class="classifier"><em>float</em></span></dt><dd><p>Data accumulation time [s]. Default 3600.</p>
 </dd>
-<dt>base_time float</dt><dd><p>Starting moment of the accumulation [s from midnight]. Default 0.</p>
+<dt>base_time<span class="classifier"><em>float</em></span></dt><dd><p>Starting moment of the accumulation [s from midnight]. Default 0.</p>
 </dd>
 </dl>
 </dd>
@@ -2555,8 +2555,8 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L689">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>ymax float</dt><dd><p>The minimum and maximum value of the Y-axis. If none it will be obtained from the Py-ART config file.</p>
+<dt>parameters</dt><dd><dl>
+<dt>ymax<span class="classifier"><em>float</em></span></dt><dd><p>The minimum and maximum value of the Y-axis. If none it will be obtained from the Py-ART config file.</p>
 </dd>
 </dl>
 </dd>
@@ -2570,10 +2570,10 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L217">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>dpi int</dt><dd><p>The pixel density of the plot. Default 72 vmin,</p>
+<dt>parameters</dt><dd><dl>
+<dt>dpi<span class="classifier"><em>int</em></span></dt><dd><p>The pixel density of the plot. Default 72 vmin,</p>
 </dd>
-<dt>vmax float</dt><dd><p>The limits of the Y-axis. If none they will be obtained from the Py-ART config file.</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>The limits of the Y-axis. If none they will be obtained from the Py-ART config file.</p>
 </dd>
 </dl>
 </dd>
@@ -2587,12 +2587,12 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L304">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>dpi int</dt><dd><p>The pixel density of the plot. Default 72 vmin,</p>
+<dt>parameters</dt><dd><dl>
+<dt>dpi<span class="classifier"><em>int</em></span></dt><dd><p>The pixel density of the plot. Default 72 vmin,</p>
 </dd>
-<dt>vmax float</dt><dd><p>The limits of the Y-axis. If none they will be obtained from the Py-ART config file.</p>
+<dt>vmax<span class="classifier"><em>float</em></span></dt><dd><p>The limits of the Y-axis. If none they will be obtained from the Py-ART config file.</p>
 </dd>
-<dt>ScanPeriod float</dt><dd><p>The scaning period of the radar in seconds. This parameter is defined in the ‘loc’ config file</p>
+<dt>ScanPeriod<span class="classifier"><em>float</em></span></dt><dd><p>The scaning period of the radar in seconds. This parameter is defined in the ‘loc’ config file</p>
 </dd>
 </dl>
 </dd>
@@ -2606,8 +2606,8 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L730">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>step float</dt><dd><p>or None The quantization step of the data. If None it will be obtained from the Py-ART config file</p>
+<dt>parameters</dt><dd><dl>
+<dt>step<span class="classifier"><em>float</em></span></dt><dd><p>or None The quantization step of the data. If None it will be obtained from the Py-ART config file</p>
 </dd>
 </dl>
 </dd>
@@ -2621,14 +2621,14 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L763">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>color_ref str</dt><dd><p>The meaning of the color code with which the trajectory is plotted. Can be ‘None’, ‘altitude’ (the absolute altitude), ‘rel_altitude’ (altitude relative to the CAPPI altitude), ‘time’ (trajectory time respect of the start of the radar scan leading to the CAPPI)</p>
+<dt>parameters</dt><dd><dl>
+<dt>color_ref<span class="classifier"><em>str</em></span></dt><dd><p>The meaning of the color code with which the trajectory is plotted. Can be ‘None’, ‘altitude’ (the absolute altitude), ‘rel_altitude’ (altitude relative to the CAPPI altitude), ‘time’ (trajectory time respect of the start of the radar scan leading to the CAPPI)</p>
 </dd>
-<dt>altitude float</dt><dd><p>The CAPPI altitude [m]</p>
+<dt>altitude<span class="classifier"><em>float</em></span></dt><dd><p>The CAPPI altitude [m]</p>
 </dd>
-<dt>wfunc str</dt><dd><p>Function used in the gridding of the radar data. The function types are defined in pyart.map.grid_from_radars. Default ‘NEAREST’</p>
+<dt>wfunc<span class="classifier"><em>str</em></span></dt><dd><p>Function used in the gridding of the radar data. The function types are defined in pyart.map.grid_from_radars. Default ‘NEAREST’</p>
 </dd>
-<dt>res float</dt><dd><p>The CAPPI resolution [m]. Default 500.</p>
+<dt>res<span class="classifier"><em>float</em></span></dt><dd><p>The CAPPI resolution [m]. Default 500.</p>
 </dd>
 </dl>
 </dd>
@@ -2687,8 +2687,8 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L932">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>dpi int</dt><dd><p>The pixel density of the plot. Default 72</p>
+<dt>parameters</dt><dd><dl>
+<dt>dpi<span class="classifier"><em>int</em></span></dt><dd><p>The pixel density of the plot. Default 72</p>
 </dd>
 </dl>
 </dd>
