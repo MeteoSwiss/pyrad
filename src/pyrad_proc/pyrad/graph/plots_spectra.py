@@ -77,7 +77,6 @@ def plot_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
     dpi = prdcfg['ppiImageConfig'].get('dpi', 72)
     xsize = prdcfg['ppiImageConfig']['xsize']
     ysize = prdcfg['ppiImageConfig']['ysize']
-
     if xaxis_info == 'Doppler_velocity':
         xaxis = spectra.Doppler_velocity['data'][ray, :].compressed()
         xlabel = 'Doppler velocity (m/s)'
