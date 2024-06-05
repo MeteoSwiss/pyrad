@@ -346,7 +346,6 @@ def plot_ppi_map(radar, field_name, ind_el, prdcfg, fname_list, vmin=None, vmax=
             projection=projection, fig=fig, embellish=False, 
             colorbar_flag=True, alpha=1)        
     ax = display_map.ax
-    import pdb; pdb.set_trace()
     if 'maps' in prdcfg['ppiMapImageConfig']:
         if 'relief' in prdcfg['ppiMapImageConfig']['maps']:
             tiler = Stamen('terrain-background')
