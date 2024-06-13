@@ -944,9 +944,10 @@ def _create_cfg_dict(cfgfile):
         if param not in cfg:
             raise Exception(
                 "ERROR config: Parameter {} undefined!".format(param))
-
-    # fill in defaults
-    cfg.update({'ScanList': get_scan_list(cfg['ScanList'])})
+    
+    if cfg['ScanList'] is not None:
+        # fill in defaults
+        cfg.update({'ScanList': get_scan_list(cfg['ScanList'])})
 
     # to use when we need to combine multiple files corresponding to multiple
     # and data types
