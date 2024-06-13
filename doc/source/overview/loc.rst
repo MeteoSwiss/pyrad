@@ -78,6 +78,14 @@ xsecImageConfig       STRUCT   Structure defining the cross-section images gener
 - ymin                FLOAT    Distance of the lower image boundary (vertical direction) to the radar in km.
 - ymax                FLOAT    Distance of the upper image boundary (vertical direction) to the radar in km.
 - dpi                 INT      Resolution of the image in dots per inch.
+spectraImageConfig    STRUCT   Structure defining the Doppler spectral plots:
+- xsize               INT      Number of horizontal pixels of the picture (without frame).
+- ysize               INT      Number of vertical pixels of the picture (without frame).
+- ymin                FLOAT    Minimum range above radar [km]
+- ymax                FLOAT    Maximum range above radar [km]
+- velmin              FLOAT    Minimum Doppler velocity that should be displayed.
+- velmax              FLOAT    Maximum Doppler velocity that should be displayed.
+- dpi				  INT      Resolution of the image in dots per inch.
 sunhitsImageConfig    STRUCT   Structure defining the sun hits image. The following 6 fields are described below:
 - xsize               INT      Number of horizontal pixels of the picture (without frame).
 - ysize               INT      Number of vertical pixels of the picture (without frame).
