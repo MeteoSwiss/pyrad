@@ -21,8 +21,102 @@ import os
 import numpy as np
 from warnings import warn
 
+_defaults_loc = {
+   'ppiImageConfig':{
+    'xsize': 10,
+    'ysize': 10,
+    'dpi': 72,
+    'xmin': -50,
+    'xmax': 50,
+    'ymin': -50,
+    'ymax': 50
+   },
+   'ppiMapImageConfig':{
+    'xsize': 10,
+    'ysize': 10,
+    'dpi': 72
+   },
+   'rhiImageConfig':{
+    'xsize': 10,
+    'ysize': 5,
+    'dpi': 72,
+    'xmin': 0,
+    'xmax': 50,
+    'ymin': 0,
+    'ymax': 12    
+   },
+   'xsecImageConfig':{
+    'xsize': 10,
+    'ysize': 5,
+    'dpi': 72,
+    'xmin': 0,
+    'xmax': 50,
+    'ymin': 0,
+    'ymax': 12    
+   },
+   'gridMapImageConfig':{
+    'xsize': 10,
+    'ysize': 10,
+    'dpi': 72
+   },
+   'sunhitsImageConfig':{
+    'xsize': 10,
+    'ysize': 5,
+    'dpi': 72,
+    'azmin': -2.0, 
+    'azmax':  2.0, 
+    'elmin': -2.0, 
+    'elmax': 2.0, 
+    'azres': 0.1, 
+    'elres': 0.1
+   },
+    'spectraImageConfig':{
+    'xsize': 10,
+    'ysize': 5,
+    'dpi': 72,
+    'ymin': None,
+    'ymax': None,
+    'velmin': None,
+    'velmax': None
+   },
+    'ScanPeriod': 5,
+    'CosmoRunFreq': 3,
+    'CosmoForecasted': 7,
+    'RadarName': None,
+    'RadarRes': None,
+    'NumRadars': 1,
+    'TimeTol': 3600.0,
+    'ScanList': None,
+    'DataTypeID': None,
+}
 
-def read_config(fname, cfg=None):
+_defaults_main = {
+    'lastStateFile': None,
+    'datapath': None,
+    'satpath': None,
+    'cosmopath': None,
+    'psrpath': None,
+    'iqpath': None,
+    'colocgatespath': None,
+    'excessgatespath': None,
+    'dempath': None,
+    'smnpath': None,
+    'disdropath': None,
+    'solarfluxpath': None,
+    'selfconsistencypath': None,
+    'loadbasepath': None,
+    'loadname': None,
+    'gecsxbasepath': None,
+    'gecsxname': None,
+    'metranet_read_lib': 'C',
+}
+
+DEFAULT_CONFIG = {
+    'loc': _defaults_loc,
+    'main': _defaults_main
+}
+
+def read_config(fname, cfg=None, defaults=None):
     """
     Read a pyrad config file.
 
@@ -34,6 +128,11 @@ def read_config(fname, cfg=None):
     cfg : dict of dicts, optional
         dictionary of dictionaries containing configuration parameters where
         the new parameters will be placed
+
+    defaults: dict of dicts, optional
+        dictionary of dictionaries containing default values. If a key is 
+        contained in the defaults dict but not in the configuration file,
+        the value from the defaults dict will be assigned
 
     Returns
     -------
@@ -54,6 +153,10 @@ def read_config(fname, cfg=None):
     # if config dictionary does not exist yet create it
     if cfg is None:
         cfg = dict()
+
+    # if default does not exist, create it
+    if defaults is None:
+        defaults = dict()
 
     # read file contents
     fileend = 0
@@ -113,6 +216,8 @@ def read_config(fname, cfg=None):
             fileend = 1
 
     cfgfile.close()
+    # Verify that all keys in default are in newly created config
+    cfg = merge_dicts(cfg, defaults)
     return cfg
 
 
@@ -403,3 +508,27 @@ def init_array(nel, dtype):
         return []
     else:
         raise Exception("ERROR: Unexpected array data type " + uptype)
+
+def merge_dicts(ref, defaults):
+    """
+    Merge two nested dictionaries recursively.
+
+    Parameters:
+    -----------
+    ref : dict
+        The base dictionary to be merged into.
+    defaults : dict
+        The dictionary whose keys and values are merged into dictionary ref.
+
+    Returns:
+    --------
+    ref: dict
+        The base dictionary after addition of missing keys from defaults
+    """
+    for key, value in defaults.items():
+        if key in ref:
+            if isinstance(ref[key], dict) and isinstance(value, dict):
+                merge_dicts(ref[key], value)
+        else:
+            ref[key] = value
+    return ref

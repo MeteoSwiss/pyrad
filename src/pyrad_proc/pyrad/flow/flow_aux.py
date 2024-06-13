@@ -54,7 +54,7 @@ except ImportError:
 
 from pyrad import proc
 
-from ..io.config import read_config
+from ..io.config import read_config, DEFAULT_CONFIG
 from ..io.read_data_radar import get_data
 from ..io.write_data import write_to_s3
 from ..io.io_aux import get_datetime, get_file_list, get_scan_list
@@ -929,9 +929,9 @@ def _create_cfg_dict(cfgfile):
     cfg = dict({'configFile': cfgfile})
     try:
         print("- Main config file : {}".format(cfgfile))
-        cfg = read_config(cfg['configFile'], cfg=cfg)
+        cfg = read_config(cfg['configFile'], cfg=cfg, defaults=DEFAULT_CONFIG['main'])
         print("- Location config file : {}".format(cfg['locationConfigFile']))
-        cfg = read_config(cfg['locationConfigFile'], cfg=cfg)
+        cfg = read_config(cfg['locationConfigFile'], cfg=cfg, defaults=DEFAULT_CONFIG['loc'])
         print("- Product config file : {}".format(cfg['productConfigFile']))
         cfg = read_config(cfg['productConfigFile'], cfg=cfg)
     except Exception as inst:
@@ -946,14 +946,7 @@ def _create_cfg_dict(cfgfile):
                 "ERROR config: Parameter {} undefined!".format(param))
 
     # fill in defaults
-    if 'NumRadars' not in cfg:
-        cfg.update({'NumRadars': 1})
-    if 'TimeTol' not in cfg:
-        cfg.update({'TimeTol': 3600.})
-    if 'ScanList' not in cfg:
-        cfg.update({'ScanList': None})
-    else:
-        cfg.update({'ScanList': get_scan_list(cfg['ScanList'])})
+    cfg.update({'ScanList': get_scan_list(cfg['ScanList'])})
 
     # to use when we need to combine multiple files corresponding to multiple
     # and data types
@@ -967,58 +960,6 @@ def _create_cfg_dict(cfgfile):
         cfg.update({
             'MasterScanTimeTol': 0. * np.ones(
                 cfg['NumRadars'], dtype=np.float32)})
-    if 'lastStateFile' not in cfg:
-        cfg.update({'lastStateFile': None})
-    if 'datapath' not in cfg:
-        cfg.update({'datapath': None})
-    if 'satpath' not in cfg:
-        cfg.update({'satpath': None})
-    if 'cosmopath' not in cfg:
-        cfg.update({'cosmopath': None})
-    if 'psrpath' not in cfg:
-        cfg.update({'psrpath': None})
-    if 'iqpath' not in cfg:
-        cfg.update({'iqpath': None})
-    if 'colocgatespath' not in cfg:
-        cfg.update({'colocgatespath': None})
-    if 'excessgatespath' not in cfg:
-        cfg.update({'excessgatespath': None})
-    if 'dempath' not in cfg:
-        cfg.update({'dempath': None})
-    if 'smnpath' not in cfg:
-        cfg.update({'smnpath': None})
-    if 'disdropath' not in cfg:
-        cfg.update({'disdropath': None})
-    if 'solarfluxpath' not in cfg:
-        cfg.update({'solarfluxpath': None})
-    if 'selfconsistencypath' not in cfg:
-        cfg.update({'selfconsistencypath': None})
-    if 'loadbasepath' not in cfg:
-        cfg.update({'loadbasepath': None})
-    if 'loadname' not in cfg:
-        cfg.update({'loadname': None})
-    if 'gecsxbasepath' not in cfg:
-        cfg.update({'gecsxbasepath': None})
-    if 'gecsxname' not in cfg:
-        cfg.update({'gecsxname': None})
-    if 'RadarName' not in cfg:
-        cfg.update({'RadarName': None})
-    if 'RadarRes' not in cfg:
-        cfg.update({'RadarRes': None})
-    if 'metranet_read_lib' not in cfg:
-        cfg.update({'metranet_read_lib': 'C'})
-    if 'ScanPeriod' not in cfg:
-        warn('WARNING: Scan period not specified. '
-             'Assumed default value 5 min')
-        cfg.update({'ScanPeriod': 5})
-    if 'CosmoRunFreq' not in cfg:
-        warn('WARNING: COSMO run frequency not specified. '
-             'Assumed default value 3h')
-        cfg.update({'CosmoRunFreq': 3})
-    if 'CosmoForecasted' not in cfg:
-        warn('WARNING: Hours forecasted by COSMO not specified. '
-             'Assumed default value 7h (including analysis)')
-        cfg.update({'CosmoForecasted': 7})
 
     if 'path_convention' not in cfg:
         cfg.update({'path_convention': ['MCH'] * cfg['NumRadars']})
@@ -1457,6 +1398,9 @@ def _create_prdcfg_dict(cfg, dataset, product, voltime, runinfo=None):
         prdcfg.update({'gridMapImageConfig': cfg['gridMapImageConfig']})
     if 'sunhitsImageConfig' in cfg:
         prdcfg.update({'sunhitsImageConfig': cfg['sunhitsImageConfig']})
+    if 'spectraImageConfig' in cfg:
+        prdcfg.update({'spectraImageConfig': cfg['spectraImageConfig']})
+        
     prdcfg.update({'dsname': dataset})
     prdcfg.update({'dstype': cfg[dataset]['type']})
     prdcfg.update({'prdname': product})

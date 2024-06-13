@@ -487,7 +487,7 @@ def get_data(voltime, datatypesdescr, cfg):
         azmin = cfg['azmin'][ind_rad]
     if cfg['azmax'] is not None:
         azmax = cfg['azmax'][ind_rad]
-
+    
     radar = None
     if ndatatypes_rainbow > 0 and _WRADLIB_AVAILABLE:
         radar = merge_scans_rainbow(
