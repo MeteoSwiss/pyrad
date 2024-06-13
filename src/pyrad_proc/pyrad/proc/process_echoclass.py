@@ -93,17 +93,13 @@ def process_echo_id(procstatus, dscfg, radar_list=None):
 
     for datatypedescr in dscfg['datatype']:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype == 'dBZ':
+        if datatype in ['dBZ', 'dBuZ']:
             refl_field = get_fieldname_pyart(datatype)
-        if datatype == 'dBuZ':
-            refl_field = get_fieldname_pyart(datatype)
-        if datatype == 'ZDR':
-            zdr_field = get_fieldname_pyart(datatype)
-        if datatype == 'ZDRu':
+        if datatype in ['ZDR', 'ZDRu']:
             zdr_field = get_fieldname_pyart(datatype)
         if datatype in ['RhoHV', 'uRhoHV']:
             rhv_field = get_fieldname_pyart(datatype)
-        if datatype == 'uPhiDP':
+        if datatype in ['PhiDP', 'uPhiDP']:
             phi_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8]) - 1

@@ -2926,11 +2926,11 @@ def merge_scans_skyecho(basepath, scan_list, voltime, datatype_list,
     for filename_aux in filenames:
         fdatetime = find_date_in_file_name(
             filename_aux, date_format=fdate_strf)
-        if fdatetime == time_ref:
+        if fdatetime >= time_ref:
             filename = [filename_aux]
 
     if not filename:
-        warn('No file found in ' + datapath + '*.*')
+        warn(f'No file found in {datapath}*{scan_list[0]}* for time ref {time_ref}')
     else:
         radar = pyart.aux_io.read_skyecho(
             filename[0], sweep_end_time=voltime,

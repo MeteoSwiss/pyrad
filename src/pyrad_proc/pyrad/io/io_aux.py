@@ -850,6 +850,9 @@ def get_datatype_skyecho(datatype):
     elif datatype == 'LDRvh':
         datatype_skyecho = 'LDR_VH'
         field_name = 'linear_depolarization_ratio_vh'
+    elif datatype == 'RhoHV':
+        datatype_skyecho = 'copolar_correlation'
+        field_name = 'cross_correlation_ratio'
 
     elif datatype == 'Ah':
         datatype_skyecho = 'attenuationRain'
