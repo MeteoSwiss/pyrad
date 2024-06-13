@@ -60,7 +60,7 @@ except ImportError:
     _SHAPELY_AVAILABLE = False
 
 # Test whether ARM or MCH fork of pyart
-if  hasattr(pyart, '__ismchfordk__'):
+if  hasattr(pyart, '__ismchfork__'):
     _PYARTMCH_AVAILABLE = True
 else:
     warn('MCH version of pyart not installed, some features' + \
