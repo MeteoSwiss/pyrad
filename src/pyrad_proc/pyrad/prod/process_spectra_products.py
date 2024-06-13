@@ -377,7 +377,7 @@ def generate_spectra_products(dataset, prdcfg):
         xaxis_info = prdcfg.get('xaxis_info', 'Doppler_velocity')
         vmin = prdcfg.get('vmin', None)
         vmax = prdcfg.get('vmax', None)
-
+        
         savedir = get_save_dir(
             prdcfg['basepath'], prdcfg['procname'], dssavedir,
             prdcfg['prdname'], timeinfo=prdcfg['timeinfo'])
