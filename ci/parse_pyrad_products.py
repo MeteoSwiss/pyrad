@@ -36,8 +36,16 @@ def dict_to_restructured_text(yaml_data):
         rst_output.append(f"{datasettype}")
         rst_output.append("-----------------------------")
 
+        if 'all_products' in yaml_data[datasettype]:
+            rst_output.append(".. note::")
+            rst_output.append("   Supports all products of type " + \
+                f"{yaml_data[datasettype]['all_products']}")
+            rst_output.append('')
+
         for product, prodinfo in yaml_data[datasettype].items():
-            if 'description' not in prodinfo.keys():
+            if type(prodinfo) == str:
+                continue
+            if 'description' not in prodinfo:
                 continue
             rst_output.append(f"{product}")
             rst_output.append('""""""""""""""""""""""""""""""')
@@ -72,6 +80,10 @@ def process_file(filepath):
             started = True
             reading_params = False
         if started:
+            if 'All the products of the' in line:
+                all_products_type = line.split('All the products of the ')[1].split()[0]
+                all_products[function]['all_products'] = all_products_type
+
             match = re.findall("^'[A-Z0-9_]*'\\s*:\\d*", line.strip())
             if 'Parameters' in line: # End of block with product list
                 reading_params = False
@@ -134,5 +146,3 @@ rst_content = dict_to_restructured_text(products)
 fname = Path(OUT_DIRECTORY, 'list_products.rst')
 with open(fname, 'w') as f:
     f.write(rst_content)
-
-# %%
