@@ -487,7 +487,7 @@ def get_data(voltime, datatypesdescr, cfg):
         azmin = cfg['azmin'][ind_rad]
     if cfg['azmax'] is not None:
         azmax = cfg['azmax'][ind_rad]
-
+    
     radar = None
     if ndatatypes_rainbow > 0 and _WRADLIB_AVAILABLE:
         radar = merge_scans_rainbow(
@@ -2926,11 +2926,11 @@ def merge_scans_skyecho(basepath, scan_list, voltime, datatype_list,
     for filename_aux in filenames:
         fdatetime = find_date_in_file_name(
             filename_aux, date_format=fdate_strf)
-        if fdatetime == time_ref:
+        if fdatetime >= time_ref:
             filename = [filename_aux]
 
     if not filename:
-        warn('No file found in ' + datapath + '*.*')
+        warn(f'No file found in {datapath}*{scan_list[0]}* for time ref {time_ref}')
     else:
         radar = pyart.aux_io.read_skyecho(
             filename[0], sweep_end_time=voltime,

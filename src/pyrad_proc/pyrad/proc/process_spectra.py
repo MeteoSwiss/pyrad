@@ -381,7 +381,7 @@ def process_spectra_point(procstatus, dscfg, radar_list=None):
         psr_poi.elevation['data'] = np.array([], dtype='float64')
         psr_poi.nrays = 0
 
-        psr_poi.npulses['data'] = np.array([], dtype=np.int)
+        psr_poi.npulses['data'] = np.array([], dtype=np.int32)
         if psr_poi.Doppler_velocity is not None:
             psr_poi.Doppler_velocity['data'] = np.array([])
         if psr_poi.Doppler_frequency is not None:
@@ -1186,7 +1186,6 @@ def process_spectral_reflectivity(procstatus, dscfg, radar_list=None):
 
     if procstatus != 1:
         return None, None
-
     noise_field = None
     signal_field = None
     pwr_field = None

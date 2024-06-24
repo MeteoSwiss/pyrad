@@ -76,6 +76,8 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
             elevation tolerance to determine which radar elevation to use [deg]
         RngTol : float. Dataset keyword
             range tolerance to determine which radar bin to use [m]
+        fill_value : float or None
+            If not None masked values are going to be filled by this value
 
     radar_list : list of Radar objects
           Optional. list of radar objects
@@ -130,6 +132,7 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
     projparams.update({'lat_0': radar.latitude['data']})
 
     single_point = dscfg.get('single_point', True)
+    fill_value = dscfg.get('fill_value', None)
     if dscfg['latlon']:
         lon = dscfg['lon']
         lat = dscfg['lat']
@@ -202,6 +205,11 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
     ant_coord[2, :] = np.zeros(ind_ray.size) + radar.range['data'][ind_r]
 
     val = radar.fields[field_name]['data'].data[ind_ray, ind_r]
+    if (fill_value is not None
+            and np.ma.is_masked(radar.fields[field_name]['data'][
+                ind_ray, ind_r])):
+        val = fill_value        
+
     time = num2date(radar.time['data'][ind_ray], radar.time['units'],
                     radar.time['calendar'])
 

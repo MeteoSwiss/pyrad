@@ -461,7 +461,6 @@ def process_occurrence(procstatus, dscfg, radar_list=None):
             warn('No valid radar')
             return None, None
         radar = radar_list[ind_rad]
-
         if field_name not in radar.fields:
             warn(field_name + ' not available.')
             return None, None

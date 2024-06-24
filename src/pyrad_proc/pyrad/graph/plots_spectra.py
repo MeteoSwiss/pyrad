@@ -74,9 +74,13 @@ def plot_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['ppiImageConfig'].get('dpi', 72)
-    xsize = prdcfg['ppiImageConfig']['xsize']
-    ysize = prdcfg['ppiImageConfig']['ysize']
+    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
+    xsize = prdcfg['spectraImageConfig']['xsize']
+    ysize = prdcfg['spectraImageConfig']['ysize']
+    ymin = prdcfg['spectraImageConfig']['ymin']
+    ymax = prdcfg['spectraImageConfig']['ymax']
+    velmin = prdcfg['spectraImageConfig']['velmin']
+    velmax = prdcfg['spectraImageConfig']['velmax']
 
     if xaxis_info == 'Doppler_velocity':
         xaxis = spectra.Doppler_velocity['data'][ray, :].compressed()
@@ -142,6 +146,11 @@ def plot_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
     ax.set_ylabel(ylabel)
     ax.set_title(titl)
 
+    if not (velmin is None or velmax is None):
+        ax.set_xlim([velmin, velmax])
+    if not (ymin is None or ymax is None):
+        ax.set_ylim([ymin, ymax])
+
     cb = fig.colorbar(cax)
     if ticks is not None:
         cb.set_ticks(ticks)
@@ -204,9 +213,11 @@ def plot_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng, prdcfg,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['ppiImageConfig'].get('dpi', 72)
-    xsize = prdcfg['ppiImageConfig']['xsize']
-    ysize = prdcfg['ppiImageConfig']['ysize']
+    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
+    xsize = prdcfg['spectraImageConfig']['xsize']
+    ysize = prdcfg['spectraImageConfig']['ysize']
+    velmin = prdcfg['spectraImageConfig']['velmin']
+    velmax = prdcfg['spectraImageConfig']['velmax']
 
     if xaxis_info == 'Doppler_velocity':
         xaxis = spectra.Doppler_velocity['data'][ind_rays, :]
@@ -276,6 +287,8 @@ def plot_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng, prdcfg,
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_title(titl)
+    if not (velmin is None or velmax is None):
+        ax.set_xlim([velmin, velmax])
 
     cb = fig.colorbar(cax)
     if ticks is not None:
@@ -332,9 +345,9 @@ def plot_time_Doppler(spectra, field_name, prdcfg, fname_list,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['ppiImageConfig'].get('dpi', 72)
-    xsize = prdcfg['ppiImageConfig']['xsize']
-    ysize = prdcfg['ppiImageConfig']['ysize']
+    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
+    xsize = prdcfg['spectraImageConfig']['xsize']
+    ysize = prdcfg['spectraImageConfig']['ysize']
 
     if xaxis_info == 'Doppler_velocity':
         xaxis = spectra.Doppler_velocity['data']
@@ -450,9 +463,11 @@ def plot_Doppler(spectra, field_name, ray, rng, prdcfg, fname_list,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['ppiImageConfig'].get('dpi', 72)
-    xsize = prdcfg['ppiImageConfig']['xsize']
-    ysize = prdcfg['ppiImageConfig']['ysize']
+    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
+    xsize = prdcfg['spectraImageConfig']['xsize']
+    ysize = prdcfg['spectraImageConfig']['ysize']
+    velmin = prdcfg['spectraImageConfig']['velmin']
+    velmax = prdcfg['spectraImageConfig']['velmax']
 
     if xaxis_info == 'Doppler_velocity':
         xaxis = spectra.Doppler_velocity['data'][ray, :].compressed()
@@ -492,6 +507,9 @@ def plot_Doppler(spectra, field_name, ray, rng, prdcfg, fname_list,
     ax.set_xlim([xaxis[0], xaxis[-1]])
     ax.set_title(titl)
 
+    if not (velmin is None or velmax is None):
+        ax.set_xlim([velmin, velmax])
+    
     # Turn on the grid
     ax.grid()
 
@@ -540,9 +558,13 @@ def plot_complex_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['ppiImageConfig'].get('dpi', 72)
-    xsize = prdcfg['ppiImageConfig']['xsize']
-    ysize = prdcfg['ppiImageConfig']['ysize']
+    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
+    xsize = prdcfg['spectraImageConfig']['xsize']
+    ysize = prdcfg['spectraImageConfig']['ysize']
+    ymin = prdcfg['spectraImageConfig']['ymin']
+    ymax = prdcfg['spectraImageConfig']['ymax']
+    velmin = prdcfg['spectraImageConfig']['velmin']
+    velmax = prdcfg['spectraImageConfig']['velmax']
 
     if xaxis_info == 'Doppler_velocity':
         xaxis = spectra.Doppler_velocity['data'][ray, :].compressed()
@@ -612,6 +634,10 @@ def plot_complex_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_title('Real part')
+    if not (velmin is None or velmax is None):
+        ax.set_xlim([velmin, velmax])
+    if not (ymin is None or ymax is None):
+        ax.set_ylim([ymin, ymax])
 
     ax = fig.add_subplot(122)
     cax = ax.pcolormesh(
@@ -620,6 +646,10 @@ def plot_complex_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_title('Imaginary part')
+    if not (velmin is None or velmax is None):
+        ax.set_xlim([velmin, velmax])
+    if not (ymin is None or ymax is None):
+        ax.set_ylim([ymin, ymax])
 
     cb = fig.colorbar(cax)
     if ticks is not None:
@@ -686,9 +716,11 @@ def plot_complex_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['ppiImageConfig'].get('dpi', 72)
-    xsize = prdcfg['ppiImageConfig']['xsize']
-    ysize = prdcfg['ppiImageConfig']['ysize']
+    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
+    xsize = prdcfg['spectraImageConfig']['xsize']
+    ysize = prdcfg['spectraImageConfig']['ysize']
+    velmin = prdcfg['spectraImageConfig']['velmin']
+    velmax = prdcfg['spectraImageConfig']['velmax']
 
     if xaxis_info == 'Doppler_velocity':
         xaxis = spectra.Doppler_velocity['data'][ind_rays, :]
@@ -763,6 +795,8 @@ def plot_complex_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng,
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_title('Real part')
+    if not (velmin is None or velmax is None):
+        ax.set_xlim([velmin, velmax])
 
     ax = fig.add_subplot(122)
     cax = ax.pcolor(
@@ -771,6 +805,8 @@ def plot_complex_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng,
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_title('Imaginary part')
+    if not (velmin is None or velmax is None):
+        ax.set_xlim([velmin, velmax])
 
     cb = fig.colorbar(cax)
     if ticks is not None:
@@ -828,9 +864,11 @@ def plot_complex_time_Doppler(spectra, field_name, prdcfg, fname_list,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['ppiImageConfig'].get('dpi', 72)
-    xsize = prdcfg['ppiImageConfig']['xsize']
-    ysize = prdcfg['ppiImageConfig']['ysize']
+    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
+    xsize = prdcfg['spectraImageConfig']['xsize']
+    ysize = prdcfg['spectraImageConfig']['ysize']
+    velmin = prdcfg['spectraImageConfig']['velmin']
+    velmax = prdcfg['spectraImageConfig']['velmax']
 
     if xaxis_info == 'Doppler_velocity':
         xaxis = spectra.Doppler_velocity['data']
@@ -897,6 +935,8 @@ def plot_complex_time_Doppler(spectra, field_name, prdcfg, fname_list,
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_title('Real part')
+    if not (velmin is None or velmax is None):
+        ax.set_xlim([velmin, velmax])
 
     ax = fig.add_subplot(122)
     cax = ax.pcolor(
@@ -905,6 +945,8 @@ def plot_complex_time_Doppler(spectra, field_name, prdcfg, fname_list,
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_title('Imaginary part')
+    if not (velmin is None or velmax is None):
+        ax.set_xlim([velmin, velmax])
 
     cb = fig.colorbar(cax)
     if ticks is not None:
@@ -959,9 +1001,13 @@ def plot_amp_phase_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['ppiImageConfig'].get('dpi', 72)
-    xsize = prdcfg['ppiImageConfig']['xsize']
-    ysize = prdcfg['ppiImageConfig']['ysize']
+    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
+    xsize = prdcfg['spectraImageConfig']['xsize']
+    ysize = prdcfg['spectraImageConfig']['ysize']
+    ymin = prdcfg['spectraImageConfig']['ymin']
+    ymax = prdcfg['spectraImageConfig']['ymax']
+    velmin = prdcfg['spectraImageConfig']['velmin']
+    velmax = prdcfg['spectraImageConfig']['velmax']
 
     if xaxis_info == 'Doppler_velocity':
         xaxis = spectra.Doppler_velocity['data'][ray, :].compressed()
@@ -1036,7 +1082,11 @@ def plot_amp_phase_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_title('Amplitude')
-
+    if not (velmin is None or velmax is None):
+        ax.set_xlim([velmin, velmax])
+    if not (ymin is None or ymax is None):
+        ax.set_ylim([ymin, ymax])
+        
     cb = fig.colorbar(cax)
     if ticks is not None:
         cb.set_ticks(ticks)
@@ -1051,6 +1101,10 @@ def plot_amp_phase_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_title('Phase')
+    if not (velmin is None or velmax is None):
+        ax.set_xlim([velmin, velmax])
+    if not (ymin is None or ymax is None):
+        ax.set_ylim([ymin, ymax])
 
     cb = fig.colorbar(cax)
     if ticks is not None:
@@ -1116,9 +1170,11 @@ def plot_amp_phase_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['ppiImageConfig'].get('dpi', 72)
-    xsize = prdcfg['ppiImageConfig']['xsize']
-    ysize = prdcfg['ppiImageConfig']['ysize']
+    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
+    xsize = prdcfg['spectraImageConfig']['xsize']
+    ysize = prdcfg['spectraImageConfig']['ysize']
+    velmin = prdcfg['spectraImageConfig']['velmin']
+    velmax = prdcfg['spectraImageConfig']['velmax']
 
     if xaxis_info == 'Doppler_velocity':
         xaxis = spectra.Doppler_velocity['data'][ind_rays, :]
@@ -1199,6 +1255,8 @@ def plot_amp_phase_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng,
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_title('Amplitude')
+    if not (velmin is None or velmax is None):
+        ax.set_xlim([velmin, velmax])
 
     cb = fig.colorbar(cax)
     if ticks is not None:
@@ -1214,6 +1272,8 @@ def plot_amp_phase_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng,
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_title('Phase')
+    if not (velmin is None or velmax is None):
+        ax.set_xlim([velmin, velmax])
 
     cb = fig.colorbar(cax)
     if ticks is not None:
@@ -1270,9 +1330,11 @@ def plot_amp_phase_time_Doppler(spectra, field_name, prdcfg, fname_list,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['ppiImageConfig'].get('dpi', 72)
-    xsize = prdcfg['ppiImageConfig']['xsize']
-    ysize = prdcfg['ppiImageConfig']['ysize']
+    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
+    xsize = prdcfg['spectraImageConfig']['xsize']
+    ysize = prdcfg['spectraImageConfig']['ysize']
+    velmin = prdcfg['spectraImageConfig']['velmin']
+    velmax = prdcfg['spectraImageConfig']['velmax']
 
     if xaxis_info == 'Doppler_velocity':
         xaxis = spectra.Doppler_velocity['data']
@@ -1345,7 +1407,9 @@ def plot_amp_phase_time_Doppler(spectra, field_name, prdcfg, fname_list,
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_title('Amplitude')
-
+    if not (velmin is None or velmax is None):
+        ax.set_xlim([velmin, velmax])
+        
     cb = fig.colorbar(cax)
     if ticks is not None:
         cb.set_ticks(ticks)
@@ -1360,6 +1424,8 @@ def plot_amp_phase_time_Doppler(spectra, field_name, prdcfg, fname_list,
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_title('Phase')
+    if not (velmin is None or velmax is None):
+        ax.set_xlim([velmin, velmax])
 
     cb = fig.colorbar(cax)
     if ticks is not None:
@@ -1415,9 +1481,11 @@ def plot_complex_Doppler(spectra, field_name, ray, rng, prdcfg, fname_list,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['ppiImageConfig'].get('dpi', 72)
-    xsize = prdcfg['ppiImageConfig']['xsize']
-    ysize = prdcfg['ppiImageConfig']['ysize']
+    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
+    xsize = prdcfg['spectraImageConfig']['xsize']
+    ysize = prdcfg['spectraImageConfig']['ysize']
+    velmin = prdcfg['spectraImageConfig']['velmin']
+    velmax = prdcfg['spectraImageConfig']['velmax']
 
     if xaxis_info == 'Doppler_velocity':
         xaxis = spectra.Doppler_velocity['data'][ray, :].compressed()
@@ -1461,7 +1529,9 @@ def plot_complex_Doppler(spectra, field_name, ray, rng, prdcfg, fname_list,
     ax.set_ylim(bottom=vmin, top=vmax)
     ax.set_xlim([xaxis[0], xaxis[-1]])
     ax.set_title('Real part')
-
+    if not (velmin is None or velmax is None):
+        ax.set_xlim([velmin, velmax])
+        
     # Turn on the grid
     ax.grid()
 
@@ -1472,6 +1542,8 @@ def plot_complex_Doppler(spectra, field_name, ray, rng, prdcfg, fname_list,
     ax.set_ylim(bottom=vmin, top=vmax)
     ax.set_xlim([xaxis[0], xaxis[-1]])
     ax.set_title('Imaginary part')
+    if not (velmin is None or velmax is None):
+            ax.set_xlim([velmin, velmax])
 
     # Turn on the grid
     ax.grid()
@@ -1522,9 +1594,11 @@ def plot_amp_phase_Doppler(spectra, field_name, ray, rng, prdcfg, fname_list,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['ppiImageConfig'].get('dpi', 72)
-    xsize = prdcfg['ppiImageConfig']['xsize']
-    ysize = prdcfg['ppiImageConfig']['ysize']
+    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
+    xsize = prdcfg['spectraImageConfig']['xsize']
+    ysize = prdcfg['spectraImageConfig']['ysize']
+    velmin = prdcfg['spectraImageConfig']['velmin']
+    velmax = prdcfg['spectraImageConfig']['velmax']
 
     if xaxis_info == 'Doppler_velocity':
         xaxis = spectra.Doppler_velocity['data'][ray, :].compressed()
@@ -1572,6 +1646,8 @@ def plot_amp_phase_Doppler(spectra, field_name, ray, rng, prdcfg, fname_list,
     ax.set_ylim(bottom=ampli_vmin, top=ampli_vmax)
     ax.set_xlim([xaxis[0], xaxis[-1]])
     ax.set_title('Amplitude')
+    if not (velmin is None or velmax is None):
+        ax.set_xlim([velmin, velmax])
 
     # Turn on the grid
     ax.grid()
