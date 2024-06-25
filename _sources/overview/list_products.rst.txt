@@ -712,6 +712,9 @@ parameters
 
 COLOCATED_GATES
 -----------------------------
+.. note::
+   Supports all products of type 'VOL'
+
 COSMO_COORD
 -----------------------------
 SAVEVOL
@@ -731,6 +734,9 @@ parameters
 
 COSMO2RADAR
 -----------------------------
+.. note::
+   Supports all products of type 'VOL'
+
 SAVEVOL
 """"""""""""""""""""""""""""""
 description
@@ -1217,6 +1223,9 @@ parameters
 
 GRID_TIMEAVG
 -----------------------------
+.. note::
+   Supports all products of type 'VOL'
+
 INTERCOMP
 -----------------------------
 PLOT_AND_WRITE_INTERCOMP_TS
@@ -1252,6 +1261,9 @@ parameters
 
 ML
 -----------------------------
+.. note::
+   Supports all products of type 'VOL'
+
 ML_TS
 """"""""""""""""""""""""""""""
 description
@@ -1382,6 +1394,9 @@ parameters
 
 OCCURRENCE
 -----------------------------
+.. note::
+   Supports all products of type 'VOL'
+
 WRITE_EXCESS_GATES
 """"""""""""""""""""""""""""""
 description
@@ -1393,6 +1408,9 @@ parameters
 
 QVP
 -----------------------------
+.. note::
+   Supports all products of type 'VOL'
+
 SPARSE_GRID
 -----------------------------
 SURFACE_IMAGE
@@ -1406,6 +1424,9 @@ parameters
 
 SUN_HITS
 -----------------------------
+.. note::
+   Supports all products of type 'VOL'
+
 PLOT_SUN_HITS
 """"""""""""""""""""""""""""""
 description
@@ -1456,6 +1477,9 @@ parameters
 
 TIMEAVG
 -----------------------------
+.. note::
+   Supports all products of type 'VOL'
+
 TIMESERIES
 -----------------------------
 COMPARE_CUMULATIVE_POINT
@@ -1611,6 +1635,9 @@ parameters
 
 VPR
 -----------------------------
+.. note::
+   Supports all products of type 'VOL'
+
 PLOT_VPR_THEO
 """"""""""""""""""""""""""""""
 description
