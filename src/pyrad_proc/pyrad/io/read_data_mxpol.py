@@ -51,7 +51,7 @@ class MissingOptionalDependency(Exception):
 
 # -------------------------- classes - MXPOL ------------------------------ #
 class pyrad_MXPOL(pyart.core.Radar):
-    def __init__(self, filename, field_names=None, max_range=np.Inf,
+    def __init__(self, filename, field_names=None, max_range=np.inf,
                  min_range=10000, pyrad_names=True):
         # find information based on filename
         all_files = [filename]
@@ -203,7 +203,7 @@ class pyrad_MXPOL(pyart.core.Radar):
 # -------------------------- classes - IDL --------------------------- #
 
 class pyrad_IDL(pyart.core.Radar):
-    def __init__(self, filename, field_names=None, max_range=np.Inf,
+    def __init__(self, filename, field_names=None, max_range=np.inf,
                  min_range=10000):
 
         # find information based on filename
