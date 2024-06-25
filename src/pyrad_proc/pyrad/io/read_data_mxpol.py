@@ -51,7 +51,7 @@ class MissingOptionalDependency(Exception):
 
 # -------------------------- classes - MXPOL ------------------------------ #
 class pyrad_MXPOL(pyart.core.Radar):
-    def __init__(self, filename, field_names=None, max_range=np.Inf,
+    def __init__(self, filename, field_names=None, max_range=np.inf,
                  min_range=10000, pyrad_names=True):
         # find information based on filename
         all_files = [filename]
@@ -203,7 +203,7 @@ class pyrad_MXPOL(pyart.core.Radar):
 # -------------------------- classes - IDL --------------------------- #
 
 class pyrad_IDL(pyart.core.Radar):
-    def __init__(self, filename, field_names=None, max_range=np.Inf,
+    def __init__(self, filename, field_names=None, max_range=np.inf,
                  min_range=10000):
 
         # find information based on filename
@@ -359,7 +359,7 @@ class pyrad_IDL(pyart.core.Radar):
 
 
 class pyrad_MCH(pyart.core.Radar):
-    def __init__(self, filename, field_names=None, max_range=np.Inf):
+    def __init__(self, filename, field_names=None, max_range=np.inf):
 
         # find information based on filename
         all_files = [filename]
@@ -645,7 +645,7 @@ def int2float_radar(data, varname, index_angle):
     return output
 
 
-def readMXPOLRadData(filename, variableList, max_range=np.Inf, min_range=0):
+def readMXPOLRadData(filename, variableList, max_range=np.inf, min_range=0):
     """
     Reads a netcdf containing processed radar data in polar coordinates
     Parameters
@@ -716,7 +716,7 @@ def readMXPOLRadData(filename, variableList, max_range=np.Inf, min_range=0):
     return metadata, varPol
 
 
-def readIDLRadData(filename, variableList, max_range=np.Inf, min_range=0):
+def readIDLRadData(filename, variableList, max_range=np.inf, min_range=0):
     """
     Reads a netcdf containing IDL processed radar data in polar coordinates
     Parameters
@@ -790,7 +790,7 @@ def readIDLRadData(filename, variableList, max_range=np.Inf, min_range=0):
 
 
 def readCHRadData(filename, radar_name, variableList, radial_resolution,
-                  max_range=np.Inf, min_range=0):
+                  max_range=np.inf, min_range=0):
     """
     Reads a HDF5 file containing processed radar data in polar coordinates
     Parameters
