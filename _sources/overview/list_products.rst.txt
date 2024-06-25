@@ -1,5 +1,5 @@
-List of pyrad products
-==============================
+List of pyrad products separated by dataset type
+=================================================
 
 VOL
 -----------------------------
