@@ -401,6 +401,31 @@ document.write(`
                   
 <section class="tex2jax_ignore mathjax_ignore" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h1>
+<section id="v1-8-9">
+<h2>v1.8.9<a class="headerlink" href="#v1-8-9" title="Link to this heading">#</a></h2>
+<p><strong>Bug corrections:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/f0d3bf32c7dbb3ca9c8eb13708957072af872dd5">FIX: fix np.Inf for numpy 2</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/64c6c3064996e6be7682b34b27df9772692b896b">fix conflict in src/pyrad_proc/pyrad/flow/flow_aux.py</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/3955a619d1145b5d307bdc24742ab54215ff8398">revert of</a> https://github.com/MeteoSwiss/pyrad/commit/41382257dc5578d5cb121de11b3766b70e4c1878 <a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/3955a619d1145b5d307bdc24742ab54215ff8398">that removed by mistake call to read_smn2</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/33581ced90e5c45705fcba99328d4e76be5b4c40">[BUG] fix in process_monitoring_products.py to allow copy to S3 of VOL_HISTOGRAM imgs</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/369048bff7cdc275d541feb6aaff5a13471a1ded">added coercion of product names to list in flow_aux for s3 writing</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/e6adbba15df72ab6c6a782d2d87687b0c1aea7d8">added support of visibility_polar varname in process_intercomp (GECSX format)</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/d83c14064993203f80b5f204d823cca10d88d3bb">fixed issue in process_traj.py that lead to some timesteps not being considered</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/1fbc1f0786726bf1b68637d45e2142396340b689">provided alternative to fcntl for windows</a></p></li>
+</ul>
+<p><strong>New additions</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/2d54aca2896dd02ab2f19b0bdb251f1f8982daa9">added possibility to copy saved products to S3 storage</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/3050ffe8590206c4fb7776cfcd10fc497449bb3b">modified function merge_scans_mfcfradial in read_data_radar.py to allow ingesting CFRadial files containing individual parameters and scans</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/49dab5b2ffb2d5e4ea86308431e446a981743baf">minor changes to be able to read better SkyEcho files</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/5cc42995f2e0791f2cc5b25a18239113a927d495">added spectraImageConfig struct in loc cfg file to specify spectral image parameters</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/f49814667748f45f3cf52642b70d4e48e5a33fd3">function get_datatype_skyecho made available</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/2e89dea47483b95299ac0dd1b1c5a27762fe47b2">Added the possibility to read rain gauge data with reader read_smn2</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/fbba560740ed62de7e6119e2d103a090f0caa39c">Added possibility to use Gate Filter in LP phase processing. Added user-defined settings</a></p></li>
+<li><p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/commit/a83d1859ead9c1e315e06fd2892215dac14ab34d">added new SkyEcho variables</a></p></li>
+</ul>
+</section>
 <section id="v1-8-8">
 <h2>v1.8.8<a class="headerlink" href="#v1-8-8" title="Link to this heading">#</a></h2>
 <p><strong>Bug corrections</strong></p>
@@ -593,6 +618,7 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-8-9">v1.8.9</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-8-8">v1.8.8</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-8-7">v1.8.7</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-8-6">v1.8.6</a></li>
