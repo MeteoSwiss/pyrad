@@ -1,5 +1,26 @@
 # Changelog
 
+## v1.8.9
+**Bug corrections:**
+- [FIX: fix np.Inf for numpy 2](https://github.com/MeteoSwiss/pyrad/commit/f0d3bf32c7dbb3ca9c8eb13708957072af872dd5)
+- [fix conflict in src/pyrad_proc/pyrad/flow/flow_aux.py](https://github.com/MeteoSwiss/pyrad/commit/64c6c3064996e6be7682b34b27df9772692b896b)
+- [revert of](https://github.com/MeteoSwiss/pyrad/commit/3955a619d1145b5d307bdc24742ab54215ff8398) https://github.com/MeteoSwiss/pyrad/commit/41382257dc5578d5cb121de11b3766b70e4c1878 [that removed by mistake call to read_smn2](https://github.com/MeteoSwiss/pyrad/commit/3955a619d1145b5d307bdc24742ab54215ff8398)
+- [[BUG] fix in process_monitoring_products.py to allow copy to S3 of VOL_HISTOGRAM imgs](https://github.com/MeteoSwiss/pyrad/commit/33581ced90e5c45705fcba99328d4e76be5b4c40)
+- [added coercion of product names to list in flow_aux for s3 writing](https://github.com/MeteoSwiss/pyrad/commit/369048bff7cdc275d541feb6aaff5a13471a1ded)
+- [added support of visibility_polar varname in process_intercomp (GECSX format)](https://github.com/MeteoSwiss/pyrad/commit/e6adbba15df72ab6c6a782d2d87687b0c1aea7d8)
+- [fixed issue in process_traj.py that lead to some timesteps not being considered](https://github.com/MeteoSwiss/pyrad/commit/d83c14064993203f80b5f204d823cca10d88d3bb)
+- [provided alternative to fcntl for windows](https://github.com/MeteoSwiss/pyrad/commit/1fbc1f0786726bf1b68637d45e2142396340b689)
+
+**New additions**
+- [added possibility to copy saved products to S3 storage](https://github.com/MeteoSwiss/pyrad/commit/2d54aca2896dd02ab2f19b0bdb251f1f8982daa9)
+- [modified function merge_scans_mfcfradial in read_data_radar.py to allow ingesting CFRadial files containing individual parameters and scans](https://github.com/MeteoSwiss/pyrad/commit/3050ffe8590206c4fb7776cfcd10fc497449bb3b)
+- [minor changes to be able to read better SkyEcho files](https://github.com/MeteoSwiss/pyrad/commit/49dab5b2ffb2d5e4ea86308431e446a981743baf)
+- [added spectraImageConfig struct in loc cfg file to specify spectral image parameters](https://github.com/MeteoSwiss/pyrad/commit/5cc42995f2e0791f2cc5b25a18239113a927d495)
+- [function get_datatype_skyecho made available](https://github.com/MeteoSwiss/pyrad/commit/f49814667748f45f3cf52642b70d4e48e5a33fd3)
+- [Added the possibility to read rain gauge data with reader read_smn2](https://github.com/MeteoSwiss/pyrad/commit/2e89dea47483b95299ac0dd1b1c5a27762fe47b2)
+- [Added possibility to use Gate Filter in LP phase processing. Added user-defined settings](https://github.com/MeteoSwiss/pyrad/commit/fbba560740ed62de7e6119e2d103a090f0caa39c)
+- [added new SkyEcho variables](https://github.com/MeteoSwiss/pyrad/commit/a83d1859ead9c1e315e06fd2892215dac14ab34d)
+
 ## v1.8.8
 **Bug corrections**
 
