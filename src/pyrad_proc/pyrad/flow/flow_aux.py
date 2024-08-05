@@ -951,8 +951,10 @@ def _create_cfg_dict(cfgfile):
 
     # to use when we need to combine multiple files corresponding to multiple
     # and data types
-    if 'DataTypeID' not in cfg:
-        cfg.update({'DataTypeID': None})
+    if 'DataTypeIDInFilenames' not in cfg:
+        cfg.update({'DataTypeIDInFilenames': None})
+    if 'DataTypeIDInFiles' not in cfg:
+        cfg.update({'DataTypeIDInFiles': None})
 
     if 'MasterScanTimeTol' not in cfg:
         #  0: no tolerance
@@ -1159,8 +1161,9 @@ def _create_datacfg_dict(cfg):
 
     datacfg.update({'BinFileParams': cfg['BinFileParams']})
     datacfg.update({'MFScale': cfg['MFScale']})
-    datacfg.update({'DataTypeID': cfg['DataTypeID']})
-
+    datacfg.update({'DataTypeIDInFiles': cfg['DataTypeIDInFiles']})
+    datacfg.update({'DataTypeIDInFilenames': cfg['DataTypeIDInFilenames']})
+    
     # Modify size of radar or radar spectra object
     datacfg.update({'elmin': cfg.get('elmin', None)})
     datacfg.update({'elmax': cfg.get('elmax', None)})

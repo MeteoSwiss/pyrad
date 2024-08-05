@@ -2228,7 +2228,7 @@ def merge_scans_gamic(basepath, scan_list, radar_name, radar_res, voltime,
 def merge_scans_mfcfradial(basepath, scan_list, voltime, datatype_list,
                            dataset_list, cfg, ind_rad=0):
     """
-    merge CF radial data from Meteo France
+    merge CF radial data where one moment is stored per file (mf-moment files)
 
     Parameters
     ----------
@@ -2254,7 +2254,7 @@ def merge_scans_mfcfradial(basepath, scan_list, voltime, datatype_list,
 
     """
     # Mapping of MeteoFrance and JMA field names to Py-ART field names
-    field_names = {
+    default_field_names = {
         'DBZH': 'reflectivity',  # JMA
         'TH': 'unfiltered_reflectivity',  # MF
         'ZDR': 'differential_reflectivity',  # MF & JMA
@@ -2268,6 +2268,15 @@ def merge_scans_mfcfradial(basepath, scan_list, voltime, datatype_list,
         'SIGMA': 'sigma_zh'  # MF
     }
 
+    field_names = {}
+    if cfg['DataTypeIDInFiles']:
+        # Use custom name mapping
+        for datatype in datatype_list:
+            if datatype in cfg['DataTypeIDInFiles']:  
+                field_names[cfg['DataTypeIDInFiles'][datatype]] = get_fieldname_pyart(datatype)
+    else:		
+        field_names = default_field_names
+            
     radar = None
 
     # get list of files to combine
@@ -2331,7 +2340,7 @@ def merge_scans_mfcfradial(basepath, scan_list, voltime, datatype_list,
     if not flist:
         return radar
 
-    if cfg['DataTypeID'] is None:
+    if cfg['DataTypeIDInFilenames'] is None:
         for fname, scan in zip(flist, scan_list_aux):
             radar_aux = pyart.io.read_cfradial(fname, field_names=field_names)
             if radar_aux is None:
@@ -2342,13 +2351,13 @@ def merge_scans_mfcfradial(basepath, scan_list, voltime, datatype_list,
             radar = pyart.util.radar_utils.join_radar(radar, radar_aux)
     else:
         for datatype in datatype_list:
-            if datatype not in cfg['DataTypeID'].keys():
+            if datatype not in cfg['DataTypeIDInFilenames'].keys():
                 warn(f'No file contains data type {datatype}')
                 continue
             nscans = 0
             radar_aux = None
             for fname, scan in zip(flist, scan_list_aux):
-                if cfg['DataTypeID'][datatype] not in os.path.basename(fname):
+                if cfg['DataTypeIDInFilenames'][datatype] not in os.path.basename(fname):
                     continue
                 radar_aux2 = pyart.io.read_cfradial(
                     fname, field_names=field_names)
@@ -2558,8 +2567,14 @@ def merge_scans_cfradial(basepath, scan_list, radar_name, radar_res, voltime,
 
     """
     field_names = {}
-    for datatype in datatype_list:
-        field_names[datatype] = get_fieldname_pyart(datatype)
+    if cfg['DataTypeIDInFiles']:
+        # Use custom name mapping
+        for datatype in datatype_list:
+            if datatype in cfg['DataTypeIDInFiles']:  
+                field_names[cfg['DataTypeIDInFiles'][datatype]] = get_fieldname_pyart(datatype)
+    else:		
+        for datatype in datatype_list:
+            field_names[datatype] = get_fieldname_pyart(datatype)
 
     radar = None
     dayinfo = voltime.strftime('%y%j')
@@ -2609,7 +2624,7 @@ def merge_scans_cfradial(basepath, scan_list, radar_name, radar_res, voltime,
     if not filename:
         warn('No file found in ' + datapath[0] + basename + timeinfo + '*.*')
     else:
-        radar = pyart.io.read_cfradial(filename[0], field_names=None)
+        radar = pyart.io.read_cfradial(filename[0], field_names=field_names)
 
     rmin = None
     rmax = None
@@ -2678,7 +2693,7 @@ def merge_scans_cfradial(basepath, scan_list, radar_name, radar_res, voltime,
 
     if radar is None:
         return radar
-
+    
     return pyart.util.subset_radar(
         radar, radar.fields.keys(), rng_min=rmin, rng_max=rmax,
         ele_min=elmin, ele_max=elmax, azi_min=azmin, azi_max=azmax)

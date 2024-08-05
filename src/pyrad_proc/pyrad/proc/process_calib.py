@@ -14,7 +14,7 @@ Functions for monitoring data quality and correct bias and noise effects
     process_time_avg_std
     process_occurrence_period
     process_sun_hits
-   *process_sunscan
+    process_sunscan
 
 """
 
@@ -1318,18 +1318,22 @@ def process_sun_hits(procstatus, dscfg, radar_list=None):
                 flx_dt_closest, flx_val_closest = get_closest_solar_flux(
                     sun_hits[0], flx_dt, flx_val)
 
-                # flux at radar wavelength
-                sf_radar = pyart.correct.solar_flux_lookup(
-                    flx_val_closest, dscfg['global_data']['wavelen'])
+                if flx_val_closest.mask.all():
+                    warn('Could not find any valid recent solar flux value')
+                    warn('Power will not be scaled for solar flux variations!')
+                else:
+                    # flux at radar wavelength
+                    sf_radar = pyart.correct.solar_flux_lookup(
+                        flx_val_closest, dscfg['global_data']['wavelen'])
 
-                sf_ref = np.ma.asarray(sf_radar[-1])
-                ref_time = flx_dt_closest[-1]
+                    sf_ref = np.ma.asarray(sf_radar[-1])
+                    ref_time = flx_dt_closest[-1]
 
-                # scaling of the power to account for solar flux variations.
-                # The last sun hit is the reference. The scale factor is in dB
-                scale_factor = -10. * np.log10(sf_radar / sf_ref)
-                sun_pwr_h += scale_factor
-                sun_pwr_v += scale_factor
+                    # scaling of the power to account for solar flux variations.
+                    # The last sun hit is the reference. The scale factor is in dB
+                    scale_factor = -10. * np.log10(sf_radar / sf_ref)
+                    sun_pwr_h += scale_factor
+                    sun_pwr_v += scale_factor
             else:
                 warn('Unable to compute solar power reference. ' +
                      'Missing DRAO data')
@@ -1895,21 +1899,25 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
             flx_dt_closest, flx_val_closest = get_closest_solar_flux(
                 sun_hits['time'], flx_dt, flx_val)
 
-            # flux at radar wavelength
-            sf_radar = pyart.correct.solar_flux_lookup(
-                flx_val_closest, dscfg['global_data']['wavelen'])
-
-            sf_ref = np.ma.asarray(sf_radar[-1])
-            ref_time = flx_dt_closest[-1]
-
-            # scaling of the power to account for solar flux variations.
-            # The last sun hit is the reference. The scale factor is in dB
-            scale_factor = -10. * np.log10(sf_radar / sf_ref)
-            if sun_hit_method == 'PSR':
-                vals_nonoise_db += scale_factor
+            if flx_val_closest.mask.all():
+                warn('Could not find any valid recent solar flux value')
+                warn('Power will not be scaled for solar flux variations!')
             else:
-                sun_pwr_h += scale_factor
-                sun_pwr_v += scale_factor
+                # flux at radar wavelength
+                sf_radar = pyart.correct.solar_flux_lookup(
+                    flx_val_closest, dscfg['global_data']['wavelen'])
+
+                sf_ref = np.ma.asarray(sf_radar[-1])
+                ref_time = flx_dt_closest[-1]
+
+                # scaling of the power to account for solar flux variations.
+                # The last sun hit is the reference. The scale factor is in dB
+                scale_factor = -10. * np.log10(sf_radar / sf_ref)
+                if sun_hit_method == 'PSR':
+                    vals_nonoise_db += scale_factor
+                else:
+                    sun_pwr_h += scale_factor
+                    sun_pwr_v += scale_factor
         else:
             warn('Unable to compute solar power reference. ' +
                  'Missing DRAO data')
@@ -2054,20 +2062,27 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
 
                 if flx_dt is not None:
                     flx_dt_closest, flx_val_closest = get_closest_solar_flux(
-                        sun_hits['time'], flx_dt, flx_val)
+                    sun_hits['time'], flx_dt, flx_val)
 
-                    # flux at radar wavelength
-                    sf_radar = pyart.correct.solar_flux_lookup(
-                        flx_val_closest, dscfg['global_data']['wavelen'])
+                    if flx_val_closest.mask.all():
+                        warn('Could not find any valid recent solar flux value')
+                        warn('Power will not be scaled for solar flux variations!')
+                    else:
+                        # flux at radar wavelength
+                        sf_radar = pyart.correct.solar_flux_lookup(
+                            flx_val_closest, dscfg['global_data']['wavelen'])
 
-                    sf_ref = np.ma.asarray(sf_radar[-1])
-                    ref_time = flx_dt_closest[-1]
+                        sf_ref = np.ma.asarray(sf_radar[-1])
+                        ref_time = flx_dt_closest[-1]
 
-                    # scaling of the power to account for solar flux variations.
-                    # The last sun hit is the reference. The scale factor is in
-                    # dB
-                    scale_factor = -10. * np.log10(sf_radar / sf_ref)
-                    vals_nonoise_db += scale_factor
+                        # scaling of the power to account for solar flux variations.
+                        # The last sun hit is the reference. The scale factor is in dB
+                        scale_factor = -10. * np.log10(sf_radar / sf_ref)
+                        if sun_hit_method == 'PSR':
+                            vals_nonoise_db += scale_factor
+                        else:
+                            sun_pwr_h += scale_factor
+                            sun_pwr_v += scale_factor
                 else:
                     warn('Unable to compute solar power reference. ' +
                          'Missing DRAO data')
