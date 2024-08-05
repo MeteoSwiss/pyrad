@@ -1182,7 +1182,7 @@ DEFAULT_METADATA = {
         'coordinates': 'elevation azimuth range',
         'scale_factor': 0.5,
         'add_offset': -32.,
-        '_Write_as_dtype': 'uint8'},
+        },
 
     avg_reflectivity: {
         'units': 'dBZ',
@@ -1697,7 +1697,7 @@ DEFAULT_METADATA = {
         'coordinates': 'elevation azimuth range',
         'scale_factor': 0.062254902,
         'add_offset': -7.9375,
-        '_Write_as_dtype': 'uint8'},
+        },
 
     corrected_differential_reflectivity: {
         'units': 'dB',
