@@ -1699,7 +1699,7 @@ def merge_scans_odim(basepath, scan_list, radar_name, radar_res, voltime,
     if not flist:
         return radar
 
-    if cfg['DataTypeID'] is None:
+    if cfg['DataTypeIDInFilenames'] is None:
         for fname, scan in zip(flist, scan_list_aux):
             radar_aux = get_data_odim(
                 fname, datatype_list, scan, cfg, ind_rad=ind_rad)
@@ -1711,13 +1711,13 @@ def merge_scans_odim(basepath, scan_list, radar_name, radar_res, voltime,
             radar = pyart.util.radar_utils.join_radar(radar, radar_aux)
     else:
         for datatype in datatype_list:
-            if datatype not in cfg['DataTypeID'].keys():
+            if datatype not in cfg['DataTypeIDInFilenames'].keys():
                 warn(f'No file contains data type {datatype}')
                 continue
             nscans = 0
             radar_aux = None
             for fname, scan in zip(flist, scan_list_aux):
-                if cfg['DataTypeID'][datatype] not in os.path.basename(fname):
+                if cfg['DataTypeIDInFilenames'][datatype] not in os.path.basename(fname):
                     continue
                 radar_aux2 = get_data_odim(
                     fname, [datatype], scan, cfg, ind_rad=ind_rad)
@@ -1832,7 +1832,7 @@ def merge_scans_odimgrid(basepath, scan_list, voltime, datatype_list,
             continue
 
         grid_aux = get_data_odimgrid(
-            filename[0], datatype_list, mf_scale=cfg['MFScale'])
+            filename[0], datatype_list, cfg, mf_scale=cfg['MFScale'])
 
         if grid_aux is None:
             continue
@@ -2732,8 +2732,14 @@ def merge_scans_cfradial2(basepath, scan_list, radar_name, radar_res, voltime,
 
     """
     field_names = {}
-    for datatype in datatype_list:
-        field_names[datatype] = (get_fieldname_pyart(datatype))
+    if cfg['DataTypeIDInFiles']:
+        # Use custom name mapping
+        for datatype in datatype_list:
+            if datatype in cfg['DataTypeIDInFiles']:  
+                field_names[cfg['DataTypeIDInFiles'][datatype]] = get_fieldname_pyart(datatype)
+    else:		
+        for datatype in datatype_list:
+            field_names[datatype] = get_fieldname_pyart(datatype)
 
     radar = None
     dayinfo = voltime.strftime('%y%j')
@@ -3010,6 +3016,7 @@ def merge_scans_cf1(basepath, scan_list, radar_name, radar_res, voltime,
         radar object
 
     """
+    
     field_names = []
     for datatype in datatype_list:
         field_names.append(get_fieldname_pyart(datatype))
@@ -5021,10 +5028,15 @@ def get_data_odim(filename, datatype_list, scan_name, cfg, ind_rad=0):
         radar object. None if the reading has not been successful
 
     """
+    
     odim_field_names = dict()
+    # Use custom name mapping
     for datatype in datatype_list:
-        if datatype not in ('Nh', 'Nv'):
+        if datatype in cfg['DataTypeIDInFiles']:  
+            odim_field_names[cfg['DataTypeIDInFiles'][datatype]] = get_fieldname_pyart(datatype)
+        else:
             odim_field_names.update(get_datatype_odim(datatype))
+
     try:
         if cfg['MFScale']:
             # assumes only a data type per file
@@ -5165,7 +5177,7 @@ def get_data_odim(filename, datatype_list, scan_name, cfg, ind_rad=0):
     return radar
 
 
-def get_data_odimgrid(filename, datatype_list, mf_scale=False):
+def get_data_odimgrid(filename, datatype_list, cfg, mf_scale=False):
     """
     gets ODIM grid data
 
@@ -5175,6 +5187,8 @@ def get_data_odimgrid(filename, datatype_list, mf_scale=False):
         name of file containing odim data
     datatype_list : list of strings
         list of data fields to get
+    cfg : dict
+        configuration dictionary
     mf_scale : bool
         Whether to impose a MF scale
 
@@ -5187,7 +5201,11 @@ def get_data_odimgrid(filename, datatype_list, mf_scale=False):
     grid = None
     if mf_scale:
         for datatype in datatype_list:
-            odim_field_name = get_datatype_odim(datatype)
+            if datatype in cfg['DataTypeIDInFiles']:  
+                odim_field_name = {cfg['DataTypeIDInFiles'][datatype]:
+                    get_fieldname_pyart(datatype)}
+            else:
+                odim_field_name = get_datatype_odim(datatype)
             field_name = get_fieldname_pyart(datatype)
 
             offset = 0.
