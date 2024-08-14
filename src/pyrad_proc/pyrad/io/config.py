@@ -94,7 +94,7 @@ _defaults_main = {
     'lastStateFile': None,
     'datapath': None,
     'satpath': None,
-    'cosmopath': None,
+    'iconpath': None,
     'psrpath': None,
     'iqpath': None,
     'colocgatespath': None,

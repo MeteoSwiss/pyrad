@@ -954,7 +954,7 @@ def _create_cfg_dict(cfgfile):
     if 'DataTypeIDInFilenames' not in cfg:
         cfg.update({'DataTypeIDInFilenames': None})
     if 'DataTypeIDInFiles' not in cfg:
-        cfg.update({'DataTypeIDInFiles': None})
+        cfg.update({'DataTypeIDInFiles': {}})
 
     if 'MasterScanTimeTol' not in cfg:
         #  0: no tolerance
@@ -990,7 +990,7 @@ def _create_cfg_dict(cfgfile):
     # Convert the following strings to string arrays
     strarr_list = [
         'datapath',
-        'cosmopath',
+        'iconpath',
         'dempath',
         'gecsxbasepath',
         'gecsxname',
@@ -1145,7 +1145,7 @@ def _create_datacfg_dict(cfg):
     datacfg.update({'MasterScanTimeTol': cfg['MasterScanTimeTol']})
     datacfg.update({'TimeTol': cfg['TimeTol']})
     datacfg.update({'NumRadars': cfg['NumRadars']})
-    datacfg.update({'cosmopath': cfg['cosmopath']})
+    datacfg.update({'iconpath': cfg['iconpath']})
     datacfg.update({'dempath': cfg['dempath']})
     datacfg.update({'loadbasepath': cfg['loadbasepath']})
     datacfg.update({'loadname': cfg['loadname']})
@@ -1294,7 +1294,7 @@ def _create_dscfg_dict(cfg, dataset):
     dscfg.update({'excessgatespath': cfg['excessgatespath']})
     dscfg.update({'dempath': cfg['dempath']})
     dscfg.update({'selfconsistencypath': cfg['selfconsistencypath']})
-    dscfg.update({'cosmopath': cfg['cosmopath']})
+    dscfg.update({'iconpath': cfg['iconpath']})
     dscfg.update({'CosmoRunFreq': cfg['CosmoRunFreq']})
     dscfg.update({'CosmoForecasted': cfg['CosmoForecasted']})
     dscfg.update({'metranet_read_lib': cfg['metranet_read_lib']})
@@ -1377,7 +1377,7 @@ def _create_prdcfg_dict(cfg, dataset, product, voltime, runinfo=None):
     prdcfg.update({'basepath': cfg['saveimgbasepath']})
     prdcfg.update({'smnpath': cfg['smnpath']})
     prdcfg.update({'disdropath': cfg['disdropath']})
-    prdcfg.update({'cosmopath': cfg['cosmopath']})
+    prdcfg.update({'iconpath': cfg['iconpath']})
     prdcfg.update({'dempath': cfg['dempath']})
     prdcfg.update({'ScanPeriod': cfg['ScanPeriod']})
     prdcfg.update({'imgformat': cfg['imgformat']})
