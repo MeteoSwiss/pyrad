@@ -26,6 +26,7 @@ import numpy as np
 
 import pyart
 
+
 try:
     import pytda
     _PYTDA_AVAILABLE = True
@@ -38,7 +39,7 @@ try:
 except ImportError:
     _PYDDA_AVAILABLE = False
 
-from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
+from ..io.io_aux import get_datatype_fields, get_fieldname_pyart, convert_pydda_to_pyart_grid
 from ..io import read_radiosounding_igra
 from .process_grid import process_grid
 from ..util import compute_average_vad
@@ -928,7 +929,7 @@ def process_dda(procstatus, dscfg, radar_list=None):
 
     """
     if not _PYDDA_AVAILABLE:
-        warn('PyDDA package not available. Unable to compute wind fields')
+        warn('PyDDA and xarray package not available. Unable to compute wind fields')
         return None, None
 
     if procstatus != 1:
@@ -1016,21 +1017,22 @@ def process_dda(procstatus, dscfg, radar_list=None):
             ind_radar_list == i]
         grids.append(process_grid(1, dscfg_grid, radar_list)[0]['radar_out'])
 
+    grids_pyDDA = []
     # Harmonize variables
     for i, grid in enumerate(grids):
         grid.fields['velocity'] = grid.fields.pop(vel_fields[i])
         if signs[i] == 1:
             grid.fields['velocity']['data'] *= -1
         grid.fields['reflectivity'] = grid.fields.pop(refl_fields[i])
-
+        grids_pyDDA.append(pydda.io.read_from_pyart_grid(grid))
+    
     # DDA initialization
-
-    grids[0] = pydda.initialization.make_wind_field_from_profile(
-        grids[0], wind_prof, vel_field='velocity')
+    grids_pyDDA[0] = pydda.initialization.make_wind_field_from_profile(
+        grids_pyDDA[0], wind_prof, vel_field='velocity')
 
     # Actual DDA computation
     new_grids, params = pydda.retrieval.get_dd_wind_field(
-        grids,
+        grids_pyDDA,
         vel_name='velocity',
         refl_field='reflectivity',
         mask_outside_opt=True,
@@ -1038,6 +1040,12 @@ def process_dda(procstatus, dscfg, radar_list=None):
         Co=Co, Cm=Cm, Cx=Cx, Cy=Cy, Cz=Cz, Cb=Cb, Cv=Cv, Cmod=Cmod,
         Cpoint=Cpoint, wind_tol=wind_tol, frz=frz)
 
+    for i, grid in enumerate(new_grids):
+        # convert back to pyart grids
+        new_grids[i] = convert_pydda_to_pyart_grid(grid)
+        # add radar name
+        new_grids[i].radar_name = grids[i].radar_name
+        
     # pyDDA returns as many grid objects as input radars
     # the idea here is to merge these grid objects into one
     # and to replace the homogeneized vel and refl fields by the
@@ -1057,7 +1065,7 @@ def process_dda(procstatus, dscfg, radar_list=None):
             else:
                 new_key = var
             merged_grid.fields[new_key] = merged_grid.fields.pop(var)
-
+    
     # add the other dda grids
     radar_metadata = []
     for i, additional_grid in enumerate(new_grids[1:]):
@@ -1085,7 +1093,7 @@ def process_dda(procstatus, dscfg, radar_list=None):
             mdata['radar_name'] = 'Unknown'
 
         radar_metadata.append(mdata)
-
+    
     # Rename DDA u, v, w fields to pyart names
     merged_grid.fields['eastward_wind_component'] = merged_grid.fields.pop('u')
     merged_grid.fields['northward_wind_component'] = merged_grid.fields.pop(
@@ -1097,5 +1105,4 @@ def process_dda(procstatus, dscfg, radar_list=None):
 
     new_dataset = {}
     new_dataset['radar_out'] = merged_grid
-
     return new_dataset, ind_radar_list
