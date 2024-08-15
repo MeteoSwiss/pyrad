@@ -256,8 +256,7 @@ def read_geotiff_data(fname, fill_value=None):
         except RuntimeError:
             projparams = None
             pass
-        if not len(projparams):  # gdal could not read proj
-            projparams = None
+
         width = raster.RasterXSize
         height = raster.RasterYSize
         gt = raster.GetGeoTransform()
