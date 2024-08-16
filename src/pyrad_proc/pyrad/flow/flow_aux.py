@@ -1154,8 +1154,8 @@ def _create_datacfg_dict(cfg):
     datacfg.update({'RadarName': cfg['RadarName']})
     datacfg.update({'RadarRes': cfg['RadarRes']})
     datacfg.update({'ScanPeriod': cfg['ScanPeriod']})
-    datacfg.update({'CosmoRunFreq': int(cfg['CosmoRunFreq'])})
-    datacfg.update({'CosmoForecasted': int(cfg['CosmoForecasted'])})
+    datacfg.update({'IconRunFreq': int(cfg['IconRunFreq'])})
+    datacfg.update({'IconForecasted': int(cfg['IconForecasted'])})
     datacfg.update({'path_convention': cfg['path_convention']})
     datacfg.update({'metranet_read_lib': cfg['metranet_read_lib']})
 
@@ -1295,8 +1295,8 @@ def _create_dscfg_dict(cfg, dataset):
     dscfg.update({'dempath': cfg['dempath']})
     dscfg.update({'selfconsistencypath': cfg['selfconsistencypath']})
     dscfg.update({'iconpath': cfg['iconpath']})
-    dscfg.update({'CosmoRunFreq': cfg['CosmoRunFreq']})
-    dscfg.update({'CosmoForecasted': cfg['CosmoForecasted']})
+    dscfg.update({'IconRunFreq': cfg['IconRunFreq']})
+    dscfg.update({'IconForecasted': cfg['IconForecasted']})
     dscfg.update({'metranet_read_lib': cfg['metranet_read_lib']})
     dscfg.update({'lastStateFile': cfg['lastStateFile']})
     dscfg.update({'timeinfo': None})
@@ -1537,7 +1537,7 @@ def _get_masterfile_list(datatypesdescr, starttimes, endtimes, datacfg,
     for datatypedescr in datatypesdescr:
         radarnr, datagroup, _, _, _ = get_datatype_fields(datatypedescr)
         if (datagroup not in (
-                'COSMO', 'RAD4ALPCOSMO', 'CFRADIALCOSMO', 'DEM', 'RAD4ALPDEM',
+                'Icon', 'RAD4ALPIcon', 'CFRADIALIcon', 'DEM', 'RAD4ALPDEM',
                 'RAD4ALPHYDRO', 'RAD4ALPDOPPLER', 'RAD4ALPIQ', 'PSR',
                 'PSRSPECTRA', 'GECSX')):
             masterdatatypedescr = datatypedescr
@@ -1549,13 +1549,13 @@ def _get_masterfile_list(datatypesdescr, starttimes, endtimes, datacfg,
     if masterdatatypedescr is None:
         for datatypedescr in datatypesdescr:
             radarnr, datagroup, _, _, _ = get_datatype_fields(datatypedescr)
-            if datagroup in ('COSMO', 'DEM', 'PSR', 'PSRSPECTRA'):
+            if datagroup in ('Icon', 'DEM', 'PSR', 'PSRSPECTRA'):
                 masterdatatypedescr = '{}:RAINBOW:dBZ'.format(radarnr)
                 if scan_list is not None:
                     masterscan = scan_list[int(radarnr[5:8]) - 1][0]
                 break
             if (datagroup in (
-                    'RAD4ALPCOSMO', 'RAD4ALPDEM', 'RAD4ALPHYDRO',
+                    'RAD4ALPIcon', 'RAD4ALPDEM', 'RAD4ALPHYDRO',
                     'RAD4ALPDOPPLER', 'RAD4ALPIQ')):
                 masterdatatypedescr = '{}:RAD4ALP:dBZ'.format(radarnr)
                 if scan_list is not None:

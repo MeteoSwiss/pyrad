@@ -2270,7 +2270,7 @@ def merge_scans_mfcfradial(basepath, scan_list, voltime, datatype_list,
         'WIDTH': 'spectrum_width',  # JMA
         'SIGMA': 'sigma_zh'  # MF
     }
-
+    
     field_names = {}
     if cfg['DataTypeIDInFiles']:
         # Use custom name mapping
@@ -2628,7 +2628,7 @@ def merge_scans_cfradial(basepath, scan_list, radar_name, radar_res, voltime,
         warn('No file found in ' + datapath[0] + basename + timeinfo + '*.*')
     else:
         radar = pyart.io.read_cfradial(filename[0], field_names=field_names,
-                                       include_fields = field_names.keys())
+                                       include_fields = field_names.values())
     rmin = None
     rmax = None
     elmin = None
@@ -2685,7 +2685,7 @@ def merge_scans_cfradial(basepath, scan_list, radar_name, radar_res, voltime,
                 scan)
         else:
             radar_aux = pyart.io.read_cfradial(
-                filename[0], field_names=field_names, include_fields=field_names.keys())
+                filename[0], field_names=field_names, include_fields=field_names.values())
 
             if radar_aux is None:
                 continue
@@ -2694,6 +2694,7 @@ def merge_scans_cfradial(basepath, scan_list, radar_name, radar_res, voltime,
                 radar = radar_aux
             else:
                 radar = merge_radars(radar, radar_aux)
+
     if radar is None:
         return radar
     return pyart.util.subset_radar(
@@ -5088,7 +5089,7 @@ def get_data_odim(filename, datatype_list, scan_name, cfg, ind_rad=0):
                 filename, field_names=odim_field_names, offset=offset,
                 gain=gain, nodata=nodata, undetect=undetect,
                 use_file_conversion=use_file_conversion, 
-                include_fields = odim_field_names.keys())
+                include_fields = odim_field_names.values())
 
             if datatype_list[0] == 'PhiDP':
                 radar.fields['differential_phase']['data'][

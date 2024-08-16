@@ -33,7 +33,7 @@ Example:
 # Author: fvj
 # License: BSD 3 clause
 
-import datetime
+from datetime import datetime, timezone
 import argparse
 import atexit
 import os
@@ -97,7 +97,7 @@ def main():
     args = parser.parse_args()
 
     print("====== PYRAD data processing started: %s" %
-          datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"))
+          datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S"))
     atexit.register(_print_end_msg,
                     "====== PYRAD data processing finished: ")
 
@@ -121,11 +121,11 @@ def main():
 
     proc_starttime = None
     if args.starttime is not None:
-        proc_starttime = datetime.datetime.strptime(
+        proc_starttime = datetime.strptime(
             args.starttime, '%Y%m%d%H%M%S')
     proc_endtime = None
     if args.endtime is not None:
-        proc_endtime = datetime.datetime.strptime(args.endtime, '%Y%m%d%H%M%S')
+        proc_endtime = datetime.strptime(args.endtime, '%Y%m%d%H%M%S')
     cfgfile_proc = args.cfgpath + args.proc_cfgfile
 
     if args.infostr == 'None':
@@ -165,7 +165,8 @@ def _print_end_msg(text):
     Nothing
 
     """
-    print(text + datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"))
+    now = datetime.now(timezone.utc)    
+    print(text + now.strftime("%Y-%m-%d %H:%M:%S"))
 
 
 # ---------------------------------------------------------

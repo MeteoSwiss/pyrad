@@ -80,8 +80,8 @@ _defaults_loc = {
     'velmax': None
    },
     'ScanPeriod': 5,
-    'CosmoRunFreq': 3,
-    'CosmoForecasted': 7,
+    'IconRunFreq': 3,
+    'IconForecasted': 7,
     'RadarName': None,
     'RadarRes': None,
     'NumRadars': 1,
