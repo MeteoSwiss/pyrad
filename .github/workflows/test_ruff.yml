@@ -37,4 +37,4 @@ jobs:
         shell: bash -l {0}
         run: |
           pip install ruff
-          ruff --ignore E501 . 
+          ruff check --ignore E501 . 
