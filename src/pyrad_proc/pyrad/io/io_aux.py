@@ -19,7 +19,7 @@ Auxiliary functions for reading/writing files
     get_datatype_skyecho
     get_datatype_odim
     get_fieldname_pyart
-    get_fieldname_cosmo
+    get_fieldname_icon
     get_field_unit
     get_field_name
     get_file_list
@@ -31,16 +31,16 @@ Auxiliary functions for reading/writing files
     get_datatype_fields
     get_dataset_fields
     get_datetime
-    find_raw_cosmo_file
-    find_cosmo_file
+    find_raw_icon_file
+    find_icon_file
     find_hzt_file
     find_iso0_file
     find_iso0_grib_file
-    find_rad4alpcosmo_file
-    find_pyradcosmo_file
+    find_rad4alpicon_file
+    find_pyradicon_file
     _get_datetime
     find_date_in_file_name
-
+    convert_pydda_to_pyart_grid
 
 """
 
@@ -52,6 +52,7 @@ import datetime
 from warnings import warn
 from copy import deepcopy
 import numpy as np
+import pyart
 
 from pyart.config import get_metadata
 
@@ -1162,9 +1163,9 @@ def get_datatype_odim(datatype):
     elif datatype == 'H_ISO0':
         field_name = 'height_over_iso0'
         datatype_odim = 'HISO0'
-    elif datatype == 'cosmo_index':
-        field_name = 'cosmo_index'
-        datatype_odim = 'COSMOIND'
+    elif datatype == 'icon_index':
+        field_name = 'icon_index'
+        datatype_odim = 'ICONIND'
     elif datatype == 'hzt_index':
         field_name = 'hzt_index'
         datatype_odim = 'HZTIND'
@@ -1612,8 +1613,8 @@ def get_fieldname_pyart(datatype):
         field_name = 'iso0_height'
     elif datatype == 'HZTc':
         field_name = 'corrected_iso0_height'
-    elif datatype == 'cosmo_index':
-        field_name = 'cosmo_index'
+    elif datatype == 'icon_index':
+        field_name = 'icon_index'
     elif datatype == 'hzt_index':
         field_name = 'hzt_index'
     elif datatype == 'ml':
@@ -2397,9 +2398,9 @@ def get_fieldname_pyart(datatype):
     return field_name
 
 
-def get_fieldname_cosmo(field_name):
+def get_fieldname_icon(field_name):
     """
-    maps the Py-ART field name into the corresponding COSMO variable name
+    maps the Py-ART field name into the corresponding ICON variable name
 
     Parameters
     ----------
@@ -2408,22 +2409,22 @@ def get_fieldname_cosmo(field_name):
 
     Returns
     -------
-    cosmo_name : str
+    icon_name : str
         Py-ART variable name
 
     """
     if field_name == 'temperature':
-        cosmo_name = 'T'
+        icon_name = 'T'
     elif field_name == 'wind_speed':
-        cosmo_name = 'FF'
+        icon_name = 'FF'
     elif field_name == 'wind_direction':
-        cosmo_name = 'DD'
+        icon_name = 'DD'
     elif field_name == 'vertical_wind_shear':
-        cosmo_name = 'WSHEAR'
+        icon_name = 'WSHEAR'
     else:
         raise ValueError('ERROR: Unknown field name ' + field_name)
 
-    return cosmo_name
+    return icon_name
 
 
 def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
@@ -2722,16 +2723,16 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     dayfilelist = glob.glob(pattern)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
-            elif datagroup == 'COSMORAW':
+            elif datagroup == 'ICONRAW':
                 daydir = (starttime + datetime.timedelta(days=i)).strftime(
                     '%Y-%m-%d')
                 dayinfo = (starttime + datetime.timedelta(days=i)).strftime(
                     '%Y%m%d')
 
                 # check that base directory exists
-                datapath = cfg['cosmopath'][ind_rad] + datatype + '/raw/'
+                datapath = cfg['iconpath'][ind_rad] + datatype + '/raw/'
                 if not os.path.isdir(datapath):
-                    datapath = cfg['cosmopath'][ind_rad] + datatype + '/raw1/'
+                    datapath = cfg['iconpath'][ind_rad] + datatype + '/raw1/'
                     if not os.path.isdir(datapath):
                         warn("WARNING: Unknown datapath '%s'" % datapath)
                         continue
@@ -3031,7 +3032,7 @@ def get_datatype_fields(datadescriptor):
     radarnr : str
         radar number, i.e. RADAR1, RADAR2, ...
     datagroup : str
-        data type group, i.e. RAINBOW, RAD4ALP, ODIM, CFRADIAL, COSMO,
+        data type group, i.e. RAINBOW, RAD4ALP, ODIM, CFRADIAL, ICON,
         MXPOL ...
     datatype : str
         data type, i.e. dBZ, ZDR, ISO0, ...
@@ -3064,7 +3065,7 @@ def get_datatype_fields(datadescriptor):
                 datatype = descrfields2[0]
                 dataset = descrfields2[1]
                 product = descrfields2[2]
-            elif datagroup == 'CFRADIALCOSMO':
+            elif datagroup == 'CFRADIALICON':
                 descrfields2 = descrfields[2].split(',')
                 datatype = descrfields2[0]
                 dataset = descrfields2[1]
@@ -3096,7 +3097,7 @@ def get_datatype_fields(datadescriptor):
             datatype = descrfields2[0]
             dataset = descrfields2[1]
             product = descrfields2[2]
-        elif datagroup == 'CFRADIALCOSMO':
+        elif datagroup == 'CFRADIALICON':
             descrfields2 = descrfields[1].split(',')
             datatype = descrfields2[0]
             dataset = descrfields2[1]
@@ -3181,16 +3182,16 @@ def get_datetime(fname, datadescriptor):
     return _get_datetime(fname, datagroup, ftime_format=dataset)
 
 
-def find_cosmo_file(voltime, datatype, cfg, scanid, ind_rad=0):
+def find_icon_file(voltime, datatype, cfg, scanid, ind_rad=0):
     """
-    Search a COSMO file in Rainbow format
+    Search a ICON file in Rainbow format
 
     Parameters
     ----------
     voltime : datetime object
         volume scan time
     datatype : str
-        type of COSMO data to look for
+        type of ICON data to look for
     cfg : dictionary of dictionaries
         configuration info to figure out where the data is
     scanid : str
@@ -3201,7 +3202,7 @@ def find_cosmo_file(voltime, datatype, cfg, scanid, ind_rad=0):
     Returns
     -------
     fname : str
-        Name of COSMO file if it exists. None otherwise
+        Name of ICON file if it exists. None otherwise
 
     """
     # hour rounded date-time
@@ -3209,18 +3210,18 @@ def find_cosmo_file(voltime, datatype, cfg, scanid, ind_rad=0):
 
     # initial run time to look for
     hvol = int(voltime.strftime('%H'))
-    runhour0 = int(hvol / cfg['CosmoRunFreq']) * cfg['CosmoRunFreq']
+    runhour0 = int(hvol / cfg['IconRunFreq']) * cfg['IconRunFreq']
     runtime0 = voltime.replace(hour=runhour0, minute=0, second=0)
 
-    # look for cosmo file
+    # look for icon file
     found = False
-    nruns_to_check = int((cfg['CosmoForecasted'] - 1) / cfg['CosmoRunFreq'])
+    nruns_to_check = int((cfg['IconForecasted'] - 1) / cfg['IconRunFreq'])
     for i in range(nruns_to_check):
-        runtime = runtime0 - datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
+        runtime = runtime0 - datetime.timedelta(hours=i * cfg['IconRunFreq'])
         runtimestr = runtime.strftime('%Y%m%d%H') + '000000'
 
         daydir = runtime.strftime('%Y-%m-%d')
-        datapath = cfg['cosmopath'][ind_rad] + \
+        datapath = cfg['iconpath'][ind_rad] + \
             datatype + '/' + scanid + daydir + '/'
 
         search_name = (
@@ -3240,22 +3241,22 @@ def find_cosmo_file(voltime, datatype, cfg, scanid, ind_rad=0):
     if found:
         return fname[0]
 
-    warn('WARNING: Unable to get COSMO ' + datatype + ' information')
+    warn('WARNING: Unable to get ICON ' + datatype + ' information')
     return None
 
 
-def find_pyradcosmo_file(basepath, voltime, datatype, cfg, dataset):
+def find_pyradicon_file(basepath, voltime, datatype, cfg, dataset):
     """
-    Search a COSMO file in CFRadial or ODIM format
+    Search a ICON file in CFRadial or ODIM format
 
     Parameters
     ----------
     basepath : str
-        base path to the COSMO file
+        base path to the ICON file
     voltime : datetime object
         volume scan time
     datatype : str
-        type of COSMO data to look for
+        type of ICON data to look for
     cfg : dictionary of dictionaries
         configuration info to figure out where the data is
     dataset : str
@@ -3264,7 +3265,7 @@ def find_pyradcosmo_file(basepath, voltime, datatype, cfg, dataset):
     Returns
     -------
     fname : str
-        Name of COSMO file if it exists. None otherwise
+        Name of ICON file if it exists. None otherwise
 
     """
     # hour rounded date-time
@@ -3272,14 +3273,14 @@ def find_pyradcosmo_file(basepath, voltime, datatype, cfg, dataset):
 
     # initial run time to look for
     hvol = int(voltime.strftime('%H'))
-    runhour0 = int(hvol / cfg['CosmoRunFreq']) * cfg['CosmoRunFreq']
+    runhour0 = int(hvol / cfg['IconRunFreq']) * cfg['IconRunFreq']
     runtime0 = voltime.replace(hour=runhour0, minute=0, second=0)
 
-    # look for cosmo file
+    # look for icon file
     found = False
-    nruns_to_check = int((cfg['CosmoForecasted'] - 1) / cfg['CosmoRunFreq'])
+    nruns_to_check = int((cfg['IconForecasted'] - 1) / cfg['IconRunFreq'])
     for i in range(nruns_to_check):
-        runtime = runtime0 - datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
+        runtime = runtime0 - datetime.timedelta(hours=i * cfg['IconRunFreq'])
         runtimestr = runtime.strftime('%Y%m%d%H') + '0000'
 
         daydir = runtime.strftime('%Y-%m-%d')
@@ -3297,20 +3298,20 @@ def find_pyradcosmo_file(basepath, voltime, datatype, cfg, dataset):
     if found:
         return fname[0]
 
-    warn('WARNING: Unable to get COSMO ' + datatype + ' information')
+    warn('WARNING: Unable to get ICON ' + datatype + ' information')
     return None
 
 
-def find_raw_cosmo_file(voltime, datatype, cfg, ind_rad=0):
+def find_raw_icon_file(voltime, datatype, cfg, ind_rad=0):
     """
-    Search a COSMO file in netcdf format
+    Search a ICON file in netcdf format
 
     Parameters
     ----------
     voltime : datetime object
         volume scan time
     datatype : str
-        type of COSMO data to look for
+        type of ICON data to look for
     cfg : dictionary of dictionaries
         configuration info to figure out where the data is
     ind_rad : int
@@ -3319,24 +3320,24 @@ def find_raw_cosmo_file(voltime, datatype, cfg, ind_rad=0):
     Returns
     -------
     fname : str
-        Name of COSMO file if it exists. None otherwise
+        Name of ICON file if it exists. None otherwise
 
     """
     # initial run time to look for
-    runhour0 = int(voltime.hour / cfg['CosmoRunFreq']) * cfg['CosmoRunFreq']
+    runhour0 = int(voltime.hour / cfg['IconRunFreq']) * cfg['IconRunFreq']
     runtime0 = voltime.replace(hour=runhour0, minute=0, second=0)
 
-    # look for cosmo file in raw
+    # look for icon file in raw
     found = False
-    nruns_to_check = int(cfg['CosmoForecasted'] / cfg['CosmoRunFreq'])
+    nruns_to_check = int(cfg['IconForecasted'] / cfg['IconRunFreq'])
     for i in range(nruns_to_check):
-        runtime = runtime0 - datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
+        runtime = runtime0 - datetime.timedelta(hours=i * cfg['IconRunFreq'])
         runtimestr = runtime.strftime('%Y%m%d%H')
 
         daydir = runtime.strftime('%Y-%m-%d')
-        datapath = cfg['cosmopath'][ind_rad] + \
+        datapath = cfg['iconpath'][ind_rad] + \
             datatype + '/raw/' + daydir + '/'
-        for model in ('cosmo-1e', 'cosmo-1', 'cosmo-2', 'cosmo-7'):
+        for model in ('icon-ch1', 'icon-ch2'):
             if datatype == 'TEMP':
                 search_name = (
                     datapath +
@@ -3352,7 +3353,7 @@ def find_raw_cosmo_file(voltime, datatype, cfg, ind_rad=0):
                     runtimestr +
                     '.nc')
             else:
-                warn('Unable to get COSMO ' + datatype + '. Unknown variable')
+                warn('Unable to get ICON ' + datatype + '. Unknown variable')
             print('Looking for file: ' + search_name)
             fname = glob.glob(search_name)
             if fname:
@@ -3365,16 +3366,16 @@ def find_raw_cosmo_file(voltime, datatype, cfg, ind_rad=0):
     if found:
         return fname[0]
 
-    # look for cosmo file in raw1
+    # look for icon file in raw1
     found = False
     for i in range(nruns_to_check):
-        runtime = runtime0 - datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
+        runtime = runtime0 - datetime.timedelta(hours=i * cfg['IconRunFreq'])
         runtimestr = runtime.strftime('%Y%m%d%H')
 
         daydir = runtime.strftime('%Y-%m-%d')
-        datapath = cfg['cosmopath'][ind_rad] + \
+        datapath = cfg['iconpath'][ind_rad] + \
             datatype + '/raw1/' + daydir + '/'
-        for model in ('cosmo-1e', 'cosmo-1', 'cosmo-2', 'cosmo-7'):
+        for model in ('icon-1e', 'icon-1', 'icon-2', 'icon-7'):
             if datatype == 'TEMP':
                 search_name = (
                     datapath +
@@ -3390,7 +3391,7 @@ def find_raw_cosmo_file(voltime, datatype, cfg, ind_rad=0):
                     runtimestr +
                     '.nc')
             else:
-                warn('Unable to get COSMO ' + datatype + '. Unknown variable')
+                warn('Unable to get ICON ' + datatype + '. Unknown variable')
             print('Looking for file: ' + search_name)
             fname = glob.glob(search_name)
             if fname:
@@ -3403,7 +3404,7 @@ def find_raw_cosmo_file(voltime, datatype, cfg, ind_rad=0):
     if found:
         return fname[0]
 
-    warn('WARNING: Unable to get COSMO ' + datatype + ' information')
+    warn('WARNING: Unable to get ICON ' + datatype + ' information')
     return None
 
 
@@ -3427,22 +3428,22 @@ def find_hzt_file(voltime, cfg, ind_rad=0):
 
     """
     # initial run time to look for
-    runhour0 = int(voltime.hour / cfg['CosmoRunFreq']) * cfg['CosmoRunFreq']
+    runhour0 = int(voltime.hour / cfg['IconRunFreq']) * cfg['IconRunFreq']
     runtime0 = voltime.replace(hour=runhour0, minute=0, second=0)
 
-    # look for cosmo file
+    # look for icon file
     found = False
-    nruns_to_check = int((cfg['CosmoForecasted'] - 1) / cfg['CosmoRunFreq'])
+    nruns_to_check = int((cfg['IconForecasted'] - 1) / cfg['IconRunFreq'])
     for i in range(nruns_to_check):
-        runtime = runtime0 - datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
+        runtime = runtime0 - datetime.timedelta(hours=i * cfg['IconRunFreq'])
         target_hour = int((voltime - runtime).total_seconds() / 3600.)
         runtimestr = runtime.strftime('%y%j%H00')
 
         daydir = runtime.strftime('%y%j')
         if cfg['path_convention'][ind_rad] == 'RT':
-            datapath = cfg['cosmopath'][ind_rad] + 'HZT/'
+            datapath = cfg['iconpath'][ind_rad] + 'HZT/'
         else:
-            datapath = cfg['cosmopath'][ind_rad] + 'HZT/' + daydir + '/'
+            datapath = cfg['iconpath'][ind_rad] + 'HZT/' + daydir + '/'
         search_name = datapath + 'HZT' + runtimestr + '0L.8' + '{:02d}'.format(
             target_hour)
 
@@ -3479,19 +3480,19 @@ def find_iso0_file(voltime, cfg, ind_rad=0):
 
     """
     # initial run time to look for
-    runhour0 = int(voltime.hour / cfg['CosmoRunFreq']) * cfg['CosmoRunFreq']
+    runhour0 = int(voltime.hour / cfg['IconRunFreq']) * cfg['IconRunFreq']
     runtime0 = voltime.replace(hour=runhour0, minute=0, second=0)
 
     radar_name = mf_sname_to_wmo_number(cfg['RadarName'][ind_rad])
     # look for file
     found = False
-    nruns_to_check = int((cfg['CosmoForecasted']) / cfg['CosmoRunFreq'])
+    nruns_to_check = int((cfg['IconForecasted']) / cfg['IconRunFreq'])
     for i in range(nruns_to_check):
-        runtime = runtime0 - datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
+        runtime = runtime0 - datetime.timedelta(hours=i * cfg['IconRunFreq'])
         int((voltime - runtime).total_seconds() / 3600.)
         runtimestr = runtime.strftime('%Y%m%d%H0000')
 
-        datapath = cfg['cosmopath'][ind_rad]
+        datapath = cfg['iconpath'][ind_rad]
         search_name = (
             datapath + 'bdap_iso0_' + radar_name + '_' + runtimestr +
             '.txt')
@@ -3528,9 +3529,9 @@ def find_iso0_grib_file(voltime, cfg, ind_rad=0):
         Name of iso0 file if it exists. None otherwise
 
     """
-    datapath = cfg['cosmopath'][ind_rad]
+    datapath = cfg['iconpath'][ind_rad]
 
-    if cfg['CosmoRunFreq'] == 0:
+    if cfg['IconRunFreq'] == 0:
         # The date of the NWP file corresponds to the data of the radar
         runtimestr = voltime.strftime('%Y%m%d%H%M')
         search_name = datapath + 'ISO_T_PAROME_' + runtimestr + '*.grib'
@@ -3541,14 +3542,14 @@ def find_iso0_grib_file(voltime, cfg, ind_rad=0):
         warn('WARNING: Unable to find iso0 file')
         return None
 
-    runhour0 = int(voltime.hour / cfg['CosmoRunFreq']) * cfg['CosmoRunFreq']
+    runhour0 = int(voltime.hour / cfg['IconRunFreq']) * cfg['IconRunFreq']
     runtime0 = voltime.replace(hour=runhour0, minute=0, second=0)
-    nruns_to_check = int((cfg['CosmoForecasted']) / cfg['CosmoRunFreq'])
+    nruns_to_check = int((cfg['IconForecasted']) / cfg['IconRunFreq'])
 
     # look for file
     found = False
     for i in range(nruns_to_check):
-        runtime = runtime0 - datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
+        runtime = runtime0 - datetime.timedelta(hours=i * cfg['IconRunFreq'])
         int((voltime - runtime).total_seconds() / 3600.)
         runtimestr = runtime.strftime('%Y%m%d%H00')
         search_name = datapath + 'ISO_T_PAROME_' + runtimestr + '*.grib'
@@ -3566,16 +3567,16 @@ def find_iso0_grib_file(voltime, cfg, ind_rad=0):
     return fname[0]
 
 
-def find_rad4alpcosmo_file(voltime, datatype, cfg, scanid, ind_rad=0):
+def find_rad4alpicon_file(voltime, datatype, cfg, scanid, ind_rad=0):
     """
-    Search a COSMO file
+    Search a ICON file
 
     Parameters
     ----------
     voltime : datetime object
         volume scan time
     datatype : str
-        type of COSMO data to look for
+        type of ICON data to look for
     cfg: dictionary of dictionaries
         configuration info to figure out where the data is
     ind_rad: int
@@ -3584,7 +3585,7 @@ def find_rad4alpcosmo_file(voltime, datatype, cfg, scanid, ind_rad=0):
     Returns
     -------
     fname : str
-        Name of COSMO file if it exists. None otherwise
+        Name of ICON file if it exists. None otherwise
 
     scanid: str
         name of the scan
@@ -3595,20 +3596,20 @@ def find_rad4alpcosmo_file(voltime, datatype, cfg, scanid, ind_rad=0):
 
     # initial run time to look for
     hvol = int(voltime.strftime('%H'))
-    runhour0 = int(hvol / cfg['CosmoRunFreq']) * cfg['CosmoRunFreq']
+    runhour0 = int(hvol / cfg['IconRunFreq']) * cfg['IconRunFreq']
     runtime0 = voltime.replace(hour=runhour0, minute=0, second=0)
 
-    # look for cosmo file
+    # look for icon file
     found = False
-    nruns_to_check = int((cfg['CosmoForecasted'] - 1) / cfg['CosmoRunFreq'])
+    nruns_to_check = int((cfg['IconForecasted'] - 1) / cfg['IconRunFreq'])
     rad_id = 'P' + cfg['RadarRes'][ind_rad] + cfg['RadarName'][ind_rad]
     for i in range(nruns_to_check):
-        runtime = runtime0 - datetime.timedelta(hours=i * cfg['CosmoRunFreq'])
+        runtime = runtime0 - datetime.timedelta(hours=i * cfg['IconRunFreq'])
         runtimestr = runtime.strftime('%y%j%H') + '00'
 
         daydir = runtime.strftime('%y%j')
         datapath = (
-            cfg['cosmopath'][ind_rad] +
+            cfg['iconpath'][ind_rad] +
             datatype +
             '/' +
             rad_id +
@@ -3634,7 +3635,7 @@ def find_rad4alpcosmo_file(voltime, datatype, cfg, scanid, ind_rad=0):
             break
 
     if not found:
-        warn('WARNING: Unable to get COSMO ' + datatype + ' information')
+        warn('WARNING: Unable to get ICON ' + datatype + ' information')
         return None
 
     return fname[0]
@@ -3687,7 +3688,7 @@ def _get_datetime(fname, datagroup, ftime_format=None):
     elif datagroup == 'MXPOL':
         datetimestr = re.findall(r"([0-9]{8}-[0-9]{6})", bfile)[0]
         fdatetime = datetime.datetime.strptime(datetimestr, '%Y%m%d-%H%M%S')
-    elif datagroup == 'COSMORAW':
+    elif datagroup == 'ICONRAW':
         datetimestr = bfile[-13:-3]
         fdatetime = datetime.datetime.strptime(datetimestr, '%Y%m%d%H')
     elif datagroup == 'SATGRID':
@@ -3741,3 +3742,91 @@ def find_date_in_file_name(filename, date_format='%Y%m%d%H%M%S'):
             break
 
     return fdatetime
+
+
+def convert_pydda_to_pyart_grid(pydda_grid):
+    """
+    Converts a PyDDA Dataset back to a Py-ART Grid with the necessary variables.
+
+    Parameters
+    ----------
+    pydda_grid: xarray.Dataset
+        The PyDDA Dataset to convert back to a Py-ART Grid.
+
+    Returns
+    -------
+    grid: Py-ART Grid
+        The Py-ART Grid reconstructed from the PyDDA Dataset.
+    """
+
+    # Extract the basic grid properties
+    pydda_grid['time'].values
+    z = pydda_grid['z'].values
+    y = pydda_grid['y'].values
+    x = pydda_grid['x'].values
+    pydda_grid['point_latitude'].values
+    pydda_grid['point_longitude'].values
+
+    # Reconstruct fields
+    fields = {}
+    for var_name in pydda_grid.data_vars:
+        if var_name not in ["time", "z", "y", "x", "point_latitude", "point_longitude", "point_altitude",
+                            "ROI", "projection", "radar_latitude", "radar_longitude", "radar_altitude",
+                            "origin_longitude", "origin_latitude", "origin_altitude", 
+                            "point_x", "point_z", "point_y", "AZ", "EL"]:
+            field_data = pydda_grid[var_name].values.squeeze()
+            field_metadata = {k: v for k, v in pydda_grid[var_name].attrs.items() if k != 'data'}
+            fields[var_name] = {"data": field_data}
+            fields[var_name].update(field_metadata)
+
+    # Extract the time information
+    pydda_time = pydda_grid['time'].values[0]
+    rounded_time = pydda_time.replace(microsecond=0)
+
+    # Convert cftime.DatetimeGregorian to seconds since a reference time
+    reference_time_str = pydda_time.strftime('%Y-%m-%dT%H:%M:%SZ')
+    time_in_seconds = np.array([(pydda_time - rounded_time).total_seconds()], dtype=np.float32)
+    
+    time_dict = {
+        "units": f"seconds since {reference_time_str}",
+        "standard_name": "time",
+        "long_name": "Time of grid",
+        "calendar": "gregorian",
+        "data": time_in_seconds
+    }
+    
+    # Reconstructing the Py-ART Grid object
+    grid = pyart.core.Grid(
+        time=time_dict,
+        fields=fields,
+        metadata=pydda_grid.attrs,
+        origin_latitude={
+            "data": pydda_grid["origin_latitude"].values
+        },
+        origin_longitude={
+            "data": pydda_grid["origin_longitude"].values
+        },
+        origin_altitude={
+            "data": pydda_grid["origin_altitude"].values
+        },
+        x={
+            "data": x
+        },
+        y={
+            "data": y
+        },
+        z={
+            "data": z
+        },
+        projection=pydda_grid["projection"].attrs,
+        radar_latitude={
+            "data": pydda_grid["radar_latitude"].values
+        },
+        radar_longitude={
+            "data": pydda_grid["radar_longitude"].values
+        },
+        radar_altitude={
+            "data": pydda_grid["radar_altitude"].values
+        },
+    )
+    return grid

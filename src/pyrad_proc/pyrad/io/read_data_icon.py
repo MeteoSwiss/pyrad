@@ -1,17 +1,17 @@
 """
-pyrad.io.read_data_cosmo
+pyrad.io.read_data_icon
 ========================
 
-Functions for reading COSMO data
+Functions for reading icon data
 
 .. autosummary::
     :toctree: generated/
 
-    cosmo2radar_data
-    cosmo2radar_coord
-    get_cosmo_fields
-    read_cosmo_data
-    read_cosmo_coord
+    icon2radar_data
+    icon2radar_coord
+    get_icon_fields
+    read_icon_data
+    read_icon_coord
     _ncvar_to_dict
     _prepare_for_interpolation
     _put_radar_in_swiss_coord
@@ -28,18 +28,18 @@ import netCDF4
 import pyart
 from pyart.config import get_metadata, get_field_name
 
-from ..io.io_aux import get_fieldname_cosmo
+from ..io.io_aux import get_fieldname_icon
 
 # from memory_profiler import profile
 
 # import time
 
 
-def cosmo2radar_data(radar, cosmo_coord, cosmo_data, time_index=0,
+def icon2radar_data(radar, icon_coord, icon_data, time_index=0,
                      slice_xy=True, slice_z=False,
                      field_names=['temperature'], dtype=np.float32):
     """
-    get the COSMO value corresponding to each radar gate using nearest
+    get the icon value corresponding to each radar gate using nearest
     neighbour interpolation
 
     Parameters
@@ -47,27 +47,27 @@ def cosmo2radar_data(radar, cosmo_coord, cosmo_data, time_index=0,
     radar : Radar
         the radar object containing the information on the position of the
         radar gates
-    cosmo_coord : dict
-        dictionary containing the COSMO coordinates
-    cosmo_data : dict
-        dictionary containing the COSMO data
+    icon_coord : dict
+        dictionary containing the icon coordinates
+    icon_data : dict
+        dictionary containing the icon data
     time_index : int
         index of the forecasted data
     slice_xy : boolean
-        if true the horizontal plane of the COSMO field is cut to the
+        if true the horizontal plane of the icon field is cut to the
         dimensions of the radar field
     slice_z : boolean
-        if true the vertical plane of the COSMO field is cut to the dimensions
+        if true the vertical plane of the icon field is cut to the dimensions
         of the radar field
     field_names : str
-        names of COSMO fields to convert (default temperature)
+        names of icon fields to convert (default temperature)
     dtype : numpy data type object
         the data type of the output data
 
     Returns
     -------
-    cosmo_fields : list of dict
-        list of dictionary with the COSMO fields and metadata
+    icon_fields : list of dict
+        list of dictionary with the icon fields and metadata
 
     """
     # debugging
@@ -75,17 +75,17 @@ def cosmo2radar_data(radar, cosmo_coord, cosmo_data, time_index=0,
 
     x_radar, y_radar, z_radar = _put_radar_in_swiss_coord(radar)
 
-    (x_cosmo, y_cosmo, z_cosmo, ind_xmin, ind_ymin, ind_zmin, ind_xmax,
+    (x_icon, y_icon, z_icon, ind_xmin, ind_ymin, ind_zmin, ind_xmax,
      ind_ymax, ind_zmax) = _prepare_for_interpolation(
-         x_radar, y_radar, z_radar, cosmo_coord, slice_xy=slice_xy,
+         x_radar, y_radar, z_radar, icon_coord, slice_xy=slice_xy,
          slice_z=slice_z)
 
-    cosmo_fields = []
+    icon_fields = []
     for field in field_names:
-        if field not in cosmo_data:
-            warn('COSMO field ' + field + ' data not available')
+        if field not in icon_data:
+            warn('icon field ' + field + ' data not available')
         else:
-            values = cosmo_data[field]['data'][
+            values = icon_data[field]['data'][
                 time_index, ind_zmin:ind_zmax + 1, ind_ymin:ind_ymax + 1,
                 ind_xmin:ind_xmax + 1].flatten()
             # find interpolation function
@@ -94,7 +94,7 @@ def cosmo2radar_data(radar, cosmo_coord, cosmo_data, time_index=0,
                 'balanced_tree': False
             }
             interp_func = NearestNDInterpolator(
-                (z_cosmo, y_cosmo, x_cosmo), values,
+                (z_icon, y_icon, x_icon), values,
                 tree_options=tree_options)
 
             del values
@@ -105,42 +105,42 @@ def cosmo2radar_data(radar, cosmo_coord, cosmo_data, time_index=0,
             # put field
             field_dict = get_metadata(field)
             field_dict['data'] = data_interp.astype(dtype)
-            cosmo_fields.append({field: field_dict})
+            icon_fields.append({field: field_dict})
 
             del data_interp
 
-    if not cosmo_fields:
-        warn('COSMO data not available')
+    if not icon_fields:
+        warn('icon data not available')
         return None
 
-    return cosmo_fields
+    return icon_fields
 
 
-def cosmo2radar_coord(radar, cosmo_coord, slice_xy=True, slice_z=False,
+def icon2radar_coord(radar, icon_coord, slice_xy=True, slice_z=False,
                       field_name=None):
     """
-    Given the radar coordinates find the nearest COSMO model pixel
+    Given the radar coordinates find the nearest icon model pixel
 
     Parameters
     ----------
     radar : Radar
         the radar object containing the information on the position of the
         radar gates
-    cosmo_coord : dict
-        dictionary containing the COSMO coordinates
+    icon_coord : dict
+        dictionary containing the icon coordinates
     slice_xy : boolean
-        if true the horizontal plane of the COSMO field is cut to the
+        if true the horizontal plane of the icon field is cut to the
         dimensions of the radar field
     slice_z : boolean
-        if true the vertical plane of the COSMO field is cut to the dimensions
+        if true the vertical plane of the icon field is cut to the dimensions
         of the radar field
     field_name : str
         name of the field
 
     Returns
     -------
-    cosmo_ind_field : dict
-        dictionary containing a field of COSMO indices and metadata
+    icon_ind_field : dict
+        dictionary containing a field of icon indices and metadata
 
     """
     # debugging
@@ -148,27 +148,27 @@ def cosmo2radar_coord(radar, cosmo_coord, slice_xy=True, slice_z=False,
 
     # parse the field parameters
     if field_name is None:
-        field_name = get_field_name('cosmo_index')
+        field_name = get_field_name('icon_index')
 
     x_radar, y_radar, z_radar = _put_radar_in_swiss_coord(radar)
 
-    (x_cosmo, y_cosmo, z_cosmo, ind_xmin, ind_ymin, ind_zmin, ind_xmax,
+    (x_icon, y_icon, z_icon, ind_xmin, ind_ymin, ind_zmin, ind_xmax,
      ind_ymax, _) = _prepare_for_interpolation(
-         x_radar, y_radar, z_radar, cosmo_coord, slice_xy=slice_xy,
+         x_radar, y_radar, z_radar, icon_coord, slice_xy=slice_xy,
          slice_z=slice_z)
 
     print('Generating tree')
     # default scipy compact_nodes and balanced_tree = True
     tree = cKDTree(
-        np.transpose((z_cosmo, y_cosmo, x_cosmo)), compact_nodes=False,
+        np.transpose((z_icon, y_icon, x_icon)), compact_nodes=False,
         balanced_tree=False)
     print('Tree generated')
     _, ind_vec = tree.query(np.transpose(
         (z_radar.flatten(), y_radar.flatten(), x_radar.flatten())), k=1)
 
-    # put the index in the original cosmo coordinates
-    nx_cosmo = len(cosmo_coord['x']['data'])
-    ny_cosmo = len(cosmo_coord['y']['data'])
+    # put the index in the original icon coordinates
+    nx_icon = len(icon_coord['x']['data'])
+    ny_icon = len(icon_coord['y']['data'])
 
     nx = ind_xmax - ind_xmin + 1
     ny = ind_ymax - ind_ymin + 1
@@ -176,72 +176,72 @@ def cosmo2radar_coord(radar, cosmo_coord, slice_xy=True, slice_z=False,
     ind_z = (ind_vec / (nx * ny)).astype(int) + ind_zmin
     ind_y = ((ind_vec - nx * ny * ind_z) / nx).astype(int) + ind_ymin
     ind_x = ((ind_vec - nx * ny * ind_z) % nx).astype(int) + ind_xmin
-    ind_cosmo = (
+    ind_icon = (
         ind_x +
-        nx_cosmo *
+        nx_icon *
         ind_y +
-        nx_cosmo *
-        ny_cosmo *
+        nx_icon *
+        ny_icon *
         ind_z).astype(int)
 
-    cosmo_ind_field = get_metadata(field_name)
-    cosmo_ind_field['data'] = ind_cosmo.reshape(radar.nrays, radar.ngates)
+    icon_ind_field = get_metadata(field_name)
+    icon_ind_field['data'] = ind_icon.reshape(radar.nrays, radar.ngates)
 
     # debugging
-    # print(" generating COSMO indices takes %s seconds " %
+    # print(" generating icon indices takes %s seconds " %
     #      (time.time() - start_time))
 
-    return cosmo_ind_field
+    return icon_ind_field
 
 
-def get_cosmo_fields(cosmo_data, cosmo_ind, time_index=0,
+def get_icon_fields(icon_data, icon_ind, time_index=0,
                      field_names=['temperature']):
     """
-    Get the COSMO data corresponding to each radar gate
+    Get the icon data corresponding to each radar gate
     using a precomputed look up table of the nearest neighbour
 
     Parameters
     ----------
-    cosmo_data : dict
-        dictionary containing the COSMO data and metadata
-    cosmo_ind : dict
-        dictionary containing a field of COSMO indices and metadata
+    icon_data : dict
+        dictionary containing the icon data and metadata
+    icon_ind : dict
+        dictionary containing a field of icon indices and metadata
     time_index : int
         index of the forecasted data
     field_names : str
-        names of COSMO parameters (default temperature)
+        names of icon parameters (default temperature)
 
     Returns
     -------
-    cosmo_fields : list of dict
-        dictionary with the COSMO fields and metadata
+    icon_fields : list of dict
+        dictionary with the icon fields and metadata
 
     """
-    nrays, ngates = np.shape(cosmo_ind['data'])
-    cosmo_fields = []
+    nrays, ngates = np.shape(icon_ind['data'])
+    icon_fields = []
     for field in field_names:
-        if field not in cosmo_data:
-            warn('COSMO field ' + field + ' data not available')
+        if field not in icon_data:
+            warn('icon field ' + field + ' data not available')
         else:
-            values = cosmo_data[field]['data'][time_index, :, :, :].flatten()
+            values = icon_data[field]['data'][time_index, :, :, :].flatten()
 
             # put field
             field_dict = get_metadata(field)
-            field_dict['data'] = values[cosmo_ind['data'].flatten()].reshape(
+            field_dict['data'] = values[icon_ind['data'].flatten()].reshape(
                 nrays, ngates).astype(float)
-            cosmo_fields.append({field: field_dict})
+            icon_fields.append({field: field_dict})
 
-    if not cosmo_fields:
-        warn('COSMO data not available')
+    if not icon_fields:
+        warn('icon data not available')
         return None
 
-    return cosmo_fields
+    return icon_fields
 
 
 # @profile
-def read_cosmo_data(fname, field_names=['temperature'], celsius=True):
+def read_icon_data(fname, field_names=['temperature'], celsius=True):
     """
-    Reads COSMO data from a netcdf file
+    Reads icon data from a netcdf file
 
     Parameters
     ----------
@@ -255,7 +255,7 @@ def read_cosmo_data(fname, field_names=['temperature'], celsius=True):
 
     Returns
     -------
-    cosmo_data : dictionary
+    icon_data : dictionary
         dictionary with the data and metadata
 
     """
@@ -267,16 +267,16 @@ def read_cosmo_data(fname, field_names=['temperature'], celsius=True):
     metadata = dict([(k, getattr(ncobj, k)) for k in ncobj.ncattrs()])
 
     # read data for requested fields
-    cosmo_data = dict()
+    icon_data = dict()
     found = False
     for field in field_names:
-        cosmo_name = get_fieldname_cosmo(field)
-        if cosmo_name not in ncvars:
-            warn(field + ' data not present in COSMO file ' + fname)
+        icon_name = get_fieldname_icon(field)
+        if icon_name not in ncvars:
+            warn(field + ' data not present in icon file ' + fname)
         else:
-            var_data = _ncvar_to_dict(ncvars[cosmo_name], dtype='float16')
+            var_data = _ncvar_to_dict(ncvars[icon_name], dtype='float16')
 
-            # remove dimension ensemble member of cosmo-1e
+            # remove dimension ensemble member of icon-1e
             if var_data['data'].ndim == 5:
                 var_data['data'] = np.squeeze(var_data['data'], axis=1)
 
@@ -286,11 +286,11 @@ def read_cosmo_data(fname, field_names=['temperature'], celsius=True):
             if field == 'vertical_wind_shear':
                 var_data['data'] *= 1000.
                 var_data['units'] = 'meters_per_second_per_km'
-            cosmo_data.update({field: var_data})
+            icon_data.update({field: var_data})
             found = True
             del var_data
     if not found:
-        warn('No field available in COSMO file ' + fname)
+        warn('No field available in icon file ' + fname)
         ncobj.close()
         return None
 
@@ -306,7 +306,7 @@ def read_cosmo_data(fname, field_names=['temperature'], celsius=True):
     # close object
     ncobj.close()
 
-    cosmo_data.update({
+    icon_data.update({
         'metadata': metadata,
         'time': time_data,
         'x': x_1,
@@ -317,12 +317,12 @@ def read_cosmo_data(fname, field_names=['temperature'], celsius=True):
         'lat': lat_1
     })
 
-    return cosmo_data
+    return icon_data
 
 
-def read_cosmo_coord(fname, zmin=None):
+def read_icon_coord(fname, zmin=None):
     """
-    Reads COSMO coordinates from a netcdf file
+    Reads icon coordinates from a netcdf file
 
     Parameters
     ----------
@@ -331,7 +331,7 @@ def read_cosmo_coord(fname, zmin=None):
 
     Returns
     -------
-    cosmo_coord : dictionary
+    icon_coord : dictionary
         dictionary with the data and metadata
 
     """
@@ -361,7 +361,7 @@ def read_cosmo_coord(fname, zmin=None):
             z_1['data'] = z_1['data'][z_1['data'] >= zmin]
             z_bnds_1['data'] = z_bnds_1['data'][z_bnds_1['data'] >= zmin]
 
-        cosmo_coord = {
+        icon_coord = {
             'metadata': metadata,
             'x': x_1,
             'y': y_1,
@@ -374,7 +374,7 @@ def read_cosmo_coord(fname, zmin=None):
             'fr_land': fr_land,
         }
 
-        return cosmo_coord
+        return icon_coord
     except EnvironmentError:
         warn('Unable to read file ' + fname)
         return None
@@ -394,11 +394,11 @@ def _ncvar_to_dict(ncvar, dtype=np.float32):
     return d
 
 
-def _prepare_for_interpolation(x_radar, y_radar, z_radar, cosmo_coord,
+def _prepare_for_interpolation(x_radar, y_radar, z_radar, icon_coord,
                                slice_xy=True, slice_z=False):
     """
-    prepares the COSMO 3D volume for interpolation:
-        1. if set slices the cosmo data to the area (or volume)
+    prepares the icon 3D volume for interpolation:
+        1. if set slices the icon data to the area (or volume)
     covered by the radar
         2. creates the x, y, z grid for the interpolation
 
@@ -406,98 +406,98 @@ def _prepare_for_interpolation(x_radar, y_radar, z_radar, cosmo_coord,
     ----------
     x_radar, y_radar, z_radar : arrays
         The Swiss coordinates of the radar
-    cosmo_coord : dict
-        dictionary containing the COSMO coordinates
+    icon_coord : dict
+        dictionary containing the icon coordinates
     slice_xy : boolean
-        if true the horizontal plane of the COSMO field is cut to the
+        if true the horizontal plane of the icon field is cut to the
         dimensions of the radar field
     slice_z : boolean
-        if true the vertical plane of the COSMO field is cut to the dimensions
+        if true the vertical plane of the icon field is cut to the dimensions
         of the radar field
 
     Returns
     -------
-    x_cosmo, y_cosmo, z_cosmo : 1D arrays
-        arrays containing the flatten swiss coordinates of the COSMO data in
+    x_icon, y_icon, z_icon : 1D arrays
+        arrays containing the flatten swiss coordinates of the icon data in
         the area of interest
     ind_xmin, ind_ymin, ind_zmin, ind_xmax, ind_ymax, ind_zmax : ints
         the minimum and maximum indices of each dimension
 
     """
-    nx_cosmo = len(cosmo_coord['x']['data'])
-    ny_cosmo = len(cosmo_coord['y']['data'])
-    nz_cosmo = len(cosmo_coord['z']['data'])
+    nx_icon = len(icon_coord['x']['data'])
+    ny_icon = len(icon_coord['y']['data'])
+    nz_icon = len(icon_coord['z']['data'])
 
     if slice_xy:
-        # get the COSMO data within the radar range
+        # get the icon data within the radar range
         xmin = np.min(x_radar)
         xmax = np.max(x_radar)
         ymin = np.min(y_radar)
         ymax = np.max(y_radar)
 
-        ind_xmin = np.where(cosmo_coord['x']['data'] < xmin)[0]
+        ind_xmin = np.where(icon_coord['x']['data'] < xmin)[0]
         if ind_xmin.size == 0:
             ind_xmin = 0
         else:
             ind_xmin = ind_xmin[-1]
 
-        ind_xmax = np.where(cosmo_coord['x']['data'] > xmax)[0]
+        ind_xmax = np.where(icon_coord['x']['data'] > xmax)[0]
         if ind_xmax.size == 0:
-            ind_xmax = nx_cosmo - 1
+            ind_xmax = nx_icon - 1
         else:
             ind_xmax = ind_xmax[0]
 
-        ind_ymin = np.where(cosmo_coord['y']['data'] < ymin)[0]
+        ind_ymin = np.where(icon_coord['y']['data'] < ymin)[0]
         if ind_ymin.size == 0:
             ind_ymin = 0
         else:
             ind_ymin = ind_ymin[-1]
 
-        ind_ymax = np.where(cosmo_coord['y']['data'] > ymax)[0]
+        ind_ymax = np.where(icon_coord['y']['data'] > ymax)[0]
         if ind_ymax.size == 0:
-            ind_ymax = ny_cosmo - 1
+            ind_ymax = ny_icon - 1
         else:
             ind_ymax = ind_ymax[0]
     else:
         ind_xmin = 0
-        ind_xmax = nx_cosmo - 1
+        ind_xmax = nx_icon - 1
         ind_ymin = 0
-        ind_ymax = ny_cosmo - 1
+        ind_ymax = ny_icon - 1
 
     if slice_z:
         zmin = np.min(z_radar)
         zmax = np.max(z_radar)
 
-        ind_z, _, _ = np.where(cosmo_coord['hfl']['data'] < zmin)
+        ind_z, _, _ = np.where(icon_coord['hfl']['data'] < zmin)
         if ind_z.size == 0:
             ind_zmin = 0
         else:
             ind_zmin = np.min(ind_z)
-        ind_z, _, _ = np.where(cosmo_coord['hfl']['data'] > zmax)
+        ind_z, _, _ = np.where(icon_coord['hfl']['data'] > zmax)
         if ind_z.size == 0:
-            ind_zmax = nz_cosmo - 1
+            ind_zmax = nz_icon - 1
         else:
             ind_zmax = np.max(ind_z)
     else:
         ind_zmin = 0
-        ind_zmax = nz_cosmo - 1
+        ind_zmax = nz_icon - 1
 
     nx = ind_xmax - ind_xmin + 1
     ny = ind_ymax - ind_ymin + 1
     nz = ind_zmax - ind_zmin + 1
 
-    x_cosmo = cosmo_coord['x']['data'][ind_xmin:ind_xmax + 1]
-    y_cosmo = cosmo_coord['y']['data'][ind_ymin:ind_ymax + 1]
-    z_cosmo = cosmo_coord['hfl']['data'][
+    x_icon = icon_coord['x']['data'][ind_xmin:ind_xmax + 1]
+    y_icon = icon_coord['y']['data'][ind_ymin:ind_ymax + 1]
+    z_icon = icon_coord['hfl']['data'][
         ind_zmin:ind_zmax + 1, ind_ymin:ind_ymax + 1, ind_xmin:ind_xmax + 1]
 
-    x_cosmo = (
-        np.broadcast_to(x_cosmo.reshape(1, 1, nx), (nz, ny, nx))).flatten()
-    y_cosmo = (
-        np.broadcast_to(y_cosmo.reshape(1, ny, 1), (nz, ny, nx))).flatten()
-    z_cosmo = z_cosmo.flatten()
+    x_icon = (
+        np.broadcast_to(x_icon.reshape(1, 1, nx), (nz, ny, nx))).flatten()
+    y_icon = (
+        np.broadcast_to(y_icon.reshape(1, ny, 1), (nz, ny, nx))).flatten()
+    z_icon = z_icon.flatten()
 
-    return (x_cosmo, y_cosmo, z_cosmo, ind_xmin, ind_ymin,
+    return (x_icon, y_icon, z_icon, ind_xmin, ind_ymin,
             ind_zmin, ind_xmax, ind_ymax, ind_zmax)
 
 

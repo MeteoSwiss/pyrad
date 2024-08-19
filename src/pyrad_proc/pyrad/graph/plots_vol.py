@@ -1257,8 +1257,8 @@ def plot_cappi(radar, field_name, altitude, prdcfg, fname_list,
     if radar.ray_angle_res is not None:
         beam_spacing = radar.ray_angle_res['data'][0]
 
-    lat = float(radar.latitude['data'])
-    lon = float(radar.longitude['data'])
+    lat = float(radar.latitude['data'][0])
+    lon = float(radar.longitude['data'][0])
     alt = 0.
 
     # cartesian mapping

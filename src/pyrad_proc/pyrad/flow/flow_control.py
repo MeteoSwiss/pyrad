@@ -154,7 +154,6 @@ def main(cfgfile, starttime=None, endtime=None, trajfile="", trajtype='plane',
     for i in range(1, cfg['NumRadars'] + 1):
         datatypesdescr_list.append(
             _get_datatype_list(cfg, radarnr='RADAR' + '{:03d}'.format(i)))
-
     dataset_levels = _get_datasets_list(cfg)
 
     masterfilelist, masterdatatypedescr, masterscan = _get_masterfile_list(

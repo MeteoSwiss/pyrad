@@ -34,7 +34,7 @@ except ImportError:
 
 import pyart
 from pyart.config import get_metadata
-from ..io.read_data_cosmo import _put_radar_in_swiss_coord
+from .read_data_icon import _put_radar_in_swiss_coord
 
 # from memory_profiler import profile
 
@@ -250,10 +250,13 @@ def read_geotiff_data(fname, fill_value=None):
         raster = gdal.Open(fname)
 
         prj = raster.GetProjection()
-        srs = osr.SpatialReference(wkt=prj)
-        projparams = _proj4_str_to_dict(srs.ExportToProj4())
-        if not len(projparams):  # gdal could not read proj
+        try:
+            srs = osr.SpatialReference(wkt=prj)
+            projparams = _proj4_str_to_dict(srs.ExportToProj4())
+        except RuntimeError:
             projparams = None
+            pass
+
         width = raster.RasterXSize
         height = raster.RasterYSize
         gt = raster.GetGeoTransform()

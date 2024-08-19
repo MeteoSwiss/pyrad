@@ -25,8 +25,8 @@ Functions for reading radar data files
     merge_scans_skyecho
     merge_scans_cf1
     merge_scans_mxpol
-    merge_scans_cosmo
-    merge_scans_cosmo_rad4alp
+    merge_scans_icon
+    merge_scans_icon_rad4alp
     merge_scans_dem_rad4alp
     merge_scans_other_rad4alp
     merge_scans_iq_rad4alp
@@ -37,11 +37,11 @@ Functions for reading radar data files
     merge_fields_sat_grid
     merge_fields_mf_grid
     merge_fields_pyrad
-    merge_fields_pyradcosmo
+    merge_fields_pyradicon
     merge_fields_pyradgrid
     merge_fields_pyrad_spectra
     merge_fields_dem
-    merge_fields_cosmo
+    merge_fields_icon
     get_data_rainbow
     get_data_rad4alp
     get_data_odim
@@ -82,14 +82,14 @@ except BaseException:
     # bare exception needed to capture error
     _METRANETLIB_AVAILABLE = False
 
-from .read_data_other import read_status, read_rad4alp_cosmo, read_rad4alp_vis
+from .read_data_other import read_status, read_rad4alp_icon, read_rad4alp_vis
 from .read_data_mxpol import pyrad_MXPOL, pyrad_MCH
 
 from .io_aux import get_datatype_metranet, get_fieldname_pyart, get_file_list
 from .io_aux import get_datatype_odim, get_datatype_knmi, find_date_in_file_name
 from .io_aux import get_datatype_fields, get_datetime, map_hydro, map_Doppler
-from .io_aux import find_cosmo_file, find_rad4alpcosmo_file
-from .io_aux import find_pyradcosmo_file, get_datatype_skyecho
+from .io_aux import find_icon_file, find_rad4alpicon_file
+from .io_aux import find_pyradicon_file, get_datatype_skyecho
 from .io_aux import get_rad4alp_prod_fname, get_rad4alp_grid_dir
 from .io_aux import get_rad4alp_dir
 
@@ -276,10 +276,10 @@ def get_data(voltime, datatypesdescr, cfg):
     datatype_odimpyrad = list()
     dataset_odimpyrad = list()
     product_odimpyrad = list()
-    datatype_cosmo = list()
-    datatype_rad4alpcosmo = list()
-    datatype_cfradialcosmo = list()
-    dataset_cfradialcosmo = list()
+    datatype_icon = list()
+    datatype_rad4alpicon = list()
+    datatype_cfradialicon = list()
+    dataset_cfradialicon = list()
     datatype_dem = list()
     datatype_rad4alpdem = list()
     datatype_rad4alphydro = list()
@@ -363,12 +363,12 @@ def get_data(voltime, datatypesdescr, cfg):
             dataset_odimpyrad.append(dataset)
             product_odimpyrad.append(product)
         elif datagroup == 'COSMO':
-            datatype_cosmo.append(datatype)
+            datatype_icon.append(datatype)
         elif datagroup == 'RAD4ALPCOSMO':
-            datatype_rad4alpcosmo.append(datatype)
+            datatype_rad4alpicon.append(datatype)
         elif datagroup == 'CFRADIALCOSMO':
-            datatype_cfradialcosmo.append(datatype)
-            dataset_cfradialcosmo.append(dataset)
+            datatype_cfradialicon.append(datatype)
+            dataset_cfradialicon.append(dataset)
         elif datagroup == 'DEM':
             datatype_dem.append(datatype)
         elif datagroup == 'RAD4ALPDEM':
@@ -442,9 +442,9 @@ def get_data(voltime, datatypesdescr, cfg):
     ndatatypes_cfradial2 = len(datatype_cfradial2)
     ndatatypes_cf1 = len(datatype_cf1)
     ndatatypes_odimpyrad = len(datatype_odimpyrad)
-    ndatatypes_cosmo = len(datatype_cosmo)
-    ndatatypes_rad4alpcosmo = len(datatype_rad4alpcosmo)
-    ndatatypes_cfradialcosmo = len(datatype_cfradialcosmo)
+    ndatatypes_icon = len(datatype_icon)
+    ndatatypes_rad4alpicon = len(datatype_rad4alpicon)
+    ndatatypes_cfradialicon = len(datatype_cfradialicon)
     ndatatypes_dem = len(datatype_dem)
     ndatatypes_rad4alpdem = len(datatype_rad4alpdem)
     ndatatypes_rad4alphydro = len(datatype_rad4alphydro)
@@ -619,6 +619,9 @@ def get_data(voltime, datatypesdescr, cfg):
             ind_rad=ind_rad)
 
     elif ndatatypes_mfcfradial > 0:
+        warn('MFCFRADIAL type is kept for legacy purposes but is not needed anymore')
+        warn('Please use CFRADIAL type for all CFRadial files,')
+        warn('with path_convention ODIM and DataTypeIDInFiles matching your data')
         radar = merge_scans_mfcfradial(
             cfg['datapath'][ind_rad], cfg['ScanList'][ind_rad], voltime,
             datatype_mfcfradial, dataset_mfcfradial, cfg, ind_rad=ind_rad)
@@ -648,10 +651,10 @@ def get_data(voltime, datatypesdescr, cfg):
             azi_min=azmin, azi_max=azmax)
         radar = add_field(radar, radar_aux)
 
-    if ndatatypes_cfradialcosmo > 0:
-        radar_aux = merge_fields_pyradcosmo(
-            cfg['cosmopath'][ind_rad], voltime,
-            datatype_cfradialcosmo, dataset_cfradialcosmo, cfg,
+    if ndatatypes_cfradialicon > 0:
+        radar_aux = merge_fields_pyradicon(
+            cfg['iconpath'][ind_rad], voltime,
+            datatype_cfradialicon, dataset_cfradialicon, cfg,
             rng_min=rmin, rng_max=rmax, ele_min=elmin, ele_max=elmax,
             azi_min=azmin, azi_max=azmax, termination='.nc')
         radar = add_field(radar, radar_aux)
@@ -793,12 +796,12 @@ def get_data(voltime, datatypesdescr, cfg):
                 radar = radar_aux
 
     # add COSMO files to the radar field
-    if ndatatypes_cosmo > 0 and _WRADLIB_AVAILABLE:
-        radar_aux = merge_scans_cosmo(
-            voltime, datatype_cosmo, cfg, ind_rad=ind_rad)
+    if ndatatypes_icon > 0 and _WRADLIB_AVAILABLE:
+        radar_aux = merge_scans_icon(
+            voltime, datatype_icon, cfg, ind_rad=ind_rad)
         radar = add_field(radar, radar_aux)
 
-    elif ndatatypes_rad4alpcosmo > 0:
+    elif ndatatypes_rad4alpicon > 0:
         if ((cfg['RadarRes'][ind_rad] is None) or
                 (cfg['RadarName'][ind_rad] is None)):
             raise ValueError(
@@ -806,9 +809,9 @@ def get_data(voltime, datatypesdescr, cfg):
                 'not specified in config file. ' +
                 'Unable to load rad4alp COSMO data')
 
-        for dt_rad4alpcosmo in datatype_rad4alpcosmo:
-            radar_aux = merge_scans_cosmo_rad4alp(
-                voltime, dt_rad4alpcosmo, cfg, ind_rad=ind_rad)
+        for dt_rad4alpicon in datatype_rad4alpicon:
+            radar_aux = merge_scans_icon_rad4alp(
+                voltime, dt_rad4alpicon, cfg, ind_rad=ind_rad)
             if radar is None:
                 radar = radar_aux
                 continue
@@ -1699,7 +1702,7 @@ def merge_scans_odim(basepath, scan_list, radar_name, radar_res, voltime,
     if not flist:
         return radar
 
-    if cfg['DataTypeID'] is None:
+    if cfg['DataTypeIDInFilenames'] is None:
         for fname, scan in zip(flist, scan_list_aux):
             radar_aux = get_data_odim(
                 fname, datatype_list, scan, cfg, ind_rad=ind_rad)
@@ -1711,13 +1714,13 @@ def merge_scans_odim(basepath, scan_list, radar_name, radar_res, voltime,
             radar = pyart.util.radar_utils.join_radar(radar, radar_aux)
     else:
         for datatype in datatype_list:
-            if datatype not in cfg['DataTypeID'].keys():
+            if datatype not in cfg['DataTypeIDInFilenames'].keys():
                 warn(f'No file contains data type {datatype}')
                 continue
             nscans = 0
             radar_aux = None
             for fname, scan in zip(flist, scan_list_aux):
-                if cfg['DataTypeID'][datatype] not in os.path.basename(fname):
+                if cfg['DataTypeIDInFilenames'][datatype] not in os.path.basename(fname):
                     continue
                 radar_aux2 = get_data_odim(
                     fname, [datatype], scan, cfg, ind_rad=ind_rad)
@@ -1832,7 +1835,7 @@ def merge_scans_odimgrid(basepath, scan_list, voltime, datatype_list,
             continue
 
         grid_aux = get_data_odimgrid(
-            filename[0], datatype_list, mf_scale=cfg['MFScale'])
+            filename[0], datatype_list, cfg, mf_scale=cfg['MFScale'])
 
         if grid_aux is None:
             continue
@@ -2228,7 +2231,7 @@ def merge_scans_gamic(basepath, scan_list, radar_name, radar_res, voltime,
 def merge_scans_mfcfradial(basepath, scan_list, voltime, datatype_list,
                            dataset_list, cfg, ind_rad=0):
     """
-    merge CF radial data from Meteo France
+    merge CF radial data where one moment is stored per file (mf-moment files)
 
     Parameters
     ----------
@@ -2254,7 +2257,7 @@ def merge_scans_mfcfradial(basepath, scan_list, voltime, datatype_list,
 
     """
     # Mapping of MeteoFrance and JMA field names to Py-ART field names
-    field_names = {
+    default_field_names = {
         'DBZH': 'reflectivity',  # JMA
         'TH': 'unfiltered_reflectivity',  # MF
         'ZDR': 'differential_reflectivity',  # MF & JMA
@@ -2267,7 +2270,16 @@ def merge_scans_mfcfradial(basepath, scan_list, voltime, datatype_list,
         'WIDTH': 'spectrum_width',  # JMA
         'SIGMA': 'sigma_zh'  # MF
     }
-
+    
+    field_names = {}
+    if cfg['DataTypeIDInFiles']:
+        # Use custom name mapping
+        for datatype in datatype_list:
+            if datatype in cfg['DataTypeIDInFiles']:  
+                field_names[cfg['DataTypeIDInFiles'][datatype]] = get_fieldname_pyart(datatype)
+    else:		
+        field_names = default_field_names
+            
     radar = None
 
     # get list of files to combine
@@ -2330,8 +2342,8 @@ def merge_scans_mfcfradial(basepath, scan_list, voltime, datatype_list,
 
     if not flist:
         return radar
-
-    if cfg['DataTypeID'] is None:
+    
+    if cfg['DataTypeIDInFilenames'] is None:
         for fname, scan in zip(flist, scan_list_aux):
             radar_aux = pyart.io.read_cfradial(fname, field_names=field_names)
             if radar_aux is None:
@@ -2342,13 +2354,13 @@ def merge_scans_mfcfradial(basepath, scan_list, voltime, datatype_list,
             radar = pyart.util.radar_utils.join_radar(radar, radar_aux)
     else:
         for datatype in datatype_list:
-            if datatype not in cfg['DataTypeID'].keys():
+            if datatype not in cfg['DataTypeIDInFilenames'].keys():
                 warn(f'No file contains data type {datatype}')
                 continue
             nscans = 0
             radar_aux = None
             for fname, scan in zip(flist, scan_list_aux):
-                if cfg['DataTypeID'][datatype] not in os.path.basename(fname):
+                if cfg['DataTypeIDInFilenames'][datatype] not in os.path.basename(fname):
                     continue
                 radar_aux2 = pyart.io.read_cfradial(
                     fname, field_names=field_names)
@@ -2558,8 +2570,14 @@ def merge_scans_cfradial(basepath, scan_list, radar_name, radar_res, voltime,
 
     """
     field_names = {}
-    for datatype in datatype_list:
-        field_names[datatype] = get_fieldname_pyart(datatype)
+    if cfg['DataTypeIDInFiles']:
+        # Use custom name mapping
+        for datatype in datatype_list:
+            if datatype in cfg['DataTypeIDInFiles']:  
+                field_names[cfg['DataTypeIDInFiles'][datatype]] = get_fieldname_pyart(datatype)
+    else:		
+        for datatype in datatype_list:
+            field_names[datatype] = get_fieldname_pyart(datatype)
 
     radar = None
     dayinfo = voltime.strftime('%y%j')
@@ -2609,8 +2627,8 @@ def merge_scans_cfradial(basepath, scan_list, radar_name, radar_res, voltime,
     if not filename:
         warn('No file found in ' + datapath[0] + basename + timeinfo + '*.*')
     else:
-        radar = pyart.io.read_cfradial(filename[0], field_names=None)
-
+        radar = pyart.io.read_cfradial(filename[0], field_names=field_names,
+                                       include_fields = field_names.values())
     rmin = None
     rmax = None
     elmin = None
@@ -2667,23 +2685,23 @@ def merge_scans_cfradial(basepath, scan_list, radar_name, radar_res, voltime,
                 scan)
         else:
             radar_aux = pyart.io.read_cfradial(
-                filename[0], field_names=field_names)
+                filename[0], field_names=field_names, include_fields=field_names.values())
+
             if radar_aux is None:
                 continue
 
             if radar is None:
                 radar = radar_aux
             else:
-                radar = pyart.util.radar_utils.join_radar(radar, radar_aux)
+                radar = merge_radars(radar, radar_aux)
 
     if radar is None:
         return radar
-
     return pyart.util.subset_radar(
         radar, radar.fields.keys(), rng_min=rmin, rng_max=rmax,
         ele_min=elmin, ele_max=elmax, azi_min=azmin, azi_max=azmax)
 
-
+    
 def merge_scans_cfradial2(basepath, scan_list, radar_name, radar_res, voltime,
                           datatype_list, dataset_list, cfg, ind_rad=0):
     """
@@ -2717,8 +2735,14 @@ def merge_scans_cfradial2(basepath, scan_list, radar_name, radar_res, voltime,
 
     """
     field_names = {}
-    for datatype in datatype_list:
-        field_names[datatype] = (get_fieldname_pyart(datatype))
+    if cfg['DataTypeIDInFiles']:
+        # Use custom name mapping
+        for datatype in datatype_list:
+            if datatype in cfg['DataTypeIDInFiles']:  
+                field_names[cfg['DataTypeIDInFiles'][datatype]] = get_fieldname_pyart(datatype)
+    else:		
+        for datatype in datatype_list:
+            field_names[datatype] = get_fieldname_pyart(datatype)
 
     radar = None
     dayinfo = voltime.strftime('%y%j')
@@ -2995,6 +3019,7 @@ def merge_scans_cf1(basepath, scan_list, radar_name, radar_res, voltime,
         radar object
 
     """
+    
     field_names = []
     for datatype in datatype_list:
         field_names.append(get_fieldname_pyart(datatype))
@@ -3217,7 +3242,7 @@ def merge_scans_mxpol(basepath, scan_list, voltime, datatype_list, cfg,
         ele_max=elmax, azi_min=azmin, azi_max=azmax)
 
 
-def merge_scans_cosmo(voltime, datatype_list, cfg, ind_rad=0):
+def merge_scans_icon(voltime, datatype_list, cfg, ind_rad=0):
     """
     merge rainbow scans
 
@@ -3242,14 +3267,14 @@ def merge_scans_cosmo(voltime, datatype_list, cfg, ind_rad=0):
     for scan in cfg['ScanList'][ind_rad]:
         filename_list = list()
         for datatype in datatype_list:
-            filename = find_cosmo_file(
+            filename = find_icon_file(
                 voltime, datatype, cfg, scan, ind_rad=ind_rad)
             if filename is not None:
                 filename_list.append(filename)
 
         nfiles_valid = len(filename_list)
         if nfiles_valid > 0:
-            radar_aux = merge_fields_cosmo(filename_list)
+            radar_aux = merge_fields_icon(filename_list)
 
             if radar is None:
                 radar = radar_aux
@@ -3284,9 +3309,9 @@ def merge_scans_cosmo(voltime, datatype_list, cfg, ind_rad=0):
         ele_max=elmax, azi_min=azmin, azi_max=azmax)
 
 
-def merge_scans_cosmo_rad4alp(voltime, datatype, cfg, ind_rad=0):
+def merge_scans_icon_rad4alp(voltime, datatype, cfg, ind_rad=0):
     """
-    merge cosmo rad4alp scans. If data for all the scans cannot be retrieved
+    merge icon rad4alp scans. If data for all the scans cannot be retrieved
     returns None
 
     Parameters
@@ -3306,7 +3331,7 @@ def merge_scans_cosmo_rad4alp(voltime, datatype, cfg, ind_rad=0):
         radar object
 
     """
-    # look for rad4alp COSMO data. Data must be present in all scans
+    # look for rad4alp ICON data. Data must be present in all scans
     # to consider the volume valid
     radar = None
     for scan in cfg['ScanList'][ind_rad]:
@@ -3328,12 +3353,12 @@ def merge_scans_cosmo_rad4alp(voltime, datatype, cfg, ind_rad=0):
         if radar_aux is None:
             return None
 
-        # read the cosmo file
-        filename = find_rad4alpcosmo_file(voltime, datatype, cfg, scan)
+        # read the icon file
+        filename = find_rad4alpicon_file(voltime, datatype, cfg, scan)
         if filename is None:
             return None
-        cosmo_dict = read_rad4alp_cosmo(filename, datatype)
-        radar_aux.add_field(get_fieldname_pyart(datatype), cosmo_dict)
+        icon_dict = read_rad4alp_icon(filename, datatype)
+        radar_aux.add_field(get_fieldname_pyart(datatype), icon_dict)
 
         if radar is None:
             radar = radar_aux
@@ -4477,7 +4502,7 @@ def merge_fields_gecsx(basepath, loadname, datatype_list,
         ele_min=ele_min, ele_max=ele_max, azi_min=azi_min, azi_max=azi_max)
 
 
-def merge_fields_pyradcosmo(basepath, voltime, datatype_list, dataset_list,
+def merge_fields_pyradicon(basepath, voltime, datatype_list, dataset_list,
                             cfg, rng_min=None, rng_max=None, azi_min=None,
                             azi_max=None, ele_min=None, ele_max=None,
                             termination='.nc'):
@@ -4517,7 +4542,7 @@ def merge_fields_pyradcosmo(basepath, voltime, datatype_list, dataset_list,
 
     radar = None
     for i, (datatype, dataset) in enumerate(zip(datatype_list, dataset_list)):
-        filename = find_pyradcosmo_file(
+        filename = find_pyradicon_file(
             basepath, voltime, datatype, cfg, dataset)
         if filename is None:
             continue
@@ -4770,7 +4795,7 @@ def merge_fields_dem(basepath, scan_name, datatype_list):
     return radar
 
 
-def merge_fields_cosmo(filename_list):
+def merge_fields_icon(filename_list):
     """
     merge COSMO fields in Rainbow file format
 
@@ -5006,10 +5031,15 @@ def get_data_odim(filename, datatype_list, scan_name, cfg, ind_rad=0):
         radar object. None if the reading has not been successful
 
     """
+    
     odim_field_names = dict()
+    # Use custom name mapping
     for datatype in datatype_list:
-        if datatype not in ('Nh', 'Nv'):
+        if datatype in cfg['DataTypeIDInFiles']:  
+            odim_field_names[cfg['DataTypeIDInFiles'][datatype]] = get_fieldname_pyart(datatype)
+        else:
             odim_field_names.update(get_datatype_odim(datatype))
+
     try:
         if cfg['MFScale']:
             # assumes only a data type per file
@@ -5058,7 +5088,8 @@ def get_data_odim(filename, datatype_list, scan_name, cfg, ind_rad=0):
             radar = pyart.aux_io.read_odim_h5(
                 filename, field_names=odim_field_names, offset=offset,
                 gain=gain, nodata=nodata, undetect=undetect,
-                use_file_conversion=use_file_conversion)
+                use_file_conversion=use_file_conversion, 
+                include_fields = odim_field_names.values())
 
             if datatype_list[0] == 'PhiDP':
                 radar.fields['differential_phase']['data'][
@@ -5150,7 +5181,7 @@ def get_data_odim(filename, datatype_list, scan_name, cfg, ind_rad=0):
     return radar
 
 
-def get_data_odimgrid(filename, datatype_list, mf_scale=False):
+def get_data_odimgrid(filename, datatype_list, cfg, mf_scale=False):
     """
     gets ODIM grid data
 
@@ -5160,6 +5191,8 @@ def get_data_odimgrid(filename, datatype_list, mf_scale=False):
         name of file containing odim data
     datatype_list : list of strings
         list of data fields to get
+    cfg : dict
+        configuration dictionary
     mf_scale : bool
         Whether to impose a MF scale
 
@@ -5172,7 +5205,11 @@ def get_data_odimgrid(filename, datatype_list, mf_scale=False):
     grid = None
     if mf_scale:
         for datatype in datatype_list:
-            odim_field_name = get_datatype_odim(datatype)
+            if datatype in cfg['DataTypeIDInFiles']:  
+                odim_field_name = {cfg['DataTypeIDInFiles'][datatype]:
+                    get_fieldname_pyart(datatype)}
+            else:
+                odim_field_name = get_datatype_odim(datatype)
             field_name = get_fieldname_pyart(datatype)
 
             offset = 0.
@@ -5197,7 +5234,8 @@ def get_data_odimgrid(filename, datatype_list, mf_scale=False):
                     grid = pyart.aux_io.read_odim_grid_h5(
                         filename, field_names=odim_field_name, offset=offset,
                         gain=gain, nodata=nodata, undetect=undetect,
-                        use_file_conversion=use_file_conversion)
+                        use_file_conversion=use_file_conversion, 
+                        include_fields=odim_field_name.keys())
                 except (ValueError, OSError) as ee:
                     warn(
                         "Unable to read file '" +
@@ -5209,7 +5247,8 @@ def get_data_odimgrid(filename, datatype_list, mf_scale=False):
                     grid_aux = pyart.aux_io.read_odim_grid_h5(
                         filename, field_names=odim_field_name, offset=offset,
                         gain=gain, nodata=nodata, undetect=undetect,
-                        use_file_conversion=use_file_conversion)
+                        use_file_conversion=use_file_conversion,
+                        include_fields=odim_field_name.keys())
                     if grid_aux is not None:
                         grid.add_field(field_name, grid_aux.fields[field_name])
                 except (ValueError, OSError) as ee:
@@ -5221,11 +5260,15 @@ def get_data_odimgrid(filename, datatype_list, mf_scale=False):
     else:
         odim_field_names = dict()
         for datatype in datatype_list:
-            odim_field_names.update(get_datatype_odim(datatype))
-
+            if datatype in cfg['DataTypeIDInFiles']:  
+                odim_field_name = {cfg['DataTypeIDInFiles'][datatype]:
+                    get_fieldname_pyart(datatype)}
+            else:
+                odim_field_name = get_datatype_odim(datatype)
         try:
             grid = pyart.aux_io.read_odim_grid_h5(
-                filename, field_names=odim_field_names)
+                filename, field_names=odim_field_names, 
+                include_fields=odim_field_name.keys())
         except (ValueError, OSError) as ee:
             warn("Unable to read file '" + filename + ": (%s)" % str(ee))
 
@@ -5583,6 +5626,58 @@ def crop_grid(grid, lat_min=None, lat_max=None, lon_min=None, lon_max=None,
 
     return grid_crop
 
+def merge_radars(radar1, radar2):
+    """
+    Versatile function that merges two radar objects even
+    if they do not have the same fields
+    
+    Parameters
+    ----------
+    radar1, radar2 : grid object
+        the radar objects to merge
+
+    Returns
+    -------
+    radar : radar object
+        The merged radar
+
+    """
+    
+    if set(radar1.fields.keys()) == set(radar2.fields.keys()):
+        # Same fields
+        radar = pyart.util.join_radar(radar1, radar2)
+    elif any([f in radar1.fields.keys() for f in radar2.fields.keys()]):
+        # At least one field of radar_aux already in radar
+        # create object with common fields
+        common_keys = [value for value in radar1.fields.keys() 
+                        if value in radar2.fields.keys()]
+        
+        radar1_aux = deepcopy(radar1)
+        radar1_aux.fields = {}
+        radar2_aux = deepcopy(radar2)
+        radar2_aux.fields = {}
+        
+        for k in common_keys:
+            radar1_aux.fields[k] = radar1.fields[k]
+            radar2_aux.fields[k] = radar2.fields[k]
+        
+        radar_aux = pyart.util.join_radar(radar1_aux, radar2_aux)
+        for key in radar1.fields:
+            if key not in common_keys:
+                radar1_aux = deepcopy(radar1)
+                radar1_aux.fields = {key: radar1.fields[key]}
+                radar_aux = add_field(radar_aux, radar1_aux)
+        for key in radar2.fields:
+            if key not in common_keys:
+                radar2_aux = deepcopy(radar2)
+                radar2_aux.fields = radar2.fields[key]
+                radar_aux = add_field(radar_aux, radar2_aux)
+        radar = radar_aux
+    else:
+        radar = add_field(radar1, radar2)
+        
+    return radar
+                    
 
 def merge_grids(grid1, grid2):
     """

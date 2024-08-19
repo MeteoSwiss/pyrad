@@ -23,20 +23,20 @@ Reading radar data
 
     get_data
 
-Reading cosmo data
+Reading icon data
 ==================
 
 .. autosummary::
     :toctree: generated/
 
-    cosmo2radar_data
-    cosmo2radar_coord
+    icon2radar_data
+    icon2radar_coord
     hzt2radar_data
     hzt2radar_coord
-    get_cosmo_fields
+    get_icon_fields
     get_iso0_field
-    read_cosmo_data
-    read_cosmo_coord
+    read_icon_data
+    read_icon_coord
     read_hzt_data
     read_iso0_mf_data
     read_iso0_grib_data
@@ -65,7 +65,7 @@ Reading other data
     read_proc_periods
     read_last_state
     read_status
-    read_rad4alp_cosmo
+    read_rad4alp_icon
     read_rad4alp_vis
     read_excess_gates
     read_colocated_gates
@@ -174,7 +174,7 @@ Auxiliary functions
     make_filename
     generate_field_name_str
     get_fieldname_pyart
-    get_fieldname_cosmo
+    get_fieldname_icon
     get_field_unit
     get_file_list
     get_rad4alp_dir
@@ -184,7 +184,7 @@ Auxiliary functions
     get_datatype_fields
     get_dataset_fields
     get_datetime
-    find_raw_cosmo_file
+    find_raw_icon_file
     find_hzt_file
     find_iso0_file
     find_iso0_grib_file
@@ -213,9 +213,9 @@ from .config import read_config # noqa
 
 from .read_data_radar import get_data, add_field, interpol_field # noqa
 
-from .read_data_cosmo import read_cosmo_data, read_cosmo_coord # noqa
-from .read_data_cosmo import cosmo2radar_data, cosmo2radar_coord # noqa
-from .read_data_cosmo import get_cosmo_fields # noqa
+from .read_data_icon import read_icon_data, read_icon_coord # noqa
+from .read_data_icon import icon2radar_data, icon2radar_coord # noqa
+from .read_data_icon import get_icon_fields # noqa
 
 from .read_data_dem import read_idrisi_data, read_idrisi_metadata # noqa
 from .read_data_dem import dem2radar_data #noqa
@@ -226,7 +226,7 @@ from .read_data_hzt import get_iso0_field # noqa
 from .read_data_iso0_mf import read_iso0_mf_data, iso2radar_data, get_iso0_ref # noqa
 from .read_data_iso0_mf import read_iso0_grib_data, grib2radar_data # noqa
 
-from .read_data_other import read_status, read_rad4alp_cosmo, read_rad4alp_vis # noqa
+from .read_data_other import read_status, read_rad4alp_icon, read_rad4alp_vis # noqa
 from .read_data_other import read_timeseries, read_monitoring_ts, read_ts_cum # noqa
 from .read_data_other import read_intercomp_scores_ts, read_quantiles # noqa
 from .read_data_other import read_selfconsistency, read_colocated_gates # noqa
@@ -276,8 +276,8 @@ from .write_data import write_vol_kml, write_vol_csv # noqa
 from .io_aux import get_save_dir, make_filename, get_new_rainbow_file_name # noqa
 from .io_aux import get_datetime, get_dataset_fields, map_hydro, map_Doppler # noqa
 from .io_aux import get_file_list, get_trtfile_list, get_datatype_fields # noqa
-from .io_aux import get_fieldname_pyart, get_field_unit, get_fieldname_cosmo # noqa
-from .io_aux import generate_field_name_str, find_raw_cosmo_file # noqa
+from .io_aux import get_fieldname_pyart, get_field_unit, get_fieldname_icon # noqa
+from .io_aux import generate_field_name_str, find_raw_icon_file # noqa
 from .io_aux import find_hzt_file, _get_datetime, get_rad4alp_prod_fname # noqa
 from .io_aux import get_rad4alp_dir, get_rad4alp_grid_dir, find_iso0_file # noqa
 from .io_aux import find_iso0_grib_file, find_date_in_file_name # noqa

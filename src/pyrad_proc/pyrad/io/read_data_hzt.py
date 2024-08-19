@@ -34,7 +34,7 @@ except BaseException:
     # bare exception needed to capture error
     _METRANETLIB_AVAILABLE = False
 
-from ..io.read_data_cosmo import _put_radar_in_swiss_coord
+from ..io.read_data_icon import _put_radar_in_swiss_coord
 
 
 def hzt2radar_data(radar, hzt_coord, hzt_data, slice_xy=True,
@@ -53,7 +53,7 @@ def hzt2radar_data(radar, hzt_coord, hzt_data, slice_xy=True,
     hzt_data : dict
         dictionary containing the HZT data
     slice_xy : boolean
-        if true the horizontal plane of the COSMO field is cut to the
+        if true the horizontal plane of the icon field is cut to the
         dimensions of the radar field
     field_name : str
         name of HZT fields to convert (default height_over_iso0)
@@ -122,7 +122,7 @@ def hzt2radar_coord(radar, hzt_coord, slice_xy=True, field_name=None):
     _, ind_vec = tree.query(
         np.transpose((y_radar.flatten(), x_radar.flatten())), k=1)
 
-    # put the index in the original cosmo coordinates
+    # put the index in the original icon coordinates
     nx_hzt = len(hzt_coord['x']['data'])
 
     nx = ind_xmax - ind_xmin + 1
@@ -250,7 +250,7 @@ def read_hzt_data(fname, chy0=255., chx0=-160., read_lib='C'):
 def _prepare_for_interpolation(x_radar, y_radar, hzt_coord, slice_xy=True):
     """
     prepares the HZT 2D volume for interpolation:
-        1. if set slices the cosmo data to the area covered by the radar
+        1. if set slices the icon data to the area covered by the radar
         2. creates the x, y grid for the interpolation
 
     Parameters
@@ -276,7 +276,7 @@ def _prepare_for_interpolation(x_radar, y_radar, hzt_coord, slice_xy=True):
     ny_hzt = len(hzt_coord['y']['data'])
 
     if slice_xy:
-        # get the COSMO data within the radar range
+        # get the icon data within the radar range
         xmin = np.min(x_radar)
         xmax = np.max(x_radar)
         ymin = np.min(y_radar)

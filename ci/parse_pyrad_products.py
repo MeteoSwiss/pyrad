@@ -29,8 +29,8 @@ def parameters_to_dict(params):
 
 def dict_to_restructured_text(yaml_data):
     rst_output = []
-    rst_output.append('List of pyrad products')
-    rst_output.append('==============================\n')
+    rst_output.append('List of pyrad products separated by dataset type')
+    rst_output.append('=================================================\n')
 
     for datasettype, value in yaml_data.items():
         rst_output.append(f"{datasettype}")

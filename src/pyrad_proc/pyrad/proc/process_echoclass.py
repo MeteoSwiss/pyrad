@@ -107,7 +107,6 @@ def process_echo_id(procstatus, dscfg, radar_list=None):
         warn('No valid radar')
         return None, None
     radar = radar_list[ind_rad]
-
     if ((refl_field not in radar.fields) or
             (zdr_field not in radar.fields) or
             (rhv_field not in radar.fields) or

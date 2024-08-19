@@ -235,21 +235,21 @@ Trajectory functions
     process_traj_trt
     process_traj_trt_contour
 
-COSMO data
+icon data
 ==========
 
 .. autosummary::
     :toctree: generated/
 
-    process_cosmo
-    process_cosmo_lookup_table
-    process_cosmo_coord
+    process_icon
+    process_icon_lookup_table
+    process_icon_coord
     process_hzt
     process_hzt_lookup_table
     process_hzt_coord
     process_iso0_mf
     process_iso0_grib
-    process_cosmo_to_radar
+    process_icon_to_radar
 
 
 DEM data
@@ -364,10 +364,10 @@ from .process_Doppler import process_dealias_unwrap_phase  # noqa
 from .process_Doppler import process_vad, process_turbulence, process_dda  # noqa
 from .process_Doppler import process_windshear_lidar  # noqa
 
-from .process_cosmo import process_cosmo, process_cosmo_lookup_table  # noqa
-from .process_cosmo import process_cosmo_coord, process_hzt, process_iso0_mf  # noqa
-from .process_cosmo import process_hzt_lookup_table, process_hzt_coord  # noqa
-from .process_cosmo import process_cosmo_to_radar, process_iso0_grib  # noqa
+from .process_icon import process_icon, process_icon_lookup_table  # noqa
+from .process_icon import process_icon_coord, process_hzt, process_iso0_mf  # noqa
+from .process_icon import process_hzt_lookup_table, process_hzt_coord  # noqa
+from .process_icon import process_icon_to_radar, process_iso0_grib  # noqa
 
 from .process_dem import process_dem, process_visibility, process_gecsx  # noqa
 
