@@ -124,16 +124,10 @@ def process_icon(procstatus, dscfg, radar_list=None):
     if fname is None:
         return None, None
 
-    model = os.path.basename(fname)[0:7]
-    if model not in ('icon-1', 'icon-2', 'icon-7'):
+    model = os.path.basename(fname)[14:26]
+    if model not in ('icon-ch1-eps', 'icon-ch2-eps'):
         warn('Unknown NWP model ' + model)
         return None, None
-
-    # check if model is icon-1 or icon-1e
-    if model == 'icon-1':
-        model_aux = os.path.basename(fname)[0:8]
-        if model_aux == 'icon-1e':
-            model = model_aux
 
     if keep_in_memory:
         if dscfg['initialized'] == 0:
@@ -595,16 +589,10 @@ def process_icon_lookup_table(procstatus, dscfg, radar_list=None):
     if fname is None:
         return None, None
 
-    model = os.path.basename(fname)[0:7]
-    if model not in ('icon-1', 'icon-1e', 'icon-2', 'icon-7'):
+    model = os.path.basename(fname)[14:26]
+    if model not in ('icon-ch1-eps', 'icon-ch2-eps'):
         warn('Unknown NWP model ' + model)
         return None, None
-
-    # check if model is icon-1 or icon-1e
-    if model == 'icon-1':
-        model_aux = os.path.basename(fname)[0:8]
-        if model_aux == 'icon-1e':
-            model = model_aux
 
     if dscfg['initialized'] == 0:
         if lookup_table:
@@ -933,16 +921,10 @@ def process_icon_to_radar(procstatus, dscfg, radar_list=None):
     if fname is None:
         return None, None
 
-    model = os.path.basename(fname)[0:7]
-    if model not in ('icon-1', 'icon-1e', 'icon-2', 'icon-7'):
+    model = os.path.basename(fname)[14:26]
+    if model not in ('icon-ch1-eps', 'icon-ch2-eps'):
         warn('Unknown NWP model ' + model)
         return None, None
-
-    # check if model is icon-1 or icon-1e
-    if model == 'icon-1':
-        model_aux = os.path.basename(fname)[0:8]
-        if model_aux == 'icon-1e':
-            model = model_aux
 
     if dscfg['initialized'] == 0:
         savedir = dscfg['iconpath'][ind_rad] + 'rad2icon/'
@@ -1054,8 +1036,8 @@ def process_icon_coord(procstatus, dscfg, radar_list=None):
         return None, None
     radar = radar_list[ind_rad]
 
-    model = dscfg.get('model', 'icon-1e')
-    if model not in ('icon-1', 'icon-1e', 'icon-2', 'icon-7'):
+    model = dscfg.get('model', 'icon-ch1-eps')
+    if model not in ('icon-ch1-eps', 'icon-ch2-eps'):
         warn('Unknown NWP model ' + model)
         return None, None
 

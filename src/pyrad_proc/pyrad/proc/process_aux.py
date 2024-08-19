@@ -80,7 +80,7 @@ def get_process_func(dataset_type, dsname):
                 'CDR': process_cdr
                 'CLT_TO_SAN': process_clt_to_echo_id
                 'icon': process_icon
-                'icon_LOOKUP': process_icon_lookup_table
+                'ICON_LOOKUP': process_icon_lookup_table
                 'DEM': process_dem
                 'DEALIAS_FOURDD': process_dealias_fourdd
                 'DEALIAS_REGION': process_dealias_region_based
@@ -186,11 +186,11 @@ def get_process_func(dataset_type, dsname):
                 'CENTROIDS': process_centroids
             'COLOCATED_GATES' format output:
                 'COLOCATED_GATES': process_colocated_gates
-            'icon_COORD' format output:
-                'icon_COORD': process_icon_coord
+            'ICON_COORD' format output:
+                'ICON_COORD': process_icon_coord
                 'HZT_COORD': process_hzt_coord
-            'icon2RADAR' format output:
-                'icon2RADAR': process_icon_to_radar
+            'ICON2RADAR' format output:
+                'ICON2RADAR': process_icon_to_radar
             'GRID' format output:
                 'RAW_GRID': process_raw_grid
                 'GECSX' : process_gecsx
@@ -538,17 +538,17 @@ def get_process_func(dataset_type, dsname):
         func_name = 'process_selfconsistency_bias2'
     elif dataset_type == 'icon':
         func_name = 'process_icon'
-    elif dataset_type == 'icon_LOOKUP':
+    elif dataset_type == 'ICON_LOOKUP':
         func_name = 'process_icon_lookup_table'
-    elif dataset_type == 'icon_COORD':
+    elif dataset_type == 'ICON_COORD':
         func_name = 'process_icon_coord'
-        dsformat = 'icon_COORD'
+        dsformat = 'ICON_COORD'
     elif dataset_type == 'HZT_COORD':
         func_name = 'process_hzt_coord'
-        dsformat = 'icon_COORD'
-    elif dataset_type == 'icon2RADAR':
+        dsformat = 'ICON_COORD'
+    elif dataset_type == 'ICON2RADAR':
         func_name = 'process_icon_to_radar'
-        dsformat = 'icon2RADAR'
+        dsformat = 'ICON2RADAR'
     elif dataset_type == 'HZT':
         func_name = 'process_hzt'
     elif dataset_type == 'ISO0_MF':

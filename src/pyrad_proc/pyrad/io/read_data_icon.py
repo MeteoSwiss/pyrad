@@ -276,7 +276,7 @@ def read_icon_data(fname, field_names=['temperature'], celsius=True):
         else:
             var_data = _ncvar_to_dict(ncvars[icon_name], dtype='float16')
 
-            # remove dimension ensemble member of icon-1e
+            # remove dimension ensemble member of icon-ch1-eps
             if var_data['data'].ndim == 5:
                 var_data['data'] = np.squeeze(var_data['data'], axis=1)
 

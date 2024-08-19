@@ -3326,69 +3326,27 @@ def find_raw_icon_file(voltime, datatype, cfg, ind_rad=0):
     # initial run time to look for
     runhour0 = int(voltime.hour / cfg['IconRunFreq']) * cfg['IconRunFreq']
     runtime0 = voltime.replace(hour=runhour0, minute=0, second=0)
-
     # look for icon file in raw
     found = False
     nruns_to_check = int(cfg['IconForecasted'] / cfg['IconRunFreq'])
     for i in range(nruns_to_check):
         runtime = runtime0 - datetime.timedelta(hours=i * cfg['IconRunFreq'])
-        runtimestr = runtime.strftime('%Y%m%d%H')
-
+        runtimestr = runtime.strftime('%Y_%m_%d_%H')
         daydir = runtime.strftime('%Y-%m-%d')
         datapath = cfg['iconpath'][ind_rad] + \
-            datatype + '/raw/' + daydir + '/'
-        for model in ('icon-ch1', 'icon-ch2'):
+            datatype + '/raw*/' + daydir + '/'
+        for model in ('icon-ch1-eps', 'icon-ch2-eps'):
             if datatype == 'TEMP':
                 search_name = (
-                    datapath +
-                    model +
-                    '_MDR_3D_' +
-                    runtimestr +
+                    datapath + 
+                    runtimestr + '_' + model +
+                    '_MDR_3D_m_000' +
                     '.nc')
             elif datatype == 'WIND':
                 search_name = (
-                    datapath +
-                    model +
-                    '_MDR_3DWIND_' +
-                    runtimestr +
-                    '.nc')
-            else:
-                warn('Unable to get ICON ' + datatype + '. Unknown variable')
-            print('Looking for file: ' + search_name)
-            fname = glob.glob(search_name)
-            if fname:
-                found = True
-                break
-
-        if found:
-            break
-
-    if found:
-        return fname[0]
-
-    # look for icon file in raw1
-    found = False
-    for i in range(nruns_to_check):
-        runtime = runtime0 - datetime.timedelta(hours=i * cfg['IconRunFreq'])
-        runtimestr = runtime.strftime('%Y%m%d%H')
-
-        daydir = runtime.strftime('%Y-%m-%d')
-        datapath = cfg['iconpath'][ind_rad] + \
-            datatype + '/raw1/' + daydir + '/'
-        for model in ('icon-1e', 'icon-1', 'icon-2', 'icon-7'):
-            if datatype == 'TEMP':
-                search_name = (
-                    datapath +
-                    model +
-                    '_MDR_3D_' +
-                    runtimestr +
-                    '.nc')
-            elif datatype == 'WIND':
-                search_name = (
-                    datapath +
-                    model +
-                    '_MDR_3DWIND_' +
-                    runtimestr +
+                    datapath + 
+                    runtimestr + '_' + model +
+                    '_MDR_3DWIND_m_000' +
                     '.nc')
             else:
                 warn('Unable to get ICON ' + datatype + '. Unknown variable')

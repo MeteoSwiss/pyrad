@@ -45,8 +45,8 @@ def get_prodgen_func(dsformat, dsname, dstype):
             'VOL': generate_vol_products
             'CENTROIDS': generate_centroids_products
             'COLOCATED_GATES': generate_colocated_gates_products
-            'icon_COORD': generate_icon_coord_products
-            'icon2RADAR': generate_icon_to_radar_products
+            'ICON_COORD': generate_icon_coord_products
+            'ICON2RADAR': generate_icon_to_radar_products
             'GRID': generate_grid_products
             'SPECTRA': generate_spectra_products
             'GRID_TIMEAVG': generate_grid_time_avg_products
@@ -95,9 +95,9 @@ def get_prodgen_func(dsformat, dsname, dstype):
         func = generate_traj_product
     elif dsformat == 'COLOCATED_GATES':
         func = generate_colocated_gates_products
-    elif dsformat == 'icon_COORD':
+    elif dsformat == 'ICON_COORD':
         func = generate_icon_coord_products
-    elif dsformat == 'icon2RADAR':
+    elif dsformat == 'ICON2RADAR':
         func = generate_icon_to_radar_products
     elif dsformat == 'QVP':
         func = generate_qvp_products
