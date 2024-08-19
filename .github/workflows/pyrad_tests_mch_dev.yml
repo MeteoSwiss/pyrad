@@ -73,6 +73,14 @@ jobs:
         run: |
           python -c "import pyrad; print(pyrad.__file__)"
           python -c "from pyrad.flow import main"
+          # Insert tmate session here
+      - name: Start tmate session
+        run: |
+          sudo apt-get install -y tmate
+          tmate -S /tmp/tmate.sock new-session -d
+          tmate -S /tmp/tmate.sock wait tmate-ready
+          tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}'
+          tmate -S /tmp/tmate.sock display -p '#{tmate_web}'
       - name: Run tests
         env:
            PYRAD_TESTS_PATH: ${{github.workspace}}/pyrad-tests/
