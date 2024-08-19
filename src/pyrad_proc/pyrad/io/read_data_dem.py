@@ -257,6 +257,9 @@ def read_geotiff_data(fname, fill_value=None):
             projparams = None
             pass
 
+        if not projparams: # Case of empty dict
+            projparams = None
+
         width = raster.RasterXSize
         height = raster.RasterYSize
         gt = raster.GetGeoTransform()
