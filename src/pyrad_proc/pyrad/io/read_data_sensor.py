@@ -2273,9 +2273,7 @@ def read_radiosounding_igra(station, dtime):
     # URL of the station list
     url = "https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive" + \
         "/doc/igra2-station-list.txt"
-
-    stations_ref = pd.read_fwf(url,
-        names=COLUMNS_STATION_LIST)
+    stations_ref = pd.read_fwf(url, names=COLUMNS_STATION_LIST)
 
     # get igra code
     code = stations_ref['CODE'][stations_ref['CODE'].str.contains(station)].iloc[0]
@@ -2286,9 +2284,7 @@ def read_radiosounding_igra(station, dtime):
     response = requests.get(url2)
     links = re.findall(r'<a\s+(?:[^>]*?\s+)?href="([^"]*)"', response.text)
 
-    for link in links:
-        if code in link:
-            mylink = link
+    mylink = [alink for alink in links if code in alink][0]
 
     url = url2 + mylink
     # Send a GET request to the URL
@@ -2347,7 +2343,7 @@ def read_radiosounding_igra(station, dtime):
         for d in all_soundings.keys()]
     idx = np.argsort(offsets)
     closest = list(all_soundings.keys())[idx[0]]
-        
+
     return all_soundings[closest]
 
 def read_fzl_igra(station, dtime):
