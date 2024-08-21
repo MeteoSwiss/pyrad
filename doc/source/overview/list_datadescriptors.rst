@@ -214,6 +214,9 @@ usage
 	where 
 		- datatype is a pyrad variable name as listed `here <https://github.com/MeteoSwiss/pyrad/blob/master/doc/source/overview/list_variables.rst>`_
 		- dataset is an optional descriptor used to describe where the data is stored, it has the format "*D{time_descr_folder}-F{time_descr_file}*", where *time_descr_folder* is a datetime descriptor used to name the parent directory of the radar files, and *time_descr_file* is a datetime descriptor used to name the radar files. *time_descr_folder* can be left empty if wanted.
+
+	The ODIM reader and all similar readers (e.g. CFRADIAL) assume that the names within the files are the `standard names <https://meteoswiss.github.io/pyrad/overview/list_variables.html>`_. If this is not the case, you can use the structure `DataTypeIDInFiles <https://meteoswiss.github.io/pyrad/overview/loc.html>`_ in the loc files to provide explicitely the mapping between the pyrad variable names and the variable names within your files.
+
 example
 	*ODIM:ZDR,D{%Y%m%d}-F{%Y%m%d%H%M00}* will attempt to read the differential reflectivity from the h5 file located under *datapath/ScanList/day_dir/filename* where *datapath* and *ScanList* are as defined in the main and loc configuration files and *day_dir* contains the datetime format string *%Y%m%d* and filename contains the datetime format *%Y%m%d%H%M00*.
 	
@@ -335,7 +338,7 @@ COSMO
 
 description
 	Reads data from the COSMO model, previously ingested by pyrad and converted to polar coordinates with the `COSMO_LOOKUP dataset <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_cosmo_lookup_table>`_.
-	For this to work you will need to define the variable *cosmopath* in the main pyrad configuration file.
+	For this to work you will need to define the variable *iconpath* in the main pyrad configuration file.
  
 
 usage
@@ -600,14 +603,17 @@ usage
 MFCFRADIAL
 ----------------------------- 
 
+.. warning::
+	MFCFRADIAL is deprecated since pyrad 2.0.0, please use CFRADIAL with path_convention=ODIM and specify the struct DataTypeIDInFiles in the loc file instead.
+				
+
 description
 	Used to read radar data from MeteoFrance written in CFRadial
-				
+
 usage
 	*MFCFRADIAL:datatype,dataset* 
 	See the data descriptor *ODIM* for usage info as it works exactly in the same way.
-example
-	::
+
 		
 
 -------------------------------------
@@ -725,5 +731,3 @@ example
 					voltype STRING prec_type
 					binwidth_equal INT 1
 					write_data INT 1
-
-					

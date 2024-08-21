@@ -951,8 +951,10 @@ def _create_cfg_dict(cfgfile):
 
     # to use when we need to combine multiple files corresponding to multiple
     # and data types
-    if 'DataTypeID' not in cfg:
-        cfg.update({'DataTypeID': None})
+    if 'DataTypeIDInFilenames' not in cfg:
+        cfg.update({'DataTypeIDInFilenames': None})
+    if 'DataTypeIDInFiles' not in cfg:
+        cfg.update({'DataTypeIDInFiles': {}})
 
     if 'MasterScanTimeTol' not in cfg:
         #  0: no tolerance
@@ -988,7 +990,7 @@ def _create_cfg_dict(cfgfile):
     # Convert the following strings to string arrays
     strarr_list = [
         'datapath',
-        'cosmopath',
+        'iconpath',
         'dempath',
         'gecsxbasepath',
         'gecsxname',
@@ -1143,7 +1145,7 @@ def _create_datacfg_dict(cfg):
     datacfg.update({'MasterScanTimeTol': cfg['MasterScanTimeTol']})
     datacfg.update({'TimeTol': cfg['TimeTol']})
     datacfg.update({'NumRadars': cfg['NumRadars']})
-    datacfg.update({'cosmopath': cfg['cosmopath']})
+    datacfg.update({'iconpath': cfg['iconpath']})
     datacfg.update({'dempath': cfg['dempath']})
     datacfg.update({'loadbasepath': cfg['loadbasepath']})
     datacfg.update({'loadname': cfg['loadname']})
@@ -1152,15 +1154,16 @@ def _create_datacfg_dict(cfg):
     datacfg.update({'RadarName': cfg['RadarName']})
     datacfg.update({'RadarRes': cfg['RadarRes']})
     datacfg.update({'ScanPeriod': cfg['ScanPeriod']})
-    datacfg.update({'CosmoRunFreq': int(cfg['CosmoRunFreq'])})
-    datacfg.update({'CosmoForecasted': int(cfg['CosmoForecasted'])})
+    datacfg.update({'IconRunFreq': int(cfg['IconRunFreq'])})
+    datacfg.update({'IconForecasted': int(cfg['IconForecasted'])})
     datacfg.update({'path_convention': cfg['path_convention']})
     datacfg.update({'metranet_read_lib': cfg['metranet_read_lib']})
 
     datacfg.update({'BinFileParams': cfg['BinFileParams']})
     datacfg.update({'MFScale': cfg['MFScale']})
-    datacfg.update({'DataTypeID': cfg['DataTypeID']})
-
+    datacfg.update({'DataTypeIDInFiles': cfg['DataTypeIDInFiles']})
+    datacfg.update({'DataTypeIDInFilenames': cfg['DataTypeIDInFilenames']})
+    
     # Modify size of radar or radar spectra object
     datacfg.update({'elmin': cfg.get('elmin', None)})
     datacfg.update({'elmax': cfg.get('elmax', None)})
@@ -1291,9 +1294,9 @@ def _create_dscfg_dict(cfg, dataset):
     dscfg.update({'excessgatespath': cfg['excessgatespath']})
     dscfg.update({'dempath': cfg['dempath']})
     dscfg.update({'selfconsistencypath': cfg['selfconsistencypath']})
-    dscfg.update({'cosmopath': cfg['cosmopath']})
-    dscfg.update({'CosmoRunFreq': cfg['CosmoRunFreq']})
-    dscfg.update({'CosmoForecasted': cfg['CosmoForecasted']})
+    dscfg.update({'iconpath': cfg['iconpath']})
+    dscfg.update({'IconRunFreq': cfg['IconRunFreq']})
+    dscfg.update({'IconForecasted': cfg['IconForecasted']})
     dscfg.update({'metranet_read_lib': cfg['metranet_read_lib']})
     dscfg.update({'lastStateFile': cfg['lastStateFile']})
     dscfg.update({'timeinfo': None})
@@ -1374,7 +1377,7 @@ def _create_prdcfg_dict(cfg, dataset, product, voltime, runinfo=None):
     prdcfg.update({'basepath': cfg['saveimgbasepath']})
     prdcfg.update({'smnpath': cfg['smnpath']})
     prdcfg.update({'disdropath': cfg['disdropath']})
-    prdcfg.update({'cosmopath': cfg['cosmopath']})
+    prdcfg.update({'iconpath': cfg['iconpath']})
     prdcfg.update({'dempath': cfg['dempath']})
     prdcfg.update({'ScanPeriod': cfg['ScanPeriod']})
     prdcfg.update({'imgformat': cfg['imgformat']})
@@ -1534,7 +1537,7 @@ def _get_masterfile_list(datatypesdescr, starttimes, endtimes, datacfg,
     for datatypedescr in datatypesdescr:
         radarnr, datagroup, _, _, _ = get_datatype_fields(datatypedescr)
         if (datagroup not in (
-                'COSMO', 'RAD4ALPCOSMO', 'CFRADIALCOSMO', 'DEM', 'RAD4ALPDEM',
+                'Icon', 'RAD4ALPIcon', 'CFRADIALIcon', 'DEM', 'RAD4ALPDEM',
                 'RAD4ALPHYDRO', 'RAD4ALPDOPPLER', 'RAD4ALPIQ', 'PSR',
                 'PSRSPECTRA', 'GECSX')):
             masterdatatypedescr = datatypedescr
@@ -1546,13 +1549,13 @@ def _get_masterfile_list(datatypesdescr, starttimes, endtimes, datacfg,
     if masterdatatypedescr is None:
         for datatypedescr in datatypesdescr:
             radarnr, datagroup, _, _, _ = get_datatype_fields(datatypedescr)
-            if datagroup in ('COSMO', 'DEM', 'PSR', 'PSRSPECTRA'):
+            if datagroup in ('Icon', 'DEM', 'PSR', 'PSRSPECTRA'):
                 masterdatatypedescr = '{}:RAINBOW:dBZ'.format(radarnr)
                 if scan_list is not None:
                     masterscan = scan_list[int(radarnr[5:8]) - 1][0]
                 break
             if (datagroup in (
-                    'RAD4ALPCOSMO', 'RAD4ALPDEM', 'RAD4ALPHYDRO',
+                    'RAD4ALPIcon', 'RAD4ALPDEM', 'RAD4ALPHYDRO',
                     'RAD4ALPDOPPLER', 'RAD4ALPIQ')):
                 masterdatatypedescr = '{}:RAD4ALP:dBZ'.format(radarnr)
                 if scan_list is not None:

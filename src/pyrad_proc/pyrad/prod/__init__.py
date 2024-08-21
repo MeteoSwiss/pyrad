@@ -22,8 +22,8 @@ Product generation
     :toctree: generated/
 
     generate_occurrence_products
-    generate_cosmo_coord_products
-    generate_cosmo_to_radar_products
+    generate_icon_coord_products
+    generate_icon_to_radar_products
     generate_sun_hits_products
     generate_intercomp_products
     generate_colocated_gates_products
@@ -44,11 +44,11 @@ Product generation
 from .product_aux import get_prodgen_func # noqa
 
 from .process_product import generate_sun_hits_products # noqa
-from .process_product import generate_cosmo_coord_products # noqa
+from .process_product import generate_icon_coord_products # noqa
 from .process_product import generate_qvp_products # noqa
 from .process_product import generate_occurrence_products # noqa
 from .process_product import generate_ml_products # noqa
-from .process_product import generate_cosmo_to_radar_products # noqa
+from .process_product import generate_icon_to_radar_products # noqa
 from .process_product import generate_centroids_products # noqa
 
 from .process_vol_products import generate_vol_products # noqa

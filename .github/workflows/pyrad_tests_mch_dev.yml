@@ -73,6 +73,7 @@ jobs:
         run: |
           python -c "import pyrad; print(pyrad.__file__)"
           python -c "from pyrad.flow import main"
+          # Insert tmate session here
       - name: Run tests
         env:
            PYRAD_TESTS_PATH: ${{github.workspace}}/pyrad-tests/
@@ -80,4 +81,7 @@ jobs:
            PYART_CONFIG: ${{github.workspace}}/config/pyart/mch_config.py
         working-directory: ${{github.workspace}}/pyrad-tests//
         run: pytest "run_tests.py::test_mch"
+      - name: tmate session if tests fail
+        if:  ${{ github.event_name == 'workflow_dispatch' && failure() }}
+        uses: mxschmitt/action-tmate@v3
         

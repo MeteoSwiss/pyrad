@@ -1,20 +1,20 @@
 """
-pyrad.proc.process_cosmo
+pyrad.proc.process_icon
 ===========================
 
-Functions to manage COSMO data
+Functions to manage icon data
 
 .. autosummary::
     :toctree: generated/
 
-    process_cosmo
+    process_icon
     process_hzt
     process_iso0_mf
     process_iso0_grib
-    process_cosmo_lookup_table
+    process_icon_lookup_table
     process_hzt_lookup_table
-    process_cosmo_to_radar
-    process_cosmo_coord
+    process_icon_to_radar
+    process_icon_coord
     process_hzt_coord
 
 """
@@ -29,12 +29,12 @@ from netCDF4 import num2date
 
 import pyart
 
-from ..io.io_aux import get_datatype_fields, find_raw_cosmo_file
+from ..io.io_aux import get_datatype_fields, find_raw_icon_file
 from ..io.io_aux import find_hzt_file, find_iso0_file, find_iso0_grib_file
 from ..io.io_aux import get_fieldname_pyart
-from ..io.read_data_cosmo import read_cosmo_data, read_cosmo_coord
-from ..io.read_data_cosmo import cosmo2radar_data, cosmo2radar_coord
-from ..io.read_data_cosmo import get_cosmo_fields
+from ..io.read_data_icon import read_icon_data, read_icon_coord
+from ..io.read_data_icon import icon2radar_data, icon2radar_coord
+from ..io.read_data_icon import get_icon_fields
 from ..io.read_data_radar import interpol_field
 from ..io.read_data_hzt import read_hzt_data, hzt2radar_data, hzt2radar_coord
 from ..io.read_data_hzt import get_iso0_field
@@ -44,9 +44,9 @@ from ..io.read_data_iso0_mf import iso2radar_data, grib2radar_data
 # from memory_profiler import profile
 
 
-def process_cosmo(procstatus, dscfg, radar_list=None):
+def process_icon(procstatus, dscfg, radar_list=None):
     """
-    Gets COSMO data and put it in radar coordinates
+    Gets icon data and put it in radar coordinates
 
     Parameters
     ----------
@@ -59,16 +59,16 @@ def process_cosmo(procstatus, dscfg, radar_list=None):
         datatype : string. Dataset keyword
             arbitrary data type
         keep_in_memory : int. Dataset keyword
-            if set keeps the COSMO data dict, the COSMO coordinates dict and
-            the COSMO field in radar coordinates in memory
+            if set keeps the icon data dict, the icon coordinates dict and
+            the icon field in radar coordinates in memory
         regular_grid : int. Dataset keyword
             if set it is assume that the radar has a grid constant in time and
-            there is no need to compute a new COSMO field if the COSMO
+            there is no need to compute a new icon field if the icon
             data has not changed
-        cosmo_type : str. Dataset keyword
-            name of the COSMO field to process. Default TEMP
-        cosmo_variables : list of strings. Dataset keyword
-            Py-art name of the COSMO fields. Default temperature
+        icon_type : str. Dataset keyword
+            name of the icon field to process. Default TEMP
+        icon_variables : list of strings. Dataset keyword
+            Py-art name of the icon fields. Default temperature
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -99,118 +99,112 @@ def process_cosmo(procstatus, dscfg, radar_list=None):
     keep_in_memory = dscfg.get('keep_in_memory', 0)
     regular_grid = dscfg.get('regular_grid', 0)
 
-    cosmo_type = dscfg.get('cosmo_type', 'TEMP')
-    if cosmo_type == 'TEMP':
+    icon_type = dscfg.get('icon_type', 'TEMP')
+    if icon_type == 'TEMP':
         field_names = ['temperature']
-        if 'cosmo_variables' in dscfg:
+        if 'icon_variables' in dscfg:
             field_names = []
-            for var in dscfg['cosmo_variables']:
+            for var in dscfg['icon_variables']:
                 field_names.append(get_fieldname_pyart(var))
         zmin = None
-    elif cosmo_type == 'WIND':
+    elif icon_type == 'WIND':
         field_names = ['wind_speed', 'wind_direction', 'vertical_wind_shear']
-        if 'cosmo_variables' in dscfg:
+        if 'icon_variables' in dscfg:
             field_names = []
-            for var in dscfg['cosmo_variables']:
+            for var in dscfg['icon_variables']:
                 field_names.append(get_fieldname_pyart(var))
         zmin = None
     else:
-        warn('Unknown COSMO data type ' + cosmo_type)
+        warn('Unknown icon data type ' + icon_type)
         return None, None
 
-    fname = find_raw_cosmo_file(dscfg['timeinfo'], cosmo_type, dscfg,
+    fname = find_raw_icon_file(dscfg['timeinfo'], icon_type, dscfg,
                                 ind_rad=ind_rad)
 
     if fname is None:
         return None, None
 
-    model = os.path.basename(fname)[0:7]
-    if model not in ('cosmo-1', 'cosmo-2', 'cosmo-7'):
+    model = os.path.basename(fname)[14:26]
+    if model not in ('icon-ch1-eps', 'icon-ch2-eps'):
         warn('Unknown NWP model ' + model)
         return None, None
 
-    # check if model is cosmo-1 or cosmo-1e
-    if model == 'cosmo-1':
-        model_aux = os.path.basename(fname)[0:8]
-        if model_aux == 'cosmo-1e':
-            model = model_aux
-
     if keep_in_memory:
         if dscfg['initialized'] == 0:
-            cosmo_coord = read_cosmo_coord(
-                dscfg['cosmopath'][ind_rad] + 'rad2cosmo/' + model +
+            icon_coord = read_icon_coord(
+                dscfg['iconpath'][ind_rad] + 'rad2icon/' + model +
                 '_MDR_3D_const.nc', zmin=zmin)
             dscfg['global_data'] = {
-                'cosmo_fname': None,
-                'cosmo_data': None,
-                'cosmo_fields': None,
+                'icon_fname': None,
+                'icon_data': None,
+                'icon_fields': None,
                 'time_index': None,
-                'cosmo_coord': cosmo_coord}
+                'icon_coord': icon_coord}
             dscfg['initialized'] = 1
 
-        cosmo_coord = dscfg['global_data']['cosmo_coord']
-        if fname != dscfg['global_data']['cosmo_fname']:
+        icon_coord = dscfg['global_data']['icon_coord']
+        if fname != dscfg['global_data']['icon_fname']:
             # debugging
             # start_time2 = time.time()
-            cosmo_data = read_cosmo_data(
+            icon_data = read_icon_data(
                 fname, field_names=field_names, celsius=True)
-            # print(" reading COSMO takes %s seconds " %
+            # print(" reading icon takes %s seconds " %
             #      (time.time() - start_time2))
-            if cosmo_data is None:
-                warn('COSMO data not found')
+            if icon_data is None:
+                warn('icon data not found')
                 return None, None
 
-            dscfg['global_data']['cosmo_data'] = cosmo_data
-            dscfg['global_data']['cosmo_fname'] = fname
+            dscfg['global_data']['icon_data'] = icon_data
+            dscfg['global_data']['icon_fname'] = fname
         else:
-            print('raw COSMO data already in memory')
-            cosmo_data = dscfg['global_data']['cosmo_data']
+            print('raw icon data already in memory')
+            icon_data = dscfg['global_data']['icon_data']
     else:
-        cosmo_coord = read_cosmo_coord(
-            dscfg['cosmopath'][ind_rad] + 'rad2cosmo/' + model +
+        icon_coord = read_icon_coord(
+            dscfg['iconpath'][ind_rad] + 'rad2icon/' + model +
             '_MDR_3D_const.nc', zmin=zmin)
 
         # debugging
         # start_time2 = time.time()
-        cosmo_data = read_cosmo_data(
+        icon_data = read_icon_data(
             fname, field_names=field_names, celsius=True)
-        # print(" reading COSMO takes %s seconds " %
+        # print(" reading icon takes %s seconds " %
         #      (time.time() - start_time2))
-        if cosmo_data is None:
-            warn('COSMO data not found')
+        if icon_data is None:
+            warn('icon data not found')
             return None, None
 
-    dtcosmo = num2date(
-        cosmo_data['time']['data'][:], cosmo_data['time']['units'])
-    time_index = np.argmin(abs(dtcosmo - dscfg['timeinfo']))
+    dticon = num2date(
+        icon_data['time']['data'][:], icon_data['time']['units'])
+    time_index = np.argmin(abs(dticon - dscfg['timeinfo']))
 
     if keep_in_memory and regular_grid:
         if time_index != dscfg['global_data']['time_index']:
-            cosmo_fields = cosmo2radar_data(
-                radar, cosmo_coord, cosmo_data, time_index=time_index,
+            icon_fields = icon2radar_data(
+                radar, icon_coord, icon_data, time_index=time_index,
                 field_names=field_names)
-            if cosmo_fields is None:
-                warn('Unable to obtain COSMO fields')
+            if icon_fields is None:
+                warn('Unable to obtain icon fields')
                 return None, None
 
             dscfg['global_data']['time_index'] = time_index
-            dscfg['global_data']['cosmo_fields'] = cosmo_fields
+            dscfg['global_data']['icon_fields'] = icon_fields
         else:
-            print('COSMO field already in memory')
-            cosmo_fields = dscfg['global_data']['cosmo_fields']
+            print('icon field already in memory')
+            icon_fields = dscfg['global_data']['icon_fields']
     else:
-        cosmo_fields = cosmo2radar_data(
-            radar, cosmo_coord, cosmo_data, time_index=time_index,
+        icon_fields = icon2radar_data(
+            radar, icon_coord, icon_data, time_index=time_index,
             field_names=field_names)
-        if cosmo_fields is None:
-            warn('Unable to obtain COSMO fields')
+        if icon_fields is None:
+            warn('Unable to obtain icon fields')
             return None, None
 
     # prepare for exit
     new_dataset = {'radar_out': deepcopy(radar)}
     new_dataset['radar_out'].fields = dict()
 
-    for field in cosmo_fields:
+    for field in icon_fields:
         for field_name in field:
             new_dataset['radar_out'].add_field(field_name, field[field_name])
 
@@ -235,16 +229,16 @@ def process_hzt(procstatus, dscfg, radar_list=None):
         datatype : string. Dataset keyword
             arbitrary data type
         keep_in_memory : int. Dataset keyword
-            if set keeps the COSMO data dict, the COSMO coordinates dict and
-            the COSMO field in radar coordinates in memory
+            if set keeps the icon data dict, the icon coordinates dict and
+            the icon field in radar coordinates in memory
         regular_grid : int. Dataset keyword
             if set it is assume that the radar has a grid constant in time and
-            there is no need to compute a new COSMO field if the COSMO
+            there is no need to compute a new icon field if the icon
             data has not changed
-        cosmo_type : str. Dataset keyword
-            name of the COSMO field to process. Default TEMP
-        cosmo_variables : list of strings. Dataset keyword
-            Py-art name of the COSMO fields. Default temperature
+        icon_type : str. Dataset keyword
+            name of the icon field to process. Default TEMP
+        icon_variables : list of strings. Dataset keyword
+            Py-art name of the icon fields. Default temperature
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -513,9 +507,9 @@ def process_iso0_grib(procstatus, dscfg, radar_list=None):
 
 
 # @profile
-def process_cosmo_lookup_table(procstatus, dscfg, radar_list=None):
+def process_icon_lookup_table(procstatus, dscfg, radar_list=None):
     """
-    Gets COSMO data and put it in radar coordinates
+    Gets icon data and put it in radar coordinates
     using look up tables computed or loaded when initializing
 
     Parameters
@@ -529,17 +523,17 @@ def process_cosmo_lookup_table(procstatus, dscfg, radar_list=None):
         datatype : string. Dataset keyword
             arbitrary data type
         lookup_table : int. Dataset keyword
-            if set a pre-computed look up table for the COSMO coordinates is
+            if set a pre-computed look up table for the icon coordinates is
             loaded. Otherwise the look up table is computed taking the first
             radar object as reference
         regular_grid : int. Dataset keyword
             if set it is assume that the radar has a grid constant in time and
-            therefore there is no need to interpolate the COSMO field in
+            therefore there is no need to interpolate the icon field in
             memory to the current radar grid
-        cosmo_type : str. Dataset keyword
-            name of the COSMO field to process. Default TEMP
-        cosmo_variables : list of strings. Dataset keyword
-            Py-art name of the COSMO fields. Default temperature
+        icon_type : str. Dataset keyword
+            name of the icon field to process. Default TEMP
+        icon_variables : list of strings. Dataset keyword
+            Py-art name of the icon fields. Default temperature
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -570,123 +564,117 @@ def process_cosmo_lookup_table(procstatus, dscfg, radar_list=None):
     regular_grid = dscfg.get('regular_grid', 0)
     lookup_table = dscfg.get('lookup_table', 0)
 
-    cosmo_type = dscfg.get('cosmo_type', 'TEMP')
-    if cosmo_type == 'TEMP':
+    icon_type = dscfg.get('icon_type', 'TEMP')
+    if icon_type == 'TEMP':
         field_names = ['temperature']
-        if 'cosmo_variables' in dscfg:
+        if 'icon_variables' in dscfg:
             field_names = []
-            for var in dscfg['cosmo_variables']:
+            for var in dscfg['icon_variables']:
                 field_names.append(get_fieldname_pyart(var))
         zmin = None
-    elif cosmo_type == 'WIND':
+    elif icon_type == 'WIND':
         field_names = ['wind_speed', 'wind_direction', 'vertical_wind_shear']
-        if 'cosmo_variables' in dscfg:
+        if 'icon_variables' in dscfg:
             field_names = []
-            for var in dscfg['cosmo_variables']:
+            for var in dscfg['icon_variables']:
                 field_names.append(get_fieldname_pyart(var))
         zmin = None
     else:
-        warn('Unknown COSMO data type ' + cosmo_type)
+        warn('Unknown icon data type ' + icon_type)
         return None, None
 
-    fname = find_raw_cosmo_file(dscfg['timeinfo'], cosmo_type, dscfg,
+    fname = find_raw_icon_file(dscfg['timeinfo'], icon_type, dscfg,
                                 ind_rad=ind_rad)
 
     if fname is None:
         return None, None
 
-    model = os.path.basename(fname)[0:7]
-    if model not in ('cosmo-1', 'cosmo-1e', 'cosmo-2', 'cosmo-7'):
+    model = os.path.basename(fname)[14:26]
+    if model not in ('icon-ch1-eps', 'icon-ch2-eps'):
         warn('Unknown NWP model ' + model)
         return None, None
 
-    # check if model is cosmo-1 or cosmo-1e
-    if model == 'cosmo-1':
-        model_aux = os.path.basename(fname)[0:8]
-        if model_aux == 'cosmo-1e':
-            model = model_aux
-
     if dscfg['initialized'] == 0:
         if lookup_table:
-            savedir = dscfg['cosmopath'][ind_rad] + 'rad2cosmo/'
-            fname_ind = 'rad2cosmo_cosmo_index_' + dscfg['procname'] + '.nc'
+            savedir = dscfg['iconpath'][ind_rad] + 'rad2icon/'
+            fname_ind = 'rad2icon_icon_index_' + dscfg['procname'] + '.nc'
             fname_ind2 = glob.glob(savedir + fname_ind)
             if not fname_ind2:
                 warn('File ' + savedir + fname_ind + ' not found')
                 return None, None
-            cosmo_radar = pyart.io.read_cfradial(fname_ind2[0])
+            icon_radar = pyart.io.read_cfradial(fname_ind2[0])
         else:
-            cosmo_coord = read_cosmo_coord(
-                dscfg['cosmopath'][ind_rad] + 'rad2cosmo/' + model +
+            icon_coord = read_icon_coord(
+                dscfg['iconpath'][ind_rad] + 'rad2icon/' + model +
                 '_MDR_3D_const.nc', zmin=zmin)
-            print('COSMO coordinates files read')
-            cosmo_ind_field = cosmo2radar_coord(radar, cosmo_coord)
-            cosmo_radar = deepcopy(radar)
-            cosmo_radar.fields = dict()
-            cosmo_radar.add_field('cosmo_index', cosmo_ind_field)
-            print('COSMO index field added')
+            print('icon coordinates files read')
+            icon_ind_field = icon2radar_coord(radar, icon_coord)
+            icon_radar = deepcopy(radar)
+            icon_radar.fields = dict()
+            icon_radar.add_field('icon_index', icon_ind_field)
+            print('icon index field added')
 
         dscfg['global_data'] = {
-            'cosmo_fname': None,
-            'cosmo_data': None,
-            'cosmo_fields': None,
-            'cosmo_radar': cosmo_radar,
+            'icon_fname': None,
+            'icon_data': None,
+            'icon_fields': None,
+            'icon_radar': icon_radar,
             'time_index': None}
         dscfg['initialized'] = 1
 
-    if fname != dscfg['global_data']['cosmo_fname']:
+    if fname != dscfg['global_data']['icon_fname']:
         # debugging
         # start_time2 = time.time()
-        cosmo_data = read_cosmo_data(
+        icon_data = read_icon_data(
             fname, field_names=field_names, celsius=True)
-        # print(" reading COSMO takes %s seconds " %
+        # print(" reading icon takes %s seconds " %
         #      (time.time() - start_time2))
-        if cosmo_data is None:
-            warn('COSMO data not found')
+        if icon_data is None:
+            warn('icon data not found')
             return None, None
 
-        dscfg['global_data']['cosmo_data'] = cosmo_data
+        dscfg['global_data']['icon_data'] = icon_data
     else:
-        print('raw COSMO data already in memory')
-        cosmo_data = dscfg['global_data']['cosmo_data']
+        print('raw icon data already in memory')
+        icon_data = dscfg['global_data']['icon_data']
 
-    dtcosmo = num2date(
-        cosmo_data['time']['data'][:], cosmo_data['time']['units'])
+    dticon = num2date(
+        icon_data['time']['data'][:], icon_data['time']['units'])
 
-    time_index = np.argmin(abs(dtcosmo - dscfg['timeinfo']))
+    time_index = np.argmin(abs(dticon - dscfg['timeinfo']))
 
-    if (fname != dscfg['global_data']['cosmo_fname'] or
+    if (fname != dscfg['global_data']['icon_fname'] or
             time_index != dscfg['global_data']['time_index']):
         # debugging
         # start_time3 = time.time()
-        cosmo_fields = get_cosmo_fields(
-            cosmo_data,
-            dscfg['global_data']['cosmo_radar'].fields['cosmo_index'],
+        icon_fields = get_icon_fields(
+            icon_data,
+            dscfg['global_data']['icon_radar'].fields['icon_index'],
             time_index=time_index,
             field_names=field_names)
-        if cosmo_fields is None:
-            warn('Unable to obtain COSMO fields')
+        if icon_fields is None:
+            warn('Unable to obtain icon fields')
             return None, None
-        # print(" getting COSMO data takes %s seconds "
+        # print(" getting icon data takes %s seconds "
         #      % (time.time() - start_time3))
 
         dscfg['global_data']['time_index'] = time_index
-        dscfg['global_data']['cosmo_fields'] = cosmo_fields
+        dscfg['global_data']['icon_fields'] = icon_fields
     else:
-        print('COSMO field already in memory')
-        cosmo_fields = dscfg['global_data']['cosmo_fields']
+        print('icon field already in memory')
+        icon_fields = dscfg['global_data']['icon_fields']
 
-    dscfg['global_data']['cosmo_fname'] = fname
+    dscfg['global_data']['icon_fname'] = fname
 
     # prepare for exit
     new_dataset = {'radar_out': deepcopy(radar)}
     new_dataset['radar_out'].fields = dict()
 
     if not regular_grid:
-        radar_aux = deepcopy(dscfg['global_data']['cosmo_radar'])
+        radar_aux = deepcopy(dscfg['global_data']['icon_radar'])
         radar_aux.fields = dict()
 
-    for field in cosmo_fields:
+    for field in icon_fields:
         for field_name in field:
             try:
                 if regular_grid:
@@ -695,13 +683,13 @@ def process_cosmo_lookup_table(procstatus, dscfg, radar_list=None):
                 else:
                     # interpolate to current radar grid
                     radar_aux.add_field(field_name, field[field_name])
-                    cosmo_field_interp = interpol_field(
+                    icon_field_interp = interpol_field(
                         radar, radar_aux, field_name)
                     new_dataset['radar_out'].add_field(
-                        field_name, cosmo_field_interp)
+                        field_name, icon_field_interp)
             except Exception as ee:
                 warn(str(ee))
-                warn('Unable to add COSMO ' + field_name +
+                warn('Unable to add icon ' + field_name +
                      ' field to radar object')
                 return None, None
 
@@ -727,12 +715,12 @@ def process_hzt_lookup_table(procstatus, dscfg, radar_list=None):
         datatype : string. Dataset keyword
             arbitrary data type
         lookup_table : int. Dataset keyword
-            if set a pre-computed look up table for the COSMO coordinates is
+            if set a pre-computed look up table for the icon coordinates is
             loaded. Otherwise the look up table is computed taking the first
             radar object as reference
         regular_grid : int. Dataset keyword
             if set it is assume that the radar has a grid constant in time and
-            therefore there is no need to interpolate the COSMO field in
+            therefore there is no need to interpolate the icon field in
             memory to the current radar grid
     radar_list : list of Radar objects
         Optional. list of radar objects
@@ -771,8 +759,8 @@ def process_hzt_lookup_table(procstatus, dscfg, radar_list=None):
 
     if dscfg['initialized'] == 0:
         if lookup_table:
-            savedir = dscfg['cosmopath'][ind_rad] + 'rad2cosmo/'
-            fname_ind = 'rad2cosmo_hzt_index_' + dscfg['procname'] + '.nc'
+            savedir = dscfg['iconpath'][ind_rad] + 'rad2icon/'
+            fname_ind = 'rad2icon_hzt_index_' + dscfg['procname'] + '.nc'
             fname_ind2 = glob.glob(savedir + fname_ind)
             if not fname_ind2:
                 warn('File ' + savedir + fname_ind + ' not found')
@@ -864,9 +852,9 @@ def process_hzt_lookup_table(procstatus, dscfg, radar_list=None):
 
 
 # @profile
-def process_cosmo_to_radar(procstatus, dscfg, radar_list=None):
+def process_icon_to_radar(procstatus, dscfg, radar_list=None):
     """
-    Gets COSMO data and put it in radar coordinates using look up tables
+    Gets icon data and put it in radar coordinates using look up tables
 
     Parameters
     ----------
@@ -878,12 +866,12 @@ def process_cosmo_to_radar(procstatus, dscfg, radar_list=None):
 
         datatype : string. Dataset keyword
             arbitrary data type
-        cosmo_type : str. Dataset keyword
-            name of the COSMO field to process. Default TEMP
-        cosmo_variables : list of strings. Dataset keyword
-            Py-art name of the COSMO fields. Default temperature
-        cosmo_time_index_min, cosmo_time_index_max : int
-            minimum and maximum indices of the COSMO data to retrieve. If a
+        icon_type : str. Dataset keyword
+            name of the icon field to process. Default TEMP
+        icon_variables : list of strings. Dataset keyword
+            Py-art name of the icon fields. Default temperature
+        icon_time_index_min, icon_time_index_max : int
+            minimum and maximum indices of the icon data to retrieve. If a
             value is provided only data corresponding to the time indices
             within the interval will be used. If None all data will be used.
             Default None
@@ -907,111 +895,105 @@ def process_cosmo_to_radar(procstatus, dscfg, radar_list=None):
 
     ind_rad = int(radarnr[5:8]) - 1
 
-    cosmo_type = dscfg.get('cosmo_type', 'TEMP')
-    if cosmo_type == 'TEMP':
+    icon_type = dscfg.get('icon_type', 'TEMP')
+    if icon_type == 'TEMP':
         field_names = ['temperature']
-        if 'cosmo_variables' in dscfg:
+        if 'icon_variables' in dscfg:
             field_names = []
-            for var in dscfg['cosmo_variables']:
+            for var in dscfg['icon_variables']:
                 field_names.append(get_fieldname_pyart(var))
-    elif cosmo_type == 'WIND':
+    elif icon_type == 'WIND':
         field_names = ['wind_speed', 'wind_direction', 'vertical_wind_shear']
-        if 'cosmo_variables' in dscfg:
+        if 'icon_variables' in dscfg:
             field_names = []
-            for var in dscfg['cosmo_variables']:
+            for var in dscfg['icon_variables']:
                 field_names.append(get_fieldname_pyart(var))
     else:
-        warn('Unknown COSMO data type ' + cosmo_type)
+        warn('Unknown icon data type ' + icon_type)
         return None, None
 
-    time_index_min = dscfg.get('cosmo_time_index_min', None)
-    time_index_max = dscfg.get('cosmo_time_index_max', None)
+    time_index_min = dscfg.get('icon_time_index_min', None)
+    time_index_max = dscfg.get('icon_time_index_max', None)
 
-    fname = find_raw_cosmo_file(dscfg['timeinfo'], cosmo_type, dscfg,
+    fname = find_raw_icon_file(dscfg['timeinfo'], icon_type, dscfg,
                                 ind_rad=ind_rad)
 
     if fname is None:
         return None, None
 
-    model = os.path.basename(fname)[0:7]
-    if model not in ('cosmo-1', 'cosmo-1e', 'cosmo-2', 'cosmo-7'):
+    model = os.path.basename(fname)[14:26]
+    if model not in ('icon-ch1-eps', 'icon-ch2-eps'):
         warn('Unknown NWP model ' + model)
         return None, None
 
-    # check if model is cosmo-1 or cosmo-1e
-    if model == 'cosmo-1':
-        model_aux = os.path.basename(fname)[0:8]
-        if model_aux == 'cosmo-1e':
-            model = model_aux
-
     if dscfg['initialized'] == 0:
-        savedir = dscfg['cosmopath'][ind_rad] + 'rad2cosmo/'
-        fname_ind = 'rad2cosmo_cosmo_index_' + dscfg['procname'] + '.nc'
+        savedir = dscfg['iconpath'][ind_rad] + 'rad2icon/'
+        fname_ind = 'rad2icon_icon_index_' + dscfg['procname'] + '.nc'
         fname_ind2 = glob.glob(savedir + fname_ind)
         if not fname_ind2:
             warn('File ' + savedir + fname_ind + ' not found')
             return None, None
-        cosmo_radar = pyart.io.read_cfradial(fname_ind2[0])
+        icon_radar = pyart.io.read_cfradial(fname_ind2[0])
 
         dscfg['global_data'] = {
-            'cosmo_radar': cosmo_radar}
+            'icon_radar': icon_radar}
         dscfg['initialized'] = 1
 
-    cosmo_data = read_cosmo_data(
+    icon_data = read_icon_data(
         fname, field_names=field_names, celsius=True)
-    if cosmo_data is None:
-        warn('COSMO data not found')
+    if icon_data is None:
+        warn('icon data not found')
         return None, None
 
-    dtcosmo = num2date(
-        cosmo_data['time']['data'][:], cosmo_data['time']['units'])
+    dticon = num2date(
+        icon_data['time']['data'][:], icon_data['time']['units'])
 
     if time_index_min is None:
         time_index_min = 0
     if time_index_max is None:
-        time_index_max = len(dtcosmo) - 1
+        time_index_max = len(dticon) - 1
 
-    if time_index_max > len(dtcosmo) - 1:
-        warn('cosmo_time_index_max larger than number of COSMO forecasts'
-             'cosmo forecasts ' + len(dtcosmo))
-        time_index_max = len(dtcosmo) - 1
+    if time_index_max > len(dticon) - 1:
+        warn('icon_time_index_max larger than number of icon forecasts'
+             'icon forecasts ' + len(dticon))
+        time_index_max = len(dticon) - 1
 
-    cosmo_radars = []
-    for time_index, dtc in enumerate(dtcosmo):
+    icon_radars = []
+    for time_index, dtc in enumerate(dticon):
         if time_index < time_index_min:
             continue
         if time_index > time_index_max:
             break
 
-        cosmo_fields = get_cosmo_fields(
-            cosmo_data,
-            dscfg['global_data']['cosmo_radar'].fields['cosmo_index'],
+        icon_fields = get_icon_fields(
+            icon_data,
+            dscfg['global_data']['icon_radar'].fields['icon_index'],
             time_index=time_index,
             field_names=field_names)
-        if cosmo_fields is None:
-            warn('Unable to obtain COSMO fields')
+        if icon_fields is None:
+            warn('Unable to obtain icon fields')
             return None, None
 
-        radar_out = deepcopy(dscfg['global_data']['cosmo_radar'])
+        radar_out = deepcopy(dscfg['global_data']['icon_radar'])
         radar_out.fields = dict()
         radar_out.time['units'] = dtc.strftime(
             'seconds since %Y-%m-%dT%H:%M:%SZ')
 
-        for field in cosmo_fields:
+        for field in icon_fields:
             for field_name in field:
                 radar_out.add_field(field_name, field[field_name])
 
-        cosmo_radars.append({
+        icon_radars.append({
             'ind_rad': ind_rad,
             'radar_out': radar_out,
-            'dtcosmo': dtc})
+            'dticon': dtc})
 
-    return cosmo_radars, ind_rad
+    return icon_radars, ind_rad
 
 
-def process_cosmo_coord(procstatus, dscfg, radar_list=None):
+def process_icon_coord(procstatus, dscfg, radar_list=None):
     """
-    Gets the COSMO indices corresponding to each cosmo coordinates
+    Gets the icon indices corresponding to each icon coordinates
 
     Parameters
     ----------
@@ -1023,10 +1005,10 @@ def process_cosmo_coord(procstatus, dscfg, radar_list=None):
 
         datatype : string. Dataset keyword
             arbitrary data type
-        cosmopath : string. General keyword
+        iconpath : string. General keyword
             path where to store the look up table
         model : string. Dataset keyword
-            The COSMO model to use. Can be cosmo-1, cosmo-1e, cosmo-2, cosmo-7
+            The icon model to use. Can be icon-1, icon-1e, icon-2, icon-7
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -1054,28 +1036,28 @@ def process_cosmo_coord(procstatus, dscfg, radar_list=None):
         return None, None
     radar = radar_list[ind_rad]
 
-    model = dscfg.get('model', 'cosmo-1e')
-    if model not in ('cosmo-1', 'cosmo-1e', 'cosmo-2', 'cosmo-7'):
+    model = dscfg.get('model', 'icon-ch1-eps')
+    if model not in ('icon-ch1-eps', 'icon-ch2-eps'):
         warn('Unknown NWP model ' + model)
         return None, None
 
-    cosmo_coord = read_cosmo_coord(
-        dscfg['cosmopath'][ind_rad] +
-        'rad2cosmo/' +
+    icon_coord = read_icon_coord(
+        dscfg['iconpath'][ind_rad] +
+        'rad2icon/' +
         model +
         '_MDR_3D_const.nc',
         zmin=None)
 
-    if cosmo_coord is None:
+    if icon_coord is None:
         return None, None
 
-    cosmo_ind_field = cosmo2radar_coord(
-        radar, cosmo_coord, slice_xy=True, slice_z=False)
+    icon_ind_field = icon2radar_coord(
+        radar, icon_coord, slice_xy=True, slice_z=False)
 
     # prepare for exit
     radar_obj = deepcopy(radar)
     radar_obj.fields = dict()
-    radar_obj.add_field('cosmo_index', cosmo_ind_field)
+    radar_obj.add_field('icon_index', icon_ind_field)
 
     new_dataset = {
         'ind_rad': ind_rad,
@@ -1103,7 +1085,7 @@ def process_hzt_coord(procstatus, dscfg, radar_list=None):
             Can be 'C' or 'python'
         datatype : string. Dataset keyword
             arbitrary data type
-        cosmopath : string. General keyword
+        iconpath : string. General keyword
             path where to store the look up table
     radar_list : list of Radar objects
         Optional. list of radar objects

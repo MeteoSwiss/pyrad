@@ -8,8 +8,8 @@ Functions for obtaining Pyrad products from the datasets
     :toctree: generated/
 
     generate_occurrence_products
-    generate_cosmo_coord_products
-    generate_cosmo_to_radar_products
+    generate_icon_coord_products
+    generate_icon_to_radar_products
     generate_sun_hits_products
     generate_qvp_products
     generate_ml_products
@@ -163,10 +163,10 @@ def generate_occurrence_products(dataset, prdcfg):
     return generate_vol_products(dataset, prdcfg)
 
 
-def generate_cosmo_coord_products(dataset, prdcfg):
+def generate_icon_coord_products(dataset, prdcfg):
     """
-    generates COSMO coordinates products. Accepted product types:
-        'SAVEVOL': Save an object containing the index of the COSMO model grid
+    generates icon coordinates products. Accepted product types:
+        'SAVEVOL': Save an object containing the index of the icon model grid
             that corresponds to each radar gate in a C/F radial file.
             User defined parameters:
                 file_type: str
@@ -187,7 +187,7 @@ def generate_cosmo_coord_products(dataset, prdcfg):
     Parameters
     ----------
     dataset : tuple
-        radar object containing the COSMO coordinates
+        radar object containing the icon coordinates
 
     prdcfg : dictionary of dictionaries
         product configuration dictionary of dictionaries
@@ -219,8 +219,8 @@ def generate_cosmo_coord_products(dataset, prdcfg):
         new_dataset.fields = dict()
         new_dataset.add_field(field_name, radar_obj.fields[field_name])
 
-        savedir = prdcfg['cosmopath'][ind_rad] + 'rad2cosmo/'
-        fname = 'rad2cosmo_' + prdcfg['voltype'] + \
+        savedir = prdcfg['iconpath'][ind_rad] + 'rad2icon/'
+        fname = 'rad2icon_' + prdcfg['voltype'] + \
             '_' + prdcfg['procname'] + '.nc'
 
         if file_type == 'nc':
@@ -243,11 +243,11 @@ def generate_cosmo_coord_products(dataset, prdcfg):
     return None
 
 
-def generate_cosmo_to_radar_products(dataset, prdcfg):
+def generate_icon_to_radar_products(dataset, prdcfg):
     """
-    generates COSMO data in radar coordinates products. Accepted product
+    generates icon data in radar coordinates products. Accepted product
     types:
-        'SAVEVOL': Save an object containing the COSMO data in radar
+        'SAVEVOL': Save an object containing the icon data in radar
             coordinatesin a C/F radial or ODIM file.
                 User defined parameters:
                 file_type: str
@@ -269,7 +269,7 @@ def generate_cosmo_to_radar_products(dataset, prdcfg):
     Parameters
     ----------
     dataset : tuple
-        radar object containing the COSMO coordinates
+        radar object containing the icon coordinates
 
     prdcfg : dictionary of dictionaries
         product configuration dictionary of dictionaries
@@ -280,10 +280,10 @@ def generate_cosmo_to_radar_products(dataset, prdcfg):
         the name of the file created. None otherwise
 
     """
-    time_index = prdcfg.get('cosmo_time_index', 0)
+    time_index = prdcfg.get('icon_time_index', 0)
     if time_index > len(dataset) - 1:
         warn(
-            'COSMO time index larger than available. Skipping product ' +
+            'icon time index larger than available. Skipping product ' +
             prdcfg['type'])
         return None
 
@@ -310,7 +310,7 @@ def generate_cosmo_to_radar_products(dataset, prdcfg):
         new_dataset.add_field(field_name, radar_obj.fields[field_name])
 
         savedir = (
-            prdcfg['cosmopath'][ind_rad] +
+            prdcfg['iconpath'][ind_rad] +
             prdcfg['voltype'] +
             '/radar/' +
             prdcfg['timeinfo'].strftime('%Y-%m-%d') +
@@ -320,7 +320,7 @@ def generate_cosmo_to_radar_products(dataset, prdcfg):
         fname = (
             prdcfg['voltype'] + '_RUN' +
             prdcfg['timeinfo'].strftime('%Y%m%d%H%M%S') + '_' +
-            radar_dataset['dtcosmo'].strftime('%Y%m%d%H%M%S') + '.nc')
+            radar_dataset['dticon'].strftime('%Y%m%d%H%M%S') + '.nc')
 
         if not os.path.isdir(savedir):
             os.makedirs(savedir)

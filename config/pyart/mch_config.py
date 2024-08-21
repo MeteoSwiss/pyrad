@@ -307,11 +307,11 @@ colocated_gates = 'colocated_gates'
 occurrence = 'occurrence'
 frequency_of_occurrence = 'frequency_of_occurrence'
 
-# COSMO data fields
+# icon data fields
 temperature = 'temperature'
 iso0 = 'iso0'
 height_over_iso0 = 'height_over_iso0'
-cosmo_index = 'cosmo_index'
+icon_index = 'icon_index'
 hzt_index = 'hzt_index'
 iso0_height = 'iso0_height'
 
@@ -732,7 +732,7 @@ DEFAULT_FIELD_NAMES = {
     'iso0': iso0,
     'height_over_iso0': height_over_iso0,
     'iso0_height': iso0_height,
-    'cosmo_index': cosmo_index,
+    'icon_index': icon_index,
     'hzt_index': hzt_index,
     'visibility': visibility,
     'mininum_visible_elevation': mininum_visible_elevation,
@@ -1182,7 +1182,7 @@ DEFAULT_METADATA = {
         'coordinates': 'elevation azimuth range',
         'scale_factor': 0.5,
         'add_offset': -32.,
-        '_Write_as_dtype': 'uint8'},
+        },
 
     avg_reflectivity: {
         'units': 'dBZ',
@@ -1697,7 +1697,7 @@ DEFAULT_METADATA = {
         'coordinates': 'elevation azimuth range',
         'scale_factor': 0.062254902,
         'add_offset': -7.9375,
-        '_Write_as_dtype': 'uint8'},
+        },
 
     corrected_differential_reflectivity: {
         'units': 'dB',
@@ -2705,7 +2705,7 @@ DEFAULT_METADATA = {
         '_FillValue': 0,
         '_Write_as_dtype': 'uint8'},
 
-    # COSMO model data
+    # icon model data
     temperature: {
         'units': 'deg Celsius',
         'standard_name': 'temperature',
@@ -2736,11 +2736,11 @@ DEFAULT_METADATA = {
         'standard_name': 'iso0_height',
         'long_name': 'iso0 height'},
 
-    cosmo_index: {
+    icon_index: {
         'units': 'bin index',
-        'standard_name': 'cosmo_index',
+        'standard_name': 'icon_index',
         'long_name': (
-            'indices of the COSMO model corresponding to each radar gate'),
+            'indices of the icon model corresponding to each radar gate'),
         'coordinates': 'elevation azimuth range'},
 
     hzt_index: {

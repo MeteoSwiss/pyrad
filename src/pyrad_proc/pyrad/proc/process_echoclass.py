@@ -107,7 +107,6 @@ def process_echo_id(procstatus, dscfg, radar_list=None):
         warn('No valid radar')
         return None, None
     radar = radar_list[ind_rad]
-
     if ((refl_field not in radar.fields) or
             (zdr_field not in radar.fields) or
             (rhv_field not in radar.fields) or
@@ -1483,9 +1482,18 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
 
     if dscfg['HYDRO_METHOD'] == 'SEMISUPERVISED':
         if temp_field is None and iso0_field is None:
-            warn('iso0 or temperature fields needed to create hydrometeor ' +
-                 'classification field')
-            return None, None
+            if  'sounding' in dscfg:
+                warn('No iso0 or temperature fields were provided')
+                warn('Getting freezing level height from sounding')
+                sounding_code = dscfg['sounding']
+                t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
+                freezing_level = read_fzl_igra(sounding_code, t0)
+                _generate_iso0_from_fzl(radar, freezing_level)
+                iso0_field = 'height_over_iso0'
+            else:
+                warn('iso0 or temperature fields or sounding needed to create hydrometeor ' +
+                    'classification field')
+                return None, None
 
         if temp_field is not None and (temp_field not in radar.fields):
             warn('Unable to create hydrometeor classification field. ' +
@@ -2676,3 +2684,14 @@ class ScanObject:
         for field_name, field_name_int in zip(dp_fields, dualpol_vars_int):
             dualpol_fields[field_name_int] = radar.fields[field_name]['data']
         self.dualpol_fields = dualpol_fields
+
+def _generate_iso0_from_fzl(radar, fzl):
+    # Computes the height of iso0 from the freezing level
+    # and adds it to the radar object
+    alt_gates = radar.gate_z['data'] + radar.altitude['data'][0]
+    iso0_height = (alt_gates - fzl)
+    iso0_field = pyart.config.get_metadata('height_over_iso0')
+    iso0_field['data'] = iso0_height
+    radar.add_field('height_over_iso0', iso0_field)
+
+    

@@ -49,7 +49,7 @@ from pyart.util import subset_radar
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from ..io.read_data_sensor import read_trt_traj_data
 from ..io.read_data_other import read_antenna_pattern
-from ..io.read_data_cosmo import _put_radar_in_swiss_coord
+from ..io.read_data_icon import _put_radar_in_swiss_coord
 from ..util.radar_utils import belongs_roi_indices
 from ..util.radar_utils import get_fixed_rng_data, get_cercle_coords
 from ..util.radar_utils import get_box_coords
@@ -79,8 +79,8 @@ def get_process_func(dataset_type, dsname):
                 'CDF': process_cdf
                 'CDR': process_cdr
                 'CLT_TO_SAN': process_clt_to_echo_id
-                'COSMO': process_cosmo
-                'COSMO_LOOKUP': process_cosmo_lookup_table
+                'icon': process_icon
+                'ICON_LOOKUP': process_icon_lookup_table
                 'DEM': process_dem
                 'DEALIAS_FOURDD': process_dealias_fourdd
                 'DEALIAS_REGION': process_dealias_region_based
@@ -186,11 +186,11 @@ def get_process_func(dataset_type, dsname):
                 'CENTROIDS': process_centroids
             'COLOCATED_GATES' format output:
                 'COLOCATED_GATES': process_colocated_gates
-            'COSMO_COORD' format output:
-                'COSMO_COORD': process_cosmo_coord
+            'ICON_COORD' format output:
+                'ICON_COORD': process_icon_coord
                 'HZT_COORD': process_hzt_coord
-            'COSMO2RADAR' format output:
-                'COSMO2RADAR': process_cosmo_to_radar
+            'ICON2RADAR' format output:
+                'ICON2RADAR': process_icon_to_radar
             'GRID' format output:
                 'RAW_GRID': process_raw_grid
                 'GECSX' : process_gecsx
@@ -536,19 +536,19 @@ def get_process_func(dataset_type, dsname):
         func_name = 'process_selfconsistency_bias'
     elif dataset_type == 'SELFCONSISTENCY_BIAS2':
         func_name = 'process_selfconsistency_bias2'
-    elif dataset_type == 'COSMO':
-        func_name = 'process_cosmo'
-    elif dataset_type == 'COSMO_LOOKUP':
-        func_name = 'process_cosmo_lookup_table'
-    elif dataset_type == 'COSMO_COORD':
-        func_name = 'process_cosmo_coord'
-        dsformat = 'COSMO_COORD'
+    elif dataset_type == 'icon':
+        func_name = 'process_icon'
+    elif dataset_type == 'ICON_LOOKUP':
+        func_name = 'process_icon_lookup_table'
+    elif dataset_type == 'ICON_COORD':
+        func_name = 'process_icon_coord'
+        dsformat = 'ICON_COORD'
     elif dataset_type == 'HZT_COORD':
         func_name = 'process_hzt_coord'
-        dsformat = 'COSMO_COORD'
-    elif dataset_type == 'COSMO2RADAR':
-        func_name = 'process_cosmo_to_radar'
-        dsformat = 'COSMO2RADAR'
+        dsformat = 'ICON_COORD'
+    elif dataset_type == 'ICON2RADAR':
+        func_name = 'process_icon_to_radar'
+        dsformat = 'ICON2RADAR'
     elif dataset_type == 'HZT':
         func_name = 'process_hzt'
     elif dataset_type == 'ISO0_MF':

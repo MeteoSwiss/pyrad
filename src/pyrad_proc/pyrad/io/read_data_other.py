@@ -18,7 +18,7 @@ Functions for reading auxiliary data
     read_last_state
     read_status
     read_mch_xml_vad
-    read_rad4alp_cosmo
+    read_rad4alp_icon
     read_rad4alp_vis
     read_mf_vis
     read_histogram
@@ -551,9 +551,9 @@ def read_mch_xml_vad(voltime, cfg, ind_rad=0):
 
     return pyart.aux_io.read_mch_vad(filename)
 
-def read_rad4alp_cosmo(fname, datatype, ngates=0):
+def read_rad4alp_icon(fname, datatype, ngates=0):
     """
-    Reads rad4alp COSMO data binary file.
+    Reads rad4alp ICON data binary file.
 
     Parameters
     ----------
