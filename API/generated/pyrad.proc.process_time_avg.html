@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyrad.proc.process_time_avg &#8212; Pyrad 1.8.9 documentation</title>
+    <title>pyrad.proc.process_time_avg &#8212; Pyrad 2.0.0 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=32f5de64"></script>
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -128,7 +128,7 @@
   
   
   
-    <p class="title logo__title">Pyrad 1.8.9 documentation</p>
+    <p class="title logo__title">Pyrad 2.0.0 documentation</p>
   
 </a></div>
     
@@ -473,14 +473,14 @@ document.write(`
 <li class="toctree-l1 has-children"><a class="reference internal" href="pyrad.io.html">pyrad.io</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_config.html">pyrad.io.read_config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_data.html">pyrad.io.get_data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.cosmo2radar_data.html">pyrad.io.cosmo2radar_data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.cosmo2radar_coord.html">pyrad.io.cosmo2radar_coord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.icon2radar_data.html">pyrad.io.icon2radar_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.icon2radar_coord.html">pyrad.io.icon2radar_coord</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.hzt2radar_data.html">pyrad.io.hzt2radar_data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.hzt2radar_coord.html">pyrad.io.hzt2radar_coord</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_cosmo_fields.html">pyrad.io.get_cosmo_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_icon_fields.html">pyrad.io.get_icon_fields</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_iso0_field.html">pyrad.io.get_iso0_field</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_cosmo_data.html">pyrad.io.read_cosmo_data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_cosmo_coord.html">pyrad.io.read_cosmo_coord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_icon_data.html">pyrad.io.read_icon_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_icon_coord.html">pyrad.io.read_icon_coord</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_hzt_data.html">pyrad.io.read_hzt_data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_iso0_mf_data.html">pyrad.io.read_iso0_mf_data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_iso0_grib_data.html">pyrad.io.read_iso0_grib_data</a></li>
@@ -495,7 +495,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_proc_periods.html">pyrad.io.read_proc_periods</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_last_state.html">pyrad.io.read_last_state</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_status.html">pyrad.io.read_status</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_rad4alp_cosmo.html">pyrad.io.read_rad4alp_cosmo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_rad4alp_icon.html">pyrad.io.read_rad4alp_icon</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_rad4alp_vis.html">pyrad.io.read_rad4alp_vis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_excess_gates.html">pyrad.io.read_excess_gates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_colocated_gates.html">pyrad.io.read_colocated_gates</a></li>
@@ -588,7 +588,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.make_filename.html">pyrad.io.make_filename</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.generate_field_name_str.html">pyrad.io.generate_field_name_str</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_fieldname_pyart.html">pyrad.io.get_fieldname_pyart</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_fieldname_cosmo.html">pyrad.io.get_fieldname_cosmo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_fieldname_icon.html">pyrad.io.get_fieldname_icon</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_field_unit.html">pyrad.io.get_field_unit</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_file_list.html">pyrad.io.get_file_list</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_rad4alp_dir.html">pyrad.io.get_rad4alp_dir</a></li>
@@ -598,7 +598,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_datatype_fields.html">pyrad.io.get_datatype_fields</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_dataset_fields.html">pyrad.io.get_dataset_fields</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_datetime.html">pyrad.io.get_datetime</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.find_raw_cosmo_file.html">pyrad.io.find_raw_cosmo_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.find_raw_icon_file.html">pyrad.io.find_raw_icon_file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.find_hzt_file.html">pyrad.io.find_hzt_file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.find_iso0_file.html">pyrad.io.find_iso0_file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.find_iso0_grib_file.html">pyrad.io.find_iso0_grib_file</a></li>
@@ -637,25 +637,23 @@ document.write(`
 </ul>
 </details></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.add_field.html">pyrad.io.add_field</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyrad.io.cosmo2radar_coord.html">pyrad.io.cosmo2radar_coord</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyrad.io.cosmo2radar_data.html">pyrad.io.cosmo2radar_data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.dem2radar_data.html">pyrad.io.dem2radar_data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.find_date_in_file_name.html">pyrad.io.find_date_in_file_name</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.find_hzt_file.html">pyrad.io.find_hzt_file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.find_iso0_file.html">pyrad.io.find_iso0_file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.find_iso0_grib_file.html">pyrad.io.find_iso0_grib_file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyrad.io.find_raw_cosmo_file.html">pyrad.io.find_raw_cosmo_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.find_raw_icon_file.html">pyrad.io.find_raw_icon_file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.generate_field_name_str.html">pyrad.io.generate_field_name_str</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_cosmo_fields.html">pyrad.io.get_cosmo_fields</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_data.html">pyrad.io.get_data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_dataset_fields.html">pyrad.io.get_dataset_fields</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_datatype_fields.html">pyrad.io.get_datatype_fields</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_datatype_skyecho.html">pyrad.io.get_datatype_skyecho</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_datetime.html">pyrad.io.get_datetime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_field_unit.html">pyrad.io.get_field_unit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_fieldname_cosmo.html">pyrad.io.get_fieldname_cosmo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_fieldname_icon.html">pyrad.io.get_fieldname_icon</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_fieldname_pyart.html">pyrad.io.get_fieldname_pyart</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_file_list.html">pyrad.io.get_file_list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_icon_fields.html">pyrad.io.get_icon_fields</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_iso0_field.html">pyrad.io.get_iso0_field</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_iso0_ref.html">pyrad.io.get_iso0_ref</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_new_rainbow_file_name.html">pyrad.io.get_new_rainbow_file_name</a></li>
@@ -668,6 +666,8 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.grib2radar_data.html">pyrad.io.grib2radar_data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.hzt2radar_coord.html">pyrad.io.hzt2radar_coord</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.hzt2radar_data.html">pyrad.io.hzt2radar_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.icon2radar_coord.html">pyrad.io.icon2radar_coord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.icon2radar_data.html">pyrad.io.icon2radar_data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.interpol_field.html">pyrad.io.interpol_field</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.iso2radar_data.html">pyrad.io.iso2radar_data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.make_filename.html">pyrad.io.make_filename</a></li>
@@ -680,8 +680,6 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_colocated_gates.html">pyrad.io.read_colocated_gates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_config.html">pyrad.io.read_config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_coord_sensors.html">pyrad.io.read_coord_sensors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_cosmo_coord.html">pyrad.io.read_cosmo_coord</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_cosmo_data.html">pyrad.io.read_cosmo_data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_disdro_parsivel.html">pyrad.io.read_disdro_parsivel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_disdro_scattering.html">pyrad.io.read_disdro_scattering</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_excess_gates.html">pyrad.io.read_excess_gates</a></li>
@@ -689,6 +687,8 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_histogram.html">pyrad.io.read_histogram</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_histogram_ts.html">pyrad.io.read_histogram_ts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_hzt_data.html">pyrad.io.read_hzt_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_icon_coord.html">pyrad.io.read_icon_coord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_icon_data.html">pyrad.io.read_icon_data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_idrisi_data.html">pyrad.io.read_idrisi_data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_idrisi_metadata.html">pyrad.io.read_idrisi_metadata</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_intercomp_scores_ts.html">pyrad.io.read_intercomp_scores_ts</a></li>
@@ -708,7 +708,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_profile_ts.html">pyrad.io.read_profile_ts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_quantiles.html">pyrad.io.read_quantiles</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_quantiles_ts.html">pyrad.io.read_quantiles_ts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_rad4alp_cosmo.html">pyrad.io.read_rad4alp_cosmo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_rad4alp_icon.html">pyrad.io.read_rad4alp_icon</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_rad4alp_vis.html">pyrad.io.read_rad4alp_vis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_radiosounding_igra.html">pyrad.io.read_radiosounding_igra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_radiosounding_wyoming.html">pyrad.io.read_radiosounding_wyoming</a></li>
@@ -926,15 +926,15 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_traj_lightning.html">pyrad.proc.process_traj_lightning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_traj_trt.html">pyrad.proc.process_traj_trt</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_traj_trt_contour.html">pyrad.proc.process_traj_trt_contour</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_cosmo.html">pyrad.proc.process_cosmo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_cosmo_lookup_table.html">pyrad.proc.process_cosmo_lookup_table</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_cosmo_coord.html">pyrad.proc.process_cosmo_coord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_icon.html">pyrad.proc.process_icon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_icon_lookup_table.html">pyrad.proc.process_icon_lookup_table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_icon_coord.html">pyrad.proc.process_icon_coord</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_hzt.html">pyrad.proc.process_hzt</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_hzt_lookup_table.html">pyrad.proc.process_hzt_lookup_table</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_hzt_coord.html">pyrad.proc.process_hzt_coord</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_iso0_mf.html">pyrad.proc.process_iso0_mf</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_iso0_grib.html">pyrad.proc.process_iso0_grib</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_cosmo_to_radar.html">pyrad.proc.process_cosmo_to_radar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_icon_to_radar.html">pyrad.proc.process_icon_to_radar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_dem.html">pyrad.proc.process_dem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_visibility.html">pyrad.proc.process_visibility</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_gecsx.html">pyrad.proc.process_gecsx</a></li>
@@ -956,10 +956,6 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_correct_bias.html">pyrad.proc.process_correct_bias</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_correct_noise_rhohv.html">pyrad.proc.process_correct_noise_rhohv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_correct_phidp0.html">pyrad.proc.process_correct_phidp0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_cosmo.html">pyrad.proc.process_cosmo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_cosmo_coord.html">pyrad.proc.process_cosmo_coord</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_cosmo_lookup_table.html">pyrad.proc.process_cosmo_lookup_table</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_cosmo_to_radar.html">pyrad.proc.process_cosmo_to_radar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_dda.html">pyrad.proc.process_dda</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_dealias_fourdd.html">pyrad.proc.process_dealias_fourdd</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_dealias_region_based.html">pyrad.proc.process_dealias_region_based</a></li>
@@ -1003,6 +999,10 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_hzt.html">pyrad.proc.process_hzt</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_hzt_coord.html">pyrad.proc.process_hzt_coord</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_hzt_lookup_table.html">pyrad.proc.process_hzt_lookup_table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_icon.html">pyrad.proc.process_icon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_icon_coord.html">pyrad.proc.process_icon_coord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_icon_lookup_table.html">pyrad.proc.process_icon_lookup_table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_icon_to_radar.html">pyrad.proc.process_icon_to_radar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_ifft.html">pyrad.proc.process_ifft</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_intercomp.html">pyrad.proc.process_intercomp</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_intercomp_fields.html">pyrad.proc.process_intercomp_fields</a></li>
@@ -1107,8 +1107,8 @@ document.write(`
 <li class="toctree-l1 has-children"><a class="reference internal" href="pyrad.prod.html">pyrad.prod</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.get_prodgen_func.html">pyrad.prod.get_prodgen_func</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_occurrence_products.html">pyrad.prod.generate_occurrence_products</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_cosmo_coord_products.html">pyrad.prod.generate_cosmo_coord_products</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_cosmo_to_radar_products.html">pyrad.prod.generate_cosmo_to_radar_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_icon_coord_products.html">pyrad.prod.generate_icon_coord_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_icon_to_radar_products.html">pyrad.prod.generate_icon_to_radar_products</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_sun_hits_products.html">pyrad.prod.generate_sun_hits_products</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_intercomp_products.html">pyrad.prod.generate_intercomp_products</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_colocated_gates_products.html">pyrad.prod.generate_colocated_gates_products</a></li>
@@ -1125,10 +1125,10 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.prod.generate_centroids_products.html">pyrad.prod.generate_centroids_products</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_centroids_products.html">pyrad.prod.generate_centroids_products</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_colocated_gates_products.html">pyrad.prod.generate_colocated_gates_products</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_cosmo_coord_products.html">pyrad.prod.generate_cosmo_coord_products</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_cosmo_to_radar_products.html">pyrad.prod.generate_cosmo_to_radar_products</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_grid_products.html">pyrad.prod.generate_grid_products</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_grid_time_avg_products.html">pyrad.prod.generate_grid_time_avg_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_icon_coord_products.html">pyrad.prod.generate_icon_coord_products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_icon_to_radar_products.html">pyrad.prod.generate_icon_to_radar_products</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_intercomp_products.html">pyrad.prod.generate_intercomp_products</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_ml_products.html">pyrad.prod.generate_ml_products</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.prod.generate_monitoring_products.html">pyrad.prod.generate_monitoring_products</a></li>

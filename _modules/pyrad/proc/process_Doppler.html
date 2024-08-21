@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyrad.proc.process_Doppler &#8212; Pyrad 1.8.9 documentation</title>
+    <title>pyrad.proc.process_Doppler &#8212; Pyrad 2.0.0 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=32f5de64"></script>
+    <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -125,7 +125,7 @@
   
   
   
-    <p class="title logo__title">Pyrad 1.8.9 documentation</p>
+    <p class="title logo__title">Pyrad 2.0.0 documentation</p>
   
 </a></div>
     
@@ -413,6 +413,7 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">pyart</span>
 
+
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">pytda</span>
     <span class="n">_PYTDA_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
@@ -425,7 +426,7 @@ document.write(`
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_PYDDA_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">from</span> <span class="nn">..io.io_aux</span> <span class="kn">import</span> <span class="n">get_datatype_fields</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span>
+<span class="kn">from</span> <span class="nn">..io.io_aux</span> <span class="kn">import</span> <span class="n">get_datatype_fields</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span><span class="p">,</span> <span class="n">convert_pydda_to_pyart_grid</span>
 <span class="kn">from</span> <span class="nn">..io</span> <span class="kn">import</span> <span class="n">read_radiosounding_igra</span>
 <span class="kn">from</span> <span class="nn">.process_grid</span> <span class="kn">import</span> <span class="n">process_grid</span>
 <span class="kn">from</span> <span class="nn">..util</span> <span class="kn">import</span> <span class="n">compute_average_vad</span>
@@ -1344,7 +1345,7 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_PYDDA_AVAILABLE</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;PyDDA package not available. Unable to compute wind fields&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;PyDDA and xarray package not available. Unable to compute wind fields&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
@@ -1432,21 +1433,22 @@ document.write(`
             <span class="n">ind_radar_list</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span>
         <span class="n">grids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">process_grid</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dscfg_grid</span><span class="p">,</span> <span class="n">radar_list</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;radar_out&#39;</span><span class="p">])</span>
 
+    <span class="n">grids_pyDDA</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="c1"># Harmonize variables</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">grid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">grids</span><span class="p">):</span>
         <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;velocity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">vel_fields</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">signs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;velocity&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">refl_fields</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-
+        <span class="n">grids_pyDDA</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_from_pyart_grid</span><span class="p">(</span><span class="n">grid</span><span class="p">))</span>
+    
     <span class="c1"># DDA initialization</span>
-
-    <span class="n">grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">make_wind_field_from_profile</span><span class="p">(</span>
-        <span class="n">grids</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">wind_prof</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="s1">&#39;velocity&#39;</span><span class="p">)</span>
+    <span class="n">grids_pyDDA</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">make_wind_field_from_profile</span><span class="p">(</span>
+        <span class="n">grids_pyDDA</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">wind_prof</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="s1">&#39;velocity&#39;</span><span class="p">)</span>
 
     <span class="c1"># Actual DDA computation</span>
     <span class="n">new_grids</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">(</span>
-        <span class="n">grids</span><span class="p">,</span>
+        <span class="n">grids_pyDDA</span><span class="p">,</span>
         <span class="n">vel_name</span><span class="o">=</span><span class="s1">&#39;velocity&#39;</span><span class="p">,</span>
         <span class="n">refl_field</span><span class="o">=</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span>
         <span class="n">mask_outside_opt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -1454,6 +1456,12 @@ document.write(`
         <span class="n">Co</span><span class="o">=</span><span class="n">Co</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="n">Cm</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="n">Cx</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="n">Cy</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="n">Cz</span><span class="p">,</span> <span class="n">Cb</span><span class="o">=</span><span class="n">Cb</span><span class="p">,</span> <span class="n">Cv</span><span class="o">=</span><span class="n">Cv</span><span class="p">,</span> <span class="n">Cmod</span><span class="o">=</span><span class="n">Cmod</span><span class="p">,</span>
         <span class="n">Cpoint</span><span class="o">=</span><span class="n">Cpoint</span><span class="p">,</span> <span class="n">wind_tol</span><span class="o">=</span><span class="n">wind_tol</span><span class="p">,</span> <span class="n">frz</span><span class="o">=</span><span class="n">frz</span><span class="p">)</span>
 
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">grid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">new_grids</span><span class="p">):</span>
+        <span class="c1"># convert back to pyart grids</span>
+        <span class="n">new_grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">convert_pydda_to_pyart_grid</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+        <span class="c1"># add radar name</span>
+        <span class="n">new_grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">radar_name</span> <span class="o">=</span> <span class="n">grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">radar_name</span>
+        
     <span class="c1"># pyDDA returns as many grid objects as input radars</span>
     <span class="c1"># the idea here is to merge these grid objects into one</span>
     <span class="c1"># and to replace the homogeneized vel and refl fields by the</span>
@@ -1473,7 +1481,7 @@ document.write(`
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">new_key</span> <span class="o">=</span> <span class="n">var</span>
             <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">new_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
-
+    
     <span class="c1"># add the other dda grids</span>
     <span class="n">radar_metadata</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">additional_grid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">new_grids</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
@@ -1501,7 +1509,7 @@ document.write(`
             <span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Unknown&#39;</span>
 
         <span class="n">radar_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mdata</span><span class="p">)</span>
-
+    
     <span class="c1"># Rename DDA u, v, w fields to pyart names</span>
     <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;eastward_wind_component&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;u&#39;</span><span class="p">)</span>
     <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;northward_wind_component&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span>
@@ -1513,7 +1521,6 @@ document.write(`
 
     <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_grid</span>
-
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_radar_list</span></div>
 
 </pre></div>

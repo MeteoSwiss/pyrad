@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyrad.prod.product_aux &#8212; Pyrad 1.8.9 documentation</title>
+    <title>pyrad.prod.product_aux &#8212; Pyrad 2.0.0 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=32f5de64"></script>
+    <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -125,7 +125,7 @@
   
   
   
-    <p class="title logo__title">Pyrad 1.8.9 documentation</p>
+    <p class="title logo__title">Pyrad 2.0.0 documentation</p>
   
 </a></div>
     
@@ -398,11 +398,11 @@ document.write(`
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">.process_product</span> <span class="kn">import</span> <span class="n">generate_sun_hits_products</span>
-<span class="kn">from</span> <span class="nn">.process_product</span> <span class="kn">import</span> <span class="n">generate_cosmo_coord_products</span>
+<span class="kn">from</span> <span class="nn">.process_product</span> <span class="kn">import</span> <span class="n">generate_icon_coord_products</span>
 <span class="kn">from</span> <span class="nn">.process_product</span> <span class="kn">import</span> <span class="n">generate_occurrence_products</span>
 <span class="kn">from</span> <span class="nn">.process_product</span> <span class="kn">import</span> <span class="n">generate_qvp_products</span>
 <span class="kn">from</span> <span class="nn">.process_product</span> <span class="kn">import</span> <span class="n">generate_ml_products</span>
-<span class="kn">from</span> <span class="nn">.process_product</span> <span class="kn">import</span> <span class="n">generate_cosmo_to_radar_products</span>
+<span class="kn">from</span> <span class="nn">.process_product</span> <span class="kn">import</span> <span class="n">generate_icon_to_radar_products</span>
 <span class="kn">from</span> <span class="nn">.process_product</span> <span class="kn">import</span> <span class="n">generate_centroids_products</span>
 <span class="kn">from</span> <span class="nn">.process_product</span> <span class="kn">import</span> <span class="n">generate_vpr_products</span>
 
@@ -434,8 +434,8 @@ document.write(`
 <span class="sd">            &#39;VOL&#39;: generate_vol_products</span>
 <span class="sd">            &#39;CENTROIDS&#39;: generate_centroids_products</span>
 <span class="sd">            &#39;COLOCATED_GATES&#39;: generate_colocated_gates_products</span>
-<span class="sd">            &#39;COSMO_COORD&#39;: generate_cosmo_coord_products</span>
-<span class="sd">            &#39;COSMO2RADAR&#39;: generate_cosmo_to_radar_products</span>
+<span class="sd">            &#39;ICON_COORD&#39;: generate_icon_coord_products</span>
+<span class="sd">            &#39;ICON2RADAR&#39;: generate_icon_to_radar_products</span>
 <span class="sd">            &#39;GRID&#39;: generate_grid_products</span>
 <span class="sd">            &#39;SPECTRA&#39;: generate_spectra_products</span>
 <span class="sd">            &#39;GRID_TIMEAVG&#39;: generate_grid_time_avg_products</span>
@@ -484,10 +484,10 @@ document.write(`
         <span class="n">func</span> <span class="o">=</span> <span class="n">generate_traj_product</span>
     <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;COLOCATED_GATES&#39;</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">generate_colocated_gates_products</span>
-    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;COSMO_COORD&#39;</span><span class="p">:</span>
-        <span class="n">func</span> <span class="o">=</span> <span class="n">generate_cosmo_coord_products</span>
-    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;COSMO2RADAR&#39;</span><span class="p">:</span>
-        <span class="n">func</span> <span class="o">=</span> <span class="n">generate_cosmo_to_radar_products</span>
+    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;ICON_COORD&#39;</span><span class="p">:</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="n">generate_icon_coord_products</span>
+    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;ICON2RADAR&#39;</span><span class="p">:</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="n">generate_icon_to_radar_products</span>
     <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;QVP&#39;</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">generate_qvp_products</span>
     <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;ML&#39;</span><span class="p">:</span>

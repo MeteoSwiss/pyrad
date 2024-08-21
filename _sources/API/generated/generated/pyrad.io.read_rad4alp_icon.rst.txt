@@ -1,0 +1,6 @@
+pyrad.io.read\_rad4alp\_icon
+============================
+
+.. currentmodule:: pyrad.io
+
+.. autofunction:: read_rad4alp_icon

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Location configuration file &#8212; Pyrad 1.8.9 documentation</title>
+    <title>Location configuration file &#8212; Pyrad 2.0.0 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=32f5de64"></script>
+    <script src="../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -128,7 +128,7 @@
   
   
   
-    <p class="title logo__title">Pyrad 1.8.9 documentation</p>
+    <p class="title logo__title">Pyrad 2.0.0 documentation</p>
   
 </a></div>
     
@@ -437,6 +437,59 @@ it is not necessarily defined in this file. The fields are described in the tabl
 <td><p>FLOAT</p></td>
 <td><p>Radar antenna beam width [Deg].</p></td>
 </tr>
+<tr class="row-odd"><td><p>DataTypeIDInFiles</p></td>
+<td><p>STRUCT</p></td>
+<td><p>Structure of strings defining the mapping between pyrad names and variable names in input files. If not provided it will be expected that the name in the files are the standard py-ART names (defined in the py-ART config file). An example of such a struct could be:</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>dBZ</p></li>
+</ul>
+</td>
+<td><p>STRING</p></td>
+<td><p>DBZ</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>ZDR</p></li>
+</ul>
+</td>
+<td><p>STRING</p></td>
+<td><p>ZDR</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>RhoHV</p></li>
+</ul>
+</td>
+<td><p>STRING</p></td>
+<td><p>RHOHV</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>PhiDP</p></li>
+</ul>
+</td>
+<td><p>STRING</p></td>
+<td><p>PHIDP</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>KDP</p></li>
+</ul>
+</td>
+<td><p>STRING</p></td>
+<td><p>KDP</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li><p>V</p></li>
+</ul>
+</td>
+<td><p>STRING</p></td>
+<td><p>VEL</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li><p>W</p></li>
+</ul>
+</td>
+<td><p>STRING</p></td>
+<td><p>WIDTH</p></td>
+</tr>
 <tr class="row-odd"><td><p>AntennaGaindB</p></td>
 <td><p>FLOAT</p></td>
 <td><p>Antenna gain [dB].</p></td>
@@ -473,13 +526,13 @@ it is not necessarily defined in this file. The fields are described in the tabl
 <td><p>FLOAT</p></td>
 <td><p>Gas attenuation coefficient (units? (1 way attenuation)).</p></td>
 </tr>
-<tr class="row-even"><td><p>CosmoRunFreq</p></td>
+<tr class="row-even"><td><p>IconRunFreq</p></td>
 <td><p>INT</p></td>
-<td><p>Frequency of a COSMO model run in hours.</p></td>
+<td><p>Frequency of a Icon model run in hours.</p></td>
 </tr>
-<tr class="row-odd"><td><p>CosmoForecasted</p></td>
+<tr class="row-odd"><td><p>IconForecasted</p></td>
 <td><p>INT</p></td>
-<td><p>Hours forecasted by the COSMO model.</p></td>
+<td><p>Hours forecasted by the Icon model.</p></td>
 </tr>
 <tr class="row-even"><td><p>rmax</p></td>
 <td><p>FLOAT</p></td>

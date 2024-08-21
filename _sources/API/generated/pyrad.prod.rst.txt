@@ -19,13 +19,13 @@
     
     generate_colocated_gates_products
     
-    generate_cosmo_coord_products
-    
-    generate_cosmo_to_radar_products
-    
     generate_grid_products
     
     generate_grid_time_avg_products
+    
+    generate_icon_coord_products
+    
+    generate_icon_to_radar_products
     
     generate_intercomp_products
     

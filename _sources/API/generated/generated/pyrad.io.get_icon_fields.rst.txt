@@ -1,0 +1,6 @@
+pyrad.io.get\_icon\_fields
+==========================
+
+.. currentmodule:: pyrad.io
+
+.. autofunction:: get_icon_fields

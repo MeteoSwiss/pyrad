@@ -1,0 +1,6 @@
+pyrad.io.find\_raw\_icon\_file
+==============================
+
+.. currentmodule:: pyrad.io
+
+.. autofunction:: find_raw_icon_file

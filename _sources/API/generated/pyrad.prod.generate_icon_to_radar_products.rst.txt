@@ -1,0 +1,6 @@
+pyrad.prod.generate\_icon\_to\_radar\_products
+==============================================
+
+.. currentmodule:: pyrad.prod
+
+.. autofunction:: generate_icon_to_radar_products

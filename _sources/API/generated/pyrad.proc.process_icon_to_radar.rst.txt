@@ -1,0 +1,6 @@
+pyrad.proc.process\_icon\_to\_radar
+===================================
+
+.. currentmodule:: pyrad.proc
+
+.. autofunction:: process_icon_to_radar

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyrad.prod.process_product &#8212; Pyrad 1.8.9 documentation</title>
+    <title>pyrad.prod.process_product &#8212; Pyrad 2.0.0 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=32f5de64"></script>
+    <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -125,7 +125,7 @@
   
   
   
-    <p class="title logo__title">Pyrad 1.8.9 documentation</p>
+    <p class="title logo__title">Pyrad 2.0.0 documentation</p>
   
 </a></div>
     
@@ -395,8 +395,8 @@ document.write(`
 <span class="sd">    :toctree: generated/</span>
 
 <span class="sd">    generate_occurrence_products</span>
-<span class="sd">    generate_cosmo_coord_products</span>
-<span class="sd">    generate_cosmo_to_radar_products</span>
+<span class="sd">    generate_icon_coord_products</span>
+<span class="sd">    generate_icon_to_radar_products</span>
 <span class="sd">    generate_sun_hits_products</span>
 <span class="sd">    generate_qvp_products</span>
 <span class="sd">    generate_ml_products</span>
@@ -553,12 +553,12 @@ document.write(`
 
 
 
-<div class="viewcode-block" id="generate_cosmo_coord_products">
-<a class="viewcode-back" href="../../../API/generated/pyrad.prod.generate_cosmo_coord_products.html#pyrad.prod.generate_cosmo_coord_products">[docs]</a>
-<span class="k">def</span> <span class="nf">generate_cosmo_coord_products</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">):</span>
+<div class="viewcode-block" id="generate_icon_coord_products">
+<a class="viewcode-back" href="../../../API/generated/pyrad.prod.generate_icon_coord_products.html#pyrad.prod.generate_icon_coord_products">[docs]</a>
+<span class="k">def</span> <span class="nf">generate_icon_coord_products</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    generates COSMO coordinates products. Accepted product types:</span>
-<span class="sd">        &#39;SAVEVOL&#39;: Save an object containing the index of the COSMO model grid</span>
+<span class="sd">    generates icon coordinates products. Accepted product types:</span>
+<span class="sd">        &#39;SAVEVOL&#39;: Save an object containing the index of the icon model grid</span>
 <span class="sd">            that corresponds to each radar gate in a C/F radial file.</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                file_type: str</span>
@@ -579,7 +579,7 @@ document.write(`
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    dataset : tuple</span>
-<span class="sd">        radar object containing the COSMO coordinates</span>
+<span class="sd">        radar object containing the icon coordinates</span>
 
 <span class="sd">    prdcfg : dictionary of dictionaries</span>
 <span class="sd">        product configuration dictionary of dictionaries</span>
@@ -611,8 +611,8 @@ document.write(`
         <span class="n">new_dataset</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="n">new_dataset</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">radar_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">])</span>
 
-        <span class="n">savedir</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;cosmopath&#39;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;rad2cosmo/&#39;</span>
-        <span class="n">fname</span> <span class="o">=</span> <span class="s1">&#39;rad2cosmo_&#39;</span> <span class="o">+</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">]</span> <span class="o">+</span> \
+        <span class="n">savedir</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;iconpath&#39;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;rad2icon/&#39;</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="s1">&#39;rad2icon_&#39;</span> <span class="o">+</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">]</span> <span class="o">+</span> \
             <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;procname&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.nc&#39;</span>
 
         <span class="k">if</span> <span class="n">file_type</span> <span class="o">==</span> <span class="s1">&#39;nc&#39;</span><span class="p">:</span>
@@ -636,13 +636,13 @@ document.write(`
 
 
 
-<div class="viewcode-block" id="generate_cosmo_to_radar_products">
-<a class="viewcode-back" href="../../../API/generated/pyrad.prod.generate_cosmo_to_radar_products.html#pyrad.prod.generate_cosmo_to_radar_products">[docs]</a>
-<span class="k">def</span> <span class="nf">generate_cosmo_to_radar_products</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">):</span>
+<div class="viewcode-block" id="generate_icon_to_radar_products">
+<a class="viewcode-back" href="../../../API/generated/pyrad.prod.generate_icon_to_radar_products.html#pyrad.prod.generate_icon_to_radar_products">[docs]</a>
+<span class="k">def</span> <span class="nf">generate_icon_to_radar_products</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    generates COSMO data in radar coordinates products. Accepted product</span>
+<span class="sd">    generates icon data in radar coordinates products. Accepted product</span>
 <span class="sd">    types:</span>
-<span class="sd">        &#39;SAVEVOL&#39;: Save an object containing the COSMO data in radar</span>
+<span class="sd">        &#39;SAVEVOL&#39;: Save an object containing the icon data in radar</span>
 <span class="sd">            coordinatesin a C/F radial or ODIM file.</span>
 <span class="sd">                User defined parameters:</span>
 <span class="sd">                file_type: str</span>
@@ -664,7 +664,7 @@ document.write(`
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    dataset : tuple</span>
-<span class="sd">        radar object containing the COSMO coordinates</span>
+<span class="sd">        radar object containing the icon coordinates</span>
 
 <span class="sd">    prdcfg : dictionary of dictionaries</span>
 <span class="sd">        product configuration dictionary of dictionaries</span>
@@ -675,10 +675,10 @@ document.write(`
 <span class="sd">        the name of the file created. None otherwise</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">time_index</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cosmo_time_index&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">time_index</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;icon_time_index&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">time_index</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span>
-            <span class="s1">&#39;COSMO time index larger than available. Skipping product &#39;</span> <span class="o">+</span>
+            <span class="s1">&#39;icon time index larger than available. Skipping product &#39;</span> <span class="o">+</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">])</span>
         <span class="k">return</span> <span class="kc">None</span>
 
@@ -705,7 +705,7 @@ document.write(`
         <span class="n">new_dataset</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">radar_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">])</span>
 
         <span class="n">savedir</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;cosmopath&#39;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;iconpath&#39;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">]</span> <span class="o">+</span>
             <span class="s1">&#39;/radar/&#39;</span> <span class="o">+</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span>
@@ -715,7 +715,7 @@ document.write(`
         <span class="n">fname</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_RUN&#39;</span> <span class="o">+</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span>
-            <span class="n">radar_dataset</span><span class="p">[</span><span class="s1">&#39;dtcosmo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.nc&#39;</span><span class="p">)</span>
+            <span class="n">radar_dataset</span><span class="p">[</span><span class="s1">&#39;dticon&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.nc&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">savedir</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">savedir</span><span class="p">)</span>

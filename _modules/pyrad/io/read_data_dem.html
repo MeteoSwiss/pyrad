@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyrad.io.read_data_dem &#8212; Pyrad 1.8.9 documentation</title>
+    <title>pyrad.io.read_data_dem &#8212; Pyrad 2.0.0 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=32f5de64"></script>
+    <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -125,7 +125,7 @@
   
   
   
-    <p class="title logo__title">Pyrad 1.8.9 documentation</p>
+    <p class="title logo__title">Pyrad 2.0.0 documentation</p>
   
 </a></div>
     
@@ -421,7 +421,7 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">pyart</span>
 <span class="kn">from</span> <span class="nn">pyart.config</span> <span class="kn">import</span> <span class="n">get_metadata</span>
-<span class="kn">from</span> <span class="nn">..io.read_data_cosmo</span> <span class="kn">import</span> <span class="n">_put_radar_in_swiss_coord</span>
+<span class="kn">from</span> <span class="nn">.read_data_icon</span> <span class="kn">import</span> <span class="n">_put_radar_in_swiss_coord</span>
 
 <span class="c1"># from memory_profiler import profile</span>
 
@@ -640,10 +640,16 @@ document.write(`
         <span class="n">raster</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
 
         <span class="n">prj</span> <span class="o">=</span> <span class="n">raster</span><span class="o">.</span><span class="n">GetProjection</span><span class="p">()</span>
-        <span class="n">srs</span> <span class="o">=</span> <span class="n">osr</span><span class="o">.</span><span class="n">SpatialReference</span><span class="p">(</span><span class="n">wkt</span><span class="o">=</span><span class="n">prj</span><span class="p">)</span>
-        <span class="n">projparams</span> <span class="o">=</span> <span class="n">_proj4_str_to_dict</span><span class="p">(</span><span class="n">srs</span><span class="o">.</span><span class="n">ExportToProj4</span><span class="p">())</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">projparams</span><span class="p">):</span>  <span class="c1"># gdal could not read proj</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">srs</span> <span class="o">=</span> <span class="n">osr</span><span class="o">.</span><span class="n">SpatialReference</span><span class="p">(</span><span class="n">wkt</span><span class="o">=</span><span class="n">prj</span><span class="p">)</span>
+            <span class="n">projparams</span> <span class="o">=</span> <span class="n">_proj4_str_to_dict</span><span class="p">(</span><span class="n">srs</span><span class="o">.</span><span class="n">ExportToProj4</span><span class="p">())</span>
+        <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
             <span class="n">projparams</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">pass</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">projparams</span><span class="p">:</span> <span class="c1"># Case of empty dict</span>
+            <span class="n">projparams</span> <span class="o">=</span> <span class="kc">None</span>
+
         <span class="n">width</span> <span class="o">=</span> <span class="n">raster</span><span class="o">.</span><span class="n">RasterXSize</span>
         <span class="n">height</span> <span class="o">=</span> <span class="n">raster</span><span class="o">.</span><span class="n">RasterYSize</span>
         <span class="n">gt</span> <span class="o">=</span> <span class="n">raster</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>

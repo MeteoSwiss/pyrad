@@ -1,0 +1,6 @@
+pyrad.proc.process\_icon\_lookup\_table
+=======================================
+
+.. currentmodule:: pyrad.proc
+
+.. autofunction:: process_icon_lookup_table

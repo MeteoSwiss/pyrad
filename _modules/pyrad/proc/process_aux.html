@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyrad.proc.process_aux &#8212; Pyrad 1.8.9 documentation</title>
+    <title>pyrad.proc.process_aux &#8212; Pyrad 2.0.0 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=32f5de64"></script>
+    <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -125,7 +125,7 @@
   
   
   
-    <p class="title logo__title">Pyrad 1.8.9 documentation</p>
+    <p class="title logo__title">Pyrad 2.0.0 documentation</p>
   
 </a></div>
     
@@ -436,7 +436,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">..io.io_aux</span> <span class="kn">import</span> <span class="n">get_datatype_fields</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span>
 <span class="kn">from</span> <span class="nn">..io.read_data_sensor</span> <span class="kn">import</span> <span class="n">read_trt_traj_data</span>
 <span class="kn">from</span> <span class="nn">..io.read_data_other</span> <span class="kn">import</span> <span class="n">read_antenna_pattern</span>
-<span class="kn">from</span> <span class="nn">..io.read_data_cosmo</span> <span class="kn">import</span> <span class="n">_put_radar_in_swiss_coord</span>
+<span class="kn">from</span> <span class="nn">..io.read_data_icon</span> <span class="kn">import</span> <span class="n">_put_radar_in_swiss_coord</span>
 <span class="kn">from</span> <span class="nn">..util.radar_utils</span> <span class="kn">import</span> <span class="n">belongs_roi_indices</span>
 <span class="kn">from</span> <span class="nn">..util.radar_utils</span> <span class="kn">import</span> <span class="n">get_fixed_rng_data</span><span class="p">,</span> <span class="n">get_cercle_coords</span>
 <span class="kn">from</span> <span class="nn">..util.radar_utils</span> <span class="kn">import</span> <span class="n">get_box_coords</span>
@@ -468,8 +468,8 @@ document.write(`
 <span class="sd">                &#39;CDF&#39;: process_cdf</span>
 <span class="sd">                &#39;CDR&#39;: process_cdr</span>
 <span class="sd">                &#39;CLT_TO_SAN&#39;: process_clt_to_echo_id</span>
-<span class="sd">                &#39;COSMO&#39;: process_cosmo</span>
-<span class="sd">                &#39;COSMO_LOOKUP&#39;: process_cosmo_lookup_table</span>
+<span class="sd">                &#39;icon&#39;: process_icon</span>
+<span class="sd">                &#39;ICON_LOOKUP&#39;: process_icon_lookup_table</span>
 <span class="sd">                &#39;DEM&#39;: process_dem</span>
 <span class="sd">                &#39;DEALIAS_FOURDD&#39;: process_dealias_fourdd</span>
 <span class="sd">                &#39;DEALIAS_REGION&#39;: process_dealias_region_based</span>
@@ -575,11 +575,11 @@ document.write(`
 <span class="sd">                &#39;CENTROIDS&#39;: process_centroids</span>
 <span class="sd">            &#39;COLOCATED_GATES&#39; format output:</span>
 <span class="sd">                &#39;COLOCATED_GATES&#39;: process_colocated_gates</span>
-<span class="sd">            &#39;COSMO_COORD&#39; format output:</span>
-<span class="sd">                &#39;COSMO_COORD&#39;: process_cosmo_coord</span>
+<span class="sd">            &#39;ICON_COORD&#39; format output:</span>
+<span class="sd">                &#39;ICON_COORD&#39;: process_icon_coord</span>
 <span class="sd">                &#39;HZT_COORD&#39;: process_hzt_coord</span>
-<span class="sd">            &#39;COSMO2RADAR&#39; format output:</span>
-<span class="sd">                &#39;COSMO2RADAR&#39;: process_cosmo_to_radar</span>
+<span class="sd">            &#39;ICON2RADAR&#39; format output:</span>
+<span class="sd">                &#39;ICON2RADAR&#39;: process_icon_to_radar</span>
 <span class="sd">            &#39;GRID&#39; format output:</span>
 <span class="sd">                &#39;RAW_GRID&#39;: process_raw_grid</span>
 <span class="sd">                &#39;GECSX&#39; : process_gecsx</span>
@@ -925,19 +925,19 @@ document.write(`
         <span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;process_selfconsistency_bias&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;SELFCONSISTENCY_BIAS2&#39;</span><span class="p">:</span>
         <span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;process_selfconsistency_bias2&#39;</span>
-    <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;COSMO&#39;</span><span class="p">:</span>
-        <span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;process_cosmo&#39;</span>
-    <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;COSMO_LOOKUP&#39;</span><span class="p">:</span>
-        <span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;process_cosmo_lookup_table&#39;</span>
-    <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;COSMO_COORD&#39;</span><span class="p">:</span>
-        <span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;process_cosmo_coord&#39;</span>
-        <span class="n">dsformat</span> <span class="o">=</span> <span class="s1">&#39;COSMO_COORD&#39;</span>
+    <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;icon&#39;</span><span class="p">:</span>
+        <span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;process_icon&#39;</span>
+    <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;ICON_LOOKUP&#39;</span><span class="p">:</span>
+        <span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;process_icon_lookup_table&#39;</span>
+    <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;ICON_COORD&#39;</span><span class="p">:</span>
+        <span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;process_icon_coord&#39;</span>
+        <span class="n">dsformat</span> <span class="o">=</span> <span class="s1">&#39;ICON_COORD&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;HZT_COORD&#39;</span><span class="p">:</span>
         <span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;process_hzt_coord&#39;</span>
-        <span class="n">dsformat</span> <span class="o">=</span> <span class="s1">&#39;COSMO_COORD&#39;</span>
-    <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;COSMO2RADAR&#39;</span><span class="p">:</span>
-        <span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;process_cosmo_to_radar&#39;</span>
-        <span class="n">dsformat</span> <span class="o">=</span> <span class="s1">&#39;COSMO2RADAR&#39;</span>
+        <span class="n">dsformat</span> <span class="o">=</span> <span class="s1">&#39;ICON_COORD&#39;</span>
+    <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;ICON2RADAR&#39;</span><span class="p">:</span>
+        <span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;process_icon_to_radar&#39;</span>
+        <span class="n">dsformat</span> <span class="o">=</span> <span class="s1">&#39;ICON2RADAR&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;HZT&#39;</span><span class="p">:</span>
         <span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;process_hzt&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_type</span> <span class="o">==</span> <span class="s1">&#39;ISO0_MF&#39;</span><span class="p">:</span>

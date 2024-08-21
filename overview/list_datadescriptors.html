@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>List of pyrad input data descriptors &#8212; Pyrad 1.8.9 documentation</title>
+    <title>List of pyrad input data descriptors &#8212; Pyrad 2.0.0 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=32f5de64"></script>
+    <script src="../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -128,7 +128,7 @@
   
   
   
-    <p class="title logo__title">Pyrad 1.8.9 documentation</p>
+    <p class="title logo__title">Pyrad 2.0.0 documentation</p>
   
 </a></div>
     
@@ -628,6 +628,7 @@ See the data descriptor <em>ODIM</em> for usage info as it works exactly in the 
 </ul>
 </dd>
 </dl>
+<p>The ODIM reader and all similar readers (e.g. CFRADIAL) assume that the names within the files are the <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_variables.html">standard names</a>. If this is not the case, you can use the structure <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/loc.html">DataTypeIDInFiles</a> in the loc files to provide explicitely the mapping between the pyrad variable names and the variable names within your files.</p>
 </dd>
 <dt>example</dt><dd><p><em>ODIM:ZDR,D{%Y%m%d}-F{%Y%m%d%H%M00}</em> will attempt to read the differential reflectivity from the h5 file located under <em>datapath/ScanList/day_dir/filename</em> where <em>datapath</em> and <em>ScanList</em> are as defined in the main and loc configuration files and <em>day_dir</em> contains the datetime format string <em>%Y%m%d</em> and filename contains the datetime format <em>%Y%m%d%H%M00</em>.</p>
 <p><em>ODIM:dBZ,D{}-F{%Y%m%d%H%}</em> will attempt to read the horizontal reflectivity from the h5 file located under <em>datapath/ScanList/filename</em> where filename contains the datetime format <em>%Y%m%d%H%M00</em> (notice the omission of the <em>day_dir</em> folder which is expected not to be present.</p>
@@ -740,7 +741,7 @@ where datatype is a pyrad variable name as listed <a class="reference external" 
 <h3>COSMO<a class="headerlink" href="#cosmo" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><p>Reads data from the COSMO model, previously ingested by pyrad and converted to polar coordinates with the <a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_cosmo_lookup_table">COSMO_LOOKUP dataset</a>.
-For this to work you will need to define the variable <em>cosmopath</em> in the main pyrad configuration file.</p>
+For this to work you will need to define the variable <em>iconpath</em> in the main pyrad configuration file.</p>
 </dd>
 <dt>usage</dt><dd><p><em>COSMO:datatype</em> where datatype is a pyrad variable name as listed <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_variables.html#cosmo-to-pyrad">here</a>.</p>
 </dd>
@@ -992,13 +993,16 @@ From this list of variables you will typically use the CPC variables: CPC* (CPC0
 </section>
 <section id="mfcfradial">
 <h3>MFCFRADIAL<a class="headerlink" href="#mfcfradial" title="Link to this heading">#</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>MFCFRADIAL is deprecated since pyrad 2.0.0, please use CFRADIAL with path_convention=ODIM and specify the struct DataTypeIDInFiles in the loc file instead.</p>
+</div>
 <dl class="simple">
 <dt>description</dt><dd><p>Used to read radar data from MeteoFrance written in CFRadial</p>
 </dd>
 <dt>usage</dt><dd><p><em>MFCFRADIAL:datatype,dataset</em>
 See the data descriptor <em>ODIM</em> for usage info as it works exactly in the same way.</p>
 </dd>
-<dt>example</dt><dd></dd>
 </dl>
 </section>
 </section>

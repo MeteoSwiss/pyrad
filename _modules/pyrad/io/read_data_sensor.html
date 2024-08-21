@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyrad.io.read_data_sensor &#8212; Pyrad 1.8.9 documentation</title>
+    <title>pyrad.io.read_data_sensor &#8212; Pyrad 2.0.0 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=32f5de64"></script>
+    <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -125,7 +125,7 @@
   
   
   
-    <p class="title logo__title">Pyrad 1.8.9 documentation</p>
+    <p class="title logo__title">Pyrad 2.0.0 documentation</p>
   
 </a></div>
     
@@ -2731,9 +2731,7 @@ document.write(`
     <span class="c1"># URL of the station list</span>
     <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive&quot;</span> <span class="o">+</span> \
         <span class="s2">&quot;/doc/igra2-station-list.txt&quot;</span>
-
-    <span class="n">stations_ref</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_fwf</span><span class="p">(</span><span class="n">url</span><span class="p">,</span>
-        <span class="n">names</span><span class="o">=</span><span class="n">COLUMNS_STATION_LIST</span><span class="p">)</span>
+    <span class="n">stations_ref</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_fwf</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="n">COLUMNS_STATION_LIST</span><span class="p">)</span>
 
     <span class="c1"># get igra code</span>
     <span class="n">code</span> <span class="o">=</span> <span class="n">stations_ref</span><span class="p">[</span><span class="s1">&#39;CODE&#39;</span><span class="p">][</span><span class="n">stations_ref</span><span class="p">[</span><span class="s1">&#39;CODE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">station</span><span class="p">)]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -2744,9 +2742,7 @@ document.write(`
     <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url2</span><span class="p">)</span>
     <span class="n">links</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&lt;a\s+(?:[^&gt;]*?\s+)?href=&quot;([^&quot;]*)&quot;&#39;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">link</span><span class="p">:</span>
-            <span class="n">mylink</span> <span class="o">=</span> <span class="n">link</span>
+    <span class="n">mylink</span> <span class="o">=</span> <span class="p">[</span><span class="n">alink</span> <span class="k">for</span> <span class="n">alink</span> <span class="ow">in</span> <span class="n">links</span> <span class="k">if</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">alink</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="n">url</span> <span class="o">=</span> <span class="n">url2</span> <span class="o">+</span> <span class="n">mylink</span>
     <span class="c1"># Send a GET request to the URL</span>
@@ -2805,7 +2801,7 @@ document.write(`
         <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">all_soundings</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
     <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">offsets</span><span class="p">)</span>
     <span class="n">closest</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">all_soundings</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-        
+
     <span class="k">return</span> <span class="n">all_soundings</span><span class="p">[</span><span class="n">closest</span><span class="p">]</span></div>
 
 

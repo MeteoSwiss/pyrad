@@ -715,12 +715,12 @@ COLOCATED_GATES
 .. note::
    Supports all products of type 'VOL'
 
-COSMO_COORD
+ICON_COORD
 -----------------------------
 SAVEVOL
 """"""""""""""""""""""""""""""
 description
-   Save an object containing the index of the COSMO model grid that corresponds to each radar gate in a C/F radial file.
+   Save an object containing the index of the icon model grid that corresponds to each radar gate in a C/F radial file.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L201>`_
 parameters
    file_type : *str*
@@ -732,7 +732,7 @@ parameters
    compression_opts : *any*
         The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level). 
 
-COSMO2RADAR
+ICON2RADAR
 -----------------------------
 .. note::
    Supports all products of type 'VOL'
@@ -740,7 +740,7 @@ COSMO2RADAR
 SAVEVOL
 """"""""""""""""""""""""""""""
 description
-   Save an object containing the COSMO data in radar coordinatesin a C/F radial or ODIM file.
+   Save an object containing the icon data in radar coordinatesin a C/F radial or ODIM file.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L291>`_
 parameters
    file_type : *str*

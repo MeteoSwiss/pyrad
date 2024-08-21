@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyrad.io.read_data_hzt &#8212; Pyrad 1.8.9 documentation</title>
+    <title>pyrad.io.read_data_hzt &#8212; Pyrad 2.0.0 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=32f5de64"></script>
+    <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -125,7 +125,7 @@
   
   
   
-    <p class="title logo__title">Pyrad 1.8.9 documentation</p>
+    <p class="title logo__title">Pyrad 2.0.0 documentation</p>
   
 </a></div>
     
@@ -421,7 +421,7 @@ document.write(`
     <span class="c1"># bare exception needed to capture error</span>
     <span class="n">_METRANETLIB_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">from</span> <span class="nn">..io.read_data_cosmo</span> <span class="kn">import</span> <span class="n">_put_radar_in_swiss_coord</span>
+<span class="kn">from</span> <span class="nn">..io.read_data_icon</span> <span class="kn">import</span> <span class="n">_put_radar_in_swiss_coord</span>
 
 
 <div class="viewcode-block" id="hzt2radar_data">
@@ -442,7 +442,7 @@ document.write(`
 <span class="sd">    hzt_data : dict</span>
 <span class="sd">        dictionary containing the HZT data</span>
 <span class="sd">    slice_xy : boolean</span>
-<span class="sd">        if true the horizontal plane of the COSMO field is cut to the</span>
+<span class="sd">        if true the horizontal plane of the icon field is cut to the</span>
 <span class="sd">        dimensions of the radar field</span>
 <span class="sd">    field_name : str</span>
 <span class="sd">        name of HZT fields to convert (default height_over_iso0)</span>
@@ -514,7 +514,7 @@ document.write(`
     <span class="n">_</span><span class="p">,</span> <span class="n">ind_vec</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
         <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">((</span><span class="n">y_radar</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">x_radar</span><span class="o">.</span><span class="n">flatten</span><span class="p">())),</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="c1"># put the index in the original cosmo coordinates</span>
+    <span class="c1"># put the index in the original icon coordinates</span>
     <span class="n">nx_hzt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">hzt_coord</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
 
     <span class="n">nx</span> <span class="o">=</span> <span class="n">ind_xmax</span> <span class="o">-</span> <span class="n">ind_xmin</span> <span class="o">+</span> <span class="mi">1</span>
@@ -649,7 +649,7 @@ document.write(`
 <span class="k">def</span> <span class="nf">_prepare_for_interpolation</span><span class="p">(</span><span class="n">x_radar</span><span class="p">,</span> <span class="n">y_radar</span><span class="p">,</span> <span class="n">hzt_coord</span><span class="p">,</span> <span class="n">slice_xy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    prepares the HZT 2D volume for interpolation:</span>
-<span class="sd">        1. if set slices the cosmo data to the area covered by the radar</span>
+<span class="sd">        1. if set slices the icon data to the area covered by the radar</span>
 <span class="sd">        2. creates the x, y grid for the interpolation</span>
 
 <span class="sd">    Parameters</span>
@@ -675,7 +675,7 @@ document.write(`
     <span class="n">ny_hzt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">hzt_coord</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
 
     <span class="k">if</span> <span class="n">slice_xy</span><span class="p">:</span>
-        <span class="c1"># get the COSMO data within the radar range</span>
+        <span class="c1"># get the icon data within the radar range</span>
         <span class="n">xmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x_radar</span><span class="p">)</span>
         <span class="n">xmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x_radar</span><span class="p">)</span>
         <span class="n">ymin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">y_radar</span><span class="p">)</span>

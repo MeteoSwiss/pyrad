@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>List of pyrad datasets separated by dataset type &#8212; Pyrad 1.8.9 documentation</title>
+    <title>List of pyrad datasets separated by dataset type &#8212; Pyrad 2.0.0 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=32f5de64"></script>
+    <script src="../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -128,7 +128,7 @@
   
   
   
-    <p class="title logo__title">Pyrad 1.8.9 documentation</p>
+    <p class="title logo__title">Pyrad 2.0.0 documentation</p>
   
 </a></div>
     
@@ -596,47 +596,24 @@ document.write(`
 </dd>
 </dl>
 </section>
-<section id="cosmo">
-<h3>COSMO<a class="headerlink" href="#cosmo" title="Link to this heading">#</a></h3>
+<section id="icon-lookup">
+<h3>ICON_LOOKUP<a class="headerlink" href="#icon-lookup" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
-<div><p>Gets COSMO data and put it in radar coordinates</p>
+<div><p>Gets icon data and put it in radar coordinates using look up tables computed or loaded when initializing</p>
 </div></blockquote>
-<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_cosmo">[Source]</a></p>
+<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_icon_lookup_table">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type</p>
 </dd>
-<dt>keep_in_memory<span class="classifier">int. Dataset keyword</span></dt><dd><p>if set keeps the COSMO data dict, the COSMO coordinates dict and the COSMO field in radar coordinates in memory</p>
+<dt>lookup_table<span class="classifier">int. Dataset keyword</span></dt><dd><p>if set a pre-computed look up table for the icon coordinates is loaded. Otherwise the look up table is computed taking the first radar object as reference</p>
 </dd>
-<dt>regular_grid<span class="classifier">int. Dataset keyword</span></dt><dd><p>if set it is assume that the radar has a grid constant in time and there is no need to compute a new COSMO field if the COSMO data has not changed</p>
+<dt>regular_grid<span class="classifier">int. Dataset keyword</span></dt><dd><p>if set it is assume that the radar has a grid constant in time and therefore there is no need to interpolate the icon field in memory to the current radar grid</p>
 </dd>
-<dt>cosmo_type<span class="classifier">str. Dataset keyword</span></dt><dd><p>name of the COSMO field to process. Default TEMP</p>
+<dt>icon_type<span class="classifier">str. Dataset keyword</span></dt><dd><p>name of the icon field to process. Default TEMP</p>
 </dd>
-<dt>cosmo_variables<span class="classifier">list of strings. Dataset keyword</span></dt><dd><p>Py-art name of the COSMO fields. Default temperature</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</section>
-<section id="cosmo-lookup">
-<h3>COSMO_LOOKUP<a class="headerlink" href="#cosmo-lookup" title="Link to this heading">#</a></h3>
-<dl>
-<dt>description</dt><dd><blockquote>
-<div><p>Gets COSMO data and put it in radar coordinates using look up tables computed or loaded when initializing</p>
-</div></blockquote>
-<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_cosmo_lookup_table">[Source]</a></p>
-</dd>
-<dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type</p>
-</dd>
-<dt>lookup_table<span class="classifier">int. Dataset keyword</span></dt><dd><p>if set a pre-computed look up table for the COSMO coordinates is loaded. Otherwise the look up table is computed taking the first radar object as reference</p>
-</dd>
-<dt>regular_grid<span class="classifier">int. Dataset keyword</span></dt><dd><p>if set it is assume that the radar has a grid constant in time and therefore there is no need to interpolate the COSMO field in memory to the current radar grid</p>
-</dd>
-<dt>cosmo_type<span class="classifier">str. Dataset keyword</span></dt><dd><p>name of the COSMO field to process. Default TEMP</p>
-</dd>
-<dt>cosmo_variables<span class="classifier">list of strings. Dataset keyword</span></dt><dd><p>Py-art name of the COSMO fields. Default temperature</p>
+<dt>icon_variables<span class="classifier">list of strings. Dataset keyword</span></dt><dd><p>Py-art name of the icon fields. Default temperature</p>
 </dd>
 </dl>
 </dd>
@@ -967,20 +944,20 @@ document.write(`
 <dt>description</dt><dd><blockquote>
 <div><p>Gets iso0 degree data in HZT format and put it in radar coordinates</p>
 </div></blockquote>
-<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_hzt">[Source]</a></p>
+<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_hzt">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>metranet_read_lib<span class="classifier">str. Global keyword</span></dt><dd><p>Type of METRANET reader library used to read the data. Can be ‘C’ or ‘python’</p>
 </dd>
 <dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type</p>
 </dd>
-<dt>keep_in_memory<span class="classifier">int. Dataset keyword</span></dt><dd><p>if set keeps the COSMO data dict, the COSMO coordinates dict and the COSMO field in radar coordinates in memory</p>
+<dt>keep_in_memory<span class="classifier">int. Dataset keyword</span></dt><dd><p>if set keeps the icon data dict, the icon coordinates dict and the icon field in radar coordinates in memory</p>
 </dd>
-<dt>regular_grid<span class="classifier">int. Dataset keyword</span></dt><dd><p>if set it is assume that the radar has a grid constant in time and there is no need to compute a new COSMO field if the COSMO data has not changed</p>
+<dt>regular_grid<span class="classifier">int. Dataset keyword</span></dt><dd><p>if set it is assume that the radar has a grid constant in time and there is no need to compute a new icon field if the icon data has not changed</p>
 </dd>
-<dt>cosmo_type<span class="classifier">str. Dataset keyword</span></dt><dd><p>name of the COSMO field to process. Default TEMP</p>
+<dt>icon_type<span class="classifier">str. Dataset keyword</span></dt><dd><p>name of the icon field to process. Default TEMP</p>
 </dd>
-<dt>cosmo_variables<span class="classifier">list of strings. Dataset keyword</span></dt><dd><p>Py-art name of the COSMO fields. Default temperature</p>
+<dt>icon_variables<span class="classifier">list of strings. Dataset keyword</span></dt><dd><p>Py-art name of the icon fields. Default temperature</p>
 </dd>
 </dl>
 </dd>
@@ -992,16 +969,16 @@ document.write(`
 <dt>description</dt><dd><blockquote>
 <div><p>Gets HZT data and put it in radar coordinates using look up tables computed or loaded when initializing</p>
 </div></blockquote>
-<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_hzt_lookup_table">[Source]</a></p>
+<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_hzt_lookup_table">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>metranet_read_lib<span class="classifier">str. Global keyword</span></dt><dd><p>Type of METRANET reader library used to read the data. Can be ‘C’ or ‘python’</p>
 </dd>
 <dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type</p>
 </dd>
-<dt>lookup_table<span class="classifier">int. Dataset keyword</span></dt><dd><p>if set a pre-computed look up table for the COSMO coordinates is loaded. Otherwise the look up table is computed taking the first radar object as reference</p>
+<dt>lookup_table<span class="classifier">int. Dataset keyword</span></dt><dd><p>if set a pre-computed look up table for the icon coordinates is loaded. Otherwise the look up table is computed taking the first radar object as reference</p>
 </dd>
-<dt>regular_grid<span class="classifier">int. Dataset keyword</span></dt><dd><p>if set it is assume that the radar has a grid constant in time and therefore there is no need to interpolate the COSMO field in memory to the current radar grid</p>
+<dt>regular_grid<span class="classifier">int. Dataset keyword</span></dt><dd><p>if set it is assume that the radar has a grid constant in time and therefore there is no need to interpolate the icon field in memory to the current radar grid</p>
 </dd>
 </dl>
 </dd>
@@ -1013,7 +990,7 @@ document.write(`
 <dt>description</dt><dd><blockquote>
 <div><p>Gets iso0 degree data in GRIB format and put it in radar coordinates. This function is meant to process data received from the MeteoFrance NWP model. It can output the height over the iso0 of each gate or the iso0 height at each gate</p>
 </div></blockquote>
-<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_iso0_grib">[Source]</a></p>
+<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_iso0_grib">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type</p>
@@ -1032,7 +1009,7 @@ document.write(`
 <dt>description</dt><dd><blockquote>
 <div><p>Gets iso0 degree data in text format and put it in radar coordinates. This function is meant to process data received from the MeteoFrance NWP model. The model provides a maximum of 9 points at 0.5 degree lat/lon spacing surrounding a given radar. If a point is not provided it means that the iso0 for that point is at or below the ground level. Out of these points a single reference iso-0 is obtained according to the user defined iso0 statistic.</p>
 </div></blockquote>
-<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_iso0_mf">[Source]</a></p>
+<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_iso0_mf">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type</p>
@@ -2681,8 +2658,8 @@ document.write(`
 </section>
 <section id="centroids">
 <h2>CENTROIDS<a class="headerlink" href="#centroids" title="Link to this heading">#</a></h2>
-<section id="id103">
-<h3>CENTROIDS<a class="headerlink" href="#id103" title="Link to this heading">#</a></h3>
+<section id="id102">
+<h3>CENTROIDS<a class="headerlink" href="#id102" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
 <div><p>Computes centroids for the semi-supervised hydrometeor classification</p>
@@ -2759,8 +2736,8 @@ document.write(`
 </section>
 <section id="colocated-gates">
 <h2>COLOCATED_GATES<a class="headerlink" href="#colocated-gates" title="Link to this heading">#</a></h2>
-<section id="id105">
-<h3>COLOCATED_GATES<a class="headerlink" href="#id105" title="Link to this heading">#</a></h3>
+<section id="id104">
+<h3>COLOCATED_GATES<a class="headerlink" href="#id104" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
 <div><p>Find colocated gates within two radars</p>
@@ -2803,22 +2780,22 @@ document.write(`
 </dl>
 </section>
 </section>
-<section id="cosmo-coord">
-<h2>COSMO_COORD<a class="headerlink" href="#cosmo-coord" title="Link to this heading">#</a></h2>
-<section id="id107">
-<h3>COSMO_COORD<a class="headerlink" href="#id107" title="Link to this heading">#</a></h3>
+<section id="icon-coord">
+<h2>ICON_COORD<a class="headerlink" href="#icon-coord" title="Link to this heading">#</a></h2>
+<section id="id106">
+<h3>ICON_COORD<a class="headerlink" href="#id106" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
-<div><p>Gets the COSMO indices corresponding to each cosmo coordinates</p>
+<div><p>Gets the icon indices corresponding to each icon coordinates</p>
 </div></blockquote>
-<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_cosmo_coord">[Source]</a></p>
+<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_icon_coord">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type</p>
 </dd>
-<dt>cosmopath<span class="classifier">string. General keyword</span></dt><dd><p>path where to store the look up table</p>
+<dt>iconpath<span class="classifier">string. General keyword</span></dt><dd><p>path where to store the look up table</p>
 </dd>
-<dt>model<span class="classifier">string. Dataset keyword</span></dt><dd><p>The COSMO model to use. Can be cosmo-1, cosmo-1e, cosmo-2, cosmo-7</p>
+<dt>model<span class="classifier">string. Dataset keyword</span></dt><dd><p>The icon model to use. Can be icon-1, icon-1e, icon-2, icon-7</p>
 </dd>
 </dl>
 </dd>
@@ -2830,38 +2807,38 @@ document.write(`
 <dt>description</dt><dd><blockquote>
 <div><p>Gets the HZT indices corresponding to each HZT coordinates</p>
 </div></blockquote>
-<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_hzt_coord">[Source]</a></p>
+<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_hzt_coord">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>metranet_read_lib<span class="classifier">str. Global keyword</span></dt><dd><p>Type of METRANET reader library used to read the data. Can be ‘C’ or ‘python’</p>
 </dd>
 <dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type</p>
 </dd>
-<dt>cosmopath<span class="classifier">string. General keyword</span></dt><dd><p>path where to store the look up table</p>
+<dt>iconpath<span class="classifier">string. General keyword</span></dt><dd><p>path where to store the look up table</p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 </section>
-<section id="cosmo2radar">
-<h2>COSMO2RADAR<a class="headerlink" href="#cosmo2radar" title="Link to this heading">#</a></h2>
-<section id="id110">
-<h3>COSMO2RADAR<a class="headerlink" href="#id110" title="Link to this heading">#</a></h3>
+<section id="icon2radar">
+<h2>ICON2RADAR<a class="headerlink" href="#icon2radar" title="Link to this heading">#</a></h2>
+<section id="id109">
+<h3>ICON2RADAR<a class="headerlink" href="#id109" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
-<div><p>Gets COSMO data and put it in radar coordinates using look up tables</p>
+<div><p>Gets icon data and put it in radar coordinates using look up tables</p>
 </div></blockquote>
-<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_cosmo_to_radar">[Source]</a></p>
+<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_icon_to_radar">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type</p>
 </dd>
-<dt>cosmo_type<span class="classifier">str. Dataset keyword</span></dt><dd><p>name of the COSMO field to process. Default TEMP</p>
+<dt>icon_type<span class="classifier">str. Dataset keyword</span></dt><dd><p>name of the icon field to process. Default TEMP</p>
 </dd>
-<dt>cosmo_variables<span class="classifier">list of strings. Dataset keyword</span></dt><dd><p>Py-art name of the COSMO fields. Default temperature</p>
+<dt>icon_variables<span class="classifier">list of strings. Dataset keyword</span></dt><dd><p>Py-art name of the icon fields. Default temperature</p>
 </dd>
-<dt>cosmo_time_index_min, cosmo_time_index_max<span class="classifier">int</span></dt><dd><p>minimum and maximum indices of the COSMO data to retrieve. If a value is provided only data corresponding to the time indices within the interval will be used. If None all data will be used. Default None</p>
+<dt>icon_time_index_min, icon_time_index_max<span class="classifier">int</span></dt><dd><p>minimum and maximum indices of the icon data to retrieve. If a value is provided only data corresponding to the time indices within the interval will be used. If None all data will be used. Default None</p>
 </dd>
 </dl>
 </dd>
@@ -2881,8 +2858,8 @@ document.write(`
 </dl>
 <p>parameters</p>
 </section>
-<section id="id113">
-<h3>GECSX<a class="headerlink" href="#id113" title="Link to this heading">#</a></h3>
+<section id="id112">
+<h3>GECSX<a class="headerlink" href="#id112" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
 <div><p>Computes ground clutter RCS, radar visibility and many others using the GECSX algorithmn translated from IDL into python</p>
@@ -2912,8 +2889,8 @@ document.write(`
 </dd>
 </dl>
 </section>
-<section id="id115">
-<h3>GRID<a class="headerlink" href="#id115" title="Link to this heading">#</a></h3>
+<section id="id114">
+<h3>GRID<a class="headerlink" href="#id114" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
 <div><p>Puts the radar data in a regular grid</p>
@@ -3167,8 +3144,8 @@ document.write(`
 </section>
 <section id="intercomp">
 <h2>INTERCOMP<a class="headerlink" href="#intercomp" title="Link to this heading">#</a></h2>
-<section id="id127">
-<h3>INTERCOMP<a class="headerlink" href="#id127" title="Link to this heading">#</a></h3>
+<section id="id126">
+<h3>INTERCOMP<a class="headerlink" href="#id126" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
 <div><p>intercomparison between two radars at co-located gates. The variables compared must be of the same type.</p>
@@ -3269,8 +3246,8 @@ document.write(`
 </section>
 <section id="vpr">
 <h2>VPR<a class="headerlink" href="#vpr" title="Link to this heading">#</a></h2>
-<section id="id132">
-<h3>VPR<a class="headerlink" href="#id132" title="Link to this heading">#</a></h3>
+<section id="id131">
+<h3>VPR<a class="headerlink" href="#id131" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
 <div><p>Computes the vertical profile of reflectivity using the Meteo-France operational algorithm</p>
@@ -3366,8 +3343,8 @@ document.write(`
 </dd>
 </dl>
 </section>
-<section id="id135">
-<h3>MONITORING<a class="headerlink" href="#id135" title="Link to this heading">#</a></h3>
+<section id="id134">
+<h3>MONITORING<a class="headerlink" href="#id134" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
 <div><p>computes monitoring statistics</p>
@@ -3388,8 +3365,8 @@ document.write(`
 </section>
 <section id="occurrence">
 <h2>OCCURRENCE<a class="headerlink" href="#occurrence" title="Link to this heading">#</a></h2>
-<section id="id137">
-<h3>OCCURRENCE<a class="headerlink" href="#id137" title="Link to this heading">#</a></h3>
+<section id="id136">
+<h3>OCCURRENCE<a class="headerlink" href="#id136" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
 <div><p>computes the frequency of occurrence of data. It looks only for gates where data is present.</p>
@@ -3497,8 +3474,8 @@ document.write(`
 </dd>
 </dl>
 </section>
-<section id="id142">
-<h3>QVP<a class="headerlink" href="#id142" title="Link to this heading">#</a></h3>
+<section id="id141">
+<h3>QVP<a class="headerlink" href="#id141" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
 <div><p>Computes quasi vertical profiles, by averaging over height levels PPI data.</p>
@@ -3630,8 +3607,8 @@ document.write(`
 </section>
 <section id="sun-hits">
 <h2>SUN_HITS<a class="headerlink" href="#sun-hits" title="Link to this heading">#</a></h2>
-<section id="id148">
-<h3>SUN_HITS<a class="headerlink" href="#id148" title="Link to this heading">#</a></h3>
+<section id="id147">
+<h3>SUN_HITS<a class="headerlink" href="#id147" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
 <div><p>monitoring of the radar using sun hits</p>
@@ -4168,8 +4145,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cdf">CDF</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cdr">CDR</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clt-to-san">CLT_TO_SAN</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cosmo">COSMO</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cosmo-lookup">COSMO_LOOKUP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#icon-lookup">ICON_LOOKUP</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dem">DEM</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dealias-fourdd">DEALIAS_FOURDD</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dealias-region">DEALIAS_REGION</a></li>
@@ -4267,26 +4243,26 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#centroids">CENTROIDS</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id103">CENTROIDS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id102">CENTROIDS</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#colocated-gates">COLOCATED_GATES</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id105">COLOCATED_GATES</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id104">COLOCATED_GATES</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cosmo-coord">COSMO_COORD</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id107">COSMO_COORD</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#icon-coord">ICON_COORD</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id106">ICON_COORD</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hzt-coord">HZT_COORD</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cosmo2radar">COSMO2RADAR</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id110">COSMO2RADAR</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#icon2radar">ICON2RADAR</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id109">ICON2RADAR</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#grid">GRID</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#raw-grid">RAW_GRID</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id113">GECSX</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id115">GRID</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id112">GECSX</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id114">GRID</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grid-fields-diff">GRID_FIELDS_DIFF</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grid-mask">GRID_MASK</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grid-texture">GRID_TEXTURE</a></li>
@@ -4303,7 +4279,7 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intercomp">INTERCOMP</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id127">INTERCOMP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id126">INTERCOMP</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intercomp-fields">INTERCOMP_FIELDS</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intercomp-time-avg">INTERCOMP_TIME_AVG</a></li>
 </ul>
@@ -4313,23 +4289,23 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vpr">VPR</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id132">VPR</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id131">VPR</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#monitoring">MONITORING</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gc-monitoring">GC_MONITORING</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id135">MONITORING</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id134">MONITORING</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#occurrence">OCCURRENCE</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id137">OCCURRENCE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id136">OCCURRENCE</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#occurrence-period">OCCURRENCE_PERIOD</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#timeavg-std">TIMEAVG_STD</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#qvp">QVP</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evp">EVP</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id142">QVP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id141">QVP</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#svp">SVP</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#time-height">TIME_HEIGHT</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#time-along-coord">TIME_ALONG_COORD</a></li>
@@ -4340,7 +4316,7 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sun-hits">SUN_HITS</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id148">SUN_HITS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id147">SUN_HITS</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sunscan">SUNSCAN</a></li>
 </ul>
 </li>

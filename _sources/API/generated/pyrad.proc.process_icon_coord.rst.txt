@@ -1,0 +1,6 @@
+pyrad.proc.process\_icon\_coord
+===============================
+
+.. currentmodule:: pyrad.proc
+
+.. autofunction:: process_icon_coord

@@ -121,39 +121,22 @@ parameters
    datatype : list of string. Dataset keyword
        The input data types
 
-COSMO
+ICON_LOOKUP
 """"""""""""""""""""""""""""""
 description
-   Gets COSMO data and put it in radar coordinates
- `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_cosmo>`_
-parameters
-   datatype : string. Dataset keyword
-       arbitrary data type
-   keep_in_memory : int. Dataset keyword
-       if set keeps the COSMO data dict, the COSMO coordinates dict and the COSMO field in radar coordinates in memory
-   regular_grid : int. Dataset keyword
-       if set it is assume that the radar has a grid constant in time and there is no need to compute a new COSMO field if the COSMO data has not changed
-   cosmo_type : str. Dataset keyword
-       name of the COSMO field to process. Default TEMP
-   cosmo_variables : list of strings. Dataset keyword
-       Py-art name of the COSMO fields. Default temperature
-
-COSMO_LOOKUP
-""""""""""""""""""""""""""""""
-description
-   Gets COSMO data and put it in radar coordinates using look up tables computed or loaded when initializing
- `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_cosmo_lookup_table>`_
+   Gets icon data and put it in radar coordinates using look up tables computed or loaded when initializing
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_icon_lookup_table>`_
 parameters
    datatype : string. Dataset keyword
        arbitrary data type
    lookup_table : int. Dataset keyword
-       if set a pre-computed look up table for the COSMO coordinates is loaded. Otherwise the look up table is computed taking the first radar object as reference
+       if set a pre-computed look up table for the icon coordinates is loaded. Otherwise the look up table is computed taking the first radar object as reference
    regular_grid : int. Dataset keyword
-       if set it is assume that the radar has a grid constant in time and therefore there is no need to interpolate the COSMO field in memory to the current radar grid
-   cosmo_type : str. Dataset keyword
-       name of the COSMO field to process. Default TEMP
-   cosmo_variables : list of strings. Dataset keyword
-       Py-art name of the COSMO fields. Default temperature
+       if set it is assume that the radar has a grid constant in time and therefore there is no need to interpolate the icon field in memory to the current radar grid
+   icon_type : str. Dataset keyword
+       name of the icon field to process. Default TEMP
+   icon_variables : list of strings. Dataset keyword
+       Py-art name of the icon fields. Default temperature
 
 DEM
 """"""""""""""""""""""""""""""
@@ -388,41 +371,41 @@ HZT
 """"""""""""""""""""""""""""""
 description
    Gets iso0 degree data in HZT format and put it in radar coordinates
- `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_hzt>`_
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_hzt>`_
 parameters
    metranet_read_lib : str. Global keyword
        Type of METRANET reader library used to read the data. Can be 'C' or 'python'
    datatype : string. Dataset keyword
        arbitrary data type
    keep_in_memory : int. Dataset keyword
-       if set keeps the COSMO data dict, the COSMO coordinates dict and the COSMO field in radar coordinates in memory
+       if set keeps the icon data dict, the icon coordinates dict and the icon field in radar coordinates in memory
    regular_grid : int. Dataset keyword
-       if set it is assume that the radar has a grid constant in time and there is no need to compute a new COSMO field if the COSMO data has not changed
-   cosmo_type : str. Dataset keyword
-       name of the COSMO field to process. Default TEMP
-   cosmo_variables : list of strings. Dataset keyword
-       Py-art name of the COSMO fields. Default temperature
+       if set it is assume that the radar has a grid constant in time and there is no need to compute a new icon field if the icon data has not changed
+   icon_type : str. Dataset keyword
+       name of the icon field to process. Default TEMP
+   icon_variables : list of strings. Dataset keyword
+       Py-art name of the icon fields. Default temperature
 
 HZT_LOOKUP
 """"""""""""""""""""""""""""""
 description
    Gets HZT data and put it in radar coordinates using look up tables computed or loaded when initializing
- `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_hzt_lookup_table>`_
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_hzt_lookup_table>`_
 parameters
    metranet_read_lib : str. Global keyword
        Type of METRANET reader library used to read the data. Can be 'C' or 'python'
    datatype : string. Dataset keyword
        arbitrary data type
    lookup_table : int. Dataset keyword
-       if set a pre-computed look up table for the COSMO coordinates is loaded. Otherwise the look up table is computed taking the first radar object as reference
+       if set a pre-computed look up table for the icon coordinates is loaded. Otherwise the look up table is computed taking the first radar object as reference
    regular_grid : int. Dataset keyword
-       if set it is assume that the radar has a grid constant in time and therefore there is no need to interpolate the COSMO field in memory to the current radar grid
+       if set it is assume that the radar has a grid constant in time and therefore there is no need to interpolate the icon field in memory to the current radar grid
 
 ISO0_GRIB
 """"""""""""""""""""""""""""""
 description
    Gets iso0 degree data in GRIB format and put it in radar coordinates. This function is meant to process data received from the MeteoFrance NWP model. It can output the height over the iso0 of each gate or the iso0 height at each gate
- `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_iso0_grib>`_
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_iso0_grib>`_
 parameters
    datatype : string. Dataset keyword
        arbitrary data type
@@ -435,7 +418,7 @@ ISO0_MF
 """"""""""""""""""""""""""""""
 description
    Gets iso0 degree data in text format and put it in radar coordinates. This function is meant to process data received from the MeteoFrance NWP model. The model provides a maximum of 9 points at 0.5 degree lat/lon spacing surrounding a given radar. If a point is not provided it means that the iso0 for that point is at or below the ground level. Out of these points a single reference iso-0 is obtained according to the user defined iso0 statistic.
- `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_iso0_mf>`_
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_iso0_mf>`_
 parameters
    datatype : string. Dataset keyword
        arbitrary data type
@@ -1774,50 +1757,50 @@ parameters
    azrad2max : float. Dataset keyword
        Maximum azimuth angle [deg] for radar 2. Default None.
 
-COSMO_COORD
+ICON_COORD
 -----------------------------
-COSMO_COORD
+ICON_COORD
 """"""""""""""""""""""""""""""
 description
-   Gets the COSMO indices corresponding to each cosmo coordinates
- `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_cosmo_coord>`_
+   Gets the icon indices corresponding to each icon coordinates
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_icon_coord>`_
 parameters
    datatype : string. Dataset keyword
        arbitrary data type
-   cosmopath : string. General keyword
+   iconpath : string. General keyword
        path where to store the look up table
    model : string. Dataset keyword
-       The COSMO model to use. Can be cosmo-1, cosmo-1e, cosmo-2, cosmo-7
+       The icon model to use. Can be icon-1, icon-1e, icon-2, icon-7
 
 HZT_COORD
 """"""""""""""""""""""""""""""
 description
    Gets the HZT indices corresponding to each HZT coordinates
- `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_hzt_coord>`_
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_hzt_coord>`_
 parameters
    metranet_read_lib : str. Global keyword
        Type of METRANET reader library used to read the data. Can be 'C' or 'python'
    datatype : string. Dataset keyword
        arbitrary data type
-   cosmopath : string. General keyword
+   iconpath : string. General keyword
        path where to store the look up table
 
-COSMO2RADAR
+ICON2RADAR
 -----------------------------
-COSMO2RADAR
+ICON2RADAR
 """"""""""""""""""""""""""""""
 description
-   Gets COSMO data and put it in radar coordinates using look up tables
- `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_cosmo.html#process_cosmo_to_radar>`_
+   Gets icon data and put it in radar coordinates using look up tables
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_icon_to_radar>`_
 parameters
    datatype : string. Dataset keyword
        arbitrary data type
-   cosmo_type : str. Dataset keyword
-       name of the COSMO field to process. Default TEMP
-   cosmo_variables : list of strings. Dataset keyword
-       Py-art name of the COSMO fields. Default temperature
-   cosmo_time_index_min, cosmo_time_index_max : int
-       minimum and maximum indices of the COSMO data to retrieve. If a value is provided only data corresponding to the time indices within the interval will be used. If None all data will be used. Default None
+   icon_type : str. Dataset keyword
+       name of the icon field to process. Default TEMP
+   icon_variables : list of strings. Dataset keyword
+       Py-art name of the icon fields. Default temperature
+   icon_time_index_min, icon_time_index_max : int
+       minimum and maximum indices of the icon data to retrieve. If a value is provided only data corresponding to the time indices within the interval will be used. If None all data will be used. Default None
 
 GRID
 -----------------------------
