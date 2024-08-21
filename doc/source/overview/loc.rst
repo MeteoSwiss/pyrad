@@ -12,6 +12,14 @@ Name                  Type     Description
 RadarName             STRING   Short version name of a C-band radar (i.e., A, D, L, P) or DX50, MXPol for the X-band radars.
 RadarRes              STRING   rad4alp radar resolution (H or L). Only necessary if rad4alp (swiss C-band) data is processed.
 RadarBeamwidth        FLOAT    Radar antenna beam width [Deg].
+DataTypeIDInFiles     STRUCT   Structure of strings defining the mapping between pyrad names and variable names in input files. If not provided it will be expected that the name in the files are the standard py-ART names (defined in the py-ART config file). An example of such a struct could be:
+- dBZ                 STRING   DBZ
+- ZDR                 STRING   ZDR
+- RhoHV               STRING   RHOHV
+- PhiDP               STRING   PHIDP
+- KDP                 STRING   KDP
+- V                   STRING   VEL
+- W                   STRING   WIDTH
 AntennaGaindB         FLOAT    Antenna gain [dB].
 ScanList              STRARR   A list with the scans used for this data processing. Note that the first scan in this list is used as master scan. The master scan must be the first (temporal) scan of the corresponding rainbow task. In case of composite volumes the master scan is usually a PPI and the following are RHIs. If the radar processed is MCH C-band the scan list consists of the radar elevation (i.e., from 001 to 020). All scan names must have a trailing '/' except if rad4alp data is processed.
 ScanPeriod            FLOAT    Repetition period of each scan in minutes.
@@ -21,8 +29,8 @@ AntennaGain           FLOAT    Radar antenna gain. Not used for X-band MCH data.
 radarconsth(v)        FLOAT    Radar constant h (v). Not mandatory.
 mflossh(v)            FLOAT    Matched filter losses h (v). Not mandatory.
 attg                  FLOAT    Gas attenuation coefficient (units? (1 way attenuation)).
-CosmoRunFreq          INT      Frequency of a COSMO model run in hours.
-CosmoForecasted       INT      Hours forecasted by the COSMO model.
+IconRunFreq           INT      Frequency of a Icon model run in hours.
+IconForecasted        INT      Hours forecasted by the Icon model.
 rmax                  FLOAT    For C-band data, the maximum range in [m] to be considered. Useful for speed considerations.
 elmax                 FLOAT    Maximum elevation [°] to consider.
 ppiImageConfig        STRUCT   Structure defining the PPI image generating (PPI_IMAGE or PSEUDOPPI_IMAGE products). The following 6 fields are described below:
@@ -40,7 +48,7 @@ rhiImageConfig        STRUCT   Structure defining the RHI image generating (RHI_
 - xmax                FLOAT    Distance of the right image boundary to the radar in km.
 - ymin                FLOAT    Distance of the lower image boundary (vertical direction) to the radar in km.
 - ymax                FLOAT    Distance of the upper image boundary (vertical direction) to the radar in km.
-- dpi		      INT      Resolution of the image in dots per inch.
+- dpi		          INT      Resolution of the image in dots per inch.
 ppiMapImageConfig     STRUCT   Structure defining the PPI image overlaid on a map (PPI_MAP product). The following 9 fields are described below:
 - rngRing             FLOAT    Distance between range rings (0 means no range ring) [km].
 - xsize               FLOAT    Image size (inches) [inch].
@@ -55,7 +63,7 @@ ppiMapImageConfig     STRUCT   Structure defining the PPI image overlaid on a ma
 - mapres              STRING   Map resolution. Accepted strings are: “10m”, “50m”, “110m”.
 - maps                STRARR   String array of possible maps to overplot. Accepted entries include: relief, countries, provinces, 
                                  urban_areas, roads, railroads, coastline, lakes, lakes_europe, rivers, rivers_europe.
-- dpi		      INT      Resolution of the image in dots per inch.
+- dpi		          INT      Resolution of the image in dots per inch.
 gridMapImageConfig    STRUCT   Structure defining the display of gridded data overlaid on a map (SURFACE_IMAGE product).
 - xsize               FLOAT    Image size (inches) [inch].
 - ysize               FLOAT    Image size (inches) [inch].
@@ -69,7 +77,7 @@ gridMapImageConfig    STRUCT   Structure defining the display of gridded data ov
 - mapres              STRING   Map resolution. Accepted strings are: “10m”, “50m”, “110m”.
 - maps                STRARR   String array of possible maps to overplot. Accepted entries include: relief, countries, provinces, 
                                urban_areas, roads, railroads, coastline, lakes, lakes_europe, rivers, rivers_europe
-- dpi		      INT      Resolution of the image in dots per inch.
+- dpi		          INT      Resolution of the image in dots per inch.
 xsecImageConfig       STRUCT   Structure defining the cross-section images generated from gridded data (CROSS_SECTION, LATITUDE_SLICE and LONGITUDE_SLICE products)
 - xsize               INT      Number of horizontal pixels of the picture (without frame).
 - ysize               INT      Number of vertical pixels of the picture (without frame).
