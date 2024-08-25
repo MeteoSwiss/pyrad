@@ -1896,46 +1896,20 @@ def read_smn2(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
-            # skip the first 2 lines
-            next(csvfile)
-            next(csvfile)
-
-            # first count the lines
-            reader = csv.DictReader(
-                csvfile, fieldnames=['StationID', 'DateTime', 'Value'])
-            nrows = sum(1 for row in reader)
-
-            if nrows == 0:
-                warn('Empty file ' + fname)
-                return None, None, None
-            smn_id = np.ma.empty(nrows, dtype=int)
-            value = np.ma.empty(nrows, dtype=float)
-
-            # now read the data
-            csvfile.seek(0)
-
-            # skip the first 2 lines
-            next(csvfile)
-            next(csvfile)
-
-            reader = csv.DictReader(
-                csvfile, fieldnames=['StationID', 'DateTime', 'Value'])
-            date = []
-            for i, row in enumerate(reader):
-                smn_id[i] = float(row['StationID'])
-                date.append(datetime.datetime.strptime(
-                    row['DateTime'], '%Y%m%d%H%M%S'))
-                value[i] = float(row['Value'])
-
-            csvfile.close()
-
-            return smn_id, date, value
+        df = pd.read_csv(fname, sep=',', parse_dates = ['DateTime'])
+        # Try to convert stationID to int
+        try:
+            df['StationID'] = pd.to_numeric(df['StationID'])
+        except ValueError:
+            pass
+        # Convert dates to python datetime
+        arr_date = np.array(df['DateTime'].dt.to_pydatetime())
+        df['DateTime']= pd.Series(arr_date, dtype=object)
+        return np.array(df['StationID']), df['DateTime'].to_list(), np.array(df['Value'])
     except EnvironmentError as ee:
         warn(str(ee))
         warn('Unable to read file ' + fname)
         return None, None, None
-
 
 def read_knmi(fname, col_names=None):
     """
@@ -1984,7 +1958,7 @@ def read_knmi(fname, col_names=None):
 def read_coord_sensors(fname):
     """
     Reads a file containing the coordinates of multiple sensors. File of form
-    lat,lon,sensor_ID
+    lat,lon,StationID, header is optional
 
     Parameters
     ----------
@@ -1997,39 +1971,20 @@ def read_coord_sensors(fname):
         The read values
 
     """
+    
     try:
-        with open(fname, 'r', newline='') as csvfile:
-            # skip the first line
-            next(csvfile)
-
-            # first count the lines
-            reader = csv.DictReader(
-                csvfile, fieldnames=['lat', 'lon', 'sensor_ID'])
-            nrows = sum(1 for row in reader)
-
-            if nrows == 0:
-                warn('Empty file ' + fname)
-                return None, None, None
-            lat = np.ma.empty(nrows, dtype=float)
-            lon = np.ma.empty(nrows, dtype=float)
-            sensor_ID = np.ma.empty(nrows, dtype=int)
-
-            # now read the data
-            csvfile.seek(0)
-
-            # skip the first line
-            next(csvfile)
-
-            reader = csv.DictReader(
-                csvfile, fieldnames=['lat', 'lon', 'sensor_ID'])
-            for i, row in enumerate(reader):
-                lat[i] = float(row['lat'])
-                lon[i] = float(row['lon'])
-                sensor_ID[i] = int(row['sensor_ID'])
-
-            csvfile.close()
-
-            return lat, lon, sensor_ID
+        df = pd.read_csv(fname, sep=',')
+        # check if missing header
+        if set(df.columns) != set(['lat','lon','StationID']):
+            df = pd.read_csv(fname, sep=',', names=['lat','lon','StationID'])
+        
+        # Try to convert stationID to int
+        try:
+            df['StationID'] = pd.to_numeric(df['StationID'])
+        except ValueError:
+            pass
+        
+        return np.array(df['lat']), np.array(df['lon']), np.array(df['StationID'])
     except EnvironmentError as ee:
         warn(str(ee))
         warn('Unable to read file ' + fname)
