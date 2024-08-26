@@ -31,3 +31,4 @@ solarfluxpath         STRING   OPTIONAL. Base directory of the solar flux data. 
 iconpath             STRING   OPTIONAL. Base directory of the ICON (NWP model) data files.
 ====================  =======  =======================================================================================
 
+
