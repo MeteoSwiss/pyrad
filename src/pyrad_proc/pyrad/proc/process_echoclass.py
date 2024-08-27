@@ -107,15 +107,21 @@ def process_echo_id(procstatus, dscfg, radar_list=None):
         warn('No valid radar')
         return None, None
     radar = radar_list[ind_rad]
-    if ((refl_field not in radar.fields) or
-            (zdr_field not in radar.fields) or
-            (rhv_field not in radar.fields) or
-            (phi_field not in radar.fields)):
-        warn('Unable to create radar_echo_id dataset. Missing data')
+
+    if (zdr_field not in radar.fields):
+        warn('Unable to create radar_echo_id dataset. Missing reflectivity data')
         return None, None
-
+    if (refl_field not in radar.fields):
+        warn('Unable to create radar_echo_id dataset. Missing ZDR data')
+        return None, None
+    if (rhv_field not in radar.fields):
+        warn('Unable to create radar_echo_id dataset. Missing rhohv data')
+        return None, None
+    if (phi_field not in radar.fields):
+        warn('Unable to create radar_echo_id dataset. Missing phidp data')
+        return None, None
+                   
     echo_id = np.ma.zeros((radar.nrays, radar.ngates), dtype=np.uint8) + 3
-
     # user defined parameters
     wind_size = dscfg.get('wind_size', 7)
     max_textphi = dscfg.get('max_textphi', 20.)
@@ -1400,15 +1406,15 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
             Used with HYDRO_METHOD UKMO. if specified, the depth of the
             melting layer can be varied by +/- this value [km], allowing a
             less-rigidly defined melting layer. Default 0.
-        freezing_level: float or None. Dataset keyword
-            Used with HYDRO_METHOD UKMO. if desired, a single freezing level
-            height can be specified for the entire PPI domain - this will
-            over-ride any field found within the input file. Default None
+        fzl: float or None. Dataset keyword
+            If desired, a single freezing level
+            height can be specified for the entire PPI domain. This will be used
+            only if no temperature field is available.
         sounding : str. Dataset keyword
             The nearest radiosounding WMO code (5 int digits). It will be used to
             compute the freezing level, if no temperature field name is specified,
-            if the temperature field isin the radar object or if no freezing_level
-            is explicitely defined.
+            if the temperature field is not in the radar object or if no
+            fzl is explicitely defined.
         use_dualpol: Bool. Dataset keyword
             Used with HYDRO_METHOD UKMO. If false no radar data is used and
             the classification is performed using temperature information
@@ -1482,18 +1488,21 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
 
     if dscfg['HYDRO_METHOD'] == 'SEMISUPERVISED':
         if temp_field is None and iso0_field is None:
-            if  'sounding' in dscfg:
+            if 'fzl' in dscfg:
+                freezing_level = dscfg['fzl']
+            elif  'sounding' in dscfg:
                 warn('No iso0 or temperature fields were provided')
                 warn('Getting freezing level height from sounding')
                 sounding_code = dscfg['sounding']
                 t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
                 freezing_level = read_fzl_igra(sounding_code, t0)
-                _generate_iso0_from_fzl(radar, freezing_level)
-                iso0_field = 'height_over_iso0'
             else:
                 warn('iso0 or temperature fields or sounding needed to create hydrometeor ' +
                     'classification field')
                 return None, None
+            
+            _generate_iso0_from_fzl(radar, freezing_level)
+            iso0_field = 'height_over_iso0'
 
         if temp_field is not None and (temp_field not in radar.fields):
             warn('Unable to create hydrometeor classification field. ' +
@@ -1534,7 +1543,6 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
                     'Default centroids will be used in classification.')
                 hydro_names = (
                     'AG', 'CR', 'LR', 'RP', 'RN', 'VI', 'WS', 'MH', 'IH/HDG')
-                var_names = ('dBZ', 'ZDR', 'KDP', 'RhoHV', 'H_ISO0')
         else:
             warn(
                 'No centroids were specified. ' +
@@ -1542,41 +1550,24 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
             mass_centers = None
             hydro_names = (
                 'AG', 'CR', 'LR', 'RP', 'RN', 'VI', 'WS', 'MH', 'IH/HDG')
-            var_names = ('dBZ', 'ZDR', 'KDP', 'RhoHV', 'H_ISO0')
-
-        ARM_VERSION = False
-        try:
-            fields_dict = pyart.retrieve.hydroclass_semisupervised(
-                radar, hydro_names=hydro_names, var_names=var_names,
-                mass_centers=mass_centers, weights=weights,
-                refl_field=refl_field, zdr_field=zdr_field,
-                rhv_field=rhv_field, kdp_field=kdp_field,
-                temp_field=temp_field, iso0_field=iso0_field, hydro_field=None,
-                entropy_field=None, temp_ref=temp_ref,
-                compute_entropy=compute_entropy,
-                output_distances=output_distances, vectorize=vectorize)
-        except TypeError:
-            ARM_VERSION = True
-            warn('Hydroclass method could not parse all inputs')
-            warn('You are probably using PyART-ARM')
-            warn('Please use PyART-MCH to get all functionalities')
-            fields_dict = pyart.retrieve.hydroclass_semisupervised(
-                radar, mass_centers=mass_centers, weights=weights,
-                refl_field=refl_field, zdr_field=zdr_field,
-                rhv_field=rhv_field, kdp_field=kdp_field,
-                temp_field=temp_field)
-
+        
+        fields_dict = pyart.retrieve.hydroclass_semisupervised(
+            radar, hydro_names=hydro_names,
+            mass_centers=mass_centers, weights=weights,
+            refl_field=refl_field, zdr_field=zdr_field,
+            rhv_field=rhv_field, kdp_field=kdp_field,
+            temp_field=temp_field, iso0_field=iso0_field, hydro_field=None,
+            entropy_field=None, temp_ref=temp_ref,
+            compute_entropy=compute_entropy,
+            output_distances=output_distances, vectorize=vectorize)
+       
         # prepare for exit
         new_dataset = {'radar_out': deepcopy(radar)}
         new_dataset['radar_out'].fields = dict()
-        if ARM_VERSION:
-            new_dataset['radar_out'].add_field(
-                'radar_echo_classification', fields_dict)
-        else:
-            new_dataset['radar_out'].add_field(
-                'radar_echo_classification', fields_dict['hydro'])
+        new_dataset['radar_out'].add_field(
+            'radar_echo_classification', fields_dict['hydro'])
 
-        if compute_entropy and not ARM_VERSION:
+        if compute_entropy:
             new_dataset['radar_out'].add_field(
                 'hydroclass_entropy', fields_dict['entropy'])
             if output_distances:
