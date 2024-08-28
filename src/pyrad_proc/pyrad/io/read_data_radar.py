@@ -1983,61 +1983,14 @@ def merge_scans_odim(
     if not flist:
         return radar
 
-    if cfg["DataTypeIDInFiles"] is None:
-        for fname, scan in zip(flist, scan_list_aux):
-            radar_aux = get_data_odim(fname, datatype_list, scan, cfg, ind_rad=ind_rad)
-            if radar_aux is None:
-                continue
-            if radar is None:
-                radar = radar_aux
-                continue
-            radar = pyart.util.radar_utils.join_radar(radar, radar_aux)
-    else:
-        for datatype in datatype_list:
-            if datatype not in cfg["DataTypeIDInFiles"].keys():
-                warn(f"No file contains data type {datatype}")
-                continue
-            nscans = 0
-            radar_aux = None
-            for fname, scan in zip(flist, scan_list_aux):
-                if cfg["DataTypeIDInFiles"][datatype] not in os.path.basename(
-                    fname
-                ):
-                    continue
-                radar_aux2 = get_data_odim(
-                    fname, [datatype], scan, cfg, ind_rad=ind_rad
-                )
-                if radar_aux2 is None:
-                    continue
-                if radar_aux is None:
-                    radar_aux = radar_aux2
-                    nscans += 1
-                    continue
-                radar_aux = pyart.util.radar_utils.join_radar(radar_aux, radar_aux2)
-                nscans += 1
-            if radar is None:
-                radar = radar_aux
-                nscans_expected = nscans
-                continue
-            if nscans != nscans_expected:
-                warn(
-                    f"Unable to merge datatype {datatype} into radar object."
-                    f" Number of scans containing the datatype {nscans}"
-                    f" different from number of scans expected"
-                    f" {nscans_expected}"
-                )
-                continue
-            field_name = get_fieldname_pyart(datatype)
-            try:
-                radar.add_field(field_name, radar_aux.fields[field_name])
-            except ValueError:
-                if radar.nrays * radar.ngates > radar_aux.nrays * radar_aux.ngates:
-                    warn(f"Field {field_name} will be interpolated")
-                    radar = add_field(radar, radar_aux)
-                else:
-                    warn(f"Fields will be adapted to {field_name} field size")
-                    radar = add_field(radar_aux, radar)
-                print(f"nrays: {radar.nrays} ngates: {radar.ngates}")
+    for fname, scan in zip(flist, scan_list_aux):
+        radar_aux = get_data_odim(fname, datatype_list, scan, cfg, ind_rad=ind_rad)
+        if radar_aux is None:
+            continue
+        if radar is None:
+            radar = radar_aux
+            continue
+        radar = pyart.util.radar_utils.join_radar(radar, radar_aux)
 
     if radar is None:
         return radar
