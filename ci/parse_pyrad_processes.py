@@ -1,9 +1,6 @@
 # %%
-import pandas as pd
 from pathlib import Path
-import os
 import inspect
-import yaml
 import re
 from pyrad import proc
 

@@ -69,22 +69,67 @@ def read_sun_hits_multiple_days(cfg, time_ref, nfiles=1):
 
     for i in range(nfiles):
         savedir = get_save_dir(
-            cfg['basepath'], cfg['procname'], cfg['dsname'],
-            cfg['sun_hits_dir'], timeinfo=timeinfo, create_dir=False)
+            cfg["basepath"],
+            cfg["procname"],
+            cfg["dsname"],
+            cfg["sun_hits_dir"],
+            timeinfo=timeinfo,
+            create_dir=False,
+        )
 
         fname = make_filename(
-            'info', cfg['type'], 'detected', ['csv'],
-            timeinfo=timeinfo, timeformat='%Y%m%d')
+            "info",
+            cfg["type"],
+            "detected",
+            ["csv"],
+            timeinfo=timeinfo,
+            timeformat="%Y%m%d",
+        )
 
-        (date_aux, ray_aux, nrng_aux, rad_el_aux, rad_az_aux, sun_el_aux,
-         sun_az_aux, ph_aux, ph_std_aux, nph_aux, nvalh_aux, pv_aux,
-         pv_std_aux, npv_aux, nvalv_aux, zdr_aux, zdr_std_aux, nzdr_aux,
-         nvalzdr_aux) = read_sun_hits(savedir + fname[0])
+        (
+            date_aux,
+            ray_aux,
+            nrng_aux,
+            rad_el_aux,
+            rad_az_aux,
+            sun_el_aux,
+            sun_az_aux,
+            ph_aux,
+            ph_std_aux,
+            nph_aux,
+            nvalh_aux,
+            pv_aux,
+            pv_std_aux,
+            npv_aux,
+            nvalv_aux,
+            zdr_aux,
+            zdr_std_aux,
+            nzdr_aux,
+            nvalzdr_aux,
+        ) = read_sun_hits(savedir + fname[0])
 
         if date_aux is None:
-            return (None, None, None, None, None, None, None, None, None,
-                    None, None, None, None, None, None, None, None, None,
-                    None)
+            return (
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+            )
 
         date += date_aux
         ray += list(ray_aux)
@@ -121,8 +166,27 @@ def read_sun_hits_multiple_days(cfg, time_ref, nfiles=1):
     nzdr = np.squeeze(np.array(nzdr))
     nvalzdr = np.squeeze(np.array(nvalzdr))
 
-    return (date, ray, nrng, rad_el, rad_az, sun_el, sun_az, ph, ph_std, nph,
-            nvalh, pv, pv_std, npv, nvalv, zdr, zdr_std, nzdr, nvalzdr)
+    return (
+        date,
+        ray,
+        nrng,
+        rad_el,
+        rad_az,
+        sun_el,
+        sun_az,
+        ph,
+        ph_std,
+        nph,
+        nvalh,
+        pv,
+        pv_std,
+        npv,
+        nvalv,
+        zdr,
+        zdr_std,
+        nzdr,
+        nvalzdr,
+    )
 
 
 def read_sun_hits(fname):
@@ -143,10 +207,9 @@ def read_sun_hits(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             nrows = sum(1 for row in reader)
 
             ray = np.empty(nrows, dtype=int)
@@ -170,30 +233,30 @@ def read_sun_hits(fname):
 
             # now read the data
             csvfile.seek(0)
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             date = list()
             for i, row in enumerate(reader):
-                date.append(datetime.datetime.strptime(
-                    row['time'], '%Y-%m-%d %H:%M:%S.%f'))
-                ray[i] = int(row['ray'])
-                nrng[i] = int(row['NPrng'])
-                rad_el[i] = float(row['rad_el'])
-                rad_az[i] = float(row['rad_az'])
-                sun_el[i] = float(row['sun_el'])
-                sun_az[i] = float(row['sun_az'])
-                ph[i] = float(row['dBm_sun_hit'])
-                ph_std[i] = float(row['std(dBm_sun_hit)'])
-                nph[i] = int(row['NPh'])
-                nvalh[i] = int(row['NPhval'])
-                pv[i] = float(row['dBmv_sun_hit'])
-                pv_std[i] = float(row['std(dBmv_sun_hit)'])
-                npv[i] = int(row['NPv'])
-                nvalv[i] = int(row['NPvval'])
-                zdr[i] = float(row['ZDR_sun_hit'])
-                zdr_std[i] = float(row['std(ZDR_sun_hit)'])
-                nzdr[i] = int(row['NPzdr'])
-                nvalzdr[i] = int(row['NPzdrval'])
+                date.append(
+                    datetime.datetime.strptime(row["time"], "%Y-%m-%d %H:%M:%S.%f")
+                )
+                ray[i] = int(row["ray"])
+                nrng[i] = int(row["NPrng"])
+                rad_el[i] = float(row["rad_el"])
+                rad_az[i] = float(row["rad_az"])
+                sun_el[i] = float(row["sun_el"])
+                sun_az[i] = float(row["sun_az"])
+                ph[i] = float(row["dBm_sun_hit"])
+                ph_std[i] = float(row["std(dBm_sun_hit)"])
+                nph[i] = int(row["NPh"])
+                nvalh[i] = int(row["NPhval"])
+                pv[i] = float(row["dBmv_sun_hit"])
+                pv_std[i] = float(row["std(dBmv_sun_hit)"])
+                npv[i] = int(row["NPv"])
+                nvalv[i] = int(row["NPvval"])
+                zdr[i] = float(row["ZDR_sun_hit"])
+                zdr_std[i] = float(row["std(ZDR_sun_hit)"])
+                nzdr[i] = int(row["NPzdr"])
+                nvalzdr[i] = int(row["NPzdrval"])
 
             ph = np.ma.masked_values(ph, get_fillvalue())
             ph_std = np.ma.masked_values(ph_std, get_fillvalue())
@@ -204,15 +267,52 @@ def read_sun_hits(fname):
 
             csvfile.close()
 
-            return (date, ray, nrng, rad_el, rad_az, sun_el, sun_az,
-                    ph, ph_std, nph, nvalh, pv, pv_std, npv, nvalv,
-                    zdr, zdr_std, nzdr, nvalzdr)
+            return (
+                date,
+                ray,
+                nrng,
+                rad_el,
+                rad_az,
+                sun_el,
+                sun_az,
+                ph,
+                ph_std,
+                nph,
+                nvalh,
+                pv,
+                pv_std,
+                npv,
+                nvalv,
+                zdr,
+                zdr_std,
+                nzdr,
+                nvalzdr,
+            )
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
-        return (None, None, None, None, None, None, None, None, None, None,
-                None, None, None, None, None, None, None, None, None)
+        warn("Unable to read file " + fname)
+        return (
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        )
 
 
 def read_sun_retrieval(fname):
@@ -237,10 +337,9 @@ def read_sun_retrieval(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             nrows = sum(1 for row in reader)
 
             nhits_h = np.empty(nrows, dtype=int)
@@ -269,54 +368,55 @@ def read_sun_retrieval(fname):
 
             # now read the data
             csvfile.seek(0)
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
 
             first_hit_time = list()
             last_hit_time = list()
             ref_time = list()
             for i, row in enumerate(reader):
-                first_hit_time.append(datetime.datetime.strptime(
-                    row['first_hit_time'], '%Y%m%d%H%M%S'))
-                last_hit_time.append(datetime.datetime.strptime(
-                    row['last_hit_time'], '%Y%m%d%H%M%S'))
+                first_hit_time.append(
+                    datetime.datetime.strptime(row["first_hit_time"], "%Y%m%d%H%M%S")
+                )
+                last_hit_time.append(
+                    datetime.datetime.strptime(row["last_hit_time"], "%Y%m%d%H%M%S")
+                )
 
-                nhits_h[i] = int(row['nhits_h'])
-                el_width_h[i] = float(row['el_width_h'])
-                az_width_h[i] = float(row['az_width_h'])
-                el_bias_h[i] = float(row['el_bias_h'])
-                az_bias_h[i] = float(row['az_bias_h'])
-                dBm_sun_est[i] = float(row['dBm_sun_est'])
-                std_dBm_sun_est[i] = float(row['std(dBm_sun_est)'])
-                sf_h[i] = float(row['sf_h'])
+                nhits_h[i] = int(row["nhits_h"])
+                el_width_h[i] = float(row["el_width_h"])
+                az_width_h[i] = float(row["az_width_h"])
+                el_bias_h[i] = float(row["el_bias_h"])
+                az_bias_h[i] = float(row["az_bias_h"])
+                dBm_sun_est[i] = float(row["dBm_sun_est"])
+                std_dBm_sun_est[i] = float(row["std(dBm_sun_est)"])
+                sf_h[i] = float(row["sf_h"])
 
-                nhits_v[i] = int(row['nhits_v'])
-                el_width_v[i] = float(row['el_width_v'])
-                az_width_v[i] = float(row['az_width_v'])
-                el_bias_v[i] = float(row['el_bias_v'])
-                az_bias_v[i] = float(row['az_bias_v'])
-                dBmv_sun_est[i] = float(row['dBmv_sun_est'])
-                std_dBmv_sun_est[i] = float(row['std(dBmv_sun_est)'])
-                sf_v[i] = float(row['sf_v'])
+                nhits_v[i] = int(row["nhits_v"])
+                el_width_v[i] = float(row["el_width_v"])
+                az_width_v[i] = float(row["az_width_v"])
+                el_bias_v[i] = float(row["el_bias_v"])
+                az_bias_v[i] = float(row["az_bias_v"])
+                dBmv_sun_est[i] = float(row["dBmv_sun_est"])
+                std_dBmv_sun_est[i] = float(row["std(dBmv_sun_est)"])
+                sf_v[i] = float(row["sf_v"])
 
-                nhits_zdr[i] = int(row['nhits_zdr'])
-                zdr_sun_est[i] = float(row['ZDR_sun_est'])
-                std_zdr_sun_est[i] = float(row['std(ZDR_sun_est)'])
+                nhits_zdr[i] = int(row["nhits_zdr"])
+                zdr_sun_est[i] = float(row["ZDR_sun_est"])
+                std_zdr_sun_est[i] = float(row["std(ZDR_sun_est)"])
 
-                sf_ref[i] = float(row['sf_ref'])
-                if row['ref_time'] == 'None':
+                sf_ref[i] = float(row["sf_ref"])
+                if row["ref_time"] == "None":
                     ref_time.append(None)
                 else:
-                    ref_time.append(datetime.datetime.strptime(
-                        row['ref_time'], '%Y%m%d%H%M%S'))
+                    ref_time.append(
+                        datetime.datetime.strptime(row["ref_time"], "%Y%m%d%H%M%S")
+                    )
 
             el_width_h = np.ma.masked_values(el_width_h, get_fillvalue())
             az_width_h = np.ma.masked_values(az_width_h, get_fillvalue())
             el_bias_h = np.ma.masked_values(el_bias_h, get_fillvalue())
             az_bias_h = np.ma.masked_values(az_bias_h, get_fillvalue())
             dBm_sun_est = np.ma.masked_values(dBm_sun_est, get_fillvalue())
-            std_dBm_sun_est = np.ma.masked_values(
-                std_dBm_sun_est, get_fillvalue())
+            std_dBm_sun_est = np.ma.masked_values(std_dBm_sun_est, get_fillvalue())
             sf_h = np.ma.masked_values(sf_h, get_fillvalue())
 
             el_width_v = np.ma.masked_values(el_width_v, get_fillvalue())
@@ -324,31 +424,70 @@ def read_sun_retrieval(fname):
             el_bias_v = np.ma.masked_values(el_bias_v, get_fillvalue())
             az_bias_v = np.ma.masked_values(az_bias_v, get_fillvalue())
             dBmv_sun_est = np.ma.masked_values(dBmv_sun_est, get_fillvalue())
-            std_dBmv_sun_est = np.ma.masked_values(
-                std_dBmv_sun_est, get_fillvalue())
+            std_dBmv_sun_est = np.ma.masked_values(std_dBmv_sun_est, get_fillvalue())
             sf_v = np.ma.masked_values(sf_v, get_fillvalue())
 
             zdr_sun_est = np.ma.masked_values(zdr_sun_est, get_fillvalue())
-            std_zdr_sun_est = np.ma.masked_values(
-                std_zdr_sun_est, get_fillvalue())
+            std_zdr_sun_est = np.ma.masked_values(std_zdr_sun_est, get_fillvalue())
 
             sf_ref = np.ma.masked_values(sf_ref, get_fillvalue())
 
             csvfile.close()
 
-            return (first_hit_time, last_hit_time, nhits_h,
-                    el_width_h, az_width_h, el_bias_h, az_bias_h,
-                    dBm_sun_est, std_dBm_sun_est, sf_h,
-                    nhits_v, el_width_v, az_width_v, el_bias_v, az_bias_v,
-                    dBmv_sun_est, std_dBmv_sun_est, sf_v,
-                    nhits_zdr, zdr_sun_est, std_zdr_sun_est, sf_ref, ref_time)
+            return (
+                first_hit_time,
+                last_hit_time,
+                nhits_h,
+                el_width_h,
+                az_width_h,
+                el_bias_h,
+                az_bias_h,
+                dBm_sun_est,
+                std_dBm_sun_est,
+                sf_h,
+                nhits_v,
+                el_width_v,
+                az_width_v,
+                el_bias_v,
+                az_bias_v,
+                dBmv_sun_est,
+                std_dBmv_sun_est,
+                sf_v,
+                nhits_zdr,
+                zdr_sun_est,
+                std_zdr_sun_est,
+                sf_ref,
+                ref_time,
+            )
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
-        return (None, None, None, None, None, None, None, None, None, None,
-                None, None, None, None, None, None, None, None, None, None,
-                None, None, None)
+        warn("Unable to read file " + fname)
+        return (
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        )
 
 
 def read_solar_flux(fname):
@@ -369,16 +508,26 @@ def read_solar_flux(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as txtfile:
+        with open(fname, "r", newline="") as txtfile:
             # skip the first two lines
             for i in range(2):
                 next(txtfile)
 
             # first count the lines
             reader = csv.DictReader(
-                txtfile, delimiter=' ', skipinitialspace=True, fieldnames=[
-                    'fluxdate', 'fluxtime', 'fluxjulian', 'fluxcarrington',
-                    'fluxobsflux', 'fluxadjflux', 'fluxursi'])
+                txtfile,
+                delimiter=" ",
+                skipinitialspace=True,
+                fieldnames=[
+                    "fluxdate",
+                    "fluxtime",
+                    "fluxjulian",
+                    "fluxcarrington",
+                    "fluxobsflux",
+                    "fluxadjflux",
+                    "fluxursi",
+                ],
+            )
             nrows = sum(1 for row in reader)
 
             flux_value = np.empty(nrows, dtype=float)
@@ -391,15 +540,28 @@ def read_solar_flux(fname):
                 next(txtfile)
 
             reader = csv.DictReader(
-                txtfile, delimiter=' ', skipinitialspace=True, fieldnames=[
-                    'fluxdate', 'fluxtime', 'fluxjulian', 'fluxcarrington',
-                    'fluxobsflux', 'fluxadjflux', 'fluxursi'])
+                txtfile,
+                delimiter=" ",
+                skipinitialspace=True,
+                fieldnames=[
+                    "fluxdate",
+                    "fluxtime",
+                    "fluxjulian",
+                    "fluxcarrington",
+                    "fluxobsflux",
+                    "fluxadjflux",
+                    "fluxursi",
+                ],
+            )
 
             flux_datetime = list()
             for i, row in enumerate(reader):
-                flux_datetime.append(datetime.datetime.strptime(
-                    row['fluxdate'] + row['fluxtime'], '%Y%m%d%H%M%S'))
-                flux_value[i] = float(row['fluxobsflux'])
+                flux_datetime.append(
+                    datetime.datetime.strptime(
+                        row["fluxdate"] + row["fluxtime"], "%Y%m%d%H%M%S"
+                    )
+                )
+                flux_value[i] = float(row["fluxobsflux"])
 
             txtfile.close()
 
@@ -407,5 +569,5 @@ def read_solar_flux(fname):
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None

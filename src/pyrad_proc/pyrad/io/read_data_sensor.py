@@ -67,13 +67,19 @@ def read_windmills_data(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
             reader = csv.DictReader(
-                (row for row in csvfile if (
-                    not row.startswith('#') and
-                    not row.startswith('@') and not row.startswith(" ")
-                    and row)),
+                (
+                    row
+                    for row in csvfile
+                    if (
+                        not row.startswith("#")
+                        and not row.startswith("@")
+                        and not row.startswith(" ")
+                        and row
+                    )
+                ),
                 #                fieldnames=[
                 #                    'Datum(Remote)', 'Uhrzeit(Remote)', 'Datum(Server)',
                 #                    'Uhrzeit(Server)', 'Zeitdifferenz', 'Windgeschwindigkeit',
@@ -126,11 +132,12 @@ def read_windmills_data(fname):
                 #                    'T Gear Oil Inlet (avg)', 'T Gear Oil Inlet (min)',
                 #                    'T Gear Oil Inlet (max)', 'T Gear Oil Inlet (stddev)',
                 #                    'Calculated By ROTORsoft'],
-                delimiter=';')
+                delimiter=";",
+            )
             nrows = sum(1 for row in reader)
 
             if nrows == 0:
-                warn('No data in file ' + fname)
+                warn("No data in file " + fname)
                 return None
 
             dt_remote = np.ma.masked_all(nrows, dtype=datetime.datetime)
@@ -148,10 +155,16 @@ def read_windmills_data(fname):
             # now read the data
             csvfile.seek(0)
             reader = csv.DictReader(
-                (row for row in csvfile if (
-                    not row.startswith('#') and
-                    not row.startswith('@') and not row.startswith(" ")
-                    and row)),
+                (
+                    row
+                    for row in csvfile
+                    if (
+                        not row.startswith("#")
+                        and not row.startswith("@")
+                        and not row.startswith(" ")
+                        and row
+                    )
+                ),
                 #                fieldnames=[
                 #                    'Datum(Remote)', 'Uhrzeit(Remote)', 'Datum(Server)',
                 #                    'Uhrzeit(Server)', 'Zeitdifferenz', 'Windgeschwindigkeit',
@@ -204,60 +217,55 @@ def read_windmills_data(fname):
                 #                    'T Gear Oil Inlet (avg)', 'T Gear Oil Inlet (min)',
                 #                    'T Gear Oil Inlet (max)', 'T Gear Oil Inlet (stddev)',
                 #                    'Calculated By ROTORsoft'],
-                delimiter=';')
+                delimiter=";",
+            )
 
             for i, row in enumerate(reader):
-                if 'Datum(Remote)' in row and 'Uhrzeit(Remote)' in row:
+                if "Datum(Remote)" in row and "Uhrzeit(Remote)" in row:
                     dt_remote[i] = datetime.datetime.strptime(
-                        row['Datum(Remote)'] + ' ' + row['Uhrzeit(Remote)'],
-                        '%d.%m.%Y %H:%M:%S')
+                        row["Datum(Remote)"] + " " + row["Uhrzeit(Remote)"],
+                        "%d.%m.%Y %H:%M:%S",
+                    )
                     dt_server[i] = datetime.datetime.strptime(
-                        row['Datum(Server)'] + ' ' + row['Uhrzeit(Server)'],
-                        '%d.%m.%Y %H:%M:%S')
+                        row["Datum(Server)"] + " " + row["Uhrzeit(Server)"],
+                        "%d.%m.%Y %H:%M:%S",
+                    )
                 else:
                     dt_remote[i] = datetime.datetime.strptime(
-                        row['Datum (Anlage)'] + ' ' + row['Zeit (Anlage)'],
-                        '%d.%m.%Y %H:%M:%S')
-                rotor_speed_avg[i] = float(
-                    row['Rotordrehzahl'].replace(',', '.'))
-                rotor_speed_min[i] = float(
-                    row['Rotordrehzahl Max'].replace(',', '.'))
-                rotor_speed_max[i] = float(
-                    row['Rotordrehzahl Min'].replace(',', '.'))
-                nacelle_pos[i] = float(
-                    row['Gondelposition'].replace(',', '.'))
-                blade_angle_1[i] = float(
-                    row['Blattwinkel 1'].replace(',', '.'))
-                blade_angle_2[i] = float(
-                    row['Blattwinkel 2'].replace(',', '.'))
-                blade_angle_3[i] = float(
-                    row['Blattwinkel 3'].replace(',', '.'))
-                t_outside[i] = float(
-                    row['T Aussen'].replace(',', '.'))
-                ice_level[i] = float(
-                    row['Ice Level'].replace(',', '.'))
+                        row["Datum (Anlage)"] + " " + row["Zeit (Anlage)"],
+                        "%d.%m.%Y %H:%M:%S",
+                    )
+                rotor_speed_avg[i] = float(row["Rotordrehzahl"].replace(",", "."))
+                rotor_speed_min[i] = float(row["Rotordrehzahl Max"].replace(",", "."))
+                rotor_speed_max[i] = float(row["Rotordrehzahl Min"].replace(",", "."))
+                nacelle_pos[i] = float(row["Gondelposition"].replace(",", "."))
+                blade_angle_1[i] = float(row["Blattwinkel 1"].replace(",", "."))
+                blade_angle_2[i] = float(row["Blattwinkel 2"].replace(",", "."))
+                blade_angle_3[i] = float(row["Blattwinkel 3"].replace(",", "."))
+                t_outside[i] = float(row["T Aussen"].replace(",", "."))
+                ice_level[i] = float(row["Ice Level"].replace(",", "."))
 
             csvfile.close()
 
             windmill_dict = {
-                'dt_remote': dt_remote,
-                'dt_server': dt_server,
-                'rotor_speed_avg': rotor_speed_avg,
-                'rotor_speed_min': rotor_speed_min,
-                'rotor_speed_max': rotor_speed_max,
-                'nacelle_pos': nacelle_pos,
-                'blade_angle_1': blade_angle_1,
-                'blade_angle_2': blade_angle_2,
-                'blade_angle_3': blade_angle_3,
-                't_outside': t_outside,
-                'ice_level': ice_level,
+                "dt_remote": dt_remote,
+                "dt_server": dt_server,
+                "rotor_speed_avg": rotor_speed_avg,
+                "rotor_speed_min": rotor_speed_min,
+                "rotor_speed_max": rotor_speed_max,
+                "nacelle_pos": nacelle_pos,
+                "blade_angle_1": blade_angle_1,
+                "blade_angle_2": blade_angle_2,
+                "blade_angle_3": blade_angle_3,
+                "t_outside": t_outside,
+                "ice_level": ice_level,
             }
 
             return windmill_dict
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None
 
 
@@ -277,15 +285,15 @@ def read_thundertracking_info(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
             reader = csv.DictReader(
-                (row for row in csvfile if not row.startswith('#')),
-                delimiter=',')
+                (row for row in csvfile if not row.startswith("#")), delimiter=","
+            )
             nrows = sum(1 for row in reader)
 
             if nrows == 0:
-                warn('No data in file ' + fname)
+                warn("No data in file " + fname)
                 return None, None, None, None, None
 
             cell_id = np.empty(nrows, dtype=int)
@@ -297,16 +305,16 @@ def read_thundertracking_info(fname):
             # now read the data
             csvfile.seek(0)
             reader = csv.DictReader(
-                (row for row in csvfile if not row.startswith('#')),
-                delimiter=',')
+                (row for row in csvfile if not row.startswith("#")), delimiter=","
+            )
             for i, row in enumerate(reader):
-                cell_id[i] = int(row['id'])
-                max_rank[i] = float(row['max_rank'])
-                nscans_Xband[i] = int(row['nscans_Xband'])
+                cell_id[i] = int(row["id"])
+                max_rank[i] = float(row["max_rank"])
+                nscans_Xband[i] = int(row["nscans_Xband"])
                 time_start[i] = datetime.datetime.strptime(
-                    row['time_start'], '%Y%m%d%H%M')
-                time_end[i] = datetime.datetime.strptime(
-                    row['time_end'], '%Y%m%d%H%M')
+                    row["time_start"], "%Y%m%d%H%M"
+                )
+                time_end[i] = datetime.datetime.strptime(row["time_end"], "%Y%m%d%H%M")
 
             csvfile.close()
 
@@ -314,7 +322,7 @@ def read_thundertracking_info(fname):
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None, None, None, None
 
 
@@ -334,9 +342,9 @@ def read_trt_info_all(info_path):
     vel_x, vel_y, det
 
     """
-    file_list = glob.glob(info_path + '*.txt')
+    file_list = glob.glob(info_path + "*.txt")
     if not file_list:
-        warn('No info files in ' + info_path)
+        warn("No info files in " + info_path)
         return None
 
     trt_time = np.array([], dtype=datetime.datetime)
@@ -355,9 +363,22 @@ def read_trt_info_all(info_path):
     det = np.array([])
 
     for file in file_list:
-        (trt_time_aux, id_aux, rank_aux, nscans_aux, azi_aux, rng_aux,
-         lat_aux, lon_aux, ell_l_aux, ell_s_aux, ell_or_aux, vel_x_aux,
-         vel_y_aux, det_aux) = read_trt_info(file)
+        (
+            trt_time_aux,
+            id_aux,
+            rank_aux,
+            nscans_aux,
+            azi_aux,
+            rng_aux,
+            lat_aux,
+            lon_aux,
+            ell_l_aux,
+            ell_s_aux,
+            ell_or_aux,
+            vel_x_aux,
+            vel_y_aux,
+            det_aux,
+        ) = read_trt_info(file)
 
         if trt_time_aux is None:
             continue
@@ -378,8 +399,21 @@ def read_trt_info_all(info_path):
         det = np.append(det, det_aux)
 
     return (
-        trt_time, cell_id, rank, nscans, azi, rng, lat, lon, ell_l, ell_s,
-        ell_or, vel_x, vel_y, det)
+        trt_time,
+        cell_id,
+        rank,
+        nscans,
+        azi,
+        rng,
+        lat,
+        lon,
+        ell_l,
+        ell_s,
+        ell_or,
+        vel_x,
+        vel_y,
+        det,
+    )
 
 
 def read_trt_info_all2(info_path):
@@ -398,9 +432,9 @@ def read_trt_info_all2(info_path):
     vel_x, vel_y, det
 
     """
-    file_list = glob.glob(info_path + '*.txt')
+    file_list = glob.glob(info_path + "*.txt")
     if not file_list:
-        warn('No info files in ' + info_path)
+        warn("No info files in " + info_path)
         return None
 
     trt_time = np.ma.array([], dtype=datetime.datetime)
@@ -419,9 +453,22 @@ def read_trt_info_all2(info_path):
     det = np.ma.array([])
 
     for file in file_list:
-        (trt_time_aux, id_aux, rank_aux, scan_time_aux, azi_aux, rng_aux,
-         lat_aux, lon_aux, ell_l_aux, ell_s_aux, ell_or_aux, vel_x_aux,
-         vel_y_aux, det_aux) = read_trt_info(file)
+        (
+            trt_time_aux,
+            id_aux,
+            rank_aux,
+            scan_time_aux,
+            azi_aux,
+            rng_aux,
+            lat_aux,
+            lon_aux,
+            ell_l_aux,
+            ell_s_aux,
+            ell_or_aux,
+            vel_x_aux,
+            vel_y_aux,
+            det_aux,
+        ) = read_trt_info(file)
 
         if trt_time_aux is None:
             continue
@@ -442,8 +489,21 @@ def read_trt_info_all2(info_path):
         det = np.ma.append(det, det_aux)
 
     return (
-        trt_time, cell_id, rank, scan_time, azi, rng, lat, lon, ell_l, ell_s,
-        ell_or, vel_x, vel_y, det)
+        trt_time,
+        cell_id,
+        rank,
+        scan_time,
+        azi,
+        rng,
+        lat,
+        lon,
+        ell_l,
+        ell_s,
+        ell_or,
+        vel_x,
+        vel_y,
+        det,
+    )
 
 
 def read_trt_info(fname):
@@ -464,7 +524,7 @@ def read_trt_info(fname):
     """
     try:
 
-        with open(fname, 'r', newline='') as txtfile:
+        with open(fname, "r", newline="") as txtfile:
             # read file contents
             cell_id = np.array([], dtype=int)
             azi = np.array([])
@@ -488,45 +548,72 @@ def read_trt_info(fname):
                     break
                 fields = line.split()
 
-                if fields[2] == ':TRT:':
+                if fields[2] == ":TRT:":
                     if nscans_aux != -1:
                         nscans = np.append(nscans, nscans_aux)
-                    cell_id = np.append(cell_id, int(fields[3].split('=')[1]))
-                    azi = np.append(azi, float(fields[4].split('=')[1]))
-                    rng = np.append(rng, float(fields[5].split('=')[1]))
-                    rank = np.append(rank, float(fields[6].split('=')[1]))
+                    cell_id = np.append(cell_id, int(fields[3].split("=")[1]))
+                    azi = np.append(azi, float(fields[4].split("=")[1]))
+                    rng = np.append(rng, float(fields[5].split("=")[1]))
+                    rank = np.append(rank, float(fields[6].split("=")[1]))
                     trt_time = np.append(
                         trt_time,
                         datetime.datetime.strptime(
-                            fields[7].split('=')[1], '%Y%m%d%H%M'))
-                    vel_x = np.append(vel_x, float(fields[8].split('=')[1]))
-                    vel_y = np.append(vel_y, float(fields[9].split('=')[1]))
-                    ell_l = np.append(ell_l, float(fields[10].split('=')[1]))
-                    ell_s = np.append(ell_s, float(fields[11].split('=')[1]))
-                    ell_or = np.append(
-                        ell_or, float(fields[12].split('=')[1]))
-                    det = np.append(det, float(fields[13].split('=')[1]))
+                            fields[7].split("=")[1], "%Y%m%d%H%M"
+                        ),
+                    )
+                    vel_x = np.append(vel_x, float(fields[8].split("=")[1]))
+                    vel_y = np.append(vel_y, float(fields[9].split("=")[1]))
+                    ell_l = np.append(ell_l, float(fields[10].split("=")[1]))
+                    ell_s = np.append(ell_s, float(fields[11].split("=")[1]))
+                    ell_or = np.append(ell_or, float(fields[12].split("=")[1]))
+                    det = np.append(det, float(fields[13].split("=")[1]))
                     if np.size(fields) == 16:
-                        lat = np.append(lat, float(fields[14].split('=')[1]))
-                        lon = np.append(lon, float(fields[15].split('=')[1]))
+                        lat = np.append(lat, float(fields[14].split("=")[1]))
+                        lon = np.append(lon, float(fields[15].split("=")[1]))
                     else:
-                        lat = -9999.
-                        lon = -9999.
+                        lat = -9999.0
+                        lon = -9999.0
                     nscans_aux = 0
-                elif fields[2] == ':START':
+                elif fields[2] == ":START":
                     nscans_aux += 1
 
             nscans = np.append(nscans, nscans_aux)
             return (
-                trt_time, cell_id, rank, nscans, azi, rng, lat, lon, ell_l,
-                ell_s, ell_or, vel_x, vel_y, det)
+                trt_time,
+                cell_id,
+                rank,
+                nscans,
+                azi,
+                rng,
+                lat,
+                lon,
+                ell_l,
+                ell_s,
+                ell_or,
+                vel_x,
+                vel_y,
+                det,
+            )
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return (
-            None, None, None, None, None, None, None, None, None, None, None,
-            None, None, None)
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        )
 
 
 def read_trt_info2(fname):
@@ -547,7 +634,7 @@ def read_trt_info2(fname):
     """
     try:
 
-        with open(fname, 'r', newline='') as txtfile:
+        with open(fname, "r", newline="") as txtfile:
             # read file contents
             cell_id = np.ma.array([], dtype=int)
             azi = np.ma.array([])
@@ -570,28 +657,30 @@ def read_trt_info2(fname):
                     break
                 fields = line.split()
 
-                if fields[2] == ':TRT:':
-                    cell_id_aux = int(fields[3].split('=')[1])
-                    azi_aux = float(fields[4].split('=')[1])
-                    rng_aux = float(fields[5].split('=')[1])
-                    rank_aux = int(fields[6].split('=')[1])
+                if fields[2] == ":TRT:":
+                    cell_id_aux = int(fields[3].split("=")[1])
+                    azi_aux = float(fields[4].split("=")[1])
+                    rng_aux = float(fields[5].split("=")[1])
+                    rank_aux = int(fields[6].split("=")[1])
                     trt_time_aux = datetime.datetime.strptime(
-                        fields[7].split('=')[1], '%Y%m%d%H%M')
-                    vel_x_aux = float(fields[8].split('=')[1])
-                    vel_y_aux = float(fields[9].split('=')[1])
-                    ell_l_aux = float(fields[10].split('=')[1])
-                    ell_s_aux = float(fields[11].split('=')[1])
-                    ell_or_aux = float(fields[12].split('=')[1])
-                    det_aux = float(fields[13].split('=')[1])
+                        fields[7].split("=")[1], "%Y%m%d%H%M"
+                    )
+                    vel_x_aux = float(fields[8].split("=")[1])
+                    vel_y_aux = float(fields[9].split("=")[1])
+                    ell_l_aux = float(fields[10].split("=")[1])
+                    ell_s_aux = float(fields[11].split("=")[1])
+                    ell_or_aux = float(fields[12].split("=")[1])
+                    det_aux = float(fields[13].split("=")[1])
                     if np.size(fields) == 16:
-                        lat_aux = float(fields[14].split('=')[1])
-                        lon_aux = float(fields[15].split('=')[1])
+                        lat_aux = float(fields[14].split("=")[1])
+                        lon_aux = float(fields[15].split("=")[1])
                     else:
                         lat_aux = np.ma.masked
                         lon_aux = np.ma.masked
-                elif fields[2] == ':START':
+                elif fields[2] == ":START":
                     scan_time_aux = datetime.datetime.strptime(
-                        fields[0] + ' ' + fields[1], '%Y-%m-%d %H:%M:%S.%f')
+                        fields[0] + " " + fields[1], "%Y-%m-%d %H:%M:%S.%f"
+                    )
 
                     cell_id = np.ma.append(cell_id, cell_id_aux)
                     azi = np.ma.append(azi, azi_aux)
@@ -609,21 +698,60 @@ def read_trt_info2(fname):
                     scan_time = np.ma.append(scan_time, scan_time_aux)
 
             if trt_time.size == 0:
-                warn('No valid X-band scans in ' + fname)
+                warn("No valid X-band scans in " + fname)
                 return (
-                    None, None, None, None, None, None, None, None, None,
-                    None, None, None, None, None)
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                )
 
             return (
-                trt_time, cell_id, rank, scan_time, azi, rng, lat, lon, ell_l,
-                ell_s, ell_or, vel_x, vel_y, det)
+                trt_time,
+                cell_id,
+                rank,
+                scan_time,
+                azi,
+                rng,
+                lat,
+                lon,
+                ell_l,
+                ell_s,
+                ell_or,
+                vel_x,
+                vel_y,
+                det,
+            )
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return (
-            None, None, None, None, None, None, None, None, None, None, None,
-            None, None, None)
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        )
 
 
 def read_trt_scores(fname):
@@ -648,15 +776,15 @@ def read_trt_scores(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
             reader = csv.DictReader(
-                (row for row in csvfile if not row.startswith('#')),
-                delimiter=',')
+                (row for row in csvfile if not row.startswith("#")), delimiter=","
+            )
             nrows = sum(1 for row in reader)
 
             if nrows == 0:
-                warn('No data in file ' + fname)
+                warn("No data in file " + fname)
                 return None, None, None, None, None, None, None, None
 
             traj_ID = np.empty(nrows, dtype=int)
@@ -671,34 +799,38 @@ def read_trt_scores(fname):
             # now read the data
             csvfile.seek(0)
             reader = csv.DictReader(
-                (row for row in csvfile if not row.startswith('#')),
-                delimiter=',')
+                (row for row in csvfile if not row.startswith("#")), delimiter=","
+            )
             for i, row in enumerate(reader):
-                traj_ID[i] = int(row['traj ID'])
+                traj_ID[i] = int(row["traj ID"])
                 time_flash_density_max[i] = datetime.datetime.strptime(
-                    row['max flash density time'], '%Y-%m-%d %H:%M:%S')
-                flash_density_max_rank[i] = float(
-                    row['max flash density rank'])
-                flash_density_max_nflashes[i] = int(
-                    row['max flash density flashes'])
-                flash_density_max_area[i] = float(
-                    row['max flash density area'])
-                flash_density_max[i] = float(
-                    row['max flash density'])
+                    row["max flash density time"], "%Y-%m-%d %H:%M:%S"
+                )
+                flash_density_max_rank[i] = float(row["max flash density rank"])
+                flash_density_max_nflashes[i] = int(row["max flash density flashes"])
+                flash_density_max_area[i] = float(row["max flash density area"])
+                flash_density_max[i] = float(row["max flash density"])
                 time_rank_max[i] = datetime.datetime.strptime(
-                    row['max rank time'], '%Y-%m-%d %H:%M:%S')
-                rank_max[i] = row['max rank']
+                    row["max rank time"], "%Y-%m-%d %H:%M:%S"
+                )
+                rank_max[i] = row["max rank"]
 
             csvfile.close()
 
             return (
-                traj_ID, time_flash_density_max, flash_density_max_rank,
-                flash_density_max_nflashes, flash_density_max_area,
-                flash_density_max, time_rank_max, rank_max)
+                traj_ID,
+                time_flash_density_max,
+                flash_density_max_rank,
+                flash_density_max_nflashes,
+                flash_density_max_area,
+                flash_density_max,
+                time_rank_max,
+                rank_max,
+            )
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None, None, None, None, None, None, None
 
 
@@ -726,15 +858,15 @@ def read_trt_cell_lightning(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
             reader = csv.DictReader(
-                (row for row in csvfile if not row.startswith('#')),
-                delimiter=',')
+                (row for row in csvfile if not row.startswith("#")), delimiter=","
+            )
             nrows = sum(1 for row in reader)
 
             if nrows == 0:
-                warn('No data in file ' + fname)
+                warn("No data in file " + fname)
                 return None, None, None, None, None, None, None, None
 
             traj_ID = np.empty(nrows, dtype=int)
@@ -749,32 +881,39 @@ def read_trt_cell_lightning(fname):
             # now read the data
             csvfile.seek(0)
             reader = csv.DictReader(
-                (row for row in csvfile if not row.startswith('#')),
-                delimiter=',')
+                (row for row in csvfile if not row.startswith("#")), delimiter=","
+            )
             for i, row in enumerate(reader):
-                traj_ID[i] = int(row['traj_ID'])
+                traj_ID[i] = int(row["traj_ID"])
                 time_cell[i] = datetime.datetime.strptime(
-                    row['yyyymmddHHMM'], '%Y%m%d%H%M')
-                lon_cell[i] = float(row['lon'])
-                lat_cell[i] = float(row['lat'])
-                area_cell[i] = float(row['area'])
-                rank_cell[i] = float(row['RANKr'])
-                nflashes_cell[i] = float(row['nflashes'])
-                flash_dens_cell[i] = float(row['flash_dens'])
+                    row["yyyymmddHHMM"], "%Y%m%d%H%M"
+                )
+                lon_cell[i] = float(row["lon"])
+                lat_cell[i] = float(row["lat"])
+                area_cell[i] = float(row["area"])
+                rank_cell[i] = float(row["RANKr"])
+                nflashes_cell[i] = float(row["nflashes"])
+                flash_dens_cell[i] = float(row["flash_dens"])
 
             csvfile.close()
 
             nflashes_cell = np.ma.masked_values(nflashes_cell, get_fillvalue())
-            flash_dens_cell = np.ma.masked_values(
-                flash_dens_cell, get_fillvalue())
+            flash_dens_cell = np.ma.masked_values(flash_dens_cell, get_fillvalue())
 
             return (
-                traj_ID, time_cell, lon_cell, lat_cell, area_cell, rank_cell,
-                nflashes_cell, flash_dens_cell)
+                traj_ID,
+                time_cell,
+                lon_cell,
+                lat_cell,
+                area_cell,
+                rank_cell,
+                nflashes_cell,
+                flash_dens_cell,
+            )
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None, None, None, None, None, None, None
 
 
@@ -837,30 +976,85 @@ def read_trt_data(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
             reader = csv.DictReader(
-                (row for row in csvfile if (
-                    not row.startswith('#') and
-                    not row.startswith('@') and not row.startswith(" ")
-                    and row)),
+                (
+                    row
+                    for row in csvfile
+                    if (
+                        not row.startswith("#")
+                        and not row.startswith("@")
+                        and not row.startswith(" ")
+                        and row
+                    )
+                ),
                 fieldnames=[
-                    'traj_ID', 'yyyymmddHHMM', 'lon', 'lat', 'ell_L', 'ell_S',
-                    'ell_or', 'area', 'vel_x', 'vel_y', 'det', 'RANKr', 'CG-',
-                    'CG+', 'CG', '%CG+', 'ET45', 'ET45m', 'ET15', 'ET15m',
-                    'VIL', 'maxH', 'maxHm', 'POH', 'RANK', 'Dvel_x',
-                    'Dvel_y'],
-                restkey='cell_contour_lon-lat',
-                delimiter=';')
+                    "traj_ID",
+                    "yyyymmddHHMM",
+                    "lon",
+                    "lat",
+                    "ell_L",
+                    "ell_S",
+                    "ell_or",
+                    "area",
+                    "vel_x",
+                    "vel_y",
+                    "det",
+                    "RANKr",
+                    "CG-",
+                    "CG+",
+                    "CG",
+                    "%CG+",
+                    "ET45",
+                    "ET45m",
+                    "ET15",
+                    "ET15m",
+                    "VIL",
+                    "maxH",
+                    "maxHm",
+                    "POH",
+                    "RANK",
+                    "Dvel_x",
+                    "Dvel_y",
+                ],
+                restkey="cell_contour_lon-lat",
+                delimiter=";",
+            )
             nrows = sum(1 for row in reader)
 
             if nrows == 0:
-                warn('No data in file ' + fname)
+                warn("No data in file " + fname)
                 return (
-                    None, None, None, None, None, None, None, None, None,
-                    None, None, None, None, None, None, None, None, None,
-                    None, None, None, None, None, None, None, None, None,
-                    None)
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                )
 
             traj_ID = np.empty(nrows, dtype=int)
             yyyymmddHHMM = np.empty(nrows, dtype=datetime.datetime)
@@ -893,58 +1087,88 @@ def read_trt_data(fname):
             # now read the data
             csvfile.seek(0)
             reader = csv.DictReader(
-                (row for row in csvfile if (
-                    not row.startswith('#') and
-                    not row.startswith('@') and not row.startswith(" ")
-                    and row)),
+                (
+                    row
+                    for row in csvfile
+                    if (
+                        not row.startswith("#")
+                        and not row.startswith("@")
+                        and not row.startswith(" ")
+                        and row
+                    )
+                ),
                 fieldnames=[
-                    'traj_ID', 'yyyymmddHHMM', 'lon', 'lat', 'ell_L', 'ell_S',
-                    'ell_or', 'area', 'vel_x', 'vel_y', 'det', 'RANKr', 'CG-',
-                    'CG+', 'CG', '%CG+', 'ET45', 'ET45m', 'ET15', 'ET15m',
-                    'VIL', 'maxH', 'maxHm', 'POH', 'RANK', 'Dvel_x',
-                    'Dvel_y'],
-                restkey='cell_contour_lon-lat',
-                delimiter=';')
+                    "traj_ID",
+                    "yyyymmddHHMM",
+                    "lon",
+                    "lat",
+                    "ell_L",
+                    "ell_S",
+                    "ell_or",
+                    "area",
+                    "vel_x",
+                    "vel_y",
+                    "det",
+                    "RANKr",
+                    "CG-",
+                    "CG+",
+                    "CG",
+                    "%CG+",
+                    "ET45",
+                    "ET45m",
+                    "ET15",
+                    "ET15m",
+                    "VIL",
+                    "maxH",
+                    "maxHm",
+                    "POH",
+                    "RANK",
+                    "Dvel_x",
+                    "Dvel_y",
+                ],
+                restkey="cell_contour_lon-lat",
+                delimiter=";",
+            )
             cell_contour = []
             for i, row in enumerate(reader):
-                traj_ID[i] = int(row['traj_ID'])
+                traj_ID[i] = int(row["traj_ID"])
                 yyyymmddHHMM[i] = datetime.datetime.strptime(
-                    row['yyyymmddHHMM'].strip(), '%Y%m%d%H%M')
-                lon[i] = float(row['lon'].strip())
-                lat[i] = float(row['lat'].strip())
-                ell_L[i] = float(row['ell_L'].strip())
-                ell_S[i] = float(row['ell_S'].strip())
-                ell_or[i] = float(row['ell_or'].strip())
-                area[i] = float(row['area'].strip())
-                vel_x[i] = float(row['vel_x'].strip())
-                vel_y[i] = float(row['vel_y'].strip())
-                det[i] = float(row['det'].strip())
-                RANKr[i] = int(row['RANKr'].strip())
-                CG_n[i] = int(row['CG-'].strip())
-                CG_p[i] = int(row['CG+'].strip())
-                CG[i] = int(row['CG'].strip())
-                CG_percent_p[i] = float(row['%CG+'].strip())
-                ET45[i] = float(row['ET45'].strip())
-                ET45m[i] = float(row['ET45m'].strip())
-                ET15[i] = float(row['ET15'].strip())
-                ET15m[i] = float(row['ET15m'].strip())
-                VIL[i] = float(row['VIL'].strip())
-                maxH[i] = float(row['maxH'].strip())
-                maxHm[i] = float(row['maxHm'].strip())
-                POH[i] = float(row['POH'].strip())
-                RANK[i] = float(row['RANK'].strip())
-                Dvel_x[i] = float(row['Dvel_x'].strip())
-                Dvel_y[i] = float(row['Dvel_y'].strip())
+                    row["yyyymmddHHMM"].strip(), "%Y%m%d%H%M"
+                )
+                lon[i] = float(row["lon"].strip())
+                lat[i] = float(row["lat"].strip())
+                ell_L[i] = float(row["ell_L"].strip())
+                ell_S[i] = float(row["ell_S"].strip())
+                ell_or[i] = float(row["ell_or"].strip())
+                area[i] = float(row["area"].strip())
+                vel_x[i] = float(row["vel_x"].strip())
+                vel_y[i] = float(row["vel_y"].strip())
+                det[i] = float(row["det"].strip())
+                RANKr[i] = int(row["RANKr"].strip())
+                CG_n[i] = int(row["CG-"].strip())
+                CG_p[i] = int(row["CG+"].strip())
+                CG[i] = int(row["CG"].strip())
+                CG_percent_p[i] = float(row["%CG+"].strip())
+                ET45[i] = float(row["ET45"].strip())
+                ET45m[i] = float(row["ET45m"].strip())
+                ET15[i] = float(row["ET15"].strip())
+                ET15m[i] = float(row["ET15m"].strip())
+                VIL[i] = float(row["VIL"].strip())
+                maxH[i] = float(row["maxH"].strip())
+                maxHm[i] = float(row["maxHm"].strip())
+                POH[i] = float(row["POH"].strip())
+                RANK[i] = float(row["RANK"].strip())
+                Dvel_x[i] = float(row["Dvel_x"].strip())
+                Dvel_y[i] = float(row["Dvel_y"].strip())
 
-                cell_contour_list_aux = row['cell_contour_lon-lat']
+                cell_contour_list_aux = row["cell_contour_lon-lat"]
                 nele = len(cell_contour_list_aux) - 1
                 cell_contour_list = []
                 for j in range(nele):
-                    cell_contour_list.append(
-                        float(cell_contour_list_aux[j].strip()))
+                    cell_contour_list.append(float(cell_contour_list_aux[j].strip()))
                 cell_contour_dict = {
-                    'lon': cell_contour_list[0::2],
-                    'lat': cell_contour_list[1::2]
+                    "lon": cell_contour_list[0::2],
+                    "lat": cell_contour_list[1::2],
                 }
                 cell_contour.append(cell_contour_dict)
 
@@ -973,18 +1197,69 @@ def read_trt_data(fname):
             Dvel_y = np.ma.masked_invalid(Dvel_y)
 
             return (
-                traj_ID, yyyymmddHHMM, lon, lat, ell_L, ell_S, ell_or, area,
-                vel_x, vel_y, det, RANKr, CG_n, CG_p, CG, CG_percent_p, ET45,
-                ET45m, ET15, ET15m, VIL, maxH, maxHm, POH, RANK, Dvel_x,
-                Dvel_y, cell_contour)
+                traj_ID,
+                yyyymmddHHMM,
+                lon,
+                lat,
+                ell_L,
+                ell_S,
+                ell_or,
+                area,
+                vel_x,
+                vel_y,
+                det,
+                RANKr,
+                CG_n,
+                CG_p,
+                CG,
+                CG_percent_p,
+                ET45,
+                ET45m,
+                ET15,
+                ET15m,
+                VIL,
+                maxH,
+                maxHm,
+                POH,
+                RANK,
+                Dvel_x,
+                Dvel_y,
+                cell_contour,
+            )
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return (
-            None, None, None, None, None, None, None, None, None, None, None,
-            None, None, None, None, None, None, None, None, None, None, None,
-            None, None, None, None, None, None)
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        )
 
 
 def read_trt_traj_data(fname):
@@ -1039,13 +1314,16 @@ def read_trt_traj_data(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
             reader = csv.DictReader(
-                (row for row in csvfile if (
-                    not row.startswith('#') and
-                    not row.startswith('@') and row)),
-                delimiter=',')
+                (
+                    row
+                    for row in csvfile
+                    if (not row.startswith("#") and not row.startswith("@") and row)
+                ),
+                delimiter=",",
+            )
             nrows = sum(1 for row in reader)
 
             traj_ID = np.empty(nrows, dtype=int)
@@ -1079,51 +1357,54 @@ def read_trt_traj_data(fname):
             # now read the data
             csvfile.seek(0)
             reader = csv.DictReader(
-                (row for row in csvfile if (
-                    not row.startswith('#') and
-                    not row.startswith('@') and row)),
-                delimiter=',')
+                (
+                    row
+                    for row in csvfile
+                    if (not row.startswith("#") and not row.startswith("@") and row)
+                ),
+                delimiter=",",
+            )
 
             cell_contour = []
             for i, row in enumerate(reader):
-                traj_ID[i] = int(row['traj_ID'])
+                traj_ID[i] = int(row["traj_ID"])
                 yyyymmddHHMM[i] = datetime.datetime.strptime(
-                    row['yyyymmddHHMM'].strip(), '%Y%m%d%H%M')
-                lon[i] = float(row['lon'].strip())
-                lat[i] = float(row['lat'].strip())
-                ell_L[i] = float(row['ell_L'].strip())
-                ell_S[i] = float(row['ell_S'].strip())
-                ell_or[i] = float(row['ell_or'].strip())
-                area[i] = float(row['area'].strip())
-                vel_x[i] = float(row['vel_x'].strip())
-                vel_y[i] = float(row['vel_y'].strip())
-                det[i] = float(row['det'].strip())
-                RANKr[i] = int(row['RANKr'].strip())
-                CG_n[i] = int(row['CG-'].strip())
-                CG_p[i] = int(row['CG+'].strip())
-                CG[i] = int(row['CG'].strip())
-                CG_percent_p[i] = float(row['%CG+'].strip())
-                ET45[i] = float(row['ET45'].strip())
-                ET45m[i] = float(row['ET45m'].strip())
-                ET15[i] = float(row['ET15'].strip())
-                ET15m[i] = float(row['ET15m'].strip())
-                VIL[i] = float(row['VIL'].strip())
-                maxH[i] = float(row['maxH'].strip())
-                maxHm[i] = float(row['maxHm'].strip())
-                POH[i] = float(row['POH'].strip())
-                RANK[i] = float(row['RANK'].strip())
-                Dvel_x[i] = float(row['Dvel_x'].strip())
-                Dvel_y[i] = float(row['Dvel_y'].strip())
+                    row["yyyymmddHHMM"].strip(), "%Y%m%d%H%M"
+                )
+                lon[i] = float(row["lon"].strip())
+                lat[i] = float(row["lat"].strip())
+                ell_L[i] = float(row["ell_L"].strip())
+                ell_S[i] = float(row["ell_S"].strip())
+                ell_or[i] = float(row["ell_or"].strip())
+                area[i] = float(row["area"].strip())
+                vel_x[i] = float(row["vel_x"].strip())
+                vel_y[i] = float(row["vel_y"].strip())
+                det[i] = float(row["det"].strip())
+                RANKr[i] = int(row["RANKr"].strip())
+                CG_n[i] = int(row["CG-"].strip())
+                CG_p[i] = int(row["CG+"].strip())
+                CG[i] = int(row["CG"].strip())
+                CG_percent_p[i] = float(row["%CG+"].strip())
+                ET45[i] = float(row["ET45"].strip())
+                ET45m[i] = float(row["ET45m"].strip())
+                ET15[i] = float(row["ET15"].strip())
+                ET15m[i] = float(row["ET15m"].strip())
+                VIL[i] = float(row["VIL"].strip())
+                maxH[i] = float(row["maxH"].strip())
+                maxHm[i] = float(row["maxHm"].strip())
+                POH[i] = float(row["POH"].strip())
+                RANK[i] = float(row["RANK"].strip())
+                Dvel_x[i] = float(row["Dvel_x"].strip())
+                Dvel_y[i] = float(row["Dvel_y"].strip())
 
-                cell_contour_str_arr = row['cell_contour_lon-lat'].split()
-                cell_contour_arr = np.empty(
-                    len(cell_contour_str_arr), dtype=float)
+                cell_contour_str_arr = row["cell_contour_lon-lat"].split()
+                cell_contour_arr = np.empty(len(cell_contour_str_arr), dtype=float)
                 for j, cell_contour_el in enumerate(cell_contour_str_arr):
                     cell_contour_arr[j] = float(cell_contour_el)
 
                 cell_contour_dict = {
-                    'lon': cell_contour_arr[0::2],
-                    'lat': cell_contour_arr[1::2]
+                    "lon": cell_contour_arr[0::2],
+                    "lat": cell_contour_arr[1::2],
                 }
                 cell_contour.append(cell_contour_dict)
 
@@ -1152,18 +1433,69 @@ def read_trt_traj_data(fname):
             Dvel_y = np.ma.masked_invalid(Dvel_y)
 
             return (
-                traj_ID, yyyymmddHHMM, lon, lat, ell_L, ell_S, ell_or, area,
-                vel_x, vel_y, det, RANKr, CG_n, CG_p, CG, CG_percent_p, ET45,
-                ET45m, ET15, ET15m, VIL, maxH, maxHm, POH, RANK, Dvel_x,
-                Dvel_y, cell_contour)
+                traj_ID,
+                yyyymmddHHMM,
+                lon,
+                lat,
+                ell_L,
+                ell_S,
+                ell_or,
+                area,
+                vel_x,
+                vel_y,
+                det,
+                RANKr,
+                CG_n,
+                CG_p,
+                CG,
+                CG_percent_p,
+                ET45,
+                ET45m,
+                ET15,
+                ET15m,
+                VIL,
+                maxH,
+                maxHm,
+                POH,
+                RANK,
+                Dvel_x,
+                Dvel_y,
+                cell_contour,
+            )
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return (
-            None, None, None, None, None, None, None, None, None, None, None,
-            None, None, None, None, None, None, None, None, None, None, None,
-            None, None, None, None, None, None)
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        )
 
 
 def read_trt_thundertracking_traj_data(fname):
@@ -1222,18 +1554,20 @@ def read_trt_thundertracking_traj_data(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
             reader = csv.DictReader(
-                (row for row in csvfile if (
-                    not row.startswith('#') and
-                    not row.startswith('@') and row)),
-                delimiter=',')
+                (
+                    row
+                    for row in csvfile
+                    if (not row.startswith("#") and not row.startswith("@") and row)
+                ),
+                delimiter=",",
+            )
             nrows = sum(1 for row in reader)
 
             traj_ID = np.ma.masked_all(nrows, dtype=int)
-            scan_ordered_time = np.ma.masked_all(
-                nrows, dtype=datetime.datetime)
+            scan_ordered_time = np.ma.masked_all(nrows, dtype=datetime.datetime)
             scan_time = np.ma.masked_all(nrows, dtype=datetime.datetime)
             azi = np.ma.masked_all(nrows, dtype=float)
             rng = np.ma.masked_all(nrows, dtype=float)
@@ -1268,57 +1602,62 @@ def read_trt_thundertracking_traj_data(fname):
             # now read the data
             csvfile.seek(0)
             reader = csv.DictReader(
-                (row for row in csvfile if (
-                    not row.startswith('#') and
-                    not row.startswith('@') and row)),
-                delimiter=',')
+                (
+                    row
+                    for row in csvfile
+                    if (not row.startswith("#") and not row.startswith("@") and row)
+                ),
+                delimiter=",",
+            )
 
             for i, row in enumerate(reader):
-                traj_ID[i] = int(row['traj_ID'])
+                traj_ID[i] = int(row["traj_ID"])
                 scan_ordered_time[i] = datetime.datetime.strptime(
-                    row['scan_ordered_time'].strip(), '%Y%m%d%H%M%S.%f')
-                if float(row['scan_time'].strip()) != get_fillvalue():
+                    row["scan_ordered_time"].strip(), "%Y%m%d%H%M%S.%f"
+                )
+                if float(row["scan_time"].strip()) != get_fillvalue():
                     scan_time[i] = datetime.datetime.strptime(
-                        row['scan_time'].strip(), '%Y%m%d%H%M%S')
-                azi[i] = float(row['azi'].strip())
-                rng[i] = float(row['rng'].strip())
+                        row["scan_time"].strip(), "%Y%m%d%H%M%S"
+                    )
+                azi[i] = float(row["azi"].strip())
+                rng[i] = float(row["rng"].strip())
                 yyyymmddHHMM[i] = datetime.datetime.strptime(
-                    row['yyyymmddHHMM'].strip(), '%Y%m%d%H%M')
-                lon[i] = float(row['lon'].strip())
-                lat[i] = float(row['lat'].strip())
-                ell_L[i] = float(row['ell_L'].strip())
-                ell_S[i] = float(row['ell_S'].strip())
-                ell_or[i] = float(row['ell_or'].strip())
-                area[i] = float(row['area'].strip())
-                vel_x[i] = float(row['vel_x'].strip())
-                vel_y[i] = float(row['vel_y'].strip())
-                det[i] = float(row['det'].strip())
-                RANKr[i] = int(row['RANKr'].strip())
-                CG_n[i] = int(row['CG-'].strip())
-                CG_p[i] = int(row['CG+'].strip())
-                CG[i] = int(row['CG'].strip())
-                CG_percent_p[i] = float(row['%CG+'].strip())
-                ET45[i] = float(row['ET45'].strip())
-                ET45m[i] = float(row['ET45m'].strip())
-                ET15[i] = float(row['ET15'].strip())
-                ET15m[i] = float(row['ET15m'].strip())
-                VIL[i] = float(row['VIL'].strip())
-                maxH[i] = float(row['maxH'].strip())
-                maxHm[i] = float(row['maxHm'].strip())
-                POH[i] = float(row['POH'].strip())
-                RANK[i] = float(row['RANK'].strip())
-                Dvel_x[i] = float(row['Dvel_x'].strip())
-                Dvel_y[i] = float(row['Dvel_y'].strip())
+                    row["yyyymmddHHMM"].strip(), "%Y%m%d%H%M"
+                )
+                lon[i] = float(row["lon"].strip())
+                lat[i] = float(row["lat"].strip())
+                ell_L[i] = float(row["ell_L"].strip())
+                ell_S[i] = float(row["ell_S"].strip())
+                ell_or[i] = float(row["ell_or"].strip())
+                area[i] = float(row["area"].strip())
+                vel_x[i] = float(row["vel_x"].strip())
+                vel_y[i] = float(row["vel_y"].strip())
+                det[i] = float(row["det"].strip())
+                RANKr[i] = int(row["RANKr"].strip())
+                CG_n[i] = int(row["CG-"].strip())
+                CG_p[i] = int(row["CG+"].strip())
+                CG[i] = int(row["CG"].strip())
+                CG_percent_p[i] = float(row["%CG+"].strip())
+                ET45[i] = float(row["ET45"].strip())
+                ET45m[i] = float(row["ET45m"].strip())
+                ET15[i] = float(row["ET15"].strip())
+                ET15m[i] = float(row["ET15m"].strip())
+                VIL[i] = float(row["VIL"].strip())
+                maxH[i] = float(row["maxH"].strip())
+                maxHm[i] = float(row["maxHm"].strip())
+                POH[i] = float(row["POH"].strip())
+                RANK[i] = float(row["RANK"].strip())
+                Dvel_x[i] = float(row["Dvel_x"].strip())
+                Dvel_y[i] = float(row["Dvel_y"].strip())
 
-                cell_contour_str_arr = row['cell_contour_lon-lat'].split()
-                cell_contour_arr = np.empty(
-                    len(cell_contour_str_arr), dtype=float)
+                cell_contour_str_arr = row["cell_contour_lon-lat"].split()
+                cell_contour_arr = np.empty(len(cell_contour_str_arr), dtype=float)
                 for j, cell_contour_el in enumerate(cell_contour_str_arr):
                     cell_contour_arr[j] = float(cell_contour_el)
 
                 cell_contour_dict = {
-                    'lon': cell_contour_arr[0::2],
-                    'lat': cell_contour_arr[1::2]
+                    "lon": cell_contour_arr[0::2],
+                    "lat": cell_contour_arr[1::2],
                 }
                 cell_contour[i] = cell_contour_dict
 
@@ -1349,18 +1688,77 @@ def read_trt_thundertracking_traj_data(fname):
             Dvel_y = np.ma.masked_invalid(Dvel_y)
 
             return (
-                traj_ID, scan_ordered_time, scan_time, azi, rng, yyyymmddHHMM,
-                lon, lat, ell_L, ell_S, ell_or, area, vel_x, vel_y, det,
-                RANKr, CG_n, CG_p, CG, CG_percent_p, ET45, ET45m, ET15, ET15m,
-                VIL, maxH, maxHm, POH, RANK, Dvel_x, Dvel_y, cell_contour)
+                traj_ID,
+                scan_ordered_time,
+                scan_time,
+                azi,
+                rng,
+                yyyymmddHHMM,
+                lon,
+                lat,
+                ell_L,
+                ell_S,
+                ell_or,
+                area,
+                vel_x,
+                vel_y,
+                det,
+                RANKr,
+                CG_n,
+                CG_p,
+                CG,
+                CG_percent_p,
+                ET45,
+                ET45m,
+                ET15,
+                ET15m,
+                VIL,
+                maxH,
+                maxHm,
+                POH,
+                RANK,
+                Dvel_x,
+                Dvel_y,
+                cell_contour,
+            )
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return (
-            None, None, None, None, None, None, None, None, None, None, None,
-            None, None, None, None, None, None, None, None, None, None, None,
-            None, None, None, None, None, None, None, None, None, None)
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        )
 
 
 def read_lightning(fname, filter_data=True):
@@ -1392,14 +1790,23 @@ def read_lightning(fname, filter_data=True):
         # get date from file name
         bfile = os.path.basename(fname)
         datetimestr = bfile[0:6]
-        fdatetime = datetime.datetime.strptime(datetimestr, '%y%m%d')
+        fdatetime = datetime.datetime.strptime(datetimestr, "%y%m%d")
 
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
             reader = csv.DictReader(
-                csvfile, fieldnames=['flashnr', 'time', 'time_in_flash',
-                                     'lat', 'lon', 'alt', 'dBm'],
-                delimiter=' ')
+                csvfile,
+                fieldnames=[
+                    "flashnr",
+                    "time",
+                    "time_in_flash",
+                    "lat",
+                    "lon",
+                    "alt",
+                    "dBm",
+                ],
+                delimiter=" ",
+            )
             nrows = sum(1 for row in reader)
 
             flashnr = np.ma.empty(nrows, dtype=int)
@@ -1412,20 +1819,30 @@ def read_lightning(fname, filter_data=True):
             # now read the data
             csvfile.seek(0)
             reader = csv.DictReader(
-                csvfile, fieldnames=['flashnr', 'time', 'time_in_flash',
-                                     'lat', 'lon', 'alt', 'dBm'],
-                delimiter=' ')
+                csvfile,
+                fieldnames=[
+                    "flashnr",
+                    "time",
+                    "time_in_flash",
+                    "lat",
+                    "lon",
+                    "alt",
+                    "dBm",
+                ],
+                delimiter=" ",
+            )
 
             time_data = []
             for i, row in enumerate(reader):
-                flashnr[i] = int(row['flashnr'])
-                time_data.append(fdatetime + datetime.timedelta(
-                    seconds=float(row['time'])))
-                time_in_flash[i] = float(row['time_in_flash'])
-                lat[i] = float(row['lat'])
-                lon[i] = float(row['lon'])
-                alt[i] = float(row['alt'])
-                dBm[i] = float(row['dBm'])
+                flashnr[i] = int(row["flashnr"])
+                time_data.append(
+                    fdatetime + datetime.timedelta(seconds=float(row["time"]))
+                )
+                time_in_flash[i] = float(row["time_in_flash"])
+                lat[i] = float(row["lat"])
+                lon[i] = float(row["lon"])
+                alt[i] = float(row["alt"])
+                dBm[i] = float(row["dBm"])
 
             time_data = np.array(time_data)
 
@@ -1444,7 +1861,7 @@ def read_lightning(fname, filter_data=True):
             return flashnr, time_data, time_in_flash, lat, lon, alt, dBm
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None, None, None, None, None, None
 
 
@@ -1479,14 +1896,30 @@ def read_meteorage(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
             reader = csv.DictReader(
-                csvfile, fieldnames=['date', 'lon', 'lat', 'intens', 'ns',
-                                     'mode', 'intra', 'ax', 'ki2', 'ecc',
-                                     'incl', 'sind', 'par1', 'par2', 'par3',
-                                     'par4'],
-                delimiter='|')
+                csvfile,
+                fieldnames=[
+                    "date",
+                    "lon",
+                    "lat",
+                    "intens",
+                    "ns",
+                    "mode",
+                    "intra",
+                    "ax",
+                    "ki2",
+                    "ecc",
+                    "incl",
+                    "sind",
+                    "par1",
+                    "par2",
+                    "par3",
+                    "par4",
+                ],
+                delimiter="|",
+            )
             nrows = sum(1 for row in reader)
 
             stroke_time = np.empty(nrows, dtype=datetime.datetime)
@@ -1505,38 +1938,64 @@ def read_meteorage(fname):
             # now read the data
             csvfile.seek(0)
             reader = csv.DictReader(
-                csvfile, fieldnames=['date', 'lon', 'lat', 'intens', 'ns',
-                                     'mode', 'intra', 'ax', 'ki2', 'ecc',
-                                     'incl', 'sind', 'par1', 'par2', 'par3',
-                                     'par4'],
-                delimiter='|')
+                csvfile,
+                fieldnames=[
+                    "date",
+                    "lon",
+                    "lat",
+                    "intens",
+                    "ns",
+                    "mode",
+                    "intra",
+                    "ax",
+                    "ki2",
+                    "ecc",
+                    "incl",
+                    "sind",
+                    "par1",
+                    "par2",
+                    "par3",
+                    "par4",
+                ],
+                delimiter="|",
+            )
 
             for i, row in enumerate(reader):
                 stroke_time[i] = datetime.datetime.strptime(
-                    row['date'], '%d.%m.%Y %H:%M:%S.%f UTC')
-                lon[i] = float(row['lon'])
-                lat[i] = float(row['lat'])
-                intens[i] = float(row['intens'])
-                ns[i] = int(row['ns'])
-                mode[i] = int(row['mode'])
-                intra[i] = int(row['intra'])
-                ax[i] = float(row['ax'])
-                ki2[i] = float(row['ki2'])
-                ecc[i] = float(row['ecc'])
-                incl[i] = float(row['incl'])
-                sind[i] = int(float(row['sind'])) - 1
+                    row["date"], "%d.%m.%Y %H:%M:%S.%f UTC"
+                )
+                lon[i] = float(row["lon"])
+                lat[i] = float(row["lat"])
+                intens[i] = float(row["intens"])
+                ns[i] = int(row["ns"])
+                mode[i] = int(row["mode"])
+                intra[i] = int(row["intra"])
+                ax[i] = float(row["ax"])
+                ki2[i] = float(row["ki2"])
+                ecc[i] = float(row["ecc"])
+                incl[i] = float(row["incl"])
+                sind[i] = int(float(row["sind"])) - 1
 
             csvfile.close()
 
             return (
-                stroke_time, lon, lat, intens, ns, mode, intra, ax, ki2, ecc,
-                incl, sind)
+                stroke_time,
+                lon,
+                lat,
+                intens,
+                ns,
+                mode,
+                intra,
+                ax,
+                ki2,
+                ecc,
+                incl,
+                sind,
+            )
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
-        return (
-            None, None, None, None, None, None, None, None, None, None, None,
-            None)
+        warn("Unable to read file " + fname)
+        return (None, None, None, None, None, None, None, None, None, None, None, None)
 
 
 def read_lightning_traj(fname):
@@ -1566,13 +2025,23 @@ def read_lightning_traj(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
             reader = csv.DictReader(
-                (row for row in csvfile if not row.startswith('#')),
-                fieldnames=['Date', 'UTC', 'flashnr', 'dBm', 'at_flash',
-                            'mean', 'min', 'max', 'nvalid'],
-                delimiter=',')
+                (row for row in csvfile if not row.startswith("#")),
+                fieldnames=[
+                    "Date",
+                    "UTC",
+                    "flashnr",
+                    "dBm",
+                    "at_flash",
+                    "mean",
+                    "min",
+                    "max",
+                    "nvalid",
+                ],
+                delimiter=",",
+            )
             nrows = sum(1 for row in reader)
 
             time_flash = np.empty(nrows, dtype=datetime.datetime)
@@ -1587,25 +2056,35 @@ def read_lightning_traj(fname):
             # now read the data
             csvfile.seek(0)
             reader = csv.DictReader(
-                (row for row in csvfile if not row.startswith('#')),
-                fieldnames=['Date', 'UTC', 'flashnr', 'dBm', 'at_flash',
-                            'mean', 'min', 'max', 'nvalid'],
-                delimiter=',')
+                (row for row in csvfile if not row.startswith("#")),
+                fieldnames=[
+                    "Date",
+                    "UTC",
+                    "flashnr",
+                    "dBm",
+                    "at_flash",
+                    "mean",
+                    "min",
+                    "max",
+                    "nvalid",
+                ],
+                delimiter=",",
+            )
 
             for i, row in enumerate(reader):
-                date_flash_aux = datetime.datetime.strptime(
-                    row['Date'], '%d-%b-%Y')
-                time_flash_aux = float(row['UTC'])
+                date_flash_aux = datetime.datetime.strptime(row["Date"], "%d-%b-%Y")
+                time_flash_aux = float(row["UTC"])
                 time_flash[i] = date_flash_aux + datetime.timedelta(
-                    seconds=time_flash_aux)
+                    seconds=time_flash_aux
+                )
 
-                flashnr[i] = int(float(row['flashnr']))
-                dBm[i] = float(row['dBm'])
-                val_at_flash[i] = float(row['at_flash'])
-                val_mean[i] = float(row['mean'])
-                val_min[i] = float(row['min'])
-                val_max[i] = float(row['max'])
-                nval[i] = int(float(row['nvalid']))
+                flashnr[i] = int(float(row["flashnr"]))
+                dBm[i] = float(row["dBm"])
+                val_at_flash[i] = float(row["at_flash"])
+                val_mean[i] = float(row["mean"])
+                val_min[i] = float(row["min"])
+                val_max[i] = float(row["max"])
+                nval[i] = int(float(row["nvalid"]))
 
             csvfile.close()
 
@@ -1614,18 +2093,34 @@ def read_lightning_traj(fname):
             val_min = np.ma.masked_invalid(val_min)
             val_max = np.ma.masked_invalid(val_max)
 
-            return (time_flash, flashnr, dBm, val_at_flash, val_mean, val_min,
-                    val_max, nval)
+            return (
+                time_flash,
+                flashnr,
+                dBm,
+                val_at_flash,
+                val_mean,
+                val_min,
+                val_max,
+                nval,
+            )
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None, None, None, None, None, None, None
 
 
-def read_lightning_all(fname,
-                       labels=['hydro [-]', 'KDPc [deg/Km]', 'dBZc [dBZ]',
-                               'RhoHVc [-]', 'TEMP [deg C]', 'ZDRc [dB]']):
+def read_lightning_all(
+    fname,
+    labels=[
+        "hydro [-]",
+        "KDPc [deg/Km]",
+        "dBZc [dBZ]",
+        "RhoHVc [-]",
+        "TEMP [deg C]",
+        "ZDRc [dB]",
+    ],
+):
     """
     Reads a file containing lightning data and co-located polarimetric data.
     fields:
@@ -1653,10 +2148,9 @@ def read_lightning_all(fname,
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             nrows = sum(1 for row in reader)
 
             flashnr = np.ma.empty(nrows, dtype=int)
@@ -1672,18 +2166,18 @@ def read_lightning_all(fname,
 
             # now read the data
             csvfile.seek(0)
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
 
             for i, row in enumerate(reader):
-                flashnr[i] = int(row['flashnr'])
+                flashnr[i] = int(row["flashnr"])
                 time_data[i] = datetime.datetime.strptime(
-                    row['time_data'], '%Y-%m-%d %H:%M:%S.%f')
-                time_in_flash[i] = float(row['time_in_flash'])
-                lat[i] = float(row['lat'])
-                lon[i] = float(row['lon'])
-                alt[i] = float(row['alt'])
-                dBm[i] = float(row['dBm'])
+                    row["time_data"], "%Y-%m-%d %H:%M:%S.%f"
+                )
+                time_in_flash[i] = float(row["time_in_flash"])
+                lat[i] = float(row["lat"])
+                lon[i] = float(row["lon"])
+                alt[i] = float(row["alt"])
+                dBm[i] = float(row["dBm"])
 
                 for label in labels:
                     pol_vals_dict[label][i] = float(row[label])
@@ -1692,12 +2186,13 @@ def read_lightning_all(fname,
 
             for label in labels:
                 pol_vals_dict[label] = np.ma.masked_values(
-                    pol_vals_dict[label], get_fillvalue())
+                    pol_vals_dict[label], get_fillvalue()
+                )
 
             return flashnr, time_data, time_in_flash, lat, lon, alt, dBm, pol_vals_dict
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None, None, None, None, None, None, None
 
 
@@ -1722,95 +2217,102 @@ def get_sensor_data(date, datatype, cfg):
         date, value, type of sensor and measurement period
 
     """
-    if cfg['sensor'] == 'rgage':
-        datapath = cfg['smnpath'] + date.strftime('%Y%m') + '/'
-        datafile = date.strftime('%Y%m%d') + '_' + cfg['sensorid'] + '.csv'
+    if cfg["sensor"] == "rgage":
+        datapath = cfg["smnpath"] + date.strftime("%Y%m") + "/"
+        datafile = date.strftime("%Y%m%d") + "_" + cfg["sensorid"] + ".csv"
         try:
-            _, sensordate, _, _, _, sensorvalue, _, _ = read_smn(
-                datapath + datafile)
+            _, sensordate, _, _, _, sensorvalue, _, _ = read_smn(datapath + datafile)
         except Exception:
             _, sensordate, sensorvalue = read_smn2(datapath + datafile)
             if sensordate is None:
                 return None, None, None, None
-        label = 'RG'
+        label = "RG"
         period = (sensordate[1] - sensordate[0]).total_seconds()
-    elif cfg['sensor'] == 'rgage_knmi':
+    elif cfg["sensor"] == "rgage_knmi":
         datapath = f"{cfg['smnpath']}{date.strftime('%Y')}/"
         datafile = f"kis_tor_{date.strftime('%Y%m')}.gz"
-        df_rg = read_knmi(f'{datapath}{datafile}')
+        df_rg = read_knmi(f"{datapath}{datafile}")
         # extract data corresponding to desired sensor
-        df_rg = df_rg[df_rg['id'] == cfg['sensorid']]
+        df_rg = df_rg[df_rg["id"] == cfg["sensorid"]]
 
         # extract data corresponding to desired time
         t_start = date.replace(hour=0, minute=0, second=0)
         t_end = t_start + datetime.timedelta(days=1)
-        mask = ((df_rg['time_stamp'] > t_start) & (df_rg['time_stamp'] <= t_end))
+        mask = (df_rg["time_stamp"] > t_start) & (df_rg["time_stamp"] <= t_end)
         df_rg = df_rg.loc[mask]
         df_rg.reset_index(inplace=True)
 
-        sensordate = df_rg['time_stamp'].values
-        sensorvalue = df_rg['ri_rg_10'].values
+        sensordate = df_rg["time_stamp"].values
+        sensorvalue = df_rg["ri_rg_10"].values
 
-        label = 'RG'
-        period = (df_rg['time_stamp'][1] - df_rg['time_stamp'][0]).total_seconds()
-    elif cfg['sensor'] == 'disdro':
-        if datatype in ('dBZ', 'dBZc'):
-            sensor_datatype = 'dBZ'
+        label = "RG"
+        period = (df_rg["time_stamp"][1] - df_rg["time_stamp"][0]).total_seconds()
+    elif cfg["sensor"] == "disdro":
+        if datatype in ("dBZ", "dBZc"):
+            sensor_datatype = "dBZ"
         else:
             sensor_datatype = datatype
 
         datapath = (
-            cfg['disdropath'] + cfg['sensorid'] + '/scattering/' +
-            date.strftime('%Y') + '/' + date.strftime('%Y%m') + '/')
-        datafile = (date.strftime('%Y%m%d') +
-                    '_' +
-                    cfg['sensorid'] +
-                    '_' +
-                    cfg['location'] +
-                    '_' +
-                    str(cfg['freq']) +
-                    'GHz_' +
-                    sensor_datatype +
-                    '_el' +
-                    str(cfg['ele']) +
-                    '.csv')
+            cfg["disdropath"]
+            + cfg["sensorid"]
+            + "/scattering/"
+            + date.strftime("%Y")
+            + "/"
+            + date.strftime("%Y%m")
+            + "/"
+        )
+        datafile = (
+            date.strftime("%Y%m%d")
+            + "_"
+            + cfg["sensorid"]
+            + "_"
+            + cfg["location"]
+            + "_"
+            + str(cfg["freq"])
+            + "GHz_"
+            + sensor_datatype
+            + "_el"
+            + str(cfg["ele"])
+            + ".csv"
+        )
 
         sensordate, _, sensorvalue, _ = read_disdro(datapath + datafile)
         if sensordate is None:
             return None, None, None, None
-        label = 'Disdro'
+        label = "Disdro"
         period = (sensordate[1] - sensordate[0]).total_seconds()
-    elif cfg['sensor'] == 'disdro_parsivel':
-        if datatype in ('dBZ', 'dBZc'):
-            sensor_datatype = 'dBZ'
+    elif cfg["sensor"] == "disdro_parsivel":
+        if datatype in ("dBZ", "dBZc"):
+            sensor_datatype = "dBZ"
         else:
             sensor_datatype = datatype
 
         datapath = (
             f'{cfg["disdropath"]}{cfg["sensorid"]}/Disdro-1min/'
-            f'{date.strftime("%Y")}/')
+            f'{date.strftime("%Y")}/'
+        )
         datafile = f'{date.strftime("%Y%m%d")}.csv'
 
         df_disdro = read_disdro_parsivel(datapath + datafile)
-        sensordate = df_disdro['t_0'].values
-        if datatype in ('dBZ', 'dBZc'):
-            substr = 'Disdro_RadarRef_Q5'
+        sensordate = df_disdro["t_0"].values
+        if datatype in ("dBZ", "dBZc"):
+            substr = "Disdro_RadarRef_Q5"
         else:
-            substr = 'Disdro_Intensity_Q5'
+            substr = "Disdro_Intensity_Q5"
 
         sensorvalue = None
         for col in df_disdro.columns:
             if substr in col:
                 sensorvalue = df_disdro[col].values
         if sensorvalue is None:
-            warn(f'No data in file {datapath}{datafile}')
+            warn(f"No data in file {datapath}{datafile}")
             return None, None, None, None
 
-        label = 'Disdro'
-        period = (
-            df_disdro['t_0'][1] - df_disdro['t_0'][0]).total_seconds()
+        label = "Disdro"
+        period = (df_disdro["t_0"][1] - df_disdro["t_0"][0]).total_seconds()
     else:
-        warn('Unknown sensor: ' + cfg['sensor'])
+        warn("Unknown sensor: " + cfg["sensor"])
         return None, None, None, None
 
     return sensordate, sensorvalue, label, period
@@ -1833,32 +2335,31 @@ def read_smn(fname):
     """
     fill_value = 10000000.0
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
             reader = csv.DictReader(csvfile)
             nrows = sum(1 for row in reader)
-            smn_id = np.ma.empty(nrows, dtype='float32')
-            pressure = np.ma.empty(nrows, dtype='float32')
-            temp = np.ma.empty(nrows, dtype='float32')
-            rh = np.ma.empty(nrows, dtype='float32')
-            precip = np.ma.empty(nrows, dtype='float32')
-            wspeed = np.ma.empty(nrows, dtype='float32')
-            wdir = np.ma.empty(nrows, dtype='float32')
+            smn_id = np.ma.empty(nrows, dtype="float32")
+            pressure = np.ma.empty(nrows, dtype="float32")
+            temp = np.ma.empty(nrows, dtype="float32")
+            rh = np.ma.empty(nrows, dtype="float32")
+            precip = np.ma.empty(nrows, dtype="float32")
+            wspeed = np.ma.empty(nrows, dtype="float32")
+            wdir = np.ma.empty(nrows, dtype="float32")
 
             # now read the data
             csvfile.seek(0)
             reader = csv.DictReader(csvfile)
             date = []
             for i, row in enumerate(reader):
-                smn_id[i] = float(row['StationID'])
-                date.append(datetime.datetime.strptime(
-                    row['DateTime'], '%Y%m%d%H%M%S'))
-                pressure[i] = float(row['AirPressure'])
-                temp[i] = float(row['2mTemperature'])
-                rh[i] = float(row['RH'])
-                precip[i] = float(row['Precipitation'])
-                wspeed[i] = float(row['Windspeed'])
-                wdir[i] = float(row['Winddirection'])
+                smn_id[i] = float(row["StationID"])
+                date.append(datetime.datetime.strptime(row["DateTime"], "%Y%m%d%H%M%S"))
+                pressure[i] = float(row["AirPressure"])
+                temp[i] = float(row["2mTemperature"])
+                rh[i] = float(row["RH"])
+                precip[i] = float(row["Precipitation"])
+                wspeed[i] = float(row["Windspeed"])
+                wdir[i] = float(row["Winddirection"])
 
             pressure = np.ma.masked_values(pressure, fill_value)
             temp = np.ma.masked_values(temp, fill_value)
@@ -1868,14 +2369,14 @@ def read_smn(fname):
             wdir = np.ma.masked_values(wdir, fill_value)
 
             # convert precip from mm/10min to mm/h
-            precip *= 6.
+            precip *= 6.0
 
             csvfile.close()
 
             return smn_id, date, pressure, temp, rh, precip, wspeed, wdir
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None, None, None, None, None, None, None
 
 
@@ -1896,20 +2397,25 @@ def read_smn2(fname):
 
     """
     try:
-        df = pd.read_csv(fname, sep=',', parse_dates = ['DateTime'])
+        df = pd.read_csv(fname, sep=",", parse_dates=["DateTime"])
         # Try to convert stationID to int
         try:
-            df['StationID'] = pd.to_numeric(df['StationID'])
+            df["StationID"] = pd.to_numeric(df["StationID"])
         except ValueError:
             pass
         # Convert dates to python datetime
-        arr_date = np.array(df['DateTime'].dt.to_pydatetime())
-        df['DateTime']= pd.Series(arr_date, dtype=object)
-        return np.array(df['StationID']), df['DateTime'].to_list(), np.array(df['Value'])
+        arr_date = np.array(df["DateTime"].dt.to_pydatetime())
+        df["DateTime"] = pd.Series(arr_date, dtype=object)
+        return (
+            np.array(df["StationID"]),
+            df["DateTime"].to_list(),
+            np.array(df["Value"]),
+        )
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None, None
+
 
 def read_knmi(fname, col_names=None):
     """
@@ -1944,13 +2450,30 @@ def read_knmi(fname, col_names=None):
     """
     if col_names is None:
         col_names = [
-            'time_stamp', 'id', 'name', 'lat', 'lon', 'alt', 'dr_pws_10',
-            'dr_rg_10', 'ww_cor_10', 'ri_pws_10', 'ri_rg_10']
+            "time_stamp",
+            "id",
+            "name",
+            "lat",
+            "lon",
+            "alt",
+            "dr_pws_10",
+            "dr_rg_10",
+            "ww_cor_10",
+            "ri_pws_10",
+            "ri_rg_10",
+        ]
     df_prec = pd.read_table(
-        fname, compression='gzip', comment='#', header=None, names=col_names,
-        sep=r"\s{2,}", engine="python")
-    df_prec['time_stamp'] = pd.to_datetime(
-        df_prec['time_stamp'], format='%Y-%m-%d %H:%M:%S')
+        fname,
+        compression="gzip",
+        comment="#",
+        header=None,
+        names=col_names,
+        sep=r"\s{2,}",
+        engine="python",
+    )
+    df_prec["time_stamp"] = pd.to_datetime(
+        df_prec["time_stamp"], format="%Y-%m-%d %H:%M:%S"
+    )
 
     return df_prec
 
@@ -1971,23 +2494,23 @@ def read_coord_sensors(fname):
         The read values
 
     """
-    
+
     try:
-        df = pd.read_csv(fname, sep=',')
+        df = pd.read_csv(fname, sep=",")
         # check if missing header
-        if set(df.columns) != set(['lat','lon','StationID']):
-            df = pd.read_csv(fname, sep=',', names=['lat','lon','StationID'])
-        
+        if set(df.columns) != set(["lat", "lon", "StationID"]):
+            df = pd.read_csv(fname, sep=",", names=["lat", "lon", "StationID"])
+
         # Try to convert stationID to int
         try:
-            df['StationID'] = pd.to_numeric(df['StationID'])
+            df["StationID"] = pd.to_numeric(df["StationID"])
         except ValueError:
             pass
-        
-        return np.array(df['lat']), np.array(df['lon']), np.array(df['StationID'])
+
+        return np.array(df["lat"]), np.array(df["lon"]), np.array(df["StationID"])
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None, None
 
 
@@ -2009,31 +2532,46 @@ def read_disdro_scattering(fname):
 
     """
     try:
-        with open(fname, 'r', newline='', encoding='utf-8', errors='ignore') as csvfile:
+        with open(fname, "r", newline="", encoding="utf-8", errors="ignore") as csvfile:
             # skip the first line
             next(csvfile)
 
             # first count the lines
             reader = csv.DictReader(
-                csvfile, fieldnames=['date', 'preciptype', 'lwc', 'rr', 'zh',
-                                     'zv', 'zdr', 'ldr', 'ah', 'av', 'adiff',
-                                     'kdp', 'deltaco', 'rhohv'],
-                dialect='excel-tab')
+                csvfile,
+                fieldnames=[
+                    "date",
+                    "preciptype",
+                    "lwc",
+                    "rr",
+                    "zh",
+                    "zv",
+                    "zdr",
+                    "ldr",
+                    "ah",
+                    "av",
+                    "adiff",
+                    "kdp",
+                    "deltaco",
+                    "rhohv",
+                ],
+                dialect="excel-tab",
+            )
             nrows = sum(1 for row in reader)
 
-            preciptype = np.ma.empty(nrows, dtype='float32')
-            lwc = np.ma.empty(nrows, dtype='float32')
-            rr = np.ma.empty(nrows, dtype='float32')
-            zh = np.ma.empty(nrows, dtype='float32')
-            zv = np.ma.empty(nrows, dtype='float32')
-            zdr = np.ma.empty(nrows, dtype='float32')
-            ldr = np.ma.empty(nrows, dtype='float32')
-            ah = np.ma.empty(nrows, dtype='float32')
-            av = np.ma.empty(nrows, dtype='float32')
-            adiff = np.ma.empty(nrows, dtype='float32')
-            kdp = np.ma.empty(nrows, dtype='float32')
-            deltaco = np.ma.empty(nrows, dtype='float32')
-            rhohv = np.ma.empty(nrows, dtype='float32')
+            preciptype = np.ma.empty(nrows, dtype="float32")
+            lwc = np.ma.empty(nrows, dtype="float32")
+            rr = np.ma.empty(nrows, dtype="float32")
+            zh = np.ma.empty(nrows, dtype="float32")
+            zv = np.ma.empty(nrows, dtype="float32")
+            zdr = np.ma.empty(nrows, dtype="float32")
+            ldr = np.ma.empty(nrows, dtype="float32")
+            ah = np.ma.empty(nrows, dtype="float32")
+            av = np.ma.empty(nrows, dtype="float32")
+            adiff = np.ma.empty(nrows, dtype="float32")
+            kdp = np.ma.empty(nrows, dtype="float32")
+            deltaco = np.ma.empty(nrows, dtype="float32")
+            rhohv = np.ma.empty(nrows, dtype="float32")
 
             # now read the data
             csvfile.seek(0)
@@ -2041,37 +2579,80 @@ def read_disdro_scattering(fname):
             next(csvfile)
 
             reader = csv.DictReader(
-                csvfile, fieldnames=['date', 'preciptype', 'lwc', 'rr', 'zh',
-                                     'zv', 'zdr', 'ldr', 'ah', 'av', 'adiff',
-                                     'kdp', 'deltaco', 'rhohv'],
-                dialect='excel-tab')
+                csvfile,
+                fieldnames=[
+                    "date",
+                    "preciptype",
+                    "lwc",
+                    "rr",
+                    "zh",
+                    "zv",
+                    "zdr",
+                    "ldr",
+                    "ah",
+                    "av",
+                    "adiff",
+                    "kdp",
+                    "deltaco",
+                    "rhohv",
+                ],
+                dialect="excel-tab",
+            )
             date = []
             for i, row in enumerate(reader):
-                date.append(datetime.datetime.strptime(
-                    row['date'], '%Y-%m-%d %H:%M:%S'))
-                preciptype[i] = float(row['preciptype'])
-                lwc[i] = float(row['lwc'])
-                rr[i] = float(row['rr'])
-                zh[i] = float(row['zh'])
-                zv[i] = float(row['zv'])
-                zdr[i] = float(row['zdr'])
-                ldr[i] = float(row['ldr'])
-                ah[i] = float(row['ah'])
-                av[i] = float(row['av'])
-                adiff[i] = float(row['adiff'])
-                kdp[i] = float(row['kdp'])
-                deltaco[i] = float(row['deltaco'])
-                rhohv[i] = float(row['rhohv'])
+                date.append(
+                    datetime.datetime.strptime(row["date"], "%Y-%m-%d %H:%M:%S")
+                )
+                preciptype[i] = float(row["preciptype"])
+                lwc[i] = float(row["lwc"])
+                rr[i] = float(row["rr"])
+                zh[i] = float(row["zh"])
+                zv[i] = float(row["zv"])
+                zdr[i] = float(row["zdr"])
+                ldr[i] = float(row["ldr"])
+                ah[i] = float(row["ah"])
+                av[i] = float(row["av"])
+                adiff[i] = float(row["adiff"])
+                kdp[i] = float(row["kdp"])
+                deltaco[i] = float(row["deltaco"])
+                rhohv[i] = float(row["rhohv"])
 
             csvfile.close()
 
-            return (date, preciptype, lwc, rr, zh, zv, zdr, ldr, ah, av,
-                    adiff, kdp, deltaco, rhohv)
+            return (
+                date,
+                preciptype,
+                lwc,
+                rr,
+                zh,
+                zv,
+                zdr,
+                ldr,
+                ah,
+                av,
+                adiff,
+                kdp,
+                deltaco,
+                rhohv,
+            )
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
-        return (None, None, None, None, None, None, None, None, None, None,
-                None, None, None)
+        warn("Unable to read file " + fname)
+        return (
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        )
 
 
 def read_disdro(fname):
@@ -2091,35 +2672,36 @@ def read_disdro(fname):
 
     """
     try:
-        var = re.search('GHz_(.{,7})_el', fname).group(1)
+        var = re.search("GHz_(.{,7})_el", fname).group(1)
     except AttributeError:
         # AAA, ZZZ not found in the original string
-        var = ''  # apply your error handling
+        var = ""  # apply your error handling
     try:
-        with open(fname, 'r', newline='', encoding='utf-8', errors='ignore') as csvfile:
+        with open(fname, "r", newline="", encoding="utf-8", errors="ignore") as csvfile:
             # first count the lines
             reader = csv.DictReader(
-                (row for row in csvfile if not row.startswith('#')),
-                delimiter=',')
+                (row for row in csvfile if not row.startswith("#")), delimiter=","
+            )
             nrows = sum(1 for row in reader)
 
-            variable = np.ma.empty(nrows, dtype='float32')
-            scatt_temp = np.ma.empty(nrows, dtype='float32')
+            variable = np.ma.empty(nrows, dtype="float32")
+            scatt_temp = np.ma.empty(nrows, dtype="float32")
 
             # now read the data
             csvfile.seek(0)
             reader = csv.DictReader(
-                (row for row in csvfile if not row.startswith('#')),
-                delimiter=',')
+                (row for row in csvfile if not row.startswith("#")), delimiter=","
+            )
             i = 0
             date = []
             preciptype = []
             for row in reader:
-                date.append(datetime.datetime.strptime(
-                    row['date'], '%Y-%m-%d %H:%M:%S'))
-                preciptype.append(row['Precip Code'])
+                date.append(
+                    datetime.datetime.strptime(row["date"], "%Y-%m-%d %H:%M:%S")
+                )
+                preciptype.append(row["Precip Code"])
                 variable[i] = float(row[var])
-                scatt_temp[i] = float(row['Scattering Temp [deg C]'])
+                scatt_temp[i] = float(row["Scattering Temp [deg C]"])
                 i += 1
             variable = np.ma.masked_values(variable, get_fillvalue())
             np.ma.set_fill_value(variable, get_fillvalue())
@@ -2128,7 +2710,7 @@ def read_disdro(fname):
             return (date, preciptype, variable, scatt_temp)
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return (None, None, None, None)
 
 
@@ -2147,9 +2729,8 @@ def read_disdro_parsivel(fname):
         DataFrame containing the read values
 
     """
-    df_disdro = pd.read_csv(fname, sep=';')
-    df_disdro['t_0'] = pd.to_datetime(
-        df_disdro['t_0'], format='%Y-%m-%d %H:%M:%S')
+    df_disdro = pd.read_csv(fname, sep=";")
+    df_disdro["t_0"] = pd.to_datetime(df_disdro["t_0"], format="%Y-%m-%d %H:%M:%S")
     return df_disdro
 
 
@@ -2165,7 +2746,7 @@ def read_radiosounding_wyoming(station, dtime):
 
     Returns:
         pandas.DataFrame: A DataFrame containing the radiosounding data with
-        columns: ['PRES', 'HGHT', 'TEMP', 'DWPT', 'RELH', 'MIXR', 'DRCT', 
+        columns: ['PRES', 'HGHT', 'TEMP', 'DWPT', 'RELH', 'MIXR', 'DRCT',
                   'SKNT', 'THTA', 'THTE', 'THTV]
     """
 
@@ -2177,7 +2758,7 @@ def read_radiosounding_wyoming(station, dtime):
         "MONTH": f"{dtime.month:02d}",
         "FROM": f"{dtime.hour:02d}00",
         "TO": f"{dtime.hour:02d}00",
-        "STNM": station
+        "STNM": station,
     }
 
     response = requests.get(base_url, params=query_params, verify=False)
@@ -2191,16 +2772,21 @@ def read_radiosounding_wyoming(station, dtime):
     data_str = response.text[start_idx:end_idx][0:-10]
 
     data_io = StringIO(data_str)
-    data_df = pd.read_csv(data_io, sep=r'\s+', header=0, skiprows = [1,2],
-        on_bad_lines='warn', 
+    data_df = pd.read_csv(
+        data_io,
+        sep=r"\s+",
+        header=0,
+        skiprows=[1, 2],
+        on_bad_lines="warn",
     )
     for col in data_df.columns:
         data_df[col] = pd.to_numeric(data_df[col])
     return data_df
 
+
 def read_radiosounding_igra(station, dtime):
     """
-    Download radiosounding data from  from the Integrated Global Radiosonde Archive 
+    Download radiosounding data from  from the Integrated Global Radiosonde Archive
     (IGRA)
 
     Parameters:
@@ -2219,22 +2805,47 @@ def read_radiosounding_igra(station, dtime):
     doc/igra2-data-format.txt
     """
 
-    COLUMNS_SOUNDING = ['LVLTYPE1', 'LVLTYPE2','ETIME', 'PRESS', 'PFLAG', 'GPH',
-            'ZFLAG', 'TEMP', 'TFLAG', 'RH','DPDP','WDIR','WSPD']
-    COLUMNS_STATION_LIST = ['CODE', 'LATITUDE', 'LONGITUDE', 'ELEVATION',
-         'NAME', 'START', 'END', 'ID']
+    COLUMNS_SOUNDING = [
+        "LVLTYPE1",
+        "LVLTYPE2",
+        "ETIME",
+        "PRESS",
+        "PFLAG",
+        "GPH",
+        "ZFLAG",
+        "TEMP",
+        "TFLAG",
+        "RH",
+        "DPDP",
+        "WDIR",
+        "WSPD",
+    ]
+    COLUMNS_STATION_LIST = [
+        "CODE",
+        "LATITUDE",
+        "LONGITUDE",
+        "ELEVATION",
+        "NAME",
+        "START",
+        "END",
+        "ID",
+    ]
 
     # Start by getting the list of stations
     # URL of the station list
-    url = "https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive" + \
-        "/doc/igra2-station-list.txt"
+    url = (
+        "https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive"
+        + "/doc/igra2-station-list.txt"
+    )
     stations_ref = pd.read_fwf(url, names=COLUMNS_STATION_LIST)
 
     # get igra code
-    code = stations_ref['CODE'][stations_ref['CODE'].str.contains(station)].iloc[0]
+    code = stations_ref["CODE"][stations_ref["CODE"].str.contains(station)].iloc[0]
 
-    url2 = 'https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive' + \
-        '/access/data-y2d/'
+    url2 = (
+        "https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive"
+        + "/access/data-y2d/"
+    )
 
     response = requests.get(url2)
     links = re.findall(r'<a\s+(?:[^>]*?\s+)?href="([^"]*)"', response.text)
@@ -2251,55 +2862,72 @@ def read_radiosounding_igra(station, dtime):
         with ZipFile(BytesIO(response.content)) as zip_file:
             # List the files in the zip file (optional)
             file_list = zip_file.namelist()
-            file_name = file_list[0] # only one file
-            file_content = [line.decode('utf-8') for line in
-                zip_file.open(file_name).readlines()]
+            file_name = file_list[0]  # only one file
+            file_content = [
+                line.decode("utf-8") for line in zip_file.open(file_name).readlines()
+            ]
     else:
-        warn(f"Failed to retrieve the sounding file. Status code: {response.status_code}")
+        warn(
+            f"Failed to retrieve the sounding file. Status code: {response.status_code}"
+        )
         return None
 
     # Now parse file and separate entries by sounding date
     all_soundings = {}
     for line in file_content:
-        if '#' in line:
+        if "#" in line:
             # New sounding found
-            year, month, day, hour = line.split(' ')[1:5]
-            time_sounding = datetime.datetime(int(year), 
-                                            int(month),
-                                            int(day),
-                                            int(hour))
+            year, month, day, hour = line.split(" ")[1:5]
+            time_sounding = datetime.datetime(
+                int(year), int(month), int(day), int(hour)
+            )
             all_soundings[time_sounding] = []
         else:
             # Get row
-            lvltyp1 = int(line[0])  
-            lvltyp2 = int(line[1])  
-            etime = int(line[3:8]) 
-            press = int(line[9:15]) 
-            pflag = line[15] 
+            lvltyp1 = int(line[0])
+            lvltyp2 = int(line[1])
+            etime = int(line[3:8])
+            press = int(line[9:15])
+            pflag = line[15]
             gph = int(line[16:21])
             zflag = line[21]
-            temp = int(line[22:27]) / 10. 
-            tflag = line[27] 
-            rh = int(line[28:33]) / 10. 
-            dpdp = int(line[34:39]) / 10. 
-            wdir = int(line[40:45]) 
-            wspd = int(line[46:51]) / 10. 
-            all_soundings[time_sounding].append((lvltyp1, lvltyp2, 
-                etime, press, pflag, gph, zflag, temp, 
-                tflag, rh, dpdp, wdir, wspd))
+            temp = int(line[22:27]) / 10.0
+            tflag = line[27]
+            rh = int(line[28:33]) / 10.0
+            dpdp = int(line[34:39]) / 10.0
+            wdir = int(line[40:45])
+            wspd = int(line[46:51]) / 10.0
+            all_soundings[time_sounding].append(
+                (
+                    lvltyp1,
+                    lvltyp2,
+                    etime,
+                    press,
+                    pflag,
+                    gph,
+                    zflag,
+                    temp,
+                    tflag,
+                    rh,
+                    dpdp,
+                    wdir,
+                    wspd,
+                )
+            )
 
     # Convert to pandas DataFrame
     for date in all_soundings:
-        all_soundings[date] = pd.DataFrame(all_soundings[date], 
-            columns = COLUMNS_SOUNDING)
+        all_soundings[date] = pd.DataFrame(
+            all_soundings[date], columns=COLUMNS_SOUNDING
+        )
 
     # Find radiosounding closest in time to datetime_obj
-    offsets = [np.abs((dtime - d).total_seconds()) 
-        for d in all_soundings.keys()]
+    offsets = [np.abs((dtime - d).total_seconds()) for d in all_soundings.keys()]
     idx = np.argsort(offsets)
     closest = list(all_soundings.keys())[idx[0]]
 
     return all_soundings[closest]
+
 
 def read_fzl_igra(station, dtime):
     """
@@ -2319,8 +2947,8 @@ def read_fzl_igra(station, dtime):
     """
 
     sounding = read_radiosounding_igra(station, dtime)
-    height = sounding['GPH']
-    temp = sounding['TEMP']
+    height = sounding["GPH"]
+    temp = sounding["TEMP"]
 
     if temp[0] <= 0 and temp[0] > -999.9:
         return 0
@@ -2329,6 +2957,6 @@ def read_fzl_igra(station, dtime):
         if height[i] < 0:
             continue
         if temp[i] < 0:
-            slope = (temp[i] - temp[i-1])/(height[i] - height[i-1])
-            fzl = - temp[i] / slope + height[i]
+            slope = (temp[i] - temp[i - 1]) / (height[i] - height[i - 1])
+            fzl = -temp[i] / slope + height[i]
             return fzl

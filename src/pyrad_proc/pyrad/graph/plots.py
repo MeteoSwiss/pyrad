@@ -38,22 +38,39 @@ import numpy as np
 try:
     import cartopy
     from cartopy.io.img_tiles import Stamen
+
     _CARTOPY_AVAILABLE = True
 except ImportError:
     _CARTOPY_AVAILABLE = False
 
 import matplotlib as mpl
-mpl.use('Agg')
+
+mpl.use("Agg")
 
 # Increase a bit font size
-mpl.rcParams.update({'font.size': 16})
-mpl.rcParams.update({'font.family': "sans-serif"})
+mpl.rcParams.update({"font.size": 16})
+mpl.rcParams.update({"font.family": "sans-serif"})
 
 
-def plot_pos(lat, lon, alt, fname_list, ax=None, fig=None, save_fig=True,
-             sort_altitude='No', dpi=72, alpha=1., cb_label='height [m MSL]',
-             titl='Position', xlabel='Lon [Deg]', ylabel='Lat [Deg]',
-             limits=None, vmin=None, vmax=None):
+def plot_pos(
+    lat,
+    lon,
+    alt,
+    fname_list,
+    ax=None,
+    fig=None,
+    save_fig=True,
+    sort_altitude="No",
+    dpi=72,
+    alpha=1.0,
+    cb_label="height [m MSL]",
+    titl="Position",
+    xlabel="Lon [Deg]",
+    ylabel="Lat [Deg]",
+    limits=None,
+    vmin=None,
+    vmax=None,
+):
     """
     plots a trajectory on a Cartesian surface
 
@@ -94,9 +111,9 @@ def plot_pos(lat, lon, alt, fname_list, ax=None, fig=None, save_fig=True,
     fig, ax : tupple
         list of names of the saved plots or handle of the figure an axes
     """
-    if sort_altitude in ('Lowest_on_top', 'Highest_on_top'):
+    if sort_altitude in ("Lowest_on_top", "Highest_on_top"):
         ind = np.argsort(alt)
-        if sort_altitude == 'Lowest_on_top':
+        if sort_altitude == "Lowest_on_top":
             ind = ind[::-1]
         lat = lat[ind]
         lon = lon[ind]
@@ -106,26 +123,25 @@ def plot_pos(lat, lon, alt, fname_list, ax=None, fig=None, save_fig=True,
         vmin = alt.min()
     if vmax is None:
         vmax = alt.max()
-    marker = 'x'
+    marker = "x"
     col = alt
-    cmap = 'viridis'
+    cmap = "viridis"
     norm = plt.Normalize(vmin, vmax)
 
     if fig is None:
         fig = plt.figure(figsize=[10, 8], dpi=dpi)
-        ax = fig.add_subplot(111, aspect='equal')
+        ax = fig.add_subplot(111, aspect="equal")
     else:
         ax.autoscale(False)
 
-    cax = ax.scatter(
-        lon, lat, c=col, marker=marker, alpha=alpha, cmap=cmap, norm=norm)
+    cax = ax.scatter(lon, lat, c=col, marker=marker, alpha=alpha, cmap=cmap, norm=norm)
 
     if limits is not None:
         ax.set_xlim(limits[0], limits[1])
         ax.set_ylim(limits[2], limits[3])
 
     # plot colorbar
-    cb = fig.colorbar(cax, orientation='horizontal')
+    cb = fig.colorbar(cax, orientation="horizontal")
     cb.set_label(cb_label)
 
     ax.set_title(titl)
@@ -145,12 +161,28 @@ def plot_pos(lat, lon, alt, fname_list, ax=None, fig=None, save_fig=True,
     return (fig, ax)
 
 
-def plot_pos_map(lat, lon, alt, fname_list, ax=None, fig=None, save_fig=True,
-                 sort_altitude='No', dpi=72, alpha=1.,
-                 cb_label='height [m MSL]', titl='Position',
-                 xlabel='Lon [Deg]', ylabel='Lat [Deg]', limits=None,
-                 vmin=None, vmax=None, lon_step=0.3, lat_step=0.1,
-                 background_zoom=8):
+def plot_pos_map(
+    lat,
+    lon,
+    alt,
+    fname_list,
+    ax=None,
+    fig=None,
+    save_fig=True,
+    sort_altitude="No",
+    dpi=72,
+    alpha=1.0,
+    cb_label="height [m MSL]",
+    titl="Position",
+    xlabel="Lon [Deg]",
+    ylabel="Lat [Deg]",
+    limits=None,
+    vmin=None,
+    vmax=None,
+    lon_step=0.3,
+    lat_step=0.1,
+    background_zoom=8,
+):
     """
     plots a trajectory on a map
 
@@ -198,12 +230,12 @@ def plot_pos_map(lat, lon, alt, fname_list, ax=None, fig=None, save_fig=True,
 
     """
     if not _CARTOPY_AVAILABLE:
-        warn('Unable to plot trajectory on a map. Cartopy not available')
-        return ['']
+        warn("Unable to plot trajectory on a map. Cartopy not available")
+        return [""]
 
-    if sort_altitude in ('Lowest_on_top', 'Highest_on_top'):
+    if sort_altitude in ("Lowest_on_top", "Highest_on_top"):
         ind = np.argsort(alt)
-        if sort_altitude == 'Lowest_on_top':
+        if sort_altitude == "Lowest_on_top":
             ind = ind[::-1]
         lat = lat[ind]
         lon = lon[ind]
@@ -213,13 +245,13 @@ def plot_pos_map(lat, lon, alt, fname_list, ax=None, fig=None, save_fig=True,
         vmin = alt.min()
     if vmax is None:
         vmax = alt.max()
-    marker = 'x'
+    marker = "x"
     col = alt
-    cmap = 'viridis'
+    cmap = "viridis"
     norm = plt.Normalize(vmin, vmax)
 
     # get background map instance
-    stamen_terrain = Stamen('terrain-background')
+    stamen_terrain = Stamen("terrain-background")
     projection = cartopy.crs.PlateCarree()
 
     # set map limits and lat/lon lines
@@ -239,34 +271,53 @@ def plot_pos_map(lat, lon, alt, fname_list, ax=None, fig=None, save_fig=True,
 
         # add countries
         countries = cartopy.feature.NaturalEarthFeature(
-            category='cultural',
-            name='admin_0_countries',
-            scale='10m',
-            facecolor='none')
-        ax.add_feature(countries, edgecolor='black')
+            category="cultural", name="admin_0_countries", scale="10m", facecolor="none"
+        )
+        ax.add_feature(countries, edgecolor="black")
 
         # draw grid lines and labels
         gl = ax.gridlines(xlocs=lon_lines, ylocs=lat_lines, draw_labels=True)
         gl.xlabels_top = False
         gl.ylabels_right = False
 
-        ax.text(0.5, -0.2, xlabel, va='bottom', ha='center',
-                rotation='horizontal', rotation_mode='anchor',
-                transform=ax.transAxes)
+        ax.text(
+            0.5,
+            -0.2,
+            xlabel,
+            va="bottom",
+            ha="center",
+            rotation="horizontal",
+            rotation_mode="anchor",
+            transform=ax.transAxes,
+        )
 
-        ax.text(-0.1, 0.55, ylabel, va='bottom', ha='center',
-                rotation='vertical', rotation_mode='anchor',
-                transform=ax.transAxes)
+        ax.text(
+            -0.1,
+            0.55,
+            ylabel,
+            va="bottom",
+            ha="center",
+            rotation="vertical",
+            rotation_mode="anchor",
+            transform=ax.transAxes,
+        )
     else:
         ax.autoscale(False)
 
     # plot data
     cax = ax.scatter(
-        lon, lat, c=col, marker=marker, alpha=alpha, cmap=cmap, norm=norm,
-        transform=projection)
+        lon,
+        lat,
+        c=col,
+        marker=marker,
+        alpha=alpha,
+        cmap=cmap,
+        norm=norm,
+        transform=projection,
+    )
 
     # plot colorbar
-    cb = fig.colorbar(cax, orientation='horizontal')
+    cb = fig.colorbar(cax, orientation="horizontal")
     cb.set_label(cb_label)
 
     ax.set_title(titl)
@@ -281,9 +332,18 @@ def plot_pos_map(lat, lon, alt, fname_list, ax=None, fig=None, save_fig=True,
     return (fig, ax)
 
 
-def plot_density(hist_obj, hist_type, field_name, ind_sweep, prdcfg,
-                 fname_list, quantiles=(25., 50., 75.), ref_value=0.,
-                 vmin=None, vmax=None):
+def plot_density(
+    hist_obj,
+    hist_type,
+    field_name,
+    ind_sweep,
+    prdcfg,
+    fname_list,
+    quantiles=(25.0, 50.0, 75.0),
+    ref_value=0.0,
+    vmin=None,
+    vmax=None,
+):
     """
     density plot (angle-values representation)
 
@@ -315,29 +375,29 @@ def plot_density(hist_obj, hist_type, field_name, ind_sweep, prdcfg,
 
     """
     hist_obj_aux = hist_obj.extract_sweeps([ind_sweep])
-    if hist_obj_aux.scan_type == 'ppi':
-        ang = np.sort(hist_obj_aux.azimuth['data'])
-        ind_ang = np.argsort(hist_obj_aux.azimuth['data'])
-        ang_min = np.min(hist_obj_aux.azimuth['data'])
-        ang_max = np.max(hist_obj_aux.azimuth['data'])
+    if hist_obj_aux.scan_type == "ppi":
+        ang = np.sort(hist_obj_aux.azimuth["data"])
+        ind_ang = np.argsort(hist_obj_aux.azimuth["data"])
+        ang_min = np.min(hist_obj_aux.azimuth["data"])
+        ang_max = np.max(hist_obj_aux.azimuth["data"])
         ang_step = ang[1] - ang[0]
-        field = hist_obj_aux.fields[field_name]['data'][ind_ang, :]
-        labelx = 'azimuth angle (degrees)'
-    elif hist_obj_aux.scan_type == 'rhi':
-        ang = np.sort(hist_obj_aux.elevation['data'])
-        ind_ang = np.argsort(hist_obj_aux.elevation['data'])
-        ang_min = np.min(hist_obj_aux.elevation['data'])
-        ang_max = np.max(hist_obj_aux.elevation['data'])
+        field = hist_obj_aux.fields[field_name]["data"][ind_ang, :]
+        labelx = "azimuth angle (degrees)"
+    elif hist_obj_aux.scan_type == "rhi":
+        ang = np.sort(hist_obj_aux.elevation["data"])
+        ind_ang = np.argsort(hist_obj_aux.elevation["data"])
+        ang_min = np.min(hist_obj_aux.elevation["data"])
+        ang_max = np.max(hist_obj_aux.elevation["data"])
         ang_step = ang[1] - ang[0]
-        field = hist_obj_aux.fields[field_name]['data'][ind_ang, :]
-        labelx = 'elevation angle (degrees)'
+        field = hist_obj_aux.fields[field_name]["data"][ind_ang, :]
+        labelx = "elevation angle (degrees)"
     else:
-        field = hist_obj_aux.fields[field_name]['data']
+        field = hist_obj_aux.fields[field_name]["data"]
         ang = np.array(range(hist_obj_aux.nrays))
         ang_min = 0
         ang_max = hist_obj_aux.nrays - 1
         ang_step = ang[1] - ang[0]
-        labelx = 'ray number'
+        labelx = "ray number"
 
     # compute percentiles of the histogram
     az_percentile_ref = np.ma.masked_all(len(ang))
@@ -345,67 +405,78 @@ def plot_density(hist_obj, hist_type, field_name, ind_sweep, prdcfg,
     az_percentile_high = deepcopy(az_percentile_ref)
     for ray in range(len(ang)):
         quantiles, values_ray = compute_quantiles_from_hist(
-            hist_obj.range['data'], field[ray, :], quantiles=quantiles)
+            hist_obj.range["data"], field[ray, :], quantiles=quantiles
+        )
 
         az_percentile_low[ray] = values_ray[0]
         az_percentile_ref[ray] = values_ray[1]
         az_percentile_high[ray] = values_ray[2]
 
     quantiles, values_sweep = compute_quantiles_from_hist(
-        hist_obj.range['data'], np.ma.sum(field, axis=0),
-        quantiles=quantiles)
+        hist_obj.range["data"], np.ma.sum(field, axis=0), quantiles=quantiles
+    )
 
     # mask 0 data
     field = np.ma.masked_where(field == 0, field)
 
     # display data
-    if hist_type == 'instant':
-        titl = pyart.graph.common.generate_title(
-            hist_obj_aux, field_name, ind_sweep)
+    if hist_type == "instant":
+        titl = pyart.graph.common.generate_title(hist_obj_aux, field_name, ind_sweep)
     else:
         titl = (
-            '{:.1f}'.format(hist_obj_aux.fixed_angle['data'][0]) + ' Deg. ' +
-            pyart.graph.common.generate_radar_time_begin(
-                hist_obj).strftime('%Y-%m-%d') + '\n' +
-            get_field_name(hist_obj.fields[field_name], field_name))
-    label = 'Number of Points'
+            "{:.1f}".format(hist_obj_aux.fixed_angle["data"][0])
+            + " Deg. "
+            + pyart.graph.common.generate_radar_time_begin(hist_obj).strftime(
+                "%Y-%m-%d"
+            )
+            + "\n"
+            + get_field_name(hist_obj.fields[field_name], field_name)
+        )
+    label = "Number of Points"
     labely = get_colobar_label(hist_obj_aux.fields[field_name], field_name)
 
     dpi = 72
-    if 'dpi' in prdcfg['ppiImageConfig']:
-        dpi = prdcfg['ppiImageConfig']['dpi']
+    if "dpi" in prdcfg["ppiImageConfig"]:
+        dpi = prdcfg["ppiImageConfig"]["dpi"]
 
-    fig = plt.figure(figsize=[prdcfg['ppiImageConfig']['xsize'],
-                              prdcfg['ppiImageConfig']['ysize']],
-                     dpi=dpi)
+    fig = plt.figure(
+        figsize=[prdcfg["ppiImageConfig"]["xsize"], prdcfg["ppiImageConfig"]["ysize"]],
+        dpi=dpi,
+    )
     ax = fig.add_subplot(111)
 
     # define limits of field and color map
     cmap = pyart.config.get_field_colormap(field_name)
-    step = hist_obj.range['data'][1] - hist_obj.range['data'][0]
-    xmin = ang_min - ang_step / 2.
-    xmax = ang_max + ang_step / 2.
-    ymin = hist_obj.range['data'][0] - step / 2.
-    ymax = hist_obj.range['data'][-1] + step / 2.
+    step = hist_obj.range["data"][1] - hist_obj.range["data"][0]
+    xmin = ang_min - ang_step / 2.0
+    xmax = ang_max + ang_step / 2.0
+    ymin = hist_obj.range["data"][0] - step / 2.0
+    ymax = hist_obj.range["data"][-1] + step / 2.0
 
     cax = ax.imshow(
-        np.ma.transpose(field), origin='lower', cmap=cmap, vmin=0.,
-        vmax=np.max(field), extent=(xmin, xmax, ymin, ymax),
-        aspect='auto', interpolation='none')
+        np.ma.transpose(field),
+        origin="lower",
+        cmap=cmap,
+        vmin=0.0,
+        vmax=np.max(field),
+        extent=(xmin, xmax, ymin, ymax),
+        aspect="auto",
+        interpolation="none",
+    )
     ax.set_ylim(bottom=vmin, top=vmax)
     ax.autoscale(False)
 
     # plot reference
-    ax.plot(ang, np.zeros(len(ang)) + ref_value, 'k--')
+    ax.plot(ang, np.zeros(len(ang)) + ref_value, "k--")
 
     # plot quantiles
-    ax.plot(ang, np.zeros(len(ang)) + values_sweep[1], 'r')
-    ax.plot(ang, np.zeros(len(ang)) + values_sweep[0], 'r--')
-    ax.plot(ang, np.zeros(len(ang)) + values_sweep[2], 'r--')
+    ax.plot(ang, np.zeros(len(ang)) + values_sweep[1], "r")
+    ax.plot(ang, np.zeros(len(ang)) + values_sweep[0], "r--")
+    ax.plot(ang, np.zeros(len(ang)) + values_sweep[2], "r--")
 
-    ax.plot(ang, az_percentile_ref, 'k')
-    ax.plot(ang, az_percentile_low, 'k--')
-    ax.plot(ang, az_percentile_high, 'k--')
+    ax.plot(ang, az_percentile_ref, "k")
+    ax.plot(ang, az_percentile_low, "k--")
+    ax.plot(ang, az_percentile_high, "k--")
 
     # ax.autoscale(enable=True, axis='both', tight=True)
 
@@ -416,24 +487,42 @@ def plot_density(hist_obj, hist_type, field_name, ind_sweep, prdcfg,
     cb = fig.colorbar(cax)
     cb.set_label(label)
 
-    val_quant0_str = '--'
+    val_quant0_str = "--"
     if values_sweep[0] is not np.ma.masked:
-        val_quant0_str = '{:.3f}'.format(values_sweep[0])
-    val_quant1_str = '--'
+        val_quant0_str = "{:.3f}".format(values_sweep[0])
+    val_quant1_str = "--"
     if values_sweep[1] is not np.ma.masked:
-        val_quant1_str = '{:.3f}'.format(values_sweep[1])
-    val_quant2_str = '--'
+        val_quant1_str = "{:.3f}".format(values_sweep[1])
+    val_quant2_str = "--"
     if values_sweep[2] is not np.ma.masked:
-        val_quant2_str = '{:.3f}'.format(values_sweep[2])
+        val_quant2_str = "{:.3f}".format(values_sweep[2])
 
     metadata = (
-        'npoints: ' + str(np.ma.sum(field)) + '\n' +
-        str(quantiles[1]) + ' quant: ' + val_quant1_str + '\n' +
-        str(quantiles[0]) + ' quant: ' + val_quant0_str + '\n' +
-        str(quantiles[2]) + ' quant: ' + val_quant2_str + '\n')
+        "npoints: "
+        + str(np.ma.sum(field))
+        + "\n"
+        + str(quantiles[1])
+        + " quant: "
+        + val_quant1_str
+        + "\n"
+        + str(quantiles[0])
+        + " quant: "
+        + val_quant0_str
+        + "\n"
+        + str(quantiles[2])
+        + " quant: "
+        + val_quant2_str
+        + "\n"
+    )
 
-    ax.text(0.05, 0.05, metadata, horizontalalignment='left',
-            verticalalignment='bottom', transform=ax.transAxes)
+    ax.text(
+        0.05,
+        0.05,
+        metadata,
+        horizontalalignment="left",
+        verticalalignment="bottom",
+        transform=ax.transAxes,
+    )
 
     # Turn on the grid
     ax.grid()
@@ -445,11 +534,22 @@ def plot_density(hist_obj, hist_type, field_name, ind_sweep, prdcfg,
     return fname_list
 
 
-def plot_scatter(bin_edges1, bin_edges2, hist_2d, field_name1, field_name2,
-                 fname_list, prdcfg, metadata=None, lin_regr=None,
-                 lin_regr_slope1=None, rad1_name='RADAR001',
-                 rad2_name='RADAR002', titl='colocated radar gates',
-                 cmap=None):
+def plot_scatter(
+    bin_edges1,
+    bin_edges2,
+    hist_2d,
+    field_name1,
+    field_name2,
+    fname_list,
+    prdcfg,
+    metadata=None,
+    lin_regr=None,
+    lin_regr_slope1=None,
+    rad1_name="RADAR001",
+    rad2_name="RADAR002",
+    titl="colocated radar gates",
+    cmap=None,
+):
     """
     2D histogram
 
@@ -489,17 +589,18 @@ def plot_scatter(bin_edges1, bin_edges2, hist_2d, field_name1, field_name2,
     hist_2d = np.ma.masked_where(hist_2d == 0, hist_2d)
 
     # display data
-    label = 'Number of Points'
-    labelx = rad1_name + ' ' + field_name1
-    labely = rad2_name + ' ' + field_name2
+    label = "Number of Points"
+    labelx = rad1_name + " " + field_name1
+    labely = rad2_name + " " + field_name2
 
     dpi = 72
-    if 'dpi' in prdcfg['ppiImageConfig']:
-        dpi = prdcfg['ppiImageConfig']['dpi']
+    if "dpi" in prdcfg["ppiImageConfig"]:
+        dpi = prdcfg["ppiImageConfig"]["dpi"]
 
     fig = plt.figure(
-        figsize=[prdcfg['ppiImageConfig']['xsize'],
-                 prdcfg['ppiImageConfig']['ysize']], dpi=dpi)
+        figsize=[prdcfg["ppiImageConfig"]["xsize"], prdcfg["ppiImageConfig"]["ysize"]],
+        dpi=dpi,
+    )
     ax = fig.add_subplot(111)
 
     if cmap is None:
@@ -507,24 +608,24 @@ def plot_scatter(bin_edges1, bin_edges2, hist_2d, field_name1, field_name2,
 
     X, Y = np.meshgrid(bin_edges1, bin_edges2)
     cax = ax.pcolormesh(
-        X, Y, np.ma.transpose(hist_2d), cmap=cmap, vmin=0.,
-        vmax=np.max(hist_2d))
+        X, Y, np.ma.transpose(hist_2d), cmap=cmap, vmin=0.0, vmax=np.max(hist_2d)
+    )
 
     step1 = bin_edges1[1] - bin_edges1[0]
-    bin_centers1 = bin_edges1[0:-1] + step1 / 2.
+    bin_centers1 = bin_edges1[0:-1] + step1 / 2.0
 
     step2 = bin_edges2[1] - bin_edges2[0]
-    bin_centers2 = bin_edges2[0:-1] + step2 / 2.
+    bin_centers2 = bin_edges2[0:-1] + step2 / 2.0
 
     # plot reference
     if bin_edges1.size == bin_edges2.size:
-        ax.plot(bin_centers1, bin_centers2, 'k--')
+        ax.plot(bin_centers1, bin_centers2, "k--")
 
     # plot linear regression
     if lin_regr is not None:
-        ax.plot(bin_centers1, lin_regr[0] * bin_centers1 + lin_regr[1], 'r')
+        ax.plot(bin_centers1, lin_regr[0] * bin_centers1 + lin_regr[1], "r")
     if lin_regr_slope1 is not None:
-        ax.plot(bin_centers1, bin_centers1 + lin_regr_slope1, 'g')
+        ax.plot(bin_centers1, bin_centers1 + lin_regr_slope1, "g")
 
     ax.set_xlabel(labelx)
     ax.set_ylabel(labely)
@@ -534,8 +635,14 @@ def plot_scatter(bin_edges1, bin_edges2, hist_2d, field_name1, field_name2,
     cb.set_label(label)
 
     if metadata is not None:
-        ax.text(0.05, 0.95, metadata, horizontalalignment='left',
-                verticalalignment='top', transform=ax.transAxes)
+        ax.text(
+            0.05,
+            0.95,
+            metadata,
+            horizontalalignment="left",
+            verticalalignment="top",
+            transform=ax.transAxes,
+        )
 
     # Make a tight layout
     fig.tight_layout()
@@ -547,10 +654,21 @@ def plot_scatter(bin_edges1, bin_edges2, hist_2d, field_name1, field_name2,
     return fname_list
 
 
-def plot_centroids(bin_edges1, bin_edges2, hist_2d, field_name1, field_name2,
-                   fname_list, prdcfg, titl='centroids', cmap=None,
-                   medoids_x=None, medoids_y=None, fmedoid_x=None,
-                   fmedoid_y=None):
+def plot_centroids(
+    bin_edges1,
+    bin_edges2,
+    hist_2d,
+    field_name1,
+    field_name2,
+    fname_list,
+    prdcfg,
+    titl="centroids",
+    cmap=None,
+    medoids_x=None,
+    medoids_y=None,
+    fmedoid_x=None,
+    fmedoid_y=None,
+):
     """
     2D histogram
 
@@ -586,17 +704,18 @@ def plot_centroids(bin_edges1, bin_edges2, hist_2d, field_name1, field_name2,
     hist_2d = np.ma.masked_where(hist_2d == 0, hist_2d)
 
     # display data
-    label = 'Number of Points'
+    label = "Number of Points"
     labelx = field_name1
     labely = field_name2
 
     dpi = 72
-    if 'dpi' in prdcfg['ppiImageConfig']:
-        dpi = prdcfg['ppiImageConfig']['dpi']
+    if "dpi" in prdcfg["ppiImageConfig"]:
+        dpi = prdcfg["ppiImageConfig"]["dpi"]
 
     fig = plt.figure(
-        figsize=[prdcfg['ppiImageConfig']['xsize'],
-                 prdcfg['ppiImageConfig']['ysize']], dpi=dpi)
+        figsize=[prdcfg["ppiImageConfig"]["xsize"], prdcfg["ppiImageConfig"]["ysize"]],
+        dpi=dpi,
+    )
     ax = fig.add_subplot(111)
 
     if cmap is None:
@@ -604,14 +723,14 @@ def plot_centroids(bin_edges1, bin_edges2, hist_2d, field_name1, field_name2,
 
     X, Y = np.meshgrid(bin_edges1, bin_edges2)
     cax = ax.pcolormesh(
-        X, Y, np.ma.transpose(hist_2d), cmap=cmap, vmin=0.,
-        vmax=np.max(hist_2d))
+        X, Y, np.ma.transpose(hist_2d), cmap=cmap, vmin=0.0, vmax=np.max(hist_2d)
+    )
 
     # plot intermediate medoids
     if medoids_x is not None:
-        ax.scatter(medoids_x, medoids_y, c='w', marker='o')
+        ax.scatter(medoids_x, medoids_y, c="w", marker="o")
     if fmedoid_x is not None:
-        ax.plot(fmedoid_x, fmedoid_y, c='r', marker='D')
+        ax.plot(fmedoid_x, fmedoid_y, c="r", marker="D")
 
     ax.set_xlabel(labelx)
     ax.set_ylabel(labely)
@@ -630,8 +749,17 @@ def plot_centroids(bin_edges1, bin_edges2, hist_2d, field_name1, field_name2,
     return fname_list
 
 
-def plot_quantiles(quant, value, fname_list, labelx='quantile', labely='value',
-                   titl='quantile', vmin=None, vmax=None, dpi=72):
+def plot_quantiles(
+    quant,
+    value,
+    fname_list,
+    labelx="quantile",
+    labely="value",
+    titl="quantile",
+    vmin=None,
+    vmax=None,
+    dpi=72,
+):
     """
     plots quantiles
 
@@ -661,7 +789,7 @@ def plot_quantiles(quant, value, fname_list, labelx='quantile', labely='value',
 
     """
     fig, ax = plt.subplots(figsize=[10, 6], dpi=dpi)
-    ax.plot(quant, value, 'bx-')
+    ax.plot(quant, value, "bx-")
     ax.set_xlabel(labelx)
     ax.set_ylabel(labely)
     ax.set_ylim(bottom=vmin, top=vmax)
@@ -677,9 +805,16 @@ def plot_quantiles(quant, value, fname_list, labelx='quantile', labely='value',
     return fname_list
 
 
-def plot_histogram(bin_edges, values, fname_list, labelx='bins',
-                   labely='Number of Samples', titl='histogram',
-                   binwidth_equal=False, dpi=72):
+def plot_histogram(
+    bin_edges,
+    values,
+    fname_list,
+    labelx="bins",
+    labely="Number of Samples",
+    titl="histogram",
+    binwidth_equal=False,
+    dpi=72,
+):
     """
     computes and plots histogram
 
@@ -712,9 +847,9 @@ def plot_histogram(bin_edges, values, fname_list, labelx='bins',
     fig, ax = plt.subplots(figsize=[10, 6], dpi=dpi)
     if binwidth_equal:
         hist, bin_edges = np.histogram(values, bins=bin_edges)
-        ax.bar(np.arange(len(bin_edges) - 1.) + 0.5, hist, width=1)
+        ax.bar(np.arange(len(bin_edges) - 1.0) + 0.5, hist, width=1)
         ax.set_xticks(np.arange(len(bin_edges)))
-        ax.set_xticklabels(bin_edges, rotation=45.)
+        ax.set_xticklabels(bin_edges, rotation=45.0)
     else:
         ax.hist(values, bins=bin_edges)
     ax.set_xlabel(labelx)
@@ -731,10 +866,22 @@ def plot_histogram(bin_edges, values, fname_list, labelx='bins',
     return fname_list
 
 
-def plot_histogram2(bin_centers, hist, fname_list, width=None, labelx='bins',
-                    labely='Number of Samples', titl='histogram', dpi=72,
-                    ax=None, fig=None, save_fig=True, color=None, alpha=None,
-                    invert_xaxis=False):
+def plot_histogram2(
+    bin_centers,
+    hist,
+    fname_list,
+    width=None,
+    labelx="bins",
+    labely="Number of Samples",
+    titl="histogram",
+    dpi=72,
+    ax=None,
+    fig=None,
+    save_fig=True,
+    color=None,
+    alpha=None,
+    invert_xaxis=False,
+):
     """
     plots histogram
 
@@ -803,9 +950,17 @@ def plot_histogram2(bin_centers, hist, fname_list, width=None, labelx='bins',
     return (fig, ax)
 
 
-def plot_antenna_pattern(antpattern, fname_list, labelx='Angle [Deg]',
-                         linear=False, twoway=False, title='Antenna Pattern',
-                         ymin=None, ymax=None, dpi=72):
+def plot_antenna_pattern(
+    antpattern,
+    fname_list,
+    labelx="Angle [Deg]",
+    linear=False,
+    twoway=False,
+    title="Antenna Pattern",
+    ymin=None,
+    ymax=None,
+    dpi=72,
+):
     """
     plots an antenna pattern
 
@@ -836,36 +991,41 @@ def plot_antenna_pattern(antpattern, fname_list, labelx='Angle [Deg]',
         list of names of the created plots
 
     """
-    waystr = 'One-way '
-    bw_threshold = -3.
+    waystr = "One-way "
+    bw_threshold = -3.0
     if twoway:
-        waystr = 'Two-way '
+        waystr = "Two-way "
         bw_threshold = -6
 
-    linstr = 'Att [dB]'
+    linstr = "Att [dB]"
     if linear:
-        linstr = 'Att [-]'
-        mainbeam = (
-            antpattern['angle'][
-                antpattern['attenuation'] >= 10.**(0.1 * bw_threshold)])
+        linstr = "Att [-]"
+        mainbeam = antpattern["angle"][
+            antpattern["attenuation"] >= 10.0 ** (0.1 * bw_threshold)
+        ]
     else:
-        mainbeam = antpattern['angle'][
-            antpattern['attenuation'] >= bw_threshold]
+        mainbeam = antpattern["angle"][antpattern["attenuation"] >= bw_threshold]
     beamwidth = np.abs(np.max(mainbeam) - np.min(mainbeam))
 
     labely = waystr + linstr
 
     fig, ax = plt.subplots(figsize=[10, 6], dpi=dpi)
 
-    ax.plot(antpattern['angle'], antpattern['attenuation'])
+    ax.plot(antpattern["angle"], antpattern["attenuation"])
     ax.set_title(title)
     ax.set_xlabel(labelx)
     ax.set_ylabel(labely)
     ax.set_ylim(bottom=ymin, top=ymax)
 
-    metadata = '3-dB beamwidth: ' + '{:.2f}'.format(float(beamwidth))
-    ax.text(0.05, 0.95, metadata, horizontalalignment='left',
-            verticalalignment='top', transform=ax.transAxes)
+    metadata = "3-dB beamwidth: " + "{:.2f}".format(float(beamwidth))
+    ax.text(
+        0.05,
+        0.95,
+        metadata,
+        horizontalalignment="left",
+        verticalalignment="top",
+        transform=ax.transAxes,
+    )
 
     # Make a tight layout
     fig.tight_layout()
@@ -877,10 +1037,19 @@ def plot_antenna_pattern(antpattern, fname_list, labelx='Angle [Deg]',
     return fname_list
 
 
-def plot_selfconsistency(zdrkdp_table, fname_list, labelx='ZDR [dB]',
-                         labely='KDP/Zh [(deg*m3)/(km*mm6)]',
-                         title='Selfconsistency in rain', ymin=None,
-                         ymax=None, dpi=72, save_fig=True, ax=None, fig=None):
+def plot_selfconsistency(
+    zdrkdp_table,
+    fname_list,
+    labelx="ZDR [dB]",
+    labely="KDP/Zh [(deg*m3)/(km*mm6)]",
+    title="Selfconsistency in rain",
+    ymin=None,
+    ymax=None,
+    dpi=72,
+    save_fig=True,
+    ax=None,
+    fig=None,
+):
     """
     plots a ZDR-KDP/ZH selfconsistency in rain relation
 
@@ -935,15 +1104,26 @@ def plot_selfconsistency(zdrkdp_table, fname_list, labelx='ZDR [dB]',
     return (fig, ax)
 
 
-def plot_selfconsistency_instrument(zdr, kdp, zh, fname_list,
-                                    bins_zdr_step=0.05, bins_zdr_min=0.,
-                                    bins_zdr_max=6., bins_kdpzh_step=0.1,
-                                    bins_kdpzh_min=-2., bins_kdpzh_max=20.,
-                                    normalize=True, vmin=0., vmax=0.01,
-                                    parametrization='None',
-                                    zdr_kdpzh_dict=None,
-                                    retrieve_relation=True,
-                                    plot_theoretical=True, dpi=72):
+def plot_selfconsistency_instrument(
+    zdr,
+    kdp,
+    zh,
+    fname_list,
+    bins_zdr_step=0.05,
+    bins_zdr_min=0.0,
+    bins_zdr_max=6.0,
+    bins_kdpzh_step=0.1,
+    bins_kdpzh_min=-2.0,
+    bins_kdpzh_max=20.0,
+    normalize=True,
+    vmin=0.0,
+    vmax=0.01,
+    parametrization="None",
+    zdr_kdpzh_dict=None,
+    retrieve_relation=True,
+    plot_theoretical=True,
+    dpi=72,
+):
     """
     plots the ZDR-KDP/ZH relationship obtained by an instrument. The
     theoretical curve and the retrieved curve
@@ -996,113 +1176,142 @@ def plot_selfconsistency_instrument(zdr, kdp, zh, fname_list,
 
     # prepare bins for histogram
     bins_zdr_centers = np.arange(
-        bins_zdr_min, bins_zdr_max + bins_zdr_step, bins_zdr_step)
+        bins_zdr_min, bins_zdr_max + bins_zdr_step, bins_zdr_step
+    )
     bins_zdr_edges = np.append(
-        bins_zdr_centers - bins_zdr_step / 2.,
-        bins_zdr_centers[-1] + bins_zdr_step / 2.)
+        bins_zdr_centers - bins_zdr_step / 2.0,
+        bins_zdr_centers[-1] + bins_zdr_step / 2.0,
+    )
     bins_kdpzh_centers = np.arange(
-        bins_kdpzh_min, bins_kdpzh_max + bins_kdpzh_step, bins_kdpzh_step)
+        bins_kdpzh_min, bins_kdpzh_max + bins_kdpzh_step, bins_kdpzh_step
+    )
     bins_kdpzh_edges = np.append(
-        bins_kdpzh_centers - bins_kdpzh_step / 2.,
-        bins_kdpzh_centers[-1] + bins_kdpzh_step / 2.)
+        bins_kdpzh_centers - bins_kdpzh_step / 2.0,
+        bins_kdpzh_centers[-1] + bins_kdpzh_step / 2.0,
+    )
 
-    labely = '10e5*KDP/ZH [(deg*m3)/(km*mm6)'
+    labely = "10e5*KDP/ZH [(deg*m3)/(km*mm6)"
 
     kdpzh_th = None
     if plot_theoretical:
-        if parametrization == 'None':
-            if zdr_kdpzh_dict is not None and 'zdr_kdpzh' in zdr_kdpzh_dict:
-                zdr_th = zdr_kdpzh_dict['zdr_kdpzh'][0][0]
-                kdpzh_th = 1e5 * zdr_kdpzh_dict['zdr_kdpzh'][0][1]
+        if parametrization == "None":
+            if zdr_kdpzh_dict is not None and "zdr_kdpzh" in zdr_kdpzh_dict:
+                zdr_th = zdr_kdpzh_dict["zdr_kdpzh"][0][0]
+                kdpzh_th = 1e5 * zdr_kdpzh_dict["zdr_kdpzh"][0][1]
             else:
-                warn('Unable to plot theoretical self-consistency curve. '
-                     'Relationship not provided')
-        elif parametrization == 'Gourley':
-            if zdr_kdpzh_dict is None or 'freq_band' not in zdr_kdpzh_dict:
-                warn('Unable to plot theoretical self-consistency curve. '
-                     'Frequency band not provided')
+                warn(
+                    "Unable to plot theoretical self-consistency curve. "
+                    "Relationship not provided"
+                )
+        elif parametrization == "Gourley":
+            if zdr_kdpzh_dict is None or "freq_band" not in zdr_kdpzh_dict:
+                warn(
+                    "Unable to plot theoretical self-consistency curve. "
+                    "Frequency band not provided"
+                )
             else:
-                zdr_th = np.arange(0., 3.5 + bins_zdr_step, bins_zdr_step)
-                if zdr_kdpzh_dict['freq_band'] == 'S':
+                zdr_th = np.arange(0.0, 3.5 + bins_zdr_step, bins_zdr_step)
+                if zdr_kdpzh_dict["freq_band"] == "S":
                     kdpzh_th = (
-                        3.696 - 1.963 * zdr_th + 0.504 * zdr_th * zdr_th -
-                        0.051 * zdr_th * zdr_th * zdr_th)
-                elif zdr_kdpzh_dict['freq_band'] == 'C':
+                        3.696
+                        - 1.963 * zdr_th
+                        + 0.504 * zdr_th * zdr_th
+                        - 0.051 * zdr_th * zdr_th * zdr_th
+                    )
+                elif zdr_kdpzh_dict["freq_band"] == "C":
                     kdpzh_th = (
-                        6.746 - 2.970 * zdr_th + 0.711 * zdr_th * zdr_th -
-                        0.079 * zdr_th * zdr_th * zdr_th)
-                elif zdr_kdpzh_dict['freq_band'] == 'X':
+                        6.746
+                        - 2.970 * zdr_th
+                        + 0.711 * zdr_th * zdr_th
+                        - 0.079 * zdr_th * zdr_th * zdr_th
+                    )
+                elif zdr_kdpzh_dict["freq_band"] == "X":
                     kdpzh_th = (
-                        11.74 - 4.020 * zdr_th - 0.140 * zdr_th * zdr_th +
-                        0.130 * zdr_th * zdr_th * zdr_th)
+                        11.74
+                        - 4.020 * zdr_th
+                        - 0.140 * zdr_th * zdr_th
+                        + 0.130 * zdr_th * zdr_th * zdr_th
+                    )
                 else:
                     warn(
-                        'Unable to plot theoretical self-consistency curve. '
-                        'Unknown frequency band ' +
-                        zdr_kdpzh_dict['freq_band'])
-        elif parametrization == 'Wolfensberger':
-            if zdr_kdpzh_dict is None or 'freq_band' not in zdr_kdpzh_dict:
-                warn('Unable to plot theoretical self-consistency curve. '
-                     'Frequency band not provided')
+                        "Unable to plot theoretical self-consistency curve. "
+                        "Unknown frequency band " + zdr_kdpzh_dict["freq_band"]
+                    )
+        elif parametrization == "Wolfensberger":
+            if zdr_kdpzh_dict is None or "freq_band" not in zdr_kdpzh_dict:
+                warn(
+                    "Unable to plot theoretical self-consistency curve. "
+                    "Frequency band not provided"
+                )
             else:
-                zdr_th = np.arange(0., 3.5 + bins_zdr_step, bins_zdr_step)
-                if zdr_kdpzh_dict['freq_band'] == 'C':
-                    kdpzh_th = (3.199 * np.ma.exp(-7.767e-1 *
-                                zdr_th) - 0.4436 * zdr_th + 3.464)
+                zdr_th = np.arange(0.0, 3.5 + bins_zdr_step, bins_zdr_step)
+                if zdr_kdpzh_dict["freq_band"] == "C":
+                    kdpzh_th = (
+                        3.199 * np.ma.exp(-7.767e-1 * zdr_th) - 0.4436 * zdr_th + 3.464
+                    )
                 else:
                     warn(
-                        'Unable to plot theoretical self-consistency curve. '
-                        'Unknown frequency band ' +
-                        zdr_kdpzh_dict['freq_band'])
-        elif parametrization == 'Louf':
-            if zdr_kdpzh_dict is None or 'freq_band' not in zdr_kdpzh_dict:
-                warn('Unable to plot theoretical self-consistency curve. '
-                     'Frequency band not provided')
+                        "Unable to plot theoretical self-consistency curve. "
+                        "Unknown frequency band " + zdr_kdpzh_dict["freq_band"]
+                    )
+        elif parametrization == "Louf":
+            if zdr_kdpzh_dict is None or "freq_band" not in zdr_kdpzh_dict:
+                warn(
+                    "Unable to plot theoretical self-consistency curve. "
+                    "Frequency band not provided"
+                )
             else:
                 zdr_th = np.arange(0.5, 3.5 + bins_zdr_step, bins_zdr_step)
-                if zdr_kdpzh_dict['freq_band'] == 'C':
+                if zdr_kdpzh_dict["freq_band"] == "C":
                     kdpzh_th = (
-                        6.607 - 4.577 * zdr_th + 1.577 * zdr_th * zdr_th -
-                        0.23 * zdr_th * zdr_th * zdr_th)
+                        6.607
+                        - 4.577 * zdr_th
+                        + 1.577 * zdr_th * zdr_th
+                        - 0.23 * zdr_th * zdr_th * zdr_th
+                    )
                 else:
                     warn(
-                        'Unable to plot theoretical self-consistency curve. '
-                        'Unknown frequency band ' +
-                        zdr_kdpzh_dict['freq_band'])
-        elif parametrization == 'Gorgucci':
-            if zdr_kdpzh_dict is None or 'freq_band' not in zdr_kdpzh_dict:
-                warn('Unable to plot theoretical self-consistency curve. '
-                     'Frequency band not provided')
+                        "Unable to plot theoretical self-consistency curve. "
+                        "Unknown frequency band " + zdr_kdpzh_dict["freq_band"]
+                    )
+        elif parametrization == "Gorgucci":
+            if zdr_kdpzh_dict is None or "freq_band" not in zdr_kdpzh_dict:
+                warn(
+                    "Unable to plot theoretical self-consistency curve. "
+                    "Frequency band not provided"
+                )
             else:
-                zdr_th = np.arange(0., 3.5 + bins_zdr_step, bins_zdr_step)
-                if zdr_kdpzh_dict['freq_band'] == 'C':
-                    zdr_lin = np.ma.power(10., 0.1 * zdr_th)
+                zdr_th = np.arange(0.0, 3.5 + bins_zdr_step, bins_zdr_step)
+                if zdr_kdpzh_dict["freq_band"] == "C":
+                    zdr_lin = np.ma.power(10.0, 0.1 * zdr_th)
                     kdpzh_th = 18.2 * np.power(zdr_lin, -1.28)
-                    labely = '10e5*KDP/ZH^0.95 [(deg*m3)/(km*mm6)'
+                    labely = "10e5*KDP/ZH^0.95 [(deg*m3)/(km*mm6)"
                 else:
                     warn(
-                        'Unable to plot theoretical self-consistency curve. '
-                        'Unknown frequency band ' +
-                        zdr_kdpzh_dict['freq_band'])
-        elif parametrization == 'Vaccarono':
-            if zdr_kdpzh_dict is None or 'freq_band' not in zdr_kdpzh_dict:
-                warn('Unable to plot theoretical self-consistency curve. '
-                     'Frequency band not provided')
+                        "Unable to plot theoretical self-consistency curve. "
+                        "Unknown frequency band " + zdr_kdpzh_dict["freq_band"]
+                    )
+        elif parametrization == "Vaccarono":
+            if zdr_kdpzh_dict is None or "freq_band" not in zdr_kdpzh_dict:
+                warn(
+                    "Unable to plot theoretical self-consistency curve. "
+                    "Frequency band not provided"
+                )
             else:
-                zdr_th = np.arange(0., 3.5 + bins_zdr_step, bins_zdr_step)
-                if zdr_kdpzh_dict['freq_band'] == 'C':
-                    zdr_lin = np.ma.power(10., 0.1 * zdr_th)
+                zdr_th = np.arange(0.0, 3.5 + bins_zdr_step, bins_zdr_step)
+                if zdr_kdpzh_dict["freq_band"] == "C":
+                    zdr_lin = np.ma.power(10.0, 0.1 * zdr_th)
                     kdpzh_th = 17.7 * np.power(zdr_lin, -2.09)
-                    labely = '10e5*KDP^0.85/ZH^0.91 [(deg*m3)/(km*mm6)'
+                    labely = "10e5*KDP^0.85/ZH^0.91 [(deg*m3)/(km*mm6)"
                 else:
                     warn(
-                        'Unable to plot theoretical self-consistency curve. '
-                        'Unknown frequency band ' +
-                        zdr_kdpzh_dict['freq_band'])
+                        "Unable to plot theoretical self-consistency curve. "
+                        "Unknown frequency band " + zdr_kdpzh_dict["freq_band"]
+                    )
 
-    if kdpzh_th is not None and parametrization == 'Gorgucci':
+    if kdpzh_th is not None and parametrization == "Gorgucci":
         kdpzh = 1e5 * kdp / np.ma.power(zh, 0.95)
-    elif kdpzh_th is not None and parametrization == 'Vaccarono':
+    elif kdpzh_th is not None and parametrization == "Vaccarono":
         kdpzh = 1e5 * np.ma.power(kdp, 0.85) / np.ma.power(zh, 0.95)
     else:
         kdpzh = 1e5 * kdp / zh
@@ -1113,13 +1322,12 @@ def plot_selfconsistency_instrument(zdr, kdp, zh, fname_list,
 
         ind_min = np.where(bins_zdr_edges >= zdr_min)[0][0]
         ind_max = np.where(bins_zdr_edges < zdr_max)[0][-1]
-        zdr_int = bins_zdr_edges[ind_min:ind_max + 1]
+        zdr_int = bins_zdr_edges[ind_min : ind_max + 1]
         zdr_par = bins_zdr_centers[ind_min:ind_max]
         kdpzh_par = np.ma.masked_all(zdr_par.size)
         for ind, zdr_left in enumerate(zdr_int[:-1]):
             zdr_right = zdr_int[ind + 1]
-            ind_val = np.where(
-                np.logical_and(zdr >= zdr_left, zdr < zdr_right))[0]
+            ind_val = np.where(np.logical_and(zdr >= zdr_left, zdr < zdr_right))[0]
             if ind_val.size == 0:
                 continue
             kdpzh_par[ind] = np.ma.median(kdpzh[ind_val])
@@ -1132,38 +1340,61 @@ def plot_selfconsistency_instrument(zdr, kdp, zh, fname_list,
     kdpzh[kdpzh > bins_kdpzh_centers[-1]] = bins_kdpzh_centers[-1]
 
     hist2d, bins_zdr_edges, bins_kdpzh_edges = np.histogram2d(
-        zdr, kdpzh, bins=[bins_zdr_edges, bins_kdpzh_edges])
+        zdr, kdpzh, bins=[bins_zdr_edges, bins_kdpzh_edges]
+    )
 
     hist2d = np.ma.masked_equal(hist2d, 0)
 
     if normalize:
         hist2d = hist2d / np.expand_dims(np.ma.sum(hist2d, axis=-1), axis=1)
-        clabel = 'Occurrence density\n(For each ZDR bin)'
+        clabel = "Occurrence density\n(For each ZDR bin)"
     else:
-        clabel = 'Number of gates'
+        clabel = "Number of gates"
         vmin = None
         vmax = None
 
     if not retrieve_relation and not plot_theoretical:
         fname_list = _plot_time_range(
-            bins_zdr_edges, bins_kdpzh_edges, hist2d, None, fname_list,
-            titl='self-consistency', xlabel='ZDR [dB]', ylabel=labely,
-            clabel=clabel, vmin=vmin, vmax=vmax, save_fig=True, dpi=dpi)
+            bins_zdr_edges,
+            bins_kdpzh_edges,
+            hist2d,
+            None,
+            fname_list,
+            titl="self-consistency",
+            xlabel="ZDR [dB]",
+            ylabel=labely,
+            clabel=clabel,
+            vmin=vmin,
+            vmax=vmax,
+            save_fig=True,
+            dpi=dpi,
+        )
 
         return fname_list
 
     fig, ax = _plot_time_range(
-        bins_zdr_edges, bins_kdpzh_edges, hist2d, None, fname_list,
-        titl='self-consistency', xlabel='ZDR [dB]', ylabel=labely,
-        clabel=clabel, vmin=vmin, vmax=vmax, save_fig=False, dpi=dpi)
+        bins_zdr_edges,
+        bins_kdpzh_edges,
+        hist2d,
+        None,
+        fname_list,
+        titl="self-consistency",
+        xlabel="ZDR [dB]",
+        ylabel=labely,
+        clabel=clabel,
+        vmin=vmin,
+        vmax=vmax,
+        save_fig=False,
+        dpi=dpi,
+    )
 
     ax.autoscale(False)
 
     if retrieve_relation:
-        ax.plot(zdr_par, kdpzh_par, 'rx-', linewidth=3)
+        ax.plot(zdr_par, kdpzh_par, "rx-", linewidth=3)
 
     if plot_theoretical and kdpzh_th is not None:
-        ax.plot(zdr_th, kdpzh_th, 'r', linewidth=3)
+        ax.plot(zdr_th, kdpzh_th, "r", linewidth=3)
 
     for fname in fname_list:
         fig.savefig(fname, dpi=72)
@@ -1172,12 +1403,21 @@ def plot_selfconsistency_instrument(zdr, kdp, zh, fname_list,
     return fname_list
 
 
-def plot_selfconsistency_instrument2(zdr, kdp, zh, fname_list,
-                                     bins_zh_step=0.5, bins_zh_min=-30.,
-                                     bins_zh_max=80.,
-                                     normalize=True, vmin=0., vmax=0.01,
-                                     parametrization='None',
-                                     zdr_kdpzh_dict=None, dpi=72):
+def plot_selfconsistency_instrument2(
+    zdr,
+    kdp,
+    zh,
+    fname_list,
+    bins_zh_step=0.5,
+    bins_zh_min=-30.0,
+    bins_zh_max=80.0,
+    normalize=True,
+    vmin=0.0,
+    vmax=0.01,
+    parametrization="None",
+    zdr_kdpzh_dict=None,
+    dpi=72,
+):
     """
     plots the ZDR-KDP/ZH relationship obtained by an instrument. The
     theoretical curve and the retrieved curve
@@ -1219,16 +1459,15 @@ def plot_selfconsistency_instrument2(zdr, kdp, zh, fname_list,
     """
 
     # prepare bins for histogram
-    bins_zh_centers = np.arange(
-        bins_zh_min, bins_zh_max + bins_zh_step, bins_zh_step)
+    bins_zh_centers = np.arange(bins_zh_min, bins_zh_max + bins_zh_step, bins_zh_step)
     bins_zh_edges = np.append(
-        bins_zh_centers - bins_zh_step / 2.,
-        bins_zh_centers[-1] + bins_zh_step / 2.)
+        bins_zh_centers - bins_zh_step / 2.0, bins_zh_centers[-1] + bins_zh_step / 2.0
+    )
 
-    if parametrization == 'None':
-        if zdr_kdpzh_dict is not None and 'zdr_kdpzh' in zdr_kdpzh_dict:
-            zdr_th_table = zdr_kdpzh_dict['zdr_kdpzh'][0][0]
-            kdpzh_th_table = zdr_kdpzh_dict['zdr_kdpzh'][0][1]
+    if parametrization == "None":
+        if zdr_kdpzh_dict is not None and "zdr_kdpzh" in zdr_kdpzh_dict:
+            zdr_th_table = zdr_kdpzh_dict["zdr_kdpzh"][0][0]
+            kdpzh_th_table = zdr_kdpzh_dict["zdr_kdpzh"][0][1]
 
             # sort values by ZDR
             ind_zdr_sorted = np.argsort(zdr)
@@ -1236,92 +1475,111 @@ def plot_selfconsistency_instrument2(zdr, kdp, zh, fname_list,
             kdp = kdp[ind_zdr_sorted]
 
             # get value of KDP/ZH as interpolation of look up table values
-            kdpzh_th = np.interp(
-                zdr[ind_zdr_sorted], zdr_th_table, kdpzh_th_table)
+            kdpzh_th = np.interp(zdr[ind_zdr_sorted], zdr_th_table, kdpzh_th_table)
 
         else:
-            warn('Unable to plot self-consistency curve. '
-                 'Relationship not provided')
+            warn("Unable to plot self-consistency curve. " "Relationship not provided")
             return None
-    elif parametrization == 'Gourley':
-        if zdr_kdpzh_dict is None or 'freq_band' not in zdr_kdpzh_dict:
-            warn('Unable to plot theoretical self-consistency curve. '
-                 'Frequency band not provided')
-            return None
-        if zdr_kdpzh_dict['freq_band'] == 'S':
-            kdpzh_th = 1e-5 * (3.696 - 1.963 * zdr + 0.504 *
-                               zdr * zdr - 0.051 * zdr * zdr * zdr)
-        elif zdr_kdpzh_dict['freq_band'] == 'C':
-            kdpzh_th = 1e-5 * (6.746 - 2.970 * zdr + 0.711 *
-                               zdr * zdr - 0.079 * zdr * zdr * zdr)
-        elif zdr_kdpzh_dict['freq_band'] == 'X':
-            kdpzh_th = 1e-5 * (11.74 - 4.020 * zdr - 0.140 *
-                               zdr * zdr + 0.130 * zdr * zdr * zdr)
-        else:
+    elif parametrization == "Gourley":
+        if zdr_kdpzh_dict is None or "freq_band" not in zdr_kdpzh_dict:
             warn(
-                'Unable to plot theoretical self-consistency curve. '
-                'Unknown frequency band ' + zdr_kdpzh_dict['freq_band'])
+                "Unable to plot theoretical self-consistency curve. "
+                "Frequency band not provided"
+            )
             return None
-    elif parametrization == 'Wolfensberger':
-        if zdr_kdpzh_dict is None or 'freq_band' not in zdr_kdpzh_dict:
-            warn('Unable to plot theoretical self-consistency curve. '
-                 'Frequency band not provided')
-            return None
-        if zdr_kdpzh_dict['freq_band'] == 'C':
+        if zdr_kdpzh_dict["freq_band"] == "S":
             kdpzh_th = 1e-5 * (
-                3.199 * np.ma.exp(-7.767e-1 * zdr) - 0.4436 * zdr + 3.464)
+                3.696 - 1.963 * zdr + 0.504 * zdr * zdr - 0.051 * zdr * zdr * zdr
+            )
+        elif zdr_kdpzh_dict["freq_band"] == "C":
+            kdpzh_th = 1e-5 * (
+                6.746 - 2.970 * zdr + 0.711 * zdr * zdr - 0.079 * zdr * zdr * zdr
+            )
+        elif zdr_kdpzh_dict["freq_band"] == "X":
+            kdpzh_th = 1e-5 * (
+                11.74 - 4.020 * zdr - 0.140 * zdr * zdr + 0.130 * zdr * zdr * zdr
+            )
         else:
             warn(
-                'Unable to plot theoretical self-consistency curve. '
-                'Unknown frequency band ' + zdr_kdpzh_dict['freq_band'])
+                "Unable to plot theoretical self-consistency curve. "
+                "Unknown frequency band " + zdr_kdpzh_dict["freq_band"]
+            )
             return None
-    elif parametrization == 'Louf':
-        if zdr_kdpzh_dict is None or 'freq_band' not in zdr_kdpzh_dict:
-            warn('Unable to plot theoretical self-consistency curve. '
-                 'Frequency band not provided')
+    elif parametrization == "Wolfensberger":
+        if zdr_kdpzh_dict is None or "freq_band" not in zdr_kdpzh_dict:
+            warn(
+                "Unable to plot theoretical self-consistency curve. "
+                "Frequency band not provided"
+            )
             return None
-        if zdr_kdpzh_dict['freq_band'] == 'C':
-            kdpzh_th = 1e-5 * (6.607 - 4.577 * zdr + 1.577 *
-                               zdr * zdr - 0.23 * zdr * zdr * zdr)
+        if zdr_kdpzh_dict["freq_band"] == "C":
+            kdpzh_th = 1e-5 * (
+                3.199 * np.ma.exp(-7.767e-1 * zdr) - 0.4436 * zdr + 3.464
+            )
         else:
             warn(
-                'Unable to plot theoretical self-consistency curve. '
-                'Unknown frequency band ' + zdr_kdpzh_dict['freq_band'])
+                "Unable to plot theoretical self-consistency curve. "
+                "Unknown frequency band " + zdr_kdpzh_dict["freq_band"]
+            )
             return None
-    elif parametrization == 'Gorgucci':
-        if zdr_kdpzh_dict is None or 'freq_band' not in zdr_kdpzh_dict:
-            warn('Unable to plot theoretical self-consistency curve. '
-                 'Frequency band not provided')
+    elif parametrization == "Louf":
+        if zdr_kdpzh_dict is None or "freq_band" not in zdr_kdpzh_dict:
+            warn(
+                "Unable to plot theoretical self-consistency curve. "
+                "Frequency band not provided"
+            )
             return None
-        if zdr_kdpzh_dict['freq_band'] == 'C':
-            zdr_lin = np.ma.power(10., 0.1 * zdr)
+        if zdr_kdpzh_dict["freq_band"] == "C":
+            kdpzh_th = 1e-5 * (
+                6.607 - 4.577 * zdr + 1.577 * zdr * zdr - 0.23 * zdr * zdr * zdr
+            )
+        else:
+            warn(
+                "Unable to plot theoretical self-consistency curve. "
+                "Unknown frequency band " + zdr_kdpzh_dict["freq_band"]
+            )
+            return None
+    elif parametrization == "Gorgucci":
+        if zdr_kdpzh_dict is None or "freq_band" not in zdr_kdpzh_dict:
+            warn(
+                "Unable to plot theoretical self-consistency curve. "
+                "Frequency band not provided"
+            )
+            return None
+        if zdr_kdpzh_dict["freq_band"] == "C":
+            zdr_lin = np.ma.power(10.0, 0.1 * zdr)
             kdpzh_th = 1e-5 * (18.2 * np.power(zdr_lin, -1.28))
         else:
             warn(
-                'Unable to plot theoretical self-consistency curve. '
-                'Unknown frequency band ' + zdr_kdpzh_dict['freq_band'])
+                "Unable to plot theoretical self-consistency curve. "
+                "Unknown frequency band " + zdr_kdpzh_dict["freq_band"]
+            )
             return None
-    elif parametrization == 'Vaccarono':
-        if zdr_kdpzh_dict is None or 'freq_band' not in zdr_kdpzh_dict:
-            warn('Unable to plot theoretical self-consistency curve. '
-                 'Frequency band not provided')
+    elif parametrization == "Vaccarono":
+        if zdr_kdpzh_dict is None or "freq_band" not in zdr_kdpzh_dict:
+            warn(
+                "Unable to plot theoretical self-consistency curve. "
+                "Frequency band not provided"
+            )
             return None
-        if zdr_kdpzh_dict['freq_band'] == 'C':
-            zdr_lin = np.ma.power(10., 0.1 * zdr)
+        if zdr_kdpzh_dict["freq_band"] == "C":
+            zdr_lin = np.ma.power(10.0, 0.1 * zdr)
             kdpzh_th = 1e-5 * (17.7 * np.power(zdr_lin, -2.09))
         else:
             warn(
-                'Unable to plot theoretical self-consistency curve. '
-                'Unknown frequency band ' + zdr_kdpzh_dict['freq_band'])
+                "Unable to plot theoretical self-consistency curve. "
+                "Unknown frequency band " + zdr_kdpzh_dict["freq_band"]
+            )
             return None
 
-    if parametrization == 'Gorgucci':
-        zh_th = 10. * np.ma.log10(np.ma.power(kdp / kdpzh_th, 1 / 0.95))
-    elif kdpzh_th is not None and parametrization == 'Vaccarono':
-        zh_th = 10. * np.ma.log10(
-            np.ma.power(np.ma.power(kdp, 0.85) / kdpzh_th, 1 / 0.95))
+    if parametrization == "Gorgucci":
+        zh_th = 10.0 * np.ma.log10(np.ma.power(kdp / kdpzh_th, 1 / 0.95))
+    elif kdpzh_th is not None and parametrization == "Vaccarono":
+        zh_th = 10.0 * np.ma.log10(
+            np.ma.power(np.ma.power(kdp, 0.85) / kdpzh_th, 1 / 0.95)
+        )
     else:
-        zh_th = 10. * np.ma.log10(kdp / kdpzh_th)
+        zh_th = 10.0 * np.ma.log10(kdp / kdpzh_th)
 
     # prepare histogram
     zh[zh < bins_zh_centers[0]] = bins_zh_centers[0]
@@ -1331,25 +1589,36 @@ def plot_selfconsistency_instrument2(zdr, kdp, zh, fname_list,
     zh_th[zh_th > bins_zh_centers[-1]] = bins_zh_centers[-1]
 
     hist2d, bins_zh_edges, _ = np.histogram2d(
-        zh, zh_th, bins=[bins_zh_edges, bins_zh_edges])
+        zh, zh_th, bins=[bins_zh_edges, bins_zh_edges]
+    )
     hist2d = np.ma.masked_equal(hist2d, 0)
 
     if normalize:
         hist2d = hist2d / np.expand_dims(np.ma.sum(hist2d, axis=-1), axis=1)
-        clabel = 'Occurrence density\n(For each ZH bin)'
+        clabel = "Occurrence density\n(For each ZH bin)"
     else:
-        clabel = 'Number of gates'
+        clabel = "Number of gates"
         vmin = None
         vmax = None
 
     fig, ax = _plot_time_range(
-        bins_zh_edges, bins_zh_edges, hist2d, None, fname_list,
-        titl='self-consistency', xlabel='ZH measured [dBZ]',
-        ylabel='ZH selfcons [dBZ]',
-        clabel=clabel, vmin=vmin, vmax=vmax, save_fig=False, dpi=dpi)
+        bins_zh_edges,
+        bins_zh_edges,
+        hist2d,
+        None,
+        fname_list,
+        titl="self-consistency",
+        xlabel="ZH measured [dBZ]",
+        ylabel="ZH selfcons [dBZ]",
+        clabel=clabel,
+        vmin=vmin,
+        vmax=vmax,
+        save_fig=False,
+        dpi=dpi,
+    )
 
     ax.autoscale(False)
-    ax.plot(bins_zh_centers, bins_zh_centers, 'rx-', linewidth=3)
+    ax.plot(bins_zh_centers, bins_zh_centers, "rx-", linewidth=3)
 
     for fname in fname_list:
         fig.savefig(fname, dpi=72)
@@ -1358,10 +1627,21 @@ def plot_selfconsistency_instrument2(zdr, kdp, zh, fname_list,
     return fname_list
 
 
-def plot_scatter_comp(value1, value2, fname_list, labelx='Sensor 1',
-                      labely='Sensor 2', titl='Scatter', axis=None,
-                      metadata=None, dpi=72, ax=None, fig=None,
-                      save_fig=True, point_format='bx'):
+def plot_scatter_comp(
+    value1,
+    value2,
+    fname_list,
+    labelx="Sensor 1",
+    labely="Sensor 2",
+    titl="Scatter",
+    axis=None,
+    metadata=None,
+    dpi=72,
+    ax=None,
+    fig=None,
+    save_fig=True,
+    point_format="bx",
+):
     """
     plots the scatter between two time series
 
@@ -1411,14 +1691,20 @@ def plot_scatter_comp(value1, value2, fname_list, labelx='Sensor 1',
         ax.set_ylabel(labely)
         ax.set_title(titl)
 
-        if axis == 'equal':
+        if axis == "equal":
             ax.axis([0, max_value, 0, max_value])
-            ax.plot([0, max_value], [0, max_value], 'k--')
-            ax.set(adjustable='box', aspect='equal')
+            ax.plot([0, max_value], [0, max_value], "k--")
+            ax.set(adjustable="box", aspect="equal")
 
         if metadata is not None:
-            ax.text(0.05, 0.95, metadata, horizontalalignment='left',
-                    verticalalignment='top', transform=ax.transAxes)
+            ax.text(
+                0.05,
+                0.95,
+                metadata,
+                horizontalalignment="left",
+                verticalalignment="top",
+                transform=ax.transAxes,
+            )
 
         # turn on the grid
         ax.grid()
@@ -1460,32 +1746,45 @@ def plot_sun_hits(field, field_name, fname_list, prdcfg):
         list of names of the created plots
 
     """
-    azmin = prdcfg['sunhitsImageConfig']['azmin']
-    azmax = prdcfg['sunhitsImageConfig']['azmax']
-    elmin = prdcfg['sunhitsImageConfig']['elmin']
-    elmax = prdcfg['sunhitsImageConfig']['elmax']
+    azmin = prdcfg["sunhitsImageConfig"]["azmin"]
+    azmax = prdcfg["sunhitsImageConfig"]["azmax"]
+    elmin = prdcfg["sunhitsImageConfig"]["elmin"]
+    elmax = prdcfg["sunhitsImageConfig"]["elmax"]
 
     field_dict = pyart.config.get_metadata(field_name)
 
     # display data
     dpi = 72
-    if 'dpi' in prdcfg['sunhitsImageConfig']:
-        dpi = prdcfg['sunhitsImageConfig']['dpi']
+    if "dpi" in prdcfg["sunhitsImageConfig"]:
+        dpi = prdcfg["sunhitsImageConfig"]["dpi"]
 
-    fig = plt.figure(figsize=[prdcfg['sunhitsImageConfig']['xsize'],
-                              prdcfg['sunhitsImageConfig']['ysize']],
-                     dpi=dpi)
+    fig = plt.figure(
+        figsize=[
+            prdcfg["sunhitsImageConfig"]["xsize"],
+            prdcfg["sunhitsImageConfig"]["ysize"],
+        ],
+        dpi=dpi,
+    )
     ax = fig.add_subplot(111)
     cmap = pyart.config.get_field_colormap(field_name)
     vmin, vmax = pyart.config.get_field_limits(field_name)
-    titl = (prdcfg['timeinfo'].strftime('%Y-%m-%d') + '\n' +
-            get_field_name(field_dict, field_name))
+    titl = (
+        prdcfg["timeinfo"].strftime("%Y-%m-%d")
+        + "\n"
+        + get_field_name(field_dict, field_name)
+    )
 
     cax = ax.imshow(
-        field, extent=(azmin, azmax, elmin, elmax),
-        origin='lower', cmap=cmap, vmin=vmin, vmax=vmax, interpolation='none')
-    ax.set_xlabel('rad_az-sun_az (deg)')
-    ax.set_ylabel('rad_el-sun_el (deg)')
+        field,
+        extent=(azmin, azmax, elmin, elmax),
+        origin="lower",
+        cmap=cmap,
+        vmin=vmin,
+        vmax=vmax,
+        interpolation="none",
+    )
+    ax.set_xlabel("rad_az-sun_az (deg)")
+    ax.set_ylabel("rad_el-sun_el (deg)")
     ax.set_title(titl)
 
     # plot the colorbar and set the label.
@@ -1503,10 +1802,23 @@ def plot_sun_hits(field, field_name, fname_list, prdcfg):
     return fname_list
 
 
-def _plot_sunscan(rad_az, rad_el, rad_data, sun_hits, field_name, fname_list,
-                  titl='AZ-EL sunscan plot', xlabel='Azimuth (deg)',
-                  ylabel='Elevation (deg)', clabel=None, vmin=None, vmax=None,
-                  figsize=(10, 8), save_fig=True, dpi=72):
+def _plot_sunscan(
+    rad_az,
+    rad_el,
+    rad_data,
+    sun_hits,
+    field_name,
+    fname_list,
+    titl="AZ-EL sunscan plot",
+    xlabel="Azimuth (deg)",
+    ylabel="Elevation (deg)",
+    clabel=None,
+    vmin=None,
+    vmax=None,
+    figsize=(10, 8),
+    save_fig=True,
+    dpi=72,
+):
     """
     plots a AZ-EL plot of a sunscan
 
@@ -1569,7 +1881,7 @@ def _plot_sunscan(rad_az, rad_el, rad_data, sun_hits, field_name, fname_list,
             norm = None
     else:
         if clabel is None:
-            clabel = 'value'
+            clabel = "value"
         if vmin is None:
             vmin = np.ma.min(rad_data)
         if vmax is None:
@@ -1580,14 +1892,14 @@ def _plot_sunscan(rad_az, rad_el, rad_data, sun_hits, field_name, fname_list,
 
     T, R = np.meshgrid(rad_az, rad_el)
     cax = ax.pcolormesh(
-        T, R, np.ma.transpose(rad_data), cmap=cmap, vmin=vmin, vmax=vmax,
-        norm=norm)
+        T, R, np.ma.transpose(rad_data), cmap=cmap, vmin=vmin, vmax=vmax, norm=norm
+    )
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_title(titl)
 
     # Add scatter points of detected sun hits location
-    ax.scatter(sun_hits['rad_az'], sun_hits['rad_el'], s=7., c='red')
+    ax.scatter(sun_hits["rad_az"], sun_hits["rad_el"], s=7.0, c="red")
 
     cb = fig.colorbar(cax)
     if ticks is not None:
@@ -1608,11 +1920,22 @@ def _plot_sunscan(rad_az, rad_el, rad_data, sun_hits, field_name, fname_list,
     return fig, ax
 
 
-def _plot_time_range(rad_time, rad_range, rad_data, field_name, fname_list,
-                     titl='Time-Range plot',
-                     xlabel='time (s from start time)', ylabel='range (Km)',
-                     clabel=None, vmin=None, vmax=None, figsize=(10, 8),
-                     save_fig=True, dpi=72):
+def _plot_time_range(
+    rad_time,
+    rad_range,
+    rad_data,
+    field_name,
+    fname_list,
+    titl="Time-Range plot",
+    xlabel="time (s from start time)",
+    ylabel="range (Km)",
+    clabel=None,
+    vmin=None,
+    vmax=None,
+    figsize=(10, 8),
+    save_fig=True,
+    dpi=72,
+):
     """
     plots a time-range plot
 
@@ -1673,7 +1996,7 @@ def _plot_time_range(rad_time, rad_range, rad_data, field_name, fname_list,
             norm = None
     else:
         if clabel is None:
-            clabel = 'value'
+            clabel = "value"
         if vmin is None:
             vmin = np.ma.min(rad_data)
         if vmax is None:
@@ -1684,8 +2007,8 @@ def _plot_time_range(rad_time, rad_range, rad_data, field_name, fname_list,
 
     T, R = np.meshgrid(rad_time, rad_range)
     cax = ax.pcolormesh(
-        T, R, np.ma.transpose(rad_data), cmap=cmap, vmin=vmin, vmax=vmax,
-        norm=norm)
+        T, R, np.ma.transpose(rad_data), cmap=cmap, vmin=vmin, vmax=vmax, norm=norm
+    )
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_title(titl)

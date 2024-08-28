@@ -93,149 +93,179 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
     if procstatus == 0:
         return None, None
 
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         break
     field_name = get_fieldname_pyart(datatype)
     ind_rad = int(radarnr[5:8]) - 1
 
     if procstatus == 2:
-        if dscfg['initialized'] == 0:
+        if dscfg["initialized"] == 0:
             return None, None
 
         # prepare for exit
         new_dataset = {
-            'time': dscfg['global_data']['time'],
-            'ref_time': dscfg['global_data']['ref_time'],
-            'datatype': datatype,
-            'point_coordinates_WGS84_lon_lat_alt': (
-                dscfg['global_data']['point_coordinates_WGS84_lon_lat_alt']),
-            'antenna_coordinates_az_el_r': (
-                dscfg['global_data']['antenna_coordinates_az_el_r']),
-            'final': True}
+            "time": dscfg["global_data"]["time"],
+            "ref_time": dscfg["global_data"]["ref_time"],
+            "datatype": datatype,
+            "point_coordinates_WGS84_lon_lat_alt": (
+                dscfg["global_data"]["point_coordinates_WGS84_lon_lat_alt"]
+            ),
+            "antenna_coordinates_az_el_r": (
+                dscfg["global_data"]["antenna_coordinates_az_el_r"]
+            ),
+            "final": True,
+        }
 
         return new_dataset, ind_rad
 
     if (radar_list is None) or (radar_list[ind_rad] is None):
-        warn('ERROR: No valid radar')
+        warn("ERROR: No valid radar")
         return None, None
     radar = radar_list[ind_rad]
 
     if field_name not in radar.fields:
-        warn('Unable to extract point measurement information. ' +
-             'Field not available')
+        warn(
+            "Unable to extract point measurement information. " + "Field not available"
+        )
         return None, None
 
     projparams = dict()
-    projparams.update({'proj': 'pyart_aeqd'})
-    projparams.update({'lon_0': radar.longitude['data']})
-    projparams.update({'lat_0': radar.latitude['data']})
+    projparams.update({"proj": "pyart_aeqd"})
+    projparams.update({"lon_0": radar.longitude["data"]})
+    projparams.update({"lat_0": radar.latitude["data"]})
 
-    single_point = dscfg.get('single_point', True)
-    fill_value = dscfg.get('fill_value', None)
-    if dscfg['latlon']:
-        lon = dscfg['lon']
-        lat = dscfg['lat']
+    single_point = dscfg.get("single_point", True)
+    fill_value = dscfg.get("fill_value", None)
+    if dscfg["latlon"]:
+        lon = dscfg["lon"]
+        lat = dscfg["lat"]
         x, y = pyart.core.geographic_to_cartesian(lon, lat, projparams)
 
-        if not dscfg['truealt']:
-            ke = 4. / 3.  # constant for effective radius
-            a = 6378100.  # earth radius
+        if not dscfg["truealt"]:
+            ke = 4.0 / 3.0  # constant for effective radius
+            a = 6378100.0  # earth radius
             re = a * ke  # effective radius
 
-            elrad = dscfg['ele'] * np.pi / 180.
-            r_ground = np.sqrt(x ** 2. + y ** 2.)
+            elrad = dscfg["ele"] * np.pi / 180.0
+            r_ground = np.sqrt(x**2.0 + y**2.0)
             r = r_ground / np.cos(elrad)
-            alt = radar.altitude['data'] + np.sqrt(
-                r ** 2. + re ** 2. + 2. * r * re * np.sin(elrad)) - re
+            alt = (
+                radar.altitude["data"]
+                + np.sqrt(r**2.0 + re**2.0 + 2.0 * r * re * np.sin(elrad))
+                - re
+            )
             alt = alt[0]
         else:
-            alt = dscfg['alt']
+            alt = dscfg["alt"]
 
-        r, az, el = pyart.core.cartesian_to_antenna(
-            x, y, alt - radar.altitude['data'])
+        r, az, el = pyart.core.cartesian_to_antenna(x, y, alt - radar.altitude["data"])
         r = r[0]
         az = az[0]
         el = el[0]
     else:
-        r = dscfg['rng']
-        az = dscfg['azi']
-        el = dscfg['ele']
+        r = dscfg["rng"]
+        az = dscfg["azi"]
+        el = dscfg["ele"]
 
-        x, y, alt = pyart.core.antenna_to_cartesian(r / 1000., az, el)
+        x, y, alt = pyart.core.antenna_to_cartesian(r / 1000.0, az, el)
         lon, lat = pyart.core.cartesian_to_geographic(x, y, projparams)
         lon = lon[0]
         lat = lat[0]
 
-    d_az = np.abs(radar.azimuth['data'] - az)
-    if np.min(d_az) > dscfg['AziTol']:
-        warn(' No radar bin found for point (az, el, r):(' +
-             str(az) + ', ' + str(el) + ', ' + str(r) +
-             '). Minimum distance to radar azimuth ' + str(d_az) +
-             ' larger than tolerance')
+    d_az = np.abs(radar.azimuth["data"] - az)
+    if np.min(d_az) > dscfg["AziTol"]:
+        warn(
+            " No radar bin found for point (az, el, r):("
+            + str(az)
+            + ", "
+            + str(el)
+            + ", "
+            + str(r)
+            + "). Minimum distance to radar azimuth "
+            + str(d_az)
+            + " larger than tolerance"
+        )
         return None, None
 
-    d_el = np.abs(radar.elevation['data'] - el)
-    if np.min(d_el) > dscfg['EleTol']:
-        warn(' No radar bin found for point (az, el, r):(' +
-             str(az) + ', ' + str(el) + ', ' + str(r) +
-             '). Minimum distance to radar elevation ' + str(d_el) +
-             ' larger than tolerance')
+    d_el = np.abs(radar.elevation["data"] - el)
+    if np.min(d_el) > dscfg["EleTol"]:
+        warn(
+            " No radar bin found for point (az, el, r):("
+            + str(az)
+            + ", "
+            + str(el)
+            + ", "
+            + str(r)
+            + "). Minimum distance to radar elevation "
+            + str(d_el)
+            + " larger than tolerance"
+        )
         return None, None
 
-    d_r = np.abs(radar.range['data'] - r)
-    if np.min(d_r) > dscfg['RngTol']:
-        warn(' No radar bin found for point (az, el, r):(' +
-             str(az) + ', ' + str(el) + ', ' + str(r) +
-             '). Minimum distance to radar range bin ' + str(d_r) +
-             ' larger than tolerance')
+    d_r = np.abs(radar.range["data"] - r)
+    if np.min(d_r) > dscfg["RngTol"]:
+        warn(
+            " No radar bin found for point (az, el, r):("
+            + str(az)
+            + ", "
+            + str(el)
+            + ", "
+            + str(r)
+            + "). Minimum distance to radar range bin "
+            + str(d_r)
+            + " larger than tolerance"
+        )
         return None, None
 
     if single_point:
-        ind_ray = np.argmin(np.abs(radar.azimuth['data'] - az) +
-                            np.abs(radar.elevation['data'] - el))
+        ind_ray = np.argmin(
+            np.abs(radar.azimuth["data"] - az) + np.abs(radar.elevation["data"] - el)
+        )
     else:
-        ind_ray = np.where(np.logical_and(
-            d_az <= dscfg['AziTol'], d_el <= dscfg['EleTol']))[0]
-    ind_r = np.argmin(np.abs(radar.range['data'] - r))
+        ind_ray = np.where(
+            np.logical_and(d_az <= dscfg["AziTol"], d_el <= dscfg["EleTol"])
+        )[0]
+    ind_r = np.argmin(np.abs(radar.range["data"] - r))
 
     ant_coord = np.empty((3, ind_ray.size), np.float32)
-    ant_coord[0, :] = radar.azimuth['data'][ind_ray]
-    ant_coord[1, :] = radar.elevation['data'][ind_ray]
-    ant_coord[2, :] = np.zeros(ind_ray.size) + radar.range['data'][ind_r]
+    ant_coord[0, :] = radar.azimuth["data"][ind_ray]
+    ant_coord[1, :] = radar.elevation["data"][ind_ray]
+    ant_coord[2, :] = np.zeros(ind_ray.size) + radar.range["data"][ind_r]
 
-    val = radar.fields[field_name]['data'].data[ind_ray, ind_r]
-    if (fill_value is not None
-            and np.ma.is_masked(radar.fields[field_name]['data'][
-                ind_ray, ind_r])):
-        val = fill_value        
+    val = radar.fields[field_name]["data"].data[ind_ray, ind_r]
+    if fill_value is not None and np.ma.is_masked(
+        radar.fields[field_name]["data"][ind_ray, ind_r]
+    ):
+        val = fill_value
 
-    time = num2date(radar.time['data'][ind_ray], radar.time['units'],
-                    radar.time['calendar'])
+    time = num2date(
+        radar.time["data"][ind_ray], radar.time["units"], radar.time["calendar"]
+    )
 
     # initialize dataset
-    if dscfg['initialized'] == 0:
+    if dscfg["initialized"] == 0:
         poi = {
-            'point_coordinates_WGS84_lon_lat_alt': [lon, lat, alt],
-            'antenna_coordinates_az_el_r': [az, el, r],
-            'time': time,
-            'ref_time': dscfg['timeinfo']}
-        dscfg['global_data'] = poi
-        dscfg['initialized'] = 1
+            "point_coordinates_WGS84_lon_lat_alt": [lon, lat, alt],
+            "antenna_coordinates_az_el_r": [az, el, r],
+            "time": time,
+            "ref_time": dscfg["timeinfo"],
+        }
+        dscfg["global_data"] = poi
+        dscfg["initialized"] = 1
 
-    dscfg['global_data']['ref_time'] = dscfg['timeinfo']
+    dscfg["global_data"]["ref_time"] = dscfg["timeinfo"]
 
     # prepare for exit
     new_dataset = dict()
-    new_dataset.update({'value': val})
-    new_dataset.update({'datatype': datatype})
-    new_dataset.update({'time': time})
-    new_dataset.update({'ref_time': dscfg['timeinfo']})
-    new_dataset.update(
-        {'point_coordinates_WGS84_lon_lat_alt': [lon, lat, alt]})
-    new_dataset.update({'antenna_coordinates_az_el_r': [az, el, r]})
-    new_dataset.update({'used_antenna_coordinates_az_el_r': ant_coord})
-    new_dataset.update({'final': False})
+    new_dataset.update({"value": val})
+    new_dataset.update({"datatype": datatype})
+    new_dataset.update({"time": time})
+    new_dataset.update({"ref_time": dscfg["timeinfo"]})
+    new_dataset.update({"point_coordinates_WGS84_lon_lat_alt": [lon, lat, alt]})
+    new_dataset.update({"antenna_coordinates_az_el_r": [az, el, r]})
+    new_dataset.update({"used_antenna_coordinates_az_el_r": ant_coord})
+    new_dataset.update({"final": False})
 
     return new_dataset, ind_rad
 
@@ -287,54 +317,57 @@ def process_multiple_points(procstatus, dscfg, radar_list=None):
     if procstatus != 1:
         return None, None
 
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         break
     field_name = get_fieldname_pyart(datatype)
     ind_rad = int(radarnr[5:8]) - 1
 
     if (radar_list is None) or (radar_list[ind_rad] is None):
-        warn('ERROR: No valid radar')
+        warn("ERROR: No valid radar")
         return None, None
     radar = radar_list[ind_rad]
 
     if field_name not in radar.fields:
-        warn('Unable to extract point measurement information. ' +
-             'Field not available')
+        warn(
+            "Unable to extract point measurement information. " + "Field not available"
+        )
         return None, None
 
     # default parameters
-    truealt = dscfg.get('truealt', False)
-    ele_points = dscfg.get('ele_points', 1.)
-    alt_points = dscfg.get('alt_points', 0.)
-    AziTol = dscfg.get('AziTol', 0.25)
-    EleTol = dscfg.get('EleTol', 1.)
-    RngTol = dscfg.get('RngTol', 120.)
+    truealt = dscfg.get("truealt", False)
+    ele_points = dscfg.get("ele_points", 1.0)
+    alt_points = dscfg.get("alt_points", 0.0)
+    AziTol = dscfg.get("AziTol", 0.25)
+    EleTol = dscfg.get("EleTol", 1.0)
+    RngTol = dscfg.get("RngTol", 120.0)
 
     projparams = dict()
-    projparams.update({'proj': 'pyart_aeqd'})
-    projparams.update({'lon_0': radar.longitude['data']})
-    projparams.update({'lat_0': radar.latitude['data']})
+    projparams.update({"proj": "pyart_aeqd"})
+    projparams.update({"lon_0": radar.longitude["data"]})
+    projparams.update({"lat_0": radar.latitude["data"]})
 
-    lat, lon, point_id = read_coord_sensors(dscfg['coord_fname'])
+    lat, lon, point_id = read_coord_sensors(dscfg["coord_fname"])
     x, y = pyart.core.geographic_to_cartesian(lon, lat, projparams)
     npoints = lon.size
 
     if not truealt:
-        ke = 4. / 3.  # constant for effective radius
-        a = 6378100.  # earth radius
+        ke = 4.0 / 3.0  # constant for effective radius
+        a = 6378100.0  # earth radius
         re = a * ke  # effective radius
 
-        elrad = ele_points * np.pi / 180.
-        r_ground = np.sqrt(x ** 2. + y ** 2.)
+        elrad = ele_points * np.pi / 180.0
+        r_ground = np.sqrt(x**2.0 + y**2.0)
         r = r_ground / np.cos(elrad)
-        alt = radar.altitude['data'] + np.sqrt(
-            r ** 2. + re ** 2. + 2. * r * re * np.sin(elrad)) - re
+        alt = (
+            radar.altitude["data"]
+            + np.sqrt(r**2.0 + re**2.0 + 2.0 * r * re * np.sin(elrad))
+            - re
+        )
     else:
         alt = alt_points + np.zeros(npoints)
 
-    r, az, el = pyart.core.cartesian_to_antenna(
-        x, y, alt - radar.altitude['data'])
+    r, az, el = pyart.core.cartesian_to_antenna(x, y, alt - radar.altitude["data"])
 
     val = np.ma.masked_all(npoints)
     time = np.ma.masked_all(npoints, dtype=datetime.datetime)
@@ -342,60 +375,83 @@ def process_multiple_points(procstatus, dscfg, radar_list=None):
     used_lat = np.ma.masked_all(npoints)
     used_alt = np.ma.masked_all(npoints)
     for ind in range(npoints):
-        d_az = np.abs(radar.azimuth['data'] - az[ind])
+        d_az = np.abs(radar.azimuth["data"] - az[ind])
         if np.min(d_az) > AziTol:
-            warn(' No radar bin found for point (az, el, r):(' +
-                 str(az[ind]) + ', ' + str(el[ind]) + ', ' + str(r[ind]) +
-                 '). Minimum distance to radar azimuth ' + str(d_az) +
-                 ' larger than tolerance')
+            warn(
+                " No radar bin found for point (az, el, r):("
+                + str(az[ind])
+                + ", "
+                + str(el[ind])
+                + ", "
+                + str(r[ind])
+                + "). Minimum distance to radar azimuth "
+                + str(d_az)
+                + " larger than tolerance"
+            )
             continue
 
-        d_el = np.abs(radar.elevation['data'] - el[ind])
+        d_el = np.abs(radar.elevation["data"] - el[ind])
         if np.min(d_el) > EleTol:
-            warn(' No radar bin found for point (az, el, r):(' +
-                 str(az[ind]) + ', ' + str(el[ind]) + ', ' + str(r[ind]) +
-                 '). Minimum distance to radar elevation ' + str(d_el) +
-                 ' larger than tolerance')
+            warn(
+                " No radar bin found for point (az, el, r):("
+                + str(az[ind])
+                + ", "
+                + str(el[ind])
+                + ", "
+                + str(r[ind])
+                + "). Minimum distance to radar elevation "
+                + str(d_el)
+                + " larger than tolerance"
+            )
             continue
 
-        d_r = np.abs(radar.range['data'] - r[ind])
+        d_r = np.abs(radar.range["data"] - r[ind])
         if np.min(d_r) > RngTol:
-            warn(' No radar bin found for point (az, el, r):(' +
-                 str(az[ind]) + ', ' + str(el[ind]) + ', ' + str(r[ind]) +
-                 '). Minimum distance to radar range bin ' + str(d_r) +
-                 ' larger than tolerance')
+            warn(
+                " No radar bin found for point (az, el, r):("
+                + str(az[ind])
+                + ", "
+                + str(el[ind])
+                + ", "
+                + str(r[ind])
+                + "). Minimum distance to radar range bin "
+                + str(d_r)
+                + " larger than tolerance"
+            )
             continue
 
-        ind_ray = np.argmin(np.abs(radar.azimuth['data'] - az[ind]) +
-                            np.abs(radar.elevation['data'] - el[ind]))
-        ind_r = np.argmin(np.abs(radar.range['data'] - r[ind]))
+        ind_ray = np.argmin(
+            np.abs(radar.azimuth["data"] - az[ind])
+            + np.abs(radar.elevation["data"] - el[ind])
+        )
+        ind_r = np.argmin(np.abs(radar.range["data"] - r[ind]))
 
-        used_lon[ind] = radar.gate_longitude['data'][ind_ray, ind_r]
-        used_lat[ind] = radar.gate_latitude['data'][ind_ray, ind_r]
-        used_alt[ind] = radar.gate_altitude['data'][ind_ray, ind_r]
+        used_lon[ind] = radar.gate_longitude["data"][ind_ray, ind_r]
+        used_lat[ind] = radar.gate_latitude["data"][ind_ray, ind_r]
+        used_alt[ind] = radar.gate_altitude["data"][ind_ray, ind_r]
 
-        val[ind] = radar.fields[field_name]['data'].data[ind_ray, ind_r]
+        val[ind] = radar.fields[field_name]["data"].data[ind_ray, ind_r]
         time[ind] = num2date(
-            radar.time['data'][ind_ray], radar.time['units'],
-            radar.time['calendar'])
+            radar.time["data"][ind_ray], radar.time["units"], radar.time["calendar"]
+        )
 
     # prepare for exit
     new_dataset = dict()
-    new_dataset.update({'value': val})
-    new_dataset.update({'datatype': datatype})
-    new_dataset.update({'time': time})
-    new_dataset.update({'ref_time': dscfg['timeinfo']})
-    new_dataset.update({'point_coordinates_WGS84_lon': lon})
-    new_dataset.update({'point_coordinates_WGS84_lat': lat})
-    new_dataset.update({'point_coordinates_WGS84_alt': alt})
-    new_dataset.update({'antenna_coordinates_az': az})
-    new_dataset.update({'antenna_coordinates_el': el})
-    new_dataset.update({'antenna_coordinates_r': r})
-    new_dataset.update({'used_point_coordinates_WGS84_lon': used_lon})
-    new_dataset.update({'used_point_coordinates_WGS84_lat': used_lat})
-    new_dataset.update({'used_point_coordinates_WGS84_alt': used_alt})
-    new_dataset.update({'point_id': point_id})
-    new_dataset.update({'final': False})
+    new_dataset.update({"value": val})
+    new_dataset.update({"datatype": datatype})
+    new_dataset.update({"time": time})
+    new_dataset.update({"ref_time": dscfg["timeinfo"]})
+    new_dataset.update({"point_coordinates_WGS84_lon": lon})
+    new_dataset.update({"point_coordinates_WGS84_lat": lat})
+    new_dataset.update({"point_coordinates_WGS84_alt": alt})
+    new_dataset.update({"antenna_coordinates_az": az})
+    new_dataset.update({"antenna_coordinates_el": el})
+    new_dataset.update({"antenna_coordinates_r": r})
+    new_dataset.update({"used_point_coordinates_WGS84_lon": used_lon})
+    new_dataset.update({"used_point_coordinates_WGS84_lat": used_lat})
+    new_dataset.update({"used_point_coordinates_WGS84_alt": used_alt})
+    new_dataset.update({"point_id": point_id})
+    new_dataset.update({"final": False})
 
     return new_dataset, ind_rad
 
@@ -465,81 +521,96 @@ def process_qvp(procstatus, dscfg, radar_list=None):
 
     if procstatus == 1:
         field_names = []
-        for datatypedescr in dscfg['datatype']:
+        for datatypedescr in dscfg["datatype"]:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             field_names.append(get_fieldname_pyart(datatype))
 
         ind_rad = int(radarnr[5:8]) - 1
 
         if (radar_list is None) or (radar_list[ind_rad] is None):
-            warn('ERROR: No valid radar')
+            warn("ERROR: No valid radar")
             return None, None
 
         radar = radar_list[ind_rad]
 
         # default parameters
-        angle = dscfg.get('angle', 0)
-        ang_tol = dscfg.get('ang_tol', 1.)
-        hmax = dscfg.get('hmax', 10000.)
-        hres = dscfg.get('hres', 50.)
-        avg_type = dscfg.get('avg_type', 'mean')
-        nvalid_min = dscfg.get('nvalid_min', 30)
-        interp_kind = dscfg.get('interp_kind', 'none')
+        angle = dscfg.get("angle", 0)
+        ang_tol = dscfg.get("ang_tol", 1.0)
+        hmax = dscfg.get("hmax", 10000.0)
+        hres = dscfg.get("hres", 50.0)
+        avg_type = dscfg.get("avg_type", "mean")
+        nvalid_min = dscfg.get("nvalid_min", 30)
+        interp_kind = dscfg.get("interp_kind", "none")
 
         # initialize dataset
-        if not dscfg['initialized']:
+        if not dscfg["initialized"]:
             qvp = pyart.retrieve.compute_qvp(
-                radar, field_names, ref_time=dscfg['timeinfo'],
-                angle=angle, ang_tol=ang_tol, hmax=hmax, hres=hres,
-                avg_type=avg_type, nvalid_min=nvalid_min,
-                interp_kind=interp_kind, qvp=None)
+                radar,
+                field_names,
+                ref_time=dscfg["timeinfo"],
+                angle=angle,
+                ang_tol=ang_tol,
+                hmax=hmax,
+                hres=hres,
+                avg_type=avg_type,
+                nvalid_min=nvalid_min,
+                interp_kind=interp_kind,
+                qvp=None,
+            )
 
             if qvp is None:
-                warn('Unable to compute QVP')
+                warn("Unable to compute QVP")
                 return None, None
 
             global_dict = dict()
-            global_dict.update({'start_time': dscfg['timeinfo']})
-            global_dict.update({'radar_out': qvp})
-            dscfg['global_data'] = global_dict
-            dscfg['initialized'] = 1
+            global_dict.update({"start_time": dscfg["timeinfo"]})
+            global_dict.update({"radar_out": qvp})
+            dscfg["global_data"] = global_dict
+            dscfg["initialized"] = 1
         else:
             qvp = pyart.retrieve.compute_qvp(
-                radar, field_names, ref_time=dscfg['timeinfo'],
-                angle=angle, ang_tol=ang_tol, hmax=hmax, hres=hres,
-                avg_type=avg_type, nvalid_min=nvalid_min,
+                radar,
+                field_names,
+                ref_time=dscfg["timeinfo"],
+                angle=angle,
+                ang_tol=ang_tol,
+                hmax=hmax,
+                hres=hres,
+                avg_type=avg_type,
+                nvalid_min=nvalid_min,
                 interp_kind=interp_kind,
-                qvp=dscfg['global_data']['radar_out'])
+                qvp=dscfg["global_data"]["radar_out"],
+            )
 
             if qvp is None:
-                warn('Unable to compute QVP')
+                warn("Unable to compute QVP")
                 return None, None
 
-            dscfg['global_data']['radar_out'] = qvp
+            dscfg["global_data"]["radar_out"] = qvp
 
         new_dataset = dict()
-        new_dataset.update({'radar_out': qvp})
-        new_dataset.update({'radar_type': 'temporal'})
-        new_dataset.update({'start_time': dscfg['global_data']['start_time']})
+        new_dataset.update({"radar_out": qvp})
+        new_dataset.update({"radar_type": "temporal"})
+        new_dataset.update({"start_time": dscfg["global_data"]["start_time"]})
 
         return new_dataset, ind_rad
 
     if procstatus == 2:
-        if not dscfg['initialized']:
+        if not dscfg["initialized"]:
             return None, None
 
-        for datatypedescr in dscfg['datatype']:
+        for datatypedescr in dscfg["datatype"]:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             break
 
         ind_rad = int(radarnr[5:8]) - 1
 
-        qvp = dscfg['global_data']['radar_out']
+        qvp = dscfg["global_data"]["radar_out"]
 
         new_dataset = dict()
-        new_dataset.update({'radar_out': qvp})
-        new_dataset.update({'radar_type': 'final'})
-        new_dataset.update({'start_time': dscfg['global_data']['start_time']})
+        new_dataset.update({"radar_out": qvp})
+        new_dataset.update({"radar_type": "final"})
+        new_dataset.update({"start_time": dscfg["global_data"]["start_time"]})
 
         return new_dataset, ind_rad
 
@@ -609,81 +680,96 @@ def process_rqvp(procstatus, dscfg, radar_list=None):
 
     if procstatus == 1:
         field_names = []
-        for datatypedescr in dscfg['datatype']:
+        for datatypedescr in dscfg["datatype"]:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             field_names.append(get_fieldname_pyart(datatype))
 
         ind_rad = int(radarnr[5:8]) - 1
 
         if (radar_list is None) or (radar_list[ind_rad] is None):
-            warn('ERROR: No valid radar')
+            warn("ERROR: No valid radar")
             return None, None
 
         radar = radar_list[ind_rad]
 
         # default parameters
-        hmax = dscfg.get('hmax', 10000.)
-        hres = dscfg.get('hres', 2.)
-        avg_type = dscfg.get('avg_type', 'mean')
-        nvalid_min = dscfg.get('nvalid_min', 30)
-        interp_kind = dscfg.get('interp_kind', 'nearest')
-        rmax = dscfg.get('rmax', 50000.)
-        weight_power = dscfg.get('weight_power', 2.)
+        hmax = dscfg.get("hmax", 10000.0)
+        hres = dscfg.get("hres", 2.0)
+        avg_type = dscfg.get("avg_type", "mean")
+        nvalid_min = dscfg.get("nvalid_min", 30)
+        interp_kind = dscfg.get("interp_kind", "nearest")
+        rmax = dscfg.get("rmax", 50000.0)
+        weight_power = dscfg.get("weight_power", 2.0)
 
         # initialize dataset
-        if not dscfg['initialized']:
+        if not dscfg["initialized"]:
             qvp = pyart.retrieve.compute_rqvp(
-                radar, field_names, ref_time=dscfg['timeinfo'],
-                hmax=hmax, hres=hres, avg_type=avg_type,
-                nvalid_min=nvalid_min, interp_kind=interp_kind, rmax=rmax,
-                weight_power=weight_power, qvp=None)
+                radar,
+                field_names,
+                ref_time=dscfg["timeinfo"],
+                hmax=hmax,
+                hres=hres,
+                avg_type=avg_type,
+                nvalid_min=nvalid_min,
+                interp_kind=interp_kind,
+                rmax=rmax,
+                weight_power=weight_power,
+                qvp=None,
+            )
 
             if qvp is None:
-                warn('Unable to compute QVP')
+                warn("Unable to compute QVP")
                 return None, None
 
             global_dict = dict()
-            global_dict.update({'start_time': dscfg['timeinfo']})
-            global_dict.update({'radar_out': qvp})
-            dscfg['global_data'] = global_dict
-            dscfg['initialized'] = 1
+            global_dict.update({"start_time": dscfg["timeinfo"]})
+            global_dict.update({"radar_out": qvp})
+            dscfg["global_data"] = global_dict
+            dscfg["initialized"] = 1
         else:
             qvp = pyart.retrieve.compute_rqvp(
-                radar, field_names, ref_time=dscfg['timeinfo'],
-                hmax=hmax, hres=hres, avg_type=avg_type,
-                nvalid_min=nvalid_min, interp_kind=interp_kind, rmax=rmax,
+                radar,
+                field_names,
+                ref_time=dscfg["timeinfo"],
+                hmax=hmax,
+                hres=hres,
+                avg_type=avg_type,
+                nvalid_min=nvalid_min,
+                interp_kind=interp_kind,
+                rmax=rmax,
                 weight_power=weight_power,
-                qvp=dscfg['global_data']['radar_out'])
+                qvp=dscfg["global_data"]["radar_out"],
+            )
 
             if qvp is None:
-                warn('Unable to compute QVP')
+                warn("Unable to compute QVP")
                 return None, None
 
-            dscfg['global_data']['radar_out'] = qvp
+            dscfg["global_data"]["radar_out"] = qvp
 
         new_dataset = dict()
-        new_dataset.update({'radar_out': qvp})
-        new_dataset.update({'radar_type': 'temporal'})
-        new_dataset.update({'start_time': dscfg['global_data']['start_time']})
+        new_dataset.update({"radar_out": qvp})
+        new_dataset.update({"radar_type": "temporal"})
+        new_dataset.update({"start_time": dscfg["global_data"]["start_time"]})
 
         return new_dataset, ind_rad
 
     if procstatus == 2:
-        if not dscfg['initialized']:
+        if not dscfg["initialized"]:
             return None, None
 
-        for datatypedescr in dscfg['datatype']:
+        for datatypedescr in dscfg["datatype"]:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             break
 
         ind_rad = int(radarnr[5:8]) - 1
 
-        qvp = dscfg['global_data']['radar_out']
+        qvp = dscfg["global_data"]["radar_out"]
 
         new_dataset = dict()
-        new_dataset.update({'radar_out': qvp})
-        new_dataset.update({'radar_type': 'final'})
-        new_dataset.update({'start_time': dscfg['global_data']['start_time']})
+        new_dataset.update({"radar_out": qvp})
+        new_dataset.update({"radar_type": "final"})
+        new_dataset.update({"start_time": dscfg["global_data"]["start_time"]})
 
         return new_dataset, ind_rad
 
@@ -755,84 +841,105 @@ def process_evp(procstatus, dscfg, radar_list=None):
 
     if procstatus == 1:
         field_names = []
-        for datatypedescr in dscfg['datatype']:
+        for datatypedescr in dscfg["datatype"]:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             field_names.append(get_fieldname_pyart(datatype))
 
         ind_rad = int(radarnr[5:8]) - 1
 
         if (radar_list is None) or (radar_list[ind_rad] is None):
-            warn('ERROR: No valid radar')
+            warn("ERROR: No valid radar")
             return None, None
 
         radar = radar_list[ind_rad]
 
         # default parameters
-        lon = dscfg['lon']
-        lat = dscfg['lat']
-        latlon_tol = dscfg.get('latlon_tol', 0.0005)
-        delta_rng = dscfg.get('delta_rng', 15000.)
-        delta_azi = dscfg.get('delta_azi', 10.)
-        hmax = dscfg.get('hmax', 10000.)
-        hres = dscfg.get('hres', 250.)
-        avg_type = dscfg.get('avg_type', 'mean')
-        nvalid_min = dscfg.get('nvalid_min', 1)
-        interp_kind = dscfg.get('interp_kind', 'none')
+        lon = dscfg["lon"]
+        lat = dscfg["lat"]
+        latlon_tol = dscfg.get("latlon_tol", 0.0005)
+        delta_rng = dscfg.get("delta_rng", 15000.0)
+        delta_azi = dscfg.get("delta_azi", 10.0)
+        hmax = dscfg.get("hmax", 10000.0)
+        hres = dscfg.get("hres", 250.0)
+        avg_type = dscfg.get("avg_type", "mean")
+        nvalid_min = dscfg.get("nvalid_min", 1)
+        interp_kind = dscfg.get("interp_kind", "none")
 
         # initialize dataset
-        if not dscfg['initialized']:
+        if not dscfg["initialized"]:
             qvp = pyart.retrieve.compute_evp(
-                radar, field_names, lon, lat, ref_time=dscfg['timeinfo'],
-                latlon_tol=latlon_tol, delta_rng=delta_rng,
-                delta_azi=delta_azi, hmax=hmax, hres=hres, avg_type=avg_type,
-                nvalid_min=nvalid_min, interp_kind=interp_kind, qvp=None)
+                radar,
+                field_names,
+                lon,
+                lat,
+                ref_time=dscfg["timeinfo"],
+                latlon_tol=latlon_tol,
+                delta_rng=delta_rng,
+                delta_azi=delta_azi,
+                hmax=hmax,
+                hres=hres,
+                avg_type=avg_type,
+                nvalid_min=nvalid_min,
+                interp_kind=interp_kind,
+                qvp=None,
+            )
 
             if qvp is None:
-                warn('Unable to compute QVP')
+                warn("Unable to compute QVP")
                 return None, None
 
             global_dict = dict()
-            global_dict.update({'start_time': dscfg['timeinfo']})
-            global_dict.update({'radar_out': qvp})
-            dscfg['global_data'] = global_dict
-            dscfg['initialized'] = 1
+            global_dict.update({"start_time": dscfg["timeinfo"]})
+            global_dict.update({"radar_out": qvp})
+            dscfg["global_data"] = global_dict
+            dscfg["initialized"] = 1
         else:
             qvp = pyart.retrieve.compute_evp(
-                radar, field_names, lon, lat, ref_time=dscfg['timeinfo'],
-                latlon_tol=latlon_tol, delta_rng=delta_rng,
-                delta_azi=delta_azi, hmax=hmax, hres=hres, avg_type=avg_type,
-                nvalid_min=nvalid_min, interp_kind=interp_kind,
-                qvp=dscfg['global_data']['radar_out'])
+                radar,
+                field_names,
+                lon,
+                lat,
+                ref_time=dscfg["timeinfo"],
+                latlon_tol=latlon_tol,
+                delta_rng=delta_rng,
+                delta_azi=delta_azi,
+                hmax=hmax,
+                hres=hres,
+                avg_type=avg_type,
+                nvalid_min=nvalid_min,
+                interp_kind=interp_kind,
+                qvp=dscfg["global_data"]["radar_out"],
+            )
 
             if qvp is None:
-                warn('Unable to compute QVP')
+                warn("Unable to compute QVP")
                 return None, None
 
-        dscfg['global_data']['radar_out'] = qvp
+        dscfg["global_data"]["radar_out"] = qvp
 
         new_dataset = dict()
-        new_dataset.update({'radar_out': qvp})
-        new_dataset.update({'radar_type': 'temporal'})
-        new_dataset.update({'start_time': dscfg['global_data']['start_time']})
+        new_dataset.update({"radar_out": qvp})
+        new_dataset.update({"radar_type": "temporal"})
+        new_dataset.update({"start_time": dscfg["global_data"]["start_time"]})
 
         return new_dataset, ind_rad
 
     if procstatus == 2:
-        if not dscfg['initialized']:
+        if not dscfg["initialized"]:
             return None, None
 
-        for datatypedescr in dscfg['datatype']:
+        for datatypedescr in dscfg["datatype"]:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             break
 
         ind_rad = int(radarnr[5:8]) - 1
 
-        qvp = dscfg['global_data']['radar_out']
+        qvp = dscfg["global_data"]["radar_out"]
 
         new_dataset = dict()
-        new_dataset.update({'radar_out': qvp})
-        new_dataset.update({'radar_type': 'final'})
-        new_dataset.update({'start_time': dscfg['global_data']['start_time']})
+        new_dataset.update({"radar_out": qvp})
+        new_dataset.update({"radar_type": "final"})
+        new_dataset.update({"start_time": dscfg["global_data"]["start_time"]})
 
         return new_dataset, ind_rad
 
@@ -911,88 +1018,111 @@ def process_svp(procstatus, dscfg, radar_list=None):
 
     if procstatus == 1:
         field_names = []
-        for datatypedescr in dscfg['datatype']:
+        for datatypedescr in dscfg["datatype"]:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             field_names.append(get_fieldname_pyart(datatype))
 
         ind_rad = int(radarnr[5:8]) - 1
 
         if (radar_list is None) or (radar_list[ind_rad] is None):
-            warn('ERROR: No valid radar')
+            warn("ERROR: No valid radar")
             return None, None
 
         radar = radar_list[ind_rad]
 
         # default parameters
-        angle = dscfg.get('angle', 0)
-        ang_tol = dscfg.get('ang_tol', 1.)
-        lon = dscfg['lon']
-        lat = dscfg['lat']
-        latlon_tol = dscfg.get('latlon_tol', 0.0005)
-        delta_rng = dscfg.get('delta_rng', 30000.)
-        delta_azi = dscfg.get('delta_azi', 10.)
-        hmax = dscfg.get('hmax', 10000.)
-        hres = dscfg.get('hres', 250.)
-        avg_type = dscfg.get('avg_type', 'mean')
-        nvalid_min = dscfg.get('nvalid_min', 1)
-        interp_kind = dscfg.get('interp_kind', 'none')
+        angle = dscfg.get("angle", 0)
+        ang_tol = dscfg.get("ang_tol", 1.0)
+        lon = dscfg["lon"]
+        lat = dscfg["lat"]
+        latlon_tol = dscfg.get("latlon_tol", 0.0005)
+        delta_rng = dscfg.get("delta_rng", 30000.0)
+        delta_azi = dscfg.get("delta_azi", 10.0)
+        hmax = dscfg.get("hmax", 10000.0)
+        hres = dscfg.get("hres", 250.0)
+        avg_type = dscfg.get("avg_type", "mean")
+        nvalid_min = dscfg.get("nvalid_min", 1)
+        interp_kind = dscfg.get("interp_kind", "none")
 
         # initialize dataset
-        if not dscfg['initialized']:
+        if not dscfg["initialized"]:
             qvp = pyart.retrieve.compute_svp(
-                radar, field_names, lon, lat, angle,
-                ref_time=dscfg['timeinfo'], ang_tol=ang_tol,
-                latlon_tol=latlon_tol, delta_rng=delta_rng,
-                delta_azi=delta_azi, hmax=hmax, hres=hres, avg_type=avg_type,
-                nvalid_min=nvalid_min, interp_kind=interp_kind, qvp=None)
+                radar,
+                field_names,
+                lon,
+                lat,
+                angle,
+                ref_time=dscfg["timeinfo"],
+                ang_tol=ang_tol,
+                latlon_tol=latlon_tol,
+                delta_rng=delta_rng,
+                delta_azi=delta_azi,
+                hmax=hmax,
+                hres=hres,
+                avg_type=avg_type,
+                nvalid_min=nvalid_min,
+                interp_kind=interp_kind,
+                qvp=None,
+            )
 
             if qvp is None:
-                warn('Unable to compute QVP')
+                warn("Unable to compute QVP")
                 return None, None
 
             global_dict = dict()
-            global_dict.update({'start_time': dscfg['timeinfo']})
-            global_dict.update({'radar_out': qvp})
-            dscfg['global_data'] = global_dict
-            dscfg['initialized'] = 1
+            global_dict.update({"start_time": dscfg["timeinfo"]})
+            global_dict.update({"radar_out": qvp})
+            dscfg["global_data"] = global_dict
+            dscfg["initialized"] = 1
         else:
             qvp = pyart.retrieve.compute_svp(
-                radar, field_names, lon, lat, angle,
-                ref_time=dscfg['timeinfo'], ang_tol=ang_tol,
-                latlon_tol=latlon_tol, delta_rng=delta_rng,
-                delta_azi=delta_azi, hmax=hmax, hres=hres, avg_type=avg_type,
-                nvalid_min=nvalid_min, interp_kind=interp_kind,
-                qvp=dscfg['global_data']['radar_out'])
+                radar,
+                field_names,
+                lon,
+                lat,
+                angle,
+                ref_time=dscfg["timeinfo"],
+                ang_tol=ang_tol,
+                latlon_tol=latlon_tol,
+                delta_rng=delta_rng,
+                delta_azi=delta_azi,
+                hmax=hmax,
+                hres=hres,
+                avg_type=avg_type,
+                nvalid_min=nvalid_min,
+                interp_kind=interp_kind,
+                qvp=dscfg["global_data"]["radar_out"],
+            )
 
             if qvp is None:
-                warn('Unable to compute QVP')
+                warn("Unable to compute QVP")
                 return None, None
 
-        dscfg['global_data']['radar_out'] = qvp
+        dscfg["global_data"]["radar_out"] = qvp
 
         new_dataset = dict()
-        new_dataset.update({'radar_out': qvp})
-        new_dataset.update({'radar_type': 'temporal'})
-        new_dataset.update({'start_time': dscfg['global_data']['start_time']})
+        new_dataset.update({"radar_out": qvp})
+        new_dataset.update({"radar_type": "temporal"})
+        new_dataset.update({"start_time": dscfg["global_data"]["start_time"]})
 
         return new_dataset, ind_rad
 
     if procstatus == 2:
-        if not dscfg['initialized']:
+        if not dscfg["initialized"]:
             return None, None
 
-        for datatypedescr in dscfg['datatype']:
+        for datatypedescr in dscfg["datatype"]:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             break
 
         ind_rad = int(radarnr[5:8]) - 1
 
-        svp = dscfg['global_data']['radar_out']
+        svp = dscfg["global_data"]["radar_out"]
 
         new_dataset = dict()
-        new_dataset.update({'radar_out': svp})
-        new_dataset.update({'radar_type': 'final'})
-        new_dataset.update({'start_time': dscfg['global_data']['start_time']})
+        new_dataset.update({"radar_out": svp})
+        new_dataset.update({"radar_type": "final"})
+        new_dataset.update({"start_time": dscfg["global_data"]["start_time"]})
 
         return new_dataset, ind_rad
 
@@ -1050,78 +1180,93 @@ def process_time_height(procstatus, dscfg, radar_list=None):
 
     if procstatus == 1:
         field_names = []
-        for datatypedescr in dscfg['datatype']:
+        for datatypedescr in dscfg["datatype"]:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             field_names.append(get_fieldname_pyart(datatype))
 
         ind_rad = int(radarnr[5:8]) - 1
 
         if (radar_list is None) or (radar_list[ind_rad] is None):
-            warn('ERROR: No valid radar')
+            warn("ERROR: No valid radar")
             return None, None
 
         radar = radar_list[ind_rad]
 
         # default parameters
-        lon = dscfg['lon']
-        lat = dscfg['lat']
-        latlon_tol = dscfg.get('latlon_tol', 0.0005)
-        hmax = dscfg.get('hmax', 10000.)
-        hres = dscfg.get('hres', 50.)
-        interp_kind = dscfg.get('interp_kind', 'none')
+        lon = dscfg["lon"]
+        lat = dscfg["lat"]
+        latlon_tol = dscfg.get("latlon_tol", 0.0005)
+        hmax = dscfg.get("hmax", 10000.0)
+        hres = dscfg.get("hres", 50.0)
+        interp_kind = dscfg.get("interp_kind", "none")
 
         # initialize dataset
-        if not dscfg['initialized']:
+        if not dscfg["initialized"]:
             qvp = pyart.retrieve.compute_vp(
-                radar, field_names, lon, lat, ref_time=dscfg['timeinfo'],
-                latlon_tol=latlon_tol, hmax=hmax, hres=hres,
-                interp_kind=interp_kind, qvp=None)
+                radar,
+                field_names,
+                lon,
+                lat,
+                ref_time=dscfg["timeinfo"],
+                latlon_tol=latlon_tol,
+                hmax=hmax,
+                hres=hres,
+                interp_kind=interp_kind,
+                qvp=None,
+            )
 
             if qvp is None:
-                warn('Unable to compute QVP')
+                warn("Unable to compute QVP")
                 return None, None
 
             global_dict = dict()
-            global_dict.update({'start_time': dscfg['timeinfo']})
-            global_dict.update({'radar_out': qvp})
-            dscfg['global_data'] = global_dict
-            dscfg['initialized'] = 1
+            global_dict.update({"start_time": dscfg["timeinfo"]})
+            global_dict.update({"radar_out": qvp})
+            dscfg["global_data"] = global_dict
+            dscfg["initialized"] = 1
         else:
             qvp = pyart.retrieve.compute_vp(
-                radar, field_names, lon, lat, ref_time=dscfg['timeinfo'],
-                latlon_tol=latlon_tol, hmax=hmax, hres=hres,
+                radar,
+                field_names,
+                lon,
+                lat,
+                ref_time=dscfg["timeinfo"],
+                latlon_tol=latlon_tol,
+                hmax=hmax,
+                hres=hres,
                 interp_kind=interp_kind,
-                qvp=dscfg['global_data']['radar_out'])
+                qvp=dscfg["global_data"]["radar_out"],
+            )
 
             if qvp is None:
-                warn('Unable to compute QVP')
+                warn("Unable to compute QVP")
                 return None, None
 
-        dscfg['global_data']['radar_out'] = qvp
+        dscfg["global_data"]["radar_out"] = qvp
 
         new_dataset = dict()
-        new_dataset.update({'radar_out': qvp})
-        new_dataset.update({'radar_type': 'temporal'})
-        new_dataset.update({'start_time': dscfg['global_data']['start_time']})
+        new_dataset.update({"radar_out": qvp})
+        new_dataset.update({"radar_type": "temporal"})
+        new_dataset.update({"start_time": dscfg["global_data"]["start_time"]})
 
         return new_dataset, ind_rad
 
     if procstatus == 2:
-        if not dscfg['initialized']:
+        if not dscfg["initialized"]:
             return None, None
 
-        for datatypedescr in dscfg['datatype']:
+        for datatypedescr in dscfg["datatype"]:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             break
 
         ind_rad = int(radarnr[5:8]) - 1
 
-        qvp = dscfg['global_data']['radar_out']
+        qvp = dscfg["global_data"]["radar_out"]
 
         new_dataset = dict()
-        new_dataset.update({'radar_out': qvp})
-        new_dataset.update({'radar_type': 'final'})
-        new_dataset.update({'start_time': dscfg['global_data']['start_time']})
+        new_dataset.update({"radar_out": qvp})
+        new_dataset.update({"radar_type": "final"})
+        new_dataset.update({"start_time": dscfg["global_data"]["start_time"]})
 
         return new_dataset, ind_rad
 
@@ -1170,107 +1315,119 @@ def process_ts_along_coord(procstatus, dscfg, radar_list=None):
         return None, None
 
     if procstatus == 1:
-        radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
+        radarnr, _, datatype, _, _ = get_datatype_fields(dscfg["datatype"][0])
         field_names = []
-        for datatypedescr in dscfg['datatype']:
+        for datatypedescr in dscfg["datatype"]:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             field_names.append(get_fieldname_pyart(datatype))
 
         ind_rad = int(radarnr[5:8]) - 1
 
         if (radar_list is None) or (radar_list[ind_rad] is None):
-            warn('ERROR: No valid radar')
+            warn("ERROR: No valid radar")
             return None, None
 
         radar = radar_list[ind_rad]
 
-        mode = dscfg.get('mode', 'ALONG_AZI')
-        if mode == 'ALONG_RNG':
-            value_start = dscfg.get('value_start', 0.)
-            value_stop = dscfg.get('value_stop', radar.range['data'][-1])
-            ang_tol = dscfg.get('AngTol', 1.)
-            rng_tol = dscfg.get('RngTol', 50.)
-            fixed_range = dscfg.get('fixed_range', None)
-            fixed_azimuth = dscfg.get('fixed_azimuth', 0.)
-            fixed_elevation = dscfg.get('fixed_elevation', 0.)
-        elif mode == 'ALONG_AZI':
-            value_start = dscfg.get(
-                'value_start', np.min(radar.azimuth['data']))
-            value_stop = dscfg.get(
-                'value_stop', np.max(radar.azimuth['data']))
-            ang_tol = dscfg.get('AngTol', 1.)
-            rng_tol = dscfg.get('RngTol', 50.)
-            fixed_range = dscfg.get('fixed_range', 0.)
-            fixed_azimuth = dscfg.get('fixed_azimuth', None)
-            fixed_elevation = dscfg.get('fixed_elevation', 0.)
-        elif mode == 'ALONG_ELE':
-            value_start = dscfg.get(
-                'value_start', np.min(radar.elevation['data']))
-            value_stop = dscfg.get(
-                'value_stop', np.max(radar.elevation['data']))
-            ang_tol = dscfg.get('AngTol', 1.)
-            rng_tol = dscfg.get('RngTol', 50.)
-            fixed_range = dscfg.get('fixed_range', 0.)
-            fixed_azimuth = dscfg.get('fixed_azimuth', 0.)
-            fixed_elevation = dscfg.get('fixed_elevation', None)
+        mode = dscfg.get("mode", "ALONG_AZI")
+        if mode == "ALONG_RNG":
+            value_start = dscfg.get("value_start", 0.0)
+            value_stop = dscfg.get("value_stop", radar.range["data"][-1])
+            ang_tol = dscfg.get("AngTol", 1.0)
+            rng_tol = dscfg.get("RngTol", 50.0)
+            fixed_range = dscfg.get("fixed_range", None)
+            fixed_azimuth = dscfg.get("fixed_azimuth", 0.0)
+            fixed_elevation = dscfg.get("fixed_elevation", 0.0)
+        elif mode == "ALONG_AZI":
+            value_start = dscfg.get("value_start", np.min(radar.azimuth["data"]))
+            value_stop = dscfg.get("value_stop", np.max(radar.azimuth["data"]))
+            ang_tol = dscfg.get("AngTol", 1.0)
+            rng_tol = dscfg.get("RngTol", 50.0)
+            fixed_range = dscfg.get("fixed_range", 0.0)
+            fixed_azimuth = dscfg.get("fixed_azimuth", None)
+            fixed_elevation = dscfg.get("fixed_elevation", 0.0)
+        elif mode == "ALONG_ELE":
+            value_start = dscfg.get("value_start", np.min(radar.elevation["data"]))
+            value_stop = dscfg.get("value_stop", np.max(radar.elevation["data"]))
+            ang_tol = dscfg.get("AngTol", 1.0)
+            rng_tol = dscfg.get("RngTol", 50.0)
+            fixed_range = dscfg.get("fixed_range", 0.0)
+            fixed_azimuth = dscfg.get("fixed_azimuth", 0.0)
+            fixed_elevation = dscfg.get("fixed_elevation", None)
         else:
-            warn('Unknown plotting mode ' + dscfg['mode'])
+            warn("Unknown plotting mode " + dscfg["mode"])
             return None, None
 
         # initialize dataset
-        if not dscfg['initialized']:
+        if not dscfg["initialized"]:
             acoord = pyart.retrieve.compute_ts_along_coord(
-                radar, field_names, mode=mode, fixed_range=fixed_range,
-                fixed_azimuth=fixed_azimuth, fixed_elevation=fixed_elevation,
-                ang_tol=ang_tol, rng_tol=rng_tol, value_start=value_start,
-                value_stop=value_stop, ref_time=dscfg['timeinfo'],
-                acoord=None)
+                radar,
+                field_names,
+                mode=mode,
+                fixed_range=fixed_range,
+                fixed_azimuth=fixed_azimuth,
+                fixed_elevation=fixed_elevation,
+                ang_tol=ang_tol,
+                rng_tol=rng_tol,
+                value_start=value_start,
+                value_stop=value_stop,
+                ref_time=dscfg["timeinfo"],
+                acoord=None,
+            )
 
             if acoord is None:
-                warn('Unable to compute time series along coordinate')
+                warn("Unable to compute time series along coordinate")
                 return None, None
 
             global_dict = dict()
-            global_dict.update({'start_time': dscfg['timeinfo']})
-            global_dict.update({'radar_out': acoord})
-            dscfg['global_data'] = global_dict
-            dscfg['initialized'] = 1
+            global_dict.update({"start_time": dscfg["timeinfo"]})
+            global_dict.update({"radar_out": acoord})
+            dscfg["global_data"] = global_dict
+            dscfg["initialized"] = 1
         else:
             acoord = pyart.retrieve.compute_ts_along_coord(
-                radar, field_names, mode=mode, fixed_range=fixed_range,
-                fixed_azimuth=fixed_azimuth, fixed_elevation=fixed_elevation,
-                ang_tol=ang_tol, rng_tol=rng_tol, value_start=value_start,
-                value_stop=value_stop, ref_time=dscfg['timeinfo'],
-                acoord=dscfg['global_data']['radar_out'])
+                radar,
+                field_names,
+                mode=mode,
+                fixed_range=fixed_range,
+                fixed_azimuth=fixed_azimuth,
+                fixed_elevation=fixed_elevation,
+                ang_tol=ang_tol,
+                rng_tol=rng_tol,
+                value_start=value_start,
+                value_stop=value_stop,
+                ref_time=dscfg["timeinfo"],
+                acoord=dscfg["global_data"]["radar_out"],
+            )
 
             if acoord is None:
-                warn('Unable to compute time series along coordinate')
+                warn("Unable to compute time series along coordinate")
                 return None, None
 
-        dscfg['global_data']['radar_out'] = acoord
+        dscfg["global_data"]["radar_out"] = acoord
 
         new_dataset = dict()
-        new_dataset.update({'radar_out': acoord})
-        new_dataset.update({'radar_type': 'temporal'})
-        new_dataset.update({'start_time': dscfg['global_data']['start_time']})
+        new_dataset.update({"radar_out": acoord})
+        new_dataset.update({"radar_type": "temporal"})
+        new_dataset.update({"start_time": dscfg["global_data"]["start_time"]})
 
         return new_dataset, ind_rad
 
     if procstatus == 2:
-        if not dscfg['initialized']:
+        if not dscfg["initialized"]:
             return None, None
 
-        for datatypedescr in dscfg['datatype']:
+        for datatypedescr in dscfg["datatype"]:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
             break
 
         ind_rad = int(radarnr[5:8]) - 1
 
-        acoord = dscfg['global_data']['radar_out']
+        acoord = dscfg["global_data"]["radar_out"]
 
         new_dataset = dict()
-        new_dataset.update({'radar_out': acoord})
-        new_dataset.update({'radar_type': 'final'})
-        new_dataset.update({'start_time': dscfg['global_data']['start_time']})
+        new_dataset.update({"radar_out": acoord})
+        new_dataset.update({"radar_type": "final"})
+        new_dataset.update({"start_time": dscfg["global_data"]["start_time"]})
 
         return new_dataset, ind_rad

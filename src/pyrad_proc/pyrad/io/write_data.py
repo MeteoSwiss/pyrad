@@ -59,11 +59,14 @@ from urllib.parse import urlparse
 from warnings import warn
 import smtplib
 from email.message import EmailMessage
+
 try:
     import fcntl
+
     FCNTL_AVAIL = True
 except ModuleNotFoundError:
-    import msvcrt # For windows
+    import msvcrt  # For windows
+
     FCNTL_AVAIL = False
 import errno
 import time
@@ -80,19 +83,21 @@ from .io_aux import generate_field_name_str
 
 try:
     import simplekml
+
     _SIMPLEKML_AVAILABLE = True
 except ImportError:
     _SIMPLEKML_AVAILABLE = False
 
 try:
     import boto3
+
     _BOTO3_AVAILABLE = True
 except ImportError:
-    warn('boto3 is not installed, no copy to S3 bucket will be performed!')
+    warn("boto3 is not installed, no copy to S3 bucket will be performed!")
     _BOTO3_AVAILABLE = False
 
 
-def write_to_s3(fname, basepath, s3copypath, s3accesspolicy = None):
+def write_to_s3(fname, basepath, s3copypath, s3accesspolicy=None):
     """
     Copies a locally stored product to a S3 bucket
 
@@ -112,38 +117,40 @@ def write_to_s3(fname, basepath, s3copypath, s3accesspolicy = None):
         Default is to use nothing which will inherit the policy of the bucket
     """
     if not _BOTO3_AVAILABLE:
-        warn('boto3 not installed, aborting writing to s3')
+        warn("boto3 not installed, aborting writing to s3")
         return
 
     try:
-        aws_key = os.environ['AWS_KEY']
-        aws_secret = os.environ['AWS_SECRET']
+        aws_key = os.environ["AWS_KEY"]
+        aws_secret = os.environ["AWS_SECRET"]
     except KeyError:
-        warn('In order to be able to save to an S3 bucket')
-        warn('you need to define the environment variables AWS_KEY and AWS_SECRET')
-        warn('Saving to S3 failed...')
+        warn("In order to be able to save to an S3 bucket")
+        warn("you need to define the environment variables AWS_KEY and AWS_SECRET")
+        warn("Saving to S3 failed...")
         return
-    
-    bucket = s3copypath.split('//')[1].split('.')[0]
-    endpoint_raw = s3copypath.replace(bucket + '.', '')
-    add_path = endpoint_raw.replace(urlparse(endpoint_raw).netloc, '').split('///')[1]
-    endpoint = endpoint_raw.replace(add_path, '')
-    s3fname = add_path + fname.replace(basepath, '')
-    if s3fname.startswith('/'): # Remove leading /
+
+    bucket = s3copypath.split("//")[1].split(".")[0]
+    endpoint_raw = s3copypath.replace(bucket + ".", "")
+    add_path = endpoint_raw.replace(urlparse(endpoint_raw).netloc, "").split("///")[1]
+    endpoint = endpoint_raw.replace(add_path, "")
+    s3fname = add_path + fname.replace(basepath, "")
+    if s3fname.startswith("/"):  # Remove leading /
         s3fname = s3fname[1:]
     linode_obj_config = {
         "aws_access_key_id": aws_key,
         "endpoint_url": endpoint,
-        "aws_secret_access_key": aws_secret}
-    
-    s3_client = boto3.client("s3", **linode_obj_config, verify = False)
+        "aws_secret_access_key": aws_secret,
+    }
+
+    s3_client = boto3.client("s3", **linode_obj_config, verify=False)
     if s3accesspolicy:
-        ExtraArgs = {'ACL': s3accesspolicy}
+        ExtraArgs = {"ACL": s3accesspolicy}
     else:
         ExtraArgs = None
     s3_client.upload_file(fname, bucket, s3fname, ExtraArgs=ExtraArgs)
-    print(f'----- copying {fname} to {s3copypath + s3fname}')
-    
+    print(f"----- copying {fname} to {s3copypath + s3fname}")
+
+
 def write_vol_csv(fname, radar, field_name, ignore_masked=False):
     """
     Creates a kml file with the radar volume data
@@ -166,14 +173,14 @@ def write_vol_csv(fname, radar, field_name, ignore_masked=False):
 
     """
     df = pd.DataFrame()
-    df['lon'] = radar.gate_longitude['data'][0, :]
-    df['lat'] = radar.gate_latitude['data'][0, :]
-    df['alt'] = radar.gate_altitude['data'][0, :]
-    if radar.azimuth['data'].size == df.shape[0]:
-        df['azi'] = radar.azimuth['data']
-        df['ele'] = radar.elevation['data']
-    df['rng'] = radar.range['data']
-    df[field_name] = radar.fields[field_name]['data'][0, :]
+    df["lon"] = radar.gate_longitude["data"][0, :]
+    df["lat"] = radar.gate_latitude["data"][0, :]
+    df["alt"] = radar.gate_altitude["data"][0, :]
+    if radar.azimuth["data"].size == df.shape[0]:
+        df["azi"] = radar.azimuth["data"]
+        df["ele"] = radar.elevation["data"]
+    df["rng"] = radar.range["data"]
+    df[field_name] = radar.fields[field_name]["data"][0, :]
 
     if ignore_masked:
         df.dropna(inplace=True)
@@ -183,8 +190,9 @@ def write_vol_csv(fname, radar, field_name, ignore_masked=False):
     return fname
 
 
-def write_vol_kml(fname, radar, field_name, ignore_masked=False,
-                  rng_res_km=0.24, azi_res=0.5):
+def write_vol_kml(
+    fname, radar, field_name, ignore_masked=False, rng_res_km=0.24, azi_res=0.5
+):
     """
     Creates a kml file with the radar volume data
 
@@ -210,71 +218,87 @@ def write_vol_kml(fname, radar, field_name, ignore_masked=False,
 
     """
     if not _SIMPLEKML_AVAILABLE:
-        warn('simplekml module required to write kml files')
+        warn("simplekml module required to write kml files")
         return None
 
     df = pd.DataFrame()
-    df['lon'] = radar.gate_longitude['data'][0, :]
-    df['lat'] = radar.gate_latitude['data'][0, :]
-    df['alt'] = radar.gate_altitude['data'][0, :]
-    if radar.azimuth['data'].size == df.shape[0]:
-        df['azi'] = radar.azimuth['data']
-        df['ele'] = radar.elevation['data']
-    df['rng'] = radar.range['data']
-    df[field_name] = radar.fields[field_name]['data'][0, :]
+    df["lon"] = radar.gate_longitude["data"][0, :]
+    df["lat"] = radar.gate_latitude["data"][0, :]
+    df["alt"] = radar.gate_altitude["data"][0, :]
+    if radar.azimuth["data"].size == df.shape[0]:
+        df["azi"] = radar.azimuth["data"]
+        df["ele"] = radar.elevation["data"]
+    df["rng"] = radar.range["data"]
+    df[field_name] = radar.fields[field_name]["data"][0, :]
 
     if ignore_masked:
         df.dropna(inplace=True)
 
     x1, y1, z1 = antenna_to_cartesian(
-        df['rng'].values / 1000. - rng_res_km / 2., df['azi'].values - azi_res / 2,
-        df['ele'].values)
+        df["rng"].values / 1000.0 - rng_res_km / 2.0,
+        df["azi"].values - azi_res / 2,
+        df["ele"].values,
+    )
     x2, y2, z2 = antenna_to_cartesian(
-        df['rng'].values / 1000. - rng_res_km / 2., df['azi'].values + azi_res / 2,
-        df['ele'].values)
+        df["rng"].values / 1000.0 - rng_res_km / 2.0,
+        df["azi"].values + azi_res / 2,
+        df["ele"].values,
+    )
     x3, y3, z3 = antenna_to_cartesian(
-        df['rng'].values / 1000. + rng_res_km / 2., df['azi'].values + azi_res / 2,
-        df['ele'].values)
+        df["rng"].values / 1000.0 + rng_res_km / 2.0,
+        df["azi"].values + azi_res / 2,
+        df["ele"].values,
+    )
     x4, y4, z4 = antenna_to_cartesian(
-        df['rng'].values / 1000. + rng_res_km / 2., df['azi'].values - azi_res / 2,
-        df['ele'].values)
+        df["rng"].values / 1000.0 + rng_res_km / 2.0,
+        df["azi"].values - azi_res / 2,
+        df["ele"].values,
+    )
 
     lon1, lat1 = cartesian_to_geographic_aeqd(
-        x1, y1, radar.longitude['data'][0], radar.latitude['data'][0])
+        x1, y1, radar.longitude["data"][0], radar.latitude["data"][0]
+    )
     lon2, lat2 = cartesian_to_geographic_aeqd(
-        x2, y2, radar.longitude['data'][0], radar.latitude['data'][0])
+        x2, y2, radar.longitude["data"][0], radar.latitude["data"][0]
+    )
     lon3, lat3 = cartesian_to_geographic_aeqd(
-        x3, y3, radar.longitude['data'][0], radar.latitude['data'][0])
+        x3, y3, radar.longitude["data"][0], radar.latitude["data"][0]
+    )
     lon4, lat4 = cartesian_to_geographic_aeqd(
-        x4, y4, radar.longitude['data'][0], radar.latitude['data'][0])
+        x4, y4, radar.longitude["data"][0], radar.latitude["data"][0]
+    )
 
-    df['lon1'] = lon1
-    df['lon2'] = lon2
-    df['lon3'] = lon3
-    df['lon4'] = lon4
-    df['lat1'] = lat1
-    df['lat2'] = lat2
-    df['lat3'] = lat3
-    df['lat4'] = lat4
-    df['alt1'] = z1
-    df['alt2'] = z2
-    df['alt3'] = z3
-    df['alt4'] = z4
+    df["lon1"] = lon1
+    df["lon2"] = lon2
+    df["lon3"] = lon3
+    df["lon4"] = lon4
+    df["lat1"] = lat1
+    df["lat2"] = lat2
+    df["lat3"] = lat3
+    df["lat4"] = lat4
+    df["alt1"] = z1
+    df["alt2"] = z2
+    df["alt3"] = z3
+    df["alt4"] = z4
 
     kml = simplekml.Kml()
-    df.apply(lambda X: kml.newpolygon(
-        name=f'azi={X["azi"]}, ele={X["ele"]}, rng={X["rng"]}',
-        outerboundaryis=[
-            (X['lon1'], X['lat1'], X["alt1"]),
-            (X['lon2'], X['lat2'], X["alt2"]),
-            (X['lon3'], X['lat3'], X["alt3"]),
-            (X['lon4'], X['lat4'], X["alt4"]),
-            (X['lon1'], X['lat1'], X["alt1"])],
-        altitudemode='absolute'),
-        axis=1)
+    df.apply(
+        lambda X: kml.newpolygon(
+            name=f'azi={X["azi"]}, ele={X["ele"]}, rng={X["rng"]}',
+            outerboundaryis=[
+                (X["lon1"], X["lat1"], X["alt1"]),
+                (X["lon2"], X["lat2"], X["alt2"]),
+                (X["lon3"], X["lat3"], X["alt3"]),
+                (X["lon4"], X["lat4"], X["alt4"]),
+                (X["lon1"], X["lat1"], X["alt1"]),
+            ],
+            altitudemode="absolute",
+        ),
+        axis=1,
+    )
 
     # color value
-    cmap = cmap_d[get_field_colormap(field_name).split('_')[1]]
+    cmap = cmap_d[get_field_colormap(field_name).split("_")[1]]
     vmin, vmax = get_field_limits(field_name)
     col_number = (df[field_name].values - vmin) / (vmax - vmin)
     for ind, pol in enumerate(kml.features):
@@ -305,18 +329,18 @@ def write_centroids(fname, centroids_dict, var_names):
         the name of the file containing the content
 
     """
-    with open(fname, 'w', newline='') as csvfile:
+    with open(fname, "w", newline="") as csvfile:
         csvfile.write("# Centroids file\n")
         csvfile.write("# Header lines with comments are preceded by '#'\n")
         csvfile.write("#\n")
 
-        field_names = np.append('hydro_type', var_names)
+        field_names = np.append("hydro_type", var_names)
 
         writer = csv.DictWriter(csvfile, field_names)
         writer.writeheader()
 
         for hydro_type in centroids_dict.keys():
-            dict_row = {'hydro_type': hydro_type}
+            dict_row = {"hydro_type": hydro_type}
             for ivar, var_name in enumerate(var_names):
                 dict_row.update({var_name: centroids_dict[hydro_type][ivar]})
             writer.writerow(dict_row)
@@ -343,15 +367,15 @@ def write_proc_periods(start_times, end_times, fname):
         the name of the file containing the content
 
     """
-    with open(fname, 'w', newline='') as csvfile:
-        field_names = ['start_time', 'end_time']
+    with open(fname, "w", newline="") as csvfile:
+        field_names = ["start_time", "end_time"]
         writer = csv.DictWriter(csvfile, field_names)
         writer.writeheader()
 
         for start_time, end_time in zip(start_times, end_times):
             dict_row = {
-                'start_time': start_time.strftime('%Y%m%d%H%M%S'),
-                'end_time': end_time.strftime('%Y%m%d%H%M%S')
+                "start_time": start_time.strftime("%Y%m%d%H%M%S"),
+                "end_time": end_time.strftime("%Y%m%d%H%M%S"),
             }
             writer.writerow(dict_row)
         csvfile.close()
@@ -359,8 +383,7 @@ def write_proc_periods(start_times, end_times, fname):
     return fname
 
 
-def write_fixed_angle(time_data, fixed_angle, rad_lat, rad_lon, rad_alt,
-                      fname):
+def write_fixed_angle(time_data, fixed_angle, rad_lat, rad_lon, rad_alt, fname):
     """
     writes an output file with the fixed angle data
 
@@ -383,36 +406,50 @@ def write_fixed_angle(time_data, fixed_angle, rad_lat, rad_lon, rad_alt,
     """
     filelist = glob.glob(fname)
     if not filelist:
-        with open(fname, 'w', newline='') as csvfile:
-            fieldnames = [
-                'date_time', 'rad_lat', 'rad_lon', 'rad_alt', 'fixed_angle']
+        with open(fname, "w", newline="") as csvfile:
+            fieldnames = ["date_time", "rad_lat", "rad_lon", "rad_alt", "fixed_angle"]
             writer = csv.DictWriter(csvfile, fieldnames)
             writer.writeheader()
-            writer.writerow({
-                'date_time': time_data.strftime('%Y%m%d%H%M%S'),
-                'rad_lat': rad_lat,
-                'rad_lon': rad_lon,
-                'rad_alt': rad_alt,
-                'fixed_angle': fixed_angle})
+            writer.writerow(
+                {
+                    "date_time": time_data.strftime("%Y%m%d%H%M%S"),
+                    "rad_lat": rad_lat,
+                    "rad_lon": rad_lon,
+                    "rad_alt": rad_alt,
+                    "fixed_angle": fixed_angle,
+                }
+            )
 
             csvfile.close()
     else:
-        with open(fname, 'a', newline='') as csvfile:
-            fieldnames = [
-                'date_time', 'rad_lat', 'rad_lon', 'rad_alt', 'fixed_angle']
+        with open(fname, "a", newline="") as csvfile:
+            fieldnames = ["date_time", "rad_lat", "rad_lon", "rad_alt", "fixed_angle"]
             writer = csv.DictWriter(csvfile, fieldnames)
-            writer.writerow({
-                'date_time': time_data.strftime('%Y%m%d%H%M%S'),
-                'rad_lat': rad_lat,
-                'rad_lon': rad_lon,
-                'rad_alt': rad_alt,
-                'fixed_angle': fixed_angle})
+            writer.writerow(
+                {
+                    "date_time": time_data.strftime("%Y%m%d%H%M%S"),
+                    "rad_lat": rad_lat,
+                    "rad_lon": rad_lon,
+                    "rad_alt": rad_alt,
+                    "fixed_angle": fixed_angle,
+                }
+            )
 
             csvfile.close()
 
 
-def write_ts_lightning(flashnr, time_data, time_in_flash, lat, lon, alt, dBm,
-                       vals_list, fname, pol_vals_labels):
+def write_ts_lightning(
+    flashnr,
+    time_data,
+    time_in_flash,
+    lat,
+    lon,
+    alt,
+    dBm,
+    vals_list,
+    fname,
+    pol_vals_labels,
+):
     """
     writes the LMA sources data and the value of the colocated polarimetric
     variables
@@ -442,48 +479,54 @@ def write_ts_lightning(flashnr, time_data, time_in_flash, lat, lon, alt, dBm,
         the name of the file containing the content
 
     """
-    with open(fname, 'w', newline='') as csvfile:
+    with open(fname, "w", newline="") as csvfile:
         vals_list_aux = []
         for j, label in enumerate(pol_vals_labels):
-            vals_list_aux.append(
-                vals_list[j].filled(fill_value=get_fillvalue()))
+            vals_list_aux.append(vals_list[j].filled(fill_value=get_fillvalue()))
 
         csvfile.write("# Weather radar timeseries data file\n")
         csvfile.write("# Project: MALSplus\n")
         if time_data.size > 0:
-            csvfile.write("# Start : %s UTC\n" %
-                          time_data[0].strftime("%Y-%m-%d %H:%M:%S"))
-            csvfile.write("# End   : %s UTC\n" %
-                          time_data[-1].strftime("%Y-%m-%d %H:%M:%S"))
+            csvfile.write(
+                "# Start : %s UTC\n" % time_data[0].strftime("%Y-%m-%d %H:%M:%S")
+            )
+            csvfile.write(
+                "# End   : %s UTC\n" % time_data[-1].strftime("%Y-%m-%d %H:%M:%S")
+            )
         csvfile.write("# Header lines with comments are preceded by '#'\n")
         csvfile.write("#\n")
 
         field_names = [
-            'flashnr', 'time_data', 'time_in_flash', 'lat', 'lon', 'alt',
-            'dBm']
+            "flashnr",
+            "time_data",
+            "time_in_flash",
+            "lat",
+            "lon",
+            "alt",
+            "dBm",
+        ]
         field_names.extend(pol_vals_labels)
 
         writer = csv.DictWriter(csvfile, field_names)
         writer.writeheader()
 
-        if flashnr.size == 0.:
-            warn('No data to write in file ' + fname)
+        if flashnr.size == 0.0:
+            warn("No data to write in file " + fname)
             csvfile.close()
             return fname
 
         for i, flash in enumerate(flashnr):
             dict_row = {
-                'flashnr': int(flash),
-                'time_data': time_data[i].strftime('%Y-%m-%d %H:%M:%S.%f'),
-                'time_in_flash': time_in_flash[i],
-                'lat': lat[i],
-                'lon': lon[i],
-                'alt': alt[i],
-                'dBm': dBm[i],
+                "flashnr": int(flash),
+                "time_data": time_data[i].strftime("%Y-%m-%d %H:%M:%S.%f"),
+                "time_in_flash": time_in_flash[i],
+                "lat": lat[i],
+                "lon": lon[i],
+                "alt": alt[i],
+                "dBm": dBm[i],
             }
             for j, label in enumerate(pol_vals_labels):
-                dict_row.update(
-                    {label: vals_list_aux[j][i]})
+                dict_row.update({label: vals_list_aux[j][i]})
 
             writer.writerow(dict_row)
         csvfile.close()
@@ -514,9 +557,9 @@ def send_msg(sender, receiver_list, subject, fname):
     """
     # Create the container email message.
     msg = EmailMessage()
-    msg['Subject'] = subject
-    msg['From'] = sender
-    msg['To'] = ', '.join(receiver_list)
+    msg["Subject"] = subject
+    msg["From"] = sender
+    msg["To"] = ", ".join(receiver_list)
 
     # Open the plain text file whose name is in fname for reading.
     with open(fname) as fp:
@@ -524,15 +567,26 @@ def send_msg(sender, receiver_list, subject, fname):
         msg.set_content(fp.read())
 
     # Send the message via our own SMTP server.
-    with smtplib.SMTP('localhost') as s:
+    with smtplib.SMTP("localhost") as s:
         s.send_message(msg)
 
     return fname
 
 
-def write_alarm_msg(radar_name, param_name_unit, date_last, target, tol_abs,
-                    np_trend, value_trend, tol_trend, nevents, np_last,
-                    value_last, fname):
+def write_alarm_msg(
+    radar_name,
+    param_name_unit,
+    date_last,
+    target,
+    tol_abs,
+    np_trend,
+    value_trend,
+    tol_trend,
+    nevents,
+    np_last,
+    value_last,
+    fname,
+):
     """
     writes an alarm file
 
@@ -565,31 +619,33 @@ def write_alarm_msg(radar_name, param_name_unit, date_last, target, tol_abs,
         the name of the file where data has written
 
     """
-    with open(fname, 'w', newline='') as txtfile:
-        txtfile.write(
-            'Weather radar polarimetric parameters monitoring alarm\n')
+    with open(fname, "w", newline="") as txtfile:
+        txtfile.write("Weather radar polarimetric parameters monitoring alarm\n")
         if radar_name is not None:
-            txtfile.write('Radar name: ' + radar_name + '\n')
-        txtfile.write('Parameter [Unit]: ' + param_name_unit + '\n')
-        txtfile.write('Date : ' + date_last.strftime('%Y%m%d') + '\n')
-        txtfile.write(
-            'Target value: ' +
-            str(target) +
-            ' +/- ' +
-            str(tol_abs) +
-            '\n')
+            txtfile.write("Radar name: " + radar_name + "\n")
+        txtfile.write("Parameter [Unit]: " + param_name_unit + "\n")
+        txtfile.write("Date : " + date_last.strftime("%Y%m%d") + "\n")
+        txtfile.write("Target value: " + str(target) + " +/- " + str(tol_abs) + "\n")
         if np_trend > 0:
             txtfile.write(
-                'Number of points in trend: ' + str(np_trend) + ' in ' +
-                str(nevents) + ' events\n')
+                "Number of points in trend: "
+                + str(np_trend)
+                + " in "
+                + str(nevents)
+                + " events\n"
+            )
             txtfile.write(
-                'Trend value: ' + str(value_trend) + ' (tolerance: +/- ' +
-                str(tol_trend) + ')\n')
+                "Trend value: "
+                + str(value_trend)
+                + " (tolerance: +/- "
+                + str(tol_trend)
+                + ")\n"
+            )
         else:
-            txtfile.write('Number of points in trend: NA\n')
-            txtfile.write('Trend value: NA\n')
-        txtfile.write('Number of points: ' + str(np_last) + '\n')
-        txtfile.write('Value: ' + str(value_last) + '\n')
+            txtfile.write("Number of points in trend: NA\n")
+            txtfile.write("Trend value: NA\n")
+        txtfile.write("Number of points: " + str(np_last) + "\n")
+        txtfile.write("Value: " + str(value_last) + "\n")
 
         txtfile.close()
 
@@ -614,13 +670,13 @@ def write_last_state(datetime_last, fname):
 
     """
     try:
-        with open(fname, 'w', newline='') as txtfile:
-            txtfile.write(datetime_last.strftime('%Y%m%d%H%M%S'))
+        with open(fname, "w", newline="") as txtfile:
+            txtfile.write(datetime_last.strftime("%Y%m%d%H%M%S"))
             txtfile.close()
 
             return fname
     except EnvironmentError:
-        warn('Unable to write on file ' + fname)
+        warn("Unable to write on file " + fname)
         return None
 
 
@@ -645,23 +701,25 @@ def write_smn(datetime_vec, value_avg_vec, value_std_vec, fname):
         the name of the file where data has written
 
     """
-    with open(fname, 'w', newline='') as csvfile:
-        fieldnames = ['datetime', 'avg', 'std']
+    with open(fname, "w", newline="") as csvfile:
+        fieldnames = ["datetime", "avg", "std"]
         writer = csv.DictWriter(csvfile, fieldnames)
         writer.writeheader()
         for i, value_avg in enumerate(value_avg_vec):
-            writer.writerow({
-                'datetime': datetime_vec[i].strftime('%Y%m%d%H%M%S'),
-                'avg': value_avg,
-                'std': value_std_vec[i]})
+            writer.writerow(
+                {
+                    "datetime": datetime_vec[i].strftime("%Y%m%d%H%M%S"),
+                    "avg": value_avg,
+                    "std": value_std_vec[i],
+                }
+            )
 
         csvfile.close()
 
     return fname
 
 
-def write_timeseries_point(fname, data, dstype, text, timeformat=None,
-                           timeinfo=None):
+def write_timeseries_point(fname, data, dstype, text, timeformat=None, timeinfo=None):
     """
     Write one timesample of a time series to a file
 
@@ -690,24 +748,23 @@ def write_timeseries_point(fname, data, dstype, text, timeformat=None,
 
     """
 
-    datatime = data['time'].strftime("%Y-%m-%d %H:%M:%S")
-    data['value']
+    datatime = data["time"].strftime("%Y-%m-%d %H:%M:%S")
+    data["value"]
     datatypename = dstype
-    unit = data['unit']
+    unit = data["unit"]
 
     print("----- Write timeseries ", fname)
 
     if not os.path.isfile(fname):
         # File does not exist. Open it and fill in header info.
-        with open(fname, 'w', newline='') as csvfile:
+        with open(fname, "w", newline="") as csvfile:
             csvfile.write("# Weather radar timeseries data file\n")
             csvfile.write("# Project: MALSplus\n")
-            csvfile.write(
-                "# Data/Unit : " + datatypename + " [" + unit + "]\n")
+            csvfile.write("# Data/Unit : " + datatypename + " [" + unit + "]\n")
             csvfile.write("# Start : " + datatime + " UTC\n")
             csvfile.write("# Header lines with comments are preceded by '#'\n")
             for line in text:
-                csvfile.write("# " + line + '\n')
+                csvfile.write("# " + line + "\n")
             csvfile.write("#\n")
 
             if timeformat is None:
@@ -720,13 +777,13 @@ def write_timeseries_point(fname, data, dstype, text, timeformat=None,
                 tformat = timeformat
                 time_str = datatime.strftime(tformat)
 
-            for label in data['label']:
+            for label in data["label"]:
                 label_str = label_str + ", " + label
-            csvfile.write(label_str + '\n')
+            csvfile.write(label_str + "\n")
 
-            for value in data['value']:
-                time_str = time_str + ", " + ('%.4f' % value)
-            csvfile.write(time_str + '\n')
+            for value in data["value"]:
+                time_str = time_str + ", " + ("%.4f" % value)
+            csvfile.write(time_str + "\n")
 
     else:
         if timeformat is None:
@@ -737,11 +794,11 @@ def write_timeseries_point(fname, data, dstype, text, timeformat=None,
             tformat = timeformat
             time_str = datatime.strftime(tformat)
 
-        with open(fname, 'a', newline='') as csvfile:
+        with open(fname, "a", newline="") as csvfile:
 
-            for value in data['value']:
-                time_str = time_str + ", " + ('%.4f' % value)
-            csvfile.write(time_str + '\n')
+            for value in data["value"]:
+                time_str = time_str + ", " + ("%.4f" % value)
+            csvfile.write(time_str + "\n")
 
     csvfile.close()
 
@@ -765,19 +822,20 @@ def write_trt_info(ids, max_rank, nscans, time_start, time_end, fname):
         the name of the file where data has written
 
     """
-    with open(fname, 'w', newline='') as csvfile:
-        fieldnames = [
-            'id', 'max_rank', 'nscans_Xband', 'time_start', 'time_end']
+    with open(fname, "w", newline="") as csvfile:
+        fieldnames = ["id", "max_rank", "nscans_Xband", "time_start", "time_end"]
         writer = csv.DictWriter(csvfile, fieldnames)
         writer.writeheader()
         for i, id_cell in enumerate(ids):
-            writer.writerow({
-                'id': id_cell,
-                'max_rank': max_rank[i],
-                'nscans_Xband': nscans[i],
-                'time_start': time_start[i].strftime('%Y%m%d%H%M'),
-                'time_end': time_end[i].strftime('%Y%m%d%H%M')
-            })
+            writer.writerow(
+                {
+                    "id": id_cell,
+                    "max_rank": max_rank[i],
+                    "nscans_Xband": nscans[i],
+                    "time_start": time_start[i].strftime("%Y%m%d%H%M"),
+                    "time_end": time_end[i].strftime("%Y%m%d%H%M"),
+                }
+            )
 
         csvfile.close()
 
@@ -785,10 +843,36 @@ def write_trt_info(ids, max_rank, nscans, time_start, time_end, fname):
 
 
 def write_trt_cell_data(
-        traj_ID, yyyymmddHHMM, lon, lat, ell_L, ell_S, ell_or, area,
-        vel_x, vel_y, det, RANKr, CG_n, CG_p, CG, CG_percent_p, ET45,
-        ET45m, ET15, ET15m, VIL, maxH, maxHm, POH, RANK, Dvel_x,
-        Dvel_y, cell_contour, fname):
+    traj_ID,
+    yyyymmddHHMM,
+    lon,
+    lat,
+    ell_L,
+    ell_S,
+    ell_or,
+    area,
+    vel_x,
+    vel_y,
+    det,
+    RANKr,
+    CG_n,
+    CG_p,
+    CG,
+    CG_percent_p,
+    ET45,
+    ET45m,
+    ET15,
+    ET15m,
+    VIL,
+    maxH,
+    maxHm,
+    POH,
+    RANK,
+    Dvel_x,
+    Dvel_y,
+    cell_contour,
+    fname,
+):
     """
     writes TRT cell data
 
@@ -809,69 +893,125 @@ def write_trt_cell_data(
 
     """
     try:
-        with open(fname, 'w', newline='') as csvfile:
+        with open(fname, "w", newline="") as csvfile:
             fieldnames = [
-                'traj_ID', 'yyyymmddHHMM', 'lon', 'lat', 'ell_L', 'ell_S',
-                'ell_or', 'area', 'vel_x', 'vel_y', 'det', 'RANKr', 'CG-',
-                'CG+', 'CG', '%CG+', 'ET45', 'ET45m', 'ET15', 'ET15m',
-                'VIL', 'maxH', 'maxHm', 'POH', 'RANK', 'Dvel_x', 'Dvel_y',
-                'cell_contour_lon-lat']
+                "traj_ID",
+                "yyyymmddHHMM",
+                "lon",
+                "lat",
+                "ell_L",
+                "ell_S",
+                "ell_or",
+                "area",
+                "vel_x",
+                "vel_y",
+                "det",
+                "RANKr",
+                "CG-",
+                "CG+",
+                "CG",
+                "%CG+",
+                "ET45",
+                "ET45m",
+                "ET15",
+                "ET15m",
+                "VIL",
+                "maxH",
+                "maxHm",
+                "POH",
+                "RANK",
+                "Dvel_x",
+                "Dvel_y",
+                "cell_contour_lon-lat",
+            ]
             writer = csv.DictWriter(csvfile, fieldnames)
             writer.writeheader()
             for i, traj_ID_el in enumerate(traj_ID):
                 cell_contour_aux = cell_contour[i]
-                npoints_contour = len(cell_contour_aux['lon'])
+                npoints_contour = len(cell_contour_aux["lon"])
                 cell_contour_arr = np.empty(2 * npoints_contour, dtype=float)
-                cell_contour_arr[0:-1:2] = cell_contour_aux['lon']
-                cell_contour_arr[1::2] = cell_contour_aux['lat']
+                cell_contour_arr[0:-1:2] = cell_contour_aux["lon"]
+                cell_contour_arr[1::2] = cell_contour_aux["lat"]
                 cell_contour_str = str(cell_contour_arr[0])
                 for j in range(1, 2 * npoints_contour):
-                    cell_contour_str += ' ' + str(cell_contour_arr[j])
+                    cell_contour_str += " " + str(cell_contour_arr[j])
 
-                writer.writerow({
-                    'traj_ID': traj_ID_el,
-                    'yyyymmddHHMM': yyyymmddHHMM[i].strftime('%Y%m%d%H%M'),
-                    'lon': lon[i],
-                    'lat': lat[i],
-                    'ell_L': ell_L[i],
-                    'ell_S': ell_S[i],
-                    'ell_or': ell_or[i],
-                    'area': area[i],
-                    'vel_x': vel_x[i],
-                    'vel_y': vel_y[i],
-                    'det': det[i],
-                    'RANKr': RANKr[i],
-                    'CG-': CG_n[i],
-                    'CG+': CG_p[i],
-                    'CG': CG[i],
-                    '%CG+': CG_percent_p[i],
-                    'ET45': ET45[i],
-                    'ET45m': ET45m[i],
-                    'ET15': ET15[i],
-                    'ET15m': ET15m[i],
-                    'VIL': VIL[i],
-                    'maxH': maxH[i],
-                    'maxHm': maxHm[i],
-                    'POH': POH[i],
-                    'RANK': RANK[i],
-                    'Dvel_x': Dvel_x[i],
-                    'Dvel_y': Dvel_y[i],
-                    'cell_contour_lon-lat': cell_contour_str
-                })
+                writer.writerow(
+                    {
+                        "traj_ID": traj_ID_el,
+                        "yyyymmddHHMM": yyyymmddHHMM[i].strftime("%Y%m%d%H%M"),
+                        "lon": lon[i],
+                        "lat": lat[i],
+                        "ell_L": ell_L[i],
+                        "ell_S": ell_S[i],
+                        "ell_or": ell_or[i],
+                        "area": area[i],
+                        "vel_x": vel_x[i],
+                        "vel_y": vel_y[i],
+                        "det": det[i],
+                        "RANKr": RANKr[i],
+                        "CG-": CG_n[i],
+                        "CG+": CG_p[i],
+                        "CG": CG[i],
+                        "%CG+": CG_percent_p[i],
+                        "ET45": ET45[i],
+                        "ET45m": ET45m[i],
+                        "ET15": ET15[i],
+                        "ET15m": ET15m[i],
+                        "VIL": VIL[i],
+                        "maxH": maxH[i],
+                        "maxHm": maxHm[i],
+                        "POH": POH[i],
+                        "RANK": RANK[i],
+                        "Dvel_x": Dvel_x[i],
+                        "Dvel_y": Dvel_y[i],
+                        "cell_contour_lon-lat": cell_contour_str,
+                    }
+                )
 
             csvfile.close()
 
             return fname
     except EnvironmentError:
-        warn('Unable to write on file ' + fname)
+        warn("Unable to write on file " + fname)
         return None
 
 
 def write_trt_thundertracking_data(
-        traj_ID, scan_ordered_time, scan_time, azi, rng, yyyymmddHHMM, lon,
-        lat, ell_L, ell_S, ell_or, area, vel_x, vel_y, det, RANKr, CG_n, CG_p,
-        CG, CG_percent_p, ET45, ET45m, ET15, ET15m, VIL, maxH, maxHm, POH,
-        RANK, Dvel_x, Dvel_y, cell_contour, fname):
+    traj_ID,
+    scan_ordered_time,
+    scan_time,
+    azi,
+    rng,
+    yyyymmddHHMM,
+    lon,
+    lat,
+    ell_L,
+    ell_S,
+    ell_or,
+    area,
+    vel_x,
+    vel_y,
+    det,
+    RANKr,
+    CG_n,
+    CG_p,
+    CG,
+    CG_percent_p,
+    ET45,
+    ET45m,
+    ET15,
+    ET15m,
+    VIL,
+    maxH,
+    maxHm,
+    POH,
+    RANK,
+    Dvel_x,
+    Dvel_y,
+    cell_contour,
+    fname,
+):
     """
     writes TRT cell data of the thundertracking scan
 
@@ -892,78 +1032,115 @@ def write_trt_thundertracking_data(
 
     """
     try:
-        with open(fname, 'w', newline='') as csvfile:
+        with open(fname, "w", newline="") as csvfile:
             fieldnames = [
-                'traj_ID', 'scan_ordered_time', 'scan_time', 'azi', 'rng',
-                'yyyymmddHHMM', 'lon', 'lat', 'ell_L', 'ell_S', 'ell_or',
-                'area', 'vel_x', 'vel_y', 'det', 'RANKr', 'CG-', 'CG+', 'CG',
-                '%CG+', 'ET45', 'ET45m', 'ET15', 'ET15m', 'VIL', 'maxH',
-                'maxHm', 'POH', 'RANK', 'Dvel_x', 'Dvel_y',
-                'cell_contour_lon-lat']
+                "traj_ID",
+                "scan_ordered_time",
+                "scan_time",
+                "azi",
+                "rng",
+                "yyyymmddHHMM",
+                "lon",
+                "lat",
+                "ell_L",
+                "ell_S",
+                "ell_or",
+                "area",
+                "vel_x",
+                "vel_y",
+                "det",
+                "RANKr",
+                "CG-",
+                "CG+",
+                "CG",
+                "%CG+",
+                "ET45",
+                "ET45m",
+                "ET15",
+                "ET15m",
+                "VIL",
+                "maxH",
+                "maxHm",
+                "POH",
+                "RANK",
+                "Dvel_x",
+                "Dvel_y",
+                "cell_contour_lon-lat",
+            ]
             writer = csv.DictWriter(csvfile, fieldnames)
             writer.writeheader()
             for i, traj_ID_el in enumerate(traj_ID):
                 cell_contour_aux = cell_contour[i]
-                npoints_contour = len(cell_contour_aux['lon'])
+                npoints_contour = len(cell_contour_aux["lon"])
                 cell_contour_arr = np.empty(2 * npoints_contour, dtype=float)
-                cell_contour_arr[0:-1:2] = cell_contour_aux['lon']
-                cell_contour_arr[1::2] = cell_contour_aux['lat']
+                cell_contour_arr[0:-1:2] = cell_contour_aux["lon"]
+                cell_contour_arr[1::2] = cell_contour_aux["lat"]
                 cell_contour_str = str(cell_contour_arr[0])
                 for j in range(1, 2 * npoints_contour):
-                    cell_contour_str += ' ' + str(cell_contour_arr[j])
+                    cell_contour_str += " " + str(cell_contour_arr[j])
 
                 if np.ma.is_masked(scan_time[i]):
                     scan_time_str = get_fillvalue()
                 else:
-                    scan_time_str = scan_time[i].strftime('%Y%m%d%H%M%S')
-                writer.writerow({
-                    'traj_ID': traj_ID_el,
-                    'scan_ordered_time': scan_ordered_time[i].strftime(
-                        '%Y%m%d%H%M%S.%f'),
-                    'scan_time': scan_time_str,
-                    'azi': azi[i],
-                    'rng': rng[i],
-                    'yyyymmddHHMM': yyyymmddHHMM[i].strftime('%Y%m%d%H%M'),
-                    'lon': lon[i],
-                    'lat': lat[i],
-                    'ell_L': ell_L[i],
-                    'ell_S': ell_S[i],
-                    'ell_or': ell_or[i],
-                    'area': area[i],
-                    'vel_x': vel_x[i],
-                    'vel_y': vel_y[i],
-                    'det': det[i],
-                    'RANKr': RANKr[i],
-                    'CG-': CG_n[i],
-                    'CG+': CG_p[i],
-                    'CG': CG[i],
-                    '%CG+': CG_percent_p[i],
-                    'ET45': ET45[i],
-                    'ET45m': ET45m[i],
-                    'ET15': ET15[i],
-                    'ET15m': ET15m[i],
-                    'VIL': VIL[i],
-                    'maxH': maxH[i],
-                    'maxHm': maxHm[i],
-                    'POH': POH[i],
-                    'RANK': RANK[i],
-                    'Dvel_x': Dvel_x[i],
-                    'Dvel_y': Dvel_y[i],
-                    'cell_contour_lon-lat': cell_contour_str
-                })
+                    scan_time_str = scan_time[i].strftime("%Y%m%d%H%M%S")
+                writer.writerow(
+                    {
+                        "traj_ID": traj_ID_el,
+                        "scan_ordered_time": scan_ordered_time[i].strftime(
+                            "%Y%m%d%H%M%S.%f"
+                        ),
+                        "scan_time": scan_time_str,
+                        "azi": azi[i],
+                        "rng": rng[i],
+                        "yyyymmddHHMM": yyyymmddHHMM[i].strftime("%Y%m%d%H%M"),
+                        "lon": lon[i],
+                        "lat": lat[i],
+                        "ell_L": ell_L[i],
+                        "ell_S": ell_S[i],
+                        "ell_or": ell_or[i],
+                        "area": area[i],
+                        "vel_x": vel_x[i],
+                        "vel_y": vel_y[i],
+                        "det": det[i],
+                        "RANKr": RANKr[i],
+                        "CG-": CG_n[i],
+                        "CG+": CG_p[i],
+                        "CG": CG[i],
+                        "%CG+": CG_percent_p[i],
+                        "ET45": ET45[i],
+                        "ET45m": ET45m[i],
+                        "ET15": ET15[i],
+                        "ET15m": ET15m[i],
+                        "VIL": VIL[i],
+                        "maxH": maxH[i],
+                        "maxHm": maxHm[i],
+                        "POH": POH[i],
+                        "RANK": RANK[i],
+                        "Dvel_x": Dvel_x[i],
+                        "Dvel_y": Dvel_y[i],
+                        "cell_contour_lon-lat": cell_contour_str,
+                    }
+                )
 
             csvfile.close()
 
             return fname
     except EnvironmentError:
-        warn('Unable to write on file ' + fname)
+        warn("Unable to write on file " + fname)
         return None
 
 
 def write_trt_cell_scores(
-        traj_ID, flash_density_max_time, flash_density_max_rank,
-        nflashes_max_list, area_flash_max_list, flash_density_max,
-        rank_max_time, rank_max, fname):
+    traj_ID,
+    flash_density_max_time,
+    flash_density_max_rank,
+    nflashes_max_list,
+    area_flash_max_list,
+    flash_density_max,
+    rank_max_time,
+    rank_max,
+    fname,
+):
     """
     writes TRT cells scores
 
@@ -994,27 +1171,34 @@ def write_trt_cell_scores(
         the name of the file where data has written
 
     """
-    with open(fname, 'w', newline='') as csvfile:
+    with open(fname, "w", newline="") as csvfile:
         fieldnames = [
-            'traj ID', 'max flash density time',
-            'max flash density rank', 'max flash density flashes',
-            'max flash density area', 'max flash density', 'max rank time',
-            'max rank']
+            "traj ID",
+            "max flash density time",
+            "max flash density rank",
+            "max flash density flashes",
+            "max flash density area",
+            "max flash density",
+            "max rank time",
+            "max rank",
+        ]
         writer = csv.DictWriter(csvfile, fieldnames)
         writer.writeheader()
         for i, traj_ID_el in enumerate(traj_ID):
-            writer.writerow({
-                'traj ID': traj_ID_el,
-                'max flash density time': flash_density_max_time[i].strftime(
-                    '%Y-%m-%d %H:%M:%S'),
-                'max flash density rank': flash_density_max_rank[i],
-                'max flash density flashes': nflashes_max_list[i],
-                'max flash density area': area_flash_max_list[i],
-                'max flash density': flash_density_max[i],
-                'max rank time': rank_max_time[i].strftime(
-                    '%Y-%m-%d %H:%M:%S'),
-                'max rank': rank_max[i],
-            })
+            writer.writerow(
+                {
+                    "traj ID": traj_ID_el,
+                    "max flash density time": flash_density_max_time[i].strftime(
+                        "%Y-%m-%d %H:%M:%S"
+                    ),
+                    "max flash density rank": flash_density_max_rank[i],
+                    "max flash density flashes": nflashes_max_list[i],
+                    "max flash density area": area_flash_max_list[i],
+                    "max flash density": flash_density_max[i],
+                    "max rank time": rank_max_time[i].strftime("%Y-%m-%d %H:%M:%S"),
+                    "max rank": rank_max[i],
+                }
+            )
 
         csvfile.close()
 
@@ -1022,8 +1206,17 @@ def write_trt_cell_scores(
 
 
 def write_trt_cell_lightning(
-        cell_ID, cell_time, lon, lat, area, rank, nflash, flash_density,
-        fname, timeformat='%Y%m%d%H%M'):
+    cell_ID,
+    cell_time,
+    lon,
+    lat,
+    area,
+    rank,
+    nflash,
+    flash_density,
+    fname,
+    timeformat="%Y%m%d%H%M",
+):
     """
     writes the lightning data for each TRT cell
 
@@ -1054,31 +1247,51 @@ def write_trt_cell_lightning(
     """
     nflash = nflash.filled(fill_value=get_fillvalue())
     flash_density = flash_density.filled(fill_value=get_fillvalue())
-    with open(fname, 'w', newline='') as csvfile:
+    with open(fname, "w", newline="") as csvfile:
         fieldnames = [
-            'traj_ID', 'yyyymmddHHMM', 'lon', 'lat', 'area', 'RANKr',
-            'nflashes', 'flash_dens']
+            "traj_ID",
+            "yyyymmddHHMM",
+            "lon",
+            "lat",
+            "area",
+            "RANKr",
+            "nflashes",
+            "flash_dens",
+        ]
         writer = csv.DictWriter(csvfile, fieldnames)
         writer.writeheader()
         for i, traj_ID_el in enumerate(cell_ID):
-            writer.writerow({
-                'traj_ID': traj_ID_el,
-                'yyyymmddHHMM': cell_time[i].strftime(timeformat),
-                'lon': lon[i],
-                'lat': lat[i],
-                'area': area[i],
-                'RANKr': rank[i],
-                'nflashes': nflash[i],
-                'flash_dens': flash_density[i],
-            })
+            writer.writerow(
+                {
+                    "traj_ID": traj_ID_el,
+                    "yyyymmddHHMM": cell_time[i].strftime(timeformat),
+                    "lon": lon[i],
+                    "lat": lat[i],
+                    "area": area[i],
+                    "RANKr": rank[i],
+                    "nflashes": nflash[i],
+                    "flash_dens": flash_density[i],
+                }
+            )
 
         csvfile.close()
 
     return fname
 
 
-def write_trt_rpc(cell_ID, cell_time, lon, lat, area, rank, hmin, hmax, freq,
-                  fname, timeformat='%Y%m%d%H%M'):
+def write_trt_rpc(
+    cell_ID,
+    cell_time,
+    lon,
+    lat,
+    area,
+    rank,
+    hmin,
+    hmax,
+    freq,
+    fname,
+    timeformat="%Y%m%d%H%M",
+):
     """
     writes the rimed particles column data for a TRT cell
 
@@ -1111,24 +1324,34 @@ def write_trt_rpc(cell_ID, cell_time, lon, lat, area, rank, hmin, hmax, freq,
     hmin = hmin.filled(fill_value=get_fillvalue())
     hmax = hmax.filled(fill_value=get_fillvalue())
     freq = freq.filled(fill_value=get_fillvalue())
-    with open(fname, 'w', newline='') as csvfile:
+    with open(fname, "w", newline="") as csvfile:
         fieldnames = [
-            'traj_ID', 'yyyymmddHHMM', 'lon', 'lat', 'area', 'RANKr',
-            'hmin', 'hmax', 'freq']
+            "traj_ID",
+            "yyyymmddHHMM",
+            "lon",
+            "lat",
+            "area",
+            "RANKr",
+            "hmin",
+            "hmax",
+            "freq",
+        ]
         writer = csv.DictWriter(csvfile, fieldnames)
         writer.writeheader()
         for i, traj_ID_el in enumerate(cell_ID):
-            writer.writerow({
-                'traj_ID': traj_ID_el,
-                'yyyymmddHHMM': cell_time[i].strftime(timeformat),
-                'lon': lon[i],
-                'lat': lat[i],
-                'area': area[i],
-                'RANKr': rank[i],
-                'hmin': hmin[i],
-                'hmax': hmax[i],
-                'freq': freq[i]
-            })
+            writer.writerow(
+                {
+                    "traj_ID": traj_ID_el,
+                    "yyyymmddHHMM": cell_time[i].strftime(timeformat),
+                    "lon": lon[i],
+                    "lat": lat[i],
+                    "area": area[i],
+                    "RANKr": rank[i],
+                    "hmin": hmin[i],
+                    "hmax": hmax[i],
+                    "freq": freq[i],
+                }
+            )
 
         csvfile.close()
 
@@ -1136,13 +1359,8 @@ def write_trt_rpc(cell_ID, cell_time, lon, lat, area, rank, hmin, hmax, freq,
 
 
 def write_vpr_theo_params(
-    vpr_theo_dict,
-    fname,
-    labels=(
-        'ml_top',
-        'ml_bottom',
-        'val_ml_peak',
-        'val_dr')):
+    vpr_theo_dict, fname, labels=("ml_top", "ml_bottom", "val_ml_peak", "val_dr")
+):
     """
     writes the parameters defining a theoretical VPR profile into a csv file
 
@@ -1161,7 +1379,7 @@ def write_vpr_theo_params(
         the name of the file where data has been written
 
     """
-    with open(fname, 'w', newline='') as csvfile:
+    with open(fname, "w", newline="") as csvfile:
         writer = csv.DictWriter(csvfile, labels)
         writer.writeheader()
         data_dict = dict((k, vpr_theo_dict[k]) for k in labels)
@@ -1190,7 +1408,7 @@ def write_vpr_info(vpr_info_dict, fname):
         the name of the file where data has been written
 
     """
-    with open(fname, 'w', newline='') as csvfile:
+    with open(fname, "w", newline="") as csvfile:
         writer = csv.DictWriter(csvfile, vpr_info_dict.keys())
         writer.writeheader()
         writer.writerow(vpr_info_dict)
@@ -1200,8 +1418,9 @@ def write_vpr_info(vpr_info_dict, fname):
     return fname
 
 
-def write_rhi_profile(hvec, data, nvalid_vec, labels, fname, datatype=None,
-                      timeinfo=None, sector=None):
+def write_rhi_profile(
+    hvec, data, nvalid_vec, labels, fname, datatype=None, timeinfo=None, sector=None
+):
     """
     writes the values of an RHI profile in a text file
 
@@ -1233,35 +1452,33 @@ def write_rhi_profile(hvec, data, nvalid_vec, labels, fname, datatype=None,
     data_aux = list()
     for data_points in data:
         data_aux.append(data_points.filled(fill_value=get_fillvalue()))
-    with open(fname, 'w', newline='') as csvfile:
-        csvfile.write('# Height Profile\n')
-        csvfile.write('# ==============\n')
-        csvfile.write('#\n')
+    with open(fname, "w", newline="") as csvfile:
+        csvfile.write("# Height Profile\n")
+        csvfile.write("# ==============\n")
+        csvfile.write("#\n")
         if datatype is None:
-            csvfile.write('# Datatype (Unit) : Not specified\n')
+            csvfile.write("# Datatype (Unit) : Not specified\n")
         else:
-            csvfile.write('# Datatype (Unit) : ' + datatype + '\n')
-        csvfile.write('# Fill value : ' + str(get_fillvalue()) + '\n')
+            csvfile.write("# Datatype (Unit) : " + datatype + "\n")
+        csvfile.write("# Fill value : " + str(get_fillvalue()) + "\n")
         if timeinfo is None:
-            csvfile.write('# Time     : Not specified\n')
+            csvfile.write("# Time     : Not specified\n")
         else:
-            csvfile.write('# Time     : ' +
-                          timeinfo.strftime('%Y-%m-%d %H:%M:%S') + '\n')
+            csvfile.write(
+                "# Time     : " + timeinfo.strftime("%Y-%m-%d %H:%M:%S") + "\n"
+            )
         if sector is None:
-            csvfile.write('# Sector specification: None\n')
+            csvfile.write("# Sector specification: None\n")
         else:
-            csvfile.write('# Sector specification:\n')
-            csvfile.write('#   Azimuth         : ' + str(sector['az']) +
-                          ' deg\n')
-            csvfile.write('#   Range start     : ' +
-                          str(sector['rmin']) + ' m\n')
-            csvfile.write('#   Range stop      : ' +
-                          str(sector['rmax']) + ' m\n')
+            csvfile.write("# Sector specification:\n")
+            csvfile.write("#   Azimuth         : " + str(sector["az"]) + " deg\n")
+            csvfile.write("#   Range start     : " + str(sector["rmin"]) + " m\n")
+            csvfile.write("#   Range stop      : " + str(sector["rmax"]) + " m\n")
 
-        fieldnames = ['Altitude [m MSL]']
+        fieldnames = ["Altitude [m MSL]"]
         fieldnames.extend(labels)
         if nvalid_vec is not None:
-            fieldnames.append('N valid')
+            fieldnames.append("N valid")
         writer = csv.DictWriter(csvfile, fieldnames)
         writer.writeheader()
         for j, height in enumerate(hvec):
@@ -1277,9 +1494,19 @@ def write_rhi_profile(hvec, data, nvalid_vec, labels, fname, datatype=None,
     return fname
 
 
-def write_field_coverage(quantiles, values, ele_start, ele_stop, azi_start,
-                         azi_stop, threshold, nvalid_min, datatype, timeinfo,
-                         fname):
+def write_field_coverage(
+    quantiles,
+    values,
+    ele_start,
+    ele_stop,
+    azi_start,
+    azi_stop,
+    threshold,
+    nvalid_min,
+    datatype,
+    timeinfo,
+    fname,
+):
     """
     writes the quantiles of the coverage on a particular sector
 
@@ -1309,38 +1536,49 @@ def write_field_coverage(quantiles, values, ele_start, ele_stop, azi_start,
         the name of the file where data has written
 
     """
-    with open(fname, 'w', newline='') as csvfile:
-        csvfile.write('# Quantiles of the field coverage\n')
-        csvfile.write('# Datatype (Unit) : ' + datatype + '\n')
+    with open(fname, "w", newline="") as csvfile:
+        csvfile.write("# Quantiles of the field coverage\n")
+        csvfile.write("# Datatype (Unit) : " + datatype + "\n")
+        csvfile.write("# Time : " + timeinfo.strftime("%Y-%m-%d %H:%M:%S") + "\n")
+        csvfile.write("# Sector specification:\n")
+        csvfile.write("#   Azimuth start   : " + str(azi_start) + " deg\n")
+        csvfile.write("#   Azimuth stop    : " + str(azi_stop) + " deg\n")
+        csvfile.write("#   Elevation start : " + str(ele_start) + " deg\n")
+        csvfile.write("#   Elevation stop  : " + str(ele_stop) + " deg\n")
+        csvfile.write("# Threshold : " + str(threshold) + "\n")
         csvfile.write(
-            '# Time : ' +
-            timeinfo.strftime('%Y-%m-%d %H:%M:%S') +
-            '\n')
-        csvfile.write('# Sector specification:\n')
-        csvfile.write('#   Azimuth start   : ' + str(azi_start) + ' deg\n')
-        csvfile.write('#   Azimuth stop    : ' + str(azi_stop) + ' deg\n')
-        csvfile.write('#   Elevation start : ' + str(ele_start) + ' deg\n')
-        csvfile.write('#   Elevation stop  : ' + str(ele_stop) + ' deg\n')
-        csvfile.write('# Threshold : ' + str(threshold) + '\n')
-        csvfile.write('# Minimum number of valid gates per ray : ' +
-                      str(nvalid_min) + '\n')
-        fieldnames = ['Quantile [%]', 'Rain extension [m]']
+            "# Minimum number of valid gates per ray : " + str(nvalid_min) + "\n"
+        )
+        fieldnames = ["Quantile [%]", "Rain extension [m]"]
         writer = csv.DictWriter(csvfile, fieldnames)
         writer.writeheader()
         for i, quant in enumerate(quantiles):
-            writer.writerow({
-                'Quantile [%]': quant,
-                'Rain extension [m]': values[i]})
+            writer.writerow({"Quantile [%]": quant, "Rain extension [m]": values[i]})
 
         csvfile.close()
 
     return fname
 
 
-def write_cdf(quantiles, values, ntot, nnan, nclut, nblocked, nprec_filter,
-              noutliers, ncdf, fname, use_nans=False, nan_value=0.,
-              filterprec=[], vismin=None, sector=None, datatype=None,
-              timeinfo=None):
+def write_cdf(
+    quantiles,
+    values,
+    ntot,
+    nnan,
+    nclut,
+    nblocked,
+    nprec_filter,
+    noutliers,
+    ncdf,
+    fname,
+    use_nans=False,
+    nan_value=0.0,
+    filterprec=[],
+    vismin=None,
+    sector=None,
+    datatype=None,
+    timeinfo=None,
+):
     """
     writes a cumulative distribution function
 
@@ -1361,121 +1599,117 @@ def write_cdf(quantiles, values, ntot, nnan, nclut, nblocked, nprec_filter,
         the name of the file where data has written
 
     """
-    hydrotype_list = ['NC', 'DS', 'CR', 'LR', 'GR', 'RN', 'VI', 'WS', 'MH',
-                      'IH/HDG']
-    with open(fname, 'w', newline='') as txtfile:
-        txtfile.write('Statistical analysis\n')
-        txtfile.write('====================\n\n')
+    hydrotype_list = ["NC", "DS", "CR", "LR", "GR", "RN", "VI", "WS", "MH", "IH/HDG"]
+    with open(fname, "w", newline="") as txtfile:
+        txtfile.write("Statistical analysis\n")
+        txtfile.write("====================\n\n")
         if datatype is None:
-            txtfile.write('Datatype (Unit) : Not specified\n')
+            txtfile.write("Datatype (Unit) : Not specified\n")
         else:
-            txtfile.write('Datatype (Unit) : ' + datatype + '\n')
+            txtfile.write("Datatype (Unit) : " + datatype + "\n")
         if timeinfo is None:
-            txtfile.write('Time     : Not specified\n')
+            txtfile.write("Time     : Not specified\n")
         else:
-            txtfile.write('Time     : ' +
-                          timeinfo.strftime('%Y-%m-%d %H:%M:%S') + '\n')
+            txtfile.write("Time     : " + timeinfo.strftime("%Y-%m-%d %H:%M:%S") + "\n")
         if sector is None:
-            txtfile.write('Sector specification: None\n')
+            txtfile.write("Sector specification: None\n")
         else:
-            txtfile.write('Sector specification:\n')
-            if sector['rmin'] is None:
-                txtfile.write('  Range start     : Not specified\n')
+            txtfile.write("Sector specification:\n")
+            if sector["rmin"] is None:
+                txtfile.write("  Range start     : Not specified\n")
             else:
-                txtfile.write('  Range start     : ' +
-                              str(sector['rmin']) + ' m\n')
+                txtfile.write("  Range start     : " + str(sector["rmin"]) + " m\n")
 
-            if sector['rmax'] is None:
-                txtfile.write('  Range stop      : Not specified\n')
+            if sector["rmax"] is None:
+                txtfile.write("  Range stop      : Not specified\n")
             else:
-                txtfile.write('  Range stop      : ' +
-                              str(sector['rmax']) + ' m\n')
+                txtfile.write("  Range stop      : " + str(sector["rmax"]) + " m\n")
 
-            if sector['azmin'] is None:
-                txtfile.write('  Azimuth start   : Not specified\n')
+            if sector["azmin"] is None:
+                txtfile.write("  Azimuth start   : Not specified\n")
             else:
-                txtfile.write('  Azimuth start   : ' +
-                              str(sector['azmin']) + ' deg\n')
+                txtfile.write("  Azimuth start   : " + str(sector["azmin"]) + " deg\n")
 
-            if sector['azmax'] is None:
-                txtfile.write('  Azimuth stop    : Not specified\n')
+            if sector["azmax"] is None:
+                txtfile.write("  Azimuth stop    : Not specified\n")
             else:
-                txtfile.write('  Azimuth stop    : ' +
-                              str(sector['azmax']) + ' deg\n')
+                txtfile.write("  Azimuth stop    : " + str(sector["azmax"]) + " deg\n")
 
-            if sector['elmin'] is None:
-                txtfile.write('  Elevation start : Not specified\n')
+            if sector["elmin"] is None:
+                txtfile.write("  Elevation start : Not specified\n")
             else:
-                txtfile.write('  Elevation start : ' +
-                              str(sector['elmin']) + ' deg\n')
+                txtfile.write("  Elevation start : " + str(sector["elmin"]) + " deg\n")
 
-            if sector['elmax'] is None:
-                txtfile.write('  Elevation stop  : Not specified\n')
+            if sector["elmax"] is None:
+                txtfile.write("  Elevation stop  : Not specified\n")
             else:
-                txtfile.write('  Elevation stop  : ' +
-                              str(sector['elmax']) + ' deg\n')
+                txtfile.write("  Elevation stop  : " + str(sector["elmax"]) + " deg\n")
 
-            if sector['hmin'] is None:
-                txtfile.write('  Height start    : Not specified\n')
+            if sector["hmin"] is None:
+                txtfile.write("  Height start    : Not specified\n")
             else:
-                txtfile.write('  Height start    : ' +
-                              str(sector['hmin']) + ' m\n')
+                txtfile.write("  Height start    : " + str(sector["hmin"]) + " m\n")
 
-            if sector['hmax'] is None:
-                txtfile.write('  Height stop     : Not specified\n')
+            if sector["hmax"] is None:
+                txtfile.write("  Height stop     : Not specified\n")
             else:
-                txtfile.write('  Height stop     : ' +
-                              str(sector['hmax']) + ' m\n')
-            txtfile.write('')
-        txtfile.write('Total number of gates in sector      : ' +
-                      str(ntot) + '\n')
-        txtfile.write('Number of gates with no value (NaNs) : ' +
-                      str(nnan) + '\n')
+                txtfile.write("  Height stop     : " + str(sector["hmax"]) + " m\n")
+            txtfile.write("")
+        txtfile.write("Total number of gates in sector      : " + str(ntot) + "\n")
+        txtfile.write("Number of gates with no value (NaNs) : " + str(nnan) + "\n")
         if use_nans:
-            txtfile.write(
-                '  NaNs are set to          : ' +
-                str(nan_value) +
-                '\n')
+            txtfile.write("  NaNs are set to          : " + str(nan_value) + "\n")
         else:
-            txtfile.write('  NaNs are ignored!\n')
+            txtfile.write("  NaNs are ignored!\n")
         if nclut == -1:
-            txtfile.write('Clutter contaminated gates           : ' +
-                          'Not checked\n')
+            txtfile.write("Clutter contaminated gates           : " + "Not checked\n")
         else:
-            txtfile.write('Clutter contaminated gates           : ' +
-                          str(nclut) + '\n')
+            txtfile.write("Clutter contaminated gates           : " + str(nclut) + "\n")
         if nblocked == -1:
-            txtfile.write('Blocked gates                        : ' +
-                          'Not checked\n')
+            txtfile.write("Blocked gates                        : " + "Not checked\n")
         else:
-            txtfile.write('Blocked gates (vismin = ' + str(int(vismin)) +
-                          ') : ' + str(nblocked) + '\n')
+            txtfile.write(
+                "Blocked gates (vismin = "
+                + str(int(vismin))
+                + ") : "
+                + str(nblocked)
+                + "\n"
+            )
         if nprec_filter == -1:
-            txtfile.write('Filtered precipitation gates         : None\n')
+            txtfile.write("Filtered precipitation gates         : None\n")
         else:
-            txtfile.write('Filtered precipitation gates         : ' +
-                          str(nprec_filter) + '\n')
-            txtfile.write('  precipitation types filtered: ')
+            txtfile.write(
+                "Filtered precipitation gates         : " + str(nprec_filter) + "\n"
+            )
+            txtfile.write("  precipitation types filtered: ")
             for ind_hydro in filterprec:
-                txtfile.write(hydrotype_list[ind_hydro] + ' ')
-            txtfile.write('\n')
-        txtfile.write('Number of outliers                   : ' +
-                      str(noutliers) + '\n')
-        txtfile.write('Number of gates used for histogram   : ' + str(ncdf) +
-                      ' (' + str(int(ncdf * 100. / ntot)) + '%)\n\n')
-        txtfile.write('Quantiles\n')
-        txtfile.write('=========\n')
+                txtfile.write(hydrotype_list[ind_hydro] + " ")
+            txtfile.write("\n")
+        txtfile.write("Number of outliers                   : " + str(noutliers) + "\n")
+        txtfile.write(
+            "Number of gates used for histogram   : "
+            + str(ncdf)
+            + " ("
+            + str(int(ncdf * 100.0 / ntot))
+            + "%)\n\n"
+        )
+        txtfile.write("Quantiles\n")
+        txtfile.write("=========\n")
         for i, value in enumerate(values):
-            txtfile.write('  Quantile_' + str(int(quantiles[i])) + ' = ' +
-                          '{:5.1f}'.format(value) + '\n')
+            txtfile.write(
+                "  Quantile_"
+                + str(int(quantiles[i]))
+                + " = "
+                + "{:5.1f}".format(value)
+                + "\n"
+            )
 
         txtfile.close()
 
     return fname
 
 
-def write_histogram(bin_edges, values, fname, datatype='undefined',
-                    step=0):
+def write_histogram(bin_edges, values, fname, datatype="undefined", step=0):
     """
     writes a histogram
 
@@ -1498,32 +1732,40 @@ def write_histogram(bin_edges, values, fname, datatype='undefined',
         the name of the file where data has written
 
     """
-    with open(fname, 'w', newline='') as csvfile:
-        datatype_str = 'undefined'
-        if datatype != 'undefined':
+    with open(fname, "w", newline="") as csvfile:
+        datatype_str = "undefined"
+        if datatype != "undefined":
             datatype_str = generate_field_name_str(datatype)
         csvfile.write(
-            '# Weather radar data histogram file\n' +
-            '# Comment lines are preceded by "#"\n' +
-            '# Description:\n' +
-            '# Histogram of weather radar data.\n' +
-            '# Data: ' + datatype_str + '\n' +
-            '# Step: ' + str(step) + '\n'
-            '#\n')
-        fieldnames = ['bin_edge_left', 'bin_edge_right', 'value']
+            "# Weather radar data histogram file\n"
+            + '# Comment lines are preceded by "#"\n'
+            + "# Description:\n"
+            + "# Histogram of weather radar data.\n"
+            + "# Data: "
+            + datatype_str
+            + "\n"
+            + "# Step: "
+            + str(step)
+            + "\n"
+            "#\n"
+        )
+        fieldnames = ["bin_edge_left", "bin_edge_right", "value"]
         writer = csv.DictWriter(csvfile, fieldnames)
         writer.writeheader()
         for i, val in enumerate(values):
-            writer.writerow({
-                'bin_edge_left': bin_edges[i],
-                'bin_edge_right': bin_edges[i + 1],
-                'value': val})
+            writer.writerow(
+                {
+                    "bin_edge_left": bin_edges[i],
+                    "bin_edge_right": bin_edges[i + 1],
+                    "value": val,
+                }
+            )
         csvfile.close()
 
     return fname
 
 
-def write_quantiles(quantiles, values, fname, datatype='undefined'):
+def write_quantiles(quantiles, values, fname, datatype="undefined"):
     """
     writes quantiles
 
@@ -1545,21 +1787,22 @@ def write_quantiles(quantiles, values, fname, datatype='undefined'):
 
     """
     values_aux = values.filled(fill_value=get_fillvalue())
-    with open(fname, 'w', newline='') as csvfile:
+    with open(fname, "w", newline="") as csvfile:
         csvfile.write(
-            '# Weather radar data histogram file\n' +
-            '# Comment lines are preceded by "#"\n' +
-            '# Description:\n' +
-            '# Histogram of weather radar data.\n' +
-            '# Data: ' + generate_field_name_str(datatype) + '\n' +
-            '#\n')
-        fieldnames = ['quantile', 'value']
+            "# Weather radar data histogram file\n"
+            + '# Comment lines are preceded by "#"\n'
+            + "# Description:\n"
+            + "# Histogram of weather radar data.\n"
+            + "# Data: "
+            + generate_field_name_str(datatype)
+            + "\n"
+            + "#\n"
+        )
+        fieldnames = ["quantile", "value"]
         writer = csv.DictWriter(csvfile, fieldnames)
         writer.writeheader()
         for i, quant in enumerate(quantiles):
-            writer.writerow({
-                'quantile': quant,
-                'value': values_aux[i]})
+            writer.writerow({"quantile": quant, "value": values_aux[i]})
         csvfile.close()
 
     return fname
@@ -1582,46 +1825,65 @@ def write_multiple_points(dataset, fname):
         the name of the file where data has written
 
     """
-    val = dataset['value'].filled(fill_value=get_fillvalue())
-    lon_ref = dataset['used_point_coordinates_WGS84_lon'].filled(
-        fill_value=get_fillvalue())
-    lat_ref = dataset['used_point_coordinates_WGS84_lat'].filled(
-        fill_value=get_fillvalue())
-    alt_ref = dataset['used_point_coordinates_WGS84_alt'].filled(
-        fill_value=get_fillvalue())
-    with open(fname, 'w', newline='') as csvfile:
+    val = dataset["value"].filled(fill_value=get_fillvalue())
+    lon_ref = dataset["used_point_coordinates_WGS84_lon"].filled(
+        fill_value=get_fillvalue()
+    )
+    lat_ref = dataset["used_point_coordinates_WGS84_lat"].filled(
+        fill_value=get_fillvalue()
+    )
+    alt_ref = dataset["used_point_coordinates_WGS84_alt"].filled(
+        fill_value=get_fillvalue()
+    )
+    with open(fname, "w", newline="") as csvfile:
         csvfile.write(
-            '# Weather radar data at multiple points file\n' +
-            '# Comment lines are preceded by "#"\n' +
-            '# Description:\n' +
-            '# weather radar data at points of interest.\n' +
-            '# Data: ' + generate_field_name_str(dataset['datatype']) + '\n' +
-            '#\n')
+            "# Weather radar data at multiple points file\n"
+            + '# Comment lines are preceded by "#"\n'
+            + "# Description:\n"
+            + "# weather radar data at points of interest.\n"
+            + "# Data: "
+            + generate_field_name_str(dataset["datatype"])
+            + "\n"
+            + "#\n"
+        )
         fieldnames = [
-            'point_ID', 'time', 'azi', 'ele', 'rng', 'lon', 'lat', 'alt',
-            'lon_ref', 'lat_ref', 'alt_ref', 'val']
+            "point_ID",
+            "time",
+            "azi",
+            "ele",
+            "rng",
+            "lon",
+            "lat",
+            "alt",
+            "lon_ref",
+            "lat_ref",
+            "alt_ref",
+            "val",
+        ]
         writer = csv.DictWriter(csvfile, fieldnames)
         writer.writeheader()
         for i in range(val.size):
-            time_aux = dataset['time'][i]
-            if not np.ma.is_masked(dataset['time'][i]):
-                time_aux = time_aux.strftime('%Y%m%d%H%M%S')
+            time_aux = dataset["time"][i]
+            if not np.ma.is_masked(dataset["time"][i]):
+                time_aux = time_aux.strftime("%Y%m%d%H%M%S")
             else:
-                time_aux = 'NA'
-            writer.writerow({
-                'point_ID': dataset['point_id'][i],
-                'time': time_aux,
-                'azi': dataset['antenna_coordinates_az'][i],
-                'ele': dataset['antenna_coordinates_el'][i],
-                'rng': dataset['antenna_coordinates_r'][i],
-                'lon': dataset['point_coordinates_WGS84_lon'][i],
-                'lat': dataset['point_coordinates_WGS84_lat'][i],
-                'alt': dataset['point_coordinates_WGS84_alt'][i],
-                'lon_ref': lon_ref[i],
-                'lat_ref': lat_ref[i],
-                'alt_ref': alt_ref[i],
-                'val': val[i],
-            })
+                time_aux = "NA"
+            writer.writerow(
+                {
+                    "point_ID": dataset["point_id"][i],
+                    "time": time_aux,
+                    "azi": dataset["antenna_coordinates_az"][i],
+                    "ele": dataset["antenna_coordinates_el"][i],
+                    "rng": dataset["antenna_coordinates_r"][i],
+                    "lon": dataset["point_coordinates_WGS84_lon"][i],
+                    "lat": dataset["point_coordinates_WGS84_lat"][i],
+                    "alt": dataset["point_coordinates_WGS84_alt"][i],
+                    "lon_ref": lon_ref[i],
+                    "lat_ref": lat_ref[i],
+                    "alt_ref": alt_ref[i],
+                    "val": val[i],
+                }
+            )
         csvfile.close()
 
     return fname
@@ -1644,41 +1906,56 @@ def write_multiple_points_grid(dataset, fname):
         the name of the file where data has written
 
     """
-    val = dataset['value'].filled(fill_value=get_fillvalue())
-    lon_ref = dataset['used_point_coordinates_WGS84_lon'].filled(
-        fill_value=get_fillvalue())
-    lat_ref = dataset['used_point_coordinates_WGS84_lat'].filled(
-        fill_value=get_fillvalue())
-    with open(fname, 'w', newline='') as csvfile:
+    val = dataset["value"].filled(fill_value=get_fillvalue())
+    lon_ref = dataset["used_point_coordinates_WGS84_lon"].filled(
+        fill_value=get_fillvalue()
+    )
+    lat_ref = dataset["used_point_coordinates_WGS84_lat"].filled(
+        fill_value=get_fillvalue()
+    )
+    with open(fname, "w", newline="") as csvfile:
         csvfile.write(
-            '# Gridded data at multiple points file\n' +
-            '# Comment lines are preceded by "#"\n' +
-            '# Description:\n' +
-            '# Gridded data at points of interest.\n' +
-            '# Data: ' + generate_field_name_str(dataset['datatype']) + '\n' +
-            '#\n')
+            "# Gridded data at multiple points file\n"
+            + '# Comment lines are preceded by "#"\n'
+            + "# Description:\n"
+            + "# Gridded data at points of interest.\n"
+            + "# Data: "
+            + generate_field_name_str(dataset["datatype"])
+            + "\n"
+            + "#\n"
+        )
         fieldnames = [
-            'point_ID', 'time', 'ix', 'iy', 'lon', 'lat',
-            'lon_ref', 'lat_ref', 'val']
+            "point_ID",
+            "time",
+            "ix",
+            "iy",
+            "lon",
+            "lat",
+            "lon_ref",
+            "lat_ref",
+            "val",
+        ]
         writer = csv.DictWriter(csvfile, fieldnames)
         writer.writeheader()
         for i in range(val.size):
-            time_aux = dataset['time'][i]
-            if not np.ma.is_masked(dataset['time'][i]):
-                time_aux = time_aux.strftime('%Y%m%d%H%M%S')
+            time_aux = dataset["time"][i]
+            if not np.ma.is_masked(dataset["time"][i]):
+                time_aux = time_aux.strftime("%Y%m%d%H%M%S")
             else:
-                time_aux = 'NA'
-            writer.writerow({
-                'point_ID': dataset['point_id'][i],
-                'time': time_aux,
-                'ix': dataset['grid_point_ix'][i],
-                'iy': dataset['grid_point_iy'][i],
-                'lon': dataset['point_coordinates_WGS84_lon'][i],
-                'lat': dataset['point_coordinates_WGS84_lat'][i],
-                'lon_ref': lon_ref[i],
-                'lat_ref': lat_ref[i],
-                'val': val[i],
-            })
+                time_aux = "NA"
+            writer.writerow(
+                {
+                    "point_ID": dataset["point_id"][i],
+                    "time": time_aux,
+                    "ix": dataset["grid_point_ix"][i],
+                    "iy": dataset["grid_point_iy"][i],
+                    "lon": dataset["point_coordinates_WGS84_lon"][i],
+                    "lat": dataset["point_coordinates_WGS84_lat"][i],
+                    "lon_ref": lon_ref[i],
+                    "lat_ref": lat_ref[i],
+                    "val": val[i],
+                }
+            )
         csvfile.close()
 
     return fname
@@ -1703,86 +1980,95 @@ def write_ts_polar_data(dataset, fname):
 
     """
     filelist = glob.glob(fname)
-    nsamples = len(dataset['used_antenna_coordinates_az_el_r'][0])
+    nsamples = len(dataset["used_antenna_coordinates_az_el_r"][0])
     if not filelist:
-        with open(fname, 'w', newline='') as csvfile:
+        with open(fname, "w", newline="") as csvfile:
             if nsamples > 1:
-                start_time = dataset['time'][0]
+                start_time = dataset["time"][0]
             else:
-                start_time = dataset['time']
-            csvfile.write('# Weather radar timeseries data file\n')
+                start_time = dataset["time"]
+            csvfile.write("# Weather radar timeseries data file\n")
             csvfile.write('# Comment lines are preceded by "#"\n')
-            csvfile.write('# Description: \n')
-            csvfile.write('# Time series of a weather radar data over a ' +
-                          'fixed location.\n')
+            csvfile.write("# Description: \n")
             csvfile.write(
-                '# Location [lon, lat, alt]: ' +
-                str(dataset['point_coordinates_WGS84_lon_lat_alt']) + '\n')
+                "# Time series of a weather radar data over a " + "fixed location.\n"
+            )
             csvfile.write(
-                '# Nominal antenna coordinates used [az, el, r]: ' +
-                str(dataset['antenna_coordinates_az_el_r']) + '\n')
+                "# Location [lon, lat, alt]: "
+                + str(dataset["point_coordinates_WGS84_lon_lat_alt"])
+                + "\n"
+            )
             csvfile.write(
-                '# Data: ' +
-                generate_field_name_str(
-                    dataset['datatype']) +
-                '\n')
-            csvfile.write('# Fill Value: ' + str(get_fillvalue()) + '\n')
+                "# Nominal antenna coordinates used [az, el, r]: "
+                + str(dataset["antenna_coordinates_az_el_r"])
+                + "\n"
+            )
             csvfile.write(
-                '# Start: ' +
-                start_time.strftime('%Y-%m-%d %H:%M:%S UTC') + '\n')
-            csvfile.write('#\n')
+                "# Data: " + generate_field_name_str(dataset["datatype"]) + "\n"
+            )
+            csvfile.write("# Fill Value: " + str(get_fillvalue()) + "\n")
+            csvfile.write(
+                "# Start: " + start_time.strftime("%Y-%m-%d %H:%M:%S UTC") + "\n"
+            )
+            csvfile.write("#\n")
 
-            fieldnames = ['date', 'az', 'el', 'r', 'value']
+            fieldnames = ["date", "az", "el", "r", "value"]
             writer = csv.DictWriter(csvfile, fieldnames)
             writer.writeheader()
 
             if nsamples == 1:
-                writer.writerow({
-                    'date': dataset['time'],
-                    'az': dataset['used_antenna_coordinates_az_el_r'][0][0],
-                    'el': dataset['used_antenna_coordinates_az_el_r'][1][0],
-                    'r': dataset['used_antenna_coordinates_az_el_r'][2][0],
-                    'value': dataset['value']})
+                writer.writerow(
+                    {
+                        "date": dataset["time"],
+                        "az": dataset["used_antenna_coordinates_az_el_r"][0][0],
+                        "el": dataset["used_antenna_coordinates_az_el_r"][1][0],
+                        "r": dataset["used_antenna_coordinates_az_el_r"][2][0],
+                        "value": dataset["value"],
+                    }
+                )
             else:
                 for i in range(nsamples):
-                    writer.writerow({
-                        'date': dataset['time'][i],
-                        'az':
-                            dataset['used_antenna_coordinates_az_el_r'][0][i],
-                        'el':
-                            dataset['used_antenna_coordinates_az_el_r'][1][i],
-                        'r':
-                            dataset['used_antenna_coordinates_az_el_r'][2][i],
-                        'value': dataset['value'][i]})
+                    writer.writerow(
+                        {
+                            "date": dataset["time"][i],
+                            "az": dataset["used_antenna_coordinates_az_el_r"][0][i],
+                            "el": dataset["used_antenna_coordinates_az_el_r"][1][i],
+                            "r": dataset["used_antenna_coordinates_az_el_r"][2][i],
+                            "value": dataset["value"][i],
+                        }
+                    )
             csvfile.close()
     else:
-        with open(fname, 'a', newline='') as csvfile:
-            fieldnames = ['date', 'az', 'el', 'r', 'value']
+        with open(fname, "a", newline="") as csvfile:
+            fieldnames = ["date", "az", "el", "r", "value"]
             writer = csv.DictWriter(csvfile, fieldnames)
             if nsamples == 1:
-                writer.writerow({
-                    'date': dataset['time'],
-                    'az': dataset['used_antenna_coordinates_az_el_r'][0][0],
-                    'el': dataset['used_antenna_coordinates_az_el_r'][1][0],
-                    'r': dataset['used_antenna_coordinates_az_el_r'][2][0],
-                    'value': dataset['value']})
+                writer.writerow(
+                    {
+                        "date": dataset["time"],
+                        "az": dataset["used_antenna_coordinates_az_el_r"][0][0],
+                        "el": dataset["used_antenna_coordinates_az_el_r"][1][0],
+                        "r": dataset["used_antenna_coordinates_az_el_r"][2][0],
+                        "value": dataset["value"],
+                    }
+                )
             else:
                 for i in range(nsamples):
-                    writer.writerow({
-                        'date': dataset['time'][i],
-                        'az':
-                            dataset['used_antenna_coordinates_az_el_r'][0][i],
-                        'el':
-                            dataset['used_antenna_coordinates_az_el_r'][1][i],
-                        'r':
-                            dataset['used_antenna_coordinates_az_el_r'][2][i],
-                        'value': dataset['value'][i]})
+                    writer.writerow(
+                        {
+                            "date": dataset["time"][i],
+                            "az": dataset["used_antenna_coordinates_az_el_r"][0][i],
+                            "el": dataset["used_antenna_coordinates_az_el_r"][1][i],
+                            "r": dataset["used_antenna_coordinates_az_el_r"][2][i],
+                            "value": dataset["value"][i],
+                        }
+                    )
             csvfile.close()
 
     return fname
 
 
-def write_ts_grid_data(dataset, fname):
+def write_ts_grid_data(dataset, fname, sensorid=None):
     """
     writes time series of data
 
@@ -1794,6 +2080,9 @@ def write_ts_grid_data(dataset, fname):
     fname : str
         file name where to store the data
 
+    sensorid : str
+        Optional, sensor ID if dataset contains multiple sensors
+
     Returns
     -------
     fname : str
@@ -1801,57 +2090,110 @@ def write_ts_grid_data(dataset, fname):
 
     """
     filelist = glob.glob(fname)
+    if sensorid:
+        sensor_idx = np.where(dataset["point_id"] == sensorid)[0]
+        multiple_sensors = True
+    else:
+        multiple_sensors = False
     if not filelist:
-        with open(fname, 'w', newline='') as csvfile:
-            csvfile.write('# Gridded data timeseries data file\n')
+        with open(fname, "w", newline="") as csvfile:
+            csvfile.write("# Gridded data timeseries data file\n")
             csvfile.write('# Comment lines are preceded by "#"\n')
-            csvfile.write('# Description: \n')
-            csvfile.write('# Time series of a gridded data over a ' +
-                          'fixed location.\n')
+            csvfile.write("# Description: \n")
             csvfile.write(
-                '# Nominal location [lon, lat, alt]: ' +
-                str(dataset['point_coordinates_WGS84_lon_lat_alt']) + '\n')
+                "# Time series of a gridded data over a " + "fixed location.\n"
+            )
             csvfile.write(
-                '# Grid points used [iz, iy, ix]: ' +
-                str(dataset['grid_points_iz_iy_ix']) + '\n')
+                "# Nominal location [lon, lat, alt]: "
+                + str(dataset["point_coordinates_WGS84_lon_lat_alt"])
+                + "\n"
+            )
             csvfile.write(
-                '# Data: ' +
-                generate_field_name_str(
-                    dataset['datatype']) +
-                '\n')
-            csvfile.write('# Fill Value: ' + str(get_fillvalue()) + '\n')
+                "# Grid points used [iz, iy, ix]: "
+                + str(dataset["grid_points_iz_iy_ix"])
+                + "\n"
+            )
             csvfile.write(
-                '# Start: ' +
-                dataset['time'].strftime('%Y-%m-%d %H:%M:%S UTC') + '\n')
-            csvfile.write('#\n')
+                "# Data: " + generate_field_name_str(dataset["datatype"]) + "\n"
+            )
+            csvfile.write("# Fill Value: " + str(get_fillvalue()) + "\n")
+            csvfile.write(
+                "# Start: " + dataset["time"].strftime("%Y-%m-%d %H:%M:%S UTC") + "\n"
+            )
+            csvfile.write("#\n")
 
-            fieldnames = ['date', 'lon', 'lat', 'alt', 'value']
+            fieldnames = ["date", "lon", "lat", "alt", "value"]
             writer = csv.DictWriter(csvfile, fieldnames)
             writer.writeheader()
-            writer.writerow(
-                {'date': dataset['time'].strftime('%Y-%m-%d %H:%M:%S.%f'),
-                 'lon': dataset['used_coordinates_WGS84_lon_lat_alt'][0],
-                 'lat': dataset['used_coordinates_WGS84_lon_lat_alt'][1],
-                 'alt': dataset['used_coordinates_WGS84_lon_lat_alt'][2],
-                 'value': dataset['value']})
+            if multiple_sensors:
+                writer.writerow(
+                    {
+                        "date": dataset["time"][sensor_idx][0].strftime(
+                            "%Y-%m-%d %H:%M:%S.%f"
+                        ),
+                        "lon": dataset["used_point_coordinates_WGS84_lon"][sensor_idx][
+                            0
+                        ],
+                        "lat": dataset["used_point_coordinates_WGS84_lat"][sensor_idx][
+                            0
+                        ],
+                        "alt": dataset["used_point_coordinates_WGS84_alt"][sensor_idx][
+                            0
+                        ],
+                        "value": dataset["value"],
+                    }
+                )
+            else:
+                writer.writerow(
+                    {
+                        "date": dataset["time"].strftime("%Y-%m-%d %H:%M:%S.%f"),
+                        "lon": dataset["used_coordinates_WGS84_lon_lat_alt"][0],
+                        "lat": dataset["used_coordinates_WGS84_lon_lat_alt"][1],
+                        "alt": dataset["used_coordinates_WGS84_lon_lat_alt"][2],
+                        "value": dataset["value"],
+                    }
+                )
             csvfile.close()
     else:
-        with open(fname, 'a', newline='') as csvfile:
-            fieldnames = ['date', 'lon', 'lat', 'alt', 'value']
+        with open(fname, "a", newline="") as csvfile:
+            fieldnames = ["date", "lon", "lat", "alt", "value"]
             writer = csv.DictWriter(csvfile, fieldnames)
-            writer.writerow(
-                {'date': dataset['time'].strftime('%Y-%m-%d %H:%M:%S.%f'),
-                 'lon': dataset['used_coordinates_WGS84_lon_lat_alt'][0],
-                 'lat': dataset['used_coordinates_WGS84_lon_lat_alt'][1],
-                 'alt': dataset['used_coordinates_WGS84_lon_lat_alt'][2],
-                 'value': dataset['value']})
+            if multiple_sensors:
+                writer.writerow(
+                    {
+                        "date": dataset["time"][sensor_idx][0].strftime(
+                            "%Y-%m-%d %H:%M:%S.%f"
+                        ),
+                        "lon": dataset["used_point_coordinates_WGS84_lon"][sensor_idx][
+                            0
+                        ],
+                        "lat": dataset["used_point_coordinates_WGS84_lat"][sensor_idx][
+                            0
+                        ],
+                        "alt": dataset["used_point_coordinates_WGS84_alt"][sensor_idx][
+                            0
+                        ],
+                        "value": dataset["value"][sensor_idx][0],
+                    }
+                )
+            else:
+                writer.writerow(
+                    {
+                        "date": dataset["time"].strftime("%Y-%m-%d %H:%M:%S.%f"),
+                        "lon": dataset["used_coordinates_WGS84_lon_lat_alt"][0],
+                        "lat": dataset["used_coordinates_WGS84_lon_lat_alt"][1],
+                        "alt": dataset["used_coordinates_WGS84_lon_lat_alt"][2],
+                        "value": dataset["value"][sensor_idx][0],
+                    }
+                )
             csvfile.close()
 
     return fname
 
 
-def write_ts_ml(dt_ml, ml_top_avg, ml_top_std, thick_avg, thick_std,
-                nrays_valid, nrays_total, fname):
+def write_ts_ml(
+    dt_ml, ml_top_avg, ml_top_std, thick_avg, thick_std, nrays_valid, nrays_total, fname
+):
     """
     writes time series of melting layer data
 
@@ -1877,60 +2219,89 @@ def write_ts_ml(dt_ml, ml_top_avg, ml_top_std, thick_avg, thick_std,
     """
     filelist = glob.glob(fname)
     if not filelist:
-        with open(fname, 'w', newline='') as csvfile:
+        with open(fname, "w", newline="") as csvfile:
             csvfile.write(
-                '# Weather radar detected melting layer data file\n' +
-                '# Comment lines are preceded by "#"\n' +
-                '# Description: \n' +
-                '# Time series of melting layer data detected by weather radar.\n' +
-                '# Fill Value: ' + str(get_fillvalue()) + '\n' +
-                '# Start: ' + dt_ml.strftime('%Y-%m-%d %H:%M:%S UTC') + '\n' +
-                '#\n')
+                "# Weather radar detected melting layer data file\n"
+                + '# Comment lines are preceded by "#"\n'
+                + "# Description: \n"
+                + "# Time series of melting layer data detected by weather radar.\n"
+                + "# Fill Value: "
+                + str(get_fillvalue())
+                + "\n"
+                + "# Start: "
+                + dt_ml.strftime("%Y-%m-%d %H:%M:%S UTC")
+                + "\n"
+                + "#\n"
+            )
 
             fieldnames = [
-                'date-time [UTC]', 'mean ml top height [m MSL]',
-                'std ml top height [m MSL]', 'mean ml thickness [m]',
-                'std ml thickness [m]', 'N valid rays', 'rays total']
+                "date-time [UTC]",
+                "mean ml top height [m MSL]",
+                "std ml top height [m MSL]",
+                "mean ml thickness [m]",
+                "std ml thickness [m]",
+                "N valid rays",
+                "rays total",
+            ]
             writer = csv.DictWriter(csvfile, fieldnames)
             writer.writeheader()
             writer.writerow(
-                {'date-time [UTC]': dt_ml.strftime('%Y-%m-%d %H:%M:%S'),
-                 'mean ml top height [m MSL]': ml_top_avg.filled(
-                     fill_value=get_fillvalue()),
-                 'std ml top height [m MSL]': ml_top_std.filled(
-                     fill_value=get_fillvalue()),
-                 'mean ml thickness [m]': thick_avg.filled(
-                     fill_value=get_fillvalue()),
-                 'std ml thickness [m]': thick_std.filled(
-                     fill_value=get_fillvalue()),
-                 'N valid rays': nrays_valid,
-                 'rays total': nrays_total})
+                {
+                    "date-time [UTC]": dt_ml.strftime("%Y-%m-%d %H:%M:%S"),
+                    "mean ml top height [m MSL]": ml_top_avg.filled(
+                        fill_value=get_fillvalue()
+                    ),
+                    "std ml top height [m MSL]": ml_top_std.filled(
+                        fill_value=get_fillvalue()
+                    ),
+                    "mean ml thickness [m]": thick_avg.filled(
+                        fill_value=get_fillvalue()
+                    ),
+                    "std ml thickness [m]": thick_std.filled(
+                        fill_value=get_fillvalue()
+                    ),
+                    "N valid rays": nrays_valid,
+                    "rays total": nrays_total,
+                }
+            )
             csvfile.close()
     else:
-        with open(fname, 'a', newline='') as csvfile:
+        with open(fname, "a", newline="") as csvfile:
             fieldnames = [
-                'date-time [UTC]', 'mean ml top height [m MSL]',
-                'std ml top height [m MSL]', 'mean ml thickness [m]',
-                'std ml thickness [m]', 'N valid rays', 'rays total']
+                "date-time [UTC]",
+                "mean ml top height [m MSL]",
+                "std ml top height [m MSL]",
+                "mean ml thickness [m]",
+                "std ml thickness [m]",
+                "N valid rays",
+                "rays total",
+            ]
             writer = csv.DictWriter(csvfile, fieldnames)
             writer.writerow(
-                {'date-time [UTC]': dt_ml.strftime('%Y-%m-%d %H:%M:%S'),
-                 'mean ml top height [m MSL]': ml_top_avg.filled(
-                     fill_value=get_fillvalue()),
-                 'std ml top height [m MSL]': ml_top_std.filled(
-                     fill_value=get_fillvalue()),
-                 'mean ml thickness [m]': thick_avg.filled(
-                     fill_value=get_fillvalue()),
-                 'std ml thickness [m]': thick_std.filled(
-                     fill_value=get_fillvalue()),
-                 'N valid rays': nrays_valid,
-                 'rays total': nrays_total})
+                {
+                    "date-time [UTC]": dt_ml.strftime("%Y-%m-%d %H:%M:%S"),
+                    "mean ml top height [m MSL]": ml_top_avg.filled(
+                        fill_value=get_fillvalue()
+                    ),
+                    "std ml top height [m MSL]": ml_top_std.filled(
+                        fill_value=get_fillvalue()
+                    ),
+                    "mean ml thickness [m]": thick_avg.filled(
+                        fill_value=get_fillvalue()
+                    ),
+                    "std ml thickness [m]": thick_std.filled(
+                        fill_value=get_fillvalue()
+                    ),
+                    "N valid rays": nrays_valid,
+                    "rays total": nrays_total,
+                }
+            )
             csvfile.close()
 
     return fname
 
 
-def write_ts_stats(dt, value, fname, stat='mean'):
+def write_ts_stats(dt, value, fname, stat="mean"):
     """
     writes time series of statistics
 
@@ -1953,32 +2324,43 @@ def write_ts_stats(dt, value, fname, stat='mean'):
     """
     filelist = glob.glob(fname)
     if not filelist:
-        with open(fname, 'w', newline='') as csvfile:
+        with open(fname, "w", newline="") as csvfile:
             csvfile.write(
-                '# Statistics\n' +
-                '# Comment lines are preceded by "#"\n' +
-                '# Description: \n' +
-                '# Time series of ' + stat + '.\n' +
-                '# Fill Value: ' + str(get_fillvalue()) + '\n' +
-                '# Start: ' + dt.strftime('%Y-%m-%d %H:%M:%S UTC') + '\n' +
-                '#\n')
+                "# Statistics\n"
+                + '# Comment lines are preceded by "#"\n'
+                + "# Description: \n"
+                + "# Time series of "
+                + stat
+                + ".\n"
+                + "# Fill Value: "
+                + str(get_fillvalue())
+                + "\n"
+                + "# Start: "
+                + dt.strftime("%Y-%m-%d %H:%M:%S UTC")
+                + "\n"
+                + "#\n"
+            )
 
-            fieldnames = ['date-time [UTC]', 'value']
+            fieldnames = ["date-time [UTC]", "value"]
             writer = csv.DictWriter(csvfile, fieldnames)
             writer.writeheader()
             writer.writerow(
-                {'date-time [UTC]': dt.strftime('%Y-%m-%d %H:%M:%S'),
-                 'value': value.filled(
-                     fill_value=get_fillvalue())[0]})
+                {
+                    "date-time [UTC]": dt.strftime("%Y-%m-%d %H:%M:%S"),
+                    "value": value.filled(fill_value=get_fillvalue())[0],
+                }
+            )
             csvfile.close()
     else:
-        with open(fname, 'a', newline='') as csvfile:
-            fieldnames = ['date-time [UTC]', 'value']
+        with open(fname, "a", newline="") as csvfile:
+            fieldnames = ["date-time [UTC]", "value"]
             writer = csv.DictWriter(csvfile, fieldnames)
             writer.writerow(
-                {'date-time [UTC]': dt.strftime('%Y-%m-%d %H:%M:%S'),
-                 'value': value.filled(
-                     fill_value=get_fillvalue())[0]})
+                {
+                    "date-time [UTC]": dt.strftime("%Y-%m-%d %H:%M:%S"),
+                    "value": value.filled(fill_value=get_fillvalue())[0],
+                }
+            )
             csvfile.close()
 
     return fname
@@ -2002,54 +2384,66 @@ def write_ts_cum(dataset, fname):
         the name of the file where data has written
 
     """
-    radar_value = dataset['radar_value'].filled(fill_value=get_fillvalue())
-    sensor_value = dataset['sensor_value'].filled(fill_value=get_fillvalue())
-    np_radar = dataset['np_radar']
-    np_sensor = dataset['np_sensor']
+    radar_value = dataset["radar_value"].filled(fill_value=get_fillvalue())
+    sensor_value = dataset["sensor_value"].filled(fill_value=get_fillvalue())
+    np_radar = dataset["np_radar"]
+    np_sensor = dataset["np_sensor"]
 
-    with open(fname, 'w', newline='') as csvfile:
-        csvfile.write('# Precipitation accumulation data file\n')
+    with open(fname, "w", newline="") as csvfile:
+        csvfile.write("# Precipitation accumulation data file\n")
         csvfile.write('# Comment lines are preceded by "#"\n')
-        csvfile.write('# Description: \n')
-        csvfile.write('# Time series of a precipitation accumulation of ' +
-                      'weather radar data and another sensor over a ' +
-                      'fixed location.\n')
+        csvfile.write("# Description: \n")
         csvfile.write(
-            '# Location [lon, lat, alt]: ' +
-            str(dataset['point_coordinates_WGS84_lon_lat_alt']) + '\n')
-        if 'antenna_coordinates_az_el_r' in dataset:
+            "# Time series of a precipitation accumulation of "
+            + "weather radar data and another sensor over a "
+            + "fixed location.\n"
+        )
+        csvfile.write(
+            "# Location [lon, lat, alt]: "
+            + str(dataset["point_coordinates_WGS84_lon_lat_alt"])
+            + "\n"
+        )
+        if "antenna_coordinates_az_el_r" in dataset:
             csvfile.write(
-                '# Nominal antenna coordinates used [az, el, r]: ' +
-                str(dataset['antenna_coordinates_az_el_r']) + '\n')
-        csvfile.write('# sensor type: ' + dataset['sensor'] + '\n')
-        csvfile.write('# sensor ID: ' + dataset['sensorid'] + '\n')
-        csvfile.write('# Data: Precipitation accumulation over ' +
-                      str(dataset['cum_time']) + ' s\n')
-        csvfile.write('# Fill Value: ' + str(get_fillvalue()) + '\n')
+                "# Nominal antenna coordinates used [az, el, r]: "
+                + str(dataset["antenna_coordinates_az_el_r"])
+                + "\n"
+            )
+        csvfile.write("# sensor type: " + dataset["sensor"] + "\n")
+        csvfile.write("# sensor ID: " + dataset["sensorid"] + "\n")
         csvfile.write(
-            '# Start: ' +
-            dataset['time'][0].strftime('%Y-%m-%d %H:%M:%S UTC') + '\n')
-        csvfile.write('#\n')
+            "# Data: Precipitation accumulation over "
+            + str(dataset["cum_time"])
+            + " s\n"
+        )
+        csvfile.write("# Fill Value: " + str(get_fillvalue()) + "\n")
+        csvfile.write(
+            "# Start: " + dataset["time"][0].strftime("%Y-%m-%d %H:%M:%S UTC") + "\n"
+        )
+        csvfile.write("#\n")
 
-        fieldnames = ['date', 'np_radar', 'radar_value', 'np_sensor',
-                      'sensor_value']
+        fieldnames = ["date", "np_radar", "radar_value", "np_sensor", "sensor_value"]
         writer = csv.DictWriter(csvfile, fieldnames)
         writer.writeheader()
         for i, rad_val in enumerate(radar_value):
-            writer.writerow({
-                'date': dataset['time'][i],
-                'np_radar': np_radar[i],
-                'radar_value': rad_val,
-                'np_sensor': np_sensor[i],
-                'sensor_value': sensor_value[i]})
+            writer.writerow(
+                {
+                    "date": dataset["time"][i],
+                    "np_radar": np_radar[i],
+                    "radar_value": rad_val,
+                    "np_sensor": np_sensor[i],
+                    "sensor_value": sensor_value[i],
+                }
+            )
 
         csvfile.close()
 
     return fname
 
 
-def write_monitoring_ts(start_time, np_t, values, quantiles, datatype, fname,
-                        rewrite=False):
+def write_monitoring_ts(
+    start_time, np_t, values, quantiles, datatype, fname, rewrite=False
+):
     """
     writes time series of data
 
@@ -2096,7 +2490,7 @@ def write_monitoring_ts(start_time, np_t, values, quantiles, datatype, fname,
             file_exists = True
 
     if not file_exists:
-        with open(fname, 'w', newline='') as csvfile:
+        with open(fname, "w", newline="") as csvfile:
             if FCNTL_AVAIL:
                 while True:
                     try:
@@ -2107,8 +2501,9 @@ def write_monitoring_ts(start_time, np_t, values, quantiles, datatype, fname,
                             time.sleep(0.1)
                         elif e.errno == errno.EBADF:
                             warn(
-                                "WARNING: No file locking is possible (NFS mount?), " +
-                                "expect strange issues with multiprocessing...")
+                                "WARNING: No file locking is possible (NFS mount?), "
+                                + "expect strange issues with multiprocessing..."
+                            )
                             break
                         else:
                             raise
@@ -2116,61 +2511,76 @@ def write_monitoring_ts(start_time, np_t, values, quantiles, datatype, fname,
                 while True:
                     try:
                         # Attempt to acquire an exclusive lock on the file
-                        msvcrt.locking(os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0)
+                        msvcrt.locking(
+                            os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0
+                        )
                         break
                     except OSError as e:
                         if e.errno == 13:  # Permission denied
                             time.sleep(0.1)
                         elif e.errno == 13:  # No such file or directory
                             warn(
-                                "WARNING: No file locking is possible (NFS mount?), " +
-                                "expect strange issues with multiprocessing...")
+                                "WARNING: No file locking is possible (NFS mount?), "
+                                + "expect strange issues with multiprocessing..."
+                            )
                             break
                         else:
                             raise
 
-            csvfile.write('# Weather radar monitoring timeseries data file\n' +
-                          '# Comment lines are preceded by "#"\n' +
-                          '# Description: \n' +
-                          '# Time series of a monitoring of weather radar data.\n' +
-                          '# Quantiles: ' +
-                          str(quantiles[1]) +
-                          ', ' +
-                          str(quantiles[0]) +
-                          ', ' +
-                          str(quantiles[2]) +
-                          ' percent.\n' +
-                          '# Data: ' +
-                          generate_field_name_str(datatype) +
-                          '\n' +
-                          '# Fill Value: ' +
-                          str(get_fillvalue()) +
-                          '\n' +
-                          '# Start: ' +
-                          start_time_aux[0].strftime('%Y-%m-%d %H:%M:%S UTC') +
-                          '\n' +
-                          '#\n')
+            csvfile.write(
+                "# Weather radar monitoring timeseries data file\n"
+                + '# Comment lines are preceded by "#"\n'
+                + "# Description: \n"
+                + "# Time series of a monitoring of weather radar data.\n"
+                + "# Quantiles: "
+                + str(quantiles[1])
+                + ", "
+                + str(quantiles[0])
+                + ", "
+                + str(quantiles[2])
+                + " percent.\n"
+                + "# Data: "
+                + generate_field_name_str(datatype)
+                + "\n"
+                + "# Fill Value: "
+                + str(get_fillvalue())
+                + "\n"
+                + "# Start: "
+                + start_time_aux[0].strftime("%Y-%m-%d %H:%M:%S UTC")
+                + "\n"
+                + "#\n"
+            )
 
-            fieldnames = ['date', 'NP', 'central_quantile', 'low_quantile',
-                          'high_quantile']
+            fieldnames = [
+                "date",
+                "NP",
+                "central_quantile",
+                "low_quantile",
+                "high_quantile",
+            ]
             writer = csv.DictWriter(csvfile, fieldnames)
             writer.writeheader()
             for i, np_t_el in enumerate(np_t_aux):
-                writer.writerow({
-                    'date': start_time_aux[i].strftime('%Y%m%d%H%M%S'),
-                    'NP': np_t_el,
-                    'central_quantile': values_aux[i, 1],
-                    'low_quantile': values_aux[i, 0],
-                    'high_quantile': values_aux[i, 2]})
+                writer.writerow(
+                    {
+                        "date": start_time_aux[i].strftime("%Y%m%d%H%M%S"),
+                        "NP": np_t_el,
+                        "central_quantile": values_aux[i, 1],
+                        "low_quantile": values_aux[i, 0],
+                        "high_quantile": values_aux[i, 2],
+                    }
+                )
 
             if FCNTL_AVAIL:
                 fcntl.flock(csvfile, fcntl.LOCK_UN)
             else:
-                msvcrt.locking(csvfile.fileno(), msvcrt.LK_UNLCK, os.path.getsize(csvfile))
+                msvcrt.locking(
+                    csvfile.fileno(), msvcrt.LK_UNLCK, os.path.getsize(csvfile)
+                )
 
             csvfile.close()
     else:
-        with open(fname, 'a', newline='') as csvfile:
+        with open(fname, "a", newline="") as csvfile:
             if FCNTL_AVAIL:
                 while True:
                     try:
@@ -2181,8 +2591,9 @@ def write_monitoring_ts(start_time, np_t, values, quantiles, datatype, fname,
                             time.sleep(0.1)
                         elif e.errno == errno.EBADF:
                             warn(
-                                "WARNING: No file locking is possible (NFS mount?), " +
-                                "expect strange issues with multiprocessing...")
+                                "WARNING: No file locking is possible (NFS mount?), "
+                                + "expect strange issues with multiprocessing..."
+                            )
                             break
                         else:
                             raise
@@ -2190,33 +2601,46 @@ def write_monitoring_ts(start_time, np_t, values, quantiles, datatype, fname,
                 while True:
                     try:
                         # Attempt to acquire an exclusive lock on the file
-                        msvcrt.locking(os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0)
+                        msvcrt.locking(
+                            os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0
+                        )
                         break
                     except OSError as e:
                         if e.errno == 13:  # Permission denied
                             time.sleep(0.1)
                         elif e.errno == 13:  # No such file or directory
                             warn(
-                                "WARNING: No file locking is possible (NFS mount?), " +
-                                "expect strange issues with multiprocessing...")
+                                "WARNING: No file locking is possible (NFS mount?), "
+                                + "expect strange issues with multiprocessing..."
+                            )
                             break
                         else:
                             raise
 
-            fieldnames = ['date', 'NP', 'central_quantile', 'low_quantile',
-                          'high_quantile']
+            fieldnames = [
+                "date",
+                "NP",
+                "central_quantile",
+                "low_quantile",
+                "high_quantile",
+            ]
             writer = csv.DictWriter(csvfile, fieldnames)
             for i, np_t_el in enumerate(np_t_aux):
-                writer.writerow({
-                    'date': start_time_aux[i].strftime('%Y%m%d%H%M%S'),
-                    'NP': np_t_el,
-                    'central_quantile': values_aux[i, 1],
-                    'low_quantile': values_aux[i, 0],
-                    'high_quantile': values_aux[i, 2]})
+                writer.writerow(
+                    {
+                        "date": start_time_aux[i].strftime("%Y%m%d%H%M%S"),
+                        "NP": np_t_el,
+                        "central_quantile": values_aux[i, 1],
+                        "low_quantile": values_aux[i, 0],
+                        "high_quantile": values_aux[i, 2],
+                    }
+                )
             if FCNTL_AVAIL:
                 fcntl.flock(csvfile, fcntl.LOCK_UN)
             else:
-                msvcrt.locking(csvfile.fileno(), msvcrt.LK_UNLCK, os.path.getsize(csvfile))
+                msvcrt.locking(
+                    csvfile.fileno(), msvcrt.LK_UNLCK, os.path.getsize(csvfile)
+                )
             csvfile.close()
     return fname
 
@@ -2239,44 +2663,67 @@ def write_excess_gates(excess_dict, fname):
         the name of the file where data has written
 
     """
-    ngates = len(excess_dict['ray_ind'])
-    with open(fname, 'w', newline='') as csvfile:
-        csvfile.write('# Gates exceeding ' + str(excess_dict['quant_min']) +
-                      ' percentile data file\n')
+    ngates = len(excess_dict["ray_ind"])
+    with open(fname, "w", newline="") as csvfile:
+        csvfile.write(
+            "# Gates exceeding "
+            + str(excess_dict["quant_min"])
+            + " percentile data file\n"
+        )
         csvfile.write('# Comment lines are preceded by "#"\n')
         csvfile.write(
-            '# Data collection start time: ' +
-            excess_dict['starttime'].strftime('%Y-%m-%d %H:%M:%S UTC') + '\n')
+            "# Data collection start time: "
+            + excess_dict["starttime"].strftime("%Y-%m-%d %H:%M:%S UTC")
+            + "\n"
+        )
         csvfile.write(
-            '# Data collection end time: ' +
-            excess_dict['endtime'].strftime('%Y-%m-%d %H:%M:%S UTC') + '\n')
-        csvfile.write('# Number of gates in file: ' + str(ngates) + '\n')
-        csvfile.write('#\n')
+            "# Data collection end time: "
+            + excess_dict["endtime"].strftime("%Y-%m-%d %H:%M:%S UTC")
+            + "\n"
+        )
+        csvfile.write("# Number of gates in file: " + str(ngates) + "\n")
+        csvfile.write("#\n")
 
         fieldnames = [
-            'ray_ind', 'rng_ind', 'ele', 'azi', 'rng', 'nsamples',
-            'occurrence', 'freq_occu']
+            "ray_ind",
+            "rng_ind",
+            "ele",
+            "azi",
+            "rng",
+            "nsamples",
+            "occurrence",
+            "freq_occu",
+        ]
         writer = csv.DictWriter(csvfile, fieldnames)
         writer.writeheader()
-        for i, ray_ind in enumerate(excess_dict['ray_ind']):
-            writer.writerow({
-                'ray_ind': ray_ind,
-                'rng_ind': excess_dict['rng_ind'][i],
-                'ele': excess_dict['ele'][i],
-                'azi': excess_dict['azi'][i],
-                'rng': excess_dict['rng'][i],
-                'nsamples': excess_dict['nsamples'][i],
-                'occurrence': excess_dict['occurrence'][i],
-                'freq_occu': excess_dict['freq_occu'][i]})
+        for i, ray_ind in enumerate(excess_dict["ray_ind"]):
+            writer.writerow(
+                {
+                    "ray_ind": ray_ind,
+                    "rng_ind": excess_dict["rng_ind"][i],
+                    "ele": excess_dict["ele"][i],
+                    "azi": excess_dict["azi"][i],
+                    "rng": excess_dict["rng"][i],
+                    "nsamples": excess_dict["nsamples"][i],
+                    "occurrence": excess_dict["occurrence"][i],
+                    "freq_occu": excess_dict["freq_occu"][i],
+                }
+            )
 
         csvfile.close()
 
     return fname
 
 
-def write_intercomp_scores_ts(start_time, stats, field_name, fname,
-                              rad1_name='RADAR001', rad2_name='RADAR002',
-                              rewrite=False):
+def write_intercomp_scores_ts(
+    start_time,
+    stats,
+    field_name,
+    fname,
+    rad1_name="RADAR001",
+    rad2_name="RADAR002",
+    rewrite=False,
+):
     """
     writes time series of radar intercomparison scores
 
@@ -2303,16 +2750,15 @@ def write_intercomp_scores_ts(start_time, stats, field_name, fname,
     """
     nvalues = np.size(start_time)
 
-    meanbias = stats['meanbias'].filled(fill_value=get_fillvalue())
-    medianbias = stats['medianbias'].filled(fill_value=get_fillvalue())
-    quant25bias = stats['quant25bias'].filled(fill_value=get_fillvalue())
-    quant75bias = stats['quant75bias'].filled(fill_value=get_fillvalue())
-    modebias = stats['modebias'].filled(fill_value=get_fillvalue())
-    corr = stats['corr'].filled(fill_value=get_fillvalue())
-    slope = stats['slope'].filled(fill_value=get_fillvalue())
-    intercep = stats['intercep'].filled(fill_value=get_fillvalue())
-    intercep_slope_1 = stats['intercep_slope_1'].filled(
-        fill_value=get_fillvalue())
+    meanbias = stats["meanbias"].filled(fill_value=get_fillvalue())
+    medianbias = stats["medianbias"].filled(fill_value=get_fillvalue())
+    quant25bias = stats["quant25bias"].filled(fill_value=get_fillvalue())
+    quant75bias = stats["quant75bias"].filled(fill_value=get_fillvalue())
+    modebias = stats["modebias"].filled(fill_value=get_fillvalue())
+    corr = stats["corr"].filled(fill_value=get_fillvalue())
+    slope = stats["slope"].filled(fill_value=get_fillvalue())
+    intercep = stats["intercep"].filled(fill_value=get_fillvalue())
+    intercep_slope_1 = stats["intercep_slope_1"].filled(fill_value=get_fillvalue())
 
     if nvalues == 1:
         start_time_aux = np.asarray([start_time])
@@ -2325,10 +2771,10 @@ def write_intercomp_scores_ts(start_time, stats, field_name, fname,
         slope = np.asarray([slope])
         intercep = np.asarray([intercep])
         intercep_slope_1 = np.asarray([intercep_slope_1])
-        np_t = np.asarray([stats['npoints']])
+        np_t = np.asarray([stats["npoints"]])
     else:
         start_time_aux = np.asarray(start_time)
-        np_t = stats['npoints']
+        np_t = stats["npoints"]
 
     if rewrite:
         file_exists = False
@@ -2340,7 +2786,7 @@ def write_intercomp_scores_ts(start_time, stats, field_name, fname,
             file_exists = True
 
     if not file_exists:
-        with open(fname, 'w', newline='') as csvfile:
+        with open(fname, "w", newline="") as csvfile:
             if FCNTL_AVAIL:
                 while True:
                     try:
@@ -2351,8 +2797,9 @@ def write_intercomp_scores_ts(start_time, stats, field_name, fname,
                             time.sleep(0.1)
                         elif e.errno == errno.EBADF:
                             warn(
-                                "WARNING: No file locking is possible (NFS mount?), " +
-                                "expect strange issues with multiprocessing...")
+                                "WARNING: No file locking is possible (NFS mount?), "
+                                + "expect strange issues with multiprocessing..."
+                            )
                             break
                         else:
                             raise
@@ -2360,61 +2807,84 @@ def write_intercomp_scores_ts(start_time, stats, field_name, fname,
                 while True:
                     try:
                         # Attempt to acquire an exclusive lock on the file
-                        msvcrt.locking(os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0)
+                        msvcrt.locking(
+                            os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0
+                        )
                         break
                     except OSError as e:
                         if e.errno == 13:  # Permission denied
                             time.sleep(0.1)
                         elif e.errno == 13:  # No such file or directory
                             warn(
-                                "WARNING: No file locking is possible (NFS mount?), " +
-                                "expect strange issues with multiprocessing...")
+                                "WARNING: No file locking is possible (NFS mount?), "
+                                + "expect strange issues with multiprocessing..."
+                            )
                             break
                         else:
                             raise
 
-
             csvfile.write(
-                '# Weather radar intercomparison scores timeseries file\n' +
-                '# Comment lines are preceded by "#"\n' +
-                '# Description: \n' +
-                '# Time series of the intercomparison between two radars.\n' +
-                '# Radar 1: ' + rad1_name + '\n' +
-                '# Radar 2: ' + rad2_name + '\n' +
-                '# Field name: ' + field_name + '\n' +
-                '# Fill Value: ' + str(get_fillvalue()) + '\n' +
-                '# Start: ' + start_time_aux[0].strftime(
-                    '%Y-%m-%d %H:%M:%S UTC') + '\n' +
-                '#\n')
+                "# Weather radar intercomparison scores timeseries file\n"
+                + '# Comment lines are preceded by "#"\n'
+                + "# Description: \n"
+                + "# Time series of the intercomparison between two radars.\n"
+                + "# Radar 1: "
+                + rad1_name
+                + "\n"
+                + "# Radar 2: "
+                + rad2_name
+                + "\n"
+                + "# Field name: "
+                + field_name
+                + "\n"
+                + "# Fill Value: "
+                + str(get_fillvalue())
+                + "\n"
+                + "# Start: "
+                + start_time_aux[0].strftime("%Y-%m-%d %H:%M:%S UTC")
+                + "\n"
+                + "#\n"
+            )
 
-            fieldnames = ['date', 'NP', 'mean_bias', 'median_bias',
-                          'quant25_bias', 'quant75_bias', 'mode_bias', 'corr',
-                          'slope_of_linear_regression',
-                          'intercep_of_linear_regression',
-                          'intercep_of_linear_regression_of_slope_1']
+            fieldnames = [
+                "date",
+                "NP",
+                "mean_bias",
+                "median_bias",
+                "quant25_bias",
+                "quant75_bias",
+                "mode_bias",
+                "corr",
+                "slope_of_linear_regression",
+                "intercep_of_linear_regression",
+                "intercep_of_linear_regression_of_slope_1",
+            ]
             writer = csv.DictWriter(csvfile, fieldnames)
             writer.writeheader()
 
             for i, dtime in enumerate(start_time_aux):
-                writer.writerow({
-                    'date': dtime.strftime('%Y%m%d%H%M%S'),
-                    'NP': np_t[i],
-                    'mean_bias': meanbias[i],
-                    'median_bias': medianbias[i],
-                    'quant25_bias': quant25bias[i],
-                    'quant75_bias': quant75bias[i],
-                    'mode_bias': modebias[i],
-                    'corr': corr[i],
-                    'slope_of_linear_regression': slope[i],
-                    'intercep_of_linear_regression': intercep[i],
-                    'intercep_of_linear_regression_of_slope_1': (
-                        intercep_slope_1[i])
-                })
+                writer.writerow(
+                    {
+                        "date": dtime.strftime("%Y%m%d%H%M%S"),
+                        "NP": np_t[i],
+                        "mean_bias": meanbias[i],
+                        "median_bias": medianbias[i],
+                        "quant25_bias": quant25bias[i],
+                        "quant75_bias": quant75bias[i],
+                        "mode_bias": modebias[i],
+                        "corr": corr[i],
+                        "slope_of_linear_regression": slope[i],
+                        "intercep_of_linear_regression": intercep[i],
+                        "intercep_of_linear_regression_of_slope_1": (
+                            intercep_slope_1[i]
+                        ),
+                    }
+                )
 
             fcntl.flock(csvfile, fcntl.LOCK_UN)
             csvfile.close()
     else:
-        with open(fname, 'a', newline='') as csvfile:
+        with open(fname, "a", newline="") as csvfile:
             if FCNTL_AVAIL:
                 while True:
                     try:
@@ -2425,8 +2895,9 @@ def write_intercomp_scores_ts(start_time, stats, field_name, fname,
                             time.sleep(0.1)
                         elif e.errno == errno.EBADF:
                             warn(
-                                "WARNING: No file locking is possible (NFS mount?), " +
-                                "expect strange issues with multiprocessing...")
+                                "WARNING: No file locking is possible (NFS mount?), "
+                                + "expect strange issues with multiprocessing..."
+                            )
                             break
                         else:
                             raise
@@ -2434,45 +2905,60 @@ def write_intercomp_scores_ts(start_time, stats, field_name, fname,
                 while True:
                     try:
                         # Attempt to acquire an exclusive lock on the file
-                        msvcrt.locking(os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0)
+                        msvcrt.locking(
+                            os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0
+                        )
                         break
                     except OSError as e:
                         if e.errno == 13:  # Permission denied
                             time.sleep(0.1)
                         elif e.errno == 13:  # No such file or directory
                             warn(
-                                "WARNING: No file locking is possible (NFS mount?), " +
-                                "expect strange issues with multiprocessing...")
+                                "WARNING: No file locking is possible (NFS mount?), "
+                                + "expect strange issues with multiprocessing..."
+                            )
                             break
                         else:
                             raise
 
-
-            fieldnames = ['date', 'NP', 'mean_bias', 'median_bias',
-                          'quant25_bias', 'quant75_bias', 'mode_bias', 'corr',
-                          'slope_of_linear_regression',
-                          'intercep_of_linear_regression',
-                          'intercep_of_linear_regression_of_slope_1']
+            fieldnames = [
+                "date",
+                "NP",
+                "mean_bias",
+                "median_bias",
+                "quant25_bias",
+                "quant75_bias",
+                "mode_bias",
+                "corr",
+                "slope_of_linear_regression",
+                "intercep_of_linear_regression",
+                "intercep_of_linear_regression_of_slope_1",
+            ]
             writer = csv.DictWriter(csvfile, fieldnames)
             for i, dtime in enumerate(start_time_aux):
-                writer.writerow({
-                    'date': dtime.strftime('%Y%m%d%H%M%S'),
-                    'NP': np_t[i],
-                    'mean_bias': meanbias[i],
-                    'median_bias': medianbias[i],
-                    'quant25_bias': quant25bias[i],
-                    'quant75_bias': quant75bias[i],
-                    'mode_bias': modebias[i],
-                    'corr': corr[i],
-                    'slope_of_linear_regression': slope[i],
-                    'intercep_of_linear_regression': intercep[i],
-                    'intercep_of_linear_regression_of_slope_1': (
-                        intercep_slope_1[i])
-                })
+                writer.writerow(
+                    {
+                        "date": dtime.strftime("%Y%m%d%H%M%S"),
+                        "NP": np_t[i],
+                        "mean_bias": meanbias[i],
+                        "median_bias": medianbias[i],
+                        "quant25_bias": quant25bias[i],
+                        "quant75_bias": quant75bias[i],
+                        "mode_bias": modebias[i],
+                        "corr": corr[i],
+                        "slope_of_linear_regression": slope[i],
+                        "intercep_of_linear_regression": intercep[i],
+                        "intercep_of_linear_regression_of_slope_1": (
+                            intercep_slope_1[i]
+                        ),
+                    }
+                )
             if FCNTL_AVAIL:
                 fcntl.flock(csvfile, fcntl.LOCK_UN)
             else:
-                msvcrt.locking(csvfile.fileno(), msvcrt.LK_UNLCK, os.path.getsize(csvfile))
+                msvcrt.locking(
+                    csvfile.fileno(), msvcrt.LK_UNLCK, os.path.getsize(csvfile)
+                )
             csvfile.close()
 
     return fname
@@ -2495,28 +2981,40 @@ def write_colocated_gates(coloc_gates, fname):
         the name of the file where data has written
 
     """
-    with open(fname, 'w', newline='') as csvfile:
-        csvfile.write('# Colocated radar gates data file\n')
+    with open(fname, "w", newline="") as csvfile:
+        csvfile.write("# Colocated radar gates data file\n")
         csvfile.write('# Comment lines are preceded by "#"\n')
-        csvfile.write('#\n')
+        csvfile.write("#\n")
 
         fieldnames = [
-            'rad1_ray_ind', 'rad1_rng_ind', 'rad1_ele', 'rad1_azi', 'rad1_rng',
-            'rad2_ray_ind', 'rad2_rng_ind', 'rad2_ele', 'rad2_azi', 'rad2_rng']
+            "rad1_ray_ind",
+            "rad1_rng_ind",
+            "rad1_ele",
+            "rad1_azi",
+            "rad1_rng",
+            "rad2_ray_ind",
+            "rad2_rng_ind",
+            "rad2_ele",
+            "rad2_azi",
+            "rad2_rng",
+        ]
         writer = csv.DictWriter(csvfile, fieldnames)
         writer.writeheader()
-        for i, rad1_ray_ind in enumerate(coloc_gates['rad1_ray_ind']):
-            writer.writerow({
-                'rad1_ray_ind': rad1_ray_ind,
-                'rad1_rng_ind': coloc_gates['rad1_rng_ind'][i],
-                'rad1_ele': coloc_gates['rad1_ele'][i],
-                'rad1_azi': coloc_gates['rad1_azi'][i],
-                'rad1_rng': coloc_gates['rad1_rng'][i],
-                'rad2_ray_ind': coloc_gates['rad2_ray_ind'][i],
-                'rad2_rng_ind': coloc_gates['rad2_rng_ind'][i],
-                'rad2_ele': coloc_gates['rad2_ele'][i],
-                'rad2_azi': coloc_gates['rad2_azi'][i],
-                'rad2_rng': coloc_gates['rad2_rng'][i]})
+        for i, rad1_ray_ind in enumerate(coloc_gates["rad1_ray_ind"]):
+            writer.writerow(
+                {
+                    "rad1_ray_ind": rad1_ray_ind,
+                    "rad1_rng_ind": coloc_gates["rad1_rng_ind"][i],
+                    "rad1_ele": coloc_gates["rad1_ele"][i],
+                    "rad1_azi": coloc_gates["rad1_azi"][i],
+                    "rad1_rng": coloc_gates["rad1_rng"][i],
+                    "rad2_ray_ind": coloc_gates["rad2_ray_ind"][i],
+                    "rad2_rng_ind": coloc_gates["rad2_rng_ind"][i],
+                    "rad2_ele": coloc_gates["rad2_ele"][i],
+                    "rad2_azi": coloc_gates["rad2_azi"][i],
+                    "rad2_rng": coloc_gates["rad2_rng"][i],
+                }
+            )
 
         csvfile.close()
 
@@ -2542,62 +3040,92 @@ def write_colocated_data(coloc_data, fname):
     """
     filelist = glob.glob(fname)
     if not filelist:
-        with open(fname, 'w', newline='') as csvfile:
-            csvfile.write('# Colocated radar gates data file\n')
+        with open(fname, "w", newline="") as csvfile:
+            csvfile.write("# Colocated radar gates data file\n")
             csvfile.write('# Comment lines are preceded by "#"\n')
-            csvfile.write('#\n')
+            csvfile.write("#\n")
 
             fieldnames = [
-                'rad1_time', 'rad1_ray_ind', 'rad1_rng_ind', 'rad1_ele',
-                'rad1_azi', 'rad1_rng', 'rad1_val', 'rad2_time',
-                'rad2_ray_ind', 'rad2_rng_ind', 'rad2_ele', 'rad2_azi',
-                'rad2_rng', 'rad2_val']
+                "rad1_time",
+                "rad1_ray_ind",
+                "rad1_rng_ind",
+                "rad1_ele",
+                "rad1_azi",
+                "rad1_rng",
+                "rad1_val",
+                "rad2_time",
+                "rad2_ray_ind",
+                "rad2_rng_ind",
+                "rad2_ele",
+                "rad2_azi",
+                "rad2_rng",
+                "rad2_val",
+            ]
             writer = csv.DictWriter(csvfile, fieldnames)
             writer.writeheader()
-            for i, rad1_time in enumerate(coloc_data['rad1_time']):
-                writer.writerow({
-                    'rad1_time': rad1_time.strftime('%Y%m%d%H%M%S'),
-                    'rad1_ray_ind': coloc_data['rad1_ray_ind'][i],
-                    'rad1_rng_ind': coloc_data['rad1_rng_ind'][i],
-                    'rad1_ele': coloc_data['rad1_ele'][i],
-                    'rad1_azi': coloc_data['rad1_azi'][i],
-                    'rad1_rng': coloc_data['rad1_rng'][i],
-                    'rad1_val': coloc_data['rad1_val'][i],
-                    'rad2_time': (
-                        coloc_data['rad2_time'][i].strftime('%Y%m%d%H%M%S')),
-                    'rad2_ray_ind': coloc_data['rad2_ray_ind'][i],
-                    'rad2_rng_ind': coloc_data['rad2_rng_ind'][i],
-                    'rad2_ele': coloc_data['rad2_ele'][i],
-                    'rad2_azi': coloc_data['rad2_azi'][i],
-                    'rad2_rng': coloc_data['rad2_rng'][i],
-                    'rad2_val': coloc_data['rad2_val'][i]})
+            for i, rad1_time in enumerate(coloc_data["rad1_time"]):
+                writer.writerow(
+                    {
+                        "rad1_time": rad1_time.strftime("%Y%m%d%H%M%S"),
+                        "rad1_ray_ind": coloc_data["rad1_ray_ind"][i],
+                        "rad1_rng_ind": coloc_data["rad1_rng_ind"][i],
+                        "rad1_ele": coloc_data["rad1_ele"][i],
+                        "rad1_azi": coloc_data["rad1_azi"][i],
+                        "rad1_rng": coloc_data["rad1_rng"][i],
+                        "rad1_val": coloc_data["rad1_val"][i],
+                        "rad2_time": (
+                            coloc_data["rad2_time"][i].strftime("%Y%m%d%H%M%S")
+                        ),
+                        "rad2_ray_ind": coloc_data["rad2_ray_ind"][i],
+                        "rad2_rng_ind": coloc_data["rad2_rng_ind"][i],
+                        "rad2_ele": coloc_data["rad2_ele"][i],
+                        "rad2_azi": coloc_data["rad2_azi"][i],
+                        "rad2_rng": coloc_data["rad2_rng"][i],
+                        "rad2_val": coloc_data["rad2_val"][i],
+                    }
+                )
 
             csvfile.close()
     else:
-        with open(fname, 'a', newline='') as csvfile:
+        with open(fname, "a", newline="") as csvfile:
             fieldnames = [
-                'rad1_time', 'rad1_ray_ind', 'rad1_rng_ind', 'rad1_ele',
-                'rad1_azi', 'rad1_rng', 'rad1_val', 'rad2_time',
-                'rad2_ray_ind', 'rad2_rng_ind', 'rad2_ele', 'rad2_azi',
-                'rad2_rng', 'rad2_val']
+                "rad1_time",
+                "rad1_ray_ind",
+                "rad1_rng_ind",
+                "rad1_ele",
+                "rad1_azi",
+                "rad1_rng",
+                "rad1_val",
+                "rad2_time",
+                "rad2_ray_ind",
+                "rad2_rng_ind",
+                "rad2_ele",
+                "rad2_azi",
+                "rad2_rng",
+                "rad2_val",
+            ]
             writer = csv.DictWriter(csvfile, fieldnames)
-            for i, rad1_time in enumerate(coloc_data['rad1_time']):
-                writer.writerow({
-                    'rad1_time': rad1_time.strftime('%Y%m%d%H%M%S'),
-                    'rad1_ray_ind': coloc_data['rad1_ray_ind'][i],
-                    'rad1_rng_ind': coloc_data['rad1_rng_ind'][i],
-                    'rad1_ele': coloc_data['rad1_ele'][i],
-                    'rad1_azi': coloc_data['rad1_azi'][i],
-                    'rad1_rng': coloc_data['rad1_rng'][i],
-                    'rad1_val': coloc_data['rad1_val'][i],
-                    'rad2_time': (
-                        coloc_data['rad2_time'][i].strftime('%Y%m%d%H%M%S')),
-                    'rad2_ray_ind': coloc_data['rad2_ray_ind'][i],
-                    'rad2_rng_ind': coloc_data['rad2_rng_ind'][i],
-                    'rad2_ele': coloc_data['rad2_ele'][i],
-                    'rad2_azi': coloc_data['rad2_azi'][i],
-                    'rad2_rng': coloc_data['rad2_rng'][i],
-                    'rad2_val': coloc_data['rad2_val'][i]})
+            for i, rad1_time in enumerate(coloc_data["rad1_time"]):
+                writer.writerow(
+                    {
+                        "rad1_time": rad1_time.strftime("%Y%m%d%H%M%S"),
+                        "rad1_ray_ind": coloc_data["rad1_ray_ind"][i],
+                        "rad1_rng_ind": coloc_data["rad1_rng_ind"][i],
+                        "rad1_ele": coloc_data["rad1_ele"][i],
+                        "rad1_azi": coloc_data["rad1_azi"][i],
+                        "rad1_rng": coloc_data["rad1_rng"][i],
+                        "rad1_val": coloc_data["rad1_val"][i],
+                        "rad2_time": (
+                            coloc_data["rad2_time"][i].strftime("%Y%m%d%H%M%S")
+                        ),
+                        "rad2_ray_ind": coloc_data["rad2_ray_ind"][i],
+                        "rad2_rng_ind": coloc_data["rad2_rng_ind"][i],
+                        "rad2_ele": coloc_data["rad2_ele"][i],
+                        "rad2_azi": coloc_data["rad2_azi"][i],
+                        "rad2_rng": coloc_data["rad2_rng"][i],
+                        "rad2_val": coloc_data["rad2_val"][i],
+                    }
+                )
             csvfile.close()
 
     return fname
@@ -2622,72 +3150,108 @@ def write_colocated_data_time_avg(coloc_data, fname):
     """
     filelist = glob.glob(fname)
     if not filelist:
-        with open(fname, 'w', newline='') as csvfile:
-            csvfile.write('# Colocated radar gates data file\n')
+        with open(fname, "w", newline="") as csvfile:
+            csvfile.write("# Colocated radar gates data file\n")
             csvfile.write('# Comment lines are preceded by "#"\n')
-            csvfile.write('#\n')
+            csvfile.write("#\n")
 
             fieldnames = [
-                'rad1_time', 'rad1_ray_ind', 'rad1_rng_ind', 'rad1_ele',
-                'rad1_azi', 'rad1_rng', 'rad1_dBZavg', 'rad1_PhiDPavg',
-                'rad1_Flagavg', 'rad2_time', 'rad2_ray_ind', 'rad2_rng_ind',
-                'rad2_ele', 'rad2_azi', 'rad2_rng', 'rad2_dBZavg',
-                'rad2_PhiDPavg', 'rad2_Flagavg']
+                "rad1_time",
+                "rad1_ray_ind",
+                "rad1_rng_ind",
+                "rad1_ele",
+                "rad1_azi",
+                "rad1_rng",
+                "rad1_dBZavg",
+                "rad1_PhiDPavg",
+                "rad1_Flagavg",
+                "rad2_time",
+                "rad2_ray_ind",
+                "rad2_rng_ind",
+                "rad2_ele",
+                "rad2_azi",
+                "rad2_rng",
+                "rad2_dBZavg",
+                "rad2_PhiDPavg",
+                "rad2_Flagavg",
+            ]
             writer = csv.DictWriter(csvfile, fieldnames)
             writer.writeheader()
-            for i, rad1_time in enumerate(coloc_data['rad1_time']):
-                writer.writerow({
-                    'rad1_time': rad1_time.strftime('%Y%m%d%H%M%S'),
-                    'rad1_ray_ind': coloc_data['rad1_ray_ind'][i],
-                    'rad1_rng_ind': coloc_data['rad1_rng_ind'][i],
-                    'rad1_ele': coloc_data['rad1_ele'][i],
-                    'rad1_azi': coloc_data['rad1_azi'][i],
-                    'rad1_rng': coloc_data['rad1_rng'][i],
-                    'rad1_dBZavg': coloc_data['rad1_dBZavg'][i],
-                    'rad1_PhiDPavg': coloc_data['rad1_PhiDPavg'][i],
-                    'rad1_Flagavg': coloc_data['rad1_Flagavg'][i],
-                    'rad2_time': (
-                        coloc_data['rad2_time'][i].strftime('%Y%m%d%H%M%S')),
-                    'rad2_ray_ind': coloc_data['rad2_ray_ind'][i],
-                    'rad2_rng_ind': coloc_data['rad2_rng_ind'][i],
-                    'rad2_ele': coloc_data['rad2_ele'][i],
-                    'rad2_azi': coloc_data['rad2_azi'][i],
-                    'rad2_rng': coloc_data['rad2_rng'][i],
-                    'rad2_dBZavg': coloc_data['rad2_dBZavg'][i],
-                    'rad2_PhiDPavg': coloc_data['rad2_PhiDPavg'][i],
-                    'rad2_Flagavg': coloc_data['rad2_Flagavg'][i]})
+            for i, rad1_time in enumerate(coloc_data["rad1_time"]):
+                writer.writerow(
+                    {
+                        "rad1_time": rad1_time.strftime("%Y%m%d%H%M%S"),
+                        "rad1_ray_ind": coloc_data["rad1_ray_ind"][i],
+                        "rad1_rng_ind": coloc_data["rad1_rng_ind"][i],
+                        "rad1_ele": coloc_data["rad1_ele"][i],
+                        "rad1_azi": coloc_data["rad1_azi"][i],
+                        "rad1_rng": coloc_data["rad1_rng"][i],
+                        "rad1_dBZavg": coloc_data["rad1_dBZavg"][i],
+                        "rad1_PhiDPavg": coloc_data["rad1_PhiDPavg"][i],
+                        "rad1_Flagavg": coloc_data["rad1_Flagavg"][i],
+                        "rad2_time": (
+                            coloc_data["rad2_time"][i].strftime("%Y%m%d%H%M%S")
+                        ),
+                        "rad2_ray_ind": coloc_data["rad2_ray_ind"][i],
+                        "rad2_rng_ind": coloc_data["rad2_rng_ind"][i],
+                        "rad2_ele": coloc_data["rad2_ele"][i],
+                        "rad2_azi": coloc_data["rad2_azi"][i],
+                        "rad2_rng": coloc_data["rad2_rng"][i],
+                        "rad2_dBZavg": coloc_data["rad2_dBZavg"][i],
+                        "rad2_PhiDPavg": coloc_data["rad2_PhiDPavg"][i],
+                        "rad2_Flagavg": coloc_data["rad2_Flagavg"][i],
+                    }
+                )
 
             csvfile.close()
     else:
-        with open(fname, 'a', newline='') as csvfile:
+        with open(fname, "a", newline="") as csvfile:
             fieldnames = [
-                'rad1_time', 'rad1_ray_ind', 'rad1_rng_ind', 'rad1_ele',
-                'rad1_azi', 'rad1_rng', 'rad1_dBZavg', 'rad1_PhiDPavg',
-                'rad1_Flagavg', 'rad2_time', 'rad2_ray_ind', 'rad2_rng_ind',
-                'rad2_ele', 'rad2_azi', 'rad2_rng', 'rad2_dBZavg',
-                'rad2_PhiDPavg', 'rad2_Flagavg']
+                "rad1_time",
+                "rad1_ray_ind",
+                "rad1_rng_ind",
+                "rad1_ele",
+                "rad1_azi",
+                "rad1_rng",
+                "rad1_dBZavg",
+                "rad1_PhiDPavg",
+                "rad1_Flagavg",
+                "rad2_time",
+                "rad2_ray_ind",
+                "rad2_rng_ind",
+                "rad2_ele",
+                "rad2_azi",
+                "rad2_rng",
+                "rad2_dBZavg",
+                "rad2_PhiDPavg",
+                "rad2_Flagavg",
+            ]
             writer = csv.DictWriter(csvfile, fieldnames)
-            for i, rad1_time in enumerate(coloc_data['rad1_time']):
-                writer.writerow({
-                    'rad1_time': rad1_time.strftime('%Y%m%d%H%M%S'),
-                    'rad1_ray_ind': coloc_data['rad1_ray_ind'][i],
-                    'rad1_rng_ind': coloc_data['rad1_rng_ind'][i],
-                    'rad1_ele': coloc_data['rad1_ele'][i],
-                    'rad1_azi': coloc_data['rad1_azi'][i],
-                    'rad1_rng': coloc_data['rad1_rng'][i],
-                    'rad1_dBZavg': coloc_data['rad1_dBZavg'][i],
-                    'rad1_PhiDPavg': coloc_data['rad1_PhiDPavg'][i],
-                    'rad1_Flagavg': coloc_data['rad1_Flagavg'][i],
-                    'rad2_time': (
-                        coloc_data['rad2_time'][i].strftime('%Y%m%d%H%M%S')),
-                    'rad2_ray_ind': coloc_data['rad2_ray_ind'][i],
-                    'rad2_rng_ind': coloc_data['rad2_rng_ind'][i],
-                    'rad2_ele': coloc_data['rad2_ele'][i],
-                    'rad2_azi': coloc_data['rad2_azi'][i],
-                    'rad2_rng': coloc_data['rad2_rng'][i],
-                    'rad2_dBZavg': coloc_data['rad2_dBZavg'][i],
-                    'rad2_PhiDPavg': coloc_data['rad2_PhiDPavg'][i],
-                    'rad2_Flagavg': coloc_data['rad2_Flagavg'][i]})
+            for i, rad1_time in enumerate(coloc_data["rad1_time"]):
+                writer.writerow(
+                    {
+                        "rad1_time": rad1_time.strftime("%Y%m%d%H%M%S"),
+                        "rad1_ray_ind": coloc_data["rad1_ray_ind"][i],
+                        "rad1_rng_ind": coloc_data["rad1_rng_ind"][i],
+                        "rad1_ele": coloc_data["rad1_ele"][i],
+                        "rad1_azi": coloc_data["rad1_azi"][i],
+                        "rad1_rng": coloc_data["rad1_rng"][i],
+                        "rad1_dBZavg": coloc_data["rad1_dBZavg"][i],
+                        "rad1_PhiDPavg": coloc_data["rad1_PhiDPavg"][i],
+                        "rad1_Flagavg": coloc_data["rad1_Flagavg"][i],
+                        "rad2_time": (
+                            coloc_data["rad2_time"][i].strftime("%Y%m%d%H%M%S")
+                        ),
+                        "rad2_ray_ind": coloc_data["rad2_ray_ind"][i],
+                        "rad2_rng_ind": coloc_data["rad2_rng_ind"][i],
+                        "rad2_ele": coloc_data["rad2_ele"][i],
+                        "rad2_azi": coloc_data["rad2_azi"][i],
+                        "rad2_rng": coloc_data["rad2_rng"][i],
+                        "rad2_dBZavg": coloc_data["rad2_dBZavg"][i],
+                        "rad2_PhiDPavg": coloc_data["rad2_PhiDPavg"][i],
+                        "rad2_Flagavg": coloc_data["rad2_Flagavg"][i],
+                    }
+                )
             csvfile.close()
 
     return fname
@@ -2711,84 +3275,117 @@ def write_sun_hits(sun_hits, fname):
         the name of the file where data has written
 
     """
-    dBm_sun_hit = sun_hits['dBm_sun_hit'].filled(fill_value=get_fillvalue())
-    std_dBm_sun_hit = sun_hits['std(dBm_sun_hit)'].filled(
-        fill_value=get_fillvalue())
-    dBmv_sun_hit = sun_hits['dBmv_sun_hit'].filled(fill_value=get_fillvalue())
-    std_dBmv_sun_hit = sun_hits['std(dBmv_sun_hit)'].filled(
-        fill_value=get_fillvalue())
-    zdr_sun_hit = sun_hits['ZDR_sun_hit'].filled(fill_value=get_fillvalue())
-    std_zdr_sun_hit = sun_hits['std(ZDR_sun_hit)'].filled(
-        fill_value=get_fillvalue())
+    dBm_sun_hit = sun_hits["dBm_sun_hit"].filled(fill_value=get_fillvalue())
+    std_dBm_sun_hit = sun_hits["std(dBm_sun_hit)"].filled(fill_value=get_fillvalue())
+    dBmv_sun_hit = sun_hits["dBmv_sun_hit"].filled(fill_value=get_fillvalue())
+    std_dBmv_sun_hit = sun_hits["std(dBmv_sun_hit)"].filled(fill_value=get_fillvalue())
+    zdr_sun_hit = sun_hits["ZDR_sun_hit"].filled(fill_value=get_fillvalue())
+    std_zdr_sun_hit = sun_hits["std(ZDR_sun_hit)"].filled(fill_value=get_fillvalue())
 
     filelist = glob.glob(fname)
     if not filelist:
-        with open(fname, 'w', newline='') as csvfile:
-            csvfile.write('# Weather radar sun hits data file\n')
+        with open(fname, "w", newline="") as csvfile:
+            csvfile.write("# Weather radar sun hits data file\n")
             csvfile.write('# Comment lines are preceded by "#"\n')
-            csvfile.write('# Fill Value: ' + str(get_fillvalue()) + '\n')
-            csvfile.write('#\n')
+            csvfile.write("# Fill Value: " + str(get_fillvalue()) + "\n")
+            csvfile.write("#\n")
 
             fieldnames = [
-                'time', 'ray', 'NPrng',
-                'rad_el', 'rad_az', 'sun_el', 'sun_az',
-                'dBm_sun_hit', 'std(dBm_sun_hit)', 'NPh', 'NPhval',
-                'dBmv_sun_hit', 'std(dBmv_sun_hit)', 'NPv', 'NPvval',
-                'ZDR_sun_hit', 'std(ZDR_sun_hit)', 'NPzdr', 'NPzdrval']
+                "time",
+                "ray",
+                "NPrng",
+                "rad_el",
+                "rad_az",
+                "sun_el",
+                "sun_az",
+                "dBm_sun_hit",
+                "std(dBm_sun_hit)",
+                "NPh",
+                "NPhval",
+                "dBmv_sun_hit",
+                "std(dBmv_sun_hit)",
+                "NPv",
+                "NPvval",
+                "ZDR_sun_hit",
+                "std(ZDR_sun_hit)",
+                "NPzdr",
+                "NPzdrval",
+            ]
             writer = csv.DictWriter(csvfile, fieldnames)
             writer.writeheader()
-            for i, sh_time in enumerate(sun_hits['time']):
-                writer.writerow({
-                    'time': sh_time.strftime('%Y-%m-%d %H:%M:%S.%f'),
-                    'ray': sun_hits['ray'][i],
-                    'NPrng': sun_hits['NPrng'][i],
-                    'rad_el': sun_hits['rad_el'][i],
-                    'rad_az': sun_hits['rad_az'][i],
-                    'sun_el': sun_hits['sun_el'][i],
-                    'sun_az': sun_hits['sun_az'][i],
-                    'dBm_sun_hit': dBm_sun_hit[i],
-                    'std(dBm_sun_hit)': std_dBm_sun_hit[i],
-                    'NPh': sun_hits['NPh'][i],
-                    'NPhval': sun_hits['NPhval'][i],
-                    'dBmv_sun_hit': dBmv_sun_hit[i],
-                    'std(dBmv_sun_hit)': std_dBmv_sun_hit[i],
-                    'NPv': sun_hits['NPv'][i],
-                    'NPvval': sun_hits['NPvval'][i],
-                    'ZDR_sun_hit': zdr_sun_hit[i],
-                    'std(ZDR_sun_hit)': std_zdr_sun_hit[i],
-                    'NPzdr': sun_hits['NPzdr'][i],
-                    'NPzdrval': sun_hits['NPzdrval'][i]})
+            for i, sh_time in enumerate(sun_hits["time"]):
+                writer.writerow(
+                    {
+                        "time": sh_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
+                        "ray": sun_hits["ray"][i],
+                        "NPrng": sun_hits["NPrng"][i],
+                        "rad_el": sun_hits["rad_el"][i],
+                        "rad_az": sun_hits["rad_az"][i],
+                        "sun_el": sun_hits["sun_el"][i],
+                        "sun_az": sun_hits["sun_az"][i],
+                        "dBm_sun_hit": dBm_sun_hit[i],
+                        "std(dBm_sun_hit)": std_dBm_sun_hit[i],
+                        "NPh": sun_hits["NPh"][i],
+                        "NPhval": sun_hits["NPhval"][i],
+                        "dBmv_sun_hit": dBmv_sun_hit[i],
+                        "std(dBmv_sun_hit)": std_dBmv_sun_hit[i],
+                        "NPv": sun_hits["NPv"][i],
+                        "NPvval": sun_hits["NPvval"][i],
+                        "ZDR_sun_hit": zdr_sun_hit[i],
+                        "std(ZDR_sun_hit)": std_zdr_sun_hit[i],
+                        "NPzdr": sun_hits["NPzdr"][i],
+                        "NPzdrval": sun_hits["NPzdrval"][i],
+                    }
+                )
             csvfile.close()
     else:
-        with open(fname, 'a', newline='') as csvfile:
+        with open(fname, "a", newline="") as csvfile:
             fieldnames = [
-                'time', 'ray', 'NPrng',
-                'rad_el', 'rad_az', 'sun_el', 'sun_az',
-                'dBm_sun_hit', 'std(dBm_sun_hit)', 'NPh', 'NPhval',
-                'dBmv_sun_hit', 'std(dBmv_sun_hit)', 'NPv', 'NPvval',
-                'ZDR_sun_hit', 'std(ZDR_sun_hit)', 'NPzdr', 'NPzdrval']
+                "time",
+                "ray",
+                "NPrng",
+                "rad_el",
+                "rad_az",
+                "sun_el",
+                "sun_az",
+                "dBm_sun_hit",
+                "std(dBm_sun_hit)",
+                "NPh",
+                "NPhval",
+                "dBmv_sun_hit",
+                "std(dBmv_sun_hit)",
+                "NPv",
+                "NPvval",
+                "ZDR_sun_hit",
+                "std(ZDR_sun_hit)",
+                "NPzdr",
+                "NPzdrval",
+            ]
             writer = csv.DictWriter(csvfile, fieldnames)
-            for i, sh_time in enumerate(sun_hits['time']):
-                writer.writerow({
-                    'time': sh_time.strftime('%Y-%m-%d %H:%M:%S.%f'),
-                    'ray': sun_hits['ray'][i],
-                    'NPrng': sun_hits['NPrng'][i],
-                    'rad_el': sun_hits['rad_el'][i],
-                    'rad_az': sun_hits['rad_az'][i],
-                    'sun_el': sun_hits['sun_el'][i],
-                    'sun_az': sun_hits['sun_az'][i],
-                    'dBm_sun_hit': dBm_sun_hit[i],
-                    'std(dBm_sun_hit)': std_dBm_sun_hit[i],
-                    'NPh': sun_hits['NPh'][i],
-                    'NPhval': sun_hits['NPhval'][i],
-                    'dBmv_sun_hit': dBmv_sun_hit[i],
-                    'std(dBmv_sun_hit)': std_dBmv_sun_hit[i],
-                    'NPv': sun_hits['NPv'][i],
-                    'NPvval': sun_hits['NPvval'][i],
-                    'ZDR_sun_hit': zdr_sun_hit[i],
-                    'std(ZDR_sun_hit)': std_zdr_sun_hit[i],
-                    'NPzdr': sun_hits['NPzdr'][i],
-                    'NPzdrval': sun_hits['NPzdrval'][i]})
+            for i, sh_time in enumerate(sun_hits["time"]):
+                writer.writerow(
+                    {
+                        "time": sh_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
+                        "ray": sun_hits["ray"][i],
+                        "NPrng": sun_hits["NPrng"][i],
+                        "rad_el": sun_hits["rad_el"][i],
+                        "rad_az": sun_hits["rad_az"][i],
+                        "sun_el": sun_hits["sun_el"][i],
+                        "sun_az": sun_hits["sun_az"][i],
+                        "dBm_sun_hit": dBm_sun_hit[i],
+                        "std(dBm_sun_hit)": std_dBm_sun_hit[i],
+                        "NPh": sun_hits["NPh"][i],
+                        "NPhval": sun_hits["NPhval"][i],
+                        "dBmv_sun_hit": dBmv_sun_hit[i],
+                        "std(dBmv_sun_hit)": std_dBmv_sun_hit[i],
+                        "NPv": sun_hits["NPv"][i],
+                        "NPvval": sun_hits["NPvval"][i],
+                        "ZDR_sun_hit": zdr_sun_hit[i],
+                        "std(ZDR_sun_hit)": std_zdr_sun_hit[i],
+                        "NPzdr": sun_hits["NPzdr"][i],
+                        "NPzdrval": sun_hits["NPzdrval"][i],
+                    }
+                )
             csvfile.close()
 
     return fname
@@ -2812,122 +3409,157 @@ def write_sun_retrieval(sun_retrieval, fname):
         the name of the file where data has written
 
     """
-    first_hit_time = sun_retrieval['first_hit_time'].strftime('%Y%m%d%H%M%S')
-    last_hit_time = sun_retrieval['last_hit_time'].strftime('%Y%m%d%H%M%S')
-    el_width_h = sun_retrieval['el_width_h'].filled(fill_value=get_fillvalue())
-    az_width_h = sun_retrieval['az_width_h'].filled(fill_value=get_fillvalue())
-    el_bias_h = sun_retrieval['el_bias_h'].filled(fill_value=get_fillvalue())
-    az_bias_h = sun_retrieval['az_bias_h'].filled(fill_value=get_fillvalue())
-    dBm_sun_est = sun_retrieval['dBm_sun_est'].filled(
-        fill_value=get_fillvalue())
-    std_dBm_sun_est = sun_retrieval['std(dBm_sun_est)'].filled(
-        fill_value=get_fillvalue())
-    sf_h = sun_retrieval['sf_h'].filled(fill_value=get_fillvalue())
+    first_hit_time = sun_retrieval["first_hit_time"].strftime("%Y%m%d%H%M%S")
+    last_hit_time = sun_retrieval["last_hit_time"].strftime("%Y%m%d%H%M%S")
+    el_width_h = sun_retrieval["el_width_h"].filled(fill_value=get_fillvalue())
+    az_width_h = sun_retrieval["az_width_h"].filled(fill_value=get_fillvalue())
+    el_bias_h = sun_retrieval["el_bias_h"].filled(fill_value=get_fillvalue())
+    az_bias_h = sun_retrieval["az_bias_h"].filled(fill_value=get_fillvalue())
+    dBm_sun_est = sun_retrieval["dBm_sun_est"].filled(fill_value=get_fillvalue())
+    std_dBm_sun_est = sun_retrieval["std(dBm_sun_est)"].filled(
+        fill_value=get_fillvalue()
+    )
+    sf_h = sun_retrieval["sf_h"].filled(fill_value=get_fillvalue())
 
-    el_width_v = sun_retrieval['el_width_v'].filled(fill_value=get_fillvalue())
-    az_width_v = sun_retrieval['az_width_v'].filled(fill_value=get_fillvalue())
-    el_bias_v = sun_retrieval['el_bias_v'].filled(fill_value=get_fillvalue())
-    az_bias_v = sun_retrieval['az_bias_v'].filled(fill_value=get_fillvalue())
-    dBmv_sun_est = sun_retrieval['dBmv_sun_est'].filled(
-        fill_value=get_fillvalue())
-    std_dBmv_sun_est = sun_retrieval['std(dBmv_sun_est)'].filled(
-        fill_value=get_fillvalue())
-    sf_v = sun_retrieval['sf_v'].filled(fill_value=get_fillvalue())
+    el_width_v = sun_retrieval["el_width_v"].filled(fill_value=get_fillvalue())
+    az_width_v = sun_retrieval["az_width_v"].filled(fill_value=get_fillvalue())
+    el_bias_v = sun_retrieval["el_bias_v"].filled(fill_value=get_fillvalue())
+    az_bias_v = sun_retrieval["az_bias_v"].filled(fill_value=get_fillvalue())
+    dBmv_sun_est = sun_retrieval["dBmv_sun_est"].filled(fill_value=get_fillvalue())
+    std_dBmv_sun_est = sun_retrieval["std(dBmv_sun_est)"].filled(
+        fill_value=get_fillvalue()
+    )
+    sf_v = sun_retrieval["sf_v"].filled(fill_value=get_fillvalue())
 
-    zdr_sun_est = sun_retrieval['ZDR_sun_est'].filled(
-        fill_value=get_fillvalue())
-    std_zdr_sun_est = sun_retrieval['std(ZDR_sun_est)'].filled(
-        fill_value=get_fillvalue())
-    sf_ref = sun_retrieval['sf_ref'].filled(
-        fill_value=get_fillvalue())
-    ref_time = 'None'
-    if sun_retrieval['ref_time'] is not None:
-        ref_time = sun_retrieval['ref_time'].strftime('%Y%m%d%H%M%S')
+    zdr_sun_est = sun_retrieval["ZDR_sun_est"].filled(fill_value=get_fillvalue())
+    std_zdr_sun_est = sun_retrieval["std(ZDR_sun_est)"].filled(
+        fill_value=get_fillvalue()
+    )
+    sf_ref = sun_retrieval["sf_ref"].filled(fill_value=get_fillvalue())
+    ref_time = "None"
+    if sun_retrieval["ref_time"] is not None:
+        ref_time = sun_retrieval["ref_time"].strftime("%Y%m%d%H%M%S")
 
     filelist = glob.glob(fname)
     if not filelist:
-        with open(fname, 'w', newline='') as csvfile:
-            csvfile.write('# Weather radar sun retrievals data file\n')
+        with open(fname, "w", newline="") as csvfile:
+            csvfile.write("# Weather radar sun retrievals data file\n")
             csvfile.write('# Comment lines are preceded by "#"\n')
-            csvfile.write('# Fill Value: ' + str(get_fillvalue()) + '\n')
-            csvfile.write('#\n')
+            csvfile.write("# Fill Value: " + str(get_fillvalue()) + "\n")
+            csvfile.write("#\n")
 
             fieldnames = [
-                'first_hit_time', 'last_hit_time',
-                'nhits_h', 'el_width_h', 'az_width_h',
-                'el_bias_h', 'az_bias_h', 'dBm_sun_est', 'std(dBm_sun_est)',
-                'sf_h',
-                'nhits_v', 'el_width_v', 'az_width_v',
-                'el_bias_v', 'az_bias_v', 'dBmv_sun_est', 'std(dBmv_sun_est)',
-                'sf_v',
-                'nhits_zdr', 'ZDR_sun_est', 'std(ZDR_sun_est)', 'sf_ref',
-                'ref_time']
+                "first_hit_time",
+                "last_hit_time",
+                "nhits_h",
+                "el_width_h",
+                "az_width_h",
+                "el_bias_h",
+                "az_bias_h",
+                "dBm_sun_est",
+                "std(dBm_sun_est)",
+                "sf_h",
+                "nhits_v",
+                "el_width_v",
+                "az_width_v",
+                "el_bias_v",
+                "az_bias_v",
+                "dBmv_sun_est",
+                "std(dBmv_sun_est)",
+                "sf_v",
+                "nhits_zdr",
+                "ZDR_sun_est",
+                "std(ZDR_sun_est)",
+                "sf_ref",
+                "ref_time",
+            ]
 
             writer = csv.DictWriter(csvfile, fieldnames)
             writer.writeheader()
             writer.writerow(
-                {'first_hit_time': first_hit_time,
-                 'last_hit_time': last_hit_time,
-                 'nhits_h': sun_retrieval['nhits_h'],
-                 'el_width_h': el_width_h,
-                 'az_width_h': az_width_h,
-                 'el_bias_h': el_bias_h,
-                 'az_bias_h': az_bias_h,
-                 'dBm_sun_est': dBm_sun_est,
-                 'std(dBm_sun_est)': std_dBm_sun_est,
-                 'sf_h': sf_h,
-                 'nhits_v': sun_retrieval['nhits_v'],
-                 'el_width_v': el_width_v,
-                 'az_width_v': az_width_v,
-                 'el_bias_v': el_bias_v,
-                 'az_bias_v': az_bias_v,
-                 'dBmv_sun_est': dBmv_sun_est,
-                 'std(dBmv_sun_est)': std_dBmv_sun_est,
-                 'sf_v': sf_v,
-                 'nhits_zdr': sun_retrieval['nhits_zdr'],
-                 'ZDR_sun_est': zdr_sun_est,
-                 'std(ZDR_sun_est)': std_zdr_sun_est,
-                 'sf_ref': sf_ref,
-                 'ref_time': ref_time})
+                {
+                    "first_hit_time": first_hit_time,
+                    "last_hit_time": last_hit_time,
+                    "nhits_h": sun_retrieval["nhits_h"],
+                    "el_width_h": el_width_h,
+                    "az_width_h": az_width_h,
+                    "el_bias_h": el_bias_h,
+                    "az_bias_h": az_bias_h,
+                    "dBm_sun_est": dBm_sun_est,
+                    "std(dBm_sun_est)": std_dBm_sun_est,
+                    "sf_h": sf_h,
+                    "nhits_v": sun_retrieval["nhits_v"],
+                    "el_width_v": el_width_v,
+                    "az_width_v": az_width_v,
+                    "el_bias_v": el_bias_v,
+                    "az_bias_v": az_bias_v,
+                    "dBmv_sun_est": dBmv_sun_est,
+                    "std(dBmv_sun_est)": std_dBmv_sun_est,
+                    "sf_v": sf_v,
+                    "nhits_zdr": sun_retrieval["nhits_zdr"],
+                    "ZDR_sun_est": zdr_sun_est,
+                    "std(ZDR_sun_est)": std_zdr_sun_est,
+                    "sf_ref": sf_ref,
+                    "ref_time": ref_time,
+                }
+            )
             csvfile.close()
     else:
-        with open(fname, 'a', newline='') as csvfile:
+        with open(fname, "a", newline="") as csvfile:
             fieldnames = [
-                'first_hit_time', 'last_hit_time',
-                'nhits_h', 'el_width_h', 'az_width_h',
-                'el_bias_h', 'az_bias_h', 'dBm_sun_est', 'std(dBm_sun_est)',
-                'sf_h',
-                'nhits_v', 'el_width_v', 'az_width_v',
-                'el_bias_v', 'az_bias_v', 'dBmv_sun_est', 'std(dBmv_sun_est)',
-                'sf_v',
-                'nhits_zdr', 'ZDR_sun_est', 'std(ZDR_sun_est)', 'sf_ref',
-                'ref_time']
+                "first_hit_time",
+                "last_hit_time",
+                "nhits_h",
+                "el_width_h",
+                "az_width_h",
+                "el_bias_h",
+                "az_bias_h",
+                "dBm_sun_est",
+                "std(dBm_sun_est)",
+                "sf_h",
+                "nhits_v",
+                "el_width_v",
+                "az_width_v",
+                "el_bias_v",
+                "az_bias_v",
+                "dBmv_sun_est",
+                "std(dBmv_sun_est)",
+                "sf_v",
+                "nhits_zdr",
+                "ZDR_sun_est",
+                "std(ZDR_sun_est)",
+                "sf_ref",
+                "ref_time",
+            ]
 
             writer = csv.DictWriter(csvfile, fieldnames)
             writer.writerow(
-                {'first_hit_time': first_hit_time,
-                 'last_hit_time': last_hit_time,
-                 'nhits_h': sun_retrieval['nhits_h'],
-                 'el_width_h': el_width_h,
-                 'az_width_h': az_width_h,
-                 'el_bias_h': el_bias_h,
-                 'az_bias_h': az_bias_h,
-                 'dBm_sun_est': dBm_sun_est,
-                 'std(dBm_sun_est)': std_dBm_sun_est,
-                 'sf_h': sf_h,
-                 'nhits_v': sun_retrieval['nhits_v'],
-                 'el_width_v': el_width_v,
-                 'az_width_v': az_width_v,
-                 'el_bias_v': el_bias_v,
-                 'az_bias_v': az_bias_v,
-                 'dBmv_sun_est': dBmv_sun_est,
-                 'std(dBmv_sun_est)': std_dBmv_sun_est,
-                 'sf_v': sf_v,
-                 'nhits_zdr': sun_retrieval['nhits_zdr'],
-                 'ZDR_sun_est': zdr_sun_est,
-                 'std(ZDR_sun_est)': std_zdr_sun_est,
-                 'sf_ref': sf_ref,
-                 'ref_time': ref_time})
+                {
+                    "first_hit_time": first_hit_time,
+                    "last_hit_time": last_hit_time,
+                    "nhits_h": sun_retrieval["nhits_h"],
+                    "el_width_h": el_width_h,
+                    "az_width_h": az_width_h,
+                    "el_bias_h": el_bias_h,
+                    "az_bias_h": az_bias_h,
+                    "dBm_sun_est": dBm_sun_est,
+                    "std(dBm_sun_est)": std_dBm_sun_est,
+                    "sf_h": sf_h,
+                    "nhits_v": sun_retrieval["nhits_v"],
+                    "el_width_v": el_width_v,
+                    "az_width_v": az_width_v,
+                    "el_bias_v": el_bias_v,
+                    "az_bias_v": az_bias_v,
+                    "dBmv_sun_est": dBmv_sun_est,
+                    "std(dBmv_sun_est)": std_dBmv_sun_est,
+                    "sf_v": sf_v,
+                    "nhits_zdr": sun_retrieval["nhits_zdr"],
+                    "ZDR_sun_est": zdr_sun_est,
+                    "std(ZDR_sun_est)": std_zdr_sun_est,
+                    "sf_ref": sf_ref,
+                    "ref_time": ref_time,
+                }
+            )
             csvfile.close()
 
     return fname

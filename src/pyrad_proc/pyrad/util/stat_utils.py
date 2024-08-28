@@ -15,9 +15,14 @@ Miscellaneous functions dealing with statistics
 import numpy as np
 
 
-def quantiles_weighted(values, weight_vector=None, quantiles=np.array([0.5]),
-                       weight_threshold=None, data_is_log=False,
-                       nvalid_min=3):
+def quantiles_weighted(
+    values,
+    weight_vector=None,
+    quantiles=np.array([0.5]),
+    weight_threshold=None,
+    data_is_log=False,
+    nvalid_min=3,
+):
     """
     Given a set of values and weights, compute the weighted quantile(s) and
     average.
@@ -58,14 +63,16 @@ def quantiles_weighted(values, weight_vector=None, quantiles=np.array([0.5]),
         if weight_vector.size != values.shape[0]:
             raise Exception(
                 "ERROR: Unexpected size of weight vector "
-                "(%d instead of %d)" % (weight_vector.size, values.shape[0]))
+                "(%d instead of %d)" % (weight_vector.size, values.shape[0])
+            )
     else:
         weight_vector = np.ones(values.shape[0], dtype=float)
 
     if len(values.shape) > 1:
         # repeat weight vec
-        weight_vector = np.repeat(weight_vector, values.shape[1]) \
-            .reshape(weight_vector.size, values.shape[1])
+        weight_vector = np.repeat(weight_vector, values.shape[1]).reshape(
+            weight_vector.size, values.shape[1]
+        )
 
         values = values.reshape(-1)
         weight_vector = weight_vector.reshape(-1)
@@ -83,7 +90,7 @@ def quantiles_weighted(values, weight_vector=None, quantiles=np.array([0.5]),
 
     if data_is_log:
         # Convert log to lin
-        values = 10.**(values / 10.)
+        values = 10.0 ** (values / 10.0)
 
     # Average
     avg = np.ma.sum(values * weight_vector) / total_weight
@@ -92,7 +99,7 @@ def quantiles_weighted(values, weight_vector=None, quantiles=np.array([0.5]),
         if total_weight < weight_threshold:
             if data_is_log:
                 # Convert lin to log
-                avg = 10. * np.log10(avg)
+                avg = 10.0 * np.log10(avg)
             return (avg, np.array([None] * quantiles.size), nvalid)
 
     # sort the valid data
@@ -116,8 +123,8 @@ def quantiles_weighted(values, weight_vector=None, quantiles=np.array([0.5]),
 
     if data_is_log:
         # Convert lin to log
-        avg = 10. * np.log10(avg)
-        quants = 10. * np.log10(quants)
+        avg = 10.0 * np.log10(avg)
+        quants = 10.0 * np.log10(quants)
 
     return (avg, quants, nvalid)
 
@@ -150,7 +157,9 @@ def ratio_bootstrapping(nominator, denominator, nsamples=1000):
         # this is for version of numpy from 1.7 to 1.15. for higher versions
         # np.random.Generator.choice should be used
         ind_sample = np.random.choice(
-            ind_values, size=ind_values.size, replace=True, p=None)
-        samples[i] = (np.ma.sum(nominator[ind_sample]) /
-                      np.ma.sum(denominator[ind_sample]))
+            ind_values, size=ind_values.size, replace=True, p=None
+        )
+        samples[i] = np.ma.sum(nominator[ind_sample]) / np.ma.sum(
+            denominator[ind_sample]
+        )
     return samples

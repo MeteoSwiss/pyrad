@@ -32,27 +32,41 @@ from .plots_aux import get_norm
 try:
     import cartopy
     from cartopy.io.img_tiles import Stamen
+
     _CARTOPY_AVAILABLE = True
 except ImportError:
     _CARTOPY_AVAILABLE = False
 
 try:
     import pydda
+
     _PYDDA_AVAILABLE = True
 except ImportError:
     _PYDDA_AVAILABLE = False
 
 import matplotlib as mpl
-mpl.use('Agg')
+
+mpl.use("Agg")
 
 # Increase a bit font size
-mpl.rcParams.update({'font.size': 16})
-mpl.rcParams.update({'font.family': "sans-serif"})
+mpl.rcParams.update({"font.size": 16})
+mpl.rcParams.update({"font.family": "sans-serif"})
 
 
-def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
-                 alpha=None, ax=None, fig=None, display=None, save_fig=True,
-                 use_basemap=False):
+def plot_surface(
+    grid,
+    field_name,
+    level,
+    prdcfg,
+    fname_list,
+    titl=None,
+    alpha=None,
+    ax=None,
+    fig=None,
+    display=None,
+    save_fig=True,
+    use_basemap=False,
+):
     """
     plots a surface from gridded data
 
@@ -90,25 +104,26 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
         list of names of the saved plots or handle of the figure an axes
 
     """
-    dpi = prdcfg['gridMapImageConfig'].get('dpi', 72)
-    vmin = prdcfg.get('vmin', None)
-    vmax = prdcfg.get('vmax', None)
-    mask_outside = prdcfg.get('mask_outside', False)
+    dpi = prdcfg["gridMapImageConfig"].get("dpi", 72)
+    vmin = prdcfg.get("vmin", None)
+    vmax = prdcfg.get("vmax", None)
+    mask_outside = prdcfg.get("mask_outside", False)
 
     norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name], isxarray=False)
+        field_name, field_dict=grid.fields[field_name], isxarray=False
+    )
 
-    xsize = prdcfg['gridMapImageConfig']['xsize']
-    ysize = prdcfg['gridMapImageConfig']['ysize']
-    lonstep = prdcfg['gridMapImageConfig'].get('lonstep', 0.5)
-    latstep = prdcfg['gridMapImageConfig'].get('latstep', 0.5)
-    min_lon = prdcfg['gridMapImageConfig'].get('lonmin', 2.5)
-    max_lon = prdcfg['gridMapImageConfig'].get('lonmax', 12.5)
-    min_lat = prdcfg['gridMapImageConfig'].get('latmin', 43.5)
-    max_lat = prdcfg['gridMapImageConfig'].get('latmax', 49.5)
-    embellish = prdcfg['gridMapImageConfig'].get('embellish', True)
-    colorbar_flag = prdcfg['gridMapImageConfig'].get('colorbar_flag', True)
-    exact_limits = prdcfg['gridMapImageConfig'].get('exact_limits', 0)
+    xsize = prdcfg["gridMapImageConfig"]["xsize"]
+    ysize = prdcfg["gridMapImageConfig"]["ysize"]
+    lonstep = prdcfg["gridMapImageConfig"].get("lonstep", 0.5)
+    latstep = prdcfg["gridMapImageConfig"].get("latstep", 0.5)
+    min_lon = prdcfg["gridMapImageConfig"].get("lonmin", 2.5)
+    max_lon = prdcfg["gridMapImageConfig"].get("lonmax", 12.5)
+    min_lat = prdcfg["gridMapImageConfig"].get("latmin", 43.5)
+    max_lat = prdcfg["gridMapImageConfig"].get("latmax", 49.5)
+    embellish = prdcfg["gridMapImageConfig"].get("embellish", True)
+    colorbar_flag = prdcfg["gridMapImageConfig"].get("colorbar_flag", True)
+    exact_limits = prdcfg["gridMapImageConfig"].get("exact_limits", 0)
 
     if exact_limits:
         lon_lines = np.arange(min_lon, max_lon + lonstep, lonstep)
@@ -118,37 +133,36 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
         lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat) + 1, latstep)
 
     if use_basemap or not _CARTOPY_AVAILABLE:
-        resolution = prdcfg['gridMapImageConfig'].get('mapres', 'l')
-        if resolution not in ('c', 'l', 'i', 'h', 'f'):
-            warn('Unknown map resolution: ' + resolution)
-            resolution = 'l'
+        resolution = prdcfg["gridMapImageConfig"].get("mapres", "l")
+        if resolution not in ("c", "l", "i", "h", "f"):
+            warn("Unknown map resolution: " + resolution)
+            resolution = "l"
 
-        if resolution == 'c':
+        if resolution == "c":
             area_thresh = 10000
-        elif resolution == 'l':
+        elif resolution == "l":
             area_thresh = 1000
-        elif resolution == 'i':
+        elif resolution == "i":
             area_thresh = 100
-        elif resolution == 'h':
+        elif resolution == "h":
             area_thresh = 10
-        elif resolution == 'f':
+        elif resolution == "f":
             area_thresh = 1
     else:
-        resolution = prdcfg['gridMapImageConfig'].get('mapres', '110m')
+        resolution = prdcfg["gridMapImageConfig"].get("mapres", "110m")
         # Map from basemap to cartopy notation
-        if resolution == 'l':
-            resolution = '110m'
-        elif resolution == 'i':
-            resolution = '50m'
-        elif resolution == 'h':
-            resolution = '10m'
+        if resolution == "l":
+            resolution = "110m"
+        elif resolution == "i":
+            resolution = "50m"
+        elif resolution == "h":
+            resolution = "10m"
 
-        if resolution not in ('110m', '50m', '10m'):
-            warn('Unknown map resolution: ' + resolution)
-            resolution = '110m'
-        background_zoom = prdcfg['gridMapImageConfig'].get(
-            'background_zoom', 8)
-        maps_list = prdcfg['gridMapImageConfig'].get('maps', [])
+        if resolution not in ("110m", "50m", "10m"):
+            warn("Unknown map resolution: " + resolution)
+            resolution = "110m"
+        background_zoom = prdcfg["gridMapImageConfig"].get("background_zoom", 8)
+        maps_list = prdcfg["gridMapImageConfig"].get("maps", [])
 
     if fig is None:
         fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
@@ -156,24 +170,51 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
         if use_basemap or not _CARTOPY_AVAILABLE:
             display = pyart.graph.GridMapDisplayBasemap(grid)
             display.plot_basemap(
-                lat_lines=lat_lines, lon_lines=lon_lines,
-                resolution=resolution, area_thresh=area_thresh,
-                auto_range=False, min_lon=min_lon, max_lon=max_lon,
-                min_lat=min_lat, max_lat=max_lat)
+                lat_lines=lat_lines,
+                lon_lines=lon_lines,
+                resolution=resolution,
+                area_thresh=area_thresh,
+                auto_range=False,
+                min_lon=min_lon,
+                max_lon=max_lon,
+                min_lat=min_lat,
+                max_lat=max_lat,
+            )
             display.plot_grid(
-                field_name, level=level, norm=norm, ticks=ticks, title=titl,
-                ticklabs=ticklabs, mask_outside=mask_outside, vmin=vmin,
-                vmax=vmax, alpha=alpha, fig=fig)
+                field_name,
+                level=level,
+                norm=norm,
+                ticks=ticks,
+                title=titl,
+                ticklabs=ticklabs,
+                mask_outside=mask_outside,
+                vmin=vmin,
+                vmax=vmax,
+                alpha=alpha,
+                fig=fig,
+            )
         else:
             projection = cartopy.crs.PlateCarree()
 
             display = pyart.graph.GridMapDisplay(grid)
             display.plot_grid(
-                field_name, level=level, norm=norm, ticks=ticks,
-                ticklabs=ticklabs, lat_lines=lat_lines, projection=projection,
-                lon_lines=lon_lines, vmin=vmin, embellish=False,
-                add_grid_lines=True, vmax=vmax, mask_outside=mask_outside,
-                alpha=alpha, title=titl, colorbar_flag=colorbar_flag)
+                field_name,
+                level=level,
+                norm=norm,
+                ticks=ticks,
+                ticklabs=ticklabs,
+                lat_lines=lat_lines,
+                projection=projection,
+                lon_lines=lon_lines,
+                vmin=vmin,
+                embellish=False,
+                add_grid_lines=True,
+                vmax=vmax,
+                mask_outside=mask_outside,
+                alpha=alpha,
+                title=titl,
+                colorbar_flag=colorbar_flag,
+            )
 
             # fig = plt.gcf()
             # ax.set_extent([min_lon, max_lon, min_lat, max_lat])
@@ -181,109 +222,135 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
     else:
         if use_basemap or not _CARTOPY_AVAILABLE:
             display.plot_grid(
-                field_name, level=level, norm=norm, ticks=ticks,
-                lat_lines=lat_lines, lon_lines=lon_lines, title=titl,
-                ticklabs=ticklabs, colorbar_flag=False, embellish=False,
-                vmin=vmin, vmax=vmax, mask_outside=mask_outside,
-                alpha=alpha, ax=ax, fig=fig)
+                field_name,
+                level=level,
+                norm=norm,
+                ticks=ticks,
+                lat_lines=lat_lines,
+                lon_lines=lon_lines,
+                title=titl,
+                ticklabs=ticklabs,
+                colorbar_flag=False,
+                embellish=False,
+                vmin=vmin,
+                vmax=vmax,
+                mask_outside=mask_outside,
+                alpha=alpha,
+                ax=ax,
+                fig=fig,
+            )
         else:
             display.plot_grid(
-                field_name, level=level, norm=norm, ticks=ticks,
-                projection=ax.projection, lat_lines=lat_lines,
-                lon_lines=lon_lines, ticklabs=ticklabs, colorbar_flag=False,
-                embellish=False, vmin=vmin, vmax=vmax,
-                mask_outside=mask_outside, alpha=alpha, title=titl, ax=ax,
-                fig=fig)
+                field_name,
+                level=level,
+                norm=norm,
+                ticks=ticks,
+                projection=ax.projection,
+                lat_lines=lat_lines,
+                lon_lines=lon_lines,
+                ticklabs=ticklabs,
+                colorbar_flag=False,
+                embellish=False,
+                vmin=vmin,
+                vmax=vmax,
+                mask_outside=mask_outside,
+                alpha=alpha,
+                title=titl,
+                ax=ax,
+                fig=fig,
+            )
 
     if embellish:
         ax = plt.gca()
-        if 'relief' in maps_list:
-            tiler = Stamen('terrain-background')
+        if "relief" in maps_list:
+            tiler = Stamen("terrain-background")
             projection = tiler.crs
             fig.delaxes(ax)
             ax = fig.add_subplot(111, projection=projection)
             warn(
-                'The projection of the image is set to that of the ' +
-                'background map, i.e. ' + str(projection), UserWarning)
+                "The projection of the image is set to that of the "
+                + "background map, i.e. "
+                + str(projection),
+                UserWarning,
+            )
 
         for cartomap in maps_list:
-            if cartomap == 'relief':
+            if cartomap == "relief":
                 ax.add_image(tiler, background_zoom)
-            if cartomap == 'countries':
+            if cartomap == "countries":
                 # add countries
                 countries = cartopy.feature.NaturalEarthFeature(
-                    category='cultural',
-                    name='admin_0_countries',
+                    category="cultural",
+                    name="admin_0_countries",
                     scale=resolution,
-                    facecolor='none')
-                ax.add_feature(countries, edgecolor='black')
-            elif cartomap == 'provinces':
+                    facecolor="none",
+                )
+                ax.add_feature(countries, edgecolor="black")
+            elif cartomap == "provinces":
                 # Create a feature for States/Admin 1 regions at
                 # 1:resolution from Natural Earth
                 states_provinces = cartopy.feature.NaturalEarthFeature(
-                    category='cultural',
-                    name='admin_1_states_provinces_lines',
+                    category="cultural",
+                    name="admin_1_states_provinces_lines",
                     scale=resolution,
-                    facecolor='none')
-                ax.add_feature(states_provinces, edgecolor='gray')
-            elif (cartomap == 'urban_areas' and
-                    resolution in ('10m', '50m')):
+                    facecolor="none",
+                )
+                ax.add_feature(states_provinces, edgecolor="gray")
+            elif cartomap == "urban_areas" and resolution in ("10m", "50m"):
                 urban_areas = cartopy.feature.NaturalEarthFeature(
-                    category='cultural',
-                    name='urban_areas',
-                    scale=resolution)
+                    category="cultural", name="urban_areas", scale=resolution
+                )
                 ax.add_feature(
-                    urban_areas, edgecolor='brown', facecolor='brown',
-                    alpha=0.25)
-            elif cartomap == 'roads' and resolution == '10m':
+                    urban_areas, edgecolor="brown", facecolor="brown", alpha=0.25
+                )
+            elif cartomap == "roads" and resolution == "10m":
                 roads = cartopy.feature.NaturalEarthFeature(
-                    category='cultural',
-                    name='roads',
-                    scale=resolution)
-                ax.add_feature(roads, edgecolor='red', facecolor='none')
-            elif cartomap == 'railroads' and resolution == '10m':
+                    category="cultural", name="roads", scale=resolution
+                )
+                ax.add_feature(roads, edgecolor="red", facecolor="none")
+            elif cartomap == "railroads" and resolution == "10m":
                 railroads = cartopy.feature.NaturalEarthFeature(
-                    category='cultural',
-                    name='railroads',
-                    scale=resolution)
+                    category="cultural", name="railroads", scale=resolution
+                )
                 ax.add_feature(
-                    railroads, edgecolor='green', facecolor='none',
-                    linestyle=':')
-            elif cartomap == 'coastlines':
+                    railroads, edgecolor="green", facecolor="none", linestyle=":"
+                )
+            elif cartomap == "coastlines":
                 ax.coastlines(resolution=resolution)
-            elif cartomap == 'lakes':
+            elif cartomap == "lakes":
                 # add lakes
                 lakes = cartopy.feature.NaturalEarthFeature(
-                    category='physical',
-                    name='lakes',
-                    scale=resolution)
-                ax.add_feature(
-                    lakes, edgecolor='blue', facecolor='blue', alpha=0.25)
-            elif resolution == '10m' and cartomap == 'lakes_europe':
+                    category="physical", name="lakes", scale=resolution
+                )
+                ax.add_feature(lakes, edgecolor="blue", facecolor="blue", alpha=0.25)
+            elif resolution == "10m" and cartomap == "lakes_europe":
                 lakes_europe = cartopy.feature.NaturalEarthFeature(
-                    category='physical',
-                    name='lakes_europe',
-                    scale=resolution)
+                    category="physical", name="lakes_europe", scale=resolution
+                )
                 ax.add_feature(
-                    lakes_europe, edgecolor='blue', facecolor='blue',
-                    alpha=0.25)
-            elif cartomap == 'rivers':
+                    lakes_europe, edgecolor="blue", facecolor="blue", alpha=0.25
+                )
+            elif cartomap == "rivers":
                 # add rivers
                 rivers = cartopy.feature.NaturalEarthFeature(
-                    category='physical',
-                    name='rivers_lake_centerlines',
-                    scale=resolution)
-                ax.add_feature(rivers, edgecolor='blue', facecolor='none')
-            elif resolution == '10m' and cartomap == 'rivers_europe':
+                    category="physical",
+                    name="rivers_lake_centerlines",
+                    scale=resolution,
+                )
+                ax.add_feature(rivers, edgecolor="blue", facecolor="none")
+            elif resolution == "10m" and cartomap == "rivers_europe":
                 rivers_europe = cartopy.feature.NaturalEarthFeature(
-                    category='physical',
-                    name='rivers_europe',
-                    scale=resolution)
-                ax.add_feature(
-                    rivers_europe, edgecolor='blue', facecolor='none')
+                    category="physical", name="rivers_europe", scale=resolution
+                )
+                ax.add_feature(rivers_europe, edgecolor="blue", facecolor="none")
             else:
-                warn('cartomap ' + cartomap + ' for resolution ' + resolution +
-                     ' not available')
+                warn(
+                    "cartomap "
+                    + cartomap
+                    + " for resolution "
+                    + resolution
+                    + " not available"
+                )
 
     if save_fig:
         for fname in fname_list:
@@ -295,9 +362,19 @@ def plot_surface(grid, field_name, level, prdcfg, fname_list, titl=None,
     return (fig, ax, display)
 
 
-def plot_surface_raw(grid, field_name, level, prdcfg, fname_list, titl=None,
-                     alpha=None, ax=None, fig=None, display=None,
-                     save_fig=True):
+def plot_surface_raw(
+    grid,
+    field_name,
+    level,
+    prdcfg,
+    fname_list,
+    titl=None,
+    alpha=None,
+    ax=None,
+    fig=None,
+    display=None,
+    save_fig=True,
+):
     """
     plots a surface from gridded data within reprojecting the data into a map
 
@@ -335,16 +412,17 @@ def plot_surface_raw(grid, field_name, level, prdcfg, fname_list, titl=None,
         list of names of the saved plots or handle of the figure an axes
 
     """
-    dpi = prdcfg['gridMapImageConfig'].get('dpi', 72)
-    vmin = prdcfg.get('vmin', None)
-    vmax = prdcfg.get('vmax', None)
+    dpi = prdcfg["gridMapImageConfig"].get("dpi", 72)
+    vmin = prdcfg.get("vmin", None)
+    vmax = prdcfg.get("vmax", None)
 
     norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name], isxarray=False)
+        field_name, field_dict=grid.fields[field_name], isxarray=False
+    )
 
-    xsize = prdcfg['gridMapImageConfig']['xsize']
-    ysize = prdcfg['gridMapImageConfig']['ysize']
-    colorbar_flag = prdcfg['gridMapImageConfig'].get('colorbar_flag', True)
+    xsize = prdcfg["gridMapImageConfig"]["xsize"]
+    ysize = prdcfg["gridMapImageConfig"]["ysize"]
+    colorbar_flag = prdcfg["gridMapImageConfig"].get("colorbar_flag", True)
 
     if fig is None:
         fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
@@ -352,15 +430,35 @@ def plot_surface_raw(grid, field_name, level, prdcfg, fname_list, titl=None,
 
         display = pyart.graph.GridMapDisplay(grid)
         display.plot_grid_raw(
-            field_name, level=level, norm=norm, ticks=ticks,
-            ticklabs=ticklabs, vmin=vmin, vmax=vmax, alpha=alpha,
-            title=titl, ax=ax, fig=fig, colorbar_flag=colorbar_flag)
+            field_name,
+            level=level,
+            norm=norm,
+            ticks=ticks,
+            ticklabs=ticklabs,
+            vmin=vmin,
+            vmax=vmax,
+            alpha=alpha,
+            title=titl,
+            ax=ax,
+            fig=fig,
+            colorbar_flag=colorbar_flag,
+        )
         # display.plot_crosshairs(lon=lon, lat=lat)
     else:
         display.plot_grid_raw(
-            field_name, level=level, norm=norm, ticks=ticks,
-            ticklabs=ticklabs, colorbar_flag=False, vmin=vmin, vmax=vmax,
-            alpha=alpha, title=titl, ax=ax, fig=fig)
+            field_name,
+            level=level,
+            norm=norm,
+            ticks=ticks,
+            ticklabs=ticklabs,
+            colorbar_flag=False,
+            vmin=vmin,
+            vmax=vmax,
+            alpha=alpha,
+            title=titl,
+            ax=ax,
+            fig=fig,
+        )
 
     if save_fig:
         for fname in fname_list:
@@ -372,10 +470,21 @@ def plot_surface_raw(grid, field_name, level, prdcfg, fname_list, titl=None,
     return (fig, ax, display)
 
 
-def plot_surface_contour(grid, field_name, level, prdcfg, fname_list,
-                         contour_values=None, linewidths=1.5, colors='k',
-                         ax=None, fig=None, display=None, save_fig=True,
-                         use_basemap=False):
+def plot_surface_contour(
+    grid,
+    field_name,
+    level,
+    prdcfg,
+    fname_list,
+    contour_values=None,
+    linewidths=1.5,
+    colors="k",
+    ax=None,
+    fig=None,
+    display=None,
+    save_fig=True,
+    use_basemap=False,
+):
     """
     plots a contour plot from gridded data
 
@@ -419,112 +528,142 @@ def plot_surface_contour(grid, field_name, level, prdcfg, fname_list,
     # get contour intervals
     if contour_values is None:
         field_dict = pyart.config.get_metadata(field_name)
-        if 'boundaries' in field_dict:
-            vmin = field_dict['boundaries'][0]
-            vmax = field_dict['boundaries'][-1]
-            num = len(field_dict['boundaries'])
+        if "boundaries" in field_dict:
+            vmin = field_dict["boundaries"][0]
+            vmax = field_dict["boundaries"][-1]
+            num = len(field_dict["boundaries"])
         else:
             vmin, vmax = pyart.config.get_field_limits(field_name)
             num = 10
 
         contour_values = np.linspace(vmin, vmax, num=num)
 
-    dpi = prdcfg['gridMapImageConfig'].get('dpi', 72)
+    dpi = prdcfg["gridMapImageConfig"].get("dpi", 72)
 
-    xsize = prdcfg['gridMapImageConfig']['xsize']
-    ysize = prdcfg['gridMapImageConfig']['ysize']
-    lonstep = prdcfg['gridMapImageConfig'].get('lonstep', 0.5)
-    latstep = prdcfg['gridMapImageConfig'].get('latstep', 0.5)
-    min_lon = prdcfg['gridMapImageConfig'].get('lonmin', 2.5)
-    max_lon = prdcfg['gridMapImageConfig'].get('lonmax', 12.5)
-    min_lat = prdcfg['gridMapImageConfig'].get('latmin', 43.5)
-    max_lat = prdcfg['gridMapImageConfig'].get('latmax', 49.5)
-    exact_limits = prdcfg['gridMapImageConfig'].get('exact_limits', 0)
+    xsize = prdcfg["gridMapImageConfig"]["xsize"]
+    ysize = prdcfg["gridMapImageConfig"]["ysize"]
+    lonstep = prdcfg["gridMapImageConfig"].get("lonstep", 0.5)
+    latstep = prdcfg["gridMapImageConfig"].get("latstep", 0.5)
+    min_lon = prdcfg["gridMapImageConfig"].get("lonmin", 2.5)
+    max_lon = prdcfg["gridMapImageConfig"].get("lonmax", 12.5)
+    min_lat = prdcfg["gridMapImageConfig"].get("latmin", 43.5)
+    max_lat = prdcfg["gridMapImageConfig"].get("latmax", 49.5)
+    exact_limits = prdcfg["gridMapImageConfig"].get("exact_limits", 0)
 
     if fig is None:
         if exact_limits:
             lon_lines = np.arange(min_lon, max_lon + lonstep, lonstep)
             lat_lines = np.arange(min_lat, max_lat + latstep, latstep)
         else:
-            lon_lines = np.arange(
-                np.floor(min_lon), np.ceil(max_lon) + 1, lonstep)
-            lat_lines = np.arange(
-                np.floor(min_lat), np.ceil(max_lat) + 1, latstep)
+            lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon) + 1, lonstep)
+            lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat) + 1, latstep)
 
         fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
         ax = fig.add_subplot(111)
 
         if use_basemap or not _CARTOPY_AVAILABLE:
-            resolution = prdcfg['gridMapImageConfig'].get('mapres', 'l')
-            if resolution not in ('c', 'l', 'i', 'h', 'f'):
-                warn('Unknown map resolution: ' + resolution)
-                resolution = 'l'
+            resolution = prdcfg["gridMapImageConfig"].get("mapres", "l")
+            if resolution not in ("c", "l", "i", "h", "f"):
+                warn("Unknown map resolution: " + resolution)
+                resolution = "l"
 
-            if resolution == 'c':
+            if resolution == "c":
                 area_thresh = 10000
-            elif resolution == 'l':
+            elif resolution == "l":
                 area_thresh = 1000
-            elif resolution == 'i':
+            elif resolution == "i":
                 area_thresh = 100
-            elif resolution == 'h':
+            elif resolution == "h":
                 area_thresh = 10
-            elif resolution == 'f':
+            elif resolution == "f":
                 area_thresh = 1
 
             display = pyart.graph.GridMapDisplayBasemap(grid)
             display.plot_basemap(
-                lat_lines=lat_lines, lon_lines=lon_lines,
-                resolution=resolution, auto_range=False,
-                area_thresh=area_thresh, min_lon=min_lon, max_lon=max_lon,
-                min_lat=min_lat, max_lat=max_lat, ax=ax)
+                lat_lines=lat_lines,
+                lon_lines=lon_lines,
+                resolution=resolution,
+                auto_range=False,
+                area_thresh=area_thresh,
+                min_lon=min_lon,
+                max_lon=max_lon,
+                min_lat=min_lat,
+                max_lat=max_lat,
+                ax=ax,
+            )
 
             lons, lats = grid.get_point_longitude_latitude(edges=False)
-            data = grid.fields[field_name]['data'][level, :, :]
+            data = grid.fields[field_name]["data"][level, :, :]
 
             basemap = display.get_basemap()
             basemap.contour(
-                lons, lats, data, contour_values, colors=colors,
-                linewidths=linewidths, latlon=True)
+                lons,
+                lats,
+                data,
+                contour_values,
+                colors=colors,
+                linewidths=linewidths,
+                latlon=True,
+            )
             ax.set_title(display.generate_grid_title(field_name, level))
         else:
-            resolution = prdcfg['gridMapImageConfig'].get('mapres', '110m')
+            resolution = prdcfg["gridMapImageConfig"].get("mapres", "110m")
             # Map from basemap to cartopy notation
-            if resolution == 'l':
-                resolution = '110m'
-            elif resolution == 'i':
-                resolution = '50m'
-            elif resolution == 'h':
-                resolution = '10m'
-            if resolution not in ('110m', '50m', '10m'):
-                warn('Unknown map resolution: ' + resolution)
-                resolution = '110m'
-            background_zoom = prdcfg['gridMapImageConfig'].get(
-                'background_zoom', 8)
-            maps_list = prdcfg['gridMapImageConfig'].get('maps', [])
+            if resolution == "l":
+                resolution = "110m"
+            elif resolution == "i":
+                resolution = "50m"
+            elif resolution == "h":
+                resolution = "10m"
+            if resolution not in ("110m", "50m", "10m"):
+                warn("Unknown map resolution: " + resolution)
+                resolution = "110m"
+            background_zoom = prdcfg["gridMapImageConfig"].get("background_zoom", 8)
+            maps_list = prdcfg["gridMapImageConfig"].get("maps", [])
 
             display = pyart.graph.GridMapDisplay(grid)
             fig, ax = display.plot_grid_contour(
-                field_name, level=level, ax=ax, fig=fig, lat_lines=lat_lines,
-                lon_lines=lon_lines, contour_values=contour_values,
-                linewidths=linewidths, colors=colors, resolution=resolution,
+                field_name,
+                level=level,
+                ax=ax,
+                fig=fig,
+                lat_lines=lat_lines,
+                lon_lines=lon_lines,
+                contour_values=contour_values,
+                linewidths=linewidths,
+                colors=colors,
+                resolution=resolution,
                 background_zoom=background_zoom,
-                maps_list=maps_list)
+                maps_list=maps_list,
+            )
     else:
         if use_basemap or not _CARTOPY_AVAILABLE:
             lons, lats = grid.get_point_longitude_latitude(edges=False)
-            data = grid.fields[field_name]['data'][level, :, :]
+            data = grid.fields[field_name]["data"][level, :, :]
 
             basemap = display.get_basemap()
             basemap.contour(
-                lons, lats, data, contour_values, colors=colors,
-                linewidths=linewidths, latlon=True)
+                lons,
+                lats,
+                data,
+                contour_values,
+                colors=colors,
+                linewidths=linewidths,
+                latlon=True,
+            )
         else:
             lons, lats = grid.get_point_longitude_latitude(edges=False)
-            data = grid.fields[field_name]['data'][level, :, :]
+            data = grid.fields[field_name]["data"][level, :, :]
 
             ax.contour(
-                lons, lats, data, contour_values, colors=colors,
-                linewidths=linewidths, transform=cartopy.crs.PlateCarree())
+                lons,
+                lats,
+                data,
+                contour_values,
+                colors=colors,
+                linewidths=linewidths,
+                transform=cartopy.crs.PlateCarree(),
+            )
             ax.set_extent([min_lon, max_lon, min_lat, max_lat])
 
     if save_fig:
@@ -561,27 +700,38 @@ def plot_latitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
 
     """
     dpi = 72
-    if 'dpi' in prdcfg['xsecImageConfig']:
-        dpi = prdcfg['xsecImageConfig']['dpi']
+    if "dpi" in prdcfg["xsecImageConfig"]:
+        dpi = prdcfg["xsecImageConfig"]["dpi"]
 
     norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name], isxarray=True)
+        field_name, field_dict=grid.fields[field_name], isxarray=True
+    )
 
-    xsize = prdcfg['xsecImageConfig'].get('xsize', 10.)
-    ysize = prdcfg['xsecImageConfig'].get('ysize', 5.)
-    xmin = prdcfg['xsecImageConfig'].get('xmin', None)
-    xmax = prdcfg['xsecImageConfig'].get('xmax', None)
-    ymin = prdcfg['xsecImageConfig'].get('ymin', None)
-    ymax = prdcfg['xsecImageConfig'].get('ymax', None)
-    vmin = prdcfg.get('vmin', None)
-    vmax = prdcfg.get('vmax', None)
+    xsize = prdcfg["xsecImageConfig"].get("xsize", 10.0)
+    ysize = prdcfg["xsecImageConfig"].get("ysize", 5.0)
+    xmin = prdcfg["xsecImageConfig"].get("xmin", None)
+    xmax = prdcfg["xsecImageConfig"].get("xmax", None)
+    ymin = prdcfg["xsecImageConfig"].get("ymin", None)
+    ymax = prdcfg["xsecImageConfig"].get("ymax", None)
+    vmin = prdcfg.get("vmin", None)
+    vmax = prdcfg.get("vmax", None)
 
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
-    ax = fig.add_subplot(111, aspect='equal')
+    ax = fig.add_subplot(111, aspect="equal")
     display = pyart.graph.GridMapDisplay(grid)
     display.plot_latitude_slice(
-        field_name, lon=lon, lat=lat, norm=norm, colorbar_orient='horizontal',
-        ticks=ticks, ticklabs=ticklabs, ax=ax, fig=fig, vmin=vmin, vmax=vmax)
+        field_name,
+        lon=lon,
+        lat=lat,
+        norm=norm,
+        colorbar_orient="horizontal",
+        ticks=ticks,
+        ticklabs=ticklabs,
+        ax=ax,
+        fig=fig,
+        vmin=vmin,
+        vmax=vmax,
+    )
     ax.set_xlim([xmin, xmax])
     ax.set_ylim([ymin, ymax])
 
@@ -614,27 +764,38 @@ def plot_longitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
 
     """
     dpi = 72
-    if 'dpi' in prdcfg['xsecImageConfig']:
-        dpi = prdcfg['xsecImageConfig']['dpi']
+    if "dpi" in prdcfg["xsecImageConfig"]:
+        dpi = prdcfg["xsecImageConfig"]["dpi"]
 
     norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name], isxarray=True)
+        field_name, field_dict=grid.fields[field_name], isxarray=True
+    )
 
-    xsize = prdcfg['xsecImageConfig'].get('xsize', 10.)
-    ysize = prdcfg['xsecImageConfig'].get('ysize', 5.)
-    xmin = prdcfg['xsecImageConfig'].get('xmin', None)
-    xmax = prdcfg['xsecImageConfig'].get('xmax', None)
-    ymin = prdcfg['xsecImageConfig'].get('ymin', None)
-    ymax = prdcfg['xsecImageConfig'].get('ymax', None)
-    vmin = prdcfg.get('vmin', None)
-    vmax = prdcfg.get('vmax', None)
+    xsize = prdcfg["xsecImageConfig"].get("xsize", 10.0)
+    ysize = prdcfg["xsecImageConfig"].get("ysize", 5.0)
+    xmin = prdcfg["xsecImageConfig"].get("xmin", None)
+    xmax = prdcfg["xsecImageConfig"].get("xmax", None)
+    ymin = prdcfg["xsecImageConfig"].get("ymin", None)
+    ymax = prdcfg["xsecImageConfig"].get("ymax", None)
+    vmin = prdcfg.get("vmin", None)
+    vmax = prdcfg.get("vmax", None)
 
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
-    ax = fig.add_subplot(111, aspect='equal')
+    ax = fig.add_subplot(111, aspect="equal")
     display = pyart.graph.GridMapDisplay(grid)
     display.plot_longitude_slice(
-        field_name, lon=lon, lat=lat, norm=norm, colorbar_orient='horizontal',
-        ticks=ticks, ticklabs=ticklabs, ax=ax, fig=fig, vmin=vmin, vmax=vmax)
+        field_name,
+        lon=lon,
+        lat=lat,
+        norm=norm,
+        colorbar_orient="horizontal",
+        ticks=ticks,
+        ticklabs=ticklabs,
+        ax=ax,
+        fig=fig,
+        vmin=vmin,
+        vmax=vmax,
+    )
     ax.set_xlim([xmin, xmax])
     ax.set_ylim([ymin, ymax])
 
@@ -667,28 +828,39 @@ def plot_cross_section(grid, field_name, coord1, coord2, prdcfg, fname_list):
 
     """
     dpi = 72
-    if 'dpi' in prdcfg['xsecImageConfig']:
-        dpi = prdcfg['xsecImageConfig']['dpi']
+    if "dpi" in prdcfg["xsecImageConfig"]:
+        dpi = prdcfg["xsecImageConfig"]["dpi"]
 
     norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name], isxarray=True)
+        field_name, field_dict=grid.fields[field_name], isxarray=True
+    )
 
-    xsize = prdcfg['xsecImageConfig'].get('xsize', 10.)
-    ysize = prdcfg['xsecImageConfig'].get('ysize', 5.)
-    vmin = prdcfg.get('vmin', None)
-    vmax = prdcfg.get('vmax', None)
+    xsize = prdcfg["xsecImageConfig"].get("xsize", 10.0)
+    ysize = prdcfg["xsecImageConfig"].get("ysize", 5.0)
+    vmin = prdcfg.get("vmin", None)
+    vmax = prdcfg.get("vmax", None)
     # xmin = prdcfg['xsecImageConfig'].get('xmin', None)
     # xmax = prdcfg['xsecImageConfig'].get('xmax', None)
     # ymin = prdcfg['xsecImageConfig'].get('ymin', None)
     # ymax = prdcfg['xsecImageConfig'].get('ymax', None)
 
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
-    ax = fig.add_subplot(111, aspect='equal')
+    ax = fig.add_subplot(111, aspect="equal")
     display = pyart.graph.GridMapDisplay(grid)
     display.plot_cross_section(
-        field_name, start=coord1, end=coord2, norm=norm,
-        colorbar_orient='vertical', ticks=ticks, ticklabs=ticklabs, fig=fig,
-        ax=ax, axislabels_flag=True, vmin=vmin, vmax=vmax)
+        field_name,
+        start=coord1,
+        end=coord2,
+        norm=norm,
+        colorbar_orient="vertical",
+        ticks=ticks,
+        ticklabs=ticklabs,
+        fig=fig,
+        ax=ax,
+        axislabels_flag=True,
+        vmin=vmin,
+        vmax=vmax,
+    )
     # ax.set_ylim(
     #    [prdcfg['xsecImageConfig']['ymin'], prdcfg['xsecImageConfig']['ymax']])
 
@@ -697,9 +869,20 @@ def plot_cross_section(grid, field_name, coord1, coord2, prdcfg, fname_list):
     plt.close(fig)
 
 
-def plot_dda_map(grid, bg_field_name, level, prdcfg, fname_list, titl=None,
-                 alpha=None, ax=None, fig=None, display=None, save_fig=True,
-                 display_type='quiver'):
+def plot_dda_map(
+    grid,
+    bg_field_name,
+    level,
+    prdcfg,
+    fname_list,
+    titl=None,
+    alpha=None,
+    ax=None,
+    fig=None,
+    display=None,
+    save_fig=True,
+    display_type="quiver",
+):
     """
     This procedure plots a horizontal cross section of winds from wind fields
     generated by PyDDA.
@@ -743,37 +926,40 @@ def plot_dda_map(grid, bg_field_name, level, prdcfg, fname_list, titl=None,
     """
 
     if not _PYDDA_AVAILABLE:
-        warn('PyDDA package not available. Unable to display wind fields')
+        warn("PyDDA package not available. Unable to display wind fields")
         return None
-    
-    dpi = prdcfg['gridMapImageConfig'].get('dpi', 72)
-    vmin = prdcfg.get('vmin', None)
-    vmax = prdcfg.get('vmax', None)
-    u_vel_contours = prdcfg.get('u_vel_contours', None)
-    v_vel_contours = prdcfg.get('v_vel_contours', None)
-    w_vel_contours = prdcfg.get('w_vel_contours', None)
-    vector_spacing_km = prdcfg.get('vector_spacing_km', 10.)
-    quiver_len = prdcfg.get('quiver_len', 10.)
-    streamline_width = prdcfg.get('streamline_width', None)
-    streamline_arrowsize = prdcfg.get('streamline_arrowsize', None)
-    display_type = prdcfg.get('display_type', 'quiver')
+
+    dpi = prdcfg["gridMapImageConfig"].get("dpi", 72)
+    vmin = prdcfg.get("vmin", None)
+    vmax = prdcfg.get("vmax", None)
+    u_vel_contours = prdcfg.get("u_vel_contours", None)
+    v_vel_contours = prdcfg.get("v_vel_contours", None)
+    w_vel_contours = prdcfg.get("w_vel_contours", None)
+    vector_spacing_km = prdcfg.get("vector_spacing_km", 10.0)
+    quiver_len = prdcfg.get("quiver_len", 10.0)
+    quiver_width = prdcfg.get("quiver_width", 0.01)
+    streamline_width = prdcfg.get("streamline_width", None)
+    streamline_arrowsize = prdcfg.get("streamline_arrowsize", None)
+    display_type = prdcfg.get("display_type", "quiver")
 
     norm, ticks, ticklabs = get_norm(
-        bg_field_name, field_dict=grid.fields[bg_field_name])
+        bg_field_name, field_dict=grid.fields[bg_field_name]
+    )
 
-    xsize = prdcfg['gridMapImageConfig']['xsize']
-    ysize = prdcfg['gridMapImageConfig']['ysize']
-    lonstep = prdcfg['gridMapImageConfig'].get('lonstep', 0.5)
-    latstep = prdcfg['gridMapImageConfig'].get('latstep', 0.5)
-    min_lon = prdcfg['gridMapImageConfig'].get('lonmin', 2.5)
-    max_lon = prdcfg['gridMapImageConfig'].get('lonmax', 12.5)
-    min_lat = prdcfg['gridMapImageConfig'].get('latmin', 43.5)
-    max_lat = prdcfg['gridMapImageConfig'].get('latmax', 49.5)
-    embellish = prdcfg['gridMapImageConfig'].get('embellish', True)
-    exact_limits = prdcfg['gridMapImageConfig'].get('exact_limits', 0)
-    colorbar_flag = prdcfg['gridMapImageConfig'].get('colorbar_flag', True)
-    colorbar_contour_flag = prdcfg['gridMapImageConfig'].get(
-        'colorbar_contour_flag', False)
+    xsize = prdcfg["gridMapImageConfig"]["xsize"]
+    ysize = prdcfg["gridMapImageConfig"]["ysize"]
+    lonstep = prdcfg["gridMapImageConfig"].get("lonstep", 0.5)
+    latstep = prdcfg["gridMapImageConfig"].get("latstep", 0.5)
+    min_lon = prdcfg["gridMapImageConfig"].get("lonmin", 2.5)
+    max_lon = prdcfg["gridMapImageConfig"].get("lonmax", 12.5)
+    min_lat = prdcfg["gridMapImageConfig"].get("latmin", 43.5)
+    max_lat = prdcfg["gridMapImageConfig"].get("latmax", 49.5)
+    embellish = prdcfg["gridMapImageConfig"].get("embellish", True)
+    exact_limits = prdcfg["gridMapImageConfig"].get("exact_limits", 0)
+    colorbar_flag = prdcfg["gridMapImageConfig"].get("colorbar_flag", True)
+    colorbar_contour_flag = prdcfg["gridMapImageConfig"].get(
+        "colorbar_contour_flag", False
+    )
     cmap = pyart.config.get_field_colormap(bg_field_name)
 
     if exact_limits:
@@ -785,63 +971,91 @@ def plot_dda_map(grid, bg_field_name, level, prdcfg, fname_list, titl=None,
 
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
 
-    resolution = prdcfg['gridMapImageConfig'].get('mapres', '110m')
+    resolution = prdcfg["gridMapImageConfig"].get("mapres", "110m")
     # Map from basemap to cartopy notation
-    if resolution == 'l':
-        resolution = '110m'
-    elif resolution == 'i':
-        resolution = '50m'
-    elif resolution == 'h':
-        resolution = '10m'
+    if resolution == "l":
+        resolution = "110m"
+    elif resolution == "i":
+        resolution = "50m"
+    elif resolution == "h":
+        resolution = "10m"
 
-    if resolution not in ('110m', '50m', '10m'):
-        warn('Unknown map resolution: ' + resolution)
-        resolution = '110m'
+    if resolution not in ("110m", "50m", "10m"):
+        warn("Unknown map resolution: " + resolution)
+        resolution = "110m"
 
-    maps_list = prdcfg['gridMapImageConfig'].get('maps', [])
+    maps_list = prdcfg["gridMapImageConfig"].get("maps", [])
 
-    if display_type == 'quiver':
+    if display_type == "quiver":
         ax = pydda.vis.plot_horiz_xsection_quiver_map(
             [pydda.io.read_from_pyart_grid(deepcopy(grid))],
-            background_field=bg_field_name, level=level,
-            show_lobes=True, bg_grid_no=0, vmin=vmin, vmax=vmax,
-            u_vel_contours=u_vel_contours, v_vel_contours=v_vel_contours,
+            background_field=bg_field_name,
+            level=level,
+            show_lobes=True,
+            bg_grid_no=0,
+            vmin=vmin,
+            vmax=vmax,
+            u_vel_contours=u_vel_contours,
+            v_vel_contours=v_vel_contours,
             w_vel_contours=w_vel_contours,
             quiver_spacing_x_km=vector_spacing_km,
-            quiver_spacing_y_km=vector_spacing_km, quiverkey_len=quiver_len,
+            quiver_spacing_y_km=vector_spacing_km,
+            quiverkey_len=quiver_len,
+            quiver_width=quiver_width,
             colorbar_flag=colorbar_flag,
             colorbar_contour_flag=colorbar_contour_flag,
-            u_field='eastward_wind_component',
-            v_field='northward_wind_component',
-            w_field='vertical_wind_component', title_flag=False, cmap=cmap)
+            u_field="eastward_wind_component",
+            v_field="northward_wind_component",
+            w_field="vertical_wind_component",
+            title_flag=False,
+            cmap=cmap,
+        )
 
-    elif display_type == 'barbs':
+    elif display_type == "barbs":
         ax = pydda.vis.plot_horiz_xsection_barbs_map(
             [pydda.io.read_from_pyart_grid(deepcopy(grid))],
-            background_field=bg_field_name, level=level,
-            show_lobes=True, bg_grid_no=0, vmin=vmin, vmax=vmax,
-            u_vel_contours=u_vel_contours, v_vel_contours=v_vel_contours,
+            background_field=bg_field_name,
+            level=level,
+            show_lobes=True,
+            bg_grid_no=0,
+            vmin=vmin,
+            vmax=vmax,
+            u_vel_contours=u_vel_contours,
+            v_vel_contours=v_vel_contours,
             w_vel_contours=w_vel_contours,
             barb_spacing_x_km=vector_spacing_km,
             barb_spacing_y_km=vector_spacing_km,
             colorbar_flag=colorbar_flag,
             colorbar_contour_flag=colorbar_contour_flag,
-            u_field='eastward_wind_component',
-            v_field='northward_wind_component',
-            w_field='vertical_wind_component', title_flag=False, cmap=cmap)
+            u_field="eastward_wind_component",
+            v_field="northward_wind_component",
+            w_field="vertical_wind_component",
+            title_flag=False,
+            cmap=cmap,
+        )
 
-    elif display_type == 'streamline':
+    elif display_type == "streamline":
         ax = pydda.vis.plot_horiz_xsection_streamlines_map(
             [pydda.io.read_from_pyart_grid(deepcopy(grid))],
-            background_field=bg_field_name, level=level,
-            show_lobes=True, bg_grid_no=0, vmin=vmin, vmax=vmax,
-            u_vel_contours=u_vel_contours, v_vel_contours=v_vel_contours,
-            w_vel_contours=w_vel_contours, linewidth=streamline_width,
-            arrowsize=streamline_arrowsize, colorbar_flag=colorbar_flag,
+            background_field=bg_field_name,
+            level=level,
+            show_lobes=True,
+            bg_grid_no=0,
+            vmin=vmin,
+            vmax=vmax,
+            u_vel_contours=u_vel_contours,
+            v_vel_contours=v_vel_contours,
+            w_vel_contours=w_vel_contours,
+            linewidth=streamline_width,
+            arrowsize=streamline_arrowsize,
+            colorbar_flag=colorbar_flag,
             colorbar_contour_flag=colorbar_contour_flag,
-            u_field='eastward_wind_component',
-            v_field='northward_wind_component',
-            w_field='vertical_wind_component', title_flag=False, cmap=cmap)
+            u_field="eastward_wind_component",
+            v_field="northward_wind_component",
+            w_field="vertical_wind_component",
+            title_flag=False,
+            cmap=cmap,
+        )
 
     # Edit parameters a posteriori
     # since they cannot be given to pyDDA
@@ -861,81 +1075,80 @@ def plot_dda_map(grid, bg_field_name, level, prdcfg, fname_list, titl=None,
 
     if embellish and _CARTOPY_AVAILABLE:
         for cartomap in maps_list:
-            if cartomap == 'countries':
+            if cartomap == "countries":
                 # add countries
                 countries = cartopy.feature.NaturalEarthFeature(
-                    category='cultural',
-                    name='admin_0_countries',
+                    category="cultural",
+                    name="admin_0_countries",
                     scale=resolution,
-                    facecolor='none')
-                ax.add_feature(countries, edgecolor='black')
-            elif cartomap == 'provinces':
+                    facecolor="none",
+                )
+                ax.add_feature(countries, edgecolor="black")
+            elif cartomap == "provinces":
                 # Create a feature for States/Admin 1 regions at
                 # 1:resolution from Natural Earth
                 states_provinces = cartopy.feature.NaturalEarthFeature(
-                    category='cultural',
-                    name='admin_1_states_provinces_lines',
+                    category="cultural",
+                    name="admin_1_states_provinces_lines",
                     scale=resolution,
-                    facecolor='none')
-                ax.add_feature(states_provinces, edgecolor='gray')
-            elif (cartomap == 'urban_areas' and
-                    resolution in ('10m', '50m')):
+                    facecolor="none",
+                )
+                ax.add_feature(states_provinces, edgecolor="gray")
+            elif cartomap == "urban_areas" and resolution in ("10m", "50m"):
                 urban_areas = cartopy.feature.NaturalEarthFeature(
-                    category='cultural',
-                    name='urban_areas',
-                    scale=resolution)
+                    category="cultural", name="urban_areas", scale=resolution
+                )
                 ax.add_feature(
-                    urban_areas, edgecolor='brown', facecolor='brown',
-                    alpha=0.25)
-            elif cartomap == 'roads' and resolution == '10m':
+                    urban_areas, edgecolor="brown", facecolor="brown", alpha=0.25
+                )
+            elif cartomap == "roads" and resolution == "10m":
                 roads = cartopy.feature.NaturalEarthFeature(
-                    category='cultural',
-                    name='roads',
-                    scale=resolution)
-                ax.add_feature(roads, edgecolor='red', facecolor='none')
-            elif cartomap == 'railroads' and resolution == '10m':
+                    category="cultural", name="roads", scale=resolution
+                )
+                ax.add_feature(roads, edgecolor="red", facecolor="none")
+            elif cartomap == "railroads" and resolution == "10m":
                 railroads = cartopy.feature.NaturalEarthFeature(
-                    category='cultural',
-                    name='railroads',
-                    scale=resolution)
+                    category="cultural", name="railroads", scale=resolution
+                )
                 ax.add_feature(
-                    railroads, edgecolor='green', facecolor='none',
-                    linestyle=':')
-            elif cartomap == 'coastlines':
+                    railroads, edgecolor="green", facecolor="none", linestyle=":"
+                )
+            elif cartomap == "coastlines":
                 ax.coastlines(resolution=resolution)
-            elif cartomap == 'lakes':
+            elif cartomap == "lakes":
                 # add lakes
                 lakes = cartopy.feature.NaturalEarthFeature(
-                    category='physical',
-                    name='lakes',
-                    scale=resolution)
-                ax.add_feature(
-                    lakes, edgecolor='blue', facecolor='blue', alpha=0.25)
-            elif resolution == '10m' and cartomap == 'lakes_europe':
+                    category="physical", name="lakes", scale=resolution
+                )
+                ax.add_feature(lakes, edgecolor="blue", facecolor="blue", alpha=0.25)
+            elif resolution == "10m" and cartomap == "lakes_europe":
                 lakes_europe = cartopy.feature.NaturalEarthFeature(
-                    category='physical',
-                    name='lakes_europe',
-                    scale=resolution)
+                    category="physical", name="lakes_europe", scale=resolution
+                )
                 ax.add_feature(
-                    lakes_europe, edgecolor='blue', facecolor='blue',
-                    alpha=0.25)
-            elif cartomap == 'rivers':
+                    lakes_europe, edgecolor="blue", facecolor="blue", alpha=0.25
+                )
+            elif cartomap == "rivers":
                 # add rivers
                 rivers = cartopy.feature.NaturalEarthFeature(
-                    category='physical',
-                    name='rivers_lake_centerlines',
-                    scale=resolution)
-                ax.add_feature(rivers, edgecolor='blue', facecolor='none')
-            elif resolution == '10m' and cartomap == 'rivers_europe':
+                    category="physical",
+                    name="rivers_lake_centerlines",
+                    scale=resolution,
+                )
+                ax.add_feature(rivers, edgecolor="blue", facecolor="none")
+            elif resolution == "10m" and cartomap == "rivers_europe":
                 rivers_europe = cartopy.feature.NaturalEarthFeature(
-                    category='physical',
-                    name='rivers_europe',
-                    scale=resolution)
-                ax.add_feature(
-                    rivers_europe, edgecolor='blue', facecolor='none')
+                    category="physical", name="rivers_europe", scale=resolution
+                )
+                ax.add_feature(rivers_europe, edgecolor="blue", facecolor="none")
             else:
-                warn('cartomap ' + cartomap + ' for resolution ' + resolution +
-                     ' not available')
+                warn(
+                    "cartomap "
+                    + cartomap
+                    + " for resolution "
+                    + resolution
+                    + " not available"
+                )
 
     if save_fig:
         for fname in fname_list:
@@ -946,12 +1159,25 @@ def plot_dda_map(grid, bg_field_name, level, prdcfg, fname_list, titl=None,
     return (fig, ax, display)
 
 
-def plot_dda_slice(grid, bg_field_name, slice_type, level, prdcfg, fname_list,
-                   titl=None, alpha=None, ax=None, fig=None, display=None,
-                   save_fig=True, display_type='quiver', wind_vectors='hor'):
+def plot_dda_slice(
+    grid,
+    bg_field_name,
+    slice_type,
+    level,
+    prdcfg,
+    fname_list,
+    titl=None,
+    alpha=None,
+    ax=None,
+    fig=None,
+    display=None,
+    save_fig=True,
+    display_type="quiver",
+    wind_vectors="hor",
+):
     """
     This procedure plots a cross section of wind vectors from wind fields
-    generated by PyDDA in the X-Z plane at a specified latitude
+    generated by PyDDA in the X-Z plane at a specified latitude or longitude
 
         Parameters
     ----------
@@ -997,135 +1223,187 @@ def plot_dda_slice(grid, bg_field_name, slice_type, level, prdcfg, fname_list,
 
     """
     if not _PYDDA_AVAILABLE:
-        warn('PyDDA package not available. Unable to display wind fields')
+        warn("PyDDA package not available. Unable to display wind fields")
         return None
-
-    dpi = prdcfg['xsecImageConfig'].get('dpi', 72)
-    vmin = prdcfg.get('vmin', None)
-    vmax = prdcfg.get('vmax', None)
-    u_vel_contours = prdcfg.get('u_vel_contours', None)
-    v_vel_contours = prdcfg.get('v_vel_contours', None)
-    w_vel_contours = prdcfg.get('w_vel_contours', None)
-    vector_spacing_km = prdcfg.get('vector_spacing_km', 10.)
-    quiver_len = prdcfg.get('quiver_len', 10.)
-    streamline_width = prdcfg.get('streamline_width', None)
-    streamline_arrowsize = prdcfg.get('streamline_arrowsize', None)
-    display_type = prdcfg.get('display_type', 'quiver')
+    dpi = prdcfg["xsecImageConfig"].get("dpi", 72)
+    vmin = prdcfg.get("vmin", None)
+    vmax = prdcfg.get("vmax", None)
+    u_vel_contours = prdcfg.get("u_vel_contours", None)
+    v_vel_contours = prdcfg.get("v_vel_contours", None)
+    w_vel_contours = prdcfg.get("w_vel_contours", None)
+    vector_spacing_km = prdcfg.get("vector_spacing_km", 10.0)
+    quiver_len = prdcfg.get("quiver_len", 10.0)
+    quiver_width = prdcfg.get("quiver_width", 0.01)
+    streamline_width = prdcfg.get("streamline_width", None)
+    streamline_arrowsize = prdcfg.get("streamline_arrowsize", None)
+    display_type = prdcfg.get("display_type", "quiver")
 
     norm, ticks, ticklabs = get_norm(
-        bg_field_name, field_dict=grid.fields[bg_field_name])
+        bg_field_name, field_dict=grid.fields[bg_field_name]
+    )
 
-    colorbar_flag = prdcfg['xsecImageConfig'].get('colorbar_flag', True)
-    colorbar_contour_flag = prdcfg['xsecImageConfig'].get(
-        'colorbar_contour_flag', False)
+    colorbar_flag = prdcfg["xsecImageConfig"].get("colorbar_flag", True)
+    colorbar_contour_flag = prdcfg["xsecImageConfig"].get(
+        "colorbar_contour_flag", False
+    )
     cmap = pyart.config.get_field_colormap(bg_field_name)
 
-    xsize = prdcfg['xsecImageConfig'].get('xsize', 10.)
-    ysize = prdcfg['xsecImageConfig'].get('ysize', 5.)
-    xmin = prdcfg['xsecImageConfig'].get('xmin', None)
-    xmax = prdcfg['xsecImageConfig'].get('xmax', None)
-    ymin = prdcfg['xsecImageConfig'].get('ymin', None)
-    ymax = prdcfg['xsecImageConfig'].get('ymax', None)
+    xsize = prdcfg["xsecImageConfig"].get("xsize", 10.0)
+    ysize = prdcfg["xsecImageConfig"].get("ysize", 5.0)
+    xmin = prdcfg["xsecImageConfig"].get("xmin", None)
+    xmax = prdcfg["xsecImageConfig"].get("xmax", None)
+    ymin = prdcfg["xsecImageConfig"].get("ymin", None)
+    ymax = prdcfg["xsecImageConfig"].get("ymax", None)
 
     # This is a bit hackish
     # pyDDA does not support plotting vertical profiles of u and v
     # only (v and w) or (u and w), so we trick it by assigning the v variable
     # to w
 
-    if wind_vectors == 'hor':
-        w_field = 'eastward_wind_component'
+    if wind_vectors == "hor":
+        w_field = "eastward_wind_component"
     else:
-        w_field = 'vertical_wind_component'
+        w_field = "vertical_wind_component"
 
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
 
-    if slice_type == 'latitude':
-        if display_type == 'quiver':
+    if slice_type == "latitude":
+        if display_type == "quiver":
             ax = pydda.vis.plot_yz_xsection_quiver(
                 [pydda.io.read_from_pyart_grid(deepcopy(grid))],
-                background_field=bg_field_name, level=level,
-                bg_grid_no=0, vmin=vmin, vmax=vmax,
-                u_vel_contours=u_vel_contours, v_vel_contours=v_vel_contours,
+                background_field=bg_field_name,
+                level=level,
+                bg_grid_no=0,
+                vmin=vmin,
+                vmax=vmax,
+                u_vel_contours=u_vel_contours,
+                v_vel_contours=v_vel_contours,
                 w_vel_contours=w_vel_contours,
                 quiver_spacing_y_km=vector_spacing_km,
                 quiver_spacing_z_km=vector_spacing_km,
-                quiverkey_len=quiver_len, colorbar_flag=colorbar_flag,
+                quiver_width=quiver_width,
+                quiverkey_len=quiver_len,
+                colorbar_flag=colorbar_flag,
                 colorbar_contour_flag=colorbar_contour_flag,
-                u_field='eastward_wind_component',
-                v_field='northward_wind_component', w_field=w_field,
-                title_flag=False, cmap=cmap)
+                u_field="eastward_wind_component",
+                v_field="northward_wind_component",
+                w_field=w_field,
+                title_flag=False,
+                cmap=cmap,
+            )
 
-        elif display_type == 'barbs':
+        elif display_type == "barbs":
             ax = pydda.vis.plot_yz_xsection_barbs(
                 [pydda.io.read_from_pyart_grid(deepcopy(grid))],
-                background_field=bg_field_name, level=level,
-                bg_grid_no=0, vmin=vmin, vmax=vmax,
-                u_vel_contours=u_vel_contours, v_vel_contours=v_vel_contours,
+                background_field=bg_field_name,
+                level=level,
+                bg_grid_no=0,
+                vmin=vmin,
+                vmax=vmax,
+                u_vel_contours=u_vel_contours,
+                v_vel_contours=v_vel_contours,
                 w_vel_contours=w_vel_contours,
                 barb_spacing_y_km=vector_spacing_km,
                 barb_spacing_z_km=vector_spacing_km,
                 colorbar_flag=colorbar_flag,
                 colorbar_contour_flag=colorbar_contour_flag,
-                u_field='eastward_wind_component',
-                v_field='northward_wind_component', w_field=w_field,
-                title_flag=False, cmap=cmap)
+                u_field="eastward_wind_component",
+                v_field="northward_wind_component",
+                w_field=w_field,
+                title_flag=False,
+                cmap=cmap,
+            )
 
-        elif display_type == 'streamline':
+        elif display_type == "streamline":
             ax = pydda.vis.plot_yz_xsection_streamlines(
                 [pydda.io.read_from_pyart_grid(deepcopy(grid))],
-                background_field=bg_field_name, level=level,
-                bg_grid_no=0, vmin=vmin, vmax=vmax,
-                u_vel_contours=u_vel_contours, v_vel_contours=v_vel_contours,
-                w_vel_contours=w_vel_contours, linewidth=streamline_width,
-                arrowsize=streamline_arrowsize, colorbar_flag=colorbar_flag,
-                colorbar_contour_flag=colorbar_contour_flag,
-                u_field='eastward_wind_component',
-                v_field='northward_wind_component', w_field=w_field,
-                title_flag=False, cmap=cmap)
-
-    elif slice_type == 'longitude':
-        if display_type == 'quiver':
-            ax = pydda.vis.plot_xz_xsection_quiver(
-                [pydda.io.read_from_pyart_grid(deepcopy(grid))], 
-                background_field=bg_field_name, level=level,
-                bg_grid_no=0, vmin=vmin, vmax=vmax,
-                u_vel_contours=u_vel_contours, v_vel_contours=v_vel_contours,
+                background_field=bg_field_name,
+                level=level,
+                bg_grid_no=0,
+                vmin=vmin,
+                vmax=vmax,
+                u_vel_contours=u_vel_contours,
+                v_vel_contours=v_vel_contours,
                 w_vel_contours=w_vel_contours,
+                linewidth=streamline_width,
+                arrowsize=streamline_arrowsize,
+                colorbar_flag=colorbar_flag,
+                colorbar_contour_flag=colorbar_contour_flag,
+                u_field="eastward_wind_component",
+                v_field="northward_wind_component",
+                w_field=w_field,
+                title_flag=False,
+                cmap=cmap,
+            )
+
+    elif slice_type == "longitude":
+        if display_type == "quiver":
+            ax = pydda.vis.plot_xz_xsection_quiver(
+                [pydda.io.read_from_pyart_grid(deepcopy(grid))],
+                background_field=bg_field_name,
+                level=level,
+                bg_grid_no=0,
+                vmin=vmin,
+                vmax=vmax,
+                u_vel_contours=u_vel_contours,
+                v_vel_contours=v_vel_contours,
+                w_vel_contours=w_vel_contours,
+                quiver_width=quiver_width,
                 quiver_spacing_x_km=vector_spacing_km,
                 quiver_spacing_z_km=vector_spacing_km,
-                quiverkey_len=quiver_len, colorbar_flag=colorbar_flag,
+                quiverkey_len=quiver_len,
+                colorbar_flag=colorbar_flag,
                 colorbar_contour_flag=colorbar_contour_flag,
-                u_field='eastward_wind_component',
-                v_field='northward_wind_component', w_field=w_field,
-                title_flag=False, cmap=cmap)
+                u_field="eastward_wind_component",
+                v_field="northward_wind_component",
+                w_field=w_field,
+                title_flag=False,
+                cmap=cmap,
+            )
 
-        elif display_type == 'barbs':
+        elif display_type == "barbs":
             ax = pydda.vis.plot_xz_xsection_barbs(
                 [pydda.io.read_from_pyart_grid(deepcopy(grid))],
-                background_field=bg_field_name, level=level,
-                bg_grid_no=0, vmin=vmin, vmax=vmax,
-                u_vel_contours=u_vel_contours, v_vel_contours=v_vel_contours,
+                background_field=bg_field_name,
+                level=level,
+                bg_grid_no=0,
+                vmin=vmin,
+                vmax=vmax,
+                u_vel_contours=u_vel_contours,
+                v_vel_contours=v_vel_contours,
                 w_vel_contours=w_vel_contours,
                 barb_spacing_x_km=vector_spacing_km,
                 barb_spacing_z_km=vector_spacing_km,
                 colorbar_flag=colorbar_flag,
                 colorbar_contour_flag=colorbar_contour_flag,
-                u_field='eastward_wind_component',
-                v_field='northward_wind_component', w_field=w_field,
-                title_flag=False, cmap=cmap)
+                u_field="eastward_wind_component",
+                v_field="northward_wind_component",
+                w_field=w_field,
+                title_flag=False,
+                cmap=cmap,
+            )
 
-        elif display_type == 'streamline':
+        elif display_type == "streamline":
             ax = pydda.vis.plot_xz_xsection_streamlines(
                 [pydda.io.read_from_pyart_grid(deepcopy(grid))],
-                background_field=bg_field_name, level=level,
-                bg_grid_no=0, vmin=vmin, vmax=vmax,
-                u_vel_contours=u_vel_contours, v_vel_contours=v_vel_contours,
-                w_vel_contours=w_vel_contours, linewidth=streamline_width,
-                arrowsize=streamline_arrowsize, colorbar_flag=colorbar_flag,
+                background_field=bg_field_name,
+                level=level,
+                bg_grid_no=0,
+                vmin=vmin,
+                vmax=vmax,
+                u_vel_contours=u_vel_contours,
+                v_vel_contours=v_vel_contours,
+                w_vel_contours=w_vel_contours,
+                linewidth=streamline_width,
+                arrowsize=streamline_arrowsize,
+                colorbar_flag=colorbar_flag,
                 colorbar_contour_flag=colorbar_contour_flag,
-                u_field='eastward_wind_component',
-                v_field='northward_wind_component', w_field=w_field,
-                title_flag=False, cmap=cmap)
+                u_field="eastward_wind_component",
+                v_field="northward_wind_component",
+                w_field=w_field,
+                title_flag=False,
+                cmap=cmap,
+            )
 
     # Edit parameters a posteriori
     # since they cannot be given to pyDDA
