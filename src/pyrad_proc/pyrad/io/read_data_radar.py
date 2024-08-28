@@ -1983,7 +1983,7 @@ def merge_scans_odim(
     if not flist:
         return radar
 
-    if cfg["DataTypeIDInFilenames"] is None:
+    if cfg["DataTypeIDInFiles"] is None:
         for fname, scan in zip(flist, scan_list_aux):
             radar_aux = get_data_odim(fname, datatype_list, scan, cfg, ind_rad=ind_rad)
             if radar_aux is None:
@@ -1994,13 +1994,13 @@ def merge_scans_odim(
             radar = pyart.util.radar_utils.join_radar(radar, radar_aux)
     else:
         for datatype in datatype_list:
-            if datatype not in cfg["DataTypeIDInFilenames"].keys():
+            if datatype not in cfg["DataTypeIDInFiles"].keys():
                 warn(f"No file contains data type {datatype}")
                 continue
             nscans = 0
             radar_aux = None
             for fname, scan in zip(flist, scan_list_aux):
-                if cfg["DataTypeIDInFilenames"][datatype] not in os.path.basename(
+                if cfg["DataTypeIDInFiles"][datatype] not in os.path.basename(
                     fname
                 ):
                     continue
@@ -2689,7 +2689,7 @@ def merge_scans_mfcfradial(
     if not flist:
         return radar
 
-    if cfg["DataTypeIDInFilenames"] is None:
+    if cfg["DataTypeIDInFiles"] is None:
         for fname, scan in zip(flist, scan_list_aux):
             radar_aux = pyart.io.read_cfradial(fname, field_names=field_names)
             if radar_aux is None:
@@ -2700,13 +2700,13 @@ def merge_scans_mfcfradial(
             radar = pyart.util.radar_utils.join_radar(radar, radar_aux)
     else:
         for datatype in datatype_list:
-            if datatype not in cfg["DataTypeIDInFilenames"].keys():
+            if datatype not in cfg["DataTypeIDInFiles"].keys():
                 warn(f"No file contains data type {datatype}")
                 continue
             nscans = 0
             radar_aux = None
             for fname, scan in zip(flist, scan_list_aux):
-                if cfg["DataTypeIDInFilenames"][datatype] not in os.path.basename(
+                if cfg["DataTypeIDInFiles"][datatype] not in os.path.basename(
                     fname
                 ):
                     continue
