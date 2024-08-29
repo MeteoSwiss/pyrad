@@ -109,7 +109,7 @@ def process_file(filepath):
             if reading_params and product:
                 all_products[function][product]['parameters'] += " " + \
                     " ".join(line.replace('\n', ' ').split())
-        if "prdcfg['type']" in line and '==' in line:
+        if ('prdcfg["type"]' in line or "prdcfg['type']" in line) and '==' in line:
             for product in all_products[function].keys():
                 if product in line:
                     all_products[function][product]['link'] = (funcpath_to_docpath(filepath) +
