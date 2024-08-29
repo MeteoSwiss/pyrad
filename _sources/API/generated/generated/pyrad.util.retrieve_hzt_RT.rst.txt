@@ -1,0 +1,6 @@
+pyrad.util.retrieve\_hzt\_RT
+============================
+
+.. currentmodule:: pyrad.util
+
+.. autofunction:: retrieve_hzt_RT

@@ -1,0 +1,6 @@
+pyrad.util.compute\_average\_vad
+================================
+
+.. currentmodule:: pyrad.util
+
+.. autofunction:: compute_average_vad

@@ -1,0 +1,6 @@
+pyrad.util.get\_box\_coords
+===========================
+
+.. currentmodule:: pyrad.util
+
+.. autofunction:: get_box_coords

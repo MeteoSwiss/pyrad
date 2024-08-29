@@ -51,7 +51,7 @@
     <script src="../../../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="pyrad.proc.process_point_measurement" href="pyrad.proc.process_point_measurement.html" />
+    <link rel="next" title="pyrad.proc.process_dda" href="pyrad.proc.process_dda.html" />
     <link rel="prev" title="pyrad.proc.process_windshear_lidar" href="pyrad.proc.process_windshear_lidar.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>   
@@ -912,6 +912,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_windshear.html">pyrad.proc.process_windshear</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_windshear_lidar.html">pyrad.proc.process_windshear_lidar</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">pyrad.proc.process_vad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_dda.html">pyrad.proc.process_dda</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_point_measurement.html">pyrad.proc.process_point_measurement</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_multiple_points.html">pyrad.proc.process_multiple_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_qvp.html">pyrad.proc.process_qvp</a></li>
@@ -1144,6 +1145,46 @@ document.write(`
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../pyrad.util.html">pyrad.util</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.time_avg_range.html">pyrad.util.time_avg_range</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.get_closest_solar_flux.html">pyrad.util.get_closest_solar_flux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.create_sun_hits_field.html">pyrad.util.create_sun_hits_field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.create_sun_retrieval_field.html">pyrad.util.create_sun_retrieval_field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.compute_histogram.html">pyrad.util.compute_histogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.compute_histogram_sweep.html">pyrad.util.compute_histogram_sweep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.compute_quantiles.html">pyrad.util.compute_quantiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.compute_quantiles_sweep.html">pyrad.util.compute_quantiles_sweep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.compute_quantiles_from_hist.html">pyrad.util.compute_quantiles_from_hist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.get_range_bins_to_avg.html">pyrad.util.get_range_bins_to_avg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.find_ray_index.html">pyrad.util.find_ray_index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.find_rng_index.html">pyrad.util.find_rng_index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.find_nearest_gate.html">pyrad.util.find_nearest_gate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.find_colocated_indexes.html">pyrad.util.find_colocated_indexes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.find_contiguous_times.html">pyrad.util.find_contiguous_times</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.compute_2d_hist.html">pyrad.util.compute_2d_hist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.compute_1d_stats.html">pyrad.util.compute_1d_stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.compute_2d_stats.html">pyrad.util.compute_2d_stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.time_series_statistics.html">pyrad.util.time_series_statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.join_time_series.html">pyrad.util.join_time_series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.rainfall_accumulation.html">pyrad.util.rainfall_accumulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.get_ROI.html">pyrad.util.get_ROI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.belongs_roi_indices.html">pyrad.util.belongs_roi_indices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.project_to_vertical.html">pyrad.util.project_to_vertical</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.get_data_along_rng.html">pyrad.util.get_data_along_rng</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.get_data_along_azi.html">pyrad.util.get_data_along_azi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.get_data_along_ele.html">pyrad.util.get_data_along_ele</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.get_fixed_rng_data.html">pyrad.util.get_fixed_rng_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.get_cercle_coords.html">pyrad.util.get_cercle_coords</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.get_box_coords.html">pyrad.util.get_box_coords</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.compute_profile_stats.html">pyrad.util.compute_profile_stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.compute_average_vad.html">pyrad.util.compute_average_vad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.quantiles_weighted.html">pyrad.util.quantiles_weighted</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.ratio_bootstrapping.html">pyrad.util.ratio_bootstrapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.retrieve_hzt_prod.html">pyrad.util.retrieve_hzt_prod</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.retrieve_hzt_RT.html">pyrad.util.retrieve_hzt_RT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.retrieve_mch_prod.html">pyrad.util.retrieve_mch_prod</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.retrieve_mch_prod_RT.html">pyrad.util.retrieve_mch_prod_RT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.retrieve_CPCCV.html">pyrad.util.retrieve_CPCCV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.retrieve_AQC_XLS.html">pyrad.util.retrieve_AQC_XLS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.util.belongs_roi_indices.html">pyrad.util.belongs_roi_indices</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.util.compute_1d_stats.html">pyrad.util.compute_1d_stats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.util.compute_2d_hist.html">pyrad.util.compute_2d_hist</a></li>
@@ -1302,11 +1343,11 @@ technique</p>
       </div>
     </a>
     <a class="right-next"
-       href="pyrad.proc.process_point_measurement.html"
+       href="pyrad.proc.process_dda.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">pyrad.proc.process_point_measurement</p>
+        <p class="prev-next-title">pyrad.proc.process_dda</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
