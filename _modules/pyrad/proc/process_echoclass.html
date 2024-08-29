@@ -161,6 +161,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../notebook-gallery.html">
+    Notebook Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../changelog.html">
     Changelog
   </a>
@@ -281,6 +288,13 @@ document.write(`
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../overview/index.html">
     Pyrad configuration files
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../notebook-gallery.html">
+    Notebook Gallery
   </a>
 </li>
 
@@ -495,7 +509,6 @@ document.write(`
         <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
-
     <span class="k">if</span> <span class="n">zdr_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to create radar_echo_id dataset. Missing reflectivity data&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>

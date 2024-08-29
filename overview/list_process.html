@@ -164,6 +164,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../notebook-gallery.html">
+    Notebook Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../changelog.html">
     Changelog
   </a>
@@ -286,6 +293,13 @@ document.write(`
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="index.html">
     Pyrad configuration files
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../notebook-gallery.html">
+    Notebook Gallery
   </a>
 </li>
 
@@ -1340,6 +1354,39 @@ document.write(`
 <dt>get_phidp<span class="classifier">boolean. Datset keyword</span></dt><dd><p>if set the PhiDP computed by integrating the resultant KDP is added to the radar field. Default 0 (False)</p>
 </dd>
 <dt>frequency<span class="classifier">float. Dataset keyword</span></dt><dd><p>the radar frequency [Hz]. If None that of the key frequency in attribute instrument_parameters of the radar object will be used. If the key or the attribute are not present it will be assumed that the radar is C band</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="phidp-kdp-maesaka">
+<h3>PHIDP_KDP_MAESAKA<a class="headerlink" href="#phidp-kdp-maesaka" title="Link to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><blockquote>
+<div><p>Estimates PhiDP and KDP using the method by Maesaka. This method only retrieves data in rain (i.e. below the melting layer)</p>
+</div></blockquote>
+<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_phidp_kdp_Maesaka">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+</dd>
+<dt>rmin<span class="classifier">float. Dataset keyword</span></dt><dd><p>The minimum range where to look for valid data [m]. Default 1000.</p>
+</dd>
+<dt>rmax<span class="classifier">float. Dataset keyword</span></dt><dd><p>The maximum range where to look for valid data [m]. Default 50000.</p>
+</dd>
+<dt>rcell<span class="classifier">float. Dataset keyword</span></dt><dd><p>The length of a continuous cell to consider it valid precip [m]. Default 1000.</p>
+</dd>
+<dt>Zmin<span class="classifier">float. Dataset keyword</span></dt><dd><p>The minimum reflectivity [dBZ]. Default 20</p>
+</dd>
+<dt>Zmax<span class="classifier">float. Dataset keyword</span></dt><dd><p>The maximum reflectivity [dBZ]. Default 40</p>
+</dd>
+<dt>fzl<span class="classifier">float. Dataset keyword</span></dt><dd><p>The freezing level height [m]. Default 2000.</p>
+</dd>
+<dt>sounding<span class="classifier">str. Dataset keyword</span></dt><dd><p>The nearest radiosounding WMO code (5 int digits). It will be used to compute the freezing level, if no temperature field name is specified, if the temperature field isin the radar object or if no freezing_level is explicitely defined.</p>
+</dd>
+<dt>ml_thickness<span class="classifier">float. Dataset keyword</span></dt><dd><p>The melting layer thickness in meters. Default 700.</p>
+</dd>
+<dt>beamwidth<span class="classifier">float. Dataset keyword</span></dt><dd><p>the antenna beamwidth [deg]. If None that of the keys radar_beam_width_h or radar_beam_width_v in attribute instrument_parameters of the radar object will be used. If the key or the attribute are not present the beamwidth will be set to None</p>
 </dd>
 </dl>
 </dd>
@@ -2658,8 +2705,8 @@ document.write(`
 </section>
 <section id="centroids">
 <h2>CENTROIDS<a class="headerlink" href="#centroids" title="Link to this heading">#</a></h2>
-<section id="id102">
-<h3>CENTROIDS<a class="headerlink" href="#id102" title="Link to this heading">#</a></h3>
+<section id="id103">
+<h3>CENTROIDS<a class="headerlink" href="#id103" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
 <div><p>Computes centroids for the semi-supervised hydrometeor classification</p>
@@ -2736,8 +2783,8 @@ document.write(`
 </section>
 <section id="colocated-gates">
 <h2>COLOCATED_GATES<a class="headerlink" href="#colocated-gates" title="Link to this heading">#</a></h2>
-<section id="id104">
-<h3>COLOCATED_GATES<a class="headerlink" href="#id104" title="Link to this heading">#</a></h3>
+<section id="id105">
+<h3>COLOCATED_GATES<a class="headerlink" href="#id105" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
 <div><p>Find colocated gates within two radars</p>
@@ -2782,8 +2829,8 @@ document.write(`
 </section>
 <section id="icon-coord">
 <h2>ICON_COORD<a class="headerlink" href="#icon-coord" title="Link to this heading">#</a></h2>
-<section id="id106">
-<h3>ICON_COORD<a class="headerlink" href="#id106" title="Link to this heading">#</a></h3>
+<section id="id107">
+<h3>ICON_COORD<a class="headerlink" href="#id107" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
 <div><p>Gets the icon indices corresponding to each icon coordinates</p>
@@ -2823,8 +2870,8 @@ document.write(`
 </section>
 <section id="icon2radar">
 <h2>ICON2RADAR<a class="headerlink" href="#icon2radar" title="Link to this heading">#</a></h2>
-<section id="id109">
-<h3>ICON2RADAR<a class="headerlink" href="#id109" title="Link to this heading">#</a></h3>
+<section id="id110">
+<h3>ICON2RADAR<a class="headerlink" href="#id110" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
 <div><p>Gets icon data and put it in radar coordinates using look up tables</p>
@@ -2858,8 +2905,8 @@ document.write(`
 </dl>
 <p>parameters</p>
 </section>
-<section id="id112">
-<h3>GECSX<a class="headerlink" href="#id112" title="Link to this heading">#</a></h3>
+<section id="id113">
+<h3>GECSX<a class="headerlink" href="#id113" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
 <div><p>Computes ground clutter RCS, radar visibility and many others using the GECSX algorithmn translated from IDL into python</p>
@@ -2889,8 +2936,8 @@ document.write(`
 </dd>
 </dl>
 </section>
-<section id="id114">
-<h3>GRID<a class="headerlink" href="#id114" title="Link to this heading">#</a></h3>
+<section id="id115">
+<h3>GRID<a class="headerlink" href="#id115" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
 <div><p>Puts the radar data in a regular grid</p>
@@ -3144,8 +3191,8 @@ document.write(`
 </section>
 <section id="intercomp">
 <h2>INTERCOMP<a class="headerlink" href="#intercomp" title="Link to this heading">#</a></h2>
-<section id="id126">
-<h3>INTERCOMP<a class="headerlink" href="#id126" title="Link to this heading">#</a></h3>
+<section id="id127">
+<h3>INTERCOMP<a class="headerlink" href="#id127" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
 <div><p>intercomparison between two radars at co-located gates. The variables compared must be of the same type.</p>
@@ -3246,8 +3293,8 @@ document.write(`
 </section>
 <section id="vpr">
 <h2>VPR<a class="headerlink" href="#vpr" title="Link to this heading">#</a></h2>
-<section id="id131">
-<h3>VPR<a class="headerlink" href="#id131" title="Link to this heading">#</a></h3>
+<section id="id132">
+<h3>VPR<a class="headerlink" href="#id132" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
 <div><p>Computes the vertical profile of reflectivity using the Meteo-France operational algorithm</p>
@@ -3343,8 +3390,8 @@ document.write(`
 </dd>
 </dl>
 </section>
-<section id="id134">
-<h3>MONITORING<a class="headerlink" href="#id134" title="Link to this heading">#</a></h3>
+<section id="id135">
+<h3>MONITORING<a class="headerlink" href="#id135" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
 <div><p>computes monitoring statistics</p>
@@ -3365,8 +3412,8 @@ document.write(`
 </section>
 <section id="occurrence">
 <h2>OCCURRENCE<a class="headerlink" href="#occurrence" title="Link to this heading">#</a></h2>
-<section id="id136">
-<h3>OCCURRENCE<a class="headerlink" href="#id136" title="Link to this heading">#</a></h3>
+<section id="id137">
+<h3>OCCURRENCE<a class="headerlink" href="#id137" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
 <div><p>computes the frequency of occurrence of data. It looks only for gates where data is present.</p>
@@ -3474,8 +3521,8 @@ document.write(`
 </dd>
 </dl>
 </section>
-<section id="id141">
-<h3>QVP<a class="headerlink" href="#id141" title="Link to this heading">#</a></h3>
+<section id="id142">
+<h3>QVP<a class="headerlink" href="#id142" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
 <div><p>Computes quasi vertical profiles, by averaging over height levels PPI data.</p>
@@ -3607,8 +3654,8 @@ document.write(`
 </section>
 <section id="sun-hits">
 <h2>SUN_HITS<a class="headerlink" href="#sun-hits" title="Link to this heading">#</a></h2>
-<section id="id147">
-<h3>SUN_HITS<a class="headerlink" href="#id147" title="Link to this heading">#</a></h3>
+<section id="id148">
+<h3>SUN_HITS<a class="headerlink" href="#id148" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
 <div><p>monitoring of the radar using sun hits</p>
@@ -4178,6 +4225,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#phidp-kdp-kalman">PHIDP_KDP_KALMAN</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#phidp-kdp-lp">PHIDP_KDP_LP</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#phidp-kdp-vulpiani">PHIDP_KDP_VULPIANI</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#phidp-kdp-maesaka">PHIDP_KDP_MAESAKA</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#phidp-smooth-1w">PHIDP_SMOOTH_1W</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#phidp-smooth-2w">PHIDP_SMOOTH_2W</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pol-variables">POL_VARIABLES</a></li>
@@ -4243,26 +4291,26 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#centroids">CENTROIDS</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id102">CENTROIDS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id103">CENTROIDS</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#colocated-gates">COLOCATED_GATES</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id104">COLOCATED_GATES</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id105">COLOCATED_GATES</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#icon-coord">ICON_COORD</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id106">ICON_COORD</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id107">ICON_COORD</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hzt-coord">HZT_COORD</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#icon2radar">ICON2RADAR</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id109">ICON2RADAR</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id110">ICON2RADAR</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#grid">GRID</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#raw-grid">RAW_GRID</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id112">GECSX</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id114">GRID</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id113">GECSX</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id115">GRID</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grid-fields-diff">GRID_FIELDS_DIFF</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grid-mask">GRID_MASK</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grid-texture">GRID_TEXTURE</a></li>
@@ -4279,7 +4327,7 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intercomp">INTERCOMP</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id126">INTERCOMP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id127">INTERCOMP</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intercomp-fields">INTERCOMP_FIELDS</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intercomp-time-avg">INTERCOMP_TIME_AVG</a></li>
 </ul>
@@ -4289,23 +4337,23 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vpr">VPR</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id131">VPR</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id132">VPR</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#monitoring">MONITORING</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gc-monitoring">GC_MONITORING</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id134">MONITORING</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id135">MONITORING</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#occurrence">OCCURRENCE</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id136">OCCURRENCE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id137">OCCURRENCE</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#occurrence-period">OCCURRENCE_PERIOD</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#timeavg-std">TIMEAVG_STD</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#qvp">QVP</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evp">EVP</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id141">QVP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id142">QVP</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#svp">SVP</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#time-height">TIME_HEIGHT</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#time-along-coord">TIME_ALONG_COORD</a></li>
@@ -4316,7 +4364,7 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sun-hits">SUN_HITS</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id147">SUN_HITS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id148">SUN_HITS</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sunscan">SUNSCAN</a></li>
 </ul>
 </li>

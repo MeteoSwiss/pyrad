@@ -676,6 +676,33 @@ parameters
    frequency : float. Dataset keyword
        the radar frequency [Hz]. If None that of the key frequency in attribute instrument_parameters of the radar object will be used. If the key or the attribute are not present it will be assumed that the radar is C band
 
+PHIDP_KDP_MAESAKA
+""""""""""""""""""""""""""""""
+description
+   Estimates PhiDP and KDP using the method by Maesaka. This method only retrieves data in rain (i.e. below the melting layer)
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_phidp_kdp_Maesaka>`_
+parameters
+   datatype : list of string. Dataset keyword
+       The input data types
+   rmin : float. Dataset keyword
+       The minimum range where to look for valid data [m]. Default 1000.
+   rmax : float. Dataset keyword
+       The maximum range where to look for valid data [m]. Default 50000.
+   rcell : float. Dataset keyword
+       The length of a continuous cell to consider it valid precip [m]. Default 1000.
+   Zmin : float. Dataset keyword
+       The minimum reflectivity [dBZ]. Default 20
+   Zmax : float. Dataset keyword
+       The maximum reflectivity [dBZ]. Default 40
+   fzl : float. Dataset keyword
+       The freezing level height [m]. Default 2000.
+   sounding : str. Dataset keyword
+       The nearest radiosounding WMO code (5 int digits). It will be used to compute the freezing level, if no temperature field name is specified, if the temperature field isin the radar object or if no freezing_level is explicitely defined.
+   ml_thickness : float. Dataset keyword
+       The melting layer thickness in meters. Default 700.
+   beamwidth : float. Dataset keyword
+       the antenna beamwidth [deg]. If None that of the keys radar_beam_width_h or radar_beam_width_v in attribute instrument_parameters of the radar object will be used. If the key or the attribute are not present the beamwidth will be set to None
+
 PHIDP_SMOOTH_1W
 """"""""""""""""""""""""""""""
 description

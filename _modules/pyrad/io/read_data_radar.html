@@ -161,6 +161,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../notebook-gallery.html">
+    Notebook Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../changelog.html">
     Changelog
   </a>
@@ -281,6 +288,13 @@ document.write(`
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../overview/index.html">
     Pyrad configuration files
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../notebook-gallery.html">
+    Notebook Gallery
   </a>
 </li>
 
@@ -2938,30 +2952,28 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Mapping of MeteoFrance and JMA field names to Py-ART field names</span>
-    <span class="n">default_field_names</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;DBZH&quot;</span><span class="p">:</span> <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>  <span class="c1"># JMA</span>
-        <span class="s2">&quot;TH&quot;</span><span class="p">:</span> <span class="s2">&quot;unfiltered_reflectivity&quot;</span><span class="p">,</span>  <span class="c1"># MF</span>
-        <span class="s2">&quot;ZDR&quot;</span><span class="p">:</span> <span class="s2">&quot;differential_reflectivity&quot;</span><span class="p">,</span>  <span class="c1"># MF &amp; JMA</span>
-        <span class="s2">&quot;RHOHV&quot;</span><span class="p">:</span> <span class="s2">&quot;cross_correlation_ratio&quot;</span><span class="p">,</span>  <span class="c1"># MF &amp; JMA</span>
-        <span class="s2">&quot;PHIDP&quot;</span><span class="p">:</span> <span class="s2">&quot;uncorrected_differential_phase&quot;</span><span class="p">,</span>  <span class="c1"># MF</span>
-        <span class="s2">&quot;PSIDP&quot;</span><span class="p">:</span> <span class="s2">&quot;differential_phase&quot;</span><span class="p">,</span>  <span class="c1"># JMA</span>
-        <span class="s2">&quot;KDP&quot;</span><span class="p">:</span> <span class="s2">&quot;specific_differential_phase&quot;</span><span class="p">,</span>  <span class="c1"># JMA</span>
-        <span class="s2">&quot;VRAD&quot;</span><span class="p">:</span> <span class="s2">&quot;velocity&quot;</span><span class="p">,</span>  <span class="c1"># MF</span>
-        <span class="s2">&quot;VEL&quot;</span><span class="p">:</span> <span class="s2">&quot;velocity&quot;</span><span class="p">,</span>  <span class="c1"># JMA</span>
-        <span class="s2">&quot;WIDTH&quot;</span><span class="p">:</span> <span class="s2">&quot;spectrum_width&quot;</span><span class="p">,</span>  <span class="c1"># JMA</span>
-        <span class="s2">&quot;SIGMA&quot;</span><span class="p">:</span> <span class="s2">&quot;sigma_zh&quot;</span><span class="p">,</span>  <span class="c1"># MF</span>
+    <span class="n">DataTypeIDInFiles_defaults</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;dBZ&quot;</span><span class="p">:</span> <span class="s2">&quot;DBZH&quot;</span><span class="p">,</span>  <span class="c1"># JMA</span>
+        <span class="s2">&quot;dBuZ&quot;</span><span class="p">:</span> <span class="s2">&quot;TH&quot;</span><span class="p">,</span>  <span class="c1"># MF</span>
+        <span class="s2">&quot;ZDR&quot;</span><span class="p">:</span> <span class="s2">&quot;ZDR&quot;</span><span class="p">,</span>  <span class="c1"># MF &amp; JMA</span>
+        <span class="s2">&quot;RhoHV&quot;</span><span class="p">:</span> <span class="s2">&quot;RHOHV&quot;</span><span class="p">,</span>  <span class="c1"># MF &amp; JMA</span>
+        <span class="s2">&quot;PhiDP&quot;</span><span class="p">:</span> <span class="s2">&quot;PHIDP&quot;</span><span class="p">,</span>  <span class="c1"># MF</span>
+        <span class="s2">&quot;uPhiDP&quot;</span><span class="p">:</span> <span class="s2">&quot;PSIDP&quot;</span><span class="p">,</span>  <span class="c1"># JMA</span>
+        <span class="s2">&quot;KDP&quot;</span><span class="p">:</span> <span class="s2">&quot;KDP&quot;</span><span class="p">,</span>  <span class="c1"># JMA</span>
+        <span class="s2">&quot;V&quot;</span><span class="p">:</span> <span class="s2">&quot;VRAD&quot;</span><span class="p">,</span>  <span class="c1"># MF</span>
+        <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="s2">&quot;WIDTH&quot;</span><span class="p">,</span>  <span class="c1"># JMA</span>
+        <span class="s2">&quot;sigma_zh&quot;</span><span class="p">:</span> <span class="s2">&quot;SIGMA&quot;</span><span class="p">,</span>  <span class="c1"># MF</span>
     <span class="p">}</span>
 
     <span class="n">field_names</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">if</span> <span class="n">ind_rad</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">]:</span>
-        <span class="c1"># Use custom name mapping</span>
-        <span class="k">for</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">datatype_list</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]:</span>
-                <span class="n">field_names</span><span class="p">[</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">][</span><span class="n">datatype</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-                <span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">field_names</span> <span class="o">=</span> <span class="n">default_field_names</span>
+    <span class="c1"># Use custom name mapping</span>
+    <span class="k">for</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">datatype_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]:</span>
+            <span class="n">field_names</span><span class="p">[</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">][</span><span class="n">datatype</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span> 
+            <span class="n">field_names</span><span class="p">[</span><span class="n">datatype</span><span class="p">]</span> <span class="o">=</span> <span class="n">DataTypeIDInFiles_defaults</span><span class="p">[</span><span class="n">datatype</span><span class="p">]</span>
 
     <span class="n">radar</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -3293,15 +3305,13 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">field_names</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">if</span> <span class="n">ind_rad</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">]:</span>
-        <span class="c1"># Use custom name mapping</span>
-        <span class="k">for</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">datatype_list</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]:</span>
-                <span class="n">field_names</span><span class="p">[</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">][</span><span class="n">datatype</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-                <span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">datatype_list</span><span class="p">:</span>
+    <span class="c1"># Use custom name mapping</span>
+    <span class="k">for</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">datatype_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]:</span>
+            <span class="n">field_names</span><span class="p">[</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">][</span><span class="n">datatype</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
             <span class="n">field_names</span><span class="p">[</span><span class="n">datatype</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="n">radar</span> <span class="o">=</span> <span class="kc">None</span>
@@ -3471,15 +3481,13 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">field_names</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">if</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]:</span>
-        <span class="c1"># Use custom name mapping</span>
-        <span class="k">for</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">datatype_list</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]:</span>
-                <span class="n">field_names</span><span class="p">[</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">][</span><span class="n">datatype</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-                <span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">datatype_list</span><span class="p">:</span>
+    <span class="c1"># Use custom name mapping</span>
+    <span class="k">for</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">datatype_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]:</span>
+            <span class="n">field_names</span><span class="p">[</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">][</span><span class="n">datatype</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
             <span class="n">field_names</span><span class="p">[</span><span class="n">datatype</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="n">radar</span> <span class="o">=</span> <span class="kc">None</span>

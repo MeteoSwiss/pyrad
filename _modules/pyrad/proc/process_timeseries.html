@@ -161,6 +161,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../notebook-gallery.html">
+    Notebook Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../changelog.html">
     Changelog
   </a>
@@ -281,6 +288,13 @@ document.write(`
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../overview/index.html">
     Pyrad configuration files
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../notebook-gallery.html">
+    Notebook Gallery
   </a>
 </li>
 
@@ -572,7 +586,7 @@ document.write(`
             <span class="o">+</span> <span class="s2">&quot;, &quot;</span>
             <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
             <span class="o">+</span> <span class="s2">&quot;). Minimum distance to radar azimuth &quot;</span>
-            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d_az</span><span class="p">)</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">d_az</span><span class="p">))</span>
             <span class="o">+</span> <span class="s2">&quot; larger than tolerance&quot;</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
@@ -587,7 +601,7 @@ document.write(`
             <span class="o">+</span> <span class="s2">&quot;, &quot;</span>
             <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
             <span class="o">+</span> <span class="s2">&quot;). Minimum distance to radar elevation &quot;</span>
-            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d_el</span><span class="p">)</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">d_el</span><span class="p">))</span>
             <span class="o">+</span> <span class="s2">&quot; larger than tolerance&quot;</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
@@ -602,7 +616,7 @@ document.write(`
             <span class="o">+</span> <span class="s2">&quot;, &quot;</span>
             <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
             <span class="o">+</span> <span class="s2">&quot;). Minimum distance to radar range bin &quot;</span>
-            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d_r</span><span class="p">)</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">d_r</span><span class="p">))</span>
             <span class="o">+</span> <span class="s2">&quot; larger than tolerance&quot;</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
