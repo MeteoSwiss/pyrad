@@ -1067,8 +1067,12 @@ def _create_cfg_dict(cfgfile):
                 datatypeID_dict[0] = cfg[key]
             else:
                 datatypeID_dict[int(idx) - 1] = cfg[key]
-    if not len(datatypeID_dict):
-        datatypeID_dict = {0: {}}
+        
+    # Assign empty dict to radars where no DataTypeInFiles was assigned
+    for i in range(cfg["NumRadars"]):
+        if i not in datatypeID_dict:
+            datatypeID_dict[i] = {}
+            
     cfg["DataTypeIDInFiles"] = datatypeID_dict
 
     if "MasterScanTimeTol" not in cfg:

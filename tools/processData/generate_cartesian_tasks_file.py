@@ -80,10 +80,8 @@ def main():
 
     cpus_per_node = 24
     if partition == 'postproc':
-        max_nodes = 5
         max_cpus = 120
     elif partition == 'normal':
-        max_nodes = 11
         max_cpus = 264
 
     cpus_t = int(ntasks * cpus_per_task)

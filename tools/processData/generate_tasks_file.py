@@ -80,10 +80,8 @@ def main():
 
     cpus_per_node = 24
     if partition == 'postproc':
-        max_nodes = 5
         max_cpus = 120
     elif partition == 'normal':
-        max_nodes = 11
         max_cpus = 264
 
     cpus_t = int(ntasks * cpus_per_task)
@@ -133,9 +131,6 @@ def main():
     info = 'W'
     cfgpath = os.path.expanduser('~') + '/pyrad/config/processing/'
 
-    trajfile = ['None']
-    trajtype = 'lightning'
-    flashnr = 0
 
     # ele: elevations to get from archive format 001 to 020
     # if more than one separate by a comma
