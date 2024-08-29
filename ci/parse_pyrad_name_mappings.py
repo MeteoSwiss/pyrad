@@ -8,7 +8,7 @@ from pyrad.io import io_aux
 FUNCTIONS_TO_PARSE = ['get_fieldname_pyart',
                       'get_datatype_odim',
                       'get_datatype_metranet',
-                      'get_fieldname_cosmo']
+                      'get_fieldname_icon']
 
 mainpath = Path(__file__).resolve().parent.parent
 OUT_DIRECTORY = str(Path(mainpath, 'doc', 'source', 'overview', 'mappings'))
@@ -24,7 +24,7 @@ for fun_name in FUNCTIONS_TO_PARSE:
     for line in srccode:
         if ('datatype' in line or 'field_name' in line) and '==' in line:
             pyrad_dtypes.append(line.split('==')[1].split(':')[
-                                0].strip().replace("'", ""))
+                                0].strip().replace('"', '').replace("'",""))
         if 'return' in line:
             returnline = line.replace('return', '').strip()
 
