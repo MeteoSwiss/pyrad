@@ -1,0 +1,6 @@
+pyrad.util.retrieve\_mch\_prod
+==============================
+
+.. currentmodule:: pyrad.util
+
+.. autofunction:: retrieve_mch_prod

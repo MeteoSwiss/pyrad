@@ -79,6 +79,18 @@
     
     ratio_bootstrapping
     
+    retrieve_AQC_XLS
+    
+    retrieve_CPCCV
+    
+    retrieve_hzt_RT
+    
+    retrieve_hzt_prod
+    
+    retrieve_mch_prod
+    
+    retrieve_mch_prod_RT
+    
     time_avg_range
     
     time_series_statistics
