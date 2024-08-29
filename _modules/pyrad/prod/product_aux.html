@@ -397,6 +397,7 @@ document.write(`
 <span class="sd">    get_prodgen_func</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">from</span> <span class="nn">.process_product</span> <span class="kn">import</span> <span class="n">generate_sun_hits_products</span>
 <span class="kn">from</span> <span class="nn">.process_product</span> <span class="kn">import</span> <span class="n">generate_icon_coord_products</span>
 <span class="kn">from</span> <span class="nn">.process_product</span> <span class="kn">import</span> <span class="n">generate_occurrence_products</span>
@@ -458,47 +459,49 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">if</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;VOL&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s2">&quot;VOL&quot;</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">generate_vol_products</span>
-    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;TIMESERIES&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s2">&quot;TIMESERIES&quot;</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">generate_timeseries_products</span>
-    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;GRID&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s2">&quot;GRID&quot;</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">generate_grid_products</span>
-    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;SPECTRA&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s2">&quot;SPECTRA&quot;</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">generate_spectra_products</span>
-    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;SPARSE_GRID&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s2">&quot;SPARSE_GRID&quot;</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">generate_sparse_grid_products</span>
-    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;TIMEAVG&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s2">&quot;TIMEAVG&quot;</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">generate_time_avg_products</span>
-    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;GRID_TIMEAVG&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s2">&quot;GRID_TIMEAVG&quot;</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">generate_grid_time_avg_products</span>
-    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;SUN_HITS&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s2">&quot;SUN_HITS&quot;</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">generate_sun_hits_products</span>
-    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;MONITORING&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s2">&quot;MONITORING&quot;</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">generate_monitoring_products</span>
-    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;OCCURRENCE&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s2">&quot;OCCURRENCE&quot;</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">generate_occurrence_products</span>
-    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;INTERCOMP&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s2">&quot;INTERCOMP&quot;</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">generate_intercomp_products</span>
-    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;TRAJ_ONLY&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s2">&quot;TRAJ_ONLY&quot;</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">generate_traj_product</span>
-    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;COLOCATED_GATES&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s2">&quot;COLOCATED_GATES&quot;</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">generate_colocated_gates_products</span>
-    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;ICON_COORD&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s2">&quot;ICON_COORD&quot;</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">generate_icon_coord_products</span>
-    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;ICON2RADAR&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s2">&quot;ICON2RADAR&quot;</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">generate_icon_to_radar_products</span>
-    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;QVP&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s2">&quot;QVP&quot;</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">generate_qvp_products</span>
-    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;ML&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s2">&quot;ML&quot;</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">generate_ml_products</span>
-    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;VPR&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s2">&quot;VPR&quot;</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">generate_vpr_products</span>
-    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s1">&#39;CENTROIDS&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">dsformat</span> <span class="o">==</span> <span class="s2">&quot;CENTROIDS&quot;</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">generate_centroids_products</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;ERROR: Unknown dataset format &#39;</span><span class="si">%s</span><span class="s2">&#39; of dataset &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span>
-                         <span class="s2">&quot;(dataset type &#39;</span><span class="si">%s</span><span class="s2">&#39;)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dsformat</span><span class="p">,</span> <span class="n">dsname</span><span class="p">,</span> <span class="n">dstype</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;ERROR: Unknown dataset format &#39;</span><span class="si">%s</span><span class="s2">&#39; of dataset &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span>
+            <span class="s2">&quot;(dataset type &#39;</span><span class="si">%s</span><span class="s2">&#39;)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dsformat</span><span class="p">,</span> <span class="n">dsname</span><span class="p">,</span> <span class="n">dstype</span><span class="p">)</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">func</span></div>
 
@@ -545,7 +548,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     <br/>
   </p>
 </div>

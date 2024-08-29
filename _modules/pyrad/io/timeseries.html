@@ -432,8 +432,9 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">desc</span><span class="p">,</span> <span class="n">timevec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeformat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxlength</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">datatype</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">desc</span><span class="p">,</span> <span class="n">timevec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeformat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxlength</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initalize the object.</span>
 
@@ -449,8 +450,9 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">desc</span>
         <span class="k">if</span> <span class="n">timevec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">maxlength</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: Either &#39;timevec&#39; or &#39;maxlength&#39;&quot;</span>
-                                <span class="s2">&quot; must be defined&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;ERROR: Either &#39;timevec&#39; or &#39;maxlength&#39;&quot;</span> <span class="s2">&quot; must be defined&quot;</span>
+                <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">maxlength</span> <span class="o">=</span> <span class="n">maxlength</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">maxlength</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">datetime</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">num_el</span> <span class="o">=</span> <span class="mi">0</span>
@@ -464,8 +466,16 @@ document.write(`
 
 <div class="viewcode-block" id="TimeSeries.add_dataseries">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.TimeSeries.add_dataseries.html#pyrad.io.TimeSeries.add_dataseries">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_dataseries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">unit_name</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="n">dataseries</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">add_dataseries</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">label</span><span class="p">,</span>
+        <span class="n">unit_name</span><span class="p">,</span>
+        <span class="n">unit</span><span class="p">,</span>
+        <span class="n">dataseries</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">linestyle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add a new data series to the timeseries object.</span>
 <span class="sd">        The length of the data vector must be the same as the</span>
@@ -474,13 +484,22 @@ document.write(`
 
         <span class="k">if</span> <span class="n">dataseries</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataseries</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_el</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: Number of data series sample do &quot;</span>
-                                <span class="s2">&quot;not correspond to time vector (&#39;</span><span class="si">%s</span><span class="s2">&#39;)&quot;</span> <span class="o">%</span> <span class="n">label</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;ERROR: Number of data series sample do &quot;</span>
+                    <span class="s2">&quot;not correspond to time vector (&#39;</span><span class="si">%s</span><span class="s2">&#39;)&quot;</span> <span class="o">%</span> <span class="n">label</span>
+                <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">dataseries</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maxlength</span><span class="p">)</span>
 
-        <span class="n">ds</span> <span class="o">=</span> <span class="n">_DataSeries</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">unit_name</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="n">dataseries</span><span class="p">,</span>
-                         <span class="n">plot</span><span class="o">=</span><span class="n">plot</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">)</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">_DataSeries</span><span class="p">(</span>
+            <span class="n">label</span><span class="p">,</span>
+            <span class="n">unit_name</span><span class="p">,</span>
+            <span class="n">unit</span><span class="p">,</span>
+            <span class="n">dataseries</span><span class="p">,</span>
+            <span class="n">plot</span><span class="o">=</span><span class="n">plot</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+            <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dataseries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span></div>
 
 
@@ -492,8 +511,9 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_el</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxlength</span><span class="p">:</span>  <span class="c1"># jgr changed from &gt;=</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: Cannot add time series sample. Max&quot;</span>
-                            <span class="s2">&quot; length reached.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s2">&quot;ERROR: Cannot add time series sample. Max&quot;</span> <span class="s2">&quot; length reached.&quot;</span>
+            <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">num_el</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span>
         <span class="k">for</span> <span class="n">val</span><span class="p">,</span> <span class="n">ds</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataseries</span><span class="p">):</span>
@@ -517,12 +537,15 @@ document.write(`
 
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;# Weather radar timeseries data file&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">tsfile</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;# Project: MALSplus&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">tsfile</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;# Start : </span><span class="si">%s</span><span class="s2"> UTC&quot;</span> <span class="o">%</span>
-              <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">),</span>
-              <span class="n">file</span><span class="o">=</span><span class="n">tsfile</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;# End   : </span><span class="si">%s</span><span class="s2"> UTC&quot;</span> <span class="o">%</span>
-              <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">num_el</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">),</span>
-              <span class="n">file</span><span class="o">=</span><span class="n">tsfile</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;# Start : </span><span class="si">%s</span><span class="s2"> UTC&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">),</span>
+            <span class="n">file</span><span class="o">=</span><span class="n">tsfile</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;# End   : </span><span class="si">%s</span><span class="s2"> UTC&quot;</span>
+            <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">num_el</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">),</span>
+            <span class="n">file</span><span class="o">=</span><span class="n">tsfile</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;# Header lines with comments are preceded by &#39;#&#39;&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">tsfile</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;# </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">line</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">tsfile</span><span class="p">)</span>
@@ -543,18 +566,24 @@ document.write(`
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeformat</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
                 <span class="n">daystr</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%b-%Y&quot;</span><span class="p">)</span>
-                <span class="n">secs</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">hour</span> <span class="o">*</span> <span class="mf">3600.</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">minute</span> <span class="o">*</span> <span class="mf">60.</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">second</span> <span class="o">+</span> \
-                    <span class="n">dt</span><span class="o">.</span><span class="n">microsecond</span> <span class="o">/</span> <span class="mf">1000000.</span>
+                <span class="n">secs</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">dt</span><span class="o">.</span><span class="n">hour</span> <span class="o">*</span> <span class="mf">3600.0</span>
+                    <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">minute</span> <span class="o">*</span> <span class="mf">60.0</span>
+                    <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">second</span>
+                    <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">microsecond</span> <span class="o">/</span> <span class="mf">1000000.0</span>
+                <span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">, </span><span class="si">%14.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">daystr</span><span class="p">,</span> <span class="n">secs</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">tsfile</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timeformat</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-                      <span class="n">file</span><span class="o">=</span><span class="n">tsfile</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timeformat</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">tsfile</span>
+                <span class="p">)</span>
 
             <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataseries</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;, </span><span class="si">%14.4f</span><span class="s2">&quot;</span>
-                    <span class="o">%</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)[</span><span class="n">i</span><span class="p">]),</span>
-                    <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">tsfile</span><span class="p">)</span>
+                    <span class="s2">&quot;, </span><span class="si">%14.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)[</span><span class="n">i</span><span class="p">]),</span>
+                    <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">file</span><span class="o">=</span><span class="n">tsfile</span><span class="p">,</span>
+                <span class="p">)</span>
 
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">tsfile</span><span class="p">)</span>
 
@@ -576,7 +605,7 @@ document.write(`
         <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataseries</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">plot</span><span class="p">:</span>
                 <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="n">ds_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">data</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">num_el</span><span class="p">])</span>
+                <span class="n">ds_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">data</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_el</span><span class="p">])</span>
                 <span class="n">color_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">color</span><span class="p">)</span>
                 <span class="n">lstyle_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">linestyle</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">labely</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -587,15 +616,20 @@ document.write(`
 
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- plot to &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">fname</span><span class="p">)</span>
 
-        <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Trajectory Time Series </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> \
-            <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">plot_timeseries</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">num_el</span><span class="p">],</span>
-                        <span class="n">ds_list</span><span class="p">,</span>
-                        <span class="p">[</span><span class="n">fname</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
-                        <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                        <span class="n">labely</span><span class="o">=</span><span class="n">labely</span><span class="p">,</span> <span class="n">timeformat</span><span class="o">=</span><span class="s2">&quot;%H:%M&quot;</span><span class="p">,</span>
-                        <span class="n">colors</span><span class="o">=</span><span class="n">color_list</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="n">lstyle_list</span><span class="p">,</span>
-                        <span class="n">ymin</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">ymax</span><span class="p">)</span></div>
+        <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Trajectory Time Series </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">plot_timeseries</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_el</span><span class="p">],</span>
+            <span class="n">ds_list</span><span class="p">,</span>
+            <span class="p">[</span><span class="n">fname</span><span class="p">],</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+            <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">labely</span><span class="o">=</span><span class="n">labely</span><span class="p">,</span>
+            <span class="n">timeformat</span><span class="o">=</span><span class="s2">&quot;%H:%M&quot;</span><span class="p">,</span>
+            <span class="n">colors</span><span class="o">=</span><span class="n">color_list</span><span class="p">,</span>
+            <span class="n">linestyles</span><span class="o">=</span><span class="n">lstyle_list</span><span class="p">,</span>
+            <span class="n">ymin</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span>
+            <span class="n">ymax</span><span class="o">=</span><span class="n">ymax</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="TimeSeries.plot_hist">
@@ -607,14 +641,21 @@ document.write(`
         <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataseries</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">plot</span><span class="p">:</span>
                 <span class="n">bins</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="n">compute_histogram</span><span class="p">(</span>
-                    <span class="n">ds</span><span class="o">.</span><span class="n">data</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">num_el</span><span class="p">],</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datatype</span><span class="p">),</span>
-                    <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">)</span>
-                <span class="n">fname2</span> <span class="o">=</span> <span class="n">fname</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">ds</span><span class="o">.</span><span class="n">label</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
+                    <span class="n">ds</span><span class="o">.</span><span class="n">data</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_el</span><span class="p">],</span>
+                    <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datatype</span><span class="p">),</span>
+                    <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">fname2</span> <span class="o">=</span> <span class="n">fname</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">ds</span><span class="o">.</span><span class="n">label</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span>
                 <span class="n">plot_histogram</span><span class="p">(</span>
-                    <span class="n">bins</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="p">[</span><span class="n">fname2</span><span class="p">],</span>
+                    <span class="n">bins</span><span class="p">,</span>
+                    <span class="n">values</span><span class="p">,</span>
+                    <span class="p">[</span><span class="n">fname2</span><span class="p">],</span>
                     <span class="n">labelx</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> [</span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">unit_name</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">unit</span><span class="p">),</span>
-                    <span class="n">titl</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Trajectory Histogram </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
-                          <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)))</span>
+                    <span class="n">titl</span><span class="o">=</span><span class="p">(</span>
+                        <span class="s2">&quot;Trajectory Histogram </span><span class="si">%s</span><span class="s2">&quot;</span>
+                        <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- plot to &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">fname2</span><span class="p">)</span></div>
 </div>
 
@@ -625,8 +666,9 @@ document.write(`
 <span class="sd">    Hold a data vector and some meta information.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">unit_name</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">unit_name</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initalize the object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -687,7 +729,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     <br/>
   </p>
 </div>

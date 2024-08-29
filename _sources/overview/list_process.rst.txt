@@ -352,10 +352,10 @@ parameters
        Used with HYDRO_METHOD UKMO. Depth of the melting layer [km]. Default 500.
    perturb_ml_depth: float. Dataset keyword
        Used with HYDRO_METHOD UKMO. if specified, the depth of the melting layer can be varied by +/- this value [km], allowing a less-rigidly defined melting layer. Default 0.
-   freezing_level: float or None. Dataset keyword
-       Used with HYDRO_METHOD UKMO. if desired, a single freezing level height can be specified for the entire PPI domain - this will over-ride any field found within the input file. Default None
+   fzl: float or None. Dataset keyword
+       If desired, a single freezing level height can be specified for the entire PPI domain. This will be used only if no temperature field is available.
    sounding : str. Dataset keyword
-       The nearest radiosounding WMO code (5 int digits). It will be used to compute the freezing level, if no temperature field name is specified, if the temperature field isin the radar object or if no freezing_level is explicitely defined.
+       The nearest radiosounding WMO code (5 int digits). It will be used to compute the freezing level, if no temperature field name is specified, if the temperature field is not in the radar object or if no fzl is explicitely defined.
    use_dualpol: Bool. Dataset keyword
        Used with HYDRO_METHOD UKMO. If false no radar data is used and the classification is performed using temperature information only. Default True
    use_temperature: Bool. Dataset keyword

@@ -920,9 +920,9 @@ document.write(`
 </dd>
 <dt>perturb_ml_depth: float. Dataset keyword</dt><dd><p>Used with HYDRO_METHOD UKMO. if specified, the depth of the melting layer can be varied by +/- this value [km], allowing a less-rigidly defined melting layer. Default 0.</p>
 </dd>
-<dt>freezing_level: float or None. Dataset keyword</dt><dd><p>Used with HYDRO_METHOD UKMO. if desired, a single freezing level height can be specified for the entire PPI domain - this will over-ride any field found within the input file. Default None</p>
+<dt>fzl: float or None. Dataset keyword</dt><dd><p>If desired, a single freezing level height can be specified for the entire PPI domain. This will be used only if no temperature field is available.</p>
 </dd>
-<dt>sounding<span class="classifier">str. Dataset keyword</span></dt><dd><p>The nearest radiosounding WMO code (5 int digits). It will be used to compute the freezing level, if no temperature field name is specified, if the temperature field isin the radar object or if no freezing_level is explicitely defined.</p>
+<dt>sounding<span class="classifier">str. Dataset keyword</span></dt><dd><p>The nearest radiosounding WMO code (5 int digits). It will be used to compute the freezing level, if no temperature field name is specified, if the temperature field is not in the radar object or if no fzl is explicitely defined.</p>
 </dd>
 <dt>use_dualpol: Bool. Dataset keyword</dt><dd><p>Used with HYDRO_METHOD UKMO. If false no radar data is used and the classification is performed using temperature information only. Default True</p>
 </dd>
@@ -4379,7 +4379,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     <br/>
   </p>
 </div>

@@ -401,6 +401,7 @@ document.write(`
 <span class="sd">    _prepare_for_interpolation</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">platform</span>
@@ -414,7 +415,7 @@ document.write(`
 <span class="c1"># check existence of METRANET library</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="n">METRANET_LIB</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">aux_io</span><span class="o">.</span><span class="n">get_library</span><span class="p">(</span><span class="n">momentms</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;Linux&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Linux&quot;</span><span class="p">:</span>
         <span class="n">METRANET_LIB</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">aux_io</span><span class="o">.</span><span class="n">get_library</span><span class="p">(</span><span class="n">momentms</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">_METRANETLIB_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
@@ -426,8 +427,9 @@ document.write(`
 
 <div class="viewcode-block" id="hzt2radar_data">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.hzt2radar_data.html#pyrad.io.hzt2radar_data">[docs]</a>
-<span class="k">def</span> <span class="nf">hzt2radar_data</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">hzt_coord</span><span class="p">,</span> <span class="n">hzt_data</span><span class="p">,</span> <span class="n">slice_xy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                   <span class="n">field_name</span><span class="o">=</span><span class="s1">&#39;height_over_iso0&#39;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">hzt2radar_data</span><span class="p">(</span>
+    <span class="n">radar</span><span class="p">,</span> <span class="n">hzt_coord</span><span class="p">,</span> <span class="n">hzt_data</span><span class="p">,</span> <span class="n">slice_xy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">field_name</span><span class="o">=</span><span class="s2">&quot;height_over_iso0&quot;</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    get the HZT value corresponding to each radar gate using nearest</span>
 <span class="sd">    neighbour interpolation</span>
@@ -455,12 +457,13 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">x_radar</span><span class="p">,</span> <span class="n">y_radar</span><span class="p">,</span> <span class="n">z_radar</span> <span class="o">=</span> <span class="n">_put_radar_in_swiss_coord</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 
-    <span class="n">x_hzt</span><span class="p">,</span> <span class="n">y_hzt</span><span class="p">,</span> <span class="n">ind_xmin</span><span class="p">,</span> <span class="n">ind_ymin</span><span class="p">,</span> <span class="n">ind_xmax</span><span class="p">,</span> <span class="n">ind_ymax</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">_prepare_for_interpolation</span><span class="p">(</span>
-            <span class="n">x_radar</span><span class="p">,</span> <span class="n">y_radar</span><span class="p">,</span> <span class="n">hzt_coord</span><span class="p">,</span> <span class="n">slice_xy</span><span class="o">=</span><span class="n">slice_xy</span><span class="p">))</span>
+    <span class="n">x_hzt</span><span class="p">,</span> <span class="n">y_hzt</span><span class="p">,</span> <span class="n">ind_xmin</span><span class="p">,</span> <span class="n">ind_ymin</span><span class="p">,</span> <span class="n">ind_xmax</span><span class="p">,</span> <span class="n">ind_ymax</span> <span class="o">=</span> <span class="n">_prepare_for_interpolation</span><span class="p">(</span>
+        <span class="n">x_radar</span><span class="p">,</span> <span class="n">y_radar</span><span class="p">,</span> <span class="n">hzt_coord</span><span class="p">,</span> <span class="n">slice_xy</span><span class="o">=</span><span class="n">slice_xy</span>
+    <span class="p">)</span>
 
-    <span class="n">values</span> <span class="o">=</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s1">&#39;HZT&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span>
-        <span class="n">ind_ymin</span><span class="p">:</span><span class="n">ind_ymax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ind_xmin</span><span class="p">:</span><span class="n">ind_xmax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s2">&quot;HZT&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+        <span class="n">ind_ymin</span> <span class="p">:</span> <span class="n">ind_ymax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ind_xmin</span> <span class="p">:</span> <span class="n">ind_xmax</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
     <span class="c1"># find interpolation function</span>
     <span class="n">interp_func</span> <span class="o">=</span> <span class="n">NearestNDInterpolator</span><span class="p">((</span><span class="n">y_hzt</span><span class="p">,</span> <span class="n">x_hzt</span><span class="p">),</span> <span class="n">values</span><span class="p">)</span>
 
@@ -469,7 +472,7 @@ document.write(`
 
     <span class="c1"># put field</span>
     <span class="n">field_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
-    <span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">z_radar</span> <span class="o">-</span> <span class="n">data_interp</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">z_radar</span> <span class="o">-</span> <span class="n">data_interp</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">field_dict</span></div>
 
@@ -502,20 +505,19 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># parse the field parameters</span>
     <span class="k">if</span> <span class="n">field_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;hzt_index&#39;</span><span class="p">)</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;hzt_index&quot;</span><span class="p">)</span>
 
     <span class="n">x_radar</span><span class="p">,</span> <span class="n">y_radar</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_put_radar_in_swiss_coord</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 
-    <span class="n">x_hzt</span><span class="p">,</span> <span class="n">y_hzt</span><span class="p">,</span> <span class="n">ind_xmin</span><span class="p">,</span> <span class="n">ind_ymin</span><span class="p">,</span> <span class="n">ind_xmax</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">_prepare_for_interpolation</span><span class="p">(</span>
-            <span class="n">x_radar</span><span class="p">,</span> <span class="n">y_radar</span><span class="p">,</span> <span class="n">hzt_coord</span><span class="p">,</span> <span class="n">slice_xy</span><span class="o">=</span><span class="n">slice_xy</span><span class="p">))</span>
+    <span class="n">x_hzt</span><span class="p">,</span> <span class="n">y_hzt</span><span class="p">,</span> <span class="n">ind_xmin</span><span class="p">,</span> <span class="n">ind_ymin</span><span class="p">,</span> <span class="n">ind_xmax</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_prepare_for_interpolation</span><span class="p">(</span>
+        <span class="n">x_radar</span><span class="p">,</span> <span class="n">y_radar</span><span class="p">,</span> <span class="n">hzt_coord</span><span class="p">,</span> <span class="n">slice_xy</span><span class="o">=</span><span class="n">slice_xy</span>
+    <span class="p">)</span>
 
     <span class="n">tree</span> <span class="o">=</span> <span class="n">cKDTree</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">((</span><span class="n">y_hzt</span><span class="p">,</span> <span class="n">x_hzt</span><span class="p">)))</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">ind_vec</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">((</span><span class="n">y_radar</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">x_radar</span><span class="o">.</span><span class="n">flatten</span><span class="p">())),</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">ind_vec</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">((</span><span class="n">y_radar</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">x_radar</span><span class="o">.</span><span class="n">flatten</span><span class="p">())),</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># put the index in the original icon coordinates</span>
-    <span class="n">nx_hzt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">hzt_coord</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+    <span class="n">nx_hzt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">hzt_coord</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
 
     <span class="n">nx</span> <span class="o">=</span> <span class="n">ind_xmax</span> <span class="o">-</span> <span class="n">ind_xmin</span> <span class="o">+</span> <span class="mi">1</span>
 
@@ -524,7 +526,7 @@ document.write(`
     <span class="n">ind_hzt</span> <span class="o">=</span> <span class="p">(</span><span class="n">ind_x</span> <span class="o">+</span> <span class="n">nx_hzt</span> <span class="o">*</span> <span class="n">ind_y</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
     <span class="n">hzt_ind_field</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
-    <span class="n">hzt_ind_field</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ind_hzt</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">ngates</span><span class="p">)</span>
+    <span class="n">hzt_ind_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ind_hzt</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">ngates</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">hzt_ind_field</span></div>
 
@@ -532,7 +534,7 @@ document.write(`
 
 <div class="viewcode-block" id="get_iso0_field">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.get_iso0_field.html#pyrad.io.get_iso0_field">[docs]</a>
-<span class="k">def</span> <span class="nf">get_iso0_field</span><span class="p">(</span><span class="n">hzt_data</span><span class="p">,</span> <span class="n">hzt_ind</span><span class="p">,</span> <span class="n">z_radar</span><span class="p">,</span> <span class="n">field_name</span><span class="o">=</span><span class="s1">&#39;height_over_iso0&#39;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_iso0_field</span><span class="p">(</span><span class="n">hzt_data</span><span class="p">,</span> <span class="n">hzt_ind</span><span class="p">,</span> <span class="n">z_radar</span><span class="p">,</span> <span class="n">field_name</span><span class="o">=</span><span class="s2">&quot;height_over_iso0&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the height over iso0 data corresponding to each radar gate</span>
 <span class="sd">    using a precomputed look up table of the nearest neighbour</span>
@@ -554,11 +556,12 @@ document.write(`
 <span class="sd">        dictionary with the height over iso0 field and metadata</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">nrays</span><span class="p">,</span> <span class="n">ngates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">hzt_ind</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-    <span class="n">values</span> <span class="o">=</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s1">&#39;HZT&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">nrays</span><span class="p">,</span> <span class="n">ngates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">hzt_ind</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s2">&quot;HZT&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
     <span class="n">field_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
-    <span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">z_radar</span> <span class="o">-</span> <span class="n">values</span><span class="p">[</span><span class="n">hzt_ind</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
-        <span class="n">nrays</span><span class="p">,</span> <span class="n">ngates</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">z_radar</span> <span class="o">-</span> <span class="n">values</span><span class="p">[</span><span class="n">hzt_ind</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+        <span class="n">nrays</span><span class="p">,</span> <span class="n">ngates</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">field_dict</span></div>
 
@@ -566,7 +569,7 @@ document.write(`
 
 <div class="viewcode-block" id="read_hzt_data">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_hzt_data.html#pyrad.io.read_hzt_data">[docs]</a>
-<span class="k">def</span> <span class="nf">read_hzt_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">chy0</span><span class="o">=</span><span class="mf">255.</span><span class="p">,</span> <span class="n">chx0</span><span class="o">=-</span><span class="mf">160.</span><span class="p">,</span> <span class="n">read_lib</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">read_hzt_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">chy0</span><span class="o">=</span><span class="mf">255.0</span><span class="p">,</span> <span class="n">chx0</span><span class="o">=-</span><span class="mf">160.0</span><span class="p">,</span> <span class="n">read_lib</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads iso-0 degree data from an HZT file</span>
 
@@ -585,61 +588,70 @@ document.write(`
 <span class="sd">        dictionary with the data and metadata</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">read_lib</span> <span class="o">==</span> <span class="s1">&#39;C&#39;</span> <span class="ow">and</span> <span class="n">_METRANETLIB_AVAILABLE</span><span class="p">:</span>
-        <span class="n">ret</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">aux_io</span><span class="o">.</span><span class="n">read_product_c</span><span class="p">(</span>
-            <span class="n">fname</span><span class="p">,</span> <span class="n">physic_value</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">masked_array</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">read_lib</span> <span class="o">==</span> <span class="s1">&#39;python&#39;</span><span class="p">:</span>
-        <span class="n">ret</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">aux_io</span><span class="o">.</span><span class="n">read_product_py</span><span class="p">(</span>
-            <span class="n">fname</span><span class="p">,</span> <span class="n">physic_value</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">masked_array</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">read_lib</span> <span class="o">==</span> <span class="s2">&quot;C&quot;</span> <span class="ow">and</span> <span class="n">_METRANETLIB_AVAILABLE</span><span class="p">:</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">aux_io</span><span class="o">.</span><span class="n">read_product_c</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">physic_value</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">masked_array</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">read_lib</span> <span class="o">==</span> <span class="s2">&quot;python&quot;</span><span class="p">:</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">aux_io</span><span class="o">.</span><span class="n">read_product_py</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">physic_value</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">masked_array</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;METRANET C-library reader not available or unknown &#39;</span> <span class="o">+</span>
-             <span class="s1">&#39;library type. Python library will be used&#39;</span><span class="p">)</span>
-        <span class="n">ret</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">aux_io</span><span class="o">.</span><span class="n">read_product_py</span><span class="p">(</span>
-            <span class="n">fname</span><span class="p">,</span> <span class="n">physic_value</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">masked_array</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;METRANET C-library reader not available or unknown &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;library type. Python library will be used&quot;</span>
+        <span class="p">)</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">aux_io</span><span class="o">.</span><span class="n">read_product_py</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">physic_value</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">masked_array</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">ret</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to read HZT file &#39;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to read HZT file &quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">var_data</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;meters_above_mean_sea_level&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">ret</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
-        <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;height_over_iso0&#39;</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;meters_above_mean_sea_level&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">ret</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+        <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;height_over_iso0&quot;</span><span class="p">,</span>
     <span class="p">}</span>
-    <span class="n">run_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">],</span> <span class="s1">&#39;%y%j%H%M0&#39;</span><span class="p">)</span>
+    <span class="n">run_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">],</span> <span class="s2">&quot;%y%j%H%M0&quot;</span><span class="p">)</span>
     <span class="n">time_data</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;standard_name&#39;</span><span class="p">:</span> <span class="s1">&#39;time&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;time&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;seconds since &#39;</span> <span class="o">+</span> <span class="n">run_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">),</span>
-        <span class="s1">&#39;calendar&#39;</span><span class="p">:</span> <span class="s1">&#39;gregorian&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;usr_forecast_hour&#39;</span><span class="p">])</span> <span class="o">*</span> <span class="mf">3600.</span><span class="p">]</span>
+        <span class="s2">&quot;standard_name&quot;</span><span class="p">:</span> <span class="s2">&quot;time&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;time&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;seconds since &quot;</span> <span class="o">+</span> <span class="n">run_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;calendar&quot;</span><span class="p">:</span> <span class="s2">&quot;gregorian&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;usr_forecast_hour&quot;</span><span class="p">])</span> <span class="o">*</span> <span class="mf">3600.0</span><span class="p">],</span>
     <span class="p">}</span>
 
     <span class="n">x_1</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;axis&#39;</span><span class="p">:</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span>
-        <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s2">&quot;x-coordinate in Swiss coordinate system&quot;</span><span class="p">,</span>
-        <span class="s1">&#39;standard_name&#39;</span><span class="p">:</span> <span class="s2">&quot;projection_x_coordinate&quot;</span><span class="p">,</span>
-        <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s2">&quot;m&quot;</span><span class="p">,</span>
-        <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;column&#39;</span><span class="p">]))</span> <span class="o">*</span>
-                  <span class="nb">float</span><span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;rect_xres&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="n">chy0</span> <span class="o">+</span>
-                  <span class="nb">float</span><span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;rect_xres&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.</span><span class="p">)</span>
+        <span class="s2">&quot;axis&quot;</span><span class="p">:</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;x-coordinate in Swiss coordinate system&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;standard_name&quot;</span><span class="p">:</span> <span class="s2">&quot;projection_x_coordinate&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;m&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;column&quot;</span><span class="p">]))</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;rect_xres&quot;</span><span class="p">])</span>
+                <span class="o">+</span> <span class="n">chy0</span>
+                <span class="o">+</span> <span class="nb">float</span><span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;rect_xres&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span>
+            <span class="p">)</span>
+            <span class="o">*</span> <span class="mf">1000.0</span>
+        <span class="p">),</span>
     <span class="p">}</span>
     <span class="n">y_1</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;axis&#39;</span><span class="p">:</span> <span class="s2">&quot;Y&quot;</span><span class="p">,</span>
-        <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s2">&quot;y-coordinate in Swiss coordinate system&quot;</span><span class="p">,</span>
-        <span class="s1">&#39;standard_name&#39;</span><span class="p">:</span> <span class="s2">&quot;projection_y_coordinate&quot;</span><span class="p">,</span>
-        <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s2">&quot;m&quot;</span><span class="p">,</span>
-        <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;row&#39;</span><span class="p">]))</span> <span class="o">*</span>
-                  <span class="nb">float</span><span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;rect_yres&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="n">chx0</span> <span class="o">+</span>
-                  <span class="nb">float</span><span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;rect_yres&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.</span><span class="p">)</span>
+        <span class="s2">&quot;axis&quot;</span><span class="p">:</span> <span class="s2">&quot;Y&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;y-coordinate in Swiss coordinate system&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;standard_name&quot;</span><span class="p">:</span> <span class="s2">&quot;projection_y_coordinate&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;m&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;row&quot;</span><span class="p">]))</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;rect_yres&quot;</span><span class="p">])</span>
+                <span class="o">+</span> <span class="n">chx0</span>
+                <span class="o">+</span> <span class="nb">float</span><span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;rect_yres&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span>
+            <span class="p">)</span>
+            <span class="o">*</span> <span class="mf">1000.0</span>
+        <span class="p">),</span>
     <span class="p">}</span>
 
     <span class="n">hzt_data</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;HZT&#39;</span><span class="p">:</span> <span class="n">var_data</span><span class="p">,</span>
-        <span class="s1">&#39;metadata&#39;</span><span class="p">:</span> <span class="n">ret</span><span class="o">.</span><span class="n">header</span><span class="p">,</span>
-        <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">time_data</span><span class="p">,</span>
-        <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">x_1</span><span class="p">,</span>
-        <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">y_1</span>
+        <span class="s2">&quot;HZT&quot;</span><span class="p">:</span> <span class="n">var_data</span><span class="p">,</span>
+        <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="n">ret</span><span class="o">.</span><span class="n">header</span><span class="p">,</span>
+        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">time_data</span><span class="p">,</span>
+        <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">x_1</span><span class="p">,</span>
+        <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">y_1</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="k">return</span> <span class="n">hzt_data</span></div>
@@ -671,8 +683,8 @@ document.write(`
 <span class="sd">        the minimum and maximum indices of each dimension</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">nx_hzt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">hzt_coord</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-    <span class="n">ny_hzt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">hzt_coord</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+    <span class="n">nx_hzt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">hzt_coord</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">ny_hzt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">hzt_coord</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
 
     <span class="k">if</span> <span class="n">slice_xy</span><span class="p">:</span>
         <span class="c1"># get the icon data within the radar range</span>
@@ -681,25 +693,25 @@ document.write(`
         <span class="n">ymin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">y_radar</span><span class="p">)</span>
         <span class="n">ymax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">y_radar</span><span class="p">)</span>
 
-        <span class="n">ind_xmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hzt_coord</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">xmin</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ind_xmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hzt_coord</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">xmin</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">ind_xmin</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">ind_xmin</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ind_xmin</span> <span class="o">=</span> <span class="n">ind_xmin</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="n">ind_xmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hzt_coord</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">xmax</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ind_xmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hzt_coord</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">xmax</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">ind_xmax</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">ind_xmax</span> <span class="o">=</span> <span class="n">nx_hzt</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ind_xmax</span> <span class="o">=</span> <span class="n">ind_xmax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="n">ind_ymin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hzt_coord</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ymin</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ind_ymin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hzt_coord</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ymin</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">ind_ymin</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">ind_ymin</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ind_ymin</span> <span class="o">=</span> <span class="n">ind_ymin</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="n">ind_ymax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hzt_coord</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">ymax</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ind_ymax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hzt_coord</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">ymax</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">ind_ymax</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">ind_ymax</span> <span class="o">=</span> <span class="n">ny_hzt</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
@@ -713,13 +725,11 @@ document.write(`
     <span class="n">nx</span> <span class="o">=</span> <span class="n">ind_xmax</span> <span class="o">-</span> <span class="n">ind_xmin</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">ny</span> <span class="o">=</span> <span class="n">ind_ymax</span> <span class="o">-</span> <span class="n">ind_ymin</span> <span class="o">+</span> <span class="mi">1</span>
 
-    <span class="n">x_hzt</span> <span class="o">=</span> <span class="n">hzt_coord</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ind_xmin</span><span class="p">:</span><span class="n">ind_xmax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
-    <span class="n">y_hzt</span> <span class="o">=</span> <span class="n">hzt_coord</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ind_ymin</span><span class="p">:</span><span class="n">ind_ymax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">x_hzt</span> <span class="o">=</span> <span class="n">hzt_coord</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_xmin</span> <span class="p">:</span> <span class="n">ind_xmax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">y_hzt</span> <span class="o">=</span> <span class="n">hzt_coord</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ymin</span> <span class="p">:</span> <span class="n">ind_ymax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
 
-    <span class="n">x_hzt</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">x_hzt</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nx</span><span class="p">),</span> <span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)))</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-    <span class="n">y_hzt</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">y_hzt</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)))</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">x_hzt</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">x_hzt</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nx</span><span class="p">),</span> <span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)))</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">y_hzt</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">y_hzt</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)))</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">x_hzt</span><span class="p">,</span> <span class="n">y_hzt</span><span class="p">,</span> <span class="n">ind_xmin</span><span class="p">,</span> <span class="n">ind_ymin</span><span class="p">,</span> <span class="n">ind_xmax</span><span class="p">,</span> <span class="n">ind_ymax</span>
 </pre></div>
@@ -765,7 +775,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     <br/>
   </p>
 </div>

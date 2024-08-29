@@ -414,7 +414,7 @@ document.write(`
 
 <div class="viewcode-block" id="Trajectory">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.Trajectory.html#pyrad.io.Trajectory">[docs]</a>
-<span class="k">class</span> <span class="nc">Trajectory</span><span class="p">():</span>
+<span class="k">class</span> <span class="nc">Trajectory</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class for reading and handling trajectory data from a file.</span>
 <span class="sd">    Attributes</span>
@@ -468,8 +468,9 @@ document.write(`
 <span class="sd">    _get_total_seconds : Get the total time of the trajectory in seconds</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">starttime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">endtime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">trajtype</span><span class="o">=</span><span class="s1">&#39;plane&#39;</span><span class="p">,</span> <span class="n">flashnr</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">starttime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">endtime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">trajtype</span><span class="o">=</span><span class="s2">&quot;plane&quot;</span><span class="p">,</span> <span class="n">flashnr</span><span class="o">=</span><span class="mi">0</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initalize the object.</span>
 <span class="sd">        Parameters</span>
@@ -507,20 +508,20 @@ document.write(`
 
         <span class="bp">self</span><span class="o">.</span><span class="n">radar_list</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajtype</span> <span class="o">==</span> <span class="s1">&#39;lightning&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajtype</span> <span class="o">==</span> <span class="s2">&quot;lightning&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">flashnr</span> <span class="o">=</span> <span class="n">flashnr</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">time_in_flash</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dBm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">flashnr_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajtype</span> <span class="o">==</span> <span class="s1">&#39;trt&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajtype</span> <span class="o">==</span> <span class="s2">&quot;trt&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cell_contour</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajtype</span> <span class="o">==</span> <span class="s1">&#39;lightning&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajtype</span> <span class="o">==</span> <span class="s2">&quot;lightning&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_read_traj_lightning</span><span class="p">(</span><span class="n">flashnr</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajtype</span> <span class="o">==</span> <span class="s1">&#39;trt&#39;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajtype</span> <span class="o">==</span> <span class="s2">&quot;trt&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_read_traj_trt</span><span class="p">()</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajtype</span> <span class="o">==</span> <span class="s1">&#39;plane_flores&#39;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajtype</span> <span class="o">==</span> <span class="s2">&quot;plane_flores&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_read_traj_flores</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_read_traj</span><span class="p">()</span>
@@ -528,8 +529,10 @@ document.write(`
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ee</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">))</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                <span class="s2">&quot;ERROR: Could not load trajectory data from file &#39;&quot;</span> <span class="o">+</span>
-                <span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;&#39; into Trajectory object&quot;</span><span class="p">)</span>
+                <span class="s2">&quot;ERROR: Could not load trajectory data from file &#39;&quot;</span>
+                <span class="o">+</span> <span class="n">filename</span>
+                <span class="o">+</span> <span class="s2">&quot;&#39; into Trajectory object&quot;</span>
+            <span class="p">)</span>
 
 <div class="viewcode-block" id="Trajectory.add_radar">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.Trajectory.add_radar.html#pyrad.io.Trajectory.add_radar">[docs]</a>
@@ -548,16 +551,20 @@ document.write(`
 
         <span class="c1"># Check if radar location is already in the radar list</span>
         <span class="k">for</span> <span class="n">rad</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">radar_list</span><span class="p">:</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">rad</span><span class="o">.</span><span class="n">location_is_equal</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                                      <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                                      <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])):</span>
+            <span class="k">if</span> <span class="n">rad</span><span class="o">.</span><span class="n">location_is_equal</span><span class="p">(</span>
+                <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="p">):</span>
                 <span class="c1"># warn(&quot;WARNING: Tried to add the same radar twice to the&quot;</span>
                 <span class="c1">#      &quot; radar list&quot;)</span>
                 <span class="k">return</span> <span class="n">rad</span>
 
-        <span class="n">rad</span> <span class="o">=</span> <span class="n">_Radar_Trajectory</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                                <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                                <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">rad</span> <span class="o">=</span> <span class="n">_Radar_Trajectory</span><span class="p">(</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">radar_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rad</span><span class="p">)</span>
 
         <span class="c1"># Convert trajectory WGS84 points to polara radar coordinates</span>
@@ -568,8 +575,10 @@ document.write(`
         <span class="c1"># Note: Earth curvature not considered yet!</span>
 
         <span class="p">(</span><span class="n">rvec</span><span class="p">,</span> <span class="n">azvec</span><span class="p">,</span> <span class="n">elvec</span><span class="p">)</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">cartesian_to_antenna</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chy</span> <span class="o">-</span> <span class="n">rad</span><span class="o">.</span><span class="n">ch_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chx</span> <span class="o">-</span> <span class="n">rad</span><span class="o">.</span><span class="n">ch_x</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chh</span> <span class="o">-</span> <span class="n">rad</span><span class="o">.</span><span class="n">ch_alt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chy</span> <span class="o">-</span> <span class="n">rad</span><span class="o">.</span><span class="n">ch_y</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chx</span> <span class="o">-</span> <span class="n">rad</span><span class="o">.</span><span class="n">ch_x</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chh</span> <span class="o">-</span> <span class="n">rad</span><span class="o">.</span><span class="n">ch_alt</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="n">rad</span><span class="o">.</span><span class="n">assign_trajectory</span><span class="p">(</span><span class="n">elvec</span><span class="p">,</span> <span class="n">azvec</span><span class="p">,</span> <span class="n">rvec</span><span class="p">)</span>
 
@@ -596,8 +605,8 @@ document.write(`
         <span class="n">v_az</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsamples</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="n">v_az</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_az</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
         <span class="n">daz</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth_vec</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="o">-</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth_vec</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
-        <span class="n">daz</span><span class="p">[</span><span class="n">daz</span> <span class="o">&gt;</span> <span class="mf">180.</span><span class="p">]</span> <span class="o">-=</span> <span class="mf">360.</span>
-        <span class="n">daz</span><span class="p">[</span><span class="n">daz</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">180.</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">360.</span>
+        <span class="n">daz</span><span class="p">[</span><span class="n">daz</span> <span class="o">&gt;</span> <span class="mf">180.0</span><span class="p">]</span> <span class="o">-=</span> <span class="mf">360.0</span>
+        <span class="n">daz</span><span class="p">[</span><span class="n">daz</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">180.0</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">360.0</span>
         <span class="n">v_az</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">daz</span> <span class="o">/</span> <span class="n">dt</span>
 
         <span class="n">v_el</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsamples</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
@@ -618,12 +627,12 @@ document.write(`
 <div class="viewcode-block" id="Trajectory.get_samples_in_period">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.Trajectory.get_samples_in_period.html#pyrad.io.Trajectory.get_samples_in_period">[docs]</a>
     <span class="k">def</span> <span class="nf">get_samples_in_period</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; &quot;</span>
 <span class="sd">        Get indices of samples of the trajectory within given time</span>
 <span class="sd">        period.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="p">((</span><span class="n">start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">end</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">end</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: Either start or end must be defined&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">)</span>
@@ -666,9 +675,11 @@ document.write(`
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_swiss_grid_done</span><span class="p">:</span>
             <span class="k">return</span>
 
-        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swiss_chy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chh</span><span class="p">)</span> <span class="o">=</span> \
+        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swiss_chy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chh</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">wgs84_to_swissCH1903</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lon_deg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lat_deg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lon_deg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lat_deg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_swiss_grid_done</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -690,19 +701,21 @@ document.write(`
         <span class="k">try</span><span class="p">:</span>
             <span class="n">tfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: Could not find|open trajectory file &#39;&quot;</span> <span class="o">+</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s2">&quot;ERROR: Could not find|open trajectory file &#39;&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span>
+            <span class="p">)</span>
 
         <span class="n">repat</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
             <span class="s2">&quot;(</span><span class="se">\\</span><span class="s2">d+</span><span class="se">\\</span><span class="s2">-[A-Za-z]+</span><span class="se">\\</span><span class="s2">-</span><span class="se">\\</span><span class="s2">d+)</span><span class="se">\\</span><span class="s2">s+([</span><span class="se">\\</span><span class="s2">d</span><span class="se">\\</span><span class="s2">.]+)</span><span class="se">\\</span><span class="s2">s+&quot;</span>
-            <span class="s2">&quot;([</span><span class="se">\\</span><span class="s2">-</span><span class="se">\\</span><span class="s2">d</span><span class="se">\\</span><span class="s2">.]+)</span><span class="se">\\</span><span class="s2">s+([</span><span class="se">\\</span><span class="s2">-</span><span class="se">\\</span><span class="s2">d</span><span class="se">\\</span><span class="s2">.]+)</span><span class="se">\\</span><span class="s2">s+([</span><span class="se">\\</span><span class="s2">-</span><span class="se">\\</span><span class="s2">d</span><span class="se">\\</span><span class="s2">.]+)&quot;</span><span class="p">)</span>
+            <span class="s2">&quot;([</span><span class="se">\\</span><span class="s2">-</span><span class="se">\\</span><span class="s2">d</span><span class="se">\\</span><span class="s2">.]+)</span><span class="se">\\</span><span class="s2">s+([</span><span class="se">\\</span><span class="s2">-</span><span class="se">\\</span><span class="s2">d</span><span class="se">\\</span><span class="s2">.]+)</span><span class="se">\\</span><span class="s2">s+([</span><span class="se">\\</span><span class="s2">-</span><span class="se">\\</span><span class="s2">d</span><span class="se">\\</span><span class="s2">.]+)&quot;</span>
+        <span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">loc_set</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="n">loc</span> <span class="o">=</span> <span class="n">locale</span><span class="o">.</span><span class="n">getlocale</span><span class="p">()</span>  <span class="c1"># get current locale</span>
-            <span class="k">if</span> <span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;en_US&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;en_US&quot;</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="n">locale</span><span class="o">.</span><span class="n">setlocale</span><span class="p">(</span><span class="n">locale</span><span class="o">.</span><span class="n">LC_ALL</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;en_US&#39;</span><span class="p">,</span> <span class="s1">&#39;UTF-8&#39;</span><span class="p">))</span>
+                    <span class="n">locale</span><span class="o">.</span><span class="n">setlocale</span><span class="p">(</span><span class="n">locale</span><span class="o">.</span><span class="n">LC_ALL</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">,</span> <span class="s2">&quot;UTF-8&quot;</span><span class="p">))</span>
                 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ee</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ERROR: Cannot set local &#39;en_US&#39;: </span><span class="si">{</span><span class="n">ee</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                 <span class="n">loc_set</span> <span class="o">=</span> <span class="kc">True</span>
@@ -721,17 +734,19 @@ document.write(`
                     <span class="k">continue</span>
 
                 <span class="c1"># ignore comments</span>
-                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">):</span>
                     <span class="k">continue</span>
 
-                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Remove comments</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Remove comments</span>
                 <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
                 <span class="n">mm</span> <span class="o">=</span> <span class="n">repat</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">mm</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;WARNING: Format error in trajectory file&quot;</span>
-                          <span class="sa">f</span><span class="s2">&quot; &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39; on line &#39;</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">,</span>
-                          <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;WARNING: Format error in trajectory file&quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot; &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39; on line &#39;</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">,</span>
+                        <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span>
+                    <span class="p">)</span>
                     <span class="k">continue</span>
 
                 <span class="c1"># Get time stamp</span>
@@ -741,7 +756,8 @@ document.write(`
                     <span class="nb">print</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%b-%Y&quot;</span><span class="p">))</span>
                     <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;ERROR: Format error in traj file &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39; &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;on line &#39;</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&#39; (</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+                        <span class="sa">f</span><span class="s2">&quot;on line &#39;</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&#39; (</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>
+                    <span class="p">)</span>
 
                 <span class="n">sday</span> <span class="o">+=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">mm</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span>
 
@@ -757,11 +773,12 @@ document.write(`
                 <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">,</span> <span class="p">[</span><span class="n">sday</span><span class="p">])</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lat_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lat_deg</span><span class="p">,</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">mm</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span> <span class="o">*</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lat_deg</span><span class="p">,</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">mm</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span> <span class="o">*</span> <span class="mf">180.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">]</span>
+                <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lon_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lon_deg</span><span class="p">,</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">mm</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span> <span class="o">*</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">])</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span><span class="p">,</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">mm</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">5</span><span class="p">))])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lon_deg</span><span class="p">,</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">mm</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span> <span class="o">*</span> <span class="mf">180.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span><span class="p">,</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">mm</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">5</span><span class="p">))])</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">raise</span>
         <span class="k">finally</span><span class="p">:</span>
@@ -793,23 +810,23 @@ document.write(`
         <span class="k">try</span><span class="p">:</span>
             <span class="n">tfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: Could not find|open trajectory file &#39;&quot;</span> <span class="o">+</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s2">&quot;ERROR: Could not find|open trajectory file &#39;&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span>
+            <span class="p">)</span>
         <span class="n">tfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">28</span><span class="p">,</span>
-                               <span class="n">delim_whitespace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">28</span><span class="p">,</span> <span class="n">delim_whitespace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">times</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
-                    <span class="n">d</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">h</span> <span class="o">+</span> <span class="s1">&#39;0000&#39;</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">_%H:%M:%S.</span><span class="si">%f</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">for</span>
-                <span class="n">d</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;UTCDate&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;UTCTime&#39;</span><span class="p">])]</span>
+                <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">d</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">h</span> <span class="o">+</span> <span class="s2">&quot;0000&quot;</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">_%H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;UTCDate&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;UTCTime&quot;</span><span class="p">])</span>
+            <span class="p">]</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lat_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Latitude&#39;</span><span class="p">]))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lon_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Longitude&#39;</span><span class="p">]))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;H-MSL&#39;</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lat_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Latitude&quot;</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lon_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Longitude&quot;</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;H-MSL&quot;</span><span class="p">]))</span>
 
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">raise</span>
@@ -835,11 +852,13 @@ document.write(`
 <span class="sd">            the flash number to keep. If 0 data from all flashes will be kept</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">flashnr_vec</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">time_in_flash</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">dBm</span> <span class="o">=</span> <span class="n">read_lightning</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filename</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">flashnr_vec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: Could not find|open trajectory file &#39;&quot;</span> <span class="o">+</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s2">&quot;ERROR: Could not find|open trajectory file &#39;&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span>
+            <span class="p">)</span>
 
         <span class="n">recording_started</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">starttime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -871,8 +890,7 @@ document.write(`
 
             <span class="bp">self</span><span class="o">.</span><span class="n">flashnr_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flashnr_vec</span><span class="p">,</span> <span class="p">[</span><span class="n">flashnr_vec</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">,</span> <span class="p">[</span><span class="n">time</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">time_in_flash</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">time_in_flash</span><span class="p">,</span> <span class="p">[</span><span class="n">time_in_flash</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">time_in_flash</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_in_flash</span><span class="p">,</span> <span class="p">[</span><span class="n">time_in_flash</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lat_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lat_deg</span><span class="p">,</span> <span class="p">[</span><span class="n">lat</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lon_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lon_deg</span><span class="p">,</span> <span class="p">[</span><span class="n">lon</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
@@ -919,16 +937,46 @@ document.write(`
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="s1">&#39;_tt.trt&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">:</span>
-            <span class="p">(</span><span class="n">traj_ID</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">yyyymmddHHMM</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span>
-             <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span>
-             <span class="n">cell_contours</span><span class="p">)</span> <span class="o">=</span> <span class="n">read_trt_thundertracking_traj_data</span><span class="p">(</span>
-                 <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;_tt.trt&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">:</span>
+            <span class="p">(</span>
+                <span class="n">traj_ID</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">yyyymmddHHMM</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">lon</span><span class="p">,</span>
+                <span class="n">lat</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">cell_contours</span><span class="p">,</span>
+            <span class="p">)</span> <span class="o">=</span> <span class="n">read_trt_thundertracking_traj_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">traj_ID</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                    <span class="s2">&quot;ERROR: Could not find|open trajectory file &#39;&quot;</span> <span class="o">+</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+                    <span class="s2">&quot;ERROR: Could not find|open trajectory file &#39;&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span>
+                <span class="p">)</span>
 
             <span class="n">valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">yyyymmddHHMM</span><span class="p">))</span>
             <span class="n">yyyymmddHHMM</span> <span class="o">=</span> <span class="n">yyyymmddHHMM</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
@@ -939,18 +987,45 @@ document.write(`
 
             <span class="k">if</span> <span class="n">traj_ID</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                    <span class="s2">&quot;ERROR: No valid data in trajectory file &#39;&quot;</span> <span class="o">+</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+                    <span class="s2">&quot;ERROR: No valid data in trajectory file &#39;&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span>
+                <span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="p">(</span><span class="n">traj_ID</span><span class="p">,</span> <span class="n">yyyymmddHHMM</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span>
-             <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">cell_contours</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span>
-                 <span class="n">read_trt_traj_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">))</span>
+            <span class="p">(</span>
+                <span class="n">traj_ID</span><span class="p">,</span>
+                <span class="n">yyyymmddHHMM</span><span class="p">,</span>
+                <span class="n">lon</span><span class="p">,</span>
+                <span class="n">lat</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">,</span>
+                <span class="n">cell_contours</span><span class="p">,</span>
+            <span class="p">)</span> <span class="o">=</span> <span class="n">read_trt_traj_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">traj_ID</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                    <span class="s2">&quot;ERROR: Could not find|open trajectory file &#39;&quot;</span> <span class="o">+</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+                    <span class="s2">&quot;ERROR: Could not find|open trajectory file &#39;&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span>
+                <span class="p">)</span>
 
         <span class="n">recording_started</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">starttime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -973,14 +1048,14 @@ document.write(`
 
             <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lat_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lat_deg</span><span class="p">,</span> <span class="p">[</span><span class="n">lat</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lon_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lon_deg</span><span class="p">,</span> <span class="p">[</span><span class="n">lon</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">cell_contour</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_contour</span><span class="p">,</span> <span class="p">[</span><span class="n">cell_contour</span><span class="p">])</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">nsamples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_total_seconds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return total seconds of timedelta object&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return total seconds of timedelta object&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span></div>
 
 
@@ -1061,11 +1136,13 @@ document.write(`
 
         <span class="n">lat_tol</span> <span class="o">=</span> <span class="mf">0.002</span>  <span class="c1"># [deg]</span>
         <span class="n">lon_tol</span> <span class="o">=</span> <span class="mf">0.002</span>  <span class="c1"># [deg]</span>
-        <span class="n">alt_tol</span> <span class="o">=</span> <span class="mf">2.0</span>    <span class="c1"># [m]</span>
+        <span class="n">alt_tol</span> <span class="o">=</span> <span class="mf">2.0</span>  <span class="c1"># [m]</span>
 
-        <span class="k">if</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latitude</span> <span class="o">-</span> <span class="n">lat</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">lat_tol</span><span class="p">)</span> <span class="ow">or</span>
-                <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">longitude</span> <span class="o">-</span> <span class="n">lon</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">lon_tol</span><span class="p">)</span> <span class="ow">or</span>
-                <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">altitude</span> <span class="o">-</span> <span class="n">alt</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">alt_tol</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latitude</span> <span class="o">-</span> <span class="n">lat</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">lat_tol</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">longitude</span> <span class="o">-</span> <span class="n">lon</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">lon_tol</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">altitude</span> <span class="o">-</span> <span class="n">alt</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">alt_tol</span><span class="p">)</span>
+        <span class="p">):</span>
             <span class="k">return</span> <span class="kc">False</span>
 
         <span class="k">return</span> <span class="kc">True</span>
@@ -1098,11 +1175,9 @@ document.write(`
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_swiss_coords_done</span><span class="p">:</span>
             <span class="k">return</span>
 
-        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ch_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ch_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ch_alt</span><span class="p">)</span> <span class="o">=</span> \
-            <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">wgs84_to_swissCH1903</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">longitude</span><span class="p">,</span>
-                                            <span class="bp">self</span><span class="o">.</span><span class="n">latitude</span><span class="p">,</span>
-                                            <span class="bp">self</span><span class="o">.</span><span class="n">altitude</span><span class="p">,</span>
-                                            <span class="n">no_altitude_transform</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ch_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ch_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ch_alt</span><span class="p">)</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">wgs84_to_swissCH1903</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">longitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">latitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">altitude</span><span class="p">,</span> <span class="n">no_altitude_transform</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_swiss_coords_done</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="k">def</span> <span class="nf">assign_velocity_vecs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v_abs</span><span class="p">,</span> <span class="n">v_r</span><span class="p">,</span> <span class="n">v_el</span><span class="p">,</span> <span class="n">v_az</span><span class="p">):</span>
@@ -1162,7 +1237,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     <br/>
   </p>
 </div>

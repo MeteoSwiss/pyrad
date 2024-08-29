@@ -570,419 +570,559 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># check the type of dataset required</span>
-    <span class="n">hist_type</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;hist_type&#39;</span><span class="p">,</span> <span class="s1">&#39;cumulative&#39;</span><span class="p">)</span>
+    <span class="n">hist_type</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hist_type&quot;</span><span class="p">,</span> <span class="s2">&quot;cumulative&quot;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;hist_type&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">hist_type</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;hist_type&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">hist_type</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
 
-    <span class="n">hist_obj</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;hist_obj&#39;</span><span class="p">]</span>
+    <span class="n">hist_obj</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;hist_obj&quot;</span><span class="p">]</span>
 
-    <span class="n">dssavedir</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;dsname&#39;</span><span class="p">]</span>
-    <span class="k">if</span> <span class="s1">&#39;dssavename&#39;</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
-        <span class="n">dssavedir</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;dssavename&#39;</span><span class="p">]</span>
+    <span class="n">dssavedir</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dsname&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s2">&quot;dssavename&quot;</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
+        <span class="n">dssavedir</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dssavename&quot;</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;VOL_HISTOGRAM&#39;</span><span class="p">:</span>
-        <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;VOL_HISTOGRAM&quot;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span>
-                <span class="s1">&#39; Field type &#39;</span> <span class="o">+</span> <span class="n">field_name</span> <span class="o">+</span>
-                <span class="s1">&#39; not available in data set. Skipping product &#39;</span> <span class="o">+</span>
-                <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">])</span>
+                <span class="s2">&quot; Field type &quot;</span>
+                <span class="o">+</span> <span class="n">field_name</span>
+                <span class="o">+</span> <span class="s2">&quot; not available in data set. Skipping product &quot;</span>
+                <span class="o">+</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="n">write_data</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;write_data&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">write_data</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;write_data&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
-        <span class="n">timeformat</span> <span class="o">=</span> <span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">&#39;</span>
+        <span class="n">timeformat</span> <span class="o">=</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span>
         <span class="n">titl</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_radar_time_begin</span><span class="p">(</span>
-                <span class="n">hist_obj</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span>
-            <span class="n">get_field_name</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">],</span> <span class="n">field_name</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">hist_type</span> <span class="o">==</span> <span class="s1">&#39;instant&#39;</span><span class="p">:</span>
-            <span class="n">timeformat</span> <span class="o">=</span> <span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S&#39;</span>
+            <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_radar_time_begin</span><span class="p">(</span><span class="n">hist_obj</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="o">+</span> <span class="n">get_field_name</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">],</span> <span class="n">field_name</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">hist_type</span> <span class="o">==</span> <span class="s2">&quot;instant&quot;</span><span class="p">:</span>
+            <span class="n">timeformat</span> <span class="o">=</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span>
             <span class="n">titl</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_radar_time_begin</span><span class="p">(</span>
-                    <span class="n">hist_obj</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;Z&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span>
-                <span class="n">get_field_name</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">],</span> <span class="n">field_name</span><span class="p">))</span>
+                <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_radar_time_begin</span><span class="p">(</span><span class="n">hist_obj</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+                <span class="o">+</span> <span class="s2">&quot;Z&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="o">+</span> <span class="n">get_field_name</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">],</span> <span class="n">field_name</span><span class="p">)</span>
+            <span class="p">)</span>
 
         <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;basepath&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;procname&#39;</span><span class="p">],</span> <span class="n">dssavedir</span><span class="p">,</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;prdname&#39;</span><span class="p">],</span> <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">])</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">],</span>
+            <span class="n">dssavedir</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;prdname&quot;</span><span class="p">],</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
 
         <span class="n">fname_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
-            <span class="s1">&#39;histogram&#39;</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;dstype&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">],</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;imgformat&#39;</span><span class="p">],</span>
-            <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">],</span> <span class="n">timeformat</span><span class="o">=</span><span class="n">timeformat</span><span class="p">)</span>
+            <span class="s2">&quot;histogram&quot;</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;imgformat&quot;</span><span class="p">],</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
+            <span class="n">timeformat</span><span class="o">=</span><span class="n">timeformat</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fname_list</span><span class="p">):</span>
             <span class="n">fname_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span>
 
         <span class="n">labelx</span> <span class="o">=</span> <span class="n">get_colobar_label</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">],</span> <span class="n">field_name</span><span class="p">)</span>
 
-        <span class="n">bin_centers</span> <span class="o">=</span> <span class="n">hist_obj</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-        <span class="n">hist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">bin_centers</span> <span class="o">=</span> <span class="n">hist_obj</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="n">hist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">plot_histogram2</span><span class="p">(</span>
-            <span class="n">bin_centers</span><span class="p">,</span> <span class="n">hist</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span> <span class="n">labelx</span><span class="o">=</span><span class="n">labelx</span><span class="p">,</span>
-            <span class="n">labely</span><span class="o">=</span><span class="s1">&#39;Number of Samples&#39;</span><span class="p">,</span> <span class="n">titl</span><span class="o">=</span><span class="n">titl</span><span class="p">)</span>
+            <span class="n">bin_centers</span><span class="p">,</span>
+            <span class="n">hist</span><span class="p">,</span>
+            <span class="n">fname_list</span><span class="p">,</span>
+            <span class="n">labelx</span><span class="o">=</span><span class="n">labelx</span><span class="p">,</span>
+            <span class="n">labely</span><span class="o">=</span><span class="s2">&quot;Number of Samples&quot;</span><span class="p">,</span>
+            <span class="n">titl</span><span class="o">=</span><span class="n">titl</span><span class="p">,</span>
+        <span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;----- save to &#39;</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fname_list</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- save to &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fname_list</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="n">write_data</span><span class="p">:</span>
-            <span class="n">fname</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">make_filename</span><span class="p">(</span>
-                <span class="s1">&#39;histogram&#39;</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;dstype&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">],</span>
-                <span class="p">[</span><span class="s1">&#39;csv&#39;</span><span class="p">],</span> <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">],</span>
-                <span class="n">timeformat</span><span class="o">=</span><span class="n">timeformat</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">savedir</span>
+                <span class="o">+</span> <span class="n">make_filename</span><span class="p">(</span>
+                    <span class="s2">&quot;histogram&quot;</span><span class="p">,</span>
+                    <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
+                    <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;csv&quot;</span><span class="p">],</span>
+                    <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
+                    <span class="n">timeformat</span><span class="o">=</span><span class="n">timeformat</span><span class="p">,</span>
+                <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="p">)</span>
 
             <span class="n">step</span> <span class="o">=</span> <span class="n">bin_centers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">bin_centers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">bin_centers</span> <span class="o">-</span> <span class="n">step</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">bin_centers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">step</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span>
+                <span class="n">bin_centers</span> <span class="o">-</span> <span class="n">step</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">bin_centers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">step</span> <span class="o">/</span> <span class="mf">2.0</span>
+            <span class="p">)</span>
             <span class="n">write_histogram</span><span class="p">(</span>
-                <span class="n">bin_edges</span><span class="p">,</span> <span class="n">hist</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">],</span> <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;----- save to &#39;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
+                <span class="n">bin_edges</span><span class="p">,</span> <span class="n">hist</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span> <span class="n">step</span><span class="o">=</span><span class="n">step</span>
+            <span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- save to &quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
 
             <span class="n">fname_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">fname_list</span>
 
-    <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;PPI_HISTOGRAM&#39;</span><span class="p">:</span>
-        <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PPI_HISTOGRAM&quot;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span>
-                <span class="s1">&#39; Field type &#39;</span> <span class="o">+</span> <span class="n">field_name</span> <span class="o">+</span>
-                <span class="s1">&#39; not available in data set. Skipping product &#39;</span> <span class="o">+</span>
-                <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">])</span>
+                <span class="s2">&quot; Field type &quot;</span>
+                <span class="o">+</span> <span class="n">field_name</span>
+                <span class="o">+</span> <span class="s2">&quot; not available in data set. Skipping product &quot;</span>
+                <span class="o">+</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="n">el_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-        <span class="n">el</span> <span class="o">=</span> <span class="n">el_vec</span><span class="p">[</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;anglenr&#39;</span><span class="p">]]</span>
-        <span class="n">ind_el</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">el</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">el_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+        <span class="n">el</span> <span class="o">=</span> <span class="n">el_vec</span><span class="p">[</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;anglenr&quot;</span><span class="p">]]</span>
+        <span class="n">ind_el</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">el</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="n">timeformat</span> <span class="o">=</span> <span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">&#39;</span>
+        <span class="n">timeformat</span> <span class="o">=</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span>
         <span class="n">titl</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s1">&#39;</span><span class="si">{:.1f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">el</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; Deg. &#39;</span> <span class="o">+</span>
-            <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_radar_time_begin</span><span class="p">(</span>
-                <span class="n">hist_obj</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span>
-            <span class="n">get_field_name</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">],</span> <span class="n">field_name</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">hist_type</span> <span class="o">==</span> <span class="s1">&#39;instant&#39;</span><span class="p">:</span>
-            <span class="n">timeformat</span> <span class="o">=</span> <span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S&#39;</span>
+            <span class="s2">&quot;</span><span class="si">{:.1f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s2">&quot; Deg. &quot;</span>
+            <span class="o">+</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_radar_time_begin</span><span class="p">(</span><span class="n">hist_obj</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
+                <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="o">+</span> <span class="n">get_field_name</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">],</span> <span class="n">field_name</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">hist_type</span> <span class="o">==</span> <span class="s2">&quot;instant&quot;</span><span class="p">:</span>
+            <span class="n">timeformat</span> <span class="o">=</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span>
             <span class="n">titl</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s1">&#39;</span><span class="si">{:.1f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">el</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; Deg. &#39;</span> <span class="o">+</span>
-                <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_radar_time_begin</span><span class="p">(</span>
-                    <span class="n">hist_obj</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;Z&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span>
-                <span class="n">get_field_name</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">],</span> <span class="n">field_name</span><span class="p">))</span>
+                <span class="s2">&quot;</span><span class="si">{:.1f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot; Deg. &quot;</span>
+                <span class="o">+</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_radar_time_begin</span><span class="p">(</span><span class="n">hist_obj</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+                <span class="o">+</span> <span class="s2">&quot;Z&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="o">+</span> <span class="n">get_field_name</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">],</span> <span class="n">field_name</span><span class="p">)</span>
+            <span class="p">)</span>
 
         <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;basepath&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;procname&#39;</span><span class="p">],</span> <span class="n">dssavedir</span><span class="p">,</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;prdname&#39;</span><span class="p">],</span> <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">])</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">],</span>
+            <span class="n">dssavedir</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;prdname&quot;</span><span class="p">],</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
 
         <span class="n">fname_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
-            <span class="s1">&#39;ppi&#39;</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;dstype&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">],</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;imgformat&#39;</span><span class="p">],</span> <span class="n">prdcfginfo</span><span class="o">=</span><span class="s1">&#39;el&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">{:.1f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">el</span><span class="p">),</span>
-            <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">],</span> <span class="n">timeformat</span><span class="o">=</span><span class="n">timeformat</span><span class="p">)</span>
+            <span class="s2">&quot;ppi&quot;</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;imgformat&quot;</span><span class="p">],</span>
+            <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;el&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:.1f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">el</span><span class="p">),</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
+            <span class="n">timeformat</span><span class="o">=</span><span class="n">timeformat</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fname_list</span><span class="p">):</span>
             <span class="n">fname_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span>
 
         <span class="n">labelx</span> <span class="o">=</span> <span class="n">get_colobar_label</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">],</span> <span class="n">field_name</span><span class="p">)</span>
 
-        <span class="n">sweep_start</span> <span class="o">=</span> <span class="n">hist_obj</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ind_el</span><span class="p">]</span>
-        <span class="n">sweep_end</span> <span class="o">=</span> <span class="n">hist_obj</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ind_el</span><span class="p">]</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">sweep_start</span><span class="p">:</span><span class="n">sweep_end</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">sweep_start</span> <span class="o">=</span> <span class="n">hist_obj</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_el</span><span class="p">]</span>
+        <span class="n">sweep_end</span> <span class="o">=</span> <span class="n">hist_obj</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_el</span><span class="p">]</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep_start</span><span class="p">:</span><span class="n">sweep_end</span><span class="p">,</span> <span class="p">:]</span>
         <span class="n">plot_histogram2</span><span class="p">(</span>
-            <span class="n">hist_obj</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
-            <span class="n">fname_list</span><span class="p">,</span> <span class="n">labelx</span><span class="o">=</span><span class="n">labelx</span><span class="p">,</span> <span class="n">labely</span><span class="o">=</span><span class="s1">&#39;Number of Samples&#39;</span><span class="p">,</span>
-            <span class="n">titl</span><span class="o">=</span><span class="n">titl</span><span class="p">)</span>
+            <span class="n">hist_obj</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+            <span class="n">fname_list</span><span class="p">,</span>
+            <span class="n">labelx</span><span class="o">=</span><span class="n">labelx</span><span class="p">,</span>
+            <span class="n">labely</span><span class="o">=</span><span class="s2">&quot;Number of Samples&quot;</span><span class="p">,</span>
+            <span class="n">titl</span><span class="o">=</span><span class="n">titl</span><span class="p">,</span>
+        <span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;----- save to &#39;</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fname_list</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- save to &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fname_list</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">fname_list</span>
 
-    <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;ANGULAR_DENSITY&#39;</span><span class="p">:</span>
-        <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;ANGULAR_DENSITY&quot;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span>
-                <span class="s1">&#39; Field type &#39;</span> <span class="o">+</span> <span class="n">field_name</span> <span class="o">+</span>
-                <span class="s1">&#39; not available in data set. Skipping product &#39;</span> <span class="o">+</span>
-                <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">])</span>
+                <span class="s2">&quot; Field type &quot;</span>
+                <span class="o">+</span> <span class="n">field_name</span>
+                <span class="o">+</span> <span class="s2">&quot; not available in data set. Skipping product &quot;</span>
+                <span class="o">+</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="n">el_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-        <span class="n">el</span> <span class="o">=</span> <span class="n">el_vec</span><span class="p">[</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;anglenr&#39;</span><span class="p">]]</span>
-        <span class="n">ind_el</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">el</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">el_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+        <span class="n">el</span> <span class="o">=</span> <span class="n">el_vec</span><span class="p">[</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;anglenr&quot;</span><span class="p">]]</span>
+        <span class="n">ind_el</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">el</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="n">timeformat</span> <span class="o">=</span> <span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">&#39;</span>
-        <span class="k">if</span> <span class="n">hist_type</span> <span class="o">==</span> <span class="s1">&#39;instant&#39;</span><span class="p">:</span>
-            <span class="n">timeformat</span> <span class="o">=</span> <span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S&#39;</span>
+        <span class="n">timeformat</span> <span class="o">=</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">hist_type</span> <span class="o">==</span> <span class="s2">&quot;instant&quot;</span><span class="p">:</span>
+            <span class="n">timeformat</span> <span class="o">=</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span>
 
         <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;basepath&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;procname&#39;</span><span class="p">],</span> <span class="n">dssavedir</span><span class="p">,</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;prdname&#39;</span><span class="p">],</span> <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">])</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">],</span>
+            <span class="n">dssavedir</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;prdname&quot;</span><span class="p">],</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
 
         <span class="n">fname_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
-            <span class="s1">&#39;ppi&#39;</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;dstype&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">],</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;imgformat&#39;</span><span class="p">],</span> <span class="n">prdcfginfo</span><span class="o">=</span><span class="s1">&#39;el&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">{:.1f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">el</span><span class="p">),</span>
-            <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">],</span> <span class="n">timeformat</span><span class="o">=</span><span class="n">timeformat</span><span class="p">)</span>
+            <span class="s2">&quot;ppi&quot;</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;imgformat&quot;</span><span class="p">],</span>
+            <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;el&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:.1f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">el</span><span class="p">),</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
+            <span class="n">timeformat</span><span class="o">=</span><span class="n">timeformat</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fname_list</span><span class="p">):</span>
             <span class="n">fname_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span>
 
-        <span class="n">quantiles</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;quantiles&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">25.</span><span class="p">,</span> <span class="mf">50.</span><span class="p">,</span> <span class="mf">75.</span><span class="p">]))</span>
-        <span class="n">ref_value</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ref_value&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
-        <span class="n">vmin</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="n">vmax</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">quantiles</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;quantiles&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">25.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">,</span> <span class="mf">75.0</span><span class="p">]))</span>
+        <span class="n">ref_value</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ref_value&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">vmin</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmin&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">vmax</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmax&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
         <span class="n">plot_density</span><span class="p">(</span>
-            <span class="n">hist_obj</span><span class="p">,</span> <span class="n">hist_type</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">ind_el</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span>
-            <span class="n">quantiles</span><span class="o">=</span><span class="n">quantiles</span><span class="p">,</span> <span class="n">ref_value</span><span class="o">=</span><span class="n">ref_value</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
+            <span class="n">hist_obj</span><span class="p">,</span>
+            <span class="n">hist_type</span><span class="p">,</span>
+            <span class="n">field_name</span><span class="p">,</span>
+            <span class="n">ind_el</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">,</span>
+            <span class="n">fname_list</span><span class="p">,</span>
+            <span class="n">quantiles</span><span class="o">=</span><span class="n">quantiles</span><span class="p">,</span>
+            <span class="n">ref_value</span><span class="o">=</span><span class="n">ref_value</span><span class="p">,</span>
+            <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
+            <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+        <span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;----- save to &#39;</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fname_list</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- save to &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fname_list</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">fname_list</span>
 
-    <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;VOL_TS&#39;</span><span class="p">:</span>
-        <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;VOL_TS&quot;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span>
-                <span class="s1">&#39; Field type &#39;</span> <span class="o">+</span> <span class="n">field_name</span> <span class="o">+</span>
-                <span class="s1">&#39; not available in data set. Skipping product &#39;</span> <span class="o">+</span>
-                <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">])</span>
+                <span class="s2">&quot; Field type &quot;</span>
+                <span class="o">+</span> <span class="n">field_name</span>
+                <span class="o">+</span> <span class="s2">&quot; not available in data set. Skipping product &quot;</span>
+                <span class="o">+</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="c1"># put time info in file path and name</span>
         <span class="n">csvtimeinfo_path</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">csvtimeinfo_file</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">timeformat</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="n">hist_type</span> <span class="o">==</span> <span class="s1">&#39;instant&#39;</span><span class="p">:</span>
-            <span class="n">csvtimeinfo_path</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">]</span>
-            <span class="n">csvtimeinfo_file</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">]</span>
-            <span class="n">timeformat</span> <span class="o">=</span> <span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">&#39;</span>
-        <span class="k">if</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;add_date_in_fname&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
-            <span class="n">csvtimeinfo_file</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">]</span>
-            <span class="n">timeformat</span> <span class="o">=</span> <span class="s1">&#39;%Y&#39;</span>
+        <span class="k">if</span> <span class="n">hist_type</span> <span class="o">==</span> <span class="s2">&quot;instant&quot;</span><span class="p">:</span>
+            <span class="n">csvtimeinfo_path</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]</span>
+            <span class="n">csvtimeinfo_file</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]</span>
+            <span class="n">timeformat</span> <span class="o">=</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;add_date_in_fname&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">csvtimeinfo_file</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]</span>
+            <span class="n">timeformat</span> <span class="o">=</span> <span class="s2">&quot;%Y&quot;</span>
 
-        <span class="n">quantiles</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;quantiles&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">25.</span><span class="p">,</span> <span class="mf">50.</span><span class="p">,</span> <span class="mf">75.</span><span class="p">]))</span>
-        <span class="n">ref_value</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ref_value&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
-        <span class="n">sort_by_date</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sort_by_date&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-        <span class="n">rewrite</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rewrite&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-        <span class="n">plot_until_year_end</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;plot_until_year_end&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">quantiles</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;quantiles&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">25.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">,</span> <span class="mf">75.0</span><span class="p">]))</span>
+        <span class="n">ref_value</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ref_value&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">sort_by_date</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sort_by_date&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">rewrite</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rewrite&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">plot_until_year_end</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;plot_until_year_end&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
         <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;basepath&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;procname&#39;</span><span class="p">],</span> <span class="n">dssavedir</span><span class="p">,</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;prdname&#39;</span><span class="p">],</span> <span class="n">timeinfo</span><span class="o">=</span><span class="n">csvtimeinfo_path</span><span class="p">)</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">],</span>
+            <span class="n">dssavedir</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;prdname&quot;</span><span class="p">],</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">csvtimeinfo_path</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="n">csvfname</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
-            <span class="s1">&#39;ts&#39;</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;dstype&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;csv&#39;</span><span class="p">],</span>
-            <span class="n">timeinfo</span><span class="o">=</span><span class="n">csvtimeinfo_file</span><span class="p">,</span> <span class="n">timeformat</span><span class="o">=</span><span class="n">timeformat</span><span class="p">,</span>
-            <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;runinfo&#39;</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="s2">&quot;ts&quot;</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;csv&quot;</span><span class="p">],</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">csvtimeinfo_file</span><span class="p">,</span>
+            <span class="n">timeformat</span><span class="o">=</span><span class="n">timeformat</span><span class="p">,</span>
+            <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;runinfo&quot;</span><span class="p">],</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">csvfname</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">csvfname</span>
 
         <span class="n">quantiles</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="n">compute_quantiles_from_hist</span><span class="p">(</span>
-            <span class="n">hist_obj</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
-            <span class="n">quantiles</span><span class="o">=</span><span class="n">quantiles</span><span class="p">)</span>
+            <span class="n">hist_obj</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+            <span class="n">quantiles</span><span class="o">=</span><span class="n">quantiles</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_radar_time_begin</span><span class="p">(</span><span class="n">hist_obj</span><span class="p">)</span>
-        <span class="n">np_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">np_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">np_t</span><span class="p">):</span>
             <span class="n">np_t</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="n">write_monitoring_ts</span><span class="p">(</span>
-            <span class="n">start_time</span><span class="p">,</span> <span class="n">np_t</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">],</span>
-            <span class="n">csvfname</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;saved CSV file: &#39;</span> <span class="o">+</span> <span class="n">csvfname</span><span class="p">)</span>
+            <span class="n">start_time</span><span class="p">,</span> <span class="n">np_t</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span> <span class="n">csvfname</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;saved CSV file: &quot;</span> <span class="o">+</span> <span class="n">csvfname</span><span class="p">)</span>
 
-        <span class="n">date</span><span class="p">,</span> <span class="n">np_t_vec</span><span class="p">,</span> <span class="n">cquant_vec</span><span class="p">,</span> <span class="n">lquant_vec</span><span class="p">,</span> <span class="n">hquant_vec</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">read_monitoring_ts</span><span class="p">(</span><span class="n">csvfname</span><span class="p">,</span> <span class="n">sort_by_date</span><span class="o">=</span><span class="n">sort_by_date</span><span class="p">))</span>
+        <span class="n">date</span><span class="p">,</span> <span class="n">np_t_vec</span><span class="p">,</span> <span class="n">cquant_vec</span><span class="p">,</span> <span class="n">lquant_vec</span><span class="p">,</span> <span class="n">hquant_vec</span> <span class="o">=</span> <span class="n">read_monitoring_ts</span><span class="p">(</span>
+            <span class="n">csvfname</span><span class="p">,</span> <span class="n">sort_by_date</span><span class="o">=</span><span class="n">sort_by_date</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span>
-                <span class="s1">&#39;Unable to plot time series. No valid data&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to plot time series. No valid data&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="n">rewrite</span><span class="p">:</span>
-            <span class="n">val_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
-                <span class="p">[</span><span class="n">lquant_vec</span><span class="p">,</span> <span class="n">cquant_vec</span><span class="p">,</span> <span class="n">hquant_vec</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+            <span class="n">val_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">lquant_vec</span><span class="p">,</span> <span class="n">cquant_vec</span><span class="p">,</span> <span class="n">hquant_vec</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
             <span class="n">write_monitoring_ts</span><span class="p">(</span>
-                <span class="n">date</span><span class="p">,</span> <span class="n">np_t_vec</span><span class="p">,</span> <span class="n">val_vec</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">],</span>
-                <span class="n">csvfname</span><span class="p">,</span> <span class="n">rewrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">date</span><span class="p">,</span>
+                <span class="n">np_t_vec</span><span class="p">,</span>
+                <span class="n">val_vec</span><span class="p">,</span>
+                <span class="n">quantiles</span><span class="p">,</span>
+                <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+                <span class="n">csvfname</span><span class="p">,</span>
+                <span class="n">rewrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
 
         <span class="n">figtimeinfo</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">titldate</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-        <span class="k">if</span> <span class="n">hist_type</span> <span class="o">==</span> <span class="s1">&#39;instant&#39;</span><span class="p">:</span>
+        <span class="n">titldate</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">hist_type</span> <span class="o">==</span> <span class="s2">&quot;instant&quot;</span><span class="p">:</span>
             <span class="n">figtimeinfo</span> <span class="o">=</span> <span class="n">date</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">titldate</span> <span class="o">=</span> <span class="n">date</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">titldate</span> <span class="o">=</span> <span class="n">date</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">titldate</span> <span class="o">=</span> <span class="p">(</span><span class="n">date</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span>
-                        <span class="n">date</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">))</span>
-            <span class="k">if</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;add_date_in_fname&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">titldate</span> <span class="o">=</span> <span class="n">date</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">date</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;add_date_in_fname&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
                 <span class="n">figtimeinfo</span> <span class="o">=</span> <span class="n">date</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">timeformat</span> <span class="o">=</span> <span class="s1">&#39;%Y&#39;</span>
+                <span class="n">timeformat</span> <span class="o">=</span> <span class="s2">&quot;%Y&quot;</span>
 
         <span class="n">figfname_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
-            <span class="s1">&#39;ts&#39;</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;dstype&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">],</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;imgformat&#39;</span><span class="p">],</span>
-            <span class="n">timeinfo</span><span class="o">=</span><span class="n">figtimeinfo</span><span class="p">,</span> <span class="n">timeformat</span><span class="o">=</span><span class="n">timeformat</span><span class="p">,</span>
-            <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;runinfo&#39;</span><span class="p">])</span>
+            <span class="s2">&quot;ts&quot;</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;imgformat&quot;</span><span class="p">],</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">figtimeinfo</span><span class="p">,</span>
+            <span class="n">timeformat</span><span class="o">=</span><span class="n">timeformat</span><span class="p">,</span>
+            <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;runinfo&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">figfname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">figfname_list</span><span class="p">):</span>
             <span class="n">figfname_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">figfname</span>
 
-        <span class="n">titl</span> <span class="o">=</span> <span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;runinfo&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; Monitoring &#39;</span> <span class="o">+</span> <span class="n">titldate</span><span class="p">)</span>
+        <span class="n">titl</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;runinfo&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; Monitoring &quot;</span> <span class="o">+</span> <span class="n">titldate</span>
 
-        <span class="n">labely</span> <span class="o">=</span> <span class="n">generate_field_name_str</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">])</span>
+        <span class="n">labely</span> <span class="o">=</span> <span class="n">generate_field_name_str</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
 
-        <span class="n">np_min</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;npoints_min&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="n">vmin</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="n">vmax</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">np_min</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;npoints_min&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">vmin</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmin&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">vmax</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmax&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
         <span class="n">plot_monitoring_ts</span><span class="p">(</span>
-            <span class="n">date</span><span class="p">,</span> <span class="n">np_t_vec</span><span class="p">,</span> <span class="n">cquant_vec</span><span class="p">,</span> <span class="n">lquant_vec</span><span class="p">,</span> <span class="n">hquant_vec</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span>
-            <span class="n">figfname_list</span><span class="p">,</span> <span class="n">ref_value</span><span class="o">=</span><span class="n">ref_value</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
-            <span class="n">np_min</span><span class="o">=</span><span class="n">np_min</span><span class="p">,</span> <span class="n">labelx</span><span class="o">=</span><span class="s1">&#39;Time UTC&#39;</span><span class="p">,</span> <span class="n">labely</span><span class="o">=</span><span class="n">labely</span><span class="p">,</span> <span class="n">titl</span><span class="o">=</span><span class="n">titl</span><span class="p">,</span>
-            <span class="n">plot_until_year_end</span><span class="o">=</span><span class="n">plot_until_year_end</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;----- save to &#39;</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">figfname_list</span><span class="p">))</span>
+            <span class="n">date</span><span class="p">,</span>
+            <span class="n">np_t_vec</span><span class="p">,</span>
+            <span class="n">cquant_vec</span><span class="p">,</span>
+            <span class="n">lquant_vec</span><span class="p">,</span>
+            <span class="n">hquant_vec</span><span class="p">,</span>
+            <span class="n">field_name</span><span class="p">,</span>
+            <span class="n">figfname_list</span><span class="p">,</span>
+            <span class="n">ref_value</span><span class="o">=</span><span class="n">ref_value</span><span class="p">,</span>
+            <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
+            <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+            <span class="n">np_min</span><span class="o">=</span><span class="n">np_min</span><span class="p">,</span>
+            <span class="n">labelx</span><span class="o">=</span><span class="s2">&quot;Time UTC&quot;</span><span class="p">,</span>
+            <span class="n">labely</span><span class="o">=</span><span class="n">labely</span><span class="p">,</span>
+            <span class="n">titl</span><span class="o">=</span><span class="n">titl</span><span class="p">,</span>
+            <span class="n">plot_until_year_end</span><span class="o">=</span><span class="n">plot_until_year_end</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- save to &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">figfname_list</span><span class="p">))</span>
 
         <span class="c1"># generate alarms if needed</span>
-        <span class="n">alarm</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;alarm&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">alarm</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;alarm&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">alarm</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">figfname_list</span>
 
-        <span class="k">if</span> <span class="s1">&#39;tol_abs&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;unable to send alarm. Missing tolerance on target&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;tol_abs&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;unable to send alarm. Missing tolerance on target&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="s1">&#39;tol_trend&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;unable to send alarm. Missing tolerance in trend&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;tol_trend&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;unable to send alarm. Missing tolerance in trend&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="s1">&#39;nevents_min&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;unable to send alarm. &#39;</span> <span class="o">+</span>
-                 <span class="s1">&#39;Missing minimum number of events to compute trend&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;nevents_min&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;unable to send alarm. &quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;Missing minimum number of events to compute trend&quot;</span>
+            <span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="s1">&#39;sender&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;unable to send alarm. Missing email sender&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;sender&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;unable to send alarm. Missing email sender&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="s1">&#39;receiver_list&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;unable to send alarm. Missing email receivers&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;receiver_list&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;unable to send alarm. Missing email receivers&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="n">tol_abs</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;tol_abs&#39;</span><span class="p">]</span>
-        <span class="n">tol_trend</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;tol_trend&#39;</span><span class="p">]</span>
-        <span class="n">nevents_min</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;nevents_min&#39;</span><span class="p">]</span>
-        <span class="n">sender</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;sender&#39;</span><span class="p">]</span>
-        <span class="n">receiver_list</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;receiver_list&#39;</span><span class="p">]</span>
+        <span class="n">tol_abs</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;tol_abs&quot;</span><span class="p">]</span>
+        <span class="n">tol_trend</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;tol_trend&quot;</span><span class="p">]</span>
+        <span class="n">nevents_min</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;nevents_min&quot;</span><span class="p">]</span>
+        <span class="n">sender</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;sender&quot;</span><span class="p">]</span>
+        <span class="n">receiver_list</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;receiver_list&quot;</span><span class="p">]</span>
 
         <span class="n">np_last</span> <span class="o">=</span> <span class="n">np_t_vec</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">value_last</span> <span class="o">=</span> <span class="n">cquant_vec</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">np_last</span> <span class="o">&lt;</span> <span class="n">np_min</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid data on day &#39;</span> <span class="o">+</span> <span class="n">date</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">-%m-%Y&#39;</span><span class="p">))</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid data on day &quot;</span> <span class="o">+</span> <span class="n">date</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%m-%Y&quot;</span><span class="p">))</span>
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="c1"># check if absolute value exceeded</span>
         <span class="n">abs_exceeded</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">if</span> <span class="p">((</span><span class="n">value_last</span> <span class="o">&gt;</span> <span class="n">ref_value</span> <span class="o">+</span> <span class="n">tol_abs</span><span class="p">)</span> <span class="ow">or</span>
-                <span class="p">(</span><span class="n">value_last</span> <span class="o">&lt;</span> <span class="n">ref_value</span> <span class="o">-</span> <span class="n">tol_abs</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">value_last</span> <span class="o">&gt;</span> <span class="n">ref_value</span> <span class="o">+</span> <span class="n">tol_abs</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">value_last</span> <span class="o">&lt;</span> <span class="n">ref_value</span> <span class="o">-</span> <span class="n">tol_abs</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
-                <span class="s1">&#39;Value &#39;</span> <span class="o">+</span>
-                <span class="nb">str</span><span class="p">(</span><span class="n">value_last</span><span class="p">)</span> <span class="o">+</span>
-                <span class="s1">&#39; exceeds target &#39;</span> <span class="o">+</span>
-                <span class="nb">str</span><span class="p">(</span><span class="n">ref_value</span><span class="p">)</span> <span class="o">+</span>
-                <span class="s1">&#39; +/- &#39;</span> <span class="o">+</span>
-                <span class="nb">str</span><span class="p">(</span><span class="n">tol_abs</span><span class="p">))</span>
+                <span class="s2">&quot;Value &quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value_last</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot; exceeds target &quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ref_value</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot; +/- &quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">tol_abs</span><span class="p">)</span>
+            <span class="p">)</span>
             <span class="n">abs_exceeded</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="c1"># compute trend and check if last value exceeds it</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">cquant_vec</span><span class="p">)</span>
-        <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">mask</span><span class="p">),</span> <span class="n">np_t_vec</span> <span class="o">&gt;=</span> <span class="n">np_min</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">mask</span><span class="p">),</span> <span class="n">np_t_vec</span> <span class="o">&gt;=</span> <span class="n">np_min</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">nvalid</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">nvalid</span> <span class="o">&lt;=</span> <span class="n">nevents_min</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Not enough points to compute reliable trend&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Not enough points to compute reliable trend&quot;</span><span class="p">)</span>
             <span class="n">np_trend</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">value_trend</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">np_trend_vec</span> <span class="o">=</span> <span class="n">np_t_vec</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="o">-</span><span class="p">(</span><span class="n">nevents_min</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">data_trend_vec</span> <span class="o">=</span> <span class="n">cquant_vec</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="o">-</span><span class="p">(</span><span class="n">nevents_min</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">np_trend_vec</span> <span class="o">=</span> <span class="n">np_t_vec</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="o">-</span><span class="p">(</span><span class="n">nevents_min</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">data_trend_vec</span> <span class="o">=</span> <span class="n">cquant_vec</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="o">-</span><span class="p">(</span><span class="n">nevents_min</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
             <span class="n">np_trend</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np_trend_vec</span><span class="p">)</span>
             <span class="n">value_trend</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data_trend_vec</span> <span class="o">*</span> <span class="n">np_trend_vec</span><span class="p">)</span> <span class="o">/</span> <span class="n">np_trend</span>
 
         <span class="n">trend_exceeded</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="n">np_trend</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">if</span> <span class="p">((</span><span class="n">value_last</span> <span class="o">&gt;</span> <span class="n">value_trend</span> <span class="o">+</span> <span class="n">tol_trend</span><span class="p">)</span> <span class="ow">or</span>
-                    <span class="p">(</span><span class="n">value_last</span> <span class="o">&lt;</span> <span class="n">value_trend</span> <span class="o">-</span> <span class="n">tol_trend</span><span class="p">)):</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Value &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value_last</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;exceeds trend &#39;</span> <span class="o">+</span>
-                     <span class="nb">str</span><span class="p">(</span><span class="n">value_trend</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; +/- &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">tol_trend</span><span class="p">))</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">value_last</span> <span class="o">&gt;</span> <span class="n">value_trend</span> <span class="o">+</span> <span class="n">tol_trend</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+                <span class="n">value_last</span> <span class="o">&lt;</span> <span class="n">value_trend</span> <span class="o">-</span> <span class="n">tol_trend</span>
+            <span class="p">):</span>
+                <span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;Value &quot;</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value_last</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="s2">&quot;exceeds trend &quot;</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value_trend</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="s2">&quot; +/- &quot;</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">tol_trend</span><span class="p">)</span>
+                <span class="p">)</span>
                 <span class="n">trend_exceeded</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">if</span> <span class="n">abs_exceeded</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">trend_exceeded</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="n">alarm_dir</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="s1">&#39;/alarms/&#39;</span>
+        <span class="n">alarm_dir</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="s2">&quot;/alarms/&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">alarm_dir</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">alarm_dir</span><span class="p">)</span>
         <span class="n">alarm_fname</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
-            <span class="s1">&#39;alarm&#39;</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;dstype&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;txt&#39;</span><span class="p">],</span>
-            <span class="n">timeinfo</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span> <span class="n">timeformat</span><span class="o">=</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="s2">&quot;alarm&quot;</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;txt&quot;</span><span class="p">],</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span>
+            <span class="n">timeformat</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">alarm_fname</span> <span class="o">=</span> <span class="n">alarm_dir</span> <span class="o">+</span> <span class="n">alarm_fname</span>
 
         <span class="n">field_dict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
         <span class="n">param_name</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="n">field_dict</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span>
-        <span class="n">param_name_unit</span> <span class="o">=</span> <span class="n">param_name</span> <span class="o">+</span> <span class="s1">&#39; [&#39;</span> <span class="o">+</span> <span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span>
+        <span class="n">param_name_unit</span> <span class="o">=</span> <span class="n">param_name</span> <span class="o">+</span> <span class="s2">&quot; [&quot;</span> <span class="o">+</span> <span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
 
         <span class="n">write_alarm_msg</span><span class="p">(</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;RadarName&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">param_name_unit</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">ref_value</span><span class="p">,</span>
-            <span class="n">tol_abs</span><span class="p">,</span> <span class="n">np_trend</span><span class="p">,</span> <span class="n">value_trend</span><span class="p">,</span> <span class="n">tol_trend</span><span class="p">,</span> <span class="n">nevents_min</span><span class="p">,</span> <span class="n">np_last</span><span class="p">,</span>
-            <span class="n">value_last</span><span class="p">,</span> <span class="n">alarm_fname</span><span class="p">)</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;RadarName&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">param_name_unit</span><span class="p">,</span>
+            <span class="n">start_time</span><span class="p">,</span>
+            <span class="n">ref_value</span><span class="p">,</span>
+            <span class="n">tol_abs</span><span class="p">,</span>
+            <span class="n">np_trend</span><span class="p">,</span>
+            <span class="n">value_trend</span><span class="p">,</span>
+            <span class="n">tol_trend</span><span class="p">,</span>
+            <span class="n">nevents_min</span><span class="p">,</span>
+            <span class="n">np_last</span><span class="p">,</span>
+            <span class="n">value_last</span><span class="p">,</span>
+            <span class="n">alarm_fname</span><span class="p">,</span>
+        <span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;----- saved monitoring alarm to &#39;</span> <span class="o">+</span> <span class="n">alarm_fname</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- saved monitoring alarm to &quot;</span> <span class="o">+</span> <span class="n">alarm_fname</span><span class="p">)</span>
 
-        <span class="n">subject</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;NO REPLY: &#39;</span> <span class="o">+</span> <span class="n">param_name</span> <span class="o">+</span> <span class="s1">&#39; monitoring alarm for radar &#39;</span> <span class="o">+</span>
-                   <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;RadarName&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; on day &#39;</span> <span class="o">+</span>
-                   <span class="n">start_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">-%m-%Y&#39;</span><span class="p">))</span>
+        <span class="n">subject</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;NO REPLY: &quot;</span>
+            <span class="o">+</span> <span class="n">param_name</span>
+            <span class="o">+</span> <span class="s2">&quot; monitoring alarm for radar &quot;</span>
+            <span class="o">+</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;RadarName&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="o">+</span> <span class="s2">&quot; on day &quot;</span>
+            <span class="o">+</span> <span class="n">start_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%m-%Y&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
         <span class="n">send_msg</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">receiver_list</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">alarm_fname</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">alarm_fname</span>
 
-    <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;CUMUL_VOL_TS&#39;</span><span class="p">:</span>
-        <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CUMUL_VOL_TS&quot;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span>
-                <span class="s1">&#39; Field type &#39;</span> <span class="o">+</span> <span class="n">field_name</span> <span class="o">+</span>
-                <span class="s1">&#39; not available in data set. Skipping product &#39;</span> <span class="o">+</span>
-                <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">])</span>
+                <span class="s2">&quot; Field type &quot;</span>
+                <span class="o">+</span> <span class="n">field_name</span>
+                <span class="o">+</span> <span class="s2">&quot; not available in data set. Skipping product &quot;</span>
+                <span class="o">+</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="c1"># put time info in file path and name</span>
-        <span class="n">csvtimeinfo_path</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">]</span>
-        <span class="n">csvtimeinfo_file</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">]</span>
-        <span class="n">timeformat</span> <span class="o">=</span> <span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">&#39;</span>
+        <span class="n">csvtimeinfo_path</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]</span>
+        <span class="n">csvtimeinfo_file</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]</span>
+        <span class="n">timeformat</span> <span class="o">=</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span>
 
-        <span class="n">quantiles</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;quantiles&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">25.</span><span class="p">,</span> <span class="mf">50.</span><span class="p">,</span> <span class="mf">75.</span><span class="p">]))</span>
-        <span class="n">ref_value</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ref_value&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
-        <span class="n">sort_by_date</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sort_by_date&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-        <span class="n">rewrite</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rewrite&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-        <span class="n">plot_until_year_end</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;plot_until_year_end&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">quantiles</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;quantiles&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">25.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">,</span> <span class="mf">75.0</span><span class="p">]))</span>
+        <span class="n">ref_value</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ref_value&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">sort_by_date</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sort_by_date&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">rewrite</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rewrite&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">plot_until_year_end</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;plot_until_year_end&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
         <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;basepath&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;procname&#39;</span><span class="p">],</span> <span class="n">dssavedir</span><span class="p">,</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;prod_ref&#39;</span><span class="p">],</span> <span class="n">timeinfo</span><span class="o">=</span><span class="n">csvtimeinfo_path</span><span class="p">)</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">],</span>
+            <span class="n">dssavedir</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;prod_ref&quot;</span><span class="p">],</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">csvtimeinfo_path</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="n">csvfname</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
-            <span class="s1">&#39;ts&#39;</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;dstype&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;csv&#39;</span><span class="p">],</span>
-            <span class="n">timeinfo</span><span class="o">=</span><span class="n">csvtimeinfo_file</span><span class="p">,</span> <span class="n">timeformat</span><span class="o">=</span><span class="n">timeformat</span><span class="p">,</span>
-            <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;runinfo&#39;</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="s2">&quot;ts&quot;</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;csv&quot;</span><span class="p">],</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">csvtimeinfo_file</span><span class="p">,</span>
+            <span class="n">timeformat</span><span class="o">=</span><span class="n">timeformat</span><span class="p">,</span>
+            <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;runinfo&quot;</span><span class="p">],</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">csvfname</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">csvfname</span>
 
-        <span class="n">date</span><span class="p">,</span> <span class="n">np_t_vec</span><span class="p">,</span> <span class="n">cquant_vec</span><span class="p">,</span> <span class="n">lquant_vec</span><span class="p">,</span> <span class="n">hquant_vec</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">read_monitoring_ts</span><span class="p">(</span><span class="n">csvfname</span><span class="p">))</span>
+        <span class="n">date</span><span class="p">,</span> <span class="n">np_t_vec</span><span class="p">,</span> <span class="n">cquant_vec</span><span class="p">,</span> <span class="n">lquant_vec</span><span class="p">,</span> <span class="n">hquant_vec</span> <span class="o">=</span> <span class="n">read_monitoring_ts</span><span class="p">(</span>
+            <span class="n">csvfname</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span>
-                <span class="s1">&#39;Unable to plot time series. No valid data&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to plot time series. No valid data&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="n">cquant</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">cquant_vec</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">np_t_vec</span><span class="p">)</span>
@@ -997,183 +1137,243 @@ document.write(`
         <span class="n">csvtimeinfo_path</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">csvtimeinfo_file</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">timeformat</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;add_date_in_fname&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
-            <span class="n">csvtimeinfo_file</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">]</span>
-            <span class="n">timeformat</span> <span class="o">=</span> <span class="s1">&#39;%Y&#39;</span>
+        <span class="k">if</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;add_date_in_fname&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">csvtimeinfo_file</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]</span>
+            <span class="n">timeformat</span> <span class="o">=</span> <span class="s2">&quot;%Y&quot;</span>
 
         <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;basepath&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;procname&#39;</span><span class="p">],</span> <span class="n">dssavedir</span><span class="p">,</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;prdname&#39;</span><span class="p">],</span> <span class="n">timeinfo</span><span class="o">=</span><span class="n">csvtimeinfo_path</span><span class="p">)</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">],</span>
+            <span class="n">dssavedir</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;prdname&quot;</span><span class="p">],</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">csvtimeinfo_path</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="n">csvfname</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
-            <span class="s1">&#39;ts&#39;</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;dstype&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;csv&#39;</span><span class="p">],</span>
-            <span class="n">timeinfo</span><span class="o">=</span><span class="n">csvtimeinfo_file</span><span class="p">,</span> <span class="n">timeformat</span><span class="o">=</span><span class="n">timeformat</span><span class="p">,</span>
-            <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;runinfo&#39;</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="s2">&quot;ts&quot;</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;csv&quot;</span><span class="p">],</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">csvtimeinfo_file</span><span class="p">,</span>
+            <span class="n">timeformat</span><span class="o">=</span><span class="n">timeformat</span><span class="p">,</span>
+            <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;runinfo&quot;</span><span class="p">],</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">csvfname</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">csvfname</span>
 
         <span class="n">write_monitoring_ts</span><span class="p">(</span>
-            <span class="n">start_time</span><span class="p">,</span> <span class="n">np_t</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">],</span> <span class="n">csvfname</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;saved CSV file: &#39;</span> <span class="o">+</span> <span class="n">csvfname</span><span class="p">)</span>
+            <span class="n">start_time</span><span class="p">,</span> <span class="n">np_t</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span> <span class="n">csvfname</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;saved CSV file: &quot;</span> <span class="o">+</span> <span class="n">csvfname</span><span class="p">)</span>
 
-        <span class="n">date</span><span class="p">,</span> <span class="n">np_t_vec</span><span class="p">,</span> <span class="n">cquant_vec</span><span class="p">,</span> <span class="n">lquant_vec</span><span class="p">,</span> <span class="n">hquant_vec</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">read_monitoring_ts</span><span class="p">(</span><span class="n">csvfname</span><span class="p">,</span> <span class="n">sort_by_date</span><span class="o">=</span><span class="n">sort_by_date</span><span class="p">))</span>
+        <span class="n">date</span><span class="p">,</span> <span class="n">np_t_vec</span><span class="p">,</span> <span class="n">cquant_vec</span><span class="p">,</span> <span class="n">lquant_vec</span><span class="p">,</span> <span class="n">hquant_vec</span> <span class="o">=</span> <span class="n">read_monitoring_ts</span><span class="p">(</span>
+            <span class="n">csvfname</span><span class="p">,</span> <span class="n">sort_by_date</span><span class="o">=</span><span class="n">sort_by_date</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span>
-                <span class="s1">&#39;Unable to plot time series. No valid data&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to plot time series. No valid data&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="n">rewrite</span><span class="p">:</span>
-            <span class="n">val_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
-                <span class="p">[</span><span class="n">lquant_vec</span><span class="p">,</span> <span class="n">cquant_vec</span><span class="p">,</span> <span class="n">hquant_vec</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+            <span class="n">val_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">lquant_vec</span><span class="p">,</span> <span class="n">cquant_vec</span><span class="p">,</span> <span class="n">hquant_vec</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
             <span class="n">write_monitoring_ts</span><span class="p">(</span>
-                <span class="n">date</span><span class="p">,</span> <span class="n">np_t_vec</span><span class="p">,</span> <span class="n">val_vec</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">],</span>
-                <span class="n">csvfname</span><span class="p">,</span> <span class="n">rewrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">date</span><span class="p">,</span>
+                <span class="n">np_t_vec</span><span class="p">,</span>
+                <span class="n">val_vec</span><span class="p">,</span>
+                <span class="n">quantiles</span><span class="p">,</span>
+                <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+                <span class="n">csvfname</span><span class="p">,</span>
+                <span class="n">rewrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
 
         <span class="n">figtimeinfo</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">titldate</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-        <span class="n">titldate</span> <span class="o">=</span> <span class="p">(</span><span class="n">date</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span>
-                    <span class="n">date</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;add_date_in_fname&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="n">titldate</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">titldate</span> <span class="o">=</span> <span class="n">date</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">date</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;add_date_in_fname&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
             <span class="n">figtimeinfo</span> <span class="o">=</span> <span class="n">date</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">timeformat</span> <span class="o">=</span> <span class="s1">&#39;%Y&#39;</span>
+            <span class="n">timeformat</span> <span class="o">=</span> <span class="s2">&quot;%Y&quot;</span>
 
         <span class="n">figfname_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
-            <span class="s1">&#39;ts&#39;</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;dstype&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">],</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;imgformat&#39;</span><span class="p">],</span>
-            <span class="n">timeinfo</span><span class="o">=</span><span class="n">figtimeinfo</span><span class="p">,</span> <span class="n">timeformat</span><span class="o">=</span><span class="n">timeformat</span><span class="p">,</span>
-            <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;runinfo&#39;</span><span class="p">])</span>
+            <span class="s2">&quot;ts&quot;</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;imgformat&quot;</span><span class="p">],</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">figtimeinfo</span><span class="p">,</span>
+            <span class="n">timeformat</span><span class="o">=</span><span class="n">timeformat</span><span class="p">,</span>
+            <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;runinfo&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">figfname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">figfname_list</span><span class="p">):</span>
             <span class="n">figfname_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">figfname</span>
 
-        <span class="n">titl</span> <span class="o">=</span> <span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;runinfo&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; Monitoring &#39;</span> <span class="o">+</span> <span class="n">titldate</span><span class="p">)</span>
+        <span class="n">titl</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;runinfo&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; Monitoring &quot;</span> <span class="o">+</span> <span class="n">titldate</span>
 
-        <span class="n">labely</span> <span class="o">=</span> <span class="n">generate_field_name_str</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">])</span>
+        <span class="n">labely</span> <span class="o">=</span> <span class="n">generate_field_name_str</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
 
-        <span class="n">np_min</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;npoints_min&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="n">vmin</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="n">vmax</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">np_min</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;npoints_min&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">vmin</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmin&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">vmax</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmax&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
         <span class="n">plot_monitoring_ts</span><span class="p">(</span>
-            <span class="n">date</span><span class="p">,</span> <span class="n">np_t_vec</span><span class="p">,</span> <span class="n">cquant_vec</span><span class="p">,</span> <span class="n">lquant_vec</span><span class="p">,</span> <span class="n">hquant_vec</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span>
-            <span class="n">figfname_list</span><span class="p">,</span> <span class="n">ref_value</span><span class="o">=</span><span class="n">ref_value</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
-            <span class="n">np_min</span><span class="o">=</span><span class="n">np_min</span><span class="p">,</span> <span class="n">labelx</span><span class="o">=</span><span class="s1">&#39;Time UTC&#39;</span><span class="p">,</span> <span class="n">labely</span><span class="o">=</span><span class="n">labely</span><span class="p">,</span> <span class="n">titl</span><span class="o">=</span><span class="n">titl</span><span class="p">,</span>
-            <span class="n">plot_until_year_end</span><span class="o">=</span><span class="n">plot_until_year_end</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;----- save to &#39;</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">figfname_list</span><span class="p">))</span>
+            <span class="n">date</span><span class="p">,</span>
+            <span class="n">np_t_vec</span><span class="p">,</span>
+            <span class="n">cquant_vec</span><span class="p">,</span>
+            <span class="n">lquant_vec</span><span class="p">,</span>
+            <span class="n">hquant_vec</span><span class="p">,</span>
+            <span class="n">field_name</span><span class="p">,</span>
+            <span class="n">figfname_list</span><span class="p">,</span>
+            <span class="n">ref_value</span><span class="o">=</span><span class="n">ref_value</span><span class="p">,</span>
+            <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
+            <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+            <span class="n">np_min</span><span class="o">=</span><span class="n">np_min</span><span class="p">,</span>
+            <span class="n">labelx</span><span class="o">=</span><span class="s2">&quot;Time UTC&quot;</span><span class="p">,</span>
+            <span class="n">labely</span><span class="o">=</span><span class="n">labely</span><span class="p">,</span>
+            <span class="n">titl</span><span class="o">=</span><span class="n">titl</span><span class="p">,</span>
+            <span class="n">plot_until_year_end</span><span class="o">=</span><span class="n">plot_until_year_end</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- save to &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">figfname_list</span><span class="p">))</span>
 
         <span class="c1"># generate alarms if needed</span>
-        <span class="n">alarm</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;alarm&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">alarm</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;alarm&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">alarm</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">figfname_list</span>
 
-        <span class="k">if</span> <span class="s1">&#39;tol_abs&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;unable to send alarm. Missing tolerance on target&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;tol_abs&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;unable to send alarm. Missing tolerance on target&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="s1">&#39;tol_trend&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;unable to send alarm. Missing tolerance in trend&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;tol_trend&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;unable to send alarm. Missing tolerance in trend&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="s1">&#39;nevents_min&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;unable to send alarm. &#39;</span> <span class="o">+</span>
-                 <span class="s1">&#39;Missing minimum number of events to compute trend&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;nevents_min&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;unable to send alarm. &quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;Missing minimum number of events to compute trend&quot;</span>
+            <span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="s1">&#39;sender&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;unable to send alarm. Missing email sender&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;sender&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;unable to send alarm. Missing email sender&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="s1">&#39;receiver_list&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;unable to send alarm. Missing email receivers&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;receiver_list&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;unable to send alarm. Missing email receivers&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="n">tol_abs</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;tol_abs&#39;</span><span class="p">]</span>
-        <span class="n">tol_trend</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;tol_trend&#39;</span><span class="p">]</span>
-        <span class="n">nevents_min</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;nevents_min&#39;</span><span class="p">]</span>
-        <span class="n">sender</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;sender&#39;</span><span class="p">]</span>
-        <span class="n">receiver_list</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;receiver_list&#39;</span><span class="p">]</span>
+        <span class="n">tol_abs</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;tol_abs&quot;</span><span class="p">]</span>
+        <span class="n">tol_trend</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;tol_trend&quot;</span><span class="p">]</span>
+        <span class="n">nevents_min</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;nevents_min&quot;</span><span class="p">]</span>
+        <span class="n">sender</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;sender&quot;</span><span class="p">]</span>
+        <span class="n">receiver_list</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;receiver_list&quot;</span><span class="p">]</span>
 
         <span class="n">np_last</span> <span class="o">=</span> <span class="n">np_t_vec</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">value_last</span> <span class="o">=</span> <span class="n">cquant_vec</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">np_last</span> <span class="o">&lt;</span> <span class="n">np_min</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid data on day &#39;</span> <span class="o">+</span> <span class="n">date</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">-%m-%Y&#39;</span><span class="p">))</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid data on day &quot;</span> <span class="o">+</span> <span class="n">date</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%m-%Y&quot;</span><span class="p">))</span>
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="c1"># check if absolute value exceeded</span>
         <span class="n">abs_exceeded</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">if</span> <span class="p">((</span><span class="n">value_last</span> <span class="o">&gt;</span> <span class="n">ref_value</span> <span class="o">+</span> <span class="n">tol_abs</span><span class="p">)</span> <span class="ow">or</span>
-                <span class="p">(</span><span class="n">value_last</span> <span class="o">&lt;</span> <span class="n">ref_value</span> <span class="o">-</span> <span class="n">tol_abs</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">value_last</span> <span class="o">&gt;</span> <span class="n">ref_value</span> <span class="o">+</span> <span class="n">tol_abs</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">value_last</span> <span class="o">&lt;</span> <span class="n">ref_value</span> <span class="o">-</span> <span class="n">tol_abs</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
-                <span class="s1">&#39;Value &#39;</span> <span class="o">+</span>
-                <span class="nb">str</span><span class="p">(</span><span class="n">value_last</span><span class="p">)</span> <span class="o">+</span>
-                <span class="s1">&#39; exceeds target &#39;</span> <span class="o">+</span>
-                <span class="nb">str</span><span class="p">(</span><span class="n">ref_value</span><span class="p">)</span> <span class="o">+</span>
-                <span class="s1">&#39; +/- &#39;</span> <span class="o">+</span>
-                <span class="nb">str</span><span class="p">(</span><span class="n">tol_abs</span><span class="p">))</span>
+                <span class="s2">&quot;Value &quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value_last</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot; exceeds target &quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ref_value</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot; +/- &quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">tol_abs</span><span class="p">)</span>
+            <span class="p">)</span>
             <span class="n">abs_exceeded</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="c1"># compute trend and check if last value exceeds it</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">cquant_vec</span><span class="p">)</span>
-        <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">mask</span><span class="p">),</span> <span class="n">np_t_vec</span> <span class="o">&gt;=</span> <span class="n">np_min</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">mask</span><span class="p">),</span> <span class="n">np_t_vec</span> <span class="o">&gt;=</span> <span class="n">np_min</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">nvalid</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">nvalid</span> <span class="o">&lt;=</span> <span class="n">nevents_min</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Not enough points to compute reliable trend&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Not enough points to compute reliable trend&quot;</span><span class="p">)</span>
             <span class="n">np_trend</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">value_trend</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">np_trend_vec</span> <span class="o">=</span> <span class="n">np_t_vec</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="o">-</span><span class="p">(</span><span class="n">nevents_min</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">data_trend_vec</span> <span class="o">=</span> <span class="n">cquant_vec</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="o">-</span><span class="p">(</span><span class="n">nevents_min</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">np_trend_vec</span> <span class="o">=</span> <span class="n">np_t_vec</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="o">-</span><span class="p">(</span><span class="n">nevents_min</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">data_trend_vec</span> <span class="o">=</span> <span class="n">cquant_vec</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="o">-</span><span class="p">(</span><span class="n">nevents_min</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
             <span class="n">np_trend</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np_trend_vec</span><span class="p">)</span>
             <span class="n">value_trend</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data_trend_vec</span> <span class="o">*</span> <span class="n">np_trend_vec</span><span class="p">)</span> <span class="o">/</span> <span class="n">np_trend</span>
 
         <span class="n">trend_exceeded</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="n">np_trend</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">if</span> <span class="p">((</span><span class="n">value_last</span> <span class="o">&gt;</span> <span class="n">value_trend</span> <span class="o">+</span> <span class="n">tol_trend</span><span class="p">)</span> <span class="ow">or</span>
-                    <span class="p">(</span><span class="n">value_last</span> <span class="o">&lt;</span> <span class="n">value_trend</span> <span class="o">-</span> <span class="n">tol_trend</span><span class="p">)):</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Value &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value_last</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;exceeds trend &#39;</span> <span class="o">+</span>
-                     <span class="nb">str</span><span class="p">(</span><span class="n">value_trend</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; +/- &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">tol_trend</span><span class="p">))</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">value_last</span> <span class="o">&gt;</span> <span class="n">value_trend</span> <span class="o">+</span> <span class="n">tol_trend</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+                <span class="n">value_last</span> <span class="o">&lt;</span> <span class="n">value_trend</span> <span class="o">-</span> <span class="n">tol_trend</span>
+            <span class="p">):</span>
+                <span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;Value &quot;</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value_last</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="s2">&quot;exceeds trend &quot;</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value_trend</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="s2">&quot; +/- &quot;</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">tol_trend</span><span class="p">)</span>
+                <span class="p">)</span>
                 <span class="n">trend_exceeded</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">if</span> <span class="n">abs_exceeded</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">trend_exceeded</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="n">alarm_dir</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="s1">&#39;/alarms/&#39;</span>
+        <span class="n">alarm_dir</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="s2">&quot;/alarms/&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">alarm_dir</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">alarm_dir</span><span class="p">)</span>
         <span class="n">alarm_fname</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
-            <span class="s1">&#39;alarm&#39;</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;dstype&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;txt&#39;</span><span class="p">],</span>
-            <span class="n">timeinfo</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span> <span class="n">timeformat</span><span class="o">=</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="s2">&quot;alarm&quot;</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;txt&quot;</span><span class="p">],</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span>
+            <span class="n">timeformat</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">alarm_fname</span> <span class="o">=</span> <span class="n">alarm_dir</span> <span class="o">+</span> <span class="n">alarm_fname</span>
 
         <span class="n">field_dict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
         <span class="n">param_name</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="n">field_dict</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span>
-        <span class="n">param_name_unit</span> <span class="o">=</span> <span class="n">param_name</span> <span class="o">+</span> <span class="s1">&#39; [&#39;</span> <span class="o">+</span> <span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span>
+        <span class="n">param_name_unit</span> <span class="o">=</span> <span class="n">param_name</span> <span class="o">+</span> <span class="s2">&quot; [&quot;</span> <span class="o">+</span> <span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
 
         <span class="n">write_alarm_msg</span><span class="p">(</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;RadarName&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">param_name_unit</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">ref_value</span><span class="p">,</span>
-            <span class="n">tol_abs</span><span class="p">,</span> <span class="n">np_trend</span><span class="p">,</span> <span class="n">value_trend</span><span class="p">,</span> <span class="n">tol_trend</span><span class="p">,</span> <span class="n">nevents_min</span><span class="p">,</span> <span class="n">np_last</span><span class="p">,</span>
-            <span class="n">value_last</span><span class="p">,</span> <span class="n">alarm_fname</span><span class="p">)</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;RadarName&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">param_name_unit</span><span class="p">,</span>
+            <span class="n">start_time</span><span class="p">,</span>
+            <span class="n">ref_value</span><span class="p">,</span>
+            <span class="n">tol_abs</span><span class="p">,</span>
+            <span class="n">np_trend</span><span class="p">,</span>
+            <span class="n">value_trend</span><span class="p">,</span>
+            <span class="n">tol_trend</span><span class="p">,</span>
+            <span class="n">nevents_min</span><span class="p">,</span>
+            <span class="n">np_last</span><span class="p">,</span>
+            <span class="n">value_last</span><span class="p">,</span>
+            <span class="n">alarm_fname</span><span class="p">,</span>
+        <span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;----- saved monitoring alarm to &#39;</span> <span class="o">+</span> <span class="n">alarm_fname</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- saved monitoring alarm to &quot;</span> <span class="o">+</span> <span class="n">alarm_fname</span><span class="p">)</span>
 
-        <span class="n">subject</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;NO REPLY: &#39;</span> <span class="o">+</span> <span class="n">param_name</span> <span class="o">+</span> <span class="s1">&#39; monitoring alarm for radar &#39;</span> <span class="o">+</span>
-                   <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;RadarName&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; on day &#39;</span> <span class="o">+</span>
-                   <span class="n">start_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">-%m-%Y&#39;</span><span class="p">))</span>
+        <span class="n">subject</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;NO REPLY: &quot;</span>
+            <span class="o">+</span> <span class="n">param_name</span>
+            <span class="o">+</span> <span class="s2">&quot; monitoring alarm for radar &quot;</span>
+            <span class="o">+</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;RadarName&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="o">+</span> <span class="s2">&quot; on day &quot;</span>
+            <span class="o">+</span> <span class="n">start_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%m-%Y&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
         <span class="n">send_msg</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">receiver_list</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">alarm_fname</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">alarm_fname</span>
 
-    <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;SAVEVOL&#39;</span><span class="p">:</span>
-        <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;SAVEVOL&quot;</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span>
-                <span class="s1">&#39; Field type &#39;</span> <span class="o">+</span> <span class="n">field_name</span> <span class="o">+</span>
-                <span class="s1">&#39; not available in data set. Skipping product &#39;</span> <span class="o">+</span>
-                <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">])</span>
+                <span class="s2">&quot; Field type &quot;</span>
+                <span class="o">+</span> <span class="n">field_name</span>
+                <span class="o">+</span> <span class="s2">&quot; not available in data set. Skipping product &quot;</span>
+                <span class="o">+</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="n">new_dataset</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">hist_obj</span><span class="p">)</span>
@@ -1181,21 +1381,29 @@ document.write(`
         <span class="n">new_dataset</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">])</span>
 
         <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;basepath&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;procname&#39;</span><span class="p">],</span> <span class="n">dssavedir</span><span class="p">,</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;prdname&#39;</span><span class="p">],</span> <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">])</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">],</span>
+            <span class="n">dssavedir</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;prdname&quot;</span><span class="p">],</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
 
         <span class="n">fname</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
-            <span class="s1">&#39;savevol&#39;</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;dstype&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;voltype&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;nc&#39;</span><span class="p">],</span>
-            <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="s2">&quot;savevol&quot;</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;nc&quot;</span><span class="p">],</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">fname</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span>
 
         <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">cfradial</span><span class="o">.</span><span class="n">write_cfradial</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">new_dataset</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;saved file: &#39;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;saved file: &quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">fname</span>
 
-    <span class="n">warn</span><span class="p">(</span><span class="s1">&#39; Unsupported product type: &#39;</span> <span class="o">+</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">])</span>
+    <span class="n">warn</span><span class="p">(</span><span class="s2">&quot; Unsupported product type: &quot;</span> <span class="o">+</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">])</span>
     <span class="k">return</span> <span class="kc">None</span></div>
 
 </pre></div>
@@ -1241,7 +1449,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     <br/>
   </p>
 </div>

@@ -416,17 +416,23 @@ document.write(`
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">pytda</span>
+
     <span class="n">_PYTDA_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_PYTDA_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">pydda</span>
+
     <span class="n">_PYDDA_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_PYDDA_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">from</span> <span class="nn">..io.io_aux</span> <span class="kn">import</span> <span class="n">get_datatype_fields</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span><span class="p">,</span> <span class="n">convert_pydda_to_pyart_grid</span>
+<span class="kn">from</span> <span class="nn">..io.io_aux</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">get_datatype_fields</span><span class="p">,</span>
+    <span class="n">get_fieldname_pyart</span><span class="p">,</span>
+    <span class="n">convert_pydda_to_pyart_grid</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..io</span> <span class="kn">import</span> <span class="n">read_radiosounding_igra</span>
 <span class="kn">from</span> <span class="nn">.process_grid</span> <span class="kn">import</span> <span class="n">process_grid</span>
 <span class="kn">from</span> <span class="nn">..util</span> <span class="kn">import</span> <span class="n">compute_average_vad</span>
@@ -486,7 +492,7 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_PYTDA_AVAILABLE</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;PyTDA package not available. Unable to compute turbulence&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;PyTDA package not available. Unable to compute turbulence&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
@@ -494,89 +500,112 @@ document.write(`
 
     <span class="n">width_field</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">refl_field</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;dBuZ&#39;</span><span class="p">,</span> <span class="s1">&#39;dBZ&#39;</span><span class="p">,</span> <span class="s1">&#39;dBZc&#39;</span><span class="p">,</span> <span class="s1">&#39;dBuZv&#39;</span><span class="p">,</span> <span class="s1">&#39;dBZv&#39;</span><span class="p">,</span> <span class="s1">&#39;dBZvc&#39;</span><span class="p">,</span>
-                        <span class="s1">&#39;CNRc&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;dBuZ&quot;</span><span class="p">,</span> <span class="s2">&quot;dBZ&quot;</span><span class="p">,</span> <span class="s2">&quot;dBZc&quot;</span><span class="p">,</span> <span class="s2">&quot;dBuZv&quot;</span><span class="p">,</span> <span class="s2">&quot;dBZv&quot;</span><span class="p">,</span> <span class="s2">&quot;dBZvc&quot;</span><span class="p">,</span> <span class="s2">&quot;CNRc&quot;</span><span class="p">):</span>
             <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;W&#39;</span><span class="p">,</span> <span class="s1">&#39;Wv&#39;</span><span class="p">,</span> <span class="s1">&#39;Wu&#39;</span><span class="p">,</span> <span class="s1">&#39;Wvu&#39;</span><span class="p">,</span> <span class="s1">&#39;WD&#39;</span><span class="p">,</span> <span class="s1">&#39;WDc&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;W&quot;</span><span class="p">,</span> <span class="s2">&quot;Wv&quot;</span><span class="p">,</span> <span class="s2">&quot;Wu&quot;</span><span class="p">,</span> <span class="s2">&quot;Wvu&quot;</span><span class="p">,</span> <span class="s2">&quot;WD&quot;</span><span class="p">,</span> <span class="s2">&quot;WDc&quot;</span><span class="p">):</span>
             <span class="n">width_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">width_field</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Reflectivity and spectrum width fields required&#39;</span>
-             <span class="s1">&#39; to estimate turbulence&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Reflectivity and spectrum width fields required&quot;</span> <span class="s2">&quot; to estimate turbulence&quot;</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">width_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span> <span class="ow">or</span> <span class="n">refl_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to compute turbulence. Missing data&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to compute turbulence. Missing data&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="c1"># user defined parameters</span>
-    <span class="n">radius</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;radius&#39;</span><span class="p">,</span> <span class="mf">2.</span><span class="p">)</span>
-    <span class="n">split_cut</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;split_cut&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-    <span class="n">xran</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;xran&#39;</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mf">100.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">])</span>
-    <span class="n">yran</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;yran&#39;</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mf">100.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">])</span>
-    <span class="n">max_split_cut</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;max_split_cut&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="n">use_ntda</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;use_ntda&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-    <span class="n">beamwidth</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;beamwidth&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="n">verbose</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-    <span class="n">compute_gate_pos</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;compute_gate_pos&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">radius</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;radius&quot;</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">split_cut</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;split_cut&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">xran</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;xran&quot;</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">])</span>
+    <span class="n">yran</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;yran&quot;</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">])</span>
+    <span class="n">max_split_cut</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_split_cut&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">use_ntda</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;use_ntda&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">beamwidth</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;beamwidth&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">verbose</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;verbose&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">compute_gate_pos</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;compute_gate_pos&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">beamwidth</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span>
-                <span class="s1">&#39;radar_beam_width_h&#39;</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">):</span>
-            <span class="n">beamwidth</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span>
-                <span class="s1">&#39;radar_beam_width_h&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="s2">&quot;radar_beam_width_h&quot;</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span>
+        <span class="p">):</span>
+            <span class="n">beamwidth</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">&quot;radar_beam_width_h&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unknown radar beamwidth. Default 1 deg will be used&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown radar beamwidth. Default 1 deg will be used&quot;</span><span class="p">)</span>
             <span class="n">beamwidth</span> <span class="o">=</span> <span class="mi">1</span>
 
-    <span class="n">rng_res</span> <span class="o">=</span> <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1000.</span>
+    <span class="n">rng_res</span> <span class="o">=</span> <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1000.0</span>
 
     <span class="n">radar_out</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
     <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="n">radar_out</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">refl_field</span><span class="p">,</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">]))</span>
     <span class="n">radar_out</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">width_field</span><span class="p">,</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">width_field</span><span class="p">]))</span>
-    <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">32768</span>
-    <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">width_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">width_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">32768</span>
+    <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">32768</span>
+    <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">width_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">width_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">32768</span>
 
-    <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s1">&#39;_FillValue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">32768</span>
-    <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">width_field</span><span class="p">][</span><span class="s1">&#39;_FillValue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">32768</span>
+    <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">32768</span>
+    <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">width_field</span><span class="p">][</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">32768</span>
 
-    <span class="k">if</span> <span class="n">radar_out</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s1">&#39;ppi&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">radar_out</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s2">&quot;ppi&quot;</span><span class="p">:</span>
         <span class="n">pytda</span><span class="o">.</span><span class="n">calc_turb_vol</span><span class="p">(</span>
-            <span class="n">radar_out</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">split_cut</span><span class="o">=</span><span class="n">split_cut</span><span class="p">,</span> <span class="n">xran</span><span class="o">=</span><span class="n">xran</span><span class="p">,</span>
-            <span class="n">yran</span><span class="o">=</span><span class="n">yran</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">name_dz</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span>
-            <span class="n">name_sw</span><span class="o">=</span><span class="n">width_field</span><span class="p">,</span> <span class="n">turb_name</span><span class="o">=</span><span class="s1">&#39;turbulence&#39;</span><span class="p">,</span>
-            <span class="n">max_split_cut</span><span class="o">=</span><span class="n">max_split_cut</span><span class="p">,</span> <span class="n">use_ntda</span><span class="o">=</span><span class="n">use_ntda</span><span class="p">,</span>
-            <span class="n">beamwidth</span><span class="o">=</span><span class="n">beamwidth</span><span class="p">,</span> <span class="n">gate_spacing</span><span class="o">=</span><span class="n">rng_res</span><span class="p">,</span>
-            <span class="n">compute_gate_pos</span><span class="o">=</span><span class="n">compute_gate_pos</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">radar_out</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s1">&#39;rhi&#39;</span><span class="p">:</span>
+            <span class="n">radar_out</span><span class="p">,</span>
+            <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span>
+            <span class="n">split_cut</span><span class="o">=</span><span class="n">split_cut</span><span class="p">,</span>
+            <span class="n">xran</span><span class="o">=</span><span class="n">xran</span><span class="p">,</span>
+            <span class="n">yran</span><span class="o">=</span><span class="n">yran</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+            <span class="n">name_dz</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span>
+            <span class="n">name_sw</span><span class="o">=</span><span class="n">width_field</span><span class="p">,</span>
+            <span class="n">turb_name</span><span class="o">=</span><span class="s2">&quot;turbulence&quot;</span><span class="p">,</span>
+            <span class="n">max_split_cut</span><span class="o">=</span><span class="n">max_split_cut</span><span class="p">,</span>
+            <span class="n">use_ntda</span><span class="o">=</span><span class="n">use_ntda</span><span class="p">,</span>
+            <span class="n">beamwidth</span><span class="o">=</span><span class="n">beamwidth</span><span class="p">,</span>
+            <span class="n">gate_spacing</span><span class="o">=</span><span class="n">rng_res</span><span class="p">,</span>
+            <span class="n">compute_gate_pos</span><span class="o">=</span><span class="n">compute_gate_pos</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">radar_out</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s2">&quot;rhi&quot;</span><span class="p">:</span>
         <span class="n">pytda</span><span class="o">.</span><span class="n">calc_turb_rhi</span><span class="p">(</span>
-            <span class="n">radar_out</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">name_dz</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span>
-            <span class="n">name_sw</span><span class="o">=</span><span class="n">width_field</span><span class="p">,</span> <span class="n">turb_name</span><span class="o">=</span><span class="s1">&#39;turbulence&#39;</span><span class="p">,</span>
-            <span class="n">use_ntda</span><span class="o">=</span><span class="n">use_ntda</span><span class="p">,</span> <span class="n">beamwidth</span><span class="o">=</span><span class="n">beamwidth</span><span class="p">,</span> <span class="n">gate_spacing</span><span class="o">=</span><span class="n">rng_res</span><span class="p">)</span>
+            <span class="n">radar_out</span><span class="p">,</span>
+            <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+            <span class="n">name_dz</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span>
+            <span class="n">name_sw</span><span class="o">=</span><span class="n">width_field</span><span class="p">,</span>
+            <span class="n">turb_name</span><span class="o">=</span><span class="s2">&quot;turbulence&quot;</span><span class="p">,</span>
+            <span class="n">use_ntda</span><span class="o">=</span><span class="n">use_ntda</span><span class="p">,</span>
+            <span class="n">beamwidth</span><span class="o">=</span><span class="n">beamwidth</span><span class="p">,</span>
+            <span class="n">gate_spacing</span><span class="o">=</span><span class="n">rng_res</span><span class="p">,</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Radar volume of type &#39;</span> <span class="o">+</span> <span class="n">radar_out</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">+</span>
-             <span class="s1">&#39;. Only volumes of type PPI or RHI are allowed&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Radar volume of type &quot;</span>
+            <span class="o">+</span> <span class="n">radar_out</span><span class="o">.</span><span class="n">scan_type</span>
+            <span class="o">+</span> <span class="s2">&quot;. Only volumes of type PPI or RHI are allowed&quot;</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="k">del</span> <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">]</span>
     <span class="k">del</span> <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">width_field</span><span class="p">]</span>
 
-    <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;turbulence&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span>
-        <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;turbulence&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="o">-</span><span class="mf">32768.</span><span class="p">)</span>
+    <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;turbulence&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span>
+        <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;turbulence&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="o">-</span><span class="mf">32768.0</span>
+    <span class="p">)</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">radar_out</span><span class="p">}</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">radar_out</span><span class="p">}</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -623,67 +652,86 @@ document.write(`
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">vel_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">vel_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to correct Doppler aliasing. Missing data&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to correct Doppler aliasing. Missing velocity field&quot;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Radar available fields are </span><span class="si">{</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">corr_vel_field</span> <span class="o">=</span> <span class="s1">&#39;dealiased_&#39;</span> <span class="o">+</span> <span class="n">vel_field</span>
+    <span class="n">corr_vel_field</span> <span class="o">=</span> <span class="s2">&quot;dealiased_&quot;</span> <span class="o">+</span> <span class="n">vel_field</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;initialized&#39;</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]:</span>
         <span class="c1"># Use phase unwraping method to obtain first guess</span>
 
         <span class="c1"># get user parameters</span>
-        <span class="n">interval_splits</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;interval_splits&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-        <span class="n">skip_between_rays</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;skip_between_rays&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-        <span class="n">skip_along_ray</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;skip_along_ray&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-        <span class="n">centered</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;centered&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">interval_splits</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;interval_splits&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">skip_between_rays</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;skip_between_rays&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="n">skip_along_ray</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;skip_along_ray&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="n">centered</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;centered&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
         <span class="n">corr_vel_dict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">dealias_region_based</span><span class="p">(</span>
-            <span class="n">radar</span><span class="p">,</span> <span class="n">ref_vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">interval_splits</span><span class="o">=</span><span class="n">interval_splits</span><span class="p">,</span>
-            <span class="n">interval_limits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">skip_between_rays</span><span class="o">=</span><span class="n">skip_between_rays</span><span class="p">,</span>
-            <span class="n">skip_along_ray</span><span class="o">=</span><span class="n">skip_along_ray</span><span class="p">,</span> <span class="n">centered</span><span class="o">=</span><span class="n">centered</span><span class="p">,</span>
-            <span class="n">nyquist_vel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">check_nyquist_uniform</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">rays_wrap_around</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keep_original</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">set_limits</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">vel_field</span><span class="o">=</span><span class="n">vel_field</span><span class="p">,</span> <span class="n">corr_vel_field</span><span class="o">=</span><span class="n">corr_vel_field</span><span class="p">)</span>
+            <span class="n">radar</span><span class="p">,</span>
+            <span class="n">ref_vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">interval_splits</span><span class="o">=</span><span class="n">interval_splits</span><span class="p">,</span>
+            <span class="n">interval_limits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">skip_between_rays</span><span class="o">=</span><span class="n">skip_between_rays</span><span class="p">,</span>
+            <span class="n">skip_along_ray</span><span class="o">=</span><span class="n">skip_along_ray</span><span class="p">,</span>
+            <span class="n">centered</span><span class="o">=</span><span class="n">centered</span><span class="p">,</span>
+            <span class="n">nyquist_vel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">check_nyquist_uniform</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">gatefilter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">rays_wrap_around</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">keep_original</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">set_limits</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">vel_field</span><span class="o">=</span><span class="n">vel_field</span><span class="p">,</span>
+            <span class="n">corr_vel_field</span><span class="o">=</span><span class="n">corr_vel_field</span><span class="p">,</span>
+        <span class="p">)</span>
 
-        <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;initialized&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># get user parameters</span>
-        <span class="n">filt</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;filt&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">sign</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sign&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">keep_mask</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;keep_mask&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">filt</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;filt&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">sign</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sign&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">keep_mask</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;keep_mask&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
-        <span class="n">last_radar</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">]</span>
+        <span class="n">last_radar</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]</span>
 
         <span class="n">corr_vel_dict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">dealias_fourdd</span><span class="p">(</span>
-            <span class="n">radar</span><span class="p">,</span> <span class="n">last_radar</span><span class="o">=</span><span class="n">last_radar</span><span class="p">,</span> <span class="n">sonde_profile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">gatefilter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">filt</span><span class="o">=</span><span class="n">filt</span><span class="p">,</span> <span class="n">rsl_badval</span><span class="o">=</span><span class="mf">131072.0</span><span class="p">,</span>
-            <span class="n">keep_original</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">set_limits</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="n">vel_field</span><span class="p">,</span>
-            <span class="n">corr_vel_field</span><span class="o">=</span><span class="n">corr_vel_field</span><span class="p">,</span> <span class="n">last_vel_field</span><span class="o">=</span><span class="n">corr_vel_field</span><span class="p">,</span>
-            <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="n">sign</span><span class="p">)</span>
+            <span class="n">radar</span><span class="p">,</span>
+            <span class="n">last_radar</span><span class="o">=</span><span class="n">last_radar</span><span class="p">,</span>
+            <span class="n">sonde_profile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">gatefilter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">filt</span><span class="o">=</span><span class="n">filt</span><span class="p">,</span>
+            <span class="n">rsl_badval</span><span class="o">=</span><span class="mf">131072.0</span><span class="p">,</span>
+            <span class="n">keep_original</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">set_limits</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">vel_field</span><span class="o">=</span><span class="n">vel_field</span><span class="p">,</span>
+            <span class="n">corr_vel_field</span><span class="o">=</span><span class="n">corr_vel_field</span><span class="p">,</span>
+            <span class="n">last_vel_field</span><span class="o">=</span><span class="n">corr_vel_field</span><span class="p">,</span>
+            <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">sign</span><span class="o">=</span><span class="n">sign</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">keep_mask</span><span class="p">:</span>
-            <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-            <span class="n">corr_vel_dict</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span>
-                <span class="n">mask</span><span class="p">,</span> <span class="n">corr_vel_dict</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+            <span class="n">corr_vel_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">corr_vel_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
 
     <span class="c1"># prepare for exit</span>
     <span class="n">radar_out</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
     <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="n">radar_out</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">corr_vel_field</span><span class="p">,</span> <span class="n">corr_vel_dict</span><span class="p">)</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">radar_out</span><span class="p">}</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">radar_out</span><span class="p">}</span>
 
     <span class="c1"># keep current corrected Doppler velocity field in memory</span>
-    <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar_out</span>
+    <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar_out</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -742,40 +790,51 @@ document.write(`
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">vel_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">vel_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to correct Doppler aliasing. Missing data&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to correct Doppler aliasing. Missing velocity field&quot;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Radar available fields are </span><span class="si">{</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">corr_vel_field</span> <span class="o">=</span> <span class="s1">&#39;dealiased_&#39;</span> <span class="o">+</span> <span class="n">vel_field</span>
+    <span class="n">corr_vel_field</span> <span class="o">=</span> <span class="s2">&quot;dealiased_&quot;</span> <span class="o">+</span> <span class="n">vel_field</span>
 
     <span class="c1"># get user parameters</span>
-    <span class="n">interval_splits</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;interval_splits&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-    <span class="n">skip_between_rays</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;skip_between_rays&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-    <span class="n">skip_along_ray</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;skip_along_ray&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-    <span class="n">centered</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;centered&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-    <span class="n">nyquist_vel</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;nyquist_vel&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">interval_splits</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;interval_splits&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">skip_between_rays</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;skip_between_rays&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">skip_along_ray</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;skip_along_ray&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">centered</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;centered&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">nyquist_vel</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;nyquist_vel&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="n">corr_vel_dict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">dealias_region_based</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">ref_vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">interval_splits</span><span class="o">=</span><span class="n">interval_splits</span><span class="p">,</span>
-        <span class="n">interval_limits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">skip_between_rays</span><span class="o">=</span><span class="n">skip_between_rays</span><span class="p">,</span>
-        <span class="n">skip_along_ray</span><span class="o">=</span><span class="n">skip_along_ray</span><span class="p">,</span> <span class="n">centered</span><span class="o">=</span><span class="n">centered</span><span class="p">,</span>
-        <span class="n">nyquist_vel</span><span class="o">=</span><span class="n">nyquist_vel</span><span class="p">,</span> <span class="n">check_nyquist_uniform</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">rays_wrap_around</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keep_original</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">set_limits</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">vel_field</span><span class="o">=</span><span class="n">vel_field</span><span class="p">,</span> <span class="n">corr_vel_field</span><span class="o">=</span><span class="n">corr_vel_field</span><span class="p">)</span>
+        <span class="n">radar</span><span class="p">,</span>
+        <span class="n">ref_vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">interval_splits</span><span class="o">=</span><span class="n">interval_splits</span><span class="p">,</span>
+        <span class="n">interval_limits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">skip_between_rays</span><span class="o">=</span><span class="n">skip_between_rays</span><span class="p">,</span>
+        <span class="n">skip_along_ray</span><span class="o">=</span><span class="n">skip_along_ray</span><span class="p">,</span>
+        <span class="n">centered</span><span class="o">=</span><span class="n">centered</span><span class="p">,</span>
+        <span class="n">nyquist_vel</span><span class="o">=</span><span class="n">nyquist_vel</span><span class="p">,</span>
+        <span class="n">check_nyquist_uniform</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">gatefilter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">rays_wrap_around</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">keep_original</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">set_limits</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">vel_field</span><span class="o">=</span><span class="n">vel_field</span><span class="p">,</span>
+        <span class="n">corr_vel_field</span><span class="o">=</span><span class="n">corr_vel_field</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">corr_vel_field</span><span class="p">,</span> <span class="n">corr_vel_dict</span><span class="p">)</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">corr_vel_field</span><span class="p">,</span> <span class="n">corr_vel_dict</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -820,34 +879,42 @@ document.write(`
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">vel_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">vel_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to correct Doppler aliasing. Missing data&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to correct Doppler aliasing. Missing data&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">corr_vel_field</span> <span class="o">=</span> <span class="s1">&#39;dealiased_&#39;</span> <span class="o">+</span> <span class="n">vel_field</span>
+    <span class="n">corr_vel_field</span> <span class="o">=</span> <span class="s2">&quot;dealiased_&quot;</span> <span class="o">+</span> <span class="n">vel_field</span>
 
     <span class="c1"># get user parameters</span>
-    <span class="n">unwrap_unit</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;unwrap_unit&#39;</span><span class="p">,</span> <span class="s1">&#39;sweep&#39;</span><span class="p">)</span>
+    <span class="n">unwrap_unit</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;unwrap_unit&quot;</span><span class="p">,</span> <span class="s2">&quot;sweep&quot;</span><span class="p">)</span>
 
     <span class="n">corr_vel_dict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">dealias_unwrap_phase</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">unwrap_unit</span><span class="o">=</span><span class="n">unwrap_unit</span><span class="p">,</span> <span class="n">nyquist_vel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">check_nyquist_uniform</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">rays_wrap_around</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keep_original</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">set_limits</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">vel_field</span><span class="o">=</span><span class="n">vel_field</span><span class="p">,</span> <span class="n">corr_vel_field</span><span class="o">=</span><span class="n">corr_vel_field</span><span class="p">,</span> <span class="n">skip_checks</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">radar</span><span class="p">,</span>
+        <span class="n">unwrap_unit</span><span class="o">=</span><span class="n">unwrap_unit</span><span class="p">,</span>
+        <span class="n">nyquist_vel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">check_nyquist_uniform</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">gatefilter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">rays_wrap_around</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">keep_original</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">set_limits</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">vel_field</span><span class="o">=</span><span class="n">vel_field</span><span class="p">,</span>
+        <span class="n">corr_vel_field</span><span class="o">=</span><span class="n">corr_vel_field</span><span class="p">,</span>
+        <span class="n">skip_checks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">corr_vel_field</span><span class="p">,</span> <span class="n">corr_vel_dict</span><span class="p">)</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">corr_vel_field</span><span class="p">,</span> <span class="n">corr_vel_dict</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -892,48 +959,49 @@ document.write(`
     <span class="n">v_speed_field</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">h_speed_field</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">h_dir_field</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;wind_vel_v&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s2">&quot;wind_vel_v&quot;</span><span class="p">:</span>
             <span class="n">v_speed_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;WIND_SPEED&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s2">&quot;WIND_SPEED&quot;</span><span class="p">:</span>
             <span class="n">h_speed_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;WIND_DIRECTION&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s2">&quot;WIND_DIRECTION&quot;</span><span class="p">:</span>
             <span class="n">h_dir_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">h_speed_field</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">h_dir_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Horizontal wind speed and direction fields required&#39;</span>
-             <span class="s1">&#39; to estimate radial velocity&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Horizontal wind speed and direction fields required&quot;</span>
+            <span class="s2">&quot; to estimate radial velocity&quot;</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">h_speed_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span> <span class="ow">or</span> <span class="n">h_dir_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to estimate radial velocity. &#39;</span>
-             <span class="s1">&#39;Missing horizontal wind&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to estimate radial velocity. &quot;</span> <span class="s2">&quot;Missing horizontal wind&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">h_speed</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">h_speed_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-    <span class="n">h_dir</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">h_dir_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+    <span class="n">h_speed</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">h_speed_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">h_dir</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">h_dir_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">v_speed_field</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">v_speed_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unknown vertical wind speed. Assumed 0&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown vertical wind speed. Assumed 0&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">v_speed_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">v_speed_field</span> <span class="o">==</span> <span class="s1">&#39;vertical_wind_component&#39;</span>
+            <span class="n">v_speed_field</span> <span class="o">==</span> <span class="s2">&quot;vertical_wind_component&quot;</span>
 
         <span class="n">v_speed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">radar</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">ngates</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">v_speed</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">v_speed_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="n">v_speed</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">v_speed_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
 
     <span class="c1"># user defined parameters</span>
-    <span class="n">lat</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;latitude&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="n">lon</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;longitude&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="n">alt</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;altitude&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">lat</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;latitude&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">lon</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;longitude&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">alt</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;altitude&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="c1"># get u and v wind components</span>
     <span class="n">h_dir_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">h_dir</span><span class="p">)</span>
@@ -943,42 +1011,43 @@ document.write(`
     <span class="k">if</span> <span class="n">lat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">lon</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">alt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># get antenna coordinates respect to new radar location</span>
         <span class="k">if</span> <span class="n">lat</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">lat</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">lat</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">lon</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">lon</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">lon</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">alt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">alt</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">alt</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">geographic_to_cartesian_aeqd</span><span class="p">(</span>
-            <span class="n">radar</span><span class="o">.</span><span class="n">gate_longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">lon</span><span class="p">,</span>
-            <span class="n">lat</span><span class="p">)</span>
-        <span class="n">z</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">alt</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevations</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">cartesian_to_antenna</span><span class="p">(</span>
-            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">gate_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span>
+        <span class="p">)</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">alt</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevations</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">cartesian_to_antenna</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
         <span class="n">azi_2D_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">azimuths</span><span class="p">)</span>
         <span class="n">ele_2D_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">elevations</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">azi_2D_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
-            <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">ngates</span><span class="p">))</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
+            <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">ngates</span><span class="p">),</span>
+        <span class="p">)</span>
         <span class="n">ele_2D_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
-            <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">ngates</span><span class="p">))</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
+            <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">ngates</span><span class="p">),</span>
+        <span class="p">)</span>
 
-    <span class="n">r_speed</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;velocity&#39;</span><span class="p">)</span>
+    <span class="n">r_speed</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;velocity&quot;</span><span class="p">)</span>
 
     <span class="c1"># assuming no vertical velocity</span>
     <span class="c1"># r_speed[&#39;data&#39;] = h_speed*np.cos(h_dir_rad-azi_2D_rad)*np.cos(ele_2D_rad)</span>
 
     <span class="c1"># with vertical velocity included</span>
-    <span class="n">r_speed</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="p">(</span><span class="n">speed_h_u</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">azi_2D_rad</span><span class="p">)</span> <span class="o">+</span> <span class="n">speed_h_v</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">azi_2D_rad</span><span class="p">))</span> <span class="o">*</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">ele_2D_rad</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ele_2D_rad</span><span class="p">)</span> <span class="o">*</span> <span class="n">v_speed</span><span class="p">)</span>
+    <span class="n">r_speed</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">speed_h_u</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">azi_2D_rad</span><span class="p">)</span> <span class="o">+</span> <span class="n">speed_h_v</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">azi_2D_rad</span><span class="p">)</span>
+    <span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">ele_2D_rad</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ele_2D_rad</span><span class="p">)</span> <span class="o">*</span> <span class="n">v_speed</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;velocity&#39;</span><span class="p">,</span> <span class="n">r_speed</span><span class="p">)</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;velocity&quot;</span><span class="p">,</span> <span class="n">r_speed</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -1018,32 +1087,32 @@ document.write(`
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">vel_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">vel_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to retrieve wind speed. Missing data&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to retrieve wind speed. Missing data&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">vert_proj</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;vert_proj&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-    <span class="n">wind_field</span> <span class="o">=</span> <span class="s1">&#39;azimuthal_horizontal_wind_component&#39;</span>
+    <span class="n">vert_proj</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vert_proj&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">wind_field</span> <span class="o">=</span> <span class="s2">&quot;azimuthal_horizontal_wind_component&quot;</span>
     <span class="k">if</span> <span class="n">vert_proj</span><span class="p">:</span>
-        <span class="n">wind_field</span> <span class="o">=</span> <span class="s1">&#39;vertical_wind_component&#39;</span>
+        <span class="n">wind_field</span> <span class="o">=</span> <span class="s2">&quot;vertical_wind_component&quot;</span>
 
     <span class="n">wind</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">est_wind_vel</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">vert_proj</span><span class="o">=</span><span class="n">vert_proj</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="n">vel_field</span><span class="p">,</span>
-        <span class="n">wind_field</span><span class="o">=</span><span class="n">wind_field</span><span class="p">)</span>
+        <span class="n">radar</span><span class="p">,</span> <span class="n">vert_proj</span><span class="o">=</span><span class="n">vert_proj</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="n">vel_field</span><span class="p">,</span> <span class="n">wind_field</span><span class="o">=</span><span class="n">wind_field</span>
+    <span class="p">)</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">wind_field</span><span class="p">,</span> <span class="n">wind</span><span class="p">)</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">wind_field</span><span class="p">,</span> <span class="n">wind</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -1083,30 +1152,30 @@ document.write(`
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">wind_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">wind_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to retrieve wind shear. Missing data&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to retrieve wind shear. Missing data&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">az_tol</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;az_tol&#39;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
-    <span class="n">windshear_field</span> <span class="o">=</span> <span class="s1">&#39;vertical_wind_shear&#39;</span>
+    <span class="n">az_tol</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;az_tol&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">windshear_field</span> <span class="o">=</span> <span class="s2">&quot;vertical_wind_shear&quot;</span>
 
     <span class="n">windshear</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">est_vertical_windshear</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">az_tol</span><span class="o">=</span><span class="n">az_tol</span><span class="p">,</span> <span class="n">wind_field</span><span class="o">=</span><span class="n">wind_field</span><span class="p">,</span>
-        <span class="n">windshear_field</span><span class="o">=</span><span class="n">windshear_field</span><span class="p">)</span>
+        <span class="n">radar</span><span class="p">,</span> <span class="n">az_tol</span><span class="o">=</span><span class="n">az_tol</span><span class="p">,</span> <span class="n">wind_field</span><span class="o">=</span><span class="n">wind_field</span><span class="p">,</span> <span class="n">windshear_field</span><span class="o">=</span><span class="n">windshear_field</span>
+    <span class="p">)</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">windshear_field</span><span class="p">,</span> <span class="n">windshear</span><span class="p">)</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">windshear_field</span><span class="p">,</span> <span class="n">windshear</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -1146,30 +1215,30 @@ document.write(`
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">wind_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
-    <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span><span class="o">-</span><span class="mi">1</span>
+    <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">wind_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to retrieve wind shear. Missing data&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to retrieve wind shear. Missing data&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">az_tol</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;az_tol&#39;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
-    <span class="n">windshear_field</span> <span class="o">=</span> <span class="s1">&#39;vertical_wind_shear&#39;</span>
+    <span class="n">az_tol</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;az_tol&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">windshear_field</span> <span class="o">=</span> <span class="s2">&quot;vertical_wind_shear&quot;</span>
 
     <span class="n">windshear</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">est_vertical_windshear_lidar</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">az_tol</span><span class="o">=</span><span class="n">az_tol</span><span class="p">,</span> <span class="n">wind_field</span><span class="o">=</span><span class="n">wind_field</span><span class="p">,</span>
-        <span class="n">windshear_field</span><span class="o">=</span><span class="n">windshear_field</span><span class="p">)</span>
+        <span class="n">radar</span><span class="p">,</span> <span class="n">az_tol</span><span class="o">=</span><span class="n">az_tol</span><span class="p">,</span> <span class="n">wind_field</span><span class="o">=</span><span class="n">wind_field</span><span class="p">,</span> <span class="n">windshear_field</span><span class="o">=</span><span class="n">windshear_field</span>
+    <span class="p">)</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">windshear_field</span><span class="p">,</span> <span class="n">windshear</span><span class="p">)</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">windshear_field</span><span class="p">,</span> <span class="n">windshear</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -1206,44 +1275,49 @@ document.write(`
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">vel_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">vel_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to retrieve wind speed. Missing data&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to retrieve wind speed. Missing data&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="c1"># User defined parameters</span>
-    <span class="n">npoints_min</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;npoints_min&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
-    <span class="n">azi_spacing_max</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;azi_spacing_max&#39;</span><span class="p">,</span> <span class="mf">45.</span><span class="p">)</span>
-    <span class="n">vel_diff_max</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;vel_diff_max&#39;</span><span class="p">,</span> <span class="mf">10.</span><span class="p">)</span>
+    <span class="n">npoints_min</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;npoints_min&quot;</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="n">azi_spacing_max</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;azi_spacing_max&quot;</span><span class="p">,</span> <span class="mf">45.0</span><span class="p">)</span>
+    <span class="n">vel_diff_max</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vel_diff_max&quot;</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
 
-    <span class="p">(</span><span class="n">u_vel_dict</span><span class="p">,</span> <span class="n">v_vel_dict</span><span class="p">,</span> <span class="n">w_vel_dict</span><span class="p">,</span> <span class="n">vel_est_dict</span><span class="p">,</span> <span class="n">vel_std_dict</span><span class="p">,</span>
-     <span class="n">vel_diff_dict</span><span class="p">)</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">est_wind_profile</span><span class="p">(</span>
-         <span class="n">radar</span><span class="p">,</span> <span class="n">npoints_min</span><span class="o">=</span><span class="n">npoints_min</span><span class="p">,</span> <span class="n">azi_spacing_max</span><span class="o">=</span><span class="n">azi_spacing_max</span><span class="p">,</span>
-         <span class="n">vel_diff_max</span><span class="o">=</span><span class="n">vel_diff_max</span><span class="p">,</span> <span class="n">rad_vel_field</span><span class="o">=</span><span class="n">vel_field</span><span class="p">,</span>
-         <span class="n">u_vel_field</span><span class="o">=</span><span class="s1">&#39;eastward_wind_component&#39;</span><span class="p">,</span>
-         <span class="n">v_vel_field</span><span class="o">=</span><span class="s1">&#39;northward_wind_component&#39;</span><span class="p">,</span>
-         <span class="n">w_vel_field</span><span class="o">=</span><span class="s1">&#39;vertical_wind_component&#39;</span><span class="p">,</span>
-         <span class="n">vel_est_field</span><span class="o">=</span><span class="s1">&#39;retrieved_velocity&#39;</span><span class="p">,</span>
-         <span class="n">vel_std_field</span><span class="o">=</span><span class="s1">&#39;retrieved_velocity_std&#39;</span><span class="p">,</span>
-         <span class="n">vel_diff_field</span><span class="o">=</span><span class="s1">&#39;velocity_difference&#39;</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">u_vel_dict</span><span class="p">,</span> <span class="n">v_vel_dict</span><span class="p">,</span> <span class="n">w_vel_dict</span><span class="p">,</span> <span class="n">vel_est_dict</span><span class="p">,</span> <span class="n">vel_std_dict</span><span class="p">,</span> <span class="n">vel_diff_dict</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">est_wind_profile</span><span class="p">(</span>
+            <span class="n">radar</span><span class="p">,</span>
+            <span class="n">npoints_min</span><span class="o">=</span><span class="n">npoints_min</span><span class="p">,</span>
+            <span class="n">azi_spacing_max</span><span class="o">=</span><span class="n">azi_spacing_max</span><span class="p">,</span>
+            <span class="n">vel_diff_max</span><span class="o">=</span><span class="n">vel_diff_max</span><span class="p">,</span>
+            <span class="n">rad_vel_field</span><span class="o">=</span><span class="n">vel_field</span><span class="p">,</span>
+            <span class="n">u_vel_field</span><span class="o">=</span><span class="s2">&quot;eastward_wind_component&quot;</span><span class="p">,</span>
+            <span class="n">v_vel_field</span><span class="o">=</span><span class="s2">&quot;northward_wind_component&quot;</span><span class="p">,</span>
+            <span class="n">w_vel_field</span><span class="o">=</span><span class="s2">&quot;vertical_wind_component&quot;</span><span class="p">,</span>
+            <span class="n">vel_est_field</span><span class="o">=</span><span class="s2">&quot;retrieved_velocity&quot;</span><span class="p">,</span>
+            <span class="n">vel_std_field</span><span class="o">=</span><span class="s2">&quot;retrieved_velocity_std&quot;</span><span class="p">,</span>
+            <span class="n">vel_diff_field</span><span class="o">=</span><span class="s2">&quot;velocity_difference&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;eastward_wind_component&#39;</span><span class="p">,</span> <span class="n">u_vel_dict</span><span class="p">)</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;northward_wind_component&#39;</span><span class="p">,</span> <span class="n">v_vel_dict</span><span class="p">)</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;vertical_wind_component&#39;</span><span class="p">,</span> <span class="n">w_vel_dict</span><span class="p">)</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;retrieved_velocity&#39;</span><span class="p">,</span> <span class="n">vel_est_dict</span><span class="p">)</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;retrieved_velocity_std&#39;</span><span class="p">,</span> <span class="n">vel_std_dict</span><span class="p">)</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;velocity_difference&#39;</span><span class="p">,</span> <span class="n">vel_diff_dict</span><span class="p">)</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;eastward_wind_component&quot;</span><span class="p">,</span> <span class="n">u_vel_dict</span><span class="p">)</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;northward_wind_component&quot;</span><span class="p">,</span> <span class="n">v_vel_dict</span><span class="p">)</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;vertical_wind_component&quot;</span><span class="p">,</span> <span class="n">w_vel_dict</span><span class="p">)</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;retrieved_velocity&quot;</span><span class="p">,</span> <span class="n">vel_est_dict</span><span class="p">)</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;retrieved_velocity_std&quot;</span><span class="p">,</span> <span class="n">vel_std_dict</span><span class="p">)</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;velocity_difference&quot;</span><span class="p">,</span> <span class="n">vel_diff_dict</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -1345,21 +1419,21 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_PYDDA_AVAILABLE</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;PyDDA and xarray package not available. Unable to compute wind fields&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;PyDDA and xarray package not available. Unable to compute wind fields&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">radar_list</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;DDA requires data from at least two different radars&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;DDA requires data from at least two different radars&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="c1"># check how many radars have to be compared and which datatype to use</span>
     <span class="n">ind_radar_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">field_name_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">datatype_list</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
         <span class="n">ind_radar_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
@@ -1370,20 +1444,20 @@ document.write(`
     <span class="n">field_name_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">field_name_list</span><span class="p">)</span>
 
     <span class="c1"># Get DDA numerical parameters</span>
-    <span class="n">Co</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Co&#39;</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
-    <span class="n">Cm</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Cm&#39;</span><span class="p">,</span> <span class="mf">1500.</span><span class="p">)</span>
-    <span class="n">Cx</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Cx&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
-    <span class="n">Cy</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Cy&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
-    <span class="n">Cz</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Cz&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
-    <span class="n">Cb</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Cb&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
-    <span class="n">Cv</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Cv&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
-    <span class="n">frz</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;frz&#39;</span><span class="p">,</span> <span class="mf">4500.</span><span class="p">)</span>
-    <span class="n">Cmod</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Cmod&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
-    <span class="n">Cpoint</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Cpoint&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
-    <span class="n">wind_tol</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;wind_tol&#39;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">Co</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Co&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">Cm</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Cm&quot;</span><span class="p">,</span> <span class="mf">1500.0</span><span class="p">)</span>
+    <span class="n">Cx</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Cx&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">Cy</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Cy&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">Cz</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Cz&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">Cb</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Cb&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">Cv</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Cv&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">frz</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;frz&quot;</span><span class="p">,</span> <span class="mf">4500.0</span><span class="p">)</span>
+    <span class="n">Cmod</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Cmod&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">Cpoint</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Cpoint&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">wind_tol</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;wind_tol&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
 
-    <span class="n">signs</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;signs&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">ind_radar_list</span><span class="p">)))</span>
-    <span class="n">sounding</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sounding&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">signs</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;signs&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">ind_radar_list</span><span class="p">)))</span>
+    <span class="n">sounding</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sounding&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">sounding</span><span class="p">:</span>
         <span class="n">dtime</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_radar_time_begin</span><span class="p">(</span><span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">sounding_data</span> <span class="o">=</span> <span class="n">read_radiosounding_igra</span><span class="p">(</span><span class="n">sounding</span><span class="p">,</span> <span class="n">dtime</span><span class="p">)</span>
@@ -1395,19 +1469,24 @@ document.write(`
         <span class="n">sounding_data</span> <span class="o">=</span> <span class="n">sounding_data</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
         <span class="c1"># create wind profile from sounding</span>
         <span class="n">wind_prof</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">HorizontalWindProfile</span><span class="p">(</span>
-            <span class="n">sounding_data</span><span class="p">[</span><span class="s1">&#39;GPH&#39;</span><span class="p">],</span> <span class="n">sounding_data</span><span class="p">[</span><span class="s1">&#39;WSPD&#39;</span><span class="p">],</span>
-            <span class="n">sounding_data</span><span class="p">[</span><span class="s1">&#39;WDIR&#39;</span><span class="p">])</span>
+            <span class="n">sounding_data</span><span class="p">[</span><span class="s2">&quot;GPH&quot;</span><span class="p">],</span> <span class="n">sounding_data</span><span class="p">[</span><span class="s2">&quot;WSPD&quot;</span><span class="p">],</span> <span class="n">sounding_data</span><span class="p">[</span><span class="s2">&quot;WDIR&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Compute VAD for every radar to initialize DDA</span>
         <span class="c1"># z-vector for vad</span>
         <span class="n">z_want</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
-            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;zmin&#39;</span><span class="p">],</span>
-            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;zmax&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;vres&#39;</span><span class="p">],</span>
-            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;vres&#39;</span><span class="p">])</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;gridConfig&quot;</span><span class="p">][</span><span class="s2">&quot;zmin&quot;</span><span class="p">],</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;gridConfig&quot;</span><span class="p">][</span><span class="s2">&quot;zmax&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;gridConfig&quot;</span><span class="p">][</span><span class="s2">&quot;vres&quot;</span><span class="p">],</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;gridConfig&quot;</span><span class="p">][</span><span class="s2">&quot;vres&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
 
         <span class="n">wind_prof</span> <span class="o">=</span> <span class="n">compute_average_vad</span><span class="p">(</span>
-            <span class="n">radar_list</span><span class="p">,</span> <span class="n">z_want</span><span class="p">,</span> <span class="n">signs</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;lonorig&#39;</span><span class="p">],</span>
-            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;gridConfig&#39;</span><span class="p">][</span><span class="s1">&#39;latorig&#39;</span><span class="p">])</span>
+            <span class="n">radar_list</span><span class="p">,</span>
+            <span class="n">z_want</span><span class="p">,</span>
+            <span class="n">signs</span><span class="p">,</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;gridConfig&quot;</span><span class="p">][</span><span class="s2">&quot;lonorig&quot;</span><span class="p">],</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;gridConfig&quot;</span><span class="p">][</span><span class="s2">&quot;latorig&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
 
     <span class="c1"># Get name of reflectivity and velocity fields for each radar</span>
     <span class="n">refl_fields</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1415,13 +1494,13 @@ document.write(`
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">radar</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">radar_list</span><span class="p">):</span>
         <span class="c1"># Find vel and refl fields</span>
         <span class="n">field_names_rad</span> <span class="o">=</span> <span class="n">field_name_list</span><span class="p">[</span><span class="n">ind_radar_list</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span>
-        <span class="n">vel_field</span> <span class="o">=</span> <span class="n">field_names_rad</span><span class="p">[[</span>
-            <span class="s1">&#39;velocity&#39;</span> <span class="ow">in</span> <span class="n">vname</span> <span class="k">for</span> <span class="n">vname</span> <span class="ow">in</span> <span class="n">field_name_list</span><span class="p">[</span>
-                <span class="n">ind_radar_list</span> <span class="o">==</span> <span class="n">i</span><span class="p">]]][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">vel_field</span> <span class="o">=</span> <span class="n">field_names_rad</span><span class="p">[</span>
+            <span class="p">[</span><span class="s2">&quot;velocity&quot;</span> <span class="ow">in</span> <span class="n">vname</span> <span class="k">for</span> <span class="n">vname</span> <span class="ow">in</span> <span class="n">field_name_list</span><span class="p">[</span><span class="n">ind_radar_list</span> <span class="o">==</span> <span class="n">i</span><span class="p">]]</span>
+        <span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">vel_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vel_field</span><span class="p">)</span>
-        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">field_names_rad</span><span class="p">[[</span>
-            <span class="s1">&#39;reflectivity&#39;</span> <span class="ow">in</span> <span class="n">vname</span> <span class="k">for</span> <span class="n">vname</span> <span class="ow">in</span> <span class="n">field_name_list</span><span class="p">[</span>
-                <span class="n">ind_radar_list</span> <span class="o">==</span> <span class="n">i</span><span class="p">]]][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">field_names_rad</span><span class="p">[</span>
+            <span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span> <span class="ow">in</span> <span class="n">vname</span> <span class="k">for</span> <span class="n">vname</span> <span class="ow">in</span> <span class="n">field_name_list</span><span class="p">[</span><span class="n">ind_radar_list</span> <span class="o">==</span> <span class="n">i</span><span class="p">]]</span>
+        <span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">refl_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">refl_field</span><span class="p">)</span>
 
     <span class="c1"># Grid the variables</span>
@@ -1429,39 +1508,49 @@ document.write(`
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">radar</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">radar_list</span><span class="p">):</span>
         <span class="c1"># Now we grid</span>
         <span class="n">dscfg_grid</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">dscfg</span><span class="p">)</span>
-        <span class="n">dscfg_grid</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">])[</span>
-            <span class="n">ind_radar_list</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span>
-        <span class="n">grids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">process_grid</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dscfg_grid</span><span class="p">,</span> <span class="n">radar_list</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;radar_out&#39;</span><span class="p">])</span>
-
+        <span class="n">dscfg_grid</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">])[</span><span class="n">ind_radar_list</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span>
+        <span class="n">grids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">process_grid</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dscfg_grid</span><span class="p">,</span> <span class="n">radar_list</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;radar_out&quot;</span><span class="p">])</span>
     <span class="n">grids_pyDDA</span> <span class="o">=</span> <span class="p">[]</span>
+
     <span class="c1"># Harmonize variables</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">grid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">grids</span><span class="p">):</span>
-        <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;velocity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">vel_fields</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;velocity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">vel_fields</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">signs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;velocity&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
-        <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">refl_fields</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;velocity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">refl_fields</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
         <span class="n">grids_pyDDA</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_from_pyart_grid</span><span class="p">(</span><span class="n">grid</span><span class="p">))</span>
-    
+
     <span class="c1"># DDA initialization</span>
     <span class="n">grids_pyDDA</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">make_wind_field_from_profile</span><span class="p">(</span>
-        <span class="n">grids_pyDDA</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">wind_prof</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="s1">&#39;velocity&#39;</span><span class="p">)</span>
+        <span class="n">grids_pyDDA</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">wind_prof</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="s2">&quot;velocity&quot;</span>
+    <span class="p">)</span>
 
     <span class="c1"># Actual DDA computation</span>
     <span class="n">new_grids</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">(</span>
         <span class="n">grids_pyDDA</span><span class="p">,</span>
-        <span class="n">vel_name</span><span class="o">=</span><span class="s1">&#39;velocity&#39;</span><span class="p">,</span>
-        <span class="n">refl_field</span><span class="o">=</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span>
+        <span class="n">vel_name</span><span class="o">=</span><span class="s2">&quot;velocity&quot;</span><span class="p">,</span>
+        <span class="n">refl_field</span><span class="o">=</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
         <span class="n">mask_outside_opt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;scipy&#39;</span><span class="p">,</span>
-        <span class="n">Co</span><span class="o">=</span><span class="n">Co</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="n">Cm</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="n">Cx</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="n">Cy</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="n">Cz</span><span class="p">,</span> <span class="n">Cb</span><span class="o">=</span><span class="n">Cb</span><span class="p">,</span> <span class="n">Cv</span><span class="o">=</span><span class="n">Cv</span><span class="p">,</span> <span class="n">Cmod</span><span class="o">=</span><span class="n">Cmod</span><span class="p">,</span>
-        <span class="n">Cpoint</span><span class="o">=</span><span class="n">Cpoint</span><span class="p">,</span> <span class="n">wind_tol</span><span class="o">=</span><span class="n">wind_tol</span><span class="p">,</span> <span class="n">frz</span><span class="o">=</span><span class="n">frz</span><span class="p">)</span>
+        <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;scipy&quot;</span><span class="p">,</span>
+        <span class="n">Co</span><span class="o">=</span><span class="n">Co</span><span class="p">,</span>
+        <span class="n">Cm</span><span class="o">=</span><span class="n">Cm</span><span class="p">,</span>
+        <span class="n">Cx</span><span class="o">=</span><span class="n">Cx</span><span class="p">,</span>
+        <span class="n">Cy</span><span class="o">=</span><span class="n">Cy</span><span class="p">,</span>
+        <span class="n">Cz</span><span class="o">=</span><span class="n">Cz</span><span class="p">,</span>
+        <span class="n">Cb</span><span class="o">=</span><span class="n">Cb</span><span class="p">,</span>
+        <span class="n">Cv</span><span class="o">=</span><span class="n">Cv</span><span class="p">,</span>
+        <span class="n">Cmod</span><span class="o">=</span><span class="n">Cmod</span><span class="p">,</span>
+        <span class="n">Cpoint</span><span class="o">=</span><span class="n">Cpoint</span><span class="p">,</span>
+        <span class="n">wind_tol</span><span class="o">=</span><span class="n">wind_tol</span><span class="p">,</span>
+        <span class="n">frz</span><span class="o">=</span><span class="n">frz</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">grid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">new_grids</span><span class="p">):</span>
         <span class="c1"># convert back to pyart grids</span>
         <span class="n">new_grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">convert_pydda_to_pyart_grid</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
         <span class="c1"># add radar name</span>
         <span class="n">new_grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">radar_name</span> <span class="o">=</span> <span class="n">grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">radar_name</span>
-        
+
     <span class="c1"># pyDDA returns as many grid objects as input radars</span>
     <span class="c1"># the idea here is to merge these grid objects into one</span>
     <span class="c1"># and to replace the homogeneized vel and refl fields by the</span>
@@ -1474,53 +1563,52 @@ document.write(`
     <span class="n">merged_grid</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">new_grids</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;velocity&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">var</span> <span class="o">==</span> <span class="s2">&quot;velocity&quot;</span><span class="p">:</span>
                 <span class="n">new_key</span> <span class="o">=</span> <span class="n">vel_fields</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="k">elif</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;reflectivity&#39;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">var</span> <span class="o">==</span> <span class="s2">&quot;reflectivity&quot;</span><span class="p">:</span>
                 <span class="n">new_key</span> <span class="o">=</span> <span class="n">refl_fields</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">new_key</span> <span class="o">=</span> <span class="n">var</span>
             <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">new_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
-    
+
     <span class="c1"># add the other dda grids</span>
     <span class="n">radar_metadata</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">additional_grid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">new_grids</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
         <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">additional_grid</span><span class="o">.</span><span class="n">fields</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">grids</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;velocity&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">var</span> <span class="o">==</span> <span class="s2">&quot;velocity&quot;</span><span class="p">:</span>
                     <span class="n">new_key</span> <span class="o">=</span> <span class="n">vel_fields</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
-                <span class="k">elif</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;reflectivity&#39;</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">var</span> <span class="o">==</span> <span class="s2">&quot;reflectivity&quot;</span><span class="p">:</span>
                     <span class="n">new_key</span> <span class="o">=</span> <span class="n">refl_fields</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">new_key</span> <span class="o">=</span> <span class="n">var</span>
-                <span class="n">new_key</span> <span class="o">+=</span> <span class="s1">&#39;_radar</span><span class="si">{:d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">new_key</span> <span class="o">+=</span> <span class="s2">&quot;_radar</span><span class="si">{:d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
                 <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">new_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">additional_grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">var</span><span class="p">]</span>
 
         <span class="c1"># Get additional radar metadata</span>
         <span class="n">mdata</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_longitude&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">additional_grid</span><span class="o">.</span><span class="n">radar_longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-        <span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_latitude&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">additional_grid</span><span class="o">.</span><span class="n">radar_latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="n">mdata</span><span class="p">[</span><span class="s2">&quot;radar_longitude&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">additional_grid</span><span class="o">.</span><span class="n">radar_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="n">mdata</span><span class="p">[</span><span class="s2">&quot;radar_latitude&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">additional_grid</span><span class="o">.</span><span class="n">radar_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
         <span class="c1"># Try to find name of radar</span>
-        <span class="k">if</span> <span class="n">additional_grid</span><span class="o">.</span><span class="n">radar_name</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
-            <span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">additional_grid</span><span class="o">.</span><span class="n">radar_name</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;RadarName&#39;</span><span class="p">][</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
-            <span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;RadarName&#39;</span><span class="p">][</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">additional_grid</span><span class="o">.</span><span class="n">radar_name</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">mdata</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">additional_grid</span><span class="o">.</span><span class="n">radar_name</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;RadarName&quot;</span><span class="p">][</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">mdata</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;RadarName&quot;</span><span class="p">][</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Unknown&#39;</span>
+            <span class="n">mdata</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Unknown&quot;</span>
 
         <span class="n">radar_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mdata</span><span class="p">)</span>
-    
+
     <span class="c1"># Rename DDA u, v, w fields to pyart names</span>
-    <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;eastward_wind_component&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;u&#39;</span><span class="p">)</span>
-    <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;northward_wind_component&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span>
-        <span class="s1">&#39;v&#39;</span><span class="p">)</span>
-    <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;vertical_wind_component&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;eastward_wind_component&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;u&quot;</span><span class="p">)</span>
+    <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;northward_wind_component&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+    <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;vertical_wind_component&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
 
     <span class="c1"># Add coordinates of additional radars in metadata</span>
-    <span class="n">merged_grid</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;additional_radars&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar_metadata</span>
+    <span class="n">merged_grid</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;additional_radars&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar_metadata</span>
 
     <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_grid</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_grid</span>
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_radar_list</span></div>
 
 </pre></div>
@@ -1566,7 +1654,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     <br/>
   </p>
 </div>

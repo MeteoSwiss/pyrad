@@ -424,9 +424,16 @@ document.write(`
 
 <div class="viewcode-block" id="icon2radar_data">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.icon2radar_data.html#pyrad.io.icon2radar_data">[docs]</a>
-<span class="k">def</span> <span class="nf">icon2radar_data</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">icon_coord</span><span class="p">,</span> <span class="n">icon_data</span><span class="p">,</span> <span class="n">time_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                     <span class="n">slice_xy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">slice_z</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                     <span class="n">field_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">icon2radar_data</span><span class="p">(</span>
+    <span class="n">radar</span><span class="p">,</span>
+    <span class="n">icon_coord</span><span class="p">,</span>
+    <span class="n">icon_data</span><span class="p">,</span>
+    <span class="n">time_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">slice_xy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">slice_z</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">field_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;temperature&quot;</span><span class="p">],</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    get the icon value corresponding to each radar gate using nearest</span>
 <span class="sd">    neighbour interpolation</span>
@@ -464,27 +471,36 @@ document.write(`
 
     <span class="n">x_radar</span><span class="p">,</span> <span class="n">y_radar</span><span class="p">,</span> <span class="n">z_radar</span> <span class="o">=</span> <span class="n">_put_radar_in_swiss_coord</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 
-    <span class="p">(</span><span class="n">x_icon</span><span class="p">,</span> <span class="n">y_icon</span><span class="p">,</span> <span class="n">z_icon</span><span class="p">,</span> <span class="n">ind_xmin</span><span class="p">,</span> <span class="n">ind_ymin</span><span class="p">,</span> <span class="n">ind_zmin</span><span class="p">,</span> <span class="n">ind_xmax</span><span class="p">,</span>
-     <span class="n">ind_ymax</span><span class="p">,</span> <span class="n">ind_zmax</span><span class="p">)</span> <span class="o">=</span> <span class="n">_prepare_for_interpolation</span><span class="p">(</span>
-         <span class="n">x_radar</span><span class="p">,</span> <span class="n">y_radar</span><span class="p">,</span> <span class="n">z_radar</span><span class="p">,</span> <span class="n">icon_coord</span><span class="p">,</span> <span class="n">slice_xy</span><span class="o">=</span><span class="n">slice_xy</span><span class="p">,</span>
-         <span class="n">slice_z</span><span class="o">=</span><span class="n">slice_z</span><span class="p">)</span>
+    <span class="p">(</span>
+        <span class="n">x_icon</span><span class="p">,</span>
+        <span class="n">y_icon</span><span class="p">,</span>
+        <span class="n">z_icon</span><span class="p">,</span>
+        <span class="n">ind_xmin</span><span class="p">,</span>
+        <span class="n">ind_ymin</span><span class="p">,</span>
+        <span class="n">ind_zmin</span><span class="p">,</span>
+        <span class="n">ind_xmax</span><span class="p">,</span>
+        <span class="n">ind_ymax</span><span class="p">,</span>
+        <span class="n">ind_zmax</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">=</span> <span class="n">_prepare_for_interpolation</span><span class="p">(</span>
+        <span class="n">x_radar</span><span class="p">,</span> <span class="n">y_radar</span><span class="p">,</span> <span class="n">z_radar</span><span class="p">,</span> <span class="n">icon_coord</span><span class="p">,</span> <span class="n">slice_xy</span><span class="o">=</span><span class="n">slice_xy</span><span class="p">,</span> <span class="n">slice_z</span><span class="o">=</span><span class="n">slice_z</span>
+    <span class="p">)</span>
 
     <span class="n">icon_fields</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">field_names</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">icon_data</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;icon field &#39;</span> <span class="o">+</span> <span class="n">field</span> <span class="o">+</span> <span class="s1">&#39; data not available&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;icon field &quot;</span> <span class="o">+</span> <span class="n">field</span> <span class="o">+</span> <span class="s2">&quot; data not available&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">values</span> <span class="o">=</span> <span class="n">icon_data</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span>
-                <span class="n">time_index</span><span class="p">,</span> <span class="n">ind_zmin</span><span class="p">:</span><span class="n">ind_zmax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ind_ymin</span><span class="p">:</span><span class="n">ind_ymax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-                <span class="n">ind_xmin</span><span class="p">:</span><span class="n">ind_xmax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">icon_data</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                <span class="n">time_index</span><span class="p">,</span>
+                <span class="n">ind_zmin</span> <span class="p">:</span> <span class="n">ind_zmax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="n">ind_ymin</span> <span class="p">:</span> <span class="n">ind_ymax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="n">ind_xmin</span> <span class="p">:</span> <span class="n">ind_xmax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
             <span class="c1"># find interpolation function</span>
-            <span class="n">tree_options</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s1">&#39;compact_nodes&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                <span class="s1">&#39;balanced_tree&#39;</span><span class="p">:</span> <span class="kc">False</span>
-            <span class="p">}</span>
+            <span class="n">tree_options</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;compact_nodes&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;balanced_tree&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
             <span class="n">interp_func</span> <span class="o">=</span> <span class="n">NearestNDInterpolator</span><span class="p">(</span>
-                <span class="p">(</span><span class="n">z_icon</span><span class="p">,</span> <span class="n">y_icon</span><span class="p">,</span> <span class="n">x_icon</span><span class="p">),</span> <span class="n">values</span><span class="p">,</span>
-                <span class="n">tree_options</span><span class="o">=</span><span class="n">tree_options</span><span class="p">)</span>
+                <span class="p">(</span><span class="n">z_icon</span><span class="p">,</span> <span class="n">y_icon</span><span class="p">,</span> <span class="n">x_icon</span><span class="p">),</span> <span class="n">values</span><span class="p">,</span> <span class="n">tree_options</span><span class="o">=</span><span class="n">tree_options</span>
+            <span class="p">)</span>
 
             <span class="k">del</span> <span class="n">values</span>
 
@@ -493,13 +509,13 @@ document.write(`
 
             <span class="c1"># put field</span>
             <span class="n">field_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
-            <span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_interp</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+            <span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_interp</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
             <span class="n">icon_fields</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="n">field</span><span class="p">:</span> <span class="n">field_dict</span><span class="p">})</span>
 
             <span class="k">del</span> <span class="n">data_interp</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">icon_fields</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;icon data not available&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;icon data not available&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">return</span> <span class="n">icon_fields</span></div>
@@ -508,8 +524,7 @@ document.write(`
 
 <div class="viewcode-block" id="icon2radar_coord">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.icon2radar_coord.html#pyrad.io.icon2radar_coord">[docs]</a>
-<span class="k">def</span> <span class="nf">icon2radar_coord</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">icon_coord</span><span class="p">,</span> <span class="n">slice_xy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">slice_z</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                      <span class="n">field_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">icon2radar_coord</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">icon_coord</span><span class="p">,</span> <span class="n">slice_xy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">slice_z</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">field_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given the radar coordinates find the nearest icon model pixel</span>
 
@@ -540,27 +555,29 @@ document.write(`
 
     <span class="c1"># parse the field parameters</span>
     <span class="k">if</span> <span class="n">field_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;icon_index&#39;</span><span class="p">)</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;icon_index&quot;</span><span class="p">)</span>
 
     <span class="n">x_radar</span><span class="p">,</span> <span class="n">y_radar</span><span class="p">,</span> <span class="n">z_radar</span> <span class="o">=</span> <span class="n">_put_radar_in_swiss_coord</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 
-    <span class="p">(</span><span class="n">x_icon</span><span class="p">,</span> <span class="n">y_icon</span><span class="p">,</span> <span class="n">z_icon</span><span class="p">,</span> <span class="n">ind_xmin</span><span class="p">,</span> <span class="n">ind_ymin</span><span class="p">,</span> <span class="n">ind_zmin</span><span class="p">,</span> <span class="n">ind_xmax</span><span class="p">,</span>
-     <span class="n">ind_ymax</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">_prepare_for_interpolation</span><span class="p">(</span>
-         <span class="n">x_radar</span><span class="p">,</span> <span class="n">y_radar</span><span class="p">,</span> <span class="n">z_radar</span><span class="p">,</span> <span class="n">icon_coord</span><span class="p">,</span> <span class="n">slice_xy</span><span class="o">=</span><span class="n">slice_xy</span><span class="p">,</span>
-         <span class="n">slice_z</span><span class="o">=</span><span class="n">slice_z</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">x_icon</span><span class="p">,</span> <span class="n">y_icon</span><span class="p">,</span> <span class="n">z_icon</span><span class="p">,</span> <span class="n">ind_xmin</span><span class="p">,</span> <span class="n">ind_ymin</span><span class="p">,</span> <span class="n">ind_zmin</span><span class="p">,</span> <span class="n">ind_xmax</span><span class="p">,</span> <span class="n">ind_ymax</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">_prepare_for_interpolation</span><span class="p">(</span>
+            <span class="n">x_radar</span><span class="p">,</span> <span class="n">y_radar</span><span class="p">,</span> <span class="n">z_radar</span><span class="p">,</span> <span class="n">icon_coord</span><span class="p">,</span> <span class="n">slice_xy</span><span class="o">=</span><span class="n">slice_xy</span><span class="p">,</span> <span class="n">slice_z</span><span class="o">=</span><span class="n">slice_z</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Generating tree&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generating tree&quot;</span><span class="p">)</span>
     <span class="c1"># default scipy compact_nodes and balanced_tree = True</span>
     <span class="n">tree</span> <span class="o">=</span> <span class="n">cKDTree</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">((</span><span class="n">z_icon</span><span class="p">,</span> <span class="n">y_icon</span><span class="p">,</span> <span class="n">x_icon</span><span class="p">)),</span> <span class="n">compact_nodes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">balanced_tree</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Tree generated&#39;</span><span class="p">)</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">ind_vec</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span>
-        <span class="p">(</span><span class="n">z_radar</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">y_radar</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">x_radar</span><span class="o">.</span><span class="n">flatten</span><span class="p">())),</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">((</span><span class="n">z_icon</span><span class="p">,</span> <span class="n">y_icon</span><span class="p">,</span> <span class="n">x_icon</span><span class="p">)),</span> <span class="n">compact_nodes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">balanced_tree</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tree generated&quot;</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">ind_vec</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">((</span><span class="n">z_radar</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">y_radar</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">x_radar</span><span class="o">.</span><span class="n">flatten</span><span class="p">())),</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span>
+    <span class="p">)</span>
 
     <span class="c1"># put the index in the original icon coordinates</span>
-    <span class="n">nx_icon</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">icon_coord</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-    <span class="n">ny_icon</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">icon_coord</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+    <span class="n">nx_icon</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">icon_coord</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">ny_icon</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">icon_coord</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
 
     <span class="n">nx</span> <span class="o">=</span> <span class="n">ind_xmax</span> <span class="o">-</span> <span class="n">ind_xmin</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">ny</span> <span class="o">=</span> <span class="n">ind_ymax</span> <span class="o">-</span> <span class="n">ind_ymin</span> <span class="o">+</span> <span class="mi">1</span>
@@ -568,16 +585,10 @@ document.write(`
     <span class="n">ind_z</span> <span class="o">=</span> <span class="p">(</span><span class="n">ind_vec</span> <span class="o">/</span> <span class="p">(</span><span class="n">nx</span> <span class="o">*</span> <span class="n">ny</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">+</span> <span class="n">ind_zmin</span>
     <span class="n">ind_y</span> <span class="o">=</span> <span class="p">((</span><span class="n">ind_vec</span> <span class="o">-</span> <span class="n">nx</span> <span class="o">*</span> <span class="n">ny</span> <span class="o">*</span> <span class="n">ind_z</span><span class="p">)</span> <span class="o">/</span> <span class="n">nx</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">+</span> <span class="n">ind_ymin</span>
     <span class="n">ind_x</span> <span class="o">=</span> <span class="p">((</span><span class="n">ind_vec</span> <span class="o">-</span> <span class="n">nx</span> <span class="o">*</span> <span class="n">ny</span> <span class="o">*</span> <span class="n">ind_z</span><span class="p">)</span> <span class="o">%</span> <span class="n">nx</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">+</span> <span class="n">ind_xmin</span>
-    <span class="n">ind_icon</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">ind_x</span> <span class="o">+</span>
-        <span class="n">nx_icon</span> <span class="o">*</span>
-        <span class="n">ind_y</span> <span class="o">+</span>
-        <span class="n">nx_icon</span> <span class="o">*</span>
-        <span class="n">ny_icon</span> <span class="o">*</span>
-        <span class="n">ind_z</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">ind_icon</span> <span class="o">=</span> <span class="p">(</span><span class="n">ind_x</span> <span class="o">+</span> <span class="n">nx_icon</span> <span class="o">*</span> <span class="n">ind_y</span> <span class="o">+</span> <span class="n">nx_icon</span> <span class="o">*</span> <span class="n">ny_icon</span> <span class="o">*</span> <span class="n">ind_z</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
     <span class="n">icon_ind_field</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
-    <span class="n">icon_ind_field</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ind_icon</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">ngates</span><span class="p">)</span>
+    <span class="n">icon_ind_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ind_icon</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">ngates</span><span class="p">)</span>
 
     <span class="c1"># debugging</span>
     <span class="c1"># print(&quot; generating icon indices takes %s seconds &quot; %</span>
@@ -589,8 +600,7 @@ document.write(`
 
 <div class="viewcode-block" id="get_icon_fields">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.get_icon_fields.html#pyrad.io.get_icon_fields">[docs]</a>
-<span class="k">def</span> <span class="nf">get_icon_fields</span><span class="p">(</span><span class="n">icon_data</span><span class="p">,</span> <span class="n">icon_ind</span><span class="p">,</span> <span class="n">time_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                     <span class="n">field_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]):</span>
+<span class="k">def</span> <span class="nf">get_icon_fields</span><span class="p">(</span><span class="n">icon_data</span><span class="p">,</span> <span class="n">icon_ind</span><span class="p">,</span> <span class="n">time_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;temperature&quot;</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the icon data corresponding to each radar gate</span>
 <span class="sd">    using a precomputed look up table of the nearest neighbour</span>
@@ -612,22 +622,23 @@ document.write(`
 <span class="sd">        dictionary with the icon fields and metadata</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">nrays</span><span class="p">,</span> <span class="n">ngates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">icon_ind</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+    <span class="n">nrays</span><span class="p">,</span> <span class="n">ngates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">icon_ind</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
     <span class="n">icon_fields</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">field_names</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">icon_data</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;icon field &#39;</span> <span class="o">+</span> <span class="n">field</span> <span class="o">+</span> <span class="s1">&#39; data not available&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;icon field &quot;</span> <span class="o">+</span> <span class="n">field</span> <span class="o">+</span> <span class="s2">&quot; data not available&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">values</span> <span class="o">=</span> <span class="n">icon_data</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">time_index</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">icon_data</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">time_index</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 
             <span class="c1"># put field</span>
             <span class="n">field_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
-            <span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="n">icon_ind</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
-                <span class="n">nrays</span><span class="p">,</span> <span class="n">ngates</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+            <span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">values</span><span class="p">[</span><span class="n">icon_ind</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">ngates</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+            <span class="p">)</span>
             <span class="n">icon_fields</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="n">field</span><span class="p">:</span> <span class="n">field_dict</span><span class="p">})</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">icon_fields</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;icon data not available&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;icon data not available&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">return</span> <span class="n">icon_fields</span></div>
@@ -637,7 +648,7 @@ document.write(`
 <span class="c1"># @profile</span>
 <div class="viewcode-block" id="read_icon_data">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_icon_data.html#pyrad.io.read_icon_data">[docs]</a>
-<span class="k">def</span> <span class="nf">read_icon_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span> <span class="n">celsius</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">read_icon_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;temperature&quot;</span><span class="p">],</span> <span class="n">celsius</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads icon data from a netcdf file</span>
 
@@ -670,50 +681,52 @@ document.write(`
     <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">field_names</span><span class="p">:</span>
         <span class="n">icon_name</span> <span class="o">=</span> <span class="n">get_fieldname_icon</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">icon_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ncvars</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="n">field</span> <span class="o">+</span> <span class="s1">&#39; data not present in icon file &#39;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="n">field</span> <span class="o">+</span> <span class="s2">&quot; data not present in icon file &quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">var_data</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="n">icon_name</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float16&#39;</span><span class="p">)</span>
+            <span class="n">var_data</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="n">icon_name</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float16&quot;</span><span class="p">)</span>
 
             <span class="c1"># remove dimension ensemble member of icon-ch1-eps</span>
-            <span class="k">if</span> <span class="n">var_data</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
-                <span class="n">var_data</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">var_data</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">var_data</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="n">var_data</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">var_data</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s1">&#39;temperature&#39;</span> <span class="ow">and</span> <span class="n">celsius</span><span class="p">:</span>
-                <span class="n">var_data</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">-=</span> <span class="mf">273.15</span>
-                <span class="n">var_data</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;degrees Celsius&#39;</span>
-            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s1">&#39;vertical_wind_shear&#39;</span><span class="p">:</span>
-                <span class="n">var_data</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">1000.</span>
-                <span class="n">var_data</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;meters_per_second_per_km&#39;</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;temperature&quot;</span> <span class="ow">and</span> <span class="n">celsius</span><span class="p">:</span>
+                <span class="n">var_data</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-=</span> <span class="mf">273.15</span>
+                <span class="n">var_data</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;degrees Celsius&quot;</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;vertical_wind_shear&quot;</span><span class="p">:</span>
+                <span class="n">var_data</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">1000.0</span>
+                <span class="n">var_data</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;meters_per_second_per_km&quot;</span>
             <span class="n">icon_data</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">field</span><span class="p">:</span> <span class="n">var_data</span><span class="p">})</span>
             <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">del</span> <span class="n">var_data</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No field available in icon file &#39;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No field available in icon file &quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
         <span class="n">ncobj</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="c1"># 4.2 put variables in dictionary</span>
-    <span class="n">x_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;x_1&#39;</span><span class="p">])</span>
-    <span class="n">y_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;y_1&#39;</span><span class="p">])</span>
-    <span class="n">lon_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;lon_1&#39;</span><span class="p">])</span>
-    <span class="n">lat_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;lat_1&#39;</span><span class="p">])</span>
-    <span class="n">z_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;z_1&#39;</span><span class="p">])</span>
-    <span class="n">z_bnds_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;z_bnds_1&#39;</span><span class="p">])</span>
-    <span class="n">time_data</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">])</span>
+    <span class="n">x_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;x_1&quot;</span><span class="p">])</span>
+    <span class="n">y_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;y_1&quot;</span><span class="p">])</span>
+    <span class="n">lon_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;lon_1&quot;</span><span class="p">])</span>
+    <span class="n">lat_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;lat_1&quot;</span><span class="p">])</span>
+    <span class="n">z_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;z_1&quot;</span><span class="p">])</span>
+    <span class="n">z_bnds_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;z_bnds_1&quot;</span><span class="p">])</span>
+    <span class="n">time_data</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">])</span>
 
     <span class="c1"># close object</span>
     <span class="n">ncobj</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-    <span class="n">icon_data</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
-        <span class="s1">&#39;metadata&#39;</span><span class="p">:</span> <span class="n">metadata</span><span class="p">,</span>
-        <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">time_data</span><span class="p">,</span>
-        <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">x_1</span><span class="p">,</span>
-        <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">y_1</span><span class="p">,</span>
-        <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="n">z_1</span><span class="p">,</span>
-        <span class="s1">&#39;z_bnds&#39;</span><span class="p">:</span> <span class="n">z_bnds_1</span><span class="p">,</span>
-        <span class="s1">&#39;lon&#39;</span><span class="p">:</span> <span class="n">lon_1</span><span class="p">,</span>
-        <span class="s1">&#39;lat&#39;</span><span class="p">:</span> <span class="n">lat_1</span>
-    <span class="p">})</span>
+    <span class="n">icon_data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="n">metadata</span><span class="p">,</span>
+            <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">time_data</span><span class="p">,</span>
+            <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">x_1</span><span class="p">,</span>
+            <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">y_1</span><span class="p">,</span>
+            <span class="s2">&quot;z&quot;</span><span class="p">:</span> <span class="n">z_1</span><span class="p">,</span>
+            <span class="s2">&quot;z_bnds&quot;</span><span class="p">:</span> <span class="n">z_bnds_1</span><span class="p">,</span>
+            <span class="s2">&quot;lon&quot;</span><span class="p">:</span> <span class="n">lon_1</span><span class="p">,</span>
+            <span class="s2">&quot;lat&quot;</span><span class="p">:</span> <span class="n">lat_1</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">icon_data</span></div>
 
@@ -745,59 +758,60 @@ document.write(`
         <span class="n">metadata</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ncobj</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ncobj</span><span class="o">.</span><span class="n">ncattrs</span><span class="p">()])</span>
 
         <span class="c1"># 4.2 put variables in dictionary</span>
-        <span class="n">x_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;x_1&#39;</span><span class="p">])</span>
-        <span class="n">y_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;y_1&#39;</span><span class="p">])</span>
-        <span class="n">lon_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;lon_1&#39;</span><span class="p">])</span>
-        <span class="n">lat_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;lat_1&#39;</span><span class="p">])</span>
-        <span class="n">z_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;z_1&#39;</span><span class="p">])</span>
-        <span class="n">z_bnds_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;z_bnds_1&#39;</span><span class="p">])</span>
-        <span class="n">hfl</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;HFL&#39;</span><span class="p">])</span>
-        <span class="n">hsurf</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;HSURF&#39;</span><span class="p">])</span>
-        <span class="n">fr_land</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;FR_LAND&#39;</span><span class="p">])</span>
+        <span class="n">x_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;x_1&quot;</span><span class="p">])</span>
+        <span class="n">y_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;y_1&quot;</span><span class="p">])</span>
+        <span class="n">lon_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;lon_1&quot;</span><span class="p">])</span>
+        <span class="n">lat_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;lat_1&quot;</span><span class="p">])</span>
+        <span class="n">z_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;z_1&quot;</span><span class="p">])</span>
+        <span class="n">z_bnds_1</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;z_bnds_1&quot;</span><span class="p">])</span>
+        <span class="n">hfl</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;HFL&quot;</span><span class="p">])</span>
+        <span class="n">hsurf</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;HSURF&quot;</span><span class="p">])</span>
+        <span class="n">fr_land</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;FR_LAND&quot;</span><span class="p">])</span>
 
         <span class="c1"># close object</span>
         <span class="n">ncobj</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">zmin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">z_1</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">z_1</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">z_1</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">zmin</span><span class="p">]</span>
-            <span class="n">z_bnds_1</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">z_bnds_1</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">z_bnds_1</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">zmin</span><span class="p">]</span>
+            <span class="n">z_1</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">z_1</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">z_1</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">zmin</span><span class="p">]</span>
+            <span class="n">z_bnds_1</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">z_bnds_1</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">z_bnds_1</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">zmin</span><span class="p">]</span>
 
         <span class="n">icon_coord</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;metadata&#39;</span><span class="p">:</span> <span class="n">metadata</span><span class="p">,</span>
-            <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">x_1</span><span class="p">,</span>
-            <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">y_1</span><span class="p">,</span>
-            <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="n">z_1</span><span class="p">,</span>
-            <span class="s1">&#39;z_bnds&#39;</span><span class="p">:</span> <span class="n">z_bnds_1</span><span class="p">,</span>
-            <span class="s1">&#39;lon&#39;</span><span class="p">:</span> <span class="n">lon_1</span><span class="p">,</span>
-            <span class="s1">&#39;lat&#39;</span><span class="p">:</span> <span class="n">lat_1</span><span class="p">,</span>
-            <span class="s1">&#39;hfl&#39;</span><span class="p">:</span> <span class="n">hfl</span><span class="p">,</span>
-            <span class="s1">&#39;hsurf&#39;</span><span class="p">:</span> <span class="n">hsurf</span><span class="p">,</span>
-            <span class="s1">&#39;fr_land&#39;</span><span class="p">:</span> <span class="n">fr_land</span><span class="p">,</span>
+            <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="n">metadata</span><span class="p">,</span>
+            <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">x_1</span><span class="p">,</span>
+            <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">y_1</span><span class="p">,</span>
+            <span class="s2">&quot;z&quot;</span><span class="p">:</span> <span class="n">z_1</span><span class="p">,</span>
+            <span class="s2">&quot;z_bnds&quot;</span><span class="p">:</span> <span class="n">z_bnds_1</span><span class="p">,</span>
+            <span class="s2">&quot;lon&quot;</span><span class="p">:</span> <span class="n">lon_1</span><span class="p">,</span>
+            <span class="s2">&quot;lat&quot;</span><span class="p">:</span> <span class="n">lat_1</span><span class="p">,</span>
+            <span class="s2">&quot;hfl&quot;</span><span class="p">:</span> <span class="n">hfl</span><span class="p">,</span>
+            <span class="s2">&quot;hsurf&quot;</span><span class="p">:</span> <span class="n">hsurf</span><span class="p">,</span>
+            <span class="s2">&quot;fr_land&quot;</span><span class="p">:</span> <span class="n">fr_land</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="k">return</span> <span class="n">icon_coord</span>
     <span class="k">except</span> <span class="ne">EnvironmentError</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to read file &#39;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to read file &quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
 
 <span class="k">def</span> <span class="nf">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvar</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Convert a NetCDF Dataset variable to a dictionary. &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a NetCDF Dataset variable to a dictionary.&quot;&quot;&quot;</span>
     <span class="c1"># copy all attributes</span>
     <span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ncvar</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ncvar</span><span class="o">.</span><span class="n">ncattrs</span><span class="p">())</span>
-    <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">ncvar</span><span class="p">[:]})</span>
-    <span class="k">if</span> <span class="s1">&#39;_FillValue&#39;</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
-        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
-        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="nb">float</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;_FillValue&#39;</span><span class="p">]))</span>
+    <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">ncvar</span><span class="p">[:]})</span>
+    <span class="k">if</span> <span class="s2">&quot;_FillValue&quot;</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="nb">float</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">]))</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">d</span>
 
 
-<span class="k">def</span> <span class="nf">_prepare_for_interpolation</span><span class="p">(</span><span class="n">x_radar</span><span class="p">,</span> <span class="n">y_radar</span><span class="p">,</span> <span class="n">z_radar</span><span class="p">,</span> <span class="n">icon_coord</span><span class="p">,</span>
-                               <span class="n">slice_xy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">slice_z</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_prepare_for_interpolation</span><span class="p">(</span>
+    <span class="n">x_radar</span><span class="p">,</span> <span class="n">y_radar</span><span class="p">,</span> <span class="n">z_radar</span><span class="p">,</span> <span class="n">icon_coord</span><span class="p">,</span> <span class="n">slice_xy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">slice_z</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    prepares the icon 3D volume for interpolation:</span>
 <span class="sd">        1. if set slices the icon data to the area (or volume)</span>
@@ -826,9 +840,9 @@ document.write(`
 <span class="sd">        the minimum and maximum indices of each dimension</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">nx_icon</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">icon_coord</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-    <span class="n">ny_icon</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">icon_coord</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-    <span class="n">nz_icon</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">icon_coord</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+    <span class="n">nx_icon</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">icon_coord</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">ny_icon</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">icon_coord</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">nz_icon</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">icon_coord</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
 
     <span class="k">if</span> <span class="n">slice_xy</span><span class="p">:</span>
         <span class="c1"># get the icon data within the radar range</span>
@@ -837,25 +851,25 @@ document.write(`
         <span class="n">ymin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">y_radar</span><span class="p">)</span>
         <span class="n">ymax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">y_radar</span><span class="p">)</span>
 
-        <span class="n">ind_xmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">icon_coord</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">xmin</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ind_xmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">icon_coord</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">xmin</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">ind_xmin</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">ind_xmin</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ind_xmin</span> <span class="o">=</span> <span class="n">ind_xmin</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="n">ind_xmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">icon_coord</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">xmax</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ind_xmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">icon_coord</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">xmax</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">ind_xmax</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">ind_xmax</span> <span class="o">=</span> <span class="n">nx_icon</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ind_xmax</span> <span class="o">=</span> <span class="n">ind_xmax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="n">ind_ymin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">icon_coord</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ymin</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ind_ymin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">icon_coord</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ymin</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">ind_ymin</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">ind_ymin</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ind_ymin</span> <span class="o">=</span> <span class="n">ind_ymin</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="n">ind_ymax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">icon_coord</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">ymax</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ind_ymax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">icon_coord</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">ymax</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">ind_ymax</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">ind_ymax</span> <span class="o">=</span> <span class="n">ny_icon</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
@@ -870,12 +884,12 @@ document.write(`
         <span class="n">zmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">z_radar</span><span class="p">)</span>
         <span class="n">zmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">z_radar</span><span class="p">)</span>
 
-        <span class="n">ind_z</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">icon_coord</span><span class="p">[</span><span class="s1">&#39;hfl&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">zmin</span><span class="p">)</span>
+        <span class="n">ind_z</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">icon_coord</span><span class="p">[</span><span class="s2">&quot;hfl&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">zmin</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">ind_z</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">ind_zmin</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ind_zmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">ind_z</span><span class="p">)</span>
-        <span class="n">ind_z</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">icon_coord</span><span class="p">[</span><span class="s1">&#39;hfl&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">zmax</span><span class="p">)</span>
+        <span class="n">ind_z</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">icon_coord</span><span class="p">[</span><span class="s2">&quot;hfl&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">zmax</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">ind_z</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">ind_zmax</span> <span class="o">=</span> <span class="n">nz_icon</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
@@ -888,19 +902,27 @@ document.write(`
     <span class="n">ny</span> <span class="o">=</span> <span class="n">ind_ymax</span> <span class="o">-</span> <span class="n">ind_ymin</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">nz</span> <span class="o">=</span> <span class="n">ind_zmax</span> <span class="o">-</span> <span class="n">ind_zmin</span> <span class="o">+</span> <span class="mi">1</span>
 
-    <span class="n">x_icon</span> <span class="o">=</span> <span class="n">icon_coord</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ind_xmin</span><span class="p">:</span><span class="n">ind_xmax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
-    <span class="n">y_icon</span> <span class="o">=</span> <span class="n">icon_coord</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ind_ymin</span><span class="p">:</span><span class="n">ind_ymax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
-    <span class="n">z_icon</span> <span class="o">=</span> <span class="n">icon_coord</span><span class="p">[</span><span class="s1">&#39;hfl&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span>
-        <span class="n">ind_zmin</span><span class="p">:</span><span class="n">ind_zmax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ind_ymin</span><span class="p">:</span><span class="n">ind_ymax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ind_xmin</span><span class="p">:</span><span class="n">ind_xmax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">x_icon</span> <span class="o">=</span> <span class="n">icon_coord</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_xmin</span> <span class="p">:</span> <span class="n">ind_xmax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">y_icon</span> <span class="o">=</span> <span class="n">icon_coord</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ymin</span> <span class="p">:</span> <span class="n">ind_ymax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">z_icon</span> <span class="o">=</span> <span class="n">icon_coord</span><span class="p">[</span><span class="s2">&quot;hfl&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+        <span class="n">ind_zmin</span> <span class="p">:</span> <span class="n">ind_zmax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ind_ymin</span> <span class="p">:</span> <span class="n">ind_ymax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ind_xmin</span> <span class="p">:</span> <span class="n">ind_xmax</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="p">]</span>
 
-    <span class="n">x_icon</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">x_icon</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nx</span><span class="p">),</span> <span class="p">(</span><span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)))</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-    <span class="n">y_icon</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">y_icon</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)))</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">x_icon</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">x_icon</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nx</span><span class="p">),</span> <span class="p">(</span><span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)))</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">y_icon</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">y_icon</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)))</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
     <span class="n">z_icon</span> <span class="o">=</span> <span class="n">z_icon</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 
-    <span class="k">return</span> <span class="p">(</span><span class="n">x_icon</span><span class="p">,</span> <span class="n">y_icon</span><span class="p">,</span> <span class="n">z_icon</span><span class="p">,</span> <span class="n">ind_xmin</span><span class="p">,</span> <span class="n">ind_ymin</span><span class="p">,</span>
-            <span class="n">ind_zmin</span><span class="p">,</span> <span class="n">ind_xmax</span><span class="p">,</span> <span class="n">ind_ymax</span><span class="p">,</span> <span class="n">ind_zmax</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">x_icon</span><span class="p">,</span>
+        <span class="n">y_icon</span><span class="p">,</span>
+        <span class="n">z_icon</span><span class="p">,</span>
+        <span class="n">ind_xmin</span><span class="p">,</span>
+        <span class="n">ind_ymin</span><span class="p">,</span>
+        <span class="n">ind_zmin</span><span class="p">,</span>
+        <span class="n">ind_xmax</span><span class="p">,</span>
+        <span class="n">ind_ymax</span><span class="p">,</span>
+        <span class="n">ind_zmax</span><span class="p">,</span>
+    <span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">_put_radar_in_swiss_coord</span><span class="p">(</span><span class="n">radar</span><span class="p">):</span>
@@ -920,12 +942,15 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">wgs84_to_swissCH1903</span><span class="p">(</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">no_altitude_transform</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">no_altitude_transform</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
 
-    <span class="n">x_radar</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">x0</span>
-    <span class="n">y_radar</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">y0</span>
-    <span class="n">z_radar</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+    <span class="n">x_radar</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">x0</span>
+    <span class="n">y_radar</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">y0</span>
+    <span class="n">z_radar</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">x_radar</span><span class="p">,</span> <span class="n">y_radar</span><span class="p">,</span> <span class="n">z_radar</span>
 </pre></div>
@@ -971,7 +996,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     <br/>
   </p>
 </div>

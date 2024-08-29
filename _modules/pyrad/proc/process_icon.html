@@ -475,127 +475,130 @@ document.write(`
     <span class="c1"># debugging</span>
     <span class="c1"># start_time = time.time()</span>
 
-    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
         <span class="k">break</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
-    <span class="n">keep_in_memory</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;keep_in_memory&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">regular_grid</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;regular_grid&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">keep_in_memory</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;keep_in_memory&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">regular_grid</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;regular_grid&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
-    <span class="n">icon_type</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;icon_type&#39;</span><span class="p">,</span> <span class="s1">&#39;TEMP&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">icon_type</span> <span class="o">==</span> <span class="s1">&#39;TEMP&#39;</span><span class="p">:</span>
-        <span class="n">field_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s1">&#39;icon_variables&#39;</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">:</span>
+    <span class="n">icon_type</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;icon_type&quot;</span><span class="p">,</span> <span class="s2">&quot;TEMP&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">icon_type</span> <span class="o">==</span> <span class="s2">&quot;TEMP&quot;</span><span class="p">:</span>
+        <span class="n">field_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;temperature&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;icon_variables&quot;</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">:</span>
             <span class="n">field_names</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;icon_variables&#39;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;icon_variables&quot;</span><span class="p">]:</span>
                 <span class="n">field_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">var</span><span class="p">))</span>
         <span class="n">zmin</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">elif</span> <span class="n">icon_type</span> <span class="o">==</span> <span class="s1">&#39;WIND&#39;</span><span class="p">:</span>
-        <span class="n">field_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;wind_speed&#39;</span><span class="p">,</span> <span class="s1">&#39;wind_direction&#39;</span><span class="p">,</span> <span class="s1">&#39;vertical_wind_shear&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s1">&#39;icon_variables&#39;</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">icon_type</span> <span class="o">==</span> <span class="s2">&quot;WIND&quot;</span><span class="p">:</span>
+        <span class="n">field_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;wind_speed&quot;</span><span class="p">,</span> <span class="s2">&quot;wind_direction&quot;</span><span class="p">,</span> <span class="s2">&quot;vertical_wind_shear&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;icon_variables&quot;</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">:</span>
             <span class="n">field_names</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;icon_variables&#39;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;icon_variables&quot;</span><span class="p">]:</span>
                 <span class="n">field_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">var</span><span class="p">))</span>
         <span class="n">zmin</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unknown icon data type &#39;</span> <span class="o">+</span> <span class="n">icon_type</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown icon data type &quot;</span> <span class="o">+</span> <span class="n">icon_type</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">fname</span> <span class="o">=</span> <span class="n">find_raw_icon_file</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">],</span> <span class="n">icon_type</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span>
-                                <span class="n">ind_rad</span><span class="o">=</span><span class="n">ind_rad</span><span class="p">)</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">find_raw_icon_file</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span> <span class="n">icon_type</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="n">ind_rad</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">fname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="n">model</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)[</span><span class="mi">14</span><span class="p">:</span><span class="mi">26</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">model</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;icon-ch1-eps&#39;</span><span class="p">,</span> <span class="s1">&#39;icon-ch2-eps&#39;</span><span class="p">):</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unknown NWP model &#39;</span> <span class="o">+</span> <span class="n">model</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">model</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;icon-ch1-eps&quot;</span><span class="p">,</span> <span class="s2">&quot;icon-ch2-eps&quot;</span><span class="p">):</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown NWP model &quot;</span> <span class="o">+</span> <span class="n">model</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="k">if</span> <span class="n">keep_in_memory</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;initialized&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">icon_coord</span> <span class="o">=</span> <span class="n">read_icon_coord</span><span class="p">(</span>
-                <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;iconpath&#39;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;rad2icon/&#39;</span> <span class="o">+</span> <span class="n">model</span> <span class="o">+</span>
-                <span class="s1">&#39;_MDR_3D_const.nc&#39;</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="n">zmin</span><span class="p">)</span>
-            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s1">&#39;icon_fname&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="s1">&#39;icon_data&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="s1">&#39;icon_fields&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="s1">&#39;time_index&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="s1">&#39;icon_coord&#39;</span><span class="p">:</span> <span class="n">icon_coord</span><span class="p">}</span>
-            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;initialized&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;iconpath&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;rad2icon/&quot;</span> <span class="o">+</span> <span class="n">model</span> <span class="o">+</span> <span class="s2">&quot;_MDR_3D_const.nc&quot;</span><span class="p">,</span>
+                <span class="n">zmin</span><span class="o">=</span><span class="n">zmin</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;icon_fname&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;icon_data&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;icon_fields&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;time_index&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;icon_coord&quot;</span><span class="p">:</span> <span class="n">icon_coord</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
-        <span class="n">icon_coord</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;icon_coord&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">fname</span> <span class="o">!=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;icon_fname&#39;</span><span class="p">]:</span>
+        <span class="n">icon_coord</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;icon_coord&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">fname</span> <span class="o">!=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;icon_fname&quot;</span><span class="p">]:</span>
             <span class="c1"># debugging</span>
             <span class="c1"># start_time2 = time.time()</span>
-            <span class="n">icon_data</span> <span class="o">=</span> <span class="n">read_icon_data</span><span class="p">(</span>
-                <span class="n">fname</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">,</span> <span class="n">celsius</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">icon_data</span> <span class="o">=</span> <span class="n">read_icon_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">,</span> <span class="n">celsius</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="c1"># print(&quot; reading icon takes %s seconds &quot; %</span>
             <span class="c1">#      (time.time() - start_time2))</span>
             <span class="k">if</span> <span class="n">icon_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;icon data not found&#39;</span><span class="p">)</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;icon data not found&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;icon_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">icon_data</span>
-            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;icon_fname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fname</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;icon_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">icon_data</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;icon_fname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fname</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;raw icon data already in memory&#39;</span><span class="p">)</span>
-            <span class="n">icon_data</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;icon_data&#39;</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;raw icon data already in memory&quot;</span><span class="p">)</span>
+            <span class="n">icon_data</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;icon_data&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">icon_coord</span> <span class="o">=</span> <span class="n">read_icon_coord</span><span class="p">(</span>
-            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;iconpath&#39;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;rad2icon/&#39;</span> <span class="o">+</span> <span class="n">model</span> <span class="o">+</span>
-            <span class="s1">&#39;_MDR_3D_const.nc&#39;</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="n">zmin</span><span class="p">)</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;iconpath&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;rad2icon/&quot;</span> <span class="o">+</span> <span class="n">model</span> <span class="o">+</span> <span class="s2">&quot;_MDR_3D_const.nc&quot;</span><span class="p">,</span>
+            <span class="n">zmin</span><span class="o">=</span><span class="n">zmin</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="c1"># debugging</span>
         <span class="c1"># start_time2 = time.time()</span>
-        <span class="n">icon_data</span> <span class="o">=</span> <span class="n">read_icon_data</span><span class="p">(</span>
-            <span class="n">fname</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">,</span> <span class="n">celsius</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">icon_data</span> <span class="o">=</span> <span class="n">read_icon_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">,</span> <span class="n">celsius</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="c1"># print(&quot; reading icon takes %s seconds &quot; %</span>
         <span class="c1">#      (time.time() - start_time2))</span>
         <span class="k">if</span> <span class="n">icon_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;icon data not found&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;icon data not found&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">dticon</span> <span class="o">=</span> <span class="n">num2date</span><span class="p">(</span>
-        <span class="n">icon_data</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][:],</span> <span class="n">icon_data</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">][</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
-    <span class="n">time_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">dticon</span> <span class="o">-</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">]))</span>
+    <span class="n">dticon</span> <span class="o">=</span> <span class="n">num2date</span><span class="p">(</span><span class="n">icon_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][:],</span> <span class="n">icon_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][</span><span class="s2">&quot;units&quot;</span><span class="p">])</span>
+    <span class="n">time_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">dticon</span> <span class="o">-</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]))</span>
 
     <span class="k">if</span> <span class="n">keep_in_memory</span> <span class="ow">and</span> <span class="n">regular_grid</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">time_index</span> <span class="o">!=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;time_index&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">time_index</span> <span class="o">!=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;time_index&quot;</span><span class="p">]:</span>
             <span class="n">icon_fields</span> <span class="o">=</span> <span class="n">icon2radar_data</span><span class="p">(</span>
-                <span class="n">radar</span><span class="p">,</span> <span class="n">icon_coord</span><span class="p">,</span> <span class="n">icon_data</span><span class="p">,</span> <span class="n">time_index</span><span class="o">=</span><span class="n">time_index</span><span class="p">,</span>
-                <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">)</span>
+                <span class="n">radar</span><span class="p">,</span>
+                <span class="n">icon_coord</span><span class="p">,</span>
+                <span class="n">icon_data</span><span class="p">,</span>
+                <span class="n">time_index</span><span class="o">=</span><span class="n">time_index</span><span class="p">,</span>
+                <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="k">if</span> <span class="n">icon_fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to obtain icon fields&#39;</span><span class="p">)</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to obtain icon fields&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;time_index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_index</span>
-            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;icon_fields&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">icon_fields</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;time_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_index</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;icon_fields&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">icon_fields</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;icon field already in memory&#39;</span><span class="p">)</span>
-            <span class="n">icon_fields</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;icon_fields&#39;</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;icon field already in memory&quot;</span><span class="p">)</span>
+            <span class="n">icon_fields</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;icon_fields&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">icon_fields</span> <span class="o">=</span> <span class="n">icon2radar_data</span><span class="p">(</span>
-            <span class="n">radar</span><span class="p">,</span> <span class="n">icon_coord</span><span class="p">,</span> <span class="n">icon_data</span><span class="p">,</span> <span class="n">time_index</span><span class="o">=</span><span class="n">time_index</span><span class="p">,</span>
-            <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">)</span>
+            <span class="n">radar</span><span class="p">,</span> <span class="n">icon_coord</span><span class="p">,</span> <span class="n">icon_data</span><span class="p">,</span> <span class="n">time_index</span><span class="o">=</span><span class="n">time_index</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="n">icon_fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to obtain icon fields&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to obtain icon fields&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
     <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">icon_fields</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="n">field</span><span class="p">:</span>
-            <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">field</span><span class="p">[</span><span class="n">field_name</span><span class="p">])</span>
+            <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">field</span><span class="p">[</span><span class="n">field_name</span><span class="p">])</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -648,92 +651,84 @@ document.write(`
     <span class="c1"># debugging</span>
     <span class="c1"># start_time = time.time()</span>
 
-    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
         <span class="k">break</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
-    <span class="n">keep_in_memory</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;keep_in_memory&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">regular_grid</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;regular_grid&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">keep_in_memory</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;keep_in_memory&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">regular_grid</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;regular_grid&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
-    <span class="n">fname</span> <span class="o">=</span> <span class="n">find_hzt_file</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">],</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="n">ind_rad</span><span class="p">)</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">find_hzt_file</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="n">ind_rad</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">fname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="k">if</span> <span class="n">keep_in_memory</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;initialized&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">hzt_data</span> <span class="o">=</span> <span class="n">read_hzt_data</span><span class="p">(</span>
-                <span class="n">fname</span><span class="p">,</span> <span class="n">read_lib</span><span class="o">=</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;metranet_read_lib&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">hzt_data</span> <span class="o">=</span> <span class="n">read_hzt_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">read_lib</span><span class="o">=</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;metranet_read_lib&quot;</span><span class="p">])</span>
             <span class="k">if</span> <span class="n">hzt_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;HZT data not found&#39;</span><span class="p">)</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;HZT data not found&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
-            <span class="n">hzt_coord</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+            <span class="n">hzt_coord</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">],</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]}</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;hzt_fname&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;hzt_data&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;iso0_field&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;time_index&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;hzt_coord&quot;</span><span class="p">:</span> <span class="n">hzt_coord</span><span class="p">,</span>
             <span class="p">}</span>
-            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s1">&#39;hzt_fname&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="s1">&#39;hzt_data&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="s1">&#39;iso0_field&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="s1">&#39;time_index&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="s1">&#39;hzt_coord&#39;</span><span class="p">:</span> <span class="n">hzt_coord</span><span class="p">}</span>
-            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;initialized&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
-        <span class="n">hzt_coord</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;hzt_coord&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">fname</span> <span class="o">!=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;hzt_fname&#39;</span><span class="p">]:</span>
-            <span class="n">hzt_data</span> <span class="o">=</span> <span class="n">read_hzt_data</span><span class="p">(</span>
-                <span class="n">fname</span><span class="p">,</span> <span class="n">read_lib</span><span class="o">=</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;metranet_read_lib&#39;</span><span class="p">])</span>
+        <span class="n">hzt_coord</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;hzt_coord&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">fname</span> <span class="o">!=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;hzt_fname&quot;</span><span class="p">]:</span>
+            <span class="n">hzt_data</span> <span class="o">=</span> <span class="n">read_hzt_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">read_lib</span><span class="o">=</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;metranet_read_lib&quot;</span><span class="p">])</span>
             <span class="k">if</span> <span class="n">hzt_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;HZT data not found&#39;</span><span class="p">)</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;HZT data not found&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;hzt_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hzt_data</span>
-            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;hzt_fname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fname</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;hzt_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hzt_data</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;hzt_fname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fname</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;raw HZT data already in memory&#39;</span><span class="p">)</span>
-            <span class="n">hzt_data</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;hzt_data&#39;</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;raw HZT data already in memory&quot;</span><span class="p">)</span>
+            <span class="n">hzt_data</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;hzt_data&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">hzt_data</span> <span class="o">=</span> <span class="n">read_hzt_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">read_lib</span><span class="o">=</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;metranet_read_lib&#39;</span><span class="p">])</span>
+        <span class="n">hzt_data</span> <span class="o">=</span> <span class="n">read_hzt_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">read_lib</span><span class="o">=</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;metranet_read_lib&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">hzt_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;HZT data not found&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;HZT data not found&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
-        <span class="n">hzt_coord</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
-        <span class="p">}</span>
+        <span class="n">hzt_coord</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">],</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]}</span>
 
-    <span class="n">dthzt</span> <span class="o">=</span> <span class="n">num2date</span><span class="p">(</span>
-        <span class="n">hzt_data</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][:],</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">][</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
-    <span class="n">time_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">dthzt</span> <span class="o">-</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">]))</span>
+    <span class="n">dthzt</span> <span class="o">=</span> <span class="n">num2date</span><span class="p">(</span><span class="n">hzt_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][:],</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][</span><span class="s2">&quot;units&quot;</span><span class="p">])</span>
+    <span class="n">time_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">dthzt</span> <span class="o">-</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]))</span>
 
     <span class="k">if</span> <span class="n">keep_in_memory</span> <span class="ow">and</span> <span class="n">regular_grid</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">time_index</span> <span class="o">!=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;time_index&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">time_index</span> <span class="o">!=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;time_index&quot;</span><span class="p">]:</span>
             <span class="n">iso0_field</span> <span class="o">=</span> <span class="n">hzt2radar_data</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">hzt_coord</span><span class="p">,</span> <span class="n">hzt_data</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">iso0_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to obtain heigth over iso0 field&#39;</span><span class="p">)</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to obtain heigth over iso0 field&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;time_index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_index</span>
-            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;iso0_field&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">iso0_field</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;time_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_index</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;iso0_field&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">iso0_field</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;HZT field already in memory&#39;</span><span class="p">)</span>
-            <span class="n">iso0_field</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;iso0_field&#39;</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HZT field already in memory&quot;</span><span class="p">)</span>
+            <span class="n">iso0_field</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;iso0_field&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">iso0_field</span> <span class="o">=</span> <span class="n">hzt2radar_data</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">hzt_coord</span><span class="p">,</span> <span class="n">hzt_data</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">iso0_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to obtain HZT fields&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to obtain HZT fields&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;height_over_iso0&#39;</span><span class="p">,</span> <span class="n">iso0_field</span><span class="p">)</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;height_over_iso0&quot;</span><span class="p">,</span> <span class="n">iso0_field</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -782,42 +777,46 @@ document.write(`
     <span class="c1"># debugging</span>
     <span class="c1"># start_time = time.time()</span>
 
-    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
         <span class="k">break</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
-    <span class="n">iso0_statistic</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;iso0_statistic&#39;</span><span class="p">,</span> <span class="s1">&#39;avg_by_dist&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">iso0_statistic</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;avg_by_dist&#39;</span><span class="p">,</span> <span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">):</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;iso0 statistic &#39;</span> <span class="o">+</span> <span class="n">iso0_statistic</span> <span class="o">+</span>
-             <span class="s1">&#39; unknown. Default avg_by_dist will be applied&#39;</span><span class="p">)</span>
-        <span class="n">iso0_statistic</span> <span class="o">=</span> <span class="s1">&#39;avg_by_dist&#39;</span>
+    <span class="n">iso0_statistic</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;iso0_statistic&quot;</span><span class="p">,</span> <span class="s2">&quot;avg_by_dist&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">iso0_statistic</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;avg_by_dist&quot;</span><span class="p">,</span> <span class="s2">&quot;avg&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">):</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;iso0 statistic &quot;</span>
+            <span class="o">+</span> <span class="n">iso0_statistic</span>
+            <span class="o">+</span> <span class="s2">&quot; unknown. Default avg_by_dist will be applied&quot;</span>
+        <span class="p">)</span>
+        <span class="n">iso0_statistic</span> <span class="o">=</span> <span class="s2">&quot;avg_by_dist&quot;</span>
 
-    <span class="n">fname</span> <span class="o">=</span> <span class="n">find_iso0_file</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">],</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="n">ind_rad</span><span class="p">)</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">find_iso0_file</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="n">ind_rad</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">fname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="n">iso0_data</span> <span class="o">=</span> <span class="n">read_iso0_mf_data</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">iso0_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;iso0 data not found&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;iso0 data not found&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;fcst_time&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">]))</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;fcst_time&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]))</span>
     <span class="n">iso0_field</span> <span class="o">=</span> <span class="n">iso2radar_data</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">iso0_data</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">],</span> <span class="n">iso0_statistic</span><span class="o">=</span><span class="n">iso0_statistic</span><span class="p">)</span>
+        <span class="n">radar</span><span class="p">,</span> <span class="n">iso0_data</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span> <span class="n">iso0_statistic</span><span class="o">=</span><span class="n">iso0_statistic</span>
+    <span class="p">)</span>
     <span class="k">if</span> <span class="n">iso0_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to obtain iso0 fields&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to obtain iso0 fields&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;height_over_iso0&#39;</span><span class="p">,</span> <span class="n">iso0_field</span><span class="p">)</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;height_over_iso0&quot;</span><span class="p">,</span> <span class="n">iso0_field</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -865,41 +864,45 @@ document.write(`
     <span class="c1"># debugging</span>
     <span class="c1"># start_time = time.time()</span>
 
-    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
         <span class="k">break</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
-    <span class="n">time_interp</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;time_interp&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-    <span class="n">voltype</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;voltype&#39;</span><span class="p">,</span> <span class="s1">&#39;H_ISO0&#39;</span><span class="p">)</span>
+    <span class="n">time_interp</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;time_interp&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">voltype</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;voltype&quot;</span><span class="p">,</span> <span class="s2">&quot;H_ISO0&quot;</span><span class="p">)</span>
     <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">voltype</span><span class="p">)</span>
 
-    <span class="n">fname</span> <span class="o">=</span> <span class="n">find_iso0_grib_file</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">],</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="n">ind_rad</span><span class="p">)</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">find_iso0_grib_file</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="n">ind_rad</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">fname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="n">iso0_data</span> <span class="o">=</span> <span class="n">read_iso0_grib_data</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">iso0_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;iso0 data not found&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;iso0 data not found&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;fcst_time&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">]))</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;fcst_time&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]))</span>
     <span class="n">iso0_field</span> <span class="o">=</span> <span class="n">grib2radar_data</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">iso0_data</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">],</span> <span class="n">time_interp</span><span class="o">=</span><span class="n">time_interp</span><span class="p">,</span>
-        <span class="n">field_name</span><span class="o">=</span><span class="n">field_name</span><span class="p">)</span>
+        <span class="n">radar</span><span class="p">,</span>
+        <span class="n">iso0_data</span><span class="p">,</span>
+        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
+        <span class="n">time_interp</span><span class="o">=</span><span class="n">time_interp</span><span class="p">,</span>
+        <span class="n">field_name</span><span class="o">=</span><span class="n">field_name</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="k">if</span> <span class="n">iso0_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to obtain iso0 fields&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to obtain iso0 fields&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">iso0_field</span><span class="p">)</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">iso0_field</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -952,146 +955,144 @@ document.write(`
     <span class="c1"># debugging</span>
     <span class="c1"># start_time = time.time()</span>
 
-    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
         <span class="k">break</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
-    <span class="n">regular_grid</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;regular_grid&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">lookup_table</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lookup_table&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">regular_grid</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;regular_grid&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">lookup_table</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lookup_table&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
-    <span class="n">icon_type</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;icon_type&#39;</span><span class="p">,</span> <span class="s1">&#39;TEMP&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">icon_type</span> <span class="o">==</span> <span class="s1">&#39;TEMP&#39;</span><span class="p">:</span>
-        <span class="n">field_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s1">&#39;icon_variables&#39;</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">:</span>
+    <span class="n">icon_type</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;icon_type&quot;</span><span class="p">,</span> <span class="s2">&quot;TEMP&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">icon_type</span> <span class="o">==</span> <span class="s2">&quot;TEMP&quot;</span><span class="p">:</span>
+        <span class="n">field_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;temperature&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;icon_variables&quot;</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">:</span>
             <span class="n">field_names</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;icon_variables&#39;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;icon_variables&quot;</span><span class="p">]:</span>
                 <span class="n">field_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">var</span><span class="p">))</span>
         <span class="n">zmin</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">elif</span> <span class="n">icon_type</span> <span class="o">==</span> <span class="s1">&#39;WIND&#39;</span><span class="p">:</span>
-        <span class="n">field_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;wind_speed&#39;</span><span class="p">,</span> <span class="s1">&#39;wind_direction&#39;</span><span class="p">,</span> <span class="s1">&#39;vertical_wind_shear&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s1">&#39;icon_variables&#39;</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">icon_type</span> <span class="o">==</span> <span class="s2">&quot;WIND&quot;</span><span class="p">:</span>
+        <span class="n">field_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;wind_speed&quot;</span><span class="p">,</span> <span class="s2">&quot;wind_direction&quot;</span><span class="p">,</span> <span class="s2">&quot;vertical_wind_shear&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;icon_variables&quot;</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">:</span>
             <span class="n">field_names</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;icon_variables&#39;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;icon_variables&quot;</span><span class="p">]:</span>
                 <span class="n">field_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">var</span><span class="p">))</span>
         <span class="n">zmin</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unknown icon data type &#39;</span> <span class="o">+</span> <span class="n">icon_type</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown icon data type &quot;</span> <span class="o">+</span> <span class="n">icon_type</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">fname</span> <span class="o">=</span> <span class="n">find_raw_icon_file</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">],</span> <span class="n">icon_type</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span>
-                                <span class="n">ind_rad</span><span class="o">=</span><span class="n">ind_rad</span><span class="p">)</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">find_raw_icon_file</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span> <span class="n">icon_type</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="n">ind_rad</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">fname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="n">model</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)[</span><span class="mi">14</span><span class="p">:</span><span class="mi">26</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">model</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;icon-ch1-eps&#39;</span><span class="p">,</span> <span class="s1">&#39;icon-ch2-eps&#39;</span><span class="p">):</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unknown NWP model &#39;</span> <span class="o">+</span> <span class="n">model</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">model</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;icon-ch1-eps&quot;</span><span class="p">,</span> <span class="s2">&quot;icon-ch2-eps&quot;</span><span class="p">):</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown NWP model &quot;</span> <span class="o">+</span> <span class="n">model</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="k">if</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;initialized&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">lookup_table</span><span class="p">:</span>
-            <span class="n">savedir</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;iconpath&#39;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;rad2icon/&#39;</span>
-            <span class="n">fname_ind</span> <span class="o">=</span> <span class="s1">&#39;rad2icon_icon_index_&#39;</span> <span class="o">+</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;procname&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.nc&#39;</span>
+            <span class="n">savedir</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;iconpath&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;rad2icon/&quot;</span>
+            <span class="n">fname_ind</span> <span class="o">=</span> <span class="s2">&quot;rad2icon_icon_index_&quot;</span> <span class="o">+</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.nc&quot;</span>
             <span class="n">fname_ind2</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">savedir</span> <span class="o">+</span> <span class="n">fname_ind</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">fname_ind2</span><span class="p">:</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;File &#39;</span> <span class="o">+</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">fname_ind</span> <span class="o">+</span> <span class="s1">&#39; not found&#39;</span><span class="p">)</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;File &quot;</span> <span class="o">+</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">fname_ind</span> <span class="o">+</span> <span class="s2">&quot; not found&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
             <span class="n">icon_radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial</span><span class="p">(</span><span class="n">fname_ind2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">icon_coord</span> <span class="o">=</span> <span class="n">read_icon_coord</span><span class="p">(</span>
-                <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;iconpath&#39;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;rad2icon/&#39;</span> <span class="o">+</span> <span class="n">model</span> <span class="o">+</span>
-                <span class="s1">&#39;_MDR_3D_const.nc&#39;</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="n">zmin</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;icon coordinates files read&#39;</span><span class="p">)</span>
+                <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;iconpath&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;rad2icon/&quot;</span> <span class="o">+</span> <span class="n">model</span> <span class="o">+</span> <span class="s2">&quot;_MDR_3D_const.nc&quot;</span><span class="p">,</span>
+                <span class="n">zmin</span><span class="o">=</span><span class="n">zmin</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;icon coordinates files read&quot;</span><span class="p">)</span>
             <span class="n">icon_ind_field</span> <span class="o">=</span> <span class="n">icon2radar_coord</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">icon_coord</span><span class="p">)</span>
             <span class="n">icon_radar</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
             <span class="n">icon_radar</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-            <span class="n">icon_radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;icon_index&#39;</span><span class="p">,</span> <span class="n">icon_ind_field</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;icon index field added&#39;</span><span class="p">)</span>
+            <span class="n">icon_radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;icon_index&quot;</span><span class="p">,</span> <span class="n">icon_ind_field</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;icon index field added&quot;</span><span class="p">)</span>
 
-        <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;icon_fname&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s1">&#39;icon_data&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s1">&#39;icon_fields&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s1">&#39;icon_radar&#39;</span><span class="p">:</span> <span class="n">icon_radar</span><span class="p">,</span>
-            <span class="s1">&#39;time_index&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
-        <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;initialized&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;icon_fname&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;icon_data&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;icon_fields&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;icon_radar&quot;</span><span class="p">:</span> <span class="n">icon_radar</span><span class="p">,</span>
+            <span class="s2">&quot;time_index&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
-    <span class="k">if</span> <span class="n">fname</span> <span class="o">!=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;icon_fname&#39;</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">fname</span> <span class="o">!=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;icon_fname&quot;</span><span class="p">]:</span>
         <span class="c1"># debugging</span>
         <span class="c1"># start_time2 = time.time()</span>
-        <span class="n">icon_data</span> <span class="o">=</span> <span class="n">read_icon_data</span><span class="p">(</span>
-            <span class="n">fname</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">,</span> <span class="n">celsius</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">icon_data</span> <span class="o">=</span> <span class="n">read_icon_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">,</span> <span class="n">celsius</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="c1"># print(&quot; reading icon takes %s seconds &quot; %</span>
         <span class="c1">#      (time.time() - start_time2))</span>
         <span class="k">if</span> <span class="n">icon_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;icon data not found&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;icon data not found&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-        <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;icon_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">icon_data</span>
+        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;icon_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">icon_data</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;raw icon data already in memory&#39;</span><span class="p">)</span>
-        <span class="n">icon_data</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;icon_data&#39;</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;raw icon data already in memory&quot;</span><span class="p">)</span>
+        <span class="n">icon_data</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;icon_data&quot;</span><span class="p">]</span>
 
-    <span class="n">dticon</span> <span class="o">=</span> <span class="n">num2date</span><span class="p">(</span>
-        <span class="n">icon_data</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][:],</span> <span class="n">icon_data</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">][</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
+    <span class="n">dticon</span> <span class="o">=</span> <span class="n">num2date</span><span class="p">(</span><span class="n">icon_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][:],</span> <span class="n">icon_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][</span><span class="s2">&quot;units&quot;</span><span class="p">])</span>
 
-    <span class="n">time_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">dticon</span> <span class="o">-</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">]))</span>
+    <span class="n">time_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">dticon</span> <span class="o">-</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]))</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">fname</span> <span class="o">!=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;icon_fname&#39;</span><span class="p">]</span> <span class="ow">or</span>
-            <span class="n">time_index</span> <span class="o">!=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;time_index&#39;</span><span class="p">]):</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="n">fname</span> <span class="o">!=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;icon_fname&quot;</span><span class="p">]</span>
+        <span class="ow">or</span> <span class="n">time_index</span> <span class="o">!=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;time_index&quot;</span><span class="p">]</span>
+    <span class="p">):</span>
         <span class="c1"># debugging</span>
         <span class="c1"># start_time3 = time.time()</span>
         <span class="n">icon_fields</span> <span class="o">=</span> <span class="n">get_icon_fields</span><span class="p">(</span>
             <span class="n">icon_data</span><span class="p">,</span>
-            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;icon_radar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;icon_index&#39;</span><span class="p">],</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;icon_radar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;icon_index&quot;</span><span class="p">],</span>
             <span class="n">time_index</span><span class="o">=</span><span class="n">time_index</span><span class="p">,</span>
-            <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">)</span>
+            <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="n">icon_fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to obtain icon fields&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to obtain icon fields&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
         <span class="c1"># print(&quot; getting icon data takes %s seconds &quot;</span>
         <span class="c1">#      % (time.time() - start_time3))</span>
 
-        <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;time_index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_index</span>
-        <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;icon_fields&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">icon_fields</span>
+        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;time_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_index</span>
+        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;icon_fields&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">icon_fields</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;icon field already in memory&#39;</span><span class="p">)</span>
-        <span class="n">icon_fields</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;icon_fields&#39;</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;icon field already in memory&quot;</span><span class="p">)</span>
+        <span class="n">icon_fields</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;icon_fields&quot;</span><span class="p">]</span>
 
-    <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;icon_fname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fname</span>
+    <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;icon_fname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fname</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">regular_grid</span><span class="p">:</span>
-        <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;icon_radar&#39;</span><span class="p">])</span>
+        <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;icon_radar&quot;</span><span class="p">])</span>
         <span class="n">radar_aux</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
     <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">icon_fields</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="n">field</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">regular_grid</span><span class="p">:</span>
-                    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span>
-                        <span class="n">field_name</span><span class="p">,</span> <span class="n">field</span><span class="p">[</span><span class="n">field_name</span><span class="p">])</span>
+                    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">field</span><span class="p">[</span><span class="n">field_name</span><span class="p">])</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># interpolate to current radar grid</span>
                     <span class="n">radar_aux</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">field</span><span class="p">[</span><span class="n">field_name</span><span class="p">])</span>
-                    <span class="n">icon_field_interp</span> <span class="o">=</span> <span class="n">interpol_field</span><span class="p">(</span>
-                        <span class="n">radar</span><span class="p">,</span> <span class="n">radar_aux</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span>
-                    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span>
-                        <span class="n">field_name</span><span class="p">,</span> <span class="n">icon_field_interp</span><span class="p">)</span>
+                    <span class="n">icon_field_interp</span> <span class="o">=</span> <span class="n">interpol_field</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">radar_aux</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span>
+                    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">icon_field_interp</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ee</span><span class="p">:</span>
                 <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">))</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to add icon &#39;</span> <span class="o">+</span> <span class="n">field_name</span> <span class="o">+</span>
-                     <span class="s1">&#39; field to radar object&#39;</span><span class="p">)</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to add icon &quot;</span> <span class="o">+</span> <span class="n">field_name</span> <span class="o">+</span> <span class="s2">&quot; field to radar object&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
@@ -1143,113 +1144,109 @@ document.write(`
     <span class="c1"># debugging</span>
     <span class="c1"># start_time = time.time()</span>
 
-    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
         <span class="k">break</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
-    <span class="n">regular_grid</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;regular_grid&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">lookup_table</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lookup_table&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">regular_grid</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;regular_grid&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">lookup_table</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lookup_table&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
-    <span class="n">fname</span> <span class="o">=</span> <span class="n">find_hzt_file</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">],</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="n">ind_rad</span><span class="p">)</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">find_hzt_file</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="n">ind_rad</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">fname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="k">if</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;initialized&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">lookup_table</span><span class="p">:</span>
-            <span class="n">savedir</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;iconpath&#39;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;rad2icon/&#39;</span>
-            <span class="n">fname_ind</span> <span class="o">=</span> <span class="s1">&#39;rad2icon_hzt_index_&#39;</span> <span class="o">+</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;procname&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.nc&#39;</span>
+            <span class="n">savedir</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;iconpath&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;rad2icon/&quot;</span>
+            <span class="n">fname_ind</span> <span class="o">=</span> <span class="s2">&quot;rad2icon_hzt_index_&quot;</span> <span class="o">+</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.nc&quot;</span>
             <span class="n">fname_ind2</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">savedir</span> <span class="o">+</span> <span class="n">fname_ind</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">fname_ind2</span><span class="p">:</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;File &#39;</span> <span class="o">+</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">fname_ind</span> <span class="o">+</span> <span class="s1">&#39; not found&#39;</span><span class="p">)</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;File &quot;</span> <span class="o">+</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">fname_ind</span> <span class="o">+</span> <span class="s2">&quot; not found&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
             <span class="n">hzt_radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial</span><span class="p">(</span><span class="n">fname_ind2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">hzt_data</span> <span class="o">=</span> <span class="n">read_hzt_data</span><span class="p">(</span>
-                <span class="n">fname</span><span class="p">,</span> <span class="n">read_lib</span><span class="o">=</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;metranet_read_lib&#39;</span><span class="p">])</span>
+            <span class="n">hzt_data</span> <span class="o">=</span> <span class="n">read_hzt_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">read_lib</span><span class="o">=</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;metranet_read_lib&quot;</span><span class="p">])</span>
             <span class="k">if</span> <span class="n">hzt_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;HZT data not found&#39;</span><span class="p">)</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;HZT data not found&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
-            <span class="n">hzt_coord</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
-            <span class="p">}</span>
+            <span class="n">hzt_coord</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">],</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]}</span>
             <span class="n">hzt_ind_field</span> <span class="o">=</span> <span class="n">hzt2radar_coord</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">hzt_coord</span><span class="p">)</span>
             <span class="n">hzt_radar</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
             <span class="n">hzt_radar</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-            <span class="n">hzt_radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;hzt_index&#39;</span><span class="p">,</span> <span class="n">hzt_ind_field</span><span class="p">)</span>
+            <span class="n">hzt_radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;hzt_index&quot;</span><span class="p">,</span> <span class="n">hzt_ind_field</span><span class="p">)</span>
 
-        <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;hzt_fname&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s1">&#39;hzt_data&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s1">&#39;iso0_field&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s1">&#39;hzt_radar&#39;</span><span class="p">:</span> <span class="n">hzt_radar</span><span class="p">,</span>
-            <span class="s1">&#39;time_index&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
-        <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;initialized&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;hzt_fname&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;hzt_data&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;iso0_field&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;hzt_radar&quot;</span><span class="p">:</span> <span class="n">hzt_radar</span><span class="p">,</span>
+            <span class="s2">&quot;time_index&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
-    <span class="k">if</span> <span class="n">fname</span> <span class="o">!=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;hzt_fname&#39;</span><span class="p">]:</span>
-        <span class="n">hzt_data</span> <span class="o">=</span> <span class="n">read_hzt_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">read_lib</span><span class="o">=</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;metranet_read_lib&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">fname</span> <span class="o">!=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;hzt_fname&quot;</span><span class="p">]:</span>
+        <span class="n">hzt_data</span> <span class="o">=</span> <span class="n">read_hzt_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">read_lib</span><span class="o">=</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;metranet_read_lib&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">hzt_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;HZT data not found&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;HZT data not found&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-        <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;hzt_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hzt_data</span>
+        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;hzt_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hzt_data</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;HZT data already in memory&#39;</span><span class="p">)</span>
-        <span class="n">hzt_data</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;hzt_data&#39;</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HZT data already in memory&quot;</span><span class="p">)</span>
+        <span class="n">hzt_data</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;hzt_data&quot;</span><span class="p">]</span>
 
-    <span class="n">dthzt</span> <span class="o">=</span> <span class="n">num2date</span><span class="p">(</span>
-        <span class="n">hzt_data</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][:],</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">][</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
-    <span class="n">time_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">dthzt</span> <span class="o">-</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">]))</span>
+    <span class="n">dthzt</span> <span class="o">=</span> <span class="n">num2date</span><span class="p">(</span><span class="n">hzt_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][:],</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][</span><span class="s2">&quot;units&quot;</span><span class="p">])</span>
+    <span class="n">time_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">dthzt</span> <span class="o">-</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]))</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">fname</span> <span class="o">!=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;hzt_fname&#39;</span><span class="p">]</span> <span class="ow">or</span>
-            <span class="n">time_index</span> <span class="o">!=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;time_index&#39;</span><span class="p">]):</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="n">fname</span> <span class="o">!=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;hzt_fname&quot;</span><span class="p">]</span>
+        <span class="ow">or</span> <span class="n">time_index</span> <span class="o">!=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;time_index&quot;</span><span class="p">]</span>
+    <span class="p">):</span>
         <span class="c1"># debugging</span>
         <span class="c1"># start_time3 = time.time()</span>
         <span class="n">iso0_field</span> <span class="o">=</span> <span class="n">get_iso0_field</span><span class="p">(</span>
-            <span class="n">hzt_data</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;hzt_radar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;hzt_index&#39;</span><span class="p">],</span>
-            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;hzt_radar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+            <span class="n">hzt_data</span><span class="p">,</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;hzt_radar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;hzt_index&quot;</span><span class="p">],</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;hzt_radar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="n">iso0_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to obtain height over iso0&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to obtain height over iso0&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-        <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;time_index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_index</span>
-        <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;iso0_field&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">iso0_field</span>
+        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;time_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_index</span>
+        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;iso0_field&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">iso0_field</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;HZT field already in memory&#39;</span><span class="p">)</span>
-        <span class="n">iso0_field</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;iso0_field&#39;</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HZT field already in memory&quot;</span><span class="p">)</span>
+        <span class="n">iso0_field</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;iso0_field&quot;</span><span class="p">]</span>
 
-    <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;hzt_fname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fname</span>
+    <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;hzt_fname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fname</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">regular_grid</span><span class="p">:</span>
-        <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;hzt_radar&#39;</span><span class="p">])</span>
+        <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;hzt_radar&quot;</span><span class="p">])</span>
         <span class="n">radar_aux</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">regular_grid</span><span class="p">:</span>
-            <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span>
-                <span class="s1">&#39;height_over_iso0&#39;</span><span class="p">,</span> <span class="n">iso0_field</span><span class="p">)</span>
+            <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;height_over_iso0&quot;</span><span class="p">,</span> <span class="n">iso0_field</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># interpolate to current radar grid</span>
-            <span class="n">radar_aux</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;height_over_iso0&#39;</span><span class="p">,</span> <span class="n">iso0_field</span><span class="p">)</span>
-            <span class="n">hzt_field_interp</span> <span class="o">=</span> <span class="n">interpol_field</span><span class="p">(</span>
-                <span class="n">radar</span><span class="p">,</span> <span class="n">radar_aux</span><span class="p">,</span> <span class="s1">&#39;height_over_iso0&#39;</span><span class="p">)</span>
-            <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span>
-                <span class="s1">&#39;height_over_iso0&#39;</span><span class="p">,</span> <span class="n">hzt_field_interp</span><span class="p">)</span>
+            <span class="n">radar_aux</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;height_over_iso0&quot;</span><span class="p">,</span> <span class="n">iso0_field</span><span class="p">)</span>
+            <span class="n">hzt_field_interp</span> <span class="o">=</span> <span class="n">interpol_field</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">radar_aux</span><span class="p">,</span> <span class="s2">&quot;height_over_iso0&quot;</span><span class="p">)</span>
+            <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;height_over_iso0&quot;</span><span class="p">,</span> <span class="n">hzt_field_interp</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ee</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">))</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to add height_over_iso0 &#39;</span> <span class="o">+</span>
-             <span class="s1">&#39; field to radar object&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to add height_over_iso0 &quot;</span> <span class="o">+</span> <span class="s2">&quot; field to radar object&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
@@ -1296,64 +1293,60 @@ document.write(`
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
         <span class="k">break</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
 
-    <span class="n">icon_type</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;icon_type&#39;</span><span class="p">,</span> <span class="s1">&#39;TEMP&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">icon_type</span> <span class="o">==</span> <span class="s1">&#39;TEMP&#39;</span><span class="p">:</span>
-        <span class="n">field_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s1">&#39;icon_variables&#39;</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">:</span>
+    <span class="n">icon_type</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;icon_type&quot;</span><span class="p">,</span> <span class="s2">&quot;TEMP&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">icon_type</span> <span class="o">==</span> <span class="s2">&quot;TEMP&quot;</span><span class="p">:</span>
+        <span class="n">field_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;temperature&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;icon_variables&quot;</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">:</span>
             <span class="n">field_names</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;icon_variables&#39;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;icon_variables&quot;</span><span class="p">]:</span>
                 <span class="n">field_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">var</span><span class="p">))</span>
-    <span class="k">elif</span> <span class="n">icon_type</span> <span class="o">==</span> <span class="s1">&#39;WIND&#39;</span><span class="p">:</span>
-        <span class="n">field_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;wind_speed&#39;</span><span class="p">,</span> <span class="s1">&#39;wind_direction&#39;</span><span class="p">,</span> <span class="s1">&#39;vertical_wind_shear&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s1">&#39;icon_variables&#39;</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">icon_type</span> <span class="o">==</span> <span class="s2">&quot;WIND&quot;</span><span class="p">:</span>
+        <span class="n">field_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;wind_speed&quot;</span><span class="p">,</span> <span class="s2">&quot;wind_direction&quot;</span><span class="p">,</span> <span class="s2">&quot;vertical_wind_shear&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;icon_variables&quot;</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">:</span>
             <span class="n">field_names</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;icon_variables&#39;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;icon_variables&quot;</span><span class="p">]:</span>
                 <span class="n">field_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">var</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unknown icon data type &#39;</span> <span class="o">+</span> <span class="n">icon_type</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown icon data type &quot;</span> <span class="o">+</span> <span class="n">icon_type</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">time_index_min</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;icon_time_index_min&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="n">time_index_max</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;icon_time_index_max&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">time_index_min</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;icon_time_index_min&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">time_index_max</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;icon_time_index_max&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-    <span class="n">fname</span> <span class="o">=</span> <span class="n">find_raw_icon_file</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">],</span> <span class="n">icon_type</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span>
-                                <span class="n">ind_rad</span><span class="o">=</span><span class="n">ind_rad</span><span class="p">)</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">find_raw_icon_file</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span> <span class="n">icon_type</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="n">ind_rad</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">fname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="n">model</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)[</span><span class="mi">14</span><span class="p">:</span><span class="mi">26</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">model</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;icon-ch1-eps&#39;</span><span class="p">,</span> <span class="s1">&#39;icon-ch2-eps&#39;</span><span class="p">):</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unknown NWP model &#39;</span> <span class="o">+</span> <span class="n">model</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">model</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;icon-ch1-eps&quot;</span><span class="p">,</span> <span class="s2">&quot;icon-ch2-eps&quot;</span><span class="p">):</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown NWP model &quot;</span> <span class="o">+</span> <span class="n">model</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="k">if</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;initialized&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">savedir</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;iconpath&#39;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;rad2icon/&#39;</span>
-        <span class="n">fname_ind</span> <span class="o">=</span> <span class="s1">&#39;rad2icon_icon_index_&#39;</span> <span class="o">+</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;procname&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.nc&#39;</span>
+    <span class="k">if</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">savedir</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;iconpath&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;rad2icon/&quot;</span>
+        <span class="n">fname_ind</span> <span class="o">=</span> <span class="s2">&quot;rad2icon_icon_index_&quot;</span> <span class="o">+</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.nc&quot;</span>
         <span class="n">fname_ind2</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">savedir</span> <span class="o">+</span> <span class="n">fname_ind</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">fname_ind2</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;File &#39;</span> <span class="o">+</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">fname_ind</span> <span class="o">+</span> <span class="s1">&#39; not found&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;File &quot;</span> <span class="o">+</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">fname_ind</span> <span class="o">+</span> <span class="s2">&quot; not found&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
         <span class="n">icon_radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial</span><span class="p">(</span><span class="n">fname_ind2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-        <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;icon_radar&#39;</span><span class="p">:</span> <span class="n">icon_radar</span><span class="p">}</span>
-        <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;initialized&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;icon_radar&quot;</span><span class="p">:</span> <span class="n">icon_radar</span><span class="p">}</span>
+        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
-    <span class="n">icon_data</span> <span class="o">=</span> <span class="n">read_icon_data</span><span class="p">(</span>
-        <span class="n">fname</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">,</span> <span class="n">celsius</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">icon_data</span> <span class="o">=</span> <span class="n">read_icon_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">,</span> <span class="n">celsius</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">icon_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;icon data not found&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;icon data not found&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">dticon</span> <span class="o">=</span> <span class="n">num2date</span><span class="p">(</span>
-        <span class="n">icon_data</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][:],</span> <span class="n">icon_data</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">][</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
+    <span class="n">dticon</span> <span class="o">=</span> <span class="n">num2date</span><span class="p">(</span><span class="n">icon_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][:],</span> <span class="n">icon_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][</span><span class="s2">&quot;units&quot;</span><span class="p">])</span>
 
     <span class="k">if</span> <span class="n">time_index_min</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">time_index_min</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1361,8 +1354,10 @@ document.write(`
         <span class="n">time_index_max</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dticon</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
 
     <span class="k">if</span> <span class="n">time_index_max</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">dticon</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;icon_time_index_max larger than number of icon forecasts&#39;</span>
-             <span class="s1">&#39;icon forecasts &#39;</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">dticon</span><span class="p">))</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;icon_time_index_max larger than number of icon forecasts&quot;</span>
+            <span class="s2">&quot;icon forecasts &quot;</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">dticon</span><span class="p">)</span>
+        <span class="p">)</span>
         <span class="n">time_index_max</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dticon</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
 
     <span class="n">icon_radars</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1374,26 +1369,23 @@ document.write(`
 
         <span class="n">icon_fields</span> <span class="o">=</span> <span class="n">get_icon_fields</span><span class="p">(</span>
             <span class="n">icon_data</span><span class="p">,</span>
-            <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;icon_radar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;icon_index&#39;</span><span class="p">],</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;icon_radar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;icon_index&quot;</span><span class="p">],</span>
             <span class="n">time_index</span><span class="o">=</span><span class="n">time_index</span><span class="p">,</span>
-            <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">)</span>
+            <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="n">icon_fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to obtain icon fields&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to obtain icon fields&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-        <span class="n">radar_out</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;global_data&#39;</span><span class="p">][</span><span class="s1">&#39;icon_radar&#39;</span><span class="p">])</span>
+        <span class="n">radar_out</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;icon_radar&quot;</span><span class="p">])</span>
         <span class="n">radar_out</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-        <span class="n">radar_out</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dtc</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
-            <span class="s1">&#39;seconds since %Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%SZ&#39;</span><span class="p">)</span>
+        <span class="n">radar_out</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dtc</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;seconds since %Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%SZ&quot;</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">icon_fields</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="n">field</span><span class="p">:</span>
                 <span class="n">radar_out</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">field</span><span class="p">[</span><span class="n">field_name</span><span class="p">])</span>
 
-        <span class="n">icon_radars</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-            <span class="s1">&#39;ind_rad&#39;</span><span class="p">:</span> <span class="n">ind_rad</span><span class="p">,</span>
-            <span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">radar_out</span><span class="p">,</span>
-            <span class="s1">&#39;dticon&#39;</span><span class="p">:</span> <span class="n">dtc</span><span class="p">})</span>
+        <span class="n">icon_radars</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;ind_rad&quot;</span><span class="p">:</span> <span class="n">ind_rad</span><span class="p">,</span> <span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">radar_out</span><span class="p">,</span> <span class="s2">&quot;dticon&quot;</span><span class="p">:</span> <span class="n">dtc</span><span class="p">})</span>
 
     <span class="k">return</span> <span class="n">icon_radars</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -1433,47 +1425,41 @@ document.write(`
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="k">if</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;initialized&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
         <span class="k">break</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
-    <span class="n">model</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="s1">&#39;icon-ch1-eps&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">model</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;icon-ch1-eps&#39;</span><span class="p">,</span> <span class="s1">&#39;icon-ch2-eps&#39;</span><span class="p">):</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unknown NWP model &#39;</span> <span class="o">+</span> <span class="n">model</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="s2">&quot;icon-ch1-eps&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">model</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;icon-ch1-eps&quot;</span><span class="p">,</span> <span class="s2">&quot;icon-ch2-eps&quot;</span><span class="p">):</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown NWP model &quot;</span> <span class="o">+</span> <span class="n">model</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="n">icon_coord</span> <span class="o">=</span> <span class="n">read_icon_coord</span><span class="p">(</span>
-        <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;iconpath&#39;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span>
-        <span class="s1">&#39;rad2icon/&#39;</span> <span class="o">+</span>
-        <span class="n">model</span> <span class="o">+</span>
-        <span class="s1">&#39;_MDR_3D_const.nc&#39;</span><span class="p">,</span>
-        <span class="n">zmin</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;iconpath&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;rad2icon/&quot;</span> <span class="o">+</span> <span class="n">model</span> <span class="o">+</span> <span class="s2">&quot;_MDR_3D_const.nc&quot;</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">icon_coord</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">icon_ind_field</span> <span class="o">=</span> <span class="n">icon2radar_coord</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">icon_coord</span><span class="p">,</span> <span class="n">slice_xy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">slice_z</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">icon_ind_field</span> <span class="o">=</span> <span class="n">icon2radar_coord</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">icon_coord</span><span class="p">,</span> <span class="n">slice_xy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">slice_z</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="c1"># prepare for exit</span>
     <span class="n">radar_obj</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
     <span class="n">radar_obj</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="n">radar_obj</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;icon_index&#39;</span><span class="p">,</span> <span class="n">icon_ind_field</span><span class="p">)</span>
+    <span class="n">radar_obj</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;icon_index&quot;</span><span class="p">,</span> <span class="n">icon_ind_field</span><span class="p">)</span>
 
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;ind_rad&#39;</span><span class="p">:</span> <span class="n">ind_rad</span><span class="p">,</span>
-        <span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">radar_obj</span><span class="p">}</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ind_rad&quot;</span><span class="p">:</span> <span class="n">ind_rad</span><span class="p">,</span> <span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">radar_obj</span><span class="p">}</span>
 
-    <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;initialized&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -1514,42 +1500,37 @@ document.write(`
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="k">if</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;initialized&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
         <span class="k">break</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
-    <span class="n">fname</span> <span class="o">=</span> <span class="n">find_hzt_file</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">],</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="n">ind_rad</span><span class="p">)</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">find_hzt_file</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="n">ind_rad</span><span class="p">)</span>
 
-    <span class="n">hzt_data</span> <span class="o">=</span> <span class="n">read_hzt_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">read_lib</span><span class="o">=</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;metranet_read_lib&#39;</span><span class="p">])</span>
+    <span class="n">hzt_data</span> <span class="o">=</span> <span class="n">read_hzt_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">read_lib</span><span class="o">=</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;metranet_read_lib&quot;</span><span class="p">])</span>
     <span class="k">if</span> <span class="n">hzt_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;HZT data not found&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;HZT data not found&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
-    <span class="n">hzt_coord</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span>
-        <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
-    <span class="p">}</span>
+    <span class="n">hzt_coord</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">],</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">hzt_data</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]}</span>
 
     <span class="n">hzt_ind_field</span> <span class="o">=</span> <span class="n">hzt2radar_coord</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">hzt_coord</span><span class="p">)</span>
 
     <span class="c1"># prepare for exit</span>
     <span class="n">radar_obj</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
     <span class="n">radar_obj</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="n">radar_obj</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;hzt_index&#39;</span><span class="p">,</span> <span class="n">hzt_ind_field</span><span class="p">)</span>
+    <span class="n">radar_obj</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;hzt_index&quot;</span><span class="p">,</span> <span class="n">hzt_ind_field</span><span class="p">)</span>
 
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;ind_rad&#39;</span><span class="p">:</span> <span class="n">ind_rad</span><span class="p">,</span>
-        <span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">radar_obj</span><span class="p">}</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ind_rad&quot;</span><span class="p">:</span> <span class="n">ind_rad</span><span class="p">,</span> <span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">radar_obj</span><span class="p">}</span>
 
-    <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;initialized&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -1596,7 +1577,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     <br/>
   </p>
 </div>

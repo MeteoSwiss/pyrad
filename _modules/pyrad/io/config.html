@@ -409,99 +409,89 @@ document.write(`
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 
 <span class="n">_defaults_loc</span> <span class="o">=</span> <span class="p">{</span>
-   <span class="s1">&#39;ppiImageConfig&#39;</span><span class="p">:{</span>
-    <span class="s1">&#39;xsize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="s1">&#39;ysize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="s1">&#39;dpi&#39;</span><span class="p">:</span> <span class="mi">72</span><span class="p">,</span>
-    <span class="s1">&#39;xmin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">50</span><span class="p">,</span>
-    <span class="s1">&#39;xmax&#39;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
-    <span class="s1">&#39;ymin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">50</span><span class="p">,</span>
-    <span class="s1">&#39;ymax&#39;</span><span class="p">:</span> <span class="mi">50</span>
-   <span class="p">},</span>
-   <span class="s1">&#39;ppiMapImageConfig&#39;</span><span class="p">:{</span>
-    <span class="s1">&#39;xsize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="s1">&#39;ysize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="s1">&#39;dpi&#39;</span><span class="p">:</span> <span class="mi">72</span>
-   <span class="p">},</span>
-   <span class="s1">&#39;rhiImageConfig&#39;</span><span class="p">:{</span>
-    <span class="s1">&#39;xsize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="s1">&#39;ysize&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-    <span class="s1">&#39;dpi&#39;</span><span class="p">:</span> <span class="mi">72</span><span class="p">,</span>
-    <span class="s1">&#39;xmin&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s1">&#39;xmax&#39;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
-    <span class="s1">&#39;ymin&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s1">&#39;ymax&#39;</span><span class="p">:</span> <span class="mi">12</span>    
-   <span class="p">},</span>
-   <span class="s1">&#39;xsecImageConfig&#39;</span><span class="p">:{</span>
-    <span class="s1">&#39;xsize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="s1">&#39;ysize&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-    <span class="s1">&#39;dpi&#39;</span><span class="p">:</span> <span class="mi">72</span><span class="p">,</span>
-    <span class="s1">&#39;xmin&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s1">&#39;xmax&#39;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
-    <span class="s1">&#39;ymin&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s1">&#39;ymax&#39;</span><span class="p">:</span> <span class="mi">12</span>    
-   <span class="p">},</span>
-   <span class="s1">&#39;gridMapImageConfig&#39;</span><span class="p">:{</span>
-    <span class="s1">&#39;xsize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="s1">&#39;ysize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="s1">&#39;dpi&#39;</span><span class="p">:</span> <span class="mi">72</span>
-   <span class="p">},</span>
-   <span class="s1">&#39;sunhitsImageConfig&#39;</span><span class="p">:{</span>
-    <span class="s1">&#39;xsize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="s1">&#39;ysize&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-    <span class="s1">&#39;dpi&#39;</span><span class="p">:</span> <span class="mi">72</span><span class="p">,</span>
-    <span class="s1">&#39;azmin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">,</span> 
-    <span class="s1">&#39;azmax&#39;</span><span class="p">:</span>  <span class="mf">2.0</span><span class="p">,</span> 
-    <span class="s1">&#39;elmin&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">,</span> 
-    <span class="s1">&#39;elmax&#39;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span> 
-    <span class="s1">&#39;azres&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> 
-    <span class="s1">&#39;elres&#39;</span><span class="p">:</span> <span class="mf">0.1</span>
-   <span class="p">},</span>
-    <span class="s1">&#39;spectraImageConfig&#39;</span><span class="p">:{</span>
-    <span class="s1">&#39;xsize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="s1">&#39;ysize&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-    <span class="s1">&#39;dpi&#39;</span><span class="p">:</span> <span class="mi">72</span><span class="p">,</span>
-    <span class="s1">&#39;ymin&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;ymax&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;velmin&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;velmax&#39;</span><span class="p">:</span> <span class="kc">None</span>
-   <span class="p">},</span>
-    <span class="s1">&#39;ScanPeriod&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-    <span class="s1">&#39;IconRunFreq&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-    <span class="s1">&#39;IconForecasted&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
-    <span class="s1">&#39;RadarName&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;RadarRes&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;NumRadars&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="s1">&#39;TimeTol&#39;</span><span class="p">:</span> <span class="mf">3600.0</span><span class="p">,</span>
-    <span class="s1">&#39;ScanList&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;DataTypeID&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;ppiImageConfig&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;xsize&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="s2">&quot;ysize&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="s2">&quot;dpi&quot;</span><span class="p">:</span> <span class="mi">72</span><span class="p">,</span>
+        <span class="s2">&quot;xmin&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">50</span><span class="p">,</span>
+        <span class="s2">&quot;xmax&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+        <span class="s2">&quot;ymin&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">50</span><span class="p">,</span>
+        <span class="s2">&quot;ymax&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;ppiMapImageConfig&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;xsize&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;ysize&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;dpi&quot;</span><span class="p">:</span> <span class="mi">72</span><span class="p">},</span>
+    <span class="s2">&quot;rhiImageConfig&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;xsize&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="s2">&quot;ysize&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="s2">&quot;dpi&quot;</span><span class="p">:</span> <span class="mi">72</span><span class="p">,</span>
+        <span class="s2">&quot;xmin&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;xmax&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+        <span class="s2">&quot;ymin&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;ymax&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;xsecImageConfig&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;xsize&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="s2">&quot;ysize&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="s2">&quot;dpi&quot;</span><span class="p">:</span> <span class="mi">72</span><span class="p">,</span>
+        <span class="s2">&quot;xmin&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;xmax&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+        <span class="s2">&quot;ymin&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;ymax&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;gridMapImageConfig&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;xsize&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;ysize&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;dpi&quot;</span><span class="p">:</span> <span class="mi">72</span><span class="p">},</span>
+    <span class="s2">&quot;sunhitsImageConfig&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;xsize&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="s2">&quot;ysize&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="s2">&quot;dpi&quot;</span><span class="p">:</span> <span class="mi">72</span><span class="p">,</span>
+        <span class="s2">&quot;azmin&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">,</span>
+        <span class="s2">&quot;azmax&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
+        <span class="s2">&quot;elmin&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">,</span>
+        <span class="s2">&quot;elmax&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
+        <span class="s2">&quot;azres&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+        <span class="s2">&quot;elres&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;spectraImageConfig&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;xsize&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="s2">&quot;ysize&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="s2">&quot;dpi&quot;</span><span class="p">:</span> <span class="mi">72</span><span class="p">,</span>
+        <span class="s2">&quot;ymin&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;ymax&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;velmin&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;velmax&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;ScanPeriod&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="s2">&quot;IconRunFreq&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s2">&quot;IconForecasted&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+    <span class="s2">&quot;RadarName&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;RadarRes&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;NumRadars&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;TimeTol&quot;</span><span class="p">:</span> <span class="mf">3600.0</span><span class="p">,</span>
+    <span class="s2">&quot;ScanList&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;DataTypeID&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="n">_defaults_main</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;lastStateFile&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;datapath&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;satpath&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;iconpath&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;psrpath&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;iqpath&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;colocgatespath&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;excessgatespath&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;dempath&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;smnpath&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;disdropath&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;solarfluxpath&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;selfconsistencypath&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;loadbasepath&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;loadname&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;gecsxbasepath&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;gecsxname&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s1">&#39;metranet_read_lib&#39;</span><span class="p">:</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span>
+    <span class="s2">&quot;lastStateFile&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;datapath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;satpath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;iconpath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;psrpath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;iqpath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;colocgatespath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;excessgatespath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;dempath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;smnpath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;disdropath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;solarfluxpath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;selfconsistencypath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;loadbasepath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;loadname&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;gecsxbasepath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;gecsxname&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;metranet_read_lib&quot;</span><span class="p">:</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span>
 <span class="p">}</span>
 
-<span class="n">DEFAULT_CONFIG</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="n">_defaults_loc</span><span class="p">,</span>
-    <span class="s1">&#39;main&#39;</span><span class="p">:</span> <span class="n">_defaults_main</span>
-<span class="p">}</span>
+<span class="n">DEFAULT_CONFIG</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;loc&quot;</span><span class="p">:</span> <span class="n">_defaults_loc</span><span class="p">,</span> <span class="s2">&quot;main&quot;</span><span class="p">:</span> <span class="n">_defaults_main</span><span class="p">}</span>
+
 
 <div class="viewcode-block" id="read_config">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_config.html#pyrad.io.read_config">[docs]</a>
@@ -519,7 +509,7 @@ document.write(`
 <span class="sd">        the new parameters will be placed</span>
 
 <span class="sd">    defaults: dict of dicts, optional</span>
-<span class="sd">        dictionary of dictionaries containing default values. If a key is </span>
+<span class="sd">        dictionary of dictionaries containing default values. If a key is</span>
 <span class="sd">        contained in the defaults dict but not in the configuration file,</span>
 <span class="sd">        the value from the defaults dict will be assigned</span>
 
@@ -532,12 +522,9 @@ document.write(`
 
     <span class="c1"># check if the file can be read</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">cfgfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+        <span class="n">cfgfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-            <span class="s2">&quot;ERROR: Could not find|open config file &#39;&quot;</span> <span class="o">+</span>
-            <span class="n">fname</span> <span class="o">+</span>
-            <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: Could not find|open config file &#39;&quot;</span> <span class="o">+</span> <span class="n">fname</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
 
     <span class="c1"># if config dictionary does not exist yet create it</span>
     <span class="k">if</span> <span class="n">cfg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -560,10 +547,10 @@ document.write(`
                 <span class="k">continue</span>
 
             <span class="c1"># ignore comments</span>
-            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">):</span>
                 <span class="k">continue</span>
 
-            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Remove comments</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Remove comments</span>
             <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
             <span class="k">try</span><span class="p">:</span>
@@ -574,9 +561,12 @@ document.write(`
 
                 <span class="k">if</span> <span class="n">nvals</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                        <span class="s2">&quot;FILE FORMAT ERROR: file: &quot;</span> <span class="o">+</span> <span class="n">fname</span> <span class="o">+</span>
-                        <span class="s2">&quot;, variable: &quot;</span> <span class="o">+</span> <span class="n">fieldname</span> <span class="o">+</span>
-                        <span class="s2">&quot;: Wrong number of elements!&quot;</span><span class="p">)</span>
+                        <span class="s2">&quot;FILE FORMAT ERROR: file: &quot;</span>
+                        <span class="o">+</span> <span class="n">fname</span>
+                        <span class="o">+</span> <span class="s2">&quot;, variable: &quot;</span>
+                        <span class="o">+</span> <span class="n">fieldname</span>
+                        <span class="o">+</span> <span class="s2">&quot;: Wrong number of elements!&quot;</span>
+                    <span class="p">)</span>
 
                 <span class="n">valtype</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
                 <span class="n">valuestr</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="n">nvals</span><span class="p">]</span>
@@ -585,21 +575,19 @@ document.write(`
                 <span class="k">if</span> <span class="n">nel</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">isstruct</span><span class="p">:</span>
                         <span class="n">pos</span> <span class="o">=</span> <span class="n">cfgfile</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
-                        <span class="n">fieldvalue</span><span class="p">,</span> <span class="n">newpos</span> <span class="o">=</span> <span class="n">get_struct</span><span class="p">(</span>
-                            <span class="n">cfgfile</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">nel</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+                        <span class="n">fieldvalue</span><span class="p">,</span> <span class="n">newpos</span> <span class="o">=</span> <span class="n">get_struct</span><span class="p">(</span><span class="n">cfgfile</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">nel</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
                         <span class="n">cfgfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">newpos</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">pos</span> <span class="o">=</span> <span class="n">cfgfile</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
-                        <span class="n">fieldvalue</span><span class="p">,</span> <span class="n">newpos</span> <span class="o">=</span> <span class="n">get_array</span><span class="p">(</span>
-                            <span class="n">cfgfile</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">nel</span><span class="p">,</span> <span class="n">valtype</span><span class="p">)</span>
+                        <span class="n">fieldvalue</span><span class="p">,</span> <span class="n">newpos</span> <span class="o">=</span> <span class="n">get_array</span><span class="p">(</span><span class="n">cfgfile</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">nel</span><span class="p">,</span> <span class="n">valtype</span><span class="p">)</span>
                         <span class="n">cfgfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">newpos</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">fieldvalue</span> <span class="o">=</span> <span class="n">string_to_datatype</span><span class="p">(</span><span class="n">valtype</span><span class="p">,</span> <span class="n">valuestr</span><span class="p">)</span>
 
                 <span class="n">cfg</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">fieldname</span><span class="p">:</span> <span class="n">fieldvalue</span><span class="p">})</span>
             <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
-                    <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Parsing failed after line </span><span class="si">{:s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Parsing failed after line </span><span class="si">{:s}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
                 <span class="k">raise</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fileend</span> <span class="o">=</span> <span class="mi">1</span>
@@ -636,8 +624,8 @@ document.write(`
     <span class="n">uptype</span> <span class="o">=</span> <span class="n">dtype</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
     <span class="n">isstruct</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">nel</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">narr</span> <span class="o">=</span> <span class="n">uptype</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;ARR&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;STRUCT&#39;</span><span class="p">:</span>
+    <span class="n">narr</span> <span class="o">=</span> <span class="n">uptype</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;ARR&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;STRUCT&quot;</span><span class="p">:</span>
         <span class="n">isstruct</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">narr</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">isstruct</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
         <span class="n">nel</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nelstr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -666,23 +654,23 @@ document.write(`
 
     <span class="n">uptype</span> <span class="o">=</span> <span class="n">dtype</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 
-    <span class="k">if</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;BYTE&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;BYTE&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">strval</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;BOOL&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;BOOL&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">strval</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;INT&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;INT&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">strval</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;LONG&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;LONG&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">strval</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;HEX&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;HEX&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">strval</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;EXP&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;EXP&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">strval</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;FLOAT&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;FLOAT&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">strval</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;DOUBLE&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;DOUBLE&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">strval</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;STRING&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;STRING&quot;</span><span class="p">:</span>
         <span class="c1"># Replace all environement variables</span>
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expandvars</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">strval</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
     <span class="k">else</span><span class="p">:</span>
@@ -718,7 +706,7 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">arr_type</span> <span class="o">=</span> <span class="n">get_array_type</span><span class="p">(</span><span class="n">valtype</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">arr_type</span> <span class="o">==</span> <span class="s1">&#39;STRING&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">arr_type</span> <span class="o">==</span> <span class="s2">&quot;STRING&quot;</span><span class="p">:</span>
         <span class="n">arr</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">arr</span> <span class="o">=</span> <span class="n">init_array</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">arr_type</span><span class="p">)</span>
@@ -731,13 +719,13 @@ document.write(`
         <span class="c1"># remove leading and trailing whitespace</span>
         <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
-        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Remove comments</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Remove comments</span>
         <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
         <span class="n">vals</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
 
         <span class="n">value</span> <span class="o">=</span> <span class="n">string_to_datatype</span><span class="p">(</span><span class="n">arr_type</span><span class="p">,</span> <span class="n">vals</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">arr_type</span> <span class="o">==</span> <span class="s1">&#39;STRING&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">arr_type</span> <span class="o">==</span> <span class="s2">&quot;STRING&quot;</span><span class="p">:</span>
             <span class="n">arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
@@ -780,7 +768,7 @@ document.write(`
         <span class="c1"># remove leading and trailing whitespace</span>
         <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
-        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Remove comments</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Remove comments</span>
         <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
         <span class="k">try</span><span class="p">:</span>
@@ -791,9 +779,12 @@ document.write(`
 
             <span class="k">if</span> <span class="n">nvals</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                    <span class="s2">&quot;FILE FORMAT ERROR: file: &quot;</span> <span class="o">+</span> <span class="n">fname</span> <span class="o">+</span>
-                    <span class="s2">&quot;, struct variable: &quot;</span> <span class="o">+</span> <span class="n">sfieldname</span> <span class="o">+</span>
-                    <span class="s2">&quot;: Wrong number of elements!&quot;</span><span class="p">)</span>
+                    <span class="s2">&quot;FILE FORMAT ERROR: file: &quot;</span>
+                    <span class="o">+</span> <span class="n">fname</span>
+                    <span class="o">+</span> <span class="s2">&quot;, struct variable: &quot;</span>
+                    <span class="o">+</span> <span class="n">sfieldname</span>
+                    <span class="o">+</span> <span class="s2">&quot;: Wrong number of elements!&quot;</span>
+                <span class="p">)</span>
 
             <span class="n">svaltype</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">svaluestr</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="n">nvals</span><span class="p">]</span>
@@ -806,8 +797,7 @@ document.write(`
                     <span class="n">cfgfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">newpos</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">pos</span> <span class="o">=</span> <span class="n">cfgfile</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
-                    <span class="n">sfieldvalue</span><span class="p">,</span> <span class="n">newpos</span> <span class="o">=</span> <span class="n">get_array</span><span class="p">(</span>
-                        <span class="n">cfgfile</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">nel</span><span class="p">,</span> <span class="n">svaltype</span><span class="p">)</span>
+                    <span class="n">sfieldvalue</span><span class="p">,</span> <span class="n">newpos</span> <span class="o">=</span> <span class="n">get_array</span><span class="p">(</span><span class="n">cfgfile</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">nel</span><span class="p">,</span> <span class="n">svaltype</span><span class="p">)</span>
                     <span class="n">cfgfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">newpos</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">newpos</span> <span class="o">=</span> <span class="n">cfgfile</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
@@ -815,8 +805,8 @@ document.write(`
 
             <span class="n">struct</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">sfieldname</span><span class="p">:</span> <span class="n">sfieldvalue</span><span class="p">})</span>
         <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Parsing failed after line </span><span class="si">{:s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Parsing failed after line </span><span class="si">{:s}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
             <span class="k">raise</span>
 
     <span class="k">return</span> <span class="n">struct</span><span class="p">,</span> <span class="n">newpos</span>
@@ -840,22 +830,22 @@ document.write(`
 
     <span class="n">uptype</span> <span class="o">=</span> <span class="n">dtype</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 
-    <span class="k">if</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;BYTARR&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;BYTE&#39;</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;INTARR&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;INT&#39;</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;LONARR&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;LON&#39;</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;HEXARR&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;HEX&#39;</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;EXPARR&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;EXP&#39;</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;FLTARR&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;FLOAT&#39;</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;DBLARR&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;DOUBLE&#39;</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;STRARR&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;STRING&#39;</span>
+    <span class="k">if</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;BYTARR&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;BYTE&quot;</span>
+    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;INTARR&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;INT&quot;</span>
+    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;LONARR&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;LON&quot;</span>
+    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;HEXARR&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;HEX&quot;</span>
+    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;EXPARR&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;EXP&quot;</span>
+    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;FLTARR&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;FLOAT&quot;</span>
+    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;DBLARR&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;DOUBLE&quot;</span>
+    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;STRARR&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;STRING&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: Unexpected data type &quot;</span> <span class="o">+</span> <span class="n">uptype</span><span class="p">)</span>
 
@@ -880,24 +870,25 @@ document.write(`
 
     <span class="n">uptype</span> <span class="o">=</span> <span class="n">dtype</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 
-    <span class="k">if</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;BYTE&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;byte&#39;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;INT&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;LONG&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int64&#39;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;HEX&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;H&#39;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;EXP&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;FLOAT&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;DOUBLE&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;double&#39;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s1">&#39;STRING&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;BYTE&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;byte&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;INT&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;LONG&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;HEX&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;H&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;EXP&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;FLOAT&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;DOUBLE&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;double&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;STRING&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: Unexpected array data type &quot;</span> <span class="o">+</span> <span class="n">uptype</span><span class="p">)</span>
+
 
 <span class="k">def</span> <span class="nf">merge_dicts</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">defaults</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -965,7 +956,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     <br/>
   </p>
 </div>

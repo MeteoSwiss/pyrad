@@ -404,9 +404,14 @@ document.write(`
 
 <div class="viewcode-block" id="quantiles_weighted">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.quantiles_weighted.html#pyrad.util.quantiles_weighted">[docs]</a>
-<span class="k">def</span> <span class="nf">quantiles_weighted</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">weight_vector</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">]),</span>
-                       <span class="n">weight_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data_is_log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                       <span class="n">nvalid_min</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">quantiles_weighted</span><span class="p">(</span>
+    <span class="n">values</span><span class="p">,</span>
+    <span class="n">weight_vector</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">quantiles</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">]),</span>
+    <span class="n">weight_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">data_is_log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">nvalid_min</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given a set of values and weights, compute the weighted quantile(s) and</span>
 <span class="sd">    average.</span>
@@ -447,14 +452,16 @@ document.write(`
         <span class="k">if</span> <span class="n">weight_vector</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
                 <span class="s2">&quot;ERROR: Unexpected size of weight vector &quot;</span>
-                <span class="s2">&quot;(</span><span class="si">%d</span><span class="s2"> instead of </span><span class="si">%d</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">weight_vector</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+                <span class="s2">&quot;(</span><span class="si">%d</span><span class="s2"> instead of </span><span class="si">%d</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">weight_vector</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">weight_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="c1"># repeat weight vec</span>
-        <span class="n">weight_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">weight_vector</span><span class="p">,</span> <span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> \
-            <span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">weight_vector</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">weight_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">weight_vector</span><span class="p">,</span> <span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+            <span class="n">weight_vector</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="p">)</span>
 
         <span class="n">values</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">weight_vector</span> <span class="o">=</span> <span class="n">weight_vector</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
@@ -472,7 +479,7 @@ document.write(`
 
     <span class="k">if</span> <span class="n">data_is_log</span><span class="p">:</span>
         <span class="c1"># Convert log to lin</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="mf">10.</span><span class="o">**</span><span class="p">(</span><span class="n">values</span> <span class="o">/</span> <span class="mf">10.</span><span class="p">)</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">**</span> <span class="p">(</span><span class="n">values</span> <span class="o">/</span> <span class="mf">10.0</span><span class="p">)</span>
 
     <span class="c1"># Average</span>
     <span class="n">avg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">values</span> <span class="o">*</span> <span class="n">weight_vector</span><span class="p">)</span> <span class="o">/</span> <span class="n">total_weight</span>
@@ -481,7 +488,7 @@ document.write(`
         <span class="k">if</span> <span class="n">total_weight</span> <span class="o">&lt;</span> <span class="n">weight_threshold</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">data_is_log</span><span class="p">:</span>
                 <span class="c1"># Convert lin to log</span>
-                <span class="n">avg</span> <span class="o">=</span> <span class="mf">10.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">avg</span><span class="p">)</span>
+                <span class="n">avg</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">avg</span><span class="p">)</span>
             <span class="k">return</span> <span class="p">(</span><span class="n">avg</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">quantiles</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">nvalid</span><span class="p">)</span>
 
     <span class="c1"># sort the valid data</span>
@@ -505,8 +512,8 @@ document.write(`
 
     <span class="k">if</span> <span class="n">data_is_log</span><span class="p">:</span>
         <span class="c1"># Convert lin to log</span>
-        <span class="n">avg</span> <span class="o">=</span> <span class="mf">10.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">avg</span><span class="p">)</span>
-        <span class="n">quants</span> <span class="o">=</span> <span class="mf">10.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">quants</span><span class="p">)</span>
+        <span class="n">avg</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">avg</span><span class="p">)</span>
+        <span class="n">quants</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">quants</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="p">(</span><span class="n">avg</span><span class="p">,</span> <span class="n">quants</span><span class="p">,</span> <span class="n">nvalid</span><span class="p">)</span></div>
 
@@ -542,9 +549,11 @@ document.write(`
         <span class="c1"># this is for version of numpy from 1.7 to 1.15. for higher versions</span>
         <span class="c1"># np.random.Generator.choice should be used</span>
         <span class="n">ind_sample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span>
-            <span class="n">ind_values</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">ind_values</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-        <span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">nominator</span><span class="p">[</span><span class="n">ind_sample</span><span class="p">])</span> <span class="o">/</span>
-                      <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">denominator</span><span class="p">[</span><span class="n">ind_sample</span><span class="p">]))</span>
+            <span class="n">ind_values</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">ind_values</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="kc">None</span>
+        <span class="p">)</span>
+        <span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">nominator</span><span class="p">[</span><span class="n">ind_sample</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+            <span class="n">denominator</span><span class="p">[</span><span class="n">ind_sample</span><span class="p">]</span>
+        <span class="p">)</span>
     <span class="k">return</span> <span class="n">samples</span></div>
 
 </pre></div>
@@ -590,7 +599,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     <br/>
   </p>
 </div>

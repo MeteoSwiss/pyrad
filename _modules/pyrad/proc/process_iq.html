@@ -446,14 +446,14 @@ document.write(`
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
         <span class="k">break</span>
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">radar_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;ERROR: No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;ERROR: No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">])}</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">])}</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -504,41 +504,48 @@ document.write(`
     <span class="n">noise_v_field</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">signal_h_field</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">signal_v_field</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;IQhhADU&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s2">&quot;IQhhADU&quot;</span><span class="p">:</span>
             <span class="n">signal_h_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;IQvvADU&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s2">&quot;IQvvADU&quot;</span><span class="p">:</span>
             <span class="n">signal_v_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;IQNADUh&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s2">&quot;IQNADUh&quot;</span><span class="p">:</span>
             <span class="n">noise_h_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;IQNADUv&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s2">&quot;IQNADUv&quot;</span><span class="p">:</span>
             <span class="n">noise_v_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">radar_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;ERROR: No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;ERROR: No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
-    <span class="n">subtract_noise</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;subtract_noise&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-    <span class="n">lag</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lag&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="n">direction</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;direction&#39;</span><span class="p">,</span> <span class="s1">&#39;negative_away&#39;</span><span class="p">)</span>
-    <span class="n">variables</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;variables&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;dBZ&#39;</span><span class="p">])</span>
-    <span class="n">phase_offset</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;phase_offset&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+    <span class="n">subtract_noise</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subtract_noise&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">lag</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lag&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;direction&quot;</span><span class="p">,</span> <span class="s2">&quot;negative_away&quot;</span><span class="p">)</span>
+    <span class="n">variables</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;variables&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;dBZ&quot;</span><span class="p">])</span>
+    <span class="n">phase_offset</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;phase_offset&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
 
     <span class="n">fields_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
         <span class="n">fields_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">variable</span><span class="p">))</span>
 
     <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">compute_pol_variables_iq</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">fields_list</span><span class="p">,</span> <span class="n">subtract_noise</span><span class="o">=</span><span class="n">subtract_noise</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="n">lag</span><span class="p">,</span>
-        <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span> <span class="n">phase_offset</span><span class="o">=</span><span class="n">phase_offset</span><span class="p">,</span>
-        <span class="n">signal_h_field</span><span class="o">=</span><span class="n">signal_h_field</span><span class="p">,</span> <span class="n">signal_v_field</span><span class="o">=</span><span class="n">signal_v_field</span><span class="p">,</span>
-        <span class="n">noise_h_field</span><span class="o">=</span><span class="n">noise_h_field</span><span class="p">,</span> <span class="n">noise_v_field</span><span class="o">=</span><span class="n">noise_v_field</span><span class="p">)</span>
+        <span class="n">radar</span><span class="p">,</span>
+        <span class="n">fields_list</span><span class="p">,</span>
+        <span class="n">subtract_noise</span><span class="o">=</span><span class="n">subtract_noise</span><span class="p">,</span>
+        <span class="n">lag</span><span class="o">=</span><span class="n">lag</span><span class="p">,</span>
+        <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span>
+        <span class="n">phase_offset</span><span class="o">=</span><span class="n">phase_offset</span><span class="p">,</span>
+        <span class="n">signal_h_field</span><span class="o">=</span><span class="n">signal_h_field</span><span class="p">,</span>
+        <span class="n">signal_v_field</span><span class="o">=</span><span class="n">signal_v_field</span><span class="p">,</span>
+        <span class="n">noise_h_field</span><span class="o">=</span><span class="n">noise_h_field</span><span class="p">,</span>
+        <span class="n">noise_v_field</span><span class="o">=</span><span class="n">noise_v_field</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">radar</span><span class="p">}</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">radar</span><span class="p">}</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -579,41 +586,43 @@ document.write(`
 
     <span class="n">noise_field</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">signal_field</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;IQhhADU&#39;</span><span class="p">,</span> <span class="s1">&#39;IQvvADU&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;IQhhADU&quot;</span><span class="p">,</span> <span class="s2">&quot;IQvvADU&quot;</span><span class="p">):</span>
             <span class="n">signal_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;IQNADUh&#39;</span><span class="p">,</span> <span class="s1">&#39;IQNADUv&#39;</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;IQNADUh&quot;</span><span class="p">,</span> <span class="s2">&quot;IQNADUv&quot;</span><span class="p">):</span>
             <span class="n">noise_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">signal_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Signal field must be specified&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Signal field must be specified&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">radar_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;ERROR: No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;ERROR: No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">signal_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to obtain reflectivity. Missing field &#39;</span> <span class="o">+</span>
-             <span class="n">signal_field</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to obtain reflectivity. Missing field &quot;</span> <span class="o">+</span> <span class="n">signal_field</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">subtract_noise</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;subtract_noise&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">subtract_noise</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subtract_noise&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
     <span class="n">dBZ</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">compute_reflectivity_iq</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">subtract_noise</span><span class="o">=</span><span class="n">subtract_noise</span><span class="p">,</span> <span class="n">signal_field</span><span class="o">=</span><span class="n">signal_field</span><span class="p">,</span>
-        <span class="n">noise_field</span><span class="o">=</span><span class="n">noise_field</span><span class="p">)</span>
+        <span class="n">radar</span><span class="p">,</span>
+        <span class="n">subtract_noise</span><span class="o">=</span><span class="n">subtract_noise</span><span class="p">,</span>
+        <span class="n">signal_field</span><span class="o">=</span><span class="n">signal_field</span><span class="p">,</span>
+        <span class="n">noise_field</span><span class="o">=</span><span class="n">noise_field</span><span class="p">,</span>
+    <span class="p">)</span>
 
-    <span class="n">reflectivity_field</span> <span class="o">=</span> <span class="s1">&#39;reflectivity&#39;</span>
-    <span class="k">if</span> <span class="n">signal_field</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;IQ_vv_ADU&#39;</span><span class="p">,):</span>
-        <span class="n">reflectivity_field</span> <span class="o">+=</span> <span class="s1">&#39;_vv&#39;</span>
+    <span class="n">reflectivity_field</span> <span class="o">=</span> <span class="s2">&quot;reflectivity&quot;</span>
+    <span class="k">if</span> <span class="n">signal_field</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;IQ_vv_ADU&quot;</span><span class="p">,):</span>
+        <span class="n">reflectivity_field</span> <span class="o">+=</span> <span class="s2">&quot;_vv&quot;</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">radar_from_spectra</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">reflectivity_field</span><span class="p">,</span> <span class="n">dBZ</span><span class="p">)</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">radar_from_spectra</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">reflectivity_field</span><span class="p">,</span> <span class="n">dBZ</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -651,29 +660,28 @@ document.write(`
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">signal_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">radar_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;ERROR: No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;ERROR: No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">signal_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to obtain ST1. Missing fields&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to obtain ST1. Missing fields&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">st1</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">compute_st1_iq</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">signal_field</span><span class="o">=</span><span class="n">signal_field</span><span class="p">)</span>
+    <span class="n">st1</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">compute_st1_iq</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">signal_field</span><span class="o">=</span><span class="n">signal_field</span><span class="p">)</span>
 
-    <span class="n">st1_field</span> <span class="o">=</span> <span class="s1">&#39;stat_test_lag1&#39;</span>
-    <span class="k">if</span> <span class="n">signal_field</span> <span class="o">==</span> <span class="s1">&#39;IQ_vv_ADU&#39;</span><span class="p">:</span>
-        <span class="n">st1_field</span> <span class="o">+=</span> <span class="s1">&#39;_vv&#39;</span>
+    <span class="n">st1_field</span> <span class="o">=</span> <span class="s2">&quot;stat_test_lag1&quot;</span>
+    <span class="k">if</span> <span class="n">signal_field</span> <span class="o">==</span> <span class="s2">&quot;IQ_vv_ADU&quot;</span><span class="p">:</span>
+        <span class="n">st1_field</span> <span class="o">+=</span> <span class="s2">&quot;_vv&quot;</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">radar_from_spectra</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">st1_field</span><span class="p">,</span> <span class="n">st1</span><span class="p">)</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">radar_from_spectra</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">st1_field</span><span class="p">,</span> <span class="n">st1</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -711,29 +719,28 @@ document.write(`
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">signal_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">radar_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;ERROR: No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;ERROR: No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">signal_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to obtain ST2. Missing fields&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to obtain ST2. Missing fields&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">st2</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">compute_st2_iq</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">signal_field</span><span class="o">=</span><span class="n">signal_field</span><span class="p">)</span>
+    <span class="n">st2</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">compute_st2_iq</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">signal_field</span><span class="o">=</span><span class="n">signal_field</span><span class="p">)</span>
 
-    <span class="n">st2_field</span> <span class="o">=</span> <span class="s1">&#39;stat_test_lag2&#39;</span>
-    <span class="k">if</span> <span class="n">signal_field</span> <span class="o">==</span> <span class="s1">&#39;IQ_vv_ADU&#39;</span><span class="p">:</span>
-        <span class="n">st2_field</span> <span class="o">+=</span> <span class="s1">&#39;_vv&#39;</span>
+    <span class="n">st2_field</span> <span class="o">=</span> <span class="s2">&quot;stat_test_lag2&quot;</span>
+    <span class="k">if</span> <span class="n">signal_field</span> <span class="o">==</span> <span class="s2">&quot;IQ_vv_ADU&quot;</span><span class="p">:</span>
+        <span class="n">st2_field</span> <span class="o">+=</span> <span class="s2">&quot;_vv&quot;</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">radar_from_spectra</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">st2_field</span><span class="p">,</span> <span class="n">st2</span><span class="p">)</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">radar_from_spectra</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">st2_field</span><span class="p">,</span> <span class="n">st2</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -770,29 +777,28 @@ document.write(`
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">signal_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">radar_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;ERROR: No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;ERROR: No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">signal_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to obtain WBN. Missing fields&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to obtain WBN. Missing fields&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">wbn</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">compute_wbn_iq</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">signal_field</span><span class="o">=</span><span class="n">signal_field</span><span class="p">)</span>
+    <span class="n">wbn</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">compute_wbn_iq</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">signal_field</span><span class="o">=</span><span class="n">signal_field</span><span class="p">)</span>
 
-    <span class="n">wbn_field</span> <span class="o">=</span> <span class="s1">&#39;wide_band_noise&#39;</span>
-    <span class="k">if</span> <span class="n">signal_field</span> <span class="o">==</span> <span class="s1">&#39;IQ_vv_ADU&#39;</span><span class="p">:</span>
-        <span class="n">wbn_field</span> <span class="o">+=</span> <span class="s1">&#39;_vv&#39;</span>
+    <span class="n">wbn_field</span> <span class="o">=</span> <span class="s2">&quot;wide_band_noise&quot;</span>
+    <span class="k">if</span> <span class="n">signal_field</span> <span class="o">==</span> <span class="s2">&quot;IQ_vv_ADU&quot;</span><span class="p">:</span>
+        <span class="n">wbn_field</span> <span class="o">+=</span> <span class="s2">&quot;_vv&quot;</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">radar_from_spectra</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">wbn_field</span><span class="p">,</span> <span class="n">wbn</span><span class="p">)</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">radar_from_spectra</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">wbn_field</span><span class="p">,</span> <span class="n">wbn</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -838,40 +844,43 @@ document.write(`
     <span class="n">noise_v_field</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">signal_h_field</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">signal_v_field</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;IQhhADU&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s2">&quot;IQhhADU&quot;</span><span class="p">:</span>
             <span class="n">signal_h_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;IQvvADU&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s2">&quot;IQvvADU&quot;</span><span class="p">:</span>
             <span class="n">signal_v_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;IQNADUh&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s2">&quot;IQNADUh&quot;</span><span class="p">:</span>
             <span class="n">noise_h_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;IQNADUv&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s2">&quot;IQNADUv&quot;</span><span class="p">:</span>
             <span class="n">noise_v_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">radar_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;ERROR: No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;ERROR: No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">signal_h_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span> <span class="ow">or</span>
-            <span class="n">signal_v_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">):</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to obtain spectral differential reflectivity. &#39;</span> <span class="o">+</span>
-             <span class="s1">&#39;Missing fields&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">signal_h_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span> <span class="ow">or</span> <span class="n">signal_v_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to obtain spectral differential reflectivity. &quot;</span> <span class="o">+</span> <span class="s2">&quot;Missing fields&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">subtract_noise</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;subtract_noise&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-    <span class="n">lag</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lag&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">subtract_noise</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subtract_noise&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">lag</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lag&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
     <span class="n">zdr</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">compute_differential_reflectivity_iq</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">subtract_noise</span><span class="o">=</span><span class="n">subtract_noise</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="n">lag</span><span class="p">,</span>
-        <span class="n">signal_h_field</span><span class="o">=</span><span class="n">signal_h_field</span><span class="p">,</span> <span class="n">signal_v_field</span><span class="o">=</span><span class="n">signal_v_field</span><span class="p">,</span>
-        <span class="n">noise_h_field</span><span class="o">=</span><span class="n">noise_h_field</span><span class="p">,</span> <span class="n">noise_v_field</span><span class="o">=</span><span class="n">noise_v_field</span><span class="p">)</span>
+        <span class="n">radar</span><span class="p">,</span>
+        <span class="n">subtract_noise</span><span class="o">=</span><span class="n">subtract_noise</span><span class="p">,</span>
+        <span class="n">lag</span><span class="o">=</span><span class="n">lag</span><span class="p">,</span>
+        <span class="n">signal_h_field</span><span class="o">=</span><span class="n">signal_h_field</span><span class="p">,</span>
+        <span class="n">signal_v_field</span><span class="o">=</span><span class="n">signal_v_field</span><span class="p">,</span>
+        <span class="n">noise_h_field</span><span class="o">=</span><span class="n">noise_h_field</span><span class="p">,</span>
+        <span class="n">noise_v_field</span><span class="o">=</span><span class="n">noise_v_field</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">radar_from_spectra</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;differential_reflectivity&#39;</span><span class="p">,</span> <span class="n">zdr</span><span class="p">)</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">radar_from_spectra</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;differential_reflectivity&quot;</span><span class="p">,</span> <span class="n">zdr</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -908,29 +917,28 @@ document.write(`
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">signal_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">radar_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;ERROR: No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;ERROR: No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">signal_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to obtain MPH. Missing fields&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to obtain MPH. Missing fields&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">mph</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">compute_mean_phase_iq</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">signal_field</span><span class="o">=</span><span class="n">signal_field</span><span class="p">)</span>
+    <span class="n">mph</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">compute_mean_phase_iq</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">signal_field</span><span class="o">=</span><span class="n">signal_field</span><span class="p">)</span>
 
-    <span class="n">mean_phase_field</span> <span class="o">=</span> <span class="s1">&#39;mean_phase&#39;</span>
-    <span class="k">if</span> <span class="n">signal_field</span> <span class="o">==</span> <span class="s1">&#39;IQ_vv_ADU&#39;</span><span class="p">:</span>
-        <span class="n">mean_phase_field</span> <span class="o">+=</span> <span class="s1">&#39;_vv&#39;</span>
+    <span class="n">mean_phase_field</span> <span class="o">=</span> <span class="s2">&quot;mean_phase&quot;</span>
+    <span class="k">if</span> <span class="n">signal_field</span> <span class="o">==</span> <span class="s2">&quot;IQ_vv_ADU&quot;</span><span class="p">:</span>
+        <span class="n">mean_phase_field</span> <span class="o">+=</span> <span class="s2">&quot;_vv&quot;</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">radar_from_spectra</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">mean_phase_field</span><span class="p">,</span> <span class="n">mph</span><span class="p">)</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">radar_from_spectra</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">mean_phase_field</span><span class="p">,</span> <span class="n">mph</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -971,34 +979,35 @@ document.write(`
 
     <span class="n">signal_h_field</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">signal_v_field</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;IQhhADU&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s2">&quot;IQhhADU&quot;</span><span class="p">:</span>
             <span class="n">signal_h_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;IQvvADU&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s2">&quot;IQvvADU&quot;</span><span class="p">:</span>
             <span class="n">signal_v_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">radar_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;ERROR: No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;ERROR: No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">signal_h_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span> <span class="ow">or</span>
-            <span class="n">signal_v_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">):</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to obtain PhiDP. Missing fields&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">signal_h_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span> <span class="ow">or</span> <span class="n">signal_v_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to obtain PhiDP. Missing fields&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">phase_offset</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;phase_offset&#39;</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+    <span class="n">phase_offset</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;phase_offset&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
 
     <span class="n">uphidp</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">compute_differential_phase_iq</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">phase_offset</span><span class="o">=</span><span class="n">phase_offset</span><span class="p">,</span> <span class="n">signal_h_field</span><span class="o">=</span><span class="n">signal_h_field</span><span class="p">,</span>
-        <span class="n">signal_v_field</span><span class="o">=</span><span class="n">signal_v_field</span><span class="p">)</span>
+        <span class="n">radar</span><span class="p">,</span>
+        <span class="n">phase_offset</span><span class="o">=</span><span class="n">phase_offset</span><span class="p">,</span>
+        <span class="n">signal_h_field</span><span class="o">=</span><span class="n">signal_h_field</span><span class="p">,</span>
+        <span class="n">signal_v_field</span><span class="o">=</span><span class="n">signal_v_field</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">radar_from_spectra</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span>
-        <span class="s1">&#39;uncorrected_differential_phase&#39;</span><span class="p">,</span> <span class="n">uphidp</span><span class="p">)</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">radar_from_spectra</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;uncorrected_differential_phase&quot;</span><span class="p">,</span> <span class="n">uphidp</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -1042,39 +1051,43 @@ document.write(`
     <span class="n">noise_v_field</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">signal_h_field</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">signal_v_field</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;IQhhADU&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s2">&quot;IQhhADU&quot;</span><span class="p">:</span>
             <span class="n">signal_h_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;IQvvADU&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s2">&quot;IQvvADU&quot;</span><span class="p">:</span>
             <span class="n">signal_v_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;IQNADUh&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s2">&quot;IQNADUh&quot;</span><span class="p">:</span>
             <span class="n">noise_h_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s1">&#39;IQNADUv&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s2">&quot;IQNADUv&quot;</span><span class="p">:</span>
             <span class="n">noise_v_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">radar_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;ERROR: No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;ERROR: No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">signal_h_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span> <span class="ow">or</span>
-            <span class="n">signal_v_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">):</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to obtain RhoHV. Missing fields&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">signal_h_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span> <span class="ow">or</span> <span class="n">signal_v_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to obtain RhoHV. Missing fields&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">subtract_noise</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;subtract_noise&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-    <span class="n">lag</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lag&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">subtract_noise</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subtract_noise&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">lag</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lag&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
     <span class="n">rhohv</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">compute_rhohv_iq</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">subtract_noise</span><span class="o">=</span><span class="n">subtract_noise</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="n">lag</span><span class="p">,</span>
-        <span class="n">signal_h_field</span><span class="o">=</span><span class="n">signal_h_field</span><span class="p">,</span> <span class="n">signal_v_field</span><span class="o">=</span><span class="n">signal_v_field</span><span class="p">,</span>
-        <span class="n">noise_h_field</span><span class="o">=</span><span class="n">noise_h_field</span><span class="p">,</span> <span class="n">noise_v_field</span><span class="o">=</span><span class="n">noise_v_field</span><span class="p">)</span>
+        <span class="n">radar</span><span class="p">,</span>
+        <span class="n">subtract_noise</span><span class="o">=</span><span class="n">subtract_noise</span><span class="p">,</span>
+        <span class="n">lag</span><span class="o">=</span><span class="n">lag</span><span class="p">,</span>
+        <span class="n">signal_h_field</span><span class="o">=</span><span class="n">signal_h_field</span><span class="p">,</span>
+        <span class="n">signal_v_field</span><span class="o">=</span><span class="n">signal_v_field</span><span class="p">,</span>
+        <span class="n">noise_h_field</span><span class="o">=</span><span class="n">noise_h_field</span><span class="p">,</span>
+        <span class="n">noise_v_field</span><span class="o">=</span><span class="n">noise_v_field</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">radar_from_spectra</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;cross_correlation_ratio&#39;</span><span class="p">,</span> <span class="n">rhohv</span><span class="p">)</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">radar_from_spectra</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;cross_correlation_ratio&quot;</span><span class="p">,</span> <span class="n">rhohv</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -1114,34 +1127,34 @@ document.write(`
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;IQhhADU&#39;</span><span class="p">,</span> <span class="s1">&#39;IQvvADU&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;IQhhADU&quot;</span><span class="p">,</span> <span class="s2">&quot;IQvvADU&quot;</span><span class="p">):</span>
             <span class="n">signal_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">radar_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;ERROR: No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;ERROR: No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">signal_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to obtain Doppler velocity. &#39;</span> <span class="o">+</span>
-             <span class="s1">&#39;Missing field &#39;</span> <span class="o">+</span> <span class="n">signal_field</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to obtain Doppler velocity. &quot;</span> <span class="o">+</span> <span class="s2">&quot;Missing field &quot;</span> <span class="o">+</span> <span class="n">signal_field</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">direction</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;direction&#39;</span><span class="p">,</span> <span class="s1">&#39;negative_away&#39;</span><span class="p">)</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;direction&quot;</span><span class="p">,</span> <span class="s2">&quot;negative_away&quot;</span><span class="p">)</span>
 
     <span class="n">vel</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">compute_Doppler_velocity_iq</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">signal_field</span><span class="o">=</span><span class="n">signal_field</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+        <span class="n">radar</span><span class="p">,</span> <span class="n">signal_field</span><span class="o">=</span><span class="n">signal_field</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span>
+    <span class="p">)</span>
 
-    <span class="n">vel_field</span> <span class="o">=</span> <span class="s1">&#39;velocity&#39;</span>
-    <span class="k">if</span> <span class="n">signal_field</span> <span class="o">==</span> <span class="s1">&#39;IQ_vv_ADU&#39;</span><span class="p">:</span>
-        <span class="n">vel_field</span> <span class="o">+=</span> <span class="s1">&#39;_vv&#39;</span>
+    <span class="n">vel_field</span> <span class="o">=</span> <span class="s2">&quot;velocity&quot;</span>
+    <span class="k">if</span> <span class="n">signal_field</span> <span class="o">==</span> <span class="s2">&quot;IQ_vv_ADU&quot;</span><span class="p">:</span>
+        <span class="n">vel_field</span> <span class="o">+=</span> <span class="s2">&quot;_vv&quot;</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">radar_from_spectra</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">vel_field</span><span class="p">,</span> <span class="n">vel</span><span class="p">)</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">radar_from_spectra</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">vel_field</span><span class="p">,</span> <span class="n">vel</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -1183,38 +1196,45 @@ document.write(`
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="n">noise_field</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;IQhhADU&#39;</span><span class="p">,</span> <span class="s1">&#39;IQvvADU&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;IQhhADU&quot;</span><span class="p">,</span> <span class="s2">&quot;IQvvADU&quot;</span><span class="p">):</span>
             <span class="n">signal_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;IQNADUh&#39;</span><span class="p">,</span> <span class="s1">&#39;IQNADUv&#39;</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;IQNADUh&quot;</span><span class="p">,</span> <span class="s2">&quot;IQNADUv&quot;</span><span class="p">):</span>
             <span class="n">noise_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">radar_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;ERROR: No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;ERROR: No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">signal_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to obtain Doppler spectrum width. &#39;</span> <span class="o">+</span>
-             <span class="s1">&#39;Missing field &#39;</span> <span class="o">+</span> <span class="n">signal_field</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Unable to obtain Doppler spectrum width. &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;Missing field &quot;</span>
+            <span class="o">+</span> <span class="n">signal_field</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;subtract_noise&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-    <span class="n">lag</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lag&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subtract_noise&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">lag</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lag&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="n">width</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">compute_Doppler_width_iq</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">subtract_noise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">signal_field</span><span class="o">=</span><span class="n">signal_field</span><span class="p">,</span>
-        <span class="n">noise_field</span><span class="o">=</span><span class="n">noise_field</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="n">lag</span><span class="p">)</span>
+        <span class="n">radar</span><span class="p">,</span>
+        <span class="n">subtract_noise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">signal_field</span><span class="o">=</span><span class="n">signal_field</span><span class="p">,</span>
+        <span class="n">noise_field</span><span class="o">=</span><span class="n">noise_field</span><span class="p">,</span>
+        <span class="n">lag</span><span class="o">=</span><span class="n">lag</span><span class="p">,</span>
+    <span class="p">)</span>
 
-    <span class="n">width_field</span> <span class="o">=</span> <span class="s1">&#39;spectrum_width&#39;</span>
-    <span class="k">if</span> <span class="n">signal_field</span> <span class="o">==</span> <span class="s1">&#39;IQ_vv_ADU&#39;</span><span class="p">:</span>
-        <span class="n">width_field</span> <span class="o">+=</span> <span class="s1">&#39;_vv&#39;</span>
+    <span class="n">width_field</span> <span class="o">=</span> <span class="s2">&quot;spectrum_width&quot;</span>
+    <span class="k">if</span> <span class="n">signal_field</span> <span class="o">==</span> <span class="s2">&quot;IQ_vv_ADU&quot;</span><span class="p">:</span>
+        <span class="n">width_field</span> <span class="o">+=</span> <span class="s2">&quot;_vv&quot;</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">radar_from_spectra</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
-    <span class="n">new_dataset</span><span class="p">[</span><span class="s1">&#39;radar_out&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">width_field</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">radar_from_spectra</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
+    <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">width_field</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -1255,17 +1275,17 @@ document.write(`
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">radar_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;ERROR: No valid radar&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;ERROR: No valid radar&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span>
 
-    <span class="n">wind_params</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;window&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;None&#39;</span><span class="p">])</span>
+    <span class="n">wind_params</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;window&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;None&quot;</span><span class="p">])</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wind_params</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">window</span> <span class="o">=</span> <span class="n">wind_params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">window</span> <span class="o">==</span> <span class="s1">&#39;None&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">window</span> <span class="o">==</span> <span class="s2">&quot;None&quot;</span><span class="p">:</span>
             <span class="n">window</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
@@ -1280,29 +1300,30 @@ document.write(`
 
     <span class="n">fields_in_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">fields_out_list</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="n">field_name</span> <span class="o">+</span> <span class="s1">&#39; not in radar&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="n">field_name</span> <span class="o">+</span> <span class="s2">&quot; not in radar&quot;</span><span class="p">)</span>
             <span class="k">continue</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s1">&#39;IQ_hh_ADU&#39;</span><span class="p">:</span>
-            <span class="n">fields_out_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;unfiltered_complex_spectra_hh_ADU&#39;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s1">&#39;IQ_vv_ADU&#39;</span><span class="p">:</span>
-            <span class="n">fields_out_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;unfiltered_complex_spectra_vv_ADU&#39;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s1">&#39;IQ_noise_power_hh_ADU&#39;</span><span class="p">:</span>
-            <span class="n">fields_out_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;spectral_noise_power_hh_ADU&#39;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s1">&#39;IQ_noiseADU_vv&#39;</span><span class="p">:</span>
-            <span class="n">fields_out_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;spectral_noise_power_vv_ADU&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s2">&quot;IQ_hh_ADU&quot;</span><span class="p">:</span>
+            <span class="n">fields_out_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;unfiltered_complex_spectra_hh_ADU&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s2">&quot;IQ_vv_ADU&quot;</span><span class="p">:</span>
+            <span class="n">fields_out_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;unfiltered_complex_spectra_vv_ADU&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s2">&quot;IQ_noise_power_hh_ADU&quot;</span><span class="p">:</span>
+            <span class="n">fields_out_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;spectral_noise_power_hh_ADU&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s2">&quot;IQ_noiseADU_vv&quot;</span><span class="p">:</span>
+            <span class="n">fields_out_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;spectral_noise_power_vv_ADU&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="n">field_name</span> <span class="o">+</span> <span class="s1">&#39; can not be Fourier transformed&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="n">field_name</span> <span class="o">+</span> <span class="s2">&quot; can not be Fourier transformed&quot;</span><span class="p">)</span>
         <span class="n">fields_in_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
 
     <span class="n">radar_out</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">compute_spectra</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">fields_in_list</span><span class="p">,</span> <span class="n">fields_out_list</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span>
+        <span class="n">radar</span><span class="p">,</span> <span class="n">fields_in_list</span><span class="p">,</span> <span class="n">fields_out_list</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span>
+    <span class="p">)</span>
 
     <span class="c1"># prepare for exit</span>
-    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radar_out&#39;</span><span class="p">:</span> <span class="n">radar_out</span><span class="p">}</span>
+    <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">radar_out</span><span class="p">}</span>
 
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
@@ -1349,7 +1370,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     <br/>
   </p>
 </div>

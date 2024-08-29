@@ -414,15 +414,15 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
 <span class="kn">import</span> <span class="nn">matplotlib.cm</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;Agg&#39;</span><span class="p">)</span>
+
+<span class="n">mpl</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;Agg&quot;</span><span class="p">)</span>
 
 <span class="c1"># Increase a bit font size</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;font.size&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">})</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;font.family&#39;</span><span class="p">:</span> <span class="s2">&quot;sans-serif&quot;</span><span class="p">})</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;font.size&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">})</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;font.family&quot;</span><span class="p">:</span> <span class="s2">&quot;sans-serif&quot;</span><span class="p">})</span>
 
 
-<span class="k">def</span> <span class="nf">generate_complex_range_Doppler_title</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">ray</span><span class="p">,</span>
-                                         <span class="n">datetime_format</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">generate_complex_range_Doppler_title</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">ray</span><span class="p">,</span> <span class="n">datetime_format</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    creates the fixed range plot title</span>
 
@@ -447,16 +447,20 @@ document.write(`
     <span class="k">if</span> <span class="n">datetime_format</span><span class="p">:</span>
         <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">datetime_format</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;Z&#39;</span>
+        <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;Z&quot;</span>
     <span class="n">l1</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> azi</span><span class="si">%.1f</span><span class="s2">-ele</span><span class="si">%.1f</span><span class="s2"> deg. </span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span>
         <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_radar_name</span><span class="p">(</span><span class="n">radar</span><span class="p">),</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ray</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ray</span><span class="p">],</span> <span class="n">time_str</span><span class="p">)</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">],</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">],</span>
+        <span class="n">time_str</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">field_name</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_field_name</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">l1</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">field_name</span>
+    <span class="k">return</span> <span class="n">l1</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">field_name</span>
 
 
-<span class="k">def</span> <span class="nf">generate_angle_Doppler_title</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">ang</span><span class="p">,</span> <span class="n">ind_rng</span><span class="p">,</span>
-                                 <span class="n">along_azi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">datetime_format</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">generate_angle_Doppler_title</span><span class="p">(</span>
+    <span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">ang</span><span class="p">,</span> <span class="n">ind_rng</span><span class="p">,</span> <span class="n">along_azi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">datetime_format</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    creates the angle-Doppler plot title</span>
 
@@ -486,20 +490,23 @@ document.write(`
     <span class="k">if</span> <span class="n">datetime_format</span><span class="p">:</span>
         <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">datetime_format</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;Z&#39;</span>
+        <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;Z&quot;</span>
     <span class="k">if</span> <span class="n">along_azi</span><span class="p">:</span>
-        <span class="n">ang_type</span> <span class="o">=</span> <span class="s1">&#39;ele&#39;</span>
+        <span class="n">ang_type</span> <span class="o">=</span> <span class="s2">&quot;ele&quot;</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ang_type</span> <span class="o">=</span> <span class="s1">&#39;azi&#39;</span>
+        <span class="n">ang_type</span> <span class="o">=</span> <span class="s2">&quot;azi&quot;</span>
     <span class="n">l1</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s%.1f</span><span class="s2"> deg-rng</span><span class="si">%.1f</span><span class="s2"> m. </span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span>
         <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_radar_name</span><span class="p">(</span><span class="n">radar</span><span class="p">),</span>
-        <span class="n">ang_type</span><span class="p">,</span> <span class="n">ang</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ind_rng</span><span class="p">],</span> <span class="n">time_str</span><span class="p">)</span>
+        <span class="n">ang_type</span><span class="p">,</span>
+        <span class="n">ang</span><span class="p">,</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_rng</span><span class="p">],</span>
+        <span class="n">time_str</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">field_name</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_field_name</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">l1</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">field_name</span>
+    <span class="k">return</span> <span class="n">l1</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">field_name</span>
 
 
-<span class="k">def</span> <span class="nf">generate_complex_Doppler_title</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">ray</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span>
-                                   <span class="n">datetime_format</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">generate_complex_Doppler_title</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">ray</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">datetime_format</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    creates the fixed range plot title</span>
 
@@ -524,13 +531,16 @@ document.write(`
     <span class="k">if</span> <span class="n">datetime_format</span><span class="p">:</span>
         <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">datetime_format</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;Z&#39;</span>
+        <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;Z&quot;</span>
     <span class="n">l1</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> azi</span><span class="si">%.1f</span><span class="s2">-ele</span><span class="si">%.1f</span><span class="s2"> deg rng</span><span class="si">%.1f</span><span class="s2"> km. </span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span>
         <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_radar_name</span><span class="p">(</span><span class="n">radar</span><span class="p">),</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ray</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ray</span><span class="p">],</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">rng</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1000.</span><span class="p">,</span> <span class="n">time_str</span><span class="p">)</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">],</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">],</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rng</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">,</span>
+        <span class="n">time_str</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">field_name</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_field_name</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">l1</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">field_name</span>
+    <span class="k">return</span> <span class="n">l1</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">field_name</span>
 
 
 <span class="k">def</span> <span class="nf">generate_fixed_rng_span_title</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">stat</span><span class="p">,</span> <span class="n">datetime_format</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -558,13 +568,16 @@ document.write(`
     <span class="k">if</span> <span class="n">datetime_format</span><span class="p">:</span>
         <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">datetime_format</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;Z&#39;</span>
+        <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;Z&quot;</span>
     <span class="n">l1</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%.1f</span><span class="s2">-</span><span class="si">%.1f</span><span class="s2"> m </span><span class="si">%s</span><span class="s2">. </span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span>
         <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_radar_name</span><span class="p">(</span><span class="n">radar</span><span class="p">),</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]),</span> <span class="n">stat</span><span class="p">,</span>
-        <span class="n">time_str</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]),</span>
+        <span class="n">stat</span><span class="p">,</span>
+        <span class="n">time_str</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">field_name</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_field_name</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">l1</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">field_name</span>
+    <span class="k">return</span> <span class="n">l1</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">field_name</span>
 
 
 <span class="k">def</span> <span class="nf">generate_fixed_rng_title</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">fixed_rng</span><span class="p">,</span> <span class="n">datetime_format</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -592,11 +605,14 @@ document.write(`
     <span class="k">if</span> <span class="n">datetime_format</span><span class="p">:</span>
         <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">datetime_format</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;Z&#39;</span>
-    <span class="n">l1</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%.1f</span><span class="s2"> m. </span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_radar_name</span><span class="p">(</span><span class="n">radar</span><span class="p">),</span>
-                             <span class="n">fixed_rng</span><span class="p">,</span> <span class="n">time_str</span><span class="p">)</span>
+        <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;Z&quot;</span>
+    <span class="n">l1</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%.1f</span><span class="s2"> m. </span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span>
+        <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_radar_name</span><span class="p">(</span><span class="n">radar</span><span class="p">),</span>
+        <span class="n">fixed_rng</span><span class="p">,</span>
+        <span class="n">time_str</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">field_name</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_field_name</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">l1</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">field_name</span>
+    <span class="k">return</span> <span class="n">l1</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">field_name</span>
 
 
 <span class="k">def</span> <span class="nf">generate_dda_map_title</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">datetime_format</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -624,21 +640,22 @@ document.write(`
     <span class="k">if</span> <span class="n">datetime_format</span><span class="p">:</span>
         <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">datetime_format</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;Z&#39;</span>
-    <span class="n">radar_names</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;Z&quot;</span>
+    <span class="n">radar_names</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-    <span class="k">for</span> <span class="n">mdata</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;additional_radars&#39;</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_name&#39;</span><span class="p">],</span> <span class="nb">bytes</span><span class="p">):</span>
-            <span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-        <span class="n">radar_names</span> <span class="o">+=</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_name&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">mdata</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;additional_radars&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mdata</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">],</span> <span class="nb">bytes</span><span class="p">):</span>
+            <span class="n">mdata</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdata</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="n">radar_names</span> <span class="o">+=</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">mdata</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">]</span>
     <span class="n">height</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">level</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1000.0</span>
     <span class="n">l1</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;DDA: </span><span class="si">{</span><span class="n">radar_names</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">height</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> km </span><span class="si">{</span><span class="n">time_str</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="n">field_name</span> <span class="o">=</span> <span class="s2">&quot;Hor. wind vectors (u,v) with &quot;</span> <span class="o">+</span> <span class="n">field</span>
-    <span class="k">return</span> <span class="n">l1</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">field_name</span>
+    <span class="k">return</span> <span class="n">l1</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">field_name</span>
 
 
-<span class="k">def</span> <span class="nf">generate_dda_latitude_slice_title</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">datetime_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                      <span class="n">wind_vectors</span><span class="o">=</span><span class="s1">&#39;hor&#39;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">generate_dda_latitude_slice_title</span><span class="p">(</span>
+    <span class="n">grid</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">datetime_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wind_vectors</span><span class="o">=</span><span class="s2">&quot;hor&quot;</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    creates the dda latitude slice plot title</span>
 
@@ -666,13 +683,13 @@ document.write(`
     <span class="k">if</span> <span class="n">datetime_format</span><span class="p">:</span>
         <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">datetime_format</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;Z&#39;</span>
-    <span class="n">radar_names</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;Z&quot;</span>
+    <span class="n">radar_names</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-    <span class="k">for</span> <span class="n">mdata</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;additional_radars&#39;</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_name&#39;</span><span class="p">],</span> <span class="nb">bytes</span><span class="p">):</span>
-            <span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-        <span class="n">radar_names</span> <span class="o">+=</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_name&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">mdata</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;additional_radars&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mdata</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">],</span> <span class="nb">bytes</span><span class="p">):</span>
+            <span class="n">mdata</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdata</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="n">radar_names</span> <span class="o">+=</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">mdata</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">]</span>
     <span class="n">disp</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">level</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1000.0</span>
     <span class="k">if</span> <span class="n">disp</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;east&quot;</span>
@@ -681,17 +698,17 @@ document.write(`
         <span class="n">disp</span> <span class="o">=</span> <span class="o">-</span><span class="n">disp</span>
 
     <span class="n">l1</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;DDA: </span><span class="si">{</span><span class="n">radar_names</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">disp</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> km </span><span class="si">{</span><span class="n">direction</span><span class="si">}</span><span class="s2"> of origin </span><span class="si">{</span><span class="n">time_str</span><span class="si">}</span><span class="s2">&quot;</span>
-    <span class="k">if</span> <span class="n">wind_vectors</span> <span class="o">==</span> <span class="s1">&#39;hor&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">wind_vectors</span> <span class="o">==</span> <span class="s2">&quot;hor&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s2">&quot;Hor. wind vectors (u,v)&quot;</span>
-    <span class="k">elif</span> <span class="n">wind_vectors</span> <span class="o">==</span> <span class="s1">&#39;ver&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">wind_vectors</span> <span class="o">==</span> <span class="s2">&quot;ver&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s2">&quot;Vert. wind vectors (v,w)&quot;</span>
-    <span class="n">field_name</span> <span class="o">+=</span> <span class="s1">&#39; with &#39;</span> <span class="o">+</span> <span class="n">field</span>
-    <span class="k">return</span> <span class="n">l1</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">field_name</span>
+    <span class="n">field_name</span> <span class="o">+=</span> <span class="s2">&quot; with &quot;</span> <span class="o">+</span> <span class="n">field</span>
+    <span class="k">return</span> <span class="n">l1</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">field_name</span>
 
 
-<span class="k">def</span> <span class="nf">generate_dda_longitude_slice_title</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span>
-                                       <span class="n">datetime_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                       <span class="n">wind_vectors</span><span class="o">=</span><span class="s1">&#39;hor&#39;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">generate_dda_longitude_slice_title</span><span class="p">(</span>
+    <span class="n">grid</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">datetime_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wind_vectors</span><span class="o">=</span><span class="s2">&quot;hor&quot;</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    creates the dda longitude slice plot title</span>
 
@@ -719,13 +736,13 @@ document.write(`
     <span class="k">if</span> <span class="n">datetime_format</span><span class="p">:</span>
         <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">datetime_format</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;Z&#39;</span>
-    <span class="n">radar_names</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">time_str</span> <span class="o">=</span> <span class="n">begin_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;Z&quot;</span>
+    <span class="n">radar_names</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-    <span class="k">for</span> <span class="n">mdata</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;additional_radars&#39;</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_name&#39;</span><span class="p">],</span> <span class="nb">bytes</span><span class="p">):</span>
-            <span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-        <span class="n">radar_names</span> <span class="o">+=</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">mdata</span><span class="p">[</span><span class="s1">&#39;radar_name&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">mdata</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;additional_radars&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mdata</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">],</span> <span class="nb">bytes</span><span class="p">):</span>
+            <span class="n">mdata</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdata</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="n">radar_names</span> <span class="o">+=</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">mdata</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">]</span>
     <span class="n">disp</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">level</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1000.0</span>
     <span class="k">if</span> <span class="n">disp</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;north&quot;</span>
@@ -733,12 +750,12 @@ document.write(`
         <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;south&quot;</span>
         <span class="n">disp</span> <span class="o">=</span> <span class="o">-</span><span class="n">disp</span>
     <span class="n">l1</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;DDA: </span><span class="si">{</span><span class="n">radar_names</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">disp</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> km </span><span class="si">{</span><span class="n">direction</span><span class="si">}</span><span class="s2"> of origin </span><span class="si">{</span><span class="n">time_str</span><span class="si">}</span><span class="s2">&quot;</span>
-    <span class="k">if</span> <span class="n">wind_vectors</span> <span class="o">==</span> <span class="s1">&#39;hor&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">wind_vectors</span> <span class="o">==</span> <span class="s2">&quot;hor&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s2">&quot;Hor. wind vectors (u,v)&quot;</span>
-    <span class="k">elif</span> <span class="n">wind_vectors</span> <span class="o">==</span> <span class="s1">&#39;ver&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">wind_vectors</span> <span class="o">==</span> <span class="s2">&quot;ver&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s2">&quot;Vert. wind vectors (v,w)&quot;</span>
-    <span class="n">field_name</span> <span class="o">+=</span> <span class="s1">&#39; with &#39;</span> <span class="o">+</span> <span class="n">field</span>
-    <span class="k">return</span> <span class="n">l1</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">field_name</span>
+    <span class="n">field_name</span> <span class="o">+=</span> <span class="s2">&quot; with &quot;</span> <span class="o">+</span> <span class="n">field</span>
+    <span class="k">return</span> <span class="n">l1</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">field_name</span>
 
 
 <div class="viewcode-block" id="get_colobar_label">
@@ -760,17 +777,17 @@ document.write(`
 <span class="sd">        colorbar label</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="s1">&#39;standard_name&#39;</span> <span class="ow">in</span> <span class="n">field_dict</span><span class="p">:</span>
-        <span class="n">standard_name</span> <span class="o">=</span> <span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;standard_name&#39;</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="s1">&#39;long_name&#39;</span> <span class="ow">in</span> <span class="n">field_dict</span><span class="p">:</span>
-        <span class="n">standard_name</span> <span class="o">=</span> <span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;long_name&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s2">&quot;standard_name&quot;</span> <span class="ow">in</span> <span class="n">field_dict</span><span class="p">:</span>
+        <span class="n">standard_name</span> <span class="o">=</span> <span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="s2">&quot;long_name&quot;</span> <span class="ow">in</span> <span class="n">field_dict</span><span class="p">:</span>
+        <span class="n">standard_name</span> <span class="o">=</span> <span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">standard_name</span> <span class="o">=</span> <span class="n">field_name</span>
 
-    <span class="k">if</span> <span class="s1">&#39;units&#39;</span> <span class="ow">in</span> <span class="n">field_dict</span><span class="p">:</span>
-        <span class="n">units</span> <span class="o">=</span> <span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s2">&quot;units&quot;</span> <span class="ow">in</span> <span class="n">field_dict</span><span class="p">:</span>
+        <span class="n">units</span> <span class="o">=</span> <span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">units</span> <span class="o">=</span> <span class="s1">&#39;?&#39;</span>
+        <span class="n">units</span> <span class="o">=</span> <span class="s2">&quot;?&quot;</span>
 
     <span class="k">return</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_colorbar_label</span><span class="p">(</span><span class="n">standard_name</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span></div>
 
@@ -795,13 +812,13 @@ document.write(`
 <span class="sd">        the field name</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="s1">&#39;standard_name&#39;</span> <span class="ow">in</span> <span class="n">field_dict</span><span class="p">:</span>
-        <span class="n">field_name</span> <span class="o">=</span> <span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;standard_name&#39;</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="s1">&#39;long_name&#39;</span> <span class="ow">in</span> <span class="n">field_dict</span><span class="p">:</span>
-        <span class="n">field_name</span> <span class="o">=</span> <span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;long_name&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s2">&quot;standard_name&quot;</span> <span class="ow">in</span> <span class="n">field_dict</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="s2">&quot;long_name&quot;</span> <span class="ow">in</span> <span class="n">field_dict</span><span class="p">:</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
-    <span class="n">field_name</span> <span class="o">=</span> <span class="n">field_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span>
+    <span class="n">field_name</span> <span class="o">=</span> <span class="n">field_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
     <span class="n">field_name</span> <span class="o">=</span> <span class="n">field_name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="n">field_name</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
 
     <span class="k">return</span> <span class="n">field_name</span></div>
@@ -844,30 +861,31 @@ document.write(`
     <span class="n">ref_dict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
     <span class="n">cmap</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colormaps</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_field_colormap</span><span class="p">(</span><span class="n">field_name</span><span class="p">))</span>
 
-    <span class="k">if</span> <span class="n">field_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;boundaries&#39;</span> <span class="ow">in</span> <span class="n">field_dict</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">field_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;boundaries&quot;</span> <span class="ow">in</span> <span class="n">field_dict</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">isxarray</span><span class="p">:</span>
-            <span class="n">ncolors</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;boundaries&#39;</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">ncolors</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;boundaries&quot;</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ncolors</span> <span class="o">=</span> <span class="n">cmap</span><span class="o">.</span><span class="n">N</span>
         <span class="n">norm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">BoundaryNorm</span><span class="p">(</span>
-            <span class="n">boundaries</span><span class="o">=</span><span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;boundaries&#39;</span><span class="p">],</span> <span class="n">ncolors</span><span class="o">=</span><span class="n">ncolors</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="s1">&#39;boundaries&#39;</span> <span class="ow">in</span> <span class="n">ref_dict</span><span class="p">:</span>
+            <span class="n">boundaries</span><span class="o">=</span><span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;boundaries&quot;</span><span class="p">],</span> <span class="n">ncolors</span><span class="o">=</span><span class="n">ncolors</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="s2">&quot;boundaries&quot;</span> <span class="ow">in</span> <span class="n">ref_dict</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">isxarray</span><span class="p">:</span>
-            <span class="n">ncolors</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ref_dict</span><span class="p">[</span><span class="s1">&#39;boundaries&#39;</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">ncolors</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ref_dict</span><span class="p">[</span><span class="s2">&quot;boundaries&quot;</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ncolors</span> <span class="o">=</span> <span class="n">cmap</span><span class="o">.</span><span class="n">N</span>
         <span class="n">norm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">BoundaryNorm</span><span class="p">(</span>
-            <span class="n">boundaries</span><span class="o">=</span><span class="n">ref_dict</span><span class="p">[</span><span class="s1">&#39;boundaries&#39;</span><span class="p">],</span> <span class="n">ncolors</span><span class="o">=</span><span class="n">ncolors</span><span class="p">)</span>
+            <span class="n">boundaries</span><span class="o">=</span><span class="n">ref_dict</span><span class="p">[</span><span class="s2">&quot;boundaries&quot;</span><span class="p">],</span> <span class="n">ncolors</span><span class="o">=</span><span class="n">ncolors</span>
+        <span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">field_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;ticks&#39;</span> <span class="ow">in</span> <span class="n">field_dict</span><span class="p">:</span>
-        <span class="n">ticks</span> <span class="o">=</span> <span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;ticks&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s1">&#39;labels&#39;</span> <span class="ow">in</span> <span class="n">field_dict</span><span class="p">:</span>
-            <span class="n">ticklabs</span> <span class="o">=</span> <span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="s1">&#39;ticks&#39;</span> <span class="ow">in</span> <span class="n">ref_dict</span><span class="p">:</span>
-        <span class="n">ticks</span> <span class="o">=</span> <span class="n">ref_dict</span><span class="p">[</span><span class="s1">&#39;ticks&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s1">&#39;labels&#39;</span> <span class="ow">in</span> <span class="n">ref_dict</span><span class="p">:</span>
-            <span class="n">ticklabs</span> <span class="o">=</span> <span class="n">ref_dict</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span>
-
+    <span class="k">if</span> <span class="n">field_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;ticks&quot;</span> <span class="ow">in</span> <span class="n">field_dict</span><span class="p">:</span>
+        <span class="n">ticks</span> <span class="o">=</span> <span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;ticks&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;labels&quot;</span> <span class="ow">in</span> <span class="n">field_dict</span><span class="p">:</span>
+            <span class="n">ticklabs</span> <span class="o">=</span> <span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="s2">&quot;ticks&quot;</span> <span class="ow">in</span> <span class="n">ref_dict</span><span class="p">:</span>
+        <span class="n">ticks</span> <span class="o">=</span> <span class="n">ref_dict</span><span class="p">[</span><span class="s2">&quot;ticks&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;labels&quot;</span> <span class="ow">in</span> <span class="n">ref_dict</span><span class="p">:</span>
+            <span class="n">ticklabs</span> <span class="o">=</span> <span class="n">ref_dict</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">norm</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">ticklabs</span>
 </pre></div>
 <div class="section ablog__blog_comments">
@@ -912,7 +930,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     <br/>
   </p>
 </div>

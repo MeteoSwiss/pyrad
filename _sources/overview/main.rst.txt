@@ -28,6 +28,7 @@ dempath               STRING   OPTIONAL. Base directory of the Digital Elevation
 smnpath               STRING   OPTIONAL. Base directory of the SwissMetNet stations data. Used in the comparison between radar data and rain gauges (Optional).
 disdropath            STRING   OPTIONAL. Base directory of the disdrometer data. Used in the comparison between radar data and disdrometers (Optional).
 solarfluxpath         STRING   OPTIONAL. Base directory of the solar flux data. Used to plot the calibration bias based on sun monitoring (Optional).
-cosmopath             STRING   OPTIONAL. Base directory of the COSMO data files.
+iconpath              STRING   OPTIONAL. Base directory of the ICON (NWP model) data files.
 ====================  =======  =======================================================================================
+
 

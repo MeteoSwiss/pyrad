@@ -401,6 +401,7 @@ document.write(`
 <span class="sd">    read_iso0_grib_data</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -413,6 +414,7 @@ document.write(`
 <span class="c1"># check existence of pygrib library</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">pygrib</span>
+
     <span class="n">_PYGRIB_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_PYGRIB_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
@@ -420,8 +422,13 @@ document.write(`
 
 <div class="viewcode-block" id="iso2radar_data">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.iso2radar_data.html#pyrad.io.iso2radar_data">[docs]</a>
-<span class="k">def</span> <span class="nf">iso2radar_data</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">iso0_data</span><span class="p">,</span> <span class="n">time_info</span><span class="p">,</span> <span class="n">iso0_statistic</span><span class="o">=</span><span class="s1">&#39;avg_by_dist&#39;</span><span class="p">,</span>
-                   <span class="n">field_name</span><span class="o">=</span><span class="s1">&#39;height_over_iso0&#39;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">iso2radar_data</span><span class="p">(</span>
+    <span class="n">radar</span><span class="p">,</span>
+    <span class="n">iso0_data</span><span class="p">,</span>
+    <span class="n">time_info</span><span class="p">,</span>
+    <span class="n">iso0_statistic</span><span class="o">=</span><span class="s2">&quot;avg_by_dist&quot;</span><span class="p">,</span>
+    <span class="n">field_name</span><span class="o">=</span><span class="s2">&quot;height_over_iso0&quot;</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    get the iso0 value corresponding to each radar gate</span>
 
@@ -448,8 +455,8 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># get the relevant time indices for interpolation in time</span>
-    <span class="n">time_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;fcst_time&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">time_info</span><span class="p">))</span>
-    <span class="k">if</span> <span class="n">time_info</span> <span class="o">&gt;</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;fcst_time&#39;</span><span class="p">][</span><span class="n">time_index</span><span class="p">]:</span>
+    <span class="n">time_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;fcst_time&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">time_info</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">time_info</span> <span class="o">&gt;</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;fcst_time&quot;</span><span class="p">][</span><span class="n">time_index</span><span class="p">]:</span>
         <span class="n">time_index_future</span> <span class="o">=</span> <span class="n">time_index</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="n">time_index_past</span> <span class="o">=</span> <span class="n">time_index</span>
     <span class="k">else</span><span class="p">:</span>
@@ -460,33 +467,39 @@ document.write(`
     <span class="k">if</span> <span class="n">time_index_past</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
         <span class="c1"># no interpolation: use data from time_index_future</span>
         <span class="n">iso0_ref</span> <span class="o">=</span> <span class="n">get_iso0_ref</span><span class="p">(</span>
-            <span class="n">radar</span><span class="p">,</span> <span class="n">iso0_data</span><span class="p">,</span> <span class="n">time_index_future</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="n">iso0_statistic</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">time_index_future</span> <span class="o">&gt;</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;fcst_time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="n">radar</span><span class="p">,</span> <span class="n">iso0_data</span><span class="p">,</span> <span class="n">time_index_future</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="n">iso0_statistic</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">time_index_future</span> <span class="o">&gt;</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;fcst_time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
         <span class="c1"># no interpolation: use data from time_index_past</span>
         <span class="n">iso0_ref</span> <span class="o">=</span> <span class="n">get_iso0_ref</span><span class="p">(</span>
-            <span class="n">radar</span><span class="p">,</span> <span class="n">iso0_data</span><span class="p">,</span> <span class="n">time_index_past</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="n">iso0_statistic</span><span class="p">)</span>
+            <span class="n">radar</span><span class="p">,</span> <span class="n">iso0_data</span><span class="p">,</span> <span class="n">time_index_past</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="n">iso0_statistic</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># interpolate between two time steps</span>
         <span class="n">iso0_ref_past</span> <span class="o">=</span> <span class="n">get_iso0_ref</span><span class="p">(</span>
-            <span class="n">radar</span><span class="p">,</span> <span class="n">iso0_data</span><span class="p">,</span> <span class="n">time_index_past</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="n">iso0_statistic</span><span class="p">)</span>
+            <span class="n">radar</span><span class="p">,</span> <span class="n">iso0_data</span><span class="p">,</span> <span class="n">time_index_past</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="n">iso0_statistic</span>
+        <span class="p">)</span>
         <span class="n">iso0_ref_future</span> <span class="o">=</span> <span class="n">get_iso0_ref</span><span class="p">(</span>
-            <span class="n">radar</span><span class="p">,</span> <span class="n">iso0_data</span><span class="p">,</span> <span class="n">time_index_future</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="n">iso0_statistic</span><span class="p">)</span>
+            <span class="n">radar</span><span class="p">,</span> <span class="n">iso0_data</span><span class="p">,</span> <span class="n">time_index_future</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="n">iso0_statistic</span>
+        <span class="p">)</span>
 
         <span class="c1"># put time in seconds from past forecast</span>
         <span class="n">time_info_s</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">time_info</span> <span class="o">-</span>
-            <span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;fcst_time&#39;</span><span class="p">][</span><span class="n">time_index_past</span><span class="p">])</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+            <span class="n">time_info</span> <span class="o">-</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;fcst_time&quot;</span><span class="p">][</span><span class="n">time_index_past</span><span class="p">]</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
         <span class="n">fcst_time_s</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;fcst_time&#39;</span><span class="p">][</span><span class="n">time_index_future</span><span class="p">]</span> <span class="o">-</span>
-            <span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;fcst_time&#39;</span><span class="p">][</span><span class="n">time_index_past</span><span class="p">])</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+            <span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;fcst_time&quot;</span><span class="p">][</span><span class="n">time_index_future</span><span class="p">]</span>
+            <span class="o">-</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;fcst_time&quot;</span><span class="p">][</span><span class="n">time_index_past</span><span class="p">]</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
         <span class="n">iso0_ref</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span>
-            <span class="n">time_info_s</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">fcst_time_s</span><span class="p">],</span> <span class="p">[</span><span class="n">iso0_ref_past</span><span class="p">,</span> <span class="n">iso0_ref_future</span><span class="p">])</span>
+            <span class="n">time_info_s</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">fcst_time_s</span><span class="p">],</span> <span class="p">[</span><span class="n">iso0_ref_past</span><span class="p">,</span> <span class="n">iso0_ref_future</span><span class="p">]</span>
+        <span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;iso0_ref:&#39;</span><span class="p">,</span> <span class="n">iso0_ref</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;iso0_ref:&quot;</span><span class="p">,</span> <span class="n">iso0_ref</span><span class="p">)</span>
 
     <span class="c1"># put field</span>
     <span class="n">field_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
-    <span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">iso0_ref</span>
+    <span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">iso0_ref</span>
 
     <span class="k">return</span> <span class="n">field_dict</span></div>
 
@@ -494,8 +507,9 @@ document.write(`
 
 <div class="viewcode-block" id="grib2radar_data">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.grib2radar_data.html#pyrad.io.grib2radar_data">[docs]</a>
-<span class="k">def</span> <span class="nf">grib2radar_data</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">iso0_data</span><span class="p">,</span> <span class="n">time_info</span><span class="p">,</span> <span class="n">time_interp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                    <span class="n">field_name</span><span class="o">=</span><span class="s1">&#39;height_over_iso0&#39;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">grib2radar_data</span><span class="p">(</span>
+    <span class="n">radar</span><span class="p">,</span> <span class="n">iso0_data</span><span class="p">,</span> <span class="n">time_info</span><span class="p">,</span> <span class="n">time_interp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">field_name</span><span class="o">=</span><span class="s2">&quot;height_over_iso0&quot;</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    get the iso0 value corresponding to each radar gate</span>
 
@@ -522,11 +536,11 @@ document.write(`
 <span class="sd">        metadata</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">time_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;fcst_time&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">time_info</span><span class="p">))</span>
+    <span class="n">time_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;fcst_time&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">time_info</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="n">time_interp</span><span class="p">:</span>
         <span class="c1"># get the relevant time indices for interpolation in time</span>
-        <span class="k">if</span> <span class="n">time_info</span> <span class="o">&gt;</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;fcst_time&#39;</span><span class="p">][</span><span class="n">time_index</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">time_info</span> <span class="o">&gt;</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;fcst_time&quot;</span><span class="p">][</span><span class="n">time_index</span><span class="p">]:</span>
             <span class="n">time_index_future</span> <span class="o">=</span> <span class="n">time_index</span> <span class="o">+</span> <span class="mi">1</span>
             <span class="n">time_index_past</span> <span class="o">=</span> <span class="n">time_index</span>
         <span class="k">else</span><span class="p">:</span>
@@ -536,48 +550,53 @@ document.write(`
         <span class="c1"># interpolate the iso0 ref in time</span>
         <span class="k">if</span> <span class="n">time_index_past</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="c1"># no interpolation: use data from time_index_future</span>
-            <span class="n">iso0_ref</span> <span class="o">=</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">][</span><span class="n">time_index_future</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
-        <span class="k">elif</span> <span class="n">time_index_future</span> <span class="o">&gt;</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;fcst_time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="n">iso0_ref</span> <span class="o">=</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;values&quot;</span><span class="p">][</span><span class="n">time_index_future</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+        <span class="k">elif</span> <span class="n">time_index_future</span> <span class="o">&gt;</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;fcst_time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
             <span class="c1"># no interpolation: use data from time_index_past</span>
-            <span class="n">iso0_ref</span> <span class="o">=</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">][</span><span class="n">time_index_past</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+            <span class="n">iso0_ref</span> <span class="o">=</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;values&quot;</span><span class="p">][</span><span class="n">time_index_past</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># put time in seconds from past forecast</span>
             <span class="n">time_info_s</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">time_info</span> <span class="o">-</span>
-                <span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;fcst_time&#39;</span><span class="p">][</span><span class="n">time_index_past</span><span class="p">])</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+                <span class="n">time_info</span> <span class="o">-</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;fcst_time&quot;</span><span class="p">][</span><span class="n">time_index_past</span><span class="p">]</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
             <span class="n">fcst_time_s</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;fcst_time&#39;</span><span class="p">][</span><span class="n">time_index_future</span><span class="p">]</span> <span class="o">-</span>
-                <span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;fcst_time&#39;</span><span class="p">][</span><span class="n">time_index_past</span><span class="p">])</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+                <span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;fcst_time&quot;</span><span class="p">][</span><span class="n">time_index_future</span><span class="p">]</span>
+                <span class="o">-</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;fcst_time&quot;</span><span class="p">][</span><span class="n">time_index_past</span><span class="p">]</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
 
             <span class="c1"># interpolate between two time steps</span>
             <span class="n">fcst_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">fcst_time_s</span><span class="p">])</span>
-            <span class="n">values</span> <span class="o">=</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">][</span>
-                <span class="n">time_index_past</span><span class="p">:</span><span class="n">time_index_future</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;values&quot;</span><span class="p">][</span><span class="n">time_index_past</span> <span class="p">:</span> <span class="n">time_index_future</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
             <span class="n">f</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">fcst_time</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">assume_sorted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
             <span class="n">iso0_ref</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">time_info_s</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">iso0_ref</span> <span class="o">=</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">][</span><span class="n">time_index</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+        <span class="n">iso0_ref</span> <span class="o">=</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;values&quot;</span><span class="p">][</span><span class="n">time_index</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
 
     <span class="n">x_iso</span><span class="p">,</span> <span class="n">y_iso</span> <span class="o">=</span> <span class="n">geographic_to_cartesian_aeqd</span><span class="p">(</span>
-        <span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;lons&#39;</span><span class="p">],</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;lats&#39;</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;lons&quot;</span><span class="p">],</span>
+        <span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;lats&quot;</span><span class="p">],</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+    <span class="p">)</span>
 
     <span class="c1"># find interpolation function</span>
     <span class="n">interp_func</span> <span class="o">=</span> <span class="n">NearestNDInterpolator</span><span class="p">(</span>
-        <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">x_iso</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">y_iso</span><span class="o">.</span><span class="n">flatten</span><span class="p">())),</span> <span class="n">iso0_ref</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+        <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">x_iso</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">y_iso</span><span class="o">.</span><span class="n">flatten</span><span class="p">())),</span> <span class="n">iso0_ref</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="p">)</span>
 
     <span class="c1"># interpolate</span>
     <span class="n">data_interp</span> <span class="o">=</span> <span class="n">interp_func</span><span class="p">(</span>
-        <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+        <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+    <span class="p">)</span>
     <span class="n">data_interp</span> <span class="o">=</span> <span class="n">data_interp</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">radar</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">ngates</span><span class="p">))</span>
 
     <span class="c1"># put field</span>
     <span class="n">field_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s1">&#39;height_over_iso0&#39;</span><span class="p">:</span>
-        <span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">data_interp</span>
+    <span class="k">if</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s2">&quot;height_over_iso0&quot;</span><span class="p">:</span>
+        <span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">data_interp</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_interp</span>
+        <span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_interp</span>
 
     <span class="k">return</span> <span class="n">field_dict</span></div>
 
@@ -585,7 +604,7 @@ document.write(`
 
 <div class="viewcode-block" id="get_iso0_ref">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.get_iso0_ref.html#pyrad.io.get_iso0_ref">[docs]</a>
-<span class="k">def</span> <span class="nf">get_iso0_ref</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">iso0_data</span><span class="p">,</span> <span class="n">time_index</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="s1">&#39;avg_by_dist&#39;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_iso0_ref</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">iso0_data</span><span class="p">,</span> <span class="n">time_index</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="s2">&quot;avg_by_dist&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    gets the is0 that has to be taken as reference. The iso0 is an average of</span>
 <span class="sd">    the iso0 points available weighted by the distance to the radar. If no</span>
@@ -611,32 +630,32 @@ document.write(`
 <span class="sd">        reference iso0 [m]</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">npoints_iso0</span> <span class="o">=</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;npoints_iso0&#39;</span><span class="p">][</span><span class="n">time_index</span><span class="p">]</span>
+    <span class="n">npoints_iso0</span> <span class="o">=</span> <span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;npoints_iso0&quot;</span><span class="p">][</span><span class="n">time_index</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">npoints_iso0</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="c1"># iso 0 below ground level: we take the radar altitude as reference</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;iso-0 below ground level. &#39;</span>
-             <span class="s1">&#39;The radar altitude will be used as reference&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;iso-0 below ground level. &quot;</span> <span class="s2">&quot;The radar altitude will be used as reference&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="n">statistic</span> <span class="o">==</span> <span class="s1">&#39;avg&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;iso0_points&#39;</span><span class="p">][</span><span class="n">time_index</span><span class="p">])</span>
-    <span class="k">if</span> <span class="n">statistic</span> <span class="o">==</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;iso0_points&#39;</span><span class="p">][</span><span class="n">time_index</span><span class="p">])</span>
-    <span class="k">if</span> <span class="n">statistic</span> <span class="o">==</span> <span class="s1">&#39;max&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;iso0_points&#39;</span><span class="p">][</span><span class="n">time_index</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">statistic</span> <span class="o">==</span> <span class="s2">&quot;avg&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;iso0_points&quot;</span><span class="p">][</span><span class="n">time_index</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">statistic</span> <span class="o">==</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;iso0_points&quot;</span><span class="p">][</span><span class="n">time_index</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">statistic</span> <span class="o">==</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;iso0_points&quot;</span><span class="p">][</span><span class="n">time_index</span><span class="p">])</span>
 
-    <span class="k">if</span> <span class="n">statistic</span> <span class="o">!=</span> <span class="s1">&#39;avg_by_dist&#39;</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;unknown statistic &#39;</span> <span class="o">+</span> <span class="n">statistic</span> <span class="o">+</span>
-             <span class="s1">&#39;. Default avg_by_dist will be applied&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">statistic</span> <span class="o">!=</span> <span class="s2">&quot;avg_by_dist&quot;</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;unknown statistic &quot;</span> <span class="o">+</span> <span class="n">statistic</span> <span class="o">+</span> <span class="s2">&quot;. Default avg_by_dist will be applied&quot;</span><span class="p">)</span>
     <span class="c1"># mean weighted by the distance from the iso0 point to the radar</span>
     <span class="n">x_iso</span><span class="p">,</span> <span class="n">y_iso</span> <span class="o">=</span> <span class="n">geographic_to_cartesian_aeqd</span><span class="p">(</span>
-        <span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;lon_points&#39;</span><span class="p">][</span><span class="n">time_index</span><span class="p">],</span>
-        <span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;lat_points&#39;</span><span class="p">][</span><span class="n">time_index</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;lon_points&quot;</span><span class="p">][</span><span class="n">time_index</span><span class="p">],</span>
+        <span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;lat_points&quot;</span><span class="p">][</span><span class="n">time_index</span><span class="p">],</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+    <span class="p">)</span>
     <span class="n">dist_iso</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x_iso</span> <span class="o">*</span> <span class="n">x_iso</span> <span class="o">+</span> <span class="n">y_iso</span> <span class="o">*</span> <span class="n">y_iso</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">iso0_data</span><span class="p">[</span><span class="s1">&#39;iso0_points&#39;</span><span class="p">][</span><span class="n">time_index</span><span class="p">]</span> <span class="o">*</span> <span class="n">dist_iso</span><span class="p">)</span> <span class="o">/</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dist_iso</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">iso0_data</span><span class="p">[</span><span class="s2">&quot;iso0_points&quot;</span><span class="p">][</span><span class="n">time_index</span><span class="p">]</span> <span class="o">*</span> <span class="n">dist_iso</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dist_iso</span><span class="p">)</span></div>
 
 
 
@@ -658,7 +677,7 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">iso0file</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">iso0file</span><span class="p">:</span>
 
             <span class="n">run_time</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">fcst_time</span> <span class="o">=</span> <span class="p">[]</span>
@@ -683,22 +702,23 @@ document.write(`
                         <span class="k">continue</span>
 
                     <span class="c1"># ignore comments</span>
-                    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">):</span>
                         <span class="k">continue</span>
 
-                    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Remove comments</span>
+                    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Remove comments</span>
                     <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
                     <span class="n">vals</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
 
-                    <span class="k">if</span> <span class="n">vals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;NIVEAU&#39;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">vals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;NIVEAU&quot;</span><span class="p">:</span>
                         <span class="n">run_time_aux</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
-                            <span class="n">vals</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S&#39;</span><span class="p">)</span>
+                            <span class="n">vals</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span>
+                        <span class="p">)</span>
                         <span class="n">npoinst_iso0_aux</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">vals</span><span class="p">[</span><span class="mi">8</span><span class="p">])</span>
                         <span class="n">run_time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">run_time_aux</span><span class="p">)</span>
                         <span class="n">fcst_time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                            <span class="n">run_time_aux</span> <span class="o">+</span>
-                            <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">vals</span><span class="p">[</span><span class="mi">4</span><span class="p">])))</span>
+                            <span class="n">run_time_aux</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">vals</span><span class="p">[</span><span class="mi">4</span><span class="p">]))</span>
+                        <span class="p">)</span>
                         <span class="n">npoints_iso0</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">npoinst_iso0_aux</span><span class="p">)</span>
 
                         <span class="n">lon_points_aux</span> <span class="o">=</span> <span class="p">[]</span>
@@ -709,9 +729,9 @@ document.write(`
                             <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
                             <span class="n">vals2</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
 
-                            <span class="k">if</span> <span class="n">vals2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;LONGITUDE&#39;</span><span class="p">:</span>
-                                <span class="n">lon_points_aux</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">vals2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1000.</span><span class="p">)</span>
-                                <span class="n">lat_points_aux</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">vals2</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1000.</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="n">vals2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;LONGITUDE&quot;</span><span class="p">:</span>
+                                <span class="n">lon_points_aux</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">vals2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">)</span>
+                                <span class="n">lat_points_aux</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">vals2</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">)</span>
                                 <span class="n">iso0_points_aux</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">vals2</span><span class="p">[</span><span class="mi">5</span><span class="p">]))</span>
                         <span class="n">lon_points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lon_points_aux</span><span class="p">)</span>
                         <span class="n">lat_points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lat_points_aux</span><span class="p">)</span>
@@ -724,16 +744,16 @@ document.write(`
 
     <span class="k">except</span> <span class="ne">EnvironmentError</span> <span class="k">as</span> <span class="n">ee</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">))</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to read file &#39;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to read file &quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">iso0_data</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;run_time&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">run_time</span><span class="p">),</span>
-        <span class="s1">&#39;fcst_time&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fcst_time</span><span class="p">),</span>
-        <span class="s1">&#39;npoints_iso0&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">npoints_iso0</span><span class="p">),</span>
-        <span class="s1">&#39;lon_points&#39;</span><span class="p">:</span> <span class="n">lon_points</span><span class="p">,</span>
-        <span class="s1">&#39;lat_points&#39;</span><span class="p">:</span> <span class="n">lat_points</span><span class="p">,</span>
-        <span class="s1">&#39;iso0_points&#39;</span><span class="p">:</span> <span class="n">iso0_points</span>
+        <span class="s2">&quot;run_time&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">run_time</span><span class="p">),</span>
+        <span class="s2">&quot;fcst_time&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fcst_time</span><span class="p">),</span>
+        <span class="s2">&quot;npoints_iso0&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">npoints_iso0</span><span class="p">),</span>
+        <span class="s2">&quot;lon_points&quot;</span><span class="p">:</span> <span class="n">lon_points</span><span class="p">,</span>
+        <span class="s2">&quot;lat_points&quot;</span><span class="p">:</span> <span class="n">lat_points</span><span class="p">,</span>
+        <span class="s2">&quot;iso0_points&quot;</span><span class="p">:</span> <span class="n">iso0_points</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="k">return</span> <span class="n">iso0_data</span></div>
@@ -758,7 +778,7 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_PYGRIB_AVAILABLE</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to read file &#39;</span> <span class="o">+</span> <span class="n">fname</span> <span class="o">+</span> <span class="s1">&#39;. Pygrib library not available&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to read file &quot;</span> <span class="o">+</span> <span class="n">fname</span> <span class="o">+</span> <span class="s2">&quot;. Pygrib library not available&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
@@ -768,17 +788,16 @@ document.write(`
         <span class="n">lats</span><span class="p">,</span> <span class="n">lons</span> <span class="o">=</span> <span class="n">grb</span><span class="o">.</span><span class="n">latlons</span><span class="p">()</span>
         <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">grb</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
         <span class="n">date_analysis</span> <span class="o">=</span> <span class="n">grb</span><span class="o">.</span><span class="n">analDate</span>
-        <span class="n">date_fcst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">grb</span><span class="o">.</span><span class="n">analDate</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="n">grb</span><span class="p">[</span><span class="s1">&#39;startStep&#39;</span><span class="p">]))</span>
+        <span class="n">date_fcst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">grb</span><span class="o">.</span><span class="n">analDate</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="n">grb</span><span class="p">[</span><span class="s2">&quot;startStep&quot;</span><span class="p">]))</span>
 
     <span class="n">grbs</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="n">iso0_data</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;values&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">values</span><span class="p">),</span>
-        <span class="s1">&#39;run_time&#39;</span><span class="p">:</span> <span class="n">date_analysis</span><span class="p">,</span>
-        <span class="s1">&#39;fcst_time&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">date_fcst</span><span class="p">),</span>
-        <span class="s1">&#39;lons&#39;</span><span class="p">:</span> <span class="n">lons</span><span class="p">,</span>
-        <span class="s1">&#39;lats&#39;</span><span class="p">:</span> <span class="n">lats</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">values</span><span class="p">),</span>
+        <span class="s2">&quot;run_time&quot;</span><span class="p">:</span> <span class="n">date_analysis</span><span class="p">,</span>
+        <span class="s2">&quot;fcst_time&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">date_fcst</span><span class="p">),</span>
+        <span class="s2">&quot;lons&quot;</span><span class="p">:</span> <span class="n">lons</span><span class="p">,</span>
+        <span class="s2">&quot;lats&quot;</span><span class="p">:</span> <span class="n">lats</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">iso0_data</span></div>
 
@@ -825,7 +844,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     <br/>
   </p>
 </div>

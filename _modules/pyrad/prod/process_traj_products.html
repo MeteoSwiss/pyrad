@@ -432,109 +432,155 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">dssavedir</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;dsname&#39;</span><span class="p">]</span>
-    <span class="k">if</span> <span class="s1">&#39;dssavename&#39;</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
-        <span class="n">dssavedir</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;dssavename&#39;</span><span class="p">]</span>
+    <span class="n">dssavedir</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dsname&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s2">&quot;dssavename&quot;</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
+        <span class="n">dssavedir</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dssavename&quot;</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;TRAJ_PLOT&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;TRAJ_PLOT&quot;</span><span class="p">:</span>
 
         <span class="n">timeinfo</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;basepath&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;procname&#39;</span><span class="p">],</span> <span class="n">dssavedir</span><span class="p">,</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;prdname&#39;</span><span class="p">],</span> <span class="n">timeinfo</span><span class="o">=</span><span class="n">timeinfo</span><span class="p">)</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">],</span>
+            <span class="n">dssavedir</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;prdname&quot;</span><span class="p">],</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">timeinfo</span><span class="p">,</span>
+        <span class="p">)</span>
 
-        <span class="n">ts</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">traj</span><span class="o">.</span><span class="n">time_vector</span><span class="p">,</span>
-                        <span class="n">timeformat</span><span class="o">=</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">ts</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">traj</span><span class="o">.</span><span class="n">time_vector</span><span class="p">,</span> <span class="n">timeformat</span><span class="o">=</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;EL&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;EL&quot;</span><span class="p">:</span>
             <span class="n">fname</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
-                <span class="s1">&#39;ts&#39;</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;dstype&#39;</span><span class="p">],</span> <span class="s1">&#39;TRAJ&#39;</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;imgformat&#39;</span><span class="p">],</span>
-                <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;EL&quot;</span><span class="p">,</span> <span class="n">timeinfo</span><span class="o">=</span><span class="n">timeinfo</span><span class="p">,</span> <span class="n">timeformat</span><span class="o">=</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S&#39;</span><span class="p">,</span>
-                <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;runinfo&#39;</span><span class="p">])</span>
+                <span class="s2">&quot;ts&quot;</span><span class="p">,</span>
+                <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;TRAJ&quot;</span><span class="p">,</span>
+                <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;imgformat&quot;</span><span class="p">],</span>
+                <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;EL&quot;</span><span class="p">,</span>
+                <span class="n">timeinfo</span><span class="o">=</span><span class="n">timeinfo</span><span class="p">,</span>
+                <span class="n">timeformat</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">,</span>
+                <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;runinfo&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
 
             <span class="n">ts</span><span class="o">.</span><span class="n">add_dataseries</span><span class="p">(</span>
-                <span class="s2">&quot;Elevation&quot;</span><span class="p">,</span> <span class="s2">&quot;Elevation&quot;</span><span class="p">,</span> <span class="s2">&quot;deg&quot;</span><span class="p">,</span>
-                <span class="n">traj</span><span class="o">.</span><span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">elevation_vec</span><span class="p">)</span>
+                <span class="s2">&quot;Elevation&quot;</span><span class="p">,</span> <span class="s2">&quot;Elevation&quot;</span><span class="p">,</span> <span class="s2">&quot;deg&quot;</span><span class="p">,</span> <span class="n">traj</span><span class="o">.</span><span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">elevation_vec</span>
+            <span class="p">)</span>
             <span class="n">ts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-        <span class="k">elif</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;AZ&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;AZ&quot;</span><span class="p">:</span>
             <span class="n">fname</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
-                <span class="s1">&#39;ts&#39;</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;dstype&#39;</span><span class="p">],</span> <span class="s1">&#39;TRAJ&#39;</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;imgformat&#39;</span><span class="p">],</span>
-                <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;AZ&quot;</span><span class="p">,</span> <span class="n">timeinfo</span><span class="o">=</span><span class="n">timeinfo</span><span class="p">,</span> <span class="n">timeformat</span><span class="o">=</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S&#39;</span><span class="p">,</span>
-                <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;runinfo&#39;</span><span class="p">])</span>
+                <span class="s2">&quot;ts&quot;</span><span class="p">,</span>
+                <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;TRAJ&quot;</span><span class="p">,</span>
+                <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;imgformat&quot;</span><span class="p">],</span>
+                <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;AZ&quot;</span><span class="p">,</span>
+                <span class="n">timeinfo</span><span class="o">=</span><span class="n">timeinfo</span><span class="p">,</span>
+                <span class="n">timeformat</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">,</span>
+                <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;runinfo&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
 
             <span class="n">ts</span><span class="o">.</span><span class="n">add_dataseries</span><span class="p">(</span>
-                <span class="s2">&quot;Azimuth&quot;</span><span class="p">,</span> <span class="s2">&quot;Azimuth&quot;</span><span class="p">,</span> <span class="s2">&quot;deg&quot;</span><span class="p">,</span> <span class="n">traj</span><span class="o">.</span><span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">azimuth_vec</span><span class="p">)</span>
+                <span class="s2">&quot;Azimuth&quot;</span><span class="p">,</span> <span class="s2">&quot;Azimuth&quot;</span><span class="p">,</span> <span class="s2">&quot;deg&quot;</span><span class="p">,</span> <span class="n">traj</span><span class="o">.</span><span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">azimuth_vec</span>
+            <span class="p">)</span>
             <span class="n">ts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-        <span class="k">elif</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;RANGE&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;RANGE&quot;</span><span class="p">:</span>
             <span class="n">fname</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
-                <span class="s1">&#39;ts&#39;</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;dstype&#39;</span><span class="p">],</span> <span class="s1">&#39;TRAJ&#39;</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;imgformat&#39;</span><span class="p">],</span>
-                <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;RANGE&quot;</span><span class="p">,</span> <span class="n">timeinfo</span><span class="o">=</span><span class="n">timeinfo</span><span class="p">,</span>
-                <span class="n">timeformat</span><span class="o">=</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S&#39;</span><span class="p">,</span> <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;runinfo&#39;</span><span class="p">])</span>
+                <span class="s2">&quot;ts&quot;</span><span class="p">,</span>
+                <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;TRAJ&quot;</span><span class="p">,</span>
+                <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;imgformat&quot;</span><span class="p">],</span>
+                <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;RANGE&quot;</span><span class="p">,</span>
+                <span class="n">timeinfo</span><span class="o">=</span><span class="n">timeinfo</span><span class="p">,</span>
+                <span class="n">timeformat</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">,</span>
+                <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;runinfo&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
 
-            <span class="n">ts</span><span class="o">.</span><span class="n">add_dataseries</span><span class="p">(</span>
-                <span class="s2">&quot;Range&quot;</span><span class="p">,</span> <span class="s2">&quot;Range&quot;</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">traj</span><span class="o">.</span><span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">range_vec</span><span class="p">)</span>
+            <span class="n">ts</span><span class="o">.</span><span class="n">add_dataseries</span><span class="p">(</span><span class="s2">&quot;Range&quot;</span><span class="p">,</span> <span class="s2">&quot;Range&quot;</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">traj</span><span class="o">.</span><span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">range_vec</span><span class="p">)</span>
             <span class="n">ts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: Unknown datatype &#39;</span><span class="si">%s</span><span class="s2">&#39; (dataset: &#39;</span><span class="si">%s</span><span class="s2">&#39;)&quot;</span> <span class="o">%</span>
-                            <span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;dsname&#39;</span><span class="p">]))</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s2">&quot;ERROR: Unknown datatype &#39;</span><span class="si">%s</span><span class="s2">&#39; (dataset: &#39;</span><span class="si">%s</span><span class="s2">&#39;)&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dsname&quot;</span><span class="p">])</span>
+            <span class="p">)</span>
 
         <span class="k">return</span> <span class="kc">None</span>
 
-    <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;TRAJ_TEXT&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;TRAJ_TEXT&quot;</span><span class="p">:</span>
 
         <span class="n">timeinfo</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;basepath&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;procname&#39;</span><span class="p">],</span>
-                               <span class="n">dssavedir</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;prdname&#39;</span><span class="p">],</span>
-                               <span class="n">timeinfo</span><span class="o">=</span><span class="n">timeinfo</span><span class="p">)</span>
+        <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">],</span>
+            <span class="n">dssavedir</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;prdname&quot;</span><span class="p">],</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">timeinfo</span><span class="p">,</span>
+        <span class="p">)</span>
 
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span><span class="s1">&#39;ts&#39;</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;dstype&#39;</span><span class="p">],</span> <span class="s1">&#39;TRAJ&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;csv&#39;</span><span class="p">],</span>
-                              <span class="n">prdcfginfo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeinfo</span><span class="o">=</span><span class="n">timeinfo</span><span class="p">,</span>
-                              <span class="n">timeformat</span><span class="o">=</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S&#39;</span><span class="p">,</span>
-                              <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;runinfo&#39;</span><span class="p">])</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
+            <span class="s2">&quot;ts&quot;</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;TRAJ&quot;</span><span class="p">,</span>
+            <span class="p">[</span><span class="s2">&quot;csv&quot;</span><span class="p">],</span>
+            <span class="n">prdcfginfo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">timeinfo</span><span class="p">,</span>
+            <span class="n">timeformat</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">,</span>
+            <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;runinfo&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
 
-        <span class="n">description</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Description:&quot;</span><span class="p">,</span>
-                       <span class="s2">&quot;Time series of a plane trajectory in radar &quot;</span>
-                       <span class="s2">&quot;coordinates.&quot;</span><span class="p">]</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;Description:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Time series of a plane trajectory in radar &quot;</span> <span class="s2">&quot;coordinates.&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
 
-        <span class="n">ts</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="n">traj</span><span class="o">.</span><span class="n">time_vector</span><span class="p">,</span>
-                        <span class="n">timeformat</span><span class="o">=</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">ts</span><span class="o">.</span><span class="n">add_dataseries</span><span class="p">(</span><span class="s2">&quot;Elevation&quot;</span><span class="p">,</span> <span class="s2">&quot;Elevation&quot;</span><span class="p">,</span> <span class="s2">&quot;deg&quot;</span><span class="p">,</span>
-                          <span class="n">traj</span><span class="o">.</span><span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">elevation_vec</span><span class="p">)</span>
-        <span class="n">ts</span><span class="o">.</span><span class="n">add_dataseries</span><span class="p">(</span><span class="s2">&quot;Azimuth&quot;</span><span class="p">,</span> <span class="s2">&quot;Azimuth&quot;</span><span class="p">,</span> <span class="s2">&quot;deg&quot;</span><span class="p">,</span>
-                          <span class="n">traj</span><span class="o">.</span><span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">azimuth_vec</span><span class="p">)</span>
+        <span class="n">ts</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="p">(</span>
+            <span class="n">description</span><span class="p">,</span> <span class="n">traj</span><span class="o">.</span><span class="n">time_vector</span><span class="p">,</span> <span class="n">timeformat</span><span class="o">=</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="n">ts</span><span class="o">.</span><span class="n">add_dataseries</span><span class="p">(</span>
+            <span class="s2">&quot;Elevation&quot;</span><span class="p">,</span> <span class="s2">&quot;Elevation&quot;</span><span class="p">,</span> <span class="s2">&quot;deg&quot;</span><span class="p">,</span> <span class="n">traj</span><span class="o">.</span><span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">elevation_vec</span>
+        <span class="p">)</span>
+        <span class="n">ts</span><span class="o">.</span><span class="n">add_dataseries</span><span class="p">(</span><span class="s2">&quot;Azimuth&quot;</span><span class="p">,</span> <span class="s2">&quot;Azimuth&quot;</span><span class="p">,</span> <span class="s2">&quot;deg&quot;</span><span class="p">,</span> <span class="n">traj</span><span class="o">.</span><span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">azimuth_vec</span><span class="p">)</span>
         <span class="n">ts</span><span class="o">.</span><span class="n">add_dataseries</span><span class="p">(</span><span class="s2">&quot;Range&quot;</span><span class="p">,</span> <span class="s2">&quot;Range&quot;</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">traj</span><span class="o">.</span><span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">range_vec</span><span class="p">)</span>
 
-        <span class="n">ts</span><span class="o">.</span><span class="n">add_dataseries</span><span class="p">(</span><span class="s2">&quot;Absolute Speed&quot;</span><span class="p">,</span> <span class="s2">&quot;Absolute Speed&quot;</span><span class="p">,</span> <span class="s2">&quot;m/s&quot;</span><span class="p">,</span>
-                          <span class="n">traj</span><span class="o">.</span><span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">v_abs</span><span class="p">)</span>
-        <span class="n">ts</span><span class="o">.</span><span class="n">add_dataseries</span><span class="p">(</span><span class="s2">&quot;Radial Speed&quot;</span><span class="p">,</span> <span class="s2">&quot;Radial Speed&quot;</span><span class="p">,</span> <span class="s2">&quot;m/s&quot;</span><span class="p">,</span>
-                          <span class="n">traj</span><span class="o">.</span><span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">v_r</span><span class="p">)</span>
-        <span class="n">ts</span><span class="o">.</span><span class="n">add_dataseries</span><span class="p">(</span><span class="s2">&quot;Elevation Speed&quot;</span><span class="p">,</span> <span class="s2">&quot;Elevation Speed&quot;</span><span class="p">,</span> <span class="s2">&quot;deg/s&quot;</span><span class="p">,</span>
-                          <span class="n">traj</span><span class="o">.</span><span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">v_el</span><span class="p">)</span>
-        <span class="n">ts</span><span class="o">.</span><span class="n">add_dataseries</span><span class="p">(</span><span class="s2">&quot;Azimuth Speed&quot;</span><span class="p">,</span> <span class="s2">&quot;Azimuth Speed&quot;</span><span class="p">,</span> <span class="s2">&quot;deg/s&quot;</span><span class="p">,</span>
-                          <span class="n">traj</span><span class="o">.</span><span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">v_az</span><span class="p">)</span>
+        <span class="n">ts</span><span class="o">.</span><span class="n">add_dataseries</span><span class="p">(</span>
+            <span class="s2">&quot;Absolute Speed&quot;</span><span class="p">,</span> <span class="s2">&quot;Absolute Speed&quot;</span><span class="p">,</span> <span class="s2">&quot;m/s&quot;</span><span class="p">,</span> <span class="n">traj</span><span class="o">.</span><span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">v_abs</span>
+        <span class="p">)</span>
+        <span class="n">ts</span><span class="o">.</span><span class="n">add_dataseries</span><span class="p">(</span><span class="s2">&quot;Radial Speed&quot;</span><span class="p">,</span> <span class="s2">&quot;Radial Speed&quot;</span><span class="p">,</span> <span class="s2">&quot;m/s&quot;</span><span class="p">,</span> <span class="n">traj</span><span class="o">.</span><span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">v_r</span><span class="p">)</span>
+        <span class="n">ts</span><span class="o">.</span><span class="n">add_dataseries</span><span class="p">(</span>
+            <span class="s2">&quot;Elevation Speed&quot;</span><span class="p">,</span> <span class="s2">&quot;Elevation Speed&quot;</span><span class="p">,</span> <span class="s2">&quot;deg/s&quot;</span><span class="p">,</span> <span class="n">traj</span><span class="o">.</span><span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">v_el</span>
+        <span class="p">)</span>
+        <span class="n">ts</span><span class="o">.</span><span class="n">add_dataseries</span><span class="p">(</span>
+            <span class="s2">&quot;Azimuth Speed&quot;</span><span class="p">,</span> <span class="s2">&quot;Azimuth Speed&quot;</span><span class="p">,</span> <span class="s2">&quot;deg/s&quot;</span><span class="p">,</span> <span class="n">traj</span><span class="o">.</span><span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">v_az</span>
+        <span class="p">)</span>
 
         <span class="n">ts</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
         <span class="k">return</span> <span class="kc">None</span>
 
-    <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;TRAJ_MAP&#39;</span><span class="p">:</span>  <span class="c1"># Trajectory on a map</span>
+    <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;TRAJ_MAP&quot;</span><span class="p">:</span>  <span class="c1"># Trajectory on a map</span>
         <span class="n">timeinfo</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;basepath&#39;</span><span class="p">],</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;procname&#39;</span><span class="p">],</span> <span class="n">dssavedir</span><span class="p">,</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;prdname&#39;</span><span class="p">],</span> <span class="n">timeinfo</span><span class="o">=</span><span class="n">timeinfo</span><span class="p">)</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">],</span>
+            <span class="n">dssavedir</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;prdname&quot;</span><span class="p">],</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">timeinfo</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="n">fname</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
-            <span class="s1">&#39;ts&#39;</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;dstype&#39;</span><span class="p">],</span> <span class="s1">&#39;TRAJ&#39;</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;imgformat&#39;</span><span class="p">],</span>
-            <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;MAP&quot;</span><span class="p">,</span> <span class="n">timeinfo</span><span class="o">=</span><span class="n">timeinfo</span><span class="p">,</span> <span class="n">timeformat</span><span class="o">=</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S&#39;</span><span class="p">,</span>
-            <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;runinfo&#39;</span><span class="p">])</span>
+            <span class="s2">&quot;ts&quot;</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;TRAJ&quot;</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;imgformat&quot;</span><span class="p">],</span>
+            <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;MAP&quot;</span><span class="p">,</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">timeinfo</span><span class="p">,</span>
+            <span class="n">timeformat</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">,</span>
+            <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;runinfo&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
 
-        <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Trajectory Starting at  </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> \
-                <span class="n">traj</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Trajectory Starting at  </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">traj</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="n">fname_list</span> <span class="o">=</span> <span class="n">fname</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fname_list</span><span class="p">):</span>
@@ -546,12 +592,18 @@ document.write(`
         <span class="n">alt</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">wgs84_alt_m</span>
 
         <span class="n">plot_pos</span><span class="p">(</span>
-            <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span> <span class="n">cb_label</span><span class="o">=</span><span class="s1">&#39;Altitude [m]&#39;</span><span class="p">,</span> <span class="n">titl</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
-            <span class="n">save_fig</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">lat</span><span class="p">,</span>
+            <span class="n">lon</span><span class="p">,</span>
+            <span class="n">alt</span><span class="p">,</span>
+            <span class="n">fname_list</span><span class="p">,</span>
+            <span class="n">cb_label</span><span class="o">=</span><span class="s2">&quot;Altitude [m]&quot;</span><span class="p">,</span>
+            <span class="n">titl</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+            <span class="n">save_fig</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="k">return</span> <span class="kc">None</span>
 
-    <span class="n">warn</span><span class="p">(</span><span class="s1">&#39; Unsupported product type: &#39;</span> <span class="o">+</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">])</span>
+    <span class="n">warn</span><span class="p">(</span><span class="s2">&quot; Unsupported product type: &quot;</span> <span class="o">+</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">])</span>
     <span class="k">return</span> <span class="kc">None</span></div>
 
 </pre></div>
@@ -597,7 +649,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     <br/>
   </p>
 </div>
