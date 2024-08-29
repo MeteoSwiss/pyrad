@@ -2548,30 +2548,28 @@ def merge_scans_mfcfradial(
 
     """
     # Mapping of MeteoFrance and JMA field names to Py-ART field names
-    default_field_names = {
-        "DBZH": "reflectivity",  # JMA
-        "TH": "unfiltered_reflectivity",  # MF
-        "ZDR": "differential_reflectivity",  # MF & JMA
-        "RHOHV": "cross_correlation_ratio",  # MF & JMA
-        "PHIDP": "uncorrected_differential_phase",  # MF
-        "PSIDP": "differential_phase",  # JMA
-        "KDP": "specific_differential_phase",  # JMA
-        "VRAD": "velocity",  # MF
-        "VEL": "velocity",  # JMA
-        "WIDTH": "spectrum_width",  # JMA
-        "SIGMA": "sigma_zh",  # MF
+    DataTypeIDInFiles_defaults = {
+        "dBZ": "DBZH",  # JMA
+        "dBuZ": "TH",  # MF
+        "ZDR": "ZDR",  # MF & JMA
+        "RhoHV": "RHOHV",  # MF & JMA
+        "PhiDP": "PHIDP",  # MF
+        "uPhiDP": "PSIDP",  # JMA
+        "KDP": "KDP",  # JMA
+        "V": "VRAD",  # MF
+        "W": "WIDTH",  # JMA
+        "sigma_zh": "SIGMA",  # MF
     }
 
     field_names = {}
-    if ind_rad in cfg["DataTypeIDInFiles"]:
-        # Use custom name mapping
-        for datatype in datatype_list:
-            if datatype in cfg["DataTypeIDInFiles"][ind_rad]:
-                field_names[cfg["DataTypeIDInFiles"][ind_rad][datatype]] = (
-                    get_fieldname_pyart(datatype)
-                )
-    else:
-        field_names = default_field_names
+    # Use custom name mapping
+    for datatype in datatype_list:
+        if datatype in cfg["DataTypeIDInFiles"][ind_rad]:
+            field_names[cfg["DataTypeIDInFiles"][ind_rad][datatype]] = (
+                get_fieldname_pyart(datatype)
+            )
+        else: 
+            field_names[datatype] = DataTypeIDInFiles_defaults[datatype]
 
     radar = None
 
@@ -2903,15 +2901,13 @@ def merge_scans_cfradial(
 
     """
     field_names = {}
-    if ind_rad in cfg["DataTypeIDInFiles"]:
-        # Use custom name mapping
-        for datatype in datatype_list:
-            if datatype in cfg["DataTypeIDInFiles"][ind_rad]:
-                field_names[cfg["DataTypeIDInFiles"][ind_rad][datatype]] = (
-                    get_fieldname_pyart(datatype)
-                )
-    else:
-        for datatype in datatype_list:
+    # Use custom name mapping
+    for datatype in datatype_list:
+        if datatype in cfg["DataTypeIDInFiles"][ind_rad]:
+            field_names[cfg["DataTypeIDInFiles"][ind_rad][datatype]] = (
+                get_fieldname_pyart(datatype)
+            )
+        else:
             field_names[datatype] = get_fieldname_pyart(datatype)
 
     radar = None
@@ -3081,15 +3077,13 @@ def merge_scans_cfradial2(
 
     """
     field_names = {}
-    if cfg["DataTypeIDInFiles"][ind_rad]:
-        # Use custom name mapping
-        for datatype in datatype_list:
-            if datatype in cfg["DataTypeIDInFiles"][ind_rad]:
-                field_names[cfg["DataTypeIDInFiles"][ind_rad][datatype]] = (
-                    get_fieldname_pyart(datatype)
-                )
-    else:
-        for datatype in datatype_list:
+    # Use custom name mapping
+    for datatype in datatype_list:
+        if datatype in cfg["DataTypeIDInFiles"][ind_rad]:
+            field_names[cfg["DataTypeIDInFiles"][ind_rad][datatype]] = (
+                get_fieldname_pyart(datatype)
+            )
+        else:
             field_names[datatype] = get_fieldname_pyart(datatype)
 
     radar = None

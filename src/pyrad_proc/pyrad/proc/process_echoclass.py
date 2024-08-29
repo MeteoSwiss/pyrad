@@ -106,7 +106,6 @@ def process_echo_id(procstatus, dscfg, radar_list=None):
         warn("No valid radar")
         return None, None
     radar = radar_list[ind_rad]
-
     if zdr_field not in radar.fields:
         warn("Unable to create radar_echo_id dataset. Missing reflectivity data")
         return None, None

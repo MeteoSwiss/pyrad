@@ -734,7 +734,6 @@ DEFAULT_FIELD_NAMES = {
     'iso0_height': iso0_height,
     'icon_index': icon_index,
     'hzt_index': hzt_index,
-    'visibility': visibility,
     'mininum_visible_elevation': mininum_visible_elevation,
     'differential_phase_texture': differential_phase_texture,
     'cross_correlation_ratio_texture': cross_correlation_ratio_texture,
@@ -3686,9 +3685,6 @@ DEFAULT_FIELD_COLORMAP = {
     visibility: 'pyart_Carbone17',
     frequency_of_occurrence: 'pyart_Carbone17',
     occurrence: 'pyart_Carbone17',
-
-    noisedBZ_hh: 'pyart_ChaseSpectral',
-    noisedBZ_vv: 'pyart_ChaseSpectral',
     stat_test_lag1: 'pyart_ChaseSpectral',
     stat_test_lag2: 'pyart_ChaseSpectral',
     wide_band_noise: 'pyart_ChaseSpectral',

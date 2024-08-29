@@ -24,6 +24,13 @@ Pyrad: Python Radar Data Processing
    overview/index.rst
 
 .. toctree::
+   :maxdepth: 2
+   :hidden:
+   :caption: Notebook Gallery
+
+   notebook-gallery.rst
+
+.. toctree::
    :maxdepth: 1
    :hidden:
    :caption: Changelog

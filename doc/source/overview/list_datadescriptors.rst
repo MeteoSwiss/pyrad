@@ -599,6 +599,12 @@ description
 usage
 	*SATGRID:datatype* where datatype is a pyrad variable name as listed `here <https://meteoswiss.github.io/pyrad/overview/list_variables.html#py-art-to-pyrad>`_.
 	
+		
+
+-------------------------------------
+MeteoFrance specific
+-------------------------------------
+
 
 MFCFRADIAL
 ----------------------------- 
@@ -614,11 +620,6 @@ usage
 	*MFCFRADIAL:datatype,dataset* 
 	See the data descriptor *ODIM* for usage info as it works exactly in the same way.
 
-		
-
--------------------------------------
-MeteoFrance specific
--------------------------------------
 
 MFBIN
 ----------------------------- 

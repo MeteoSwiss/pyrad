@@ -79,7 +79,6 @@ _defaults_loc = {
     "NumRadars": 1,
     "TimeTol": 3600.0,
     "ScanList": None,
-    "DataTypeID": None,
 }
 
 _defaults_main = {

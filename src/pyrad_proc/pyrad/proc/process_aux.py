@@ -118,6 +118,7 @@ def get_process_func(dataset_type, dsname):
                 'PHIDP_KDP_KALMAN': process_phidp_kdp_Kalman
                 'PHIDP_KDP_LP': process_phidp_kdp_lp
                 'PHIDP_KDP_VULPIANI': process_phidp_kdp_Vulpiani
+                'PHIDP_KDP_MAESAKA': process_phidp_kdp_Maesaka
                 'PHIDP_SMOOTH_1W': process_smooth_phidp_single_window
                 'PHIDP_SMOOTH_2W': process_smooth_phidp_double_window
                 'POL_VARIABLES': process_pol_variables

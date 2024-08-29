@@ -183,7 +183,7 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
             + ", "
             + str(r)
             + "). Minimum distance to radar azimuth "
-            + str(d_az)
+            + str(np.min(d_az))
             + " larger than tolerance"
         )
         return None, None
@@ -198,7 +198,7 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
             + ", "
             + str(r)
             + "). Minimum distance to radar elevation "
-            + str(d_el)
+            + str(np.min(d_el))
             + " larger than tolerance"
         )
         return None, None
@@ -213,7 +213,7 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
             + ", "
             + str(r)
             + "). Minimum distance to radar range bin "
-            + str(d_r)
+            + str(np.min(d_r))
             + " larger than tolerance"
         )
         return None, None
