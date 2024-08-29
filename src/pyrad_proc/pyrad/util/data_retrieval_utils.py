@@ -590,11 +590,6 @@ def _retrieve_prod_daily(
         subprocess.call(cmd, shell=True)
 
     files = sorted(np.array([folder_out + c for c in content_zip[conditions]]))
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> master
     return files
 
 
