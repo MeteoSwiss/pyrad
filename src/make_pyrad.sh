@@ -14,12 +14,18 @@ echo 'Removing previous built...'
 rm -r $HOME/.local/lib/python${pyvers}/site-packages/pyrad
 rm -r $HOME/.local/lib/python${pyvers}/site-packages/mch_pyrad-*
 
+if [[ -z "${PYRAD_PATH}" ]]; then
+  read -p "Enter the path to your pyrad main directory [default: $HOME/pyrad/]: " PYRAD_PATH
+  PYRAD_PATH=${PYRAD_PATH:-$HOME/pyrad/}
+    export PYRAD_PATH=$PYRAD_PATH
+fi
+
 # clean pyrad
 echo 'icleaning build..'
-cd $HOME/pyrad/src/pyrad_proc
+cd $PYRAD_PATH/src/pyrad_proc
 python setup.py clean --all
 
 # recompile
 echo 'compiling...'
-cd $HOME/pyrad/src/pyrad_proc
+cd $PYRAD_PATH/src/pyrad_proc
 python setup.py install --user

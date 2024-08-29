@@ -37,13 +37,14 @@ from pyart.config import get_metadata
 from pyart.core import Radar, geographic_to_cartesian_aeqd
 from pyart.core import cartesian_to_geographic_aeqd
 from pyart.map import grid_from_radars
+
 try:
     from pyart.util import compute_directional_stats
     from pyart.util import compute_azimuthal_average
     from pyart.util import find_neighbour_gates
 except ImportError:
-    warn('ARM version of Py-ART detected, you will not be able to use some products')
-    warn('Please use Py-ART MCH instead (https://github.com/MeteoSwiss/pyart)')
+    warn("ARM version of Py-ART detected, you will not be able to use some products")
+    warn("Please use Py-ART MCH instead (https://github.com/MeteoSwiss/pyart)")
 
 from pyart.util import subset_radar
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
@@ -262,403 +263,404 @@ def get_process_func(dataset_type, dsname):
 
     """
 
-    dsformat = 'VOL'
-    if dataset_type == 'RAW':
+    dsformat = "VOL"
+    if dataset_type == "RAW":
         func_name = process_raw
-    elif dataset_type == 'AZI_AVG':
+    elif dataset_type == "AZI_AVG":
         func_name = process_azimuthal_average
-    elif dataset_type == 'MOVING_AZI_AVG':
+    elif dataset_type == "MOVING_AZI_AVG":
         func_name = process_moving_azimuthal_average
-    elif dataset_type == 'RADAR_RESAMPLING':
-        func_name = 'process_radar_resampling'
-    elif dataset_type == 'CCOR':
-        func_name = 'process_ccor'
-    elif dataset_type == 'GATEFILTER':
-        func_name = 'process_gatefilter'
-    elif dataset_type == 'GECSX':
-        func_name = 'process_gecsx'
-        dsformat = ['GRID', 'VOL']
-    elif dataset_type == 'DDA':
-        func_name = 'process_dda'
-        dsformat = 'GRID'
-    elif dataset_type == 'GRID':
-        func_name = 'process_grid'
-        dsformat = 'GRID'
-    elif dataset_type == 'RAW_GRID':
-        func_name = 'process_raw_grid'
-        dsformat = 'GRID'
-    elif dataset_type == 'VOL2GRID':
-        func_name = 'process_vol_to_grid'
-        dsformat = 'GRID'
-    elif dataset_type == 'GRID_FIELDS_DIFF':
-        func_name = 'process_grid_fields_diff'
-        dsformat = 'GRID'
-    elif dataset_type == 'GRID_MASK':
-        func_name = 'process_grid_mask'
-        dsformat = 'GRID'
-    elif dataset_type == 'GRID_TEXTURE':
-        func_name = 'process_grid_texture'
-        dsformat = 'GRID'
-    elif dataset_type == 'NORMALIZE_LUMINOSITY':
-        func_name = 'process_normalize_luminosity'
-        dsformat = 'GRID'
-    elif dataset_type == 'PIXEL_FILTER':
-        func_name = 'process_pixel_filter'
-        dsformat = 'GRID'
-    elif dataset_type == 'RAW_SPECTRA':
-        func_name = 'process_raw_spectra'
-        dsformat = 'SPECTRA'
-    elif dataset_type == 'SPECTRA_POINT':
-        func_name = 'process_spectra_point'
-        dsformat = 'SPECTRA'
-    elif dataset_type == 'IFFT':
-        func_name = 'process_ifft'
-        dsformat = 'SPECTRA'
-    elif dataset_type == 'SPECTRAL_POWER':
-        func_name = 'process_spectral_power'
-        dsformat = 'SPECTRA'
-    elif dataset_type == 'SPECTRAL_NOISE':
-        func_name = 'process_spectral_noise'
-        dsformat = 'SPECTRA'
-    elif dataset_type == 'SPECTRAL_PHASE':
-        func_name = 'process_spectral_phase'
-        dsformat = 'SPECTRA'
-    elif dataset_type == 'SPECTRAL_REFLECTIVITY':
-        func_name = 'process_spectral_reflectivity'
-        dsformat = 'SPECTRA'
-    elif dataset_type == 'sZDR':
-        func_name = 'process_spectral_differential_reflectivity'
-        dsformat = 'SPECTRA'
-    elif dataset_type == 'sPhiDP':
-        func_name = 'process_spectral_differential_phase'
-        dsformat = 'SPECTRA'
-    elif dataset_type == 'sRhoHV':
-        func_name = 'process_spectral_rhohv'
-        dsformat = 'SPECTRA'
-    elif dataset_type == 'FILTER_SPECTRA_NOISE':
-        func_name = 'process_filter_spectra_noise'
-        dsformat = 'SPECTRA'
-    elif dataset_type == 'FILTER_0DOPPLER':
-        func_name = 'process_filter_0Doppler'
-        dsformat = 'SPECTRA'
-    elif dataset_type == 'SRHOHV_FILTER':
-        func_name = 'process_filter_srhohv'
-        dsformat = 'SPECTRA'
-    elif dataset_type == 'SPECTRA_ANGULAR_AVERAGE':
-        func_name = 'process_spectra_ang_avg'
-        dsformat = 'SPECTRA'
-    elif dataset_type == 'FFT':
-        func_name = 'process_fft'
-        dsformat = 'SPECTRA'
-    elif dataset_type == 'RAW_IQ':
-        func_name = 'process_raw_iq'
-        dsformat = 'SPECTRA'
-    elif dataset_type == 'QVP':
-        func_name = 'process_qvp'
-        dsformat = 'QVP'
-    elif dataset_type == 'rQVP':
-        func_name = 'process_rqvp'
-        dsformat = 'QVP'
-    elif dataset_type == 'SVP':
-        func_name = 'process_svp'
-        dsformat = 'QVP'
-    elif dataset_type == 'EVP':
-        func_name = 'process_evp'
-        dsformat = 'QVP'
-    elif dataset_type == 'TIME_HEIGHT':
-        func_name = 'process_time_height'
-        dsformat = 'QVP'
-    elif dataset_type == 'TIME_ALONG_COORD':
-        func_name = 'process_ts_along_coord'
-        dsformat = 'QVP'
-    elif dataset_type == 'CDF':
-        func_name = 'process_cdf'
-    elif dataset_type == 'NCVOL':
+    elif dataset_type == "RADAR_RESAMPLING":
+        func_name = "process_radar_resampling"
+    elif dataset_type == "CCOR":
+        func_name = "process_ccor"
+    elif dataset_type == "GATEFILTER":
+        func_name = "process_gatefilter"
+    elif dataset_type == "GECSX":
+        func_name = "process_gecsx"
+        dsformat = ["GRID", "VOL"]
+    elif dataset_type == "DDA":
+        func_name = "process_dda"
+        dsformat = "GRID"
+    elif dataset_type == "GRID":
+        func_name = "process_grid"
+        dsformat = "GRID"
+    elif dataset_type == "RAW_GRID":
+        func_name = "process_raw_grid"
+        dsformat = "GRID"
+    elif dataset_type == "VOL2GRID":
+        func_name = "process_vol_to_grid"
+        dsformat = "GRID"
+    elif dataset_type == "GRID_FIELDS_DIFF":
+        func_name = "process_grid_fields_diff"
+        dsformat = "GRID"
+    elif dataset_type == "GRID_MASK":
+        func_name = "process_grid_mask"
+        dsformat = "GRID"
+    elif dataset_type == "GRID_TEXTURE":
+        func_name = "process_grid_texture"
+        dsformat = "GRID"
+    elif dataset_type == "NORMALIZE_LUMINOSITY":
+        func_name = "process_normalize_luminosity"
+        dsformat = "GRID"
+    elif dataset_type == "PIXEL_FILTER":
+        func_name = "process_pixel_filter"
+        dsformat = "GRID"
+    elif dataset_type == "RAW_SPECTRA":
+        func_name = "process_raw_spectra"
+        dsformat = "SPECTRA"
+    elif dataset_type == "SPECTRA_POINT":
+        func_name = "process_spectra_point"
+        dsformat = "SPECTRA"
+    elif dataset_type == "IFFT":
+        func_name = "process_ifft"
+        dsformat = "SPECTRA"
+    elif dataset_type == "SPECTRAL_POWER":
+        func_name = "process_spectral_power"
+        dsformat = "SPECTRA"
+    elif dataset_type == "SPECTRAL_NOISE":
+        func_name = "process_spectral_noise"
+        dsformat = "SPECTRA"
+    elif dataset_type == "SPECTRAL_PHASE":
+        func_name = "process_spectral_phase"
+        dsformat = "SPECTRA"
+    elif dataset_type == "SPECTRAL_REFLECTIVITY":
+        func_name = "process_spectral_reflectivity"
+        dsformat = "SPECTRA"
+    elif dataset_type == "sZDR":
+        func_name = "process_spectral_differential_reflectivity"
+        dsformat = "SPECTRA"
+    elif dataset_type == "sPhiDP":
+        func_name = "process_spectral_differential_phase"
+        dsformat = "SPECTRA"
+    elif dataset_type == "sRhoHV":
+        func_name = "process_spectral_rhohv"
+        dsformat = "SPECTRA"
+    elif dataset_type == "FILTER_SPECTRA_NOISE":
+        func_name = "process_filter_spectra_noise"
+        dsformat = "SPECTRA"
+    elif dataset_type == "FILTER_0DOPPLER":
+        func_name = "process_filter_0Doppler"
+        dsformat = "SPECTRA"
+    elif dataset_type == "SRHOHV_FILTER":
+        func_name = "process_filter_srhohv"
+        dsformat = "SPECTRA"
+    elif dataset_type == "SPECTRA_ANGULAR_AVERAGE":
+        func_name = "process_spectra_ang_avg"
+        dsformat = "SPECTRA"
+    elif dataset_type == "FFT":
+        func_name = "process_fft"
+        dsformat = "SPECTRA"
+    elif dataset_type == "RAW_IQ":
+        func_name = "process_raw_iq"
+        dsformat = "SPECTRA"
+    elif dataset_type == "QVP":
+        func_name = "process_qvp"
+        dsformat = "QVP"
+    elif dataset_type == "rQVP":
+        func_name = "process_rqvp"
+        dsformat = "QVP"
+    elif dataset_type == "SVP":
+        func_name = "process_svp"
+        dsformat = "QVP"
+    elif dataset_type == "EVP":
+        func_name = "process_evp"
+        dsformat = "QVP"
+    elif dataset_type == "TIME_HEIGHT":
+        func_name = "process_time_height"
+        dsformat = "QVP"
+    elif dataset_type == "TIME_ALONG_COORD":
+        func_name = "process_ts_along_coord"
+        dsformat = "QVP"
+    elif dataset_type == "CDF":
+        func_name = "process_cdf"
+    elif dataset_type == "NCVOL":
         func_name = process_save_radar
-    elif dataset_type == 'PWR':
-        func_name = 'process_signal_power'
-    elif dataset_type == 'RCS_PR':
-        func_name = 'process_rcs_pr'
-    elif dataset_type == 'RCS':
-        func_name = 'process_rcs'
-    elif dataset_type == 'SNR':
-        func_name = 'process_snr'
-    elif dataset_type == 'RADIAL_NOISE_HS':
-        func_name = 'process_radial_noise_hs'
-    elif dataset_type == 'RADIAL_NOISE_IVIC':
-        func_name = 'process_radial_noise_ivic'
-    elif dataset_type == 'VOL_REFL':
-        func_name = 'process_vol_refl'
-    elif dataset_type == 'VPR':
-        func_name = 'process_vpr'
-        dsformat = 'VPR'
-    elif dataset_type == 'BIRD_DENSITY':
-        func_name = 'process_bird_density'
-    elif dataset_type == 'RHOHV_CORRECTION':
-        func_name = 'process_correct_noise_rhohv'
-    elif dataset_type == 'BIAS_CORRECTION':
-        func_name = 'process_correct_bias'
-    elif dataset_type == 'L':
-        func_name = 'process_l'
-    elif dataset_type == 'CDR':
-        func_name = 'process_cdr'
-    elif dataset_type == 'SAN':
-        func_name = 'process_echo_id'
-    elif dataset_type == 'BIRDS_ID':
-        func_name = 'process_birds_id'
-    elif dataset_type == 'CLT_TO_SAN':
-        func_name = 'process_clt_to_echo_id'
-    elif dataset_type == 'VSTATUS_TO_SAN':
-        func_name = 'process_vstatus_to_echo_id'
-    elif dataset_type == 'hydroMF_to_hydro':
-        func_name = 'process_hydro_mf_to_hydro'
-    elif dataset_type == 'hydroMF_to_SAN':
-        func_name = 'process_hydro_mf_to_echo_id'
-    elif dataset_type == 'ECHO_FILTER':
-        func_name = 'process_echo_filter'
-    elif dataset_type == 'VOL2BIRD_FILTER':
-        func_name = 'process_filter_vol2bird'
-    elif dataset_type == 'VOL2BIRD_GATE_FILTER':
-        func_name = 'process_gate_filter_vol2bird'
-    elif dataset_type == 'ZDR_COLUMN':
-        func_name = 'process_zdr_column'
-        dsformat = 'SPARSE_GRID'
-    elif dataset_type == 'SNR_FILTER':
-        func_name = 'process_filter_snr'
-    elif dataset_type == 'VEL_FILTER':
-        func_name = 'process_filter_vel_diff'
-    elif dataset_type == 'VIS_FILTER':
-        func_name = 'process_filter_visibility'
-    elif dataset_type == 'VIS':
-        func_name = 'process_visibility'
-    elif dataset_type == 'OUTLIER_FILTER':
-        func_name = 'process_outlier_filter'
-    elif dataset_type == 'PHIDP0_CORRECTION':
-        func_name = 'process_correct_phidp0'
-    elif dataset_type == 'PHIDP_SMOOTH_1W':
-        func_name = 'process_smooth_phidp_single_window'
-    elif dataset_type == 'PHIDP_SMOOTH_2W':
-        func_name = 'process_smooth_phidp_double_window'
-    elif dataset_type == 'PHIDP_KDP_VULPIANI':
-        func_name = 'process_phidp_kdp_Vulpiani'
-    elif dataset_type == 'PHIDP_KDP_KALMAN':
-        func_name = 'process_phidp_kdp_Kalman'
-    elif dataset_type == 'PHIDP_KDP_MAESAKA':
-        func_name = 'process_phidp_kdp_Maesaka'
-    elif dataset_type == 'PHIDP_KDP_LP':
-        func_name = 'process_phidp_kdp_lp'
-    elif dataset_type == 'KDP_LEASTSQUARE_1W':
-        func_name = 'process_kdp_leastsquare_single_window'
-    elif dataset_type == 'KDP_LEASTSQUARE_2W':
-        func_name = 'process_kdp_leastsquare_double_window'
-    elif dataset_type == 'ATTENUATION':
-        func_name = 'process_attenuation'
-    elif dataset_type == 'RAINRATE':
-        func_name = 'process_rainrate'
-    elif dataset_type == 'RAIN_ACCU':
-        func_name = 'process_rainfall_accumulation'
-        dsformat = 'TIMEAVG'
-    elif dataset_type == 'TURBULENCE':
-        func_name = 'process_turbulence'
-    elif dataset_type == 'DEALIAS_FOURDD':
-        func_name = 'process_dealias_fourdd'
-    elif dataset_type == 'DEALIAS_REGION':
-        func_name = 'process_dealias_region_based'
-    elif dataset_type == 'DEALIAS_UNWRAP':
-        func_name = 'process_dealias_unwrap_phase'
-    elif dataset_type == 'RADIAL_VELOCITY':
-        func_name = 'process_radial_velocity'
-    elif dataset_type == 'WIND_VEL':
-        func_name = 'process_wind_vel'
-    elif dataset_type == 'VAD':
-        func_name = 'process_vad'
-    elif dataset_type == 'WINDSHEAR':
-        func_name = 'process_windshear'
-    elif dataset_type == 'WINDSHEAR_LIDAR':
-        func_name = 'process_windshear_lidar'
-    elif dataset_type == 'HYDROCLASS':
-        func_name = 'process_hydroclass'
-    elif dataset_type == 'CENTROIDS':
-        func_name = 'process_centroids'
-        dsformat = 'CENTROIDS'
-    elif dataset_type == 'ML_DETECTION':
-        func_name = 'process_melting_layer'
-        dsformat = 'ML'
-    elif dataset_type == 'PHIDP0_ESTIMATE':
-        func_name = 'process_estimate_phidp0'
-    elif dataset_type == 'RHOHV_RAIN':
-        func_name = 'process_rhohv_rain'
-    elif dataset_type == 'ZDR_PREC':
-        func_name = 'process_zdr_precip'
-    elif dataset_type == 'ZDR_SNOW':
-        func_name = 'process_zdr_snow'
-    elif dataset_type == 'POL_VARIABLES':
-        func_name = 'process_pol_variables'
-    elif dataset_type == 'NOISE_POWER':
-        func_name = 'process_noise_power'
-    elif dataset_type == 'REFLECTIVITY':
-        func_name = 'process_reflectivity'
-    elif dataset_type == 'ZDR':
-        func_name = 'process_differential_reflectivity'
-    elif dataset_type == 'PhiDP':
-        func_name = 'process_differential_phase'
-    elif dataset_type == 'RhoHV':
-        func_name = 'process_rhohv'
-    elif dataset_type == 'DOPPLER_VELOCITY':
-        func_name = 'process_Doppler_velocity'
-    elif dataset_type == 'DOPPLER_WIDTH':
-        func_name = 'process_Doppler_width'
-    elif dataset_type == 'POL_VARIABLES_IQ':
-        func_name = 'process_pol_variables_iq'
-    elif dataset_type == 'REFLECTIVITY_IQ':
-        func_name = 'process_reflectivity_iq'
-    elif dataset_type == 'ZDR_IQ':
-        func_name = 'process_differential_reflectivity_iq'
-    elif dataset_type == 'PhiDP_IQ':
-        func_name = 'process_differential_phase_iq'
-    elif dataset_type == 'RhoHV_IQ':
-        func_name = 'process_rhohv_iq'
-    elif dataset_type == 'DOPPLER_VELOCITY_IQ':
-        func_name = 'process_Doppler_velocity_iq'
-    elif dataset_type == 'DOPPLER_WIDTH_IQ':
-        func_name = 'process_Doppler_width_iq'
-    elif dataset_type == 'MEAN_PHASE_IQ':
-        func_name = 'process_mean_phase_iq'
-    elif dataset_type == 'ST1_IQ':
-        func_name = 'process_st1_iq'
-    elif dataset_type == 'ST2_IQ':
-        func_name = 'process_st2_iq'
-    elif dataset_type == 'WBN_IQ':
-        func_name = 'process_wbn_iq'
-    elif dataset_type == 'SELFCONSISTENCY_KDP_PHIDP':
-        func_name = 'process_selfconsistency_kdp_phidp'
-    elif dataset_type == 'SELFCONSISTENCY_BIAS':
-        func_name = 'process_selfconsistency_bias'
-    elif dataset_type == 'SELFCONSISTENCY_BIAS2':
-        func_name = 'process_selfconsistency_bias2'
-    elif dataset_type == 'icon':
-        func_name = 'process_icon'
-    elif dataset_type == 'ICON_LOOKUP':
-        func_name = 'process_icon_lookup_table'
-    elif dataset_type == 'ICON_COORD':
-        func_name = 'process_icon_coord'
-        dsformat = 'ICON_COORD'
-    elif dataset_type == 'HZT_COORD':
-        func_name = 'process_hzt_coord'
-        dsformat = 'ICON_COORD'
-    elif dataset_type == 'ICON2RADAR':
-        func_name = 'process_icon_to_radar'
-        dsformat = 'ICON2RADAR'
-    elif dataset_type == 'HZT':
-        func_name = 'process_hzt'
-    elif dataset_type == 'ISO0_MF':
-        func_name = 'process_iso0_mf'
-    elif dataset_type == 'ISO0_GRIB':
-        func_name = 'process_iso0_grib'
-    elif dataset_type == 'HZT_LOOKUP':
-        func_name = 'process_hzt_lookup_table'
-    elif dataset_type == 'DEM':
-        func_name = 'process_dem'
-    elif dataset_type == 'TIME_AVG':
-        func_name = 'process_time_avg'
-        dsformat = 'TIMEAVG'
-    elif dataset_type == 'WEIGHTED_TIME_AVG':
-        func_name = 'process_weighted_time_avg'
-        dsformat = 'TIMEAVG'
-    elif dataset_type == 'FLAG_TIME_AVG':
-        func_name = 'process_time_avg_flag'
-        dsformat = 'TIMEAVG'
-    elif dataset_type == 'TIME_STATS':
-        func_name = 'process_time_stats'
-        dsformat = 'TIMEAVG'
-    elif dataset_type == 'TIME_STATS2':
-        func_name = 'process_time_stats2'
-        dsformat = 'TIMEAVG'
-    elif dataset_type == 'GRID_TIME_STATS':
-        func_name = 'process_grid_time_stats'
-        dsformat = 'GRID_TIMEAVG'
-    elif dataset_type == 'GRID_TIME_STATS2':
-        func_name = 'process_grid_time_stats2'
-        dsformat = 'GRID_TIMEAVG'
-    elif dataset_type == 'GRID_RAIN_ACCU':
-        func_name = 'process_grid_rainfall_accumulation'
-        dsformat = 'GRID_TIMEAVG'
-    elif dataset_type == 'COLOCATED_GATES':
-        func_name = 'process_colocated_gates'
-        dsformat = 'COLOCATED_GATES'
-    elif dataset_type == 'INTERCOMP':
-        func_name = 'process_intercomp'
-        dsformat = 'INTERCOMP'
-    elif dataset_type == 'INTERCOMP_FIELDS':
-        func_name = 'process_intercomp_fields'
-        dsformat = 'INTERCOMP'
-    elif dataset_type == 'INTERCOMP_TIME_AVG':
-        func_name = 'process_intercomp_time_avg'
-        dsformat = 'INTERCOMP'
-    elif dataset_type == 'FIELDS_DIFF':
-        func_name = 'process_fields_diff'
-    elif dataset_type == 'MONITORING':
-        func_name = 'process_monitoring'
-        dsformat = 'MONITORING'
-    elif dataset_type == 'GC_MONITORING':
-        func_name = 'process_gc_monitoring'
-        dsformat = 'MONITORING'
-    elif dataset_type == 'OCCURRENCE':
-        func_name = 'process_occurrence'
-        dsformat = 'OCCURRENCE'
-    elif dataset_type == 'TIMEAVG_STD':
-        func_name = 'process_time_avg_std'
-        dsformat = 'OCCURRENCE'
-    elif dataset_type == 'OCCURRENCE_PERIOD':
-        func_name = 'process_occurrence_period'
-        dsformat = 'OCCURRENCE'
-    elif dataset_type == 'SUN_HITS':
-        func_name = 'process_sun_hits'
-        dsformat = 'SUN_HITS'
-    elif dataset_type == 'SUNSCAN':
-        func_name = 'process_sunscan'
-        dsformat = 'SUN_HITS'
-    elif dataset_type == 'POINT_MEASUREMENT':
-        func_name = 'process_point_measurement'
-        dsformat = 'TIMESERIES'
-    elif dataset_type == 'MULTIPLE_POINTS':
-        func_name = 'process_multiple_points'
-        dsformat = 'TIMESERIES'
-    elif dataset_type == 'GRID_POINT_MEASUREMENT':
-        func_name = 'process_grid_point'
-        dsformat = 'TIMESERIES'
-    elif dataset_type == 'GRID_MULTIPLE_POINTS':
-        func_name = 'process_grid_multiple_points'
-        dsformat = 'TIMESERIES'
-    elif dataset_type == 'ROI':
+    elif dataset_type == "PWR":
+        func_name = "process_signal_power"
+    elif dataset_type == "RCS_PR":
+        func_name = "process_rcs_pr"
+    elif dataset_type == "RCS":
+        func_name = "process_rcs"
+    elif dataset_type == "SNR":
+        func_name = "process_snr"
+    elif dataset_type == "RADIAL_NOISE_HS":
+        func_name = "process_radial_noise_hs"
+    elif dataset_type == "RADIAL_NOISE_IVIC":
+        func_name = "process_radial_noise_ivic"
+    elif dataset_type == "VOL_REFL":
+        func_name = "process_vol_refl"
+    elif dataset_type == "VPR":
+        func_name = "process_vpr"
+        dsformat = "VPR"
+    elif dataset_type == "BIRD_DENSITY":
+        func_name = "process_bird_density"
+    elif dataset_type == "RHOHV_CORRECTION":
+        func_name = "process_correct_noise_rhohv"
+    elif dataset_type == "BIAS_CORRECTION":
+        func_name = "process_correct_bias"
+    elif dataset_type == "L":
+        func_name = "process_l"
+    elif dataset_type == "CDR":
+        func_name = "process_cdr"
+    elif dataset_type == "SAN":
+        func_name = "process_echo_id"
+    elif dataset_type == "BIRDS_ID":
+        func_name = "process_birds_id"
+    elif dataset_type == "CLT_TO_SAN":
+        func_name = "process_clt_to_echo_id"
+    elif dataset_type == "VSTATUS_TO_SAN":
+        func_name = "process_vstatus_to_echo_id"
+    elif dataset_type == "hydroMF_to_hydro":
+        func_name = "process_hydro_mf_to_hydro"
+    elif dataset_type == "hydroMF_to_SAN":
+        func_name = "process_hydro_mf_to_echo_id"
+    elif dataset_type == "ECHO_FILTER":
+        func_name = "process_echo_filter"
+    elif dataset_type == "VOL2BIRD_FILTER":
+        func_name = "process_filter_vol2bird"
+    elif dataset_type == "VOL2BIRD_GATE_FILTER":
+        func_name = "process_gate_filter_vol2bird"
+    elif dataset_type == "ZDR_COLUMN":
+        func_name = "process_zdr_column"
+        dsformat = "SPARSE_GRID"
+    elif dataset_type == "SNR_FILTER":
+        func_name = "process_filter_snr"
+    elif dataset_type == "VEL_FILTER":
+        func_name = "process_filter_vel_diff"
+    elif dataset_type == "VIS_FILTER":
+        func_name = "process_filter_visibility"
+    elif dataset_type == "VIS":
+        func_name = "process_visibility"
+    elif dataset_type == "OUTLIER_FILTER":
+        func_name = "process_outlier_filter"
+    elif dataset_type == "PHIDP0_CORRECTION":
+        func_name = "process_correct_phidp0"
+    elif dataset_type == "PHIDP_SMOOTH_1W":
+        func_name = "process_smooth_phidp_single_window"
+    elif dataset_type == "PHIDP_SMOOTH_2W":
+        func_name = "process_smooth_phidp_double_window"
+    elif dataset_type == "PHIDP_KDP_VULPIANI":
+        func_name = "process_phidp_kdp_Vulpiani"
+    elif dataset_type == "PHIDP_KDP_KALMAN":
+        func_name = "process_phidp_kdp_Kalman"
+    elif dataset_type == "PHIDP_KDP_MAESAKA":
+        func_name = "process_phidp_kdp_Maesaka"
+    elif dataset_type == "PHIDP_KDP_LP":
+        func_name = "process_phidp_kdp_lp"
+    elif dataset_type == "KDP_LEASTSQUARE_1W":
+        func_name = "process_kdp_leastsquare_single_window"
+    elif dataset_type == "KDP_LEASTSQUARE_2W":
+        func_name = "process_kdp_leastsquare_double_window"
+    elif dataset_type == "ATTENUATION":
+        func_name = "process_attenuation"
+    elif dataset_type == "RAINRATE":
+        func_name = "process_rainrate"
+    elif dataset_type == "RAIN_ACCU":
+        func_name = "process_rainfall_accumulation"
+        dsformat = "TIMEAVG"
+    elif dataset_type == "TURBULENCE":
+        func_name = "process_turbulence"
+    elif dataset_type == "DEALIAS_FOURDD":
+        func_name = "process_dealias_fourdd"
+    elif dataset_type == "DEALIAS_REGION":
+        func_name = "process_dealias_region_based"
+    elif dataset_type == "DEALIAS_UNWRAP":
+        func_name = "process_dealias_unwrap_phase"
+    elif dataset_type == "RADIAL_VELOCITY":
+        func_name = "process_radial_velocity"
+    elif dataset_type == "WIND_VEL":
+        func_name = "process_wind_vel"
+    elif dataset_type == "VAD":
+        func_name = "process_vad"
+    elif dataset_type == "WINDSHEAR":
+        func_name = "process_windshear"
+    elif dataset_type == "WINDSHEAR_LIDAR":
+        func_name = "process_windshear_lidar"
+    elif dataset_type == "HYDROCLASS":
+        func_name = "process_hydroclass"
+    elif dataset_type == "CENTROIDS":
+        func_name = "process_centroids"
+        dsformat = "CENTROIDS"
+    elif dataset_type == "ML_DETECTION":
+        func_name = "process_melting_layer"
+        dsformat = "ML"
+    elif dataset_type == "PHIDP0_ESTIMATE":
+        func_name = "process_estimate_phidp0"
+    elif dataset_type == "RHOHV_RAIN":
+        func_name = "process_rhohv_rain"
+    elif dataset_type == "ZDR_PREC":
+        func_name = "process_zdr_precip"
+    elif dataset_type == "ZDR_SNOW":
+        func_name = "process_zdr_snow"
+    elif dataset_type == "POL_VARIABLES":
+        func_name = "process_pol_variables"
+    elif dataset_type == "NOISE_POWER":
+        func_name = "process_noise_power"
+    elif dataset_type == "REFLECTIVITY":
+        func_name = "process_reflectivity"
+    elif dataset_type == "ZDR":
+        func_name = "process_differential_reflectivity"
+    elif dataset_type == "PhiDP":
+        func_name = "process_differential_phase"
+    elif dataset_type == "RhoHV":
+        func_name = "process_rhohv"
+    elif dataset_type == "DOPPLER_VELOCITY":
+        func_name = "process_Doppler_velocity"
+    elif dataset_type == "DOPPLER_WIDTH":
+        func_name = "process_Doppler_width"
+    elif dataset_type == "POL_VARIABLES_IQ":
+        func_name = "process_pol_variables_iq"
+    elif dataset_type == "REFLECTIVITY_IQ":
+        func_name = "process_reflectivity_iq"
+    elif dataset_type == "ZDR_IQ":
+        func_name = "process_differential_reflectivity_iq"
+    elif dataset_type == "PhiDP_IQ":
+        func_name = "process_differential_phase_iq"
+    elif dataset_type == "RhoHV_IQ":
+        func_name = "process_rhohv_iq"
+    elif dataset_type == "DOPPLER_VELOCITY_IQ":
+        func_name = "process_Doppler_velocity_iq"
+    elif dataset_type == "DOPPLER_WIDTH_IQ":
+        func_name = "process_Doppler_width_iq"
+    elif dataset_type == "MEAN_PHASE_IQ":
+        func_name = "process_mean_phase_iq"
+    elif dataset_type == "ST1_IQ":
+        func_name = "process_st1_iq"
+    elif dataset_type == "ST2_IQ":
+        func_name = "process_st2_iq"
+    elif dataset_type == "WBN_IQ":
+        func_name = "process_wbn_iq"
+    elif dataset_type == "SELFCONSISTENCY_KDP_PHIDP":
+        func_name = "process_selfconsistency_kdp_phidp"
+    elif dataset_type == "SELFCONSISTENCY_BIAS":
+        func_name = "process_selfconsistency_bias"
+    elif dataset_type == "SELFCONSISTENCY_BIAS2":
+        func_name = "process_selfconsistency_bias2"
+    elif dataset_type == "icon":
+        func_name = "process_icon"
+    elif dataset_type == "ICON_LOOKUP":
+        func_name = "process_icon_lookup_table"
+    elif dataset_type == "ICON_COORD":
+        func_name = "process_icon_coord"
+        dsformat = "ICON_COORD"
+    elif dataset_type == "HZT_COORD":
+        func_name = "process_hzt_coord"
+        dsformat = "ICON_COORD"
+    elif dataset_type == "ICON2RADAR":
+        func_name = "process_icon_to_radar"
+        dsformat = "ICON2RADAR"
+    elif dataset_type == "HZT":
+        func_name = "process_hzt"
+    elif dataset_type == "ISO0_MF":
+        func_name = "process_iso0_mf"
+    elif dataset_type == "ISO0_GRIB":
+        func_name = "process_iso0_grib"
+    elif dataset_type == "HZT_LOOKUP":
+        func_name = "process_hzt_lookup_table"
+    elif dataset_type == "DEM":
+        func_name = "process_dem"
+    elif dataset_type == "TIME_AVG":
+        func_name = "process_time_avg"
+        dsformat = "TIMEAVG"
+    elif dataset_type == "WEIGHTED_TIME_AVG":
+        func_name = "process_weighted_time_avg"
+        dsformat = "TIMEAVG"
+    elif dataset_type == "FLAG_TIME_AVG":
+        func_name = "process_time_avg_flag"
+        dsformat = "TIMEAVG"
+    elif dataset_type == "TIME_STATS":
+        func_name = "process_time_stats"
+        dsformat = "TIMEAVG"
+    elif dataset_type == "TIME_STATS2":
+        func_name = "process_time_stats2"
+        dsformat = "TIMEAVG"
+    elif dataset_type == "GRID_TIME_STATS":
+        func_name = "process_grid_time_stats"
+        dsformat = "GRID_TIMEAVG"
+    elif dataset_type == "GRID_TIME_STATS2":
+        func_name = "process_grid_time_stats2"
+        dsformat = "GRID_TIMEAVG"
+    elif dataset_type == "GRID_RAIN_ACCU":
+        func_name = "process_grid_rainfall_accumulation"
+        dsformat = "GRID_TIMEAVG"
+    elif dataset_type == "COLOCATED_GATES":
+        func_name = "process_colocated_gates"
+        dsformat = "COLOCATED_GATES"
+    elif dataset_type == "INTERCOMP":
+        func_name = "process_intercomp"
+        dsformat = "INTERCOMP"
+    elif dataset_type == "INTERCOMP_FIELDS":
+        func_name = "process_intercomp_fields"
+        dsformat = "INTERCOMP"
+    elif dataset_type == "INTERCOMP_TIME_AVG":
+        func_name = "process_intercomp_time_avg"
+        dsformat = "INTERCOMP"
+    elif dataset_type == "FIELDS_DIFF":
+        func_name = "process_fields_diff"
+    elif dataset_type == "MONITORING":
+        func_name = "process_monitoring"
+        dsformat = "MONITORING"
+    elif dataset_type == "GC_MONITORING":
+        func_name = "process_gc_monitoring"
+        dsformat = "MONITORING"
+    elif dataset_type == "OCCURRENCE":
+        func_name = "process_occurrence"
+        dsformat = "OCCURRENCE"
+    elif dataset_type == "TIMEAVG_STD":
+        func_name = "process_time_avg_std"
+        dsformat = "OCCURRENCE"
+    elif dataset_type == "OCCURRENCE_PERIOD":
+        func_name = "process_occurrence_period"
+        dsformat = "OCCURRENCE"
+    elif dataset_type == "SUN_HITS":
+        func_name = "process_sun_hits"
+        dsformat = "SUN_HITS"
+    elif dataset_type == "SUNSCAN":
+        func_name = "process_sunscan"
+        dsformat = "SUN_HITS"
+    elif dataset_type == "POINT_MEASUREMENT":
+        func_name = "process_point_measurement"
+        dsformat = "TIMESERIES"
+    elif dataset_type == "MULTIPLE_POINTS":
+        func_name = "process_multiple_points"
+        dsformat = "TIMESERIES"
+    elif dataset_type == "GRID_POINT_MEASUREMENT":
+        func_name = "process_grid_point"
+        dsformat = "TIMESERIES"
+    elif dataset_type == "GRID_MULTIPLE_POINTS":
+        func_name = "process_grid_multiple_points"
+        dsformat = "TIMESERIES"
+    elif dataset_type == "ROI":
         func_name = process_roi
-    elif dataset_type == 'ROI2':
+    elif dataset_type == "ROI2":
         func_name = process_roi2
-    elif dataset_type == 'KEEP_ROI':
+    elif dataset_type == "KEEP_ROI":
         func_name = process_keep_roi
-    elif dataset_type == 'TRAJ':
-        func_name = 'process_trajectory'
-        dsformat = 'TRAJ_ONLY'
-    elif dataset_type == 'TRAJ_ATPLANE':
-        func_name = 'process_traj_atplane'
-        dsformat = 'TIMESERIES'
-    elif dataset_type == 'TRAJ_ANTENNA_PATTERN':
-        func_name = 'process_traj_antenna_pattern'
-        dsformat = 'TIMESERIES'
-    elif dataset_type == 'TRAJ_LIGHTNING':
-        func_name = 'process_traj_lightning'
-        dsformat = 'TIMESERIES'
-    elif dataset_type == 'TRAJ_TRT':
-        func_name = 'process_traj_trt'
-    elif dataset_type == 'TRAJ_TRT_CONTOUR':
-        func_name = 'process_traj_trt_contour'
-    elif dataset_type == 'FIXED_RNG':
+    elif dataset_type == "TRAJ":
+        func_name = "process_trajectory"
+        dsformat = "TRAJ_ONLY"
+    elif dataset_type == "TRAJ_ATPLANE":
+        func_name = "process_traj_atplane"
+        dsformat = "TIMESERIES"
+    elif dataset_type == "TRAJ_ANTENNA_PATTERN":
+        func_name = "process_traj_antenna_pattern"
+        dsformat = "TIMESERIES"
+    elif dataset_type == "TRAJ_LIGHTNING":
+        func_name = "process_traj_lightning"
+        dsformat = "TIMESERIES"
+    elif dataset_type == "TRAJ_TRT":
+        func_name = "process_traj_trt"
+    elif dataset_type == "TRAJ_TRT_CONTOUR":
+        func_name = "process_traj_trt_contour"
+    elif dataset_type == "FIXED_RNG":
         func_name = process_fixed_rng
-    elif dataset_type == 'FIXED_RNG_SPAN':
+    elif dataset_type == "FIXED_RNG_SPAN":
         func_name = process_fixed_rng_span
     else:
-        raise ValueError("ERROR: Unknown dataset type '%s' of dataset '%s'"
-                         % (dataset_type, dsname))
+        raise ValueError(
+            "ERROR: Unknown dataset type '%s' of dataset '%s'" % (dataset_type, dsname)
+        )
 
     return func_name, dsformat
 
@@ -689,15 +691,15 @@ def process_raw(procstatus, dscfg, radar_list=None):
     if procstatus != 1:
         return None, None
 
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
         break
     ind_rad = int(radarnr[5:8]) - 1
 
     if (radar_list is None) or (radar_list[ind_rad] is None):
-        warn('ERROR: No valid radar')
+        warn("ERROR: No valid radar")
         return None, None
-    new_dataset = {'radar_out': deepcopy(radar_list[ind_rad])}
+    new_dataset = {"radar_out": deepcopy(radar_list[ind_rad])}
 
     return new_dataset, ind_rad
 
@@ -728,7 +730,7 @@ def process_vol_to_grid(procstatus, dscfg, radar_list=None):
             Weighting function. Default NEAREST
     radar_list : list of Radar objects
         Optional. list of radar objects
-    
+
 
     Returns
     -------
@@ -742,13 +744,13 @@ def process_vol_to_grid(procstatus, dscfg, radar_list=None):
         return None, None
 
     if radar_list is None:
-        warn('ERROR: No valid radar found')
+        warn("ERROR: No valid radar found")
         return None, None
 
     # Process
     field_names_aux = []
     ind_rads_aux = []
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_names_aux.append(get_fieldname_pyart(datatype))
         ind_rads_aux.append(int(radarnr[5:8]) - 1)
@@ -761,13 +763,13 @@ def process_vol_to_grid(procstatus, dscfg, radar_list=None):
     ind_rads = []
     for ind_rad in ind_rads_aux:
         if radar_list[ind_rad] is None:
-            warn('ERROR: Radar {} not valid'.format(ind_rad))
+            warn("ERROR: Radar {} not valid".format(ind_rad))
             continue
         radar_list_aux.append(radar_list[ind_rad])
         ind_rads.append(ind_rad)
 
     if not radar_list_aux:
-        warn('ERROR: No valid radar found')
+        warn("ERROR: No valid radar found")
         return None, None
 
     # keep only fields present in radar object
@@ -777,10 +779,7 @@ def process_vol_to_grid(procstatus, dscfg, radar_list=None):
         nfields = 0
         for radar in radar_list_aux:
             if field_name not in radar.fields:
-                warn(
-                    'Field name ' +
-                    field_name +
-                    ' not available in radar object')
+                warn("Field name " + field_name + " not available in radar object")
                 continue
             nfields += 1
         if nfields == nrad:
@@ -790,19 +789,19 @@ def process_vol_to_grid(procstatus, dscfg, radar_list=None):
         warn("Fields not available in radar data")
         return None, None
 
-    xmin = dscfg.get('xmin', -20000.)
-    xmax = dscfg.get('xmax', 20000.)
-    ymin = dscfg.get('ymin', -20000.)
-    ymax = dscfg.get('ymax', 20000.)
-    zmin = dscfg.get('zmin', 1000.)
-    zmax = dscfg.get('zmax', 1000.)
-    hres = dscfg.get('hres', 1000.)
-    vres = dscfg.get('vres', 500.)
-    lat = dscfg.get('lat0', float(radar_list_aux[0].latitude['data']))
-    lon = dscfg.get('lon0', float(radar_list_aux[0].longitude['data']))
-    alt = dscfg.get('alt0', 0.)
+    xmin = dscfg.get("xmin", -20000.0)
+    xmax = dscfg.get("xmax", 20000.0)
+    ymin = dscfg.get("ymin", -20000.0)
+    ymax = dscfg.get("ymax", 20000.0)
+    zmin = dscfg.get("zmin", 1000.0)
+    zmax = dscfg.get("zmax", 1000.0)
+    hres = dscfg.get("hres", 1000.0)
+    vres = dscfg.get("vres", 500.0)
+    lat = dscfg.get("lat0", float(radar_list_aux[0].latitude["data"]))
+    lon = dscfg.get("lon0", float(radar_list_aux[0].longitude["data"]))
+    alt = dscfg.get("alt0", 0.0)
 
-    wfunc = dscfg.get('wfunc', 'NEAREST')
+    wfunc = dscfg.get("wfunc", "NEAREST")
 
     # number of grid points
     ny = int((ymax - ymin) / hres) + 1
@@ -810,31 +809,41 @@ def process_vol_to_grid(procstatus, dscfg, radar_list=None):
     nz = int((zmax - zmin) / vres) + 1
 
     # parameters to determine the gates to use for each grid point
-    if (radar_list_aux[0].instrument_parameters is not None and
-            'radar_beam_width_h' in radar_list_aux[0].instrument_parameters):
-        beamwidth = radar_list_aux[0].instrument_parameters[
-            'radar_beam_width_h']['data'][0]
+    if (
+        radar_list_aux[0].instrument_parameters is not None
+        and "radar_beam_width_h" in radar_list_aux[0].instrument_parameters
+    ):
+        beamwidth = radar_list_aux[0].instrument_parameters["radar_beam_width_h"][
+            "data"
+        ][0]
     else:
-        warn('beamwidth not defined. Assumed 1 deg')
-        beamwidth = 1.
+        warn("beamwidth not defined. Assumed 1 deg")
+        beamwidth = 1.0
 
     if radar_list_aux[0].ray_angle_res is not None:
-        beam_spacing = radar_list_aux[0].ray_angle_res['data'][0]
+        beam_spacing = radar_list_aux[0].ray_angle_res["data"][0]
     else:
-        warn('beam spacing not defined. Assumed 1 deg')
-        beam_spacing = 1.
+        warn("beam spacing not defined. Assumed 1 deg")
+        beam_spacing = 1.0
 
     # cartesian mapping
     grid = grid_from_radars(
-        radar_list_aux, gridding_algo='map_to_grid', weighting_function=wfunc,
-        roi_func='dist_beam', h_factor=1.0, nb=beamwidth, bsp=beam_spacing,
-        min_radius=hres / 2.,
+        radar_list_aux,
+        gridding_algo="map_to_grid",
+        weighting_function=wfunc,
+        roi_func="dist_beam",
+        h_factor=1.0,
+        nb=beamwidth,
+        bsp=beam_spacing,
+        min_radius=hres / 2.0,
         grid_shape=(nz, ny, nx),
         grid_limits=((zmin, zmax), (ymin, ymax), (xmin, xmax)),
-        grid_origin=(lat, lon), grid_origin_alt=alt,
-        fields=field_names)
+        grid_origin=(lat, lon),
+        grid_origin_alt=alt,
+        fields=field_names,
+    )
 
-    new_dataset = {'radar_out': grid}
+    new_dataset = {"radar_out": grid}
 
     return new_dataset, ind_rad
 
@@ -865,14 +874,14 @@ def process_save_radar(procstatus, dscfg, radar_list=None):
     if procstatus != 1:
         return None, None
 
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
         break
     ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
-        warn('ERROR: No valid radar')
+        warn("ERROR: No valid radar")
         return None, None
-    new_dataset = {'radar_out': deepcopy(radar_list[ind_rad])}
+    new_dataset = {"radar_out": deepcopy(radar_list[ind_rad])}
 
     return new_dataset, ind_rad
 
@@ -913,32 +922,38 @@ def process_fixed_rng(procstatus, dscfg, radar_list=None):
         return None, None
 
     field_names = []
-    for datatypedescr in dscfg['datatype']:
-        radarnr, _, datatype, _, _ = get_datatype_fields(
-            datatypedescr)
+    for datatypedescr in dscfg["datatype"]:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_names.append(get_fieldname_pyart(datatype))
     ind_rad = int(radarnr[5:8]) - 1
 
     if (radar_list is None) or (radar_list[ind_rad] is None):
-        warn('ERROR: No valid radar')
+        warn("ERROR: No valid radar")
         return None, None
     radar = radar_list[ind_rad]
 
     # user defined parameters
-    rng_tol = dscfg.get('RngTol', 50.)
-    ele_min = dscfg.get('ele_min', None)
-    ele_max = dscfg.get('ele_max', None)
-    azi_min = dscfg.get('azi_min', None)
-    azi_max = dscfg.get('azi_max', None)
+    rng_tol = dscfg.get("RngTol", 50.0)
+    ele_min = dscfg.get("ele_min", None)
+    ele_max = dscfg.get("ele_max", None)
+    azi_min = dscfg.get("azi_min", None)
+    azi_max = dscfg.get("azi_max", None)
 
     radar_aux = get_fixed_rng_data(
-        radar, field_names, dscfg['rng'], rng_tol=rng_tol, ele_min=ele_min,
-        ele_max=ele_max, azi_min=azi_min, azi_max=azi_max)
+        radar,
+        field_names,
+        dscfg["rng"],
+        rng_tol=rng_tol,
+        ele_min=ele_min,
+        ele_max=ele_max,
+        azi_min=azi_min,
+        azi_max=azi_max,
+    )
 
     if radar_aux is None:
         return None
 
-    new_dataset = {'radar_out': radar_aux}
+    new_dataset = {"radar_out": radar_aux}
 
     return new_dataset, ind_rad
 
@@ -978,33 +993,39 @@ def process_fixed_rng_span(procstatus, dscfg, radar_list=None):
         return None, None
 
     field_names = []
-    for datatypedescr in dscfg['datatype']:
-        radarnr, _, datatype, _, _ = get_datatype_fields(
-            datatypedescr)
+    for datatypedescr in dscfg["datatype"]:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_names.append(get_fieldname_pyart(datatype))
     ind_rad = int(radarnr[5:8]) - 1
 
     if (radar_list is None) or (radar_list[ind_rad] is None):
-        warn('ERROR: No valid radar')
+        warn("ERROR: No valid radar")
         return None, None
     radar = radar_list[ind_rad]
 
     # user defined parameters
-    rmin = dscfg.get('rmin', None)
-    rmax = dscfg.get('rmax', None)
-    ele_min = dscfg.get('ele_min', None)
-    ele_max = dscfg.get('ele_max', None)
-    azi_min = dscfg.get('azi_min', None)
-    azi_max = dscfg.get('azi_max', None)
+    rmin = dscfg.get("rmin", None)
+    rmax = dscfg.get("rmax", None)
+    ele_min = dscfg.get("ele_min", None)
+    ele_max = dscfg.get("ele_max", None)
+    azi_min = dscfg.get("azi_min", None)
+    azi_max = dscfg.get("azi_max", None)
 
     radar_aux = subset_radar(
-        radar, field_names, rng_min=rmin, rng_max=rmax, ele_min=ele_min,
-        ele_max=ele_max, azi_min=azi_min, azi_max=azi_max)
+        radar,
+        field_names,
+        rng_min=rmin,
+        rng_max=rmax,
+        ele_min=ele_min,
+        ele_max=ele_max,
+        azi_min=azi_min,
+        azi_max=azi_max,
+    )
 
     if radar_aux is None:
         return None
 
-    new_dataset = {'radar_out': radar_aux}
+    new_dataset = {"radar_out": radar_aux}
 
     return new_dataset, ind_rad
 
@@ -1081,13 +1102,13 @@ def process_keep_roi(procstatus, dscfg, radar_list=None):
         return None, None
 
     field_names_aux = []
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_names_aux.append(get_fieldname_pyart(datatype))
 
     ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
-        warn('ERROR: No valid radar')
+        warn("ERROR: No valid radar")
         return None, None
     radar = radar_list[ind_rad]
 
@@ -1096,7 +1117,7 @@ def process_keep_roi(procstatus, dscfg, radar_list=None):
     nfields_available = 0
     for field_name in field_names_aux:
         if field_name not in radar.fields:
-            warn('Field name ' + field_name + ' not available in radar object')
+            warn("Field name " + field_name + " not available in radar object")
             continue
         field_names.append(field_name)
         nfields_available += 1
@@ -1106,164 +1127,204 @@ def process_keep_roi(procstatus, dscfg, radar_list=None):
         return None, None
 
     # Choose origin of ROI definition
-    cercle = dscfg.get('cercle', False)
-    box = dscfg.get('box', False)
-    use_latlon = dscfg.get('use_latlon', True)
-    if 'trtfile' in dscfg:
-        (_, yyyymmddHHMM, lon, lat, _, _, _, _, _, _, _, _, _, _, _, _, _, _,
-         _, _, _, _, _, _, _, _, _, cell_contour) = read_trt_traj_data(
-             dscfg['trtfile'])
+    cercle = dscfg.get("cercle", False)
+    box = dscfg.get("box", False)
+    use_latlon = dscfg.get("use_latlon", True)
+    if "trtfile" in dscfg:
+        (
+            _,
+            yyyymmddHHMM,
+            lon,
+            lat,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            cell_contour,
+        ) = read_trt_traj_data(dscfg["trtfile"])
 
-        time_tol = dscfg.get('TimeTol', 100.)
+        time_tol = dscfg.get("TimeTol", 100.0)
         dt = np.empty(yyyymmddHHMM.size, dtype=float)
         for i, time_traj in enumerate(yyyymmddHHMM):
-            dt[i] = np.abs((dscfg['timeinfo'] - time_traj).total_seconds())
+            dt[i] = np.abs((dscfg["timeinfo"] - time_traj).total_seconds())
         if dt.min() > time_tol:
-            warn('No TRT data for radar volume time')
+            warn("No TRT data for radar volume time")
             return None, None
 
         ind = np.argmin(dt)
-        lon_roi = cell_contour[ind]['lon']
-        lat_roi = cell_contour[ind]['lat']
+        lon_roi = cell_contour[ind]["lon"]
+        lat_roi = cell_contour[ind]["lat"]
 
         x_roi, y_roi = geographic_to_cartesian_aeqd(
-            lon_roi, lat_roi, radar.longitude['data'][0],
-            radar.longitude['data'][0])
+            lon_roi, lat_roi, radar.longitude["data"][0], radar.longitude["data"][0]
+        )
     elif cercle:
-        lon_centre = dscfg.get('lon_centre', None)
-        lat_centre = dscfg.get('lat_centre', None)
-        rad_cercle = dscfg.get('rad_cercle', 1000.)  # m
-        res_cercle = dscfg.get('res_cercle', 16)
+        lon_centre = dscfg.get("lon_centre", None)
+        lat_centre = dscfg.get("lat_centre", None)
+        rad_cercle = dscfg.get("rad_cercle", 1000.0)  # m
+        res_cercle = dscfg.get("res_cercle", 16)
 
         if lon_centre is None or lat_centre is None:
-            warn('cercle position undefined. '
-                 'The radar position will be used')
-            lon_centre = radar.longitude['data'][0]
-            lat_centre = radar.latitude['data'][0]
+            warn("cercle position undefined. " "The radar position will be used")
+            lon_centre = radar.longitude["data"][0]
+            lat_centre = radar.latitude["data"][0]
 
         # put data as x,y coordinates
         x_centre, y_centre = geographic_to_cartesian_aeqd(
-            lon_centre, lat_centre, radar.longitude['data'][0],
-            radar.latitude['data'][0])
+            lon_centre,
+            lat_centre,
+            radar.longitude["data"][0],
+            radar.latitude["data"][0],
+        )
         x_roi, y_roi = get_cercle_coords(
-            x_centre[0], y_centre[0], radius=rad_cercle,
-            resolution=res_cercle)
+            x_centre[0], y_centre[0], radius=rad_cercle, resolution=res_cercle
+        )
         if x_roi is None:
             return None, None
         lon_roi, lat_roi = cartesian_to_geographic_aeqd(
-            x_roi, y_roi, radar.longitude['data'][0],
-            radar.latitude['data'][0])
+            x_roi, y_roi, radar.longitude["data"][0], radar.latitude["data"][0]
+        )
     elif box:
-        lon_point = dscfg.get('lon', None)
-        lat_point = dscfg.get('lat', None)
-        rotation = dscfg.get('rotation', 0)  # deg from north
-        origin = dscfg.get('origin', 'center')  # origin of rotation
-        we_offset = dscfg.get('we_offset', 0.)  # m
-        sn_offset = dscfg.get('sn_offset', 0.)  # m
-        we_length = dscfg.get('we_length', 1000.)   # m
-        sn_length = dscfg.get('sn_length', 1000.)   # m
+        lon_point = dscfg.get("lon", None)
+        lat_point = dscfg.get("lat", None)
+        rotation = dscfg.get("rotation", 0)  # deg from north
+        origin = dscfg.get("origin", "center")  # origin of rotation
+        we_offset = dscfg.get("we_offset", 0.0)  # m
+        sn_offset = dscfg.get("sn_offset", 0.0)  # m
+        we_length = dscfg.get("we_length", 1000.0)  # m
+        sn_length = dscfg.get("sn_length", 1000.0)  # m
 
         if lon_point is None or lat_point is None:
-            warn('box position undefined. '
-                 'The radar position will be used')
-            lon_point = radar.longitude['data'][0]
-            lat_point = radar.latitude['data'][0]
+            warn("box position undefined. " "The radar position will be used")
+            lon_point = radar.longitude["data"][0]
+            lat_point = radar.latitude["data"][0]
 
         # put data as x,y coordinates
         x_point, y_point = geographic_to_cartesian_aeqd(
-            lon_point, lat_point, radar.longitude['data'][0],
-            radar.latitude['data'][0])
+            lon_point, lat_point, radar.longitude["data"][0], radar.latitude["data"][0]
+        )
         x_roi, y_roi = get_box_coords(
-            x_point[0], y_point[0], we_length=we_length, sn_length=sn_length,
-            rotation=rotation, origin=origin, we_offset=we_offset,
-            sn_offset=sn_offset)
+            x_point[0],
+            y_point[0],
+            we_length=we_length,
+            sn_length=sn_length,
+            rotation=rotation,
+            origin=origin,
+            we_offset=we_offset,
+            sn_offset=sn_offset,
+        )
         if x_roi is None:
             return None, None
         lon_roi, lat_roi = cartesian_to_geographic_aeqd(
-            x_roi, y_roi, radar.longitude['data'][0],
-            radar.latitude['data'][0])
+            x_roi, y_roi, radar.longitude["data"][0], radar.latitude["data"][0]
+        )
     else:
-        lon_roi = dscfg.get('lon_roi', None)
-        lat_roi = dscfg.get('lat_roi', None)
+        lon_roi = dscfg.get("lon_roi", None)
+        lat_roi = dscfg.get("lat_roi", None)
 
         if lon_roi is None or lat_roi is None:
-            warn('Undefined ROI')
+            warn("Undefined ROI")
             return None, None
         x_roi, y_roi = geographic_to_cartesian_aeqd(
-            lon_roi, lat_roi, radar.longitude['data'][0],
-            radar.latitude['data'][0])
+            lon_roi, lat_roi, radar.longitude["data"][0], radar.latitude["data"][0]
+        )
 
-    alt_min = dscfg.get('alt_min', None)
-    alt_max = dscfg.get('alt_max', None)
+    alt_min = dscfg.get("alt_min", None)
+    alt_max = dscfg.get("alt_max", None)
 
     roi_dict = {
-        'lon': lon_roi,
-        'lat': lat_roi,
-        'x': x_roi,
-        'y': y_roi,
-        'alt_min': alt_min,
-        'alt_max': alt_max}
+        "lon": lon_roi,
+        "lat": lat_roi,
+        "x": x_roi,
+        "y": y_roi,
+        "alt_min": alt_min,
+        "alt_max": alt_max,
+    }
 
     # extract the data within the ROI boundaries
-    inds_ray, inds_rng = np.indices(np.shape(radar.gate_longitude['data']))
+    inds_ray, inds_rng = np.indices(np.shape(radar.gate_longitude["data"]))
 
     if use_latlon:
         mask = np.logical_and(
             np.logical_and(
-                radar.gate_latitude['data'] >= roi_dict['lat'].min(),
-                radar.gate_latitude['data'] <= roi_dict['lat'].max()),
+                radar.gate_latitude["data"] >= roi_dict["lat"].min(),
+                radar.gate_latitude["data"] <= roi_dict["lat"].max(),
+            ),
             np.logical_and(
-                radar.gate_longitude['data'] >= roi_dict['lon'].min(),
-                radar.gate_longitude['data'] <= roi_dict['lon'].max()))
+                radar.gate_longitude["data"] >= roi_dict["lon"].min(),
+                radar.gate_longitude["data"] <= roi_dict["lon"].max(),
+            ),
+        )
     else:
         mask = np.logical_and(
             np.logical_and(
-                radar.gate_y['data'] >= roi_dict['y'].min(),
-                radar.gate_y['data'] <= roi_dict['y'].max()),
+                radar.gate_y["data"] >= roi_dict["y"].min(),
+                radar.gate_y["data"] <= roi_dict["y"].max(),
+            ),
             np.logical_and(
-                radar.gate_x['data'] >= roi_dict['x'].min(),
-                radar.gate_x['data'] <= roi_dict['x'].max()))
+                radar.gate_x["data"] >= roi_dict["x"].min(),
+                radar.gate_x["data"] <= roi_dict["x"].max(),
+            ),
+        )
 
     if alt_min is not None:
-        mask[radar.gate_altitude['data'] < alt_min] = 0
+        mask[radar.gate_altitude["data"] < alt_min] = 0
     if alt_max is not None:
-        mask[radar.gate_altitude['data'] > alt_max] = 0
+        mask[radar.gate_altitude["data"] > alt_max] = 0
 
     if np.all(mask == 0):
-        warn('No values within ROI')
+        warn("No values within ROI")
         return None, None
 
     inds_ray = inds_ray[mask]
     inds_rng = inds_rng[mask]
 
     # extract the data inside the ROI
-    lat = radar.gate_latitude['data'][mask]
-    lon = radar.gate_longitude['data'][mask]
+    lat = radar.gate_latitude["data"][mask]
+    lon = radar.gate_longitude["data"][mask]
     if use_latlon:
-        inds, is_roi = belongs_roi_indices(
-            lat, lon, roi_dict, use_latlon=use_latlon)
+        inds, is_roi = belongs_roi_indices(lat, lon, roi_dict, use_latlon=use_latlon)
     else:
-        y = radar.gate_y['data'][mask]
-        x = radar.gate_x['data'][mask]
-        inds, is_roi = belongs_roi_indices(
-            y, x, roi_dict, use_latlon=use_latlon)
+        y = radar.gate_y["data"][mask]
+        x = radar.gate_x["data"][mask]
+        inds, is_roi = belongs_roi_indices(y, x, roi_dict, use_latlon=use_latlon)
 
-    if is_roi == 'None':
-        warn('No values within ROI')
+    if is_roi == "None":
+        warn("No values within ROI")
         return None, None
 
     inds_ray = inds_ray[inds]
     inds_rng = inds_rng[inds]
 
     # prepare new radar object output
-    new_dataset = {'radar_out': deepcopy(radar)}
-    new_dataset['radar_out'].fields = dict()
+    new_dataset = {"radar_out": deepcopy(radar)}
+    new_dataset["radar_out"].fields = dict()
     for field_name in field_names:
         field_dict = deepcopy(radar.fields[field_name])
-        field_dict['data'][:] = np.ma.masked
-        field_dict['data'][inds_ray, inds_rng] = (
-            radar.fields[field_name]['data'][inds_ray, inds_rng])
-        new_dataset['radar_out'].add_field(field_name, field_dict)
+        field_dict["data"][:] = np.ma.masked
+        field_dict["data"][inds_ray, inds_rng] = radar.fields[field_name]["data"][
+            inds_ray, inds_rng
+        ]
+        new_dataset["radar_out"].add_field(field_name, field_dict)
 
     return new_dataset, ind_rad
 
@@ -1337,13 +1398,13 @@ def process_roi(procstatus, dscfg, radar_list=None):
         return None, None
 
     field_names_aux = []
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_names_aux.append(get_fieldname_pyart(datatype))
 
     ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
-        warn('ERROR: No valid radar')
+        warn("ERROR: No valid radar")
         return None, None
     radar = radar_list[ind_rad]
 
@@ -1352,7 +1413,7 @@ def process_roi(procstatus, dscfg, radar_list=None):
     nfields_available = 0
     for field_name in field_names_aux:
         if field_name not in radar.fields:
-            warn('Field name ' + field_name + ' not available in radar object')
+            warn("Field name " + field_name + " not available in radar object")
             continue
         field_names.append(field_name)
         nfields_available += 1
@@ -1362,150 +1423,189 @@ def process_roi(procstatus, dscfg, radar_list=None):
         return None, None
 
     # Choose origin of ROI definition
-    cercle = dscfg.get('cercle', False)
-    box = dscfg.get('box', False)
-    use_latlon = dscfg.get('use_latlon', True)
-    if 'trtfile' in dscfg:
-        (_, yyyymmddHHMM, lon, lat, _, _, _, _, _, _, _, _, _, _, _, _, _, _,
-         _, _, _, _, _, _, _, _, _, cell_contour) = read_trt_traj_data(
-             dscfg['trtfile'])
+    cercle = dscfg.get("cercle", False)
+    box = dscfg.get("box", False)
+    use_latlon = dscfg.get("use_latlon", True)
+    if "trtfile" in dscfg:
+        (
+            _,
+            yyyymmddHHMM,
+            lon,
+            lat,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            cell_contour,
+        ) = read_trt_traj_data(dscfg["trtfile"])
 
-        time_tol = dscfg.get('TimeTol', 100.)
+        time_tol = dscfg.get("TimeTol", 100.0)
         dt = np.empty(yyyymmddHHMM.size, dtype=float)
         for i, time_traj in enumerate(yyyymmddHHMM):
-            dt[i] = np.abs((dscfg['timeinfo'] - time_traj).total_seconds())
+            dt[i] = np.abs((dscfg["timeinfo"] - time_traj).total_seconds())
         if dt.min() > time_tol:
-            warn('No TRT data for radar volume time')
+            warn("No TRT data for radar volume time")
             return None, None
 
         ind = np.argmin(dt)
-        lon_roi = cell_contour[ind]['lon']
-        lat_roi = cell_contour[ind]['lat']
+        lon_roi = cell_contour[ind]["lon"]
+        lat_roi = cell_contour[ind]["lat"]
 
         x_roi, y_roi = geographic_to_cartesian_aeqd(
-            lon_roi, lat_roi, radar.longitude['data'][0],
-            radar.longitude['data'][0])
+            lon_roi, lat_roi, radar.longitude["data"][0], radar.longitude["data"][0]
+        )
     elif cercle:
-        lon_centre = dscfg.get('lon_centre', None)
-        lat_centre = dscfg.get('lat_centre', None)
-        rad_cercle = dscfg.get('rad_cercle', 1000.)  # m
-        res_cercle = dscfg.get('res_cercle', 16)
+        lon_centre = dscfg.get("lon_centre", None)
+        lat_centre = dscfg.get("lat_centre", None)
+        rad_cercle = dscfg.get("rad_cercle", 1000.0)  # m
+        res_cercle = dscfg.get("res_cercle", 16)
 
         if lon_centre is None or lat_centre is None:
-            warn('cercle position undefined. '
-                 'The radar position will be used')
-            lon_centre = radar.longitude['data'][0]
-            lat_centre = radar.latitude['data'][0]
+            warn("cercle position undefined. " "The radar position will be used")
+            lon_centre = radar.longitude["data"][0]
+            lat_centre = radar.latitude["data"][0]
 
         # put data as x,y coordinates
         x_centre, y_centre = geographic_to_cartesian_aeqd(
-            lon_centre, lat_centre, radar.longitude['data'][0],
-            radar.latitude['data'][0])
+            lon_centre,
+            lat_centre,
+            radar.longitude["data"][0],
+            radar.latitude["data"][0],
+        )
         x_roi, y_roi = get_cercle_coords(
-            x_centre[0], y_centre[0], radius=rad_cercle,
-            resolution=res_cercle)
+            x_centre[0], y_centre[0], radius=rad_cercle, resolution=res_cercle
+        )
         if x_roi is None:
             return None, None
         lon_roi, lat_roi = cartesian_to_geographic_aeqd(
-            x_roi, y_roi, radar.longitude['data'][0],
-            radar.latitude['data'][0])
+            x_roi, y_roi, radar.longitude["data"][0], radar.latitude["data"][0]
+        )
     elif box:
-        lon_point = dscfg.get('lon', None)
-        lat_point = dscfg.get('lat', None)
-        rotation = dscfg.get('rotation', 0)  # deg from north
-        origin = dscfg.get('origin', 'center')  # origin of rotation
-        we_offset = dscfg.get('we_offset', 0.)  # m
-        sn_offset = dscfg.get('sn_offset', 0.)  # m
-        we_length = dscfg.get('we_length', 1000.)   # m
-        sn_length = dscfg.get('sn_length', 1000.)   # m
+        lon_point = dscfg.get("lon", None)
+        lat_point = dscfg.get("lat", None)
+        rotation = dscfg.get("rotation", 0)  # deg from north
+        origin = dscfg.get("origin", "center")  # origin of rotation
+        we_offset = dscfg.get("we_offset", 0.0)  # m
+        sn_offset = dscfg.get("sn_offset", 0.0)  # m
+        we_length = dscfg.get("we_length", 1000.0)  # m
+        sn_length = dscfg.get("sn_length", 1000.0)  # m
 
         if lon_point is None or lat_point is None:
-            warn('box position undefined. '
-                 'The radar position will be used')
-            lon_point = radar.longitude['data'][0]
-            lat_point = radar.latitude['data'][0]
+            warn("box position undefined. " "The radar position will be used")
+            lon_point = radar.longitude["data"][0]
+            lat_point = radar.latitude["data"][0]
 
         # put data as x,y coordinates
         x_point, y_point = geographic_to_cartesian_aeqd(
-            lon_point, lat_point, radar.longitude['data'][0],
-            radar.latitude['data'][0])
+            lon_point, lat_point, radar.longitude["data"][0], radar.latitude["data"][0]
+        )
         x_roi, y_roi = get_box_coords(
-            x_point[0], y_point[0], we_length=we_length, sn_length=sn_length,
-            rotation=rotation, origin=origin, we_offset=we_offset,
-            sn_offset=sn_offset)
+            x_point[0],
+            y_point[0],
+            we_length=we_length,
+            sn_length=sn_length,
+            rotation=rotation,
+            origin=origin,
+            we_offset=we_offset,
+            sn_offset=sn_offset,
+        )
         if x_roi is None:
             return None, None
         lon_roi, lat_roi = cartesian_to_geographic_aeqd(
-            x_roi, y_roi, radar.longitude['data'][0],
-            radar.latitude['data'][0])
+            x_roi, y_roi, radar.longitude["data"][0], radar.latitude["data"][0]
+        )
     else:
-        lon_roi = dscfg.get('lon_roi', None)
-        lat_roi = dscfg.get('lat_roi', None)
+        lon_roi = dscfg.get("lon_roi", None)
+        lat_roi = dscfg.get("lat_roi", None)
 
         if lon_roi is None or lat_roi is None:
-            warn('Undefined ROI')
+            warn("Undefined ROI")
             return None, None
         x_roi, y_roi = geographic_to_cartesian_aeqd(
-            lon_roi, lat_roi, radar.longitude['data'][0],
-            radar.latitude['data'][0])
+            lon_roi, lat_roi, radar.longitude["data"][0], radar.latitude["data"][0]
+        )
 
-    alt_min = dscfg.get('alt_min', None)
-    alt_max = dscfg.get('alt_max', None)
+    alt_min = dscfg.get("alt_min", None)
+    alt_max = dscfg.get("alt_max", None)
 
     roi_dict = {
-        'lon': lon_roi,
-        'lat': lat_roi,
-        'x': x_roi,
-        'y': y_roi,
-        'alt_min': alt_min,
-        'alt_max': alt_max}
+        "lon": lon_roi,
+        "lat": lat_roi,
+        "x": x_roi,
+        "y": y_roi,
+        "alt_min": alt_min,
+        "alt_max": alt_max,
+    }
 
     # extract the data within the ROI boundaries
-    inds_ray, inds_rng = np.indices(np.shape(radar.gate_longitude['data']))
+    inds_ray, inds_rng = np.indices(np.shape(radar.gate_longitude["data"]))
 
     if use_latlon:
         mask = np.logical_and(
             np.logical_and(
-                radar.gate_latitude['data'] >= roi_dict['lat'].min(),
-                radar.gate_latitude['data'] <= roi_dict['lat'].max()),
+                radar.gate_latitude["data"] >= roi_dict["lat"].min(),
+                radar.gate_latitude["data"] <= roi_dict["lat"].max(),
+            ),
             np.logical_and(
-                radar.gate_longitude['data'] >= roi_dict['lon'].min(),
-                radar.gate_longitude['data'] <= roi_dict['lon'].max()))
+                radar.gate_longitude["data"] >= roi_dict["lon"].min(),
+                radar.gate_longitude["data"] <= roi_dict["lon"].max(),
+            ),
+        )
     else:
         mask = np.logical_and(
             np.logical_and(
-                radar.gate_y['data'] >= roi_dict['y'].min(),
-                radar.gate_y['data'] <= roi_dict['y'].max()),
+                radar.gate_y["data"] >= roi_dict["y"].min(),
+                radar.gate_y["data"] <= roi_dict["y"].max(),
+            ),
             np.logical_and(
-                radar.gate_x['data'] >= roi_dict['x'].min(),
-                radar.gate_x['data'] <= roi_dict['x'].max()))
+                radar.gate_x["data"] >= roi_dict["x"].min(),
+                radar.gate_x["data"] <= roi_dict["x"].max(),
+            ),
+        )
 
     if alt_min is not None:
-        mask[radar.gate_altitude['data'] < alt_min] = 0
+        mask[radar.gate_altitude["data"] < alt_min] = 0
     if alt_max is not None:
-        mask[radar.gate_altitude['data'] > alt_max] = 0
+        mask[radar.gate_altitude["data"] > alt_max] = 0
 
     if np.all(mask == 0):
-        warn('No values within ROI')
+        warn("No values within ROI")
         return None, None
 
     inds_ray = inds_ray[mask]
     inds_rng = inds_rng[mask]
 
     # extract the data inside the ROI
-    lat = radar.gate_latitude['data'][mask]
-    lon = radar.gate_longitude['data'][mask]
+    lat = radar.gate_latitude["data"][mask]
+    lon = radar.gate_longitude["data"][mask]
     if use_latlon:
-        inds, is_roi = belongs_roi_indices(
-            lat, lon, roi_dict, use_latlon=use_latlon)
+        inds, is_roi = belongs_roi_indices(lat, lon, roi_dict, use_latlon=use_latlon)
     else:
-        y = radar.gate_y['data'][mask]
-        x = radar.gate_x['data'][mask]
-        inds, is_roi = belongs_roi_indices(
-            y, x, roi_dict, use_latlon=use_latlon)
+        y = radar.gate_y["data"][mask]
+        x = radar.gate_x["data"][mask]
+        inds, is_roi = belongs_roi_indices(y, x, roi_dict, use_latlon=use_latlon)
 
-    if is_roi == 'None':
-        warn('No values within ROI')
+    if is_roi == "None":
+        warn("No values within ROI")
         return None, None
 
     inds_ray = inds_ray[inds]
@@ -1513,59 +1613,61 @@ def process_roi(procstatus, dscfg, radar_list=None):
 
     lat = lat[inds]
     lon = lon[inds]
-    alt = radar.gate_altitude['data'][inds_ray, inds_rng]
+    alt = radar.gate_altitude["data"][inds_ray, inds_rng]
 
     # prepare new radar object output
-    new_dataset = {'radar_out': deepcopy(radar)}
+    new_dataset = {"radar_out": deepcopy(radar)}
 
-    new_dataset['radar_out'].range['data'] = radar.range['data'][inds_rng]
-    new_dataset['radar_out'].ngates = inds_rng.size
-    new_dataset['radar_out'].time['data'] = np.asarray(
-        [new_dataset['radar_out'].time['data'][0]])
-    new_dataset['radar_out'].scan_type = 'roi'
-    new_dataset['radar_out'].sweep_mode['data'] = np.array(['roi'])
-    new_dataset['radar_out'].sweep_start_ray_index['data'] = np.array(
-        [0], dtype='int32')
-    new_dataset['radar_out'].fixed_angle['data'] = np.array(
-        [], dtype='float64')
-    new_dataset['radar_out'].sweep_number['data'] = np.array(
-        [0], dtype='int32')
-    new_dataset['radar_out'].nsweeps = 1
+    new_dataset["radar_out"].range["data"] = radar.range["data"][inds_rng]
+    new_dataset["radar_out"].ngates = inds_rng.size
+    new_dataset["radar_out"].time["data"] = np.asarray(
+        [new_dataset["radar_out"].time["data"][0]]
+    )
+    new_dataset["radar_out"].scan_type = "roi"
+    new_dataset["radar_out"].sweep_mode["data"] = np.array(["roi"])
+    new_dataset["radar_out"].sweep_start_ray_index["data"] = np.array(
+        [0], dtype="int32"
+    )
+    new_dataset["radar_out"].fixed_angle["data"] = np.array([], dtype="float64")
+    new_dataset["radar_out"].sweep_number["data"] = np.array([0], dtype="int32")
+    new_dataset["radar_out"].nsweeps = 1
 
     if radar.rays_are_indexed is not None:
-        new_dataset['radar_out'].rays_are_indexed['data'] = np.array(
-            [radar.rays_are_indexed['data'][0]])
+        new_dataset["radar_out"].rays_are_indexed["data"] = np.array(
+            [radar.rays_are_indexed["data"][0]]
+        )
     if radar.ray_angle_res is not None:
-        new_dataset['radar_out'].ray_angle_res['data'] = np.array(
-            [radar.ray_angle_res['data'][0]])
+        new_dataset["radar_out"].ray_angle_res["data"] = np.array(
+            [radar.ray_angle_res["data"][0]]
+        )
 
-    new_dataset['radar_out'].sweep_end_ray_index['data'] = np.array(
-        [1], dtype='int32')
-    new_dataset['radar_out'].rays_per_sweep = np.array([1], dtype='int32')
-    new_dataset['radar_out'].azimuth['data'] = np.array([], dtype='float64')
-    new_dataset['radar_out'].elevation['data'] = np.array([], dtype='float64')
-    new_dataset['radar_out'].nrays = 1
+    new_dataset["radar_out"].sweep_end_ray_index["data"] = np.array([1], dtype="int32")
+    new_dataset["radar_out"].rays_per_sweep = np.array([1], dtype="int32")
+    new_dataset["radar_out"].azimuth["data"] = np.array([], dtype="float64")
+    new_dataset["radar_out"].elevation["data"] = np.array([], dtype="float64")
+    new_dataset["radar_out"].nrays = 1
 
-    new_dataset['radar_out'].gate_longitude['data'] = np.expand_dims(
-        lon, axis=0)
-    new_dataset['radar_out'].gate_latitude['data'] = np.expand_dims(
-        lat, axis=0)
-    new_dataset['radar_out'].gate_altitude['data'] = np.expand_dims(
-        alt, axis=0)
+    new_dataset["radar_out"].gate_longitude["data"] = np.expand_dims(lon, axis=0)
+    new_dataset["radar_out"].gate_latitude["data"] = np.expand_dims(lat, axis=0)
+    new_dataset["radar_out"].gate_altitude["data"] = np.expand_dims(alt, axis=0)
 
-    new_dataset['radar_out'].gate_x['data'] = np.expand_dims(
-        radar.gate_x['data'][inds_ray, inds_rng], axis=0)
-    new_dataset['radar_out'].gate_y['data'] = np.expand_dims(
-        radar.gate_y['data'][inds_ray, inds_rng], axis=0)
-    new_dataset['radar_out'].gate_z['data'] = np.expand_dims(
-        radar.gate_z['data'][inds_ray, inds_rng], axis=0)
+    new_dataset["radar_out"].gate_x["data"] = np.expand_dims(
+        radar.gate_x["data"][inds_ray, inds_rng], axis=0
+    )
+    new_dataset["radar_out"].gate_y["data"] = np.expand_dims(
+        radar.gate_y["data"][inds_ray, inds_rng], axis=0
+    )
+    new_dataset["radar_out"].gate_z["data"] = np.expand_dims(
+        radar.gate_z["data"][inds_ray, inds_rng], axis=0
+    )
 
-    new_dataset['radar_out'].fields = dict()
+    new_dataset["radar_out"].fields = dict()
     for field_name in field_names:
         field_dict = deepcopy(radar.fields[field_name])
-        field_dict['data'] = np.expand_dims(
-            radar.fields[field_name]['data'][inds_ray, inds_rng], axis=0)
-        new_dataset['radar_out'].add_field(field_name, field_dict)
+        field_dict["data"] = np.expand_dims(
+            radar.fields[field_name]["data"][inds_ray, inds_rng], axis=0
+        )
+        new_dataset["radar_out"].add_field(field_name, field_dict)
 
     return new_dataset, ind_rad
 
@@ -1642,13 +1744,13 @@ def process_roi2(procstatus, dscfg, radar_list=None):
         return None, None
 
     field_names_aux = []
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_names_aux.append(get_fieldname_pyart(datatype))
 
     ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
-        warn('ERROR: No valid radar')
+        warn("ERROR: No valid radar")
         return None, None
     radar = radar_list[ind_rad]
 
@@ -1657,7 +1759,7 @@ def process_roi2(procstatus, dscfg, radar_list=None):
     nfields_available = 0
     for field_name in field_names_aux:
         if field_name not in radar.fields:
-            warn('Field name ' + field_name + ' not available in radar object')
+            warn("Field name " + field_name + " not available in radar object")
             continue
         field_names.append(field_name)
         nfields_available += 1
@@ -1667,150 +1769,189 @@ def process_roi2(procstatus, dscfg, radar_list=None):
         return None, None
 
     # Choose origin of ROI definition
-    cercle = dscfg.get('cercle', False)
-    box = dscfg.get('box', False)
-    use_latlon = dscfg.get('use_latlon', True)
-    if 'trtfile' in dscfg:
-        (_, yyyymmddHHMM, lon, lat, _, _, _, _, _, _, _, _, _, _, _, _, _, _,
-         _, _, _, _, _, _, _, _, _, cell_contour) = read_trt_traj_data(
-             dscfg['trtfile'])
+    cercle = dscfg.get("cercle", False)
+    box = dscfg.get("box", False)
+    use_latlon = dscfg.get("use_latlon", True)
+    if "trtfile" in dscfg:
+        (
+            _,
+            yyyymmddHHMM,
+            lon,
+            lat,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            _,
+            cell_contour,
+        ) = read_trt_traj_data(dscfg["trtfile"])
 
-        time_tol = dscfg.get('TimeTol', 100.)
+        time_tol = dscfg.get("TimeTol", 100.0)
         dt = np.empty(yyyymmddHHMM.size, dtype=float)
         for i, time_traj in enumerate(yyyymmddHHMM):
-            dt[i] = np.abs((dscfg['timeinfo'] - time_traj).total_seconds())
+            dt[i] = np.abs((dscfg["timeinfo"] - time_traj).total_seconds())
         if dt.min() > time_tol:
-            warn('No TRT data for radar volume time')
+            warn("No TRT data for radar volume time")
             return None, None
 
         ind = np.argmin(dt)
-        lon_roi = cell_contour[ind]['lon']
-        lat_roi = cell_contour[ind]['lat']
+        lon_roi = cell_contour[ind]["lon"]
+        lat_roi = cell_contour[ind]["lat"]
 
         x_roi, y_roi = geographic_to_cartesian_aeqd(
-            lon_roi, lat_roi, radar.longitude['data'][0],
-            radar.longitude['data'][0])
+            lon_roi, lat_roi, radar.longitude["data"][0], radar.longitude["data"][0]
+        )
     elif cercle:
-        lon_centre = dscfg.get('lon_centre', None)
-        lat_centre = dscfg.get('lat_centre', None)
-        rad_cercle = dscfg.get('rad_cercle', 1000.)  # m
-        res_cercle = dscfg.get('res_cercle', 16)
+        lon_centre = dscfg.get("lon_centre", None)
+        lat_centre = dscfg.get("lat_centre", None)
+        rad_cercle = dscfg.get("rad_cercle", 1000.0)  # m
+        res_cercle = dscfg.get("res_cercle", 16)
 
         if lon_centre is None or lat_centre is None:
-            warn('cercle position undefined. '
-                 'The radar position will be used')
-            lon_centre = radar.longitude['data'][0]
-            lat_centre = radar.latitude['data'][0]
+            warn("cercle position undefined. " "The radar position will be used")
+            lon_centre = radar.longitude["data"][0]
+            lat_centre = radar.latitude["data"][0]
 
         # put data as x,y coordinates
         x_centre, y_centre = geographic_to_cartesian_aeqd(
-            lon_centre, lat_centre, radar.longitude['data'][0],
-            radar.latitude['data'][0])
+            lon_centre,
+            lat_centre,
+            radar.longitude["data"][0],
+            radar.latitude["data"][0],
+        )
         x_roi, y_roi = get_cercle_coords(
-            x_centre[0], y_centre[0], radius=rad_cercle,
-            resolution=res_cercle)
+            x_centre[0], y_centre[0], radius=rad_cercle, resolution=res_cercle
+        )
         if x_roi is None:
             return None, None
         lon_roi, lat_roi = cartesian_to_geographic_aeqd(
-            x_roi, y_roi, radar.longitude['data'][0],
-            radar.latitude['data'][0])
+            x_roi, y_roi, radar.longitude["data"][0], radar.latitude["data"][0]
+        )
     elif box:
-        lon_point = dscfg.get('lon', None)
-        lat_point = dscfg.get('lat', None)
-        rotation = dscfg.get('rotation', 0)  # deg from north
-        origin = dscfg.get('origin', 'center')  # origin of rotation
-        we_offset = dscfg.get('we_offset', 0.)  # m
-        sn_offset = dscfg.get('sn_offset', 0.)  # m
-        we_length = dscfg.get('we_length', 1000.)   # m
-        sn_length = dscfg.get('sn_length', 1000.)   # m
+        lon_point = dscfg.get("lon", None)
+        lat_point = dscfg.get("lat", None)
+        rotation = dscfg.get("rotation", 0)  # deg from north
+        origin = dscfg.get("origin", "center")  # origin of rotation
+        we_offset = dscfg.get("we_offset", 0.0)  # m
+        sn_offset = dscfg.get("sn_offset", 0.0)  # m
+        we_length = dscfg.get("we_length", 1000.0)  # m
+        sn_length = dscfg.get("sn_length", 1000.0)  # m
 
         if lon_point is None or lat_point is None:
-            warn('box position undefined. '
-                 'The radar position will be used')
-            lon_point = radar.longitude['data'][0]
-            lat_point = radar.latitude['data'][0]
+            warn("box position undefined. " "The radar position will be used")
+            lon_point = radar.longitude["data"][0]
+            lat_point = radar.latitude["data"][0]
 
         # put data as x,y coordinates
         x_point, y_point = geographic_to_cartesian_aeqd(
-            lon_point, lat_point, radar.longitude['data'][0],
-            radar.latitude['data'][0])
+            lon_point, lat_point, radar.longitude["data"][0], radar.latitude["data"][0]
+        )
         x_roi, y_roi = get_box_coords(
-            x_point[0], y_point[0], we_length=we_length, sn_length=sn_length,
-            rotation=rotation, origin=origin, we_offset=we_offset,
-            sn_offset=sn_offset)
+            x_point[0],
+            y_point[0],
+            we_length=we_length,
+            sn_length=sn_length,
+            rotation=rotation,
+            origin=origin,
+            we_offset=we_offset,
+            sn_offset=sn_offset,
+        )
         if x_roi is None:
             return None, None
         lon_roi, lat_roi = cartesian_to_geographic_aeqd(
-            x_roi, y_roi, radar.longitude['data'][0],
-            radar.latitude['data'][0])
+            x_roi, y_roi, radar.longitude["data"][0], radar.latitude["data"][0]
+        )
     else:
-        lon_roi = dscfg.get('lon_roi', None)
-        lat_roi = dscfg.get('lat_roi', None)
+        lon_roi = dscfg.get("lon_roi", None)
+        lat_roi = dscfg.get("lat_roi", None)
 
         if lon_roi is None or lat_roi is None:
-            warn('Undefined ROI')
+            warn("Undefined ROI")
             return None, None
         x_roi, y_roi = geographic_to_cartesian_aeqd(
-            lon_roi, lat_roi, radar.longitude['data'][0],
-            radar.latitude['data'][0])
+            lon_roi, lat_roi, radar.longitude["data"][0], radar.latitude["data"][0]
+        )
 
-    alt_min = dscfg.get('alt_min', None)
-    alt_max = dscfg.get('alt_max', None)
+    alt_min = dscfg.get("alt_min", None)
+    alt_max = dscfg.get("alt_max", None)
 
     roi_dict = {
-        'lon': lon_roi,
-        'lat': lat_roi,
-        'x': x_roi,
-        'y': y_roi,
-        'alt_min': alt_min,
-        'alt_max': alt_max}
+        "lon": lon_roi,
+        "lat": lat_roi,
+        "x": x_roi,
+        "y": y_roi,
+        "alt_min": alt_min,
+        "alt_max": alt_max,
+    }
 
     # extract the data within the ROI boundaries
-    inds_ray, inds_rng = np.indices(np.shape(radar.gate_longitude['data']))
+    inds_ray, inds_rng = np.indices(np.shape(radar.gate_longitude["data"]))
 
     if use_latlon:
         mask = np.logical_and(
             np.logical_and(
-                radar.gate_latitude['data'] >= roi_dict['lat'].min(),
-                radar.gate_latitude['data'] <= roi_dict['lat'].max()),
+                radar.gate_latitude["data"] >= roi_dict["lat"].min(),
+                radar.gate_latitude["data"] <= roi_dict["lat"].max(),
+            ),
             np.logical_and(
-                radar.gate_longitude['data'] >= roi_dict['lon'].min(),
-                radar.gate_longitude['data'] <= roi_dict['lon'].max()))
+                radar.gate_longitude["data"] >= roi_dict["lon"].min(),
+                radar.gate_longitude["data"] <= roi_dict["lon"].max(),
+            ),
+        )
     else:
         mask = np.logical_and(
             np.logical_and(
-                radar.gate_y['data'] >= roi_dict['y'].min(),
-                radar.gate_y['data'] <= roi_dict['y'].max()),
+                radar.gate_y["data"] >= roi_dict["y"].min(),
+                radar.gate_y["data"] <= roi_dict["y"].max(),
+            ),
             np.logical_and(
-                radar.gate_x['data'] >= roi_dict['x'].min(),
-                radar.gate_x['data'] <= roi_dict['x'].max()))
+                radar.gate_x["data"] >= roi_dict["x"].min(),
+                radar.gate_x["data"] <= roi_dict["x"].max(),
+            ),
+        )
 
     if alt_min is not None:
-        mask[radar.gate_altitude['data'] < alt_min] = 0
+        mask[radar.gate_altitude["data"] < alt_min] = 0
     if alt_max is not None:
-        mask[radar.gate_altitude['data'] > alt_max] = 0
+        mask[radar.gate_altitude["data"] > alt_max] = 0
 
     if np.all(mask == 0):
-        warn('No values within ROI')
+        warn("No values within ROI")
         return None, None
 
     inds_ray = inds_ray[mask]
     inds_rng = inds_rng[mask]
 
     # extract the data inside the ROI
-    lat = radar.gate_latitude['data'][mask]
-    lon = radar.gate_longitude['data'][mask]
+    lat = radar.gate_latitude["data"][mask]
+    lon = radar.gate_longitude["data"][mask]
     if use_latlon:
-        inds, is_roi = belongs_roi_indices(
-            lat, lon, roi_dict, use_latlon=use_latlon)
+        inds, is_roi = belongs_roi_indices(lat, lon, roi_dict, use_latlon=use_latlon)
     else:
-        y = radar.gate_y['data'][mask]
-        x = radar.gate_x['data'][mask]
-        inds, is_roi = belongs_roi_indices(
-            y, x, roi_dict, use_latlon=use_latlon)
+        y = radar.gate_y["data"][mask]
+        x = radar.gate_x["data"][mask]
+        inds, is_roi = belongs_roi_indices(y, x, roi_dict, use_latlon=use_latlon)
 
-    if is_roi == 'None':
-        warn('No values within ROI')
+    if is_roi == "None":
+        warn("No values within ROI")
         return None, None
 
     inds_ray = np.squeeze(inds_ray[inds])
@@ -1818,64 +1959,64 @@ def process_roi2(procstatus, dscfg, radar_list=None):
 
     lat = np.squeeze(lat[inds])
     lon = np.squeeze(lon[inds])
-    alt = np.squeeze(radar.gate_altitude['data'][inds_ray, inds_rng])
+    alt = np.squeeze(radar.gate_altitude["data"][inds_ray, inds_rng])
 
     # prepare new radar object output
     new_dataset = {
-        'radar_out': deepcopy(radar),
-        'rng_res': radar.range['data'][1] - radar.range['data'][0]
+        "radar_out": deepcopy(radar),
+        "rng_res": radar.range["data"][1] - radar.range["data"][0],
     }
 
-    new_dataset['radar_out'].range['data'] = radar.range['data'][inds_rng]
-    new_dataset['radar_out'].ngates = inds_rng.size
-    new_dataset['radar_out'].time['data'] = (
-        new_dataset['radar_out'].time['data'][inds_ray])
-    new_dataset['radar_out'].scan_type = 'roi'
-    new_dataset['radar_out'].sweep_mode['data'] = np.array(['roi'])
-    new_dataset['radar_out'].sweep_start_ray_index['data'] = np.array(
-        [0], dtype='int32')
-    new_dataset['radar_out'].fixed_angle['data'] = np.array(
-        [], dtype='float64')
-    new_dataset['radar_out'].sweep_number['data'] = np.array(
-        [0], dtype='int32')
-    new_dataset['radar_out'].nsweeps = 1
+    new_dataset["radar_out"].range["data"] = radar.range["data"][inds_rng]
+    new_dataset["radar_out"].ngates = inds_rng.size
+    new_dataset["radar_out"].time["data"] = new_dataset["radar_out"].time["data"][
+        inds_ray
+    ]
+    new_dataset["radar_out"].scan_type = "roi"
+    new_dataset["radar_out"].sweep_mode["data"] = np.array(["roi"])
+    new_dataset["radar_out"].sweep_start_ray_index["data"] = np.array(
+        [0], dtype="int32"
+    )
+    new_dataset["radar_out"].fixed_angle["data"] = np.array([], dtype="float64")
+    new_dataset["radar_out"].sweep_number["data"] = np.array([0], dtype="int32")
+    new_dataset["radar_out"].nsweeps = 1
 
     if radar.rays_are_indexed is not None:
-        new_dataset['radar_out'].rays_are_indexed['data'] = np.array(
-            [radar.rays_are_indexed['data'][0]])
+        new_dataset["radar_out"].rays_are_indexed["data"] = np.array(
+            [radar.rays_are_indexed["data"][0]]
+        )
     if radar.ray_angle_res is not None:
-        new_dataset['radar_out'].ray_angle_res['data'] = np.array(
-            [radar.ray_angle_res['data'][0]])
+        new_dataset["radar_out"].ray_angle_res["data"] = np.array(
+            [radar.ray_angle_res["data"][0]]
+        )
 
-    new_dataset['radar_out'].sweep_end_ray_index['data'] = np.array(
-        [1], dtype='int32')
-    new_dataset['radar_out'].rays_per_sweep = np.array(
-        [lon.size], dtype='int32')
-    new_dataset['radar_out'].azimuth['data'] = radar.azimuth['data'][inds_ray]
-    new_dataset['radar_out'].elevation['data'] = radar.elevation['data'][
-        inds_ray]
-    new_dataset['radar_out'].nrays = 1
+    new_dataset["radar_out"].sweep_end_ray_index["data"] = np.array([1], dtype="int32")
+    new_dataset["radar_out"].rays_per_sweep = np.array([lon.size], dtype="int32")
+    new_dataset["radar_out"].azimuth["data"] = radar.azimuth["data"][inds_ray]
+    new_dataset["radar_out"].elevation["data"] = radar.elevation["data"][inds_ray]
+    new_dataset["radar_out"].nrays = 1
 
-    new_dataset['radar_out'].gate_longitude['data'] = np.expand_dims(
-        lon, axis=0)
-    new_dataset['radar_out'].gate_latitude['data'] = np.expand_dims(
-        lat, axis=0)
-    new_dataset['radar_out'].gate_altitude['data'] = np.expand_dims(
-        alt, axis=0)
+    new_dataset["radar_out"].gate_longitude["data"] = np.expand_dims(lon, axis=0)
+    new_dataset["radar_out"].gate_latitude["data"] = np.expand_dims(lat, axis=0)
+    new_dataset["radar_out"].gate_altitude["data"] = np.expand_dims(alt, axis=0)
 
-    new_dataset['radar_out'].gate_x['data'] = np.expand_dims(
-        radar.gate_x['data'][inds_ray, inds_rng], axis=0)
-    new_dataset['radar_out'].gate_y['data'] = np.expand_dims(
-        radar.gate_y['data'][inds_ray, inds_rng], axis=0)
-    new_dataset['radar_out'].gate_z['data'] = np.expand_dims(
-        radar.gate_z['data'][inds_ray, inds_rng], axis=0)
+    new_dataset["radar_out"].gate_x["data"] = np.expand_dims(
+        radar.gate_x["data"][inds_ray, inds_rng], axis=0
+    )
+    new_dataset["radar_out"].gate_y["data"] = np.expand_dims(
+        radar.gate_y["data"][inds_ray, inds_rng], axis=0
+    )
+    new_dataset["radar_out"].gate_z["data"] = np.expand_dims(
+        radar.gate_z["data"][inds_ray, inds_rng], axis=0
+    )
 
-    new_dataset['radar_out'].fields = dict()
+    new_dataset["radar_out"].fields = dict()
     for field_name in field_names:
         field_dict = deepcopy(radar.fields[field_name])
-        field_dict['data'] = np.expand_dims(
-            radar.fields[field_name]['data'][inds_ray, inds_rng], axis=0)
-        new_dataset['radar_out'].add_field(field_name, field_dict)
+        field_dict["data"] = np.expand_dims(
+            radar.fields[field_name]["data"][inds_ray, inds_rng], axis=0
+        )
+        new_dataset["radar_out"].add_field(field_name, field_dict)
 
     return new_dataset, ind_rad
 
@@ -1926,50 +2067,49 @@ def process_azimuthal_average(procstatus, dscfg, radar_list=None):
 
     field_names_aux = []
     datatypes_aux = []
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         datatypes_aux.append(datatype)
         field_names_aux.append(get_fieldname_pyart(datatype))
 
     ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
-        warn('ERROR: No valid radar')
+        warn("ERROR: No valid radar")
         return None, None
     radar = radar_list[ind_rad]
 
     # default parameters
-    angle = dscfg.get('angle', None)
-    delta_azi = dscfg.get('delta_azi', None)
-    avg_type = dscfg.get('avg_type', 'mean')
-    nvalid_min = dscfg.get('nvalid_min', 1)
-    if avg_type not in ('mean', 'median'):
-        warn('Unsuported statistics ' + avg_type)
+    angle = dscfg.get("angle", None)
+    delta_azi = dscfg.get("delta_azi", None)
+    avg_type = dscfg.get("avg_type", "mean")
+    nvalid_min = dscfg.get("nvalid_min", 1)
+    if avg_type not in ("mean", "median"):
+        warn("Unsuported statistics " + avg_type)
         return None, None
 
     # keep only fields present in radar object
     field_names = []
     datatypes = []
     lin_trans = None
-    if avg_type == 'mean':
+    if avg_type == "mean":
         lin_trans = dict()
     nfields_available = 0
     for field_name, datatype in zip(field_names_aux, datatypes_aux):
         if field_name not in radar.fields:
-            warn('Field name ' + field_name + ' not available in radar object')
+            warn("Field name " + field_name + " not available in radar object")
             continue
         field_names.append(field_name)
         datatypes.append(datatype)
         nfields_available += 1
 
-        if avg_type != 'mean':
+        if avg_type != "mean":
             continue
         lin_trans.update({field_name: False})
-        if 'lin_trans' in dscfg:
-            if datatype in dscfg['lin_trans']:
-                lin_trans[field_name] = (dscfg['lin_trans'] != 0)
+        if "lin_trans" in dscfg:
+            if datatype in dscfg["lin_trans"]:
+                lin_trans[field_name] = dscfg["lin_trans"] != 0
             else:
-                warn('Averaging in linear units for {} not specified'.format(
-                     datatype))
+                warn("Averaging in linear units for {} not specified".format(datatype))
 
     if nfields_available == 0:
         warn("Fields not available in radar data")
@@ -1981,11 +2121,17 @@ def process_azimuthal_average(procstatus, dscfg, radar_list=None):
         angle = None
 
     radar_rhi = compute_azimuthal_average(
-        radar, field_names, angle=angle, delta_azi=delta_azi,
-        avg_type=avg_type, nvalid_min=nvalid_min, lin_trans=lin_trans)
+        radar,
+        field_names,
+        angle=angle,
+        delta_azi=delta_azi,
+        avg_type=avg_type,
+        nvalid_min=nvalid_min,
+        lin_trans=lin_trans,
+    )
 
     # prepare for exit
-    new_dataset = {'radar_out': radar_rhi}
+    new_dataset = {"radar_out": radar_rhi}
 
     return new_dataset, ind_rad
 
@@ -2031,48 +2177,47 @@ def process_moving_azimuthal_average(procstatus, dscfg, radar_list=None):
         return None, None
 
     field_names_aux = []
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_names_aux.append(get_fieldname_pyart(datatype))
 
     ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
-        warn('ERROR: No valid radar')
+        warn("ERROR: No valid radar")
         return None, None
     radar = radar_list[ind_rad]
 
     # default parameters
-    delta_azi = dscfg.get('delta_azi', 20.)
-    avg_type = dscfg.get('avg_type', 'mean')
-    nvalid_min = dscfg.get('nvalid_min', 1)
-    if avg_type not in ('mean', 'median'):
-        warn('Unsuported statistics ' + avg_type)
+    delta_azi = dscfg.get("delta_azi", 20.0)
+    avg_type = dscfg.get("avg_type", "mean")
+    nvalid_min = dscfg.get("nvalid_min", 1)
+    if avg_type not in ("mean", "median"):
+        warn("Unsuported statistics " + avg_type)
         return None, None
 
     # keep only fields present in radar object
     field_names = []
     datatypes = []
     lin_trans = None
-    if avg_type == 'mean':
+    if avg_type == "mean":
         lin_trans = dict()
     nfields_available = 0
     for field_name in field_names_aux:
         if field_name not in radar.fields:
-            warn('Field name ' + field_name + ' not available in radar object')
+            warn("Field name " + field_name + " not available in radar object")
             continue
         field_names.append(field_name)
         datatypes.append(datatype)
         nfields_available += 1
 
-        if avg_type != 'mean':
+        if avg_type != "mean":
             continue
         lin_trans.update({field_name: False})
-        if 'lin_trans' in dscfg:
-            if datatype in dscfg['lin_trans']:
-                lin_trans[field_name] = (dscfg['lin_trans'] != 0)
+        if "lin_trans" in dscfg:
+            if datatype in dscfg["lin_trans"]:
+                lin_trans[field_name] = dscfg["lin_trans"] != 0
             else:
-                warn('Averaging in linear units for {} not specified'.format(
-                     datatype))
+                warn("Averaging in linear units for {} not specified".format(datatype))
 
     if nfields_available == 0:
         warn("Fields not available in radar data")
@@ -2080,8 +2225,8 @@ def process_moving_azimuthal_average(procstatus, dscfg, radar_list=None):
 
     radar_out = deepcopy(radar)
     # At the moment only PPI scans are supported
-    if radar_out.scan_type != 'ppi':
-        warn('Error: unsupported scan type.')
+    if radar_out.scan_type != "ppi":
+        warn("Error: unsupported scan type.")
         return None, None
 
     # keep only fields of interest
@@ -2094,33 +2239,33 @@ def process_moving_azimuthal_average(procstatus, dscfg, radar_list=None):
         radar_aux = deepcopy(radar_out)
         radar_aux = radar_aux.extract_sweeps([sweep])
 
-        for ind_ray_sweep, angle in enumerate(radar_aux.azimuth['data']):
-            ind_ray = (
-                ind_ray_sweep + radar_out.sweep_start_ray_index['data'][sweep])
+        for ind_ray_sweep, angle in enumerate(radar_aux.azimuth["data"]):
+            ind_ray = ind_ray_sweep + radar_out.sweep_start_ray_index["data"][sweep]
             # find neighbouring gates to be selected
             inds_ray, inds_rng = find_neighbour_gates(
-                radar_aux, angle, None, delta_azi=delta_azi, delta_rng=None)
+                radar_aux, angle, None, delta_azi=delta_azi, delta_rng=None
+            )
 
             # keep only data we are interested in
             for field_name in field_names:
-                field_aux = radar_aux.fields[field_name]['data'][:, inds_rng]
+                field_aux = radar_aux.fields[field_name]["data"][:, inds_rng]
                 field_aux = field_aux[inds_ray, :]
-                if avg_type == 'mean':
+                if avg_type == "mean":
                     if lin_trans[field_name]:
-                        field_aux = np.ma.power(10., 0.1 * field_aux)
+                        field_aux = np.ma.power(10.0, 0.1 * field_aux)
 
                 vals, _ = compute_directional_stats(
-                    field_aux, avg_type=avg_type, nvalid_min=nvalid_min,
-                    axis=0)
+                    field_aux, avg_type=avg_type, nvalid_min=nvalid_min, axis=0
+                )
 
-                if avg_type == 'mean':
+                if avg_type == "mean":
                     if lin_trans[field_name]:
-                        vals = 10. * np.ma.log10(vals)
+                        vals = 10.0 * np.ma.log10(vals)
 
-                radar_out.fields[field_name]['data'][ind_ray, :] = vals
+                radar_out.fields[field_name]["data"][ind_ray, :] = vals
 
     # prepare for exit
-    new_dataset = {'radar_out': radar_out}
+    new_dataset = {"radar_out": radar_out}
 
     return new_dataset, ind_rad
 
@@ -2227,229 +2372,275 @@ def process_radar_resampling(procstatus, dscfg, radar_list=None):
     # Process
     field_names_aux = []
     datatypes = []
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_names_aux.append(get_fieldname_pyart(datatype))
         datatypes.append(datatype)
 
     ind_rad = int(radarnr[5:8]) - 1
-    if ((radar_list is None) or (radar_list[ind_rad] is None)):
-        warn('ERROR: No valid radar found')
+    if (radar_list is None) or (radar_list[ind_rad] is None):
+        warn("ERROR: No valid radar found")
         return None, None
     radar = deepcopy(radar_list[ind_rad])
 
     field_names = []
     for field_name in field_names_aux:
         if field_name not in radar.fields:
-            warn('Field ' + field_name + ' not in observations radar object')
+            warn("Field " + field_name + " not in observations radar object")
             continue
         field_names.append(field_name)
 
-    if not dscfg['initialized']:
-        if 'antennaType' not in dscfg:
-            raise Exception("ERROR: Undefined 'antennaType' for dataset '%s'"
-                            % dscfg['dsname'])
-        if 'configpath' not in dscfg:
-            raise Exception("ERROR: Undefined 'configpath' for dataset '%s'"
-                            % dscfg['dsname'])
-        if 'target_radar_pos' not in dscfg:
+    if not dscfg["initialized"]:
+        if "antennaType" not in dscfg:
+            raise Exception(
+                "ERROR: Undefined 'antennaType' for dataset '%s'" % dscfg["dsname"]
+            )
+        if "configpath" not in dscfg:
+            raise Exception(
+                "ERROR: Undefined 'configpath' for dataset '%s'" % dscfg["dsname"]
+            )
+        if "target_radar_pos" not in dscfg:
             radar_antenna_atsameplace = True
-            warn('No target radar position specified. ' +
-                 'The radars are assumed co-located')
+            warn(
+                "No target radar position specified. "
+                + "The radars are assumed co-located"
+            )
         else:
             radar_antenna_atsameplace = False
 
-        if dscfg['antennaType'] == 'AZIMUTH':
+        if dscfg["antennaType"] == "AZIMUTH":
             is_azimuth_antenna = True
-            info = 'parAzAnt'
-            if 'par_azimuth_antenna' not in dscfg:
-                raise Exception("ERROR: Undefined 'par_azimuth_antenna' for"
-                                " dataset '%s'" % dscfg['dsname'])
+            info = "parAzAnt"
+            if "par_azimuth_antenna" not in dscfg:
+                raise Exception(
+                    "ERROR: Undefined 'par_azimuth_antenna' for"
+                    " dataset '%s'" % dscfg["dsname"]
+                )
 
-            patternfile = dscfg['configpath'] + 'antenna/' \
-                + dscfg['par_azimuth_antenna']['elPatternFile']
-            fixed_angle_val = dscfg['par_azimuth_antenna']['fixed_angle']
+            patternfile = (
+                dscfg["configpath"]
+                + "antenna/"
+                + dscfg["par_azimuth_antenna"]["elPatternFile"]
+            )
+            fixed_angle_val = dscfg["par_azimuth_antenna"]["fixed_angle"]
 
-        elif dscfg['antennaType'] == 'ELEVATION':
+        elif dscfg["antennaType"] == "ELEVATION":
             is_azimuth_antenna = False
-            info = 'parElAnt'
-            if 'par_elevation_antenna' not in dscfg:
-                raise Exception("ERROR: Undefined 'par_elevation_antenna' for"
-                                " dataset '%s'" % dscfg['dsname'])
+            info = "parElAnt"
+            if "par_elevation_antenna" not in dscfg:
+                raise Exception(
+                    "ERROR: Undefined 'par_elevation_antenna' for"
+                    " dataset '%s'" % dscfg["dsname"]
+                )
 
-            patternfile = dscfg['configpath'] + 'antenna/' \
-                + dscfg['par_elevation_antenna']['azPatternFile']
-            fixed_angle_val = dscfg['par_elevation_antenna']['fixed_angle']
+            patternfile = (
+                dscfg["configpath"]
+                + "antenna/"
+                + dscfg["par_elevation_antenna"]["azPatternFile"]
+            )
+            fixed_angle_val = dscfg["par_elevation_antenna"]["fixed_angle"]
 
-        elif dscfg['antennaType'] == 'LOWBEAM':
+        elif dscfg["antennaType"] == "LOWBEAM":
             is_azimuth_antenna = True
-            info = 'asrLowBeamAnt'
-            if 'asr_lowbeam_antenna' not in dscfg:
-                raise Exception("ERROR: Undefined 'asr_lowbeam_antenna' for"
-                                " dataset '%s'" % dscfg['dsname'])
+            info = "asrLowBeamAnt"
+            if "asr_lowbeam_antenna" not in dscfg:
+                raise Exception(
+                    "ERROR: Undefined 'asr_lowbeam_antenna' for"
+                    " dataset '%s'" % dscfg["dsname"]
+                )
 
-            patternfile = dscfg['configpath'] + 'antenna/' \
-                + dscfg['asr_lowbeam_antenna']['elPatternFile']
-            fixed_angle_val = dscfg['asr_lowbeam_antenna']['fixed_angle']
+            patternfile = (
+                dscfg["configpath"]
+                + "antenna/"
+                + dscfg["asr_lowbeam_antenna"]["elPatternFile"]
+            )
+            fixed_angle_val = dscfg["asr_lowbeam_antenna"]["fixed_angle"]
 
-        elif dscfg['antennaType'] == 'HIGHBEAM':
+        elif dscfg["antennaType"] == "HIGHBEAM":
             is_azimuth_antenna = True
-            info = 'asrHighBeamAnt'
-            if 'asr_highbeam_antenna' not in dscfg:
-                raise Exception("ERROR: Undefined 'asr_highbeam_antenna' for"
-                                " dataset '%s'" % dscfg['dsname'])
+            info = "asrHighBeamAnt"
+            if "asr_highbeam_antenna" not in dscfg:
+                raise Exception(
+                    "ERROR: Undefined 'asr_highbeam_antenna' for"
+                    " dataset '%s'" % dscfg["dsname"]
+                )
 
-            patternfile = dscfg['configpath'] + 'antenna/' \
-                + dscfg['asr_highbeam_antenna']['elPatternFile']
-            patternfile_low = dscfg['configpath'] + 'antenna/' \
-                + dscfg['asr_lowbeam_antenna']['elPatternFile']
-            fixed_angle_val = dscfg['asr_highbeam_antenna']['fixed_angle']
+            patternfile = (
+                dscfg["configpath"]
+                + "antenna/"
+                + dscfg["asr_highbeam_antenna"]["elPatternFile"]
+            )
+            patternfile_low = (
+                dscfg["configpath"]
+                + "antenna/"
+                + dscfg["asr_lowbeam_antenna"]["elPatternFile"]
+            )
+            fixed_angle_val = dscfg["asr_highbeam_antenna"]["fixed_angle"]
         else:
-            raise Exception("ERROR: Unexpected antenna type '%s' for dataset"
-                            " '%s'" % (dscfg['antennaType'], dscfg['dsname']))
+            raise Exception(
+                "ERROR: Unexpected antenna type '%s' for dataset"
+                " '%s'" % (dscfg["antennaType"], dscfg["dsname"])
+            )
 
         if isinstance(fixed_angle_val, float):
             fixed_angle_val = [fixed_angle_val]
 
-        change_antenna_pattern = dscfg.get('change_antenna_pattern', True)
+        change_antenna_pattern = dscfg.get("change_antenna_pattern", True)
 
         # Read dataset config parameters:
-        weight_threshold = dscfg.get('pattern_thres', 0.)
+        weight_threshold = dscfg.get("pattern_thres", 0.0)
 
         # Config parameters for processing when the weather radar and the
         # antenna are not at the same place:
-        rhi_resolution = dscfg.get('rhi_resolution', 0.5)  # [deg]
-        max_altitude = dscfg.get('max_altitude', 12000.)  # [m]
-        latlon_tol = dscfg.get('latlon_tol', 0.04)  # [deg]
-        alt_tol = dscfg.get('alt_tol', 1000.)  # [m]
-        distance_upper_bound = dscfg.get('distance_upper_bound', 1000.)
-        use_cKDTree = dscfg.get('use_cKDTree', True)
-        quants = np.array(dscfg.get(
-            'quants', [0.05, 0.1, 0.2, 0.5, 0.8, 0.9, 0.95]))
+        rhi_resolution = dscfg.get("rhi_resolution", 0.5)  # [deg]
+        max_altitude = dscfg.get("max_altitude", 12000.0)  # [m]
+        latlon_tol = dscfg.get("latlon_tol", 0.04)  # [deg]
+        alt_tol = dscfg.get("alt_tol", 1000.0)  # [m]
+        distance_upper_bound = dscfg.get("distance_upper_bound", 1000.0)
+        use_cKDTree = dscfg.get("use_cKDTree", True)
+        quants = np.array(dscfg.get("quants", [0.05, 0.1, 0.2, 0.5, 0.8, 0.9, 0.95]))
 
         target_radar = _create_target_radar(
-            radar, dscfg, fixed_angle_val, info, field_names,
+            radar,
+            dscfg,
+            fixed_angle_val,
+            info,
+            field_names,
             change_antenna_pattern=change_antenna_pattern,
-            quantiles=100 * quants)
+            quantiles=100 * quants,
+        )
 
         # Get antenna pattern and make weight vector
         try:
-            if info == 'asrHighBeamAnt':
+            if info == "asrHighBeamAnt":
                 antpattern = read_antenna_pattern(
-                    patternfile, linear=True, twoway=False)
+                    patternfile, linear=True, twoway=False
+                )
                 antpattern_low = read_antenna_pattern(
-                    patternfile_low, linear=True, twoway=False)
-                antpattern['attenuation'] *= antpattern_low['attenuation']
+                    patternfile_low, linear=True, twoway=False
+                )
+                antpattern["attenuation"] *= antpattern_low["attenuation"]
             else:
-                antpattern = read_antenna_pattern(patternfile, linear=True,
-                                                  twoway=True)
+                antpattern = read_antenna_pattern(patternfile, linear=True, twoway=True)
         except Exception as ee:
             warn(str(ee))
             raise
 
-        pattern_angles = antpattern['angle'] + fixed_angle_val[0]
+        pattern_angles = antpattern["angle"] + fixed_angle_val[0]
         if not is_azimuth_antenna:
-            pattern_angles[pattern_angles < 0] += 360.
-        pattern_angles[pattern_angles >= 360.] -= 360.
+            pattern_angles[pattern_angles < 0] += 360.0
+        pattern_angles[pattern_angles >= 360.0] -= 360.0
 
         if radar_antenna_atsameplace:
             if is_azimuth_antenna:
-                scan_angles = np.sort(np.unique(
-                    radar.elevation['data'].round(decimals=1)))
+                scan_angles = np.sort(
+                    np.unique(radar.elevation["data"].round(decimals=1))
+                )
             else:
-                scan_angles = np.sort(np.unique(
-                    radar.azimuth['data'].round(decimals=1)))
+                scan_angles = np.sort(
+                    np.unique(radar.azimuth["data"].round(decimals=1))
+                )
         else:
             scan_angles = np.arange(0, 90, rhi_resolution, dtype=float)
 
         weightvec = np.empty(scan_angles.size, dtype=float)
         for kk in range(scan_angles.size):
             ind = np.argmin(np.abs(pattern_angles - scan_angles[kk]))
-            weightvec[kk] = antpattern['attenuation'][ind]
+            weightvec[kk] = antpattern["attenuation"][ind]
 
         data_is_log = dict()
         use_nans = dict()
         nan_value = dict()
         for datatype, field_name in zip(datatypes, field_names):
             data_is_log.update({field_name: False})
-            if 'data_is_log' in dscfg:
-                if datatype in dscfg['data_is_log']:
-                    data_is_log[field_name] = (
-                        dscfg['data_is_log'][datatype] != 0)
+            if "data_is_log" in dscfg:
+                if datatype in dscfg["data_is_log"]:
+                    data_is_log[field_name] = dscfg["data_is_log"][datatype] != 0
                 else:
-                    warn('Units type for data type ' + datatype +
-                         ' not specified. Assumed linear')
+                    warn(
+                        "Units type for data type "
+                        + datatype
+                        + " not specified. Assumed linear"
+                    )
 
             use_nans.update({field_name: False})
-            if 'use_nans' in dscfg:
-                if datatype in dscfg['use_nans']:
-                    use_nans[field_name] = (
-                        dscfg['use_nans'][datatype] != 0)
+            if "use_nans" in dscfg:
+                if datatype in dscfg["use_nans"]:
+                    use_nans[field_name] = dscfg["use_nans"][datatype] != 0
                 else:
-                    warn('Use of nans not specified for data type ' +
-                         datatype + ' not specified. Assumed not used')
+                    warn(
+                        "Use of nans not specified for data type "
+                        + datatype
+                        + " not specified. Assumed not used"
+                    )
 
-            nan_value.update({field_name: 0.})
-            if 'nan_value' in dscfg:
-                if datatype in dscfg['nan_value']:
-                    nan_value[field_name] = dscfg['nan_value'][datatype]
+            nan_value.update({field_name: 0.0})
+            if "nan_value" in dscfg:
+                if datatype in dscfg["nan_value"]:
+                    nan_value[field_name] = dscfg["nan_value"][datatype]
                 else:
-                    warn('NaN value not specified for data type ' + datatype +
-                         ' not specified. Assumed 0')
+                    warn(
+                        "NaN value not specified for data type "
+                        + datatype
+                        + " not specified. Assumed 0"
+                    )
 
         # Persistent data structure
-        trdict = dict({
-            'target_radar': target_radar,
-            'is_azimuth_antenna': is_azimuth_antenna,
-            'info': info,
-            'scan_angles': scan_angles,
-            'radar_antenna_atsameplace': radar_antenna_atsameplace,
-            'weightvec': weightvec,
-            'quantiles': quants,
-            'use_nans': use_nans,
-            'nan_value': nan_value,
-            'weight_threshold': weight_threshold,
-            'max_altitude': max_altitude,
-            'latlon_tol': latlon_tol,
-            'alt_tol': alt_tol,
-            'distance_upper_bound': distance_upper_bound,
-            'use_cKDTree': use_cKDTree,
-            'data_is_log': data_is_log,
-            'change_antenna_pattern': change_antenna_pattern})
+        trdict = dict(
+            {
+                "target_radar": target_radar,
+                "is_azimuth_antenna": is_azimuth_antenna,
+                "info": info,
+                "scan_angles": scan_angles,
+                "radar_antenna_atsameplace": radar_antenna_atsameplace,
+                "weightvec": weightvec,
+                "quantiles": quants,
+                "use_nans": use_nans,
+                "nan_value": nan_value,
+                "weight_threshold": weight_threshold,
+                "max_altitude": max_altitude,
+                "latlon_tol": latlon_tol,
+                "alt_tol": alt_tol,
+                "distance_upper_bound": distance_upper_bound,
+                "use_cKDTree": use_cKDTree,
+                "data_is_log": data_is_log,
+                "change_antenna_pattern": change_antenna_pattern,
+            }
+        )
 
-        dscfg['global_data'] = trdict
-        dscfg['initialized'] = True
+        dscfg["global_data"] = trdict
+        dscfg["initialized"] = True
         # end init
     else:
         # init already done
-        trdict = dscfg['global_data']
+        trdict = dscfg["global_data"]
 
         # update time of target radar
-        trdict['target_radar'].time = deepcopy(radar.time)
-        time_data = np.sort(trdict['target_radar'].time['data'])
+        trdict["target_radar"].time = deepcopy(radar.time)
+        time_data = np.sort(trdict["target_radar"].time["data"])
         time_res = time_data[1] - time_data[0]
-        trdict['target_radar'].time['data'] = np.arange(
-            trdict['target_radar'].nrays) * time_res
+        trdict["target_radar"].time["data"] = (
+            np.arange(trdict["target_radar"].nrays) * time_res
+        )
 
         # reset field values
-        for field_name in trdict['target_radar'].fields.keys():
-            if 'npoints' in field_name:
-                trdict['target_radar'].fields[field_name]['data'] = (
-                    np.ma.zeros(
-                        (trdict['target_radar'].nrays,
-                         trdict['target_radar'].ngates), dtype=np.int32))
+        for field_name in trdict["target_radar"].fields.keys():
+            if "npoints" in field_name:
+                trdict["target_radar"].fields[field_name]["data"] = np.ma.zeros(
+                    (trdict["target_radar"].nrays, trdict["target_radar"].ngates),
+                    dtype=np.int32,
+                )
                 continue
-            trdict['target_radar'].fields[field_name]['data'] = (
-                np.ma.masked_all(
-                    (trdict['target_radar'].nrays,
-                     trdict['target_radar'].ngates)))
+            trdict["target_radar"].fields[field_name]["data"] = np.ma.masked_all(
+                (trdict["target_radar"].nrays, trdict["target_radar"].ngates)
+            )
 
     target_radar = _get_values_antenna_pattern(radar, trdict, field_names)
 
     if target_radar is None:
         return None, None
 
-    new_dataset = {'radar_out': target_radar}
+    new_dataset = {"radar_out": target_radar}
 
     return new_dataset, ind_rad
 
@@ -2473,62 +2664,62 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
         The synthetic radar
 
     """
-    is_azimuth_antenna = tadict['is_azimuth_antenna']
-    scan_angles = tadict['scan_angles']
-    radar_antenna_atsameplace = tadict['radar_antenna_atsameplace']
-    nan_value = tadict['nan_value']
-    use_nans = tadict['use_nans']
-    weight_threshold = tadict['weight_threshold']
-    target_radar = tadict['target_radar']
-    max_altitude = tadict['max_altitude']
-    latlon_tol = tadict['latlon_tol']
-    alt_tol = tadict['alt_tol']
-    distance_upper_bound = tadict['distance_upper_bound']
-    use_cKDTree = tadict['use_cKDTree']
-    data_is_log = tadict['data_is_log']
-    change_antenna_pattern = tadict['change_antenna_pattern']
+    is_azimuth_antenna = tadict["is_azimuth_antenna"]
+    scan_angles = tadict["scan_angles"]
+    radar_antenna_atsameplace = tadict["radar_antenna_atsameplace"]
+    nan_value = tadict["nan_value"]
+    use_nans = tadict["use_nans"]
+    weight_threshold = tadict["weight_threshold"]
+    target_radar = tadict["target_radar"]
+    max_altitude = tadict["max_altitude"]
+    latlon_tol = tadict["latlon_tol"]
+    alt_tol = tadict["alt_tol"]
+    distance_upper_bound = tadict["distance_upper_bound"]
+    use_cKDTree = tadict["use_cKDTree"]
+    data_is_log = tadict["data_is_log"]
+    change_antenna_pattern = tadict["change_antenna_pattern"]
 
     # find closest radar gate to target
     x_radar, y_radar, z_radar = _put_radar_in_swiss_coord(radar)
     x_target, y_target, z_target = _put_radar_in_swiss_coord(target_radar)
 
     tree = cKDTree(
-        np.transpose(
-            (x_radar.flatten(), y_radar.flatten(), z_radar.flatten())),
-        compact_nodes=False, balanced_tree=False)
-    _, ind_vec = tree.query(np.transpose(
-        (x_target.flatten(), y_target.flatten(), z_target.flatten())), k=1)
+        np.transpose((x_radar.flatten(), y_radar.flatten(), z_radar.flatten())),
+        compact_nodes=False,
+        balanced_tree=False,
+    )
+    _, ind_vec = tree.query(
+        np.transpose((x_target.flatten(), y_target.flatten(), z_target.flatten())), k=1
+    )
 
     # temporary solution to get right time:
-    target_radar.time['data'][:] = radar.time['data'][0]
+    target_radar.time["data"][:] = radar.time["data"][0]
 
     if not change_antenna_pattern:
         for field_name in field_names:
             if field_name not in radar.fields:
-                warn(
-                    'Field ' +
-                    field_name +
-                    ' not in observations radar object')
+                warn("Field " + field_name + " not in observations radar object")
                 continue
 
-            values = radar.fields[field_name]['data'].flatten()
-            target_radar.fields[field_name]['data'][:] = (
-                values[ind_vec].reshape(
-                    target_radar.nrays, target_radar.ngates))
+            values = radar.fields[field_name]["data"].flatten()
+            target_radar.fields[field_name]["data"][:] = values[ind_vec].reshape(
+                target_radar.nrays, target_radar.ngates
+            )
 
         return target_radar
 
     # Find closest azimuth and elevation ray to target radar
-    rad_ind_rays, rad_ind_rngs = np.unravel_index(
-        ind_vec, (radar.nrays, radar.ngates))
+    rad_ind_rays, rad_ind_rngs = np.unravel_index(ind_vec, (radar.nrays, radar.ngates))
     for sample, (rad_ind_ray, rad_ind_rng) in enumerate(
-            zip(rad_ind_rays, rad_ind_rngs)):
+        zip(rad_ind_rays, rad_ind_rngs)
+    ):
 
         # measure time
         tstart = time()
 
         trad_ind_ray, trad_ind_rng = np.unravel_index(
-            sample, (target_radar.nrays, target_radar.ngates))
+            sample, (target_radar.nrays, target_radar.ngates)
+        )
 
         if radar_antenna_atsameplace:
             # ==============================================================
@@ -2538,13 +2729,13 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
             # ==============================================================
             # Get sample at bin
             if is_azimuth_antenna:
-                angles = radar.azimuth['data']
-                angles_scan = radar.elevation['data']
-                ray_angle = radar.azimuth['data'][rad_ind_ray]
+                angles = radar.azimuth["data"]
+                angles_scan = radar.elevation["data"]
+                ray_angle = radar.azimuth["data"][rad_ind_ray]
             else:
-                angles = radar.elevation['data']
-                angles_scan = radar.azimuth['data']
-                ray_angle = radar.elevation['data'][rad_ind_ray]
+                angles = radar.elevation["data"]
+                angles_scan = radar.azimuth["data"]
+                ray_angle = radar.elevation["data"][rad_ind_ray]
 
             d_angle = np.abs(angles - ray_angle)
             ray_inds = np.where(d_angle < 0.09)[0]
@@ -2554,19 +2745,18 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
             angles_sorted = angles_scan[ray_inds]
 
             # Set default values
-            if ((scan_angles.size != angles_sorted.size) or
-                    (np.max(np.abs(scan_angles - angles_sorted)) > 0.1)):
+            if (scan_angles.size != angles_sorted.size) or (
+                np.max(np.abs(scan_angles - angles_sorted)) > 0.1
+            ):
                 warn("Scan angle mismatch!")
                 continue
 
-            w_vec = tadict['weightvec']
+            w_vec = tadict["weightvec"]
             for field_name in field_names:
                 if field_name not in radar.fields:
-                    warn("Datatype '%s' not available in radar data" %
-                         field_name)
+                    warn("Datatype '%s' not available in radar data" % field_name)
                     continue
-                values = radar.fields[field_name]['data'][
-                    ray_inds, rad_ind_rng]
+                values = radar.fields[field_name]["data"][ray_inds, rad_ind_rng]
                 if use_nans[field_name]:
                     values_ma = np.ma.getmaskarray(values)
                     values[values_ma] = nan_value[field_name]
@@ -2575,9 +2765,10 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
                     (avg, qvals, nvals_valid) = quantiles_weighted(
                         values,
                         weight_vector=deepcopy(w_vec),
-                        quantiles=tadict['quantiles'],
+                        quantiles=tadict["quantiles"],
                         weight_threshold=weight_threshold,
-                        data_is_log=data_is_log[field_name])
+                        data_is_log=data_is_log[field_name],
+                    )
                 except Exception as ee:
                     warn(str(ee))
                     continue
@@ -2586,44 +2777,50 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
                     continue
 
                 # average field
-                target_radar.fields['avg_' + field_name]['data'][
-                    trad_ind_ray, trad_ind_rng] = avg
+                target_radar.fields["avg_" + field_name]["data"][
+                    trad_ind_ray, trad_ind_rng
+                ] = avg
 
                 # npoints field
-                target_radar.fields['npoints_' + field_name]['data'][
-                    trad_ind_ray, trad_ind_rng] = nvals_valid
+                target_radar.fields["npoints_" + field_name]["data"][
+                    trad_ind_ray, trad_ind_rng
+                ] = nvals_valid
 
                 # quantile fields
-                for quant, val in zip(tadict['quantiles'], qvals):
+                for quant, val in zip(tadict["quantiles"], qvals):
                     if val is None:
                         continue
                     quant_field = (
-                        'quant' + '{:02d}'.format(int(100 * quant)) + '_' +
-                        field_name)
-                    target_radar.fields[quant_field]['data'][
-                        trad_ind_ray, trad_ind_rng] = val
+                        "quant" + "{:02d}".format(int(100 * quant)) + "_" + field_name
+                    )
+                    target_radar.fields[quant_field]["data"][
+                        trad_ind_ray, trad_ind_rng
+                    ] = val
 
         else:
             # ================================================================
             # Radar and scanning antenna are NOT at the same place
             # ================================================================
             ray_inds, rng_inds, w_inds = _get_gates_antenna_pattern(
-                radar, target_radar,
-                target_radar.azimuth['data'][trad_ind_ray],
-                target_radar.range['data'][trad_ind_rng],
-                target_radar.time['data'][trad_ind_ray], scan_angles,
-                alt_tol=alt_tol, latlon_tol=latlon_tol,
+                radar,
+                target_radar,
+                target_radar.azimuth["data"][trad_ind_ray],
+                target_radar.range["data"][trad_ind_rng],
+                target_radar.time["data"][trad_ind_ray],
+                scan_angles,
+                alt_tol=alt_tol,
+                latlon_tol=latlon_tol,
                 max_altitude=max_altitude,
                 distance_upper_bound=distance_upper_bound,
-                use_cKDTree=use_cKDTree)
+                use_cKDTree=use_cKDTree,
+            )
 
-            w_vec = tadict['weightvec'][w_inds]
+            w_vec = tadict["weightvec"][w_inds]
             for field_name in field_names:
                 if field_name not in radar.fields:
-                    warn("Datatype '%s' not available in radar data" %
-                         field_name)
+                    warn("Datatype '%s' not available in radar data" % field_name)
                     continue
-                values = radar.fields[field_name]['data'][ray_inds, rng_inds]
+                values = radar.fields[field_name]["data"][ray_inds, rng_inds]
                 if use_nans[field_name]:
                     values_ma = np.ma.getmaskarray(values)
                     values[values_ma] = nan_value[field_name]
@@ -2632,9 +2829,10 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
                     (avg, qvals, nvals_valid) = quantiles_weighted(
                         values,
                         weight_vector=deepcopy(w_vec),
-                        quantiles=tadict['quantiles'],
+                        quantiles=tadict["quantiles"],
                         weight_threshold=weight_threshold,
-                        data_is_log=data_is_log[field_name])
+                        data_is_log=data_is_log[field_name],
+                    )
                 except Exception as ee:
                     warn(str(ee))
                     continue
@@ -2643,38 +2841,59 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
                     continue
 
                 # average field
-                target_radar.fields['avg_' + field_name]['data'][
-                    trad_ind_ray, trad_ind_rng] = avg
+                target_radar.fields["avg_" + field_name]["data"][
+                    trad_ind_ray, trad_ind_rng
+                ] = avg
 
                 # npoints field
-                target_radar.fields['npoints_' + field_name]['data'][
-                    trad_ind_ray, trad_ind_rng] = nvals_valid
+                target_radar.fields["npoints_" + field_name]["data"][
+                    trad_ind_ray, trad_ind_rng
+                ] = nvals_valid
 
                 # quantile fields
-                for quant, val in zip(tadict['quantiles'], qvals):
+                for quant, val in zip(tadict["quantiles"], qvals):
                     if val is None:
                         continue
                     quant_field = (
-                        'quant' + '{:02d}'.format(int(100 * quant)) + '_' +
-                        field_name)
-                    target_radar.fields[quant_field]['data'][
-                        trad_ind_ray, trad_ind_rng] = val
+                        "quant" + "{:02d}".format(int(100 * quant)) + "_" + field_name
+                    )
+                    target_radar.fields[quant_field]["data"][
+                        trad_ind_ray, trad_ind_rng
+                    ] = val
 
             tend = time()
 
             print(
-                'original radar indices (azi, rng): ' + str(rad_ind_ray) + ', '
-                + str(rad_ind_rng) + ' target radar indices (azi, rng): '
-                + str(trad_ind_ray) + ', ' + str(trad_ind_rng)
-                + ' Samples done: ' + str(sample) + '/'
-                + str(rad_ind_rngs.size) + ' Time used: ' + str(tend - tstart),
-                end="\r", flush=True)
+                "original radar indices (azi, rng): "
+                + str(rad_ind_ray)
+                + ", "
+                + str(rad_ind_rng)
+                + " target radar indices (azi, rng): "
+                + str(trad_ind_ray)
+                + ", "
+                + str(trad_ind_rng)
+                + " Samples done: "
+                + str(sample)
+                + "/"
+                + str(rad_ind_rngs.size)
+                + " Time used: "
+                + str(tend - tstart),
+                end="\r",
+                flush=True,
+            )
 
     return target_radar
 
 
-def _create_target_radar(radar, dscfg, fixed_angle_val, info, field_names,
-                         change_antenna_pattern=False, quantiles=[50]):
+def _create_target_radar(
+    radar,
+    dscfg,
+    fixed_angle_val,
+    info,
+    field_names,
+    change_antenna_pattern=False,
+    quantiles=[50],
+):
     """
     Creates the target radar
 
@@ -2704,108 +2923,120 @@ def _create_target_radar(radar, dscfg, fixed_angle_val, info, field_names,
 
     """
     # Parameters to create the new radar
-    moving_angle_min = dscfg.get('moving_angle_min', 0.)
-    moving_angle_max = dscfg.get('moving_angle_max', 359.)
-    ray_res = dscfg.get('ray_res', 1.)
-    rng_min = dscfg.get('rng_min', 0.)
-    rng_max = dscfg.get('rng_max', 100000.)
-    rng_res = dscfg.get('rng_res', 100.)
+    moving_angle_min = dscfg.get("moving_angle_min", 0.0)
+    moving_angle_max = dscfg.get("moving_angle_max", 359.0)
+    ray_res = dscfg.get("ray_res", 1.0)
+    rng_min = dscfg.get("rng_min", 0.0)
+    rng_max = dscfg.get("rng_max", 100000.0)
+    rng_res = dscfg.get("rng_res", 100.0)
 
     # metadata needed
-    _time = get_metadata('time')
-    _range = get_metadata('range')
-    sweep_number = get_metadata('sweep_number')
-    sweep_mode = get_metadata('sweep_mode')
-    fixed_angle = get_metadata('fixed_angle')
-    sweep_start_ray_index = get_metadata('sweep_start_ray_index')
-    sweep_end_ray_index = get_metadata('sweep_end_ray_index')
-    azimuth = get_metadata('azimuth')
-    elevation = get_metadata('elevation')
+    _time = get_metadata("time")
+    _range = get_metadata("range")
+    sweep_number = get_metadata("sweep_number")
+    sweep_mode = get_metadata("sweep_mode")
+    fixed_angle = get_metadata("fixed_angle")
+    sweep_start_ray_index = get_metadata("sweep_start_ray_index")
+    sweep_end_ray_index = get_metadata("sweep_end_ray_index")
+    azimuth = get_metadata("azimuth")
+    elevation = get_metadata("elevation")
     metadata = dict()
 
     latitude = deepcopy(radar.latitude)
     longitude = deepcopy(radar.longitude)
     altitude = deepcopy(radar.altitude)
-    if 'target_radar_pos' in dscfg:
-        latitude['data'] = np.array(
-            [dscfg['target_radar_pos']['latitude']], dtype=np.float64)
-        longitude['data'] = np.array(
-            [dscfg['target_radar_pos']['longitude']], dtype=np.float64)
-        altitude['data'] = np.array(
-            [dscfg['target_radar_pos']['altitude']], dtype=np.float64)
+    if "target_radar_pos" in dscfg:
+        latitude["data"] = np.array(
+            [dscfg["target_radar_pos"]["latitude"]], dtype=np.float64
+        )
+        longitude["data"] = np.array(
+            [dscfg["target_radar_pos"]["longitude"]], dtype=np.float64
+        )
+        altitude["data"] = np.array(
+            [dscfg["target_radar_pos"]["altitude"]], dtype=np.float64
+        )
 
-    _range['data'] = np.arange(rng_min, rng_max + rng_res, rng_res)
-    ngates = _range['data'].size
+    _range["data"] = np.arange(rng_min, rng_max + rng_res, rng_res)
+    ngates = _range["data"].size
 
-    fixed_angle['data'] = np.array(fixed_angle_val)
-    nsweeps = fixed_angle['data'].size
-    if info in ('parElAnt', 'asrLowBeamAnt', 'asrHighBeamAnt'):
-        scan_type = 'ppi'
-        sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance'])
+    fixed_angle["data"] = np.array(fixed_angle_val)
+    nsweeps = fixed_angle["data"].size
+    if info in ("parElAnt", "asrLowBeamAnt", "asrHighBeamAnt"):
+        scan_type = "ppi"
+        sweep_mode["data"] = np.array(nsweeps * ["azimuth_surveillance"])
     else:
-        scan_type = 'rhi'
-        sweep_mode['data'] = np.array(nsweeps * ['elevation_surveillance'])
+        scan_type = "rhi"
+        sweep_mode["data"] = np.array(nsweeps * ["elevation_surveillance"])
 
-    moving_angle = np.arange(
-        moving_angle_min, moving_angle_max + ray_res, ray_res)
+    moving_angle = np.arange(moving_angle_min, moving_angle_max + ray_res, ray_res)
 
     nrays = moving_angle.size * nsweeps
-    sweep_start_ray_index['data'] = np.empty((nsweeps), dtype=np.int32)
-    sweep_end_ray_index['data'] = np.empty((nsweeps), dtype=np.int32)
-    sweep_number['data'] = np.arange(nsweeps)
+    sweep_start_ray_index["data"] = np.empty((nsweeps), dtype=np.int32)
+    sweep_end_ray_index["data"] = np.empty((nsweeps), dtype=np.int32)
+    sweep_number["data"] = np.arange(nsweeps)
     for sweep in range(nsweeps):
-        sweep_start_ray_index['data'][sweep] = sweep * nrays
-        sweep_end_ray_index['data'][sweep] = (sweep + 1) * (nrays - 1)
+        sweep_start_ray_index["data"][sweep] = sweep * nrays
+        sweep_end_ray_index["data"][sweep] = (sweep + 1) * (nrays - 1)
 
-    elevation['data'] = np.empty((nrays), dtype=float)
-    azimuth['data'] = np.empty((nrays), dtype=float)
-    if scan_type == 'ppi':
-        for sweep, (start_ray, end_ray) in enumerate(zip(
-                sweep_start_ray_index['data'],
-                sweep_end_ray_index['data'])):
-            azimuth['data'][start_ray:end_ray + 1] = moving_angle
-            elevation['data'][start_ray:end_ray + 1] = (
-                fixed_angle['data'][sweep])
+    elevation["data"] = np.empty((nrays), dtype=float)
+    azimuth["data"] = np.empty((nrays), dtype=float)
+    if scan_type == "ppi":
+        for sweep, (start_ray, end_ray) in enumerate(
+            zip(sweep_start_ray_index["data"], sweep_end_ray_index["data"])
+        ):
+            azimuth["data"][start_ray : end_ray + 1] = moving_angle
+            elevation["data"][start_ray : end_ray + 1] = fixed_angle["data"][sweep]
     else:
-        for sweep, (start_ray, end_ray) in enumerate(zip(
-                sweep_start_ray_index['data'],
-                sweep_end_ray_index['data'])):
-            elevation['data'][start_ray:end_ray + 1] = moving_angle
-            azimuth['data'][start_ray:end_ray + 1] = fixed_angle['data'][sweep]
+        for sweep, (start_ray, end_ray) in enumerate(
+            zip(sweep_start_ray_index["data"], sweep_end_ray_index["data"])
+        ):
+            elevation["data"][start_ray : end_ray + 1] = moving_angle
+            azimuth["data"][start_ray : end_ray + 1] = fixed_angle["data"][sweep]
 
     _time = deepcopy(radar.time)
-    time_data = np.sort(_time['data'])
+    time_data = np.sort(_time["data"])
     time_res = time_data[1] - time_data[0]
-    _time['data'] = np.arange(nrays) * time_res
+    _time["data"] = np.arange(nrays) * time_res
 
     fields = dict()
     for field_name in field_names:
         if not change_antenna_pattern:
             fields.update({field_name: get_metadata(field_name)})
-            fields[field_name]['data'] = np.ma.masked_all((nrays, ngates))
+            fields[field_name]["data"] = np.ma.masked_all((nrays, ngates))
             continue
 
         # average field
-        field_name_aux = 'avg_' + field_name
+        field_name_aux = "avg_" + field_name
         fields.update({field_name_aux: get_metadata(field_name_aux)})
-        fields[field_name_aux]['data'] = np.ma.masked_all((nrays, ngates))
+        fields[field_name_aux]["data"] = np.ma.masked_all((nrays, ngates))
 
         # npoints field
-        field_name_aux = 'npoints_' + field_name
+        field_name_aux = "npoints_" + field_name
         fields.update({field_name_aux: get_metadata(field_name_aux)})
-        fields[field_name_aux]['data'] = np.ma.zeros(
-            (nrays, ngates), dtype=np.int32)
+        fields[field_name_aux]["data"] = np.ma.zeros((nrays, ngates), dtype=np.int32)
 
         # quantile fields
         for quant in quantiles:
-            field_name_aux = (
-                'quant' + '{:02d}'.format(int(quant)) + '_' + field_name)
+            field_name_aux = "quant" + "{:02d}".format(int(quant)) + "_" + field_name
             fields.update({field_name_aux: get_metadata(field_name_aux)})
-            fields[field_name_aux]['data'] = np.ma.masked_all((nrays, ngates))
+            fields[field_name_aux]["data"] = np.ma.masked_all((nrays, ngates))
 
     target_radar = Radar(
-        _time, _range, fields, metadata, scan_type, latitude, longitude,
-        altitude, sweep_number, sweep_mode, fixed_angle,
-        sweep_start_ray_index, sweep_end_ray_index, azimuth, elevation)
+        _time,
+        _range,
+        fields,
+        metadata,
+        scan_type,
+        latitude,
+        longitude,
+        altitude,
+        sweep_number,
+        sweep_mode,
+        fixed_angle,
+        sweep_start_ray_index,
+        sweep_end_ray_index,
+        azimuth,
+        elevation,
+    )
 
     return target_radar

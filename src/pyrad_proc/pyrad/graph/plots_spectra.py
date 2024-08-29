@@ -33,16 +33,26 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import matplotlib as mpl
-mpl.use('Agg')
+
+mpl.use("Agg")
 
 # Increase a bit font size
-mpl.rcParams.update({'font.size': 16})
-mpl.rcParams.update({'font.family': "sans-serif"})
+mpl.rcParams.update({"font.size": 16})
+mpl.rcParams.update({"font.family": "sans-serif"})
 
 
-def plot_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
-                       xaxis_info='Doppler_velocity', titl=None,
-                       clabel=None, vmin=None, vmax=None):
+def plot_range_Doppler(
+    spectra,
+    field_name,
+    ray,
+    prdcfg,
+    fname_list,
+    xaxis_info="Doppler_velocity",
+    titl=None,
+    clabel=None,
+    vmin=None,
+    vmax=None,
+):
     """
     Makes a range-Doppler plot
 
@@ -74,34 +84,34 @@ def plot_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
-    xsize = prdcfg['spectraImageConfig']['xsize']
-    ysize = prdcfg['spectraImageConfig']['ysize']
-    ymin = prdcfg['spectraImageConfig']['ymin']
-    ymax = prdcfg['spectraImageConfig']['ymax']
-    velmin = prdcfg['spectraImageConfig']['velmin']
-    velmax = prdcfg['spectraImageConfig']['velmax']
+    dpi = prdcfg["spectraImageConfig"].get("dpi", 72)
+    xsize = prdcfg["spectraImageConfig"]["xsize"]
+    ysize = prdcfg["spectraImageConfig"]["ysize"]
+    ymin = prdcfg["spectraImageConfig"]["ymin"]
+    ymax = prdcfg["spectraImageConfig"]["ymax"]
+    velmin = prdcfg["spectraImageConfig"]["velmin"]
+    velmax = prdcfg["spectraImageConfig"]["velmax"]
 
-    if xaxis_info == 'Doppler_velocity':
-        xaxis = spectra.Doppler_velocity['data'][ray, :].compressed()
-        xlabel = 'Doppler velocity (m/s)'
-    elif xaxis_info == 'Doppler_frequency':
-        xaxis = spectra.Doppler_frequency['data'][ray, :].compressed()
-        xlabel = 'Doppler frequency (Hz)'
+    if xaxis_info == "Doppler_velocity":
+        xaxis = spectra.Doppler_velocity["data"][ray, :].compressed()
+        xlabel = "Doppler velocity (m/s)"
+    elif xaxis_info == "Doppler_frequency":
+        xaxis = spectra.Doppler_frequency["data"][ray, :].compressed()
+        xlabel = "Doppler frequency (Hz)"
     else:
-        xaxis = np.arange(spectra.npulses['data'][ray])
-        xlabel = 'Pulse number'
+        xaxis = np.arange(spectra.npulses["data"][ray])
+        xlabel = "Pulse number"
 
     xres = np.abs(xaxis[1] - xaxis[0])
 
-    yaxis = spectra.range['data'] / 1000.
+    yaxis = spectra.range["data"] / 1000.0
     yres = np.abs(yaxis[1] - yaxis[0])
-    ylabel = 'range (km)'
+    ylabel = "range (km)"
 
     xaxis_lim = np.append(xaxis - xres / 2, xaxis[-1] + xres / 2)
     yaxis_lim = np.append(yaxis - yres / 2, yaxis[-1] + yres / 2)
 
-    field_2D = spectra.fields[field_name]['data'][ray, :, 0:xaxis.size]
+    field_2D = spectra.fields[field_name]["data"][ray, :, 0 : xaxis.size]
 
     X, Y = np.meshgrid(xaxis_lim, yaxis_lim)
 
@@ -118,7 +128,8 @@ def plot_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
         cmap = pyart.config.get_field_colormap(field_name)
 
         norm, ticks, ticklabs = get_norm(
-            field_name, field_dict=spectra.fields[field_name])
+            field_name, field_dict=spectra.fields[field_name]
+        )
         if vmin is None or vmax is None:
             vmin = vmax = None
             if norm is None:  # if norm is set do not override with vmin/vmax
@@ -127,7 +138,7 @@ def plot_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
             norm = None
     else:
         if clabel is None:
-            clabel = 'value'
+            clabel = "value"
         if vmin is None:
             vmin = np.ma.min(field_2D)
         if vmax is None:
@@ -136,12 +147,11 @@ def plot_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
     if titl is None:
         titl = generate_complex_range_Doppler_title(
-            spectra, field_name, ray, datetime_format=None)
+            spectra, field_name, ray, datetime_format=None
+        )
 
     ax = fig.add_subplot(111)
-    cax = ax.pcolormesh(
-        X, Y, field_2D, cmap=cmap, vmin=vmin, vmax=vmax,
-        norm=norm)
+    cax = ax.pcolormesh(X, Y, field_2D, cmap=cmap, vmin=vmin, vmax=vmax, norm=norm)
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_title(titl)
@@ -168,10 +178,22 @@ def plot_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
     return fname_list
 
 
-def plot_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng, prdcfg,
-                       fname_list, xaxis_info='Doppler_velocity',
-                       yaxis_pos='centre', along_azi=True, titl=None,
-                       clabel=None, vmin=None, vmax=None):
+def plot_angle_Doppler(
+    spectra,
+    field_name,
+    ang,
+    ind_rays,
+    ind_rng,
+    prdcfg,
+    fname_list,
+    xaxis_info="Doppler_velocity",
+    yaxis_pos="centre",
+    along_azi=True,
+    titl=None,
+    clabel=None,
+    vmin=None,
+    vmax=None,
+):
     """
     Makes an angle-Doppler plot
 
@@ -213,38 +235,40 @@ def plot_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng, prdcfg,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
-    xsize = prdcfg['spectraImageConfig']['xsize']
-    ysize = prdcfg['spectraImageConfig']['ysize']
-    velmin = prdcfg['spectraImageConfig']['velmin']
-    velmax = prdcfg['spectraImageConfig']['velmax']
+    dpi = prdcfg["spectraImageConfig"].get("dpi", 72)
+    xsize = prdcfg["spectraImageConfig"]["xsize"]
+    ysize = prdcfg["spectraImageConfig"]["ysize"]
+    velmin = prdcfg["spectraImageConfig"]["velmin"]
+    velmax = prdcfg["spectraImageConfig"]["velmax"]
 
-    if xaxis_info == 'Doppler_velocity':
-        xaxis = spectra.Doppler_velocity['data'][ind_rays, :]
-        xlabel = 'Doppler velocity (m/s)'
-    elif xaxis_info == 'Doppler_frequency':
-        xaxis = spectra.Doppler_frequency['data'][ind_rays, :]
-        xlabel = 'Doppler frequency (Hz)'
+    if xaxis_info == "Doppler_velocity":
+        xaxis = spectra.Doppler_velocity["data"][ind_rays, :]
+        xlabel = "Doppler velocity (m/s)"
+    elif xaxis_info == "Doppler_frequency":
+        xaxis = spectra.Doppler_frequency["data"][ind_rays, :]
+        xlabel = "Doppler frequency (Hz)"
     else:
         xaxis = np.ma.masked_all((ind_rays.size, spectra.npulses_max))
         for ray, ind_ray in enumerate(ind_rays):
-            npuls = spectra.npulses['data'][ind_ray]
+            npuls = spectra.npulses["data"][ind_ray]
             xaxis[ray, 0:npuls] = np.arange(npuls)
-        xlabel = 'Pulse number'
-    ylabel = 'Angle (deg)'
+        xlabel = "Pulse number"
+    ylabel = "Angle (deg)"
 
     if along_azi:
-        yaxis = spectra.azimuth['data'][ind_rays]
+        yaxis = spectra.azimuth["data"][ind_rays]
     else:
-        yaxis = spectra.elevation['data'][ind_rays]
+        yaxis = spectra.elevation["data"][ind_rays]
 
     xaxis_lim, yaxis_lim, xaxis_size = _create_irregular_grid(
-        xaxis, yaxis, yaxis_pos=yaxis_pos)
+        xaxis, yaxis, yaxis_pos=yaxis_pos
+    )
 
-    data = spectra.fields[field_name]['data'][ind_rays, :, :]
+    data = spectra.fields[field_name]["data"][ind_rays, :, :]
     data = data[:, ind_rng, :]
     zpoints = _adapt_data_to_irregular_grid(
-        data, xaxis_size, xaxis_lim.shape[0], xaxis_lim.shape[1])
+        data, xaxis_size, xaxis_lim.shape[0], xaxis_lim.shape[1]
+    )
 
     # display data
     norm = None
@@ -259,7 +283,8 @@ def plot_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng, prdcfg,
         cmap = pyart.config.get_field_colormap(field_name)
 
         norm, ticks, ticklabs = get_norm(
-            field_name, field_dict=spectra.fields[field_name])
+            field_name, field_dict=spectra.fields[field_name]
+        )
         if vmin is None or vmax is None:
             vmin = vmax = None
             if norm is None:  # if norm is set do not override with vmin/vmax
@@ -268,7 +293,7 @@ def plot_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng, prdcfg,
             norm = None
     else:
         if clabel is None:
-            clabel = 'value'
+            clabel = "value"
         if vmin is None:
             vmin = np.ma.min(zpoints)
         if vmax is None:
@@ -277,13 +302,13 @@ def plot_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng, prdcfg,
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
     if titl is None:
         titl = generate_angle_Doppler_title(
-            spectra, field_name, ang, ind_rng, along_azi=along_azi,
-            datetime_format=None)
+            spectra, field_name, ang, ind_rng, along_azi=along_azi, datetime_format=None
+        )
 
     ax = fig.add_subplot(111)
     cax = ax.pcolor(
-        xaxis_lim, yaxis_lim, zpoints, cmap=cmap, vmin=vmin, vmax=vmax,
-        norm=norm)
+        xaxis_lim, yaxis_lim, zpoints, cmap=cmap, vmin=vmin, vmax=vmax, norm=norm
+    )
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_title(titl)
@@ -307,10 +332,22 @@ def plot_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng, prdcfg,
     return fname_list
 
 
-def plot_time_Doppler(spectra, field_name, prdcfg, fname_list,
-                      xaxis_info='Doppler_velocity', yaxis_pos='start',
-                      titl=None, clabel=None, vmin=None, vmax=None, xmin=None,
-                      xmax=None, ymin=None, ymax=None):
+def plot_time_Doppler(
+    spectra,
+    field_name,
+    prdcfg,
+    fname_list,
+    xaxis_info="Doppler_velocity",
+    yaxis_pos="start",
+    titl=None,
+    clabel=None,
+    vmin=None,
+    vmax=None,
+    xmin=None,
+    xmax=None,
+    ymin=None,
+    ymax=None,
+):
     """
     Makes a time-Doppler plot
 
@@ -345,29 +382,33 @@ def plot_time_Doppler(spectra, field_name, prdcfg, fname_list,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
-    xsize = prdcfg['spectraImageConfig']['xsize']
-    ysize = prdcfg['spectraImageConfig']['ysize']
+    dpi = prdcfg["spectraImageConfig"].get("dpi", 72)
+    xsize = prdcfg["spectraImageConfig"]["xsize"]
+    ysize = prdcfg["spectraImageConfig"]["ysize"]
 
-    if xaxis_info == 'Doppler_velocity':
-        xaxis = spectra.Doppler_velocity['data']
-        xlabel = 'Doppler velocity (m/s)'
-    elif xaxis_info == 'Doppler_frequency':
-        xaxis = spectra.Doppler_frequency['data']
-        xlabel = 'Doppler frequency (Hz)'
+    if xaxis_info == "Doppler_velocity":
+        xaxis = spectra.Doppler_velocity["data"]
+        xlabel = "Doppler velocity (m/s)"
+    elif xaxis_info == "Doppler_frequency":
+        xaxis = spectra.Doppler_frequency["data"]
+        xlabel = "Doppler frequency (Hz)"
     else:
         xaxis = np.ma.masked_all((spectra.nrays, spectra.npulses_max))
-        for ray, npuls in enumerate(spectra.npulses['data']):
+        for ray, npuls in enumerate(spectra.npulses["data"]):
             xaxis[ray, 0:npuls] = np.arange(npuls)
-        xlabel = 'Pulse number'
-    ylabel = 'time (s from start time)'
+        xlabel = "Pulse number"
+    ylabel = "time (s from start time)"
 
     xaxis_lim, yaxis_lim, xaxis_size = _create_irregular_grid(
-        xaxis, spectra.time['data'], yaxis_pos=yaxis_pos)
+        xaxis, spectra.time["data"], yaxis_pos=yaxis_pos
+    )
 
     zpoints = _adapt_data_to_irregular_grid(
-        np.ma.squeeze(spectra.fields[field_name]['data'], axis=1), xaxis_size,
-        xaxis_lim.shape[0], xaxis_lim.shape[1])
+        np.ma.squeeze(spectra.fields[field_name]["data"], axis=1),
+        xaxis_size,
+        xaxis_lim.shape[0],
+        xaxis_lim.shape[1],
+    )
 
     # display data
     norm = None
@@ -382,7 +423,8 @@ def plot_time_Doppler(spectra, field_name, prdcfg, fname_list,
         cmap = pyart.config.get_field_colormap(field_name)
 
         norm, ticks, ticklabs = get_norm(
-            field_name, field_dict=spectra.fields[field_name])
+            field_name, field_dict=spectra.fields[field_name]
+        )
         if vmin is None or vmax is None:
             vmin = vmax = None
             if norm is None:  # if norm is set do not override with vmin/vmax
@@ -391,7 +433,7 @@ def plot_time_Doppler(spectra, field_name, prdcfg, fname_list,
             norm = None
     else:
         if clabel is None:
-            clabel = 'value'
+            clabel = "value"
         if vmin is None:
             vmin = np.ma.min(zpoints)
         if vmax is None:
@@ -400,12 +442,13 @@ def plot_time_Doppler(spectra, field_name, prdcfg, fname_list,
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
     if titl is None:
         titl = generate_complex_Doppler_title(
-            spectra, field_name, 0, 0, datetime_format=None)
+            spectra, field_name, 0, 0, datetime_format=None
+        )
 
     ax = fig.add_subplot(111)
     cax = ax.pcolor(
-        xaxis_lim, yaxis_lim, zpoints, cmap=cmap, vmin=vmin, vmax=vmax,
-        norm=norm)
+        xaxis_lim, yaxis_lim, zpoints, cmap=cmap, vmin=vmin, vmax=vmax, norm=norm
+    )
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_title(titl)
@@ -429,9 +472,19 @@ def plot_time_Doppler(spectra, field_name, prdcfg, fname_list,
     return fname_list
 
 
-def plot_Doppler(spectra, field_name, ray, rng, prdcfg, fname_list,
-                 xaxis_info='Doppler_velocity', ylabel=None,
-                 titl=None, vmin=None, vmax=None):
+def plot_Doppler(
+    spectra,
+    field_name,
+    ray,
+    rng,
+    prdcfg,
+    fname_list,
+    xaxis_info="Doppler_velocity",
+    ylabel=None,
+    titl=None,
+    vmin=None,
+    vmax=None,
+):
     """
     Makes a Doppler plot
 
@@ -463,23 +516,23 @@ def plot_Doppler(spectra, field_name, ray, rng, prdcfg, fname_list,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
-    xsize = prdcfg['spectraImageConfig']['xsize']
-    ysize = prdcfg['spectraImageConfig']['ysize']
-    velmin = prdcfg['spectraImageConfig']['velmin']
-    velmax = prdcfg['spectraImageConfig']['velmax']
+    dpi = prdcfg["spectraImageConfig"].get("dpi", 72)
+    xsize = prdcfg["spectraImageConfig"]["xsize"]
+    ysize = prdcfg["spectraImageConfig"]["ysize"]
+    velmin = prdcfg["spectraImageConfig"]["velmin"]
+    velmax = prdcfg["spectraImageConfig"]["velmax"]
 
-    if xaxis_info == 'Doppler_velocity':
-        xaxis = spectra.Doppler_velocity['data'][ray, :].compressed()
-        xlabel = 'Doppler velocity (m/s)'
-    elif xaxis_info == 'Doppler_frequency':
-        xaxis = spectra.Doppler_frequency['data'][ray, :].compressed()
-        xlabel = 'Doppler frequency (Hz)'
+    if xaxis_info == "Doppler_velocity":
+        xaxis = spectra.Doppler_velocity["data"][ray, :].compressed()
+        xlabel = "Doppler velocity (m/s)"
+    elif xaxis_info == "Doppler_frequency":
+        xaxis = spectra.Doppler_frequency["data"][ray, :].compressed()
+        xlabel = "Doppler frequency (Hz)"
     else:
-        xaxis = np.arange(spectra.npulses['data'][ray])
-        xlabel = 'Pulse number'
+        xaxis = np.arange(spectra.npulses["data"][ray])
+        xlabel = "Pulse number"
 
-    field = spectra.fields[field_name]['data'][ray, rng, 0:xaxis.size]
+    field = spectra.fields[field_name]["data"][ray, rng, 0 : xaxis.size]
 
     # display data
     if field_name is not None:
@@ -497,10 +550,11 @@ def plot_Doppler(spectra, field_name, ray, rng, prdcfg, fname_list,
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
     if titl is None:
         titl = generate_complex_Doppler_title(
-            spectra, field_name, ray, rng, datetime_format=None)
+            spectra, field_name, ray, rng, datetime_format=None
+        )
 
     ax = fig.add_subplot(111)
-    ax.plot(xaxis, field, marker='x')
+    ax.plot(xaxis, field, marker="x")
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_ylim(bottom=vmin, top=vmax)
@@ -509,7 +563,7 @@ def plot_Doppler(spectra, field_name, ray, rng, prdcfg, fname_list,
 
     if not (velmin is None or velmax is None):
         ax.set_xlim([velmin, velmax])
-    
+
     # Turn on the grid
     ax.grid()
 
@@ -523,9 +577,18 @@ def plot_Doppler(spectra, field_name, ray, rng, prdcfg, fname_list,
     return fname_list
 
 
-def plot_complex_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
-                               xaxis_info='Doppler_velocity', titl=None,
-                               clabel=None, vmin=None, vmax=None):
+def plot_complex_range_Doppler(
+    spectra,
+    field_name,
+    ray,
+    prdcfg,
+    fname_list,
+    xaxis_info="Doppler_velocity",
+    titl=None,
+    clabel=None,
+    vmin=None,
+    vmax=None,
+):
     """
     Makes a complex range-Doppler plot. Plotting separately the real and the
     imaginary part
@@ -558,34 +621,34 @@ def plot_complex_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
-    xsize = prdcfg['spectraImageConfig']['xsize']
-    ysize = prdcfg['spectraImageConfig']['ysize']
-    ymin = prdcfg['spectraImageConfig']['ymin']
-    ymax = prdcfg['spectraImageConfig']['ymax']
-    velmin = prdcfg['spectraImageConfig']['velmin']
-    velmax = prdcfg['spectraImageConfig']['velmax']
+    dpi = prdcfg["spectraImageConfig"].get("dpi", 72)
+    xsize = prdcfg["spectraImageConfig"]["xsize"]
+    ysize = prdcfg["spectraImageConfig"]["ysize"]
+    ymin = prdcfg["spectraImageConfig"]["ymin"]
+    ymax = prdcfg["spectraImageConfig"]["ymax"]
+    velmin = prdcfg["spectraImageConfig"]["velmin"]
+    velmax = prdcfg["spectraImageConfig"]["velmax"]
 
-    if xaxis_info == 'Doppler_velocity':
-        xaxis = spectra.Doppler_velocity['data'][ray, :].compressed()
-        xlabel = 'Doppler velocity (m/s)'
-    elif xaxis_info == 'Doppler_frequency':
-        xaxis = spectra.Doppler_frequency['data'][ray, :].compressed()
-        xlabel = 'Doppler frequency (Hz)'
+    if xaxis_info == "Doppler_velocity":
+        xaxis = spectra.Doppler_velocity["data"][ray, :].compressed()
+        xlabel = "Doppler velocity (m/s)"
+    elif xaxis_info == "Doppler_frequency":
+        xaxis = spectra.Doppler_frequency["data"][ray, :].compressed()
+        xlabel = "Doppler frequency (Hz)"
     else:
-        xaxis = np.arange(spectra.npulses['data'][ray])
-        xlabel = 'Pulse number'
+        xaxis = np.arange(spectra.npulses["data"][ray])
+        xlabel = "Pulse number"
 
     xres = np.abs(xaxis[1] - xaxis[0])
 
-    yaxis = spectra.range['data'] / 1000.
+    yaxis = spectra.range["data"] / 1000.0
     yres = np.abs(yaxis[1] - yaxis[0])
-    ylabel = 'range (km)'
+    ylabel = "range (km)"
 
     xaxis_lim = np.append(xaxis - xres / 2, xaxis[-1] + xres / 2)
     yaxis_lim = np.append(yaxis - yres / 2, yaxis[-1] + yres / 2)
 
-    field_2D = spectra.fields[field_name]['data'][ray, :, 0:xaxis.size]
+    field_2D = spectra.fields[field_name]["data"][ray, :, 0 : xaxis.size]
 
     re_field_2D = np.real(field_2D)
     im_field_2D = np.imag(field_2D)
@@ -605,7 +668,8 @@ def plot_complex_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
         cmap = pyart.config.get_field_colormap(field_name)
 
         norm, ticks, ticklabs = get_norm(
-            field_name, field_dict=spectra.fields[field_name])
+            field_name, field_dict=spectra.fields[field_name]
+        )
         if vmin is None or vmax is None:
             vmin = vmax = None
             if norm is None:  # if norm is set do not override with vmin/vmax
@@ -614,7 +678,7 @@ def plot_complex_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
             norm = None
     else:
         if clabel is None:
-            clabel = 'value'
+            clabel = "value"
         if vmin is None:
             vmin = np.ma.min([np.ma.min(re_field_2D), np.ma.min(im_field_2D)])
         if vmax is None:
@@ -623,29 +687,26 @@ def plot_complex_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
     if titl is None:
         titl = generate_complex_range_Doppler_title(
-            spectra, field_name, ray, datetime_format=None)
+            spectra, field_name, ray, datetime_format=None
+        )
 
     plt.suptitle(titl)
 
     ax = fig.add_subplot(121)
-    cax = ax.pcolormesh(
-        X, Y, re_field_2D, cmap=cmap, vmin=vmin, vmax=vmax,
-        norm=norm)
+    cax = ax.pcolormesh(X, Y, re_field_2D, cmap=cmap, vmin=vmin, vmax=vmax, norm=norm)
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
-    ax.set_title('Real part')
+    ax.set_title("Real part")
     if not (velmin is None or velmax is None):
         ax.set_xlim([velmin, velmax])
     if not (ymin is None or ymax is None):
         ax.set_ylim([ymin, ymax])
 
     ax = fig.add_subplot(122)
-    cax = ax.pcolormesh(
-        X, Y, im_field_2D, cmap=cmap, vmin=vmin, vmax=vmax,
-        norm=norm)
+    cax = ax.pcolormesh(X, Y, im_field_2D, cmap=cmap, vmin=vmin, vmax=vmax, norm=norm)
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
-    ax.set_title('Imaginary part')
+    ax.set_title("Imaginary part")
     if not (velmin is None or velmax is None):
         ax.set_xlim([velmin, velmax])
     if not (ymin is None or ymax is None):
@@ -670,11 +731,22 @@ def plot_complex_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
     return fname_list
 
 
-def plot_complex_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng,
-                               prdcfg, fname_list,
-                               xaxis_info='Doppler_velocity',
-                               yaxis_pos='centre', along_azi=True, titl=None,
-                               clabel=None, vmin=None, vmax=None):
+def plot_complex_angle_Doppler(
+    spectra,
+    field_name,
+    ang,
+    ind_rays,
+    ind_rng,
+    prdcfg,
+    fname_list,
+    xaxis_info="Doppler_velocity",
+    yaxis_pos="centre",
+    along_azi=True,
+    titl=None,
+    clabel=None,
+    vmin=None,
+    vmax=None,
+):
     """
     Makes an angle-Doppler plot of complex spectra
 
@@ -716,38 +788,40 @@ def plot_complex_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
-    xsize = prdcfg['spectraImageConfig']['xsize']
-    ysize = prdcfg['spectraImageConfig']['ysize']
-    velmin = prdcfg['spectraImageConfig']['velmin']
-    velmax = prdcfg['spectraImageConfig']['velmax']
+    dpi = prdcfg["spectraImageConfig"].get("dpi", 72)
+    xsize = prdcfg["spectraImageConfig"]["xsize"]
+    ysize = prdcfg["spectraImageConfig"]["ysize"]
+    velmin = prdcfg["spectraImageConfig"]["velmin"]
+    velmax = prdcfg["spectraImageConfig"]["velmax"]
 
-    if xaxis_info == 'Doppler_velocity':
-        xaxis = spectra.Doppler_velocity['data'][ind_rays, :]
-        xlabel = 'Doppler velocity (m/s)'
-    elif xaxis_info == 'Doppler_frequency':
-        xaxis = spectra.Doppler_frequency['data'][ind_rays, :]
-        xlabel = 'Doppler frequency (Hz)'
+    if xaxis_info == "Doppler_velocity":
+        xaxis = spectra.Doppler_velocity["data"][ind_rays, :]
+        xlabel = "Doppler velocity (m/s)"
+    elif xaxis_info == "Doppler_frequency":
+        xaxis = spectra.Doppler_frequency["data"][ind_rays, :]
+        xlabel = "Doppler frequency (Hz)"
     else:
         xaxis = np.ma.masked_all((ind_rays.size, spectra.npulses_max))
         for ray, ind_ray in enumerate(ind_rays):
-            npuls = spectra.npulses['data'][ind_ray]
+            npuls = spectra.npulses["data"][ind_ray]
             xaxis[ray, 0:npuls] = np.arange(npuls)
-        xlabel = 'Pulse number'
-    ylabel = 'Angle (deg)'
+        xlabel = "Pulse number"
+    ylabel = "Angle (deg)"
 
     if along_azi:
-        yaxis = spectra.azimuth['data'][ind_rays]
+        yaxis = spectra.azimuth["data"][ind_rays]
     else:
-        yaxis = spectra.elevation['data'][ind_rays]
+        yaxis = spectra.elevation["data"][ind_rays]
 
     xaxis_lim, yaxis_lim, xaxis_size = _create_irregular_grid(
-        xaxis, yaxis, yaxis_pos=yaxis_pos)
+        xaxis, yaxis, yaxis_pos=yaxis_pos
+    )
 
-    data = spectra.fields[field_name]['data'][ind_rays, :, :]
+    data = spectra.fields[field_name]["data"][ind_rays, :, :]
     data = data[:, ind_rng, :]
     field_2D = _adapt_data_to_irregular_grid(
-        data, xaxis_size, xaxis_lim.shape[0], xaxis_lim.shape[1])
+        data, xaxis_size, xaxis_lim.shape[0], xaxis_lim.shape[1]
+    )
 
     re_field_2D = np.real(field_2D)
     im_field_2D = np.imag(field_2D)
@@ -765,7 +839,8 @@ def plot_complex_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng,
         cmap = pyart.config.get_field_colormap(field_name)
 
         norm, ticks, ticklabs = get_norm(
-            field_name, field_dict=spectra.fields[field_name])
+            field_name, field_dict=spectra.fields[field_name]
+        )
         if vmin is None or vmax is None:
             vmin = vmax = None
             if norm is None:  # if norm is set do not override with vmin/vmax
@@ -774,7 +849,7 @@ def plot_complex_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng,
             norm = None
     else:
         if clabel is None:
-            clabel = 'value'
+            clabel = "value"
         if vmin is None:
             vmin = np.ma.min([np.ma.min(re_field_2D), np.ma.min(im_field_2D)])
         if vmax is None:
@@ -783,28 +858,28 @@ def plot_complex_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng,
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
     if titl is None:
         titl = generate_angle_Doppler_title(
-            spectra, field_name, ang, ind_rng, along_azi=along_azi,
-            datetime_format=None)
+            spectra, field_name, ang, ind_rng, along_azi=along_azi, datetime_format=None
+        )
 
     plt.suptitle(titl)
 
     ax = fig.add_subplot(121)
     cax = ax.pcolor(
-        xaxis_lim, yaxis_lim, re_field_2D, cmap=cmap, vmin=vmin, vmax=vmax,
-        norm=norm)
+        xaxis_lim, yaxis_lim, re_field_2D, cmap=cmap, vmin=vmin, vmax=vmax, norm=norm
+    )
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
-    ax.set_title('Real part')
+    ax.set_title("Real part")
     if not (velmin is None or velmax is None):
         ax.set_xlim([velmin, velmax])
 
     ax = fig.add_subplot(122)
     cax = ax.pcolor(
-        xaxis_lim, yaxis_lim, im_field_2D, cmap=cmap, vmin=vmin, vmax=vmax,
-        norm=norm)
+        xaxis_lim, yaxis_lim, im_field_2D, cmap=cmap, vmin=vmin, vmax=vmax, norm=norm
+    )
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
-    ax.set_title('Imaginary part')
+    ax.set_title("Imaginary part")
     if not (velmin is None or velmax is None):
         ax.set_xlim([velmin, velmax])
 
@@ -827,10 +902,18 @@ def plot_complex_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng,
     return fname_list
 
 
-def plot_complex_time_Doppler(spectra, field_name, prdcfg, fname_list,
-                              xaxis_info='Doppler_velocity',
-                              yaxis_pos='start', titl=None, clabel=None,
-                              vmin=None, vmax=None):
+def plot_complex_time_Doppler(
+    spectra,
+    field_name,
+    prdcfg,
+    fname_list,
+    xaxis_info="Doppler_velocity",
+    yaxis_pos="start",
+    titl=None,
+    clabel=None,
+    vmin=None,
+    vmax=None,
+):
     """
     Makes a complex time-Doppler plot. Plotting separately the real and the
     imaginary part
@@ -864,31 +947,35 @@ def plot_complex_time_Doppler(spectra, field_name, prdcfg, fname_list,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
-    xsize = prdcfg['spectraImageConfig']['xsize']
-    ysize = prdcfg['spectraImageConfig']['ysize']
-    velmin = prdcfg['spectraImageConfig']['velmin']
-    velmax = prdcfg['spectraImageConfig']['velmax']
+    dpi = prdcfg["spectraImageConfig"].get("dpi", 72)
+    xsize = prdcfg["spectraImageConfig"]["xsize"]
+    ysize = prdcfg["spectraImageConfig"]["ysize"]
+    velmin = prdcfg["spectraImageConfig"]["velmin"]
+    velmax = prdcfg["spectraImageConfig"]["velmax"]
 
-    if xaxis_info == 'Doppler_velocity':
-        xaxis = spectra.Doppler_velocity['data']
-        xlabel = 'Doppler velocity (m/s)'
-    elif xaxis_info == 'Doppler_frequency':
-        xaxis = spectra.Doppler_frequency['data']
-        xlabel = 'Doppler frequency (Hz)'
+    if xaxis_info == "Doppler_velocity":
+        xaxis = spectra.Doppler_velocity["data"]
+        xlabel = "Doppler velocity (m/s)"
+    elif xaxis_info == "Doppler_frequency":
+        xaxis = spectra.Doppler_frequency["data"]
+        xlabel = "Doppler frequency (Hz)"
     else:
         xaxis = np.ma.masked_all((spectra.nrays, spectra.npulses_max))
-        for ray, npuls in enumerate(spectra.npulses['data']):
+        for ray, npuls in enumerate(spectra.npulses["data"]):
             xaxis[ray, 0:npuls] = np.arange(npuls)
-        xlabel = 'Pulse number'
-    ylabel = 'time (s from start time)'
+        xlabel = "Pulse number"
+    ylabel = "time (s from start time)"
 
     xaxis_lim, yaxis_lim, xaxis_size = _create_irregular_grid(
-        xaxis, spectra.time['data'], yaxis_pos=yaxis_pos)
+        xaxis, spectra.time["data"], yaxis_pos=yaxis_pos
+    )
 
     field_2D = _adapt_data_to_irregular_grid(
-        np.ma.squeeze(spectra.fields[field_name]['data'], axis=1), xaxis_size,
-        xaxis_lim.shape[0], xaxis_lim.shape[1])
+        np.ma.squeeze(spectra.fields[field_name]["data"], axis=1),
+        xaxis_size,
+        xaxis_lim.shape[0],
+        xaxis_lim.shape[1],
+    )
 
     re_field_2D = np.real(field_2D)
     im_field_2D = np.imag(field_2D)
@@ -906,7 +993,8 @@ def plot_complex_time_Doppler(spectra, field_name, prdcfg, fname_list,
         cmap = pyart.config.get_field_colormap(field_name)
 
         norm, ticks, ticklabs = get_norm(
-            field_name, field_dict=spectra.fields[field_name])
+            field_name, field_dict=spectra.fields[field_name]
+        )
         if vmin is None or vmax is None:
             vmin = vmax = None
             if norm is None:  # if norm is set do not override with vmin/vmax
@@ -915,7 +1003,7 @@ def plot_complex_time_Doppler(spectra, field_name, prdcfg, fname_list,
             norm = None
     else:
         if clabel is None:
-            clabel = 'value'
+            clabel = "value"
         if vmin is None:
             vmin = np.ma.min([np.ma.min(re_field_2D), np.ma.min(im_field_2D)])
         if vmax is None:
@@ -924,27 +1012,28 @@ def plot_complex_time_Doppler(spectra, field_name, prdcfg, fname_list,
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
     if titl is None:
         titl = generate_complex_Doppler_title(
-            spectra, field_name, 0, 0, datetime_format=None)
+            spectra, field_name, 0, 0, datetime_format=None
+        )
 
     plt.suptitle(titl)
 
     ax = fig.add_subplot(121)
     cax = ax.pcolor(
-        xaxis_lim, yaxis_lim, re_field_2D, cmap=cmap, vmin=vmin, vmax=vmax,
-        norm=norm)
+        xaxis_lim, yaxis_lim, re_field_2D, cmap=cmap, vmin=vmin, vmax=vmax, norm=norm
+    )
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
-    ax.set_title('Real part')
+    ax.set_title("Real part")
     if not (velmin is None or velmax is None):
         ax.set_xlim([velmin, velmax])
 
     ax = fig.add_subplot(122)
     cax = ax.pcolor(
-        xaxis_lim, yaxis_lim, im_field_2D, cmap=cmap, vmin=vmin, vmax=vmax,
-        norm=norm)
+        xaxis_lim, yaxis_lim, im_field_2D, cmap=cmap, vmin=vmin, vmax=vmax, norm=norm
+    )
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
-    ax.set_title('Imaginary part')
+    ax.set_title("Imaginary part")
     if not (velmin is None or velmax is None):
         ax.set_xlim([velmin, velmax])
 
@@ -967,10 +1056,19 @@ def plot_complex_time_Doppler(spectra, field_name, prdcfg, fname_list,
     return fname_list
 
 
-def plot_amp_phase_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
-                                 xaxis_info='Doppler_velocity', titl=None,
-                                 ampli_vmin=None, ampli_vmax=None,
-                                 phase_vmin=None, phase_vmax=None):
+def plot_amp_phase_range_Doppler(
+    spectra,
+    field_name,
+    ray,
+    prdcfg,
+    fname_list,
+    xaxis_info="Doppler_velocity",
+    titl=None,
+    ampli_vmin=None,
+    ampli_vmax=None,
+    phase_vmin=None,
+    phase_vmax=None,
+):
     """
     Makes a complex range-Doppler plot plotting separately the module and the
     phase of the signal
@@ -1001,33 +1099,33 @@ def plot_amp_phase_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
-    xsize = prdcfg['spectraImageConfig']['xsize']
-    ysize = prdcfg['spectraImageConfig']['ysize']
-    ymin = prdcfg['spectraImageConfig']['ymin']
-    ymax = prdcfg['spectraImageConfig']['ymax']
-    velmin = prdcfg['spectraImageConfig']['velmin']
-    velmax = prdcfg['spectraImageConfig']['velmax']
+    dpi = prdcfg["spectraImageConfig"].get("dpi", 72)
+    xsize = prdcfg["spectraImageConfig"]["xsize"]
+    ysize = prdcfg["spectraImageConfig"]["ysize"]
+    ymin = prdcfg["spectraImageConfig"]["ymin"]
+    ymax = prdcfg["spectraImageConfig"]["ymax"]
+    velmin = prdcfg["spectraImageConfig"]["velmin"]
+    velmax = prdcfg["spectraImageConfig"]["velmax"]
 
-    if xaxis_info == 'Doppler_velocity':
-        xaxis = spectra.Doppler_velocity['data'][ray, :].compressed()
-        xlabel = 'Doppler velocity (m/s)'
-    elif xaxis_info == 'Doppler_frequency':
-        xaxis = spectra.Doppler_frequency['data'][ray, :].compressed()
-        xlabel = 'Doppler frequency (Hz)'
+    if xaxis_info == "Doppler_velocity":
+        xaxis = spectra.Doppler_velocity["data"][ray, :].compressed()
+        xlabel = "Doppler velocity (m/s)"
+    elif xaxis_info == "Doppler_frequency":
+        xaxis = spectra.Doppler_frequency["data"][ray, :].compressed()
+        xlabel = "Doppler frequency (Hz)"
     else:
-        xaxis = np.arange(spectra.npulses['data'][ray])
-        xlabel = 'Pulse number'
+        xaxis = np.arange(spectra.npulses["data"][ray])
+        xlabel = "Pulse number"
     xres = np.abs(xaxis[1] - xaxis[0])
 
-    yaxis = spectra.range['data'] / 1000.
+    yaxis = spectra.range["data"] / 1000.0
     yres = np.abs(yaxis[1] - yaxis[0])
-    ylabel = 'range (km)'
+    ylabel = "range (km)"
 
     xaxis_lim = np.append(xaxis - xres / 2, xaxis[-1] + xres / 2)
     yaxis_lim = np.append(yaxis - yres / 2, yaxis[-1] + yres / 2)
 
-    field_2D = spectra.fields[field_name]['data'][ray, :, 0:xaxis.size]
+    field_2D = spectra.fields[field_name]["data"][ray, :, 0 : xaxis.size]
 
     ampli_field_2D = np.ma.abs(field_2D)
     phase_field_2D = np.ma.angle(field_2D, deg=True)
@@ -1043,19 +1141,19 @@ def plot_amp_phase_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
         cmap = pyart.config.get_field_colormap(field_name)
 
         norm, ticks, ticklabs = get_norm(
-            field_name, field_dict=spectra.fields[field_name])
+            field_name, field_dict=spectra.fields[field_name]
+        )
         if ampli_vmin is None or ampli_vmax is None:
             ampli_vmin = ampli_vmax = None
             if norm is None:  # if norm is set do not override with vmin/vmax
-                ampli_vmin, ampli_vmax = pyart.config.get_field_limits(
-                    field_name)
+                ampli_vmin, ampli_vmax = pyart.config.get_field_limits(field_name)
         else:
             norm = None
 
         if phase_vmin is None or phase_vmax is None:
             phase_vmin = phase_vmax = None
             if norm is None:  # if norm is set do not override with vmin/vmax
-                phase_vmin, phase_vmax = (-180., 180.)
+                phase_vmin, phase_vmax = (-180.0, 180.0)
         else:
             norm = None
     else:
@@ -1071,36 +1169,37 @@ def plot_amp_phase_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
     if titl is None:
         titl = generate_complex_range_Doppler_title(
-            spectra, field_name, ray, datetime_format=None)
+            spectra, field_name, ray, datetime_format=None
+        )
 
     plt.suptitle(titl)
 
     ax = fig.add_subplot(121)
     cax = ax.pcolormesh(
-        X, Y, ampli_field_2D, cmap=cmap, vmin=ampli_vmin, vmax=ampli_vmax,
-        norm=norm)
+        X, Y, ampli_field_2D, cmap=cmap, vmin=ampli_vmin, vmax=ampli_vmax, norm=norm
+    )
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
-    ax.set_title('Amplitude')
+    ax.set_title("Amplitude")
     if not (velmin is None or velmax is None):
         ax.set_xlim([velmin, velmax])
     if not (ymin is None or ymax is None):
         ax.set_ylim([ymin, ymax])
-        
+
     cb = fig.colorbar(cax)
     if ticks is not None:
         cb.set_ticks(ticks)
     if ticklabs:
         cb.set_ticklabels(ticklabs)
-    cb.set_label('Amplitude (-)')
+    cb.set_label("Amplitude (-)")
 
     ax = fig.add_subplot(122)
     cax = ax.pcolormesh(
-        X, Y, phase_field_2D, cmap=cmap, vmin=phase_vmin, vmax=phase_vmax,
-        norm=norm)
+        X, Y, phase_field_2D, cmap=cmap, vmin=phase_vmin, vmax=phase_vmax, norm=norm
+    )
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
-    ax.set_title('Phase')
+    ax.set_title("Phase")
     if not (velmin is None or velmax is None):
         ax.set_xlim([velmin, velmax])
     if not (ymin is None or ymax is None):
@@ -1111,7 +1210,7 @@ def plot_amp_phase_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
         cb.set_ticks(ticks)
     if ticklabs:
         cb.set_ticklabels(ticklabs)
-    cb.set_label('Phase (deg)')
+    cb.set_label("Phase (deg)")
 
     # Make a tight layout
     fig.tight_layout()
@@ -1125,12 +1224,23 @@ def plot_amp_phase_range_Doppler(spectra, field_name, ray, prdcfg, fname_list,
     return fname_list
 
 
-def plot_amp_phase_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng,
-                                 prdcfg, fname_list,
-                                 xaxis_info='Doppler_velocity',
-                                 yaxis_pos='centre', along_azi=True,
-                                 titl=None, ampli_vmin=None, ampli_vmax=None,
-                                 phase_vmin=None, phase_vmax=None,):
+def plot_amp_phase_angle_Doppler(
+    spectra,
+    field_name,
+    ang,
+    ind_rays,
+    ind_rng,
+    prdcfg,
+    fname_list,
+    xaxis_info="Doppler_velocity",
+    yaxis_pos="centre",
+    along_azi=True,
+    titl=None,
+    ampli_vmin=None,
+    ampli_vmax=None,
+    phase_vmin=None,
+    phase_vmax=None,
+):
     """
     Makes an angle-Doppler plot of complex spectra
 
@@ -1170,38 +1280,40 @@ def plot_amp_phase_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
-    xsize = prdcfg['spectraImageConfig']['xsize']
-    ysize = prdcfg['spectraImageConfig']['ysize']
-    velmin = prdcfg['spectraImageConfig']['velmin']
-    velmax = prdcfg['spectraImageConfig']['velmax']
+    dpi = prdcfg["spectraImageConfig"].get("dpi", 72)
+    xsize = prdcfg["spectraImageConfig"]["xsize"]
+    ysize = prdcfg["spectraImageConfig"]["ysize"]
+    velmin = prdcfg["spectraImageConfig"]["velmin"]
+    velmax = prdcfg["spectraImageConfig"]["velmax"]
 
-    if xaxis_info == 'Doppler_velocity':
-        xaxis = spectra.Doppler_velocity['data'][ind_rays, :]
-        xlabel = 'Doppler velocity (m/s)'
-    elif xaxis_info == 'Doppler_frequency':
-        xaxis = spectra.Doppler_frequency['data'][ind_rays, :]
-        xlabel = 'Doppler frequency (Hz)'
+    if xaxis_info == "Doppler_velocity":
+        xaxis = spectra.Doppler_velocity["data"][ind_rays, :]
+        xlabel = "Doppler velocity (m/s)"
+    elif xaxis_info == "Doppler_frequency":
+        xaxis = spectra.Doppler_frequency["data"][ind_rays, :]
+        xlabel = "Doppler frequency (Hz)"
     else:
         xaxis = np.ma.masked_all((ind_rays.size, spectra.npulses_max))
         for ray, ind_ray in enumerate(ind_rays):
-            npuls = spectra.npulses['data'][ind_ray]
+            npuls = spectra.npulses["data"][ind_ray]
             xaxis[ray, 0:npuls] = np.arange(npuls)
-        xlabel = 'Pulse number'
-    ylabel = 'Angle (deg)'
+        xlabel = "Pulse number"
+    ylabel = "Angle (deg)"
 
     if along_azi:
-        yaxis = spectra.azimuth['data'][ind_rays]
+        yaxis = spectra.azimuth["data"][ind_rays]
     else:
-        yaxis = spectra.elevation['data'][ind_rays]
+        yaxis = spectra.elevation["data"][ind_rays]
 
     xaxis_lim, yaxis_lim, xaxis_size = _create_irregular_grid(
-        xaxis, yaxis, yaxis_pos=yaxis_pos)
+        xaxis, yaxis, yaxis_pos=yaxis_pos
+    )
 
-    data = spectra.fields[field_name]['data'][ind_rays, :, :]
+    data = spectra.fields[field_name]["data"][ind_rays, :, :]
     data = data[:, ind_rng, :]
     field_2D = _adapt_data_to_irregular_grid(
-        data, xaxis_size, xaxis_lim.shape[0], xaxis_lim.shape[1])
+        data, xaxis_size, xaxis_lim.shape[0], xaxis_lim.shape[1]
+    )
 
     ampli_field_2D = np.ma.abs(field_2D)
     phase_field_2D = np.ma.angle(field_2D, deg=True)
@@ -1215,19 +1327,19 @@ def plot_amp_phase_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng,
         cmap = pyart.config.get_field_colormap(field_name)
 
         norm, ticks, ticklabs = get_norm(
-            field_name, field_dict=spectra.fields[field_name])
+            field_name, field_dict=spectra.fields[field_name]
+        )
         if ampli_vmin is None or ampli_vmax is None:
             ampli_vmin = ampli_vmax = None
             if norm is None:  # if norm is set do not override with vmin/vmax
-                ampli_vmin, ampli_vmax = pyart.config.get_field_limits(
-                    field_name)
+                ampli_vmin, ampli_vmax = pyart.config.get_field_limits(field_name)
         else:
             norm = None
 
         if phase_vmin is None or phase_vmax is None:
             phase_vmin = phase_vmax = None
             if norm is None:  # if norm is set do not override with vmin/vmax
-                phase_vmin, phase_vmax = (-180., 180.)
+                phase_vmin, phase_vmax = (-180.0, 180.0)
         else:
             norm = None
     else:
@@ -1243,18 +1355,24 @@ def plot_amp_phase_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng,
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
     if titl is None:
         titl = generate_angle_Doppler_title(
-            spectra, field_name, ang, ind_rng, along_azi=along_azi,
-            datetime_format=None)
+            spectra, field_name, ang, ind_rng, along_azi=along_azi, datetime_format=None
+        )
 
     plt.suptitle(titl)
 
     ax = fig.add_subplot(121)
     cax = ax.pcolor(
-        xaxis_lim, yaxis_lim, ampli_field_2D, cmap=cmap, vmin=ampli_vmin,
-        vmax=ampli_vmax, norm=norm)
+        xaxis_lim,
+        yaxis_lim,
+        ampli_field_2D,
+        cmap=cmap,
+        vmin=ampli_vmin,
+        vmax=ampli_vmax,
+        norm=norm,
+    )
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
-    ax.set_title('Amplitude')
+    ax.set_title("Amplitude")
     if not (velmin is None or velmax is None):
         ax.set_xlim([velmin, velmax])
 
@@ -1263,15 +1381,21 @@ def plot_amp_phase_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng,
         cb.set_ticks(ticks)
     if ticklabs:
         cb.set_ticklabels(ticklabs)
-    cb.set_label('Amplitude (-)')
+    cb.set_label("Amplitude (-)")
 
     ax = fig.add_subplot(122)
     cax = ax.pcolor(
-        xaxis_lim, yaxis_lim, phase_field_2D, cmap=cmap, vmin=phase_vmin,
-        vmax=phase_vmax, norm=norm)
+        xaxis_lim,
+        yaxis_lim,
+        phase_field_2D,
+        cmap=cmap,
+        vmin=phase_vmin,
+        vmax=phase_vmax,
+        norm=norm,
+    )
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
-    ax.set_title('Phase')
+    ax.set_title("Phase")
     if not (velmin is None or velmax is None):
         ax.set_xlim([velmin, velmax])
 
@@ -1280,7 +1404,7 @@ def plot_amp_phase_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng,
         cb.set_ticks(ticks)
     if ticklabs:
         cb.set_ticklabels(ticklabs)
-    cb.set_label('Phase (deg)')
+    cb.set_label("Phase (deg)")
 
     # Make a tight layout
     fig.tight_layout()
@@ -1294,11 +1418,19 @@ def plot_amp_phase_angle_Doppler(spectra, field_name, ang, ind_rays, ind_rng,
     return fname_list
 
 
-def plot_amp_phase_time_Doppler(spectra, field_name, prdcfg, fname_list,
-                                xaxis_info='Doppler_velocity',
-                                yaxis_pos='start', titl=None, ampli_vmin=None,
-                                ampli_vmax=None, phase_vmin=None,
-                                phase_vmax=None):
+def plot_amp_phase_time_Doppler(
+    spectra,
+    field_name,
+    prdcfg,
+    fname_list,
+    xaxis_info="Doppler_velocity",
+    yaxis_pos="start",
+    titl=None,
+    ampli_vmin=None,
+    ampli_vmax=None,
+    phase_vmin=None,
+    phase_vmax=None,
+):
     """
     Makes a complex time-Doppler plot plotting separately the module and the
     phase of the signal
@@ -1330,31 +1462,35 @@ def plot_amp_phase_time_Doppler(spectra, field_name, prdcfg, fname_list,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
-    xsize = prdcfg['spectraImageConfig']['xsize']
-    ysize = prdcfg['spectraImageConfig']['ysize']
-    velmin = prdcfg['spectraImageConfig']['velmin']
-    velmax = prdcfg['spectraImageConfig']['velmax']
+    dpi = prdcfg["spectraImageConfig"].get("dpi", 72)
+    xsize = prdcfg["spectraImageConfig"]["xsize"]
+    ysize = prdcfg["spectraImageConfig"]["ysize"]
+    velmin = prdcfg["spectraImageConfig"]["velmin"]
+    velmax = prdcfg["spectraImageConfig"]["velmax"]
 
-    if xaxis_info == 'Doppler_velocity':
-        xaxis = spectra.Doppler_velocity['data']
-        xlabel = 'Doppler velocity (m/s)'
-    elif xaxis_info == 'Doppler_frequency':
-        xaxis = spectra.Doppler_frequency['data']
-        xlabel = 'Doppler frequency (Hz)'
+    if xaxis_info == "Doppler_velocity":
+        xaxis = spectra.Doppler_velocity["data"]
+        xlabel = "Doppler velocity (m/s)"
+    elif xaxis_info == "Doppler_frequency":
+        xaxis = spectra.Doppler_frequency["data"]
+        xlabel = "Doppler frequency (Hz)"
     else:
         xaxis = np.ma.masked_all((spectra.nrays, spectra.npulses_max))
-        for ray, npuls in enumerate(spectra.npulses['data']):
+        for ray, npuls in enumerate(spectra.npulses["data"]):
             xaxis[ray, 0:npuls] = np.arange(npuls)
-        xlabel = 'Pulse number'
-    ylabel = 'time (s from start time)'
+        xlabel = "Pulse number"
+    ylabel = "time (s from start time)"
 
     xaxis_lim, yaxis_lim, xaxis_size = _create_irregular_grid(
-        xaxis, spectra.time['data'], yaxis_pos=yaxis_pos)
+        xaxis, spectra.time["data"], yaxis_pos=yaxis_pos
+    )
 
     field_2D = _adapt_data_to_irregular_grid(
-        np.ma.squeeze(spectra.fields[field_name]['data'], axis=1), xaxis_size,
-        xaxis_lim.shape[0], xaxis_lim.shape[1])
+        np.ma.squeeze(spectra.fields[field_name]["data"], axis=1),
+        xaxis_size,
+        xaxis_lim.shape[0],
+        xaxis_lim.shape[1],
+    )
 
     ampli_field_2D = np.ma.abs(field_2D)
     phase_field_2D = np.ma.angle(field_2D, deg=True)
@@ -1368,19 +1504,19 @@ def plot_amp_phase_time_Doppler(spectra, field_name, prdcfg, fname_list,
         cmap = pyart.config.get_field_colormap(field_name)
 
         norm, ticks, ticklabs = get_norm(
-            field_name, field_dict=spectra.fields[field_name])
+            field_name, field_dict=spectra.fields[field_name]
+        )
         if ampli_vmin is None or ampli_vmax is None:
             ampli_vmin = ampli_vmax = None
             if norm is None:  # if norm is set do not override with vmin/vmax
-                ampli_vmin, ampli_vmax = pyart.config.get_field_limits(
-                    field_name)
+                ampli_vmin, ampli_vmax = pyart.config.get_field_limits(field_name)
         else:
             norm = None
 
         if phase_vmin is None or phase_vmax is None:
             phase_vmin = phase_vmax = None
             if norm is None:  # if norm is set do not override with vmin/vmax
-                phase_vmin, phase_vmax = (-180., 180.)
+                phase_vmin, phase_vmax = (-180.0, 180.0)
         else:
             norm = None
     else:
@@ -1396,34 +1532,47 @@ def plot_amp_phase_time_Doppler(spectra, field_name, prdcfg, fname_list,
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
     if titl is None:
         titl = generate_complex_Doppler_title(
-            spectra, field_name, 0, 0, datetime_format=None)
+            spectra, field_name, 0, 0, datetime_format=None
+        )
 
     plt.suptitle(titl)
 
     ax = fig.add_subplot(121)
     cax = ax.pcolor(
-        xaxis_lim, yaxis_lim, ampli_field_2D, cmap=cmap, vmin=ampli_vmin,
-        vmax=ampli_vmax, norm=norm)
+        xaxis_lim,
+        yaxis_lim,
+        ampli_field_2D,
+        cmap=cmap,
+        vmin=ampli_vmin,
+        vmax=ampli_vmax,
+        norm=norm,
+    )
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
-    ax.set_title('Amplitude')
+    ax.set_title("Amplitude")
     if not (velmin is None or velmax is None):
         ax.set_xlim([velmin, velmax])
-        
+
     cb = fig.colorbar(cax)
     if ticks is not None:
         cb.set_ticks(ticks)
     if ticklabs:
         cb.set_ticklabels(ticklabs)
-    cb.set_label('Amplitude (-)')
+    cb.set_label("Amplitude (-)")
 
     ax = fig.add_subplot(122)
     cax = ax.pcolor(
-        xaxis_lim, yaxis_lim, phase_field_2D, cmap=cmap, vmin=phase_vmin,
-        vmax=phase_vmax, norm=norm)
+        xaxis_lim,
+        yaxis_lim,
+        phase_field_2D,
+        cmap=cmap,
+        vmin=phase_vmin,
+        vmax=phase_vmax,
+        norm=norm,
+    )
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
-    ax.set_title('Phase')
+    ax.set_title("Phase")
     if not (velmin is None or velmax is None):
         ax.set_xlim([velmin, velmax])
 
@@ -1432,7 +1581,7 @@ def plot_amp_phase_time_Doppler(spectra, field_name, prdcfg, fname_list,
         cb.set_ticks(ticks)
     if ticklabs:
         cb.set_ticklabels(ticklabs)
-    cb.set_label('Phase (deg)')
+    cb.set_label("Phase (deg)")
 
     # Make a tight layout
     fig.tight_layout()
@@ -1446,9 +1595,19 @@ def plot_amp_phase_time_Doppler(spectra, field_name, prdcfg, fname_list,
     return fname_list
 
 
-def plot_complex_Doppler(spectra, field_name, ray, rng, prdcfg, fname_list,
-                         xaxis_info='Doppler_velocity', ylabel=None,
-                         titl=None, vmin=None, vmax=None):
+def plot_complex_Doppler(
+    spectra,
+    field_name,
+    ray,
+    rng,
+    prdcfg,
+    fname_list,
+    xaxis_info="Doppler_velocity",
+    ylabel=None,
+    titl=None,
+    vmin=None,
+    vmax=None,
+):
     """
     Makes a complex Doppler plot plotting separately the real and the
     imaginary parts
@@ -1481,23 +1640,23 @@ def plot_complex_Doppler(spectra, field_name, ray, rng, prdcfg, fname_list,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
-    xsize = prdcfg['spectraImageConfig']['xsize']
-    ysize = prdcfg['spectraImageConfig']['ysize']
-    velmin = prdcfg['spectraImageConfig']['velmin']
-    velmax = prdcfg['spectraImageConfig']['velmax']
+    dpi = prdcfg["spectraImageConfig"].get("dpi", 72)
+    xsize = prdcfg["spectraImageConfig"]["xsize"]
+    ysize = prdcfg["spectraImageConfig"]["ysize"]
+    velmin = prdcfg["spectraImageConfig"]["velmin"]
+    velmax = prdcfg["spectraImageConfig"]["velmax"]
 
-    if xaxis_info == 'Doppler_velocity':
-        xaxis = spectra.Doppler_velocity['data'][ray, :].compressed()
-        xlabel = 'Doppler velocity (m/s)'
-    elif xaxis_info == 'Doppler_frequency':
-        xaxis = spectra.Doppler_frequency['data'][ray, :].compressed()
-        xlabel = 'Doppler frequency (Hz)'
+    if xaxis_info == "Doppler_velocity":
+        xaxis = spectra.Doppler_velocity["data"][ray, :].compressed()
+        xlabel = "Doppler velocity (m/s)"
+    elif xaxis_info == "Doppler_frequency":
+        xaxis = spectra.Doppler_frequency["data"][ray, :].compressed()
+        xlabel = "Doppler frequency (Hz)"
     else:
-        xaxis = np.arange(spectra.npulses['data'][ray])
-        xlabel = 'Pulse number'
+        xaxis = np.arange(spectra.npulses["data"][ray])
+        xlabel = "Pulse number"
 
-    field = spectra.fields[field_name]['data'][ray, rng, 0:xaxis.size]
+    field = spectra.fields[field_name]["data"][ray, rng, 0 : xaxis.size]
 
     re_field = np.real(field)
     im_field = np.imag(field)
@@ -1518,32 +1677,33 @@ def plot_complex_Doppler(spectra, field_name, ray, rng, prdcfg, fname_list,
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
     if titl is None:
         titl = generate_complex_Doppler_title(
-            spectra, field_name, ray, rng, datetime_format=None)
+            spectra, field_name, ray, rng, datetime_format=None
+        )
 
     plt.suptitle(titl)
 
     ax = fig.add_subplot(121)
-    ax.plot(xaxis, re_field, marker='x')
+    ax.plot(xaxis, re_field, marker="x")
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_ylim(bottom=vmin, top=vmax)
     ax.set_xlim([xaxis[0], xaxis[-1]])
-    ax.set_title('Real part')
+    ax.set_title("Real part")
     if not (velmin is None or velmax is None):
         ax.set_xlim([velmin, velmax])
-        
+
     # Turn on the grid
     ax.grid()
 
     ax = fig.add_subplot(122)
-    ax.plot(xaxis, im_field, marker='x')
+    ax.plot(xaxis, im_field, marker="x")
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_ylim(bottom=vmin, top=vmax)
     ax.set_xlim([xaxis[0], xaxis[-1]])
-    ax.set_title('Imaginary part')
+    ax.set_title("Imaginary part")
     if not (velmin is None or velmax is None):
-            ax.set_xlim([velmin, velmax])
+        ax.set_xlim([velmin, velmax])
 
     # Turn on the grid
     ax.grid()
@@ -1560,10 +1720,20 @@ def plot_complex_Doppler(spectra, field_name, ray, rng, prdcfg, fname_list,
     return fname_list
 
 
-def plot_amp_phase_Doppler(spectra, field_name, ray, rng, prdcfg, fname_list,
-                           xaxis_info='Doppler_velocity', titl=None,
-                           ampli_vmin=None, ampli_vmax=None, phase_vmin=None,
-                           phase_vmax=None):
+def plot_amp_phase_Doppler(
+    spectra,
+    field_name,
+    ray,
+    rng,
+    prdcfg,
+    fname_list,
+    xaxis_info="Doppler_velocity",
+    titl=None,
+    ampli_vmin=None,
+    ampli_vmax=None,
+    phase_vmin=None,
+    phase_vmax=None,
+):
     """
     Makes a complex Doppler plot plotting separately the module and the phase
     of the signal
@@ -1594,23 +1764,23 @@ def plot_amp_phase_Doppler(spectra, field_name, ray, rng, prdcfg, fname_list,
         list of names of the saved plots
 
     """
-    dpi = prdcfg['spectraImageConfig'].get('dpi', 72)
-    xsize = prdcfg['spectraImageConfig']['xsize']
-    ysize = prdcfg['spectraImageConfig']['ysize']
-    velmin = prdcfg['spectraImageConfig']['velmin']
-    velmax = prdcfg['spectraImageConfig']['velmax']
+    dpi = prdcfg["spectraImageConfig"].get("dpi", 72)
+    xsize = prdcfg["spectraImageConfig"]["xsize"]
+    ysize = prdcfg["spectraImageConfig"]["ysize"]
+    velmin = prdcfg["spectraImageConfig"]["velmin"]
+    velmax = prdcfg["spectraImageConfig"]["velmax"]
 
-    if xaxis_info == 'Doppler_velocity':
-        xaxis = spectra.Doppler_velocity['data'][ray, :].compressed()
-        xlabel = 'Doppler velocity (m/s)'
-    elif xaxis_info == 'Doppler_frequency':
-        xaxis = spectra.Doppler_frequency['data'][ray, :].compressed()
-        xlabel = 'Doppler frequency (Hz)'
+    if xaxis_info == "Doppler_velocity":
+        xaxis = spectra.Doppler_velocity["data"][ray, :].compressed()
+        xlabel = "Doppler velocity (m/s)"
+    elif xaxis_info == "Doppler_frequency":
+        xaxis = spectra.Doppler_frequency["data"][ray, :].compressed()
+        xlabel = "Doppler frequency (Hz)"
     else:
-        xaxis = np.arange(spectra.npulses['data'][ray])
-        xlabel = 'Pulse number'
+        xaxis = np.arange(spectra.npulses["data"][ray])
+        xlabel = "Pulse number"
 
-    field = spectra.fields[field_name]['data'][ray, rng, 0:xaxis.size]
+    field = spectra.fields[field_name]["data"][ray, rng, 0 : xaxis.size]
 
     ampli_field = np.ma.abs(field)
     phase_field = np.ma.angle(field, deg=True)
@@ -1618,10 +1788,9 @@ def plot_amp_phase_Doppler(spectra, field_name, ray, rng, prdcfg, fname_list,
     # display data
     if field_name is not None:
         if ampli_vmin is None or ampli_vmax is None:
-            ampli_vmin, ampli_vmax = pyart.config.get_field_limits(
-                field_name)
+            ampli_vmin, ampli_vmax = pyart.config.get_field_limits(field_name)
         if phase_vmin is None or phase_vmax is None:
-            phase_vmin, phase_vmax = (-180., 180.)
+            phase_vmin, phase_vmax = (-180.0, 180.0)
     else:
         if ampli_vmin is None:
             ampli_vmin = np.ma.min(ampli_field)
@@ -1635,17 +1804,18 @@ def plot_amp_phase_Doppler(spectra, field_name, ray, rng, prdcfg, fname_list,
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
     if titl is None:
         titl = generate_complex_Doppler_title(
-            spectra, field_name, ray, rng, datetime_format=None)
+            spectra, field_name, ray, rng, datetime_format=None
+        )
 
     plt.suptitle(titl)
 
     ax = fig.add_subplot(121)
-    ax.plot(xaxis, ampli_field, marker='x')
+    ax.plot(xaxis, ampli_field, marker="x")
     ax.set_xlabel(xlabel)
-    ax.set_ylabel('Amplitude (-)')
+    ax.set_ylabel("Amplitude (-)")
     ax.set_ylim(bottom=ampli_vmin, top=ampli_vmax)
     ax.set_xlim([xaxis[0], xaxis[-1]])
-    ax.set_title('Amplitude')
+    ax.set_title("Amplitude")
     if not (velmin is None or velmax is None):
         ax.set_xlim([velmin, velmax])
 
@@ -1653,12 +1823,12 @@ def plot_amp_phase_Doppler(spectra, field_name, ray, rng, prdcfg, fname_list,
     ax.grid()
 
     ax = fig.add_subplot(122)
-    ax.plot(xaxis, phase_field, marker='x')
+    ax.plot(xaxis, phase_field, marker="x")
     ax.set_xlabel(xlabel)
-    ax.set_ylabel('Phase (deg)')
+    ax.set_ylabel("Phase (deg)")
     ax.set_ylim(bottom=phase_vmin, top=phase_vmax)
     ax.set_xlim([xaxis[0], xaxis[-1]])
-    ax.set_title('Phase')
+    ax.set_title("Phase")
 
     # Turn on the grid
     ax.grid()
@@ -1675,7 +1845,7 @@ def plot_amp_phase_Doppler(spectra, field_name, ray, rng, prdcfg, fname_list,
     return fname_list
 
 
-def _create_irregular_grid(xaxis, yaxis, yaxis_pos='start'):
+def _create_irregular_grid(xaxis, yaxis, yaxis_pos="start"):
     """
     Create an irregular grid to be able to plot data with variable x-axis
 
@@ -1699,12 +1869,12 @@ def _create_irregular_grid(xaxis, yaxis, yaxis_pos='start'):
 
     # One dimensional y-axis bin limits
     yres = np.median(yaxis[1:] - yaxis[:-1])
-    if yaxis_pos == 'start':
+    if yaxis_pos == "start":
         yaxis_lim = np.append(yaxis, yaxis[-1] + yres)
-    elif yaxis_pos == 'end':
+    elif yaxis_pos == "end":
         yaxis_lim = np.append(yaxis - yres, yaxis[-1])
     else:
-        yaxis_lim = np.append(yaxis - yres / 2., yaxis[-1] + yres / 2.)
+        yaxis_lim = np.append(yaxis - yres / 2.0, yaxis[-1] + yres / 2.0)
 
     # List of x-axis bin limits
     xres = np.abs(xaxis[:, 1] - xaxis[:, 0])
@@ -1712,23 +1882,23 @@ def _create_irregular_grid(xaxis, yaxis, yaxis_pos='start'):
     xaxis_list = list()
     for i in range(nbinsy):
         xaxis_aux = xaxis[i, :].compressed()
-        xaxis_lim = np.append(
-            xaxis_aux - xres[i] / 2., xaxis_aux[-1] + xres[i] / 2.)
+        xaxis_lim = np.append(xaxis_aux - xres[i] / 2.0, xaxis_aux[-1] + xres[i] / 2.0)
         xaxis_size.append(xaxis_lim.size)
         xaxis_list.append(xaxis_lim)
 
     nxbin_lim = max(xaxis_size)
 
     # Create two dimensional grid of y-axis
-    yaxis_lim = np.repeat(yaxis_lim, 2)[1: -1]
+    yaxis_lim = np.repeat(yaxis_lim, 2)[1:-1]
     nybin_lim = yaxis_lim.size
     yaxis_lim = np.broadcast_to(
-        np.reshape(yaxis_lim, (1, nybin_lim)), (nxbin_lim, nybin_lim))
+        np.reshape(yaxis_lim, (1, nybin_lim)), (nxbin_lim, nybin_lim)
+    )
 
     # Create two dimensional grid of x-axis
     xaxis_lim = np.ma.masked_all((nxbin_lim, nbinsy))
     for i in range(nbinsy):
-        xaxis_lim[0:xaxis_size[i], i] = xaxis_list[i]
+        xaxis_lim[0 : xaxis_size[i], i] = xaxis_list[i]
     xaxis_lim = np.repeat(xaxis_lim, 2, axis=1)
 
     return xaxis_lim, yaxis_lim, xaxis_size
@@ -1756,11 +1926,10 @@ def _adapt_data_to_irregular_grid(data, xaxis_size, nxbin_lim, nybin_lim):
     nbinsy = data.shape[0]
 
     # adapt Z data
-    zpoints = np.ma.masked_all(
-        (nxbin_lim - 1, nybin_lim - 1), dtype=data.dtype)
+    zpoints = np.ma.masked_all((nxbin_lim - 1, nybin_lim - 1), dtype=data.dtype)
     for i in range(nbinsy - 1):
-        zpoints[0:xaxis_size[i] - 1, 2 * i] = data[i, 0:xaxis_size[i] - 1]
-        zpoints[0:xaxis_size[i] - 1, 2 * i + 1] = data[i, 0:xaxis_size[i] - 1]
-    zpoints[0:xaxis_size[-1] - 1, -1] = data[-1, 0:xaxis_size[-1] - 1]
+        zpoints[0 : xaxis_size[i] - 1, 2 * i] = data[i, 0 : xaxis_size[i] - 1]
+        zpoints[0 : xaxis_size[i] - 1, 2 * i + 1] = data[i, 0 : xaxis_size[i] - 1]
+    zpoints[0 : xaxis_size[-1] - 1, -1] = data[-1, 0 : xaxis_size[-1] - 1]
 
     return zpoints

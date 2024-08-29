@@ -62,14 +62,14 @@ def process_raw_grid(procstatus, dscfg, radar_list=None):
     if procstatus != 1:
         return None, None
 
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
         break
     ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
-        warn('ERROR: No valid radar')
+        warn("ERROR: No valid radar")
         return None, None
-    new_dataset = {'radar_out': deepcopy(radar_list[ind_rad])}
+    new_dataset = {"radar_out": deepcopy(radar_list[ind_rad])}
 
     return new_dataset, ind_rad
 
@@ -139,13 +139,13 @@ def process_grid(procstatus, dscfg, radar_list=None):
         return None, None
 
     field_names_aux = []
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_names_aux.append(get_fieldname_pyart(datatype))
 
     ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
-        warn('ERROR: No valid radar')
+        warn("ERROR: No valid radar")
         return None, None
     radar = radar_list[ind_rad]
 
@@ -154,7 +154,7 @@ def process_grid(procstatus, dscfg, radar_list=None):
     nfields_available = 0
     for field_name in field_names_aux:
         if field_name not in radar.fields:
-            warn('Field name ' + field_name + ' not available in radar object')
+            warn("Field name " + field_name + " not available in radar object")
             continue
         field_names.append(field_name)
         nfields_available += 1
@@ -164,114 +164,131 @@ def process_grid(procstatus, dscfg, radar_list=None):
         return None, None
 
     # default parameters
-    xmin = -40.
-    xmax = 40.
-    ymin = -40.
-    ymax = 40.
-    zmin = 0.
-    zmax = 10000.
-    hres = 1000.
-    vres = 500.
+    xmin = -40.0
+    xmax = 40.0
+    ymin = -40.0
+    ymax = 40.0
+    zmin = 0.0
+    zmax = 10000.0
+    hres = 1000.0
+    vres = 500.0
     lonmin = None
     lonmax = None
     latmin = None
     latmax = None
 
-    lat = float(radar.latitude['data'][0])
-    lon = float(radar.longitude['data'][0])
-    alt = float(radar.altitude['data'][0])
+    lat = float(radar.latitude["data"][0])
+    lon = float(radar.longitude["data"][0])
+    alt = float(radar.altitude["data"][0])
 
-    if 'gridConfig' in dscfg:
-        if 'latmin' in dscfg['gridConfig']:
-            latmin = dscfg['gridConfig']['latmin']
-        if 'latmax' in dscfg['gridConfig']:
-            latmax = dscfg['gridConfig']['latmax']
-        if 'lonmin' in dscfg['gridConfig']:
-            lonmin = dscfg['gridConfig']['lonmin']
-        if 'lonmax' in dscfg['gridConfig']:
-            lonmax = dscfg['gridConfig']['lonmax']
-        if 'xmin' in dscfg['gridConfig']:
-            xmin = dscfg['gridConfig']['xmin']
-        if 'xmax' in dscfg['gridConfig']:
-            xmax = dscfg['gridConfig']['xmax']
-        if 'ymin' in dscfg['gridConfig']:
-            ymin = dscfg['gridConfig']['ymin']
-        if 'ymax' in dscfg['gridConfig']:
-            ymax = dscfg['gridConfig']['ymax']
-        if 'zmin' in dscfg['gridConfig']:
-            zmin = dscfg['gridConfig']['zmin']
-        if 'zmax' in dscfg['gridConfig']:
-            zmax = dscfg['gridConfig']['zmax']
-        if 'hres' in dscfg['gridConfig']:
-            hres = dscfg['gridConfig']['hres']
-        if 'vres' in dscfg['gridConfig']:
-            vres = dscfg['gridConfig']['vres']
-        if 'altorig' in dscfg['gridConfig']:
-            alt = dscfg['gridConfig']['altorig']
+    if "gridConfig" in dscfg:
+        if "latmin" in dscfg["gridConfig"]:
+            latmin = dscfg["gridConfig"]["latmin"]
+        if "latmax" in dscfg["gridConfig"]:
+            latmax = dscfg["gridConfig"]["latmax"]
+        if "lonmin" in dscfg["gridConfig"]:
+            lonmin = dscfg["gridConfig"]["lonmin"]
+        if "lonmax" in dscfg["gridConfig"]:
+            lonmax = dscfg["gridConfig"]["lonmax"]
+        if "xmin" in dscfg["gridConfig"]:
+            xmin = dscfg["gridConfig"]["xmin"]
+        if "xmax" in dscfg["gridConfig"]:
+            xmax = dscfg["gridConfig"]["xmax"]
+        if "ymin" in dscfg["gridConfig"]:
+            ymin = dscfg["gridConfig"]["ymin"]
+        if "ymax" in dscfg["gridConfig"]:
+            ymax = dscfg["gridConfig"]["ymax"]
+        if "zmin" in dscfg["gridConfig"]:
+            zmin = dscfg["gridConfig"]["zmin"]
+        if "zmax" in dscfg["gridConfig"]:
+            zmax = dscfg["gridConfig"]["zmax"]
+        if "hres" in dscfg["gridConfig"]:
+            hres = dscfg["gridConfig"]["hres"]
+        if "vres" in dscfg["gridConfig"]:
+            vres = dscfg["gridConfig"]["vres"]
+        if "altorig" in dscfg["gridConfig"]:
+            alt = dscfg["gridConfig"]["altorig"]
 
-    if (latmin is not None and latmax is not None and
-            lonmin is not None and lonmax is not None):
-        warn('Specified lat/lon limits')
-        warn('xmin, xmax, ymin, ymax, latorig and lonorig parameters\n' +
-             'will be ignored')
+    if (
+        latmin is not None
+        and latmax is not None
+        and lonmin is not None
+        and lonmax is not None
+    ):
+        warn("Specified lat/lon limits")
+        warn(
+            "xmin, xmax, ymin, ymax, latorig and lonorig parameters\n"
+            + "will be ignored"
+        )
         # get xmin, xmax, ymin, ymax from lon/lat
-        gatelat = radar.gate_latitude['data']
-        gatelon = radar.gate_longitude['data']
+        gatelat = radar.gate_latitude["data"]
+        gatelon = radar.gate_longitude["data"]
         mask1 = np.logical_and(gatelat > latmin, gatelat <= latmax)
         mask2 = np.logical_and(gatelon > lonmin, gatelon <= lonmax)
         mask = np.logical_and(mask1, mask2)
-        xmin = np.min(radar.gate_x['data'][mask]) / 1000.
-        xmax = np.max(radar.gate_x['data'][mask]) / 1000.
-        ymin = np.min(radar.gate_y['data'][mask]) / 1000.
-        ymax = np.max(radar.gate_y['data'][mask]) / 1000.
+        xmin = np.min(radar.gate_x["data"][mask]) / 1000.0
+        xmax = np.max(radar.gate_x["data"][mask]) / 1000.0
+        ymin = np.min(radar.gate_y["data"][mask]) / 1000.0
+        ymax = np.max(radar.gate_y["data"][mask]) / 1000.0
     else:
-        if 'latorig' in dscfg['gridConfig']:
-            lat = dscfg['gridConfig']['latorig']
-        if 'lonorig' in dscfg['gridConfig']:
-            lon = dscfg['gridConfig']['lonorig']
+        if "latorig" in dscfg["gridConfig"]:
+            lat = dscfg["gridConfig"]["latorig"]
+        if "lonorig" in dscfg["gridConfig"]:
+            lon = dscfg["gridConfig"]["lonorig"]
 
-    wfunc = dscfg.get('wfunc', 'NEAREST')
-    roi_func = dscfg.get('roi_func', 'dist_beam')
+    wfunc = dscfg.get("wfunc", "NEAREST")
+    roi_func = dscfg.get("roi_func", "dist_beam")
 
     # number of grid points in cappi
     nz = int((zmax - zmin) / vres) + 1
-    ny = int((ymax - ymin) * 1000. / hres) + 1
-    nx = int((xmax - xmin) * 1000. / hres) + 1
+    ny = int((ymax - ymin) * 1000.0 / hres) + 1
+    nx = int((xmax - xmin) * 1000.0 / hres) + 1
 
-    min_radius = dscfg.get('roi', np.max([vres, hres]) / 2.)
+    min_radius = dscfg.get("roi", np.max([vres, hres]) / 2.0)
     # parameters to determine the gates to use for each grid point
-    beamwidth = dscfg.get('beamwidth', None)
-    beam_spacing = dscfg.get('beam_spacing', None)
+    beamwidth = dscfg.get("beamwidth", None)
+    beam_spacing = dscfg.get("beam_spacing", None)
 
     if beamwidth is None:
-        if (radar.instrument_parameters is not None and
-                'radar_beam_width_h' in radar.instrument_parameters):
-            beamwidth = radar.instrument_parameters[
-                'radar_beam_width_h']['data'][0]
+        if (
+            radar.instrument_parameters is not None
+            and "radar_beam_width_h" in radar.instrument_parameters
+        ):
+            beamwidth = radar.instrument_parameters["radar_beam_width_h"]["data"][0]
         else:
-            warn('Unknown radar beamwidth. Default 1 deg will be used')
+            warn("Unknown radar beamwidth. Default 1 deg will be used")
             beamwidth = 1
 
     if beam_spacing is None:
         if radar.ray_angle_res is not None:
-            beam_spacing = radar.ray_angle_res['data'][0]
+            beam_spacing = radar.ray_angle_res["data"][0]
         else:
-            warn('Unknown beam spacing. Default 1 deg will be used')
+            warn("Unknown beam spacing. Default 1 deg will be used")
             beam_spacing = 1
 
     # cartesian mapping
     grid = pyart.map.grid_from_radars(
-        (radar,), gridding_algo='map_to_grid',
+        (radar,),
+        gridding_algo="map_to_grid",
         weighting_function=wfunc,
-        roi_func=roi_func, h_factor=1.0, nb=beamwidth, bsp=beam_spacing,
-        min_radius=min_radius, constant_roi=min_radius,
+        roi_func=roi_func,
+        h_factor=1.0,
+        nb=beamwidth,
+        bsp=beam_spacing,
+        min_radius=min_radius,
+        constant_roi=min_radius,
         grid_shape=(nz, ny, nx),
-        grid_limits=((zmin, zmax), (ymin * 1000., ymax * 1000.),
-                     (xmin * 1000., xmax * 1000.)),
-        grid_origin=(lat, lon), grid_origin_alt=alt,
-        fields=field_names)
+        grid_limits=(
+            (zmin, zmax),
+            (ymin * 1000.0, ymax * 1000.0),
+            (xmin * 1000.0, xmax * 1000.0),
+        ),
+        grid_origin=(lat, lon),
+        grid_origin_alt=alt,
+        fields=field_names,
+    )
 
-    new_dataset = {'radar_out': grid}
+    new_dataset = {"radar_out": grid}
 
     return new_dataset, ind_rad
 
@@ -321,115 +338,143 @@ def process_grid_point(procstatus, dscfg, radar_list=None):
     if procstatus == 0:
         return None, None
 
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         break
     field_name = get_fieldname_pyart(datatype)
     ind_rad = int(radarnr[5:8]) - 1
 
     if procstatus == 2:
-        if dscfg['initialized'] == 0:
+        if dscfg["initialized"] == 0:
             return None, None
 
         # prepare for exit
         new_dataset = {
-            'time': dscfg['global_data']['time'],
-            'ref_time': dscfg['global_data']['ref_time'],
-            'datatype': datatype,
-            'point_coordinates_WGS84_lon_lat_alt': (
-                dscfg['global_data']['point_coordinates_WGS84_lon_lat_alt']),
-            'grid_points_iz_iy_ix': (
-                dscfg['global_data']['grid_points_iz_iy_ix']),
-            'final': True}
+            "time": dscfg["global_data"]["time"],
+            "ref_time": dscfg["global_data"]["ref_time"],
+            "datatype": datatype,
+            "point_coordinates_WGS84_lon_lat_alt": (
+                dscfg["global_data"]["point_coordinates_WGS84_lon_lat_alt"]
+            ),
+            "grid_points_iz_iy_ix": (dscfg["global_data"]["grid_points_iz_iy_ix"]),
+            "final": True,
+        }
 
         return new_dataset, ind_rad
 
     if (radar_list is None) or (radar_list[ind_rad] is None):
-        warn('ERROR: No valid radar')
+        warn("ERROR: No valid radar")
         return None, None
     grid = radar_list[ind_rad]
 
     if field_name not in grid.fields:
-        warn('Unable to extract point measurement information. ' +
-             'Field not available')
+        warn(
+            "Unable to extract point measurement information. " + "Field not available"
+        )
         return None, None
 
-    if dscfg['latlon']:
-        lon = dscfg['lon']
-        lat = dscfg['lat']
-        alt = dscfg.get('alt', 0.)
-        latlon_tol = dscfg.get('latlonTol', 1.)
-        alt_tol = dscfg.get('altTol', 100.)
+    if dscfg["latlon"]:
+        lon = dscfg["lon"]
+        lat = dscfg["lat"]
+        alt = dscfg.get("alt", 0.0)
+        latlon_tol = dscfg.get("latlonTol", 1.0)
+        alt_tol = dscfg.get("altTol", 100.0)
 
-        d_lon = np.min(np.abs(grid.point_longitude['data'] - lon))
+        d_lon = np.min(np.abs(grid.point_longitude["data"] - lon))
         if d_lon > latlon_tol:
-            warn(' No grid point found for point (lat, lon, alt):(' +
-                 str(lat) + ', ' + str(lon) + ', ' + str(alt) +
-                 '). Minimum distance to longitude ' + str(d_lon) +
-                 ' larger than tolerance')
+            warn(
+                " No grid point found for point (lat, lon, alt):("
+                + str(lat)
+                + ", "
+                + str(lon)
+                + ", "
+                + str(alt)
+                + "). Minimum distance to longitude "
+                + str(d_lon)
+                + " larger than tolerance"
+            )
             return None, None
-        d_lat = np.min(np.abs(grid.point_latitude['data'] - lat))
+        d_lat = np.min(np.abs(grid.point_latitude["data"] - lat))
         if d_lat > latlon_tol:
-            warn(' No grid point found for point (lat, lon, alt):(' +
-                 str(lat) + ', ' + str(lon) + ', ' + str(alt) +
-                 '). Minimum distance to latitude ' + str(d_lat) +
-                 ' larger than tolerance')
+            warn(
+                " No grid point found for point (lat, lon, alt):("
+                + str(lat)
+                + ", "
+                + str(lon)
+                + ", "
+                + str(alt)
+                + "). Minimum distance to latitude "
+                + str(d_lat)
+                + " larger than tolerance"
+            )
             return None, None
-        d_alt = np.min(np.abs(grid.point_altitude['data'] - alt))
+        d_alt = np.min(np.abs(grid.point_altitude["data"] - alt))
         if d_alt > alt_tol:
-            warn(' No grid point found for point (lat, lon, alt):(' +
-                 str(lat) + ', ' + str(lon) + ', ' + str(alt) +
-                 '). Minimum distance to altitude ' + str(d_alt) +
-                 ' larger than tolerance')
+            warn(
+                " No grid point found for point (lat, lon, alt):("
+                + str(lat)
+                + ", "
+                + str(lon)
+                + ", "
+                + str(alt)
+                + "). Minimum distance to altitude "
+                + str(d_alt)
+                + " larger than tolerance"
+            )
             return None, None
 
         iz, iy, ix = np.unravel_index(
             np.argmin(
-                np.abs(grid.point_longitude['data'] - lon) +
-                np.abs(grid.point_latitude['data'] - lat)),
-            grid.point_longitude['data'].shape)
+                np.abs(grid.point_longitude["data"] - lon)
+                + np.abs(grid.point_latitude["data"] - lat)
+            ),
+            grid.point_longitude["data"].shape,
+        )
 
-        iz = np.argmin(np.abs(grid.point_altitude['data'][:, iy, ix] - alt))
+        iz = np.argmin(np.abs(grid.point_altitude["data"][:, iy, ix] - alt))
     else:
-        ix = dscfg['ix']
-        iy = dscfg['iy']
-        iz = dscfg['iz']
+        ix = dscfg["ix"]
+        iy = dscfg["iy"]
+        iz = dscfg["iz"]
 
-        lon = grid.point_longitude['data'][iz, iy, ix]
-        lat = grid.point_latitude['data'][iz, iy, ix]
-        alt = grid.point_altitude['data'][iz, iy, ix]
+        lon = grid.point_longitude["data"][iz, iy, ix]
+        lat = grid.point_latitude["data"][iz, iy, ix]
+        alt = grid.point_altitude["data"][iz, iy, ix]
 
-    val = grid.fields[field_name]['data'][iz, iy, ix]
-    time = num2date(
-        grid.time['data'][0], grid.time['units'], grid.time['calendar'])
+    val = grid.fields[field_name]["data"][iz, iy, ix]
+    time = num2date(grid.time["data"][0], grid.time["units"], grid.time["calendar"])
 
     # initialize dataset
-    if dscfg['initialized'] == 0:
+    if dscfg["initialized"] == 0:
         poi = {
-            'point_coordinates_WGS84_lon_lat_alt': [lon, lat, alt],
-            'grid_points_iz_iy_ix': [iz, iy, ix],
-            'time': time,
-            'ref_time': dscfg['timeinfo']}
-        dscfg['global_data'] = poi
-        dscfg['initialized'] = 1
+            "point_coordinates_WGS84_lon_lat_alt": [lon, lat, alt],
+            "grid_points_iz_iy_ix": [iz, iy, ix],
+            "time": time,
+            "ref_time": dscfg["timeinfo"],
+        }
+        dscfg["global_data"] = poi
+        dscfg["initialized"] = 1
 
-    dscfg['global_data']['ref_time'] = dscfg['timeinfo']
+    dscfg["global_data"]["ref_time"] = dscfg["timeinfo"]
 
     # prepare for exit
     new_dataset = dict()
-    new_dataset.update({'value': val})
-    new_dataset.update({'datatype': datatype})
-    new_dataset.update({'time': time})
-    new_dataset.update({'ref_time': dscfg['timeinfo']})
+    new_dataset.update({"value": val})
+    new_dataset.update({"datatype": datatype})
+    new_dataset.update({"time": time})
+    new_dataset.update({"ref_time": dscfg["timeinfo"]})
+    new_dataset.update({"point_coordinates_WGS84_lon_lat_alt": [lon, lat, alt]})
+    new_dataset.update({"grid_points_iz_iy_ix": [iz, iy, ix]})
     new_dataset.update(
-        {'point_coordinates_WGS84_lon_lat_alt': [lon, lat, alt]})
-    new_dataset.update({'grid_points_iz_iy_ix': [iz, iy, ix]})
-    new_dataset.update(
-        {'used_coordinates_WGS84_lon_lat_alt': [
-            grid.point_longitude['data'][iz, iy, ix],
-            grid.point_latitude['data'][iz, iy, ix],
-            grid.point_altitude['data'][iz, iy, ix]]})
-    new_dataset.update({'final': False})
+        {
+            "used_coordinates_WGS84_lon_lat_alt": [
+                grid.point_longitude["data"][iz, iy, ix],
+                grid.point_latitude["data"][iz, iy, ix],
+                grid.point_altitude["data"][iz, iy, ix],
+            ]
+        }
+    )
+    new_dataset.update({"final": False})
 
     return new_dataset, ind_rad
 
@@ -468,26 +513,27 @@ def process_grid_multiple_points(procstatus, dscfg, radar_list=None):
     if procstatus != 1:
         return None, None
 
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         break
     field_name = get_fieldname_pyart(datatype)
     ind_rad = int(radarnr[5:8]) - 1
 
     if (radar_list is None) or (radar_list[ind_rad] is None):
-        warn('ERROR: No valid radar')
+        warn("ERROR: No valid radar")
         return None, None
     grid = radar_list[ind_rad]
 
     if field_name not in grid.fields:
-        warn('Unable to extract point measurement information. ' +
-             'Field not available')
+        warn(
+            "Unable to extract point measurement information. " + "Field not available"
+        )
         return None, None
 
     # default parameters
-    latlon_tol = dscfg.get('latlonTol', 1.)
+    latlon_tol = dscfg.get("latlonTol", 1.0)
 
-    lat, lon, point_id = read_coord_sensors(dscfg['coord_fname'])
+    lat, lon, point_id = read_coord_sensors(dscfg["coord_fname"])
     npoints = lon.size
 
     val = np.ma.masked_all(npoints)
@@ -498,49 +544,56 @@ def process_grid_multiple_points(procstatus, dscfg, radar_list=None):
     used_ix = np.ma.masked_all(npoints)
     used_iy = np.ma.masked_all(npoints)
     for ind in range(npoints):
-        d_lon = np.min(np.abs(grid.point_longitude['data'] - lon[ind]))
+        d_lon = np.min(np.abs(grid.point_longitude["data"] - lon[ind]))
         if d_lon > latlon_tol:
-            warn(f' No grid point found for point (lat, lon): '
-                 f'({str(lat[ind])}, {str(lon[ind])}). '
-                 f'Minimum distance to longitude {str(d_lon)} '
-                 f'larger than tolerance')
+            warn(
+                f" No grid point found for point (lat, lon): "
+                f"({str(lat[ind])}, {str(lon[ind])}). "
+                f"Minimum distance to longitude {str(d_lon)} "
+                f"larger than tolerance"
+            )
             continue
-        d_lat = np.min(np.abs(grid.point_latitude['data'] - lat[ind]))
+        d_lat = np.min(np.abs(grid.point_latitude["data"] - lat[ind]))
         if d_lat > latlon_tol:
-            warn(f' No grid point found for point (lat, lon): '
-                 f'({str(lat[ind])}, {str(lon[ind])}). '
-                 f'Minimum distance to latitude {str(d_lat)} '
-                 f'larger than tolerance')
+            warn(
+                f" No grid point found for point (lat, lon): "
+                f"({str(lat[ind])}, {str(lon[ind])}). "
+                f"Minimum distance to latitude {str(d_lat)} "
+                f"larger than tolerance"
+            )
             continue
 
         iz, iy, ix = np.unravel_index(
             np.argmin(
-                np.abs(grid.point_longitude['data'] - lon[ind]) +
-                np.abs(grid.point_latitude['data'] - lat[ind])),
-            grid.point_longitude['data'].shape)
+                np.abs(grid.point_longitude["data"] - lon[ind])
+                + np.abs(grid.point_latitude["data"] - lat[ind])
+            ),
+            grid.point_longitude["data"].shape,
+        )
 
-        val[ind] = grid.fields[field_name]['data'][iz, iy, ix]
+        val[ind] = grid.fields[field_name]["data"][iz, iy, ix]
         time[ind] = num2date(
-            grid.time['data'][0], grid.time['units'], grid.time['calendar'])
-        used_lon[ind] = grid.point_longitude['data'][iz, iy, ix]
-        used_lat[ind] = grid.point_latitude['data'][iz, iy, ix]
+            grid.time["data"][0], grid.time["units"], grid.time["calendar"]
+        )
+        used_lon[ind] = grid.point_longitude["data"][iz, iy, ix]
+        used_lat[ind] = grid.point_latitude["data"][iz, iy, ix]
         used_ix[ind] = ix
         used_iy[ind] = iy
 
     # prepare for exit
     new_dataset = dict()
-    new_dataset.update({'value': val})
-    new_dataset.update({'datatype': datatype})
-    new_dataset.update({'time': time})
-    new_dataset.update({'ref_time': dscfg['timeinfo']})
-    new_dataset.update({'point_coordinates_WGS84_lon': lon})
-    new_dataset.update({'point_coordinates_WGS84_lat': lat})
-    new_dataset.update({'grid_point_ix': used_ix})
-    new_dataset.update({'grid_point_iy': used_iy})
-    new_dataset.update({'used_point_coordinates_WGS84_lon': used_lon})
-    new_dataset.update({'used_point_coordinates_WGS84_lat': used_lat})
-    new_dataset.update({'point_id': point_id})
-    new_dataset.update({'final': False})
+    new_dataset.update({"value": val})
+    new_dataset.update({"datatype": datatype})
+    new_dataset.update({"time": time})
+    new_dataset.update({"ref_time": dscfg["timeinfo"]})
+    new_dataset.update({"point_coordinates_WGS84_lon": lon})
+    new_dataset.update({"point_coordinates_WGS84_lat": lat})
+    new_dataset.update({"grid_point_ix": used_ix})
+    new_dataset.update({"grid_point_iy": used_iy})
+    new_dataset.update({"used_point_coordinates_WGS84_lon": used_lon})
+    new_dataset.update({"used_point_coordinates_WGS84_lat": used_lat})
+    new_dataset.update({"point_id": point_id})
+    new_dataset.update({"final": False})
 
     return new_dataset, ind_rad
 
@@ -584,269 +637,305 @@ def process_grid_time_stats(procstatus, dscfg, radar_list=None):
         radar index
 
     """
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_name = get_fieldname_pyart(datatype)
         break
     ind_rad = int(radarnr[5:8]) - 1
 
-    start_average = dscfg.get('start_average', 0.)
-    period = dscfg.get('period', 3600.)
-    lin_trans = dscfg.get('lin_trans', 0)
-    use_nan = dscfg.get('use_nan', 0)
-    nan_value = dscfg.get('nan_value', 0.)
-    stat = dscfg.get('stat', 'mean')
+    start_average = dscfg.get("start_average", 0.0)
+    period = dscfg.get("period", 3600.0)
+    lin_trans = dscfg.get("lin_trans", 0)
+    use_nan = dscfg.get("use_nan", 0)
+    nan_value = dscfg.get("nan_value", 0.0)
+    stat = dscfg.get("stat", "mean")
 
     if procstatus == 0:
         return None, None
 
     if procstatus == 1:
         if radar_list[ind_rad] is None:
-            warn('No valid radar')
+            warn("No valid radar")
             return None, None
         grid = radar_list[ind_rad]
 
         if field_name not in grid.fields:
-            warn(field_name + ' not available.')
+            warn(field_name + " not available.")
             return None, None
 
         # Prepare auxiliary grid
         field_dict = deepcopy(grid.fields[field_name])
-        if stat in ('mean', 'std', 'cov'):
+        if stat in ("mean", "std", "cov"):
             if lin_trans:
-                field_dict['data'] = np.ma.power(10., 0.1 * field_dict['data'])
+                field_dict["data"] = np.ma.power(10.0, 0.1 * field_dict["data"])
 
             if use_nan:
-                field_dict['data'] = np.ma.asarray(
-                    field_dict['data'].filled(nan_value))
+                field_dict["data"] = np.ma.asarray(field_dict["data"].filled(nan_value))
 
-            if stat in ('std', 'cov'):
-                sum2_dict = pyart.config.get_metadata('sum_squared')
-                sum2_dict['data'] = field_dict['data'] * field_dict['data']
+            if stat in ("std", "cov"):
+                sum2_dict = pyart.config.get_metadata("sum_squared")
+                sum2_dict["data"] = field_dict["data"] * field_dict["data"]
         else:
             if use_nan:
-                field_dict['data'] = np.ma.asarray(
-                    field_dict['data'].filled(nan_value))
+                field_dict["data"] = np.ma.asarray(field_dict["data"].filled(nan_value))
 
-        npoints_dict = pyart.config.get_metadata('number_of_samples')
-        npoints_dict['data'] = np.ma.asarray(
-            np.logical_not(np.ma.getmaskarray(field_dict['data'])), dtype=int)
+        npoints_dict = pyart.config.get_metadata("number_of_samples")
+        npoints_dict["data"] = np.ma.asarray(
+            np.logical_not(np.ma.getmaskarray(field_dict["data"])), dtype=int
+        )
 
         grid_aux = deepcopy(grid)
         grid_aux.fields = dict()
         grid_aux.add_field(field_name, field_dict)
-        grid_aux.add_field('number_of_samples', npoints_dict)
+        grid_aux.add_field("number_of_samples", npoints_dict)
 
-        if stat in ('std', 'cov'):
-            grid_aux.add_field('sum_squared', sum2_dict)
+        if stat in ("std", "cov"):
+            grid_aux.add_field("sum_squared", sum2_dict)
 
         # first volume: initialize start and end time of averaging
-        if dscfg['initialized'] == 0:
+        if dscfg["initialized"] == 0:
             avg_par = dict()
             if period != -1:
-                date_00 = dscfg['timeinfo'].replace(
-                    hour=0, minute=0, second=0, microsecond=0)
+                date_00 = dscfg["timeinfo"].replace(
+                    hour=0, minute=0, second=0, microsecond=0
+                )
 
                 avg_par.update(
-                    {'starttime': date_00 + datetime.timedelta(
-                        seconds=start_average)})
+                    {"starttime": date_00 + datetime.timedelta(seconds=start_average)}
+                )
                 avg_par.update(
-                    {'endtime': avg_par['starttime'] + datetime.timedelta(
-                        seconds=period)})
+                    {
+                        "endtime": avg_par["starttime"]
+                        + datetime.timedelta(seconds=period)
+                    }
+                )
             else:
-                avg_par.update({'starttime': dscfg['timeinfo']})
-                avg_par.update({'endtime': dscfg['timeinfo']})
+                avg_par.update({"starttime": dscfg["timeinfo"]})
+                avg_par.update({"endtime": dscfg["timeinfo"]})
 
-            avg_par.update({'timeinfo': dscfg['timeinfo']})
-            dscfg['global_data'] = avg_par
-            dscfg['initialized'] = 1
+            avg_par.update({"timeinfo": dscfg["timeinfo"]})
+            dscfg["global_data"] = avg_par
+            dscfg["initialized"] = 1
 
-        if dscfg['initialized'] == 0:
+        if dscfg["initialized"] == 0:
             return None, None
 
-        dscfg['global_data']['timeinfo'] = dscfg['timeinfo']
+        dscfg["global_data"]["timeinfo"] = dscfg["timeinfo"]
         # no grid object in global data: create it
-        if 'grid_out' not in dscfg['global_data']:
+        if "grid_out" not in dscfg["global_data"]:
             if period != -1:
                 # get start and stop times of new grid object
-                (dscfg['global_data']['starttime'],
-                 dscfg['global_data']['endtime']) = (
-                     time_avg_range(
-                         dscfg['timeinfo'], dscfg['global_data']['starttime'],
-                         dscfg['global_data']['endtime'], period))
+                (dscfg["global_data"]["starttime"], dscfg["global_data"]["endtime"]) = (
+                    time_avg_range(
+                        dscfg["timeinfo"],
+                        dscfg["global_data"]["starttime"],
+                        dscfg["global_data"]["endtime"],
+                        period,
+                    )
+                )
 
                 # check if volume time older than starttime
-                if dscfg['timeinfo'] > dscfg['global_data']['starttime']:
-                    dscfg['global_data'].update({'grid_out': grid_aux})
+                if dscfg["timeinfo"] > dscfg["global_data"]["starttime"]:
+                    dscfg["global_data"].update({"grid_out": grid_aux})
             else:
-                dscfg['global_data'].update({'grid_out': grid_aux})
+                dscfg["global_data"].update({"grid_out": grid_aux})
 
             return None, None
 
         # still accumulating: add field_dict to global field_dict
-        if (period == -1 or
-                dscfg['timeinfo'] < dscfg['global_data']['endtime']):
+        if period == -1 or dscfg["timeinfo"] < dscfg["global_data"]["endtime"]:
 
             if period == -1:
-                dscfg['global_data']['endtime'] = dscfg['timeinfo']
+                dscfg["global_data"]["endtime"] = dscfg["timeinfo"]
 
-            dscfg['global_data']['grid_out'].fields['number_of_samples'][
-                'data'] += npoints_dict['data']
+            dscfg["global_data"]["grid_out"].fields["number_of_samples"][
+                "data"
+            ] += npoints_dict["data"]
 
-            if stat in ('mean', 'std', 'cov'):
+            if stat in ("mean", "std", "cov"):
                 masked_sum = np.ma.getmaskarray(
-                    dscfg['global_data']['grid_out'].fields[
-                        field_name]['data'])
+                    dscfg["global_data"]["grid_out"].fields[field_name]["data"]
+                )
                 valid_sum = np.logical_and(
                     np.logical_not(masked_sum),
-                    np.logical_not(np.ma.getmaskarray(field_dict['data'])))
+                    np.logical_not(np.ma.getmaskarray(field_dict["data"])),
+                )
 
-                dscfg['global_data']['grid_out'].fields[
-                    field_name]['data'][masked_sum] = (
-                        field_dict['data'][masked_sum])
+                dscfg["global_data"]["grid_out"].fields[field_name]["data"][
+                    masked_sum
+                ] = field_dict["data"][masked_sum]
 
-                dscfg['global_data']['grid_out'].fields[
-                    field_name]['data'][valid_sum] += (
-                        field_dict['data'][valid_sum])
+                dscfg["global_data"]["grid_out"].fields[field_name]["data"][
+                    valid_sum
+                ] += field_dict["data"][valid_sum]
 
-                if stat in ('cov', 'std'):
-                    dscfg['global_data']['grid_out'].fields[
-                        'sum_squared']['data'][masked_sum] = (
-                            field_dict['data'][masked_sum] *
-                            field_dict['data'][masked_sum])
+                if stat in ("cov", "std"):
+                    dscfg["global_data"]["grid_out"].fields["sum_squared"]["data"][
+                        masked_sum
+                    ] = (
+                        field_dict["data"][masked_sum] * field_dict["data"][masked_sum]
+                    )
 
-                    dscfg['global_data']['grid_out'].fields[
-                        'sum_squared']['data'][valid_sum] += (
-                            field_dict['data'][valid_sum] *
-                            field_dict['data'][valid_sum])
+                    dscfg["global_data"]["grid_out"].fields["sum_squared"]["data"][
+                        valid_sum
+                    ] += (field_dict["data"][valid_sum] * field_dict["data"][valid_sum])
 
-            elif stat == 'max':
-                dscfg['global_data']['grid_out'].fields[
-                    field_name]['data'] = np.maximum(
-                        dscfg['global_data']['grid_out'].fields[
-                            field_name]['data'].filled(fill_value=-1.e300),
-                        field_dict['data'].filled(fill_value=-1.e300))
+            elif stat == "max":
+                dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                    np.maximum(
+                        dscfg["global_data"]["grid_out"]
+                        .fields[field_name]["data"]
+                        .filled(fill_value=-1.0e300),
+                        field_dict["data"].filled(fill_value=-1.0e300),
+                    )
+                )
 
-                dscfg['global_data']['grid_out'].fields[
-                    field_name]['data'] = np.ma.masked_values(
-                        dscfg['global_data']['grid_out'].fields[
-                            field_name]['data'], -1.e300)
-            elif stat == 'min':
-                dscfg['global_data']['grid_out'].fields[
-                    field_name]['data'] = np.minimum(
-                        dscfg['global_data']['grid_out'].fields[
-                            field_name]['data'].filled(fill_value=1.e300),
-                        field_dict['data'].filled(fill_value=1.e300))
+                dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                    np.ma.masked_values(
+                        dscfg["global_data"]["grid_out"].fields[field_name]["data"],
+                        -1.0e300,
+                    )
+                )
+            elif stat == "min":
+                dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                    np.minimum(
+                        dscfg["global_data"]["grid_out"]
+                        .fields[field_name]["data"]
+                        .filled(fill_value=1.0e300),
+                        field_dict["data"].filled(fill_value=1.0e300),
+                    )
+                )
 
-                dscfg['global_data']['grid_out'].fields[
-                    field_name]['data'] = np.ma.masked_values(
-                        dscfg['global_data']['grid_out'].fields[
-                            field_name]['data'], 1.e300)
+                dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                    np.ma.masked_values(
+                        dscfg["global_data"]["grid_out"].fields[field_name]["data"],
+                        1.0e300,
+                    )
+                )
 
             return None, None
 
         # we have reached the end of the accumulation period: do the averaging
         # and start a new object (only reachable if period != -1)
-        if stat in ('mean', 'std', 'cov'):
+        if stat in ("mean", "std", "cov"):
             field_mean = (
-                dscfg['global_data']['grid_out'].fields[field_name]['data'] /
-                dscfg['global_data']['grid_out'].fields[
-                    'number_of_samples']['data'])
+                dscfg["global_data"]["grid_out"].fields[field_name]["data"]
+                / dscfg["global_data"]["grid_out"].fields["number_of_samples"]["data"]
+            )
 
-            if stat == 'mean':
+            if stat == "mean":
                 if lin_trans:
-                    dscfg['global_data']['grid_out'].fields[
-                        field_name]['data'] = 10. * np.ma.log10(field_mean)
+                    dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                        10.0 * np.ma.log10(field_mean)
+                    )
                 else:
-                    dscfg['global_data']['grid_out'].fields[
-                        field_name]['data'] = field_mean
-            elif stat in ('std', 'cov'):
+                    dscfg["global_data"]["grid_out"].fields[field_name][
+                        "data"
+                    ] = field_mean
+            elif stat in ("std", "cov"):
                 field_std = np.ma.sqrt(
-                    dscfg['global_data']['grid_out'].fields[
-                        'sum_squared']['data'] /
-                    dscfg['global_data']['grid_out'].fields[
-                        'number_of_samples']['data'] - field_mean * field_mean)
+                    dscfg["global_data"]["grid_out"].fields["sum_squared"]["data"]
+                    / dscfg["global_data"]["grid_out"].fields["number_of_samples"][
+                        "data"
+                    ]
+                    - field_mean * field_mean
+                )
 
-                if stat == 'std':
+                if stat == "std":
                     if lin_trans:
-                        dscfg['global_data']['grid_out'].fields[
-                            field_name]['data'] = 10. * np.ma.log10(field_std)
+                        dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                            10.0 * np.ma.log10(field_std)
+                        )
                     else:
-                        dscfg['global_data']['grid_out'].fields[
-                            field_name]['data'] = field_std
+                        dscfg["global_data"]["grid_out"].fields[field_name][
+                            "data"
+                        ] = field_std
                 else:
                     if lin_trans:
-                        dscfg['global_data']['grid_out'].fields[
-                            field_name]['data'] = 10. * np.ma.log10(
-                                field_std / field_mean)
+                        dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                            10.0 * np.ma.log10(field_std / field_mean)
+                        )
                     else:
-                        dscfg['global_data']['grid_out'].fields[
-                            field_name]['data'] = field_std / field_mean
+                        dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                            field_std / field_mean
+                        )
 
         new_dataset = {
-            'radar_out': deepcopy(dscfg['global_data']['grid_out']),
-            'timeinfo': dscfg['global_data']['endtime']}
+            "radar_out": deepcopy(dscfg["global_data"]["grid_out"]),
+            "timeinfo": dscfg["global_data"]["endtime"],
+        }
 
-        dscfg['global_data']['starttime'] += datetime.timedelta(
-            seconds=period)
-        dscfg['global_data']['endtime'] += datetime.timedelta(seconds=period)
+        dscfg["global_data"]["starttime"] += datetime.timedelta(seconds=period)
+        dscfg["global_data"]["endtime"] += datetime.timedelta(seconds=period)
 
         # remove old grid object from global_data dictionary
-        dscfg['global_data'].pop('grid_out', None)
+        dscfg["global_data"].pop("grid_out", None)
 
         # get start and stop times of new grid object
-        dscfg['global_data']['starttime'], dscfg['global_data']['endtime'] = (
+        dscfg["global_data"]["starttime"], dscfg["global_data"]["endtime"] = (
             time_avg_range(
-                dscfg['timeinfo'], dscfg['global_data']['starttime'],
-                dscfg['global_data']['endtime'], period))
+                dscfg["timeinfo"],
+                dscfg["global_data"]["starttime"],
+                dscfg["global_data"]["endtime"],
+                period,
+            )
+        )
 
         # check if volume time older than starttime
-        if dscfg['timeinfo'] > dscfg['global_data']['starttime']:
-            dscfg['global_data'].update({'grid_out': grid_aux})
+        if dscfg["timeinfo"] > dscfg["global_data"]["starttime"]:
+            dscfg["global_data"].update({"grid_out": grid_aux})
 
         return new_dataset, ind_rad
 
     # no more files to process if there is global data pack it up
     if procstatus == 2:
-        if dscfg['initialized'] == 0:
+        if dscfg["initialized"] == 0:
             return None, None
-        if 'grid_out' not in dscfg['global_data']:
+        if "grid_out" not in dscfg["global_data"]:
             return None, None
 
-        if stat in ('mean', 'std', 'cov'):
+        if stat in ("mean", "std", "cov"):
             field_mean = (
-                dscfg['global_data']['grid_out'].fields[field_name]['data'] /
-                dscfg['global_data']['grid_out'].fields[
-                    'number_of_samples']['data'])
+                dscfg["global_data"]["grid_out"].fields[field_name]["data"]
+                / dscfg["global_data"]["grid_out"].fields["number_of_samples"]["data"]
+            )
 
-            if stat == 'mean':
+            if stat == "mean":
                 if lin_trans:
-                    dscfg['global_data']['grid_out'].fields[
-                        field_name]['data'] = 10. * np.ma.log10(field_mean)
+                    dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                        10.0 * np.ma.log10(field_mean)
+                    )
                 else:
-                    dscfg['global_data']['grid_out'].fields[
-                        field_name]['data'] = field_mean
+                    dscfg["global_data"]["grid_out"].fields[field_name][
+                        "data"
+                    ] = field_mean
 
-            elif stat in ('std', 'cov'):
+            elif stat in ("std", "cov"):
                 field_std = np.ma.sqrt(
-                    dscfg['global_data']['grid_out'].fields[
-                        'sum_squared']['data'] /
-                    dscfg['global_data']['grid_out'].fields[
-                        'number_of_samples']['data'] - field_mean * field_mean)
-                if stat == 'std':
+                    dscfg["global_data"]["grid_out"].fields["sum_squared"]["data"]
+                    / dscfg["global_data"]["grid_out"].fields["number_of_samples"][
+                        "data"
+                    ]
+                    - field_mean * field_mean
+                )
+                if stat == "std":
                     if lin_trans:
-                        dscfg['global_data']['grid_out'].fields[
-                            field_name]['data'] = 10. * np.ma.log10(field_std)
+                        dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                            10.0 * np.ma.log10(field_std)
+                        )
                     else:
-                        dscfg['global_data']['grid_out'].fields[
-                            field_name]['data'] = field_std
+                        dscfg["global_data"]["grid_out"].fields[field_name][
+                            "data"
+                        ] = field_std
                 else:
-                    dscfg['global_data']['grid_out'].fields[
-                        field_name]['data'] = field_std / field_mean
+                    dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                        field_std / field_mean
+                    )
 
         new_dataset = {
-            'radar_out': deepcopy(dscfg['global_data']['grid_out']),
-            'timeinfo': dscfg['global_data']['endtime']}
+            "radar_out": deepcopy(dscfg["global_data"]["grid_out"]),
+            "timeinfo": dscfg["global_data"]["endtime"],
+        }
 
         return new_dataset, ind_rad
 
@@ -887,180 +976,215 @@ def process_grid_time_stats2(procstatus, dscfg, radar_list=None):
         radar index
 
     """
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_name = get_fieldname_pyart(datatype)
         break
     ind_rad = int(radarnr[5:8]) - 1
 
-    start_average = dscfg.get('start_average', 0.)
-    period = dscfg.get('period', 3600.)
-    use_nan = dscfg.get('use_nan', 0)
-    nan_value = dscfg.get('nan_value', 0.)
-    stat = dscfg.get('stat', 'median')
-    if 'percentile' in stat:
-        percentile = float(stat.replace('percentile', ''))
+    start_average = dscfg.get("start_average", 0.0)
+    period = dscfg.get("period", 3600.0)
+    use_nan = dscfg.get("use_nan", 0)
+    nan_value = dscfg.get("nan_value", 0.0)
+    stat = dscfg.get("stat", "median")
+    if "percentile" in stat:
+        percentile = float(stat.replace("percentile", ""))
 
     if procstatus == 0:
         return None, None
 
     if procstatus == 1:
         if radar_list[ind_rad] is None:
-            warn('No valid radar')
+            warn("No valid radar")
             return None, None
         grid = radar_list[ind_rad]
 
         if field_name not in grid.fields:
-            warn(field_name + ' not available.')
+            warn(field_name + " not available.")
             return None, None
 
         # prepare auxiliary radar
         field_dict = deepcopy(grid.fields[field_name])
         if use_nan:
-            field_dict['data'] = np.ma.asarray(
-                field_dict['data'].filled(nan_value))
-        npoints_dict = pyart.config.get_metadata('number_of_samples')
-        npoints_dict['data'] = np.ma.asarray(
-            np.logical_not(np.ma.getmaskarray(field_dict['data'])), dtype=int)
+            field_dict["data"] = np.ma.asarray(field_dict["data"].filled(nan_value))
+        npoints_dict = pyart.config.get_metadata("number_of_samples")
+        npoints_dict["data"] = np.ma.asarray(
+            np.logical_not(np.ma.getmaskarray(field_dict["data"])), dtype=int
+        )
 
         grid_aux = deepcopy(grid)
         grid_aux.fields = dict()
         grid_aux.add_field(field_name, field_dict)
-        grid_aux.add_field('number_of_samples', npoints_dict)
+        grid_aux.add_field("number_of_samples", npoints_dict)
 
         # first volume: initialize start and end time of averaging
-        if dscfg['initialized'] == 0:
+        if dscfg["initialized"] == 0:
             avg_par = dict()
             if period != -1:
-                date_00 = dscfg['timeinfo'].replace(
-                    hour=0, minute=0, second=0, microsecond=0)
+                date_00 = dscfg["timeinfo"].replace(
+                    hour=0, minute=0, second=0, microsecond=0
+                )
 
                 avg_par.update(
-                    {'starttime': date_00 + datetime.timedelta(
-                        seconds=start_average)})
+                    {"starttime": date_00 + datetime.timedelta(seconds=start_average)}
+                )
                 avg_par.update(
-                    {'endtime': avg_par['starttime'] + datetime.timedelta(
-                        seconds=period)})
+                    {
+                        "endtime": avg_par["starttime"]
+                        + datetime.timedelta(seconds=period)
+                    }
+                )
             else:
-                avg_par.update({'starttime': dscfg['timeinfo']})
-                avg_par.update({'endtime': dscfg['timeinfo']})
+                avg_par.update({"starttime": dscfg["timeinfo"]})
+                avg_par.update({"endtime": dscfg["timeinfo"]})
 
-            avg_par.update({'timeinfo': dscfg['timeinfo']})
-            dscfg['global_data'] = avg_par
-            dscfg['initialized'] = 1
+            avg_par.update({"timeinfo": dscfg["timeinfo"]})
+            dscfg["global_data"] = avg_par
+            dscfg["initialized"] = 1
 
-        if dscfg['initialized'] == 0:
+        if dscfg["initialized"] == 0:
             return None, None
 
-        dscfg['global_data']['timeinfo'] = dscfg['timeinfo']
+        dscfg["global_data"]["timeinfo"] = dscfg["timeinfo"]
         # no grid object in global data: create it
-        if 'grid_out' not in dscfg['global_data']:
+        if "grid_out" not in dscfg["global_data"]:
             if period != -1:
                 # get start and stop times of new grid object
-                (dscfg['global_data']['starttime'],
-                 dscfg['global_data']['endtime']) = (
-                     time_avg_range(
-                         dscfg['timeinfo'], dscfg['global_data']['starttime'],
-                         dscfg['global_data']['endtime'], period))
+                (dscfg["global_data"]["starttime"], dscfg["global_data"]["endtime"]) = (
+                    time_avg_range(
+                        dscfg["timeinfo"],
+                        dscfg["global_data"]["starttime"],
+                        dscfg["global_data"]["endtime"],
+                        period,
+                    )
+                )
 
                 # check if volume time older than starttime
-                if dscfg['timeinfo'] > dscfg['global_data']['starttime']:
-                    dscfg['global_data'].update({'grid_out': grid_aux})
-                    dscfg['global_data'].update(
-                        {'field_data': np.expand_dims(
-                            grid_aux.fields[field_name]['data'], axis=0)})
+                if dscfg["timeinfo"] > dscfg["global_data"]["starttime"]:
+                    dscfg["global_data"].update({"grid_out": grid_aux})
+                    dscfg["global_data"].update(
+                        {
+                            "field_data": np.expand_dims(
+                                grid_aux.fields[field_name]["data"], axis=0
+                            )
+                        }
+                    )
             else:
-                dscfg['global_data'].update({'grid_out': grid_aux})
-                dscfg['global_data'].update(
-                    {'field_data': np.expand_dims(
-                        grid_aux.fields[field_name]['data'], axis=0)})
+                dscfg["global_data"].update({"grid_out": grid_aux})
+                dscfg["global_data"].update(
+                    {
+                        "field_data": np.expand_dims(
+                            grid_aux.fields[field_name]["data"], axis=0
+                        )
+                    }
+                )
 
             return None, None
 
         # still accumulating: add field_dict to global field_dict
-        if (period == -1 or
-                dscfg['timeinfo'] < dscfg['global_data']['endtime']):
+        if period == -1 or dscfg["timeinfo"] < dscfg["global_data"]["endtime"]:
 
             if period == -1:
-                dscfg['global_data']['endtime'] = dscfg['timeinfo']
+                dscfg["global_data"]["endtime"] = dscfg["timeinfo"]
 
-            dscfg['global_data']['grid_out'].fields['number_of_samples'][
-                'data'] += npoints_dict['data']
+            dscfg["global_data"]["grid_out"].fields["number_of_samples"][
+                "data"
+            ] += npoints_dict["data"]
 
-            dscfg['global_data']['field_data'] = np.ma.append(
-                dscfg['global_data']['field_data'],
-                np.expand_dims(field_dict['data'], axis=0), axis=0)
+            dscfg["global_data"]["field_data"] = np.ma.append(
+                dscfg["global_data"]["field_data"],
+                np.expand_dims(field_dict["data"], axis=0),
+                axis=0,
+            )
 
             return None, None
 
         # we have reached the end of the accumulation period: do the averaging
         # and start a new object (only reachable if period != -1)
-        if stat == 'median':
-            dscfg['global_data']['grid_out'].fields[
-                field_name]['data'] = np.ma.median(
-                    dscfg['global_data']['field_data'], axis=0)
-        elif stat == 'mode':
+        if stat == "median":
+            dscfg["global_data"]["grid_out"].fields[field_name]["data"] = np.ma.median(
+                dscfg["global_data"]["field_data"], axis=0
+            )
+        elif stat == "mode":
             mode_data, _ = scipy.stats.mode(
-                dscfg['global_data']['field_data'].filled(fill_value=np.nan),
-                axis=0, nan_policy='omit')
-            dscfg['global_data']['grid_out'].fields[field_name]['data'] = (
-                np.ma.masked_invalid(np.squeeze(mode_data, axis=0)))
-        elif 'percentile' in stat:
+                dscfg["global_data"]["field_data"].filled(fill_value=np.nan),
+                axis=0,
+                nan_policy="omit",
+            )
+            dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                np.ma.masked_invalid(np.squeeze(mode_data, axis=0))
+            )
+        elif "percentile" in stat:
             percent_data = np.nanpercentile(
-                dscfg['global_data']['field_data'].filled(fill_value=np.nan),
-                percentile, axis=0)
-            dscfg['global_data']['grid_out'].fields[field_name]['data'] = (
-                np.ma.masked_invalid(percent_data))
+                dscfg["global_data"]["field_data"].filled(fill_value=np.nan),
+                percentile,
+                axis=0,
+            )
+            dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                np.ma.masked_invalid(percent_data)
+            )
 
         new_dataset = {
-            'radar_out': deepcopy(dscfg['global_data']['grid_out']),
-            'timeinfo': dscfg['global_data']['endtime']}
+            "radar_out": deepcopy(dscfg["global_data"]["grid_out"]),
+            "timeinfo": dscfg["global_data"]["endtime"],
+        }
 
-        dscfg['global_data']['starttime'] += datetime.timedelta(
-            seconds=period)
-        dscfg['global_data']['endtime'] += datetime.timedelta(seconds=period)
+        dscfg["global_data"]["starttime"] += datetime.timedelta(seconds=period)
+        dscfg["global_data"]["endtime"] += datetime.timedelta(seconds=period)
 
         # remove old grid object from global_data dictionary
-        dscfg['global_data'].pop('grid_out', None)
+        dscfg["global_data"].pop("grid_out", None)
 
         # get start and stop times of new grid object
-        dscfg['global_data']['starttime'], dscfg['global_data']['endtime'] = (
+        dscfg["global_data"]["starttime"], dscfg["global_data"]["endtime"] = (
             time_avg_range(
-                dscfg['timeinfo'], dscfg['global_data']['starttime'],
-                dscfg['global_data']['endtime'], period))
+                dscfg["timeinfo"],
+                dscfg["global_data"]["starttime"],
+                dscfg["global_data"]["endtime"],
+                period,
+            )
+        )
 
         # check if volume time older than starttime
-        if dscfg['timeinfo'] > dscfg['global_data']['starttime']:
-            dscfg['global_data'].update({'grid_out': grid_aux})
+        if dscfg["timeinfo"] > dscfg["global_data"]["starttime"]:
+            dscfg["global_data"].update({"grid_out": grid_aux})
 
         return new_dataset, ind_rad
 
     # no more files to process if there is global data pack it up
     if procstatus == 2:
-        if dscfg['initialized'] == 0:
+        if dscfg["initialized"] == 0:
             return None, None
-        if 'grid_out' not in dscfg['global_data']:
+        if "grid_out" not in dscfg["global_data"]:
             return None, None
 
-        if stat == 'median':
-            dscfg['global_data']['grid_out'].fields[field_name]['data'] = (
-                np.ma.median(dscfg['global_data']['field_data'], axis=0))
-        elif stat == 'mode':
+        if stat == "median":
+            dscfg["global_data"]["grid_out"].fields[field_name]["data"] = np.ma.median(
+                dscfg["global_data"]["field_data"], axis=0
+            )
+        elif stat == "mode":
             mode_data, _ = scipy.stats.mode(
-                dscfg['global_data']['field_data'].filled(fill_value=np.nan),
-                axis=0, nan_policy='omit')
-            dscfg['global_data']['grid_out'].fields[field_name]['data'] = (
-                np.ma.masked_invalid(np.squeeze(mode_data, axis=0)))
-        elif 'percentile' in stat:
+                dscfg["global_data"]["field_data"].filled(fill_value=np.nan),
+                axis=0,
+                nan_policy="omit",
+            )
+            dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                np.ma.masked_invalid(np.squeeze(mode_data, axis=0))
+            )
+        elif "percentile" in stat:
             percent_data = np.nanpercentile(
-                dscfg['global_data']['field_data'].filled(fill_value=np.nan),
-                percentile, axis=0)
-            dscfg['global_data']['grid_out'].fields[field_name]['data'] = (
-                np.ma.masked_invalid(percent_data))
+                dscfg["global_data"]["field_data"].filled(fill_value=np.nan),
+                percentile,
+                axis=0,
+            )
+            dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                np.ma.masked_invalid(percent_data)
+            )
 
         new_dataset = {
-            'radar_out': deepcopy(dscfg['global_data']['grid_out']),
-            'timeinfo': dscfg['global_data']['endtime']}
+            "radar_out": deepcopy(dscfg["global_data"]["grid_out"]),
+            "timeinfo": dscfg["global_data"]["endtime"],
+        }
 
         return new_dataset, ind_rad
 
@@ -1102,145 +1226,164 @@ def process_grid_rainfall_accumulation(procstatus, dscfg, radar_list=None):
     if procstatus == 0:
         return None, None
 
-    radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
+    radarnr, _, datatype, _, _ = get_datatype_fields(dscfg["datatype"][0])
     field_name = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8]) - 1
 
-    start_average = dscfg.get('start_average', 0.)
-    period = dscfg.get('period', 3600.)
-    use_nan = dscfg.get('use_nan', 0)
-    nan_value = dscfg.get('nan_value', 0.)
+    start_average = dscfg.get("start_average", 0.0)
+    period = dscfg.get("period", 3600.0)
+    use_nan = dscfg.get("use_nan", 0)
+    nan_value = dscfg.get("nan_value", 0.0)
 
     if procstatus == 1:
         if radar_list[ind_rad] is None:
-            warn('No valid radar')
+            warn("No valid radar")
             return None, None
         grid = radar_list[ind_rad]
 
         if field_name not in grid.fields:
-            warn(field_name + ' not available.')
+            warn(field_name + " not available.")
             return None, None
 
         # prepare auxiliary radar
         field_dict = deepcopy(grid.fields[field_name])
         if use_nan:
-            field_dict['data'] = np.ma.asarray(
-                field_dict['data'].filled(nan_value))
+            field_dict["data"] = np.ma.asarray(field_dict["data"].filled(nan_value))
 
         grid_aux = deepcopy(grid)
         grid_aux.fields = {}
         grid_aux.add_field(field_name, field_dict)
 
-        starttime_field = (
-            dscfg['timeinfo']
-            - datetime.timedelta(minutes=dscfg['ScanPeriod']))
+        starttime_field = dscfg["timeinfo"] - datetime.timedelta(
+            minutes=dscfg["ScanPeriod"]
+        )
 
         # first volume: initialize start and end time of averaging
-        if dscfg['initialized'] == 0:
+        if dscfg["initialized"] == 0:
             avg_par = {}
             if period != -1:
                 date_00 = starttime_field.replace(
-                    hour=0, minute=0, second=0, microsecond=0)
+                    hour=0, minute=0, second=0, microsecond=0
+                )
 
                 avg_par.update(
-                    {'starttime': date_00 + datetime.timedelta(
-                        seconds=start_average)})
+                    {"starttime": date_00 + datetime.timedelta(seconds=start_average)}
+                )
                 avg_par.update(
-                    {'endtime': avg_par['starttime'] + datetime.timedelta(
-                        seconds=period)})
+                    {
+                        "endtime": avg_par["starttime"]
+                        + datetime.timedelta(seconds=period)
+                    }
+                )
             else:
-                avg_par.update({'starttime': starttime_field})
-                avg_par.update({'endtime': dscfg['timeinfo']})
+                avg_par.update({"starttime": starttime_field})
+                avg_par.update({"endtime": dscfg["timeinfo"]})
 
-            avg_par.update({'timeinfo': dscfg['timeinfo']})
-            dscfg['global_data'] = avg_par
-            dscfg['initialized'] = 1
+            avg_par.update({"timeinfo": dscfg["timeinfo"]})
+            dscfg["global_data"] = avg_par
+            dscfg["initialized"] = 1
 
-        if dscfg['initialized'] == 0:
+        if dscfg["initialized"] == 0:
             return None, None
 
-        dscfg['global_data']['timeinfo'] = dscfg['timeinfo']
+        dscfg["global_data"]["timeinfo"] = dscfg["timeinfo"]
         # no grid object in global data: create it
-        if 'grid_out' not in dscfg['global_data']:
+        if "grid_out" not in dscfg["global_data"]:
             if period != -1:
                 # get start and stop times of new grid object
-                (dscfg['global_data']['starttime'],
-                 dscfg['global_data']['endtime']) = (
+                (dscfg["global_data"]["starttime"], dscfg["global_data"]["endtime"]) = (
                     time_avg_range(
-                        dscfg['timeinfo'], dscfg['global_data']['starttime'],
-                        dscfg['global_data']['endtime'], period))
+                        dscfg["timeinfo"],
+                        dscfg["global_data"]["starttime"],
+                        dscfg["global_data"]["endtime"],
+                        period,
+                    )
+                )
 
                 # check if volume time older than starttime
-                if dscfg['timeinfo'] > dscfg['global_data']['starttime']:
-                    print(f'\nNew accumulation started '
-                          f'{dscfg["global_data"]["starttime"]}\n')
-                    dscfg['global_data'].update({'grid_out': grid_aux})
+                if dscfg["timeinfo"] > dscfg["global_data"]["starttime"]:
+                    print(
+                        f"\nNew accumulation started "
+                        f'{dscfg["global_data"]["starttime"]}\n'
+                    )
+                    dscfg["global_data"].update({"grid_out": grid_aux})
             else:
-                print(f'\nNew accumulation started '
-                      f'{dscfg["global_data"]["starttime"]}\n')
-                dscfg['global_data'].update({'grid_out': grid_aux})
+                print(
+                    f"\nNew accumulation started "
+                    f'{dscfg["global_data"]["starttime"]}\n'
+                )
+                dscfg["global_data"].update({"grid_out": grid_aux})
 
             return None, None
 
         # still accumulating: add field_dict to global field_dict
-        if (period == -1 or
-                dscfg['timeinfo'] < dscfg['global_data']['endtime']):
+        if period == -1 or dscfg["timeinfo"] < dscfg["global_data"]["endtime"]:
 
             if period == -1:
-                dscfg['global_data']['endtime'] = dscfg['timeinfo']
+                dscfg["global_data"]["endtime"] = dscfg["timeinfo"]
 
             masked_sum = np.ma.getmaskarray(
-                dscfg['global_data']['grid_out'].fields[field_name]['data'])
+                dscfg["global_data"]["grid_out"].fields[field_name]["data"]
+            )
             valid_sum = np.logical_and(
                 np.logical_not(masked_sum),
-                np.logical_not(np.ma.getmaskarray(field_dict['data'])))
+                np.logical_not(np.ma.getmaskarray(field_dict["data"])),
+            )
 
-            dscfg['global_data']['grid_out'].fields[field_name]['data'][
-                masked_sum] = field_dict['data'][masked_sum]
+            dscfg["global_data"]["grid_out"].fields[field_name]["data"][masked_sum] = (
+                field_dict["data"][masked_sum]
+            )
 
-            dscfg['global_data']['grid_out'].fields[field_name]['data'][
-                valid_sum] += field_dict['data'][valid_sum]
+            dscfg["global_data"]["grid_out"].fields[field_name]["data"][
+                valid_sum
+            ] += field_dict["data"][valid_sum]
 
             return None, None
 
         # we have reached the end of the accumulation period: do the averaging
         # and start a new object (only reachable if period != -1)
         new_dataset = {
-            'radar_out': deepcopy(dscfg['global_data']['grid_out']),
-            'timeinfo': dscfg['global_data']['endtime']}
+            "radar_out": deepcopy(dscfg["global_data"]["grid_out"]),
+            "timeinfo": dscfg["global_data"]["endtime"],
+        }
 
-        dscfg['global_data']['starttime'] += datetime.timedelta(
-            seconds=period)
-        dscfg['global_data']['endtime'] += datetime.timedelta(seconds=period)
+        dscfg["global_data"]["starttime"] += datetime.timedelta(seconds=period)
+        dscfg["global_data"]["endtime"] += datetime.timedelta(seconds=period)
 
         # remove old grid object from global_data dictionary
-        dscfg['global_data'].pop('grid_out', None)
+        dscfg["global_data"].pop("grid_out", None)
 
         # get start and stop times of new grid object
-        dscfg['global_data']['starttime'], dscfg['global_data']['endtime'] = (
+        dscfg["global_data"]["starttime"], dscfg["global_data"]["endtime"] = (
             time_avg_range(
-                dscfg['timeinfo'], dscfg['global_data']['starttime'],
-                dscfg['global_data']['endtime'], period))
+                dscfg["timeinfo"],
+                dscfg["global_data"]["starttime"],
+                dscfg["global_data"]["endtime"],
+                period,
+            )
+        )
 
         # check if volume time older than starttime
-        if dscfg['timeinfo'] > dscfg['global_data']['starttime']:
-            print(f'\nNew accumulation started '
-                  f'{dscfg["global_data"]["starttime"]}\n')
-            dscfg['global_data'].update({'grid_out': grid_aux})
+        if dscfg["timeinfo"] > dscfg["global_data"]["starttime"]:
+            print(
+                f"\nNew accumulation started " f'{dscfg["global_data"]["starttime"]}\n'
+            )
+            dscfg["global_data"].update({"grid_out": grid_aux})
 
         return new_dataset, ind_rad
 
     # no more files to process if there is global data pack it up
     if procstatus == 2:
-        if dscfg['initialized'] == 0:
+        if dscfg["initialized"] == 0:
             return None, None
-        if 'grid_out' not in dscfg['global_data']:
+        if "grid_out" not in dscfg["global_data"]:
             return None, None
 
         new_dataset = {
-            'radar_out': deepcopy(dscfg['global_data']['grid_out']),
-            'timeinfo': dscfg['global_data']['endtime']}
+            "radar_out": deepcopy(dscfg["global_data"]["grid_out"]),
+            "timeinfo": dscfg["global_data"]["endtime"],
+        }
 
         return new_dataset, ind_rad
 
@@ -1274,45 +1417,43 @@ def process_grid_fields_diff(procstatus, dscfg, radar_list=None):
         return None, None
 
     # create the list of data types for each radar
-    if len(dscfg['datatype']) != 2:
-        warn(
-            'Two and only two fields are required to compute the field'
-            ' differences')
+    if len(dscfg["datatype"]) != 2:
+        warn("Two and only two fields are required to compute the field" " differences")
         return None, None
 
-    radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
+    radarnr, _, datatype, _, _ = get_datatype_fields(dscfg["datatype"][0])
     field_name_1 = get_fieldname_pyart(datatype)
 
-    radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][1])
+    radarnr, _, datatype, _, _ = get_datatype_fields(dscfg["datatype"][1])
     field_name_2 = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
-        warn('No valid radar')
+        warn("No valid radar")
         return None, None
 
     grid = radar_list[ind_rad]
-    if ((field_name_1 not in grid.fields) or
-            (field_name_2 not in grid.fields)):
+    if (field_name_1 not in grid.fields) or (field_name_2 not in grid.fields):
         warn(
-            'Unable to compare fields ' +
-            field_name_1 +
-            'and ' +
-            field_name_2 +
-            '. Fields missings')
+            "Unable to compare fields "
+            + field_name_1
+            + "and "
+            + field_name_2
+            + ". Fields missings"
+        )
         return None, None
 
-    field_diff = pyart.config.get_metadata('fields_difference')
-    field_diff['data'] = (
-        grid.fields[field_name_1]['data'] -
-        grid.fields[field_name_2]['data'])
-    field_diff['long_name'] = field_name_1 + ' - ' + field_name_2
+    field_diff = pyart.config.get_metadata("fields_difference")
+    field_diff["data"] = (
+        grid.fields[field_name_1]["data"] - grid.fields[field_name_2]["data"]
+    )
+    field_diff["long_name"] = field_name_1 + " - " + field_name_2
 
     grid_diff = deepcopy(grid)
     grid_diff.fields = dict()
-    grid_diff.add_field('fields_difference', field_diff)
+    grid_diff.add_field("fields_difference", field_diff)
 
-    new_dataset = {'radar_out': grid_diff}
+    new_dataset = {"radar_out": grid_diff}
 
     return new_dataset, ind_rad
 
@@ -1350,46 +1491,44 @@ def process_grid_texture(procstatus, dscfg, radar_list=None):
         return None, None
 
     # create the list of data types for each radar
-    if len(dscfg['datatype']) != 1:
-        warn('Texture can only be computed on one field')
+    if len(dscfg["datatype"]) != 1:
+        warn("Texture can only be computed on one field")
         return None, None
 
-    radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
+    radarnr, _, datatype, _, _ = get_datatype_fields(dscfg["datatype"][0])
     field_name = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
-        warn('No valid radar')
+        warn("No valid radar")
         return None, None
 
     grid = radar_list[ind_rad]
     if field_name not in grid.fields:
-        warn(
-            'Unable to compute field ' +
-            field_name +
-            ' texture. Field missing')
+        warn("Unable to compute field " + field_name + " texture. Field missing")
         return None, None
 
-    xwind = dscfg.get('xwind', 7)
-    ywind = dscfg.get('ywind', 7)
-    fill_value = dscfg.get('fill_value', np.NaN)
+    xwind = dscfg.get("xwind", 7)
+    ywind = dscfg.get("ywind", 7)
+    fill_value = dscfg.get("fill_value", np.NaN)
 
-    field_text = pyart.config.get_metadata('field_texture')
-    field_text['data'] = np.ma.masked_all(
-        (grid.nz, grid.ny, grid.nx),
-        dtype=grid.fields[field_name]['data'].dtype)
+    field_text = pyart.config.get_metadata("field_texture")
+    field_text["data"] = np.ma.masked_all(
+        (grid.nz, grid.ny, grid.nx), dtype=grid.fields[field_name]["data"].dtype
+    )
 
     for level in range(grid.nz):
-        field_array = deepcopy(grid.fields[field_name]['data'][level, :, :])
+        field_array = deepcopy(grid.fields[field_name]["data"][level, :, :])
         field_array = field_array.filled(fill_value=fill_value)
-        field_text['data'][level, :, :] = pyart.util.grid_texture_2d(
-            field_array, xwind=xwind, ywind=ywind)
+        field_text["data"][level, :, :] = pyart.util.grid_texture_2d(
+            field_array, xwind=xwind, ywind=ywind
+        )
 
     grid_text = deepcopy(grid)
     grid_text.fields = dict()
-    grid_text.add_field('field_texture', field_text)
+    grid_text.add_field("field_texture", field_text)
 
-    new_dataset = {'radar_out': grid_text}
+    new_dataset = {"radar_out": grid_text}
 
     return new_dataset, ind_rad
 
@@ -1430,67 +1569,70 @@ def process_grid_mask(procstatus, dscfg, radar_list=None):
     if procstatus != 1:
         return None, None
 
-    radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
+    radarnr, _, datatype, _, _ = get_datatype_fields(dscfg["datatype"][0])
     field_name = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
-        warn('ERROR: No valid radar')
+        warn("ERROR: No valid radar")
         return None, None
 
     grid = radar_list[ind_rad]
 
     if field_name not in grid.fields:
-        warn('Unable to mask field ' + field_name + ' Field missing in grid')
+        warn("Unable to mask field " + field_name + " Field missing in grid")
         return None, None
 
-    threshold_min = dscfg.get('threshold_min', None)
-    threshold_max = dscfg.get('threshold_max', None)
-    x_dir_ext = dscfg.get('x_dir_ext', 0)
-    y_dir_ext = dscfg.get('y_dir_ext', 0)
+    threshold_min = dscfg.get("threshold_min", None)
+    threshold_max = dscfg.get("threshold_max", None)
+    x_dir_ext = dscfg.get("x_dir_ext", 0)
+    y_dir_ext = dscfg.get("y_dir_ext", 0)
 
     if threshold_min is None and threshold_max is None:
-        warn('At least one threshold necessary')
+        warn("At least one threshold necessary")
         return None, None
 
-    field_mask = pyart.config.get_metadata('field_mask')
-    field_mask['data'] = np.ma.masked_all(
-        (grid.nz, grid.ny, grid.nx), dtype=np.int8)
-    field_mask['data'][:] = 0
-    valid = np.logical_not(np.ma.getmaskarray(grid.fields[field_name]['data']))
-    field_mask['data'][valid] = 1
+    field_mask = pyart.config.get_metadata("field_mask")
+    field_mask["data"] = np.ma.masked_all((grid.nz, grid.ny, grid.nx), dtype=np.int8)
+    field_mask["data"][:] = 0
+    valid = np.logical_not(np.ma.getmaskarray(grid.fields[field_name]["data"]))
+    field_mask["data"][valid] = 1
 
     if threshold_min is not None and threshold_max is not None:
-        field_mask['data'][
-            (grid.fields[field_name]['data'] >= threshold_min) &
-            (grid.fields[field_name]['data'] <= threshold_max)] = 2
-        field_mask['long_name'] = '{} threshold {}-{}'.format(
-            field_name, threshold_min, threshold_max)
+        field_mask["data"][
+            (grid.fields[field_name]["data"] >= threshold_min)
+            & (grid.fields[field_name]["data"] <= threshold_max)
+        ] = 2
+        field_mask["long_name"] = "{} threshold {}-{}".format(
+            field_name, threshold_min, threshold_max
+        )
     elif threshold_min is not None:
-        field_mask['data'][
-            grid.fields[field_name]['data'] >= threshold_min] = 2
-        field_mask['long_name'] = '{} threshold_min {}'.format(
-            field_name, threshold_min)
+        field_mask["data"][grid.fields[field_name]["data"] >= threshold_min] = 2
+        field_mask["long_name"] = "{} threshold_min {}".format(
+            field_name, threshold_min
+        )
     elif threshold_max is not None:
-        field_mask['data'][
-            grid.fields[field_name]['data'] <= threshold_max] = 2
-        field_mask['long_name'] = '{} threshold_max {}'.format(
-            field_name, threshold_max)
+        field_mask["data"][grid.fields[field_name]["data"] <= threshold_max] = 2
+        field_mask["long_name"] = "{} threshold_max {}".format(
+            field_name, threshold_max
+        )
 
     if x_dir_ext > 0 or y_dir_ext > 0:
-        ind_z, ind_y, ind_x = np.where(field_mask['data'] == 2)
+        ind_z, ind_y, ind_x = np.where(field_mask["data"] == 2)
 
         if ind_z.size > 0:
             for z, y, x in zip(ind_z, ind_y, ind_x):
-                field_mask['data'][
-                    0, y - y_dir_ext:y + y_dir_ext + 1,
-                    x - x_dir_ext:x + x_dir_ext + 1] = 2
+                field_mask["data"][
+                    0,
+                    y - y_dir_ext : y + y_dir_ext + 1,
+                    x - x_dir_ext : x + x_dir_ext + 1,
+                ] = 2
 
     grid_mask = deepcopy(grid)
     grid_mask.fields = dict()
-    grid_mask.add_field('field_mask', field_mask)
+    grid_mask.add_field("field_mask", field_mask)
 
-    new_dataset = {'radar_out': grid_mask}
+    new_dataset = {"radar_out": grid_mask}
 
     return new_dataset, ind_rad
 
@@ -1522,42 +1664,40 @@ def process_normalize_luminosity(procstatus, dscfg, radar_list=None):
     if procstatus != 1:
         return None, None
 
-    radarnr, _, _, _, _ = get_datatype_fields(dscfg['datatype'][0])
+    radarnr, _, _, _, _ = get_datatype_fields(dscfg["datatype"][0])
     ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
-        warn('ERROR: No valid radar')
+        warn("ERROR: No valid radar")
         return None, None
 
     grid = radar_list[ind_rad]
 
     # get normalization factor
-    lat_point = grid.point_latitude['data'][0,
-                                            int(grid.ny / 2), int(grid.nx / 2)]
-    lon_point = grid.point_longitude['data'][
-        0, int(grid.ny / 2), int(grid.nx / 2)]
+    lat_point = grid.point_latitude["data"][0, int(grid.ny / 2), int(grid.nx / 2)]
+    lon_point = grid.point_longitude["data"][0, int(grid.ny / 2), int(grid.nx / 2)]
 
     el_sun, _ = pyart.correct.sun_position_pysolar(
-        dscfg['timeinfo'], lat_point, lon_point)
+        dscfg["timeinfo"], lat_point, lon_point
+    )
     norm = np.sin(np.deg2rad(el_sun))
 
     grid_norm = deepcopy(grid)
     grid_norm.fields = dict()
 
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         field_name = get_fieldname_pyart(datatype)
 
         if field_name not in grid.fields:
-            warn('Unable to normalize field ' + field_name +
-                 '. Field missing in grid')
+            warn("Unable to normalize field " + field_name + ". Field missing in grid")
             continue
 
-        norm_field = pyart.config.get_metadata(field_name + '_norm')
-        norm_field['data'] = grid.fields[field_name]['data'] / norm
+        norm_field = pyart.config.get_metadata(field_name + "_norm")
+        norm_field["data"] = grid.fields[field_name]["data"] / norm
 
-        grid_norm.add_field(field_name + '_norm', norm_field)
+        grid_norm.add_field(field_name + "_norm", norm_field)
 
-    new_dataset = {'radar_out': grid_norm}
+    new_dataset = {"radar_out": grid_norm}
 
     return new_dataset, ind_rad
 
@@ -1593,49 +1733,47 @@ def process_pixel_filter(procstatus, dscfg, radar_list=None):
         return None, None
 
     mask_field = None
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype == 'mask':
+        if datatype == "mask":
             mask_field = get_fieldname_pyart(datatype)
             break
     if mask_field is None:
-        warn('mask field required to filter data')
+        warn("mask field required to filter data")
         return None, None
 
     ind_rad = int(radarnr[5:8]) - 1
     if (radar_list is None) or (radar_list[ind_rad] is None):
-        warn('ERROR: No valid radar')
+        warn("ERROR: No valid radar")
         return None, None
 
     grid = radar_list[ind_rad]
 
     if mask_field not in grid.fields:
-        warn('Unable to filter data. Missing mask field')
+        warn("Unable to filter data. Missing mask field")
         return None, None
 
-    pixel_type = dscfg.get('pixel_type', 2)
-    mask = np.ma.isin(
-        grid.fields[mask_field]['data'], pixel_type, invert=True)
+    pixel_type = dscfg.get("pixel_type", 2)
+    mask = np.ma.isin(grid.fields[mask_field]["data"], pixel_type, invert=True)
 
     grid_mask = deepcopy(grid)
     grid_mask.fields = dict()
 
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype == 'mask':
+        if datatype == "mask":
             continue
 
         field_name = get_fieldname_pyart(datatype)
         if field_name not in grid.fields:
-            warn('Unable to normalize field ' + field_name +
-                 '. Field missing in grid')
+            warn("Unable to normalize field " + field_name + ". Field missing in grid")
             continue
 
         field = deepcopy(grid.fields[field_name])
-        field['data'] = np.ma.masked_where(mask, field['data'])
+        field["data"] = np.ma.masked_where(mask, field["data"])
 
         grid_mask.add_field(field_name, field)
 
-    new_dataset = {'radar_out': grid_mask}
+    new_dataset = {"radar_out": grid_mask}
 
     return new_dataset, ind_rad

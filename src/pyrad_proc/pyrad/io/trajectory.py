@@ -25,7 +25,7 @@ from ..io.read_data_sensor import read_lightning, read_trt_traj_data
 from ..io.read_data_sensor import read_trt_thundertracking_traj_data
 
 
-class Trajectory():
+class Trajectory:
     """
     A class for reading and handling trajectory data from a file.
     Attributes
@@ -79,8 +79,9 @@ class Trajectory():
     _get_total_seconds : Get the total time of the trajectory in seconds
     """
 
-    def __init__(self, filename, starttime=None, endtime=None,
-                 trajtype='plane', flashnr=0):
+    def __init__(
+        self, filename, starttime=None, endtime=None, trajtype="plane", flashnr=0
+    ):
         """
         Initalize the object.
         Parameters
@@ -118,20 +119,20 @@ class Trajectory():
 
         self.radar_list = []
 
-        if self.trajtype == 'lightning':
+        if self.trajtype == "lightning":
             self.flashnr = flashnr
             self.time_in_flash = np.array([], dtype=datetime.datetime)
             self.dBm = np.array([], dtype=float)
             self.flashnr_vec = np.array([], dtype=float)
-        elif self.trajtype == 'trt':
+        elif self.trajtype == "trt":
             self.cell_contour = np.array([])
 
         try:
-            if self.trajtype == 'lightning':
+            if self.trajtype == "lightning":
                 self._read_traj_lightning(flashnr)
-            elif self.trajtype == 'trt':
+            elif self.trajtype == "trt":
                 self._read_traj_trt()
-            elif self.trajtype == 'plane_flores':
+            elif self.trajtype == "plane_flores":
                 self._read_traj_flores()
             else:
                 self._read_traj()
@@ -139,8 +140,10 @@ class Trajectory():
         except Exception as ee:
             warn(str(ee))
             raise Exception(
-                "ERROR: Could not load trajectory data from file '" +
-                filename + "' into Trajectory object")
+                "ERROR: Could not load trajectory data from file '"
+                + filename
+                + "' into Trajectory object"
+            )
 
     def add_radar(self, radar):
         """
@@ -157,16 +160,20 @@ class Trajectory():
 
         # Check if radar location is already in the radar list
         for rad in self.radar_list:
-            if (rad.location_is_equal(radar.latitude['data'][0],
-                                      radar.longitude['data'][0],
-                                      radar.altitude['data'][0])):
+            if rad.location_is_equal(
+                radar.latitude["data"][0],
+                radar.longitude["data"][0],
+                radar.altitude["data"][0],
+            ):
                 # warn("WARNING: Tried to add the same radar twice to the"
                 #      " radar list")
                 return rad
 
-        rad = _Radar_Trajectory(radar.latitude['data'][0],
-                                radar.longitude['data'][0],
-                                radar.altitude['data'][0])
+        rad = _Radar_Trajectory(
+            radar.latitude["data"][0],
+            radar.longitude["data"][0],
+            radar.altitude["data"][0],
+        )
         self.radar_list.append(rad)
 
         # Convert trajectory WGS84 points to polara radar coordinates
@@ -177,8 +184,10 @@ class Trajectory():
         # Note: Earth curvature not considered yet!
 
         (rvec, azvec, elvec) = pyart.core.cartesian_to_antenna(
-            self.swiss_chy - rad.ch_y, self.swiss_chx - rad.ch_x,
-            self.swiss_chh - rad.ch_alt)
+            self.swiss_chy - rad.ch_y,
+            self.swiss_chx - rad.ch_x,
+            self.swiss_chh - rad.ch_alt,
+        )
 
         rad.assign_trajectory(elvec, azvec, rvec)
 
@@ -202,8 +211,8 @@ class Trajectory():
         v_az = np.empty(self.nsamples, dtype=float)
         v_az[0] = v_az[-1] = np.nan
         daz = radar.azimuth_vec[2:] - radar.azimuth_vec[:-2]
-        daz[daz > 180.] -= 360.
-        daz[daz < -180.] += 360.
+        daz[daz > 180.0] -= 360.0
+        daz[daz < -180.0] += 360.0
         v_az[1:-1] = daz / dt
 
         v_el = np.empty(self.nsamples, dtype=float)
@@ -221,12 +230,12 @@ class Trajectory():
         radar.assign_velocity_vecs(v_abs, v_r, v_el, v_az)
 
     def get_samples_in_period(self, start=None, end=None):
-        """"
+        """ "
         Get indices of samples of the trajectory within given time
         period.
         """
 
-        if ((start is None) and (end is None)):
+        if (start is None) and (end is None):
             raise Exception("ERROR: Either start or end must be defined")
         if start is None:
             return np.where(self.time_vector < end)
@@ -262,9 +271,11 @@ class Trajectory():
         if self._swiss_grid_done:
             return
 
-        (self.swiss_chy, self.swiss_chx, self.swiss_chh) = \
+        (self.swiss_chy, self.swiss_chx, self.swiss_chh) = (
             pyart.core.wgs84_to_swissCH1903(
-                self.wgs84_lon_deg, self.wgs84_lat_deg, self.wgs84_alt_m)
+                self.wgs84_lon_deg, self.wgs84_lat_deg, self.wgs84_alt_m
+            )
+        )
 
         self._swiss_grid_done = True
 
@@ -286,19 +297,21 @@ class Trajectory():
         try:
             tfile = open(self.filename, "r")
         except Exception:
-            raise Exception("ERROR: Could not find|open trajectory file '" +
-                            self.filename + "'")
+            raise Exception(
+                "ERROR: Could not find|open trajectory file '" + self.filename + "'"
+            )
 
         repat = re.compile(
             "(\\d+\\-[A-Za-z]+\\-\\d+)\\s+([\\d\\.]+)\\s+"
-            "([\\-\\d\\.]+)\\s+([\\-\\d\\.]+)\\s+([\\-\\d\\.]+)")
+            "([\\-\\d\\.]+)\\s+([\\-\\d\\.]+)\\s+([\\-\\d\\.]+)"
+        )
 
         try:
             loc_set = False
             loc = locale.getlocale()  # get current locale
-            if loc[0] != 'en_US':
+            if loc[0] != "en_US":
                 try:
-                    locale.setlocale(locale.LC_ALL, ('en_US', 'UTF-8'))
+                    locale.setlocale(locale.LC_ALL, ("en_US", "UTF-8"))
                 except Exception as ee:
                     raise Exception(f"ERROR: Cannot set local 'en_US': {ee}")
                 loc_set = True
@@ -317,17 +330,19 @@ class Trajectory():
                     continue
 
                 # ignore comments
-                if line.startswith('#'):
+                if line.startswith("#"):
                     continue
 
-                line = line.partition('#')[0]  # Remove comments
+                line = line.partition("#")[0]  # Remove comments
                 line = line.strip()
 
                 mm = repat.match(line)
                 if not mm:
-                    print(f"WARNING: Format error in trajectory file"
-                          f" '{self.filename}' on line '{line}'",
-                          file=sys.stderr)
+                    print(
+                        f"WARNING: Format error in trajectory file"
+                        f" '{self.filename}' on line '{line}'",
+                        file=sys.stderr,
+                    )
                     continue
 
                 # Get time stamp
@@ -337,7 +352,8 @@ class Trajectory():
                     print(datetime.datetime.utcnow().strftime("%d-%b-%Y"))
                     raise Exception(
                         f"ERROR: Format error in traj file '{self.filename}' "
-                        f"on line '{line}' ({str(ee)})")
+                        f"on line '{line}' ({str(ee)})"
+                    )
 
                 sday += datetime.timedelta(seconds=float(mm.group(2)))
 
@@ -353,11 +369,12 @@ class Trajectory():
                 self.time_vector = np.append(self.time_vector, [sday])
 
                 self.wgs84_lat_deg = np.append(
-                    self.wgs84_lat_deg, [float(mm.group(3)) * 180. / np.pi])
+                    self.wgs84_lat_deg, [float(mm.group(3)) * 180.0 / np.pi]
+                )
                 self.wgs84_lon_deg = np.append(
-                    self.wgs84_lon_deg, [float(mm.group(4)) * 180. / np.pi])
-                self.wgs84_alt_m = np.append(
-                    self.wgs84_alt_m, [float(mm.group(5))])
+                    self.wgs84_lon_deg, [float(mm.group(4)) * 180.0 / np.pi]
+                )
+                self.wgs84_alt_m = np.append(self.wgs84_alt_m, [float(mm.group(5))])
         except Exception:
             raise
         finally:
@@ -389,23 +406,23 @@ class Trajectory():
         try:
             tfile = open(self.filename, "r")
         except Exception:
-            raise Exception("ERROR: Could not find|open trajectory file '" +
-                            self.filename + "'")
+            raise Exception(
+                "ERROR: Could not find|open trajectory file '" + self.filename + "'"
+            )
         tfile.close()
 
         try:
-            data = pd.read_csv(self.filename, skiprows=28,
-                               delim_whitespace=True)
+            data = pd.read_csv(self.filename, skiprows=28, delim_whitespace=True)
             data = data.drop(0)
             times = [
-                datetime.datetime.strptime(
-                    d + '_' + h + '0000', '%Y-%m-%d_%H:%M:%S.%f') for
-                d, h in zip(data['UTCDate'], data['UTCTime'])]
+                datetime.datetime.strptime(d + "_" + h + "0000", "%Y-%m-%d_%H:%M:%S.%f")
+                for d, h in zip(data["UTCDate"], data["UTCTime"])
+            ]
 
             self.time_vector = np.array(times)
-            self.wgs84_lat_deg = np.array(pd.to_numeric(data['Latitude']))
-            self.wgs84_lon_deg = np.array(pd.to_numeric(data['Longitude']))
-            self.wgs84_alt_m = np.array(pd.to_numeric(data['H-MSL']))
+            self.wgs84_lat_deg = np.array(pd.to_numeric(data["Latitude"]))
+            self.wgs84_lon_deg = np.array(pd.to_numeric(data["Longitude"]))
+            self.wgs84_alt_m = np.array(pd.to_numeric(data["H-MSL"]))
 
         except Exception:
             raise
@@ -431,11 +448,13 @@ class Trajectory():
             the flash number to keep. If 0 data from all flashes will be kept
         """
         flashnr_vec, time, time_in_flash, lat, lon, alt, dBm = read_lightning(
-            self.filename)
+            self.filename
+        )
 
         if flashnr_vec is None:
-            raise Exception("ERROR: Could not find|open trajectory file '" +
-                            self.filename + "'")
+            raise Exception(
+                "ERROR: Could not find|open trajectory file '" + self.filename + "'"
+            )
 
         recording_started = True
         if self.starttime is not None:
@@ -467,8 +486,7 @@ class Trajectory():
 
             self.flashnr_vec = np.append(self.flashnr_vec, [flashnr_vec[i]])
             self.time_vector = np.append(self.time_vector, [time[i]])
-            self.time_in_flash = np.append(
-                self.time_in_flash, [time_in_flash[i]])
+            self.time_in_flash = np.append(self.time_in_flash, [time_in_flash[i]])
 
             self.wgs84_lat_deg = np.append(self.wgs84_lat_deg, [lat[i]])
             self.wgs84_lon_deg = np.append(self.wgs84_lon_deg, [lon[i]])
@@ -515,16 +533,46 @@ class Trajectory():
         Parameters
         ----------
         """
-        if '_tt.trt' in self.filename:
-            (traj_ID, _, yyyymmddHHMM, _, _, _, lon, lat, _, _, _, _, _, _, _,
-             _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _,
-             cell_contours) = read_trt_thundertracking_traj_data(
-                 self.filename)
+        if "_tt.trt" in self.filename:
+            (
+                traj_ID,
+                _,
+                yyyymmddHHMM,
+                _,
+                _,
+                _,
+                lon,
+                lat,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                cell_contours,
+            ) = read_trt_thundertracking_traj_data(self.filename)
 
             if traj_ID is None:
                 raise Exception(
-                    "ERROR: Could not find|open trajectory file '" +
-                    self.filename + "'")
+                    "ERROR: Could not find|open trajectory file '" + self.filename + "'"
+                )
 
             valid = np.logical_not(np.ma.getmaskarray(yyyymmddHHMM))
             yyyymmddHHMM = yyyymmddHHMM[valid]
@@ -535,18 +583,45 @@ class Trajectory():
 
             if traj_ID.size == 0:
                 raise Exception(
-                    "ERROR: No valid data in trajectory file '" +
-                    self.filename + "'")
+                    "ERROR: No valid data in trajectory file '" + self.filename + "'"
+                )
 
         else:
-            (traj_ID, yyyymmddHHMM, lon, lat, _, _, _, _, _, _, _, _, _, _, _,
-             _, _, _, _, _, _, _, _, _, _, _, _, cell_contours) = (
-                 read_trt_traj_data(self.filename))
+            (
+                traj_ID,
+                yyyymmddHHMM,
+                lon,
+                lat,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                _,
+                cell_contours,
+            ) = read_trt_traj_data(self.filename)
 
             if traj_ID is None:
                 raise Exception(
-                    "ERROR: Could not find|open trajectory file '" +
-                    self.filename + "'")
+                    "ERROR: Could not find|open trajectory file '" + self.filename + "'"
+                )
 
         recording_started = True
         if self.starttime is not None:
@@ -569,14 +644,14 @@ class Trajectory():
 
             self.wgs84_lat_deg = np.append(self.wgs84_lat_deg, [lat[i]])
             self.wgs84_lon_deg = np.append(self.wgs84_lon_deg, [lon[i]])
-            self.wgs84_alt_m = np.append(self.wgs84_alt_m, 0.)
+            self.wgs84_alt_m = np.append(self.wgs84_alt_m, 0.0)
 
             self.cell_contour = np.append(self.cell_contour, [cell_contour])
 
         self.nsamples = len(self.time_vector)
 
     def _get_total_seconds(self, x):
-        """ Return total seconds of timedelta object"""
+        """Return total seconds of timedelta object"""
         return x.total_seconds()
 
 
@@ -656,11 +731,13 @@ class _Radar_Trajectory:
 
         lat_tol = 0.002  # [deg]
         lon_tol = 0.002  # [deg]
-        alt_tol = 2.0    # [m]
+        alt_tol = 2.0  # [m]
 
-        if ((np.abs(self.latitude - lat) > lat_tol) or
-                (np.abs(self.longitude - lon) > lon_tol) or
-                (np.abs(self.altitude - alt) > alt_tol)):
+        if (
+            (np.abs(self.latitude - lat) > lat_tol)
+            or (np.abs(self.longitude - lon) > lon_tol)
+            or (np.abs(self.altitude - alt) > alt_tol)
+        ):
             return False
 
         return True
@@ -693,11 +770,9 @@ class _Radar_Trajectory:
         if self._swiss_coords_done:
             return
 
-        (self.ch_y, self.ch_x, self.ch_alt) = \
-            pyart.core.wgs84_to_swissCH1903(self.longitude,
-                                            self.latitude,
-                                            self.altitude,
-                                            no_altitude_transform=True)
+        (self.ch_y, self.ch_x, self.ch_alt) = pyart.core.wgs84_to_swissCH1903(
+            self.longitude, self.latitude, self.altitude, no_altitude_transform=True
+        )
         self._swiss_coords_done = True
 
     def assign_velocity_vecs(self, v_abs, v_r, v_el, v_az):

@@ -19,7 +19,6 @@ import datetime
 import atexit
 import numpy as np
 import pandas as pd
-from copy import deepcopy
 
 from pyrad.io import read_colocated_gates, write_colocated_gates
 

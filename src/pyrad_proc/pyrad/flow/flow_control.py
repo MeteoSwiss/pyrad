@@ -13,6 +13,7 @@ functions to control the Pyrad data processing flow
     main_cosmo_rt
     main_gecsx
 """
+
 from __future__ import print_function
 import warnings
 from warnings import warn
@@ -49,16 +50,26 @@ try:
     from dask.diagnostics import visualize
     from distributed import Client
     from bokeh.io import export_png
+
     _DASK_AVAILABLE = True
 except ImportError:
-    warn('dask not available: The processing will not be parallelized')
+    warn("dask not available: The processing will not be parallelized")
     _DASK_AVAILABLE = False
 
 
-def main(cfgfile, starttime=None, endtime=None, trajfile="", trajtype='plane',
-         flashnr=0, infostr="", MULTIPROCESSING_DSET=False,
-         MULTIPROCESSING_PROD=False, PROFILE_MULTIPROCESSING=False,
-         USE_CHILD_PROCESS=False):
+def main(
+    cfgfile,
+    starttime=None,
+    endtime=None,
+    trajfile="",
+    trajtype="plane",
+    flashnr=0,
+    infostr="",
+    MULTIPROCESSING_DSET=False,
+    MULTIPROCESSING_PROD=False,
+    PROFILE_MULTIPROCESSING=False,
+    USE_CHILD_PROCESS=False,
+):
     """
     Main flow control. Processes radar data off-line over a period of time
     given either by the user, a trajectory file, or determined by the last
@@ -97,13 +108,17 @@ def main(cfgfile, starttime=None, endtime=None, trajfile="", trajtype='plane',
         memory used is released.
 
     """
-    print("- PYRAD version: {} (compiled {} by {})".format(
-        pyrad_version.version, pyrad_version.compile_date_time,
-        pyrad_version.username))
+    print(
+        "- PYRAD version: {} (compiled {} by {})".format(
+            pyrad_version.version,
+            pyrad_version.compile_date_time,
+            pyrad_version.username,
+        )
+    )
     print("- PYART version: {}".format(pyart_version))
 
     # Define behaviour of warnings
-    warnings.simplefilter('always')  # always print matching warnings
+    warnings.simplefilter("always")  # always print matching warnings
     # warnings.simplefilter('error')  # turn matching warnings into exceptions
     warnings.formatwarning = _warning_format  # define format
 
@@ -117,15 +132,18 @@ def main(cfgfile, starttime=None, endtime=None, trajfile="", trajtype='plane',
         USE_CHILD_PROCESS = False
 
     # check if multiprocessing profiling is necessary
-    if (not MULTIPROCESSING_DSET and not MULTIPROCESSING_PROD and
-            not USE_CHILD_PROCESS):
+    if not MULTIPROCESSING_DSET and not MULTIPROCESSING_PROD and not USE_CHILD_PROCESS:
         PROFILE_MULTIPROCESSING = False
-    elif (int(MULTIPROCESSING_DSET) + int(MULTIPROCESSING_PROD) +
-          int(USE_CHILD_PROCESS) > 1):
+    elif (
+        int(MULTIPROCESSING_DSET) + int(MULTIPROCESSING_PROD) + int(USE_CHILD_PROCESS)
+        > 1
+    ):
         PROFILE_MULTIPROCESSING = False
 
-    if (int(MULTIPROCESSING_DSET) + int(MULTIPROCESSING_PROD) +
-            int(USE_CHILD_PROCESS) > 1):
+    if (
+        int(MULTIPROCESSING_DSET) + int(MULTIPROCESSING_PROD) + int(USE_CHILD_PROCESS)
+        > 1
+    ):
         # necessary to launch tasks from tasks
         Client()
 
@@ -142,41 +160,52 @@ def main(cfgfile, starttime=None, endtime=None, trajfile="", trajtype='plane',
     datacfg = _create_datacfg_dict(cfg)
 
     starttimes, endtimes, traj = _get_times_and_traj(
-        trajfile, starttime, endtime, cfg['ScanPeriod'],
-        last_state_file=cfg['lastStateFile'], trajtype=trajtype,
-        flashnr=flashnr)
+        trajfile,
+        starttime,
+        endtime,
+        cfg["ScanPeriod"],
+        last_state_file=cfg["lastStateFile"],
+        trajtype=trajtype,
+        flashnr=flashnr,
+    )
 
     if infostr:
-        print('- Info string : {}'.format(infostr))
+        print("- Info string : {}".format(infostr))
 
     # get data types and levels
     datatypesdescr_list = list()
-    for i in range(1, cfg['NumRadars'] + 1):
+    for i in range(1, cfg["NumRadars"] + 1):
         datatypesdescr_list.append(
-            _get_datatype_list(cfg, radarnr='RADAR' + '{:03d}'.format(i)))
+            _get_datatype_list(cfg, radarnr="RADAR" + "{:03d}".format(i))
+        )
     dataset_levels = _get_datasets_list(cfg)
 
     masterfilelist, masterdatatypedescr, masterscan = _get_masterfile_list(
-        datatypesdescr_list[0], starttimes, endtimes, datacfg,
-        scan_list=datacfg['ScanList'])
+        datatypesdescr_list[0],
+        starttimes,
+        endtimes,
+        datacfg,
+        scan_list=datacfg["ScanList"],
+    )
 
     nvolumes = len(masterfilelist)
     if nvolumes == 0:
         raise ValueError(
             "ERROR: Could not find any valid volumes between "
             "{} and {} for master scan '{}' and master data type '{}'".format(
-                starttimes[0].strftime('%Y-%m-%d %H:%M:%S'),
-                endtimes[-1].strftime('%Y-%m-%d %H:%M:%S'), masterscan,
-                masterdatatypedescr))
-    print('- Number of volumes to process: {}'.format(nvolumes))
-    print('- Start time: {}'.format(
-        starttimes[0].strftime("%Y-%m-%d %H:%M:%S")))
-    print('- end time: {}'.format(endtimes[-1].strftime("%Y-%m-%d %H:%M:%S")))
+                starttimes[0].strftime("%Y-%m-%d %H:%M:%S"),
+                endtimes[-1].strftime("%Y-%m-%d %H:%M:%S"),
+                masterscan,
+                masterdatatypedescr,
+            )
+        )
+    print("- Number of volumes to process: {}".format(nvolumes))
+    print("- Start time: {}".format(starttimes[0].strftime("%Y-%m-%d %H:%M:%S")))
+    print("- end time: {}".format(endtimes[-1].strftime("%Y-%m-%d %H:%M:%S")))
 
     # initial processing of the datasets
-    print('\n\n- Initializing datasets:')
-    dscfg, traj = _initialize_datasets(
-        dataset_levels, cfg, traj=traj, infostr=infostr)
+    print("\n\n- Initializing datasets:")
+    dscfg, traj = _initialize_datasets(dataset_levels, cfg, traj=traj, infostr=infostr)
 
     # process all data files in file list or until user interrupts processing
     for masterfile in masterfilelist:
@@ -184,19 +213,22 @@ def main(cfgfile, starttime=None, endtime=None, trajfile="", trajtype='plane',
             # check if user has requested exit
             try:
                 input_queue.get_nowait()
-                warn('Program terminated by user')
+                warn("Program terminated by user")
                 break
             except queue.Empty:
                 pass
 
-        print('\n- master file: {}'.format(os.path.basename(masterfile)))
+        print("\n- master file: {}".format(os.path.basename(masterfile)))
 
         master_voltime = get_datetime(masterfile, masterdatatypedescr)
 
         if USE_CHILD_PROCESS:
             data_reading = dask.delayed(_get_radars_data)(
-                master_voltime, datatypesdescr_list, datacfg,
-                num_radars=datacfg['NumRadars'])
+                master_voltime,
+                datatypesdescr_list,
+                datacfg,
+                num_radars=datacfg["NumRadars"],
+            )
 
             try:
                 radar_list = data_reading.compute()
@@ -205,10 +237,16 @@ def main(cfgfile, starttime=None, endtime=None, trajfile="", trajtype='plane',
                 dscfg_aux = dask.delayed(dscfg)
                 traj_aux = dask.delayed(traj)
                 data_processing = dask.delayed(_process_datasets)(
-                    dataset_levels, cfg, dscfg_aux, radar_list,
-                    master_voltime, traj=traj_aux, infostr=infostr,
+                    dataset_levels,
+                    cfg,
+                    dscfg_aux,
+                    radar_list,
+                    master_voltime,
+                    traj=traj_aux,
+                    infostr=infostr,
                     MULTIPROCESSING_DSET=MULTIPROCESSING_DSET,
-                    MULTIPROCESSING_PROD=MULTIPROCESSING_PROD)
+                    MULTIPROCESSING_PROD=MULTIPROCESSING_PROD,
+                )
                 try:
                     dscfg, traj = data_processing.compute()
                     del data_processing
@@ -225,15 +263,24 @@ def main(cfgfile, starttime=None, endtime=None, trajfile="", trajtype='plane',
 
         else:
             radar_list = _get_radars_data(
-                master_voltime, datatypesdescr_list, datacfg,
-                num_radars=datacfg['NumRadars'])
+                master_voltime,
+                datatypesdescr_list,
+                datacfg,
+                num_radars=datacfg["NumRadars"],
+            )
 
             # process all data sets
             dscfg, traj = _process_datasets(
-                dataset_levels, cfg, dscfg, radar_list, master_voltime,
-                traj=traj, infostr=infostr,
+                dataset_levels,
+                cfg,
+                dscfg,
+                radar_list,
+                master_voltime,
+                traj=traj,
+                infostr=infostr,
                 MULTIPROCESSING_DSET=MULTIPROCESSING_DSET,
-                MULTIPROCESSING_PROD=MULTIPROCESSING_PROD)
+                MULTIPROCESSING_PROD=MULTIPROCESSING_PROD,
+            )
 
             # delete variables
             del radar_list
@@ -241,9 +288,10 @@ def main(cfgfile, starttime=None, endtime=None, trajfile="", trajtype='plane',
         gc.collect()
 
     # post-processing of the datasets
-    print('\n\n- Post-processing datasets:')
+    print("\n\n- Post-processing datasets:")
     dscfg, traj = _postprocess_datasets(
-        dataset_levels, cfg, dscfg, traj=traj, infostr=infostr)
+        dataset_levels, cfg, dscfg, traj=traj, infostr=infostr
+    )
 
     if PROFILE_MULTIPROCESSING:
         prof.unregister()
@@ -252,19 +300,31 @@ def main(cfgfile, starttime=None, endtime=None, trajfile="", trajtype='plane',
 
         bokeh_plot = visualize([prof, rprof, cprof], show=False, save=False)
 
-        profile_path = os.path.expanduser('~') + '/profiling/'
+        profile_path = os.path.expanduser("~") + "/profiling/"
         if not os.path.isdir(profile_path):
             os.makedirs(profile_path)
 
-        export_png(bokeh_plot, filename=(
-            profile_path + datetime.utcnow().strftime('%Y%m%d%H%M%S') +
-            '_profile.png'))
+        export_png(
+            bokeh_plot,
+            filename=(
+                profile_path
+                + datetime.utcnow().strftime("%Y%m%d%H%M%S")
+                + "_profile.png"
+            ),
+        )
 
-    print('- This is the end my friend! See you soon!')
+    print("- This is the end my friend! See you soon!")
 
 
-def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
-            proc_period=60, proc_finish=None, hide_warnings=False):
+def main_rt(
+    cfgfile_list,
+    starttime=None,
+    endtime=None,
+    infostr_list=None,
+    proc_period=60,
+    proc_finish=None,
+    hide_warnings=False,
+):
     """
     main flow control. Processes radar data in real time. The start and end
     processing times can be determined by the user. This function is inteded
@@ -295,16 +355,21 @@ def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
         If true the program has ended successfully
 
     """
-    print("- PYRAD version: %s (compiled %s by %s)" %
-          (pyrad_version.version, pyrad_version.compile_date_time,
-           pyrad_version.username))
+    print(
+        "- PYRAD version: %s (compiled %s by %s)"
+        % (
+            pyrad_version.version,
+            pyrad_version.compile_date_time,
+            pyrad_version.username,
+        )
+    )
     print("- PYART version: " + pyart_version)
 
     if hide_warnings:
         warnings.filterwarnings("ignore")
     else:
         # Define behaviour of warnings
-        warnings.simplefilter('always')  # always print matching warnings
+        warnings.simplefilter("always")  # always print matching warnings
         # warnings.simplefilter('error')  # turn matching warnings into
         # exceptions
         warnings.formatwarning = _warning_format  # define format
@@ -338,29 +403,28 @@ def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
         datacfg = _create_datacfg_dict(cfg)
 
         if infostr:
-            print('- Info string : ' + infostr)
+            print("- Info string : " + infostr)
 
         # find out last processed volume
-        last_processed = read_last_state(cfg['lastStateFile'])
+        last_processed = read_last_state(cfg["lastStateFile"])
         if last_processed is None:
-            print('- last processed volume unknown')
+            print("- last processed volume unknown")
         else:
-            print('- last processed volume: ' + last_processed.strftime(
-                '%Y%m%d%H%M%S'))
+            print("- last processed volume: " + last_processed.strftime("%Y%m%d%H%M%S"))
         last_processed_list.append(last_processed)
 
         # get data types and levels
         datatypesdescr_list = list()
-        for i in range(1, cfg['NumRadars'] + 1):
+        for i in range(1, cfg["NumRadars"] + 1):
             datatypesdescr_list.append(
-                _get_datatype_list(cfg, radarnr='RADAR' + '{:03d}'.format(i)))
+                _get_datatype_list(cfg, radarnr="RADAR" + "{:03d}".format(i))
+            )
 
         dataset_levels = _get_datasets_list(cfg)
 
         # initial processing of the datasets
-        print('\n\n- Initializing datasets:')
-        dscfg, traj = _initialize_datasets(
-            dataset_levels, cfg, infostr=infostr)
+        print("\n\n- Initializing datasets:")
+        dscfg, traj = _initialize_datasets(dataset_levels, cfg, infostr=infostr)
 
         cfg_list.append(cfg)
         datacfg_list.append(datacfg)
@@ -386,7 +450,7 @@ def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
             try:
                 user_input = input_queue.get_nowait()
                 end_proc = user_input
-                warn('Program terminated by user')
+                warn("Program terminated by user")
                 break
             except queue.Empty:
                 pass
@@ -401,7 +465,7 @@ def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
         if proc_finish is not None:
             if nowtime >= endtime_proc:
                 end_proc = True
-                warn('Allowed processing time exceeded')
+                warn("Allowed processing time exceeded")
                 break
 
         # end time has been set and current time older than end time
@@ -425,7 +489,7 @@ def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
                 try:
                     user_input = input_queue.get_nowait()
                     end_proc = user_input
-                    warn('Program terminated by user')
+                    warn("Program terminated by user")
                     break
                 except queue.Empty:
                     pass
@@ -442,29 +506,32 @@ def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
 
             # wait until new files are available
             masterfile, masterdatatypedescr, last_processed = _wait_for_files(
-                nowtime, datacfg, datatypesdescr_list[0],
-                last_processed=last_processed)
+                nowtime, datacfg, datatypesdescr_list[0], last_processed=last_processed
+            )
             if masterfile is None:
                 last_processed_list[icfg] = last_processed
                 if last_processed is not None:
-                    write_last_state(last_processed, cfg['lastStateFile'])
+                    write_last_state(last_processed, cfg["lastStateFile"])
                 continue
 
-            print('\n- master file: ' + os.path.basename(masterfile))
+            print("\n- master file: " + os.path.basename(masterfile))
             master_voltime = get_datetime(masterfile, masterdatatypedescr)
 
             # get data of master radar
             radar_list = _get_radars_data(
-                master_voltime, datatypesdescr_list, datacfg,
-                num_radars=datacfg['NumRadars'])
+                master_voltime,
+                datatypesdescr_list,
+                datacfg,
+                num_radars=datacfg["NumRadars"],
+            )
 
             # process all data sets
             dscfg, traj = _process_datasets(
-                dataset_levels, cfg, dscfg, radar_list, master_voltime,
-                infostr=infostr)
+                dataset_levels, cfg, dscfg, radar_list, master_voltime, infostr=infostr
+            )
 
             last_processed_list[icfg] = master_voltime
-            write_last_state(master_voltime, cfg['lastStateFile'])
+            write_last_state(master_voltime, cfg["lastStateFile"])
             dscfg_list[icfg] = dscfg
 
             vol_processed = True
@@ -489,13 +556,13 @@ def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
 
         proc_time = (nowtime_new - nowtime).total_seconds()
         if vol_processed:
-            print('Processing time %s s\n' % proc_time)
+            print("Processing time %s s\n" % proc_time)
 
         # if processing end time exceeded finalize processing
         if proc_finish is not None:
             if nowtime_new >= endtime_proc:
                 end_proc = True
-                warn('Allowed processing time exceeded')
+                warn("Allowed processing time exceeded")
                 break
 
         if proc_time < proc_period:
@@ -504,7 +571,7 @@ def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
     # only do post processing if program properly terminated by user
     if end_proc:
         # post-processing of the datasets
-        print('\n\n- Post-processing datasets:')
+        print("\n\n- Post-processing datasets:")
         for icfg, cfg in enumerate(cfg_list):
             dscfg = dscfg_list[icfg]
             dataset_levels = dataset_levels_list[icfg]
@@ -513,7 +580,8 @@ def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
             else:
                 infostr = ""
             dscfg, traj = _postprocess_datasets(
-                dataset_levels, cfg, dscfg, infostr=None)
+                dataset_levels, cfg, dscfg, infostr=None
+            )
 
             # remove variables from memory
             del cfg
@@ -523,7 +591,7 @@ def main_rt(cfgfile_list, starttime=None, endtime=None, infostr_list=None,
 
             gc.collect()
 
-    print('- This is the end my friend! See you soon!')
+    print("- This is the end my friend! See you soon!")
 
     return end_proc
 
@@ -548,13 +616,17 @@ def main_cosmo(cfgfile, starttime=None, endtime=None, trajfile="", infostr=""):
         (e.g. 'RUN57'). This string is added to product files.
 
     """
-    print("- PYRAD version: {} (compiled {} by {})".format(
-        pyrad_version.version, pyrad_version.compile_date_time,
-        pyrad_version.username))
+    print(
+        "- PYRAD version: {} (compiled {} by {})".format(
+            pyrad_version.version,
+            pyrad_version.compile_date_time,
+            pyrad_version.username,
+        )
+    )
     print("- PYART version: {}".format(pyart_version))
 
     # Define behaviour of warnings
-    warnings.simplefilter('always')  # always print matching warnings
+    warnings.simplefilter("always")  # always print matching warnings
     # warnings.simplefilter('error')  # turn matching warnings into exceptions
     warnings.formatwarning = _warning_format  # define format
 
@@ -562,58 +634,71 @@ def main_cosmo(cfgfile, starttime=None, endtime=None, trajfile="", infostr=""):
     datacfg = _create_datacfg_dict(cfg)
 
     starttimes, endtimes, traj = _get_times_and_traj(
-        trajfile, starttime, endtime, cfg['ScanPeriod'],
-        last_state_file=cfg['lastStateFile'], trajtype='proc_periods')
+        trajfile,
+        starttime,
+        endtime,
+        cfg["ScanPeriod"],
+        last_state_file=cfg["lastStateFile"],
+        trajtype="proc_periods",
+    )
 
     if infostr:
-        print('- Info string : {}'.format(infostr))
+        print("- Info string : {}".format(infostr))
 
     # get data types and levels
     datatypesdescr_list = list()
-    for i in range(1, cfg['NumRadars'] + 1):
+    for i in range(1, cfg["NumRadars"] + 1):
         datatypesdescr_list.append(
-            _get_datatype_list(cfg, radarnr='RADAR' + '{:03d}'.format(i)))
+            _get_datatype_list(cfg, radarnr="RADAR" + "{:03d}".format(i))
+        )
 
     dataset_levels = _get_datasets_list(cfg)
 
     masterfilelist, masterdatatypedescr, masterscan = _get_masterfile_list(
-        datatypesdescr_list[0], starttimes, endtimes, datacfg)
+        datatypesdescr_list[0], starttimes, endtimes, datacfg
+    )
 
     nvolumes = len(masterfilelist)
     if nvolumes == 0:
         raise ValueError(
             "ERROR: Could not find any valid COSMO data between "
             "{} and {}".format(
-                starttimes[0].strftime('%Y-%m-%d %H:%M:%S'),
-                endtimes[-1].strftime('%Y-%m-%d %H:%M:%S')))
-    print('- Number of volumes to process: {}'.format(nvolumes))
-    print('- Start time: {}'.format(
-        starttimes[0].strftime("%Y-%m-%d %H:%M:%S")))
-    print('- end time: {}'.format(endtimes[-1].strftime("%Y-%m-%d %H:%M:%S")))
+                starttimes[0].strftime("%Y-%m-%d %H:%M:%S"),
+                endtimes[-1].strftime("%Y-%m-%d %H:%M:%S"),
+            )
+        )
+    print("- Number of volumes to process: {}".format(nvolumes))
+    print("- Start time: {}".format(starttimes[0].strftime("%Y-%m-%d %H:%M:%S")))
+    print("- end time: {}".format(endtimes[-1].strftime("%Y-%m-%d %H:%M:%S")))
 
     # initial processing of the datasets
-    print('\n\n- Initializing datasets:')
-    dscfg, traj = _initialize_datasets(
-        dataset_levels, cfg, traj=traj, infostr=infostr)
+    print("\n\n- Initializing datasets:")
+    dscfg, traj = _initialize_datasets(dataset_levels, cfg, traj=traj, infostr=infostr)
 
     # process all data files in file list
     for masterfile in masterfilelist:
-        print('\n- master file: {}'.format(os.path.basename(masterfile)))
+        print("\n- master file: {}".format(os.path.basename(masterfile)))
 
         master_voltime = get_datetime(masterfile, masterdatatypedescr)
 
         # process all data sets
         dscfg, traj = _process_datasets(
-            dataset_levels, cfg, dscfg, None, master_voltime, traj=traj,
-            infostr=infostr)
+            dataset_levels, cfg, dscfg, None, master_voltime, traj=traj, infostr=infostr
+        )
 
         gc.collect()
 
-    print('- This is the end my friend! See you soon!')
+    print("- This is the end my friend! See you soon!")
 
 
-def main_cosmo_rt(cfgfile_list, starttime=None, endtime=None,
-                  infostr_list=None, proc_period=60, proc_finish=None):
+def main_cosmo_rt(
+    cfgfile_list,
+    starttime=None,
+    endtime=None,
+    infostr_list=None,
+    proc_period=60,
+    proc_finish=None,
+):
     """
     main flow control. Processes radar data in real time. The start and end
     processing times can be determined by the user. This function is inteded
@@ -640,13 +725,18 @@ def main_cosmo_rt(cfgfile_list, starttime=None, endtime=None,
         If true the program has ended successfully
 
     """
-    print("- PYRAD version: %s (compiled %s by %s)" %
-          (pyrad_version.version, pyrad_version.compile_date_time,
-           pyrad_version.username))
+    print(
+        "- PYRAD version: %s (compiled %s by %s)"
+        % (
+            pyrad_version.version,
+            pyrad_version.compile_date_time,
+            pyrad_version.username,
+        )
+    )
     print("- PYART version: " + pyart_version)
 
     # Define behaviour of warnings
-    warnings.simplefilter('always')  # always print matching warnings
+    warnings.simplefilter("always")  # always print matching warnings
     # warnings.simplefilter('error')  # turn matching warnings into exceptions
     warnings.formatwarning = _warning_format  # define format
 
@@ -679,29 +769,28 @@ def main_cosmo_rt(cfgfile_list, starttime=None, endtime=None,
         datacfg = _create_datacfg_dict(cfg)
 
         if infostr:
-            print('- Info string : ' + infostr)
+            print("- Info string : " + infostr)
 
         # find out last processed volume
-        last_processed = read_last_state(cfg['lastStateFile'])
+        last_processed = read_last_state(cfg["lastStateFile"])
         if last_processed is None:
-            print('- last processed volume unknown')
+            print("- last processed volume unknown")
         else:
-            print('- last processed volume: ' + last_processed.strftime(
-                '%Y%m%d%H%M%S'))
+            print("- last processed volume: " + last_processed.strftime("%Y%m%d%H%M%S"))
         last_processed_list.append(last_processed)
 
         # get data types and levels
         datatypesdescr_list = list()
-        for i in range(1, cfg['NumRadars'] + 1):
+        for i in range(1, cfg["NumRadars"] + 1):
             datatypesdescr_list.append(
-                _get_datatype_list(cfg, radarnr='RADAR' + '{:03d}'.format(i)))
+                _get_datatype_list(cfg, radarnr="RADAR" + "{:03d}".format(i))
+            )
 
         dataset_levels = _get_datasets_list(cfg)
 
         # initial processing of the datasets
-        print('\n\n- Initializing datasets:')
-        dscfg, traj = _initialize_datasets(
-            dataset_levels, cfg, infostr=infostr)
+        print("\n\n- Initializing datasets:")
+        dscfg, traj = _initialize_datasets(dataset_levels, cfg, infostr=infostr)
 
         cfg_list.append(cfg)
         datacfg_list.append(datacfg)
@@ -727,7 +816,7 @@ def main_cosmo_rt(cfgfile_list, starttime=None, endtime=None,
             try:
                 user_input = input_queue.get_nowait()
                 end_proc = user_input
-                warn('Program terminated by user')
+                warn("Program terminated by user")
                 break
             except queue.Empty:
                 pass
@@ -742,7 +831,7 @@ def main_cosmo_rt(cfgfile_list, starttime=None, endtime=None,
         if proc_finish is not None:
             if nowtime >= endtime_proc:
                 end_proc = True
-                warn('Allowed processing time exceeded')
+                warn("Allowed processing time exceeded")
                 break
 
         # end time has been set and current time older than end time
@@ -766,7 +855,7 @@ def main_cosmo_rt(cfgfile_list, starttime=None, endtime=None,
                 try:
                     user_input = input_queue.get_nowait()
                     end_proc = user_input
-                    warn('Program terminated by user')
+                    warn("Program terminated by user")
                     break
                 except queue.Empty:
                     pass
@@ -783,24 +872,24 @@ def main_cosmo_rt(cfgfile_list, starttime=None, endtime=None,
 
             # wait until new files are available
             masterfile, masterdatatypedescr, last_processed = _wait_for_files(
-                nowtime, datacfg, datatypesdescr_list[0],
-                last_processed=last_processed)
+                nowtime, datacfg, datatypesdescr_list[0], last_processed=last_processed
+            )
             if masterfile is None:
                 last_processed_list[icfg] = last_processed
                 if last_processed is not None:
-                    write_last_state(last_processed, cfg['lastStateFile'])
+                    write_last_state(last_processed, cfg["lastStateFile"])
                 continue
 
-            print('\n- master file: ' + os.path.basename(masterfile))
+            print("\n- master file: " + os.path.basename(masterfile))
             master_voltime = get_datetime(masterfile, masterdatatypedescr)
 
             # process all data sets
             dscfg, traj = _process_datasets(
-                dataset_levels, cfg, dscfg, None, master_voltime,
-                infostr=infostr)
+                dataset_levels, cfg, dscfg, None, master_voltime, infostr=infostr
+            )
 
             last_processed_list[icfg] = master_voltime
-            write_last_state(master_voltime, cfg['lastStateFile'])
+            write_last_state(master_voltime, cfg["lastStateFile"])
             dscfg_list[icfg] = dscfg
 
             vol_processed = True
@@ -824,25 +913,24 @@ def main_cosmo_rt(cfgfile_list, starttime=None, endtime=None,
 
         proc_time = (nowtime_new - nowtime).total_seconds()
         if vol_processed:
-            print('Processing time %s s\n' % proc_time)
+            print("Processing time %s s\n" % proc_time)
 
         # if processing end time exceeded finalize processing
         if proc_finish is not None:
             if nowtime_new >= endtime_proc:
                 end_proc = True
-                warn('Allowed processing time exceeded')
+                warn("Allowed processing time exceeded")
                 break
 
         if proc_time < proc_period:
             time.sleep(proc_period - proc_time)
 
-    print('- This is the end my friend! See you soon!')
+    print("- This is the end my friend! See you soon!")
 
     return end_proc
 
 
-def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
-               gather_plots=True):
+def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="", gather_plots=True):
     """
     Main flow control. Processes radar data off-line over a period of time
     given either by the user, a trajectory file, or determined by the last
@@ -860,19 +948,29 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
         Information string about the actual data processing
         (e.g. 'RUN57'). This string is added to product files.
     """
-    GECSX_MANDATORY = ['frequency', 'radar_beam_width_h', 'pulse_width',
-                       'txpwrh', 'AntennaGainH', 'mflossh', 'lrxh']
+    GECSX_MANDATORY = [
+        "frequency",
+        "radar_beam_width_h",
+        "pulse_width",
+        "txpwrh",
+        "AntennaGainH",
+        "mflossh",
+        "lrxh",
+    ]
 
-    GECSX_OPTIONAL = ['attg', 'AzimTol', 'mosotti_factor', 'refcorr',
-                      'RadarPosition']
+    GECSX_OPTIONAL = ["attg", "AzimTol", "mosotti_factor", "refcorr", "RadarPosition"]
 
-    print("- PYRAD version: {} (compiled {} by {})".format(
-        pyrad_version.version, pyrad_version.compile_date_time,
-        pyrad_version.username))
+    print(
+        "- PYRAD version: {} (compiled {} by {})".format(
+            pyrad_version.version,
+            pyrad_version.compile_date_time,
+            pyrad_version.username,
+        )
+    )
     print("- PYART version: {}".format(pyart_version))
 
     # Define behaviour of warnings
-    warnings.simplefilter('always')  # always print matching warnings
+    warnings.simplefilter("always")  # always print matching warnings
     # warnings.simplefilter('error')  # turn matching warnings into exceptions
     warnings.formatwarning = _warning_format  # define format
 
@@ -886,37 +984,43 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
         endtime = datetime.now()
 
     if infostr:
-        print('- Info string : {}'.format(infostr))
+        print("- Info string : {}".format(infostr))
 
-    if cfg['datapath'] is not None:
+    if cfg["datapath"] is not None:
         starttimes, endtimes, _ = _get_times_and_traj(
-            None, starttime, endtime, cfg['ScanPeriod'],
-            last_state_file=cfg['lastStateFile'], trajtype='proc_periods')
+            None,
+            starttime,
+            endtime,
+            cfg["ScanPeriod"],
+            last_state_file=cfg["lastStateFile"],
+            trajtype="proc_periods",
+        )
 
     # get data types and levels
     datatypesdescr_list = list()
-    for i in range(1, cfg['NumRadars'] + 1):
+    for i in range(1, cfg["NumRadars"] + 1):
         datatypesdescr_list.append(
-            _get_datatype_list(cfg, radarnr='RADAR' + '{:03d}'.format(i)))
+            _get_datatype_list(cfg, radarnr="RADAR" + "{:03d}".format(i))
+        )
 
     dataset_levels = _get_datasets_list(cfg)
 
-    if cfg['datapath'] is not None:
+    if cfg["datapath"] is not None:
         masterfilelist, masterdatatypedescr, _ = _get_masterfile_list(
-            datatypesdescr_list[0], starttimes, endtimes, datacfg,
-            datacfg['ScanList'])
+            datatypesdescr_list[0], starttimes, endtimes, datacfg, datacfg["ScanList"]
+        )
 
         nvolumes = len(masterfilelist)
         if nvolumes == 0:
-            warn(f"WARNING: Could not find any valid radar data between "
-                 f"{starttimes[0].strftime('%Y-%m-%d %H:%M:%S')} and "
-                 f"{endtimes[-1].strftime('%Y-%m-%d %H:%M:%S')}")
-            warn('WARNING: Proceeding without radar reference')
-        print('- Number of volumes to process: {}'.format(nvolumes))
-        print('- Start time: {}'.format(
-            starttimes[0].strftime("%Y-%m-%d %H:%M:%S")))
-        print('- end time: {}'.format(endtimes[-1].
-                                      strftime("%Y-%m-%d %H:%M:%S")))
+            warn(
+                f"WARNING: Could not find any valid radar data between "
+                f"{starttimes[0].strftime('%Y-%m-%d %H:%M:%S')} and "
+                f"{endtimes[-1].strftime('%Y-%m-%d %H:%M:%S')}"
+            )
+            warn("WARNING: Proceeding without radar reference")
+        print("- Number of volumes to process: {}".format(nvolumes))
+        print("- Start time: {}".format(starttimes[0].strftime("%Y-%m-%d %H:%M:%S")))
+        print("- end time: {}".format(endtimes[-1].strftime("%Y-%m-%d %H:%M:%S")))
     else:
         masterfilelist = []
     # For GECSX we treat only one master file, since the method does not
@@ -926,15 +1030,13 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
         master_voltime = get_datetime(masterfile, masterdatatypedescr)
 
         # get data of master radar
-        radar_list = _get_radars_data(
-            master_voltime, datatypesdescr_list, datacfg)
+        radar_list = _get_radars_data(master_voltime, datatypesdescr_list, datacfg)
     else:
         radar_list = []
 
     # initial processing of the datasets
-    print('\n\n- Initializing datasets:')
-    dscfg, _ = _initialize_datasets(
-        dataset_levels, cfg, infostr=infostr)
+    print("\n\n- Initializing datasets:")
+    dscfg, _ = _initialize_datasets(dataset_levels, cfg, infostr=infostr)
 
     # For GECSX we copy some keys from the datacfg dict to the dataset dict
     for dset in dscfg.values():
@@ -944,7 +1046,7 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
             try:
                 dset[k] = datacfg[k]
             except Exception:
-                msg = f'Mandatory GECSX key {k} is missing from loc file'
+                msg = f"Mandatory GECSX key {k} is missing from loc file"
                 raise ValueError(msg)
         for k in GECSX_OPTIONAL:
             if k in datacfg.keys():
@@ -952,38 +1054,47 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="",
 
         if len(radar_list) == 0:
             valid_radarpos = False
-            if 'RadarPosition' in dset:
-                if ('latitude' in dset['RadarPosition']
-                        and 'longitude' in dset['RadarPosition']
-                        and 'altitude' in dset['RadarPosition']):
+            if "RadarPosition" in dset:
+                if (
+                    "latitude" in dset["RadarPosition"]
+                    and "longitude" in dset["RadarPosition"]
+                    and "altitude" in dset["RadarPosition"]
+                ):
                     valid_radarpos = True
             if not valid_radarpos:
                 raise ValueError(
-                    'When no radar data is provided, the structure '
+                    "When no radar data is provided, the structure "
                     '"RadarPosition" with field "altitude", "latitude" '
-                    'and "longitude" must be provided in the loc file')
-            for k in dset['RadarPosition'].keys():
-                if not isinstance(dset['RadarPosition'][k], list):
-                    dset['RadarPosition'][k] = [dset['RadarPosition'][k]]
+                    'and "longitude" must be provided in the loc file'
+                )
+            for k in dset["RadarPosition"].keys():
+                if not isinstance(dset["RadarPosition"][k], list):
+                    dset["RadarPosition"][k] = [dset["RadarPosition"][k]]
 
     # process all data sets
     dscfg, _ = _process_datasets(
-        dataset_levels, cfg, dscfg, radar_list, None, None,
-        infostr=infostr)
+        dataset_levels, cfg, dscfg, radar_list, None, None, infostr=infostr
+    )
 
     gc.collect()
 
     if gather_plots:
-        img_ext = cfg['imgformat']
+        img_ext = cfg["imgformat"]
         for dset in dscfg:
-            gather_dir = str(Path(cfg['saveimgbasepath'], cfg['name'], dset))
-            print('Copying all generated figures into dir {:s}...'.format(
-                  gather_dir + '/ALL_FIGURES/'))
+            gather_dir = str(Path(cfg["saveimgbasepath"], cfg["name"], dset))
+            print(
+                "Copying all generated figures into dir {:s}...".format(
+                    gather_dir + "/ALL_FIGURES/"
+                )
+            )
             for ex in img_ext:
                 if os.path.exists(gather_dir):
                     cmd = (
                         'cd {:s}; mkdir -p ALL_FIGURES; find . -type f -name "*.{:s}" '.format(
-                            gather_dir, ex) + '-exec cp {} ALL_FIGURES \\;')
+                            gather_dir, ex
+                        )
+                        + "-exec cp {} ALL_FIGURES \\;"
+                    )
                     subprocess.call(cmd, shell=True)
 
-    print('- This is the end my friend! See you soon!')
+    print("- This is the end my friend! See you soon!")

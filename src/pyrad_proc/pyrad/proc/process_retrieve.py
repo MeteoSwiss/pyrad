@@ -70,35 +70,35 @@ def process_ccor(procstatus, dscfg, radar_list=None):
     if procstatus != 1:
         return None, None
 
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype in ('dBZ', 'dBZv'):
+        if datatype in ("dBZ", "dBZv"):
             filt_field = get_fieldname_pyart(datatype)
-        elif datatype in ('dBuZ', 'dBuZv'):
+        elif datatype in ("dBuZ", "dBuZv"):
             unfilt_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
-        warn('No valid radar')
+        warn("No valid radar")
         return None, None
     radar = radar_list[ind_rad]
 
     if filt_field not in radar.fields or unfilt_field not in radar.fields:
-        warn('Unable to compute CCOR. Missing fields')
+        warn("Unable to compute CCOR. Missing fields")
         return None, None
 
-    ccor_field = 'clutter_correction_ratio_hh'
-    if 'vv' in filt_field:
-        ccor_field = 'clutter_correction_ratio_vv'
+    ccor_field = "clutter_correction_ratio_hh"
+    if "vv" in filt_field:
+        ccor_field = "clutter_correction_ratio_vv"
 
     ccor = pyart.retrieve.compute_ccor(
-        radar, filt_field=filt_field, unfilt_field=unfilt_field,
-        ccor_field=ccor_field)
+        radar, filt_field=filt_field, unfilt_field=unfilt_field, ccor_field=ccor_field
+    )
 
     # prepare for exit
-    new_dataset = {'radar_out': deepcopy(radar)}
-    new_dataset['radar_out'].fields = dict()
-    new_dataset['radar_out'].add_field(ccor_field, ccor)
+    new_dataset = {"radar_out": deepcopy(radar)}
+    new_dataset["radar_out"].fields = dict()
+    new_dataset["radar_out"].add_field(ccor_field, ccor)
 
     return new_dataset, ind_rad
 
@@ -150,53 +150,59 @@ def process_signal_power(procstatus, dscfg, radar_list=None):
     if procstatus != 1:
         return None, None
 
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype in ('dBZ', 'dBuZ', 'dBZc', 'dBuZc', 'dBZv', 'dBuZv',
-                        'dBuZvc'):
+        if datatype in ("dBZ", "dBuZ", "dBZc", "dBuZc", "dBZv", "dBuZv", "dBuZvc"):
             refl_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
-        warn('No valid radar')
+        warn("No valid radar")
         return None, None
     radar = radar_list[ind_rad]
 
     if refl_field not in radar.fields:
-        warn('Unable to obtain signal power. Missing field ' + refl_field)
+        warn("Unable to obtain signal power. Missing field " + refl_field)
         return None, None
 
-    lrx = 0.
-    lradome = 0.
-    if refl_field.endswith('_vv'):
-        pwr_field = 'signal_power_vv'
+    lrx = 0.0
+    lradome = 0.0
+    if refl_field.endswith("_vv"):
+        pwr_field = "signal_power_vv"
 
-        lmf = dscfg.get('mflossv', None)
-        radconst = dscfg.get('radconstv', None)
-        if 'lrxv' in dscfg:
-            lrx = dscfg['lrxv'][ind_rad]
-        if 'lradomev' in dscfg:
-            lradome = dscfg['lradomev'][ind_rad]
+        lmf = dscfg.get("mflossv", None)
+        radconst = dscfg.get("radconstv", None)
+        if "lrxv" in dscfg:
+            lrx = dscfg["lrxv"][ind_rad]
+        if "lradomev" in dscfg:
+            lradome = dscfg["lradomev"][ind_rad]
     else:
-        pwr_field = 'signal_power_hh'
+        pwr_field = "signal_power_hh"
 
-        lmf = dscfg.get('mflossh', None)
-        radconst = dscfg.get('radconsth', None)
-        if 'lrxh' in dscfg:
-            lrx = dscfg['lrxh'][ind_rad]
-        if 'lradomeh' in dscfg:
-            lradome = dscfg['lradomeh'][ind_rad]
+        lmf = dscfg.get("mflossh", None)
+        radconst = dscfg.get("radconsth", None)
+        if "lrxh" in dscfg:
+            lrx = dscfg["lrxh"][ind_rad]
+        if "lradomeh" in dscfg:
+            lradome = dscfg["lradomeh"][ind_rad]
 
-    attg = dscfg.get('attg', None)
+    attg = dscfg.get("attg", None)
 
     s_pwr = pyart.retrieve.compute_signal_power(
-        radar, lmf=lmf, attg=attg, radconst=radconst, lrx=lrx,
-        lradome=lradome, refl_field=refl_field, pwr_field=pwr_field)
+        radar,
+        lmf=lmf,
+        attg=attg,
+        radconst=radconst,
+        lrx=lrx,
+        lradome=lradome,
+        refl_field=refl_field,
+        pwr_field=pwr_field,
+    )
 
     # prepare for exit
-    new_dataset = {'radar_out': deepcopy(radar)}
-    new_dataset['radar_out'].fields = dict()
-    new_dataset['radar_out'].add_field(pwr_field, s_pwr)
+    new_dataset = {"radar_out": deepcopy(radar)}
+    new_dataset["radar_out"].fields = dict()
+    new_dataset["radar_out"].add_field(pwr_field, s_pwr)
 
     return new_dataset, ind_rad
 
@@ -262,63 +268,71 @@ def process_rcs_pr(procstatus, dscfg, radar_list=None):
     if procstatus != 1:
         return None, None
 
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype in ('dBZ', 'dBuZ', 'dBZc', 'dBuZc', 'dBZv', 'dBuZv',
-                        'dBuZvc'):
+        if datatype in ("dBZ", "dBuZ", "dBZc", "dBuZc", "dBZv", "dBuZv", "dBuZvc"):
             refl_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
-        warn('No valid radar')
+        warn("No valid radar")
         return None, None
     radar = radar_list[ind_rad]
 
     if refl_field not in radar.fields:
-        warn('Unable to obtain RCS. Missing field ' + refl_field)
+        warn("Unable to obtain RCS. Missing field " + refl_field)
         return None, None
 
-    lrx = 0.
-    lradome = 0.
-    ltx = 0.
-    if refl_field.endswith('_vv'):
-        rcs_field = 'radar_cross_section_vv'
+    lrx = 0.0
+    lradome = 0.0
+    ltx = 0.0
+    if refl_field.endswith("_vv"):
+        rcs_field = "radar_cross_section_vv"
 
-        lmf = dscfg.get('mflossv', None)
-        radconst = dscfg.get('radconstv', None)
-        antenna_gain = dscfg.get('AntennaGainH', None)
-        tx_pwr = dscfg.get('txpwrv', None)
-        if 'lrxv' in dscfg:
-            lrx = dscfg['lrxv'][ind_rad]
-        if 'ltxv' in dscfg:
-            ltx = dscfg['ltxv'][ind_rad]
-        if 'lradomev' in dscfg:
-            lradome = dscfg['lradomev'][ind_rad]
+        lmf = dscfg.get("mflossv", None)
+        radconst = dscfg.get("radconstv", None)
+        antenna_gain = dscfg.get("AntennaGainH", None)
+        tx_pwr = dscfg.get("txpwrv", None)
+        if "lrxv" in dscfg:
+            lrx = dscfg["lrxv"][ind_rad]
+        if "ltxv" in dscfg:
+            ltx = dscfg["ltxv"][ind_rad]
+        if "lradomev" in dscfg:
+            lradome = dscfg["lradomev"][ind_rad]
     else:
-        rcs_field = 'radar_cross_section_hh'
+        rcs_field = "radar_cross_section_hh"
 
-        lmf = dscfg.get('mflossh', None)
-        radconst = dscfg.get('radconsth', None)
-        antenna_gain = dscfg.get('AntennaGainV', None)
-        tx_pwr = dscfg.get('txpwrh', None)
-        if 'lrxh' in dscfg:
-            lrx = dscfg['lrxh'][ind_rad]
-        if 'ltxh' in dscfg:
-            ltx = dscfg['ltxh'][ind_rad]
-        if 'lradomeh' in dscfg:
-            lradome = dscfg['lradomeh'][ind_rad]
+        lmf = dscfg.get("mflossh", None)
+        radconst = dscfg.get("radconsth", None)
+        antenna_gain = dscfg.get("AntennaGainV", None)
+        tx_pwr = dscfg.get("txpwrh", None)
+        if "lrxh" in dscfg:
+            lrx = dscfg["lrxh"][ind_rad]
+        if "ltxh" in dscfg:
+            ltx = dscfg["ltxh"][ind_rad]
+        if "lradomeh" in dscfg:
+            lradome = dscfg["lradomeh"][ind_rad]
 
-    attg = dscfg.get('attg', None)
+    attg = dscfg.get("attg", None)
 
     rcs_dict = pyart.retrieve.compute_rcs_from_pr(
-        radar, lmf=lmf, attg=attg, radconst=radconst, tx_pwr=tx_pwr,
-        antenna_gain=antenna_gain, lrx=lrx, ltx=ltx,
-        lradome=lradome, refl_field=refl_field, rcs_field=rcs_field)
+        radar,
+        lmf=lmf,
+        attg=attg,
+        radconst=radconst,
+        tx_pwr=tx_pwr,
+        antenna_gain=antenna_gain,
+        lrx=lrx,
+        ltx=ltx,
+        lradome=lradome,
+        refl_field=refl_field,
+        rcs_field=rcs_field,
+    )
 
     # prepare for exit
-    new_dataset = {'radar_out': deepcopy(radar)}
-    new_dataset['radar_out'].fields = dict()
-    new_dataset['radar_out'].add_field(rcs_field, rcs_dict)
+    new_dataset = {"radar_out": deepcopy(radar)}
+    new_dataset["radar_out"].fields = dict()
+    new_dataset["radar_out"].add_field(rcs_field, rcs_dict)
 
     return new_dataset, ind_rad
 
@@ -363,42 +377,46 @@ def process_rcs(procstatus, dscfg, radar_list=None):
     if procstatus != 1:
         return None, None
 
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype in ('dBZ', 'dBuZ', 'dBZc', 'dBuZc', 'dBZv', 'dBuZv',
-                        'dBuZvc'):
+        if datatype in ("dBZ", "dBuZ", "dBZc", "dBuZc", "dBZv", "dBuZv", "dBuZvc"):
             refl_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
-        warn('No valid radar')
+        warn("No valid radar")
         return None, None
     radar = radar_list[ind_rad]
 
     if refl_field not in radar.fields:
-        warn('Unable to obtain RCS. Missing field ' + refl_field)
+        warn("Unable to obtain RCS. Missing field " + refl_field)
         return None, None
 
-    if refl_field.endswith('_vv'):
-        rcs_field = 'radar_cross_section_vv'
+    if refl_field.endswith("_vv"):
+        rcs_field = "radar_cross_section_vv"
 
-        beamwidth = dscfg.get('beamwidthv', None)
+        beamwidth = dscfg.get("beamwidthv", None)
     else:
-        rcs_field = 'radar_cross_section_hh'
+        rcs_field = "radar_cross_section_hh"
 
-        beamwidth = dscfg.get('beamwidthh', None)
+        beamwidth = dscfg.get("beamwidthh", None)
 
-    pulse_width = dscfg.get('PulseWidth', None)
-    kw2 = dscfg.get('kw2', 0.93)
+    pulse_width = dscfg.get("PulseWidth", None)
+    kw2 = dscfg.get("kw2", 0.93)
 
     rcs_dict = pyart.retrieve.compute_rcs(
-        radar, kw2=kw2, pulse_width=pulse_width, beamwidth=beamwidth,
-        refl_field=refl_field, rcs_field=rcs_field)
+        radar,
+        kw2=kw2,
+        pulse_width=pulse_width,
+        beamwidth=beamwidth,
+        refl_field=refl_field,
+        rcs_field=rcs_field,
+    )
 
     # prepare for exit
-    new_dataset = {'radar_out': deepcopy(radar)}
-    new_dataset['radar_out'].fields = dict()
-    new_dataset['radar_out'].add_field(rcs_field, rcs_dict)
+    new_dataset = {"radar_out": deepcopy(radar)}
+    new_dataset["radar_out"].fields = dict()
+    new_dataset["radar_out"].add_field(rcs_field, rcs_dict)
 
     return new_dataset, ind_rad
 
@@ -435,38 +453,37 @@ def process_vol_refl(procstatus, dscfg, radar_list=None):
     if procstatus != 1:
         return None, None
 
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype in ('dBZ', 'dBuZ', 'dBZc', 'dBuZc', 'dBZv', 'dBuZv',
-                        'dBuZvc'):
+        if datatype in ("dBZ", "dBuZ", "dBZc", "dBuZc", "dBZv", "dBuZv", "dBuZvc"):
             refl_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
-        warn('No valid radar')
+        warn("No valid radar")
         return None, None
     radar = radar_list[ind_rad]
 
     if refl_field not in radar.fields:
-        warn('Unable to obtain signal power. Missing field ' + refl_field)
+        warn("Unable to obtain signal power. Missing field " + refl_field)
         return None, None
 
-    if refl_field.endswith('_vv'):
-        vol_refl_field = 'volumetric_reflectivity_vv'
+    if refl_field.endswith("_vv"):
+        vol_refl_field = "volumetric_reflectivity_vv"
     else:
-        vol_refl_field = 'volumetric_reflectivity'
+        vol_refl_field = "volumetric_reflectivity"
 
-    freq = dscfg.get('freq', None)
-    kw = dscfg.get('kw', None)
+    freq = dscfg.get("freq", None)
+    kw = dscfg.get("kw", None)
 
     vol_refl_dict = pyart.retrieve.compute_vol_refl(
-        radar, kw=kw, freq=freq, refl_field=refl_field,
-        vol_refl_field=vol_refl_field)
+        radar, kw=kw, freq=freq, refl_field=refl_field, vol_refl_field=vol_refl_field
+    )
 
     # prepare for exit
-    new_dataset = {'radar_out': deepcopy(radar)}
-    new_dataset['radar_out'].fields = dict()
-    new_dataset['radar_out'].add_field(vol_refl_field, vol_refl_dict)
+    new_dataset = {"radar_out": deepcopy(radar)}
+    new_dataset["radar_out"].fields = dict()
+    new_dataset["radar_out"].add_field(vol_refl_field, vol_refl_dict)
 
     return new_dataset, ind_rad
 
@@ -502,37 +519,37 @@ def process_snr(procstatus, dscfg, radar_list=None):
     if procstatus != 1:
         return None, None
 
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype in ('dBZ', 'dBuZ', 'dBZv', 'dBuZv'):
+        if datatype in ("dBZ", "dBuZ", "dBZv", "dBuZv"):
             refl = get_fieldname_pyart(datatype)
-        elif datatype in ('Nh', 'Nv'):
+        elif datatype in ("Nh", "Nv"):
             noise = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
-        warn('No valid radar')
+        warn("No valid radar")
         return None, None
     radar = radar_list[ind_rad]
 
     if (refl not in radar.fields) or (noise not in radar.fields):
-        warn('Unable to compute SNR. Missing data')
+        warn("Unable to compute SNR. Missing data")
         return None, None
 
-    output_type = dscfg.get('output_type', 'SNRh')
-    if output_type == 'SNRh':
-        snr_field = 'signal_to_noise_ratio_hh'
+    output_type = dscfg.get("output_type", "SNRh")
+    if output_type == "SNRh":
+        snr_field = "signal_to_noise_ratio_hh"
     else:
-        snr_field = 'signal_to_noise_ratio_vv'
+        snr_field = "signal_to_noise_ratio_vv"
 
     snr = pyart.retrieve.compute_snr(
-        radar, refl_field=refl, noise_field=noise,
-        snr_field=snr_field)
+        radar, refl_field=refl, noise_field=noise, snr_field=snr_field
+    )
 
     # prepare for exit
-    new_dataset = {'radar_out': deepcopy(radar)}
-    new_dataset['radar_out'].fields = dict()
-    new_dataset['radar_out'].add_field(snr_field, snr)
+    new_dataset = {"radar_out": deepcopy(radar)}
+    new_dataset["radar_out"].fields = dict()
+    new_dataset["radar_out"].add_field(snr_field, snr)
 
     return new_dataset, ind_rad
 
@@ -577,49 +594,54 @@ def process_radial_noise_hs(procstatus, dscfg, radar_list=None):
     if procstatus != 1:
         return None, None
 
-    radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
+    radarnr, _, datatype, _, _ = get_datatype_fields(dscfg["datatype"][0])
     pwr_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
-        warn('No valid radar')
+        warn("No valid radar")
         return None, None
     radar = radar_list[ind_rad]
 
     if pwr_field not in radar.fields:
-        warn('Unable to compute radial noise. Missing signal power')
+        warn("Unable to compute radial noise. Missing signal power")
         return None, None
 
     # user values
-    rmin = dscfg.get('rmin', 10000.)
-    nbins_min = dscfg.get('nbins_min', 50)
-    max_std_pwr = dscfg.get('max_std_pwr', 2.)
-    get_noise_pos = dscfg.get('get_noise_pos', False)
+    rmin = dscfg.get("rmin", 10000.0)
+    nbins_min = dscfg.get("nbins_min", 50)
+    max_std_pwr = dscfg.get("max_std_pwr", 2.0)
+    get_noise_pos = dscfg.get("get_noise_pos", False)
 
-    if 'hh' in pwr_field:
-        noise_field = 'noisedBm_hh'
-        noise_pos_field = 'noise_pos_h'
+    if "hh" in pwr_field:
+        noise_field = "noisedBm_hh"
+        noise_pos_field = "noise_pos_h"
     else:
-        noise_field = 'noisedBm_vv'
-        noise_pos_field = 'noise_pos_v'
+        noise_field = "noisedBm_vv"
+        noise_pos_field = "noise_pos_v"
 
-    ind_rmin = np.where(radar.range['data'] >= rmin)[0]
+    ind_rmin = np.where(radar.range["data"] >= rmin)[0]
     if ind_rmin.size == 0:
-        warn('No data at ranges further than rmin ' + str(rmin) + '  m.')
+        warn("No data at ranges further than rmin " + str(rmin) + "  m.")
         return None, None
     ind_rmin = ind_rmin[0]
 
     noise, noise_pos = pyart.retrieve.compute_radial_noise_hs(
-        radar, ind_rmin=ind_rmin, nbins_min=nbins_min, max_std_pwr=max_std_pwr,
-        pwr_field=pwr_field, noise_field=noise_field,
-        get_noise_pos=get_noise_pos)
+        radar,
+        ind_rmin=ind_rmin,
+        nbins_min=nbins_min,
+        max_std_pwr=max_std_pwr,
+        pwr_field=pwr_field,
+        noise_field=noise_field,
+        get_noise_pos=get_noise_pos,
+    )
 
     # prepare for exit
-    new_dataset = {'radar_out': deepcopy(radar)}
-    new_dataset['radar_out'].fields = dict()
-    new_dataset['radar_out'].add_field(noise_field, noise)
+    new_dataset = {"radar_out": deepcopy(radar)}
+    new_dataset["radar_out"].fields = dict()
+    new_dataset["radar_out"].add_field(noise_field, noise)
     if noise_pos is not None:
-        new_dataset['radar_out'].add_field(noise_pos_field, noise_pos)
+        new_dataset["radar_out"].add_field(noise_pos_field, noise_pos)
 
     return new_dataset, ind_rad
 
@@ -666,43 +688,48 @@ def process_radial_noise_ivic(procstatus, dscfg, radar_list=None):
     if procstatus != 1:
         return None, None
 
-    radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
+    radarnr, _, datatype, _, _ = get_datatype_fields(dscfg["datatype"][0])
     pwr_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
-        warn('No valid radar')
+        warn("No valid radar")
         return None, None
     radar = radar_list[ind_rad]
 
     if pwr_field not in radar.fields:
-        warn('Unable to compute radial noise. Missing signal power')
+        warn("Unable to compute radial noise. Missing signal power")
         return None, None
 
     # user values
-    npulses_ray = dscfg.get('npulses_ray', 30)
-    ngates_min = dscfg.get('ngates_min', 800)
-    iterations = dscfg.get('iterations', 10)
-    get_noise_pos = dscfg.get('get_noise_pos', False)
+    npulses_ray = dscfg.get("npulses_ray", 30)
+    ngates_min = dscfg.get("ngates_min", 800)
+    iterations = dscfg.get("iterations", 10)
+    get_noise_pos = dscfg.get("get_noise_pos", False)
 
-    if 'hh' in pwr_field:
-        noise_field = 'noisedBm_hh'
-        noise_pos_field = 'noise_pos_h'
+    if "hh" in pwr_field:
+        noise_field = "noisedBm_hh"
+        noise_pos_field = "noise_pos_h"
     else:
-        noise_field = 'noisedBm_vv'
-        noise_pos_field = 'noise_pos_v'
+        noise_field = "noisedBm_vv"
+        noise_pos_field = "noise_pos_v"
 
     noise, noise_pos = pyart.retrieve.compute_radial_noise_ivic(
-        radar, npulses_ray=npulses_ray, ngates_min=ngates_min,
-        iterations=iterations, pwr_field=pwr_field, noise_field=noise_field,
-        get_noise_pos=get_noise_pos)
+        radar,
+        npulses_ray=npulses_ray,
+        ngates_min=ngates_min,
+        iterations=iterations,
+        pwr_field=pwr_field,
+        noise_field=noise_field,
+        get_noise_pos=get_noise_pos,
+    )
 
     # prepare for exit
-    new_dataset = {'radar_out': deepcopy(radar)}
-    new_dataset['radar_out'].fields = dict()
-    new_dataset['radar_out'].add_field(noise_field, noise)
+    new_dataset = {"radar_out": deepcopy(radar)}
+    new_dataset["radar_out"].fields = dict()
+    new_dataset["radar_out"].add_field(noise_field, noise)
     if noise_pos is not None:
-        new_dataset['radar_out'].add_field(noise_pos_field, noise_pos)
+        new_dataset["radar_out"].add_field(noise_pos_field, noise_pos)
 
     return new_dataset, ind_rad
 
@@ -736,28 +763,27 @@ def process_l(procstatus, dscfg, radar_list=None):
     if procstatus != 1:
         return None, None
 
-    radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'])
+    radarnr, _, datatype, _, _ = get_datatype_fields(dscfg["datatype"])
     rhohv = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
-        warn('No valid radar')
+        warn("No valid radar")
         return None, None
     radar = radar_list[ind_rad]
 
     if rhohv not in radar.fields:
-        print('Unable to compute L. Missing RhoHV field')
+        print("Unable to compute L. Missing RhoHV field")
         return None, None
 
     comp_l = pyart.retrieve.compute_l(
-        radar, rhohv_field=rhohv,
-        l_field='logarithmic_cross_correlation_ratio')
+        radar, rhohv_field=rhohv, l_field="logarithmic_cross_correlation_ratio"
+    )
 
     # prepare for exit
-    new_dataset = {'radar_out': deepcopy(radar)}
-    new_dataset['radar_out'].fields = dict()
-    new_dataset['radar_out'].add_field(
-        'logarithmic_cross_correlation_ratio', comp_l)
+    new_dataset = {"radar_out": deepcopy(radar)}
+    new_dataset["radar_out"].fields = dict()
+    new_dataset["radar_out"].add_field("logarithmic_cross_correlation_ratio", comp_l)
 
     return new_dataset, ind_rad
 
@@ -791,32 +817,34 @@ def process_cdr(procstatus, dscfg, radar_list=None):
     if procstatus != 1:
         return None, None
 
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype in ('RhoHV', 'uRhoHV', 'RhoHVu'):
+        if datatype in ("RhoHV", "uRhoHV", "RhoHVu"):
             rhohv = get_fieldname_pyart(datatype)
-        elif datatype in ('ZDR', 'ZDRc'):
+        elif datatype in ("ZDR", "ZDRc"):
             zdr = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
-        warn('No valid radar')
+        warn("No valid radar")
         return None, None
     radar = radar_list[ind_rad]
 
-    if ((rhohv not in radar.fields) or
-            (zdr not in radar.fields)):
-        warn('Unable to compute CDR field. Missing data')
+    if (rhohv not in radar.fields) or (zdr not in radar.fields):
+        warn("Unable to compute CDR field. Missing data")
         return None, None
 
     cdr = pyart.retrieve.compute_cdr(
-        radar, rhohv_field=rhohv, zdr_field=zdr,
-        cdr_field='circular_depolarization_ratio')
+        radar,
+        rhohv_field=rhohv,
+        zdr_field=zdr,
+        cdr_field="circular_depolarization_ratio",
+    )
 
     # prepare for exit
-    new_dataset = {'radar_out': deepcopy(radar)}
-    new_dataset['radar_out'].fields = dict()
-    new_dataset['radar_out'].add_field('circular_depolarization_ratio', cdr)
+    new_dataset = {"radar_out": deepcopy(radar)}
+    new_dataset["radar_out"].fields = dict()
+    new_dataset["radar_out"].add_field("circular_depolarization_ratio", cdr)
 
     return new_dataset, ind_rad
 
@@ -921,207 +949,260 @@ def process_vpr(procstatus, dscfg, radar_list=None):
     temp_ref = None
     temp_field = None
     iso0_field = None
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype in ('dBZ', 'dBZc'):
+        if datatype in ("dBZ", "dBZc"):
             refl_field = get_fieldname_pyart(datatype)
-        elif datatype in ('H_ISO0', 'H_ISO0c'):
+        elif datatype in ("H_ISO0", "H_ISO0c"):
             iso0_field = get_fieldname_pyart(datatype)
-        elif datatype in ('TEMP', 'TEMPc'):
+        elif datatype in ("TEMP", "TEMPc"):
             temp_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
-        warn('No valid radar')
+        warn("No valid radar")
         return None, None
     radar = radar_list[ind_rad]
 
     # Check which should be the reference field for temperature
     if iso0_field is not None:
         if iso0_field not in radar.fields:
-            warn('Unable to detect melting layer. '
-                 'Missing height over iso0 field')
+            warn("Unable to detect melting layer. " "Missing height over iso0 field")
             return None, None
-        temp_ref = 'height_over_iso0'
+        temp_ref = "height_over_iso0"
 
     if temp_field is not None:
         if temp_field not in radar.fields:
-            warn('Unable to detect melting layer. '
-                 'Missing temperature field')
+            warn("Unable to detect melting layer. " "Missing temperature field")
             return None, None
-        temp_ref = 'temperature'
+        temp_ref = "temperature"
 
     if temp_ref is None:
-        warn('A valid temperature reference field has to be specified')
+        warn("A valid temperature reference field has to be specified")
         return None, None
 
     if refl_field not in radar.fields:
-        warn('ERROR: Unable to compute VPR. Missing data')
+        warn("ERROR: Unable to compute VPR. Missing data")
         return None, None
 
     # User defined variables
-    nvalid_min = dscfg.get('nvalid_min', 20)
-    angle_min = dscfg.get('angle_min', 0.)
-    angle_max = dscfg.get('angle_max', 4.)
-    ml_thickness_min = dscfg.get('ml_thickness_min', 200)
-    ml_thickness_max = dscfg.get('ml_thickness_max', 800)
-    ml_thickness_step = dscfg.get('ml_thickness_step', 200)
-    iso0_max = dscfg.get('iso0_max', 5000.)
-    ml_top_diff_max = dscfg.get('ml_top_diff_max', 200)
-    ml_top_step = dscfg.get('ml_top_step', 200)
-    ml_peak_min = dscfg.get('ml_peak_min', 1.)
-    ml_peak_max = dscfg.get('ml_peak_max', 6.)
-    ml_peak_step = dscfg.get('ml_peak_step', 1.)
-    dr_min = dscfg.get('dr_min', -6.)
-    dr_max = dscfg.get('dr_max', -1.5)
-    dr_step = dscfg.get('dr_step', 1.5)
-    dr_default = dscfg.get('dr_default', -4.5)
-    dr_alt = dscfg.get('dr_alt', 800.)
-    h_max = dscfg.get('h_max', 6000.)
-    h_corr_max = dscfg.get('h_corr_max', 15000.)
-    h_res = dscfg.get('h_res', 1.)
-    filter_params = dscfg.get('filter_params', False)
-    max_weight = dscfg.get('max_weight', 9.)
-    rmin_obs = dscfg.get('rmin_obs', 5000.)
-    rmax_obs = dscfg.get('rmax_obs', 150000.)
-    use_ml = dscfg.get('use_ml', False)
-    ml_datatypedescr = dscfg.get('ml_datatype', None)
-    z_datatypedescr = dscfg.get('z_datatype', None)
-    vpr_theo_datatypedescr = dscfg.get('vpr_theo_datatype', None)
-    vpr_memory_max = dscfg.get('vpr_memory_max', 0.)
-    filter_vpr_memory_max = dscfg.get('filter_vpr_memory_max', 0.)
-    weight_mem = dscfg.get('weight_mem', 0.75)
-    spatialised = dscfg.get('spatialised', False)
-    correct_iso0 = dscfg.get('correct_iso0', True)
+    nvalid_min = dscfg.get("nvalid_min", 20)
+    angle_min = dscfg.get("angle_min", 0.0)
+    angle_max = dscfg.get("angle_max", 4.0)
+    ml_thickness_min = dscfg.get("ml_thickness_min", 200)
+    ml_thickness_max = dscfg.get("ml_thickness_max", 800)
+    ml_thickness_step = dscfg.get("ml_thickness_step", 200)
+    iso0_max = dscfg.get("iso0_max", 5000.0)
+    ml_top_diff_max = dscfg.get("ml_top_diff_max", 200)
+    ml_top_step = dscfg.get("ml_top_step", 200)
+    ml_peak_min = dscfg.get("ml_peak_min", 1.0)
+    ml_peak_max = dscfg.get("ml_peak_max", 6.0)
+    ml_peak_step = dscfg.get("ml_peak_step", 1.0)
+    dr_min = dscfg.get("dr_min", -6.0)
+    dr_max = dscfg.get("dr_max", -1.5)
+    dr_step = dscfg.get("dr_step", 1.5)
+    dr_default = dscfg.get("dr_default", -4.5)
+    dr_alt = dscfg.get("dr_alt", 800.0)
+    h_max = dscfg.get("h_max", 6000.0)
+    h_corr_max = dscfg.get("h_corr_max", 15000.0)
+    h_res = dscfg.get("h_res", 1.0)
+    filter_params = dscfg.get("filter_params", False)
+    max_weight = dscfg.get("max_weight", 9.0)
+    rmin_obs = dscfg.get("rmin_obs", 5000.0)
+    rmax_obs = dscfg.get("rmax_obs", 150000.0)
+    use_ml = dscfg.get("use_ml", False)
+    ml_datatypedescr = dscfg.get("ml_datatype", None)
+    z_datatypedescr = dscfg.get("z_datatype", None)
+    vpr_theo_datatypedescr = dscfg.get("vpr_theo_datatype", None)
+    vpr_memory_max = dscfg.get("vpr_memory_max", 0.0)
+    filter_vpr_memory_max = dscfg.get("filter_vpr_memory_max", 0.0)
+    weight_mem = dscfg.get("weight_mem", 0.75)
+    spatialised = dscfg.get("spatialised", False)
+    correct_iso0 = dscfg.get("correct_iso0", True)
 
     iso0 = None
     if use_ml:
-        if (ml_datatypedescr is None or dscfg['loadbasepath'] is None
-                or dscfg['loadname'] is None):
-            warn('unable to find files containing melting layer information')
+        if (
+            ml_datatypedescr is None
+            or dscfg["loadbasepath"] is None
+            or dscfg["loadname"] is None
+        ):
+            warn("unable to find files containing melting layer information")
             iso0 = None
         else:
             flist = get_file_list(
-                ml_datatypedescr, [dscfg['timeinfo']], [dscfg['timeinfo']],
-                dscfg)
+                ml_datatypedescr, [dscfg["timeinfo"]], [dscfg["timeinfo"]], dscfg
+            )
             if not flist:
-                warn('unable to find files containing'
-                     ' melting layer information')
+                warn("unable to find files containing" " melting layer information")
                 iso0 = None
             else:
                 radar_ml = pyart.io.read_cfradial(flist[0])
                 if radar_ml is None:
-                    warn('Unable to use retrieved melting layer data')
+                    warn("Unable to use retrieved melting layer data")
                     iso0 = None
                 else:
-                    print(f'Using file {flist[0]} '
-                          f'with melting layer information')
+                    print(f"Using file {flist[0]} " f"with melting layer information")
                     iso0 = np.ma.mean(
-                        radar_ml.fields['melting_layer_height']['data'][:, 1])
+                        radar_ml.fields["melting_layer_height"]["data"][:, 1]
+                    )
                     ml_bottom = np.ma.mean(
-                        radar_ml.fields['melting_layer_height']['data'][:, 0])
+                        radar_ml.fields["melting_layer_height"]["data"][:, 0]
+                    )
                     ml_thickness = iso0 - ml_bottom
                     ml_thickness_min = ml_thickness - ml_thickness_step
                     ml_thickness_max = ml_thickness + ml_thickness_step
 
     radar_mem_list = None
     if vpr_memory_max > 0:
-        if (z_datatypedescr is None or dscfg['loadbasepath'] is None
-                or dscfg['loadname'] is None):
-            warn('unable to find files with azimuthal reflectivity average')
+        if (
+            z_datatypedescr is None
+            or dscfg["loadbasepath"] is None
+            or dscfg["loadname"] is None
+        ):
+            warn("unable to find files with azimuthal reflectivity average")
         else:
             # get previous reflectivity files but do not include current one
             flist = get_file_list(
                 z_datatypedescr,
-                [dscfg['timeinfo'] - datetime.timedelta(minutes=vpr_memory_max)],
-                [dscfg['timeinfo'] - datetime.timedelta(seconds=1)], dscfg)
+                [dscfg["timeinfo"] - datetime.timedelta(minutes=vpr_memory_max)],
+                [dscfg["timeinfo"] - datetime.timedelta(seconds=1)],
+                dscfg,
+            )
             if not flist:
-                warn('unable to find files containing reflectivity')
+                warn("unable to find files containing reflectivity")
             else:
                 radar_mem_list = []
                 for fname in flist:
                     radar_vpr = pyart.io.read_cfradial(fname)
                     if radar_vpr is None:
-                        warn('Unable to use azimuthal reflectivity average')
+                        warn("Unable to use azimuthal reflectivity average")
                         continue
-                    print(f'Using file {fname} with azimuthal averaged refl')
+                    print(f"Using file {fname} with azimuthal averaged refl")
                     radar_mem_list.append(radar_vpr)
                 if not radar_mem_list:
                     radar_mem_list = None
 
     vpr_theo_dict_mem = None
-    if filter_vpr_memory_max > 0.:
-        if (vpr_theo_datatypedescr is None or dscfg['loadbasepath'] is None
-                or dscfg['loadname'] is None):
-            warn('unable to find files with theoretical VPR')
+    if filter_vpr_memory_max > 0.0:
+        if (
+            vpr_theo_datatypedescr is None
+            or dscfg["loadbasepath"] is None
+            or dscfg["loadname"] is None
+        ):
+            warn("unable to find files with theoretical VPR")
         else:
             # get previous VPR retrieved files but do not include current one
             flist = get_file_list(
                 vpr_theo_datatypedescr,
-                [dscfg['timeinfo']
-                 - datetime.timedelta(minutes=filter_vpr_memory_max)],
-                [dscfg['timeinfo'] - datetime.timedelta(seconds=1)], dscfg)
+                [dscfg["timeinfo"] - datetime.timedelta(minutes=filter_vpr_memory_max)],
+                [dscfg["timeinfo"] - datetime.timedelta(seconds=1)],
+                dscfg,
+            )
             if not flist:
-                warn('unable to find files containing retrieved VPR')
+                warn("unable to find files containing retrieved VPR")
             else:
                 if spatialised or filter_params:
                     # this function will read the stored VPR parameters from
                     # the previous volume
                     vpr_theo_dict_mem = read_vpr_theo_parameters(flist[-1])
                 else:
-                    height, _, vals = read_rhi_profile(
-                        flist[-1], labels=['Znorm'])
-                    vpr_theo_dict_mem = {
-                        'value': vals[:, 0],
-                        'altitude': height}
-                print(f'Using file {flist[-1]} with previously retrieved VPR')
+                    height, _, vals = read_rhi_profile(flist[-1], labels=["Znorm"])
+                    vpr_theo_dict_mem = {"value": vals[:, 0], "altitude": height}
+                print(f"Using file {flist[-1]} with previously retrieved VPR")
 
-    corr_refl_field = 'corrected_reflectivity'
-    corr_field = 'vpr_correction'
+    corr_refl_field = "corrected_reflectivity"
+    corr_field = "vpr_correction"
 
     if spatialised:
-        refl_corr, vpr_corr, vpr_theo_dict, radar_rhi, vpr_info = pyart.correct.correct_vpr_spatialised(
-            radar, nvalid_min=nvalid_min, angle_min=angle_min,
-            angle_max=angle_max, ml_thickness_min=ml_thickness_min,
-            ml_thickness_max=ml_thickness_max,
-            ml_thickness_step=ml_thickness_step, iso0_max=iso0_max,
-            ml_top_diff_max=ml_top_diff_max, ml_top_step=ml_top_step,
-            ml_peak_min=ml_peak_min, ml_peak_max=ml_peak_max,
-            ml_peak_step=ml_peak_step, dr_min=dr_min, dr_max=dr_max,
-            dr_step=dr_step, dr_default=dr_default, dr_alt=dr_alt,
-            h_max=h_max, h_corr_max=h_corr_max, h_res=h_res,
-            max_weight=max_weight, rmin_obs=rmin_obs, rmax_obs=rmax_obs,
-            iso0=iso0, correct_iso0=correct_iso0, weight_mem=weight_mem,
-            vpr_theo_dict_mem=vpr_theo_dict_mem, radar_mem_list=radar_mem_list,
-            refl_field=refl_field, corr_refl_field=corr_refl_field,
-            corr_field=corr_field, temp_field=temp_field,
-            iso0_field=iso0_field, temp_ref=temp_ref)
+        refl_corr, vpr_corr, vpr_theo_dict, radar_rhi, vpr_info = (
+            pyart.correct.correct_vpr_spatialised(
+                radar,
+                nvalid_min=nvalid_min,
+                angle_min=angle_min,
+                angle_max=angle_max,
+                ml_thickness_min=ml_thickness_min,
+                ml_thickness_max=ml_thickness_max,
+                ml_thickness_step=ml_thickness_step,
+                iso0_max=iso0_max,
+                ml_top_diff_max=ml_top_diff_max,
+                ml_top_step=ml_top_step,
+                ml_peak_min=ml_peak_min,
+                ml_peak_max=ml_peak_max,
+                ml_peak_step=ml_peak_step,
+                dr_min=dr_min,
+                dr_max=dr_max,
+                dr_step=dr_step,
+                dr_default=dr_default,
+                dr_alt=dr_alt,
+                h_max=h_max,
+                h_corr_max=h_corr_max,
+                h_res=h_res,
+                max_weight=max_weight,
+                rmin_obs=rmin_obs,
+                rmax_obs=rmax_obs,
+                iso0=iso0,
+                correct_iso0=correct_iso0,
+                weight_mem=weight_mem,
+                vpr_theo_dict_mem=vpr_theo_dict_mem,
+                radar_mem_list=radar_mem_list,
+                refl_field=refl_field,
+                corr_refl_field=corr_refl_field,
+                corr_field=corr_field,
+                temp_field=temp_field,
+                iso0_field=iso0_field,
+                temp_ref=temp_ref,
+            )
+        )
     else:
-        refl_corr, vpr_corr, vpr_theo_dict, radar_rhi, vpr_info = pyart.correct.correct_vpr(
-            radar, nvalid_min=nvalid_min, angle_min=angle_min,
-            angle_max=angle_max, ml_thickness_min=ml_thickness_min,
-            ml_thickness_max=ml_thickness_max,
-            ml_thickness_step=ml_thickness_step, iso0_max=iso0_max,
-            ml_top_diff_max=ml_top_diff_max, ml_top_step=ml_top_step,
-            ml_peak_min=ml_peak_min, ml_peak_max=ml_peak_max,
-            ml_peak_step=ml_peak_step, dr_min=dr_min, dr_max=dr_max,
-            dr_step=dr_step, dr_default=dr_default, dr_alt=dr_alt,
-            h_max=h_max, h_corr_max=h_corr_max, h_res=h_res,
-            max_weight=max_weight, rmin_obs=rmin_obs, rmax_obs=rmax_obs,
-            iso0=iso0, filter_params=filter_params, weight_mem=weight_mem,
-            vpr_theo_dict_mem=vpr_theo_dict_mem, radar_mem_list=radar_mem_list,
-            refl_field=refl_field, corr_refl_field=corr_refl_field,
-            corr_field=corr_field, temp_field=temp_field,
-            iso0_field=iso0_field, temp_ref=temp_ref)
+        refl_corr, vpr_corr, vpr_theo_dict, radar_rhi, vpr_info = (
+            pyart.correct.correct_vpr(
+                radar,
+                nvalid_min=nvalid_min,
+                angle_min=angle_min,
+                angle_max=angle_max,
+                ml_thickness_min=ml_thickness_min,
+                ml_thickness_max=ml_thickness_max,
+                ml_thickness_step=ml_thickness_step,
+                iso0_max=iso0_max,
+                ml_top_diff_max=ml_top_diff_max,
+                ml_top_step=ml_top_step,
+                ml_peak_min=ml_peak_min,
+                ml_peak_max=ml_peak_max,
+                ml_peak_step=ml_peak_step,
+                dr_min=dr_min,
+                dr_max=dr_max,
+                dr_step=dr_step,
+                dr_default=dr_default,
+                dr_alt=dr_alt,
+                h_max=h_max,
+                h_corr_max=h_corr_max,
+                h_res=h_res,
+                max_weight=max_weight,
+                rmin_obs=rmin_obs,
+                rmax_obs=rmax_obs,
+                iso0=iso0,
+                filter_params=filter_params,
+                weight_mem=weight_mem,
+                vpr_theo_dict_mem=vpr_theo_dict_mem,
+                radar_mem_list=radar_mem_list,
+                refl_field=refl_field,
+                corr_refl_field=corr_refl_field,
+                corr_field=corr_field,
+                temp_field=temp_field,
+                iso0_field=iso0_field,
+                temp_ref=temp_ref,
+            )
+        )
 
     # prepare for exit
-    new_dataset = {'radar_out': deepcopy(radar)}
-    new_dataset['radar_out'].fields = dict()
-    new_dataset['radar_out'].add_field(corr_refl_field, refl_corr)
-    new_dataset['radar_out'].add_field(corr_field, vpr_corr)
-    new_dataset.update({'vpr_theo_dict': vpr_theo_dict})
-    new_dataset.update({'vpr_info': vpr_info})
-    new_dataset.update({'radar_rhi': radar_rhi})
+    new_dataset = {"radar_out": deepcopy(radar)}
+    new_dataset["radar_out"].fields = dict()
+    new_dataset["radar_out"].add_field(corr_refl_field, refl_corr)
+    new_dataset["radar_out"].add_field(corr_field, vpr_corr)
+    new_dataset.update({"vpr_theo_dict": vpr_theo_dict})
+    new_dataset.update({"vpr_info": vpr_info})
+    new_dataset.update({"radar_rhi": radar_rhi})
 
     return new_dataset, ind_rad
 
@@ -1184,210 +1265,244 @@ def process_rainrate(procstatus, dscfg, radar_list=None):
     if procstatus != 1:
         return None, None
 
-    if 'RR_METHOD' not in dscfg:
+    if "RR_METHOD" not in dscfg:
         raise Exception(
-            "ERROR: Undefined parameter 'RR_METHOD' for dataset '%s'"
-            % dscfg['dsname'])
+            "ERROR: Undefined parameter 'RR_METHOD' for dataset '%s'" % dscfg["dsname"]
+        )
 
-    if dscfg['RR_METHOD'] == 'Z':
-        radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
+    if dscfg["RR_METHOD"] == "Z":
+        radarnr, _, datatype, _, _ = get_datatype_fields(dscfg["datatype"][0])
         refl_field = get_fieldname_pyart(datatype)
 
         ind_rad = int(radarnr[5:8]) - 1
         if radar_list[ind_rad] is None:
-            warn('No valid radar')
+            warn("No valid radar")
             return None, None
         radar = radar_list[ind_rad]
 
         if refl_field not in radar.fields:
-            warn('ERROR: Unable to compute rainfall rate. Missing data')
+            warn("ERROR: Unable to compute rainfall rate. Missing data")
             return None, None
 
         # user defined parameters
-        alpha = dscfg.get('alpha', 0.0376)
-        beta = dscfg.get('beta', 0.6112)
+        alpha = dscfg.get("alpha", 0.0376)
+        beta = dscfg.get("beta", 0.6112)
 
         rain = pyart.retrieve.est_rain_rate_z(
-            radar, alpha=alpha, beta=beta, refl_field=refl_field,
-            rr_field=None)
+            radar, alpha=alpha, beta=beta, refl_field=refl_field, rr_field=None
+        )
 
-    elif dscfg['RR_METHOD'] == 'ZPoly':
-        radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
+    elif dscfg["RR_METHOD"] == "ZPoly":
+        radarnr, _, datatype, _, _ = get_datatype_fields(dscfg["datatype"][0])
         refl_field = get_fieldname_pyart(datatype)
 
         ind_rad = int(radarnr[5:8]) - 1
         if radar_list[ind_rad] is None:
-            warn('No valid radar')
+            warn("No valid radar")
             return None, None
         radar = radar_list[ind_rad]
 
         if refl_field not in radar.fields:
-            warn('Unable to compute rainfall rate. Missing data')
+            warn("Unable to compute rainfall rate. Missing data")
             return None, None
 
         rain = pyart.retrieve.est_rain_rate_zpoly(
-            radar, refl_field=refl_field, rr_field=None)
+            radar, refl_field=refl_field, rr_field=None
+        )
 
-    elif dscfg['RR_METHOD'] == 'KDP':
-        radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
+    elif dscfg["RR_METHOD"] == "KDP":
+        radarnr, _, datatype, _, _ = get_datatype_fields(dscfg["datatype"][0])
         kdp_field = get_fieldname_pyart(datatype)
 
         ind_rad = int(radarnr[5:8]) - 1
         if radar_list[ind_rad] is None:
-            warn('No valid radar')
+            warn("No valid radar")
             return None, None
         radar = radar_list[ind_rad]
 
         if kdp_field not in radar.fields:
-            warn('Unable to compute rainfall rate. Missing data')
+            warn("Unable to compute rainfall rate. Missing data")
             return None, None
 
         # user defined parameters
-        alpha = dscfg.get('alpha', None)
-        beta = dscfg.get('beta', None)
+        alpha = dscfg.get("alpha", None)
+        beta = dscfg.get("beta", None)
 
         rain = pyart.retrieve.est_rain_rate_kdp(
-            radar, alpha=alpha, beta=beta, kdp_field=kdp_field, rr_field=None)
+            radar, alpha=alpha, beta=beta, kdp_field=kdp_field, rr_field=None
+        )
 
-    elif dscfg['RR_METHOD'] == 'A':
-        radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
+    elif dscfg["RR_METHOD"] == "A":
+        radarnr, _, datatype, _, _ = get_datatype_fields(dscfg["datatype"][0])
         a_field = get_fieldname_pyart(datatype)
 
         ind_rad = int(radarnr[5:8]) - 1
         if radar_list[ind_rad] is None:
-            warn('No valid radar')
+            warn("No valid radar")
             return None, None
         radar = radar_list[ind_rad]
 
         if a_field not in radar.fields:
-            warn('Unable to compute rainfall rate. Missing data')
+            warn("Unable to compute rainfall rate. Missing data")
             return None, None
 
         # user defined parameters
-        alpha = dscfg.get('alpha', None)
-        beta = dscfg.get('beta', None)
+        alpha = dscfg.get("alpha", None)
+        beta = dscfg.get("beta", None)
 
         rain = pyart.retrieve.est_rain_rate_a(
-            radar, alpha=alpha, beta=beta, a_field=a_field, rr_field=None)
+            radar, alpha=alpha, beta=beta, a_field=a_field, rr_field=None
+        )
 
-    elif dscfg['RR_METHOD'] == 'ZKDP':
-        for datatypedescr in dscfg['datatype']:
+    elif dscfg["RR_METHOD"] == "ZKDP":
+        for datatypedescr in dscfg["datatype"]:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-            if datatype in ('dBZ', 'dBZc'):
+            if datatype in ("dBZ", "dBZc"):
                 refl_field = get_fieldname_pyart(datatype)
-            elif datatype in ('KDP', 'KDPc'):
+            elif datatype in ("KDP", "KDPc"):
                 kdp_field = get_fieldname_pyart(datatype)
 
         ind_rad = int(radarnr[5:8]) - 1
         if radar_list[ind_rad] is None:
-            warn('No valid radar')
+            warn("No valid radar")
             return None, None
         radar = radar_list[ind_rad]
 
-        if ((refl_field not in radar.fields) or
-                (kdp_field not in radar.fields)):
-            warn('Unable to compute rainfall rate. Missing data')
+        if (refl_field not in radar.fields) or (kdp_field not in radar.fields):
+            warn("Unable to compute rainfall rate. Missing data")
             return None, None
 
         # user defined parameters
-        alphaz = dscfg.get('alphaz', 0.0376)
-        betaz = dscfg.get('betaz', 0.6112)
-        alphakdp = dscfg.get('alphakdp', None)
-        betakdp = dscfg.get('betakdp', None)
-        thresh = dscfg.get('thresh', 10.)
+        alphaz = dscfg.get("alphaz", 0.0376)
+        betaz = dscfg.get("betaz", 0.6112)
+        alphakdp = dscfg.get("alphakdp", None)
+        betakdp = dscfg.get("betakdp", None)
+        thresh = dscfg.get("thresh", 10.0)
 
         rain = pyart.retrieve.est_rain_rate_zkdp(
-            radar, alphaz=alphaz, betaz=betaz, alphakdp=alphakdp,
-            betakdp=betakdp, refl_field=refl_field, kdp_field=kdp_field,
-            rr_field=None, master_field=refl_field, thresh=thresh,
-            thresh_max=True)
+            radar,
+            alphaz=alphaz,
+            betaz=betaz,
+            alphakdp=alphakdp,
+            betakdp=betakdp,
+            refl_field=refl_field,
+            kdp_field=kdp_field,
+            rr_field=None,
+            main_field=refl_field,
+            thresh=thresh,
+            thresh_max=True,
+        )
 
-    elif dscfg['RR_METHOD'] == 'ZA':
-        for datatypedescr in dscfg['datatype']:
+    elif dscfg["RR_METHOD"] == "ZA":
+        for datatypedescr in dscfg["datatype"]:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-            if datatype in ('dBZ', 'dBZc'):
+            if datatype in ("dBZ", "dBZc"):
                 refl_field = get_fieldname_pyart(datatype)
-            elif datatype in ('Ah', 'Ahc'):
+            elif datatype in ("Ah", "Ahc"):
                 a_field = get_fieldname_pyart(datatype)
 
         ind_rad = int(radarnr[5:8]) - 1
         if radar_list[ind_rad] is None:
-            warn('No valid radar')
+            warn("No valid radar")
             return None, None
         radar = radar_list[ind_rad]
 
-        if ((refl_field not in radar.fields) or
-                (a_field not in radar.fields)):
-            warn('Unable to compute rainfall rate. Missing data')
+        if (refl_field not in radar.fields) or (a_field not in radar.fields):
+            warn("Unable to compute rainfall rate. Missing data")
             return None, None
 
         # user defined parameters
-        alphaz = dscfg.get('alphaz', 0.0376)
-        betaz = dscfg.get('betaz', 0.6112)
-        alphaa = dscfg.get('alphaa', None)
-        betaa = dscfg.get('betaa', None)
-        thresh = dscfg.get('thresh', 5.)
+        alphaz = dscfg.get("alphaz", 0.0376)
+        betaz = dscfg.get("betaz", 0.6112)
+        alphaa = dscfg.get("alphaa", None)
+        betaa = dscfg.get("betaa", None)
+        thresh = dscfg.get("thresh", 5.0)
 
         rain = pyart.retrieve.est_rain_rate_za(
-            radar, alphaz=alphaz, betaz=betaz, alphaa=alphaa, betaa=betaa,
-            refl_field=refl_field, a_field=a_field, rr_field=None,
-            master_field=refl_field, thresh=thresh, thresh_max=True)
+            radar,
+            alphaz=alphaz,
+            betaz=betaz,
+            alphaa=alphaa,
+            betaa=betaa,
+            refl_field=refl_field,
+            a_field=a_field,
+            rr_field=None,
+            main_field=refl_field,
+            thresh=thresh,
+            thresh_max=True,
+        )
 
-    elif dscfg['RR_METHOD'] == 'hydro':
-        for datatypedescr in dscfg['datatype']:
+    elif dscfg["RR_METHOD"] == "hydro":
+        for datatypedescr in dscfg["datatype"]:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-            if datatype in ('dBZ', 'dBZc'):
+            if datatype in ("dBZ", "dBZc"):
                 refl_field = get_fieldname_pyart(datatype)
-            elif datatype in ('Ah', 'Ahc'):
+            elif datatype in ("Ah", "Ahc"):
                 a_field = get_fieldname_pyart(datatype)
-            elif datatype == 'hydro':
-                hydro_field = 'radar_echo_classification'
+            elif datatype == "hydro":
+                hydro_field = "radar_echo_classification"
 
         ind_rad = int(radarnr[5:8]) - 1
         if radar_list[ind_rad] is None:
-            warn('No valid radar')
+            warn("No valid radar")
             return None, None
         radar = radar_list[ind_rad]
 
         # user defined parameters
-        alphazr = dscfg.get('alphazr', 0.0376)
-        betazr = dscfg.get('betazr', 0.6112)
-        alphazs = dscfg.get('alphazs', 0.1)
-        betazs = dscfg.get('betazs', 0.5)
-        alphaa = dscfg.get('alphaa', None)
-        betaa = dscfg.get('betaa', None)
-        thresh = dscfg.get('thresh', 5.)
-        mp_factor = dscfg.get('mp_factor', 0.6)
-
-        if ((refl_field in radar.fields) and
-                (a_field in radar.fields) and
-                (hydro_field in radar.fields)):
+        alphazr = dscfg.get("alphazr", 0.0376)
+        betazr = dscfg.get("betazr", 0.6112)
+        alphazs = dscfg.get("alphazs", 0.1)
+        betazs = dscfg.get("betazs", 0.5)
+        alphaa = dscfg.get("alphaa", None)
+        betaa = dscfg.get("betaa", None)
+        thresh = dscfg.get("thresh", 5.0)
+        mp_factor = dscfg.get("mp_factor", 0.6)
+        if (
+            (refl_field in radar.fields)
+            and (a_field in radar.fields)
+            and (hydro_field in radar.fields)
+        ):
             rain = pyart.retrieve.est_rain_rate_hydro(
-                radar, alphazr=alphazr, betazr=betazr, alphazs=alphazs,
-                betazs=betazs, alphaa=alphaa, betaa=betaa,
-                mp_factor=mp_factor, refl_field=refl_field, a_field=a_field,
-                hydro_field=hydro_field, rr_field=None,
-                master_field=refl_field, thresh=thresh, thresh_max=True)
+                radar,
+                alphazr=alphazr,
+                betazr=betazr,
+                alphazs=alphazs,
+                betazs=betazs,
+                alphaa=alphaa,
+                betaa=betaa,
+                mp_factor=mp_factor,
+                refl_field=refl_field,
+                a_field=a_field,
+                hydro_field=hydro_field,
+                rr_field=None,
+                main_field=refl_field,
+                thresh=thresh,
+                thresh_max=True,
+            )
         elif refl_field in radar.fields:
-            warn('Unable to compute rainfall rate using hydrometeor '
-                 'classification. Missing data. '
-                 'A simple Z-R relation will be used instead')
+            warn(
+                "Unable to compute rainfall rate using hydrometeor "
+                "classification. Missing data. "
+                "A simple Z-R relation will be used instead"
+            )
             rain = pyart.retrieve.est_rain_rate_z(
-                radar, alpha=alphazr, beta=betazr, refl_field=refl_field,
-                rr_field=None)
+                radar, alpha=alphazr, beta=betazr, refl_field=refl_field, rr_field=None
+            )
         else:
-            warn('Unable to compute rainfall rate using hydrometeor '
-                 'classification. Missing data.')
+            warn(
+                "Unable to compute rainfall rate using hydrometeor "
+                "classification. Missing data."
+            )
             return None, None
     else:
         raise Exception(
-            "ERROR: Unknown rainfall rate retrieval method " +
-            dscfg['RR_METHOD'])
+            "ERROR: Unknown rainfall rate retrieval method " + dscfg["RR_METHOD"]
+        )
 
     # prepare for exit
-    new_dataset = {'radar_out': deepcopy(radar)}
-    new_dataset['radar_out'].fields = dict()
-    new_dataset['radar_out'].add_field('radar_estimated_rain_rate', rain)
+    new_dataset = {"radar_out": deepcopy(radar)}
+    new_dataset["radar_out"].fields = dict()
+    new_dataset["radar_out"].add_field("radar_estimated_rain_rate", rain)
 
     return new_dataset, ind_rad
 
@@ -1429,153 +1544,170 @@ def process_rainfall_accumulation(procstatus, dscfg, radar_list=None):
     if procstatus == 0:
         return None, None
 
-    radarnr, _, datatype, _, _ = get_datatype_fields(dscfg['datatype'][0])
-    if datatype != 'RR':
-        warn(f'Unable to compute rainfall accumulation. '
-             f'Data type: {datatype}. Expected RR')
+    radarnr, _, datatype, _, _ = get_datatype_fields(dscfg["datatype"][0])
+    if datatype != "RR":
+        warn(
+            f"Unable to compute rainfall accumulation. "
+            f"Data type: {datatype}. Expected RR"
+        )
         return None, None
     field_name = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8]) - 1
 
-    start_average = dscfg.get('start_average', 0.)
-    period = dscfg.get('period', 3600.)
-    use_nan = dscfg.get('use_nan', 0)
-    nan_value = dscfg.get('nan_value', 0.)
-    rr_acu_name = 'rainfall_accumulation'
+    start_average = dscfg.get("start_average", 0.0)
+    period = dscfg.get("period", 3600.0)
+    use_nan = dscfg.get("use_nan", 0)
+    nan_value = dscfg.get("nan_value", 0.0)
+    rr_acu_name = "rainfall_accumulation"
 
     if procstatus == 1:
         if radar_list[ind_rad] is None:
-            warn('No valid radar')
+            warn("No valid radar")
             return None, None
         radar = radar_list[ind_rad]
 
         if field_name not in radar.fields:
-            warn('ERROR: Unable to compute rainfall accumulation. '
-                 'Missing data')
+            warn("ERROR: Unable to compute rainfall accumulation. " "Missing data")
             return None, None
 
         # Prepare auxiliary radar
-        field_data = deepcopy(radar.fields[field_name]['data'])
+        field_data = deepcopy(radar.fields[field_name]["data"])
         if use_nan:
             field_data = np.ma.asarray(field_data.filled(nan_value))
 
-        field_data *= dscfg['ScanPeriod'] * 60. / 3600.
+        field_data *= dscfg["ScanPeriod"] * 60.0 / 3600.0
 
         rr_acu_dict = pyart.config.get_metadata(rr_acu_name)
-        rr_acu_dict['data'] = field_data
+        rr_acu_dict["data"] = field_data
 
         radar_aux = deepcopy(radar)
         radar_aux.fields = dict()
         radar_aux.add_field(rr_acu_name, rr_acu_dict)
 
         # first volume: initialize start and end time of averaging
-        if dscfg['initialized'] == 0:
+        if dscfg["initialized"] == 0:
             avg_par = dict()
             if period != -1:
-                date_00 = dscfg['timeinfo'].replace(
-                    hour=0, minute=0, second=0, microsecond=0)
+                date_00 = dscfg["timeinfo"].replace(
+                    hour=0, minute=0, second=0, microsecond=0
+                )
 
                 avg_par.update(
-                    {'starttime': date_00 + datetime.timedelta(
-                        seconds=start_average)})
+                    {"starttime": date_00 + datetime.timedelta(seconds=start_average)}
+                )
                 avg_par.update(
-                    {'endtime': avg_par['starttime'] + datetime.timedelta(
-                        seconds=period)})
+                    {
+                        "endtime": avg_par["starttime"]
+                        + datetime.timedelta(seconds=period)
+                    }
+                )
             else:
-                avg_par.update({'starttime': dscfg['timeinfo']})
-                avg_par.update({'endtime': dscfg['timeinfo']})
+                avg_par.update({"starttime": dscfg["timeinfo"]})
+                avg_par.update({"endtime": dscfg["timeinfo"]})
 
-            avg_par.update({'timeinfo': dscfg['timeinfo']})
-            dscfg['global_data'] = avg_par
-            dscfg['initialized'] = 1
+            avg_par.update({"timeinfo": dscfg["timeinfo"]})
+            dscfg["global_data"] = avg_par
+            dscfg["initialized"] = 1
 
-        if dscfg['initialized'] == 0:
+        if dscfg["initialized"] == 0:
             return None, None
 
-        dscfg['global_data']['timeinfo'] = dscfg['timeinfo']
+        dscfg["global_data"]["timeinfo"] = dscfg["timeinfo"]
         # no radar object in global data: create it
-        if 'radar_out' not in dscfg['global_data']:
+        if "radar_out" not in dscfg["global_data"]:
             if period != -1:
                 # get start and stop times of new radar object
-                (dscfg['global_data']['starttime'],
-                 dscfg['global_data']['endtime']) = (
-                     time_avg_range(
-                         dscfg['timeinfo'], dscfg['global_data']['starttime'],
-                         dscfg['global_data']['endtime'], period))
+                (dscfg["global_data"]["starttime"], dscfg["global_data"]["endtime"]) = (
+                    time_avg_range(
+                        dscfg["timeinfo"],
+                        dscfg["global_data"]["starttime"],
+                        dscfg["global_data"]["endtime"],
+                        period,
+                    )
+                )
 
                 # check if volume time older than starttime
-                if dscfg['timeinfo'] > dscfg['global_data']['starttime']:
-                    dscfg['global_data'].update({'radar_out': radar_aux})
+                if dscfg["timeinfo"] > dscfg["global_data"]["starttime"]:
+                    dscfg["global_data"].update({"radar_out": radar_aux})
             else:
-                dscfg['global_data'].update({'radar_out': radar_aux})
+                dscfg["global_data"].update({"radar_out": radar_aux})
 
             return None, None
 
         # still accumulating: add field to global field
-        if (period == -1 or
-                dscfg['timeinfo'] < dscfg['global_data']['endtime']):
+        if period == -1 or dscfg["timeinfo"] < dscfg["global_data"]["endtime"]:
 
             if period == -1:
-                dscfg['global_data']['endtime'] = dscfg['timeinfo']
+                dscfg["global_data"]["endtime"] = dscfg["timeinfo"]
 
             field_interp = interpol_field(
-                dscfg['global_data']['radar_out'], radar_aux, rr_acu_name)
+                dscfg["global_data"]["radar_out"], radar_aux, rr_acu_name
+            )
 
             if use_nan:
-                field_interp['data'] = np.ma.asarray(
-                    field_interp['data'].filled(nan_value))
+                field_interp["data"] = np.ma.asarray(
+                    field_interp["data"].filled(nan_value)
+                )
 
             masked_sum = np.ma.getmaskarray(
-                dscfg['global_data']['radar_out'].fields[rr_acu_name]['data'])
+                dscfg["global_data"]["radar_out"].fields[rr_acu_name]["data"]
+            )
             valid_sum = np.logical_and(
                 np.logical_not(masked_sum),
-                np.logical_not(np.ma.getmaskarray(field_interp['data'])))
+                np.logical_not(np.ma.getmaskarray(field_interp["data"])),
+            )
 
-            dscfg['global_data']['radar_out'].fields[rr_acu_name]['data'][
-                masked_sum] = field_interp['data'][masked_sum]
+            dscfg["global_data"]["radar_out"].fields[rr_acu_name]["data"][
+                masked_sum
+            ] = field_interp["data"][masked_sum]
 
-            dscfg['global_data']['radar_out'].fields[
-                rr_acu_name]['data'][valid_sum] += (
-                    field_interp['data'][valid_sum])
+            dscfg["global_data"]["radar_out"].fields[rr_acu_name]["data"][
+                valid_sum
+            ] += field_interp["data"][valid_sum]
 
             return None, None
 
         # we have reached the end of the accumulation period: start a new
         # object (only reachable if period != -1)
         new_dataset = {
-            'radar_out': deepcopy(dscfg['global_data']['radar_out']),
-            'timeinfo': dscfg['global_data']['endtime']}
+            "radar_out": deepcopy(dscfg["global_data"]["radar_out"]),
+            "timeinfo": dscfg["global_data"]["endtime"],
+        }
 
-        dscfg['global_data']['starttime'] += datetime.timedelta(
-            seconds=period)
-        dscfg['global_data']['endtime'] += datetime.timedelta(seconds=period)
+        dscfg["global_data"]["starttime"] += datetime.timedelta(seconds=period)
+        dscfg["global_data"]["endtime"] += datetime.timedelta(seconds=period)
 
         # remove old radar object from global_data dictionary
-        dscfg['global_data'].pop('radar_out', None)
+        dscfg["global_data"].pop("radar_out", None)
 
         # get start and stop times of new radar object
-        dscfg['global_data']['starttime'], dscfg['global_data']['endtime'] = (
+        dscfg["global_data"]["starttime"], dscfg["global_data"]["endtime"] = (
             time_avg_range(
-                dscfg['timeinfo'], dscfg['global_data']['starttime'],
-                dscfg['global_data']['endtime'], period))
+                dscfg["timeinfo"],
+                dscfg["global_data"]["starttime"],
+                dscfg["global_data"]["endtime"],
+                period,
+            )
+        )
 
         # check if volume time older than starttime
-        if dscfg['timeinfo'] > dscfg['global_data']['starttime']:
-            dscfg['global_data'].update({'radar_out': radar_aux})
+        if dscfg["timeinfo"] > dscfg["global_data"]["starttime"]:
+            dscfg["global_data"].update({"radar_out": radar_aux})
 
         return new_dataset, ind_rad
 
     # no more files to process if there is global data pack it up
     if procstatus == 2:
-        if dscfg['initialized'] == 0:
+        if dscfg["initialized"] == 0:
             return None, None
-        if 'radar_out' not in dscfg['global_data']:
+        if "radar_out" not in dscfg["global_data"]:
             return None, None
 
         new_dataset = {
-            'radar_out': deepcopy(dscfg['global_data']['radar_out']),
-            'timeinfo': dscfg['global_data']['endtime']}
+            "radar_out": deepcopy(dscfg["global_data"]["radar_out"]),
+            "timeinfo": dscfg["global_data"]["endtime"],
+        }
 
         return new_dataset, ind_rad
 
@@ -1610,29 +1742,32 @@ def process_bird_density(procstatus, dscfg, radar_list=None):
     if procstatus != 1:
         return None, None
 
-    for datatypedescr in dscfg['datatype']:
+    for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype in ('eta_h', 'eta_v'):
+        if datatype in ("eta_h", "eta_v"):
             vol_refl_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
-        warn('No valid radar')
+        warn("No valid radar")
         return None, None
     radar = radar_list[ind_rad]
 
     if vol_refl_field not in radar.fields:
-        warn(f'Unable to obtain bird density. Missing field {vol_refl_field}')
+        warn(f"Unable to obtain bird density. Missing field {vol_refl_field}")
         return None, None
 
-    sigma_bird = dscfg.get('sigma_bird', 11.)
+    sigma_bird = dscfg.get("sigma_bird", 11.0)
     bird_density_dict = pyart.retrieve.compute_bird_density(
-        radar, sigma_bird=sigma_bird, vol_refl_field=vol_refl_field,
-        bird_density_field='bird_density')
+        radar,
+        sigma_bird=sigma_bird,
+        vol_refl_field=vol_refl_field,
+        bird_density_field="bird_density",
+    )
 
     # prepare for exit
-    new_dataset = {'radar_out': deepcopy(radar)}
-    new_dataset['radar_out'].fields = dict()
-    new_dataset['radar_out'].add_field('bird_density', bird_density_dict)
+    new_dataset = {"radar_out": deepcopy(radar)}
+    new_dataset["radar_out"].fields = dict()
+    new_dataset["radar_out"].add_field("bird_density", bird_density_dict)
 
     return new_dataset, ind_rad

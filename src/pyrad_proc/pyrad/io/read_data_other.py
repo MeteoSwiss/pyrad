@@ -46,11 +46,14 @@ import datetime
 import csv
 import xml.etree.ElementTree as et
 from warnings import warn
+
 try:
     import fcntl
+
     FCNTL_AVAIL = True
 except ModuleNotFoundError:
-    import msvcrt # For windows
+    import msvcrt  # For windows
+
     FCNTL_AVAIL = False
 import time
 import errno
@@ -80,10 +83,10 @@ def read_centroids_npz(fname):
     """
     try:
         with np.load(fname, allow_pickle=True) as npzfile:
-            return npzfile['centroids_data'].item()
+            return npzfile["centroids_data"].item()
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None
 
 
@@ -104,10 +107,9 @@ def read_centroids(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             nhydro = sum(1 for row in reader)
             nvars = len(reader.fieldnames) - 1
             mass_centers = np.empty((nhydro, nvars))
@@ -116,8 +118,7 @@ def read_centroids(fname):
 
             # now read the data
             csvfile.seek(0)
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             for i, row in enumerate(reader):
                 hydro_names.append(row[reader.fieldnames[0]])
                 for j, col in enumerate(var_names):
@@ -126,7 +127,7 @@ def read_centroids(fname):
             return mass_centers, hydro_names, var_names
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None, None
 
 
@@ -147,32 +148,32 @@ def read_proc_periods(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             nrows = sum(1 for row in reader)
             startimes = np.empty(nrows, dtype=datetime.datetime)
             endtimes = np.empty(nrows, dtype=datetime.datetime)
 
             # now read the data
             csvfile.seek(0)
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             for i, row in enumerate(reader):
                 startimes[i] = datetime.datetime.strptime(
-                    row['start_time'], '%Y%m%d%H%M%S')
+                    row["start_time"], "%Y%m%d%H%M%S"
+                )
                 endtimes[i] = datetime.datetime.strptime(
-                    row['end_time'], '%Y%m%d%H%M%S')
+                    row["end_time"], "%Y%m%d%H%M%S"
+                )
 
             return startimes, endtimes
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None
 
 
-def read_profile_ts(fname_list, labels, hres=None, label_nr=0, t_res=300.):
+def read_profile_ts(fname_list, labels, hres=None, label_nr=0, t_res=300.0):
     """
     Reads a colection of profile data file and creates a time series
 
@@ -200,8 +201,7 @@ def read_profile_ts(fname_list, labels, hres=None, label_nr=0, t_res=300.):
     np_ma = []
     datetime_arr = np.ma.array([], dtype=datetime.datetime)
     for fname in fname_list:
-        datetime_arr = np.append(
-            datetime_arr, _get_datetime(fname, 'RAINBOW'))
+        datetime_arr = np.append(datetime_arr, _get_datetime(fname, "RAINBOW"))
         height, np_t, vals = read_rhi_profile(fname, labels)
         if hres is None:
             hres = np.mean(height[1:] - height[:-1])
@@ -227,13 +227,13 @@ def read_profile_ts(fname_list, labels, hres=None, label_nr=0, t_res=300.):
         if dt_s.size > 1:
             t_res = np.median(dt_s[1:] - dt_s[:-1])
         else:
-            t_res = 300.
+            t_res = 300.0
     tbin_edges = np.append(dt_s - t_res, dt_s[-1])
 
     return tbin_edges, hbin_edges, np_ma, data_ma, datetime_arr
 
 
-def read_histogram_ts(fname_list, datatype, t_res=300.):
+def read_histogram_ts(fname_list, datatype, t_res=300.0):
     """
     Reads a colection of histogram data file and creates a time series
 
@@ -256,17 +256,16 @@ def read_histogram_ts(fname_list, datatype, t_res=300.):
     data_ma = []
     datetime_arr = np.ma.array([], dtype=datetime.datetime)
     for fname in fname_list:
-        datetime_arr = np.append(
-            datetime_arr, _get_datetime(fname, 'RAINBOW'))
+        datetime_arr = np.append(datetime_arr, _get_datetime(fname, "RAINBOW"))
         hist, bin_edges = read_histogram(fname)
-        if datatype == 'hydro':
+        if datatype == "hydro":
             hist[0] = 0
-        elif datatype == 'RhoHVc':
+        elif datatype == "RhoHVc":
             hist = hist[bin_edges[0:-1] > 0.95]
             bin_edges = bin_edges[bin_edges > 0.95]
         npoints = np.sum(hist)
         if npoints > 0:
-            data_ma.append(hist / np.sum(hist) * 100.)
+            data_ma.append(hist / np.sum(hist) * 100.0)
         else:
             data_ma.append(hist)
     data_ma = np.ma.asarray(data_ma)
@@ -285,13 +284,13 @@ def read_histogram_ts(fname_list, datatype, t_res=300.):
         if dt_s.size > 1:
             t_res = np.median(dt_s[1:] - dt_s[:-1])
         else:
-            t_res = 300.
+            t_res = 300.0
     tbin_edges = np.append(dt_s - t_res, dt_s[-1])
 
     return tbin_edges, bin_edges, data_ma, datetime_arr
 
 
-def read_quantiles_ts(fname_list, step=5., qmin=0., qmax=100., t_res=300.):
+def read_quantiles_ts(fname_list, step=5.0, qmin=0.0, qmax=100.0, t_res=300.0):
     """
     Reads a colection of quantiles data file and creates a time series
 
@@ -314,12 +313,12 @@ def read_quantiles_ts(fname_list, step=5., qmin=0., qmax=100., t_res=300.):
     data_ma = []
     datetime_arr = np.ma.array([], dtype=datetime.datetime)
     qbin_edges = np.arange(
-        qmin - step / 2, qmax + step / 2 + step / 2, step=step, dtype=float)
+        qmin - step / 2, qmax + step / 2 + step / 2, step=step, dtype=float
+    )
     qbin_centers = np.arange(qmin, qmax + step / 2, step=step)
     for fname in fname_list:
         values_aux = np.ma.masked_all(qbin_edges.size - 1, dtype=float)
-        datetime_arr = np.append(
-            datetime_arr, _get_datetime(fname, 'RAINBOW'))
+        datetime_arr = np.append(datetime_arr, _get_datetime(fname, "RAINBOW"))
 
         quantiles, values = read_quantiles(fname)
         if quantiles is not None:
@@ -344,7 +343,7 @@ def read_quantiles_ts(fname_list, step=5., qmin=0., qmax=100., t_res=300.):
         if dt_s.size > 1:
             t_res = np.median(dt_s[1:] - dt_s[:-1])
         else:
-            t_res = 300.
+            t_res = 300.0
     tbin_edges = np.append(dt_s - t_res, dt_s[-1])
 
     return tbin_edges, qbin_edges, data_ma, datetime_arr
@@ -366,7 +365,7 @@ def read_vpr_theo_parameters(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             reader = csv.DictReader(csvfile)
             vpr_theo_dict = next(reader)
             for k, v in vpr_theo_dict.items():
@@ -375,12 +374,13 @@ def read_vpr_theo_parameters(fname):
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None
 
 
-def read_rhi_profile(fname, labels=['50.0-percentile', '25.0-percentile',
-                                    '75.0-percentile']):
+def read_rhi_profile(
+    fname, labels=["50.0-percentile", "25.0-percentile", "75.0-percentile"]
+):
     """
     Reads a monitoring time series contained in a csv file
 
@@ -398,11 +398,10 @@ def read_rhi_profile(fname, labels=['50.0-percentile', '25.0-percentile',
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             nfields = len(labels)
             # first count the lines
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             nrows = sum(1 for row in reader)
 
             height = np.empty(nrows, dtype=float)
@@ -411,13 +410,11 @@ def read_rhi_profile(fname, labels=['50.0-percentile', '25.0-percentile',
 
             # now read the data
             csvfile.seek(0)
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#')
-            )
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             for i, row in enumerate(reader):
-                height[i] = float(row['Altitude [m MSL]'])
-                if 'N valid' in row:
-                    np_t[i] = int(row['N valid'])
+                height[i] = float(row["Altitude [m MSL]"])
+                if "N valid" in row:
+                    np_t[i] = int(row["N valid"])
                 for j, label in enumerate(labels):
                     vals[i, j] = float(row[label])
 
@@ -426,7 +423,7 @@ def read_rhi_profile(fname, labels=['50.0-percentile', '25.0-percentile',
             return height, np_t, vals
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None, None
 
 
@@ -447,22 +444,21 @@ def read_last_state(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as txtfile:
+        with open(fname, "r", newline="") as txtfile:
             line = txtfile.readline()
             txtfile.close()
             if not line:
-                warn('File ' + fname + ' is empty.')
+                warn("File " + fname + " is empty.")
                 return None
             try:
-                last_state = datetime.datetime.strptime(
-                    line, '%Y%m%d%H%M%S')
+                last_state = datetime.datetime.strptime(line, "%Y%m%d%H%M%S")
                 return last_state
             except ValueError:
-                warn('File ' + fname + ' does not contain a valid date.')
+                warn("File " + fname + " does not contain a valid date.")
                 return None
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None
 
 
@@ -486,32 +482,34 @@ def read_status(voltime, cfg, ind_rad=0):
         The information contained in the status file
 
     """
-    if cfg['RadarName'] is None:
+    if cfg["RadarName"] is None:
         raise ValueError(
-            'ERROR: Radar Name not specified in config file. \
-            Unable to read status data')
+            "ERROR: Radar Name not specified in config file. \
+            Unable to read status data"
+        )
 
-    dayinfo = voltime.strftime('%y%j')
-    timeinfo = voltime.strftime('%H%M')
-    basename = 'ST' + cfg['RadarName'][ind_rad] + dayinfo
-    if cfg['path_convention'][ind_rad] == 'RT':
-        datapath = cfg['datapath'][ind_rad] + \
-            'ST' + cfg['RadarName'][ind_rad] + '/'
+    dayinfo = voltime.strftime("%y%j")
+    timeinfo = voltime.strftime("%H%M")
+    basename = "ST" + cfg["RadarName"][ind_rad] + dayinfo
+    if cfg["path_convention"][ind_rad] == "RT":
+        datapath = cfg["datapath"][ind_rad] + "ST" + cfg["RadarName"][ind_rad] + "/"
     else:
-        datapath = cfg['datapath'][ind_rad] + dayinfo + '/' + basename + '/'
-    filename = glob.glob(datapath + basename + timeinfo + '*.xml')
+        datapath = cfg["datapath"][ind_rad] + dayinfo + "/" + basename + "/"
+    filename = glob.glob(datapath + basename + timeinfo + "*.xml")
     if not filename:
-        warn('rad4alp status file ' + datapath + basename + timeinfo +
-             '*.xml not found')
+        warn(
+            "rad4alp status file " + datapath + basename + timeinfo + "*.xml not found"
+        )
         return None
     try:
         root = et.parse(filename[0]).getroot()
         return root
     except et.ParseError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + filename[0])
+        warn("Unable to read file " + filename[0])
 
         return None
+
 
 def read_mch_xml_vad(voltime, cfg, ind_rad=0):
     """
@@ -529,27 +527,28 @@ def read_mch_xml_vad(voltime, cfg, ind_rad=0):
 
     Returns
     -------
-    pyart.core.HorizontalWindProfile 
+    pyart.core.HorizontalWindProfile
         pyart Wind profile object containing the VAD data
 
     """
 
-    if cfg['RadarName'] is None:
+    if cfg["RadarName"] is None:
         raise ValueError(
-            'ERROR: Radar Name not specified in config file. \
-            Unable to read status data')
+            "ERROR: Radar Name not specified in config file. \
+            Unable to read status data"
+        )
 
-    dayinfo = voltime.strftime('%y%j')
-    timeinfo = voltime.strftime('%H%M')
-    basename = 'VA' + cfg['RadarName'][ind_rad] + dayinfo
-    if cfg['path_convention'][ind_rad] == 'RT':
-        datapath = cfg['datapath'][ind_rad] + \
-            'VA' + cfg['RadarName'][ind_rad] + '/'
+    dayinfo = voltime.strftime("%y%j")
+    timeinfo = voltime.strftime("%H%M")
+    basename = "VA" + cfg["RadarName"][ind_rad] + dayinfo
+    if cfg["path_convention"][ind_rad] == "RT":
+        datapath = cfg["datapath"][ind_rad] + "VA" + cfg["RadarName"][ind_rad] + "/"
     else:
-        datapath = cfg['datapath'][ind_rad] + dayinfo + '/' + basename + '/'
-    filename = glob.glob(datapath + basename + timeinfo + '*.xml')
+        datapath = cfg["datapath"][ind_rad] + dayinfo + "/" + basename + "/"
+    filename = glob.glob(datapath + basename + timeinfo + "*.xml")
 
     return pyart.aux_io.read_mch_vad(filename)
+
 
 def read_rad4alp_icon(fname, datatype, ngates=0):
     """
@@ -572,38 +571,39 @@ def read_rad4alp_icon(fname, datatype, ngates=0):
 
     """
     try:
-        bindata = np.fromfile(fname, dtype='uint8', count=-1)
+        bindata = np.fromfile(fname, dtype="uint8", count=-1)
         nbins = bindata.size
         naz = 360
         nr = int(nbins / naz)
         bindata = np.reshape(bindata, (naz, nr))
         mask = bindata == 0
 
-        if datatype == 'TEMP':
+        if datatype == "TEMP":
             field_name = get_fieldname_pyart(datatype)
             field_data = np.ma.masked_where(
-                mask, (bindata - 1).astype(float) * 0.5 - 87.)
+                mask, (bindata - 1).astype(float) * 0.5 - 87.0
+            )
 
             field = get_metadata(field_name)
-            field['data'] = field_data
+            field["data"] = field_data
             if ngates > 0:
-                field['data'] = field['data'][:, :ngates]
+                field["data"] = field["data"][:, :ngates]
             return field
-        if datatype == 'ISO0':
+        if datatype == "ISO0":
             field_name = get_fieldname_pyart(datatype)
             field_data = np.ma.masked_where(mask, (bindata - 1).astype(float))
 
             field = get_metadata(field_name)
-            field['data'] = field_data
+            field["data"] = field_data
             if ngates > 0:
-                field['data'] = field['data'][:, :ngates]
+                field["data"] = field["data"][:, :ngates]
             return field
 
-        warn('Unknown COSMO data type ' + datatype)
+        warn("Unknown COSMO data type " + datatype)
         return None
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None
 
 
@@ -625,34 +625,54 @@ def read_rad4alp_vis(fname, datatype):
         A data field. Each element of the list corresponds to one elevation
 
     """
-    if datatype != 'VIS':
-        warn('Unknown DEM data type ' + datatype)
+    if datatype != "VIS":
+        warn("Unknown DEM data type " + datatype)
         return None
 
     header_size = 64
     naz = 360
-    nrngs = [492, 420, 492, 324, 366, 324, 292, 324, 280, 242,
-             222, 200, 174, 150, 124, 100, 82, 68, 60, 54]
+    nrngs = [
+        492,
+        420,
+        492,
+        324,
+        366,
+        324,
+        292,
+        324,
+        280,
+        242,
+        222,
+        200,
+        174,
+        150,
+        124,
+        100,
+        82,
+        68,
+        60,
+        54,
+    ]
 
     try:
-        with open(fname, 'rb') as visfile:
+        with open(fname, "rb") as visfile:
             field_list = list()
             # skip header
             visfile.seek(header_size, os.SEEK_SET)
 
-            bindata = np.fromfile(visfile, dtype='uint8', count=-1)
+            bindata = np.fromfile(visfile, dtype="uint8", count=-1)
 
             sweep_start_index = 0
             for nrng in nrngs:
                 sweep_end_index = sweep_start_index + naz * nrng - 1
                 field_data = np.reshape(
-                    bindata[sweep_start_index:sweep_end_index + 1],
-                    (naz, nrng)).astype(float)
+                    bindata[sweep_start_index : sweep_end_index + 1], (naz, nrng)
+                ).astype(float)
                 sweep_start_index = sweep_end_index + 1
 
                 field_name = get_fieldname_pyart(datatype)
                 field = get_metadata(field_name)
-                field['data'] = field_data
+                field["data"] = field_data
                 field_list.append(field)
 
             visfile.close()
@@ -661,7 +681,7 @@ def read_rad4alp_vis(fname, datatype):
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None
 
 
@@ -684,28 +704,26 @@ def read_mf_vis(fname, datatype):
 
     """
     datatype = datatype.strip()
-    if datatype != 'VIS':
-        warn('Unknown DEM data type ' + datatype)
+    if datatype != "VIS":
+        warn("Unknown DEM data type " + datatype)
         return None
 
     try:
-        with open(fname, 'rb') as visfile:
+        with open(fname, "rb") as visfile:
             if os.path.getsize(fname) == 262144:
-                bindata = np.fromfile(visfile, dtype='uint8', count=-1)
+                bindata = np.fromfile(visfile, dtype="uint8", count=-1)
                 bindata = np.reshape(bindata, (512, 512)).astype(float)
                 field_data = np.ma.masked_values(bindata, 255)
-                if 'coefmasqZ' not in fname:
-                    field_data = 100. * np.ma.power(field_data / 100., 1.6)
-                field_data = 100. - np.broadcast_to(
-                    field_data[::-1, :], (1, 512, 512))
+                if "coefmasqZ" not in fname:
+                    field_data = 100.0 * np.ma.power(field_data / 100.0, 1.6)
+                field_data = 100.0 - np.broadcast_to(field_data[::-1, :], (1, 512, 512))
             else:
-                bindata = 100. - np.fromfile(
-                    visfile, dtype='float32', count=-1)
+                bindata = 100.0 - np.fromfile(visfile, dtype="float32", count=-1)
                 field_data = np.reshape(bindata, (720, 270))
 
             field_name = get_fieldname_pyart(datatype)
             field = get_metadata(field_name)
-            field['data'] = field_data
+            field["data"] = field_data
 
             visfile.close()
 
@@ -713,7 +731,7 @@ def read_mf_vis(fname, datatype):
 
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None
 
 
@@ -733,27 +751,25 @@ def read_histogram(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             nrows = sum(1 for row in reader)
             bin_edges = np.zeros(nrows + 1, dtype=float)
             hist = np.zeros(nrows, dtype=float)
 
             # now read the data
             csvfile.seek(0)
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             for i, row in enumerate(reader):
-                bin_edges[i] = float(row['bin_edge_left'])
-                bin_edges[i + 1] = float(row['bin_edge_right'])
-                hist[i] = float(row['value'])
+                bin_edges[i] = float(row["bin_edge_left"])
+                bin_edges[i + 1] = float(row["bin_edge_right"])
+                hist[i] = float(row["value"])
 
             return hist, bin_edges
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None
 
 
@@ -773,26 +789,24 @@ def read_quantiles(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             nrows = sum(1 for row in reader)
             quantiles = np.zeros(nrows, dtype=float)
             values = np.zeros(nrows, dtype=float)
 
             # now read the data
             csvfile.seek(0)
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             for i, row in enumerate(reader):
-                quantiles[i] = float(row['quantile'])
-                values[i] = float(row['value'])
+                quantiles[i] = float(row["quantile"])
+                values[i] = float(row["value"])
 
             return quantiles, values
     except (EnvironmentError, ValueError) as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None
 
 
@@ -814,10 +828,9 @@ def read_excess_gates(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             nrows = sum(1 for row in reader)
             ray_ind = np.empty(nrows, dtype=int)
             rng_ind = np.empty(nrows, dtype=int)
@@ -830,25 +843,23 @@ def read_excess_gates(fname):
 
             # now read the data
             csvfile.seek(0)
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             for i, row in enumerate(reader):
-                ray_ind[i] = int(row['ray_ind'])
-                rng_ind[i] = int(row['rng_ind'])
-                ele[i] = float(row['ele'])
-                azi[i] = float(row['azi'])
-                rng[i] = float(row['rng'])
-                nsamples[i] = int(row['nsamples'])
-                occurrence[i] = int(row['occurrence'])
-                freq_occu[i] = float(row['freq_occu'])
+                ray_ind[i] = int(row["ray_ind"])
+                rng_ind[i] = int(row["rng_ind"])
+                ele[i] = float(row["ele"])
+                azi[i] = float(row["azi"])
+                rng[i] = float(row["rng"])
+                nsamples[i] = int(row["nsamples"])
+                occurrence[i] = int(row["occurrence"])
+                freq_occu[i] = float(row["freq_occu"])
 
             csvfile.close()
 
-            return (ray_ind, rng_ind, ele, azi, rng, nsamples, occurrence,
-                    freq_occu)
+            return (ray_ind, rng_ind, ele, azi, rng, nsamples, occurrence, freq_occu)
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None, None, None, None, None, None, None
 
 
@@ -869,10 +880,9 @@ def read_colocated_gates(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             nrows = sum(1 for row in reader)
             rad1_ray_ind = np.empty(nrows, dtype=int)
             rad1_rng_ind = np.empty(nrows, dtype=int)
@@ -887,27 +897,36 @@ def read_colocated_gates(fname):
 
             # now read the data
             csvfile.seek(0)
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             for i, row in enumerate(reader):
-                rad1_ray_ind[i] = int(row['rad1_ray_ind'])
-                rad1_rng_ind[i] = int(row['rad1_rng_ind'])
-                rad1_ele[i] = float(row['rad1_ele'])
-                rad1_azi[i] = float(row['rad1_azi'])
-                rad1_rng[i] = float(row['rad1_rng'])
-                rad2_ray_ind[i] = int(row['rad2_ray_ind'])
-                rad2_rng_ind[i] = int(row['rad2_rng_ind'])
-                rad2_ele[i] = float(row['rad2_ele'])
-                rad2_azi[i] = float(row['rad2_azi'])
-                rad2_rng[i] = float(row['rad2_rng'])
+                rad1_ray_ind[i] = int(row["rad1_ray_ind"])
+                rad1_rng_ind[i] = int(row["rad1_rng_ind"])
+                rad1_ele[i] = float(row["rad1_ele"])
+                rad1_azi[i] = float(row["rad1_azi"])
+                rad1_rng[i] = float(row["rad1_rng"])
+                rad2_ray_ind[i] = int(row["rad2_ray_ind"])
+                rad2_rng_ind[i] = int(row["rad2_rng_ind"])
+                rad2_ele[i] = float(row["rad2_ele"])
+                rad2_azi[i] = float(row["rad2_azi"])
+                rad2_rng[i] = float(row["rad2_rng"])
 
             csvfile.close()
 
-            return (rad1_ray_ind, rad1_rng_ind, rad1_ele, rad1_azi, rad1_rng,
-                    rad2_ray_ind, rad2_rng_ind, rad2_ele, rad2_azi, rad2_rng)
+            return (
+                rad1_ray_ind,
+                rad1_rng_ind,
+                rad1_ele,
+                rad1_azi,
+                rad1_rng,
+                rad2_ray_ind,
+                rad2_rng_ind,
+                rad2_ele,
+                rad2_azi,
+                rad2_rng,
+            )
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None, None, None, None, None, None, None, None, None
 
 
@@ -929,10 +948,9 @@ def read_colocated_data(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             nrows = sum(1 for row in reader)
             rad1_time = np.empty(nrows, dtype=datetime.datetime)
             rad1_ray_ind = np.empty(nrows, dtype=int)
@@ -951,36 +969,64 @@ def read_colocated_data(fname):
 
             # now read the data
             csvfile.seek(0)
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             for i, row in enumerate(reader):
                 rad1_time[i] = datetime.datetime.strptime(
-                    row['rad1_time'], '%Y%m%d%H%M%S')
-                rad1_ray_ind[i] = int(row['rad1_ray_ind'])
-                rad1_rng_ind[i] = int(row['rad1_rng_ind'])
-                rad1_ele[i] = float(row['rad1_ele'])
-                rad1_azi[i] = float(row['rad1_azi'])
-                rad1_rng[i] = float(row['rad1_rng'])
-                rad1_val[i] = float(row['rad1_val'])
+                    row["rad1_time"], "%Y%m%d%H%M%S"
+                )
+                rad1_ray_ind[i] = int(row["rad1_ray_ind"])
+                rad1_rng_ind[i] = int(row["rad1_rng_ind"])
+                rad1_ele[i] = float(row["rad1_ele"])
+                rad1_azi[i] = float(row["rad1_azi"])
+                rad1_rng[i] = float(row["rad1_rng"])
+                rad1_val[i] = float(row["rad1_val"])
                 rad2_time[i] = datetime.datetime.strptime(
-                    row['rad2_time'], '%Y%m%d%H%M%S')
-                rad2_ray_ind[i] = int(row['rad2_ray_ind'])
-                rad2_rng_ind[i] = int(row['rad2_rng_ind'])
-                rad2_ele[i] = float(row['rad2_ele'])
-                rad2_azi[i] = float(row['rad2_azi'])
-                rad2_rng[i] = float(row['rad2_rng'])
-                rad2_val[i] = float(row['rad2_val'])
+                    row["rad2_time"], "%Y%m%d%H%M%S"
+                )
+                rad2_ray_ind[i] = int(row["rad2_ray_ind"])
+                rad2_rng_ind[i] = int(row["rad2_rng_ind"])
+                rad2_ele[i] = float(row["rad2_ele"])
+                rad2_azi[i] = float(row["rad2_azi"])
+                rad2_rng[i] = float(row["rad2_rng"])
+                rad2_val[i] = float(row["rad2_val"])
 
             csvfile.close()
 
-            return (rad1_time, rad1_ray_ind, rad1_rng_ind, rad1_ele, rad1_azi,
-                    rad1_rng, rad1_val, rad2_time, rad2_ray_ind, rad2_rng_ind,
-                    rad2_ele, rad2_azi, rad2_rng, rad2_val)
+            return (
+                rad1_time,
+                rad1_ray_ind,
+                rad1_rng_ind,
+                rad1_ele,
+                rad1_azi,
+                rad1_rng,
+                rad1_val,
+                rad2_time,
+                rad2_ray_ind,
+                rad2_rng_ind,
+                rad2_ele,
+                rad2_azi,
+                rad2_rng,
+                rad2_val,
+            )
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
-        return (None, None, None, None, None, None, None, None, None, None,
-                None, None, None, None)
+        warn("Unable to read file " + fname)
+        return (
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        )
 
 
 def read_colocated_data_time_avg(fname):
@@ -1001,10 +1047,9 @@ def read_colocated_data_time_avg(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             nrows = sum(1 for row in reader)
             rad1_time = np.empty(nrows, dtype=datetime.datetime)
             rad1_ray_ind = np.empty(nrows, dtype=int)
@@ -1027,41 +1072,76 @@ def read_colocated_data_time_avg(fname):
 
             # now read the data
             csvfile.seek(0)
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             for i, row in enumerate(reader):
                 rad1_time[i] = datetime.datetime.strptime(
-                    row['rad1_time'], '%Y%m%d%H%M%S')
-                rad1_ray_ind[i] = int(row['rad1_ray_ind'])
-                rad1_rng_ind[i] = int(row['rad1_rng_ind'])
-                rad1_ele[i] = float(row['rad1_ele'])
-                rad1_azi[i] = float(row['rad1_azi'])
-                rad1_rng[i] = float(row['rad1_rng'])
-                rad1_dBZavg[i] = float(row['rad1_dBZavg'])
-                rad1_PhiDPavg[i] = float(row['rad1_PhiDPavg'])
-                rad1_Flagavg[i] = float(row['rad1_Flagavg'])
+                    row["rad1_time"], "%Y%m%d%H%M%S"
+                )
+                rad1_ray_ind[i] = int(row["rad1_ray_ind"])
+                rad1_rng_ind[i] = int(row["rad1_rng_ind"])
+                rad1_ele[i] = float(row["rad1_ele"])
+                rad1_azi[i] = float(row["rad1_azi"])
+                rad1_rng[i] = float(row["rad1_rng"])
+                rad1_dBZavg[i] = float(row["rad1_dBZavg"])
+                rad1_PhiDPavg[i] = float(row["rad1_PhiDPavg"])
+                rad1_Flagavg[i] = float(row["rad1_Flagavg"])
                 rad2_time[i] = datetime.datetime.strptime(
-                    row['rad2_time'], '%Y%m%d%H%M%S')
-                rad2_ray_ind[i] = int(row['rad2_ray_ind'])
-                rad2_rng_ind[i] = int(row['rad2_rng_ind'])
-                rad2_ele[i] = float(row['rad2_ele'])
-                rad2_azi[i] = float(row['rad2_azi'])
-                rad2_rng[i] = float(row['rad2_rng'])
-                rad2_dBZavg[i] = float(row['rad2_dBZavg'])
-                rad2_PhiDPavg[i] = float(row['rad2_PhiDPavg'])
-                rad2_Flagavg[i] = float(row['rad2_Flagavg'])
+                    row["rad2_time"], "%Y%m%d%H%M%S"
+                )
+                rad2_ray_ind[i] = int(row["rad2_ray_ind"])
+                rad2_rng_ind[i] = int(row["rad2_rng_ind"])
+                rad2_ele[i] = float(row["rad2_ele"])
+                rad2_azi[i] = float(row["rad2_azi"])
+                rad2_rng[i] = float(row["rad2_rng"])
+                rad2_dBZavg[i] = float(row["rad2_dBZavg"])
+                rad2_PhiDPavg[i] = float(row["rad2_PhiDPavg"])
+                rad2_Flagavg[i] = float(row["rad2_Flagavg"])
 
             csvfile.close()
 
-            return (rad1_time, rad1_ray_ind, rad1_rng_ind, rad1_ele, rad1_azi,
-                    rad1_rng, rad1_dBZavg, rad1_PhiDPavg, rad1_Flagavg,
-                    rad2_time, rad2_ray_ind, rad2_rng_ind, rad2_ele, rad2_azi,
-                    rad2_rng, rad2_dBZavg, rad2_PhiDPavg, rad2_Flagavg)
+            return (
+                rad1_time,
+                rad1_ray_ind,
+                rad1_rng_ind,
+                rad1_ele,
+                rad1_azi,
+                rad1_rng,
+                rad1_dBZavg,
+                rad1_PhiDPavg,
+                rad1_Flagavg,
+                rad2_time,
+                rad2_ray_ind,
+                rad2_rng_ind,
+                rad2_ele,
+                rad2_azi,
+                rad2_rng,
+                rad2_dBZavg,
+                rad2_PhiDPavg,
+                rad2_Flagavg,
+            )
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
-        return (None, None, None, None, None, None, None, None, None, None,
-                None, None, None, None, None, None, None, None)
+        warn("Unable to read file " + fname)
+        return (
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        )
 
 
 def read_timeseries(fname):
@@ -1081,22 +1161,21 @@ def read_timeseries(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             nrows = sum(1 for row in reader)
             value = np.ma.empty(nrows, dtype=float)
 
             # now read the data
             csvfile.seek(0)
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             date = list()
             for i, row in enumerate(reader):
-                date.append(datetime.datetime.strptime(
-                    row['date'][0:19], '%Y-%m-%d %H:%M:%S'))
-                value[i] = float(row['value'])
+                date.append(
+                    datetime.datetime.strptime(row["date"][0:19], "%Y-%m-%d %H:%M:%S")
+                )
+                value[i] = float(row["value"])
 
             value = np.ma.masked_values(value, get_fillvalue())
 
@@ -1105,7 +1184,7 @@ def read_timeseries(fname):
             return date, value
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None
 
 
@@ -1125,10 +1204,9 @@ def read_ts_cum(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             nrows = sum(1 for row in reader)
             np_radar = np.zeros(nrows, dtype=int)
             radar_value = np.ma.empty(nrows, dtype=float)
@@ -1137,16 +1215,16 @@ def read_ts_cum(fname):
 
             # now read the data
             csvfile.seek(0)
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             date = list()
             for i, row in enumerate(reader):
-                date.append(datetime.datetime.strptime(
-                    row['date'], '%Y-%m-%d %H:%M:%S'))
-                np_radar[i] = int(row['np_radar'])
-                radar_value[i] = float(row['radar_value'])
-                np_sensor[i] = int(row['np_sensor'])
-                sensor_value[i] = float(row['sensor_value'])
+                date.append(
+                    datetime.datetime.strptime(row["date"], "%Y-%m-%d %H:%M:%S")
+                )
+                np_radar[i] = int(row["np_radar"])
+                radar_value[i] = float(row["radar_value"])
+                np_sensor[i] = int(row["np_sensor"])
+                sensor_value[i] = float(row["sensor_value"])
 
             radar_value = np.ma.masked_values(radar_value, get_fillvalue())
             sensor_value = np.ma.masked_values(sensor_value, get_fillvalue())
@@ -1156,7 +1234,7 @@ def read_ts_cum(fname):
             return date, np_radar, radar_value, np_sensor, sensor_value
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None, None, None, None
 
 
@@ -1177,10 +1255,9 @@ def read_ml_ts(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             nrows = sum(1 for row in reader)
 
             dt_ml = np.empty(nrows, dtype=datetime.datetime)
@@ -1193,29 +1270,36 @@ def read_ml_ts(fname):
 
             # now read the data
             csvfile.seek(0)
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
 
             for i, row in enumerate(reader):
                 dt_ml[i] = datetime.datetime.strptime(
-                    row['date-time [UTC]'], '%Y-%m-%d %H:%M:%S')
-                ml_top_avg[i] = float(row['mean ml top height [m MSL]'])
-                ml_top_std[i] = float(row['std ml top height [m MSL]'])
-                thick_avg[i] = float(row['mean ml thickness [m]'])
-                thick_std[i] = float(row['std ml thickness [m]'])
-                nrays_valid[i] = int(row['N valid rays'])
-                nrays_total[i] = int(row['rays total'])
+                    row["date-time [UTC]"], "%Y-%m-%d %H:%M:%S"
+                )
+                ml_top_avg[i] = float(row["mean ml top height [m MSL]"])
+                ml_top_std[i] = float(row["std ml top height [m MSL]"])
+                thick_avg[i] = float(row["mean ml thickness [m]"])
+                thick_std[i] = float(row["std ml thickness [m]"])
+                nrays_valid[i] = int(row["N valid rays"])
+                nrays_total[i] = int(row["rays total"])
 
             ml_top_avg = np.ma.masked_values(ml_top_avg, get_fillvalue())
             ml_top_std = np.ma.masked_values(ml_top_std, get_fillvalue())
             thick_avg = np.ma.masked_values(thick_avg, get_fillvalue())
             thick_std = np.ma.masked_values(thick_std, get_fillvalue())
 
-            return (dt_ml, ml_top_avg, ml_top_std, thick_avg, thick_std,
-                    nrays_valid, nrays_total)
+            return (
+                dt_ml,
+                ml_top_avg,
+                ml_top_std,
+                thick_avg,
+                thick_std,
+                nrays_valid,
+                nrays_total,
+            )
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None, None, None, None, None, None
 
 
@@ -1237,7 +1321,7 @@ def read_monitoring_ts(fname, sort_by_date=False):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             if FCNTL_AVAIL:
                 while True:
                     try:
@@ -1248,8 +1332,9 @@ def read_monitoring_ts(fname, sort_by_date=False):
                             time.sleep(0.1)
                         elif e.errno == errno.EBADF:
                             warn(
-                                "WARNING: No file locking is possible (NFS mount?), " +
-                                "expect strange issues with multiprocessing...")
+                                "WARNING: No file locking is possible (NFS mount?), "
+                                + "expect strange issues with multiprocessing..."
+                            )
                             break
                         else:
                             raise
@@ -1257,22 +1342,24 @@ def read_monitoring_ts(fname, sort_by_date=False):
                 while True:
                     try:
                         # Attempt to acquire an exclusive lock on the file
-                        msvcrt.locking(os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0)
+                        msvcrt.locking(
+                            os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0
+                        )
                         break
                     except OSError as e:
                         if e.errno == 13:  # Permission denied
                             time.sleep(0.1)
                         elif e.errno == 13:  # No such file or directory
                             warn(
-                                "WARNING: No file locking is possible (NFS mount?), " +
-                                "expect strange issues with multiprocessing...")
+                                "WARNING: No file locking is possible (NFS mount?), "
+                                + "expect strange issues with multiprocessing..."
+                            )
                             break
                         else:
                             raise
 
             # first count the lines
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             nrows = sum(1 for row in reader)
             np_t = np.zeros(nrows, dtype=int)
             central_quantile = np.ma.empty(nrows, dtype=float)
@@ -1282,29 +1369,26 @@ def read_monitoring_ts(fname, sort_by_date=False):
 
             # now read the data
             csvfile.seek(0)
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             for i, row in enumerate(reader):
-                date[i] = datetime.datetime.strptime(
-                    row['date'], '%Y%m%d%H%M%S')
-                np_t[i] = int(row['NP'])
-                central_quantile[i] = float(row['central_quantile'])
-                low_quantile[i] = float(row['low_quantile'])
-                high_quantile[i] = float(row['high_quantile'])
+                date[i] = datetime.datetime.strptime(row["date"], "%Y%m%d%H%M%S")
+                np_t[i] = int(row["NP"])
+                central_quantile[i] = float(row["central_quantile"])
+                low_quantile[i] = float(row["low_quantile"])
+                high_quantile[i] = float(row["high_quantile"])
 
             if FCNTL_AVAIL:
                 fcntl.flock(csvfile, fcntl.LOCK_UN)
             else:
-                msvcrt.locking(csvfile.fileno(), msvcrt.LK_UNLCK, os.path.getsize(csvfile))
+                msvcrt.locking(
+                    csvfile.fileno(), msvcrt.LK_UNLCK, os.path.getsize(csvfile)
+                )
 
             csvfile.close()
 
-            central_quantile = np.ma.masked_values(
-                central_quantile, get_fillvalue())
-            low_quantile = np.ma.masked_values(
-                low_quantile, get_fillvalue())
-            high_quantile = np.ma.masked_values(
-                high_quantile, get_fillvalue())
+            central_quantile = np.ma.masked_values(central_quantile, get_fillvalue())
+            low_quantile = np.ma.masked_values(low_quantile, get_fillvalue())
+            high_quantile = np.ma.masked_values(high_quantile, get_fillvalue())
 
             if sort_by_date:
                 ind = np.argsort(date)
@@ -1317,7 +1401,7 @@ def read_monitoring_ts(fname, sort_by_date=False):
             return date, np_t, central_quantile, low_quantile, high_quantile
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None, None, None, None
 
 
@@ -1337,11 +1421,12 @@ def read_monitoring_ts_old(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
             reader = csv.DictReader(
-                (row for row in csvfile if not row.startswith('#')),
-                fieldnames=['Date [YYJJJ]', 'Npoints', 'Value'])
+                (row for row in csvfile if not row.startswith("#")),
+                fieldnames=["Date [YYJJJ]", "Npoints", "Value"],
+            )
             nrows = sum(1 for row in reader)
             np_t = np.zeros(nrows, dtype=int)
             central_quantile = np.ma.empty(nrows, dtype=float)
@@ -1351,15 +1436,15 @@ def read_monitoring_ts_old(fname):
             # now read the data
             csvfile.seek(0)
             reader = csv.DictReader(
-                (row for row in csvfile if not row.startswith('#')),
-                fieldnames=['Date [YYJJJ]', 'Npoints', 'Value'])
+                (row for row in csvfile if not row.startswith("#")),
+                fieldnames=["Date [YYJJJ]", "Npoints", "Value"],
+            )
 
             date = list()
             for i, row in enumerate(reader):
-                date.append(datetime.datetime.strptime(
-                    row['Date [YYJJJ]'], '%y%j'))
-                np_t[i] = int(row['Npoints'])
-                central_quantile[i] = float(row['Value'])
+                date.append(datetime.datetime.strptime(row["Date [YYJJJ]"], "%y%j"))
+                np_t[i] = int(row["Npoints"])
+                central_quantile[i] = float(row["Value"])
 
             central_quantile = np.ma.masked_invalid(central_quantile)
 
@@ -1368,7 +1453,7 @@ def read_monitoring_ts_old(fname):
             return date, np_t, central_quantile, low_quantile, high_quantile
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None, None, None, None
 
 
@@ -1392,7 +1477,7 @@ def read_intercomp_scores_ts(fname, sort_by_date=False):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             if FCNTL_AVAIL:
                 while True:
                     try:
@@ -1403,8 +1488,9 @@ def read_intercomp_scores_ts(fname, sort_by_date=False):
                             time.sleep(0.1)
                         elif e.errno == errno.EBADF:
                             warn(
-                                "WARNING: No file locking is possible (NFS mount?), " +
-                                "expect strange issues with multiprocessing...")
+                                "WARNING: No file locking is possible (NFS mount?), "
+                                + "expect strange issues with multiprocessing..."
+                            )
                             break
                         else:
                             raise
@@ -1412,22 +1498,24 @@ def read_intercomp_scores_ts(fname, sort_by_date=False):
                 while True:
                     try:
                         # Attempt to acquire an exclusive lock on the file
-                        msvcrt.locking(os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0)
+                        msvcrt.locking(
+                            os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0
+                        )
                         break
                     except OSError as e:
                         if e.errno == 13:  # Permission denied
                             time.sleep(0.1)
                         elif e.errno == 13:  # No such file or directory
                             warn(
-                                "WARNING: No file locking is possible (NFS mount?), " +
-                                "expect strange issues with multiprocessing...")
+                                "WARNING: No file locking is possible (NFS mount?), "
+                                + "expect strange issues with multiprocessing..."
+                            )
                             break
                         else:
                             raise
 
             # first count the lines
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             nrows = sum(1 for row in reader)
 
             np_vec = np.zeros(nrows, dtype=int)
@@ -1444,44 +1532,36 @@ def read_intercomp_scores_ts(fname, sort_by_date=False):
 
             # now read the data
             csvfile.seek(0)
-            reader = csv.DictReader(
-                row for row in csvfile if not row.startswith('#'))
+            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             for i, row in enumerate(reader):
-                date_vec[i] = datetime.datetime.strptime(
-                    row['date'], '%Y%m%d%H%M%S')
-                np_vec[i] = int(row['NP'])
-                meanbias_vec[i] = float(row['mean_bias'])
-                medianbias_vec[i] = float(row['median_bias'])
-                quant25bias_vec[i] = float(row['quant25_bias'])
-                quant75bias_vec[i] = float(row['quant75_bias'])
-                modebias_vec[i] = float(row['mode_bias'])
-                corr_vec[i] = float(row['corr'])
-                slope_vec[i] = float(row['slope_of_linear_regression'])
-                intercep_vec[i] = float(row['intercep_of_linear_regression'])
+                date_vec[i] = datetime.datetime.strptime(row["date"], "%Y%m%d%H%M%S")
+                np_vec[i] = int(row["NP"])
+                meanbias_vec[i] = float(row["mean_bias"])
+                medianbias_vec[i] = float(row["median_bias"])
+                quant25bias_vec[i] = float(row["quant25_bias"])
+                quant75bias_vec[i] = float(row["quant75_bias"])
+                modebias_vec[i] = float(row["mode_bias"])
+                corr_vec[i] = float(row["corr"])
+                slope_vec[i] = float(row["slope_of_linear_regression"])
+                intercep_vec[i] = float(row["intercep_of_linear_regression"])
                 intercep_slope1_vec[i] = float(
-                    row['intercep_of_linear_regression_of_slope_1'])
+                    row["intercep_of_linear_regression_of_slope_1"]
+                )
 
             fcntl.flock(csvfile, fcntl.LOCK_UN)
             csvfile.close()
 
-            meanbias_vec = np.ma.masked_values(
-                meanbias_vec, get_fillvalue())
-            medianbias_vec = np.ma.masked_values(
-                medianbias_vec, get_fillvalue())
-            quant25bias_vec = np.ma.masked_values(
-                quant25bias_vec, get_fillvalue())
-            quant75bias_vec = np.ma.masked_values(
-                quant75bias_vec, get_fillvalue())
-            modebias_vec = np.ma.masked_values(
-                modebias_vec, get_fillvalue())
-            corr_vec = np.ma.masked_values(
-                corr_vec, get_fillvalue())
-            slope_vec = np.ma.masked_values(
-                slope_vec, get_fillvalue())
-            intercep_vec = np.ma.masked_values(
-                intercep_vec, get_fillvalue())
+            meanbias_vec = np.ma.masked_values(meanbias_vec, get_fillvalue())
+            medianbias_vec = np.ma.masked_values(medianbias_vec, get_fillvalue())
+            quant25bias_vec = np.ma.masked_values(quant25bias_vec, get_fillvalue())
+            quant75bias_vec = np.ma.masked_values(quant75bias_vec, get_fillvalue())
+            modebias_vec = np.ma.masked_values(modebias_vec, get_fillvalue())
+            corr_vec = np.ma.masked_values(corr_vec, get_fillvalue())
+            slope_vec = np.ma.masked_values(slope_vec, get_fillvalue())
+            intercep_vec = np.ma.masked_values(intercep_vec, get_fillvalue())
             intercep_slope1_vec = np.ma.masked_values(
-                intercep_slope1_vec, get_fillvalue())
+                intercep_slope1_vec, get_fillvalue()
+            )
 
             if sort_by_date:
                 ind = np.argsort(date_vec)
@@ -1497,14 +1577,23 @@ def read_intercomp_scores_ts(fname, sort_by_date=False):
                 intercep_vec = intercep_vec[ind]
                 intercep_slope1_vec = intercep_slope1_vec[ind]
 
-            return (date_vec, np_vec, meanbias_vec, medianbias_vec,
-                    quant25bias_vec, quant75bias_vec, modebias_vec, corr_vec,
-                    slope_vec, intercep_vec, intercep_slope1_vec)
+            return (
+                date_vec,
+                np_vec,
+                meanbias_vec,
+                medianbias_vec,
+                quant25bias_vec,
+                quant75bias_vec,
+                modebias_vec,
+                corr_vec,
+                slope_vec,
+                intercep_vec,
+                intercep_slope1_vec,
+            )
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
-        return (None, None, None, None, None, None, None, None, None, None,
-                None)
+        warn("Unable to read file " + fname)
+        return (None, None, None, None, None, None, None, None, None, None, None)
 
 
 def read_intercomp_scores_ts_old(fname):
@@ -1525,14 +1614,22 @@ def read_intercomp_scores_ts_old(fname):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
             reader = csv.DictReader(
-                (row for row in csvfile if not row.startswith('#')),
-                fieldnames=['date', 'NP', 'mode_bias', 'median_bias',
-                            'mean_bias', 'corr', 'slope_of_linear_regression',
-                            'intercep_of_linear_regression'],
-                dialect='excel-tab')
+                (row for row in csvfile if not row.startswith("#")),
+                fieldnames=[
+                    "date",
+                    "NP",
+                    "mode_bias",
+                    "median_bias",
+                    "mean_bias",
+                    "corr",
+                    "slope_of_linear_regression",
+                    "intercep_of_linear_regression",
+                ],
+                dialect="excel-tab",
+            )
             nrows = sum(1 for row in reader)
 
             np_vec = np.zeros(nrows, dtype=int)
@@ -1549,22 +1646,29 @@ def read_intercomp_scores_ts_old(fname):
             # now read the data
             csvfile.seek(0)
             reader = csv.DictReader(
-                (row for row in csvfile if not row.startswith('#')),
-                fieldnames=['date', 'NP', 'mode_bias', 'median_bias',
-                            'mean_bias', 'corr', 'slope_of_linear_regression',
-                            'intercep_of_linear_regression'],
-                dialect='excel-tab')
+                (row for row in csvfile if not row.startswith("#")),
+                fieldnames=[
+                    "date",
+                    "NP",
+                    "mode_bias",
+                    "median_bias",
+                    "mean_bias",
+                    "corr",
+                    "slope_of_linear_regression",
+                    "intercep_of_linear_regression",
+                ],
+                dialect="excel-tab",
+            )
             date_vec = list()
             for i, row in enumerate(reader):
-                date_vec.append(datetime.datetime.strptime(
-                    row['date'], '%y%j'))
-                np_vec[i] = int(row['NP'])
-                meanbias_vec[i] = float(row['mean_bias'])
-                medianbias_vec[i] = float(row['median_bias'])
-                modebias_vec[i] = float(row['mode_bias'])
-                corr_vec[i] = float(row['corr'])
-                slope_vec[i] = float(row['slope_of_linear_regression'])
-                intercep_vec[i] = float(row['intercep_of_linear_regression'])
+                date_vec.append(datetime.datetime.strptime(row["date"], "%y%j"))
+                np_vec[i] = int(row["NP"])
+                meanbias_vec[i] = float(row["mean_bias"])
+                medianbias_vec[i] = float(row["median_bias"])
+                modebias_vec[i] = float(row["mode_bias"])
+                corr_vec[i] = float(row["corr"])
+                slope_vec[i] = float(row["slope_of_linear_regression"])
+                intercep_vec[i] = float(row["intercep_of_linear_regression"])
 
             meanbias_vec = np.ma.masked_invalid(meanbias_vec)
             medianbias_vec = np.ma.masked_invalid(medianbias_vec)
@@ -1575,14 +1679,23 @@ def read_intercomp_scores_ts_old(fname):
 
             csvfile.close()
 
-            return (date_vec, np_vec, meanbias_vec, medianbias_vec,
-                    quant25bias_vec, quant75bias_vec, modebias_vec, corr_vec,
-                    slope_vec, intercep_vec, intercep_slope1_vec)
+            return (
+                date_vec,
+                np_vec,
+                meanbias_vec,
+                medianbias_vec,
+                quant25bias_vec,
+                quant75bias_vec,
+                modebias_vec,
+                corr_vec,
+                slope_vec,
+                intercep_vec,
+                intercep_slope1_vec,
+            )
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
-        return (None, None, None, None, None, None, None, None, None, None,
-                None)
+        warn("Unable to read file " + fname)
+        return (None, None, None, None, None, None, None, None, None, None, None)
 
 
 def read_intercomp_scores_ts_old_v0(fname, corr_min=0.6, np_min=9):
@@ -1603,12 +1716,13 @@ def read_intercomp_scores_ts_old_v0(fname, corr_min=0.6, np_min=9):
 
     """
     try:
-        with open(fname, 'r', newline='') as csvfile:
+        with open(fname, "r", newline="") as csvfile:
             # first count the lines
             reader = csv.DictReader(
-                (row for row in csvfile if not row.startswith('#')),
-                fieldnames=['date', 'ele', 'NP', 'mean_bias', 'corr'],
-                dialect='excel-tab')
+                (row for row in csvfile if not row.startswith("#")),
+                fieldnames=["date", "ele", "NP", "mean_bias", "corr"],
+                dialect="excel-tab",
+            )
             nrows = sum(1 for row in reader)
 
             np_aux_vec = np.zeros(nrows, dtype=int)
@@ -1618,16 +1732,16 @@ def read_intercomp_scores_ts_old_v0(fname, corr_min=0.6, np_min=9):
             # now read the data
             csvfile.seek(0)
             reader = csv.DictReader(
-                (row for row in csvfile if not row.startswith('#')),
-                fieldnames=['date', 'ele', 'NP', 'mean_bias', 'corr'],
-                dialect='excel-tab')
+                (row for row in csvfile if not row.startswith("#")),
+                fieldnames=["date", "ele", "NP", "mean_bias", "corr"],
+                dialect="excel-tab",
+            )
             date_aux_vec = list()
             for i, row in enumerate(reader):
-                date_aux_vec.append(datetime.datetime.strptime(
-                    row['date'], '%y%j'))
-                np_aux_vec[i] = int(row['NP'])
-                meanbias_aux_vec[i] = float(row['mean_bias'])
-                corr_aux_vec[i] = float(row['corr'])
+                date_aux_vec.append(datetime.datetime.strptime(row["date"], "%y%j"))
+                np_aux_vec[i] = int(row["NP"])
+                meanbias_aux_vec[i] = float(row["mean_bias"])
+                corr_aux_vec[i] = float(row["corr"])
 
             meanbias_aux_vec = np.ma.masked_invalid(meanbias_aux_vec)
             corr_aux_vec = np.ma.masked_invalid(corr_aux_vec)
@@ -1647,8 +1761,9 @@ def read_intercomp_scores_ts_old_v0(fname, corr_min=0.6, np_min=9):
                 meanbias_aux = meanbias_aux_vec[ind_aux]
                 corr_aux = corr_aux_vec[ind_aux]
 
-                ind_valid = np.where(np.logical_and(
-                    corr_aux > corr_min, np_aux > np_min))
+                ind_valid = np.where(
+                    np.logical_and(corr_aux > corr_min, np_aux > np_min)
+                )
                 np_aux = np_aux[ind_valid]
                 meanbias_aux = meanbias_aux[ind_valid]
                 corr_aux = corr_aux[ind_valid]
@@ -1665,8 +1780,7 @@ def read_intercomp_scores_ts_old_v0(fname, corr_min=0.6, np_min=9):
             meanbias_aux = meanbias_aux_vec[ind_aux]
             corr_aux = corr_aux_vec[ind_aux]
 
-            ind_valid = np.where(np.logical_and(
-                corr_aux > corr_min, np_aux > np_min))
+            ind_valid = np.where(np.logical_and(corr_aux > corr_min, np_aux > np_min))
             np_aux = np_aux[ind_valid]
             meanbias_aux = meanbias_aux[ind_valid]
             corr_aux = corr_aux[ind_valid]
@@ -1683,14 +1797,23 @@ def read_intercomp_scores_ts_old_v0(fname, corr_min=0.6, np_min=9):
             intercep_vec = np.ma.masked_all(nelements, dtype=float)
             intercep_slope1_vec = np.ma.masked_all(nelements, dtype=float)
 
-            return (date_vec, np_vec, meanbias_vec, medianbias_vec,
-                    quant25bias_vec, quant75bias_vec, modebias_vec, corr_vec,
-                    slope_vec, intercep_vec, intercep_slope1_vec)
+            return (
+                date_vec,
+                np_vec,
+                meanbias_vec,
+                medianbias_vec,
+                quant25bias_vec,
+                quant75bias_vec,
+                modebias_vec,
+                corr_vec,
+                slope_vec,
+                intercep_vec,
+                intercep_slope1_vec,
+            )
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
-        return (None, None, None, None, None, None, None, None, None, None,
-                None)
+        warn("Unable to read file " + fname)
+        return (None, None, None, None, None, None, None, None, None, None, None)
 
 
 def read_selfconsistency(fname):
@@ -1709,30 +1832,31 @@ def read_selfconsistency(fname):
 
     """
     try:
-        with open(fname, 'r', newline='', encoding='utf-8',
-                  errors='ignore') as csvfile:
+        with open(fname, "r", newline="", encoding="utf-8", errors="ignore") as csvfile:
             # first count the lines
             reader = csv.DictReader(
-                csvfile, fieldnames=['zdr', 'kdpzh'], dialect='excel-tab')
+                csvfile, fieldnames=["zdr", "kdpzh"], dialect="excel-tab"
+            )
             nrows = sum(1 for row in reader)
 
-            zdr_kdpzh_table = np.empty((2, nrows), dtype='float32')
+            zdr_kdpzh_table = np.empty((2, nrows), dtype="float32")
 
             # now read the data
             csvfile.seek(0)
 
             reader = csv.DictReader(
-                csvfile, fieldnames=['zdr', 'kdpzh'], dialect='excel-tab')
+                csvfile, fieldnames=["zdr", "kdpzh"], dialect="excel-tab"
+            )
             for i, row in enumerate(reader):
-                zdr_kdpzh_table[0, i] = float(row['zdr'])
-                zdr_kdpzh_table[1, i] = float(row['kdpzh'])
+                zdr_kdpzh_table[0, i] = float(row["zdr"])
+                zdr_kdpzh_table[1, i] = float(row["kdpzh"])
 
             csvfile.close()
 
             return zdr_kdpzh_table
     except EnvironmentError as ee:
         warn(str(ee))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None
 
 
@@ -1760,8 +1884,7 @@ def read_antenna_pattern(fname, linear=False, twoway=False):
         pfile = open(fname, "r")
     except EnvironmentError as ee:
         warn(str(ee))
-        raise Exception("ERROR: Could not find|open antenna file '" +
-                        fname + "'")
+        raise Exception("ERROR: Could not find|open antenna file '" + fname + "'")
 
     # Get array length
     linenum = 0
@@ -1770,10 +1893,7 @@ def read_antenna_pattern(fname, linear=False, twoway=False):
             break
         linenum += 1
 
-    pattern = {
-        'angle': np.empty(linenum),
-        'attenuation': np.empty(linenum)
-    }
+    pattern = {"angle": np.empty(linenum), "attenuation": np.empty(linenum)}
 
     pfile.seek(0)
     cnt = 0
@@ -1781,17 +1901,17 @@ def read_antenna_pattern(fname, linear=False, twoway=False):
         if line.startswith("# CRC:"):
             break
         line = line.strip()
-        fields = line.split(',')
-        pattern['angle'][cnt] = float(fields[0])
-        pattern['attenuation'][cnt] = float(fields[1])
+        fields = line.split(",")
+        pattern["angle"][cnt] = float(fields[0])
+        pattern["attenuation"][cnt] = float(fields[1])
         cnt += 1
 
     pfile.close()
 
     if twoway:
-        pattern['attenuation'] = 2. * pattern['attenuation']
+        pattern["attenuation"] = 2.0 * pattern["attenuation"]
 
     if linear:
-        pattern['attenuation'] = 10.**(pattern['attenuation'] / 10.)
+        pattern["attenuation"] = 10.0 ** (pattern["attenuation"] / 10.0)
 
     return pattern

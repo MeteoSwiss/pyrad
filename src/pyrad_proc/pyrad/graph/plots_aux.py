@@ -27,15 +27,15 @@ import pyart
 
 import matplotlib as mpl
 import matplotlib.cm
-mpl.use('Agg')
+
+mpl.use("Agg")
 
 # Increase a bit font size
-mpl.rcParams.update({'font.size': 16})
-mpl.rcParams.update({'font.family': "sans-serif"})
+mpl.rcParams.update({"font.size": 16})
+mpl.rcParams.update({"font.family": "sans-serif"})
 
 
-def generate_complex_range_Doppler_title(radar, field, ray,
-                                         datetime_format=None):
+def generate_complex_range_Doppler_title(radar, field, ray, datetime_format=None):
     """
     creates the fixed range plot title
 
@@ -60,16 +60,20 @@ def generate_complex_range_Doppler_title(radar, field, ray,
     if datetime_format:
         time_str = begin_time.strftime(datetime_format)
     else:
-        time_str = begin_time.isoformat() + 'Z'
+        time_str = begin_time.isoformat() + "Z"
     l1 = "%s azi%.1f-ele%.1f deg. %s " % (
         pyart.graph.common.generate_radar_name(radar),
-        radar.azimuth['data'][ray], radar.elevation['data'][ray], time_str)
+        radar.azimuth["data"][ray],
+        radar.elevation["data"][ray],
+        time_str,
+    )
     field_name = pyart.graph.common.generate_field_name(radar, field)
-    return l1 + '\n' + field_name
+    return l1 + "\n" + field_name
 
 
-def generate_angle_Doppler_title(radar, field, ang, ind_rng,
-                                 along_azi=True, datetime_format=None):
+def generate_angle_Doppler_title(
+    radar, field, ang, ind_rng, along_azi=True, datetime_format=None
+):
     """
     creates the angle-Doppler plot title
 
@@ -99,20 +103,23 @@ def generate_angle_Doppler_title(radar, field, ang, ind_rng,
     if datetime_format:
         time_str = begin_time.strftime(datetime_format)
     else:
-        time_str = begin_time.isoformat() + 'Z'
+        time_str = begin_time.isoformat() + "Z"
     if along_azi:
-        ang_type = 'ele'
+        ang_type = "ele"
     else:
-        ang_type = 'azi'
+        ang_type = "azi"
     l1 = "%s %s%.1f deg-rng%.1f m. %s " % (
         pyart.graph.common.generate_radar_name(radar),
-        ang_type, ang, radar.range['data'][ind_rng], time_str)
+        ang_type,
+        ang,
+        radar.range["data"][ind_rng],
+        time_str,
+    )
     field_name = pyart.graph.common.generate_field_name(radar, field)
-    return l1 + '\n' + field_name
+    return l1 + "\n" + field_name
 
 
-def generate_complex_Doppler_title(radar, field, ray, rng,
-                                   datetime_format=None):
+def generate_complex_Doppler_title(radar, field, ray, rng, datetime_format=None):
     """
     creates the fixed range plot title
 
@@ -137,13 +144,16 @@ def generate_complex_Doppler_title(radar, field, ray, rng,
     if datetime_format:
         time_str = begin_time.strftime(datetime_format)
     else:
-        time_str = begin_time.isoformat() + 'Z'
+        time_str = begin_time.isoformat() + "Z"
     l1 = "%s azi%.1f-ele%.1f deg rng%.1f km. %s " % (
         pyart.graph.common.generate_radar_name(radar),
-        radar.azimuth['data'][ray], radar.elevation['data'][ray],
-        radar.range['data'][rng] / 1000., time_str)
+        radar.azimuth["data"][ray],
+        radar.elevation["data"][ray],
+        radar.range["data"][rng] / 1000.0,
+        time_str,
+    )
     field_name = pyart.graph.common.generate_field_name(radar, field)
-    return l1 + '\n' + field_name
+    return l1 + "\n" + field_name
 
 
 def generate_fixed_rng_span_title(radar, field, stat, datetime_format=None):
@@ -171,13 +181,16 @@ def generate_fixed_rng_span_title(radar, field, stat, datetime_format=None):
     if datetime_format:
         time_str = begin_time.strftime(datetime_format)
     else:
-        time_str = begin_time.isoformat() + 'Z'
+        time_str = begin_time.isoformat() + "Z"
     l1 = "%s %.1f-%.1f m %s. %s " % (
         pyart.graph.common.generate_radar_name(radar),
-        np.min(radar.range['data']), np.max(radar.range['data']), stat,
-        time_str)
+        np.min(radar.range["data"]),
+        np.max(radar.range["data"]),
+        stat,
+        time_str,
+    )
     field_name = pyart.graph.common.generate_field_name(radar, field)
-    return l1 + '\n' + field_name
+    return l1 + "\n" + field_name
 
 
 def generate_fixed_rng_title(radar, field, fixed_rng, datetime_format=None):
@@ -205,11 +218,14 @@ def generate_fixed_rng_title(radar, field, fixed_rng, datetime_format=None):
     if datetime_format:
         time_str = begin_time.strftime(datetime_format)
     else:
-        time_str = begin_time.isoformat() + 'Z'
-    l1 = "%s %.1f m. %s " % (pyart.graph.common.generate_radar_name(radar),
-                             fixed_rng, time_str)
+        time_str = begin_time.isoformat() + "Z"
+    l1 = "%s %.1f m. %s " % (
+        pyart.graph.common.generate_radar_name(radar),
+        fixed_rng,
+        time_str,
+    )
     field_name = pyart.graph.common.generate_field_name(radar, field)
-    return l1 + '\n' + field_name
+    return l1 + "\n" + field_name
 
 
 def generate_dda_map_title(grid, field, level, datetime_format=None):
@@ -237,21 +253,22 @@ def generate_dda_map_title(grid, field, level, datetime_format=None):
     if datetime_format:
         time_str = begin_time.strftime(datetime_format)
     else:
-        time_str = begin_time.isoformat() + 'Z'
-    radar_names = ''
+        time_str = begin_time.isoformat() + "Z"
+    radar_names = ""
 
-    for mdata in grid.metadata['additional_radars']:
-        if isinstance(mdata['radar_name'], bytes):
-            mdata['radar_name'] = mdata['radar_name'].decode('utf-8')
-        radar_names += '-' + mdata['radar_name']
+    for mdata in grid.metadata["additional_radars"]:
+        if isinstance(mdata["radar_name"], bytes):
+            mdata["radar_name"] = mdata["radar_name"].decode("utf-8")
+        radar_names += "-" + mdata["radar_name"]
     height = grid.z["data"][level] / 1000.0
     l1 = f"DDA: {radar_names} {height:.1f} km {time_str}"
     field_name = "Hor. wind vectors (u,v) with " + field
-    return l1 + '\n' + field_name
+    return l1 + "\n" + field_name
 
 
-def generate_dda_latitude_slice_title(grid, field, level, datetime_format=None,
-                                      wind_vectors='hor'):
+def generate_dda_latitude_slice_title(
+    grid, field, level, datetime_format=None, wind_vectors="hor"
+):
     """
     creates the dda latitude slice plot title
 
@@ -279,13 +296,13 @@ def generate_dda_latitude_slice_title(grid, field, level, datetime_format=None,
     if datetime_format:
         time_str = begin_time.strftime(datetime_format)
     else:
-        time_str = begin_time.isoformat() + 'Z'
-    radar_names = ''
+        time_str = begin_time.isoformat() + "Z"
+    radar_names = ""
 
-    for mdata in grid.metadata['additional_radars']:
-        if isinstance(mdata['radar_name'], bytes):
-            mdata['radar_name'] = mdata['radar_name'].decode('utf-8')
-        radar_names += '-' + mdata['radar_name']
+    for mdata in grid.metadata["additional_radars"]:
+        if isinstance(mdata["radar_name"], bytes):
+            mdata["radar_name"] = mdata["radar_name"].decode("utf-8")
+        radar_names += "-" + mdata["radar_name"]
     disp = grid.x["data"][level] / 1000.0
     if disp >= 0:
         direction = "east"
@@ -294,17 +311,17 @@ def generate_dda_latitude_slice_title(grid, field, level, datetime_format=None,
         disp = -disp
 
     l1 = f"DDA: {radar_names} {disp:.1f} km {direction} of origin {time_str}"
-    if wind_vectors == 'hor':
+    if wind_vectors == "hor":
         field_name = "Hor. wind vectors (u,v)"
-    elif wind_vectors == 'ver':
+    elif wind_vectors == "ver":
         field_name = "Vert. wind vectors (v,w)"
-    field_name += ' with ' + field
-    return l1 + '\n' + field_name
+    field_name += " with " + field
+    return l1 + "\n" + field_name
 
 
-def generate_dda_longitude_slice_title(grid, field, level,
-                                       datetime_format=None,
-                                       wind_vectors='hor'):
+def generate_dda_longitude_slice_title(
+    grid, field, level, datetime_format=None, wind_vectors="hor"
+):
     """
     creates the dda longitude slice plot title
 
@@ -332,13 +349,13 @@ def generate_dda_longitude_slice_title(grid, field, level,
     if datetime_format:
         time_str = begin_time.strftime(datetime_format)
     else:
-        time_str = begin_time.isoformat() + 'Z'
-    radar_names = ''
+        time_str = begin_time.isoformat() + "Z"
+    radar_names = ""
 
-    for mdata in grid.metadata['additional_radars']:
-        if isinstance(mdata['radar_name'], bytes):
-            mdata['radar_name'] = mdata['radar_name'].decode('utf-8')
-        radar_names += '-' + mdata['radar_name']
+    for mdata in grid.metadata["additional_radars"]:
+        if isinstance(mdata["radar_name"], bytes):
+            mdata["radar_name"] = mdata["radar_name"].decode("utf-8")
+        radar_names += "-" + mdata["radar_name"]
     disp = grid.x["data"][level] / 1000.0
     if disp >= 0:
         direction = "north"
@@ -346,12 +363,12 @@ def generate_dda_longitude_slice_title(grid, field, level,
         direction = "south"
         disp = -disp
     l1 = f"DDA: {radar_names} {disp:.1f} km {direction} of origin {time_str}"
-    if wind_vectors == 'hor':
+    if wind_vectors == "hor":
         field_name = "Hor. wind vectors (u,v)"
-    elif wind_vectors == 'ver':
+    elif wind_vectors == "ver":
         field_name = "Vert. wind vectors (v,w)"
-    field_name += ' with ' + field
-    return l1 + '\n' + field_name
+    field_name += " with " + field
+    return l1 + "\n" + field_name
 
 
 def get_colobar_label(field_dict, field_name):
@@ -371,17 +388,17 @@ def get_colobar_label(field_dict, field_name):
         colorbar label
 
     """
-    if 'standard_name' in field_dict:
-        standard_name = field_dict['standard_name']
-    elif 'long_name' in field_dict:
-        standard_name = field_dict['long_name']
+    if "standard_name" in field_dict:
+        standard_name = field_dict["standard_name"]
+    elif "long_name" in field_dict:
+        standard_name = field_dict["long_name"]
     else:
         standard_name = field_name
 
-    if 'units' in field_dict:
-        units = field_dict['units']
+    if "units" in field_dict:
+        units = field_dict["units"]
     else:
-        units = '?'
+        units = "?"
 
     return pyart.graph.common.generate_colorbar_label(standard_name, units)
 
@@ -403,13 +420,13 @@ def get_field_name(field_dict, field):
         the field name
 
     """
-    if 'standard_name' in field_dict:
-        field_name = field_dict['standard_name']
-    elif 'long_name' in field_dict:
-        field_name = field_dict['long_name']
+    if "standard_name" in field_dict:
+        field_name = field_dict["standard_name"]
+    elif "long_name" in field_dict:
+        field_name = field_dict["long_name"]
     else:
         field_name = str(field)
-    field_name = field_name.replace('_', ' ')
+    field_name = field_name.replace("_", " ")
     field_name = field_name[0].upper() + field_name[1:]
 
     return field_name
@@ -451,28 +468,29 @@ def get_norm(field_name, field_dict={}, isxarray=False):
     ref_dict = pyart.config.get_metadata(field_name)
     cmap = mpl.colormaps.get_cmap(pyart.config.get_field_colormap(field_name))
 
-    if field_dict is not None and 'boundaries' in field_dict:
+    if field_dict is not None and "boundaries" in field_dict:
         if isxarray:
-            ncolors = len(field_dict['boundaries']) - 1
+            ncolors = len(field_dict["boundaries"]) - 1
         else:
             ncolors = cmap.N
         norm = mpl.colors.BoundaryNorm(
-            boundaries=field_dict['boundaries'], ncolors=ncolors)
-    elif 'boundaries' in ref_dict:
+            boundaries=field_dict["boundaries"], ncolors=ncolors
+        )
+    elif "boundaries" in ref_dict:
         if isxarray:
-            ncolors = len(ref_dict['boundaries']) - 1
+            ncolors = len(ref_dict["boundaries"]) - 1
         else:
             ncolors = cmap.N
         norm = mpl.colors.BoundaryNorm(
-            boundaries=ref_dict['boundaries'], ncolors=ncolors)
+            boundaries=ref_dict["boundaries"], ncolors=ncolors
+        )
 
-    if field_dict is not None and 'ticks' in field_dict:
-        ticks = field_dict['ticks']
-        if 'labels' in field_dict:
-            ticklabs = field_dict['labels']
-    elif 'ticks' in ref_dict:
-        ticks = ref_dict['ticks']
-        if 'labels' in ref_dict:
-            ticklabs = ref_dict['labels']
-
+    if field_dict is not None and "ticks" in field_dict:
+        ticks = field_dict["ticks"]
+        if "labels" in field_dict:
+            ticklabs = field_dict["labels"]
+    elif "ticks" in ref_dict:
+        ticks = ref_dict["ticks"]
+        if "labels" in ref_dict:
+            ticklabs = ref_dict["labels"]
     return norm, ticks, ticklabs

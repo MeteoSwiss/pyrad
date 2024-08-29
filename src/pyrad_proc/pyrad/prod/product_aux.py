@@ -10,6 +10,7 @@ Auxiliary functions to generate products
     get_prodgen_func
 
 """
+
 from .process_product import generate_sun_hits_products
 from .process_product import generate_icon_coord_products
 from .process_product import generate_occurrence_products
@@ -69,46 +70,48 @@ def get_prodgen_func(dsformat, dsname, dstype):
 
     """
 
-    if dsformat == 'VOL':
+    if dsformat == "VOL":
         func = generate_vol_products
-    elif dsformat == 'TIMESERIES':
+    elif dsformat == "TIMESERIES":
         func = generate_timeseries_products
-    elif dsformat == 'GRID':
+    elif dsformat == "GRID":
         func = generate_grid_products
-    elif dsformat == 'SPECTRA':
+    elif dsformat == "SPECTRA":
         func = generate_spectra_products
-    elif dsformat == 'SPARSE_GRID':
+    elif dsformat == "SPARSE_GRID":
         func = generate_sparse_grid_products
-    elif dsformat == 'TIMEAVG':
+    elif dsformat == "TIMEAVG":
         func = generate_time_avg_products
-    elif dsformat == 'GRID_TIMEAVG':
+    elif dsformat == "GRID_TIMEAVG":
         func = generate_grid_time_avg_products
-    elif dsformat == 'SUN_HITS':
+    elif dsformat == "SUN_HITS":
         func = generate_sun_hits_products
-    elif dsformat == 'MONITORING':
+    elif dsformat == "MONITORING":
         func = generate_monitoring_products
-    elif dsformat == 'OCCURRENCE':
+    elif dsformat == "OCCURRENCE":
         func = generate_occurrence_products
-    elif dsformat == 'INTERCOMP':
+    elif dsformat == "INTERCOMP":
         func = generate_intercomp_products
-    elif dsformat == 'TRAJ_ONLY':
+    elif dsformat == "TRAJ_ONLY":
         func = generate_traj_product
-    elif dsformat == 'COLOCATED_GATES':
+    elif dsformat == "COLOCATED_GATES":
         func = generate_colocated_gates_products
-    elif dsformat == 'ICON_COORD':
+    elif dsformat == "ICON_COORD":
         func = generate_icon_coord_products
-    elif dsformat == 'ICON2RADAR':
+    elif dsformat == "ICON2RADAR":
         func = generate_icon_to_radar_products
-    elif dsformat == 'QVP':
+    elif dsformat == "QVP":
         func = generate_qvp_products
-    elif dsformat == 'ML':
+    elif dsformat == "ML":
         func = generate_ml_products
-    elif dsformat == 'VPR':
+    elif dsformat == "VPR":
         func = generate_vpr_products
-    elif dsformat == 'CENTROIDS':
+    elif dsformat == "CENTROIDS":
         func = generate_centroids_products
     else:
-        raise ValueError("ERROR: Unknown dataset format '%s' of dataset '%s'"
-                         "(dataset type '%s')" % (dsformat, dsname, dstype))
+        raise ValueError(
+            "ERROR: Unknown dataset format '%s' of dataset '%s'"
+            "(dataset type '%s')" % (dsformat, dsname, dstype)
+        )
 
     return func
