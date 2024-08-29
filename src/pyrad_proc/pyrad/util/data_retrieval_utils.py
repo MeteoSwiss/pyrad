@@ -465,7 +465,7 @@ def retrieve_mch_prod_RT(
             content_zip = [
                 c
                 for c in content_zip
-                if re.match(os.path.basename(c), pattern) is not None
+                if re.match(pattern, os.path.basename(c)) is not None
             ]
         else:
             raise ValueError('Unknown pattern_type, must be either "shell" or "regex".')
@@ -540,7 +540,7 @@ def _retrieve_prod_daily(
             content_zip = [
                 c
                 for c in content_zip
-                if re.match(os.path.basename(c), pattern) is not None
+                if re.match(pattern, os.path.basename(c)) is not None
             ]
         else:
             raise ValueError('Unknown pattern_type, must be either "shell" or "regex".')
@@ -590,7 +590,7 @@ def _retrieve_prod_daily(
         subprocess.call(cmd, shell=True)
 
     files = sorted(np.array([folder_out + c for c in content_zip[conditions]]))
-
+    
     return files
 
 
