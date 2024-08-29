@@ -124,7 +124,7 @@ H_ISO0,height_over_iso0
 H_ISO0c,corrected_height_over_iso0
 HZT,iso0_height
 HZTc,corrected_iso0_height
-cosmo_index,cosmo_index
+icon_index,icon_index
 hzt_index,hzt_index
 ml,melting_layer
 VIS,visibility
@@ -150,6 +150,8 @@ occurrence,occurrence
 freq_occu,frequency_of_occurrence
 RR,radar_estimated_rain_rate
 RR_MP,Marshall_Palmer_radar_estimated_rain_rate
+RR_Z,radar_reflectivity_estimated_rain_rate
+RR_KDP,radar_kdp_estimated_rain_rate
 RR_flag,radar_estimated_rain_rate_flag
 RRc,corrected_radar_estimated_rain_rate
 Raccu,rainfall_accumulation

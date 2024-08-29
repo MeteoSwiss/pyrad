@@ -206,6 +206,7 @@ Doppler processing
     process_windshear
     process_windshear_lidar
     process_vad
+    process_dda
 
 Time series functions
 ====================
