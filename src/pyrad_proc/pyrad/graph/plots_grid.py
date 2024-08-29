@@ -14,8 +14,7 @@ Functions to plot data in a Cartesian grid format
     plot_longitude_slice
     plot_cross_section
     plot_dda_map
-    plot_dda_latitude_slice
-    plot_dda_longitude_slice
+    plot_dda_slice
 """
 
 from warnings import warn

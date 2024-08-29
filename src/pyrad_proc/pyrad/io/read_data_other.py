@@ -37,12 +37,14 @@ Functions for reading auxiliary data
     read_intercomp_scores_ts_old_v0
     read_selfconsistency
     read_antenna_pattern
+    read_xls
 
 """
 
 import os
 import glob
 import datetime
+import pandas as pd
 import csv
 import xml.etree.ElementTree as et
 from warnings import warn
@@ -1915,3 +1917,26 @@ def read_antenna_pattern(fname, linear=False, twoway=False):
         pattern["attenuation"] = 10.0 ** (pattern["attenuation"] / 10.0)
 
     return pattern
+
+
+def read_xls(xls_file):
+    """Reads an excel file such as those used for CPC vlaidation
+
+    Parameters
+    ----------
+    fname : str
+        Full path of the excel file to be read
+    
+    Returns
+    -------
+    The excel file as a Pandas dataframe
+    """
+    
+    data = pd.read_excel(xls_file, sheet_name  = None)
+    keys = list(data.keys())
+    hourly_keys = []
+    for k in keys:
+        if 'Data Hourly' in k:
+            hourly_keys.append(k)
+    out = pd.concat([data[k] for k in hourly_keys])
+    return out

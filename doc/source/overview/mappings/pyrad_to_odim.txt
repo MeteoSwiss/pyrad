@@ -83,7 +83,7 @@ PIDAc,PIDAC,corrected_path_integrated_differential_attenuation
 TEMP,TEMP,temperature
 ISO0,ISO0,iso0
 H_ISO0,HISO0,height_over_iso0
-cosmo_index,COSMOIND,cosmo_index
+icon_index,ICONIND,icon_index
 hzt_index,HZTIND,hzt_index
 ml,ML,melting_layer
 VIS,VIS,visibility

@@ -2400,7 +2400,6 @@ def get_fieldname_pyart(datatype):
         field_name = "quant90_dealiased_velocity"
     elif datatype == "quant95dealV":
         field_name = "quant95_dealiased_velocity"
-
     else:
         raise ValueError("ERROR: Unknown data type " + datatype)
 
