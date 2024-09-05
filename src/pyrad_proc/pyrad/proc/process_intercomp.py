@@ -2034,9 +2034,9 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
         ):
             warn("Unable to compare radar time avg fields. " + "Fields missing")
             return None, None
-
+        
+        dscfg["global_data"].update({"timeinfo": dscfg["timeinfo"]})
         if not dscfg["initialized"]:
-            dscfg["global_data"].update({"timeinfo": dscfg["timeinfo"]})
             dscfg["global_data"].update(
                 {"rad1_name": dscfg["RadarName"][ind_radar_list[0]]}
             )
@@ -2044,7 +2044,7 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
                 {"rad2_name": dscfg["RadarName"][ind_radar_list[1]]}
             )
             dscfg["initialized"] = 1
-
+            
         refl1 = radar1.fields[rad1_refl_field]["data"]
         refl2 = radar2.fields[rad2_refl_field]["data"]
 
@@ -2263,7 +2263,7 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
         intercomp_dict["rad1_time"] = np.empty(
             len(rad1_ray_ind), dtype=datetime.datetime
         )
-        intercomp_dict["rad1_time"][:] = dscfg["global_data"]["timeinfo"]
+        intercomp_dict["rad1_time"][:] = dscfg["timeinfo"]
         intercomp_dict["rad1_ray_ind"] = rad1_ray_ind
         intercomp_dict["rad1_rng_ind"] = rad1_rng_ind
         intercomp_dict["rad1_ele"] = radar1.elevation["data"][rad1_ray_ind]
@@ -2402,7 +2402,6 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             "timeinfo": dscfg["global_data"]["timeinfo"],
             "final": True,
         }
-
         return new_dataset, None
 
 
