@@ -17,11 +17,11 @@ Py-ART to Pyrad
    :header-rows: 1
 
 
-COSMO to Pyrad
+ICON to Pyrad
 ------------------------------------
 
-.. csv-table:: COSMO to Pyrad mappings
-   :file: mappings/pyrad_to_cosmo.txt
+.. csv-table:: ICON to Pyrad mappings
+   :file: mappings/pyrad_to_icon.txt
    :header-rows: 1
 
 
