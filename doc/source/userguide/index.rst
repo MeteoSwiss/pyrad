@@ -11,3 +11,4 @@ We have a collection of installation, and contribution instructions listed below
    installation
    usage
    contributing
+   shortcourses
