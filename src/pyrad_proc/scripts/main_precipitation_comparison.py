@@ -18,6 +18,7 @@ import atexit
 import glob
 from warnings import warn
 import os
+import argparse
 
 import numpy as np
 
@@ -27,71 +28,91 @@ from pyrad.util import compute_1d_stats
 
 print(__doc__)
 
+def parse_args():
+    """Parse command-line arguments."""
+    parser = argparse.ArgumentParser(description="Compare radar data with a point measurement sensor.")
+    parser.add_argument('directory', 
+                        help="Directory where the precipitation products are stored")
+    parser.add_argument('--parameters', default = ["RR"], nargs='+',
+                        help="Directory where the precipitation products are stored")
+    
+    return parser.parse_args()
 
+def find_max_min_dates(file_paths):
+    dates = []
+
+    for file_path in file_paths:
+        # Extract the date component from the filename
+        filename = os.path.basename(file_path)
+        date_str = filename.split('_')[0]
+        
+        try:
+            # Convert the date string to a datetime object
+            date = datetime.datetime.strptime(date_str, '%Y%m%d')
+            dates.append(date)
+        except ValueError:
+            # Handle files that don't have a valid date format
+            print(f"Warning: '{file_path}' does not contain a valid date format.")
+    
+    if dates:
+        # Find the minimum and maximum dates
+        min_date = min(dates)
+        max_date = max(dates)
+        return min_date, max_date
+    else:
+        return None, None
+    
 def main():
-    """
-    """
-    param_vec = ['RR_Z', 'RR_hydro']
-    smn_station_vec = ['CIM', 'MAG', 'OTL']
-    tstart = '20180401'
-    tend = '20180430'
-
+    """Main function."""
+    args = parse_args()
+    
+    fpath = args.directory
+    params = args.parameters
+    
     np_radar_min = 6
     np_sensor_min = 6
     min_val = 0.2
 
-    fbase = '/data/pyrad_products/mals_loc_dataquality/'
     img_ext = 'png'
     avg_time = 3600
 
     print("====== precipitation comparison started: %s" %
           datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"))
-    atexit.register(_print_end_msg,
-                    "====== comparison finished: ")
 
-    startdate = datetime.datetime.strptime(tstart, '%Y%m%d')
-    enddate = datetime.datetime.strptime(tend, '%Y%m%d')
+    # Find all products within file structure
+    all_RR_files = glob.glob(os.path.join(fpath, '**',  
+                            '*acc_ts_comp_POINT_MEASUREMENT_RR*.csv'), recursive = True)
 
-    ndays = (enddate - startdate).days + 1
-    print('Number of days to process: ' + str(ndays) + '\n\n')
+    print(f'Found {len(all_RR_files)} files with acc. precip.')
+    
+    startdate, enddate = find_max_min_dates(all_RR_files)
+    print(f'Start date: {startdate}')
+    print(f'End date: {enddate}')
 
-    for param in param_vec:
+    # Sort files by parameter
+    list_params = sorted(params)[::-1]
+    RR_files_by_param = {}
+    for file in all_RR_files:
+        for param in list_params:
+            if param in file:
+                if param not in RR_files_by_param:
+                    RR_files_by_param[param] = []
+                RR_files_by_param[param].append(file)
+    
+    for param in list_params:    
         ts_vec = np.array([])
         val_radar = np.ma.array([])
         np_radar = np.array([])
         val_sensor = np.ma.array([])
         np_sensor = np.array([])
-
-        for station in smn_station_vec:
-            for day in range(ndays):
-                current_date = startdate + datetime.timedelta(days=day)
-                day_dir = current_date.strftime("%Y-%m-%d")
-                daybase = current_date.strftime("%Y%m%d")
-
-                fpath = (
-                    fbase +
-                    day_dir +
-                    '/rg' +
-                    station +
-                    '_' +
-                    param +
-                    '/RRcum' +
-                    str(avg_time) +
-                    's/')
-                fname = glob.glob(
-                    fpath + daybase + '_' + str(avg_time) +
-                    's_acc_ts_comp_POINT_MEASUREMENT_*.csv')
-                if not fname:
-                    warn('No file found in ' + fpath)
-                    continue
-                else:
-                    (ts_aux, np_radar_aux, radar_value_aux, np_sensor_aux,
-                     sensor_value_aux) = read_ts_cum(fname[0])
-                    ts_vec = np.append(ts_vec, ts_aux)
-                    val_radar = np.ma.append(val_radar, radar_value_aux)
-                    np_radar = np.append(np_radar, np_radar_aux)
-                    val_sensor = np.ma.append(val_sensor, sensor_value_aux)
-                    np_sensor = np.append(np_sensor, np_sensor_aux)
+        for file in RR_files_by_param[param]:
+            (ts_aux, np_radar_aux, radar_value_aux, np_sensor_aux,
+                sensor_value_aux) = read_ts_cum(file)
+            ts_vec = np.append(ts_vec, ts_aux)
+            val_radar = np.ma.append(val_radar, radar_value_aux)
+            np_radar = np.append(np_radar, np_radar_aux)
+            val_sensor = np.ma.append(val_sensor, sensor_value_aux)
+            np_sensor = np.append(np_sensor, np_sensor_aux)
 
         # filter out undesired data
         ind = np.where(np.logical_and(
@@ -106,12 +127,12 @@ def main():
         stats = compute_1d_stats(val_sensor, val_radar)
 
         # create output image
-        fpath = fbase + 'RR/'
+        fpath = fpath + 'RR/'
         if os.path.isdir(fpath):
             pass
         else:
             os.makedirs(fpath)
-
+        print(f'Saving outputs to {fpath}')
         figfname = [
             startdate.strftime('%Y%m%d') +
             '-' +
@@ -149,19 +170,7 @@ def main():
 
 
 def _print_end_msg(text):
-    """
-    prints end message
-
-    Parameters
-    ----------
-    text : str
-        the text to be printed
-
-    Returns
-    -------
-    Nothing
-
-    """
+    """Prints end message."""
     print(text + datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"))
 
 
