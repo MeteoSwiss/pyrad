@@ -556,30 +556,33 @@ def generate_monitoring_products(dataset, prdcfg):
 
         # generate alarms if needed
         alarm = prdcfg.get("alarm", False)
+        
         if not alarm:
             return figfname_list
 
+        output = figfname_list
+        
         if "tol_abs" not in prdcfg:
             warn("unable to send alarm. Missing tolerance on target")
-            return None
+            return output
 
         if "tol_trend" not in prdcfg:
             warn("unable to send alarm. Missing tolerance in trend")
-            return None
+            return output
 
         if "nevents_min" not in prdcfg:
             warn(
                 "unable to send alarm. "
                 + "Missing minimum number of events to compute trend"
             )
-            return None
+            return output
 
         if "sender" not in prdcfg:
             warn("unable to send alarm. Missing email sender")
-            return None
+            return output
         if "receiver_list" not in prdcfg:
             warn("unable to send alarm. Missing email receivers")
-            return None
+            return output
 
         tol_abs = prdcfg["tol_abs"]
         tol_trend = prdcfg["tol_trend"]
@@ -592,7 +595,7 @@ def generate_monitoring_products(dataset, prdcfg):
 
         if np_last < np_min:
             warn("No valid data on day " + date[-1].strftime("%d-%m-%Y"))
-            return None
+            return output
 
         # check if absolute value exceeded
         abs_exceeded = False
@@ -684,7 +687,7 @@ def generate_monitoring_products(dataset, prdcfg):
         )
         send_msg(sender, receiver_list, subject, alarm_fname)
 
-        return alarm_fname
+        return output.append(alarm_fname)
 
     if prdcfg["type"] == "CUMUL_VOL_TS":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
@@ -849,27 +852,28 @@ def generate_monitoring_products(dataset, prdcfg):
         if not alarm:
             return figfname_list
 
+        output = figfname_list
         if "tol_abs" not in prdcfg:
             warn("unable to send alarm. Missing tolerance on target")
-            return None
+            return output
 
         if "tol_trend" not in prdcfg:
             warn("unable to send alarm. Missing tolerance in trend")
-            return None
+            return output
 
         if "nevents_min" not in prdcfg:
             warn(
                 "unable to send alarm. "
                 + "Missing minimum number of events to compute trend"
             )
-            return None
+            return output
 
         if "sender" not in prdcfg:
             warn("unable to send alarm. Missing email sender")
-            return None
+            return output
         if "receiver_list" not in prdcfg:
             warn("unable to send alarm. Missing email receivers")
-            return None
+            return output
 
         tol_abs = prdcfg["tol_abs"]
         tol_trend = prdcfg["tol_trend"]
@@ -882,7 +886,7 @@ def generate_monitoring_products(dataset, prdcfg):
 
         if np_last < np_min:
             warn("No valid data on day " + date[-1].strftime("%d-%m-%Y"))
-            return None
+            return output
 
         # check if absolute value exceeded
         abs_exceeded = False
@@ -928,7 +932,7 @@ def generate_monitoring_products(dataset, prdcfg):
                 trend_exceeded = True
 
         if abs_exceeded is False and trend_exceeded is False:
-            return None
+            return output
 
         alarm_dir = savedir + "/alarms/"
         if not os.path.isdir(alarm_dir):
@@ -974,7 +978,7 @@ def generate_monitoring_products(dataset, prdcfg):
         )
         send_msg(sender, receiver_list, subject, alarm_fname)
 
-        return alarm_fname
+        return output.append(alarm_fname)
 
     if prdcfg["type"] == "SAVEVOL":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
