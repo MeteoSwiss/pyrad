@@ -2317,10 +2317,9 @@ def get_sensor_data(date, datatype, cfg):
 
     return sensordate, sensorvalue, label, period
 
-
 def read_smn(fname):
     """
-    Reads SwissMetNet data contained in a csv file
+    Reads SwissMetNet data contained in a csv or gzipped csv file.
 
     Parameters
     ----------
@@ -2329,54 +2328,45 @@ def read_smn(fname):
 
     Returns
     -------
-    smn_id, date , pressure, temp, rh, precip, wspeed, wdir : tupple
+    smn_id, date, pressure, temp, rh, precip, wspeed, wdir : tuple
         The read values
-
     """
     fill_value = 10000000.0
+
     try:
-        with open(fname, "r", newline="") as csvfile:
-            # first count the lines
-            reader = csv.DictReader(csvfile)
-            nrows = sum(1 for row in reader)
-            smn_id = np.ma.empty(nrows, dtype="float32")
-            pressure = np.ma.empty(nrows, dtype="float32")
-            temp = np.ma.empty(nrows, dtype="float32")
-            rh = np.ma.empty(nrows, dtype="float32")
-            precip = np.ma.empty(nrows, dtype="float32")
-            wspeed = np.ma.empty(nrows, dtype="float32")
-            wdir = np.ma.empty(nrows, dtype="float32")
+        # Use pandas to read the file (supports .gz files directly)
+        df = pd.read_csv(fname, compression='gzip' if fname.endswith('.gz') else None)
 
-            # now read the data
-            csvfile.seek(0)
-            reader = csv.DictReader(csvfile)
-            date = []
-            for i, row in enumerate(reader):
-                smn_id[i] = float(row["StationID"])
-                date.append(datetime.datetime.strptime(row["DateTime"], "%Y%m%d%H%M%S"))
-                pressure[i] = float(row["AirPressure"])
-                temp[i] = float(row["2mTemperature"])
-                rh[i] = float(row["RH"])
-                precip[i] = float(row["Precipitation"])
-                wspeed[i] = float(row["Windspeed"])
-                wdir[i] = float(row["Winddirection"])
+        # Convert date strings to datetime objects
+        df['DateTime'] = pd.to_datetime(df['DateTime'], format='%Y%m%d%H%M%S')
 
-            pressure = np.ma.masked_values(pressure, fill_value)
-            temp = np.ma.masked_values(temp, fill_value)
-            rh = np.ma.masked_values(rh, fill_value)
-            precip = np.ma.masked_values(precip, fill_value)
-            wspeed = np.ma.masked_values(wspeed, fill_value)
-            wdir = np.ma.masked_values(wdir, fill_value)
+        # Identify columns by searching for keywords (handles cases like AirPressure:degC)
+        air_pressure_col = [col for col in df.columns if 'AirPressure' in col][0]
+        temp_col = [col for col in df.columns if '2mTemperature' in col][0]
+        rh_col = [col for col in df.columns if 'RH' in col][0]
+        precip_col = [col for col in df.columns if 'Precipitation' in col][0]
+        wspeed_col = [col for col in df.columns if 'Windspeed' in col][0]
+        wdir_col = [col for col in df.columns if 'Winddirection' in col][0]
 
-            # convert precip from mm/10min to mm/h
-            precip *= 6.0
+        # Mask invalid data (fill_value)
+        pressure = np.ma.masked_values(df[air_pressure_col].astype('float32'), fill_value)
+        temp = np.ma.masked_values(df[temp_col].astype('float32'), fill_value)
+        rh = np.ma.masked_values(df[rh_col].astype('float32'), fill_value)
+        precip = np.ma.masked_values(df[precip_col].astype('float32'), fill_value)
+        wspeed = np.ma.masked_values(df[wspeed_col].astype('float32'), fill_value)
+        wdir = np.ma.masked_values(df[wdir_col].astype('float32'), fill_value)
 
-            csvfile.close()
+        # Convert precip from mm/10min to mm/h
+        precip *= 6.0
 
-            return smn_id, date, pressure, temp, rh, precip, wspeed, wdir
-    except EnvironmentError as ee:
-        warn(str(ee))
-        warn("Unable to read file " + fname)
+        # Extract smn_id and date
+        smn_id = df['StationID'].astype('float32').values
+        date = df['DateTime'].tolist()
+
+        return smn_id, date, pressure, temp, rh, precip, wspeed, wdir
+
+    except Exception as e:
+        warn(f"Unable to read file {fname}: {e}")
         return None, None, None, None, None, None, None, None
 
 
