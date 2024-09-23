@@ -1315,7 +1315,8 @@ GECSX algorithmn translated from IDL into python</p>
 <li><p><strong>dscfg</strong> (<em>dictionary of dictionaries</em>) –</p>
 <p>data set configuration. Accepted Configuration Keywords:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">datatype</span> <span class="p">:</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">string</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
-    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="n">types</span>
+    <span class="n">arbitrary</span> <span class="n">data</span> <span class="nb">type</span> <span class="n">supported</span> <span class="n">by</span> <span class="n">pyrad</span>
+
 <span class="n">range_discretization</span> <span class="p">:</span> <span class="nb">float</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
     <span class="n">Range</span> <span class="n">discretization</span> <span class="n">used</span> <span class="n">when</span> <span class="n">computing</span> <span class="n">the</span> <span class="n">Cartesian</span> <span class="n">visibility</span> <span class="n">field</span>
     <span class="n">the</span> <span class="n">larger</span> <span class="n">the</span> <span class="n">better</span> <span class="n">but</span> <span class="n">the</span> <span class="n">slower</span> <span class="n">the</span> <span class="n">processing</span> <span class="n">will</span> <span class="n">be</span>
@@ -1356,7 +1357,13 @@ GECSX algorithmn translated from IDL into python</p>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>new_dataset</strong> (<em>list of dict</em>) – list of dictionaries containing the polar data output and the
-Cartesian data output in this order</p></li>
+Cartesian data output in this order
+The first dictionary (polar) contains the following fields:
+“rcs_clutter”, “dBm_clutter”, “dBZ_clutter” and “visibility_polar”
+The second dictionary (cart) contains the following fields:
+“bent_terrain_altitude”, “terrain_slope”, “terrain_aspect”,
+“elevation_angle”, “min_vis_elevation”, “min_vis_altitude”,
+“incident_angle”, “sigma_0”, “effective_area”</p></li>
 <li><p><strong>ind_rad</strong> (<em>int</em>) – radar index</p></li>
 </ul>
 </p>

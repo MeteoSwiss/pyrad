@@ -1314,7 +1314,8 @@ document.write(`
 <li><p><strong>dscfg</strong> (<em>dictionary of dictionaries</em>) –</p>
 <p>data set configuration. Accepted Configuration Keywords:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">datatype</span> <span class="p">:</span> <span class="n">string</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
-    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="nb">type</span>
+    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="nb">type</span><span class="p">,</span> <span class="n">must</span> <span class="n">contain</span><span class="p">,</span>
+    <span class="s2">&quot;V&quot;</span> <span class="ow">or</span> <span class="s2">&quot;Vc&quot;</span>
 <span class="n">interval_splits</span> <span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">optional</span>
     <span class="n">Number</span> <span class="n">of</span> <span class="n">segments</span> <span class="n">to</span> <span class="n">split</span> <span class="n">the</span> <span class="n">nyquist</span> <span class="n">interval</span> <span class="n">into</span> <span class="n">when</span> <span class="n">finding</span>
     <span class="n">regions</span> <span class="n">of</span> <span class="n">similar</span> <span class="n">velocity</span><span class="o">.</span>  <span class="n">More</span> <span class="n">splits</span> <span class="n">creates</span> <span class="n">a</span> <span class="n">larger</span> <span class="n">number</span>
@@ -1346,7 +1347,7 @@ document.write(`
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output</p></li>
+<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output field “dealV” or “dealVc” (if Vc was provided)</p></li>
 <li><p><strong>ind_rad</strong> (<em>int</em>) – radar index</p></li>
 </ul>
 </p>

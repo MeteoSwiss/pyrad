@@ -468,7 +468,11 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must be </span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBuZ&quot;, and, </span>
+<span class="sd">            &quot;ZDR&quot; or &quot;ZDRu&quot;, and,</span>
+<span class="sd">            &quot;RhoHV&quot; or &quot;uRhoHV&quot;, and,</span>
+<span class="sd">            &quot;PhiDP&quot; or &quot;uPhiDP&quot;</span>
 <span class="sd">        wind_size : int</span>
 <span class="sd">            Size of the moving window used to compute the ray texture</span>
 <span class="sd">            (number of gates). Default 7</span>
@@ -484,7 +488,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;echoID&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -586,14 +590,17 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must be </span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBuZ&quot;, and, </span>
+<span class="sd">            &quot;ZDR&quot; or &quot;ZDRu&quot;, and,</span>
+<span class="sd">            &quot;RhoHV&quot; or &quot;uRhoHV&quot;</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;echoID&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -614,7 +621,9 @@ document.write(`
             <span class="n">zdr_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s2">&quot;RhoHV&quot;</span><span class="p">:</span>
             <span class="n">rhv_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s2">&quot;uRhoHV&quot;</span><span class="p">:</span>
+            <span class="n">rhv_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
+            
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid radar&quot;</span><span class="p">)</span>
@@ -688,14 +697,14 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must be &quot;CLT&quot;</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;echoID&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -752,14 +761,14 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must be &quot;wind_vel_rad_status&quot;</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;echoID&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -815,14 +824,14 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types must be &quot;hydroMF&quot;</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;echoID&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -882,14 +891,14 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types must be &quot;hydroMF&quot;</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;hydro&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -964,7 +973,9 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must be </span>
+<span class="sd">            &quot;echoID&quot; at minimum, as well as any other fields</span>
+<span class="sd">            that will be echo filtered (e.g. dBZ, ZDR)</span>
 <span class="sd">        echo_type : int or list of ints</span>
 <span class="sd">            The type of echoes to keep: 1 noise, 2 clutter, 3 precipitation.</span>
 <span class="sd">            Default 3</span>
@@ -974,7 +985,9 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field, it will contain</span>
+<span class="sd">        the corrected version of the provided datatypes</span>
+<span class="sd">        For example dBZ -&gt; dBZc, ZDR -&gt; ZDRc, RhoHV -&gt; RhoHVc</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1059,7 +1072,11 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must be </span>
+<span class="sd">            &quot;echoID&quot; (if not provided, no clutter filtering is possible), and, </span>
+<span class="sd">            &quot;hydro&quot; (if not provided, no hydro filtering is possible), and,</span>
+<span class="sd">            &quot;VIS&quot; (if not provided no blocked gate filtering is possible), and,</span>
+<span class="sd">            any other field that will be used to compute CDF</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 
@@ -1143,7 +1160,9 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, can be any any data type supported by</span>
+<span class="sd">            pyrad, the number of datatypes must match the lower and upper bounds</span>
+<span class="sd">            dimensions</span>
 <span class="sd">        lower_bounds : list of float</span>
 <span class="sd">            The list of lower bounds for every input data type</span>
 <span class="sd">        upper_bounds : list of float</span>
@@ -1155,7 +1174,9 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field, it will contain</span>
+<span class="sd">        the corrected version of the provided datatypes</span>
+<span class="sd">        For example dBZ -&gt; dBZc, ZDR -&gt; ZDRc, RhoHV -&gt; RhoHVc</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1237,7 +1258,10 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data typesm, must contain</span>
+<span class="sd">            &quot;SNRh&quot;, &quot;SNRv&quot;, &quot;SNR&quot; or &quot;CNR&quot; as well</span>
+<span class="sd">            as any other datatype supported by pyrad that</span>
+<span class="sd">            will be SNR filtered.</span>
 <span class="sd">        SNRmin : float. Dataset keyword</span>
 <span class="sd">            The minimum SNR to keep the data.</span>
 <span class="sd">    radar_list : list of Radar objects</span>
@@ -1246,7 +1270,9 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field, it will contain</span>
+<span class="sd">        the corrected version of the provided datatypes</span>
+<span class="sd">        For example dBZ -&gt; dBZc, ZDR -&gt; ZDRc, RhoHV -&gt; RhoHVc</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1347,14 +1373,19 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;diffV&quot;, as well</span>
+<span class="sd">            as any other datatype supported by pyrad that</span>
+<span class="sd">            will be filtered where no Doppler velocity could be estimated.</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field, it will contain</span>
+<span class="sd">        the corrected version of the provided datatypes</span>
+<span class="sd">        For example dBZ -&gt; dBZc, ZDR -&gt; ZDRc, RhoHV -&gt; RhoHVc</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1436,7 +1467,10 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data typesm, must contain</span>
+<span class="sd">            &quot;VIS&quot; or &quot;visibility_polar&quot;, as well</span>
+<span class="sd">            as any other datatype supported by pyrad that</span>
+<span class="sd">            will be filtered where the visibility is poor.</span>
 <span class="sd">        VISmin : float. Dataset keyword</span>
 <span class="sd">            The minimum visibility to keep the data.</span>
 <span class="sd">    radar_list : list of Radar objects</span>
@@ -1445,7 +1479,9 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output, it will contain</span>
+<span class="sd">        the corrected version of the provided datatypes</span>
+<span class="sd">        For example dBZ -&gt; dBZc, ZDR -&gt; ZDRc, RhoHV -&gt; RhoHVc</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1539,7 +1575,7 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, can be any any data type supported by pyrad</span>
 <span class="sd">        threshold : float. Dataset keyword</span>
 <span class="sd">            The distance between the value of the examined range gate and the</span>
 <span class="sd">            median of the surrounding gates to consider the gate an outlier</span>
@@ -1558,7 +1594,9 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output,  it will contain</span>
+<span class="sd">        the corrected version of the provided datatypes</span>
+<span class="sd">        For example dBZ -&gt; dBZc, ZDR -&gt; ZDRc, RhoHV -&gt; RhoHVc</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1667,7 +1705,10 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;VOL2BIRD_CLASS&quot;, as well</span>
+<span class="sd">            as any other datatype supported by pyrad that</span>
+<span class="sd">            will be filtered where vol2bird detected non-biological echoes</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 
@@ -1754,7 +1795,10 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;VOL2BIRD_CLASS&quot;, and,</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
+<span class="sd">            &quot;V&quot; or &quot;Vc&quot;</span>
 <span class="sd">        dBZ_max : float</span>
 <span class="sd">            Maximum reflectivity of biological scatterers</span>
 <span class="sd">        V_min : float</span>
@@ -1851,7 +1895,12 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
+<span class="sd">            &quot;ZDR&quot; or &quot;ZDRc&quot;, and,</span>
+<span class="sd">            &quot;RhoHV&quot;, or &quot;uRhoHV&quot;, or &quot;RhoHVc&quot;, and,</span>
+<span class="sd">            &quot;KDP&quot;, or &quot;KDPc&quot;, and,</span>
+<span class="sd">            &quot;TEMP&quot; or &quot;H_ISO0&quot; (optional)</span>
 <span class="sd">        HYDRO_METHOD : string. Dataset keyword</span>
 <span class="sd">            The hydrometeor classification method. One of the following:</span>
 <span class="sd">            SEMISUPERVISED, UKMO</span>
@@ -1921,7 +1970,9 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output fields &quot;hydro&quot;, &quot;entropy&quot; (if compute_entropy is 1),</span>
+<span class="sd">        and &quot;propAG&quot;, &quot;propCR&quot;, &quot;propLR&quot;, &quot;propRP&quot;, &quot;propRN&quot;, &quot;propVI&quot;, &quot;propWS&quot;, &quot;propMH&quot;,</span>
+<span class="sd">        &quot;propIH&quot; (if output_distances is 1)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -2254,7 +2305,12 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
+<span class="sd">            &quot;ZDR&quot; or &quot;ZDRc&quot;, and,</span>
+<span class="sd">            &quot;RhoHV&quot;, or &quot;uRhoHV&quot;, or &quot;RhoHVc&quot;, and,</span>
+<span class="sd">            &quot;KDP&quot;, or &quot;KDPc&quot;, and,</span>
+<span class="sd">            &quot;TEMP&quot; or &quot;H_ISO0&quot; (optional)</span>
 <span class="sd">        samples_per_vol : int. Dataset keyword</span>
 <span class="sd">            Maximum number of samples per volume kept for further analysis.</span>
 <span class="sd">            Default 20000</span>
@@ -2356,7 +2412,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output centroids</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -2642,14 +2698,18 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
+<span class="sd">            &quot;ZDR&quot; or &quot;ZDRc&quot;, and, </span>
+<span class="sd">            &quot;RhoHV&quot; or &quot;RhoHVc&quot;, and,</span>
+<span class="sd">            &quot;TEMP&quot; or &quot;H_ISO0&quot; (optional)</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;ml&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -3123,14 +3183,17 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain,</span>
+<span class="sd">            &quot;ZDR&quot; or &quot;ZDRc&quot;, and,</span>
+<span class="sd">            &quot;RhoHV&quot; or &quot;RhoHVc&quot;, and,</span>
+<span class="sd">            &quot;TEMP&quot; or &quot;H_ISO0&quot; </span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;ZDR_col&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 

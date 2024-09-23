@@ -1315,7 +1315,8 @@ Ivic 2013 method</p>
 <li><p><strong>dscfg</strong> (<em>dictionary of dictionaries</em>) –</p>
 <p>data set configuration. Accepted Configuration Keywords:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">datatype</span> <span class="p">:</span> <span class="n">string</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
-    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="nb">type</span>
+    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="nb">type</span><span class="p">,</span> <span class="n">must</span> <span class="n">contain</span><span class="p">,</span>
+    <span class="s2">&quot;dBm&quot;</span> <span class="ow">or</span> <span class="s2">&quot;dBmv&quot;</span>
 <span class="n">npulses_ray</span> <span class="p">:</span> <span class="nb">int</span>
     <span class="n">Default</span> <span class="n">number</span> <span class="n">of</span> <span class="n">pulses</span> <span class="n">used</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">computation</span> <span class="n">of</span> <span class="n">the</span> <span class="n">ray</span><span class="o">.</span> <span class="n">If</span>
     <span class="n">the</span> <span class="n">number</span> <span class="n">of</span> <span class="n">pulses</span> <span class="ow">is</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span> <span class="n">this</span>
@@ -1336,7 +1337,8 @@ Ivic 2013 method</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output</p></li>
+<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output field “NdBmh” and “noise_pos_h” or
+“NdBmh” and “noise_pos_v” (if vert. refl. were provided)</p></li>
 <li><p><strong>ind_rad</strong> (<em>int</em>) – radar index</p></li>
 </ul>
 </p>

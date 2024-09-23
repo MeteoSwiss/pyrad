@@ -468,7 +468,9 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The input data type</span>
+<span class="sd">            The input data type, must contain,</span>
+<span class="sd">            &quot;dBuZ&quot; or &quot;dBZ&quot; or &quot;dBZc&quot; or &quot;dBuZv&quot; or &quot;dBZv&quot; or &quot;dBZvc&quot; or &quot;CNRc&quot;, and, </span>
+<span class="sd">            &quot;W&quot; or &quot;Wv&quot; or &quot;Wu&quot; or &quot;Wvu&quot; or &quot;WD&quot; or &quot;WDc&quot;</span>
 <span class="sd">        radius : float. Dataset keyword</span>
 <span class="sd">            Search radius for calculating Eddy Dissipation Rate (EDR).</span>
 <span class="sd">            Default 2</span>
@@ -500,7 +502,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;EDR&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -641,7 +643,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The input data type</span>
+<span class="sd">            The input data type, must contain</span>
+<span class="sd">            &quot;V&quot; or &quot;Vc&quot;</span>
 <span class="sd">        filt : int. Dataset keyword</span>
 <span class="sd">            Flag controlling Bergen and Albers filter, 1 = yes, 0 = no.</span>
 <span class="sd">        sign : int. Dataset keyword</span>
@@ -658,7 +661,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;dealV&quot; or &quot;dealVc&quot; (if Vc was provided)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -766,7 +769,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The input data type</span>
+<span class="sd">            The input data type, must contain,</span>
+<span class="sd">            &quot;V&quot; or &quot;Vc&quot;</span>
 <span class="sd">        interval_splits : int, optional</span>
 <span class="sd">            Number of segments to split the nyquist interval into when finding</span>
 <span class="sd">            regions of similar velocity.  More splits creates a larger number</span>
@@ -796,7 +800,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;dealV&quot; or &quot;dealVc&quot; (if Vc was provided)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -870,7 +874,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The input data type</span>
+<span class="sd">            The input data type, must contain,</span>
+<span class="sd">            &quot;V&quot; or &quot;Vc&quot;</span>
 <span class="sd">        unwrap_unit : {&#39;ray&#39;, &#39;sweep&#39;, &#39;volume&#39;}, optional</span>
 <span class="sd">            Unit to unwrap independently.  &#39;ray&#39; will unwrap each ray</span>
 <span class="sd">            individually, &#39;sweep&#39; each sweep, and &#39;volume&#39; will unwrap the</span>
@@ -885,7 +890,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;dealV&quot; or &quot;dealVc&quot; (if Vc was provided)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -949,7 +954,10 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The input data type</span>
+<span class="sd">            The input data type, must contain</span>
+<span class="sd">            WIND_SPEED, and,</span>
+<span class="sd">            WIND_DIRECTION, and,</span>
+<span class="sd">            wind_vel_v</span>
 <span class="sd">        latitude, longitude : float</span>
 <span class="sd">            arbitrary coordinates [deg] from where to compute the radial</span>
 <span class="sd">            velocity. If any of them is None it will be the radar position</span>
@@ -962,7 +970,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;V&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1083,7 +1091,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The input data type</span>
+<span class="sd">            The input data type, must contain</span>
+<span class="sd">            &quot;V&quot; or &quot;Vc&quot;</span>
 <span class="sd">        vert_proj : Boolean</span>
 <span class="sd">            If true the vertical projection is computed. Otherwise the</span>
 <span class="sd">            horizontal projection is computed</span>
@@ -1093,7 +1102,9 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field</span>
+<span class="sd">        &quot;wind_vel_h_az&quot;, (if vert_proj is False), or,</span>
+<span class="sd">        &quot;wind_vel_v&quot; (if vert_proj is True)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1158,7 +1169,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;windshear_v&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1210,7 +1221,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The input data type</span>
+<span class="sd">            The input data type, must contain</span>
+<span class="sd">            &quot;V&quot; or &quot;Vc&quot;</span>
 <span class="sd">        az_tol : float</span>
 <span class="sd">            The tolerance in azimuth when looking for gates on top</span>
 <span class="sd">            of the gate when computation is performed</span>
@@ -1221,7 +1233,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;windshear_v&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1274,14 +1286,17 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The input data type</span>
+<span class="sd">            The input data type, must contain</span>
+<span class="sd">            &quot;V&quot; or &quot;Vc&quot;</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output fields</span>
+<span class="sd">        &quot;wind_vel_h_u&quot;, &quot;wind_vel_h_v&quot;, &quot;wind_vel_v&quot;,</span>
+<span class="sd">        &quot;estV&quot;, &quot;stdV&quot;, and &quot;diffV&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1353,7 +1368,9 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The input data type</span>
+<span class="sd">            The input data type, must contain</span>
+<span class="sd">            &quot;V&quot; or &quot;Vc&quot;, and,</span>
+<span class="sd">            &quot;dBuZ&quot;, &quot;dBZ&quot;, or &quot;dBZc&quot;</span>
 
 <span class="sd">        gridconfig : dictionary. Dataset keyword</span>
 <span class="sd">            Dictionary containing some or all of this keywords:</span>
@@ -1427,7 +1444,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output fields</span>
+<span class="sd">            &quot;wind_vel_h_u&quot;, &quot;wind_vel_h_v&quot; and &quot;wind_vel_v&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 

@@ -1314,7 +1314,24 @@ document.write(`
 <li><p><strong>dscfg</strong> (<em>dictionary of dictionaries</em>) –</p>
 <p>data set configuration. Accepted Configuration Keywords:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">datatype</span> <span class="p">:</span> <span class="n">string</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
-    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="nb">type</span>
+    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="nb">type</span><span class="p">,</span> <span class="n">must</span> <span class="n">contain</span><span class="p">,</span>
+    <span class="n">If</span> <span class="n">RR_METHOD</span> <span class="o">==</span> <span class="s2">&quot;Z&quot;</span> <span class="ow">or</span> <span class="s2">&quot;ZPoly&quot;</span><span class="p">:</span>
+        <span class="s2">&quot;dBZ&quot;</span> <span class="ow">or</span> <span class="s2">&quot;dBZc&quot;</span>
+    <span class="n">If</span> <span class="n">RR_METHOD</span> <span class="o">==</span> <span class="s2">&quot;KDP&quot;</span><span class="p">:</span>
+        <span class="s2">&quot;KDP&quot;</span> <span class="ow">or</span> <span class="s2">&quot;KDPc&quot;</span>
+    <span class="n">If</span> <span class="n">RR_METHOD</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span><span class="p">:</span>
+        <span class="s2">&quot;Ah&quot;</span> <span class="ow">or</span> <span class="s2">&quot;Ahc&quot;</span>
+    <span class="n">If</span> <span class="n">RR_METHOD</span> <span class="o">==</span> <span class="s2">&quot;ZKDP&quot;</span><span class="p">:</span>
+        <span class="s2">&quot;dBZ&quot;</span> <span class="ow">or</span> <span class="s2">&quot;dBZc&quot;</span><span class="p">,</span> <span class="ow">and</span><span class="p">,</span>
+        <span class="s2">&quot;KDP&quot;</span> <span class="ow">or</span> <span class="s2">&quot;KDPc&quot;</span>
+    <span class="n">IF</span> <span class="n">RR_METHOD</span> <span class="o">==</span> <span class="s2">&quot;ZA&quot;</span><span class="p">:</span>
+        <span class="s2">&quot;dBZ&quot;</span> <span class="ow">or</span> <span class="s2">&quot;dBZc&quot;</span><span class="p">,</span> <span class="ow">and</span><span class="p">,</span>
+        <span class="s2">&quot;Ah&quot;</span> <span class="ow">or</span> <span class="s2">&quot;Ahc&quot;</span>
+    <span class="n">IF</span> <span class="n">RR_METHID</span> <span class="o">==</span> <span class="s2">&quot;hydro&quot;</span><span class="p">:</span>
+        <span class="s2">&quot;dBZ&quot;</span> <span class="ow">or</span> <span class="s2">&quot;dBZc&quot;</span><span class="p">,</span> <span class="ow">and</span><span class="p">,</span>
+        <span class="s2">&quot;Ah&quot;</span> <span class="ow">or</span> <span class="s2">&quot;Ahc&quot;</span><span class="p">,</span> <span class="ow">and</span><span class="p">,</span>
+        <span class="s2">&quot;hydro&quot;</span>
+
 <span class="n">RR_METHOD</span> <span class="p">:</span> <span class="n">string</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
     <span class="n">The</span> <span class="n">rainfall</span> <span class="n">rate</span> <span class="n">estimation</span> <span class="n">method</span><span class="o">.</span> <span class="n">One</span> <span class="n">of</span> <span class="n">the</span> <span class="n">following</span><span class="p">:</span>
     <span class="n">Z</span><span class="p">,</span> <span class="n">ZPoly</span><span class="p">,</span> <span class="n">KDP</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">ZKDP</span><span class="p">,</span> <span class="n">ZA</span><span class="p">,</span> <span class="n">hydro</span>
@@ -1352,7 +1369,7 @@ document.write(`
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output</p></li>
+<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output field “RR” (rain rate)</p></li>
 <li><p><strong>ind_rad</strong> (<em>int</em>) – radar index</p></li>
 </ul>
 </p>

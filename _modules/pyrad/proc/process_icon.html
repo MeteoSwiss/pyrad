@@ -460,7 +460,7 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            arbitrary data type</span>
+<span class="sd">            arbitrary data type supported by pyrad</span>
 <span class="sd">        keep_in_memory : int. Dataset keyword</span>
 <span class="sd">            if set keeps the icon data dict, the icon coordinates dict and</span>
 <span class="sd">            the icon field in radar coordinates in memory</span>
@@ -478,7 +478,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field corresponding to</span>
+<span class="sd">        icon_variables</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -636,7 +637,7 @@ document.write(`
 <span class="sd">            Type of METRANET reader library used to read the data.</span>
 <span class="sd">            Can be &#39;C&#39; or &#39;python&#39;</span>
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            arbitrary data type</span>
+<span class="sd">            arbitrary data type supported by pyrad</span>
 <span class="sd">        keep_in_memory : int. Dataset keyword</span>
 <span class="sd">            if set keeps the icon data dict, the icon coordinates dict and</span>
 <span class="sd">            the icon field in radar coordinates in memory</span>
@@ -654,7 +655,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output fields corresponding to </span>
+<span class="sd">        icon_variables</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -769,7 +771,7 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            arbitrary data type</span>
+<span class="sd">            arbitrary data type supported by prad</span>
 <span class="sd">        iso0_statistic : str. Dataset keyword</span>
 <span class="sd">            The statistic used to weight the iso0 points. Can be avg_by_dist,</span>
 <span class="sd">            avg, min, max</span>
@@ -780,7 +782,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;H_ISO0&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -854,7 +856,7 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            arbitrary data type</span>
+<span class="sd">            arbitrary data type supported by pyrad</span>
 <span class="sd">        time_interp : bool. Dataset keyword</span>
 <span class="sd">            whether to perform an interpolation in time between consecutive</span>
 <span class="sd">            model outputs. Default True</span>
@@ -867,7 +869,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field H_ISO0</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -939,7 +941,7 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            arbitrary data type</span>
+<span class="sd">            arbitrary data type supported by pyrad</span>
 <span class="sd">        lookup_table : int. Dataset keyword</span>
 <span class="sd">            if set a pre-computed look up table for the icon coordinates is</span>
 <span class="sd">            loaded. Otherwise the look up table is computed taking the first</span>
@@ -958,7 +960,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output fields corresponding to icon_variables</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1132,7 +1134,7 @@ document.write(`
 <span class="sd">            Type of METRANET reader library used to read the data.</span>
 <span class="sd">            Can be &#39;C&#39; or &#39;python&#39;</span>
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            arbitrary data type</span>
+<span class="sd">            arbitrary data type supported by pyrad</span>
 <span class="sd">        lookup_table : int. Dataset keyword</span>
 <span class="sd">            if set a pre-computed look up table for the icon coordinates is</span>
 <span class="sd">            loaded. Otherwise the look up table is computed taking the first</span>
@@ -1147,7 +1149,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field HISO0</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1283,7 +1285,7 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            arbitrary data type</span>
+<span class="sd">            arbitrary data type supported by pyrad</span>
 <span class="sd">        icon_type : str. Dataset keyword</span>
 <span class="sd">            name of the icon field to process. Default TEMP</span>
 <span class="sd">        icon_variables : list of strings. Dataset keyword</span>
@@ -1299,7 +1301,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output fields corresponding to icon_variables</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1420,7 +1422,7 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            arbitrary data type</span>
+<span class="sd">            arbitrary data type supported by pyrad</span>
 <span class="sd">        iconpath : string. General keyword</span>
 <span class="sd">            path where to store the look up table</span>
 <span class="sd">        model : string. Dataset keyword</span>
@@ -1431,7 +1433,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field</span>
+<span class="sd">        &quot;icon_index&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1497,7 +1500,7 @@ document.write(`
 <span class="sd">            Type of METRANET reader library used to read the data.</span>
 <span class="sd">            Can be &#39;C&#39; or &#39;python&#39;</span>
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            arbitrary data type</span>
+<span class="sd">            arbitrary data type supported by pyrad</span>
 <span class="sd">        iconpath : string. General keyword</span>
 <span class="sd">            path where to store the look up table</span>
 <span class="sd">    radar_list : list of Radar objects</span>
@@ -1506,7 +1509,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;icon_index&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 

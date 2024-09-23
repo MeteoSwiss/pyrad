@@ -449,14 +449,17 @@ document.write(`
 <span class="sd">        Processing status: 0 initializing, 1 processing volume,</span>
 <span class="sd">        2 post-processing</span>
 <span class="sd">    dscfg : dictionary of dictionaries</span>
-<span class="sd">        data set configuration</span>
+<span class="sd">        data set configuration. Accepted Configuration Keywords:</span>
+
+<span class="sd">        datatype : string. Dataset keyword</span>
+<span class="sd">            arbitrary data type supported by pyrad and contained in the grid data</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output with field corresponding to datatype</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -536,7 +539,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the gridded data</span>
+<span class="sd">        dictionary containing the gridded data with fields corresponding to</span>
+<span class="sd">        datatype</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1026,7 +1030,7 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, can be any datatype supported by pyrad</span>
 <span class="sd">        period : float. Dataset keyword</span>
 <span class="sd">            the period to average [s]. If -1 the statistics are going to be</span>
 <span class="sd">            performed over the entire data. Default 3600.</span>
@@ -1047,7 +1051,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output fields corresponding to datatypes</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1371,7 +1375,7 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data type, can be any datatype supported by pyrad</span>
 <span class="sd">        period : float. Dataset keyword</span>
 <span class="sd">            the period to average [s]. If -1 the statistics are going to be</span>
 <span class="sd">            performed over the entire data. Default 3600.</span>
@@ -1389,7 +1393,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output fields corresponding to</span>
+<span class="sd">        datatypes</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1623,7 +1628,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data type, can be any data type supported by pyrad</span>
+<span class="sd">            but typically RR is used</span>
 <span class="sd">        period : float. Dataset keyword</span>
 <span class="sd">            the period to average [s]. If -1 the statistics are going to be</span>
 <span class="sd">            performed over the entire data. Default 3600.</span>
@@ -1639,7 +1645,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field corresponding to datatype</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1825,7 +1831,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The two input data types to compare.</span>
+<span class="sd">            Can any two datatypes supported by pyrad</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 
@@ -1898,7 +1905,7 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data type, can be any datatype supported by pyrad</span>
 <span class="sd">        xwind, ywind : int</span>
 <span class="sd">            The size of the local window in the x and y axis. Default 7</span>
 <span class="sd">        fill_value : float</span>
@@ -1909,7 +1916,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing a radar object containing the field differences</span>
+<span class="sd">        dictionary containing a radar object containing the field </span>
+<span class="sd">        &quot;texture&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1974,23 +1982,28 @@ document.write(`
 <span class="sd">        Processing status: 0 initializing, 1 processing volume,</span>
 <span class="sd">        2 post-processing</span>
 <span class="sd">    dscfg : dictionary of dictionaries</span>
-<span class="sd">        data set configuration</span>
+<span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
+
+<span class="sd">        datatype : list of string. Dataset keyword</span>
+<span class="sd">            The input data type, can be any datatype supported by pyrad</span>
+<span class="sd">        threshold_min : float or None</span>
+<span class="sd">            Threshold used for the mask. Values below threshold are set to False.</span>
+<span class="sd">            Above threshold are set to True. Default None.</span>
+<span class="sd">        threshold_max : float or None</span>
+<span class="sd">            Threshold used for the mask. Values above threshold are set to False.</span>
+<span class="sd">            Below threshold are set to True. Default None.</span>
+<span class="sd">        x_dir_ext, y_dir_ext : int</span>
+<span class="sd">            Number of pixels by which to extend the mask on each side of the</span>
+<span class="sd">            west-east direction and south-north direction</span>
+<span class="sd">        </span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
-<span class="sd">    threshold_min : float or None</span>
-<span class="sd">        Threshold used for the mask. Values below threshold are set to False.</span>
-<span class="sd">        Above threshold are set to True. Default None.</span>
-<span class="sd">    threshold_max : float or None</span>
-<span class="sd">        Threshold used for the mask. Values above threshold are set to False.</span>
-<span class="sd">        Below threshold are set to True. Default None.</span>
-<span class="sd">    x_dir_ext, y_dir_ext : int</span>
-<span class="sd">        Number of pixels by which to extend the mask on each side of the</span>
-<span class="sd">        west-east direction and south-north direction</span>
+<span class="sd">    </span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;mask&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -2081,14 +2094,18 @@ document.write(`
 <span class="sd">        Processing status: 0 initializing, 1 processing volume,</span>
 <span class="sd">        2 post-processing</span>
 <span class="sd">    dscfg : dictionary of dictionaries</span>
-<span class="sd">        data set configuration</span>
+<span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
+
+<span class="sd">        datatype : list of string. Dataset keyword</span>
+<span class="sd">            The input data type, can be any datatype supported by pyrad</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the normalized field, the name</span>
+<span class="sd">        of the field is datatype_norm</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -2150,6 +2167,10 @@ document.write(`
 <span class="sd">    dscfg : dictionary of dictionaries</span>
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
+<span class="sd">        datatype : list of string. Dataset keyword</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;mask&quot;, as well as</span>
+<span class="sd">            any datatypes supported by pyrad</span>
 <span class="sd">        pixel_type : int or list of ints</span>
 <span class="sd">            The type of pixels to keep: 0 No data, 1 Below threshold, 2 Above</span>
 <span class="sd">            threshold. Default 2</span>
@@ -2159,7 +2180,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output datatypes masked</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 

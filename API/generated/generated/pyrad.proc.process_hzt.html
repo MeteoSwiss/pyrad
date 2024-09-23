@@ -1317,7 +1317,7 @@ document.write(`
     <span class="n">Type</span> <span class="n">of</span> <span class="n">METRANET</span> <span class="n">reader</span> <span class="n">library</span> <span class="n">used</span> <span class="n">to</span> <span class="n">read</span> <span class="n">the</span> <span class="n">data</span><span class="o">.</span>
     <span class="n">Can</span> <span class="n">be</span> <span class="s1">&#39;C&#39;</span> <span class="ow">or</span> <span class="s1">&#39;python&#39;</span>
 <span class="n">datatype</span> <span class="p">:</span> <span class="n">string</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
-    <span class="n">arbitrary</span> <span class="n">data</span> <span class="nb">type</span>
+    <span class="n">arbitrary</span> <span class="n">data</span> <span class="nb">type</span> <span class="n">supported</span> <span class="n">by</span> <span class="n">pyrad</span>
 <span class="n">keep_in_memory</span> <span class="p">:</span> <span class="nb">int</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
     <span class="k">if</span> <span class="nb">set</span> <span class="n">keeps</span> <span class="n">the</span> <span class="n">icon</span> <span class="n">data</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">the</span> <span class="n">icon</span> <span class="n">coordinates</span> <span class="nb">dict</span> <span class="ow">and</span>
     <span class="n">the</span> <span class="n">icon</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">radar</span> <span class="n">coordinates</span> <span class="ow">in</span> <span class="n">memory</span>
@@ -1337,7 +1337,8 @@ document.write(`
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output</p></li>
+<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output fields corresponding to
+icon_variables</p></li>
 <li><p><strong>ind_rad</strong> (<em>int</em>) – radar index</p></li>
 </ul>
 </p>

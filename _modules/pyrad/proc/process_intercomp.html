@@ -455,7 +455,7 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            Arbitrary data type supported by pyrad and contained in the radar data</span>
 <span class="sd">        period : float. Dataset keyword</span>
 <span class="sd">            the period to average [s]. If -1 the statistics are going to be</span>
 <span class="sd">            performed over the entire data. Default 3600.</span>
@@ -476,7 +476,10 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the statistic computed on the input field, as well as </span>
+<span class="sd">        &quot;nsamples&quot;, as well as</span>
+<span class="sd">        &quot;sum2&quot; (sum-squared) if stat in (cov, std), as well as</span>
+<span class="sd">        </span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -823,7 +826,7 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            Arbitrary data type supported by pyrad and contianed in the radar data</span>
 <span class="sd">        period : float. Dataset keyword</span>
 <span class="sd">            the period to average [s]. If -1 the statistics are going to be</span>
 <span class="sd">            performed over the entire data. Default 3600.</span>
@@ -841,7 +844,9 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the statistic computed on the input field, as well as </span>
+<span class="sd">        &quot;nsamples&quot;</span>
+
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1090,7 +1095,7 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            Arbitrary data type supported by pyrad and contained in the radar data</span>
 <span class="sd">        period : float. Dataset keyword</span>
 <span class="sd">            the period to average [s]. Default 3600.</span>
 <span class="sd">        start_average : float. Dataset keyword</span>
@@ -1103,7 +1108,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the statistic computed on the input field, as well as </span>
+<span class="sd">        &quot;nsamples&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1285,7 +1291,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            Arbitrary data type supported by pyrad and contained in the radar data, as well as</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBZc&quot; or &quot;dBuZ&quot; or &quot;dBZv&quot; or &quot;dBZvc&quot; or &quot;dBuZv&quot; (refl. weighting)</span>
 <span class="sd">        period : float. Dataset keyword</span>
 <span class="sd">            the period to average [s]. Default 3600.</span>
 <span class="sd">        start_average : float. Dataset keyword</span>
@@ -1295,8 +1302,8 @@ document.write(`
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    new_dataset : Radar</span>
-<span class="sd">        radar object</span>
+<span class="sd">    new_dataset : dict</span>
+<span class="sd">        dictionary containing the statistic computed on the input field</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1468,7 +1475,12 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must be </span>
+<span class="sd">            &quot;PhiDP&quot; or &quot;PhiDPc&quot; (Optional, for PhiDP flagging), and,</span>
+<span class="sd">            &quot;echoID&quot; (Optional, for echoID flagging), and,</span>
+<span class="sd">            &quot;hydro&quot; (Optional, for no rain flagging), and,</span>
+<span class="sd">            &quot;TEMP&quot; (Optional, for solid precip flagging), and,</span>
+<span class="sd">            &quot;H_ISO0&quot; (Optional, also for solid precip flagging)</span>
 <span class="sd">        period : float. Dataset keyword</span>
 <span class="sd">            the period to average [s]. Default 3600.</span>
 <span class="sd">        start_average : float. Dataset keyword</span>
@@ -1485,8 +1497,8 @@ document.write(`
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    new_dataset : Radar</span>
-<span class="sd">        radar object</span>
+<span class="sd">    new_dataset : dict</span>
+<span class="sd">        dictionary containing the field &quot;time_avg_flag&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1733,7 +1745,10 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types to use to check colocated gates (one for every radar)</span>
+<span class="sd">            Any datatype supported by pyrad and available in both radars is accepted.</span>
+<span class="sd">            If visibility filtering is desired, the fields </span>
+<span class="sd">            &quot;visibility&quot; or &quot;visibility_polar&quot; must be specified for both radars.</span>
 <span class="sd">        h_tol : float. Dataset keyword</span>
 <span class="sd">            Tolerance in altitude difference between radar gates [m].</span>
 <span class="sd">            Default 100.</span>
@@ -1770,8 +1785,8 @@ document.write(`
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    new_dataset : radar object</span>
-<span class="sd">        radar object containing the flag field</span>
+<span class="sd">    new_dataset : dict</span>
+<span class="sd">        dictionary containing the field &quot;colocated_gates&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1953,7 +1968,9 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types (one for every radar).</span>
+<span class="sd">            Any arbitrary datatype supported by pyrad and available</span>
+<span class="sd">            in both radar is accepted.</span>
 <span class="sd">        colocgatespath : string.</span>
 <span class="sd">            base path to the file containing the coordinates of the co-located</span>
 <span class="sd">            gates</span>
@@ -2315,7 +2332,11 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            dBZ&quot; or &quot;dBZc&quot; or &quot;dBuZ&quot; or &quot;dBZv&quot; or &quot;dBZvc&quot; or &quot;dBuZv, and,</span>
+<span class="sd">            &quot;PhiDP&quot; or &quot;PhiDPc&quot;, and, </span>
+<span class="sd">            &quot;time_avg_flag&quot;</span>
+<span class="sd">            for the two radars</span>
 <span class="sd">        colocgatespath : string.</span>
 <span class="sd">            base path to the file containing the coordinates of the co-located</span>
 <span class="sd">            gates</span>
@@ -2458,9 +2479,9 @@ document.write(`
         <span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to compare radar time avg fields. &quot;</span> <span class="o">+</span> <span class="s2">&quot;Fields missing&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
-
+        
+        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">:</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]})</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]:</span>
-            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">:</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]})</span>
             <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
                 <span class="p">{</span><span class="s2">&quot;rad1_name&quot;</span><span class="p">:</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;RadarName&quot;</span><span class="p">][</span><span class="n">ind_radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]]}</span>
             <span class="p">)</span>
@@ -2468,7 +2489,7 @@ document.write(`
                 <span class="p">{</span><span class="s2">&quot;rad2_name&quot;</span><span class="p">:</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;RadarName&quot;</span><span class="p">][</span><span class="n">ind_radar_list</span><span class="p">[</span><span class="mi">1</span><span class="p">]]}</span>
             <span class="p">)</span>
             <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-
+            
         <span class="n">refl1</span> <span class="o">=</span> <span class="n">radar1</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">rad1_refl_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
         <span class="n">refl2</span> <span class="o">=</span> <span class="n">radar2</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">rad2_refl_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
 
@@ -2687,7 +2708,7 @@ document.write(`
         <span class="n">intercomp_dict</span><span class="p">[</span><span class="s2">&quot;rad1_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span>
             <span class="nb">len</span><span class="p">(</span><span class="n">rad1_ray_ind</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span>
         <span class="p">)</span>
-        <span class="n">intercomp_dict</span><span class="p">[</span><span class="s2">&quot;rad1_time&quot;</span><span class="p">][:]</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]</span>
+        <span class="n">intercomp_dict</span><span class="p">[</span><span class="s2">&quot;rad1_time&quot;</span><span class="p">][:]</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]</span>
         <span class="n">intercomp_dict</span><span class="p">[</span><span class="s2">&quot;rad1_ray_ind&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rad1_ray_ind</span>
         <span class="n">intercomp_dict</span><span class="p">[</span><span class="s2">&quot;rad1_rng_ind&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rad1_rng_ind</span>
         <span class="n">intercomp_dict</span><span class="p">[</span><span class="s2">&quot;rad1_ele&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar1</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rad1_ray_ind</span><span class="p">]</span>
@@ -2826,7 +2847,6 @@ document.write(`
             <span class="s2">&quot;timeinfo&quot;</span><span class="p">:</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
             <span class="s2">&quot;final&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
         <span class="p">}</span>
-
         <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="kc">None</span></div>
 
 
@@ -2847,7 +2867,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types for each radar,</span>
+<span class="sd">            Any datatype supported by pyrad is supported</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 
@@ -2931,7 +2952,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types for each radar,</span>
+<span class="sd">            Any datatype supported by pyrad and available in both radars is supported</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 

@@ -442,7 +442,7 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            arbitrary data type</span>
+<span class="sd">            arbitrary data type supported by pyrad</span>
 <span class="sd">        keep_in_memory : int. Dataset keyword</span>
 <span class="sd">            if set keeps the COSMO data dict, the COSMO coordinates dict and</span>
 <span class="sd">            the COSMO field in radar coordinates in memory. Default False</span>
@@ -460,7 +460,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field with name corresponding</span>
+<span class="sd">        to dem_field</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -542,7 +543,7 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            arbitrary data type</span>
+<span class="sd">            arbitrary data type supported by pyrad</span>
 <span class="sd">        offset : float. Dataset keyword</span>
 <span class="sd">            The offset above the minimum visibility that must be filtered</span>
 <span class="sd">    radar_list : list of Radar objects</span>
@@ -551,7 +552,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field </span>
+<span class="sd">        &quot;visibility&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -613,7 +615,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            arbitrary data type supported by pyrad</span>
+<span class="sd">            </span>
 <span class="sd">        range_discretization : float. Dataset keyword</span>
 <span class="sd">            Range discretization used when computing the Cartesian visibility field</span>
 <span class="sd">            the larger the better but the slower the processing will be</span>
@@ -654,6 +657,12 @@ document.write(`
 <span class="sd">    new_dataset : list of dict</span>
 <span class="sd">        list of dictionaries containing the polar data output and the</span>
 <span class="sd">        Cartesian data output in this order</span>
+<span class="sd">        The first dictionary (polar) contains the following fields:</span>
+<span class="sd">        &quot;rcs_clutter&quot;, &quot;dBm_clutter&quot;, &quot;dBZ_clutter&quot; and &quot;visibility_polar&quot;</span>
+<span class="sd">        The second dictionary (cart) contains the following fields:</span>
+<span class="sd">        &quot;bent_terrain_altitude&quot;, &quot;terrain_slope&quot;, &quot;terrain_aspect&quot;,</span>
+<span class="sd">        &quot;elevation_angle&quot;, &quot;min_vis_elevation&quot;, &quot;min_vis_altitude&quot;,</span>
+<span class="sd">        &quot;incident_angle&quot;, &quot;sigma_0&quot;, &quot;effective_area&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 

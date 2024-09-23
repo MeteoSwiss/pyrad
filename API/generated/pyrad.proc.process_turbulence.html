@@ -1315,7 +1315,9 @@ the PyTDA package</p>
 <li><p><strong>dscfg</strong> (<em>dictionary of dictionaries</em>) –</p>
 <p>data set configuration. Accepted Configuration Keywords:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">datatype</span> <span class="p">:</span> <span class="n">string</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
-    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="nb">type</span>
+    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="nb">type</span><span class="p">,</span> <span class="n">must</span> <span class="n">contain</span><span class="p">,</span>
+    <span class="s2">&quot;dBuZ&quot;</span> <span class="ow">or</span> <span class="s2">&quot;dBZ&quot;</span> <span class="ow">or</span> <span class="s2">&quot;dBZc&quot;</span> <span class="ow">or</span> <span class="s2">&quot;dBuZv&quot;</span> <span class="ow">or</span> <span class="s2">&quot;dBZv&quot;</span> <span class="ow">or</span> <span class="s2">&quot;dBZvc&quot;</span> <span class="ow">or</span> <span class="s2">&quot;CNRc&quot;</span><span class="p">,</span> <span class="ow">and</span><span class="p">,</span>
+    <span class="s2">&quot;W&quot;</span> <span class="ow">or</span> <span class="s2">&quot;Wv&quot;</span> <span class="ow">or</span> <span class="s2">&quot;Wu&quot;</span> <span class="ow">or</span> <span class="s2">&quot;Wvu&quot;</span> <span class="ow">or</span> <span class="s2">&quot;WD&quot;</span> <span class="ow">or</span> <span class="s2">&quot;WDc&quot;</span>
 <span class="n">radius</span> <span class="p">:</span> <span class="nb">float</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
     <span class="n">Search</span> <span class="n">radius</span> <span class="k">for</span> <span class="n">calculating</span> <span class="n">Eddy</span> <span class="n">Dissipation</span> <span class="n">Rate</span> <span class="p">(</span><span class="n">EDR</span><span class="p">)</span><span class="o">.</span>
     <span class="n">Default</span> <span class="mi">2</span>
@@ -1348,7 +1350,7 @@ the PyTDA package</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output</p></li>
+<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output field “EDR”</p></li>
 <li><p><strong>ind_rad</strong> (<em>int</em>) – radar index</p></li>
 </ul>
 </p>

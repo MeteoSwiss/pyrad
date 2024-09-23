@@ -1307,24 +1307,33 @@ document.write(`
 <span class="sig-prename descclassname"><span class="pre">pyrad.proc.</span></span><span class="sig-name descname"><span class="pre">process_grid_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">procstatus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dscfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radar_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyrad/proc/process_grid.html#process_grid_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.proc.process_grid_mask" title="Link to this definition">#</a></dt>
 <dd><p>Mask data. Puts True if data is within thresholds, False if it is not.
 Thresholds can be min, max or both min and max</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
+<dd class="field-odd"><ul>
 <li><p><strong>procstatus</strong> (<em>int</em>) – Processing status: 0 initializing, 1 processing volume,
 2 post-processing</p></li>
-<li><p><strong>dscfg</strong> (<em>dictionary of dictionaries</em>) – data set configuration</p></li>
+<li><p><strong>dscfg</strong> (<em>dictionary of dictionaries</em>) –</p>
+<p>data set configuration. Accepted Configuration Keywords:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">datatype</span> <span class="p">:</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">string</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
+    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="nb">type</span><span class="p">,</span> <span class="n">can</span> <span class="n">be</span> <span class="nb">any</span> <span class="n">datatype</span> <span class="n">supported</span> <span class="n">by</span> <span class="n">pyrad</span>
+<span class="n">threshold_min</span> <span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="kc">None</span>
+    <span class="n">Threshold</span> <span class="n">used</span> <span class="k">for</span> <span class="n">the</span> <span class="n">mask</span><span class="o">.</span> <span class="n">Values</span> <span class="n">below</span> <span class="n">threshold</span> <span class="n">are</span> <span class="nb">set</span> <span class="n">to</span> <span class="kc">False</span><span class="o">.</span>
+    <span class="n">Above</span> <span class="n">threshold</span> <span class="n">are</span> <span class="nb">set</span> <span class="n">to</span> <span class="kc">True</span><span class="o">.</span> <span class="n">Default</span> <span class="kc">None</span><span class="o">.</span>
+<span class="n">threshold_max</span> <span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="kc">None</span>
+    <span class="n">Threshold</span> <span class="n">used</span> <span class="k">for</span> <span class="n">the</span> <span class="n">mask</span><span class="o">.</span> <span class="n">Values</span> <span class="n">above</span> <span class="n">threshold</span> <span class="n">are</span> <span class="nb">set</span> <span class="n">to</span> <span class="kc">False</span><span class="o">.</span>
+    <span class="n">Below</span> <span class="n">threshold</span> <span class="n">are</span> <span class="nb">set</span> <span class="n">to</span> <span class="kc">True</span><span class="o">.</span> <span class="n">Default</span> <span class="kc">None</span><span class="o">.</span>
+<span class="n">x_dir_ext</span><span class="p">,</span> <span class="n">y_dir_ext</span> <span class="p">:</span> <span class="nb">int</span>
+    <span class="n">Number</span> <span class="n">of</span> <span class="n">pixels</span> <span class="n">by</span> <span class="n">which</span> <span class="n">to</span> <span class="n">extend</span> <span class="n">the</span> <span class="n">mask</span> <span class="n">on</span> <span class="n">each</span> <span class="n">side</span> <span class="n">of</span> <span class="n">the</span>
+    <span class="n">west</span><span class="o">-</span><span class="n">east</span> <span class="n">direction</span> <span class="ow">and</span> <span class="n">south</span><span class="o">-</span><span class="n">north</span> <span class="n">direction</span>
+</pre></div>
+</div>
+</li>
 <li><p><strong>radar_list</strong> (<em>list of Radar objects</em>) – Optional. list of radar objects</p></li>
-<li><p><strong>threshold_min</strong> (<em>float or None</em>) – Threshold used for the mask. Values below threshold are set to False.
-Above threshold are set to True. Default None.</p></li>
-<li><p><strong>threshold_max</strong> (<em>float or None</em>) – Threshold used for the mask. Values above threshold are set to False.
-Below threshold are set to True. Default None.</p></li>
-<li><p><strong>x_dir_ext, y_dir_ext</strong> (<em>int</em>) – Number of pixels by which to extend the mask on each side of the
-west-east direction and south-north direction</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output</p></li>
+<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output field “mask”</p></li>
 <li><p><strong>ind_rad</strong> (<em>int</em>) – radar index</p></li>
 </ul>
 </p>

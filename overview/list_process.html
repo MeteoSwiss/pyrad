@@ -441,7 +441,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_attenuation">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “dBZ” or “dBZc”, and, “PhiDP” or “PhiDPc”, and, “ZDR” or “ZDRc”, and “TEMP” or “H_ISO0” (Optional)</p>
 </dd>
 <dt>ATT_METHOD<span class="classifier">float. Dataset keyword</span></dt><dd><p>The attenuation estimation method used. One of the following: ZPhi, Philin. Default ZPhi</p>
 </dd>
@@ -510,7 +510,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_correct_bias">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The data type to correct for bias</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The data type to correct for bias, can be any datatype supported by pyrad</p>
 </dd>
 <dt>bias<span class="classifier">float. Dataset keyword</span></dt><dd><p>The bias to be corrected [dB]. Default 0</p>
 </dd>
@@ -527,7 +527,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_birds_id">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must be “dBZ” or “dBuZ”, and, “ZDR” or “ZDRu”, and, “RhoHV” or “uRhoHV”</p>
 </dd>
 </dl>
 </dd>
@@ -542,7 +542,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_bird_density">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “eta_h” or “eta_v” (volumetric reflectivities)</p>
 </dd>
 <dt>sigma_bird<span class="classifier">float. Dataset keyword</span></dt><dd><p>The bird radar cross section</p>
 </dd>
@@ -559,7 +559,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_ccor">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “dBZ” or “dBZv”, and, “dBuZ”, or “dBuZV”</p>
 </dd>
 </dl>
 </dd>
@@ -574,7 +574,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_cdf">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must be “echoID” (if not provided, no clutter filtering is possible), and, “hydro” (if not provided, no hydro filtering is possible), and, “VIS” (if not provided no blocked gate filtering is possible), and, any other field that will be used to compute CDF</p>
 </dd>
 </dl>
 </dd>
@@ -584,12 +584,12 @@ document.write(`
 <h3>CDR<a class="headerlink" href="#cdr" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
-<div><p>Computes Circular Depolarization Ratio</p>
+<div><p>Computes approximation of Circular Depolarization Ratio</p>
 </div></blockquote>
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_cdr">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type, must contain, “RhoHV” or “uRhoHV” or “RhoHVu”, and, “ZDR” or “ZDRc”</p>
 </dd>
 </dl>
 </dd>
@@ -604,7 +604,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_clt_to_echo_id">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must be “CLT”</p>
 </dd>
 </dl>
 </dd>
@@ -619,7 +619,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_icon_lookup_table">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type supported by pyrad</p>
 </dd>
 <dt>lookup_table<span class="classifier">int. Dataset keyword</span></dt><dd><p>if set a pre-computed look up table for the icon coordinates is loaded. Otherwise the look up table is computed taking the first radar object as reference</p>
 </dd>
@@ -642,7 +642,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_dem.html#process_dem">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type supported by pyrad</p>
 </dd>
 <dt>keep_in_memory<span class="classifier">int. Dataset keyword</span></dt><dd><p>if set keeps the COSMO data dict, the COSMO coordinates dict and the COSMO field in radar coordinates in memory. Default False</p>
 </dd>
@@ -665,7 +665,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_dealias_fourdd">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type, must contain “V” or “Vc”</p>
 </dd>
 <dt>filt<span class="classifier">int. Dataset keyword</span></dt><dd><p>Flag controlling Bergen and Albers filter, 1 = yes, 0 = no.</p>
 </dd>
@@ -684,7 +684,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_dealias_region_based">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type, must contain, “V” or “Vc”</p>
 </dd>
 <dt>interval_splits<span class="classifier">int, optional</span></dt><dd><p>Number of segments to split the nyquist interval into when finding regions of similar velocity. More splits creates a larger number of initial regions which takes longer to process but may result in better dealiasing. The default value of 3 seems to be a good compromise between performance and artifact free dealiasing. This value is not used if the interval_limits parameter is not None.</p>
 </dd>
@@ -707,7 +707,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_dealias_unwrap_phase">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type, must contain, “V” or “Vc”</p>
 </dd>
 <dt>unwrap_unit<span class="classifier">{‘ray’, ‘sweep’, ‘volume’}, optional</span></dt><dd><p>Unit to unwrap independently. ‘ray’ will unwrap each ray individually, ‘sweep’ each sweep, and ‘volume’ will unwrap the entire volume in a single pass. ‘sweep’, the default, often gives superior results when the lower sweeps of the radar volume are contaminated by clutter. ‘ray’ does not use the gatefilter parameter and rays where gates ared masked will result in poor dealiasing for that ray.</p>
 </dd>
@@ -724,7 +724,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_Doppler_velocity">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “sdBZ” or “sdBZv” or “sdBuZ” or “sdBuZv”</p>
 </dd>
 </dl>
 </dd>
@@ -739,7 +739,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_Doppler_velocity_iq">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “IQhhADU” or “IQvvADU”</p>
 </dd>
 <dt>direction<span class="classifier">str</span></dt><dd><p>The convention used in the Doppler mean field. Can be negative_away or negative_towards</p>
 </dd>
@@ -756,7 +756,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_Doppler_width">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “sdBZ” or “sdBZv” or “sdBuZ” or “sdBuZv”</p>
 </dd>
 </dl>
 </dd>
@@ -771,7 +771,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_Doppler_width_iq">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “IQhhADU” or “IQvvADU”</p>
 </dd>
 <dt>subtract_noise<span class="classifier">Bool</span></dt><dd><p>If True noise will be subtracted from the signals</p>
 </dd>
@@ -790,7 +790,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_echo_filter">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must be “echoID” at minimum, as well as any other fields that will be echo filtered (e.g. dBZ, ZDR)</p>
 </dd>
 <dt>echo_type<span class="classifier">int or list of ints</span></dt><dd><p>The type of echoes to keep: 1 noise, 2 clutter, 3 precipitation. Default 3</p>
 </dd>
@@ -807,7 +807,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_fields_diff">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types for each radar, Any datatype supported by pyrad is supported</p>
 </dd>
 </dl>
 </dd>
@@ -862,7 +862,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_gatefilter">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, can be any any data type supported by pyrad, the number of datatypes must match the lower and upper bounds dimensions</p>
 </dd>
 <dt>lower_bounds<span class="classifier">list of float</span></dt><dd><p>The list of lower bounds for every input data type</p>
 </dd>
@@ -881,7 +881,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_dem.html#process_gecsx">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>arbitrary data type supported by pyrad</p>
 </dd>
 <dt>range_discretization<span class="classifier">float. Dataset keyword</span></dt><dd><p>Range discretization used when computing the Cartesian visibility field the larger the better but the slower the processing will be</p>
 </dd>
@@ -912,7 +912,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_hydroclass">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “dBZ” or “dBZc”, and, “ZDR” or “ZDRc”, and, “RhoHV”, or “uRhoHV”, or “RhoHVc”, and, “KDP”, or “KDPc”, and, “TEMP” or “H_ISO0” (optional)</p>
 </dd>
 <dt>HYDRO_METHOD<span class="classifier">string. Dataset keyword</span></dt><dd><p>The hydrometeor classification method. One of the following: SEMISUPERVISED, UKMO</p>
 </dd>
@@ -963,7 +963,7 @@ document.write(`
 <dt>parameters</dt><dd><dl class="simple">
 <dt>metranet_read_lib<span class="classifier">str. Global keyword</span></dt><dd><p>Type of METRANET reader library used to read the data. Can be ‘C’ or ‘python’</p>
 </dd>
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type supported by pyrad</p>
 </dd>
 <dt>keep_in_memory<span class="classifier">int. Dataset keyword</span></dt><dd><p>if set keeps the icon data dict, the icon coordinates dict and the icon field in radar coordinates in memory</p>
 </dd>
@@ -988,7 +988,7 @@ document.write(`
 <dt>parameters</dt><dd><dl class="simple">
 <dt>metranet_read_lib<span class="classifier">str. Global keyword</span></dt><dd><p>Type of METRANET reader library used to read the data. Can be ‘C’ or ‘python’</p>
 </dd>
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type supported by pyrad</p>
 </dd>
 <dt>lookup_table<span class="classifier">int. Dataset keyword</span></dt><dd><p>if set a pre-computed look up table for the icon coordinates is loaded. Otherwise the look up table is computed taking the first radar object as reference</p>
 </dd>
@@ -1007,7 +1007,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_iso0_grib">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type supported by pyrad</p>
 </dd>
 <dt>time_interp<span class="classifier">bool. Dataset keyword</span></dt><dd><p>whether to perform an interpolation in time between consecutive model outputs. Default True</p>
 </dd>
@@ -1026,7 +1026,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_iso0_mf">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type supported by prad</p>
 </dd>
 <dt>iso0_statistic<span class="classifier">str. Dataset keyword</span></dt><dd><p>The statistic used to weight the iso0 points. Can be avg_by_dist, avg, min, max</p>
 </dd>
@@ -1043,7 +1043,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_kdp_leastsquare_single_window">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “PhiDP” or “PhiDPc” or “uPhiDP”</p>
 </dd>
 <dt>rwind<span class="classifier">float. Dataset keyword</span></dt><dd><p>The length of the segment for the least square method [m]. Default 6000.</p>
 </dd>
@@ -1062,7 +1062,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_kdp_leastsquare_double_window">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>The input data types, must contain,</dt><dd><p>“PhiDP” or “PhiDPc” or “uPhiDP”, and, “dBZ” or “dBZc”</p>
 </dd>
 <dt>rwinds<span class="classifier">float. Dataset keyword</span></dt><dd><p>The length of the short segment for the least square method [m]. Default 2000.</p>
 </dd>
@@ -1125,12 +1125,12 @@ document.write(`
 <h3>L<a class="headerlink" href="#l" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
-<div><p>Computes L parameter</p>
+<div><p>Computes L parameter (logarithmic cross-correlation ratio)</p>
 </div></blockquote>
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_l">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type, must contain, “RhoHV” or “RhoHVc” or “uRhoHV”</p>
 </dd>
 </dl>
 </dd>
@@ -1145,7 +1145,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_mean_phase_iq">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “IQhhADU” or “IQvvADU”</p>
 </dd>
 </dl>
 </dd>
@@ -1171,7 +1171,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_noise_power">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “ShhADU” or “SvvADU” or “ShhADUu” or “SvvADUu”</p>
 </dd>
 <dt>units<span class="classifier">str</span></dt><dd><p>The units of the returned signal. Can be ‘ADU’, ‘dBADU’ or ‘dBm’</p>
 </dd>
@@ -1194,7 +1194,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_outlier_filter">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, can be any any data type supported by pyrad</p>
 </dd>
 <dt>threshold<span class="classifier">float. Dataset keyword</span></dt><dd><p>The distance between the value of the examined range gate and the median of the surrounding gates to consider the gate an outlier</p>
 </dd>
@@ -1217,7 +1217,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_correct_phidp0">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “dBZ” or “dBZc”, and, “PhiDP” or “PhiDPc” or “uPhiDP”</p>
 </dd>
 <dt>rmin<span class="classifier">float. Dataset keyword</span></dt><dd><p>The minimum range where to look for valid data [m]. Default 1000.</p>
 </dd>
@@ -1242,7 +1242,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_estimate_phidp0">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “dBZ” or “dBZc”, and, “PhiDP” or “PhiDPc” or “uPhiDP”</p>
 </dd>
 <dt>rmin<span class="classifier">float. Dataset keyword</span></dt><dd><p>The minimum range where to look for valid data [m]</p>
 </dd>
@@ -1267,7 +1267,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_phidp_kdp_Kalman">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “PhiDP” or “PhiDPc” or “uPhiDP”</p>
 </dd>
 <dt>parallel<span class="classifier">boolean. Dataset keyword</span></dt><dd><p>if set use parallel computing</p>
 </dd>
@@ -1288,7 +1288,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_phidp_kdp_lp">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “dBZ” or “dBZc”, and, “PhiDP” or “PhiDPc” or “uPhiDP”, and, “RhoHV” or “RhoHVc”, (Optional, used when min_rhv is specified) and, “SNRh” (Optional, used when min_snr is specified), and “TEMP” or “H_ISO0” (Optional)</p>
 </dd>
 <dt>fzl<span class="classifier">float. Dataset keyword</span></dt><dd><p>The freezing level height [m]. Default 2000.</p>
 </dd>
@@ -1341,7 +1341,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_phidp_kdp_Vulpiani">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “PhiDP” or “PhiDPc” or “uPhiDP”</p>
 </dd>
 <dt>rwind<span class="classifier">float. Dataset keyword</span></dt><dd><p>The length of the segment [m]. Default 2000.</p>
 </dd>
@@ -1368,7 +1368,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_phidp_kdp_Maesaka">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “dBZ” or “dBZc”, and, “PhiDP” or “PhiDPc” or “uPhiDP”, and “TEMP” or “H_ISO0” (Optional)</p>
 </dd>
 <dt>rmin<span class="classifier">float. Dataset keyword</span></dt><dd><p>The minimum range where to look for valid data [m]. Default 1000.</p>
 </dd>
@@ -1401,7 +1401,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_smooth_phidp_single_window">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “dBZ” or “dBZc”, and, “PhiDP” or “PhiDPc” or “uPhiDP”</p>
 </dd>
 <dt>rmin<span class="classifier">float. Dataset keyword</span></dt><dd><p>The minimum range where to look for valid data [m]. Default 1000.</p>
 </dd>
@@ -1428,7 +1428,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_smooth_phidp_double_window">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “dBZ” or “dBZc”, and, “PhiDP” or “PhiDPc” or “uPhiDP”</p>
 </dd>
 <dt>rmin<span class="classifier">float. Dataset keyword</span></dt><dd><p>The minimum range where to look for valid data [m]</p>
 </dd>
@@ -1459,7 +1459,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_pol_variables">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, either a combination of signal and noise (“ShhADU” and “SvvADU”) or (“ShhADUu” and “SvvADUu”), and, (“sNADUh” and “sNADUv”), or the power signal (“sPhhADU” and “sPvvADU”) or (“sPhhADUu” and “sPvvADUu”), and (“sRhoHV” or “sRhoHVu”)</p>
 </dd>
 <dt>subtract_noise<span class="classifier">Bool</span></dt><dd><p>If True noise will be subtracted from the signal. Default False</p>
 </dd>
@@ -1480,7 +1480,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_pol_variables_iq">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “IQhhADU”, “IQvvADU”, “IQNADUh” and “IQNADUv”</p>
 </dd>
 <dt>subtract_noise<span class="classifier">Bool</span></dt><dd><p>If True noise will be subtracted from the signal</p>
 </dd>
@@ -1505,7 +1505,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_signal_power">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “dBZ” or “dBuZ” or “dBZc” or “dBuZc” or “dBZv” or “dBuZv” or “dBuZvc”</p>
 </dd>
 <dt>mflossh, mflossv<span class="classifier">float. Dataset keyword</span></dt><dd><p>The matching filter losses of the horizontal (vertical) channel [dB]. If None it will be obtained from the attribute radar_calibration of the radar object. Defaults to 0</p>
 </dd>
@@ -1541,7 +1541,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_radial_noise_hs">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type, must contain, “dBm” or “dBmv”</p>
 </dd>
 <dt>rmin<span class="classifier">float. Dataset keyword</span></dt><dd><p>The minimum range from which to start the computation</p>
 </dd>
@@ -1564,7 +1564,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_radial_noise_ivic">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type, must contain, “dBm” or “dBmv”</p>
 </dd>
 <dt>npulses_ray<span class="classifier">int</span></dt><dd><p>Default number of pulses used in the computation of the ray. If the number of pulses is not in radar.instrument_parameters this will be used instead. Default 30</p>
 </dd>
@@ -1587,7 +1587,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_radial_velocity">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type, must contain WIND_SPEED, and, WIND_DIRECTION, and, wind_vel_v</p>
 </dd>
 <dt>latitude, longitude<span class="classifier">float</span></dt><dd><p>arbitrary coordinates [deg] from where to compute the radial velocity. If any of them is None it will be the radar position</p>
 </dd>
@@ -1606,7 +1606,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_rainrate">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type, must contain, If RR_METHOD == “Z” or “ZPoly”: “dBZ” or “dBZc” If RR_METHOD == “KDP”: “KDP” or “KDPc” If RR_METHOD == “A”: “Ah” or “Ahc” If RR_METHOD == “ZKDP”: “dBZ” or “dBZc”, and, “KDP” or “KDPc” IF RR_METHOD == “ZA”: “dBZ” or “dBZc”, and, “Ah” or “Ahc” IF RR_METHID == “hydro”: “dBZ” or “dBZc”, and, “Ah” or “Ahc”, and, “hydro”</p>
 </dd>
 <dt>RR_METHOD<span class="classifier">string. Dataset keyword</span></dt><dd><p>The rainfall rate estimation method. One of the following: Z, ZPoly, KDP, A, ZKDP, ZA, hydro</p>
 </dd>
@@ -1650,7 +1650,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_reflectivity">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “sdBZ” or sdBZv” or “sdBuZ” or “sdBuZv”</p>
 </dd>
 </dl>
 </dd>
@@ -1665,7 +1665,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_reflectivity_iq">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “IQhhADU” or “IQvvADU”, and, “IQNADUh” or “IQNADUv”</p>
 </dd>
 <dt>subtract_noise<span class="classifier">Bool</span></dt><dd><p>If True noise will be subtracted from the signal</p>
 </dd>
@@ -1682,7 +1682,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_rcs">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “dBZ” or “dBuZ” or “dBZc” or “dBuZc” or “dBZv” or “dBuZv” or “dBuZvc”</p>
 </dd>
 <dt>kw2<span class="classifier">float. Dataset keyowrd</span></dt><dd><p>The water constant</p>
 </dd>
@@ -1705,7 +1705,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_rcs_pr">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “dBZ” or “dBuZ” or “dBZc” or “dBuZc” or “dBZv” or “dBuZv” or “dBuZvc”</p>
 </dd>
 <dt>AntennaGainH, AntennaGainV<span class="classifier">float. Dataset keyword</span></dt><dd><p>The horizontal (vertical) polarization antenna gain [dB]. If None it will be obtained from the attribute instrument_parameters of the radar object</p>
 </dd>
@@ -1736,7 +1736,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_correct_noise_rhohv">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The data types used in the correction</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The data types used in the correction, it must contain “uRhoHV”, and, “SNRh”, and, “ZDRc”, and, “Nh”, and, “Nv”</p>
 </dd>
 </dl>
 </dd>
@@ -1751,7 +1751,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_rhohv_rain">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “RhoHV” or “RhoHVc” or “uRhoHV”, and, “dBZ” or “dBZc”, and “TEMP” (Optional), or “H_ISO0” (Optional)</p>
 </dd>
 <dt>rmin<span class="classifier">float. Dataset keyword</span></dt><dd><p>minimum range where to look for rain [m]. Default 1000.</p>
 </dd>
@@ -1868,7 +1868,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_echo_id">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must be “dBZ” or “dBuZ”, and, “ZDR” or “ZDRu”, and, “RhoHV” or “uRhoHV”, and, “PhiDP” or “uPhiDP”</p>
 </dd>
 <dt>wind_size<span class="classifier">int</span></dt><dd><p>Size of the moving window used to compute the ray texture (number of gates). Default 7</p>
 </dd>
@@ -1889,7 +1889,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_selfconsistency_bias">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “dBZ” or “dBZc”, and, “ZDR” or “ZDRc”, and, “PhiDP” or “PhiDPc”, and, “uRhoHV” or “RhoHV” or “RhoHVc”, and, “TEMP” (Optional), and, “H_ISO0” (Optional), and, “hydro” (Optional, only used if filter_rain)</p>
 </dd>
 <dt>parametrization<span class="classifier">str</span></dt><dd><p>The type of parametrization for the self-consistency curves. Can be ‘None’, ‘Gourley’, ‘Wolfensberger’, ‘Louf’, ‘Gorgucci’ or ‘Vaccarono’ ‘None’ will use tables from config files. Default ‘None’.</p>
 </dd>
@@ -1942,7 +1942,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_selfconsistency_bias2">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “dBZ” or “dBZc”, and, “ZDR” or “ZDRc”, and, “PhiDP” or “PhiDPc”, and, “uRhoHV” or “RhoHV” or “RhoHVc”, and, “TEMP” (Optional), and, “H_ISO0” (Optional), and, “hydro” (Optional, only used if filter_rain)</p>
 </dd>
 <dt>parametrization<span class="classifier">str</span></dt><dd><p>The type of parametrization for the self-consistency curves. Can be ‘None’, ‘Gourley’, ‘Wolfensberger’, ‘Louf’, ‘Gorgucci’ or ‘Vaccarono’ ‘None’ will use tables from config files. Default ‘None’.</p>
 </dd>
@@ -1989,7 +1989,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_selfconsistency_kdp_phidp">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of strings. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of strings. Dataset keyword</span></dt><dd><p>The input data types, must contain “dBZ” or “dBZc”, and, “ZDR” or “ZDRc”, and, “PhiDP” or “PhiDPc”, and, “uRhoHV” or “RhoHV” or “RhoHVc”, and, “TEMP” (Optional), and, “H_ISO0” (Optional), and, “hydro” (Optional, only used if filter_rain)</p>
 </dd>
 <dt>parametrization<span class="classifier">str</span></dt><dd><p>The type of parametrization for the self-consistency curves. Can be ‘None’, ‘Gourley’, ‘Wolfensberger’, ‘Louf’, ‘Gorgucci’ or ‘Vaccarono’ ‘None’ will use tables from config files. Default ‘None’.</p>
 </dd>
@@ -2022,7 +2022,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_snr">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type, must contain, “dBZ” or “dBuZ” or “dBZv” or “dBuZv”, and, “Nh” or “Nv”</p>
 </dd>
 <dt>output_type<span class="classifier">string. Dataset keyword</span></dt><dd><p>The output data type. Either SNRh or SNRv</p>
 </dd>
@@ -2039,7 +2039,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_filter_snr">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data typesm, must contain “SNRh”, “SNRv”, “SNR” or “CNR” as well as any other datatype supported by pyrad that will be SNR filtered.</p>
 </dd>
 <dt>SNRmin<span class="classifier">float. Dataset keyword</span></dt><dd><p>The minimum SNR to keep the data.</p>
 </dd>
@@ -2056,7 +2056,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_st1_iq">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “IQhhADU” or “IQvvADU”</p>
 </dd>
 </dl>
 </dd>
@@ -2071,7 +2071,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_st2_iq">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “IQhhADU” or “IQvvADU”</p>
 </dd>
 </dl>
 </dd>
@@ -2086,7 +2086,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_traj.html#process_traj_trt">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, can be any datatype supported by pyrad and available in the radar data</p>
 </dd>
 <dt>time_tol<span class="classifier">float. Dataset keyword</span></dt><dd><p>tolerance between reference time of the radar volume and that of the TRT cell [s]. Default 100.</p>
 </dd>
@@ -2109,7 +2109,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_traj.html#process_traj_trt_contour">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, can be any datatype supported by pyrad and available in the radar data</p>
 </dd>
 <dt>time_tol<span class="classifier">float. Dataset keyword</span></dt><dd><p>tolerance between reference time of the radar volume and that of the TRT cell [s]. Default 100.</p>
 </dd>
@@ -2126,7 +2126,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_turbulence">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type, must contain, “dBuZ” or “dBZ” or “dBZc” or “dBuZv” or “dBZv” or “dBZvc” or “CNRc”, and, “W” or “Wv” or “Wu” or “Wvu” or “WD” or “WDc”</p>
 </dd>
 <dt>radius<span class="classifier">float. Dataset keyword</span></dt><dd><p>Search radius for calculating Eddy Dissipation Rate (EDR). Default 2</p>
 </dd>
@@ -2157,7 +2157,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_vad">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type, must contain “V” or “Vc”</p>
 </dd>
 </dl>
 </dd>
@@ -2172,7 +2172,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_filter_vel_diff">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “diffV”, as well as any other datatype supported by pyrad that will be filtered where no Doppler velocity could be estimated.</p>
 </dd>
 </dl>
 </dd>
@@ -2187,7 +2187,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_dem.html#process_visibility">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type supported by pyrad</p>
 </dd>
 <dt>offset<span class="classifier">float. Dataset keyword</span></dt><dd><p>The offset above the minimum visibility that must be filtered</p>
 </dd>
@@ -2204,7 +2204,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_filter_visibility">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data typesm, must contain “VIS” or “visibility_polar”, as well as any other datatype supported by pyrad that will be filtered where the visibility is poor.</p>
 </dd>
 <dt>VISmin<span class="classifier">float. Dataset keyword</span></dt><dd><p>The minimum visibility to keep the data.</p>
 </dd>
@@ -2216,12 +2216,12 @@ document.write(`
 <h3>VOL_REFL<a class="headerlink" href="#vol-refl" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
-<div><p>Computes the volumetric reflectivity in 10log10(cm^2 km^-3)</p>
+<div><p>Computes the volumetric reflectivity eta in 10log10(cm^2 km^-3)</p>
 </div></blockquote>
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_vol_refl">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “dBZ” or “dBuZ” or “dBZc” or “dBuZc” or “dBZv” or “dBuZv” or “dBuZvc”</p>
 </dd>
 <dt>freq<span class="classifier">float. Dataset keyword</span></dt><dd><p>The radar frequency</p>
 </dd>
@@ -2240,7 +2240,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_filter_vol2bird">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “VOL2BIRD_CLASS”, as well as any other datatype supported by pyrad that will be filtered where vol2bird detected non-biological echoes</p>
 </dd>
 </dl>
 </dd>
@@ -2255,7 +2255,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_gate_filter_vol2bird">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “VOL2BIRD_CLASS”, and, “dBZ” or “dBZc”, and, “V” or “Vc”</p>
 </dd>
 <dt>dBZ_max<span class="classifier">float</span></dt><dd><p>Maximum reflectivity of biological scatterers</p>
 </dd>
@@ -2274,7 +2274,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_vstatus_to_echo_id">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must be “wind_vel_rad_status”</p>
 </dd>
 </dl>
 </dd>
@@ -2289,7 +2289,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_wbn_iq">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “IQhhADU” or “IQvvADU”</p>
 </dd>
 </dl>
 </dd>
@@ -2304,7 +2304,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_wind_vel">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type, must contain “V” or “Vc”</p>
 </dd>
 <dt>vert_proj<span class="classifier">Boolean</span></dt><dd><p>If true the vertical projection is computed. Otherwise the horizontal projection is computed</p>
 </dd>
@@ -2338,7 +2338,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_windshear_lidar">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type, must contain “V” or “Vc”</p>
 </dd>
 <dt>az_tol<span class="classifier">float</span></dt><dd><p>The tolerance in azimuth when looking for gates on top of the gate when computation is performed</p>
 </dd>
@@ -2355,7 +2355,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_differential_reflectivity">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “sdBZ” and “sdBZv”, or “sdBuZ” and “sdBZuv”</p>
 </dd>
 </dl>
 </dd>
@@ -2370,7 +2370,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_differential_reflectivity_iq">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “IQhhADU”, “IQvvADU”, “IQNADUh” and “IQNADUv”</p>
 </dd>
 <dt>subtract_noise<span class="classifier">Bool</span></dt><dd><p>If True noise will be subtracted from the signal</p>
 </dd>
@@ -2389,7 +2389,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_zdr_precip">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of strings. Dataset keyword</span></dt><dd><p>The input data types, must contain “dBZ” or “dBZc”, and, “ZDR” or “ZDRc”, and, “PhiDP” or “PhiDPc”, and, “uRhoHV” or “RhoHV” or “RhoHVc”, and, “TEMP” (Optional), and, “H_ISO0” (Optional)</p>
 </dd>
 <dt>ml_filter<span class="classifier">boolean. Dataset keyword</span></dt><dd><p>indicates if a filter on data in and above the melting layer is applied. Default True.</p>
 </dd>
@@ -2426,7 +2426,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_zdr_snow">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of strings. Dataset keyword</span></dt><dd><p>The input data types, must contain “dBZ” or “dBZc”, and, “ZDR” or “ZDRc”, and, “PhiDP” or “PhiDPc”, and, “uRhoHV” or “RhoHV” or “RhoHVc”, and, “hydro”, and, “TEMP” (Optional), and, “SNRh” or “SNRv” (Optional, used to filter with SNRmin and SNRmax)</p>
 </dd>
 <dt>rmin<span class="classifier">float. Dataset keyword</span></dt><dd><p>minimum range where to look for rain [m]. Default 1000.</p>
 </dd>
@@ -2470,7 +2470,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_fft">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “IQNdBADUh” and/or “IQNdBADUv” and/or “IQNADUh” and/or “IQNADUv” (see new_dataset below)</p>
 </dd>
 <dt>window<span class="classifier">list of str</span></dt><dd><p>Parameters of the window used to obtain the spectra. The parameters are the ones corresponding to function scipy.signal.windows.get_window. It can also be [‘None’].</p>
 </dd>
@@ -2487,7 +2487,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_filter_0Doppler">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, can be any of the spectral fields supported by pyrad</p>
 </dd>
 <dt>filter_width<span class="classifier">float</span></dt><dd><p>The Doppler filter width. Default 0.</p>
 </dd>
@@ -2506,7 +2506,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_filter_spectra_noise">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “ShhADU” or “SvvADU” or “ShhADUu” or “SvvADUu”, and, “sNADUh” or “sNADUv”</p>
 </dd>
 <dt>clipping_level<span class="classifier">float</span></dt><dd><p>The clipping level [dB above noise level]. Default 10.</p>
 </dd>
@@ -2523,7 +2523,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_ifft">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “ShhADU” or “ShhADUu”, or, “SvvADU” or “SvvADUu”, or, “sNADUh” or “sNADUv”</p>
 </dd>
 </dl>
 </dd>
@@ -2560,7 +2560,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_spectra_ang_avg">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, any spectral datatype supported by pyrad</p>
 </dd>
 <dt>navg<span class="classifier">int</span></dt><dd><p>Number of spectra to average. If -1 all spectra will be averaged. Default -1.</p>
 </dd>
@@ -2616,7 +2616,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_spectral_noise">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “ShhADU” or “SvvADU” or “ShhADUu” or “SvvADUu”</p>
 </dd>
 <dt>units<span class="classifier">str</span></dt><dd><p>The units of the returned signal. Can be ‘ADU’, ‘dBADU’ or ‘dBm’</p>
 </dd>
@@ -2639,7 +2639,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_spectral_phase">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “ShhADU” or “SvvADU” or “ShhADUu” or “SvvADUu”</p>
 </dd>
 </dl>
 </dd>
@@ -2654,7 +2654,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_spectral_power">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “ShhADU” or “SvvADU” or “ShhADUu” or “SvvADUu”, and, “sNADUh”, or “sNADUv”</p>
 </dd>
 <dt>units<span class="classifier">str</span></dt><dd><p>The units of the returned signal. Can be ‘ADU’, ‘dBADU’ or ‘dBm’</p>
 </dd>
@@ -2675,7 +2675,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_spectral_reflectivity">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, either a combination of signal and noise “ShhADU” or “SvvADU” or “ShhADUu” or “SvvADUu”, and, “sNADUh” or “sNADUv”, or the power signal “sPhhADU” or “sPvvADU” or “sPhhADUu” or “sPvvADUu”</p>
 </dd>
 <dt>subtract_noise<span class="classifier">Bool</span></dt><dd><p>If True noise will be subtracted from the signal</p>
 </dd>
@@ -2694,7 +2694,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_filter_srhohv">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “sRhoHV” or “sRhoHVu”, as well as any spectral field supported by pyrad</p>
 </dd>
 <dt>sRhoHV_threshold<span class="classifier">float</span></dt><dd><p>Data with sRhoHV module above this threshold will be filtered. Default 1.</p>
 </dd>
@@ -2714,7 +2714,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_centroids">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “dBZ” or “dBZc”, and, “ZDR” or “ZDRc”, and, “RhoHV”, or “uRhoHV”, or “RhoHVc”, and, “KDP”, or “KDPc”, and, “TEMP” or “H_ISO0” (optional)</p>
 </dd>
 <dt>samples_per_vol<span class="classifier">int. Dataset keyword</span></dt><dd><p>Maximum number of samples per volume kept for further analysis. Default 20000</p>
 </dd>
@@ -2792,7 +2792,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_colocated_gates">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types to use to check colocated gates (one for every radar) Any datatype supported by pyrad and available in both radars is accepted. If visibility filtering is desired, the fields “visibility” or “visibility_polar” must be specified for both radars.</p>
 </dd>
 <dt>h_tol<span class="classifier">float. Dataset keyword</span></dt><dd><p>Tolerance in altitude difference between radar gates [m]. Default 100.</p>
 </dd>
@@ -2838,7 +2838,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_icon_coord">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type supported by pyrad</p>
 </dd>
 <dt>iconpath<span class="classifier">string. General keyword</span></dt><dd><p>path where to store the look up table</p>
 </dd>
@@ -2859,7 +2859,7 @@ document.write(`
 <dt>parameters</dt><dd><dl class="simple">
 <dt>metranet_read_lib<span class="classifier">str. Global keyword</span></dt><dd><p>Type of METRANET reader library used to read the data. Can be ‘C’ or ‘python’</p>
 </dd>
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type supported by pyrad</p>
 </dd>
 <dt>iconpath<span class="classifier">string. General keyword</span></dt><dd><p>path where to store the look up table</p>
 </dd>
@@ -2879,7 +2879,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_icon_to_radar">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type supported by pyrad</p>
 </dd>
 <dt>icon_type<span class="classifier">str. Dataset keyword</span></dt><dd><p>name of the icon field to process. Default TEMP</p>
 </dd>
@@ -2902,8 +2902,12 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_raw_grid">[Source]</a></p>
 </dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type supported by pyrad and contained in the grid data</p>
+</dd>
 </dl>
-<p>parameters</p>
+</dd>
+</dl>
 </section>
 <section id="id113">
 <h3>GECSX<a class="headerlink" href="#id113" title="Link to this heading">#</a></h3>
@@ -2914,7 +2918,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_dem.html#process_gecsx">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>arbitrary data type supported by pyrad</p>
 </dd>
 <dt>range_discretization<span class="classifier">float. Dataset keyword</span></dt><dd><p>Range discretization used when computing the Cartesian visibility field the larger the better but the slower the processing will be</p>
 </dd>
@@ -2972,7 +2976,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid_fields_diff">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The two input data types to compare. Can any two datatypes supported by pyrad</p>
 </dd>
 </dl>
 </dd>
@@ -2986,8 +2990,18 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid_mask">[Source]</a></p>
 </dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data type, can be any datatype supported by pyrad</p>
+</dd>
+<dt>threshold_min<span class="classifier">float or None</span></dt><dd><p>Threshold used for the mask. Values below threshold are set to False. Above threshold are set to True. Default None.</p>
+</dd>
+<dt>threshold_max<span class="classifier">float or None</span></dt><dd><p>Threshold used for the mask. Values above threshold are set to False. Below threshold are set to True. Default None.</p>
+</dd>
+<dt>x_dir_ext, y_dir_ext<span class="classifier">int</span></dt><dd><p>Number of pixels by which to extend the mask on each side of the west-east direction and south-north direction</p>
+</dd>
 </dl>
-<p>parameters</p>
+</dd>
+</dl>
 </section>
 <section id="grid-texture">
 <h3>GRID_TEXTURE<a class="headerlink" href="#grid-texture" title="Link to this heading">#</a></h3>
@@ -2998,7 +3012,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid_texture">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data type, can be any datatype supported by pyrad</p>
 </dd>
 <dt>xwind, ywind<span class="classifier">int</span></dt><dd><p>The size of the local window in the x and y axis. Default 7</p>
 </dd>
@@ -3016,8 +3030,12 @@ document.write(`
 </div></blockquote>
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_normalize_luminosity">[Source]</a></p>
 </dd>
+<dt>parameters</dt><dd><dl class="simple">
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data type, can be any datatype supported by pyrad</p>
+</dd>
 </dl>
-<p>parameters</p>
+</dd>
+</dl>
 </section>
 <section id="pixel-filter">
 <h3>PIXEL_FILTER<a class="headerlink" href="#pixel-filter" title="Link to this heading">#</a></h3>
@@ -3028,6 +3046,8 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_pixel_filter">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “mask”, as well as any datatypes supported by pyrad</p>
+</dd>
 <dt>pixel_type<span class="classifier">int or list of ints</span></dt><dd><p>The type of pixels to keep: 0 No data, 1 Below threshold, 2 Above threshold. Default 2</p>
 </dd>
 </dl>
@@ -3068,7 +3088,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_dda">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type, must contain “V” or “Vc”, and, “dBuZ”, “dBZ”, or “dBZc”</p>
 </dd>
 <dt>gridconfig<span class="classifier">dictionary. Dataset keyword</span></dt><dd><p>Dictionary containing some or all of this keywords: xmin, xmax, ymin, ymax, zmin, zmax : floats minimum and maximum horizontal distance from grid origin [km] and minimum and maximum vertical distance from grid origin [m] Defaults -40, 40, -40, 40, 0., 10000. latmin, latmax, lonmin, lonmax : floats minimum and maximum latitude and longitude [deg], if specified xmin, xmax, ymin, ymax will be ignored hres, vres : floats horizontal and vertical grid resolution [m] Defaults 1000., 500. latorig, lonorig, altorig : floats latitude and longitude of grid origin [deg] and altitude of grid origin [m MSL] Defaults the latitude, longitude and altitude of the radar</p>
 </dd>
@@ -3122,7 +3142,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid_time_stats">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, can be any datatype supported by pyrad</p>
 </dd>
 <dt>period<span class="classifier">float. Dataset keyword</span></dt><dd><p>the period to average [s]. If -1 the statistics are going to be performed over the entire data. Default 3600.</p>
 </dd>
@@ -3149,7 +3169,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid_time_stats2">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data type, can be any datatype supported by pyrad</p>
 </dd>
 <dt>period<span class="classifier">float. Dataset keyword</span></dt><dd><p>the period to average [s]. If -1 the statistics are going to be performed over the entire data. Default 3600.</p>
 </dd>
@@ -3174,7 +3194,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid_rainfall_accumulation">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data type, can be any data type supported by pyrad but typically RR is used</p>
 </dd>
 <dt>period<span class="classifier">float. Dataset keyword</span></dt><dd><p>the period to average [s]. If -1 the statistics are going to be performed over the entire data. Default 3600.</p>
 </dd>
@@ -3200,7 +3220,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_intercomp">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types (one for every radar). Any arbitrary datatype supported by pyrad and available in both radar is accepted.</p>
 </dd>
 <dt>colocgatespath<span class="classifier">string.</span></dt><dd><p>base path to the file containing the coordinates of the co-located gates</p>
 </dd>
@@ -3229,7 +3249,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_intercomp_fields">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types for each radar, Any datatype supported by pyrad and available in both radars is supported</p>
 </dd>
 </dl>
 </dd>
@@ -3244,7 +3264,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_intercomp_time_avg">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain dBZ” or “dBZc” or “dBuZ” or “dBZv” or “dBZvc” or “dBuZv, and, “PhiDP” or “PhiDPc”, and, “time_avg_flag” for the two radars</p>
 </dd>
 <dt>colocgatespath<span class="classifier">string.</span></dt><dd><p>base path to the file containing the coordinates of the co-located gates</p>
 </dd>
@@ -3284,7 +3304,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_melting_layer">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “dBZ” or “dBZc”, and, “ZDR” or “ZDRc”, and, “RhoHV” or “RhoHVc”, and, “TEMP” or “H_ISO0” (optional)</p>
 </dd>
 </dl>
 </dd>
@@ -3302,7 +3322,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_vpr">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type, must contain, “dBZ” or “dBZc”, and, “H_ISO0” or “H_ISO0c” or “TEMP” or “TEMPc”</p>
 </dd>
 <dt>nvalid_min<span class="classifier">int</span></dt><dd><p>Minimum number of rays with data to consider the azimuthal average valid. Default 20.</p>
 </dd>
@@ -3372,7 +3392,7 @@ document.write(`
 </dd>
 <dt>excessgates_fname<span class="classifier">str. Dataset keyword</span></dt><dd><p>The name of the gates in excess of quantile file</p>
 </dd>
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, it must contain “echoID” (Optional allows filter_prec), as well as any other fields supported by pyrad</p>
 </dd>
 <dt>step<span class="classifier">float. Dataset keyword</span></dt><dd><p>The width of the histogram bin. Default is None. In that case the default step in function get_histogram_bins is used</p>
 </dd>
@@ -3399,7 +3419,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_monitoring">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>Arbitrary datatype supported by pyrad</p>
 </dd>
 <dt>step<span class="classifier">float. Dataset keyword</span></dt><dd><p>The width of the histogram bin. Default is None. In that case the default step in function get_histogram_bins is used</p>
 </dd>
@@ -3421,7 +3441,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_occurrence">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, it must contain “echoID” (Optional allows filter_prec), as well as any other fields supported by pyrad</p>
 </dd>
 <dt>regular_grid<span class="classifier">Boolean. Dataset keyword</span></dt><dd><p>Whether the radar has a Boolean grid or not. Default False</p>
 </dd>
@@ -3448,7 +3468,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_occurrence_period">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “occurence” and, “nsamples”</p>
 </dd>
 <dt>regular_grid<span class="classifier">Boolean. Dataset keyword</span></dt><dd><p>Whether the radar has a Boolean grid or not. Default False</p>
 </dd>
@@ -3467,7 +3487,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_time_avg_std">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, it must contain “echoID” (Optional allows filter_prec), “dBZ” or “dBZc” or “dBZv” or “dBZvc” or “dBuZ” or “dBuZc” (Optional, allows val_min) as well as any other fields supported by pyrad</p>
 </dd>
 <dt>regular_grid<span class="classifier">Boolean. Dataset keyword</span></dt><dd><p>Whether the radar has a Boolean grid or not. Default False</p>
 </dd>
@@ -3499,7 +3519,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_evp">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The data type where we want to extract the point measurement</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The data type where we want to extract the point measurement, can be any datatype supported by pyrad and available in the data</p>
 </dd>
 <dt>lat, lon<span class="classifier">float</span></dt><dd><p>latitude and longitude of the point of interest [deg]</p>
 </dd>
@@ -3530,7 +3550,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_qvp">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The data type where we want to extract the point measurement</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The data type where we want to extract the point measurement, can be any datatype supported by pyrad and available in the data</p>
 </dd>
 <dt>angle<span class="classifier">int or float</span></dt><dd><p>If the radar object contains a PPI volume, the sweep number to use, if it contains an RHI volume the elevation angle. Default 0.</p>
 </dd>
@@ -3559,7 +3579,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_svp">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The data type where we want to extract the point measurement</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The data type where we want to extract the point measurement, can be any datatype supported by pyrad and available in the data</p>
 </dd>
 <dt>angle<span class="classifier">int or float</span></dt><dd><p>If the radar object contains a PPI volume, the sweep number to use, if it contains an RHI volume the elevation angle. Default 0.</p>
 </dd>
@@ -3594,7 +3614,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_time_height">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The data type where we want to extract the point measurement</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The data type where we want to extract the point measurement, can be any datatype supported by pyrad and available in the data</p>
 </dd>
 <dt>lat, lon<span class="classifier">float</span></dt><dd><p>latitude and longitude of the point of interest [deg]</p>
 </dd>
@@ -3619,7 +3639,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_ts_along_coord">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The data type where we want to extract the time series</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The data type where we want to extract the time series, can be any datatype supported by pyrad and available in the data</p>
 </dd>
 <dt>mode<span class="classifier">str</span></dt><dd><p>coordinate to extract data along. Can be ALONG_AZI, ALONG_ELE or ALONG_RNG</p>
 </dd>
@@ -3645,7 +3665,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_zdr_column">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “ZDR” or “ZDRc”, and, “RhoHV” or “RhoHVc”, and, “TEMP” or “H_ISO0”</p>
 </dd>
 </dl>
 </dd>
@@ -3663,7 +3683,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_sun_hits">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “dBm”, and, “dBmv”, and, “ZDR”, or “ZDRu”, or “ZDRu”</p>
 </dd>
 <dt>delev_max<span class="classifier">float. Dataset keyword</span></dt><dd><p>maximum elevation distance from nominal radar elevation where to look for a sun hit signal [deg]. Default 1.5</p>
 </dd>
@@ -3726,7 +3746,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_sunscan">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “dBm”, and, “dBmv”, and, “ZDR”, or “ZDRu”, or “ZDRu”</p>
 </dd>
 <dt>delev_max<span class="classifier">float. Dataset keyword</span></dt><dd><p>maximum elevation distance from nominal radar elevation where to look for a sun hit signal [deg]. Default 1.5</p>
 </dd>
@@ -3806,7 +3826,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_time_avg_flag">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must be “PhiDP” or “PhiDPc” (Optional, for PhiDP flagging), and, “echoID” (Optional, for echoID flagging), and, “hydro” (Optional, for no rain flagging), and, “TEMP” (Optional, for solid precip flagging), and, “H_ISO0” (Optional, also for solid precip flagging)</p>
 </dd>
 <dt>period<span class="classifier">float. Dataset keyword</span></dt><dd><p>the period to average [s]. Default 3600.</p>
 </dd>
@@ -3829,7 +3849,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_time_avg">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>Arbitrary data type supported by pyrad and contained in the radar data</p>
 </dd>
 <dt>period<span class="classifier">float. Dataset keyword</span></dt><dd><p>the period to average [s]. Default 3600.</p>
 </dd>
@@ -3850,7 +3870,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_weighted_time_avg">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>Arbitrary data type supported by pyrad and contained in the radar data, as well as “dBZ” or “dBZc” or “dBuZ” or “dBZv” or “dBZvc” or “dBuZv” (refl. weighting)</p>
 </dd>
 <dt>period<span class="classifier">float. Dataset keyword</span></dt><dd><p>the period to average [s]. Default 3600.</p>
 </dd>
@@ -3869,7 +3889,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_time_stats">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>Arbitrary data type supported by pyrad and contained in the radar data</p>
 </dd>
 <dt>period<span class="classifier">float. Dataset keyword</span></dt><dd><p>the period to average [s]. If -1 the statistics are going to be performed over the entire data. Default 3600.</p>
 </dd>
@@ -3896,7 +3916,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_time_stats2">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>Arbitrary data type supported by pyrad and contianed in the radar data</p>
 </dd>
 <dt>period<span class="classifier">float. Dataset keyword</span></dt><dd><p>the period to average [s]. If -1 the statistics are going to be performed over the entire data. Default 3600.</p>
 </dd>
@@ -3921,7 +3941,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_rainfall_accumulation">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “RR”</p>
 </dd>
 <dt>period<span class="classifier">float. Dataset keyword</span></dt><dd><p>the period to average [s]. If -1 the statistics are going to be performed over the entire data. Default 3600.</p>
 </dd>
@@ -3995,7 +4015,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_multiple_points">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The data type where we want to extract the point measurement</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The data type where we want to extract the point measurement, can be any datatype supported by pyrad and available in the data</p>
 </dd>
 <dt>truealt<span class="classifier">boolean. Dataset keyword</span></dt><dd><p>if True the user input altitude is used to determine the point of interest. if False use the altitude at a given radar elevation ele over the point of interest.</p>
 </dd>
@@ -4024,7 +4044,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_point_measurement">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The data type where we want to extract the point measurement</p>
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The data type where we want to extract the point measurement, can be any datatype supported by pyrad and available in the data</p>
 </dd>
 <dt>single_point<span class="classifier">boolean. Dataset keyword</span></dt><dd><p>if True only one gate per radar volume is going to be kept. Otherwise all gates within the azimuth and elevation tolerance are going to be kept. This is useful to extract all data from fixed pointing scans. Default True</p>
 </dd>
@@ -4076,7 +4096,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_traj.html#process_traj_atplane">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, can be any datatype supported by pyrad and available in the radar data</p>
 </dd>
 <dt>data_is_log<span class="classifier">dict. Dataset keyword</span></dt><dd><p>Dictionary specifying for each field if it is in log (True) or linear units (False). Default False</p>
 </dd>
@@ -4099,7 +4119,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_traj.html#process_traj_lightning">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, can be any datatype supported by pyrad and available in the radar data</p>
 </dd>
 <dt>data_is_log<span class="classifier">dict. Dataset keyword</span></dt><dd><p>Dictionary specifying for each field if it is in log (True) or linear units (False). Default False</p>
 </dd>
@@ -4123,7 +4143,7 @@ document.write(`
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_traj.html#process_trajectory">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
-<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types</p>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, can be any datatype supported by pyrad and available in the radar data</p>
 </dd>
 </dl>
 </dd>

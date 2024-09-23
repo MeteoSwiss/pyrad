@@ -1306,18 +1306,23 @@ document.write(`
 <dt class="sig sig-object py" id="pyrad.proc.process_raw_grid">
 <span class="sig-prename descclassname"><span class="pre">pyrad.proc.</span></span><span class="sig-name descname"><span class="pre">process_raw_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">procstatus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dscfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radar_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyrad/proc/process_grid.html#process_raw_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.proc.process_raw_grid" title="Link to this definition">#</a></dt>
 <dd><p>Dummy function that returns the initial input data set</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
+<dd class="field-odd"><ul>
 <li><p><strong>procstatus</strong> (<em>int</em>) – Processing status: 0 initializing, 1 processing volume,
 2 post-processing</p></li>
-<li><p><strong>dscfg</strong> (<em>dictionary of dictionaries</em>) – data set configuration</p></li>
+<li><p><strong>dscfg</strong> (<em>dictionary of dictionaries</em>) – data set configuration. Accepted Configuration Keywords:</p>
+<dl class="simple">
+<dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type supported by pyrad and contained in the grid data</p>
+</dd>
+</dl>
+</li>
 <li><p><strong>radar_list</strong> (<em>list of Radar objects</em>) – Optional. list of radar objects</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output</p></li>
+<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output with field corresponding to datatype</p></li>
 <li><p><strong>ind_rad</strong> (<em>int</em>) – radar index</p></li>
 </ul>
 </p>

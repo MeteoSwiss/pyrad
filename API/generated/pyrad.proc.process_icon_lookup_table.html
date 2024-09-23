@@ -1315,7 +1315,7 @@ using look up tables computed or loaded when initializing</p>
 <li><p><strong>dscfg</strong> (<em>dictionary of dictionaries</em>) –</p>
 <p>data set configuration. Accepted Configuration Keywords:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">datatype</span> <span class="p">:</span> <span class="n">string</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
-    <span class="n">arbitrary</span> <span class="n">data</span> <span class="nb">type</span>
+    <span class="n">arbitrary</span> <span class="n">data</span> <span class="nb">type</span> <span class="n">supported</span> <span class="n">by</span> <span class="n">pyrad</span>
 <span class="n">lookup_table</span> <span class="p">:</span> <span class="nb">int</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
     <span class="k">if</span> <span class="nb">set</span> <span class="n">a</span> <span class="n">pre</span><span class="o">-</span><span class="n">computed</span> <span class="n">look</span> <span class="n">up</span> <span class="n">table</span> <span class="k">for</span> <span class="n">the</span> <span class="n">icon</span> <span class="n">coordinates</span> <span class="ow">is</span>
     <span class="n">loaded</span><span class="o">.</span> <span class="n">Otherwise</span> <span class="n">the</span> <span class="n">look</span> <span class="n">up</span> <span class="n">table</span> <span class="ow">is</span> <span class="n">computed</span> <span class="n">taking</span> <span class="n">the</span> <span class="n">first</span>
@@ -1336,7 +1336,7 @@ using look up tables computed or loaded when initializing</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output</p></li>
+<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output fields corresponding to icon_variables</p></li>
 <li><p><strong>ind_rad</strong> (<em>int</em>) – radar index</p></li>
 </ul>
 </p>

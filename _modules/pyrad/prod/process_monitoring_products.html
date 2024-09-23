@@ -959,30 +959,33 @@ document.write(`
 
         <span class="c1"># generate alarms if needed</span>
         <span class="n">alarm</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;alarm&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        
         <span class="k">if</span> <span class="ow">not</span> <span class="n">alarm</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">figfname_list</span>
 
+        <span class="n">output</span> <span class="o">=</span> <span class="n">figfname_list</span>
+        
         <span class="k">if</span> <span class="s2">&quot;tol_abs&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;unable to send alarm. Missing tolerance on target&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">output</span>
 
         <span class="k">if</span> <span class="s2">&quot;tol_trend&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;unable to send alarm. Missing tolerance in trend&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">output</span>
 
         <span class="k">if</span> <span class="s2">&quot;nevents_min&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot;unable to send alarm. &quot;</span>
                 <span class="o">+</span> <span class="s2">&quot;Missing minimum number of events to compute trend&quot;</span>
             <span class="p">)</span>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">output</span>
 
         <span class="k">if</span> <span class="s2">&quot;sender&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;unable to send alarm. Missing email sender&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">output</span>
         <span class="k">if</span> <span class="s2">&quot;receiver_list&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;unable to send alarm. Missing email receivers&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">output</span>
 
         <span class="n">tol_abs</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;tol_abs&quot;</span><span class="p">]</span>
         <span class="n">tol_trend</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;tol_trend&quot;</span><span class="p">]</span>
@@ -995,7 +998,7 @@ document.write(`
 
         <span class="k">if</span> <span class="n">np_last</span> <span class="o">&lt;</span> <span class="n">np_min</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid data on day &quot;</span> <span class="o">+</span> <span class="n">date</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%m-%Y&quot;</span><span class="p">))</span>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">output</span>
 
         <span class="c1"># check if absolute value exceeded</span>
         <span class="n">abs_exceeded</span> <span class="o">=</span> <span class="kc">False</span>
@@ -1087,7 +1090,7 @@ document.write(`
         <span class="p">)</span>
         <span class="n">send_msg</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">receiver_list</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">alarm_fname</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">alarm_fname</span>
+        <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">alarm_fname</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CUMUL_VOL_TS&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
@@ -1252,27 +1255,28 @@ document.write(`
         <span class="k">if</span> <span class="ow">not</span> <span class="n">alarm</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">figfname_list</span>
 
+        <span class="n">output</span> <span class="o">=</span> <span class="n">figfname_list</span>
         <span class="k">if</span> <span class="s2">&quot;tol_abs&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;unable to send alarm. Missing tolerance on target&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">output</span>
 
         <span class="k">if</span> <span class="s2">&quot;tol_trend&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;unable to send alarm. Missing tolerance in trend&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">output</span>
 
         <span class="k">if</span> <span class="s2">&quot;nevents_min&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot;unable to send alarm. &quot;</span>
                 <span class="o">+</span> <span class="s2">&quot;Missing minimum number of events to compute trend&quot;</span>
             <span class="p">)</span>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">output</span>
 
         <span class="k">if</span> <span class="s2">&quot;sender&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;unable to send alarm. Missing email sender&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">output</span>
         <span class="k">if</span> <span class="s2">&quot;receiver_list&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;unable to send alarm. Missing email receivers&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">output</span>
 
         <span class="n">tol_abs</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;tol_abs&quot;</span><span class="p">]</span>
         <span class="n">tol_trend</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;tol_trend&quot;</span><span class="p">]</span>
@@ -1285,7 +1289,7 @@ document.write(`
 
         <span class="k">if</span> <span class="n">np_last</span> <span class="o">&lt;</span> <span class="n">np_min</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid data on day &quot;</span> <span class="o">+</span> <span class="n">date</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%m-%Y&quot;</span><span class="p">))</span>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">output</span>
 
         <span class="c1"># check if absolute value exceeded</span>
         <span class="n">abs_exceeded</span> <span class="o">=</span> <span class="kc">False</span>
@@ -1331,7 +1335,7 @@ document.write(`
                 <span class="n">trend_exceeded</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">if</span> <span class="n">abs_exceeded</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">trend_exceeded</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">output</span>
 
         <span class="n">alarm_dir</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="s2">&quot;/alarms/&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">alarm_dir</span><span class="p">):</span>
@@ -1377,7 +1381,7 @@ document.write(`
         <span class="p">)</span>
         <span class="n">send_msg</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">receiver_list</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">alarm_fname</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">alarm_fname</span>
+        <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">alarm_fname</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;SAVEVOL&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>

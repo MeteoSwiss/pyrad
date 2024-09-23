@@ -1315,7 +1315,9 @@ keyword echo_type</p>
 <li><p><strong>dscfg</strong> (<em>dictionary of dictionaries</em>) –</p>
 <p>data set configuration. Accepted Configuration Keywords:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">datatype</span> <span class="p">:</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">string</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
-    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="n">types</span>
+    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="n">types</span><span class="p">,</span> <span class="n">must</span> <span class="n">be</span>
+    <span class="s2">&quot;echoID&quot;</span> <span class="n">at</span> <span class="n">minimum</span><span class="p">,</span> <span class="k">as</span> <span class="n">well</span> <span class="k">as</span> <span class="nb">any</span> <span class="n">other</span> <span class="n">fields</span>
+    <span class="n">that</span> <span class="n">will</span> <span class="n">be</span> <span class="n">echo</span> <span class="n">filtered</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span> <span class="n">dBZ</span><span class="p">,</span> <span class="n">ZDR</span><span class="p">)</span>
 <span class="n">echo_type</span> <span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">ints</span>
     <span class="n">The</span> <span class="nb">type</span> <span class="n">of</span> <span class="n">echoes</span> <span class="n">to</span> <span class="n">keep</span><span class="p">:</span> <span class="mi">1</span> <span class="n">noise</span><span class="p">,</span> <span class="mi">2</span> <span class="n">clutter</span><span class="p">,</span> <span class="mi">3</span> <span class="n">precipitation</span><span class="o">.</span>
     <span class="n">Default</span> <span class="mi">3</span>
@@ -1327,7 +1329,9 @@ keyword echo_type</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output</p></li>
+<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output field, it will contain
+the corrected version of the provided datatypes
+For example dBZ -&gt; dBZc, ZDR -&gt; ZDRc, RhoHV -&gt; RhoHVc</p></li>
 <li><p><strong>ind_rad</strong> (<em>int</em>) – radar index</p></li>
 </ul>
 </p>

@@ -488,7 +488,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted configuration keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;IQhhADU&quot;, &quot;IQvvADU&quot;, &quot;IQNADUh&quot; and &quot;IQNADUv&quot;</span>
 <span class="sd">        subtract_noise : Bool</span>
 <span class="sd">            If True noise will be subtracted from the signal</span>
 <span class="sd">        lag : int</span>
@@ -506,7 +507,9 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output fields corresponding to the specified</span>
+<span class="sd">        &quot;variables&quot;</span>
+<span class="sd">        &quot;&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -580,7 +583,9 @@ document.write(`
 <span class="sd">        data set configuration. Accepted configuration keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;IQhhADU&quot; or &quot;IQvvADU&quot;, and,</span>
+<span class="sd">            &quot;IQNADUh&quot; or &quot;IQNADUv&quot;</span>
 <span class="sd">        subtract_noise : Bool</span>
 <span class="sd">            If True noise will be subtracted from the signal</span>
 <span class="sd">    radar_list : list of spectra objects</span>
@@ -589,7 +594,9 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field</span>
+<span class="sd">        &quot;dBZ&quot; if &quot;IQhhADU&quot; and &quot;IQNADUh&quot; are specified</span>
+<span class="sd">        &quot;dBZv&quot; if &quot;IQvvADU&quot; and &quot;IQNADUv&quot; are specified </span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -658,14 +665,15 @@ document.write(`
 <span class="sd">        data set configuration. Accepted configuration keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;IQhhADU&quot; or &quot;IQvvADU&quot; </span>
 <span class="sd">    radar_list : list of spectra objects</span>
 <span class="sd">        Optional. list of spectra objects</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;ST1&quot; (stat_test_lag1)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -717,14 +725,15 @@ document.write(`
 <span class="sd">        data set configuration. Accepted configuration keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;IQhhADU&quot; or &quot;IQvvADU&quot; </span>
 <span class="sd">    radar_list : list of spectra objects</span>
 <span class="sd">        Optional. list of spectra objects</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;ST2&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -775,14 +784,15 @@ document.write(`
 <span class="sd">        data set configuration. Accepted configuration keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;IQhhADU&quot; or &quot;IQvvADU&quot; </span>
 <span class="sd">    radar_list : list of spectra objects</span>
 <span class="sd">        Optional. list of spectra objects</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;WBN&quot; (wide-band noise)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -834,7 +844,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted configuration keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;IQhhADU&quot;, &quot;IQvvADU&quot;, &quot;IQNADUh&quot; and &quot;IQNADUv&quot;</span>
 <span class="sd">        subtract_noise : Bool</span>
 <span class="sd">            If True noise will be subtracted from the signal</span>
 <span class="sd">        lag : int</span>
@@ -845,7 +856,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;ZDR&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -915,14 +926,15 @@ document.write(`
 <span class="sd">        data set configuration. Accepted configuration keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;IQhhADU&quot; or &quot;IQvvADU&quot; </span>
 <span class="sd">    radar_list : list of spectra objects</span>
 <span class="sd">        Optional. list of spectra objects</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;MPH&quot; (mean_phase)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -973,7 +985,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted configuration keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;IQhhADU&quot; and &quot;IQvvADU&quot; </span>
 <span class="sd">        phase_offset : float. Dataset keyword</span>
 <span class="sd">            The system differential phase offset to remove</span>
 <span class="sd">    radar_list : list of spectra objects</span>
@@ -982,7 +995,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field uPhiDP</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1042,7 +1055,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted configuration keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;IQhhADU&quot;, &quot;IQvvADU&quot;, &quot;IQNADUh&quot; and &quot;IQNADUv&quot;</span>
 <span class="sd">        subtract_noise : Bool</span>
 <span class="sd">            If True noise will be subtracted from the signal</span>
 <span class="sd">        lag : int</span>
@@ -1053,7 +1067,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;RhoHV&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1122,7 +1136,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted configuration keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;IQhhADU&quot; or &quot;IQvvADU&quot;</span>
 <span class="sd">        direction : str</span>
 <span class="sd">            The convention used in the Doppler mean field. Can be</span>
 <span class="sd">            negative_away or negative_towards</span>
@@ -1132,7 +1147,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;V&quot; </span>
+<span class="sd">        (if IQhhADU was provided) or &quot;Vv&quot; (if IQvvADU was provided)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1189,7 +1205,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted configuration keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;IQhhADU&quot; or &quot;IQvvADU&quot;</span>
 <span class="sd">        subtract_noise : Bool</span>
 <span class="sd">            If True noise will be subtracted from the signals</span>
 <span class="sd">        lag : int</span>
@@ -1200,7 +1217,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;W&quot; (if IQhhADU was provided),</span>
+<span class="sd">        or &quot;Wv&quot; (if IQvvADU was provided)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1269,7 +1287,9 @@ document.write(`
 <span class="sd">        data set configuration. Accepted configuration keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain,</span>
+<span class="sd">            &quot;IQNdBADUh&quot; and/or &quot;IQNdBADUv&quot; and/or</span>
+<span class="sd">            &quot;IQNADUh&quot; and/or &quot;IQNADUv&quot; (see new_dataset below)</span>
 <span class="sd">        window : list of str</span>
 <span class="sd">            Parameters of the window used to obtain the spectra. The</span>
 <span class="sd">            parameters are the ones corresponding to function</span>
@@ -1280,7 +1300,11 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output fields</span>
+<span class="sd">        &quot;ShhADUu&quot; (unfiltered_complex_spectra_hh_ADU) if IQNdBADUh was provided,</span>
+<span class="sd">        &quot;SvvADUu&quot; (unfiltered_complex_spectra_vv_ADU) if IQNdBADUv was provided,</span>
+<span class="sd">        &quot;sNADUh&quot; (spectral_noise_power_hh_ADU) if IQNADUh was provided,</span>
+<span class="sd">        &quot;sNADUv&quot; (spectral_noise_power_vv_ADU) if IQNADUv was provided,</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 

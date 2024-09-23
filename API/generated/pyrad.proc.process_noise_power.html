@@ -1314,7 +1314,8 @@ document.write(`
 <li><p><strong>dscfg</strong> (<em>dictionary of dictionaries</em>) –</p>
 <p>data set configuration. Accepted configuration keywords:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">datatype</span> <span class="p">:</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">string</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
-    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="n">types</span>
+    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="n">types</span><span class="p">,</span> <span class="n">must</span> <span class="n">contain</span>
+    <span class="s2">&quot;ShhADU&quot;</span> <span class="ow">or</span> <span class="s2">&quot;SvvADU&quot;</span> <span class="ow">or</span> <span class="s2">&quot;ShhADUu&quot;</span> <span class="ow">or</span> <span class="s2">&quot;SvvADUu&quot;</span>
 <span class="n">units</span> <span class="p">:</span> <span class="nb">str</span>
     <span class="n">The</span> <span class="n">units</span> <span class="n">of</span> <span class="n">the</span> <span class="n">returned</span> <span class="n">signal</span><span class="o">.</span> <span class="n">Can</span> <span class="n">be</span> <span class="s1">&#39;ADU&#39;</span><span class="p">,</span> <span class="s1">&#39;dBADU&#39;</span> <span class="ow">or</span> <span class="s1">&#39;dBm&#39;</span>
 <span class="n">navg</span> <span class="p">:</span> <span class="nb">int</span>
@@ -1332,7 +1333,11 @@ document.write(`
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output</p></li>
+<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output field
+“sNADUh” or “sNADUv”, or
+“sNdBmh” or “sNdBmv”, or
+“sNdBAUh” or “sNdBAUv”, or
+depending on which input datatype and units were provided</p></li>
 <li><p><strong>ind_rad</strong> (<em>int</em>) – radar index</p></li>
 </ul>
 </p>

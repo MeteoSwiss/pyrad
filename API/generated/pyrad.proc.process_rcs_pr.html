@@ -1316,7 +1316,8 @@ it.</p>
 <li><p><strong>dscfg</strong> (<em>dictionary of dictionaries</em>) –</p>
 <p>data set configuration. Accepted Configuration Keywords:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">datatype</span> <span class="p">:</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">string</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
-    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="n">types</span>
+    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="n">types</span><span class="p">,</span> <span class="n">must</span> <span class="n">contain</span><span class="p">,</span>
+    <span class="s2">&quot;dBZ&quot;</span> <span class="ow">or</span> <span class="s2">&quot;dBuZ&quot;</span> <span class="ow">or</span> <span class="s2">&quot;dBZc&quot;</span> <span class="ow">or</span> <span class="s2">&quot;dBuZc&quot;</span> <span class="ow">or</span> <span class="s2">&quot;dBZv&quot;</span> <span class="ow">or</span> <span class="s2">&quot;dBuZv&quot;</span> <span class="ow">or</span> <span class="s2">&quot;dBuZvc&quot;</span>
 <span class="n">AntennaGainH</span><span class="p">,</span> <span class="n">AntennaGainV</span> <span class="p">:</span> <span class="nb">float</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
     <span class="n">The</span> <span class="n">horizontal</span> <span class="p">(</span><span class="n">vertical</span><span class="p">)</span> <span class="n">polarization</span> <span class="n">antenna</span> <span class="n">gain</span> <span class="p">[</span><span class="n">dB</span><span class="p">]</span><span class="o">.</span> <span class="n">If</span> <span class="kc">None</span>
     <span class="n">it</span> <span class="n">will</span> <span class="n">be</span> <span class="n">obtained</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">attribute</span> <span class="n">instrument_parameters</span> <span class="n">of</span>
@@ -1356,7 +1357,8 @@ it.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output</p></li>
+<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output field “rcs_h” or “rcs_v” (if vert. refl. were
+provided)</p></li>
 <li><p><strong>ind_rad</strong> (<em>int</em>) – radar index</p></li>
 </ul>
 </p>

@@ -458,7 +458,9 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain,</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
+<span class="sd">            &quot;PhiDP&quot; or &quot;PhiDPc&quot; or &quot;uPhiDP&quot;</span>
 <span class="sd">        rmin : float. Dataset keyword</span>
 <span class="sd">            The minimum range where to look for valid data [m]. Default 1000.</span>
 <span class="sd">        rmax : float. Dataset keyword</span>
@@ -476,7 +478,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;PhiDPc&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -569,7 +571,9 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain,</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
+<span class="sd">            &quot;PhiDP&quot; or &quot;PhiDPc&quot; or &quot;uPhiDP&quot;</span>
 <span class="sd">        rmin : float. Dataset keyword</span>
 <span class="sd">            The minimum range where to look for valid data [m]. Default 1000.</span>
 <span class="sd">        rmax : float. Dataset keyword</span>
@@ -589,7 +593,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;PhiDPc&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -681,7 +685,9 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain,</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
+<span class="sd">            &quot;PhiDP&quot; or &quot;PhiDPc&quot; or &quot;uPhiDP&quot;</span>
 <span class="sd">        rmin : float. Dataset keyword</span>
 <span class="sd">            The minimum range where to look for valid data [m]</span>
 <span class="sd">        rmax : float. Dataset keyword</span>
@@ -704,7 +710,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;PhiDPc&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -804,7 +810,10 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain,</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
+<span class="sd">            &quot;PhiDP&quot; or &quot;PhiDPc&quot; or &quot;uPhiDP&quot;, and</span>
+<span class="sd">            &quot;TEMP&quot; or &quot;H_ISO0&quot; (Optional)</span>
 <span class="sd">        rmin : float. Dataset keyword</span>
 <span class="sd">            The minimum range where to look for valid data [m]. Default 1000.</span>
 <span class="sd">        rmax : float. Dataset keyword</span>
@@ -836,7 +845,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;PhiDPc&quot; and &quot;KDPc&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1044,7 +1053,12 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain,</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
+<span class="sd">            &quot;PhiDP&quot; or &quot;PhiDPc&quot; or &quot;uPhiDP&quot;, and,</span>
+<span class="sd">            &quot;RhoHV&quot; or &quot;RhoHVc&quot;, (Optional, used when min_rhv is specified) and, </span>
+<span class="sd">            &quot;SNRh&quot; (Optional, used when min_snr is specified), and</span>
+<span class="sd">            &quot;TEMP&quot; or &quot;H_ISO0&quot; (Optional)</span>
 <span class="sd">        fzl : float. Dataset keyword</span>
 <span class="sd">            The freezing level height [m]. Default 2000.</span>
 <span class="sd">        sounding : str. Dataset keyword</span>
@@ -1114,7 +1128,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;PhiDPc&quot; and &quot;KDPc&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1348,7 +1362,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain,</span>
+<span class="sd">            &quot;PhiDP&quot; or &quot;PhiDPc&quot; or &quot;uPhiDP&quot;</span>
 <span class="sd">        rwind : float. Dataset keyword</span>
 <span class="sd">            The length of the segment for the least square method [m].</span>
 <span class="sd">            Default 6000.</span>
@@ -1360,7 +1375,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;KDPc&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1428,8 +1443,9 @@ document.write(`
 <span class="sd">    dscfg : dictionary of dictionaries</span>
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
-<span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain,</span>
+<span class="sd">            &quot;PhiDP&quot; or &quot;PhiDPc&quot; or &quot;uPhiDP&quot;, and,</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBZc&quot;</span>
 <span class="sd">        rwinds : float. Dataset keyword</span>
 <span class="sd">            The length of the short segment for the least square method [m].</span>
 <span class="sd">            Default 2000.</span>
@@ -1446,7 +1462,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;KDPc&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1530,7 +1546,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain,</span>
+<span class="sd">            &quot;PhiDP&quot; or &quot;PhiDPc&quot; or &quot;uPhiDP&quot;</span>
 <span class="sd">        rwind : float. Dataset keyword</span>
 <span class="sd">            The length of the segment [m]. Default 2000.</span>
 <span class="sd">        n_iter : int. Dataset keyword</span>
@@ -1554,7 +1571,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;PhiDPc&quot; and &quot;KDPc&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1666,7 +1683,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain,</span>
+<span class="sd">            &quot;PhiDP&quot; or &quot;PhiDPc&quot; or &quot;uPhiDP&quot;</span>
 <span class="sd">        parallel : boolean. Dataset keyword</span>
 <span class="sd">            if set use parallel computing</span>
 <span class="sd">        get_phidp : boolean. Datset keyword</span>
@@ -1683,7 +1701,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;PhiDPc&quot; and &quot;KDPc&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1784,7 +1802,11 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain,</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
+<span class="sd">            &quot;PhiDP&quot; or &quot;PhiDPc&quot;, and,</span>
+<span class="sd">            &quot;ZDR&quot; or &quot;ZDRc&quot;, and</span>
+<span class="sd">            &quot;TEMP&quot; or &quot;H_ISO0&quot; (Optional)</span>
 <span class="sd">        ATT_METHOD : float. Dataset keyword</span>
 <span class="sd">            The attenuation estimation method used. One of the following:</span>
 <span class="sd">            ZPhi, Philin. Default ZPhi</span>
@@ -1803,7 +1825,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output fields &quot;Ah&quot; (spec. attenuation),</span>
+<span class="sd">        &quot;PIA&quot; (path-integrated attenuation) and &quot;dBZc&quot; (corr. refl.)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 

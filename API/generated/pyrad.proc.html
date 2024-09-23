@@ -1727,10 +1727,10 @@ document.write(`
 <td><p>Computes SNR</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_l.html#pyrad.proc.process_l" title="pyrad.proc.process_l"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_l</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
-<td><p>Computes L parameter</p></td>
+<td><p>Computes L parameter (logarithmic cross-correlation ratio)</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_cdr.html#pyrad.proc.process_cdr" title="pyrad.proc.process_cdr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_cdr</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
-<td><p>Computes Circular Depolarization Ratio</p></td>
+<td><p>Computes approximation of Circular Depolarization Ratio</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_rainrate.html#pyrad.proc.process_rainrate" title="pyrad.proc.process_rainrate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_rainrate</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>Estimates rainfall rate from polarimetric moments</p></td>
@@ -1739,7 +1739,7 @@ document.write(`
 <td><p>Computes rainfall accumulation fields</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_vol_refl.html#pyrad.proc.process_vol_refl" title="pyrad.proc.process_vol_refl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_vol_refl</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
-<td><p>Computes the volumetric reflectivity in 10log10(cm^2 km^-3)</p></td>
+<td><p>Computes the volumetric reflectivity eta in 10log10(cm^2 km^-3)</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_bird_density.html#pyrad.proc.process_bird_density" title="pyrad.proc.process_bird_density"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_bird_density</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Computes the bird density from the volumetric reflectivity</p></td>
@@ -1937,7 +1937,7 @@ document.write(`
 <td><p>Collects the fields necessary to compute the Cumulative Distribution Function</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_cdr.html#pyrad.proc.process_cdr" title="pyrad.proc.process_cdr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_cdr</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
-<td><p>Computes Circular Depolarization Ratio</p></td>
+<td><p>Computes approximation of Circular Depolarization Ratio</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_centroids.html#pyrad.proc.process_centroids" title="pyrad.proc.process_centroids"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_centroids</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Computes centroids for the semi-supervised hydrometeor classification</p></td>
@@ -2126,7 +2126,7 @@ document.write(`
 <td><p>keep only data within a region of interest and mask anything else</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_l.html#pyrad.proc.process_l" title="pyrad.proc.process_l"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_l</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
-<td><p>Computes L parameter</p></td>
+<td><p>Computes L parameter (logarithmic cross-correlation ratio)</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_mean_phase_iq.html#pyrad.proc.process_mean_phase_iq" title="pyrad.proc.process_mean_phase_iq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_mean_phase_iq</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Computes the mean phase from the horizontal or vertical IQ data</p></td>
@@ -2360,7 +2360,7 @@ document.write(`
 <td><p>Gets the visibility in percentage from the minimum visible elevation.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_vol_refl.html#pyrad.proc.process_vol_refl" title="pyrad.proc.process_vol_refl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_vol_refl</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
-<td><p>Computes the volumetric reflectivity in 10log10(cm^2 km^-3)</p></td>
+<td><p>Computes the volumetric reflectivity eta in 10log10(cm^2 km^-3)</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_vol_to_grid.html#pyrad.proc.process_vol_to_grid" title="pyrad.proc.process_vol_to_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_vol_to_grid</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Function to convert polar data into a Cartesian grid</p></td>

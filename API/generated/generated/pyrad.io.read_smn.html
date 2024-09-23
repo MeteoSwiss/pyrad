@@ -1305,13 +1305,13 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pyrad.io.read_smn">
 <span class="sig-prename descclassname"><span class="pre">pyrad.io.</span></span><span class="sig-name descname"><span class="pre">read_smn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyrad/io/read_data_sensor.html#read_smn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.io.read_smn" title="Link to this definition">#</a></dt>
-<dd><p>Reads SwissMetNet data contained in a csv file</p>
+<dd><p>Reads SwissMetNet data contained in a csv or gzipped csv file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>fname</strong> (<em>str</em>) – path of time series file</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>smn_id, date , pressure, temp, rh, precip, wspeed, wdir</strong> (<em>tupple</em>) – The read values</p>
+<dd class="field-even"><p><strong>smn_id, date, pressure, temp, rh, precip, wspeed, wdir</strong> (<em>tuple</em>) – The read values</p>
 </dd>
 </dl>
 </dd></dl>

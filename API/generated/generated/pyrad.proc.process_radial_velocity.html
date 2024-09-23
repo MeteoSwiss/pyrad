@@ -1314,7 +1314,10 @@ document.write(`
 <li><p><strong>dscfg</strong> (<em>dictionary of dictionaries</em>) –</p>
 <p>data set configuration. Accepted Configuration Keywords:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">datatype</span> <span class="p">:</span> <span class="n">string</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
-    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="nb">type</span>
+    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="nb">type</span><span class="p">,</span> <span class="n">must</span> <span class="n">contain</span>
+    <span class="n">WIND_SPEED</span><span class="p">,</span> <span class="ow">and</span><span class="p">,</span>
+    <span class="n">WIND_DIRECTION</span><span class="p">,</span> <span class="ow">and</span><span class="p">,</span>
+    <span class="n">wind_vel_v</span>
 <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span> <span class="p">:</span> <span class="nb">float</span>
     <span class="n">arbitrary</span> <span class="n">coordinates</span> <span class="p">[</span><span class="n">deg</span><span class="p">]</span> <span class="kn">from</span> <span class="nn">where</span> <span class="n">to</span> <span class="n">compute</span> <span class="n">the</span> <span class="n">radial</span>
     <span class="n">velocity</span><span class="o">.</span> <span class="n">If</span> <span class="nb">any</span> <span class="n">of</span> <span class="n">them</span> <span class="ow">is</span> <span class="kc">None</span> <span class="n">it</span> <span class="n">will</span> <span class="n">be</span> <span class="n">the</span> <span class="n">radar</span> <span class="n">position</span>
@@ -1329,7 +1332,7 @@ document.write(`
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output</p></li>
+<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output field “V”</p></li>
 <li><p><strong>ind_rad</strong> (<em>int</em>) – radar index</p></li>
 </ul>
 </p>

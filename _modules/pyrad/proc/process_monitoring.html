@@ -450,7 +450,14 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of strings. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
+<span class="sd">            &quot;ZDR&quot; or &quot;ZDRc&quot;, and,</span>
+<span class="sd">            &quot;PhiDP&quot; or &quot;PhiDPc&quot;, and,</span>
+<span class="sd">            &quot;uRhoHV&quot; or &quot;RhoHV&quot; or &quot;RhoHVc&quot;, and,</span>
+<span class="sd">            &quot;TEMP&quot; (Optional), and,</span>
+<span class="sd">            &quot;H_ISO0&quot; (Optional), and,</span>
+<span class="sd">            &quot;hydro&quot; (Optional, only used if filter_rain)</span>
 <span class="sd">        parametrization : str</span>
 <span class="sd">            The type of parametrization for the self-consistency curves. Can</span>
 <span class="sd">            be &#39;None&#39;, &#39;Gourley&#39;, &#39;Wolfensberger&#39;, &#39;Louf&#39;, &#39;Gorgucci&#39; or</span>
@@ -487,7 +494,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output fields KDP and PhiDP</span>
+<span class="sd">        &quot;&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -697,7 +705,14 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
+<span class="sd">            &quot;ZDR&quot; or &quot;ZDRc&quot;, and,</span>
+<span class="sd">            &quot;PhiDP&quot; or &quot;PhiDPc&quot;, and,</span>
+<span class="sd">            &quot;uRhoHV&quot; or &quot;RhoHV&quot; or &quot;RhoHVc&quot;, and,</span>
+<span class="sd">            &quot;TEMP&quot; (Optional), and,</span>
+<span class="sd">            &quot;H_ISO0&quot; (Optional), and,</span>
+<span class="sd">            &quot;hydro&quot; (Optional, only used if filter_rain)</span>
 <span class="sd">        parametrization : str</span>
 <span class="sd">            The type of parametrization for the self-consistency curves. Can</span>
 <span class="sd">            be &#39;None&#39;, &#39;Gourley&#39;, &#39;Wolfensberger&#39;, &#39;Louf&#39;, &#39;Gorgucci&#39; or</span>
@@ -765,7 +780,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;dBZ_bias&quot; (refl. bias)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1031,7 +1046,14 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
+<span class="sd">            &quot;ZDR&quot; or &quot;ZDRc&quot;, and,</span>
+<span class="sd">            &quot;PhiDP&quot; or &quot;PhiDPc&quot;, and,</span>
+<span class="sd">            &quot;uRhoHV&quot; or &quot;RhoHV&quot; or &quot;RhoHVc&quot;, and,</span>
+<span class="sd">            &quot;TEMP&quot; (Optional), and,</span>
+<span class="sd">            &quot;H_ISO0&quot; (Optional), and,</span>
+<span class="sd">            &quot;hydro&quot; (Optional, only used if filter_rain)</span>
 <span class="sd">        parametrization : str</span>
 <span class="sd">            The type of parametrization for the self-consistency curves. Can</span>
 <span class="sd">            be &#39;None&#39;, &#39;Gourley&#39;, &#39;Wolfensberger&#39;, &#39;Louf&#39;, &#39;Gorgucci&#39; or</span>
@@ -1089,7 +1111,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;dBZ_bias&quot; (refl. bias)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1434,7 +1456,9 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
+<span class="sd">            &quot;PhiDP&quot; or &quot;PhiDPc&quot; or &quot;uPhiDP&quot;</span>
 <span class="sd">        rmin : float. Dataset keyword</span>
 <span class="sd">            The minimum range where to look for valid data [m]</span>
 <span class="sd">        rmax : float. Dataset keyword</span>
@@ -1451,7 +1475,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output fields &quot;PhiDP0&quot; (system diff. phase) and</span>
+<span class="sd">        &quot;PhiDP0_bin&quot; (first gate diff. phase)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1525,7 +1550,11 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;RhoHV&quot; or &quot;RhoHVc&quot; or &quot;uRhoHV&quot;, and,</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBZc&quot;, and</span>
+<span class="sd">            &quot;TEMP&quot; (Optional), or</span>
+<span class="sd">            &quot;H_ISO0&quot; (Optional)</span>
 <span class="sd">        rmin : float. Dataset keyword</span>
 <span class="sd">            minimum range where to look for rain [m]. Default 1000.</span>
 <span class="sd">        rmax : float. Dataset keyword</span>
@@ -1553,7 +1582,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;RhoHV_rain&quot; (RhoHV in rain)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1685,8 +1714,14 @@ document.write(`
 <span class="sd">    dscfg : dictionary of dictionaries</span>
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
-<span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">        datatype : list of strings. Dataset keyword</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
+<span class="sd">            &quot;ZDR&quot; or &quot;ZDRc&quot;, and,</span>
+<span class="sd">            &quot;PhiDP&quot; or &quot;PhiDPc&quot;, and,</span>
+<span class="sd">            &quot;uRhoHV&quot; or &quot;RhoHV&quot; or &quot;RhoHVc&quot;, and,</span>
+<span class="sd">            &quot;TEMP&quot; (Optional), and,</span>
+<span class="sd">            &quot;H_ISO0&quot; (Optional)</span>
 <span class="sd">        ml_filter : boolean. Dataset keyword</span>
 <span class="sd">            indicates if a filter on data in and above the melting layer is</span>
 <span class="sd">            applied. Default True.</span>
@@ -1726,7 +1761,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;ZDR_prec&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1901,8 +1936,15 @@ document.write(`
 <span class="sd">    dscfg : dictionary of dictionaries</span>
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
-<span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">        datatype : list of strings. Dataset keyword</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
+<span class="sd">            &quot;ZDR&quot; or &quot;ZDRc&quot;, and,</span>
+<span class="sd">            &quot;PhiDP&quot; or &quot;PhiDPc&quot;, and,</span>
+<span class="sd">            &quot;uRhoHV&quot; or &quot;RhoHV&quot; or &quot;RhoHVc&quot;, and,</span>
+<span class="sd">            &quot;hydro&quot;, and, </span>
+<span class="sd">            &quot;TEMP&quot; (Optional), and,</span>
+<span class="sd">            &quot;SNRh&quot; or &quot;SNRv&quot; (Optional, used to filter with SNRmin and SNRmax)</span>
 <span class="sd">        rmin : float. Dataset keyword</span>
 <span class="sd">            minimum range where to look for rain [m]. Default 1000.</span>
 <span class="sd">        rmax : float. Dataset keyword</span>
@@ -1946,7 +1988,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;ZDR_snow&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -2073,7 +2115,7 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            Arbitrary datatype supported by pyrad</span>
 <span class="sd">        step : float. Dataset keyword</span>
 <span class="sd">            The width of the histogram bin. Default is None. In that case the</span>
 <span class="sd">            default step in function get_histogram_bins is used</span>

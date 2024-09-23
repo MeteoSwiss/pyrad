@@ -1315,7 +1315,10 @@ gates where data is present.</p>
 <li><p><strong>dscfg</strong> (<em>dictionary of dictionaries</em>) –</p>
 <p>data set configuration. Accepted Configuration Keywords:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">datatype</span> <span class="p">:</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">string</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
-    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="n">types</span>
+    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="n">types</span><span class="p">,</span> <span class="n">it</span> <span class="n">must</span> <span class="n">contain</span>
+    <span class="s2">&quot;echoID&quot;</span> <span class="p">(</span><span class="n">Optional</span> <span class="n">allows</span> <span class="n">filter_prec</span><span class="p">),</span>
+    <span class="s2">&quot;dBZ&quot;</span> <span class="ow">or</span> <span class="s2">&quot;dBZc&quot;</span> <span class="ow">or</span> <span class="s2">&quot;dBZv&quot;</span> <span class="ow">or</span> <span class="s2">&quot;dBZvc&quot;</span> <span class="ow">or</span> <span class="s2">&quot;dBuZ&quot;</span> <span class="ow">or</span> <span class="s2">&quot;dBuZc&quot;</span> <span class="p">(</span><span class="n">Optional</span><span class="p">,</span> <span class="n">allows</span> <span class="n">val_min</span><span class="p">)</span>
+    <span class="k">as</span> <span class="n">well</span> <span class="k">as</span> <span class="nb">any</span> <span class="n">other</span> <span class="n">fields</span> <span class="n">supported</span> <span class="n">by</span> <span class="n">pyrad</span>
 <span class="n">regular_grid</span> <span class="p">:</span> <span class="n">Boolean</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
     <span class="n">Whether</span> <span class="n">the</span> <span class="n">radar</span> <span class="n">has</span> <span class="n">a</span> <span class="n">Boolean</span> <span class="n">grid</span> <span class="ow">or</span> <span class="ow">not</span><span class="o">.</span> <span class="n">Default</span> <span class="kc">False</span>
 <span class="n">rmin</span><span class="p">,</span> <span class="n">rmax</span> <span class="p">:</span> <span class="nb">float</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
@@ -1342,7 +1345,8 @@ gates where data is present.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output</p></li>
+<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the average and standard deviation for every field
+specified as datatype</p></li>
 <li><p><strong>ind_rad</strong> (<em>int</em>) – radar index</p></li>
 </ul>
 </p>

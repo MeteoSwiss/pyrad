@@ -456,7 +456,7 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The data type to correct for bias</span>
+<span class="sd">            The data type to correct for bias, can be any datatype supported by pyrad</span>
 <span class="sd">        bias : float. Dataset keyword</span>
 <span class="sd">            The bias to be corrected [dB]. Default 0</span>
 <span class="sd">    radar_list : list of Radar objects</span>
@@ -465,7 +465,9 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field, it will contain</span>
+<span class="sd">        the corrected version of the provided datatypes</span>
+<span class="sd">        For example dBZ -&gt; dBZc, ZDR -&gt; ZDRc, RhoHV -&gt; RhoHVc</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -524,14 +526,19 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The data types used in the correction</span>
+<span class="sd">            The data types used in the correction, it must contain</span>
+<span class="sd">            &quot;uRhoHV&quot;, and, </span>
+<span class="sd">            &quot;SNRh&quot;, and,</span>
+<span class="sd">            &quot;ZDRc&quot;, and,</span>
+<span class="sd">            &quot;Nh&quot;, and,</span>
+<span class="sd">            &quot;Nv&quot;</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;RhoHV&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -609,7 +616,9 @@ document.write(`
 <span class="sd">        excessgates_fname : str. Dataset keyword</span>
 <span class="sd">            The name of the gates in excess of quantile file</span>
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, it must contain</span>
+<span class="sd">            &quot;echoID&quot; (Optional allows filter_prec),</span>
+<span class="sd">            as well as any other fields supported by pyrad</span>
 <span class="sd">        step : float. Dataset keyword</span>
 <span class="sd">            The width of the histogram bin. Default is None. In that case the</span>
 <span class="sd">            default step in function get_histogram_bins is used</span>
@@ -630,7 +639,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : Radar</span>
-<span class="sd">        radar object containing histogram data</span>
+<span class="sd">        radar object containing histogram data with fields corresponding</span>
+<span class="sd">        to specified datatypes </span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -841,7 +851,9 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, it must contain</span>
+<span class="sd">            &quot;echoID&quot; (Optional allows filter_prec),</span>
+<span class="sd">            as well as any other fields supported by pyrad</span>
 <span class="sd">        regular_grid : Boolean. Dataset keyword</span>
 <span class="sd">            Whether the radar has a Boolean grid or not. Default False</span>
 <span class="sd">        rmin, rmax : float. Dataset keyword</span>
@@ -862,7 +874,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        radar object containing frequency of occurence data with fields corresponding</span>
+<span class="sd">        to specified datatypes </span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1067,7 +1080,10 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, it must contain</span>
+<span class="sd">            &quot;echoID&quot; (Optional allows filter_prec),</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBZc&quot; or &quot;dBZv&quot; or &quot;dBZvc&quot; or &quot;dBuZ&quot; or &quot;dBuZc&quot; (Optional, allows val_min)</span>
+<span class="sd">            as well as any other fields supported by pyrad</span>
 <span class="sd">        regular_grid : Boolean. Dataset keyword</span>
 <span class="sd">            Whether the radar has a Boolean grid or not. Default False</span>
 <span class="sd">        rmin, rmax : float. Dataset keyword</span>
@@ -1092,7 +1108,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the average and standard deviation for every field</span>
+<span class="sd">        specified as datatype</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1336,7 +1353,9 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain,</span>
+<span class="sd">            &quot;occurence&quot; and,</span>
+<span class="sd">            &quot;nsamples&quot;</span>
 <span class="sd">        regular_grid : Boolean. Dataset keyword</span>
 <span class="sd">            Whether the radar has a Boolean grid or not. Default False</span>
 <span class="sd">        rmin, rmax : float. Dataset keyword</span>
@@ -1348,7 +1367,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output fields &quot;occurence&quot; and </span>
+<span class="sd">        &quot;nsamples&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1496,7 +1516,10 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;dBm&quot;, and,</span>
+<span class="sd">            &quot;dBmv&quot;, and,</span>
+<span class="sd">            &quot;ZDR&quot;, or &quot;ZDRu&quot;, or &quot;ZDRu&quot;</span>
 <span class="sd">        delev_max : float. Dataset keyword</span>
 <span class="sd">            maximum elevation distance from nominal radar elevation where to</span>
 <span class="sd">            look for a sun hit signal [deg]. Default 1.5</span>
@@ -2059,7 +2082,10 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain</span>
+<span class="sd">            &quot;dBm&quot;, and,</span>
+<span class="sd">            &quot;dBmv&quot;, and,</span>
+<span class="sd">            &quot;ZDR&quot;, or &quot;ZDRu&quot;, or &quot;ZDRu&quot;</span>
 <span class="sd">        delev_max : float. Dataset keyword</span>
 <span class="sd">            maximum elevation distance from nominal radar elevation where to</span>
 <span class="sd">            look for a sun hit signal [deg]. Default 1.5</span>

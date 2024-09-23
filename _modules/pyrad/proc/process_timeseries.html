@@ -445,7 +445,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The data type where we want to extract the point measurement</span>
+<span class="sd">            The data type where we want to extract the point measurement,</span>
+<span class="sd">            can be any datatype supported by pyrad and available in the data</span>
 <span class="sd">        single_point : boolean. Dataset keyword</span>
 <span class="sd">            if True only one gate per radar volume is going to be kept.</span>
 <span class="sd">            Otherwise all gates within the azimuth and elevation tolerance</span>
@@ -689,7 +690,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The data type where we want to extract the point measurement</span>
+<span class="sd">            The data type where we want to extract the point measurement,</span>
+<span class="sd">            can be any datatype supported by pyrad and available in the data</span>
 <span class="sd">        truealt : boolean. Dataset keyword</span>
 <span class="sd">            if True the user input altitude is used to determine the point of</span>
 <span class="sd">            interest.</span>
@@ -879,7 +881,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The data type where we want to extract the point measurement</span>
+<span class="sd">            The data type where we want to extract the point measurement,</span>
+<span class="sd">            can be any datatype supported by pyrad and available in the data</span>
 <span class="sd">        angle : int or float</span>
 <span class="sd">            If the radar object contains a PPI volume, the sweep number to</span>
 <span class="sd">            use, if it contains an RHI volume the elevation angle.</span>
@@ -913,7 +916,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the QVP and a keyboard stating whether the</span>
+<span class="sd">        dictionary containing the QVP and a keyword stating whether the</span>
 <span class="sd">        processing has finished or not.</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
@@ -1041,7 +1044,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The data type where we want to extract the point measurement</span>
+<span class="sd">            The data type where we want to extract the point measurement,</span>
+<span class="sd">            can be any datatype supported by pyrad and available in the data</span>
 <span class="sd">        hmax : float</span>
 <span class="sd">            The maximum height to plot [m]. Default 10000.</span>
 <span class="sd">        hres : float</span>
@@ -1075,7 +1079,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the QVP and a keyboard stating whether the</span>
+<span class="sd">        dictionary containing the QVP and a keyword stating whether the</span>
 <span class="sd">        processing has finished or not.</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
@@ -1203,7 +1207,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The data type where we want to extract the point measurement</span>
+<span class="sd">            The data type where we want to extract the point measurement,</span>
+<span class="sd">            can be any datatype supported by pyrad and available in the data</span>
 <span class="sd">        lat, lon : float</span>
 <span class="sd">            latitude and longitude of the point of interest [deg]</span>
 <span class="sd">        latlon_tol : float</span>
@@ -1239,7 +1244,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the EVP and a keyboard stating whether the</span>
+<span class="sd">        dictionary containing the EVP and a keyword stating whether the</span>
 <span class="sd">        processing has finished or not.</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
@@ -1376,7 +1381,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The data type where we want to extract the point measurement</span>
+<span class="sd">            The data type where we want to extract the point measurement,</span>
+<span class="sd">            can be any datatype supported by pyrad and available in the data</span>
 <span class="sd">        angle : int or float</span>
 <span class="sd">            If the radar object contains a PPI volume, the sweep number to</span>
 <span class="sd">            use, if it contains an RHI volume the elevation angle.</span>
@@ -1419,7 +1425,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the svp and a keyboard stating whether the</span>
+<span class="sd">        dictionary containing the svp and a keyword stating whether the</span>
 <span class="sd">        processing has finished or not.</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
@@ -1564,7 +1570,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The data type where we want to extract the point measurement</span>
+<span class="sd">            The data type where we want to extract the point measurement,</span>
+<span class="sd">            can be any datatype supported by pyrad and available in the data</span>
 <span class="sd">        lat, lon : float</span>
 <span class="sd">            latitude and longitude of the point of interest [deg]</span>
 <span class="sd">        latlon_tol : float</span>
@@ -1590,7 +1597,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the QVP and a keyboard stating whether the</span>
+<span class="sd">        dictionary containing the QVP and a keyword stating whether the</span>
 <span class="sd">        processing has finished or not.</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
@@ -1708,7 +1715,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The data type where we want to extract the time series</span>
+<span class="sd">            The data type where we want to extract the time series,</span>
+<span class="sd">            can be any datatype supported by pyrad and available in the data</span>
 <span class="sd">        mode : str</span>
 <span class="sd">            coordinate to extract data along. Can be ALONG_AZI, ALONG_ELE or</span>
 <span class="sd">            ALONG_RNG</span>
@@ -1729,7 +1737,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the data and a keyboard stating whether the</span>
+<span class="sd">        dictionary containing the data and a keyword stating whether the</span>
 <span class="sd">        processing has finished or not.</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>

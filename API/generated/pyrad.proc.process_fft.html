@@ -1314,7 +1314,9 @@ document.write(`
 <li><p><strong>dscfg</strong> (<em>dictionary of dictionaries</em>) –</p>
 <p>data set configuration. Accepted configuration keywords:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">datatype</span> <span class="p">:</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">string</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
-    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="n">types</span>
+    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="n">types</span><span class="p">,</span> <span class="n">must</span> <span class="n">contain</span><span class="p">,</span>
+    <span class="s2">&quot;IQNdBADUh&quot;</span> <span class="ow">and</span><span class="o">/</span><span class="ow">or</span> <span class="s2">&quot;IQNdBADUv&quot;</span> <span class="ow">and</span><span class="o">/</span><span class="ow">or</span>
+    <span class="s2">&quot;IQNADUh&quot;</span> <span class="ow">and</span><span class="o">/</span><span class="ow">or</span> <span class="s2">&quot;IQNADUv&quot;</span> <span class="p">(</span><span class="n">see</span> <span class="n">new_dataset</span> <span class="n">below</span><span class="p">)</span>
 <span class="n">window</span> <span class="p">:</span> <span class="nb">list</span> <span class="n">of</span> <span class="nb">str</span>
     <span class="n">Parameters</span> <span class="n">of</span> <span class="n">the</span> <span class="n">window</span> <span class="n">used</span> <span class="n">to</span> <span class="n">obtain</span> <span class="n">the</span> <span class="n">spectra</span><span class="o">.</span> <span class="n">The</span>
     <span class="n">parameters</span> <span class="n">are</span> <span class="n">the</span> <span class="n">ones</span> <span class="n">corresponding</span> <span class="n">to</span> <span class="n">function</span>
@@ -1327,7 +1329,11 @@ document.write(`
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output</p></li>
+<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output fields
+“ShhADUu” (unfiltered_complex_spectra_hh_ADU) if IQNdBADUh was provided,
+“SvvADUu” (unfiltered_complex_spectra_vv_ADU) if IQNdBADUv was provided,
+“sNADUh” (spectral_noise_power_hh_ADU) if IQNADUh was provided,
+“sNADUv” (spectral_noise_power_vv_ADU) if IQNADUv was provided,</p></li>
 <li><p><strong>ind_rad</strong> (<em>int</em>) – radar index</p></li>
 </ul>
 </p>

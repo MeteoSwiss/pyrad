@@ -458,14 +458,17 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain,</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBZv&quot;, and,</span>
+<span class="sd">            &quot;dBuZ&quot;, or &quot;dBuZV&quot;</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;CCORh&quot; or</span>
+<span class="sd">        &quot;CCORv&quot; (if vertical reflectivities were provided)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -522,7 +525,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain,</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBuZ&quot; or &quot;dBZc&quot; or &quot;dBuZc&quot; or &quot;dBZv&quot; or &quot;dBuZv&quot; or &quot;dBuZvc&quot;</span>
 <span class="sd">        mflossh, mflossv : float. Dataset keyword</span>
 <span class="sd">            The matching filter losses of the horizontal (vertical) channel</span>
 <span class="sd">            [dB]. If None it will be obtained from the attribute</span>
@@ -547,7 +551,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;dBm&quot; or &quot;dBmv&quot; (if</span>
+<span class="sd">        vert. refl. was provided)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -631,7 +636,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain, </span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBuZ&quot; or &quot;dBZc&quot; or &quot;dBuZc&quot; or &quot;dBZv&quot; or &quot;dBuZv&quot; or &quot;dBuZvc&quot;</span>
 <span class="sd">        AntennaGainH, AntennaGainV : float. Dataset keyword</span>
 <span class="sd">            The horizontal (vertical) polarization antenna gain [dB]. If None</span>
 <span class="sd">            it will be obtained from the attribute instrument_parameters of</span>
@@ -668,7 +674,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;rcs_h&quot; or &quot;rcs_v&quot; (if vert. refl. were </span>
+<span class="sd">        provided)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -763,7 +770,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain,</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBuZ&quot; or &quot;dBZc&quot; or &quot;dBuZc&quot; or &quot;dBZv&quot; or &quot;dBuZv&quot; or &quot;dBuZvc&quot;</span>
 <span class="sd">        kw2 : float. Dataset keyowrd</span>
 <span class="sd">            The water constant</span>
 <span class="sd">        pulse_width : float. Dataset keyowrd</span>
@@ -780,7 +788,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;rcs_h&quot; or &quot;rcs_v&quot; (if vert. refl. were </span>
+<span class="sd">        provided)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -838,7 +847,7 @@ document.write(`
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_vol_refl.html#pyrad.proc.process_vol_refl">[docs]</a>
 <span class="k">def</span> <span class="nf">process_vol_refl</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Computes the volumetric reflectivity in 10log10(cm^2 km^-3)</span>
+<span class="sd">    Computes the volumetric reflectivity eta in 10log10(cm^2 km^-3)</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -849,7 +858,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain,</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBuZ&quot; or &quot;dBZc&quot; or &quot;dBuZc&quot; or &quot;dBZv&quot; or &quot;dBuZv&quot; or &quot;dBuZvc&quot;</span>
 <span class="sd">        freq : float. Dataset keyword</span>
 <span class="sd">            The radar frequency</span>
 <span class="sd">        kw : float. Dataset keyword</span>
@@ -860,7 +870,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;eta_h&quot; or &quot;eta_v&quot; (if vert. refl. were </span>
+<span class="sd">        provided)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -919,7 +930,9 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The input data type</span>
+<span class="sd">            The input data type, must contain,</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBuZ&quot; or &quot;dBZv&quot; or &quot;dBuZv&quot;, and,</span>
+<span class="sd">            &quot;Nh&quot; or &quot;Nv&quot;</span>
 <span class="sd">        output_type : string. Dataset keyword</span>
 <span class="sd">            The output data type. Either SNRh or SNRv</span>
 <span class="sd">    radar_list : list of Radar objects</span>
@@ -928,7 +941,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;SNRh&quot; or &quot;SNRv&quot; (if vert. </span>
+<span class="sd">        refl. were provided)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -989,7 +1003,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The input data type</span>
+<span class="sd">            The input data type, must contain,</span>
+<span class="sd">            &quot;dBm&quot; or &quot;dBmv&quot;</span>
 <span class="sd">        rmin : float. Dataset keyword</span>
 <span class="sd">            The minimum range from which to start the computation</span>
 <span class="sd">        nbins_min : int. Dataset keyword</span>
@@ -1006,7 +1021,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;NdBmh&quot; and &quot;noise_pos_h&quot; or</span>
+<span class="sd">        &quot;NdBmh&quot; and &quot;noise_pos_v&quot; (if vert. refl. were provided)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1084,7 +1100,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The input data type</span>
+<span class="sd">            The input data type, must contain,</span>
+<span class="sd">            &quot;dBm&quot; or &quot;dBmv&quot;</span>
 <span class="sd">        npulses_ray : int</span>
 <span class="sd">            Default number of pulses used in the computation of the ray. If</span>
 <span class="sd">            the number of pulses is not in radar.instrument_parameters this</span>
@@ -1103,7 +1120,8 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;NdBmh&quot; and &quot;noise_pos_h&quot; or</span>
+<span class="sd">        &quot;NdBmh&quot; and &quot;noise_pos_v&quot; (if vert. refl. were provided)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1163,7 +1181,7 @@ document.write(`
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_l.html#pyrad.proc.process_l">[docs]</a>
 <span class="k">def</span> <span class="nf">process_l</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Computes L parameter</span>
+<span class="sd">    Computes L parameter (logarithmic cross-correlation ratio)</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1174,14 +1192,15 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The input data type</span>
+<span class="sd">            The input data type, must contain,</span>
+<span class="sd">            &quot;RhoHV&quot; or &quot;RhoHVc&quot; or &quot;uRhoHV&quot;</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;L&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1220,7 +1239,7 @@ document.write(`
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_cdr.html#pyrad.proc.process_cdr">[docs]</a>
 <span class="k">def</span> <span class="nf">process_cdr</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Computes Circular Depolarization Ratio</span>
+<span class="sd">    Computes approximation of Circular Depolarization Ratio</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1231,14 +1250,16 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The input data type</span>
+<span class="sd">            The input data type, must contain,</span>
+<span class="sd">            &quot;RhoHV&quot; or &quot;uRhoHV&quot; or &quot;RhoHVu&quot;, and,</span>
+<span class="sd">            &quot;ZDR&quot; or &quot;ZDRc&quot;</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;CDR&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1296,7 +1317,9 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The input data type</span>
+<span class="sd">            The input data type, must contain,</span>
+<span class="sd">            &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
+<span class="sd">            &quot;H_ISO0&quot; or &quot;H_ISO0c&quot; or &quot;TEMP&quot; or &quot;TEMPc&quot;</span>
 <span class="sd">        nvalid_min : int</span>
 <span class="sd">            Minimum number of rays with data to consider the azimuthal average</span>
 <span class="sd">            valid. Default 20.</span>
@@ -1371,7 +1394,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output fields &quot;dBZc&quot; and &quot;VPRcorr&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1656,7 +1679,24 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The input data type</span>
+<span class="sd">            The input data type, must contain, </span>
+<span class="sd">            If RR_METHOD == &quot;Z&quot; or &quot;ZPoly&quot;:</span>
+<span class="sd">                &quot;dBZ&quot; or &quot;dBZc&quot;</span>
+<span class="sd">            If RR_METHOD == &quot;KDP&quot;:</span>
+<span class="sd">                &quot;KDP&quot; or &quot;KDPc&quot;</span>
+<span class="sd">            If RR_METHOD == &quot;A&quot;:   </span>
+<span class="sd">                &quot;Ah&quot; or &quot;Ahc&quot;</span>
+<span class="sd">            If RR_METHOD == &quot;ZKDP&quot;:</span>
+<span class="sd">                &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
+<span class="sd">                &quot;KDP&quot; or &quot;KDPc&quot;</span>
+<span class="sd">            IF RR_METHOD == &quot;ZA&quot;:</span>
+<span class="sd">                &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
+<span class="sd">                &quot;Ah&quot; or &quot;Ahc&quot;       </span>
+<span class="sd">            IF RR_METHID == &quot;hydro&quot;:</span>
+<span class="sd">                &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
+<span class="sd">                &quot;Ah&quot; or &quot;Ahc&quot;, and,</span>
+<span class="sd">                &quot;hydro&quot;</span>
+<span class="sd">           </span>
 <span class="sd">        RR_METHOD : string. Dataset keyword</span>
 <span class="sd">            The rainfall rate estimation method. One of the following:</span>
 <span class="sd">            Z, ZPoly, KDP, A, ZKDP, ZA, hydro</span>
@@ -1692,7 +1732,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;RR&quot; (rain rate)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1959,7 +1999,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain,</span>
+<span class="sd">            &quot;RR&quot;</span>
 <span class="sd">        period : float. Dataset keyword</span>
 <span class="sd">            the period to average [s]. If -1 the statistics are going to be</span>
 <span class="sd">            performed over the entire data. Default 3600.</span>
@@ -1975,7 +2016,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;Raccu&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -2167,7 +2208,8 @@ document.write(`
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types</span>
+<span class="sd">            The input data types, must contain,</span>
+<span class="sd">            &quot;eta_h&quot; or &quot;eta_v&quot; (volumetric reflectivities)</span>
 <span class="sd">        sigma_bird : float. Dataset keyword</span>
 <span class="sd">            The bird radar cross section</span>
 <span class="sd">    radar_list : list of Radar objects</span>
@@ -2176,7 +2218,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output</span>
+<span class="sd">        dictionary containing the output field &quot;bird_density&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 

@@ -1313,27 +1313,30 @@ document.write(`
 2 post-processing</p></li>
 <li><p><strong>dscfg</strong> (<em>dictionary of dictionaries</em>) –</p>
 <p>data set configuration. Accepted Configuration Keywords:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">datatype</span> <span class="p">:</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">string</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
-    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="n">types</span>
-<span class="n">rwinds</span> <span class="p">:</span> <span class="nb">float</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
-    <span class="n">The</span> <span class="n">length</span> <span class="n">of</span> <span class="n">the</span> <span class="n">short</span> <span class="n">segment</span> <span class="k">for</span> <span class="n">the</span> <span class="n">least</span> <span class="n">square</span> <span class="n">method</span> <span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span>
-    <span class="n">Default</span> <span class="mf">2000.</span>
-<span class="n">rwindl</span> <span class="p">:</span> <span class="nb">float</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
-    <span class="n">The</span> <span class="n">length</span> <span class="n">of</span> <span class="n">the</span> <span class="n">long</span> <span class="n">segment</span> <span class="k">for</span> <span class="n">the</span> <span class="n">least</span> <span class="n">square</span> <span class="n">method</span> <span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span>
-    <span class="n">Default</span> <span class="mf">6000.</span>
-<span class="n">Zthr</span> <span class="p">:</span> <span class="nb">float</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
-    <span class="n">The</span> <span class="n">threshold</span> <span class="n">defining</span> <span class="n">which</span> <span class="n">estimated</span> <span class="n">data</span> <span class="n">to</span> <span class="n">use</span> <span class="p">[</span><span class="n">dBZ</span><span class="p">]</span>
-<span class="n">vectorize</span> <span class="p">:</span> <span class="n">Bool</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
-    <span class="n">Whether</span> <span class="n">to</span> <span class="n">vectorize</span> <span class="n">the</span> <span class="n">KDP</span> <span class="n">processing</span><span class="o">.</span> <span class="n">Default</span> <span class="n">false</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="n">types</span><span class="p">,</span> <span class="n">must</span> <span class="n">contain</span><span class="p">,</span>
+<span class="s2">&quot;PhiDP&quot;</span> <span class="ow">or</span> <span class="s2">&quot;PhiDPc&quot;</span> <span class="ow">or</span> <span class="s2">&quot;uPhiDP&quot;</span><span class="p">,</span> <span class="ow">and</span><span class="p">,</span>
+<span class="s2">&quot;dBZ&quot;</span> <span class="ow">or</span> <span class="s2">&quot;dBZc&quot;</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>rwinds<span class="classifier">float. Dataset keyword</span></dt><dd><p>The length of the short segment for the least square method [m].
+Default 2000.</p>
+</dd>
+<dt>rwindl<span class="classifier">float. Dataset keyword</span></dt><dd><p>The length of the long segment for the least square method [m].
+Default 6000.</p>
+</dd>
+<dt>Zthr<span class="classifier">float. Dataset keyword</span></dt><dd><p>The threshold defining which estimated data to use [dBZ]</p>
+</dd>
+<dt>vectorize<span class="classifier">Bool. Dataset keyword</span></dt><dd><p>Whether to vectorize the KDP processing. Default false</p>
+</dd>
+</dl>
 </li>
 <li><p><strong>radar_list</strong> (<em>list of Radar objects</em>) – Optional. list of radar objects</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output</p></li>
+<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing the output field “KDPc”</p></li>
 <li><p><strong>ind_rad</strong> (<em>int</em>) – radar index</p></li>
 </ul>
 </p>
