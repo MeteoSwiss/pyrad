@@ -47,7 +47,14 @@ def process_selfconsistency_kdp_phidp(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of strings. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "dBZ" or "dBZc", and,
+            "ZDR" or "ZDRc", and,
+            "PhiDP" or "PhiDPc", and,
+            "uRhoHV" or "RhoHV" or "RhoHVc", and,
+            "TEMP" (Optional), and,
+            "H_ISO0" (Optional), and,
+            "hydro" (Optional, only used if filter_rain)
         parametrization : str
             The type of parametrization for the self-consistency curves. Can
             be 'None', 'Gourley', 'Wolfensberger', 'Louf', 'Gorgucci' or
@@ -84,7 +91,8 @@ def process_selfconsistency_kdp_phidp(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output fields KDP and PhiDP
+        ""
     ind_rad : int
         radar index
 
@@ -291,7 +299,14 @@ def process_selfconsistency_bias(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "dBZ" or "dBZc", and,
+            "ZDR" or "ZDRc", and,
+            "PhiDP" or "PhiDPc", and,
+            "uRhoHV" or "RhoHV" or "RhoHVc", and,
+            "TEMP" (Optional), and,
+            "H_ISO0" (Optional), and,
+            "hydro" (Optional, only used if filter_rain)
         parametrization : str
             The type of parametrization for the self-consistency curves. Can
             be 'None', 'Gourley', 'Wolfensberger', 'Louf', 'Gorgucci' or
@@ -359,7 +374,7 @@ def process_selfconsistency_bias(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "dBZ_bias" (refl. bias)
     ind_rad : int
         radar index
 
@@ -622,7 +637,14 @@ def process_selfconsistency_bias2(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "dBZ" or "dBZc", and,
+            "ZDR" or "ZDRc", and,
+            "PhiDP" or "PhiDPc", and,
+            "uRhoHV" or "RhoHV" or "RhoHVc", and,
+            "TEMP" (Optional), and,
+            "H_ISO0" (Optional), and,
+            "hydro" (Optional, only used if filter_rain)
         parametrization : str
             The type of parametrization for the self-consistency curves. Can
             be 'None', 'Gourley', 'Wolfensberger', 'Louf', 'Gorgucci' or
@@ -680,7 +702,7 @@ def process_selfconsistency_bias2(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "dBZ_bias" (refl. bias)
     ind_rad : int
         radar index
 
@@ -1022,7 +1044,9 @@ def process_estimate_phidp0(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "dBZ" or "dBZc", and,
+            "PhiDP" or "PhiDPc" or "uPhiDP"
         rmin : float. Dataset keyword
             The minimum range where to look for valid data [m]
         rmax : float. Dataset keyword
@@ -1039,7 +1063,8 @@ def process_estimate_phidp0(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output fields "PhiDP0" (system diff. phase) and
+        "PhiDP0_bin" (first gate diff. phase)
     ind_rad : int
         radar index
 
@@ -1110,7 +1135,11 @@ def process_rhohv_rain(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "RhoHV" or "RhoHVc" or "uRhoHV", and,
+            "dBZ" or "dBZc", and
+            "TEMP" (Optional), or
+            "H_ISO0" (Optional)
         rmin : float. Dataset keyword
             minimum range where to look for rain [m]. Default 1000.
         rmax : float. Dataset keyword
@@ -1138,7 +1167,7 @@ def process_rhohv_rain(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "RhoHV_rain" (RhoHV in rain)
     ind_rad : int
         radar index
 
@@ -1267,8 +1296,14 @@ def process_zdr_precip(procstatus, dscfg, radar_list=None):
     dscfg : dictionary of dictionaries
         data set configuration. Accepted Configuration Keywords::
 
-        datatype : list of string. Dataset keyword
-            The input data types
+        datatype : list of strings. Dataset keyword
+            The input data types, must contain
+            "dBZ" or "dBZc", and,
+            "ZDR" or "ZDRc", and,
+            "PhiDP" or "PhiDPc", and,
+            "uRhoHV" or "RhoHV" or "RhoHVc", and,
+            "TEMP" (Optional), and,
+            "H_ISO0" (Optional)
         ml_filter : boolean. Dataset keyword
             indicates if a filter on data in and above the melting layer is
             applied. Default True.
@@ -1308,7 +1343,7 @@ def process_zdr_precip(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "ZDR_prec"
     ind_rad : int
         radar index
 
@@ -1480,8 +1515,15 @@ def process_zdr_snow(procstatus, dscfg, radar_list=None):
     dscfg : dictionary of dictionaries
         data set configuration. Accepted Configuration Keywords::
 
-        datatype : list of string. Dataset keyword
-            The input data types
+        datatype : list of strings. Dataset keyword
+            The input data types, must contain
+            "dBZ" or "dBZc", and,
+            "ZDR" or "ZDRc", and,
+            "PhiDP" or "PhiDPc", and,
+            "uRhoHV" or "RhoHV" or "RhoHVc", and,
+            "hydro", and, 
+            "TEMP" (Optional), and,
+            "SNRh" or "SNRv" (Optional, used to filter with SNRmin and SNRmax)
         rmin : float. Dataset keyword
             minimum range where to look for rain [m]. Default 1000.
         rmax : float. Dataset keyword
@@ -1525,7 +1567,7 @@ def process_zdr_snow(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "ZDR_snow"
     ind_rad : int
         radar index
     """
@@ -1649,7 +1691,7 @@ def process_monitoring(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            Arbitrary datatype supported by pyrad
         step : float. Dataset keyword
             The width of the histogram bin. Default is None. In that case the
             default step in function get_histogram_bins is used

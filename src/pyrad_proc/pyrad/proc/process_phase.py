@@ -55,7 +55,9 @@ def process_correct_phidp0(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "dBZ" or "dBZc", and,
+            "PhiDP" or "PhiDPc" or "uPhiDP"
         rmin : float. Dataset keyword
             The minimum range where to look for valid data [m]. Default 1000.
         rmax : float. Dataset keyword
@@ -73,7 +75,7 @@ def process_correct_phidp0(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "PhiDPc"
     ind_rad : int
         radar index
 
@@ -163,7 +165,9 @@ def process_smooth_phidp_single_window(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "dBZ" or "dBZc", and,
+            "PhiDP" or "PhiDPc" or "uPhiDP"
         rmin : float. Dataset keyword
             The minimum range where to look for valid data [m]. Default 1000.
         rmax : float. Dataset keyword
@@ -183,7 +187,7 @@ def process_smooth_phidp_single_window(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "PhiDPc"
     ind_rad : int
         radar index
 
@@ -272,7 +276,9 @@ def process_smooth_phidp_double_window(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "dBZ" or "dBZc", and,
+            "PhiDP" or "PhiDPc" or "uPhiDP"
         rmin : float. Dataset keyword
             The minimum range where to look for valid data [m]
         rmax : float. Dataset keyword
@@ -295,7 +301,7 @@ def process_smooth_phidp_double_window(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "PhiDPc"
     ind_rad : int
         radar index
 
@@ -392,7 +398,10 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "dBZ" or "dBZc", and,
+            "PhiDP" or "PhiDPc" or "uPhiDP", and
+            "TEMP" or "H_ISO0" (Optional)
         rmin : float. Dataset keyword
             The minimum range where to look for valid data [m]. Default 1000.
         rmax : float. Dataset keyword
@@ -424,7 +433,7 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "PhiDPc" and "KDPc"
     ind_rad : int
         radar index
 
@@ -629,7 +638,12 @@ def process_phidp_kdp_lp(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "dBZ" or "dBZc", and,
+            "PhiDP" or "PhiDPc" or "uPhiDP", and,
+            "RhoHV" or "RhoHVc", (Optional, used when min_rhv is specified) and, 
+            "SNRh" (Optional, used when min_snr is specified), and
+            "TEMP" or "H_ISO0" (Optional)
         fzl : float. Dataset keyword
             The freezing level height [m]. Default 2000.
         sounding : str. Dataset keyword
@@ -699,7 +713,7 @@ def process_phidp_kdp_lp(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "PhiDPc" and "KDPc"
     ind_rad : int
         radar index
 
@@ -930,7 +944,8 @@ def process_kdp_leastsquare_single_window(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "PhiDP" or "PhiDPc" or "uPhiDP"
         rwind : float. Dataset keyword
             The length of the segment for the least square method [m].
             Default 6000.
@@ -942,7 +957,7 @@ def process_kdp_leastsquare_single_window(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "KDPc"
     ind_rad : int
         radar index
 
@@ -1007,8 +1022,9 @@ def process_kdp_leastsquare_double_window(procstatus, dscfg, radar_list=None):
     dscfg : dictionary of dictionaries
         data set configuration. Accepted Configuration Keywords::
 
-        datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "PhiDP" or "PhiDPc" or "uPhiDP", and,
+            "dBZ" or "dBZc"
         rwinds : float. Dataset keyword
             The length of the short segment for the least square method [m].
             Default 2000.
@@ -1025,7 +1041,7 @@ def process_kdp_leastsquare_double_window(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "KDPc"
     ind_rad : int
         radar index
 
@@ -1106,7 +1122,8 @@ def process_phidp_kdp_Vulpiani(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "PhiDP" or "PhiDPc" or "uPhiDP"
         rwind : float. Dataset keyword
             The length of the segment [m]. Default 2000.
         n_iter : int. Dataset keyword
@@ -1130,7 +1147,7 @@ def process_phidp_kdp_Vulpiani(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "PhiDPc" and "KDPc"
     ind_rad : int
         radar index
 
@@ -1239,7 +1256,8 @@ def process_phidp_kdp_Kalman(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "PhiDP" or "PhiDPc" or "uPhiDP"
         parallel : boolean. Dataset keyword
             if set use parallel computing
         get_phidp : boolean. Datset keyword
@@ -1256,7 +1274,7 @@ def process_phidp_kdp_Kalman(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "PhiDPc" and "KDPc"
     ind_rad : int
         radar index
 
@@ -1354,7 +1372,11 @@ def process_attenuation(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "dBZ" or "dBZc", and,
+            "PhiDP" or "PhiDPc", and,
+            "ZDR" or "ZDRc", and
+            "TEMP" or "H_ISO0" (Optional)
         ATT_METHOD : float. Dataset keyword
             The attenuation estimation method used. One of the following:
             ZPhi, Philin. Default ZPhi
@@ -1373,7 +1395,8 @@ def process_attenuation(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output fields "Ah" (spec. attenuation),
+        "PIA" (path-integrated attenuation) and "dBZc" (corr. refl.)
     ind_rad : int
         radar index
 

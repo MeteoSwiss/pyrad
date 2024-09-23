@@ -142,7 +142,6 @@ def generate_intercomp_products(dataset, prdcfg):
             timeinfo=dataset["timeinfo"],
             timeformat="%Y%m%d",
         )
-
         fname = savedir + fname[0]
         write_colocated_data_time_avg(dataset["intercomp_dict"], fname)
         print("saved colocated time averaged data file: " + fname)

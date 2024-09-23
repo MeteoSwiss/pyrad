@@ -65,7 +65,11 @@ def process_echo_id(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must be 
+            "dBZ" or "dBuZ", and, 
+            "ZDR" or "ZDRu", and,
+            "RhoHV" or "uRhoHV", and,
+            "PhiDP" or "uPhiDP"
         wind_size : int
             Size of the moving window used to compute the ray texture
             (number of gates). Default 7
@@ -81,7 +85,7 @@ def process_echo_id(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "echoID"
     ind_rad : int
         radar index
 
@@ -180,14 +184,17 @@ def process_birds_id(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must be 
+            "dBZ" or "dBuZ", and, 
+            "ZDR" or "ZDRu", and,
+            "RhoHV" or "uRhoHV"
     radar_list : list of Radar objects
         Optional. list of radar objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "echoID"
     ind_rad : int
         radar index
 
@@ -208,7 +215,9 @@ def process_birds_id(procstatus, dscfg, radar_list=None):
             zdr_field = get_fieldname_pyart(datatype)
         if datatype == "RhoHV":
             rhv_field = get_fieldname_pyart(datatype)
-
+        if datatype == "uRhoHV":
+            rhv_field = get_fieldname_pyart(datatype)
+            
     ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn("No valid radar")
@@ -279,14 +288,14 @@ def process_clt_to_echo_id(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must be "CLT"
     radar_list : list of Radar objects
         Optional. list of radar objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "echoID"
     ind_rad : int
         radar index
 
@@ -340,14 +349,14 @@ def process_vstatus_to_echo_id(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must be "wind_vel_rad_status"
     radar_list : list of Radar objects
         Optional. list of radar objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "echoID"
     ind_rad : int
         radar index
 
@@ -400,14 +409,14 @@ def process_hydro_mf_to_echo_id(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types must be "hydroMF"
     radar_list : list of Radar objects
         Optional. list of radar objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "echoID"
     ind_rad : int
         radar index
 
@@ -464,14 +473,14 @@ def process_hydro_mf_to_hydro(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types must be "hydroMF"
     radar_list : list of Radar objects
         Optional. list of radar objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "hydro"
     ind_rad : int
         radar index
 
@@ -543,7 +552,9 @@ def process_echo_filter(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must be 
+            "echoID" at minimum, as well as any other fields
+            that will be echo filtered (e.g. dBZ, ZDR)
         echo_type : int or list of ints
             The type of echoes to keep: 1 noise, 2 clutter, 3 precipitation.
             Default 3
@@ -553,7 +564,9 @@ def process_echo_filter(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field, it will contain
+        the corrected version of the provided datatypes
+        For example dBZ -> dBZc, ZDR -> ZDRc, RhoHV -> RhoHVc
     ind_rad : int
         radar index
 
@@ -635,7 +648,11 @@ def process_cdf(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must be 
+            "echoID" (if not provided, no clutter filtering is possible), and, 
+            "hydro" (if not provided, no hydro filtering is possible), and,
+            "VIS" (if not provided no blocked gate filtering is possible), and,
+            any other field that will be used to compute CDF
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -716,7 +733,9 @@ def process_gatefilter(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, can be any any data type supported by
+            pyrad, the number of datatypes must match the lower and upper bounds
+            dimensions
         lower_bounds : list of float
             The list of lower bounds for every input data type
         upper_bounds : list of float
@@ -728,7 +747,9 @@ def process_gatefilter(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field, it will contain
+        the corrected version of the provided datatypes
+        For example dBZ -> dBZc, ZDR -> ZDRc, RhoHV -> RhoHVc
     ind_rad : int
         radar index
 
@@ -807,7 +828,10 @@ def process_filter_snr(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data typesm, must contain
+            "SNRh", "SNRv", "SNR" or "CNR" as well
+            as any other datatype supported by pyrad that
+            will be SNR filtered.
         SNRmin : float. Dataset keyword
             The minimum SNR to keep the data.
     radar_list : list of Radar objects
@@ -816,7 +840,9 @@ def process_filter_snr(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field, it will contain
+        the corrected version of the provided datatypes
+        For example dBZ -> dBZc, ZDR -> ZDRc, RhoHV -> RhoHVc
     ind_rad : int
         radar index
 
@@ -914,14 +940,19 @@ def process_filter_vel_diff(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "diffV", as well
+            as any other datatype supported by pyrad that
+            will be filtered where no Doppler velocity could be estimated.
     radar_list : list of Radar objects
         Optional. list of radar objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field, it will contain
+        the corrected version of the provided datatypes
+        For example dBZ -> dBZc, ZDR -> ZDRc, RhoHV -> RhoHVc
     ind_rad : int
         radar index
 
@@ -1000,7 +1031,10 @@ def process_filter_visibility(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data typesm, must contain
+            "VIS" or "visibility_polar", as well
+            as any other datatype supported by pyrad that
+            will be filtered where the visibility is poor.
         VISmin : float. Dataset keyword
             The minimum visibility to keep the data.
     radar_list : list of Radar objects
@@ -1009,7 +1043,9 @@ def process_filter_visibility(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output, it will contain
+        the corrected version of the provided datatypes
+        For example dBZ -> dBZc, ZDR -> ZDRc, RhoHV -> RhoHVc
     ind_rad : int
         radar index
 
@@ -1100,7 +1136,7 @@ def process_outlier_filter(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, can be any any data type supported by pyrad
         threshold : float. Dataset keyword
             The distance between the value of the examined range gate and the
             median of the surrounding gates to consider the gate an outlier
@@ -1119,7 +1155,9 @@ def process_outlier_filter(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output,  it will contain
+        the corrected version of the provided datatypes
+        For example dBZ -> dBZc, ZDR -> ZDRc, RhoHV -> RhoHVc
     ind_rad : int
         radar index
 
@@ -1225,7 +1263,10 @@ def process_filter_vol2bird(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "VOL2BIRD_CLASS", as well
+            as any other datatype supported by pyrad that
+            will be filtered where vol2bird detected non-biological echoes
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -1309,7 +1350,10 @@ def process_gate_filter_vol2bird(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "VOL2BIRD_CLASS", and,
+            "dBZ" or "dBZc", and,
+            "V" or "Vc"
         dBZ_max : float
             Maximum reflectivity of biological scatterers
         V_min : float
@@ -1403,7 +1447,12 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "dBZ" or "dBZc", and,
+            "ZDR" or "ZDRc", and,
+            "RhoHV", or "uRhoHV", or "RhoHVc", and,
+            "KDP", or "KDPc", and,
+            "TEMP" or "H_ISO0" (optional)
         HYDRO_METHOD : string. Dataset keyword
             The hydrometeor classification method. One of the following:
             SEMISUPERVISED, UKMO
@@ -1473,7 +1522,9 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output fields "hydro", "entropy" (if compute_entropy is 1),
+        and "propAG", "propCR", "propLR", "propRP", "propRN", "propVI", "propWS", "propMH",
+        "propIH" (if output_distances is 1)
     ind_rad : int
         radar index
 
@@ -1803,7 +1854,12 @@ def process_centroids(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "dBZ" or "dBZc", and,
+            "ZDR" or "ZDRc", and,
+            "RhoHV", or "uRhoHV", or "RhoHVc", and,
+            "KDP", or "KDPc", and,
+            "TEMP" or "H_ISO0" (optional)
         samples_per_vol : int. Dataset keyword
             Maximum number of samples per volume kept for further analysis.
             Default 20000
@@ -1905,7 +1961,7 @@ def process_centroids(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output centroids
     ind_rad : int
         radar index
 
@@ -2188,14 +2244,18 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "dBZ" or "dBZc", and,
+            "ZDR" or "ZDRc", and, 
+            "RhoHV" or "RhoHVc", and,
+            "TEMP" or "H_ISO0" (optional)
     radar_list : list of Radar objects
         Optional. list of radar objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "ml"
     ind_rad : int
         radar index
 
@@ -2666,14 +2726,17 @@ def process_zdr_column(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "ZDR" or "ZDRc", and,
+            "RhoHV" or "RhoHVc", and,
+            "TEMP" or "H_ISO0" 
     radar_list : list of Radar objects
         Optional. list of radar objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "ZDR_col"
     ind_rad : int
         radar index
 

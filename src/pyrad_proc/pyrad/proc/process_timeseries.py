@@ -42,7 +42,8 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The data type where we want to extract the point measurement
+            The data type where we want to extract the point measurement,
+            can be any datatype supported by pyrad and available in the data
         single_point : boolean. Dataset keyword
             if True only one gate per radar volume is going to be kept.
             Otherwise all gates within the azimuth and elevation tolerance
@@ -283,7 +284,8 @@ def process_multiple_points(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The data type where we want to extract the point measurement
+            The data type where we want to extract the point measurement,
+            can be any datatype supported by pyrad and available in the data
         truealt : boolean. Dataset keyword
             if True the user input altitude is used to determine the point of
             interest.
@@ -470,7 +472,8 @@ def process_qvp(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The data type where we want to extract the point measurement
+            The data type where we want to extract the point measurement,
+            can be any datatype supported by pyrad and available in the data
         angle : int or float
             If the radar object contains a PPI volume, the sweep number to
             use, if it contains an RHI volume the elevation angle.
@@ -504,7 +507,7 @@ def process_qvp(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the QVP and a keyboard stating whether the
+        dictionary containing the QVP and a keyword stating whether the
         processing has finished or not.
     ind_rad : int
         radar index
@@ -629,7 +632,8 @@ def process_rqvp(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The data type where we want to extract the point measurement
+            The data type where we want to extract the point measurement,
+            can be any datatype supported by pyrad and available in the data
         hmax : float
             The maximum height to plot [m]. Default 10000.
         hres : float
@@ -663,7 +667,7 @@ def process_rqvp(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the QVP and a keyboard stating whether the
+        dictionary containing the QVP and a keyword stating whether the
         processing has finished or not.
     ind_rad : int
         radar index
@@ -788,7 +792,8 @@ def process_evp(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The data type where we want to extract the point measurement
+            The data type where we want to extract the point measurement,
+            can be any datatype supported by pyrad and available in the data
         lat, lon : float
             latitude and longitude of the point of interest [deg]
         latlon_tol : float
@@ -824,7 +829,7 @@ def process_evp(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the EVP and a keyboard stating whether the
+        dictionary containing the EVP and a keyword stating whether the
         processing has finished or not.
     ind_rad : int
         radar index
@@ -958,7 +963,8 @@ def process_svp(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The data type where we want to extract the point measurement
+            The data type where we want to extract the point measurement,
+            can be any datatype supported by pyrad and available in the data
         angle : int or float
             If the radar object contains a PPI volume, the sweep number to
             use, if it contains an RHI volume the elevation angle.
@@ -1001,7 +1007,7 @@ def process_svp(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the svp and a keyboard stating whether the
+        dictionary containing the svp and a keyword stating whether the
         processing has finished or not.
     ind_rad : int
         radar index
@@ -1143,7 +1149,8 @@ def process_time_height(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The data type where we want to extract the point measurement
+            The data type where we want to extract the point measurement,
+            can be any datatype supported by pyrad and available in the data
         lat, lon : float
             latitude and longitude of the point of interest [deg]
         latlon_tol : float
@@ -1169,7 +1176,7 @@ def process_time_height(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the QVP and a keyboard stating whether the
+        dictionary containing the QVP and a keyword stating whether the
         processing has finished or not.
     ind_rad : int
         radar index
@@ -1284,7 +1291,8 @@ def process_ts_along_coord(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The data type where we want to extract the time series
+            The data type where we want to extract the time series,
+            can be any datatype supported by pyrad and available in the data
         mode : str
             coordinate to extract data along. Can be ALONG_AZI, ALONG_ELE or
             ALONG_RNG
@@ -1305,7 +1313,7 @@ def process_ts_along_coord(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the data and a keyboard stating whether the
+        dictionary containing the data and a keyword stating whether the
         processing has finished or not.
     ind_rad : int
         radar index
