@@ -55,14 +55,17 @@ def process_ccor(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "dBZ" or "dBZv", and,
+            "dBuZ", or "dBuZV"
     radar_list : list of Radar objects
         Optional. list of radar objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "CCORh" or
+        "CCORv" (if vertical reflectivities were provided)
     ind_rad : int
         radar index
 
@@ -116,7 +119,8 @@ def process_signal_power(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "dBZ" or "dBuZ" or "dBZc" or "dBuZc" or "dBZv" or "dBuZv" or "dBuZvc"
         mflossh, mflossv : float. Dataset keyword
             The matching filter losses of the horizontal (vertical) channel
             [dB]. If None it will be obtained from the attribute
@@ -141,7 +145,8 @@ def process_signal_power(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "dBm" or "dBmv" (if
+        vert. refl. was provided)
     ind_rad : int
         radar index
 
@@ -222,7 +227,8 @@ def process_rcs_pr(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain, 
+            "dBZ" or "dBuZ" or "dBZc" or "dBuZc" or "dBZv" or "dBuZv" or "dBuZvc"
         AntennaGainH, AntennaGainV : float. Dataset keyword
             The horizontal (vertical) polarization antenna gain [dB]. If None
             it will be obtained from the attribute instrument_parameters of
@@ -259,7 +265,8 @@ def process_rcs_pr(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "rcs_h" or "rcs_v" (if vert. refl. were 
+        provided)
     ind_rad : int
         radar index
 
@@ -351,7 +358,8 @@ def process_rcs(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "dBZ" or "dBuZ" or "dBZc" or "dBuZc" or "dBZv" or "dBuZv" or "dBuZvc"
         kw2 : float. Dataset keyowrd
             The water constant
         pulse_width : float. Dataset keyowrd
@@ -368,7 +376,8 @@ def process_rcs(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "rcs_h" or "rcs_v" (if vert. refl. were 
+        provided)
     ind_rad : int
         radar index
 
@@ -423,7 +432,7 @@ def process_rcs(procstatus, dscfg, radar_list=None):
 
 def process_vol_refl(procstatus, dscfg, radar_list=None):
     """
-    Computes the volumetric reflectivity in 10log10(cm^2 km^-3)
+    Computes the volumetric reflectivity eta in 10log10(cm^2 km^-3)
 
     Parameters
     ----------
@@ -434,7 +443,8 @@ def process_vol_refl(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "dBZ" or "dBuZ" or "dBZc" or "dBuZc" or "dBZv" or "dBuZv" or "dBuZvc"
         freq : float. Dataset keyword
             The radar frequency
         kw : float. Dataset keyword
@@ -445,7 +455,8 @@ def process_vol_refl(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "eta_h" or "eta_v" (if vert. refl. were 
+        provided)
     ind_rad : int
         radar index
 
@@ -501,7 +512,9 @@ def process_snr(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The input data type
+            The input data type, must contain,
+            "dBZ" or "dBuZ" or "dBZv" or "dBuZv", and,
+            "Nh" or "Nv"
         output_type : string. Dataset keyword
             The output data type. Either SNRh or SNRv
     radar_list : list of Radar objects
@@ -510,7 +523,8 @@ def process_snr(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "SNRh" or "SNRv" (if vert. 
+        refl. were provided)
     ind_rad : int
         radar index
 
@@ -568,7 +582,8 @@ def process_radial_noise_hs(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The input data type
+            The input data type, must contain,
+            "dBm" or "dBmv"
         rmin : float. Dataset keyword
             The minimum range from which to start the computation
         nbins_min : int. Dataset keyword
@@ -585,7 +600,8 @@ def process_radial_noise_hs(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "NdBmh" and "noise_pos_h" or
+        "NdBmh" and "noise_pos_v" (if vert. refl. were provided)
     ind_rad : int
         radar index
 
@@ -660,7 +676,8 @@ def process_radial_noise_ivic(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The input data type
+            The input data type, must contain,
+            "dBm" or "dBmv"
         npulses_ray : int
             Default number of pulses used in the computation of the ray. If
             the number of pulses is not in radar.instrument_parameters this
@@ -679,7 +696,8 @@ def process_radial_noise_ivic(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "NdBmh" and "noise_pos_h" or
+        "NdBmh" and "noise_pos_v" (if vert. refl. were provided)
     ind_rad : int
         radar index
 
@@ -736,7 +754,7 @@ def process_radial_noise_ivic(procstatus, dscfg, radar_list=None):
 
 def process_l(procstatus, dscfg, radar_list=None):
     """
-    Computes L parameter
+    Computes L parameter (logarithmic cross-correlation ratio)
 
     Parameters
     ----------
@@ -747,14 +765,15 @@ def process_l(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The input data type
+            The input data type, must contain,
+            "RhoHV" or "RhoHVc" or "uRhoHV"
     radar_list : list of Radar objects
         Optional. list of radar objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "L"
     ind_rad : int
         radar index
 
@@ -790,7 +809,7 @@ def process_l(procstatus, dscfg, radar_list=None):
 
 def process_cdr(procstatus, dscfg, radar_list=None):
     """
-    Computes Circular Depolarization Ratio
+    Computes approximation of Circular Depolarization Ratio
 
     Parameters
     ----------
@@ -801,14 +820,16 @@ def process_cdr(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The input data type
+            The input data type, must contain,
+            "RhoHV" or "uRhoHV" or "RhoHVu", and,
+            "ZDR" or "ZDRc"
     radar_list : list of Radar objects
         Optional. list of radar objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "CDR"
     ind_rad : int
         radar index
 
@@ -863,7 +884,9 @@ def process_vpr(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The input data type
+            The input data type, must contain,
+            "dBZ" or "dBZc", and,
+            "H_ISO0" or "H_ISO0c" or "TEMP" or "TEMPc"
         nvalid_min : int
             Minimum number of rays with data to consider the azimuthal average
             valid. Default 20.
@@ -938,7 +961,7 @@ def process_vpr(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output fields "dBZc" and "VPRcorr"
     ind_rad : int
         radar index
 
@@ -1220,7 +1243,24 @@ def process_rainrate(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The input data type
+            The input data type, must contain, 
+            If RR_METHOD == "Z" or "ZPoly":
+                "dBZ" or "dBZc"
+            If RR_METHOD == "KDP":
+                "KDP" or "KDPc"
+            If RR_METHOD == "A":   
+                "Ah" or "Ahc"
+            If RR_METHOD == "ZKDP":
+                "dBZ" or "dBZc", and,
+                "KDP" or "KDPc"
+            IF RR_METHOD == "ZA":
+                "dBZ" or "dBZc", and,
+                "Ah" or "Ahc"       
+            IF RR_METHID == "hydro":
+                "dBZ" or "dBZc", and,
+                "Ah" or "Ahc", and,
+                "hydro"
+           
         RR_METHOD : string. Dataset keyword
             The rainfall rate estimation method. One of the following:
             Z, ZPoly, KDP, A, ZKDP, ZA, hydro
@@ -1256,7 +1296,7 @@ def process_rainrate(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "RR" (rain rate)
     ind_rad : int
         radar index
 
@@ -1520,7 +1560,8 @@ def process_rainfall_accumulation(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "RR"
         period : float. Dataset keyword
             the period to average [s]. If -1 the statistics are going to be
             performed over the entire data. Default 3600.
@@ -1536,7 +1577,7 @@ def process_rainfall_accumulation(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "Raccu"
     ind_rad : int
         radar index
 
@@ -1725,7 +1766,8 @@ def process_bird_density(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "eta_h" or "eta_v" (volumetric reflectivities)
         sigma_bird : float. Dataset keyword
             The bird radar cross section
     radar_list : list of Radar objects
@@ -1734,7 +1776,7 @@ def process_bird_density(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "bird_density"
     ind_rad : int
         radar index
 

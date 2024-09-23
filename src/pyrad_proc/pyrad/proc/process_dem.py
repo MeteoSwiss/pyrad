@@ -39,7 +39,7 @@ def process_dem(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            arbitrary data type
+            arbitrary data type supported by pyrad
         keep_in_memory : int. Dataset keyword
             if set keeps the COSMO data dict, the COSMO coordinates dict and
             the COSMO field in radar coordinates in memory. Default False
@@ -57,7 +57,8 @@ def process_dem(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field with name corresponding
+        to dem_field
     ind_rad : int
         radar index
 
@@ -136,7 +137,7 @@ def process_visibility(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            arbitrary data type
+            arbitrary data type supported by pyrad
         offset : float. Dataset keyword
             The offset above the minimum visibility that must be filtered
     radar_list : list of Radar objects
@@ -145,7 +146,8 @@ def process_visibility(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field 
+        "visibility"
     ind_rad : int
         radar index
 
@@ -204,7 +206,8 @@ def process_gecsx(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            arbitrary data type supported by pyrad
+            
         range_discretization : float. Dataset keyword
             Range discretization used when computing the Cartesian visibility field
             the larger the better but the slower the processing will be
@@ -245,6 +248,12 @@ def process_gecsx(procstatus, dscfg, radar_list=None):
     new_dataset : list of dict
         list of dictionaries containing the polar data output and the
         Cartesian data output in this order
+        The first dictionary (polar) contains the following fields:
+        "rcs_clutter", "dBm_clutter", "dBZ_clutter" and "visibility_polar"
+        The second dictionary (cart) contains the following fields:
+        "bent_terrain_altitude", "terrain_slope", "terrain_aspect",
+        "elevation_angle", "min_vis_elevation", "min_vis_altitude",
+        "incident_angle", "sigma_0", "effective_area"
     ind_rad : int
         radar index
 

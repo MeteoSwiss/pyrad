@@ -94,14 +94,21 @@ def process_ifft(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain, 
+            "ShhADU" or "ShhADUu", or,
+            "SvvADU" or "SvvADUu", or,
+            "sNADUh" or "sNADUv"
     radar_list : list of spectra objects
         Optional. list of spectra objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output fields 
+        "IQhhADU" if "ShhADU" or "ShhADUu" were provided, 
+        "IQhvvDU" if "SvvADU" or "SvvADUu" were provided, 
+        "IQNADUh" if "sNADUh" was provided,
+        "IQNADUv" if "sNADUv" was provided.
     ind_rad : int
         radar index
 
@@ -583,7 +590,8 @@ def process_filter_0Doppler(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, can be any of the spectral fields supported by pyrad
+            
         filter_width : float
             The Doppler filter width. Default 0.
         filter_units : str
@@ -594,7 +602,9 @@ def process_filter_0Doppler(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field, the names of the output fields
+        is the same as the provided datatypes, except for unfiltered fields which are renamed in the following
+        "dBuZ" => "dBZ"
     ind_rad : int
         radar index
 
@@ -663,7 +673,9 @@ def process_filter_srhohv(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "sRhoHV" or "sRhoHVu", 
+            as well as any spectral field supported by pyrad
         sRhoHV_threshold : float
             Data with sRhoHV module above this threshold will be filtered.
             Default 1.
@@ -673,7 +685,9 @@ def process_filter_srhohv(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field, the names of the output fields
+        is the same as the provided datatypes, except for unfiltered fields which are renamed in the following
+        "dBuZ" => "dBZ"
     ind_rad : int
         radar index
 
@@ -744,7 +758,9 @@ def process_filter_spectra_noise(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "ShhADU" or "SvvADU" or "ShhADUu" or "SvvADUu", and,
+            "sNADUh" or "sNADUv"
         clipping_level : float
             The clipping level [dB above noise level]. Default 10.
     radar_list : list of spectra objects
@@ -753,7 +769,8 @@ def process_filter_spectra_noise(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field, the names of the output fields
+        is the same as the provided datatypes
     ind_rad : int
         radar index
 
@@ -840,7 +857,9 @@ def process_dealias_spectra(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "ShhADU" or "SvvADU" or "ShhADUu" or "SvvADUu", and,
+            "sNADUh" or "sNADUv"
 
     radar_list : list of spectra objects
         Optional. list of spectra objects
@@ -848,7 +867,8 @@ def process_dealias_spectra(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output fields. The output fields are the same as the original
+        ones but are dealiased.
     ind_rad : int
         radar index
 
@@ -916,7 +936,8 @@ def process_spectra_ang_avg(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, 
+            any spectral datatype supported by pyrad
         navg : int
             Number of spectra to average. If -1 all spectra will be averaged.
             Default -1.
@@ -926,7 +947,7 @@ def process_spectra_ang_avg(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the same output fields as the provided datatypes
     ind_rad : int
         radar index
 
@@ -1018,7 +1039,9 @@ def process_spectral_power(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "ShhADU" or "SvvADU" or "ShhADUu" or "SvvADUu", and,
+            "sNADUh", or "sNADUv"
         units : str
             The units of the returned signal. Can be 'ADU', 'dBADU' or 'dBm'
         subtract_noise : Bool
@@ -1032,7 +1055,14 @@ def process_spectral_power(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field
+        "sPhhADU" or "sPhhADUu", or
+        "sPvvADU" or "sPvvADUu", or
+        "sPhhdBADU" or "sPhhdBADUu", or
+        "sPvvdBADU" or "sPvvdBADUu", or
+        "sPhhAdBm" or "sPhhdBmu", or
+        "sPvvdBm" or "sPvvdBmu", 
+        depending on which input datatype and units were provided
     ind_rad : int
         radar index
 
@@ -1093,7 +1123,8 @@ def process_spectral_noise(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "ShhADU" or "SvvADU" or "ShhADUu" or "SvvADUu"
         units : str
             The units of the returned signal. Can be 'ADU', 'dBADU' or 'dBm'
         navg : int
@@ -1109,7 +1140,14 @@ def process_spectral_noise(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field
+            "sNADUh" or
+            "sNADUv" or
+            "sNdBADUh" or
+            "sNdBADUv" or
+            "sNdBmh" or
+            "sNdBmv" 
+            depending on which input datatype and units were provided    
     ind_rad : int
         radar index
 
@@ -1168,14 +1206,20 @@ def process_spectral_phase(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "ShhADU" or "SvvADU" or "ShhADUu" or "SvvADUu"
     radar_list : list of spectra objects
         Optional. list of spectra objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field
+        "SPhasehh" if "ShhADU" was provided as input
+        "SPhasehhu" if "ShhADUu" was provided as input
+        "SPhasevv" if "SvvADU" was provided as input
+        "SPhasevvu" if "SvvADUu" was provided as input
+        
     ind_rad : int
         radar index
 
@@ -1222,7 +1266,12 @@ def process_spectral_reflectivity(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            either a combination of signal and noise
+            "ShhADU" or "SvvADU" or "ShhADUu" or "SvvADUu", and,
+            "sNADUh" or "sNADUv", or 
+            the power signal
+            "sPhhADU" or "sPvvADU" or "sPhhADUu" or "sPvvADUu"
         subtract_noise : Bool
             If True noise will be subtracted from the signal
         smooth_window : int or None
@@ -1234,7 +1283,11 @@ def process_spectral_reflectivity(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field
+        "sdBZ" if "ShhADU" (or "sPhhADU") was provided as input
+        "sdBuZ" if "ShhADUu" (or "sPhhADUu") was provided as input
+        "sdBZv" if "SvvADU" (or "sPvvADU") was provided as input
+        "sdBuZv" if "SvvADUu" (or "sPvvADUu") was provided as input
     ind_rad : int
         radar index
 
@@ -1310,7 +1363,12 @@ def process_spectral_differential_reflectivity(procstatus, dscfg, radar_list=Non
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            either a combination of signal and noise
+            ("ShhADU" and "SvvADU") or ("ShhADUu" and "SvvADUu"), and,
+            ("sNADUh" and "sNADUv"), or 
+            the power signal
+            ("sPhhADU" and "sPvvADU") or ("sPhhADUu" and "sPvvADUu")
         subtract_noise : Bool
             If True noise will be subtracted from the signal
         smooth_window : int or None
@@ -1322,7 +1380,9 @@ def process_spectral_differential_reflectivity(procstatus, dscfg, radar_list=Non
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field
+        "sZDR" if "ShhADU" and "SvvADU" were provided as input
+        "sZDRu" if "ShhADUu" and "SvvADUu" were provided as input
     ind_rad : int
         radar index
 
@@ -1410,14 +1470,19 @@ def process_spectral_differential_phase(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            either a combination of signal and noise
+            ("ShhADU" and "SvvADU") or ("ShhADUu" and "SvvADUu"), and,
+            "sRhoHV" or "sRhoHVu" (Optional)
     radar_list : list of spectra objects
         Optional. list of spectra objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output fields
+        "sPhiDP" if "ShhADU" and "SvvADU" were provided
+        "sPhiDPu" if "ShhADUu" and "SvvADUu" were provided 
     ind_rad : int
         radar index
 
@@ -1486,7 +1551,9 @@ def process_spectral_rhohv(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            ("ShhADU" and "SvvADU") or ("ShhADUu" and "SvvADUu"), and,
+            ("sNADUh" and "sNADUv")
         subtract_noise : Bool
             If True noise will be subtracted from the signal
     radar_list : list of spectra objects
@@ -1495,7 +1562,9 @@ def process_spectral_rhohv(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output fields
+        "sRhoHV" if "ShhADU" and "SvvADU" were provided
+        "sRhoHVu" if "ShhADUu" and "SvvADUu" were provided 
     ind_rad : int
         radar index
 
@@ -1559,7 +1628,14 @@ def process_pol_variables(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            either a combination of signal and noise
+            ("ShhADU" and "SvvADU") or ("ShhADUu" and "SvvADUu"), and,
+            ("sNADUh" and "sNADUv"), or 
+            the power signal
+            ("sPhhADU" and "sPvvADU") or ("sPhhADUu" and "sPvvADUu"), and
+            ("sRhoHV" or "sRhoHVu")
+            
         subtract_noise : Bool
             If True noise will be subtracted from the signal. Default False
         smooth_window : int or None
@@ -1573,7 +1649,8 @@ def process_pol_variables(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the all outputs fields, that correspond to the 
+        specified "variables" keyword
     ind_rad : int
         radar index
 
@@ -1671,7 +1748,8 @@ def process_noise_power(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "ShhADU" or "SvvADU" or "ShhADUu" or "SvvADUu"
         units : str
             The units of the returned signal. Can be 'ADU', 'dBADU' or 'dBm'
         navg : int
@@ -1687,7 +1765,11 @@ def process_noise_power(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field
+        "sNADUh" or "sNADUv", or
+        "sNdBmh" or "sNdBmv", or
+        "sNdBAUh" or "sNdBAUv", or
+        depending on which input datatype and units were provided
     ind_rad : int
         radar index
 
@@ -1745,14 +1827,16 @@ def process_reflectivity(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "sdBZ" or sdBZv" or "sdBuZ" or "sdBuZv"
     radar_list : list of spectra objects
         Optional. list of spectra objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "dBZ", "dBZv",
+        "dBuZ" or "dBuZv" depending on the provided input datatype
     ind_rad : int
         radar index
 
@@ -1806,14 +1890,17 @@ def process_differential_reflectivity(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "sdBZ" and "sdBZv", or
+            "sdBuZ" and "sdBZuv"
     radar_list : list of spectra objects
         Optional. list of spectra objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output fields
+        "ZDR" or "ZDRu" depending on the specified input datatype
     ind_rad : int
         radar index
 
@@ -1875,7 +1962,8 @@ def process_differential_phase(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "uPhiDPu" or
+        "uPhiDP" depending on the provided datatypes
     ind_rad : int
         radar index
 
@@ -1929,7 +2017,14 @@ def process_rhohv(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            either a combination of signal and noise
+            ("ShhADU" and "SvvADU") or ("ShhADUu" and "SvvADUu"), and,
+            ("sNADUh" and "sNADUv"), or 
+            the power signal
+            ("sPhhADU" and "sPvvADU") or ("sPhhADUu" and "sPvvADUu"), and
+            optionally ("sRhoHV" or "sRhoHVu") 
+            
         subtract_noise : Bool
             If True noise will be subtracted from the signal
     radar_list : list of spectra objects
@@ -1938,7 +2033,9 @@ def process_rhohv(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "RhoHV"
+        or "uRhoHV" depending on the provided datatypes
+        
     ind_rad : int
         radar index
 
@@ -2036,14 +2133,18 @@ def process_Doppler_velocity(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "sdBZ" or "sdBZv" or "sdBuZ" or "sdBuZv"
     radar_list : list of spectra objects
         Optional. list of spectra objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field 
+        "V" if "sdBZ" was provided
+        "Vv" if "sdBZv" was provided
+        "Vu" if "sdBuZ" was provided
     ind_rad : int
         radar index
 
@@ -2095,14 +2196,18 @@ def process_Doppler_width(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "sdBZ" or "sdBZv" or "sdBuZ" or "sdBuZv"
     radar_list : list of spectra objects
         Optional. list of spectra objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field 
+        "W" if "sdBZ" was provided
+        "Wv" if "sdBZv" was provided
+        "Wu" if "sdBuZ" was provided
     ind_rad : int
         radar index
 

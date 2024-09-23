@@ -82,7 +82,8 @@ def process_pol_variables_iq(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "IQhhADU", "IQvvADU", "IQNADUh" and "IQNADUv"
         subtract_noise : Bool
             If True noise will be subtracted from the signal
         lag : int
@@ -100,7 +101,9 @@ def process_pol_variables_iq(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output fields corresponding to the specified
+        "variables"
+        ""
     ind_rad : int
         radar index
 
@@ -171,7 +174,9 @@ def process_reflectivity_iq(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "IQhhADU" or "IQvvADU", and,
+            "IQNADUh" or "IQNADUv"
         subtract_noise : Bool
             If True noise will be subtracted from the signal
     radar_list : list of spectra objects
@@ -180,7 +185,9 @@ def process_reflectivity_iq(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field
+        "dBZ" if "IQhhADU" and "IQNADUh" are specified
+        "dBZv" if "IQvvADU" and "IQNADUv" are specified 
     ind_rad : int
         radar index
 
@@ -246,14 +253,15 @@ def process_st1_iq(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "IQhhADU" or "IQvvADU" 
     radar_list : list of spectra objects
         Optional. list of spectra objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "ST1" (stat_test_lag1)
     ind_rad : int
         radar index
 
@@ -302,14 +310,15 @@ def process_st2_iq(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "IQhhADU" or "IQvvADU" 
     radar_list : list of spectra objects
         Optional. list of spectra objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "ST2"
     ind_rad : int
         radar index
 
@@ -357,14 +366,15 @@ def process_wbn_iq(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "IQhhADU" or "IQvvADU" 
     radar_list : list of spectra objects
         Optional. list of spectra objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "WBN" (wide-band noise)
     ind_rad : int
         radar index
 
@@ -413,7 +423,8 @@ def process_differential_reflectivity_iq(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "IQhhADU", "IQvvADU", "IQNADUh" and "IQNADUv"
         subtract_noise : Bool
             If True noise will be subtracted from the signal
         lag : int
@@ -424,7 +435,7 @@ def process_differential_reflectivity_iq(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "ZDR"
     ind_rad : int
         radar index
 
@@ -491,14 +502,15 @@ def process_mean_phase_iq(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "IQhhADU" or "IQvvADU" 
     radar_list : list of spectra objects
         Optional. list of spectra objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "MPH" (mean_phase)
     ind_rad : int
         radar index
 
@@ -546,7 +558,8 @@ def process_differential_phase_iq(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "IQhhADU" and "IQvvADU" 
         phase_offset : float. Dataset keyword
             The system differential phase offset to remove
     radar_list : list of spectra objects
@@ -555,7 +568,7 @@ def process_differential_phase_iq(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field uPhiDP
     ind_rad : int
         radar index
 
@@ -612,7 +625,8 @@ def process_rhohv_iq(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "IQhhADU", "IQvvADU", "IQNADUh" and "IQNADUv"
         subtract_noise : Bool
             If True noise will be subtracted from the signal
         lag : int
@@ -623,7 +637,7 @@ def process_rhohv_iq(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "RhoHV"
     ind_rad : int
         radar index
 
@@ -689,7 +703,8 @@ def process_Doppler_velocity_iq(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "IQhhADU" or "IQvvADU"
         direction : str
             The convention used in the Doppler mean field. Can be
             negative_away or negative_towards
@@ -699,7 +714,8 @@ def process_Doppler_velocity_iq(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "V" 
+        (if IQhhADU was provided) or "Vv" (if IQvvADU was provided)
     ind_rad : int
         radar index
 
@@ -753,7 +769,8 @@ def process_Doppler_width_iq(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "IQhhADU" or "IQvvADU"
         subtract_noise : Bool
             If True noise will be subtracted from the signals
         lag : int
@@ -764,7 +781,8 @@ def process_Doppler_width_iq(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "W" (if IQhhADU was provided),
+        or "Wv" (if IQvvADU was provided)
     ind_rad : int
         radar index
 
@@ -830,7 +848,9 @@ def process_fft(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "IQNdBADUh" and/or "IQNdBADUv" and/or
+            "IQNADUh" and/or "IQNADUv" (see new_dataset below)
         window : list of str
             Parameters of the window used to obtain the spectra. The
             parameters are the ones corresponding to function
@@ -841,7 +861,11 @@ def process_fft(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output fields
+        "ShhADUu" (unfiltered_complex_spectra_hh_ADU) if IQNdBADUh was provided,
+        "SvvADUu" (unfiltered_complex_spectra_vv_ADU) if IQNdBADUv was provided,
+        "sNADUh" (spectral_noise_power_hh_ADU) if IQNADUh was provided,
+        "sNADUv" (spectral_noise_power_vv_ADU) if IQNADUv was provided,
     ind_rad : int
         radar index
 

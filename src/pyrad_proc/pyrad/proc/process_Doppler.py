@@ -65,7 +65,9 @@ def process_turbulence(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The input data type
+            The input data type, must contain,
+            "dBuZ" or "dBZ" or "dBZc" or "dBuZv" or "dBZv" or "dBZvc" or "CNRc", and, 
+            "W" or "Wv" or "Wu" or "Wvu" or "WD" or "WDc"
         radius : float. Dataset keyword
             Search radius for calculating Eddy Dissipation Rate (EDR).
             Default 2
@@ -97,7 +99,7 @@ def process_turbulence(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "EDR"
     ind_rad : int
         radar index
 
@@ -235,7 +237,8 @@ def process_dealias_fourdd(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The input data type
+            The input data type, must contain
+            "V" or "Vc"
         filt : int. Dataset keyword
             Flag controlling Bergen and Albers filter, 1 = yes, 0 = no.
         sign : int. Dataset keyword
@@ -252,7 +255,7 @@ def process_dealias_fourdd(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "dealV" or "dealVc" (if Vc was provided)
     ind_rad : int
         radar index
 
@@ -357,7 +360,8 @@ def process_dealias_region_based(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The input data type
+            The input data type, must contain,
+            "V" or "Vc"
         interval_splits : int, optional
             Number of segments to split the nyquist interval into when finding
             regions of similar velocity.  More splits creates a larger number
@@ -387,7 +391,7 @@ def process_dealias_region_based(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "dealV" or "dealVc" (if Vc was provided)
     ind_rad : int
         radar index
 
@@ -458,7 +462,8 @@ def process_dealias_unwrap_phase(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The input data type
+            The input data type, must contain,
+            "V" or "Vc"
         unwrap_unit : {'ray', 'sweep', 'volume'}, optional
             Unit to unwrap independently.  'ray' will unwrap each ray
             individually, 'sweep' each sweep, and 'volume' will unwrap the
@@ -473,7 +478,7 @@ def process_dealias_unwrap_phase(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "dealV" or "dealVc" (if Vc was provided)
     ind_rad : int
         radar index
 
@@ -534,7 +539,10 @@ def process_radial_velocity(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The input data type
+            The input data type, must contain
+            WIND_SPEED, and,
+            WIND_DIRECTION, and,
+            wind_vel_v
         latitude, longitude : float
             arbitrary coordinates [deg] from where to compute the radial
             velocity. If any of them is None it will be the radar position
@@ -547,7 +555,7 @@ def process_radial_velocity(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "V"
     ind_rad : int
         radar index
 
@@ -665,7 +673,8 @@ def process_wind_vel(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The input data type
+            The input data type, must contain
+            "V" or "Vc"
         vert_proj : Boolean
             If true the vertical projection is computed. Otherwise the
             horizontal projection is computed
@@ -675,7 +684,9 @@ def process_wind_vel(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field
+        "wind_vel_h_az", (if vert_proj is False), or,
+        "wind_vel_v" (if vert_proj is True)
     ind_rad : int
         radar index
 
@@ -737,7 +748,7 @@ def process_windshear(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "windshear_v"
     ind_rad : int
         radar index
 
@@ -786,7 +797,8 @@ def process_windshear_lidar(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The input data type
+            The input data type, must contain
+            "V" or "Vc"
         az_tol : float
             The tolerance in azimuth when looking for gates on top
             of the gate when computation is performed
@@ -797,7 +809,7 @@ def process_windshear_lidar(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "windshear_v"
     ind_rad : int
         radar index
 
@@ -847,14 +859,17 @@ def process_vad(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The input data type
+            The input data type, must contain
+            "V" or "Vc"
     radar_list : list of Radar objects
         Optional. list of radar objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output fields
+        "wind_vel_h_u", "wind_vel_h_v", "wind_vel_v",
+        "estV", "stdV", and "diffV"
     ind_rad : int
         radar index
 
@@ -923,7 +938,9 @@ def process_dda(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The input data type
+            The input data type, must contain
+            "V" or "Vc", and,
+            "dBuZ", "dBZ", or "dBZc"
 
         gridconfig : dictionary. Dataset keyword
             Dictionary containing some or all of this keywords:
@@ -997,7 +1014,8 @@ def process_dda(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output fields
+            "wind_vel_h_u", "wind_vel_h_v" and "wind_vel_v"
     ind_rad : int
         radar index
 

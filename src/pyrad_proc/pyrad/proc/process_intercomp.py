@@ -52,7 +52,7 @@ def process_time_stats(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            Arbitrary data type supported by pyrad and contained in the radar data
         period : float. Dataset keyword
             the period to average [s]. If -1 the statistics are going to be
             performed over the entire data. Default 3600.
@@ -73,7 +73,10 @@ def process_time_stats(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the statistic computed on the input field, as well as 
+        "nsamples", as well as
+        "sum2" (sum-squared) if stat in (cov, std), as well as
+        
     ind_rad : int
         radar index
 
@@ -417,7 +420,7 @@ def process_time_stats2(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            Arbitrary data type supported by pyrad and contianed in the radar data
         period : float. Dataset keyword
             the period to average [s]. If -1 the statistics are going to be
             performed over the entire data. Default 3600.
@@ -435,7 +438,9 @@ def process_time_stats2(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the statistic computed on the input field, as well as 
+        "nsamples"
+
     ind_rad : int
         radar index
 
@@ -681,7 +686,7 @@ def process_time_avg(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            Arbitrary data type supported by pyrad and contained in the radar data
         period : float. Dataset keyword
             the period to average [s]. Default 3600.
         start_average : float. Dataset keyword
@@ -694,7 +699,8 @@ def process_time_avg(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the statistic computed on the input field, as well as 
+        "nsamples"
     ind_rad : int
         radar index
 
@@ -873,7 +879,8 @@ def process_weighted_time_avg(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            Arbitrary data type supported by pyrad and contained in the radar data, as well as
+            "dBZ" or "dBZc" or "dBuZ" or "dBZv" or "dBZvc" or "dBuZv" (refl. weighting)
         period : float. Dataset keyword
             the period to average [s]. Default 3600.
         start_average : float. Dataset keyword
@@ -883,8 +890,8 @@ def process_weighted_time_avg(procstatus, dscfg, radar_list=None):
 
     Returns
     -------
-    new_dataset : Radar
-        radar object
+    new_dataset : dict
+        dictionary containing the statistic computed on the input field
     ind_rad : int
         radar index
 
@@ -1053,7 +1060,12 @@ def process_time_avg_flag(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must be 
+            "PhiDP" or "PhiDPc" (Optional, for PhiDP flagging), and,
+            "echoID" (Optional, for echoID flagging), and,
+            "hydro" (Optional, for no rain flagging), and,
+            "TEMP" (Optional, for solid precip flagging), and,
+            "H_ISO0" (Optional, also for solid precip flagging)
         period : float. Dataset keyword
             the period to average [s]. Default 3600.
         start_average : float. Dataset keyword
@@ -1070,8 +1082,8 @@ def process_time_avg_flag(procstatus, dscfg, radar_list=None):
 
     Returns
     -------
-    new_dataset : Radar
-        radar object
+    new_dataset : dict
+        dictionary containing the field "time_avg_flag"
     ind_rad : int
         radar index
 
@@ -1315,7 +1327,10 @@ def process_colocated_gates(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types to use to check colocated gates (one for every radar)
+            Any datatype supported by pyrad and available in both radars is accepted.
+            If visibility filtering is desired, the fields 
+            "visibility" or "visibility_polar" must be specified for both radars.
         h_tol : float. Dataset keyword
             Tolerance in altitude difference between radar gates [m].
             Default 100.
@@ -1352,8 +1367,8 @@ def process_colocated_gates(procstatus, dscfg, radar_list=None):
 
     Returns
     -------
-    new_dataset : radar object
-        radar object containing the flag field
+    new_dataset : dict
+        dictionary containing the field "colocated_gates"
     ind_rad : int
         radar index
 
@@ -1532,7 +1547,9 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types (one for every radar).
+            Any arbitrary datatype supported by pyrad and available
+            in both radar is accepted.
         colocgatespath : string.
             base path to the file containing the coordinates of the co-located
             gates
@@ -1891,7 +1908,11 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            dBZ" or "dBZc" or "dBuZ" or "dBZv" or "dBZvc" or "dBuZv, and,
+            "PhiDP" or "PhiDPc", and, 
+            "time_avg_flag"
+            for the two radars
         colocgatespath : string.
             base path to the file containing the coordinates of the co-located
             gates
@@ -2419,7 +2440,8 @@ def process_fields_diff(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types for each radar,
+            Any datatype supported by pyrad is supported
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -2500,7 +2522,8 @@ def process_intercomp_fields(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types for each radar,
+            Any datatype supported by pyrad and available in both radars is supported
     radar_list : list of Radar objects
         Optional. list of radar objects
 

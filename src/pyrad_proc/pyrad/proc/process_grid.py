@@ -46,14 +46,17 @@ def process_raw_grid(procstatus, dscfg, radar_list=None):
         Processing status: 0 initializing, 1 processing volume,
         2 post-processing
     dscfg : dictionary of dictionaries
-        data set configuration
+        data set configuration. Accepted Configuration Keywords:
+
+        datatype : string. Dataset keyword
+            arbitrary data type supported by pyrad and contained in the grid data
     radar_list : list of Radar objects
         Optional. list of radar objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output with field corresponding to datatype
     ind_rad : int
         radar index
 
@@ -130,7 +133,8 @@ def process_grid(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the gridded data
+        dictionary containing the gridded data with fields corresponding to
+        datatype
     ind_rad : int
         radar index
 
@@ -611,7 +615,7 @@ def process_grid_time_stats(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, can be any datatype supported by pyrad
         period : float. Dataset keyword
             the period to average [s]. If -1 the statistics are going to be
             performed over the entire data. Default 3600.
@@ -632,7 +636,7 @@ def process_grid_time_stats(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output fields corresponding to datatypes
     ind_rad : int
         radar index
 
@@ -953,7 +957,7 @@ def process_grid_time_stats2(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data type, can be any datatype supported by pyrad
         period : float. Dataset keyword
             the period to average [s]. If -1 the statistics are going to be
             performed over the entire data. Default 3600.
@@ -971,7 +975,8 @@ def process_grid_time_stats2(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output fields corresponding to
+        datatypes
     ind_rad : int
         radar index
 
@@ -1202,7 +1207,8 @@ def process_grid_rainfall_accumulation(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data type, can be any data type supported by pyrad
+            but typically RR is used
         period : float. Dataset keyword
             the period to average [s]. If -1 the statistics are going to be
             performed over the entire data. Default 3600.
@@ -1218,7 +1224,7 @@ def process_grid_rainfall_accumulation(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field corresponding to datatype
     ind_rad : int
         radar index
 
@@ -1401,7 +1407,8 @@ def process_grid_fields_diff(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The two input data types to compare.
+            Can any two datatypes supported by pyrad
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -1471,7 +1478,7 @@ def process_grid_texture(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data type, can be any datatype supported by pyrad
         xwind, ywind : int
             The size of the local window in the x and y axis. Default 7
         fill_value : float
@@ -1482,7 +1489,8 @@ def process_grid_texture(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing a radar object containing the field differences
+        dictionary containing a radar object containing the field 
+        "texture"
     ind_rad : int
         radar index
 
@@ -1544,23 +1552,28 @@ def process_grid_mask(procstatus, dscfg, radar_list=None):
         Processing status: 0 initializing, 1 processing volume,
         2 post-processing
     dscfg : dictionary of dictionaries
-        data set configuration
+        data set configuration. Accepted Configuration Keywords::
+
+        datatype : list of string. Dataset keyword
+            The input data type, can be any datatype supported by pyrad
+        threshold_min : float or None
+            Threshold used for the mask. Values below threshold are set to False.
+            Above threshold are set to True. Default None.
+        threshold_max : float or None
+            Threshold used for the mask. Values above threshold are set to False.
+            Below threshold are set to True. Default None.
+        x_dir_ext, y_dir_ext : int
+            Number of pixels by which to extend the mask on each side of the
+            west-east direction and south-north direction
+        
     radar_list : list of Radar objects
         Optional. list of radar objects
-    threshold_min : float or None
-        Threshold used for the mask. Values below threshold are set to False.
-        Above threshold are set to True. Default None.
-    threshold_max : float or None
-        Threshold used for the mask. Values above threshold are set to False.
-        Below threshold are set to True. Default None.
-    x_dir_ext, y_dir_ext : int
-        Number of pixels by which to extend the mask on each side of the
-        west-east direction and south-north direction
+    
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "mask"
     ind_rad : int
         radar index
 
@@ -1648,14 +1661,18 @@ def process_normalize_luminosity(procstatus, dscfg, radar_list=None):
         Processing status: 0 initializing, 1 processing volume,
         2 post-processing
     dscfg : dictionary of dictionaries
-        data set configuration
+        data set configuration. Accepted Configuration Keywords::
+
+        datatype : list of string. Dataset keyword
+            The input data type, can be any datatype supported by pyrad
     radar_list : list of Radar objects
         Optional. list of radar objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the normalized field, the name
+        of the field is datatype_norm
     ind_rad : int
         radar index
 
@@ -1714,6 +1731,10 @@ def process_pixel_filter(procstatus, dscfg, radar_list=None):
     dscfg : dictionary of dictionaries
         data set configuration. Accepted Configuration Keywords::
 
+        datatype : list of string. Dataset keyword
+            The input data types, must contain
+            "mask", as well as
+            any datatypes supported by pyrad
         pixel_type : int or list of ints
             The type of pixels to keep: 0 No data, 1 Below threshold, 2 Above
             threshold. Default 2
@@ -1723,7 +1744,7 @@ def process_pixel_filter(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output datatypes masked
     ind_rad : int
         radar index
 

@@ -53,7 +53,7 @@ def process_correct_bias(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The data type to correct for bias
+            The data type to correct for bias, can be any datatype supported by pyrad
         bias : float. Dataset keyword
             The bias to be corrected [dB]. Default 0
     radar_list : list of Radar objects
@@ -62,7 +62,9 @@ def process_correct_bias(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field, it will contain
+        the corrected version of the provided datatypes
+        For example dBZ -> dBZc, ZDR -> ZDRc, RhoHV -> RhoHVc
     ind_rad : int
         radar index
 
@@ -118,14 +120,19 @@ def process_correct_noise_rhohv(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The data types used in the correction
+            The data types used in the correction, it must contain
+            "uRhoHV", and, 
+            "SNRh", and,
+            "ZDRc", and,
+            "Nh", and,
+            "Nv"
     radar_list : list of Radar objects
         Optional. list of radar objects
 
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "RhoHV"
     ind_rad : int
         radar index
 
@@ -200,7 +207,9 @@ def process_gc_monitoring(procstatus, dscfg, radar_list=None):
         excessgates_fname : str. Dataset keyword
             The name of the gates in excess of quantile file
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, it must contain
+            "echoID" (Optional allows filter_prec),
+            as well as any other fields supported by pyrad
         step : float. Dataset keyword
             The width of the histogram bin. Default is None. In that case the
             default step in function get_histogram_bins is used
@@ -221,7 +230,8 @@ def process_gc_monitoring(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : Radar
-        radar object containing histogram data
+        radar object containing histogram data with fields corresponding
+        to specified datatypes 
     ind_rad : int
         radar index
 
@@ -429,7 +439,9 @@ def process_occurrence(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, it must contain
+            "echoID" (Optional allows filter_prec),
+            as well as any other fields supported by pyrad
         regular_grid : Boolean. Dataset keyword
             Whether the radar has a Boolean grid or not. Default False
         rmin, rmax : float. Dataset keyword
@@ -450,7 +462,8 @@ def process_occurrence(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        radar object containing frequency of occurence data with fields corresponding
+        to specified datatypes 
     ind_rad : int
         radar index
 
@@ -652,7 +665,10 @@ def process_time_avg_std(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, it must contain
+            "echoID" (Optional allows filter_prec),
+            "dBZ" or "dBZc" or "dBZv" or "dBZvc" or "dBuZ" or "dBuZc" (Optional, allows val_min)
+            as well as any other fields supported by pyrad
         regular_grid : Boolean. Dataset keyword
             Whether the radar has a Boolean grid or not. Default False
         rmin, rmax : float. Dataset keyword
@@ -677,7 +693,8 @@ def process_time_avg_std(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the average and standard deviation for every field
+        specified as datatype
     ind_rad : int
         radar index
 
@@ -918,7 +935,9 @@ def process_occurrence_period(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain,
+            "occurence" and,
+            "nsamples"
         regular_grid : Boolean. Dataset keyword
             Whether the radar has a Boolean grid or not. Default False
         rmin, rmax : float. Dataset keyword
@@ -930,7 +949,8 @@ def process_occurrence_period(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output fields "occurence" and 
+        "nsamples"
     ind_rad : int
         radar index
 
@@ -1075,7 +1095,10 @@ def process_sun_hits(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "dBm", and,
+            "dBmv", and,
+            "ZDR", or "ZDRu", or "ZDRu"
         delev_max : float. Dataset keyword
             maximum elevation distance from nominal radar elevation where to
             look for a sun hit signal [deg]. Default 1.5
@@ -1635,7 +1658,10 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, must contain
+            "dBm", and,
+            "dBmv", and,
+            "ZDR", or "ZDRu", or "ZDRu"
         delev_max : float. Dataset keyword
             maximum elevation distance from nominal radar elevation where to
             look for a sun hit signal [deg]. Default 1.5

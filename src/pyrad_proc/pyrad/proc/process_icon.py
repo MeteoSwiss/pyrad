@@ -57,7 +57,7 @@ def process_icon(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            arbitrary data type
+            arbitrary data type supported by pyrad
         keep_in_memory : int. Dataset keyword
             if set keeps the icon data dict, the icon coordinates dict and
             the icon field in radar coordinates in memory
@@ -75,7 +75,8 @@ def process_icon(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field corresponding to
+        icon_variables
     ind_rad : int
         radar index
 
@@ -230,7 +231,7 @@ def process_hzt(procstatus, dscfg, radar_list=None):
             Type of METRANET reader library used to read the data.
             Can be 'C' or 'python'
         datatype : string. Dataset keyword
-            arbitrary data type
+            arbitrary data type supported by pyrad
         keep_in_memory : int. Dataset keyword
             if set keeps the icon data dict, the icon coordinates dict and
             the icon field in radar coordinates in memory
@@ -248,7 +249,8 @@ def process_hzt(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output fields corresponding to 
+        icon_variables
     ind_rad : int
         radar index
 
@@ -360,7 +362,7 @@ def process_iso0_mf(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            arbitrary data type
+            arbitrary data type supported by prad
         iso0_statistic : str. Dataset keyword
             The statistic used to weight the iso0 points. Can be avg_by_dist,
             avg, min, max
@@ -371,7 +373,7 @@ def process_iso0_mf(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "H_ISO0"
     ind_rad : int
         radar index
 
@@ -442,7 +444,7 @@ def process_iso0_grib(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            arbitrary data type
+            arbitrary data type supported by pyrad
         time_interp : bool. Dataset keyword
             whether to perform an interpolation in time between consecutive
             model outputs. Default True
@@ -455,7 +457,7 @@ def process_iso0_grib(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field H_ISO0
     ind_rad : int
         radar index
 
@@ -524,7 +526,7 @@ def process_icon_lookup_table(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            arbitrary data type
+            arbitrary data type supported by pyrad
         lookup_table : int. Dataset keyword
             if set a pre-computed look up table for the icon coordinates is
             loaded. Otherwise the look up table is computed taking the first
@@ -543,7 +545,7 @@ def process_icon_lookup_table(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output fields corresponding to icon_variables
     ind_rad : int
         radar index
 
@@ -714,7 +716,7 @@ def process_hzt_lookup_table(procstatus, dscfg, radar_list=None):
             Type of METRANET reader library used to read the data.
             Can be 'C' or 'python'
         datatype : string. Dataset keyword
-            arbitrary data type
+            arbitrary data type supported by pyrad
         lookup_table : int. Dataset keyword
             if set a pre-computed look up table for the icon coordinates is
             loaded. Otherwise the look up table is computed taking the first
@@ -729,7 +731,7 @@ def process_hzt_lookup_table(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field HISO0
     ind_rad : int
         radar index
 
@@ -862,7 +864,7 @@ def process_icon_to_radar(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            arbitrary data type
+            arbitrary data type supported by pyrad
         icon_type : str. Dataset keyword
             name of the icon field to process. Default TEMP
         icon_variables : list of strings. Dataset keyword
@@ -878,7 +880,7 @@ def process_icon_to_radar(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output fields corresponding to icon_variables
     ind_rad : int
         radar index
 
@@ -996,7 +998,7 @@ def process_icon_coord(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            arbitrary data type
+            arbitrary data type supported by pyrad
         iconpath : string. General keyword
             path where to store the look up table
         model : string. Dataset keyword
@@ -1007,7 +1009,8 @@ def process_icon_coord(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field
+        "icon_index"
     ind_rad : int
         radar index
 
@@ -1070,7 +1073,7 @@ def process_hzt_coord(procstatus, dscfg, radar_list=None):
             Type of METRANET reader library used to read the data.
             Can be 'C' or 'python'
         datatype : string. Dataset keyword
-            arbitrary data type
+            arbitrary data type supported by pyrad
         iconpath : string. General keyword
             path where to store the look up table
     radar_list : list of Radar objects
@@ -1079,7 +1082,7 @@ def process_hzt_coord(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output
+        dictionary containing the output field "icon_index"
     ind_rad : int
         radar index
 

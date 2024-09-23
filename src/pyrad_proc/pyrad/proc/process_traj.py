@@ -64,7 +64,8 @@ def process_trajectory(procstatus, dscfg, radar_list=None, trajectory=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, can be any datatype supported by pyrad
+            and available in the radar data
     radar_list : list of Radar objects
         Optional. list of radar objects
     trajectory : Trajectory object
@@ -115,7 +116,8 @@ def process_traj_trt(procstatus, dscfg, radar_list=None, trajectory=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, can be any datatype supported by pyrad
+            and available in the radar data
         time_tol : float. Dataset keyword
             tolerance between reference time of the radar volume and that of
             the TRT cell [s]. Default 100.
@@ -279,7 +281,8 @@ def process_traj_trt_contour(procstatus, dscfg, radar_list=None, trajectory=None
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, can be any datatype supported by pyrad
+            and available in the radar data
         time_tol : float. Dataset keyword
             tolerance between reference time of the radar volume and that of
             the TRT cell [s]. Default 100.
@@ -355,7 +358,8 @@ def process_traj_lightning(procstatus, dscfg, radar_list=None, trajectory=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, can be any datatype supported by pyrad
+            and available in the radar data
         data_is_log : dict. Dataset keyword
             Dictionary specifying for each field if it is in log (True) or
             linear units (False). Default False
@@ -619,7 +623,8 @@ def process_traj_atplane(procstatus, dscfg, radar_list=None, trajectory=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, can be any datatype supported by pyrad
+            and available in the radar data
         data_is_log : dict. Dataset keyword
             Dictionary specifying for each field if it is in log (True) or
             linear units (False). Default False
@@ -886,7 +891,8 @@ def process_traj_antenna_pattern(procstatus, dscfg, radar_list=None, trajectory=
         2 post-processing
     dscfg : dictionary of dictionaries
         datatype : list of string. Dataset keyword
-            The input data types
+            The input data types, can be any datatype supported by pyrad
+            and available in the radar data
         antennaType : str. Dataset keyword
             Type of antenna of the radar we want to get the view from. Can
             be AZIMUTH, ELEVATION, LOWBEAM, HIGHBEAM
