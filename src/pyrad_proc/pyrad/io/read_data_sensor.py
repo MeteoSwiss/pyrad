@@ -2218,12 +2218,26 @@ def get_sensor_data(date, datatype, cfg):
 
     """
     if cfg["sensor"] == "rgage":
-        datapath = cfg["smnpath"] + date.strftime("%Y%m") + "/"
-        datafile = date.strftime("%Y%m%d") + "_" + cfg["sensorid"] + ".csv"
+        # Try several file formats
+        datapath1 = os.path.join(cfg["smnpath"], date.strftime("%Y%m"))
+        datapath2 = os.path.join(cfg["smnpath"], date.strftime("%Y-%m-%d"), 
+                                cfg["sensorid"])
+        datafile1 = os.path.join(datapath1, date.strftime("%Y%m%d")
+                                + "_" + cfg["sensorid"] + ".csv*")
+        datafile2 = os.path.join(datapath2, date.strftime("%Y%m%d")
+                                + "_" + cfg["sensorid"] + ".csv*")
+        
+        files1 = glob.glob(datafile1)
+        files2 = glob.glob(datafile2)
+        if len(files1):
+            datafile = files1[0]
+        if len(files2):
+            datafile = files2[0]
+        
         try:
-            _, sensordate, _, _, _, sensorvalue, _, _ = read_smn(datapath + datafile)
+            _, sensordate, _, _, _, sensorvalue, _, _ = read_smn(datafile)
         except Exception:
-            _, sensordate, sensorvalue = read_smn2(datapath + datafile)
+            _, sensordate, sensorvalue = read_smn2(datafile)
             if sensordate is None:
                 return None, None, None, None
         label = "RG"
