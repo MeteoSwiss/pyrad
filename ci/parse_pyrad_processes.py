@@ -35,6 +35,8 @@ def dict_to_restructured_text(yaml_data):
                 rst_output.append('   ' + key3)
                 rst_output.append('       ' + value3)
             rst_output.append('')
+            rst_output.append('returns')
+            rst_output.append('   ' + value2['returns'] +'\n')
             # rst_output.append(f"\n\n{value2['parameters']}\n\n")
     return '\n'.join(rst_output)
 
@@ -49,12 +51,11 @@ def parse_string_to_dict(input_string):
             line = line[4:]
         if line.startswith(" "):
             if current_key is not None:
-                result_dict[current_key] += line
+                result_dict[current_key] += line + '\n'
         else:
             current_key = line
             if current_key not in result_dict:
                 result_dict[current_key] = ''
-
     for k in result_dict:
         result_dict[k] = result_dict[k].strip().strip('\n')
         result_dict[k] = " ".join(result_dict[k].split())
@@ -64,13 +65,21 @@ def parse_string_to_dict(input_string):
 
 def process_docstring(docstr):
     start_reading_attr = False
+    start_reading_returns = False
     lines = docstr.split('\n')
 
     attributes = ''
     description = ''
+    returns = ''
     read_desc = True
+    read_returns = False
     for line in lines:
         if 'Parameters' in line:
+            read_params = True
+            read_desc = False
+        if 'Returns' in line:
+            read_returns = True
+            read_params = False
             read_desc = False
         if read_desc:
             description += line + ' '
@@ -79,12 +88,20 @@ def process_docstring(docstr):
             continue
         if 'radar_list' in line:
             start_reading_attr = False
-
+        if read_returns:
+            if '-------' in line:
+                start_reading_returns = True
+                continue
+            if 'ind_rad' in line:
+                start_reading_returns = False
+        if start_reading_returns:
+            returns += line + '\n'
         if start_reading_attr:
             attributes += line + '\n'
 
     dic = {'description': " ".join(description.split()),
-           'parameters': parse_string_to_dict(attributes)}
+           'parameters': parse_string_to_dict(attributes),
+           'returns': returns.strip()}
     return dic
 
 
