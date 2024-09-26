@@ -451,6 +451,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output fields “Ah” (spec. attenuation),
+“PIA” (path-integrated attenuation) and “dBZc” (corr. refl.)</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="azi-avg">
@@ -473,6 +479,11 @@ document.write(`
 <dt>nvalid_min<span class="classifier">int. Dataset keyword</span></dt><dd><p>the minimum number of valid points to consdier the average valid. Default 1</p>
 </dd>
 <dt>lin_trans<span class="classifier">dict or None</span></dt><dd><p>A dictionary specifying which data types have to be transformed in linear units before averaging</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the gridded data</p>
 </dd>
 </dl>
 </dd>
@@ -499,6 +510,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the gridded data</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="bias-correction">
@@ -516,6 +532,13 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field, it will contain
+the corrected version of the provided datatypes
+For example dBZ -&gt; dBZc, ZDR -&gt; ZDRc, RhoHV -&gt; RhoHVc</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="birds-id">
@@ -528,6 +551,11 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must be “dBZ” or “dBuZ”, and, “ZDR” or “ZDRu”, and, “RhoHV” or “uRhoHV”</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “echoID”</p>
 </dd>
 </dl>
 </dd>
@@ -548,6 +576,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “bird_density”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="ccor">
@@ -560,6 +593,12 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “dBZ” or “dBZv”, and, “dBuZ”, or “dBuZV”</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “CCORh” or
+“CCORv” (if vertical reflectivities were provided)</p>
 </dd>
 </dl>
 </dd>
@@ -578,6 +617,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="cdr">
@@ -593,6 +637,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “CDR”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="clt-to-san">
@@ -605,6 +654,11 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must be “CLT”</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “echoID”</p>
 </dd>
 </dl>
 </dd>
@@ -631,6 +685,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output fields corresponding to icon_variables</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="dem">
@@ -654,6 +713,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field with name corresponding
+to dem_field</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="dealias-fourdd">
@@ -670,6 +735,11 @@ document.write(`
 <dt>filt<span class="classifier">int. Dataset keyword</span></dt><dd><p>Flag controlling Bergen and Albers filter, 1 = yes, 0 = no.</p>
 </dd>
 <dt>sign<span class="classifier">int. Dataset keyword</span></dt><dd><p>Sign convention which the radial velocities in the volume created from the sounding data will will. This should match the convention used in the radar data. A value of 1 represents when positive values velocities are towards the radar, -1 represents when negative velocities are towards the radar.</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “dealV” or “dealVc” (if Vc was provided)</p>
 </dd>
 </dl>
 </dd>
@@ -696,6 +766,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “dealV” or “dealVc” (if Vc was provided)</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="dealias-unwrap">
@@ -713,6 +788,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “dealV” or “dealVc” (if Vc was provided)</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="doppler-velocity">
@@ -725,6 +805,14 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “sdBZ” or “sdBZv” or “sdBuZ” or “sdBuZv”</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field
+“V” if “sdBZ” was provided
+“Vv” if “sdBZv” was provided
+“Vu” if “sdBuZ” was provided</p>
 </dd>
 </dl>
 </dd>
@@ -745,6 +833,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “V”
+(if IQhhADU was provided) or “Vv” (if IQvvADU was provided)</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="doppler-width">
@@ -757,6 +851,14 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “sdBZ” or “sdBZv” or “sdBuZ” or “sdBuZv”</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field
+“W” if “sdBZ” was provided
+“Wv” if “sdBZv” was provided
+“Wu” if “sdBuZ” was provided</p>
 </dd>
 </dl>
 </dd>
@@ -779,6 +881,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “W” (if IQhhADU was provided),
+or “Wv” (if IQvvADU was provided)</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="echo-filter">
@@ -796,6 +904,13 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field, it will contain
+the corrected version of the provided datatypes
+For example dBZ -&gt; dBZc, ZDR -&gt; ZDRc, RhoHV -&gt; RhoHVc</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="fields-diff">
@@ -808,6 +923,11 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types for each radar, Any datatype supported by pyrad is supported</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing a radar object containing the field differences</p>
 </dd>
 </dl>
 </dd>
@@ -832,6 +952,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the data and metadata at the point of interest</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="fixed-rng-span">
@@ -851,6 +976,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the data and metadata at the point of interest</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="gatefilter">
@@ -867,6 +997,13 @@ document.write(`
 <dt>lower_bounds<span class="classifier">list of float</span></dt><dd><p>The list of lower bounds for every input data type</p>
 </dd>
 <dt>upper_bounds<span class="classifier">list of float</span></dt><dd><p>The list of upper bounds for every input data type</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field, it will contain
+the corrected version of the provided datatypes
+For example dBZ -&gt; dBZc, ZDR -&gt; ZDRc, RhoHV -&gt; RhoHVc</p>
 </dd>
 </dl>
 </dd>
@@ -898,6 +1035,18 @@ document.write(`
 <dt>sigma0_method<span class="classifier">string. Dataset keyword</span></dt><dd><p>Which estimation method to use, either ‘Gabella’ or ‘Delrieu’</p>
 </dd>
 <dt>clip<span class="classifier">int. Dataset keyword</span></dt><dd><p>If set to true, the provided DEM will be clipped to the extent of the polar radar domain. Increases computation speed a lot but Cartesian output fields will be available only over radar domain</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">list of dict</span></dt><dd><p>list of dictionaries containing the polar data output and the
+Cartesian data output in this order
+The first dictionary (polar) contains the following fields:
+“rcs_clutter”, “dBm_clutter”, “dBZ_clutter” and “visibility_polar”
+The second dictionary (cart) contains the following fields:
+“bent_terrain_altitude”, “terrain_slope”, “terrain_aspect”,
+“elevation_angle”, “min_vis_elevation”, “min_vis_altitude”,
+“incident_angle”, “sigma_0”, “effective_area”</p>
 </dd>
 </dl>
 </dd>
@@ -950,6 +1099,13 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output fields “hydro”, “entropy” (if compute_entropy is 1),
+and “propAG”, “propCR”, “propLR”, “propRP”, “propRN”, “propVI”, “propWS”, “propMH”,
+“propIH” (if output_distances is 1)</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="hzt">
@@ -975,6 +1131,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output fields corresponding to
+icon_variables</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="hzt-lookup">
@@ -993,6 +1155,11 @@ document.write(`
 <dt>lookup_table<span class="classifier">int. Dataset keyword</span></dt><dd><p>if set a pre-computed look up table for the icon coordinates is loaded. Otherwise the look up table is computed taking the first radar object as reference</p>
 </dd>
 <dt>regular_grid<span class="classifier">int. Dataset keyword</span></dt><dd><p>if set it is assume that the radar has a grid constant in time and therefore there is no need to interpolate the icon field in memory to the current radar grid</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field HISO0</p>
 </dd>
 </dl>
 </dd>
@@ -1015,6 +1182,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field H_ISO0</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="iso0-mf">
@@ -1029,6 +1201,11 @@ document.write(`
 <dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type supported by prad</p>
 </dd>
 <dt>iso0_statistic<span class="classifier">str. Dataset keyword</span></dt><dd><p>The statistic used to weight the iso0 points. Can be avg_by_dist, avg, min, max</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “H_ISO0”</p>
 </dd>
 </dl>
 </dd>
@@ -1048,6 +1225,11 @@ document.write(`
 <dt>rwind<span class="classifier">float. Dataset keyword</span></dt><dd><p>The length of the segment for the least square method [m]. Default 6000.</p>
 </dd>
 <dt>vectorize<span class="classifier">bool. Dataset keyword</span></dt><dd><p>Whether to vectorize the KDP processing. Default false</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “KDPc”</p>
 </dd>
 </dl>
 </dd>
@@ -1071,6 +1253,11 @@ document.write(`
 <dt>Zthr<span class="classifier">float. Dataset keyword</span></dt><dd><p>The threshold defining which estimated data to use [dBZ]</p>
 </dd>
 <dt>vectorize<span class="classifier">Bool. Dataset keyword</span></dt><dd><p>Whether to vectorize the KDP processing. Default false</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “KDPc”</p>
 </dd>
 </dl>
 </dd>
@@ -1119,6 +1306,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the data and metadata at the point of interest</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="l">
@@ -1131,6 +1323,11 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type, must contain, “RhoHV” or “RhoHVc” or “uRhoHV”</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “L”</p>
 </dd>
 </dl>
 </dd>
@@ -1149,6 +1346,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “MPH” (mean_phase)</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="ncvol">
@@ -1161,6 +1363,13 @@ document.write(`
 </dd>
 </dl>
 <p>parameters</p>
+<dl class="simple">
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </section>
 <section id="noise-power">
 <h3>NOISE_POWER<a class="headerlink" href="#noise-power" title="Link to this heading">#</a></h3>
@@ -1180,6 +1389,15 @@ document.write(`
 <dt>rmin<span class="classifier">int</span></dt><dd><p>Range from which the data is used to estimate the noise</p>
 </dd>
 <dt>nnoise_min<span class="classifier">int</span></dt><dd><p>Minimum number of samples to consider the estimated noise power valid</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field
+“sNADUh” or “sNADUv”, or
+“sNdBmh” or “sNdBmv”, or
+“sNdBAUh” or “sNdBAUv”, or
+depending on which input datatype and units were provided</p>
 </dd>
 </dl>
 </dd>
@@ -1203,6 +1421,13 @@ document.write(`
 <dt>nb_min<span class="classifier">int. Dataset keyword</span></dt><dd><p>Minimum number of neighbouring gates to consider the examined gate valid</p>
 </dd>
 <dt>percentile_min, percentile_max<span class="classifier">float. Dataset keyword</span></dt><dd><p>gates below (above) these percentiles (computed over the sweep) are considered potential outliers and further examined</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output,  it will contain
+the corrected version of the provided datatypes
+For example dBZ -&gt; dBZc, ZDR -&gt; ZDRc, RhoHV -&gt; RhoHVc</p>
 </dd>
 </dl>
 </dd>
@@ -1231,6 +1456,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “PhiDPc”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="phidp0-estimate">
@@ -1256,6 +1486,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output fields “PhiDP0” (system diff. phase) and
+“PhiDP0_bin” (first gate diff. phase)</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="phidp-kdp-kalman">
@@ -1274,6 +1510,11 @@ document.write(`
 <dt>get_phidp<span class="classifier">boolean. Datset keyword</span></dt><dd><p>if set the PhiDP computed by integrating the resultant KDP is added to the radar field</p>
 </dd>
 <dt>frequency<span class="classifier">float. Dataset keyword</span></dt><dd><p>the radar frequency [Hz]. If None that of the key frequency in attribute instrument_parameters of the radar object will be used. If the key or the attribute are not present it will be assumed that the radar is C band</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “PhiDPc” and “KDPc”</p>
 </dd>
 </dl>
 </dd>
@@ -1330,6 +1571,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “PhiDPc” and “KDPc”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="phidp-kdp-vulpiani">
@@ -1354,6 +1600,11 @@ document.write(`
 <dt>get_phidp<span class="classifier">boolean. Datset keyword</span></dt><dd><p>if set the PhiDP computed by integrating the resultant KDP is added to the radar field. Default 0 (False)</p>
 </dd>
 <dt>frequency<span class="classifier">float. Dataset keyword</span></dt><dd><p>the radar frequency [Hz]. If None that of the key frequency in attribute instrument_parameters of the radar object will be used. If the key or the attribute are not present it will be assumed that the radar is C band</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “PhiDPc” and “KDPc”</p>
 </dd>
 </dl>
 </dd>
@@ -1390,6 +1641,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “PhiDPc” and “KDPc”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="phidp-smooth-1w">
@@ -1414,6 +1670,11 @@ document.write(`
 <dt>Zmin<span class="classifier">float. Dataset keyword</span></dt><dd><p>The minimum reflectivity [dBZ]. Default 20.</p>
 </dd>
 <dt>Zmax<span class="classifier">float. Dataset keyword</span></dt><dd><p>The maximum reflectivity [dBZ]. Default 40.</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “PhiDPc”</p>
 </dd>
 </dl>
 </dd>
@@ -1448,6 +1709,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “PhiDPc”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="pol-variables">
@@ -1466,6 +1732,12 @@ document.write(`
 <dt>smooth_window<span class="classifier">int or None</span></dt><dd><p>Size of the moving Gaussian smoothing window. If none no smoothing will be applied. Default None</p>
 </dd>
 <dt>variables<span class="classifier">list of str</span></dt><dd><p>list of variables to compute. Default dBZ</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the all outputs fields, that correspond to the
+specified “variables” keyword</p>
 </dd>
 </dl>
 </dd>
@@ -1494,6 +1766,13 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output fields corresponding to the specified
+“variables”
+“”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="pwr">
@@ -1519,6 +1798,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “dBm” or “dBmv” (if
+vert. refl. was provided)</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="radar-resampling">
@@ -1531,6 +1816,13 @@ document.write(`
 </dd>
 </dl>
 <p>parameters</p>
+<dl class="simple">
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the new radar</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </section>
 <section id="radial-noise-hs">
 <h3>RADIAL_NOISE_HS<a class="headerlink" href="#radial-noise-hs" title="Link to this heading">#</a></h3>
@@ -1550,6 +1842,12 @@ document.write(`
 <dt>max_std_pwr<span class="classifier">float. Dataset keyword</span></dt><dd><p>The maximum standard deviation of the noise power to consider the estimation valid</p>
 </dd>
 <dt>get_noise_pos<span class="classifier">bool. Dataset keyword</span></dt><dd><p>If True a field flagging the position of the noisy gets will be returned</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “NdBmh” and “noise_pos_h” or
+“NdBmh” and “noise_pos_v” (if vert. refl. were provided)</p>
 </dd>
 </dl>
 </dd>
@@ -1576,6 +1874,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “NdBmh” and “noise_pos_h” or
+“NdBmh” and “noise_pos_v” (if vert. refl. were provided)</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="radial-velocity">
@@ -1592,6 +1896,11 @@ document.write(`
 <dt>latitude, longitude<span class="classifier">float</span></dt><dd><p>arbitrary coordinates [deg] from where to compute the radial velocity. If any of them is None it will be the radar position</p>
 </dd>
 <dt>altitude<span class="classifier">float</span></dt><dd><p>arbitrary altitude [m MSL] from where to compute the radial velocity. If None it will be the radar altitude</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “V”</p>
 </dd>
 </dl>
 </dd>
@@ -1628,6 +1937,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “RR” (rain rate)</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="raw">
@@ -1640,6 +1954,13 @@ document.write(`
 </dd>
 </dl>
 <p>parameters</p>
+<dl class="simple">
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </section>
 <section id="reflectivity">
 <h3>REFLECTIVITY<a class="headerlink" href="#reflectivity" title="Link to this heading">#</a></h3>
@@ -1651,6 +1972,12 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “sdBZ” or sdBZv” or “sdBuZ” or “sdBuZv”</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “dBZ”, “dBZv”,
+“dBuZ” or “dBuZv” depending on the provided input datatype</p>
 </dd>
 </dl>
 </dd>
@@ -1668,6 +1995,13 @@ document.write(`
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “IQhhADU” or “IQvvADU”, and, “IQNADUh” or “IQNADUv”</p>
 </dd>
 <dt>subtract_noise<span class="classifier">Bool</span></dt><dd><p>If True noise will be subtracted from the signal</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field
+“dBZ” if “IQhhADU” and “IQNADUh” are specified
+“dBZv” if “IQvvADU” and “IQNADUv” are specified</p>
 </dd>
 </dl>
 </dd>
@@ -1691,6 +2025,12 @@ document.write(`
 <dt>beamwidthv<span class="classifier">float. Global keyword</span></dt><dd><p>The vertical polarization antenna beamwidth [deg]. Used if input is vertical reflectivity</p>
 </dd>
 <dt>beamwidthh<span class="classifier">float. Global keyword</span></dt><dd><p>The horizontal polarization antenna beamwidth [deg]. Used if input is horizontal reflectivity</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “rcs_h” or “rcs_v” (if vert. refl. were
+provided)</p>
 </dd>
 </dl>
 </dd>
@@ -1725,6 +2065,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “rcs_h” or “rcs_v” (if vert. refl. were
+provided)</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="rhohv-correction">
@@ -1737,6 +2083,11 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The data types used in the correction, it must contain “uRhoHV”, and, “SNRh”, and, “ZDRc”, and, “Nh”, and, “Nv”</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “RhoHV”</p>
 </dd>
 </dl>
 </dd>
@@ -1766,6 +2117,11 @@ document.write(`
 <dt>fzl<span class="classifier">float. Dataset keyword</span></dt><dd><p>The default freezing level height. It will be used if no temperature field name is specified or the temperature field is not in the radar object. Default 2000.</p>
 </dd>
 <dt>sounding<span class="classifier">str. Dataset keyword</span></dt><dd><p>The nearest radiosounding WMO code (5 int digits). It will be used to compute the freezing level, if no temperature field name is specified, if the temperature field isin the radar object or if no freezing_level is explicitely defined.</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “RhoHV_rain” (RhoHV in rain)</p>
 </dd>
 </dl>
 </dd>
@@ -1809,6 +2165,11 @@ document.write(`
 <dt>origin<span class="classifier">str</span></dt><dd><p>origin of rotation. Can be center: center of the rectangle or mid_south. East-west mid-point at the south of the rectangle. Default center</p>
 </dd>
 <dt>use_latlon<span class="classifier">Bool. Dataset keyword</span></dt><dd><p>If True the coordinates used to find the radar gates within the ROI will be lat/lon. If false it will use Cartesian Coordinates with origin the radar position. Default True</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the data and metadata at the point of interest</p>
 </dd>
 </dl>
 </dd>
@@ -1857,6 +2218,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the data and metadata at the point of interest</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="san">
@@ -1875,6 +2241,11 @@ document.write(`
 <dt>max_textphi, max_textrhv, max_textzdr, max_textrefl<span class="classifier">float</span></dt><dd><p>Maximum value for the texture of the differential phase, texture of RhoHV, texture of Zdr and texture of reflectivity. Gates in these. Default 20, 0.3, 2.85, 8</p>
 </dd>
 <dt>min_rhv<span class="classifier">float</span></dt><dd><p>Minimum value for the RhoHV. Default 0.6</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “echoID”</p>
 </dd>
 </dl>
 </dd>
@@ -1931,6 +2302,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “dBZ_bias” (refl. bias)</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="selfconsistency-bias2">
@@ -1978,6 +2354,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “dBZ_bias” (refl. bias)</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="selfconsistency-kdp-phidp">
@@ -2011,6 +2392,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output fields KDP and PhiDP
+“”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="snr">
@@ -2025,6 +2412,12 @@ document.write(`
 <dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type, must contain, “dBZ” or “dBuZ” or “dBZv” or “dBuZv”, and, “Nh” or “Nv”</p>
 </dd>
 <dt>output_type<span class="classifier">string. Dataset keyword</span></dt><dd><p>The output data type. Either SNRh or SNRv</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “SNRh” or “SNRv” (if vert.
+refl. were provided)</p>
 </dd>
 </dl>
 </dd>
@@ -2045,6 +2438,13 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field, it will contain
+the corrected version of the provided datatypes
+For example dBZ -&gt; dBZc, ZDR -&gt; ZDRc, RhoHV -&gt; RhoHVc</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="st1-iq">
@@ -2060,6 +2460,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “ST1” (stat_test_lag1)</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="st2-iq">
@@ -2072,6 +2477,11 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “IQhhADU” or “IQvvADU”</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “ST2”</p>
 </dd>
 </dl>
 </dd>
@@ -2098,6 +2508,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dictionary</span></dt><dd><p>Dictionary containing radar_out, a radar object containing only data
+from inside the TRT cell</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="traj-trt-contour">
@@ -2112,6 +2528,13 @@ document.write(`
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, can be any datatype supported by pyrad and available in the radar data</p>
 </dd>
 <dt>time_tol<span class="classifier">float. Dataset keyword</span></dt><dd><p>tolerance between reference time of the radar volume and that of the TRT cell [s]. Default 100.</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>Dictionary containing radar_out and roi_dict. Radar out is the current
+radar object. roi_dict contains the positions defining the TRT cell
+contour</p>
 </dd>
 </dl>
 </dd>
@@ -2146,6 +2569,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “EDR”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="vad">
@@ -2161,6 +2589,13 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output fields
+“wind_vel_h_u”, “wind_vel_h_v”, “wind_vel_v”,
+“estV”, “stdV”, and “diffV”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="vel-filter">
@@ -2173,6 +2608,13 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “diffV”, as well as any other datatype supported by pyrad that will be filtered where no Doppler velocity could be estimated.</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field, it will contain
+the corrected version of the provided datatypes
+For example dBZ -&gt; dBZc, ZDR -&gt; ZDRc, RhoHV -&gt; RhoHVc</p>
 </dd>
 </dl>
 </dd>
@@ -2193,6 +2635,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field
+“visibility”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="vis-filter">
@@ -2207,6 +2655,13 @@ document.write(`
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data typesm, must contain “VIS” or “visibility_polar”, as well as any other datatype supported by pyrad that will be filtered where the visibility is poor.</p>
 </dd>
 <dt>VISmin<span class="classifier">float. Dataset keyword</span></dt><dd><p>The minimum visibility to keep the data.</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output, it will contain
+the corrected version of the provided datatypes
+For example dBZ -&gt; dBZc, ZDR -&gt; ZDRc, RhoHV -&gt; RhoHVc</p>
 </dd>
 </dl>
 </dd>
@@ -2229,6 +2684,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “eta_h” or “eta_v” (if vert. refl. were
+provided)</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="vol2bird-filter">
@@ -2241,6 +2702,11 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “VOL2BIRD_CLASS”, as well as any other datatype supported by pyrad that will be filtered where vol2bird detected non-biological echoes</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output</p>
 </dd>
 </dl>
 </dd>
@@ -2263,6 +2729,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="vstatus-to-san">
@@ -2278,6 +2749,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “echoID”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="wbn">
@@ -2290,6 +2766,11 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “IQhhADU” or “IQvvADU”</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “WBN” (wide-band noise)</p>
 </dd>
 </dl>
 </dd>
@@ -2310,6 +2791,13 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field
+“wind_vel_h_az”, (if vert_proj is False), or,
+“wind_vel_v” (if vert_proj is True)</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="windshear">
@@ -2324,6 +2812,11 @@ document.write(`
 <dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>The input data type</p>
 </dd>
 <dt>az_tol<span class="classifier">float</span></dt><dd><p>The tolerance in azimuth when looking for gates on top of the gate when computation is performed</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “windshear_v”</p>
 </dd>
 </dl>
 </dd>
@@ -2344,6 +2837,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “windshear_v”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="zdr">
@@ -2356,6 +2854,12 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “sdBZ” and “sdBZv”, or “sdBuZ” and “sdBZuv”</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output fields
+“ZDR” or “ZDRu” depending on the specified input datatype</p>
 </dd>
 </dl>
 </dd>
@@ -2375,6 +2879,11 @@ document.write(`
 <dt>subtract_noise<span class="classifier">Bool</span></dt><dd><p>If True noise will be subtracted from the signal</p>
 </dd>
 <dt>lag<span class="classifier">int</span></dt><dd><p>The time lag to use in the estimators</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “ZDR”</p>
 </dd>
 </dl>
 </dd>
@@ -2412,6 +2921,11 @@ document.write(`
 <dt>fzl<span class="classifier">float. Dataset keyword</span></dt><dd><p>The default freezing level height. It will be used if no temperature field name is specified or the temperature field is not in the radar object. Default 2000.</p>
 </dd>
 <dt>sounding<span class="classifier">str. Dataset keyword</span></dt><dd><p>The nearest radiosounding WMO code (5 int digits). It will be used to compute the freezing level, if no temperature field name is specified, if the temperature field isin the radar object or if no freezing_level is explicitely defined.</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “ZDR_prec”</p>
 </dd>
 </dl>
 </dd>
@@ -2456,6 +2970,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “ZDR_snow”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 </section>
@@ -2473,6 +2992,15 @@ document.write(`
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “IQNdBADUh” and/or “IQNdBADUv” and/or “IQNADUh” and/or “IQNADUv” (see new_dataset below)</p>
 </dd>
 <dt>window<span class="classifier">list of str</span></dt><dd><p>Parameters of the window used to obtain the spectra. The parameters are the ones corresponding to function scipy.signal.windows.get_window. It can also be [‘None’].</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output fields
+“ShhADUu” (unfiltered_complex_spectra_hh_ADU) if IQNdBADUh was provided,
+“SvvADUu” (unfiltered_complex_spectra_vv_ADU) if IQNdBADUv was provided,
+“sNADUh” (spectral_noise_power_hh_ADU) if IQNADUh was provided,
+“sNADUv” (spectral_noise_power_vv_ADU) if IQNADUv was provided,</p>
 </dd>
 </dl>
 </dd>
@@ -2495,6 +3023,13 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field, the names of the output fields
+is the same as the provided datatypes, except for unfiltered fields which are renamed in the following
+“dBuZ” =&gt; “dBZ”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="filter-spectra-noise">
@@ -2509,6 +3044,12 @@ document.write(`
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “ShhADU” or “SvvADU” or “ShhADUu” or “SvvADUu”, and, “sNADUh” or “sNADUv”</p>
 </dd>
 <dt>clipping_level<span class="classifier">float</span></dt><dd><p>The clipping level [dB above noise level]. Default 10.</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field, the names of the output fields
+is the same as the provided datatypes</p>
 </dd>
 </dl>
 </dd>
@@ -2527,6 +3068,15 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output fields
+“IQhhADU” if “ShhADU” or “ShhADUu” were provided,
+“IQhvvDU” if “SvvADU” or “SvvADUu” were provided,
+“IQNADUh” if “sNADUh” was provided,
+“IQNADUv” if “sNADUv” was provided.</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="raw-iq">
@@ -2539,6 +3089,13 @@ document.write(`
 </dd>
 </dl>
 <p>parameters</p>
+<dl class="simple">
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </section>
 <section id="raw-spectra">
 <h3>RAW_SPECTRA<a class="headerlink" href="#raw-spectra" title="Link to this heading">#</a></h3>
@@ -2550,6 +3107,13 @@ document.write(`
 </dd>
 </dl>
 <p>parameters</p>
+<dl class="simple">
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </section>
 <section id="spectra-angular-average">
 <h3>SPECTRA_ANGULAR_AVERAGE<a class="headerlink" href="#spectra-angular-average" title="Link to this heading">#</a></h3>
@@ -2563,6 +3127,11 @@ document.write(`
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, any spectral datatype supported by pyrad</p>
 </dd>
 <dt>navg<span class="classifier">int</span></dt><dd><p>Number of spectra to average. If -1 all spectra will be averaged. Default -1.</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the same output fields as the provided datatypes</p>
 </dd>
 </dl>
 </dd>
@@ -2605,6 +3174,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the data and metadata at the point of interest</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="spectral-noise">
@@ -2628,6 +3202,20 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><dl class="simple">
+<dt>dictionary containing the output field</dt><dd><p>“sNADUh” or
+“sNADUv” or
+“sNdBADUh” or
+“sNdBADUv” or
+“sNdBmh” or
+“sNdBmv”
+depending on which input datatype and units were provided</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="spectral-phase">
@@ -2640,6 +3228,15 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “ShhADU” or “SvvADU” or “ShhADUu” or “SvvADUu”</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field
+“SPhasehh” if “ShhADU” was provided as input
+“SPhasehhu” if “ShhADUu” was provided as input
+“SPhasevv” if “SvvADU” was provided as input
+“SPhasevvu” if “SvvADUu” was provided as input</p>
 </dd>
 </dl>
 </dd>
@@ -2664,6 +3261,18 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field
+“sPhhADU” or “sPhhADUu”, or
+“sPvvADU” or “sPvvADUu”, or
+“sPhhdBADU” or “sPhhdBADUu”, or
+“sPvvdBADU” or “sPvvdBADUu”, or
+“sPhhAdBm” or “sPhhdBmu”, or
+“sPvvdBm” or “sPvvdBmu”,
+depending on which input datatype and units were provided</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="spectral-reflectivity">
@@ -2683,6 +3292,15 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field
+“sdBZ” if “ShhADU” (or “sPhhADU”) was provided as input
+“sdBuZ” if “ShhADUu” (or “sPhhADUu”) was provided as input
+“sdBZv” if “SvvADU” (or “sPvvADU”) was provided as input
+“sdBuZv” if “SvvADUu” (or “sPvvADUu”) was provided as input</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="srhohv-filter">
@@ -2697,6 +3315,13 @@ document.write(`
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “sRhoHV” or “sRhoHVu”, as well as any spectral field supported by pyrad</p>
 </dd>
 <dt>sRhoHV_threshold<span class="classifier">float</span></dt><dd><p>Data with sRhoHV module above this threshold will be filtered. Default 1.</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field, the names of the output fields
+is the same as the provided datatypes, except for unfiltered fields which are renamed in the following
+“dBuZ” =&gt; “dBZ”</p>
 </dd>
 </dl>
 </dd>
@@ -2778,6 +3403,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output centroids</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 </section>
@@ -2824,6 +3454,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the field “colocated_gates”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 </section>
@@ -2846,6 +3481,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field
+“icon_index”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="hzt-coord">
@@ -2862,6 +3503,11 @@ document.write(`
 <dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type supported by pyrad</p>
 </dd>
 <dt>iconpath<span class="classifier">string. General keyword</span></dt><dd><p>path where to store the look up table</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “icon_index”</p>
 </dd>
 </dl>
 </dd>
@@ -2889,6 +3535,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output fields corresponding to icon_variables</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 </section>
@@ -2904,6 +3555,11 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><p>arbitrary data type supported by pyrad and contained in the grid data</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output with field corresponding to datatype</p>
 </dd>
 </dl>
 </dd>
@@ -2938,6 +3594,18 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">list of dict</span></dt><dd><p>list of dictionaries containing the polar data output and the
+Cartesian data output in this order
+The first dictionary (polar) contains the following fields:
+“rcs_clutter”, “dBm_clutter”, “dBZ_clutter” and “visibility_polar”
+The second dictionary (cart) contains the following fields:
+“bent_terrain_altitude”, “terrain_slope”, “terrain_aspect”,
+“elevation_angle”, “min_vis_elevation”, “min_vis_altitude”,
+“incident_angle”, “sigma_0”, “effective_area”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="id115">
@@ -2965,6 +3633,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the gridded data with fields corresponding to
+datatype</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="grid-fields-diff">
@@ -2977,6 +3651,11 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The two input data types to compare. Can any two datatypes supported by pyrad</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing a radar object containing the field differences</p>
 </dd>
 </dl>
 </dd>
@@ -3001,6 +3680,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “mask”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="grid-texture">
@@ -3020,6 +3704,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing a radar object containing the field
+“texture”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="normalize-luminosity">
@@ -3032,6 +3722,12 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data type, can be any datatype supported by pyrad</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the normalized field, the name
+of the field is datatype_norm</p>
 </dd>
 </dl>
 </dd>
@@ -3049,6 +3745,11 @@ document.write(`
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “mask”, as well as any datatypes supported by pyrad</p>
 </dd>
 <dt>pixel_type<span class="classifier">int or list of ints</span></dt><dd><p>The type of pixels to keep: 0 No data, 1 Below threshold, 2 Above threshold. Default 2</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output datatypes masked</p>
 </dd>
 </dl>
 </dd>
@@ -3074,6 +3775,11 @@ document.write(`
 <dt>alt0<span class="classifier">float</span></dt><dd><p>Grid origin altitude [masl]. Default is 0</p>
 </dd>
 <dt>wfunc<span class="classifier">str</span></dt><dd><p>Weighting function. Default NEAREST</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output</p>
 </dd>
 </dl>
 </dd>
@@ -3128,6 +3834,14 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><dl class="simple">
+<dt>dictionary containing the output fields</dt><dd><p>“wind_vel_h_u”, “wind_vel_h_v” and “wind_vel_v”</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 </section>
@@ -3158,6 +3872,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output fields corresponding to datatypes</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="grid-time-stats2">
@@ -3183,6 +3902,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output fields corresponding to
+datatypes</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="grid-rain-accu">
@@ -3203,6 +3928,11 @@ document.write(`
 <dt>use_nan<span class="classifier">bool. Dataset keyword</span></dt><dd><p>If true non valid data will be used</p>
 </dd>
 <dt>nan_value<span class="classifier">float. Dataset keyword</span></dt><dd><p>The value of the non valid data. Default 0</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field corresponding to datatype</p>
 </dd>
 </dl>
 </dd>
@@ -3238,6 +3968,13 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing a dictionary with intercomparison data and the
+key “final” which contains a boolean that is true when all volumes
+have been processed</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="intercomp-fields">
@@ -3250,6 +3987,11 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types for each radar, Any datatype supported by pyrad and available in both radars is supported</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing a dictionary with intercomparison data</p>
 </dd>
 </dl>
 </dd>
@@ -3290,6 +4032,13 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing a dictionary with intercomparison data and the
+key “final” which contains a boolean that is true when all volumes
+have been processed</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 </section>
@@ -3305,6 +4054,11 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain “dBZ” or “dBZc”, and, “ZDR” or “ZDRc”, and, “RhoHV” or “RhoHVc”, and, “TEMP” or “H_ISO0” (optional)</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “ml”</p>
 </dd>
 </dl>
 </dd>
@@ -3374,6 +4128,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output fields “dBZc” and “VPRcorr”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 </section>
@@ -3408,6 +4167,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">Radar</span></dt><dd><p>radar object containing histogram data with fields corresponding
+to specified datatypes</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="id135">
@@ -3424,6 +4189,11 @@ document.write(`
 <dt>step<span class="classifier">float. Dataset keyword</span></dt><dd><p>The width of the histogram bin. Default is None. In that case the default step in function get_histogram_bins is used</p>
 </dd>
 <dt>max_rays<span class="classifier">int. Dataset keyword</span></dt><dd><p>The maximum number of rays per sweep used when computing the histogram. If set above 0 the number of rays per sweep will be checked and if above max_rays the last rays of the sweep will be removed</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">Radar</span></dt><dd><p>radar object containing histogram data</p>
 </dd>
 </dl>
 </dd>
@@ -3457,6 +4227,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>radar object containing frequency of occurence data with fields corresponding
+to specified datatypes</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="occurrence-period">
@@ -3473,6 +4249,12 @@ document.write(`
 <dt>regular_grid<span class="classifier">Boolean. Dataset keyword</span></dt><dd><p>Whether the radar has a Boolean grid or not. Default False</p>
 </dd>
 <dt>rmin, rmax<span class="classifier">float. Dataset keyword</span></dt><dd><p>minimum and maximum ranges where the computation takes place. If -1 the whole range is considered. Default is -1</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output fields “occurence” and
+“nsamples”</p>
 </dd>
 </dl>
 </dd>
@@ -3502,6 +4284,12 @@ document.write(`
 <dt>percent_prec_max<span class="classifier">float. Dataset keyword</span></dt><dd><p>Maxim percentage of wet gates to consider the volume dry</p>
 </dd>
 <dt>lin_trans<span class="classifier">Boolean. Dataset keyword</span></dt><dd><p>If True the data will be transformed into linear units. Default False</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the average and standard deviation for every field
+specified as datatype</p>
 </dd>
 </dl>
 </dd>
@@ -3539,7 +4327,16 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the EVP and a keyword stating whether the
+processing has finished or not.</p>
+</dd>
 </dl>
+</dd>
+</dl>
+<p>Kaltenboeck R., Ryzhkov A. 2016: A freezing rain storm explored with a
+C-band polarimetric weather radar using the QVP methodology.
+Meteorologische Zeitschrift vol. 26 pp 207-222</p>
 </section>
 <section id="id142">
 <h3>QVP<a class="headerlink" href="#id142" title="Link to this heading">#</a></h3>
@@ -3568,7 +4365,16 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the QVP and a keyword stating whether the
+processing has finished or not.</p>
+</dd>
 </dl>
+</dd>
+</dl>
+<p>Ryzhkov A., Zhang P., Reeves H., Kumjian M., Tschallener T., Trömel S.,
+Simmer C. 2016: Quasi-Vertical Profiles: A New Way to Look at Polarimetric
+Radar Data. JTECH vol. 33 pp 551-562</p>
 </section>
 <section id="svp">
 <h3>SVP<a class="headerlink" href="#svp" title="Link to this heading">#</a></h3>
@@ -3603,7 +4409,16 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the svp and a keyword stating whether the
+processing has finished or not.</p>
+</dd>
 </dl>
+</dd>
+</dl>
+<p>Bukovcic P., Zrnic D., Zhang G. 2017: Winter Precipitation Liquid-Ice
+Phase Transitions Revealed with Polarimetric Radar and 2DVD Observations
+in Central Oklahoma. JTECH vol. 56 pp 1345-1363</p>
 </section>
 <section id="time-height">
 <h3>TIME_HEIGHT<a class="headerlink" href="#time-height" title="Link to this heading">#</a></h3>
@@ -3625,6 +4440,12 @@ document.write(`
 <dt>hres<span class="classifier">float</span></dt><dd><p>The height resolution [m]. Default 50</p>
 </dd>
 <dt>interp_kind<span class="classifier">str</span></dt><dd><p>type of interpolation when projecting to vertical grid: ‘none’, or ‘nearest’, etc. Default ‘none’ ‘none’ will select from all data points within the regular grid height bin the closest to the center of the bin. ‘nearest’ will select the closest data point to the center of the height bin regardless if it is within the height bin or not. Data points can be masked values If another type of interpolation is selected masked values will be eliminated from the data points before the interpolation</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the QVP and a keyword stating whether the
+processing has finished or not.</p>
 </dd>
 </dl>
 </dd>
@@ -3651,6 +4472,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the data and a keyword stating whether the
+processing has finished or not.</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 </section>
@@ -3666,6 +4493,11 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, must contain, “ZDR” or “ZDRc”, and, “RhoHV” or “RhoHVc”, and, “TEMP” or “H_ISO0”</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “ZDR_col”</p>
 </dd>
 </dl>
 </dd>
@@ -3732,6 +4564,12 @@ document.write(`
 <dt>ray_angle_res<span class="classifier">float. Dataset keyword</span></dt><dd><p>the ray angle resolution [deg]. If None that of the key ray_angle_res in attribute instrument_parameters of the radar object will be used. If the key or the attribute are not present the ray angle resolution parameters will not be computed</p>
 </dd>
 <dt>AntennaGainH, AntennaGainV<span class="classifier">float. Dataset keyword</span></dt><dd><p>the horizontal (vertical) polarization antenna gain [dB]. If None that of the attribute instrument_parameters of the radar object will be used. If the key or the attribute are not present the ray angle resolution parameters will not be computed</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>sun_hits_dict<span class="classifier">dict</span></dt><dd><p>dictionary containing a radar object, a sun_hits dict and a
+sun_retrieval dictionary</p>
 </dd>
 </dl>
 </dd>
@@ -3812,6 +4650,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>sunscan_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing a radar object, a sun_hits dict, a
+sun_retrieval dictionary, field_name and timeinfo</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 </section>
@@ -3838,6 +4682,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the field “time_avg_flag”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="time-avg">
@@ -3859,6 +4708,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the statistic computed on the input field, as well as
+“nsamples”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="weighted-time-avg">
@@ -3875,6 +4730,11 @@ document.write(`
 <dt>period<span class="classifier">float. Dataset keyword</span></dt><dd><p>the period to average [s]. Default 3600.</p>
 </dd>
 <dt>start_average<span class="classifier">float. Dataset keyword</span></dt><dd><p>when to start the average [s from midnight UTC]. Default 0.</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the statistic computed on the input field</p>
 </dd>
 </dl>
 </dd>
@@ -3905,6 +4765,13 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the statistic computed on the input field, as well as
+“nsamples”, as well as
+“sum2” (sum-squared) if stat in (cov, std), as well as</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="time-stats2">
@@ -3930,6 +4797,12 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the statistic computed on the input field, as well as
+“nsamples”</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="rain-accu">
@@ -3950,6 +4823,11 @@ document.write(`
 <dt>use_nan<span class="classifier">bool. Dataset keyword</span></dt><dd><p>If true non valid data will be used</p>
 </dd>
 <dt>nan_value<span class="classifier">float. Dataset keyword</span></dt><dd><p>The value of the non valid data. Default 0</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the output field “Raccu”</p>
 </dd>
 </dl>
 </dd>
@@ -3985,6 +4863,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the data and metadata at the point of interest</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="grid-multiple-points">
@@ -4001,6 +4884,11 @@ document.write(`
 <dt>coord_fname<span class="classifier">string</span></dt><dd><p>File name containing the points coordinates</p>
 </dd>
 <dt>latlonTol<span class="classifier">float. Dataset keyword</span></dt><dd><p>latitude-longitude tolerance to determine which grid point to use [deg]</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the data and metadata at the point of interest</p>
 </dd>
 </dl>
 </dd>
@@ -4030,6 +4918,11 @@ document.write(`
 <dt>EleTol<span class="classifier">float. Dataset keyword</span></dt><dd><p>elevation tolerance to determine which radar elevation to use [deg]</p>
 </dd>
 <dt>RngTol<span class="classifier">float. Dataset keyword</span></dt><dd><p>range tolerance to determine which radar bin to use [m]</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the data and metadata at the point of interest</p>
 </dd>
 </dl>
 </dd>
@@ -4074,6 +4967,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><p>dictionary containing the data and metadata at the point of interest</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 <section id="traj-antenna-pattern">
@@ -4086,6 +4984,13 @@ document.write(`
 </dd>
 </dl>
 <p>parameters</p>
+<dl class="simple">
+<dt>returns</dt><dd><dl class="simple">
+<dt>trajectory<span class="classifier">Trajectory object</span></dt><dd><p>Object holding time series</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </section>
 <section id="traj-atplane">
 <h3>TRAJ_ATPLANE<a class="headerlink" href="#traj-atplane" title="Link to this heading">#</a></h3>
@@ -4105,6 +5010,11 @@ document.write(`
 <dt>az_tol, el_tol<span class="classifier">float</span></dt><dd><p>azimuth and elevation tolerance (deg). Samples that have values beyond this tolerance from the limits in azimuth and elevation of the radar will be considered outside the sector. Default 3.</p>
 </dd>
 <dt>timeformat<span class="classifier">str or None</span></dt><dd><p>time format of the time series output file</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>trajectory<span class="classifier">Trajectory object</span></dt><dd><p>Object holding time series</p>
 </dd>
 </dl>
 </dd>
@@ -4129,6 +5039,11 @@ document.write(`
 </dd>
 </dl>
 </dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>trajectory<span class="classifier">Trajectory object</span></dt><dd><p>Object holding time series</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 </section>
@@ -4144,6 +5059,11 @@ document.write(`
 </dd>
 <dt>parameters</dt><dd><dl class="simple">
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><p>The input data types, can be any datatype supported by pyrad and available in the radar data</p>
+</dd>
+</dl>
+</dd>
+<dt>returns</dt><dd><dl class="simple">
+<dt>new_dataset<span class="classifier">Trajectory object</span></dt><dd><p>radar object</p>
 </dd>
 </dl>
 </dd>

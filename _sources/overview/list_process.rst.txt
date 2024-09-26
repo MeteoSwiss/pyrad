@@ -18,6 +18,11 @@ parameters
    sounding : str. Dataset keyword
        The nearest radiosounding WMO code (5 int digits). It will be used to compute the freezing level, if no temperature field name is specified, if the temperature field is in the radar object or if no freezing_level is explicitely defined.
 
+returns
+   new_dataset : dict
+    dictionary containing the output fields "Ah" (spec. attenuation),
+    "PIA" (path-integrated attenuation) and "dBZc" (corr. refl.)
+
 AZI_AVG
 """"""""""""""""""""""""""""""
 description
@@ -37,6 +42,10 @@ parameters
    lin_trans : dict or None
        A dictionary specifying which data types have to be transformed in linear units before averaging
 
+returns
+   new_dataset : dict
+    dictionary containing the gridded data
+
 MOVING_AZI_AVG
 """"""""""""""""""""""""""""""
 description
@@ -54,6 +63,10 @@ parameters
    lin_trans : dict or None
        A dictionary specifying which data types have to be transformed in linear units before averaging
 
+returns
+   new_dataset : dict
+    dictionary containing the gridded data
+
 BIAS_CORRECTION
 """"""""""""""""""""""""""""""
 description
@@ -65,6 +78,12 @@ parameters
    bias : float. Dataset keyword
        The bias to be corrected [dB]. Default 0
 
+returns
+   new_dataset : dict
+    dictionary containing the output field, it will contain
+    the corrected version of the provided datatypes
+    For example dBZ -> dBZc, ZDR -> ZDRc, RhoHV -> RhoHVc
+
 BIRDS_ID
 """"""""""""""""""""""""""""""
 description
@@ -73,6 +92,10 @@ description
 parameters
    datatype : list of string. Dataset keyword
        The input data types, must be "dBZ" or "dBuZ", and, "ZDR" or "ZDRu", and, "RhoHV" or "uRhoHV"
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "echoID"
 
 BIRD_DENSITY
 """"""""""""""""""""""""""""""
@@ -85,6 +108,10 @@ parameters
    sigma_bird : float. Dataset keyword
        The bird radar cross section
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "bird_density"
+
 CCOR
 """"""""""""""""""""""""""""""
 description
@@ -93,6 +120,11 @@ description
 parameters
    datatype : list of string. Dataset keyword
        The input data types, must contain, "dBZ" or "dBZv", and, "dBuZ", or "dBuZV"
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "CCORh" or
+    "CCORv" (if vertical reflectivities were provided)
 
 CDF
 """"""""""""""""""""""""""""""
@@ -103,6 +135,10 @@ parameters
    datatype : list of string. Dataset keyword
        The input data types, must be "echoID" (if not provided, no clutter filtering is possible), and, "hydro" (if not provided, no hydro filtering is possible), and, "VIS" (if not provided no blocked gate filtering is possible), and, any other field that will be used to compute CDF
 
+returns
+   new_dataset : dict
+    dictionary containing the output
+
 CDR
 """"""""""""""""""""""""""""""
 description
@@ -112,6 +148,10 @@ parameters
    datatype : string. Dataset keyword
        The input data type, must contain, "RhoHV" or "uRhoHV" or "RhoHVu", and, "ZDR" or "ZDRc"
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "CDR"
+
 CLT_TO_SAN
 """"""""""""""""""""""""""""""
 description
@@ -120,6 +160,10 @@ description
 parameters
    datatype : list of string. Dataset keyword
        The input data types, must be "CLT"
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "echoID"
 
 ICON_LOOKUP
 """"""""""""""""""""""""""""""
@@ -138,6 +182,10 @@ parameters
    icon_variables : list of strings. Dataset keyword
        Py-art name of the icon fields. Default temperature
 
+returns
+   new_dataset : dict
+    dictionary containing the output fields corresponding to icon_variables
+
 DEM
 """"""""""""""""""""""""""""""
 description
@@ -155,6 +203,11 @@ parameters
    demfile : str. Dataset keyword
        Name of the file containing the DEM data
 
+returns
+   new_dataset : dict
+    dictionary containing the output field with name corresponding
+    to dem_field
+
 DEALIAS_FOURDD
 """"""""""""""""""""""""""""""
 description
@@ -167,6 +220,10 @@ parameters
        Flag controlling Bergen and Albers filter, 1 = yes, 0 = no.
    sign : int. Dataset keyword
        Sign convention which the radial velocities in the volume created from the sounding data will will. This should match the convention used in the radar data. A value of 1 represents when positive values velocities are towards the radar, -1 represents when negative velocities are towards the radar.
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "dealV" or "dealVc" (if Vc was provided)
 
 DEALIAS_REGION
 """"""""""""""""""""""""""""""
@@ -185,6 +242,10 @@ parameters
    nyquist_vel : float, optional
        Nyquist velocity of the aquired radar velocity. Usually this parameter is provided in the Radar object intrument_parameters. If it is not available it can be provided as a keyword here.
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "dealV" or "dealVc" (if Vc was provided)
+
 DEALIAS_UNWRAP
 """"""""""""""""""""""""""""""
 description
@@ -196,6 +257,10 @@ parameters
    unwrap_unit : {'ray', 'sweep', 'volume'}, optional
        Unit to unwrap independently. 'ray' will unwrap each ray individually, 'sweep' each sweep, and 'volume' will unwrap the entire volume in a single pass. 'sweep', the default, often gives superior results when the lower sweeps of the radar volume are contaminated by clutter. 'ray' does not use the gatefilter parameter and rays where gates ared masked will result in poor dealiasing for that ray.
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "dealV" or "dealVc" (if Vc was provided)
+
 DOPPLER_VELOCITY
 """"""""""""""""""""""""""""""
 description
@@ -204,6 +269,13 @@ description
 parameters
    datatype : list of string. Dataset keyword
        The input data types, must contain, "sdBZ" or "sdBZv" or "sdBuZ" or "sdBuZv"
+
+returns
+   new_dataset : dict
+    dictionary containing the output field 
+    "V" if "sdBZ" was provided
+    "Vv" if "sdBZv" was provided
+    "Vu" if "sdBuZ" was provided
 
 DOPPLER_VELOCITY_IQ
 """"""""""""""""""""""""""""""
@@ -216,6 +288,11 @@ parameters
    direction : str
        The convention used in the Doppler mean field. Can be negative_away or negative_towards
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "V" 
+    (if IQhhADU was provided) or "Vv" (if IQvvADU was provided)
+
 DOPPLER_WIDTH
 """"""""""""""""""""""""""""""
 description
@@ -224,6 +301,13 @@ description
 parameters
    datatype : list of string. Dataset keyword
        The input data types, must contain, "sdBZ" or "sdBZv" or "sdBuZ" or "sdBuZv"
+
+returns
+   new_dataset : dict
+    dictionary containing the output field 
+    "W" if "sdBZ" was provided
+    "Wv" if "sdBZv" was provided
+    "Wu" if "sdBuZ" was provided
 
 DOPPLER_WIDTH_IQ
 """"""""""""""""""""""""""""""
@@ -238,6 +322,11 @@ parameters
    lag : int
        Time lag used in the denominator of the computation
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "W" (if IQhhADU was provided),
+    or "Wv" (if IQvvADU was provided)
+
 ECHO_FILTER
 """"""""""""""""""""""""""""""
 description
@@ -249,6 +338,12 @@ parameters
    echo_type : int or list of ints
        The type of echoes to keep: 1 noise, 2 clutter, 3 precipitation. Default 3
 
+returns
+   new_dataset : dict
+    dictionary containing the output field, it will contain
+    the corrected version of the provided datatypes
+    For example dBZ -> dBZc, ZDR -> ZDRc, RhoHV -> RhoHVc
+
 FIELDS_DIFF
 """"""""""""""""""""""""""""""
 description
@@ -257,6 +352,10 @@ description
 parameters
    datatype : list of string. Dataset keyword
        The input data types for each radar, Any datatype supported by pyrad is supported
+
+returns
+   new_dataset : dict
+    dictionary containing a radar object containing the field differences
 
 FIXED_RNG
 """"""""""""""""""""""""""""""
@@ -273,6 +372,10 @@ parameters
    ele_min, ele_max, azi_min, azi_max : floats. Dataset keyword
        The azimuth and elevation limits of the data [deg]
 
+returns
+   new_dataset : dict
+    dictionary containing the data and metadata at the point of interest
+
 FIXED_RNG_SPAN
 """"""""""""""""""""""""""""""
 description
@@ -286,6 +389,10 @@ parameters
    ele_min, ele_max, azi_min, azi_max : floats. Dataset keyword
        The azimuth and elevation limits of the data [deg]
 
+returns
+   new_dataset : dict
+    dictionary containing the data and metadata at the point of interest
+
 GATEFILTER
 """"""""""""""""""""""""""""""
 description
@@ -298,6 +405,12 @@ parameters
        The list of lower bounds for every input data type
    upper_bounds : list of float
        The list of upper bounds for every input data type
+
+returns
+   new_dataset : dict
+    dictionary containing the output field, it will contain
+    the corrected version of the provided datatypes
+    For example dBZ -> dBZc, ZDR -> ZDRc, RhoHV -> RhoHVc
 
 GECSX 
 """"""""""""""""""""""""""""""
@@ -323,6 +436,17 @@ parameters
        Which estimation method to use, either 'Gabella' or 'Delrieu'
    clip : int. Dataset keyword
        If set to true, the provided DEM will be clipped to the extent of the polar radar domain. Increases computation speed a lot but Cartesian output fields will be available only over radar domain
+
+returns
+   new_dataset : list of dict
+    list of dictionaries containing the polar data output and the
+    Cartesian data output in this order
+    The first dictionary (polar) contains the following fields:
+    "rcs_clutter", "dBm_clutter", "dBZ_clutter" and "visibility_polar"
+    The second dictionary (cart) contains the following fields:
+    "bent_terrain_altitude", "terrain_slope", "terrain_aspect",
+    "elevation_angle", "min_vis_elevation", "min_vis_altitude",
+    "incident_angle", "sigma_0", "effective_area"
 
 HYDROCLASS
 """"""""""""""""""""""""""""""
@@ -367,6 +491,12 @@ parameters
    append_all_fields: Bool. Dataset keyword
        Used with HYDRO_METHOD UKMO. If True auxiliary fields such as confidence and probability for each class are going to be added to the output
 
+returns
+   new_dataset : dict
+    dictionary containing the output fields "hydro", "entropy" (if compute_entropy is 1),
+    and "propAG", "propCR", "propLR", "propRP", "propRN", "propVI", "propWS", "propMH",
+    "propIH" (if output_distances is 1)
+
 HZT
 """"""""""""""""""""""""""""""
 description
@@ -386,6 +516,11 @@ parameters
    icon_variables : list of strings. Dataset keyword
        Py-art name of the icon fields. Default temperature
 
+returns
+   new_dataset : dict
+    dictionary containing the output fields corresponding to 
+    icon_variables
+
 HZT_LOOKUP
 """"""""""""""""""""""""""""""
 description
@@ -401,6 +536,10 @@ parameters
    regular_grid : int. Dataset keyword
        if set it is assume that the radar has a grid constant in time and therefore there is no need to interpolate the icon field in memory to the current radar grid
 
+returns
+   new_dataset : dict
+    dictionary containing the output field HISO0
+
 ISO0_GRIB
 """"""""""""""""""""""""""""""
 description
@@ -414,6 +553,10 @@ parameters
    voltype: str. Dataset keyword
        The type of data to output. Can be H_ISO0 or HZT. Default H_ISO0
 
+returns
+   new_dataset : dict
+    dictionary containing the output field H_ISO0
+
 ISO0_MF
 """"""""""""""""""""""""""""""
 description
@@ -424,6 +567,10 @@ parameters
        arbitrary data type supported by prad
    iso0_statistic : str. Dataset keyword
        The statistic used to weight the iso0 points. Can be avg_by_dist, avg, min, max
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "H_ISO0"
 
 KDP_LEASTSQUARE_1W
 """"""""""""""""""""""""""""""
@@ -437,6 +584,10 @@ parameters
        The length of the segment for the least square method [m]. Default 6000.
    vectorize : bool. Dataset keyword
        Whether to vectorize the KDP processing. Default false
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "KDPc"
 
 KDP_LEASTSQUARE_2W
 """"""""""""""""""""""""""""""
@@ -454,6 +605,10 @@ parameters
        The threshold defining which estimated data to use [dBZ]
    vectorize : Bool. Dataset keyword
        Whether to vectorize the KDP processing. Default false
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "KDPc"
 
 KEEP_ROI
 """"""""""""""""""""""""""""""
@@ -494,6 +649,10 @@ parameters
    use_latlon : Bool. Dataset keyword
        If True the coordinates used to find the radar gates within the ROI will be lat/lon. If false it will use Cartesian Coordinates with origin the radar position. Default True
 
+returns
+   new_dataset : dict
+    dictionary containing the data and metadata at the point of interest
+
 L
 """"""""""""""""""""""""""""""
 description
@@ -502,6 +661,10 @@ description
 parameters
    datatype : string. Dataset keyword
        The input data type, must contain, "RhoHV" or "RhoHVc" or "uRhoHV"
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "L"
 
 MEAN_PHASE_IQ
 """"""""""""""""""""""""""""""
@@ -512,6 +675,10 @@ parameters
    datatype : list of string. Dataset keyword
        The input data types, must contain "IQhhADU" or "IQvvADU"
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "MPH" (mean_phase)
+
 NCVOL
 """"""""""""""""""""""""""""""
 description
@@ -520,6 +687,10 @@ description
 parameters
    
        
+
+returns
+   new_dataset : dict
+    dictionary containing the output
 
 NOISE_POWER
 """"""""""""""""""""""""""""""
@@ -538,6 +709,14 @@ parameters
    nnoise_min : int
        Minimum number of samples to consider the estimated noise power valid
 
+returns
+   new_dataset : dict
+    dictionary containing the output field
+    "sNADUh" or "sNADUv", or
+    "sNdBmh" or "sNdBmv", or
+    "sNdBAUh" or "sNdBAUv", or
+    depending on which input datatype and units were provided
+
 OUTLIER_FILTER
 """"""""""""""""""""""""""""""
 description
@@ -554,6 +733,12 @@ parameters
        Minimum number of neighbouring gates to consider the examined gate valid
    percentile_min, percentile_max : float. Dataset keyword
        gates below (above) these percentiles (computed over the sweep) are considered potential outliers and further examined
+
+returns
+   new_dataset : dict
+    dictionary containing the output,  it will contain
+    the corrected version of the provided datatypes
+    For example dBZ -> dBZc, ZDR -> ZDRc, RhoHV -> RhoHVc
 
 PHIDP0_CORRECTION
 """"""""""""""""""""""""""""""
@@ -574,6 +759,10 @@ parameters
    Zmax : float. Dataset keyword
        The maximum reflectivity [dBZ]. Default 40.
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "PhiDPc"
+
 PHIDP0_ESTIMATE
 """"""""""""""""""""""""""""""
 description
@@ -593,6 +782,11 @@ parameters
    Zmax : float. Dataset keyword
        The maximum reflectivity [dBZ]
 
+returns
+   new_dataset : dict
+    dictionary containing the output fields "PhiDP0" (system diff. phase) and
+    "PhiDP0_bin" (first gate diff. phase)
+
 PHIDP_KDP_KALMAN
 """"""""""""""""""""""""""""""
 description
@@ -607,6 +801,10 @@ parameters
        if set the PhiDP computed by integrating the resultant KDP is added to the radar field
    frequency : float. Dataset keyword
        the radar frequency [Hz]. If None that of the key frequency in attribute instrument_parameters of the radar object will be used. If the key or the attribute are not present it will be assumed that the radar is C band
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "PhiDPc" and "KDPc"
 
 PHIDP_KDP_LP
 """"""""""""""""""""""""""""""
@@ -655,6 +853,10 @@ parameters
    window_len : int
        Length of Sobel Window applied to PhiDP field before computing KDP. Default 35
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "PhiDPc" and "KDPc"
+
 PHIDP_KDP_VULPIANI
 """"""""""""""""""""""""""""""
 description
@@ -675,6 +877,10 @@ parameters
        if set the PhiDP computed by integrating the resultant KDP is added to the radar field. Default 0 (False)
    frequency : float. Dataset keyword
        the radar frequency [Hz]. If None that of the key frequency in attribute instrument_parameters of the radar object will be used. If the key or the attribute are not present it will be assumed that the radar is C band
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "PhiDPc" and "KDPc"
 
 PHIDP_KDP_MAESAKA
 """"""""""""""""""""""""""""""
@@ -703,6 +909,10 @@ parameters
    beamwidth : float. Dataset keyword
        the antenna beamwidth [deg]. If None that of the keys radar_beam_width_h or radar_beam_width_v in attribute instrument_parameters of the radar object will be used. If the key or the attribute are not present the beamwidth will be set to None
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "PhiDPc" and "KDPc"
+
 PHIDP_SMOOTH_1W
 """"""""""""""""""""""""""""""
 description
@@ -723,6 +933,10 @@ parameters
        The minimum reflectivity [dBZ]. Default 20.
    Zmax : float. Dataset keyword
        The maximum reflectivity [dBZ]. Default 40.
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "PhiDPc"
 
 PHIDP_SMOOTH_2W
 """"""""""""""""""""""""""""""
@@ -749,6 +963,10 @@ parameters
    Zthr : float. Dataset keyword
        The threshold defining wich smoothed data to used [dBZ]
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "PhiDPc"
+
 POL_VARIABLES
 """"""""""""""""""""""""""""""
 description
@@ -763,6 +981,11 @@ parameters
        Size of the moving Gaussian smoothing window. If none no smoothing will be applied. Default None
    variables : list of str
        list of variables to compute. Default dBZ
+
+returns
+   new_dataset : dict
+    dictionary containing the all outputs fields, that correspond to the 
+    specified "variables" keyword
 
 POL_VARIABLES_IQ
 """"""""""""""""""""""""""""""
@@ -783,6 +1006,12 @@ parameters
    phase_offset : float. Dataset keyword
        The system differential phase offset to remove
 
+returns
+   new_dataset : dict
+    dictionary containing the output fields corresponding to the specified
+    "variables"
+    ""
+
 PWR
 """"""""""""""""""""""""""""""
 description
@@ -802,6 +1031,11 @@ parameters
    attg : float. Dataset keyword
        The gas attenuation [dB/km]. If none it will be obtained from the attribute radar_calibration of the radar object or assigned according to the radar frequency. Defaults to 0.
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "dBm" or "dBmv" (if
+    vert. refl. was provided)
+
 RADAR_RESAMPLING
 """"""""""""""""""""""""""""""
 description
@@ -810,6 +1044,10 @@ description
 parameters
    
        
+
+returns
+   new_dataset : dict
+    dictionary containing the new radar
 
 RADIAL_NOISE_HS
 """"""""""""""""""""""""""""""
@@ -828,6 +1066,11 @@ parameters
    get_noise_pos : bool. Dataset keyword
        If True a field flagging the position of the noisy gets will be returned
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "NdBmh" and "noise_pos_h" or
+    "NdBmh" and "noise_pos_v" (if vert. refl. were provided)
+
 RADIAL_NOISE_IVIC
 """"""""""""""""""""""""""""""
 description
@@ -845,6 +1088,11 @@ parameters
    get_noise_pos : bool
        If true an additional field with gates containing noise according to the algorithm is produced
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "NdBmh" and "noise_pos_h" or
+    "NdBmh" and "noise_pos_v" (if vert. refl. were provided)
+
 RADIAL_VELOCITY
 """"""""""""""""""""""""""""""
 description
@@ -857,6 +1105,10 @@ parameters
        arbitrary coordinates [deg] from where to compute the radial velocity. If any of them is None it will be the radar position
    altitude : float
        arbitrary altitude [m MSL] from where to compute the radial velocity. If None it will be the radar altitude
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "V"
 
 RAINRATE
 """"""""""""""""""""""""""""""
@@ -885,6 +1137,10 @@ parameters
    mp_factor : float
        Factor by which the Z-R relation is multiplied in the melting layer in method hydro. Default 0.6
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "RR" (rain rate)
+
 RAW
 """"""""""""""""""""""""""""""
 description
@@ -894,6 +1150,10 @@ parameters
    
        
 
+returns
+   new_dataset : dict
+    dictionary containing the output
+
 REFLECTIVITY
 """"""""""""""""""""""""""""""
 description
@@ -902,6 +1162,11 @@ description
 parameters
    datatype : list of string. Dataset keyword
        The input data types, must contain "sdBZ" or sdBZv" or "sdBuZ" or "sdBuZv"
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "dBZ", "dBZv",
+    "dBuZ" or "dBuZv" depending on the provided input datatype
 
 REFLECTIVITY_IQ
 """"""""""""""""""""""""""""""
@@ -913,6 +1178,12 @@ parameters
        The input data types, must contain "IQhhADU" or "IQvvADU", and, "IQNADUh" or "IQNADUv"
    subtract_noise : Bool
        If True noise will be subtracted from the signal
+
+returns
+   new_dataset : dict
+    dictionary containing the output field
+    "dBZ" if "IQhhADU" and "IQNADUh" are specified
+    "dBZv" if "IQvvADU" and "IQNADUv" are specified
 
 RCS
 """"""""""""""""""""""""""""""
@@ -930,6 +1201,11 @@ parameters
        The vertical polarization antenna beamwidth [deg]. Used if input is vertical reflectivity
    beamwidthh : float. Global keyword
        The horizontal polarization antenna beamwidth [deg]. Used if input is horizontal reflectivity
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "rcs_h" or "rcs_v" (if vert. refl. were 
+    provided)
 
 RCS_PR
 """"""""""""""""""""""""""""""
@@ -956,6 +1232,11 @@ parameters
    attg : float. Dataset keyword
        The gas attenuation [dB/km]. If none it will be obtained from the attribute radar_calibration of the radar object or assigned according to the radar frequency. Defaults to 0.
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "rcs_h" or "rcs_v" (if vert. refl. were 
+    provided)
+
 RHOHV_CORRECTION
 """"""""""""""""""""""""""""""
 description
@@ -964,6 +1245,10 @@ description
 parameters
    datatype : list of string. Dataset keyword
        The data types used in the correction, it must contain "uRhoHV", and, "SNRh", and, "ZDRc", and, "Nh", and, "Nv"
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "RhoHV"
 
 RHOHV_RAIN
 """"""""""""""""""""""""""""""
@@ -987,6 +1272,10 @@ parameters
        The default freezing level height. It will be used if no temperature field name is specified or the temperature field is not in the radar object. Default 2000.
    sounding : str. Dataset keyword
        The nearest radiosounding WMO code (5 int digits). It will be used to compute the freezing level, if no temperature field name is specified, if the temperature field isin the radar object or if no freezing_level is explicitely defined.
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "RhoHV_rain" (RhoHV in rain)
 
 ROI
 """"""""""""""""""""""""""""""
@@ -1024,6 +1313,10 @@ parameters
        origin of rotation. Can be center: center of the rectangle or mid_south. East-west mid-point at the south of the rectangle. Default center
    use_latlon : Bool. Dataset keyword
        If True the coordinates used to find the radar gates within the ROI will be lat/lon. If false it will use Cartesian Coordinates with origin the radar position. Default True
+
+returns
+   new_dataset : dict
+    dictionary containing the data and metadata at the point of interest
 
 ROI2
 """"""""""""""""""""""""""""""
@@ -1064,6 +1357,10 @@ parameters
    use_latlon : Bool. Dataset keyword
        If True the coordinates used to find the radar gates within the ROI will be lat/lon. If false it will use Cartesian Coordinates with origin the radar position. Default True
 
+returns
+   new_dataset : dict
+    dictionary containing the data and metadata at the point of interest
+
 SAN
 """"""""""""""""""""""""""""""
 description
@@ -1078,6 +1375,10 @@ parameters
        Maximum value for the texture of the differential phase, texture of RhoHV, texture of Zdr and texture of reflectivity. Gates in these. Default 20, 0.3, 2.85, 8
    min_rhv : float
        Minimum value for the RhoHV. Default 0.6
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "echoID"
 
 SELFCONSISTENCY_BIAS
 """"""""""""""""""""""""""""""
@@ -1126,6 +1427,10 @@ parameters
    rkdp : float
        The length of the window used to compute KDP with the single window least square method [m]. Default 6000.
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "dBZ_bias" (refl. bias)
+
 SELFCONSISTENCY_BIAS2
 """"""""""""""""""""""""""""""
 description
@@ -1167,6 +1472,10 @@ parameters
    bias_per_gate : Bool
        If True the bias per gate will be computed
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "dBZ_bias" (refl. bias)
+
 SELFCONSISTENCY_KDP_PHIDP
 """"""""""""""""""""""""""""""
 description
@@ -1194,6 +1503,11 @@ parameters
    frequency : float. Dataset keyword
        the radar frequency [Hz]. If None that of the key frequency in attribute instrument_parameters of the radar object will be used. If the key or the attribute are not present the selfconsistency will not be computed
 
+returns
+   new_dataset : dict
+    dictionary containing the output fields KDP and PhiDP
+    ""
+
 SNR
 """"""""""""""""""""""""""""""
 description
@@ -1204,6 +1518,11 @@ parameters
        The input data type, must contain, "dBZ" or "dBuZ" or "dBZv" or "dBuZv", and, "Nh" or "Nv"
    output_type : string. Dataset keyword
        The output data type. Either SNRh or SNRv
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "SNRh" or "SNRv" (if vert. 
+    refl. were provided)
 
 SNR_FILTER
 """"""""""""""""""""""""""""""
@@ -1216,6 +1535,12 @@ parameters
    SNRmin : float. Dataset keyword
        The minimum SNR to keep the data.
 
+returns
+   new_dataset : dict
+    dictionary containing the output field, it will contain
+    the corrected version of the provided datatypes
+    For example dBZ -> dBZc, ZDR -> ZDRc, RhoHV -> RhoHVc
+
 ST1_IQ
 """"""""""""""""""""""""""""""
 description
@@ -1225,6 +1550,10 @@ parameters
    datatype : list of string. Dataset keyword
        The input data types, must contain "IQhhADU" or "IQvvADU"
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "ST1" (stat_test_lag1)
+
 ST2_IQ
 """"""""""""""""""""""""""""""
 description
@@ -1233,6 +1562,10 @@ description
 parameters
    datatype : list of string. Dataset keyword
        The input data types, must contain "IQhhADU" or "IQvvADU"
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "ST2"
 
 TRAJ_TRT 
 """"""""""""""""""""""""""""""
@@ -1251,6 +1584,11 @@ parameters
    latlon_tol : Float. Dataset keyword
        Tolerance in lat/lon when extracting data only from the center of the TRT cell. Default 0.01
 
+returns
+   new_dataset : dictionary
+    Dictionary containing radar_out, a radar object containing only data
+    from inside the TRT cell
+
 TRAJ_TRT_CONTOUR 
 """"""""""""""""""""""""""""""
 description
@@ -1261,6 +1599,12 @@ parameters
        The input data types, can be any datatype supported by pyrad and available in the radar data
    time_tol : float. Dataset keyword
        tolerance between reference time of the radar volume and that of the TRT cell [s]. Default 100.
+
+returns
+   new_dataset : dict
+    Dictionary containing radar_out and roi_dict. Radar out is the current
+    radar object. roi_dict contains the positions defining the TRT cell
+    contour
 
 TURBULENCE
 """"""""""""""""""""""""""""""
@@ -1287,6 +1631,10 @@ parameters
    verbose : Bool. Dataset keyword
        True for verbose output. Default False
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "EDR"
+
 VAD
 """"""""""""""""""""""""""""""
 description
@@ -1296,6 +1644,12 @@ parameters
    datatype : string. Dataset keyword
        The input data type, must contain "V" or "Vc"
 
+returns
+   new_dataset : dict
+    dictionary containing the output fields
+    "wind_vel_h_u", "wind_vel_h_v", "wind_vel_v",
+    "estV", "stdV", and "diffV"
+
 VEL_FILTER
 """"""""""""""""""""""""""""""
 description
@@ -1304,6 +1658,12 @@ description
 parameters
    datatype : list of string. Dataset keyword
        The input data types, must contain "diffV", as well as any other datatype supported by pyrad that will be filtered where no Doppler velocity could be estimated.
+
+returns
+   new_dataset : dict
+    dictionary containing the output field, it will contain
+    the corrected version of the provided datatypes
+    For example dBZ -> dBZc, ZDR -> ZDRc, RhoHV -> RhoHVc
 
 VIS
 """"""""""""""""""""""""""""""
@@ -1316,6 +1676,11 @@ parameters
    offset : float. Dataset keyword
        The offset above the minimum visibility that must be filtered
 
+returns
+   new_dataset : dict
+    dictionary containing the output field 
+    "visibility"
+
 VIS_FILTER
 """"""""""""""""""""""""""""""
 description
@@ -1326,6 +1691,12 @@ parameters
        The input data typesm, must contain "VIS" or "visibility_polar", as well as any other datatype supported by pyrad that will be filtered where the visibility is poor.
    VISmin : float. Dataset keyword
        The minimum visibility to keep the data.
+
+returns
+   new_dataset : dict
+    dictionary containing the output, it will contain
+    the corrected version of the provided datatypes
+    For example dBZ -> dBZc, ZDR -> ZDRc, RhoHV -> RhoHVc
 
 VOL_REFL
 """"""""""""""""""""""""""""""
@@ -1340,6 +1711,11 @@ parameters
    kw : float. Dataset keyword
        The water constant
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "eta_h" or "eta_v" (if vert. refl. were 
+    provided)
+
 VOL2BIRD_FILTER
 """"""""""""""""""""""""""""""
 description
@@ -1348,6 +1724,10 @@ description
 parameters
    datatype : list of string. Dataset keyword
        The input data types, must contain "VOL2BIRD_CLASS", as well as any other datatype supported by pyrad that will be filtered where vol2bird detected non-biological echoes
+
+returns
+   new_dataset : dict
+    dictionary containing the output
 
 VOL2BIRD_GATE_FILTER
 """"""""""""""""""""""""""""""
@@ -1362,6 +1742,10 @@ parameters
    V_min : float
        Minimum Doppler velocity of biological scatterers
 
+returns
+   new_dataset : dict
+    dictionary containing the output
+
 VSTATUS_TO_SAN
 """"""""""""""""""""""""""""""
 description
@@ -1371,6 +1755,10 @@ parameters
    datatype : list of string. Dataset keyword
        The input data types, must be "wind_vel_rad_status"
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "echoID"
+
 WBN
 """"""""""""""""""""""""""""""
 description
@@ -1379,6 +1767,10 @@ description
 parameters
    datatype : list of string. Dataset keyword
        The input data types, must contain "IQhhADU" or "IQvvADU"
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "WBN" (wide-band noise)
 
 WIND_VEL
 """"""""""""""""""""""""""""""
@@ -1391,6 +1783,12 @@ parameters
    vert_proj : Boolean
        If true the vertical projection is computed. Otherwise the horizontal projection is computed
 
+returns
+   new_dataset : dict
+    dictionary containing the output field
+    "wind_vel_h_az", (if vert_proj is False), or,
+    "wind_vel_v" (if vert_proj is True)
+
 WINDSHEAR
 """"""""""""""""""""""""""""""
 description
@@ -1401,6 +1799,10 @@ parameters
        The input data type
    az_tol : float
        The tolerance in azimuth when looking for gates on top of the gate when computation is performed
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "windshear_v"
 
 WINDSHEAR_LIDAR
 """"""""""""""""""""""""""""""
@@ -1413,6 +1815,10 @@ parameters
    az_tol : float
        The tolerance in azimuth when looking for gates on top of the gate when computation is performed
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "windshear_v"
+
 ZDR
 """"""""""""""""""""""""""""""
 description
@@ -1421,6 +1827,11 @@ description
 parameters
    datatype : list of string. Dataset keyword
        The input data types, must contain, "sdBZ" and "sdBZv", or "sdBuZ" and "sdBZuv"
+
+returns
+   new_dataset : dict
+    dictionary containing the output fields
+    "ZDR" or "ZDRu" depending on the specified input datatype
 
 ZDR_IQ
 """"""""""""""""""""""""""""""
@@ -1434,6 +1845,10 @@ parameters
        If True noise will be subtracted from the signal
    lag : int
        The time lag to use in the estimators
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "ZDR"
 
 ZDR_PREC
 """"""""""""""""""""""""""""""
@@ -1465,6 +1880,10 @@ parameters
        The default freezing level height. It will be used if no temperature field name is specified or the temperature field is not in the radar object. Default 2000.
    sounding : str. Dataset keyword
        The nearest radiosounding WMO code (5 int digits). It will be used to compute the freezing level, if no temperature field name is specified, if the temperature field isin the radar object or if no freezing_level is explicitely defined.
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "ZDR_prec"
 
 ZDR_SNOW
 """"""""""""""""""""""""""""""
@@ -1501,6 +1920,10 @@ parameters
    hydroclass : list of ints. Dataset keyword
        list of hydrometeor classes to keep for the analysis Default [2] (dry snow)
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "ZDR_snow"
+
 SPECTRA
 -----------------------------
 FFT
@@ -1513,6 +1936,14 @@ parameters
        The input data types, must contain, "IQNdBADUh" and/or "IQNdBADUv" and/or "IQNADUh" and/or "IQNADUv" (see new_dataset below)
    window : list of str
        Parameters of the window used to obtain the spectra. The parameters are the ones corresponding to function scipy.signal.windows.get_window. It can also be ['None'].
+
+returns
+   new_dataset : dict
+    dictionary containing the output fields
+    "ShhADUu" (unfiltered_complex_spectra_hh_ADU) if IQNdBADUh was provided,
+    "SvvADUu" (unfiltered_complex_spectra_vv_ADU) if IQNdBADUv was provided,
+    "sNADUh" (spectral_noise_power_hh_ADU) if IQNADUh was provided,
+    "sNADUv" (spectral_noise_power_vv_ADU) if IQNADUv was provided,
 
 FILTER_0DOPPLER
 """"""""""""""""""""""""""""""
@@ -1527,6 +1958,12 @@ parameters
    filter_units : str
        Can be 'm/s' or 'Hz'. Default 'm/s'
 
+returns
+   new_dataset : dict
+    dictionary containing the output field, the names of the output fields
+    is the same as the provided datatypes, except for unfiltered fields which are renamed in the following
+    "dBuZ" => "dBZ"
+
 FILTER_SPECTRA_NOISE
 """"""""""""""""""""""""""""""
 description
@@ -1538,6 +1975,11 @@ parameters
    clipping_level : float
        The clipping level [dB above noise level]. Default 10.
 
+returns
+   new_dataset : dict
+    dictionary containing the output field, the names of the output fields
+    is the same as the provided datatypes
+
 IFFT
 """"""""""""""""""""""""""""""
 description
@@ -1546,6 +1988,14 @@ description
 parameters
    datatype : list of string. Dataset keyword
        The input data types, must contain, "ShhADU" or "ShhADUu", or, "SvvADU" or "SvvADUu", or, "sNADUh" or "sNADUv"
+
+returns
+   new_dataset : dict
+    dictionary containing the output fields 
+    "IQhhADU" if "ShhADU" or "ShhADUu" were provided, 
+    "IQhvvDU" if "SvvADU" or "SvvADUu" were provided, 
+    "IQNADUh" if "sNADUh" was provided,
+    "IQNADUv" if "sNADUv" was provided.
 
 RAW_IQ
 """"""""""""""""""""""""""""""
@@ -1556,6 +2006,10 @@ parameters
    
        
 
+returns
+   new_dataset : dict
+    dictionary containing the output
+
 RAW_SPECTRA
 """"""""""""""""""""""""""""""
 description
@@ -1564,6 +2018,10 @@ description
 parameters
    
        
+
+returns
+   new_dataset : dict
+    dictionary containing the output
 
 SPECTRA_ANGULAR_AVERAGE
 """"""""""""""""""""""""""""""
@@ -1575,6 +2033,10 @@ parameters
        The input data types, any spectral datatype supported by pyrad
    navg : int
        Number of spectra to average. If -1 all spectra will be averaged. Default -1.
+
+returns
+   new_dataset : dict
+    dictionary containing the same output fields as the provided datatypes
 
 SPECTRA_POINT
 """"""""""""""""""""""""""""""
@@ -1609,6 +2071,10 @@ parameters
    RngTol : float. Dataset keyword
        range tolerance to determine which radar bin to use [m]. Default 50.
 
+returns
+   new_dataset : dict
+    dictionary containing the data and metadata at the point of interest
+
 SPECTRAL_NOISE
 """"""""""""""""""""""""""""""
 description
@@ -1626,6 +2092,17 @@ parameters
    nnoise_min : int
        Minimum number of samples to consider the estimated noise power valid
 
+returns
+   new_dataset : dict
+    dictionary containing the output field
+        "sNADUh" or
+        "sNADUv" or
+        "sNdBADUh" or
+        "sNdBADUv" or
+        "sNdBmh" or
+        "sNdBmv" 
+        depending on which input datatype and units were provided
+
 SPECTRAL_PHASE
 """"""""""""""""""""""""""""""
 description
@@ -1634,6 +2111,14 @@ description
 parameters
    datatype : list of string. Dataset keyword
        The input data types, must contain, "ShhADU" or "SvvADU" or "ShhADUu" or "SvvADUu"
+
+returns
+   new_dataset : dict
+    dictionary containing the output field
+    "SPhasehh" if "ShhADU" was provided as input
+    "SPhasehhu" if "ShhADUu" was provided as input
+    "SPhasevv" if "SvvADU" was provided as input
+    "SPhasevvu" if "SvvADUu" was provided as input
 
 SPECTRAL_POWER
 """"""""""""""""""""""""""""""
@@ -1650,6 +2135,17 @@ parameters
    smooth_window : int or None
        Size of the moving Gaussian smoothing window. If none no smoothing will be applied
 
+returns
+   new_dataset : dict
+    dictionary containing the output field
+    "sPhhADU" or "sPhhADUu", or
+    "sPvvADU" or "sPvvADUu", or
+    "sPhhdBADU" or "sPhhdBADUu", or
+    "sPvvdBADU" or "sPvvdBADUu", or
+    "sPhhAdBm" or "sPhhdBmu", or
+    "sPvvdBm" or "sPvvdBmu", 
+    depending on which input datatype and units were provided
+
 SPECTRAL_REFLECTIVITY
 """"""""""""""""""""""""""""""
 description
@@ -1663,6 +2159,14 @@ parameters
    smooth_window : int or None
        Size of the moving Gaussian smoothing window. If none no smoothing will be applied
 
+returns
+   new_dataset : dict
+    dictionary containing the output field
+    "sdBZ" if "ShhADU" (or "sPhhADU") was provided as input
+    "sdBuZ" if "ShhADUu" (or "sPhhADUu") was provided as input
+    "sdBZv" if "SvvADU" (or "sPvvADU") was provided as input
+    "sdBuZv" if "SvvADUu" (or "sPvvADUu") was provided as input
+
 SRHOHV_FILTER
 """"""""""""""""""""""""""""""
 description
@@ -1673,6 +2177,12 @@ parameters
        The input data types, must contain "sRhoHV" or "sRhoHVu", as well as any spectral field supported by pyrad
    sRhoHV_threshold : float
        Data with sRhoHV module above this threshold will be filtered. Default 1.
+
+returns
+   new_dataset : dict
+    dictionary containing the output field, the names of the output fields
+    is the same as the provided datatypes, except for unfiltered fields which are renamed in the following
+    "dBuZ" => "dBZ"
 
 CENTROIDS
 -----------------------------
@@ -1745,6 +2255,10 @@ parameters
    allow_label_duplicates : bool
        If True allow to label multiple clusters with the same label. Default True
 
+returns
+   new_dataset : dict
+    dictionary containing the output centroids
+
 COLOCATED_GATES
 -----------------------------
 COLOCATED_GATES
@@ -1784,6 +2298,10 @@ parameters
    azrad2max : float. Dataset keyword
        Maximum azimuth angle [deg] for radar 2. Default None.
 
+returns
+   new_dataset : dict
+    dictionary containing the field "colocated_gates"
+
 ICON_COORD
 -----------------------------
 ICON_COORD
@@ -1799,6 +2317,11 @@ parameters
    model : string. Dataset keyword
        The icon model to use. Can be icon-1, icon-1e, icon-2, icon-7
 
+returns
+   new_dataset : dict
+    dictionary containing the output field
+    "icon_index"
+
 HZT_COORD
 """"""""""""""""""""""""""""""
 description
@@ -1811,6 +2334,10 @@ parameters
        arbitrary data type supported by pyrad
    iconpath : string. General keyword
        path where to store the look up table
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "icon_index"
 
 ICON2RADAR
 -----------------------------
@@ -1829,6 +2356,10 @@ parameters
    icon_time_index_min, icon_time_index_max : int
        minimum and maximum indices of the icon data to retrieve. If a value is provided only data corresponding to the time indices within the interval will be used. If None all data will be used. Default None
 
+returns
+   new_dataset : dict
+    dictionary containing the output fields corresponding to icon_variables
+
 GRID
 -----------------------------
 RAW_GRID
@@ -1839,6 +2370,10 @@ description
 parameters
    datatype : string. Dataset keyword
        arbitrary data type supported by pyrad and contained in the grid data
+
+returns
+   new_dataset : dict
+    dictionary containing the output with field corresponding to datatype
 
 GECSX 
 """"""""""""""""""""""""""""""
@@ -1865,6 +2400,17 @@ parameters
    clip : int. Dataset keyword
        If set to true, the provided DEM will be clipped to the extent of the polar radar domain. Increases computation speed a lot but Cartesian output fields will be available only over radar domain
 
+returns
+   new_dataset : list of dict
+    list of dictionaries containing the polar data output and the
+    Cartesian data output in this order
+    The first dictionary (polar) contains the following fields:
+    "rcs_clutter", "dBm_clutter", "dBZ_clutter" and "visibility_polar"
+    The second dictionary (cart) contains the following fields:
+    "bent_terrain_altitude", "terrain_slope", "terrain_aspect",
+    "elevation_angle", "min_vis_elevation", "min_vis_altitude",
+    "incident_angle", "sigma_0", "effective_area"
+
 GRID
 """"""""""""""""""""""""""""""
 description
@@ -1886,6 +2432,11 @@ parameters
    beam_spacing : float. Dataset keyword
        the beam spacing, i.e. the ray angle resolution [deg]. If None, that of the attribute ray_angle_res of the radar object will be used. If the attribute is None a default 1 deg value will be used
 
+returns
+   new_dataset : dict
+    dictionary containing the gridded data with fields corresponding to
+    datatype
+
 GRID_FIELDS_DIFF
 """"""""""""""""""""""""""""""
 description
@@ -1894,6 +2445,10 @@ description
 parameters
    datatype : list of string. Dataset keyword
        The two input data types to compare. Can any two datatypes supported by pyrad
+
+returns
+   new_dataset : dict
+    dictionary containing a radar object containing the field differences
 
 GRID_MASK
 """"""""""""""""""""""""""""""
@@ -1910,6 +2465,10 @@ parameters
    x_dir_ext, y_dir_ext : int
        Number of pixels by which to extend the mask on each side of the west-east direction and south-north direction
 
+returns
+   new_dataset : dict
+    dictionary containing the output field "mask"
+
 GRID_TEXTURE
 """"""""""""""""""""""""""""""
 description
@@ -1923,6 +2482,11 @@ parameters
    fill_value : float
        The value with which to fill masked data. Default np.NaN
 
+returns
+   new_dataset : dict
+    dictionary containing a radar object containing the field 
+    "texture"
+
 NORMALIZE_LUMINOSITY
 """"""""""""""""""""""""""""""
 description
@@ -1931,6 +2495,11 @@ description
 parameters
    datatype : list of string. Dataset keyword
        The input data type, can be any datatype supported by pyrad
+
+returns
+   new_dataset : dict
+    dictionary containing the normalized field, the name
+    of the field is datatype_norm
 
 PIXEL_FILTER
 """"""""""""""""""""""""""""""
@@ -1942,6 +2511,10 @@ parameters
        The input data types, must contain "mask", as well as any datatypes supported by pyrad
    pixel_type : int or list of ints
        The type of pixels to keep: 0 No data, 1 Below threshold, 2 Above threshold. Default 2
+
+returns
+   new_dataset : dict
+    dictionary containing the output datatypes masked
 
 VOL2GRID
 """"""""""""""""""""""""""""""
@@ -1961,6 +2534,10 @@ parameters
        Grid origin altitude [masl]. Default is 0
    wfunc : str
        Weighting function. Default NEAREST
+
+returns
+   new_dataset : dict
+    dictionary containing the output
 
 DDA
 """"""""""""""""""""""""""""""
@@ -2009,6 +2586,11 @@ parameters
    frz : float
        The freezing level in meters. This is to tell PyDDA where to use ice particle fall speeds in the wind retrieval verus liquid.
 
+returns
+   new_dataset : dict
+    dictionary containing the output fields
+        "wind_vel_h_u", "wind_vel_h_v" and "wind_vel_v"
+
 GRID_TIMEAVG
 -----------------------------
 GRID_TIME_STATS
@@ -2032,6 +2614,10 @@ parameters
    stat: string. Dataset keyword
        Statistic to compute: Can be mean, std, cov, min, max. Default mean
 
+returns
+   new_dataset : dict
+    dictionary containing the output fields corresponding to datatypes
+
 GRID_TIME_STATS2
 """"""""""""""""""""""""""""""
 description
@@ -2051,6 +2637,11 @@ parameters
    nan_value : float. Dataset keyword
        The value of the non valid data. Default 0
 
+returns
+   new_dataset : dict
+    dictionary containing the output fields corresponding to
+    datatypes
+
 GRID_RAIN_ACCU
 """"""""""""""""""""""""""""""
 description
@@ -2067,6 +2658,10 @@ parameters
        If true non valid data will be used
    nan_value : float. Dataset keyword
        The value of the non valid data. Default 0
+
+returns
+   new_dataset : dict
+    dictionary containing the output field corresponding to datatype
 
 INTERCOMP
 -----------------------------
@@ -2093,6 +2688,12 @@ parameters
    coloc_data_dir : string. Dataset keyword
        name of the directory containing the csv file with colocated data
 
+returns
+   new_dataset : dict
+    dictionary containing a dictionary with intercomparison data and the
+    key "final" which contains a boolean that is true when all volumes
+    have been processed
+
 INTERCOMP_FIELDS
 """"""""""""""""""""""""""""""
 description
@@ -2101,6 +2702,10 @@ description
 parameters
    datatype : list of string. Dataset keyword
        The input data types for each radar, Any datatype supported by pyrad and available in both radars is supported
+
+returns
+   new_dataset : dict
+    dictionary containing a dictionary with intercomparison data
 
 INTERCOMP_TIME_AVG
 """"""""""""""""""""""""""""""
@@ -2133,6 +2738,12 @@ parameters
    phi_avg_max : float. Dataset keyword
        maximum average PhiDP allowed. Default 600 deg i.e. any
 
+returns
+   new_dataset : dict
+    dictionary containing a dictionary with intercomparison data and the
+    key "final" which contains a boolean that is true when all volumes
+    have been processed
+
 ML
 -----------------------------
 ML_DETECTION
@@ -2143,6 +2754,10 @@ description
 parameters
    datatype : list of string. Dataset keyword
        The input data types, must contain "dBZ" or "dBZc", and, "ZDR" or "ZDRc", and, "RhoHV" or "RhoHVc", and, "TEMP" or "H_ISO0" (optional)
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "ml"
 
 VPR
 -----------------------------
@@ -2203,6 +2818,10 @@ parameters
    correct_iso0 : bool
        If True the iso0 field is corrected by a bias constant computed as the difference between the retrieved melting layer top and the average iso0 and areas with precipitation. Default True. Used only in the spatialised VPR correction
 
+returns
+   new_dataset : dict
+    dictionary containing the output fields "dBZc" and "VPRcorr"
+
 MONITORING
 -----------------------------
 GC_MONITORING
@@ -2230,6 +2849,11 @@ parameters
    percent_prec_max : float. Dataset keyword
        Maxim percentage of wet gates to consider the volume dry
 
+returns
+   new_dataset : Radar
+    radar object containing histogram data with fields corresponding
+    to specified datatypes
+
 MONITORING
 """"""""""""""""""""""""""""""
 description
@@ -2242,6 +2866,10 @@ parameters
        The width of the histogram bin. Default is None. In that case the default step in function get_histogram_bins is used
    max_rays : int. Dataset keyword
        The maximum number of rays per sweep used when computing the histogram. If set above 0 the number of rays per sweep will be checked and if above max_rays the last rays of the sweep will be removed
+
+returns
+   new_dataset : Radar
+    radar object containing histogram data
 
 OCCURRENCE
 -----------------------------
@@ -2266,6 +2894,11 @@ parameters
    percent_prec_max : float. Dataset keyword
        Maxim percentage of wet gates to consider the volume dry
 
+returns
+   new_dataset : dict
+    radar object containing frequency of occurence data with fields corresponding
+    to specified datatypes
+
 OCCURRENCE_PERIOD
 """"""""""""""""""""""""""""""
 description
@@ -2278,6 +2911,11 @@ parameters
        Whether the radar has a Boolean grid or not. Default False
    rmin, rmax : float. Dataset keyword
        minimum and maximum ranges where the computation takes place. If -1 the whole range is considered. Default is -1
+
+returns
+   new_dataset : dict
+    dictionary containing the output fields "occurence" and 
+    "nsamples"
 
 TIMEAVG_STD
 """"""""""""""""""""""""""""""
@@ -2301,6 +2939,11 @@ parameters
        Maxim percentage of wet gates to consider the volume dry
    lin_trans : Boolean. Dataset keyword
        If True the data will be transformed into linear units. Default False
+
+returns
+   new_dataset : dict
+    dictionary containing the average and standard deviation for every field
+    specified as datatype
 
 QVP
 -----------------------------
@@ -2329,6 +2972,14 @@ parameters
    interp_kind : str
        type of interpolation when projecting to vertical grid: 'none', or 'nearest', etc. Default 'none'. 'none' will select from all data points within the regular grid height bin the closest to the center of the bin. 'nearest' will select the closest data point to the center of the height bin regardless if it is within the height bin or not. Data points can be masked values If another type of interpolation is selected masked values will be eliminated from the data points before the interpolation
 
+returns
+   new_dataset : dict
+    dictionary containing the EVP and a keyword stating whether the
+    processing has finished or not.
+Kaltenboeck R., Ryzhkov A. 2016: A freezing rain storm explored with a
+C-band polarimetric weather radar using the QVP methodology.
+Meteorologische Zeitschrift vol. 26 pp 207-222
+
 QVP
 """"""""""""""""""""""""""""""
 description
@@ -2351,6 +3002,14 @@ parameters
        Minimum number of valid points to accept average. Default 30.
    interp_kind : str
        type of interpolation when projecting to vertical grid: 'none', or 'nearest', etc. Default 'none' 'none' will select from all data points within the regular grid height bin the closest to the center of the bin. 'nearest' will select the closest data point to the center of the height bin regardless if it is within the height bin or not. Data points can be masked values If another type of interpolation is selected masked values will be eliminated from the data points before the interpolation
+
+returns
+   new_dataset : dict
+    dictionary containing the QVP and a keyword stating whether the
+    processing has finished or not.
+Ryzhkov A., Zhang P., Reeves H., Kumjian M., Tschallener T., Trömel S.,
+Simmer C. 2016: Quasi-Vertical Profiles: A New Way to Look at Polarimetric
+Radar Data. JTECH vol. 33 pp 551-562
 
 SVP
 """"""""""""""""""""""""""""""
@@ -2381,6 +3040,14 @@ parameters
    interp_kind : str
        type of interpolation when projecting to vertical grid: 'none', or 'nearest', etc. Default 'none' 'none' will select from all data points within the regular grid height bin the closest to the center of the bin. 'nearest' will select the closest data point to the center of the height bin regardless if it is within the height bin or not. Data points can be masked values If another type of interpolation is selected masked values will be eliminated from the data points before the interpolation
 
+returns
+   new_dataset : dict
+    dictionary containing the svp and a keyword stating whether the
+    processing has finished or not.
+Bukovcic P., Zrnic D., Zhang G. 2017: Winter Precipitation Liquid-Ice
+Phase Transitions Revealed with Polarimetric Radar and 2DVD Observations
+in Central Oklahoma. JTECH vol. 56 pp 1345-1363
+
 TIME_HEIGHT
 """"""""""""""""""""""""""""""
 description
@@ -2400,6 +3067,11 @@ parameters
    interp_kind : str
        type of interpolation when projecting to vertical grid: 'none', or 'nearest', etc. Default 'none' 'none' will select from all data points within the regular grid height bin the closest to the center of the bin. 'nearest' will select the closest data point to the center of the height bin regardless if it is within the height bin or not. Data points can be masked values If another type of interpolation is selected masked values will be eliminated from the data points before the interpolation
 
+returns
+   new_dataset : dict
+    dictionary containing the QVP and a keyword stating whether the
+    processing has finished or not.
+
 TIME_ALONG_COORD
 """"""""""""""""""""""""""""""
 description
@@ -2417,6 +3089,11 @@ parameters
    value_start, value_stop : float
        The minimum and maximum value at which the data along a coordinate start and stop
 
+returns
+   new_dataset : dict
+    dictionary containing the data and a keyword stating whether the
+    processing has finished or not.
+
 SPARSE_GRID
 -----------------------------
 ZDR_COLUMN
@@ -2427,6 +3104,10 @@ description
 parameters
    datatype : list of string. Dataset keyword
        The input data types, must contain, "ZDR" or "ZDRc", and, "RhoHV" or "RhoHVc", and, "TEMP" or "H_ISO0"
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "ZDR_col"
 
 SUN_HITS
 -----------------------------
@@ -2486,6 +3167,11 @@ parameters
        the ray angle resolution [deg]. If None that of the key ray_angle_res in attribute instrument_parameters of the radar object will be used. If the key or the attribute are not present the ray angle resolution parameters will not be computed
    AntennaGainH, AntennaGainV : float. Dataset keyword
        the horizontal (vertical) polarization antenna gain [dB]. If None that of the attribute instrument_parameters of the radar object will be used. If the key or the attribute are not present the ray angle resolution parameters will not be computed
+
+returns
+   sun_hits_dict : dict
+    dictionary containing a radar object, a sun_hits dict and a
+    sun_retrieval dictionary
 
 SUNSCAN
 """"""""""""""""""""""""""""""
@@ -2558,6 +3244,11 @@ parameters
    AntennaGainH, AntennaGainV : float. Dataset keyword
        the horizontal (vertical) polarization antenna gain [dB]. If None that of the attribute instrument_parameters of the radar object will be used. If the key or the attribute are not present the ray angle resolution parameters will not be computed
 
+returns
+   sunscan_dataset : dict
+    dictionary containing a radar object, a sun_hits dict, a
+    sun_retrieval dictionary, field_name and timeinfo
+
 TIMEAVG
 -----------------------------
 FLAG_TIME_AVG
@@ -2577,6 +3268,10 @@ parameters
    beamwidth : float. Dataset keyword
        the antenna beamwidth [deg]. If None that of the keys radar_beam_width_h or radar_beam_width_v in attribute instrument_parameters of the radar object will be used. If the key or the attribute are not present the beamwidth will be set to None
 
+returns
+   new_dataset : dict
+    dictionary containing the field "time_avg_flag"
+
 TIME_AVG
 """"""""""""""""""""""""""""""
 description
@@ -2592,6 +3287,11 @@ parameters
    lin_trans: int. Dataset keyword
        If 1 apply linear transformation before averaging
 
+returns
+   new_dataset : dict
+    dictionary containing the statistic computed on the input field, as well as 
+    "nsamples"
+
 WEIGHTED_TIME_AVG
 """"""""""""""""""""""""""""""
 description
@@ -2604,6 +3304,10 @@ parameters
        the period to average [s]. Default 3600.
    start_average : float. Dataset keyword
        when to start the average [s from midnight UTC]. Default 0.
+
+returns
+   new_dataset : dict
+    dictionary containing the statistic computed on the input field
 
 TIME_STATS
 """"""""""""""""""""""""""""""
@@ -2626,6 +3330,12 @@ parameters
    stat: string. Dataset keyword
        Statistic to compute: Can be mean, std, cov, min, max. Default mean
 
+returns
+   new_dataset : dict
+    dictionary containing the statistic computed on the input field, as well as 
+    "nsamples", as well as
+    "sum2" (sum-squared) if stat in (cov, std), as well as
+
 TIME_STATS2
 """"""""""""""""""""""""""""""
 description
@@ -2645,6 +3355,11 @@ parameters
    nan_value : float. Dataset keyword
        The value of the non valid data. Default 0
 
+returns
+   new_dataset : dict
+    dictionary containing the statistic computed on the input field, as well as 
+    "nsamples"
+
 RAIN_ACCU
 """"""""""""""""""""""""""""""
 description
@@ -2661,6 +3376,10 @@ parameters
        If true non valid data will be used
    nan_value : float. Dataset keyword
        The value of the non valid data. Default 0
+
+returns
+   new_dataset : dict
+    dictionary containing the output field "Raccu"
 
 TIMESERIES
 -----------------------------
@@ -2687,6 +3406,10 @@ parameters
    altTol : float. Dataset keyword
        Altitude tolerance to determine which grid point to use [deg]
 
+returns
+   new_dataset : dict
+    dictionary containing the data and metadata at the point of interest
+
 GRID_MULTIPLE_POINTS
 """"""""""""""""""""""""""""""
 description
@@ -2699,6 +3422,10 @@ parameters
        File name containing the points coordinates
    latlonTol : float. Dataset keyword
        latitude-longitude tolerance to determine which grid point to use [deg]
+
+returns
+   new_dataset : dict
+    dictionary containing the data and metadata at the point of interest
 
 MULTIPLE_POINTS
 """"""""""""""""""""""""""""""
@@ -2722,6 +3449,10 @@ parameters
        elevation tolerance to determine which radar elevation to use [deg]
    RngTol : float. Dataset keyword
        range tolerance to determine which radar bin to use [m]
+
+returns
+   new_dataset : dict
+    dictionary containing the data and metadata at the point of interest
 
 POINT_MEASUREMENT
 """"""""""""""""""""""""""""""
@@ -2758,6 +3489,10 @@ parameters
    fill_value : float or None
        If not None masked values are going to be filled by this value
 
+returns
+   new_dataset : dict
+    dictionary containing the data and metadata at the point of interest
+
 TRAJ_ANTENNA_PATTERN
 """"""""""""""""""""""""""""""
 description
@@ -2766,6 +3501,10 @@ description
 parameters
    
        
+
+returns
+   trajectory : Trajectory object
+    Object holding time series
 
 TRAJ_ATPLANE
 """"""""""""""""""""""""""""""
@@ -2784,6 +3523,10 @@ parameters
    timeformat : str or None
        time format of the time series output file
 
+returns
+   trajectory : Trajectory object
+    Object holding time series
+
 TRAJ_LIGHTNING
 """"""""""""""""""""""""""""""
 description
@@ -2799,6 +3542,10 @@ parameters
    az_tol, el_tol : float
        azimuth and elevation tolerance (deg). Samples that have values beyond this tolerance from the limits in azimuth and elevation of the radar will be considered outside the sector. Default 3.
 
+returns
+   trajectory : Trajectory object
+    Object holding time series
+
 TRAJ_ONLY
 -----------------------------
 TRAJ
@@ -2809,3 +3556,7 @@ description
 parameters
    datatype : list of string. Dataset keyword
        The input data types, can be any datatype supported by pyrad and available in the radar data
+
+returns
+   new_dataset : Trajectory object
+    radar object
