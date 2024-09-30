@@ -33,10 +33,16 @@ def dict_to_restructured_text(yaml_data):
             params = value2['parameters']
             for key3, value3 in params.items():
                 rst_output.append('   ' + key3)
-                rst_output.append('       ' + value3)
+                for ele in value3:
+                    rst_output.append('     | ' + ele)
             rst_output.append('')
             rst_output.append('returns')
-            rst_output.append('   ' + value2['returns'] +'\n')
+            returns = value2['returns']
+            for key3, value3 in returns.items():
+                rst_output.append('   ' + key3)
+                for ele in value3:
+                    rst_output.append('     | ' + ele)
+            rst_output.append('')
             # rst_output.append(f"\n\n{value2['parameters']}\n\n")
     return '\n'.join(rst_output)
 
@@ -57,9 +63,7 @@ def parse_string_to_dict(input_string):
             if current_key not in result_dict:
                 result_dict[current_key] = ''
     for k in result_dict:
-        result_dict[k] = result_dict[k].strip().strip('\n')
-        result_dict[k] = " ".join(result_dict[k].split())
-
+        result_dict[k] = result_dict[k].strip().split('\n')
     return result_dict
 
 
@@ -99,9 +103,12 @@ def process_docstring(docstr):
         if start_reading_attr:
             attributes += line + '\n'
 
+    header =  returns.split('\n')[0]
+    returns_dict = {}
+    returns_dict[header] = list(returns.strip().split('\n'))[1:]
     dic = {'description': " ".join(description.split()),
            'parameters': parse_string_to_dict(attributes),
-           'returns': returns.strip()}
+           'returns': returns_dict}
     return dic
 
 
