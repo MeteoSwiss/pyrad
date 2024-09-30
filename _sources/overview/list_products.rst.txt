@@ -202,7 +202,6 @@ PLOT_TXH
 description
    Plots the transmitted signal power (H) for a standard sunscan.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3179>`_
-parameters
 
 PPI_CONTOUR
 """"""""""""""""""""""""""""""
@@ -545,28 +544,42 @@ SAVEALL_VOL
 description
    Same as before but can be used in a mixed GRID/VOL dataset, as there is no ambiguity with SAVEALL for VOL datasets
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4655>`_
-parameters
 
 SAVESTATE
 """"""""""""""""""""""""""""""
 description
    Saves the last processed data in a file. Used for real- time data processing
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4716>`_
-parameters
 
 SAVEPSEUDORHI
 """"""""""""""""""""""""""""""
 description
-   Saves one field of a pseudo-RHI computed from a volume scan in C/F radial or ODIM file User defined paraeters: file_type: str The type of file used to save the data. Can be 'nc' or 'h5'. Default 'nc' physical: Bool If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary compression: str For ODIM file formats, the type of compression. Can be any of the allowed compression types for hdf5 files. Default gzip compression_opts: any The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level).
+   Saves one field of a pseudo-RHI computed from a volume scan in C/F radial or ODIM file
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4871>`_
 parameters
+   file_type : *str*
+        The type of file used to save the data. Can be 'nc' or 'h5'. Default 'nc' 
+   physical : *Bool*
+        If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary 
+   compression : *str*
+        For ODIM file formats, the type of compression. Can be any of the allowed compression types for hdf5 files. Default gzip 
+   compression_opts : *any*
+        The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level).
 
 SAVEPSEUDOPPI
 """"""""""""""""""""""""""""""
 description
-   Saves one field of a pseudo-PPI computed from a volume scan in C/F radial or ODIM file User defined paraeters: file_type: str The type of file used to save the data. Can be 'nc' or 'h5'. Default 'nc' physical: Bool If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary compression: str For ODIM file formats, the type of compression. Can be any of the allowed compression types for hdf5 files. Default gzip compression_opts: any The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level).
+   Saves one field of a pseudo-PPI computed from a volume scan in C/F radial or ODIM file
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4935>`_
 parameters
+   file_type : *str*
+        The type of file used to save the data. Can be 'nc' or 'h5'. Default 'nc' 
+   physical : *Bool*
+        If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary 
+   compression : *str*
+        For ODIM file formats, the type of compression. Can be any of the allowed compression types for hdf5 files. Default gzip 
+   compression_opts : *any*
+        The compression options allowed by the hdf5. Depends on the type of compression. Default 6 (The gzip compression level).
 
 SAVEVOL
 """"""""""""""""""""""""""""""
@@ -612,7 +625,6 @@ SAVEVOL_VOL
 description
    Same as before but can be used in a mixed GRID/VOL dataset, as there is no ambiguity with SAVEVOL for GRID datasets
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4599>`_
-parameters
 
 SAVE_FIXED_ANGLE
 """"""""""""""""""""""""""""""
@@ -797,14 +809,12 @@ WRITE_CENTROIDS
 description
    Writes the final centroids in a .csv file.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L1900>`_
-parameters
 
 SAVE_DATA
 """"""""""""""""""""""""""""""
 description
    Saves the data used to compute the centroids in an .npz file
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L1936>`_
-parameters
 
 COLOCATED_GATES
 -----------------------------
@@ -914,7 +924,6 @@ SAVEALL_GRID
 description
    Same as before but can be used in a mixed GRID/VOL dataset, as there is no ambiguity with SAVEALL for VOL datasets
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1107>`_
-parameters
 
 SAVEVOL
 """"""""""""""""""""""""""""""
@@ -938,7 +947,6 @@ SAVEVOL_GRID
 description
    Same as before but can be used in a mixed GRID/VOL dataset, as there is no ambiguity with SAVEVOL for VOL datasets
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1044>`_
-parameters
 
 STATS
 """"""""""""""""""""""""""""""
@@ -1503,7 +1511,6 @@ SAVE_ML
 description
    Saves an object containing the best estimate of the melting layer retrieved in a C/F radial file
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L1040>`_
-parameters
 
 MONITORING
 -----------------------------
@@ -1577,7 +1584,6 @@ SAVEVOL
 description
    Saves the monitoring data in a C/F radar file. The data field contains histograms of data for each pair of azimuth and elevation angles
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L993>`_
-parameters
 
 VOL_HISTOGRAM
 """"""""""""""""""""""""""""""
@@ -1700,14 +1706,12 @@ PLOT_SUNSCAN
 description
    Plots a constant range radar azimuth-elevation of the sunscan field data
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L811>`_
-parameters
 
 WRITE_SUN_HITS
 """"""""""""""""""""""""""""""
 description
    Writes the information concerning possible sun hits in a csv file
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L421>`_
-parameters
 
 WRITE_SUN_RETRIEVAL
 """"""""""""""""""""""""""""""
@@ -1860,7 +1864,6 @@ WRITE_MULTIPLE_POINTS
 description
    Writes a csv file containing data from multiple points obtained from a radar object
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L215>`_
-parameters
 
 TRAJ_ONLY
 -----------------------------
@@ -1869,7 +1872,6 @@ TRAJ_MAP
 description
    Plots the trajectory on a lat-lon map with the altitude color coded
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_traj_products.py#L173>`_
-parameters
 
 TRAJ_PLOT
 """"""""""""""""""""""""""""""
@@ -1901,7 +1903,6 @@ WRITE_VPR_THEO_PARAMS
 description
    Writes the parameters of the theoretical VPR in a text file
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L1200>`_
-parameters
 
 WRITE_VPR_INFO
 """"""""""""""""""""""""""""""
