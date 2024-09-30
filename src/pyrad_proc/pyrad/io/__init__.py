@@ -177,6 +177,9 @@ Auxiliary functions
     get_fieldname_icon
     get_field_unit
     get_file_list
+    get_file_list_s3
+    get_scan_files_to_merge
+    get_scan_files_to_merge_s3
     get_rad4alp_dir
     get_rad4alp_grid_dir
     get_trtfile_list
@@ -281,7 +284,8 @@ from .io_aux import generate_field_name_str, find_raw_icon_file  # noqa
 from .io_aux import find_hzt_file, _get_datetime, get_rad4alp_prod_fname  # noqa
 from .io_aux import get_rad4alp_dir, get_rad4alp_grid_dir, find_iso0_file  # noqa
 from .io_aux import find_iso0_grib_file, find_date_in_file_name  # noqa
-from .io_aux import get_datatype_skyecho  # noqa
+from .io_aux import get_datatype_skyecho, get_file_list_s3  # noqa
+from .io_aux import get_scan_files_to_merge, get_scan_files_to_merge_s3  # noqa
 
 from .trajectory import Trajectory  # noqa
 

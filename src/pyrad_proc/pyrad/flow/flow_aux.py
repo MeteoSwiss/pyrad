@@ -62,6 +62,7 @@ from ..io.write_data import write_to_s3
 from ..io.io_aux import get_datetime, get_file_list, get_scan_list
 from ..io.io_aux import get_dataset_fields, get_datatype_fields
 from ..io.io_aux import get_new_rainbow_file_name, get_fieldname_pyart
+from ..io.io_aux import get_file_list_s3
 from ..io.trajectory import Trajectory
 from ..io.read_data_other import read_last_state, read_proc_periods
 
@@ -1067,12 +1068,12 @@ def _create_cfg_dict(cfgfile):
                 datatypeID_dict[0] = cfg[key]
             else:
                 datatypeID_dict[int(idx) - 1] = cfg[key]
-        
+
     # Assign empty dict to radars where no DataTypeInFiles was assigned
     for i in range(cfg["NumRadars"]):
         if i not in datatypeID_dict:
             datatypeID_dict[i] = {}
-            
+
     cfg["DataTypeIDInFiles"] = datatypeID_dict
 
     if "MasterScanTimeTol" not in cfg:
@@ -1294,6 +1295,32 @@ def _create_datacfg_dict(cfg):
     datacfg.update({"BinFileParams": cfg["BinFileParams"]})
     datacfg.update({"MFScale": cfg["MFScale"]})
     datacfg.update({"DataTypeIDInFiles": cfg["DataTypeIDInFiles"]})
+
+    #s3 buckets
+    if "bucket" in cfg:
+        try:
+            datacfg["s3_key"] = os.environ["S3_IN_KEY"]
+            datacfg["s3_secret_key"] = os.environ["S3_IN_SECRET"]
+        except KeyError:
+            warn(
+                'Define environment variables S3_IN_KEY and S3_IN_SECRET'
+                ' to get input data from S3 buckets.')
+
+        if "s3path" in cfg:
+            datacfg.update({"s3path": cfg["s3path"]})
+        else:
+            warn('Unable to read data from s3 bucket. Define s3path')
+        if "s3_url" in cfg:
+            datacfg.update({"s3_url": cfg["s3_url"]})
+        else:
+            warn('Unable to read data from s3 bucket. Define s3_url')
+
+        if "rm_s3_file" in cfg:
+            datacfg.update({"rm_s3_file": cfg["rm_s3_file"]})
+
+        if ('s3path' in datacfg and 's3_url' in datacfg
+                and 's3_key' in datacfg and 's3_secret_key' in datacfg):
+            datacfg.update({"bucket": cfg["bucket"]})
 
     # Modify size of radar or radar spectra object
     datacfg.update({"elmin": cfg.get("elmin", None)})
@@ -1731,9 +1758,14 @@ def _get_masterfile_list(datatypesdescr, starttimes, endtimes, datacfg, scan_lis
         )
         return [], None, None
 
-    masterfilelist = get_file_list(
-        masterdatatypedescr, starttimes, endtimes, datacfg, scan=masterscan
-    )
+    if 'bucket' in datacfg:
+        masterfilelist = get_file_list_s3(
+            masterdatatypedescr, starttimes, endtimes, datacfg,
+            scan=masterscan)
+    else:
+        masterfilelist = get_file_list(
+            masterdatatypedescr, starttimes, endtimes, datacfg,
+            scan=masterscan)
 
     return masterfilelist, masterdatatypedescr, masterscan
 

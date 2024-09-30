@@ -22,7 +22,10 @@ Auxiliary functions for reading/writing files
     get_fieldname_icon
     get_field_unit
     get_field_name
+    get_scan_files_to_merge
+    get_scan_files_to_merge_s3
     get_file_list
+    get_file_list_s3
     get_rad4alp_dir
     get_rad4alp_grid_dir
     get_trtfile_list
@@ -48,6 +51,7 @@ import os
 import glob
 import re
 import datetime
+import fnmatch
 
 from warnings import warn
 from copy import deepcopy
@@ -62,6 +66,14 @@ except ImportError:
     warn("Could not get the get_sweep_time_coverage from pyart")
     warn("You are likely using ARM Py-ART and not the MCH fork")
     warn("You will not be able to read skyecho data")
+
+try:
+    import boto3
+
+    _BOTO3_AVAILABLE = True
+except ImportError:
+    warn("boto3 is not installed, data cannot be retrieved from S3 buckets!")
+    _BOTO3_AVAILABLE = False
 
 
 def get_rad4alp_prod_fname(datatype):
@@ -2435,9 +2447,215 @@ def get_fieldname_icon(field_name):
     return icon_name
 
 
+def get_scan_files_to_merge(basepath, scan_list, radar_name, radar_res,
+                            voltime, dataset_list, path_convention='ODIM',
+                            master_scan_time_tol=0, scan_period=0):
+    """
+    gets the list of files to merge into a single radar object
+
+    Parameters
+    ----------
+    basepath : str
+        base path of radar data
+    scan_list : list
+        list of scans
+    radar_name : str
+        radar name
+    radar_res : str
+        radar resolution type
+    voltime: datetime object
+        reference time of the scan
+    datatype_list : list
+        lists of data types to get
+    dataset_list : list
+        list of datasets. Used to get path
+    path_convention : str
+        The path convention to use. Can be LTE, MCH, ODIM, RADARV, RT
+    master_scan_time_tol : int
+        time tolerance with respect to the master scan time. Can be
+        0 (No tolerance), 1 (time between master scan time and master scan
+        time plus scan period), -1 (time between master scan time and master
+        scan time minus scan period
+    scan_period : int
+        scan period (minutes)
+
+    Returns
+    -------
+    filelist : list of strings
+        list of files to merge. If it could not find them
+        returns an empty list
+    """
+    fname_list = []
+    dayinfo = voltime.strftime("%y%j")
+    timeinfo = voltime.strftime("%H%M")
+    for scan in scan_list:
+        file_id = 'M'
+        if radar_name is not None and radar_res is not None:
+            basename = f'{file_id}{radar_res}{radar_name}{dayinfo}'
+        if path_convention == "LTE":
+            yy = dayinfo[0:2]
+            dy = dayinfo[2:]
+            subf = f'{file_id}{radar_res}{radar_name}{yy}hdf{dy}'
+            datapath = f'{basepath}{subf}/'
+            pattern = f'{datapath}{basename}{timeinfo}*{scan}*'
+            filename = glob.glob(pattern)
+            if not filename:
+                file_id = 'P'
+                basename = f'{file_id}{radar_res}{radar_name}{dayinfo}'
+                subf = f'{file_id}{radar_res}{radar_name}{yy}hdf{dy}'
+                datapath = f'{basepath}{subf}/'
+                pattern = f'{datapath}{basename}{timeinfo}*{scan}*'
+                filename = glob.glob(pattern)
+        elif path_convention == "MCH":
+            datapath = f'{basepath}{dayinfo}/{basename}/'
+            pattern = f'{datapath}{basename}{timeinfo}*{scan}*'
+            filename = glob.glob(pattern)
+            if not filename:
+                file_id = 'P'
+                basename = f'{file_id}{radar_res}{radar_name}{dayinfo}'
+                datapath = f'{basepath}{dayinfo}/{basename}/'
+                pattern = f'{datapath}{basename}{timeinfo}*{scan}*'
+                filename = glob.glob(pattern)
+        elif path_convention == "ODIM":
+            fpath_strf = dataset_list[0][
+                dataset_list[0].find("D") + 2 : dataset_list[0].find("F") - 2]
+            fdate_strf = dataset_list[0][dataset_list[0].find("F") + 2 : -1]
+            datapath = f'{basepath}{voltime.strftime(fpath_strf)}/'
+            pattern = f'{datapath}*{scan}*'
+            filenames = glob.glob(pattern)
+            filename = []
+            for filename_aux in filenames:
+                fdatetime = find_date_in_file_name(
+                    filename_aux, date_format=fdate_strf)
+                if fdatetime == voltime:
+                    filename = [filename_aux]
+        elif path_convention == "RADARV":
+            datapath = f'{basepath}{scan}'
+            basename = '*'
+            fpath_strf = dataset_list[0][
+                dataset_list[0].find("D") + 2 : dataset_list[0].find("F") - 2]
+            fdate_strf = dataset_list[0][dataset_list[0].find("F") + 2 : -1]
+            pattern = f'{basepath}{scan}{voltime.strftime(fpath_strf)}/'
+            filenames = glob.glob(pattern)
+            filename = []
+            for filename_aux in filenames:
+                fdatetime = find_date_in_file_name(
+                    filename_aux, date_format=fdate_strf)
+                if master_scan_time_tol == 0:
+                    if fdatetime == voltime:
+                        filename = [filename_aux]
+                        break
+                elif master_scan_time_tol == 1:
+                    if (voltime
+                        <= fdatetime
+                        < voltime + datetime.timedelta(minutes=scan_period)):
+                        filename = [filename_aux]
+                        break
+                else:
+                    if (voltime - datetime.timedelta(minutes=scan_period)
+                        < fdatetime
+                        <= voltime):
+                        filename = [filename_aux]
+                        break
+        else:
+            datapath = f'{basepath}{file_id}{radar_res}{radar_name}/'
+            pattern = f'{datapath}{basename}{timeinfo}*{scan}*'
+            filename = glob.glob(pattern)
+            if not filename:
+                file_id = 'P'
+                basename = f'{file_id}{radar_res}{radar_name}{dayinfo}'
+                datapath = f'{basepath}{file_id}{radar_res}{radar_name}/'
+                pattern = f'{datapath}{basename}{timeinfo}*{scan}*'
+                filename = glob.glob(pattern)
+
+        if not filename:
+            warn(f"No file found in {pattern}")
+            continue
+        fname_list.append(filename[0])
+
+    return fname_list
+
+
+def get_scan_files_to_merge_s3(basepath, scan_list, radar_name, radar_res,
+                               voltime, dataset_list, cfg,
+                               path_convention='ODIM', master_scan_time_tol=0,
+                               scan_period=0):
+    """
+    gets the list of files to merge into a single radar object
+
+    Parameters
+    ----------
+    basepath : str
+        base path of radar data
+    scan_list : list
+        list of scans
+    radar_name : str
+        radar name
+    radar_res : str
+        radar resolution type
+    voltime: datetime object
+        reference time of the scan
+    datatype_list : list
+        lists of data types to get
+    dataset_list : list
+        list of datasets. Used to get path
+    cfg : dict
+        configuration dictionary
+    path_convention : str
+        The path convention to use. Can be LTE, MCH, ODIM, RADARV, RT
+    master_scan_time_tol : int
+        time tolerance with respect to the master scan time. Can be
+        0 (No tolerance), 1 (time between master scan time and master scan
+        time plus scan period), -1 (time between master scan time and master
+        scan time minus scan period
+    scan_period : int
+        scan period (minutes)
+
+    Returns
+    -------
+    filelist : list of strings
+        list of files to merge. If it could not find them
+        returns an empty list
+    """
+    fname_list = []
+    if not _BOTO3_AVAILABLE:
+        warn('boto3 not installed')
+        return filelist
+
+    s3_client = boto3.client(
+        's3', endpoint_url=cfg['s3_url'], aws_access_key_id=cfg['s3_key'],
+        aws_secret_access_key=cfg['s3_secret_key'], verify=False)
+    response = s3_client.list_objects_v2(Bucket=cfg['bucket'])
+
+    for scan in scan_list:
+        if path_convention == "ODIM":
+            fpath_strf = dataset_list[0][
+                dataset_list[0].find("D") + 2 : dataset_list[0].find("F") - 2]
+            fdate_strf = dataset_list[0][dataset_list[0].find("F") + 2 : -1]
+            daydir = voltime.strftime(fpath_strf)
+            if daydir == '':
+                pattern = f'{cfg["s3path"]}*{scan}*'
+            else:
+                pattern = f'{cfg["s3path"]}{daydir}/*{scan}*'
+
+            found = False
+            for content in response['Contents']:
+                if fnmatch.fnmatch(content['Key'], pattern):
+                    fdatetime = find_date_in_file_name(
+                        content['Key'], date_format=fdate_strf)
+                    if fdatetime == voltime:
+                        fname_list.append(content['Key'])
+                        found = True
+                        break
+            if not found:
+                warn(f'No file found in {pattern}')
+
+    return fname_list
+
+
 def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
     """
-    gets the list of files with a time period
+    gets the list of files within a time period
 
     Parameters
     ----------
@@ -2834,6 +3052,115 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                         str(starttime), str(endtime)
                     )
                 )
+    return sorted(filelist)
+
+
+def get_file_list_s3(datadescriptor, starttimes, endtimes, cfg, scan=None):
+    """
+    gets the list of files within a time period from an s3 bucket
+
+    Parameters
+    ----------
+    datadescriptor : str
+        radar field type. Format : [radar file type]:[datatype]
+    startimes : array of datetime objects
+        start of time periods
+    endtimes : array of datetime object
+        end of time periods
+    cfg: dictionary of dictionaries
+        configuration info to figure out where the data is
+    scan : str
+        scan name
+
+    Returns
+    -------
+    filelist : list of strings
+        list of files within the time period. If it could not find them
+        returns an empty list
+    """
+    filelist = []
+    if not _BOTO3_AVAILABLE:
+        warn('boto3 not installed')
+        return filelist
+    radarnr, datagroup, datatype, dataset, product = get_datatype_fields(datadescriptor)
+
+    ind_rad = int(radarnr[5:8]) - 1
+    if datatype in ("Nh", "Nv"):
+        datatype = "dBZ"
+
+    s3_client = boto3.client(
+        's3',
+        endpoint_url=cfg['s3_url'],
+        aws_access_key_id=cfg['s3_key'],
+        aws_secret_access_key=cfg['s3_secret_key'],
+        verify=False)
+    response = s3_client.list_objects_v2(Bucket=cfg['bucket'])
+
+    for starttime, endtime in zip(starttimes, endtimes):
+        startdate = starttime.replace(hour=0, minute=0, second=0, microsecond=0)
+        enddate = endtime.replace(hour=0, minute=0, second=0, microsecond=0)
+        ndays = int((enddate - startdate).days) + 1
+        t_filelist = []
+        pattern = None
+        for i in range(ndays):
+            if datagroup in (
+                "ODIM",
+                "ODIMBIRDS",
+                "CFRADIAL",
+                "CFRADIAL2",
+                "CF1",
+                "NEXRADII",
+                "GAMIC",
+                "ODIMGRID",
+                "KNMIH5GRID",
+            ):
+                if scan is None:
+                    warn("Unknown scan name")
+                    return []
+                if cfg["path_convention"][ind_rad] == "ODIM":
+                    try:
+                        fpath_strf = dataset[
+                            dataset.find("D") + 2 : dataset.find("F") - 2
+                        ]
+                    except AttributeError:
+                        warn(
+                            "Unknown ODIM directory and/or date "
+                            + "convention, check product config file"
+                        )
+                    daydir = (starttime + datetime.timedelta(days=i)).strftime(
+                        fpath_strf
+                    )
+                    if daydir == '':
+                        pattern = f'{cfg["s3path"]}*{scan}*'
+                    else:
+                        pattern = f'{cfg["s3path"]}{daydir}/*{scan}*'
+
+                    dayfilelist = []
+                    for content in response['Contents']:
+                        if fnmatch.fnmatch(content['Key'], pattern):
+                            dayfilelist.append(content['Key'])
+
+                for filename in dayfilelist:
+                    t_filelist.append(filename)
+
+        for filename in t_filelist:
+            filenamestr = str(filename)
+            fdatetime = get_datetime(filenamestr, datadescriptor)
+            if fdatetime is not None:
+                if starttime <= fdatetime <= endtime:
+                    if filenamestr not in filelist:
+                        filelist.append(filenamestr)
+
+        if not filelist:
+            if pattern is not None:
+                warn(
+                    "WARNING: No file with pattern {:s} could be found between ".format(
+                        pattern
+                    )
+                    + "starttime {:s} and endtime {:s}".format(
+                        str(starttime), str(endtime)
+                    )
+                 )
     return sorted(filelist)
 
 
