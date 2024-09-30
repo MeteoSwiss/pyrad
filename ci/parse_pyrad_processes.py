@@ -29,12 +29,13 @@ def dict_to_restructured_text(yaml_data):
             rst_output.append('""""""""""""""""""""""""""""""')
             rst_output.append('description')
             rst_output.append('   ' + value2['description'] + f'\n `[Source] <{value2["link"]}>`_' )
-            rst_output.append('parameters')
-            params = value2['parameters']
-            for key3, value3 in params.items():
-                rst_output.append('   ' + key3)
-                for ele in value3:
-                    rst_output.append('     | ' + ele)
+            if len(value2['parameters']):
+                rst_output.append('parameters')
+                params = value2['parameters']
+                for key3, value3 in params.items():
+                    rst_output.append('   ' + key3)
+                    for ele in value3:
+                        rst_output.append('     | ' + ele)
             rst_output.append('')
             rst_output.append('returns')
             returns = value2['returns']
