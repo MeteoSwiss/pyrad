@@ -47,6 +47,8 @@ def generate_monitoring_products(dataset, prdcfg):
             in the Y-axis. The reference values and the user defined quantiles
             are also plot on the same figure
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 anglenr: int
                     The elevation angle number to plot
                 quantiles: list of floats
@@ -59,6 +61,8 @@ def generate_monitoring_products(dataset, prdcfg):
         'CUMUL_VOL_TS': Plots time series of the average of instantaneous
             quantiles stored in a csv file.
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 quantiles: list of 3 floats
                     the quantiles to compute. Default 25., 50., 75.
                 ref_value: float
@@ -106,6 +110,8 @@ def generate_monitoring_products(dataset, prdcfg):
         'PPI_HISTOGRAM': Plots a histogram of data at a particular
             elevation angle.
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 anglenr: int
                     The elevation angle number to plot
         'SAVEVOL': Saves the monitoring data in a C/F radar file. The data
@@ -114,12 +120,16 @@ def generate_monitoring_products(dataset, prdcfg):
         'VOL_HISTOGRAM': Plots a histogram of data collected from all the
             radar volume.
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 write_data: bool
                     If true the resultant histogram is also saved in a csv
                     file. Default True.
         'VOL_TS': Computes statistics of the gathered data and writes them in
             a csv file and plots a time series of those statistics.
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 quantiles: list of 3 floats
                     the quantiles to compute. Default 25., 50., 75.
                 ref_value: float

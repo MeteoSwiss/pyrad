@@ -72,6 +72,8 @@ def generate_vol_products(dataset, prdcfg):
 
         'CDF': plots and writes the cumulative density function of data
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 quantiles: list of floats
                     The quantiles to compute in percent. Default None
                 sector: dict
@@ -103,6 +105,8 @@ def generate_vol_products(dataset, prdcfg):
                     Default empty list.
         'BSCOPE_IMAGE': Creates a B-scope image (azimuth, range)
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 anglenr : int
                     The elevation angle number to use
                 ray_dim : str
@@ -116,6 +120,8 @@ def generate_vol_products(dataset, prdcfg):
                     config file
         'CAPPI_IMAGE': Creates a CAPPI image
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 altitude: flt
                     CAPPI altitude [m MSL]
                 wfunc: str
@@ -126,6 +132,8 @@ def generate_vol_products(dataset, prdcfg):
         'CROSS_SECTION' : Plots a cross-section of polar data through
             arbitrary coordinates
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 coord1, coord2, ..., coordN: dict
                     The two lat-lon coordinates marking the limits. They have
                     the keywords 'lat' and 'lon' [degree].
@@ -145,6 +153,8 @@ def generate_vol_products(dataset, prdcfg):
                     must be in the dempath specified in the main config file
         'FIELD_COVERAGE': Gets the field coverage over a certain sector
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 threshold: float or None
                     Minimum value to consider the data valid. Default None
                 nvalid_min: float
@@ -168,6 +178,8 @@ def generate_vol_products(dataset, prdcfg):
                     a fixed grid
         'FIXED_RNG_IMAGE': Plots a fixed range image
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 AngTol : float
                     The tolerance between the nominal angles and the actual
                     radar angles. Default 1.
@@ -180,6 +192,8 @@ def generate_vol_products(dataset, prdcfg):
         'FIXED_RNG_SPAN_IMAGE': Plots a user-defined statistic over a fixed
             range image
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 AngTol : float
                     The tolerance between the nominal angles and the actual
                     radar angles. Default 1.
@@ -189,8 +203,10 @@ def generate_vol_products(dataset, prdcfg):
                 stat : str
                     The statistic to compute. Can be 'min', 'max', 'mean',
                     'mode'. Default 'max'
-        'HISTOGRAM': Computes a histogram of the radar volum data
+        'HISTOGRAM': Computes a histogram of the radar volume data
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 step: float or None
                     the data quantization step. If none it will be obtained
                     from the Py-ART configuration file
@@ -199,6 +215,8 @@ def generate_vol_products(dataset, prdcfg):
         'PLOT_ALONG_COORD': Plots the radar volume data along a particular
             coordinate
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 colors: list of str or None
                     The colors of each ploted line
                 data_on_y : bool
@@ -232,6 +250,8 @@ def generate_vol_products(dataset, prdcfg):
             sunscan.
         'PPI_CONTOUR': Plots a PPI countour plot
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 contour_values: list of floats or None
                     The list of contour values to plot. If None the contour
                     values are going to be obtained from the Py-ART config
@@ -243,6 +263,8 @@ def generate_vol_products(dataset, prdcfg):
         'PPI_CONTOUR_OVERPLOT': Plots a PPI of a field with another field
             overplotted as a contour plot.
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 contour_values: list of floats or None
                     The list of contour values to plot. If None the contour
                     values are going to be obtained from the Py-ART config
@@ -254,6 +276,8 @@ def generate_vol_products(dataset, prdcfg):
         'PPI_IMAGE': Plots a PPI image. It can also plot the histogram and the
             quantiles of the data in the PPI.
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 anglenr: float
                     The elevation angle number
                 plot_type: str
@@ -278,18 +302,27 @@ def generate_vol_products(dataset, prdcfg):
             type of maps used are defined in the variables 'mapres' and 'maps'
             in 'ppiMapImageConfig' in the loc config file.
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 anglenr: float
                     The elevation angle number
+                vmin, vmax : float or None
+                    Min and Max values of the color scale. If None the values
+                    are taken from the Py-ART config file
         'PPIMAP_ROI_OVERPLOT': Over plots a polygon delimiting a region of
             interest on a PPI map. The map resolution and the
             type of maps used are defined in the variables 'mapres' and 'maps'
             in 'ppiMapImageConfig' in the loc config file.
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 anglenr: float
                     The elevation angle number
         'PROFILE_STATS': Computes and plots a vertical profile statistics.
             The statistics are saved in a csv file
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 heightResolution: float
                     The height resolution of the profile [m]. Default 100.
                 heightMin, heightMax: float or None
@@ -318,6 +351,8 @@ def generate_vol_products(dataset, prdcfg):
                     config file
         'PSEUDOPPI_CONTOUR': Plots a pseudo-PPI countour plot
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 contour_values: list of floats or None
                     The list of contour values to plot. If None the contour
                     values are going to be obtained from the Py-ART config
@@ -332,6 +367,8 @@ def generate_vol_products(dataset, prdcfg):
         'PSEUDOPPI_CONTOUR_OVERPLOT': Plots a pseudo-PPI of a field with
             another field over-plotted as a contour plot
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 contour_values: list of floats or None
                     The list of contour values to plot. If None the contour
                     values are going to be obtained from the Py-ART config
@@ -346,6 +383,8 @@ def generate_vol_products(dataset, prdcfg):
         'PSEUDOPPI_IMAGE': Plots a pseudo-PPI image. It can also plot the
             histogram and the quantiles of the data in the pseudo-PPI.
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 angle: float
                     The elevation angle of the pseudo-PPI
                 EleTol: float
@@ -369,13 +408,20 @@ def generate_vol_products(dataset, prdcfg):
             resolution and the type of maps used are defined in the variables
             'mapres' and 'maps' in 'ppiMapImageConfig' in the loc config file.
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 angle: float
                     The elevation angle of the pseudo-PPI
                 EleTol: float
                     The tolerance between the actual radar elevation angle and
                     the nominal pseudo-PPI elevation angle.
+                vmin, vmax : float or None
+                    Min and Max values of the color scale. If None the values
+                    are taken from the Py-ART config file
         'PSEUDORHI_CONTOUR': Plots a pseudo-RHI countour plot
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 contour_values: list of floats or None
                     The list of contour values to plot. If None the contour
                     values are going to be obtained from the Py-ART config
@@ -390,6 +436,8 @@ def generate_vol_products(dataset, prdcfg):
         'PSEUDORHI_CONTOUR_OVERPLOT': Plots a pseudo-RHI of a field with
             another field over-plotted as a contour plot
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 contour_values: list of floats or None
                     The list of contour values to plot. If None the contour
                     values are going to be obtained from the Py-ART config
@@ -404,6 +452,8 @@ def generate_vol_products(dataset, prdcfg):
         'PSEUDORHI_IMAGE': Plots a pseudo-RHI image. It can also plot the
             histogram and the quantiles of the data in the pseudo-RHI.
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 angle: float
                     The azimuth angle at which to compute the RPI
                 AziTol: float
@@ -425,6 +475,8 @@ def generate_vol_products(dataset, prdcfg):
                     are taken from the Py-ART config file
         'QUANTILES': Plots and writes the quantiles of a radar volume
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 quantiles: list of floats or None
                     the list of quantiles to compute. If None a default list
                     of quantiles will be computed.
@@ -439,6 +491,8 @@ def generate_vol_products(dataset, prdcfg):
                     config file
         'RHI_CONTOUR': Plots an RHI countour plot
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 contour_values: list of floats or None
                     The list of contour values to plot. If None the contour
                     values are going to be obtained from the Py-ART config
@@ -450,6 +504,8 @@ def generate_vol_products(dataset, prdcfg):
         'RHI_CONTOUR_OVERPLOT': Plots an RHI of a field with another field
             over-plotted as a contour plot
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 contour_values: list of floats or None
                     The list of contour values to plot. If None the contour
                     values are going to be obtained from the Py-ART config
@@ -461,6 +517,8 @@ def generate_vol_products(dataset, prdcfg):
         'RHI_IMAGE': Plots an RHI image. It can also plot the
             histogram and the quantiles of the data in the RHI.
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 anglenr: int
                     The azimuth angle number
                 plot_type: str
@@ -482,6 +540,8 @@ def generate_vol_products(dataset, prdcfg):
             an RHI.
             The statistics are saved in a csv file
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 rangeStart, rangeStop: float
                     The range start and stop of the data to extract from the
                     RHI to compute the statistics [m]. Default 0., 25000.
@@ -511,6 +571,15 @@ def generate_vol_products(dataset, prdcfg):
                     If fixed_span is set, the minimum and maximum values of
                     the X-axis. If None, they are obtained from the Py-ART
                     config file
+        'SAMPLES_HISTOGRAM': Computes a histogram of the number of samples used
+            User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
+                step: float or None
+                    the data quantization step. If none it will be obtained
+                    from the Py-ART configuration file
+                write_data: Bool
+                    If true the histogram data is written in a csv file 
         'SAVEALL': Saves radar volume data including all or a list of user-
             defined fields in a C/F radial or ODIM file
             User defined parameters:
@@ -589,10 +658,14 @@ def generate_vol_products(dataset, prdcfg):
                     level).
         'SAVEVOL_CSV': Saves one field of a radar volume data in a CSV file
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 ignore_masked: bool
                     If True masked values will not be saved. Default False
         'SAVEVOL_KML': Saves one field of a radar volume data in a KML file
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 ignore_masked: bool
                     If True masked values will not be saved. Default False
                 azi_res : float or None
@@ -601,8 +674,10 @@ def generate_vol_products(dataset, prdcfg):
                     resolution
         'SAVEVOL_VOL' : Same as before but can be used in a mixed GRID/VOL
             dataset, as there is no ambiguity with SAVEVOL for GRID datasets
-        'SAVE_FIXED_ANGLE': Saves the position of the first fix angle in a
-            csv file
+        'SAVE_FIXED_ANGLE': Saves the position of the first fix angle in a csv file
+            User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
         'SELFCONSISTENCY': Plots a ZDR versus KDP/ZH histogram of data.
             User defined parameters:
                 retrieve_relation : bool
@@ -624,6 +699,8 @@ def generate_vol_products(dataset, prdcfg):
                     number of gates at each bin. Default True
         'TIME_RANGE': Plots a time-range/azimuth/elevation plot
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 anglenr: float
                     The number of the fixed angle to plot
                 vmin, vmax: float or None
@@ -634,6 +711,8 @@ def generate_vol_products(dataset, prdcfg):
             Meant primarily for writing and plotting the results of the
             SELFCONSISTENCY2 algorithm
             User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
                 ref_value: float
                     The reference value. Default 0
                 sort_by_date: Bool
@@ -699,7 +778,21 @@ def generate_vol_products(dataset, prdcfg):
                     If fixed_span is set, the minimum and maximum values of
                     the X-axis. If None, they are obtained from the span of
                     the U component defined in the Py-ART config file
-
+        'WRITE_MEAN': write statistics about the average of a field within a certain
+            sector (mean, median, stddev, nsamples, nvalid)
+            User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
+                ele_min, ele_max: float
+                    Min and max elevation angle defining the sector [deg].
+                    Default 0. and 90.
+                azi_min, azi_max: float
+                    Min and max azimuth angle defining the sector [deg].
+                    Default 0. and 360.
+                rmin, azi_max: rmax
+                    Min and max range defining the sector [km].
+                    Default 0. and 50.
+                
     Parameters
     ----------
     dataset : dict

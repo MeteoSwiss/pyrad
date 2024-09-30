@@ -42,37 +42,50 @@ def generate_intercomp_products(dataset, prdcfg):
             intercomparison in a file and plots the time series of the
             statistics.
             User defined parameters:
-                'add_date_in_fname': Bool
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
+                add_date_in_fname: Bool
                     If true adds the year in the csv file containing the
                     statistics. Default False
-                'sort_by_date': Bool
+                sort_by_date: Bool
                     If true sorts the statistics by date when reading the
                     csv file containing the statistics. Default False
-                'rewrite': Bool
+                step: float
+                    The quantization step of the data. If none it will be
+                    computed using the Py-ART config file. Default None
+                rewrite: Bool
                     If true rewrites the csv file containing the statistics.
                     Default False
-                'npoints_min': int
+                npoints_min: int
                     The minimum number of points to consider the statistics
                     valid and therefore use the data point in the plotting.
                     Default 0
-                'corr_min': float
+                corr_min: float
                     The minimum correlation to consider the statistics
                     valid and therefore use the data point in the plotting.
                     Default 0.
         'PLOT_SCATTER_INTERCOMP': Plots a density plot with the points of
             radar 1 versus the points of radar 2
             User defined parameters:
-                'step': float
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
+                step: float
                     The quantization step of the data. If none it will be
                     computed using the Py-ART config file. Default None
-                'scatter_type': str
+                scatter_type: str
                     Type of scatter plot. Can be a plot for each radar volume
-                    ('instant') or at the end of the processing period
-                    ('cumulative'). Default is 'cumulative'
+                    (instant) or at the end of the processing period
+                    (cumulative). Default is cumulative
         'WRITE_INTERCOMP': Writes the instantaneously intercompared data
             (gate positions, values, etc.) in a csv file.
+            User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
         'WRITE_INTERCOMP_TIME_AVG': Writes the time-averaged intercompared
             data (gate positions, values, etc.) in a csv file.
+            User defined parameters:
+                voltype: name of the pyrad variable to use, it must be available
+                    in the dataset
 
     Parameters
     ----------
@@ -411,7 +424,7 @@ def generate_intercomp_products(dataset, prdcfg):
 def generate_colocated_gates_products(dataset, prdcfg):
     """
     Generates colocated gates products. Accepted product types:
-        'WRITE_COLOCATED_GATES': Writes the position of the co-located gates
+        WRITE_COLOCATED_GATES: Writes the position of the co-located gates
             in a csv file
         All the products of the 'VOL' dataset group
 
