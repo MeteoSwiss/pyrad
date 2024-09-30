@@ -450,6 +450,8 @@ document.write(`
 <span class="sd">            in the Y-axis. The reference values and the user defined quantiles</span>
 <span class="sd">            are also plot on the same figure</span>
 <span class="sd">            User defined parameters:</span>
+<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
+<span class="sd">                    in the dataset</span>
 <span class="sd">                anglenr: int</span>
 <span class="sd">                    The elevation angle number to plot</span>
 <span class="sd">                quantiles: list of floats</span>
@@ -462,6 +464,8 @@ document.write(`
 <span class="sd">        &#39;CUMUL_VOL_TS&#39;: Plots time series of the average of instantaneous</span>
 <span class="sd">            quantiles stored in a csv file.</span>
 <span class="sd">            User defined parameters:</span>
+<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
+<span class="sd">                    in the dataset</span>
 <span class="sd">                quantiles: list of 3 floats</span>
 <span class="sd">                    the quantiles to compute. Default 25., 50., 75.</span>
 <span class="sd">                ref_value: float</span>
@@ -509,6 +513,8 @@ document.write(`
 <span class="sd">        &#39;PPI_HISTOGRAM&#39;: Plots a histogram of data at a particular</span>
 <span class="sd">            elevation angle.</span>
 <span class="sd">            User defined parameters:</span>
+<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
+<span class="sd">                    in the dataset</span>
 <span class="sd">                anglenr: int</span>
 <span class="sd">                    The elevation angle number to plot</span>
 <span class="sd">        &#39;SAVEVOL&#39;: Saves the monitoring data in a C/F radar file. The data</span>
@@ -517,12 +523,16 @@ document.write(`
 <span class="sd">        &#39;VOL_HISTOGRAM&#39;: Plots a histogram of data collected from all the</span>
 <span class="sd">            radar volume.</span>
 <span class="sd">            User defined parameters:</span>
+<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
+<span class="sd">                    in the dataset</span>
 <span class="sd">                write_data: bool</span>
 <span class="sd">                    If true the resultant histogram is also saved in a csv</span>
 <span class="sd">                    file. Default True.</span>
 <span class="sd">        &#39;VOL_TS&#39;: Computes statistics of the gathered data and writes them in</span>
 <span class="sd">            a csv file and plots a time series of those statistics.</span>
 <span class="sd">            User defined parameters:</span>
+<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
+<span class="sd">                    in the dataset</span>
 <span class="sd">                quantiles: list of 3 floats</span>
 <span class="sd">                    the quantiles to compute. Default 25., 50., 75.</span>
 <span class="sd">                ref_value: float</span>

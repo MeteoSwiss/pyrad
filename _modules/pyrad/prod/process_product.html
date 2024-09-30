@@ -469,6 +469,8 @@ document.write(`
 <span class="sd">            with clutter that has a frequency of occurrence above a certain</span>
 <span class="sd">            threshold.</span>
 <span class="sd">            User defined parameters:</span>
+<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
+<span class="sd">                    in the dataset</span>
 <span class="sd">                quant_min: float</span>
 <span class="sd">                    Minimum frequency of occurrence in percentage to keep the</span>
 <span class="sd">                    gate as valid. Default 95.</span>
@@ -777,11 +779,19 @@ document.write(`
 <span class="sd">        &#39;PLOT_SUN_HITS&#39;: Plots in a sun-radar azimuth difference-sun-radar</span>
 <span class="sd">            elevation difference grid the values of all sun hits obtained</span>
 <span class="sd">            during the processing period</span>
+<span class="sd">            User defined parameters:</span>
+<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
+<span class="sd">                    in the dataset</span>
 <span class="sd">        &#39;PLOT_SUN_RETRIEVAL&#39;: Plots in a sun-radar azimuth difference-sun-</span>
 <span class="sd">            radar elevation difference grid the retrieved sun pattern</span>
+<span class="sd">            User defined parameters:</span>
+<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
+<span class="sd">                    in the dataset</span>
 <span class="sd">        &#39;PLOT_SUN_RETRIEVAL_TS&#39;: Plots time series of the retrieved sun</span>
 <span class="sd">            pattern parameters</span>
 <span class="sd">            User defined parameters:</span>
+<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
+<span class="sd">                    in the dataset</span>
 <span class="sd">                dpi: int</span>
 <span class="sd">                    The pixel density of the plot. Default 72</span>
 <span class="sd">                add_date_in_fname: Bool</span>
@@ -1508,6 +1518,9 @@ document.write(`
 <span class="sd">            in a text file</span>
 <span class="sd">        &#39;WRITE_VPR_INFO&#39;: Writes a dictionary containing relevant parameters</span>
 <span class="sd">        of the VPR profile retrieval into a text file</span>
+<span class="sd">            User defined parameters:</span>
+<span class="sd">                    voltype: name of the pyrad variable to use, it must be available</span>
+<span class="sd">                        in the dataset</span>
 <span class="sd">        All the products of the &#39;VOL&#39; dataset group</span>
 
 <span class="sd">    Parameters</span>

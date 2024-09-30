@@ -1309,6 +1309,8 @@ document.write(`
 <dt>generates grid products. Accepted product types:</dt><dd><dl>
 <dt>‘CROSS_SECTION’: Plots a cross-section of gridded data</dt><dd><dl class="simple">
 <dt>User defined parameters:</dt><dd><dl class="simple">
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
+</dd>
 <dt>coord1, coord2: dict</dt><dd><p>The two lat-lon coordinates marking the limits. They have
 the keywords ‘lat’ and ‘lon’ [degree]. The altitude limits
 are defined by the parameters in ‘xsecImageConfig’ in the
@@ -1320,6 +1322,8 @@ are defined by the parameters in ‘xsecImageConfig’ in the
 </dd>
 <dt>‘HISTOGRAM’: Computes a histogram of the radar volum data</dt><dd><dl class="simple">
 <dt>User defined parameters:</dt><dd><dl class="simple">
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
+</dd>
 <dt>step: float or None</dt><dd><p>the data quantization step. If none it will be obtained
 from the Py-ART configuration file</p>
 </dd>
@@ -1338,6 +1342,8 @@ obtained from the Py-ART configuration file</p>
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
+</dd>
 <dt>lon, lat: floats</dt><dd><p>The starting point of the cross-section. The ending point
 is defined by the parameters in ‘xsecImageConfig’ in the
 ‘loc’ configuration file</p>
@@ -1349,6 +1355,8 @@ is defined by the parameters in ‘xsecImageConfig’ in the
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
+</dd>
 <dt>lon, lat: floats</dt><dd><p>The starting point of the cross-section. The ending point
 is defined by the parameters in ‘xsecImageConfig’ in the
 ‘loc’ configuration file</p>
@@ -1370,6 +1378,8 @@ in the radar object will be saved</p>
 </dd>
 <dt>‘SAVEVOL’: Saves on field of a gridded data object in a netcdf file.</dt><dd><dl class="simple">
 <dt>User defined parameters:</dt><dd><dl class="simple">
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
+</dd>
 <dt>file_type: str</dt><dd><p>The type of file used to save the data. Can be ‘nc’ or
 ‘h5’. Default ‘nc’</p>
 </dd>
@@ -1395,6 +1405,8 @@ level).</p>
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
+</dd>
 <dt>stat: str</dt><dd><p>The statistic used. Can be mean, median, min, max</p>
 </dd>
 </dl>
@@ -1404,6 +1416,8 @@ User defined parameters:</p>
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
+</dd>
 <dt>level: int</dt><dd><p>The altitude level to plot. The rest of the parameters are
 defined by the parameters in ‘ppiImageConfig’ and
 ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
@@ -1413,6 +1427,8 @@ defined by the parameters in ‘ppiImageConfig’ and
 </dd>
 <dt>‘SURFACE_IMAGE’: Plots a surface image of gridded data.</dt><dd><dl class="simple">
 <dt>User defined parameters:</dt><dd><dl class="simple">
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
+</dd>
 <dt>level: int</dt><dd><p>The altitude level to plot. The rest of the parameters are
 defined by the parameters in ‘ppiImageConfig’ and
 ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
@@ -1423,6 +1439,8 @@ defined by the parameters in ‘ppiImageConfig’ and
 </dd>
 <dt>‘SURFACE_CONTOUR’: Plots a surface image of contour gridded data.</dt><dd><dl class="simple">
 <dt>User defined parameters:</dt><dd><dl class="simple">
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
+</dd>
 <dt>level: int</dt><dd><p>The altitude level to plot. The rest of the parameters are
 defined by the parameters in ‘ppiImageConfig’ and
 ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
@@ -1445,6 +1463,8 @@ vmax</p>
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
+</dd>
 <dt>level: int</dt><dd><p>The altitude level to plot. The rest of the parameters are
 defined by the parameters in ‘ppiImageConfig’ and
 ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
@@ -1466,6 +1486,8 @@ vmax</p>
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
+</dd>
 <dt>level: int</dt><dd><p>The altitude level to plot. The rest of the parameters are
 defined by the parameters in ‘ppiImageConfig’ and
 ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
@@ -1479,14 +1501,100 @@ vmax</p>
 </dl>
 </div></blockquote>
 </dd>
-<dt>‘DDA_MAP’:</dt><dd><p>Plots wind vectors obtained from a DDA analysis. The pyDDA package is
-required
+<dt>‘DDA_MAP’:</dt><dd><p>Plots horizontal wind vectors obtained from a DDA analysis on a 2D map.
+The pyDDA package is required
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
+</dd>
 <dt>level: int</dt><dd><p>The altitude level to plot. The rest of the parameters are
 defined by the parameters in ‘ppiImageConfig’ and
 ‘ppiMapImageConfig’ in the ‘loc’ configuration file</p>
+</dd>
+<dt>display_type: str</dt><dd><p>Display method for the wind vectors, can be either
+‘streamline’, ‘quiver’ or ‘barbs’</p>
+</dd>
+<dt>bg_ref_rad: int</dt><dd><p>Which radar to use as reference to display the background
+voltype.</p>
+</dd>
+<dt>u_vel_contours: list of int</dt><dd><p>The contours to use for plotting contours of u. Set to None to not
+display such contours.</p>
+</dd>
+<dt>v_vel_contours: list of int</dt><dd><p>The contours to use for plotting contours of v. Set to None to not
+display such contours.</p>
+</dd>
+<dt>w_vel_contours: list of int</dt><dd><p>The contours to use for plotting contours of w. Set to None to not
+display such contours.</p>
+</dd>
+<dt>vector_spacing_km: float</dt><dd><p>Spacing in km between wind vectors in x and y axis
+(only used for barbs and quiver plots)</p>
+</dd>
+<dt>quiver_len: float</dt><dd><p>Length to use for the quiver key in m/s.
+(only used for quiver plots)</p>
+</dd>
+<dt>streamline_arrowsize: float</dt><dd><p>Factor scale arrow size for streamlines.
+(only used for streamline plots)</p>
+</dd>
+<dt>linewidth: float</dt><dd><p>Linewidths for streamlines.
+(only used for streamline plots)</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+<dt>‘DDA_LONGITUDE_SLICE’:</dt><dd><p>Plots horizontal wind vectors obtained from a DDA analysis on a vertical transect
+along a given longitude
+The pyDDA package is required
+User defined parameters:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
+</dd>
+<dt>level: int</dt><dd><p>The longitude level to plot. The rest of the parameters are
+defined by the parameters in ‘xsecImageConfig’ in the ‘loc’
+configuration file</p>
+</dd>
+<dt>display_type: str</dt><dd><p>Display method for the wind vectors, can be either
+‘streamline’, ‘quiver’ or ‘barbs’</p>
+</dd>
+<dt>bg_ref_rad: int</dt><dd><p>Which radar to use as reference to display the background
+voltype.</p>
+</dd>
+<dt>u_vel_contours: list of int</dt><dd><p>The contours to use for plotting contours of u. Set to None to not
+display such contours.</p>
+</dd>
+<dt>v_vel_contours: list of int</dt><dd><p>The contours to use for plotting contours of v. Set to None to not
+display such contours.</p>
+</dd>
+<dt>w_vel_contours: list of int</dt><dd><p>The contours to use for plotting contours of w. Set to None to not
+display such contours.</p>
+</dd>
+<dt>vector_spacing_km: float</dt><dd><p>Spacing in km between wind vectors in x and y axis
+(only used for barbs and quiver plots)</p>
+</dd>
+<dt>quiver_len: float</dt><dd><p>Length to use for the quiver key in m/s.
+(only used for quiver plots)</p>
+</dd>
+<dt>streamline_arrowsize: float</dt><dd><p>Factor scale arrow size for streamlines.
+(only used for streamline plots)</p>
+</dd>
+<dt>linewidth: float</dt><dd><p>Linewidths for streamlines.
+(only used for streamline plots)</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+<dt>‘DDA_LATITUDE_SLICE’:</dt><dd><p>Plots horizontal wind vectors obtained from a DDA analysis on a vertical transect
+along a given latitude
+The pyDDA package is required
+User defined parameters:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
+</dd>
+<dt>level: int</dt><dd><p>The latitude level to plot. The rest of the parameters are
+defined by the parameters in ‘xsecImageConfig’ in the ‘loc’
+configuration file</p>
 </dd>
 <dt>display_type: str</dt><dd><p>Display method for the wind vectors, can be either
 ‘streamline’, ‘quiver’ or ‘barbs’</p>

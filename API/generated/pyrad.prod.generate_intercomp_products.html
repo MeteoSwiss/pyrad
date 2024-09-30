@@ -1312,20 +1312,25 @@ statistics.
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
-<dt>‘add_date_in_fname’: Bool</dt><dd><p>If true adds the year in the csv file containing the
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
+</dd>
+<dt>add_date_in_fname: Bool</dt><dd><p>If true adds the year in the csv file containing the
 statistics. Default False</p>
 </dd>
-<dt>‘sort_by_date’: Bool</dt><dd><p>If true sorts the statistics by date when reading the
+<dt>sort_by_date: Bool</dt><dd><p>If true sorts the statistics by date when reading the
 csv file containing the statistics. Default False</p>
 </dd>
-<dt>‘rewrite’: Bool</dt><dd><p>If true rewrites the csv file containing the statistics.
+<dt>step: float</dt><dd><p>The quantization step of the data. If none it will be
+computed using the Py-ART config file. Default None</p>
+</dd>
+<dt>rewrite: Bool</dt><dd><p>If true rewrites the csv file containing the statistics.
 Default False</p>
 </dd>
-<dt>‘npoints_min’: int</dt><dd><p>The minimum number of points to consider the statistics
+<dt>npoints_min: int</dt><dd><p>The minimum number of points to consider the statistics
 valid and therefore use the data point in the plotting.
 Default 0</p>
 </dd>
-<dt>‘corr_min’: float</dt><dd><p>The minimum correlation to consider the statistics
+<dt>corr_min: float</dt><dd><p>The minimum correlation to consider the statistics
 valid and therefore use the data point in the plotting.
 Default 0.</p>
 </dd>
@@ -1336,19 +1341,35 @@ Default 0.</p>
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
-<dt>‘step’: float</dt><dd><p>The quantization step of the data. If none it will be
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
+</dd>
+<dt>step: float</dt><dd><p>The quantization step of the data. If none it will be
 computed using the Py-ART config file. Default None</p>
 </dd>
-<dt>‘scatter_type’: str</dt><dd><p>Type of scatter plot. Can be a plot for each radar volume
-(‘instant’) or at the end of the processing period
-(‘cumulative’). Default is ‘cumulative’</p>
+<dt>scatter_type: str</dt><dd><p>Type of scatter plot. Can be a plot for each radar volume
+(instant) or at the end of the processing period
+(cumulative). Default is cumulative</p>
 </dd>
 </dl>
 </div></blockquote>
 </dd>
-<dt>‘WRITE_INTERCOMP’: Writes the instantaneously intercompared data</dt><dd><p>(gate positions, values, etc.) in a csv file.</p>
+<dt>‘WRITE_INTERCOMP’: Writes the instantaneously intercompared data</dt><dd><p>(gate positions, values, etc.) in a csv file.
+User defined parameters:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
 </dd>
-<dt>‘WRITE_INTERCOMP_TIME_AVG’: Writes the time-averaged intercompared</dt><dd><p>data (gate positions, values, etc.) in a csv file.</p>
+</dl>
+</div></blockquote>
+</dd>
+<dt>‘WRITE_INTERCOMP_TIME_AVG’: Writes the time-averaged intercompared</dt><dd><p>data (gate positions, values, etc.) in a csv file.
+User defined parameters:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
+</dd>
+</dl>
+</div></blockquote>
 </dd>
 </dl>
 </dd>

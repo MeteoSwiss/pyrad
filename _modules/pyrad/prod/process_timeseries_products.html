@@ -514,6 +514,8 @@ document.write(`
 <span class="sd">                    Default 0.</span>
 <span class="sd">        &#39;PLOT_AND_WRITE&#39;: Writes and plots a trajectory time series.</span>
 <span class="sd">            User defined parameters:</span>
+<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
+<span class="sd">                    in the dataset</span>
 <span class="sd">                ymin, ymax: float</span>
 <span class="sd">                    The minimum and maximum value of the Y-axis. If none it</span>
 <span class="sd">                    will be obtained from the Py-ART config file.</span>
@@ -539,12 +541,16 @@ document.write(`
 <span class="sd">        &#39;PLOT_HIST&#39;: plots and writes a histogram of all the data gathered</span>
 <span class="sd">            during the trajectory processing</span>
 <span class="sd">            User defined parameters:</span>
+<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
+<span class="sd">                    in the dataset</span>
 <span class="sd">                step: float or None</span>
 <span class="sd">                    The quantization step of the data. If None it will be</span>
 <span class="sd">                    obtained from the Py-ART config file</span>
 <span class="sd">        &#39;TRAJ_CAPPI_IMAGE&#39;: Creates a CAPPI image with the trajectory position</span>
 <span class="sd">            overplot on it.</span>
 <span class="sd">            User defined parameters:</span>
+<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
+<span class="sd">                    in the dataset</span>
 <span class="sd">                color_ref: str</span>
 <span class="sd">                    The meaning of the color code with which the trajectory is</span>
 <span class="sd">                    plotted. Can be &#39;None&#39;, &#39;altitude&#39; (the absolute</span>

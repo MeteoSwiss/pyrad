@@ -1308,14 +1308,30 @@ document.write(`
 <dd><dl>
 <dt>generates sun hits products. Accepted product types:</dt><dd><dl>
 <dt>‘PLOT_SUN_HITS’: Plots in a sun-radar azimuth difference-sun-radar</dt><dd><p>elevation difference grid the values of all sun hits obtained
-during the processing period</p>
+during the processing period
+User defined parameters:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
 </dd>
-<dt>‘PLOT_SUN_RETRIEVAL’: Plots in a sun-radar azimuth difference-sun-</dt><dd><p>radar elevation difference grid the retrieved sun pattern</p>
+</dl>
+</div></blockquote>
+</dd>
+<dt>‘PLOT_SUN_RETRIEVAL’: Plots in a sun-radar azimuth difference-sun-</dt><dd><p>radar elevation difference grid the retrieved sun pattern
+User defined parameters:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
+</dd>
+</dl>
+</div></blockquote>
 </dd>
 <dt>‘PLOT_SUN_RETRIEVAL_TS’: Plots time series of the retrieved sun</dt><dd><p>pattern parameters
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
+</dd>
 <dt>dpi: int</dt><dd><p>The pixel density of the plot. Default 72</p>
 </dd>
 <dt>add_date_in_fname: Bool</dt><dd><p>If true the year is added in the plot file name</p>

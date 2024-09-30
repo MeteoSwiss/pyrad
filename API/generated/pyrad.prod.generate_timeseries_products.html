@@ -1393,6 +1393,8 @@ Default 0.</p>
 </dd>
 <dt>‘PLOT_AND_WRITE’: Writes and plots a trajectory time series.</dt><dd><dl class="simple">
 <dt>User defined parameters:</dt><dd><dl class="simple">
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
+</dd>
 <dt>ymin, ymax: float</dt><dd><p>The minimum and maximum value of the Y-axis. If none it
 will be obtained from the Py-ART config file.</p>
 </dd>
@@ -1431,6 +1433,8 @@ is defined in the ‘loc’ config file</p>
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
+</dd>
 <dt>step: float or None</dt><dd><p>The quantization step of the data. If None it will be
 obtained from the Py-ART config file</p>
 </dd>
@@ -1441,6 +1445,8 @@ obtained from the Py-ART config file</p>
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
+<dt>voltype: name of the pyrad variable to use, it must be available</dt><dd><p>in the dataset</p>
+</dd>
 <dt>color_ref: str</dt><dd><p>The meaning of the color code with which the trajectory is
 plotted. Can be ‘None’, ‘altitude’ (the absolute
 altitude), ‘rel_altitude’ (altitude relative to the CAPPI
