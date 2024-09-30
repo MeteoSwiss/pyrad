@@ -606,7 +606,7 @@ def generate_vol_products(dataset, prdcfg):
             time data processing
         'SAVEPSEUDORHI': Saves one field of a pseudo-RHI computed from a
             volume scan in C/F radial or ODIM file
-            User defined paraeters:
+            User defined parameters:
                 file_type: str
                     The type of file used to save the data. Can be 'nc' or
                     'h5'. Default 'nc'
@@ -623,7 +623,7 @@ def generate_vol_products(dataset, prdcfg):
                     level).
         'SAVEPSEUDOPPI': Saves one field of a pseudo-PPI computed from a
             volume scan in C/F radial or ODIM file
-            User defined paraeters:
+            User defined parameters:
                 file_type: str
                     The type of file used to save the data. Can be 'nc' or
                     'h5'. Default 'nc'

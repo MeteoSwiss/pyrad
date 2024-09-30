@@ -8,29 +8,25 @@ Pyrad: The MeteoSwiss Radar Processing framework
 
 Welcome to Pyrad!
 
-This program performs real time processing of the data
+This program processes and post-processes data over a time span
 
 To run the processing framework type:
-    python main_process_data_rt.py \
-[config_files] --starttime [process_start_time] --endtime [process_end_time] \
---cfgpath [cfgpath] --proc_period [proc_period]
+    python main_process_data.py \
+[config_file] --starttime [process_start_time] --endtime [process_end_time] \
+--postproc_cfgfile [postproc_config_file] --cfgpath [cfgpath]
 
-If startime or endtime are specified the program will start processing at the
-specified time and end at the specified time. Otherwise the program ends when
-the user interrupts it.
+If startime and endtime are not specified the program determines them from
+the trajectory file or the last processed volume.
+postproc_cfgfile is an optional argument with default: None
 cfgpath is an optional argument with default: \
 '$HOME/pyrad/config/processing/'
-proc_period is the time that has to pass before attempting to restart the
-processing in [s]
-if proc_finish is not none it indicates the time the program is allowed to ran
-berfore forcing it to end
-
+The trajectory file can be of type plane, lightning or proc_periods. If it is \
+of type lightning the flash number can be specified
 
 Example:
-    python main_process_data_rt.py 'paradiso_fvj_vol.txt' \
-'paradiso_fvj_rhi.txt' --starttime '20140523000000' \
---endtime '20140523001000' --cfgpath '$HOME/pyrad/config/processing/' \
---proc_period 60 --proc_finish 120
+    python main_process_data.py 'paradiso_fvj_vol.txt' --starttime \
+'20140523000000' --endtime '20140523001000' --postproc_cfgfile \
+'paradiso_fvj_vol_postproc.txt' --cfgpath '$HOME/pyrad/config/processing/'
 
 """
 
@@ -41,10 +37,8 @@ import datetime
 import argparse
 import atexit
 import os
-import traceback
-from warnings import warn
 
-from pyrad.flow.flow_control import main_cosmo_rt
+from pyrad.flow.flow_control import main_cosmo
 
 print(__doc__)
 
@@ -59,8 +53,7 @@ def main():
 
     # positional arguments
     parser.add_argument(
-        'cfgfiles', nargs='+', type=str,
-        help='name of main configuration file')
+        'proc_cfgfile', type=str, help='name of main configuration file')
 
     # keyword arguments
     parser.add_argument(
@@ -74,14 +67,14 @@ def main():
         '--cfgpath', type=str,
         default=os.path.expanduser('~') + '/pyrad/config/processing/',
         help='configuration file path')
-
-    parser.add_argument(
-        '--proc_period', type=int, default=60,
-        help='Period between processing rounds (s)')
-
-    parser.add_argument(
-        '--proc_finish', type=int, default=None,
-        help='Processing time allowed before shutdown (s)')
+    parser.add_argument("-i", "--infostr", type=str,
+                        help="Information string about the actual data "
+                        "processing (e.g. 'RUN57'). This string is added "
+                        "to the filenames of the product files.",
+                        default="")
+    parser.add_argument("-t", "--trajfile", type=str, default='',
+                        help="Definition file of plane trajectory. "
+                        "Configuration of scan sector, products, ...")
 
     args = parser.parse_args()
 
@@ -91,10 +84,7 @@ def main():
                     "====== PYRAD data processing finished: ")
 
     print('config path: ' + args.cfgpath)
-    cfgfile_list = []
-    for ind, cfgfile in enumerate(args.cfgfiles):
-        print('config file ' + str(ind) + ': ' + cfgfile)
-        cfgfile_list.append(args.cfgpath + cfgfile)
+    print('config file: ' + args.proc_cfgfile)
     if args.starttime is not None:
         print('start time: ' + args.starttime)
     else:
@@ -111,20 +101,15 @@ def main():
     proc_endtime = None
     if args.endtime is not None:
         proc_endtime = datetime.datetime.strptime(args.endtime, '%Y%m%d%H%M%S')
+    cfgfile_proc = args.cfgpath + args.proc_cfgfile
 
-    end_proc = False
-    while not end_proc:
-        try:
-            end_proc = main_cosmo_rt(
-                cfgfile_list, starttime=proc_starttime, endtime=proc_endtime,
-                proc_period=args.proc_period, proc_finish=args.proc_finish)
-        except BaseException:
-            traceback.print_exc()
-            if args.proc_finish is None:
-                warn("An exception occurred. " +
-                     "Restarting the real time processing")
-            else:
-                end_proc = True
+    if args.infostr == 'None':
+        infostr = ''
+    else:
+        infostr = args.infostr
+
+    main_cosmo(cfgfile_proc, starttime=proc_starttime, endtime=proc_endtime,
+               trajfile=args.trajfile, infostr=infostr)
 
 
 def _print_end_msg(text):
