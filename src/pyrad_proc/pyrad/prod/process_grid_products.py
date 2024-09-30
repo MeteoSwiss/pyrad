@@ -160,8 +160,8 @@ def generate_grid_products(dataset, prdcfg):
     generates grid products. Accepted product types:
         'CROSS_SECTION': Plots a cross-section of gridded data
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 coord1, coord2: dict
                     The two lat-lon coordinates marking the limits. They have
                     the keywords 'lat' and 'lon' [degree]. The altitude limits
@@ -169,8 +169,8 @@ def generate_grid_products(dataset, prdcfg):
                     'loc' configuration file
         'HISTOGRAM': Computes a histogram of the radar volum data
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 step: float or None
                     the data quantization step. If none it will be obtained
                     from the Py-ART configuration file
@@ -184,8 +184,8 @@ def generate_grid_products(dataset, prdcfg):
         'LATITUDE_SLICE': Plots a cross-section of gridded data over a
             constant latitude.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 lon, lat: floats
                     The starting point of the cross-section. The ending point
                     is defined by the parameters in 'xsecImageConfig' in the
@@ -193,8 +193,8 @@ def generate_grid_products(dataset, prdcfg):
         'LONGITUDE_SLICE': Plots a cross-ection of gridded data over a
             constant longitude.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 lon, lat: floats
                     The starting point of the cross-section. The ending point
                     is defined by the parameters in 'xsecImageConfig' in the
@@ -209,8 +209,8 @@ def generate_grid_products(dataset, prdcfg):
             dataset, as there is no ambiguity with SAVEALL for VOL datasets
         'SAVEVOL': Saves on field of a gridded data object in a netcdf file.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 file_type: str
                     The type of file used to save the data. Can be 'nc' or
                     'h5'. Default 'nc'
@@ -231,31 +231,31 @@ def generate_grid_products(dataset, prdcfg):
         'STATS': Computes statistics over the whole images and stores them in
             a file.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 stat: str
                     The statistic used. Can be mean, median, min, max
         'SURFACE_RAW': Plots a surface image of gridded data without
             projecting it into a map
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 level: int
                     The altitude level to plot. The rest of the parameters are
                     defined by the parameters in 'ppiImageConfig' and
                     'ppiMapImageConfig' in the 'loc' configuration file
         'SURFACE_IMAGE': Plots a surface image of gridded data.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 level: int
                     The altitude level to plot. The rest of the parameters are
                     defined by the parameters in 'ppiImageConfig' and
                     'ppiMapImageConfig' in the 'loc' configuration file
         'SURFACE_CONTOUR': Plots a surface image of contour gridded data.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 level: int
                     The altitude level to plot. The rest of the parameters are
                     defined by the parameters in 'ppiImageConfig' and
@@ -273,8 +273,8 @@ def generate_grid_products(dataset, prdcfg):
         'SURFACE_CONTOUR_OVERPLOT':
             Plots a surface image of gridded data with a contour overplotted.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 level: int
                     The altitude level to plot. The rest of the parameters are
                     defined by the parameters in 'ppiImageConfig' and
@@ -292,8 +292,8 @@ def generate_grid_products(dataset, prdcfg):
         'SURFACE_OVERPLOT':
             Plots on the same surface two images, one on top of the other.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 level: int
                     The altitude level to plot. The rest of the parameters are
                     defined by the parameters in 'ppiImageConfig' and
@@ -308,8 +308,8 @@ def generate_grid_products(dataset, prdcfg):
             Plots horizontal wind vectors obtained from a DDA analysis on a 2D map. 
             The pyDDA package is required
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 level: int
                     The altitude level to plot. The rest of the parameters are
                     defined by the parameters in 'ppiImageConfig' and
@@ -346,8 +346,8 @@ def generate_grid_products(dataset, prdcfg):
             along a given longitude
             The pyDDA package is required
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 level: int
                     The longitude level to plot. The rest of the parameters are
                     defined by the parameters in 'xsecImageConfig' in the 'loc' 
@@ -384,8 +384,8 @@ def generate_grid_products(dataset, prdcfg):
             along a given latitude
             The pyDDA package is required
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 level: int
                     The latitude level to plot. The rest of the parameters are
                     defined by the parameters in 'xsecImageConfig' in the 'loc' 

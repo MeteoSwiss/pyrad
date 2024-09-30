@@ -42,8 +42,8 @@ def generate_intercomp_products(dataset, prdcfg):
             intercomparison in a file and plots the time series of the
             statistics.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 add_date_in_fname: Bool
                     If true adds the year in the csv file containing the
                     statistics. Default False
@@ -67,8 +67,8 @@ def generate_intercomp_products(dataset, prdcfg):
         'PLOT_SCATTER_INTERCOMP': Plots a density plot with the points of
             radar 1 versus the points of radar 2
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 step: float
                     The quantization step of the data. If none it will be
                     computed using the Py-ART config file. Default None
@@ -79,13 +79,13 @@ def generate_intercomp_products(dataset, prdcfg):
         'WRITE_INTERCOMP': Writes the instantaneously intercompared data
             (gate positions, values, etc.) in a csv file.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
         'WRITE_INTERCOMP_TIME_AVG': Writes the time-averaged intercompared
             data (gate positions, values, etc.) in a csv file.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
 
     Parameters
     ----------

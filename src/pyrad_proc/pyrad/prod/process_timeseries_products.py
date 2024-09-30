@@ -111,8 +111,8 @@ def generate_timeseries_products(dataset, prdcfg):
                     Default 0.
         'PLOT_AND_WRITE': Writes and plots a trajectory time series.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 ymin, ymax: float
                     The minimum and maximum value of the Y-axis. If none it
                     will be obtained from the Py-ART config file.
@@ -138,16 +138,16 @@ def generate_timeseries_products(dataset, prdcfg):
         'PLOT_HIST': plots and writes a histogram of all the data gathered
             during the trajectory processing
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 step: float or None
                     The quantization step of the data. If None it will be
                     obtained from the Py-ART config file
         'TRAJ_CAPPI_IMAGE': Creates a CAPPI image with the trajectory position
             overplot on it.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 color_ref: str
                     The meaning of the color code with which the trajectory is
                     plotted. Can be 'None', 'altitude' (the absolute

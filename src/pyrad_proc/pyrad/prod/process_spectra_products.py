@@ -43,8 +43,8 @@ def generate_spectra_products(dataset, prdcfg):
             range. It is plotted separately the module and the phase of the
             signal.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 along_azi : bool
                     If true the plot is performed along azimuth, otherwise
                     along elevation. Default true
@@ -65,8 +65,8 @@ def generate_spectra_products(dataset, prdcfg):
         'AMPLITUDE_PHASE_DOPPLER': Plots a complex Doppler spectrum or IQ data
             making two separate plots for the module and phase of the signal
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 azi : float
                     azimuth (deg) of the ray to plot
                 ele : float
@@ -97,8 +97,8 @@ def generate_spectra_products(dataset, prdcfg):
         'AMPLITUDE_PHASE_RANGE_DOPPLER': Plots a complex spectra or IQ data
             range-Doppler making two separate plots for the module and phase
             of the signal User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 azi : float
                     azimuth (deg) of the ray to plot
                 ele : float
@@ -122,8 +122,8 @@ def generate_spectra_products(dataset, prdcfg):
             time-Doppler making two separate plots for the module and phase of
             the signal
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 xaxis_info : str
                     The xaxis type. Can be 'Doppler_velocity' or
                     'Doppler frequency'
@@ -141,8 +141,8 @@ def generate_spectra_products(dataset, prdcfg):
         'ANGLE_DOPPLER': Makes an angle Doppler plot. The plot can be along
             azimuth or along range
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 along_azi : bool
                     If true the plot is performed along azimuth, otherwise
                     along elevation. Default true
@@ -165,8 +165,8 @@ def generate_spectra_products(dataset, prdcfg):
             spectra or IQ data. The plot can be along azimuth or along range.
             The real and imaginary parts are plotted separately
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 along_azi : bool
                     If true the plot is performed along azimuth, otherwise
                     along elevation. Default true
@@ -188,8 +188,8 @@ def generate_spectra_products(dataset, prdcfg):
         'COMPLEX_DOPPLER': Plots a complex Doppler spectrum or IQ data making
             two separate plots for the real and imaginary parts
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 azi : float
                     azimuth (deg) of the ray to plot
                 ele : float
@@ -222,8 +222,8 @@ def generate_spectra_products(dataset, prdcfg):
             range-Doppler making two separate plots for the real and imaginary
             parts
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 azi : float
                     azimuth (deg) of the ray to plot
                 ele : float
@@ -253,8 +253,8 @@ def generate_spectra_products(dataset, prdcfg):
             time-Doppler making two separate plots for the real and imaginary
             parts
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 xaxis_info : str
                     The xaxis type. Can be 'Doppler_velocity' or
                     'Doppler frequency'
@@ -267,8 +267,8 @@ def generate_spectra_products(dataset, prdcfg):
                     plotted at the end of the processing
         'DOPPLER': Plots a Doppler spectrum variable or IQ data variable
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 azi : float
                     azimuth (deg) of the ray to plot
                 ele : float
@@ -296,8 +296,8 @@ def generate_spectra_products(dataset, prdcfg):
                     Maximum of the color scale
         'RANGE_DOPPLER': Makes a range-Doppler plot of spectral or IQ data
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 azi : float
                     azimuth (deg) of the ray to plot
                 ele : float
@@ -330,16 +330,16 @@ def generate_spectra_products(dataset, prdcfg):
         'SAVEVOL': Saves one field of a radar spectra or IQ volume data in a
             netcdf file
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 physical: Bool
                     If True the data will be saved in physical units (floats).
                     Otherwise it will be quantized and saved as binary
         'TIME_DOPPLER': Makes a time-Doppler plot of spectral or IQ data at a
             point of interest.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 xaxis_info : str
                     The xaxis type. Can be 'Doppler_velocity',
                     'Doppler_frequency' or 'pulse_number'

@@ -66,8 +66,8 @@ def generate_occurrence_products(dataset, prdcfg):
             with clutter that has a frequency of occurrence above a certain
             threshold.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 quant_min: float
                     Minimum frequency of occurrence in percentage to keep the
                     gate as valid. Default 95.
@@ -368,18 +368,18 @@ def generate_sun_hits_products(dataset, prdcfg):
             elevation difference grid the values of all sun hits obtained
             during the processing period
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
         'PLOT_SUN_RETRIEVAL': Plots in a sun-radar azimuth difference-sun-
             radar elevation difference grid the retrieved sun pattern
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
         'PLOT_SUN_RETRIEVAL_TS': Plots time series of the retrieved sun
             pattern parameters
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 dpi: int
                     The pixel density of the plot. Default 72
                 add_date_in_fname: Bool
