@@ -866,8 +866,8 @@ description
    Plots a cross-section of gridded data
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L886>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset coord1, coord2
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset coord1, coord2
    dict
         The two lat-lon coordinates marking the limits. They have the keywords 'lat' and 'lon' [degree]. The altitude limits are defined by the parameters in 'xsecImageConfig' in the 'loc' configuration file
 
@@ -877,8 +877,8 @@ description
    Computes a histogram of the radar volum data
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L953>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    step : *float*
         or None the data quantization step. If none it will be obtained from the Py-ART configuration file vmin, 
    vmax : *float*
@@ -894,8 +894,8 @@ description
    Plots a cross-section of gridded data over a constant latitude.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1289>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset lon, 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset lon, 
    lat : *floats*
         The starting point of the cross-section. The ending point is defined by the parameters in 'xsecImageConfig' in the 'loc' configuration file
 
@@ -905,8 +905,8 @@ description
    Plots a cross-ection of gridded data over a constant longitude.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1216>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset lon, 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset lon, 
    lat : *floats*
         The starting point of the cross-section. The ending point is defined by the parameters in 'xsecImageConfig' in the 'loc' configuration file
 
@@ -931,8 +931,8 @@ description
    Saves on field of a gridded data object in a netcdf file.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1044>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    file_type : *str*
         The type of file used to save the data. Can be 'nc' or 'h5'. Default 'nc' 
    physical : *Bool*
@@ -954,8 +954,8 @@ description
    Computes statistics over the whole images and stores them in a file.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L438>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    stat : *str*
         The statistic used. Can be mean, median, min, max
 
@@ -965,8 +965,8 @@ description
    Plots a surface image of gridded data without projecting it into a map
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L494>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    level : *int*
         The altitude level to plot. The rest of the parameters are defined by the parameters in 'ppiImageConfig' and 'ppiMapImageConfig' in the 'loc' configuration file
 
@@ -976,8 +976,8 @@ description
    Plots a surface image of gridded data.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L535>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    level : *int*
         The altitude level to plot. The rest of the parameters are defined by the parameters in 'ppiImageConfig' and 'ppiMapImageConfig' in the 'loc' configuration file
 
@@ -987,8 +987,8 @@ description
    Plots a surface image of contour gridded data.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L629>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    level : *int*
         The altitude level to plot. The rest of the parameters are defined by the parameters in 'ppiImageConfig' and 'ppiMapImageConfig' in the 'loc' configuration file 
    contour_values : *float*
@@ -1004,8 +1004,8 @@ description
    Plots a surface image of gridded data with a contour overplotted.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L629>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    level : *int*
         The altitude level to plot. The rest of the parameters are defined by the parameters in 'ppiImageConfig' and 'ppiMapImageConfig' in the 'loc' configuration file 
    contour_values : *float*
@@ -1021,8 +1021,8 @@ description
    Plots on the same surface two images, one on top of the other.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L714>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    level : *int*
         The altitude level to plot. The rest of the parameters are defined by the parameters in 'ppiImageConfig' and 'ppiMapImageConfig' in the 'loc' configuration file 
    contour_values : *float*
@@ -1034,8 +1034,8 @@ description
    Plots horizontal wind vectors obtained from a DDA analysis on a 2D map. The pyDDA package is required
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1155>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    level : *int*
         The altitude level to plot. The rest of the parameters are defined by the parameters in 'ppiImageConfig' and 'ppiMapImageConfig' in the 'loc' configuration file 
    display_type : *str*
@@ -1063,8 +1063,8 @@ description
    Plots horizontal wind vectors obtained from a DDA analysis on a vertical transect along a given longitude The pyDDA package is required
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1216>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    level : *int*
         The longitude level to plot. The rest of the parameters are defined by the parameters in 'xsecImageConfig' in the 'loc' configuration file 
    display_type : *str*
@@ -1092,8 +1092,8 @@ description
    Plots horizontal wind vectors obtained from a DDA analysis on a vertical transect along a given latitude The pyDDA package is required
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1289>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    level : *int*
         The latitude level to plot. The rest of the parameters are defined by the parameters in 'xsecImageConfig' in the 'loc' configuration file 
    display_type : *str*
@@ -1123,8 +1123,8 @@ description
    Makes an angle Doppler plot of complex spectra or IQ data. The plot can be along azimuth or along range. It is plotted separately the module and the phase of the signal.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1349>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    along_azi : *bool*
         If true the plot is performed along azimuth, otherwise along elevation. Default true 
    ang : *float*
@@ -1146,8 +1146,8 @@ description
    Plots a complex Doppler spectrum or IQ data making two separate plots for the module and phase of the signal
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1149>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    azi : *float*
         azimuth (deg) of the ray to plot 
    ele : *float*
@@ -1175,8 +1175,8 @@ description
    Plots a complex spectra or IQ data range-Doppler making two separate plots for the module and phase
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1253>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    azi : *float*
         azimuth (deg) of the ray to plot 
    ele : *float*
@@ -1198,8 +1198,8 @@ description
    Plots a complex spectra or IQ data time-Doppler making two separate plots for the module and phase of the signal
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1469>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    xaxis_info : *str*
         The xaxis type. Can be 'Doppler_velocity' or 'Doppler frequency' 
    ampli_vmin : *float*
@@ -1219,8 +1219,8 @@ description
    Makes an angle Doppler plot. The plot can be along azimuth or along range
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1349>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    along_azi : *bool*
         If true the plot is performed along azimuth, otherwise along elevation. Default true 
    ang : *float*
@@ -1244,8 +1244,8 @@ description
    Makes an angle Doppler plot of complex spectra or IQ data. The plot can be along azimuth or along range. The real and imaginary parts are plotted separately
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L854>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    along_azi : *bool*
         If true the plot is performed along azimuth, otherwise along elevation. Default true 
    ang : *float*
@@ -1269,8 +1269,8 @@ description
    Plots a complex Doppler spectrum or IQ data making two separate plots for the real and imaginary parts
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1049>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    azi : *float*
         azimuth (deg) of the ray to plot 
    ele : *float*
@@ -1300,8 +1300,8 @@ description
    Plots the complex spectra or IQ data range-Doppler making two separate plots for the real and imaginary parts
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L764>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    azi : *float*
         azimuth (deg) of the ray to plot 
    ele : *float*
@@ -1329,8 +1329,8 @@ description
    Plots the complex spectra or IQ data time-Doppler making two separate plots for the real and imaginary parts
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L968>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    xaxis_info : *str*
         The xaxis type. Can be 'Doppler_velocity' or 'Doppler frequency' 
    vmin : *float*
@@ -1346,8 +1346,8 @@ description
    Plots a Doppler spectrum variable or IQ data variable
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1469>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    azi : *float*
         azimuth (deg) of the ray to plot 
    ele : *float*
@@ -1375,8 +1375,8 @@ description
    Makes a range-Doppler plot of spectral or IQ data
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1253>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    azi : *float*
         azimuth (deg) of the ray to plot 
    ele : *float*
@@ -1411,8 +1411,8 @@ description
    Saves one field of a radar spectra or IQ volume data in a netcdf file
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1556>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    physical : *Bool*
         If True the data will be saved in physical units (floats). Otherwise it will be quantized and saved as binary
 
@@ -1422,8 +1422,8 @@ description
    Makes a time-Doppler plot of spectral or IQ data at a point of interest.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_spectra_products.py#L1469>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    xaxis_info : *str*
         The xaxis type. Can be 'Doppler_velocity', 'Doppler_frequency' or 'pulse_number' 
    vmin : *float*
@@ -1446,8 +1446,8 @@ description
    Writes statistics of radar intercomparison in a file and plots the time series of the statistics.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L256>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    add_date_in_fname : *Bool*
         If true adds the year in the csv file containing the statistics. Default False 
    sort_by_date : *Bool*
@@ -1467,8 +1467,8 @@ description
    Plots a density plot with the points of radar 1 versus the points of radar 2
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L164>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    step : *float*
         The quantization step of the data. If none it will be computed using the Py-ART config file. Default None 
    scatter_type : *str*
@@ -1480,8 +1480,8 @@ description
    Writes the instantaneously intercompared data (gate positions, values, etc.) in a csv file.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L256>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset
 
 WRITE_INTERCOMP_TIME_AVG
 """"""""""""""""""""""""""""""
@@ -1489,8 +1489,8 @@ description
    Writes the time-averaged intercompared data (gate positions, values, etc.) in a csv file.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L138>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
 
 ML
 -----------------------------
@@ -1520,8 +1520,8 @@ description
    For a specified elevation angle, plots a 2D histogram with the azimuth angle in the X-axis and the data values in the Y-axis. The reference values and the user defined quantiles are also plot on the same figure
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L369>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    anglenr : *int*
         The elevation angle number to plot 
    quantiles : *list*
@@ -1537,8 +1537,8 @@ description
    Plots time series of the average of instantaneous quantiles stored in a csv file.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L702>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    quantiles : *list*
         of 3 floats the quantiles to compute. Default 25., 50., 75. 
    ref_value : *float*
@@ -1574,8 +1574,8 @@ description
    Plots a histogram of data at a particular elevation angle.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L294>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    anglenr : *int*
         The elevation angle number to plot
 
@@ -1591,8 +1591,8 @@ description
    Plots a histogram of data collected from all the radar volume.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L205>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    write_data : *bool*
         If true the resultant histogram is also saved in a csv file. Default True.
 
@@ -1602,8 +1602,8 @@ description
    Computes statistics of the gathered data and writes them in a csv file and plots a time series of those statistics.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L702>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    quantiles : *list*
         of 3 floats the quantiles to compute. Default 25., 50., 75. 
    ref_value : *float*
@@ -1644,8 +1644,8 @@ description
    Write the data that identifies radar gates with clutter that has a frequency of occurrence above a certain threshold.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L97>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    quant_min : *float*
         Minimum frequency of occurrence in percentage to keep the gate as valid. Default 95. All the products of the 'VOL' dataset group 
 
@@ -1676,8 +1676,8 @@ description
    Plots in a sun-radar azimuth difference-sun-radar elevation difference grid the values of all sun hits obtained during the processing period
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L450>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset
 
 PLOT_SUN_RETRIEVAL
 """"""""""""""""""""""""""""""
@@ -1685,8 +1685,8 @@ description
    Plots in a sun-radar azimuth difference-sun- radar elevation difference grid the retrieved sun pattern
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L604>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset
 
 PLOT_SUN_RETRIEVAL_TS
 """"""""""""""""""""""""""""""
@@ -1694,8 +1694,8 @@ description
    Plots time series of the retrieved sun pattern parameters
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_product.py#L604>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    dpi : *int*
         The pixel density of the plot. Default 72 
    add_date_in_fname : *Bool*
@@ -1802,8 +1802,8 @@ description
    Writes and plots a trajectory time series.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L835>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset ymin, 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset ymin, 
    ymax : *float*
         The minimum and maximum value of the Y-axis. If none it will be obtained from the Py-ART config file.
 
@@ -1837,8 +1837,8 @@ description
    plots and writes a histogram of all the data gathered during the trajectory processing
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L892>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    step : *float*
         or None The quantization step of the data. If None it will be obtained from the Py-ART config file
 
@@ -1848,8 +1848,8 @@ description
    Creates a CAPPI image with the trajectory position overplot on it.
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L936>`_
 parameters
-   voltype : *name*
-        of the pyrad variable to use, it must be available in the dataset 
+   voltype : *str*
+        name of the pyrad variable to use, it must be available in the dataset in the dataset 
    color_ref : *str*
         The meaning of the color code with which the trajectory is plotted. Can be 'None', 'altitude' (the absolute altitude), 'rel_altitude' (altitude relative to the CAPPI altitude), 'time' (trajectory time respect of the start of the radar scan leading to the CAPPI) 
    altitude : *float*
