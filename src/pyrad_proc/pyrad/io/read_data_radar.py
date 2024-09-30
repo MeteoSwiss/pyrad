@@ -1802,18 +1802,18 @@ def merge_scans_rad4alp(
         filename = glob.glob(datapath + basename + timeinfo + "*." + scan + "*")
         if not filename:
             warn("No file found in " + datapath + basename + timeinfo + "*." + scan)
+            continue
+
+        radar_aux = get_data_rad4alp(
+            filename[0], datatype_list, scan, cfg, ind_rad=ind_rad)
+
+        if radar_aux is None:
+            continue
+
+        if radar is None:
+            radar = radar_aux
         else:
-            radar_aux = get_data_rad4alp(
-                filename[0], datatype_list, scan, cfg, ind_rad=ind_rad
-            )
-
-            if radar_aux is None:
-                continue
-
-            if radar is None:
-                radar = radar_aux
-            else:
-                radar = pyart.util.radar_utils.join_radar(radar, radar_aux)
+            radar = pyart.util.radar_utils.join_radar(radar, radar_aux)
     if radar is None:
         return radar
 
@@ -1889,115 +1889,56 @@ def merge_scans_odim(
         radar object
 
     """
+    # find files to merge
+    if 'bucket' in cfg:
+        if not _BOTO3_AVAILABLE:
+            warn('boto3 not installed')
+            return None
+        fname_list, scan_list_aux = get_scan_files_to_merge_s3(
+            cfg["s3path"], scan_list, radar_name, radar_res, voltime, dataset_list,
+            cfg, path_convention=cfg["path_convention"][ind_rad],
+            master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
+            scan_period=cfg['ScanPeriod'])
+    else:
+        fname_list, scan_list_aux = get_scan_files_to_merge(
+            basepath, scan_list, radar_name, radar_res, voltime, dataset_list,
+            path_convention=cfg["path_convention"][ind_rad],
+            master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
+            scan_period=cfg['ScanPeriod'])
+
+    if not fname_list:
+        warn('No files found')
+        return None
+
     radar = None
-    dayinfo = voltime.strftime("%y%j")
-    timeinfo = voltime.strftime("%H%M")
-    basename = ""
-    if radar_name is not None and radar_res is not None:
-        basename = f"M{radar_res}{radar_name}{dayinfo}"
+    if 'bucket' in cfg:
+        s3_client = boto3.client(
+            's3', endpoint_url=cfg['s3_url'], aws_access_key_id=cfg['s3_key'],
+            aws_secret_access_key=cfg['s3_secret_key'], verify=False)
+        daydir = voltime.strftime("%Y-%m-%d")
+        datapath = f'{basepath}{daydir}/'
+        if not os.path.isdir(datapath):
+            os.makedirs(datapath)
 
-    # get list of files to combine
-    flist = []
-    scan_list_aux = []
-    if cfg["path_convention"][ind_rad] == "LTE":
-        yy = dayinfo[0:2]
-        dy = dayinfo[2:]
-        subf = f"M{radar_res}{radar_name}{yy}hdf{dy}"
-        datapath = basepath + subf + "/"
-        filename = glob.glob(f"{datapath}{basename}{timeinfo}*{scan_list[0]}*")
-        if not filename:
-            if basename != "":
-                basename = f"P{radar_res}{radar_name}{dayinfo}"
-            subf = f"P{radar_res}{radar_name}{yy}hdf{dy}"
-            datapath = f"{basepath}{subf}/"
-            filename = glob.glob(f"{datapath}{basename}{timeinfo}*{scan_list[0]}*")
-    elif cfg["path_convention"][ind_rad] == "MCH":
-        datapath = f"{basepath}{dayinfo}/{basename}/"
-        filename = glob.glob(f"{datapath}{basename}{timeinfo}*{scan_list[0]}*")
-        if not filename:
-            if basename != "":
-                basename = f"P{radar_res}{radar_name}{dayinfo}"
-            datapath = f"{basepath}{dayinfo}/{basename}/"
-            filename = glob.glob(f"{datapath}{basename}{timeinfo}*{scan_list[0]}*")
-    elif cfg["path_convention"][ind_rad] == "ODIM":
-        basename = ""
-        fpath_strf = dataset_list[0][
-            dataset_list[0].find("D") + 2 : dataset_list[0].find("F") - 2
-        ]
-        fdate_strf = dataset_list[0][dataset_list[0].find("F") + 2 : -1]
-        datapath = f"{basepath}{voltime.strftime(fpath_strf)}/"
-        filenames = glob.glob(f"{datapath}*{scan_list[0]}*")
-        filename = []
-        for filename_aux in filenames:
-            fdatetime = find_date_in_file_name(filename_aux, date_format=fdate_strf)
-            if fdatetime == voltime:
-                filename = [filename_aux]
-                break
-    else:
-        datapath = f"{basepath}M{radar_res}{radar_name}/"
-        filename = glob.glob(f"{datapath}{basename}{timeinfo}*{scan_list[0]}*")
-        if not filename:
-            if basename != "":
-                basename = f"P{radar_res}{radar_name}{dayinfo}"
-            datapath = f"{basepath}P{radar_res}{radar_name}/"
-            filename = glob.glob(f"{datapath}{basename}{timeinfo}*{scan_list[0]}*")
-    if not filename:
-        warn(f"No file found in {datapath[0]}{basename}{timeinfo}*.h*")
-    else:
-        flist.append(filename[0])
-        scan_list_aux.append(scan_list[0])
+    for fname, scan in zip(fname_list, scan_list_aux):
+        if 'bucket' in cfg:
+            fname_aux = f'{datapath}{os.path.basename(fname)}'
+            s3_client.download_file(cfg['bucket'], fname, fname_aux)
+        else:
+            fname_aux = fname
 
-    if len(scan_list) > 1:
-        # merge the elevations into a single radar instance
-        for scan in scan_list[1:]:
-            if cfg["path_convention"][ind_rad] == "ODIM":
-                filenames = glob.glob(f"{datapath}*{scan}*")
-                filename = []
-                for filename_aux in filenames:
-                    fdatetime = find_date_in_file_name(
-                        filename_aux, date_format=fdate_strf
-                    )
-                    if cfg["MasterScanTimeTol"][ind_rad] == 0:
-                        if fdatetime == voltime:
-                            filename = [filename_aux]
-                            break
-                    elif cfg["MasterScanTimeTol"][ind_rad] == 1:
-                        if (
-                            voltime
-                            <= fdatetime
-                            < voltime + datetime.timedelta(minutes=cfg["ScanPeriod"])
-                        ):
-                            filename = [filename_aux]
-                            print(os.path.basename(filename[0]))
-                            break
-                    else:
-                        if (
-                            voltime - datetime.timedelta(minutes=cfg["ScanPeriod"])
-                            < fdatetime
-                            <= voltime
-                        ):
-                            filename = [filename_aux]
-                            print(os.path.basename(filename[0]))
-                            break
-            else:
-                filename = glob.glob(f"{datapath}{basename}{timeinfo}*{scan}*")
-            if not filename:
-                warn(f"No file found in {datapath}{basename}{timeinfo}*." f"{scan}")
-                continue
-            flist.append(filename[0])
-            scan_list_aux.append(scan)
+        radar_aux = get_data_odim(
+            fname_aux, datatype_list, scan, cfg, ind_rad=ind_rad)
 
-    if not flist:
-        return radar
-
-    for fname, scan in zip(flist, scan_list_aux):
-        radar_aux = get_data_odim(fname, datatype_list, scan, cfg, ind_rad=ind_rad)
         if radar_aux is None:
             continue
         if radar is None:
             radar = radar_aux
-            continue
-        radar = pyart.util.radar_utils.join_radar(radar, radar_aux)
+        else:
+            radar = merge_radars(radar, radar_aux)
+
+        if 'bucket' in cfg and 'rm_s3_file' in cfg and cfg['rm_s3_file']:
+            os.remove(fname_aux)
 
     if radar is None:
         return radar
@@ -2062,42 +2003,59 @@ def merge_scans_odimgrid(
         radar object
 
     """
-    grid = None
     if cfg["path_convention"][ind_rad] != "ODIM":
         raise ValueError(
             "ERROR: required path convention ODIM for files of type ODIMGRID"
         )
 
-    fpath_strf = dataset_list[0][
-        dataset_list[0].find("D") + 2 : dataset_list[0].find("F") - 2
-    ]
-    fdate_strf = dataset_list[0][dataset_list[0].find("F") + 2 : -1]
-    datapath = f"{basepath}{voltime.strftime(fpath_strf)}/"
-    for scan in scan_list:
-        filenames = glob.glob(f"{datapath}*{scan}*")
-        filename = []
-        for filename_aux in filenames:
-            fdatetime = find_date_in_file_name(filename_aux, date_format=fdate_strf)
-            if fdatetime == voltime:
-                filename = [filename_aux]
-                break
+    # find files to merge
+    if 'bucket' in cfg:
+        if not _BOTO3_AVAILABLE:
+            warn('boto3 not installed')
+            return None
+        fname_list, scan_list_aux = get_scan_files_to_merge_s3(
+            cfg["s3path"], scan_list, None, None, voltime, dataset_list,
+            cfg, path_convention=cfg["path_convention"][ind_rad])
+    else:
+        fname_list, scan_list_aux = get_scan_files_to_merge(
+            basepath, scan_list, None, None, voltime, dataset_list,
+            path_convention=cfg["path_convention"][ind_rad])
 
-        if not filename:
-            warn(f"No file found in {datapath}*{scan}*")
-            continue
+    if not fname_list:
+        warn('No files found')
+        return None
+
+    grid = None
+    if 'bucket' in cfg:
+        s3_client = boto3.client(
+            's3', endpoint_url=cfg['s3_url'], aws_access_key_id=cfg['s3_key'],
+            aws_secret_access_key=cfg['s3_secret_key'], verify=False)
+        daydir = voltime.strftime("%Y-%m-%d")
+        datapath = f'{basepath}{daydir}/'
+        if not os.path.isdir(datapath):
+            os.makedirs(datapath)
+
+    for fname in fname_list:
+        if 'bucket' in cfg:
+            fname_aux = f'{datapath}{os.path.basename(fname)}'
+            s3_client.download_file(cfg['bucket'], fname, fname_aux)
+        else:
+            fname_aux = fname
 
         grid_aux = get_data_odimgrid(
-            filename[0], datatype_list, cfg, mf_scale=cfg["MFScale"], ind_rad=ind_rad
-        )
+            fname_aux, datatype_list, cfg, mf_scale=cfg["MFScale"],
+            ind_rad=ind_rad)
 
         if grid_aux is None:
             continue
-
         if grid is None:
             grid = grid_aux
         else:
             for prod_field in grid_aux.fields.keys():
                 grid.add_field(prod_field, grid_aux.fields[prod_field])
+
+        if 'bucket' in cfg and 'rm_s3_file' in cfg and cfg['rm_s3_file']:
+            os.remove(fname_aux)
 
     if grid is None:
         return grid
@@ -2162,45 +2120,62 @@ def merge_scans_knmih5_grid(
         radar object
 
     """
-    grid = None
     if cfg["path_convention"][ind_rad] != "ODIM":
         raise ValueError(
             "ERROR: required path convention ODIM for files of type KNMIH5GRID"
         )
 
-    fpath_strf = dataset_list[0][
-        dataset_list[0].find("D") + 2 : dataset_list[0].find("F") - 2
-    ]
-    fdate_strf = dataset_list[0][dataset_list[0].find("F") + 2 : -1]
-    datapath = f"{basepath}{voltime.strftime(fpath_strf)}/"
-    for scan in scan_list:
-        filenames = glob.glob(f"{datapath}*{scan}*")
-        filename = []
-        for filename_aux in filenames:
-            fdatetime = find_date_in_file_name(filename_aux, date_format=fdate_strf)
-            if fdatetime == voltime:
-                filename = [filename_aux]
-                break
+    odim_field_names = {}
+    for datatype in datatype_list:
+        odim_field_names.update(get_datatype_knmi(datatype))
 
-        if not filename:
-            warn(f"No file found in {datapath}*{scan}*")
-            continue
+    # find files to merge
+    if 'bucket' in cfg:
+        if not _BOTO3_AVAILABLE:
+            warn('boto3 not installed')
+            return None
+        fname_list, scan_list_aux = get_scan_files_to_merge_s3(
+            cfg["s3path"], scan_list, None, None, voltime, dataset_list,
+            cfg, path_convention=cfg["path_convention"][ind_rad])
+    else:
+        fname_list, scan_list_aux = get_scan_files_to_merge(
+            basepath, scan_list, None, None, voltime, dataset_list,
+            path_convention=cfg["path_convention"][ind_rad])
 
-        odim_field_names = {}
-        for datatype in datatype_list:
-            odim_field_names.update(get_datatype_knmi(datatype))
+    if not fname_list:
+        warn('No files found')
+        return None
+
+    grid = None
+    if 'bucket' in cfg:
+        s3_client = boto3.client(
+            's3', endpoint_url=cfg['s3_url'], aws_access_key_id=cfg['s3_key'],
+            aws_secret_access_key=cfg['s3_secret_key'], verify=False)
+        daydir = voltime.strftime("%Y-%m-%d")
+        datapath = f'{basepath}{daydir}/'
+        if not os.path.isdir(datapath):
+            os.makedirs(datapath)
+
+    for fname in fname_list:
+        if 'bucket' in cfg:
+            fname_aux = f'{datapath}{os.path.basename(fname)}'
+            s3_client.download_file(cfg['bucket'], fname, fname_aux)
+        else:
+            fname_aux = fname
+
         grid_aux = pyart.aux_io.read_knmi_grid_h5(
-            filename[0], field_names=odim_field_names
-        )
+            fname_aux, field_names=odim_field_names)
 
         if grid_aux is None:
             continue
-
         if grid is None:
             grid = grid_aux
         else:
             for prod_field in grid_aux.fields.keys():
                 grid.add_field(prod_field, grid_aux.fields[prod_field])
+
+        if 'bucket' in cfg and 'rm_s3_file' in cfg and cfg['rm_s3_file']:
+            os.remove(fname_aux)
 
     if grid is None:
         return grid
@@ -2277,68 +2252,63 @@ def merge_scans_odimbirds(
         radar object
 
     """
+    field_names_dict = {}
+    for datatype in datatype_list:
+        field_names_dict.update({datatype: get_fieldname_pyart(datatype)})
+
+    # find files to merge
+    if 'bucket' in cfg:
+        if not _BOTO3_AVAILABLE:
+            warn('boto3 not installed')
+            return None
+        fname_list, scan_list_aux = get_scan_files_to_merge_s3(
+            cfg["s3path"], scan_list, radar_name, radar_res, voltime, dataset_list,
+            cfg, path_convention=cfg["path_convention"][ind_rad],
+            master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
+            scan_period=cfg['ScanPeriod'])
+    else:
+        fname_list, scan_list_aux = get_scan_files_to_merge(
+            basepath, scan_list, radar_name, radar_res, voltime, dataset_list,
+            path_convention=cfg["path_convention"][ind_rad],
+            master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
+            scan_period=cfg['ScanPeriod'])
+
+    if not fname_list:
+        warn('No files found')
+        return None
+
     radar = None
-    dayinfo = voltime.strftime("%y%j")
-    timeinfo = voltime.strftime("%H%M")
-    basename = None
-    if radar_name is not None and radar_res is not None:
-        basename = "M" + radar_res + radar_name + dayinfo
-    if cfg["path_convention"][ind_rad] == "LTE":
-        if basename is None:
-            warn(f'Radar name and Radar res have to be specified '
-                 f'in path convention {cfg["path_convention"][ind_rad]}')
-            return radar
-        yy = dayinfo[0:2]
-        dy = dayinfo[2:]
-        subf = "M" + radar_res + radar_name + yy + "hdf" + dy
-        datapath = basepath + subf + "/"
-        filename = glob.glob(datapath + basename + timeinfo + "*" + scan_list[0] + "*")
-        if not filename:
-            basename = "P" + radar_res + radar_name + dayinfo
-            subf = "P" + radar_res + radar_name + yy + "hdf" + dy
-            datapath = basepath + subf + "/"
-    elif cfg["path_convention"][ind_rad] == "MCH":
-        if basename is None:
-            warn(f'Radar name and Radar res have to be specified '
-                 f'in path convention {cfg["path_convention"][ind_rad]}')
-            return radar
-        datapath = basepath + dayinfo + "/" + basename + "/"
-        filename = glob.glob(datapath + basename + timeinfo + "*" + scan_list[0] + "*")
-        if not filename:
-            basename = "P" + radar_res + radar_name + dayinfo
-            datapath = basepath + dayinfo + "/" + basename + "/"
-    elif cfg["path_convention"][ind_rad] == "ODIM":
-        fpath_strf = dataset_list[0][
-            dataset_list[0].find("D") + 2 : dataset_list[0].find("F") - 2
-        ]
-        fdate_strf = dataset_list[0][dataset_list[0].find("F") + 2 : -1]
-        datapath = basepath + voltime.strftime(fpath_strf) + "/"
-        filenames = glob.glob(datapath + "*" + scan_list[0] + "*")
-        filename = []
-        for filename_aux in filenames:
-            fdatetime = find_date_in_file_name(filename_aux, date_format=fdate_strf)
-            if fdatetime == voltime:
-                filename = [filename_aux]
-    else:
-        if basename is None:
-            warn(f'Radar name and Radar res have to be specified '
-                 f'in path convention {cfg["path_convention"][ind_rad]}')
-            return radar
-        datapath = basepath + "M" + radar_res + radar_name + "/"
-        filename = glob.glob(datapath + basename + timeinfo + "*" + scan_list[0] + "*")
-        if not filename:
-            basename = "P" + radar_res + radar_name + dayinfo
-            datapath = basepath + "P" + radar_res + radar_name + "/"
-            filename = glob.glob(
-                datapath + basename + timeinfo + "*" + scan_list[0] + "*"
-            )
-    if not filename:
-        warn("No file found in " + datapath[0] + basename + timeinfo + "*.h*")
-    else:
-        field_names_dict = {}
-        for datatype in datatype_list:
-            field_names_dict.update({datatype: get_fieldname_pyart(datatype)})
-        radar = pyart.aux_io.read_odim_vp_h5(filename[0], field_names=field_names_dict)
+    if 'bucket' in cfg:
+        s3_client = boto3.client(
+            's3', endpoint_url=cfg['s3_url'], aws_access_key_id=cfg['s3_key'],
+            aws_secret_access_key=cfg['s3_secret_key'], verify=False)
+        daydir = voltime.strftime("%Y-%m-%d")
+        datapath = f'{basepath}{daydir}/'
+        if not os.path.isdir(datapath):
+            os.makedirs(datapath)
+
+    for fname in fname_list:
+        if 'bucket' in cfg:
+            fname_aux = f'{datapath}{os.path.basename(fname)}'
+            s3_client.download_file(cfg['bucket'], fname, fname_aux)
+        else:
+            fname_aux = fname
+
+        radar_aux = pyart.aux_io.read_odim_vp_h5(
+            fname_aux, field_names=field_names_dict)
+
+        if radar_aux is None:
+            continue
+        if radar is None:
+            radar = radar_aux
+        else:
+            radar = merge_radars(radar, radar_aux)
+
+        if 'bucket' in cfg and 'rm_s3_file' in cfg and cfg['rm_s3_file']:
+            os.remove(fname_aux)
+
+    if radar is None:
+        return radar
 
     rmin = None
     rmax = None
@@ -2359,20 +2329,16 @@ def merge_scans_odimbirds(
     if cfg["azmax"] is not None:
         azmax = cfg["azmax"][ind_rad]
 
-    if len(scan_list) == 1:
-        if radar is None:
-            return radar
-
-        return pyart.util.subset_radar(
-            radar,
-            radar.fields.keys(),
-            rng_min=rmin,
-            rng_max=rmax,
-            ele_min=elmin,
-            ele_max=elmax,
-            azi_min=azmin,
-            azi_max=azmax,
-        )
+    return pyart.util.subset_radar(
+        radar,
+        radar.fields.keys(),
+        rng_min=rmin,
+        rng_max=rmax,
+        ele_min=elmin,
+        ele_max=elmax,
+        azi_min=azmin,
+        azi_max=azmax,
+    )
 
 
 def merge_scans_gamic(
@@ -2416,139 +2382,59 @@ def merge_scans_gamic(
         radar object
 
     """
+    # find files to merge
+    if 'bucket' in cfg:
+        if not _BOTO3_AVAILABLE:
+            warn('boto3 not installed')
+            return None
+        fname_list, _ = get_scan_files_to_merge_s3(
+            cfg["s3path"], scan_list, radar_name, radar_res, voltime, dataset_list,
+            cfg, path_convention=cfg["path_convention"][ind_rad],
+            master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
+            scan_period=cfg['ScanPeriod'])
+    else:
+        fname_list, _ = get_scan_files_to_merge(
+            basepath, scan_list, radar_name, radar_res, voltime, dataset_list,
+            path_convention=cfg["path_convention"][ind_rad],
+            master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
+            scan_period=cfg['ScanPeriod'])
+
+    if not fname_list:
+        warn('No files found')
+        return None
+
     radar = None
-    dayinfo = voltime.strftime("%y%j")
-    timeinfo = voltime.strftime("%H%M")
-    basename = None
-    if radar_name is not None and radar_res is not None:
-        basename = "M" + radar_res + radar_name + dayinfo
-    if cfg["path_convention"][ind_rad] == "LTE":
-        if basename is None:
-            warn(f'Radar name and Radar res have to be specified '
-                 f'in path convention {cfg["path_convention"][ind_rad]}')
-            return radar
-        yy = dayinfo[0:2]
-        dy = dayinfo[2:]
-        subf = "M" + radar_res + radar_name + yy + "hdf" + dy
-        datapath = basepath + subf + "/"
-        filename = glob.glob(datapath + basename + timeinfo + "*" + scan_list[0] + "*")
-        if not filename:
-            basename = "P" + radar_res + radar_name + dayinfo
-            subf = "P" + radar_res + radar_name + yy + "hdf" + dy
-            datapath = basepath + subf + "/"
-    elif cfg["path_convention"][ind_rad] == "MCH":
-        if basename is None:
-            warn(f'Radar name and Radar res have to be specified '
-                 f'in path convention {cfg["path_convention"][ind_rad]}')
-            return radar
-        datapath = basepath + dayinfo + "/" + basename + "/"
-        filename = glob.glob(datapath + basename + timeinfo + "*" + scan_list[0] + "*")
-        if not filename:
-            basename = "P" + radar_res + radar_name + dayinfo
-            datapath = basepath + dayinfo + "/" + basename + "/"
-    elif cfg["path_convention"][ind_rad] == "ODIM":
-        fpath_strf = dataset_list[0][
-            dataset_list[0].find("D") + 2 : dataset_list[0].find("F") - 2
-        ]
-        fdate_strf = dataset_list[0][dataset_list[0].find("F") + 2 : -1]
-        datapath = basepath + voltime.strftime(fpath_strf) + "/"
-        filenames = glob.glob(datapath + "*" + scan_list[0] + "*")
-        filename = []
-        for filename_aux in filenames:
-            fdatetime = find_date_in_file_name(filename_aux, date_format=fdate_strf)
-            if fdatetime == voltime:
-                filename = [filename_aux]
-    else:
-        if basename is None:
-            warn(f'Radar name and Radar res have to be specified '
-                 f'in path convention {cfg["path_convention"][ind_rad]}')
-            return radar
-        datapath = basepath + "M" + radar_res + radar_name + "/"
-        filename = glob.glob(datapath + basename + timeinfo + "*" + scan_list[0] + "*")
-        if not filename:
-            basename = "P" + radar_res + radar_name + dayinfo
-            datapath = basepath + "P" + radar_res + radar_name + "/"
-            filename = glob.glob(
-                datapath + basename + timeinfo + "*" + scan_list[0] + "*"
-            )
-    if not filename:
-        warn("No file found in " + datapath[0] + basename + timeinfo + "*.h*")
-    else:
-        radar = get_data_gamic(filename[0], datatype_list, cfg["pulse_width_gamic"])
+    if 'bucket' in cfg:
+        s3_client = boto3.client(
+            's3', endpoint_url=cfg['s3_url'], aws_access_key_id=cfg['s3_key'],
+            aws_secret_access_key=cfg['s3_secret_key'], verify=False)
+        daydir = voltime.strftime("%Y-%m-%d")
+        datapath = f'{basepath}{daydir}/'
+        if not os.path.isdir(datapath):
+            os.makedirs(datapath)
 
-    rmin = None
-    rmax = None
-    elmin = None
-    elmax = None
-    azmin = None
-    azmax = None
-    if cfg["rmin"] is not None:
-        rmin = cfg["rmin"][ind_rad]
-    if cfg["rmax"] is not None:
-        rmax = cfg["rmax"][ind_rad]
-    if cfg["elmin"] is not None:
-        elmin = cfg["elmin"][ind_rad]
-    if cfg["elmax"] is not None:
-        elmax = cfg["elmax"][ind_rad]
-    if cfg["azmin"] is not None:
-        azmin = cfg["azmin"][ind_rad]
-    if cfg["azmax"] is not None:
-        azmax = cfg["azmax"][ind_rad]
+    for fname in fname_list:
+        if 'bucket' in cfg:
+            fname_aux = f'{datapath}{os.path.basename(fname)}'
+            s3_client.download_file(cfg['bucket'], fname, fname_aux)
+        else:
+            fname_aux = fname
 
-    if len(scan_list) == 1:
+        radar_aux = get_data_gamic(
+            fname_aux, datatype_list, cfg["pulse_width_gamic"])
+
+        if radar_aux is None:
+            continue
         if radar is None:
-            return radar
-
-        return pyart.util.subset_radar(
-            radar,
-            radar.fields.keys(),
-            rng_min=rmin,
-            rng_max=rmax,
-            ele_min=elmin,
-            ele_max=elmax,
-            azi_min=azmin,
-            azi_max=azmax,
-        )
-
-    # merge the elevations into a single radar instance
-    for scan in scan_list[1:]:
-        if cfg["path_convention"][ind_rad] == "ODIM":
-            filenames = glob.glob(datapath + "*" + scan + "*")
-            filename = []
-            for filename_aux in filenames:
-                fdatetime = find_date_in_file_name(filename_aux, date_format=fdate_strf)
-                if fdatetime == voltime:
-                    filename = [filename_aux]
-                    break
+            radar = radar_aux
         else:
-            filename = glob.glob(datapath + basename + timeinfo + "*" + scan + "*")
-        if not filename:
-            warn("No file found in " + datapath + basename + timeinfo + "*." + scan)
-        else:
-            radar_aux = get_data_gamic(
-                filename[0], datatype_list, cfg["pulse_width_gamic"]
-            )
-            if radar_aux is None:
-                continue
+            radar = merge_radars(radar, radar_aux)
 
-            if radar is None:
-                radar = radar_aux
-            else:
-                radar = pyart.util.radar_utils.join_radar(radar, radar_aux)
+        if 'bucket' in cfg and 'rm_s3_file' in cfg and cfg['rm_s3_file']:
+            os.remove(fname_aux)
 
     if radar is None:
         return radar
-
-    return pyart.util.subset_radar(
-        radar,
-        radar.fields.keys(),
-        rng_min=rmin,
-        rng_max=rmax,
-        ele_min=elmin,
-        ele_max=elmax,
-        azi_min=azmin,
-        azi_max=azmax,
-    )
 
 
 def merge_scans_mfcfradial(
@@ -2796,24 +2682,67 @@ def merge_scans_nexrad2(
         radar object
 
     """
-    fpath_strf = dataset_list[0][
-        dataset_list[0].find("D") + 2 : dataset_list[0].find("F") - 2
-    ]
-    timeinfo = voltime.strftime(fpath_strf)
-    fdate_strf = dataset_list[0][dataset_list[0].find("F") + 2 : -1]
-    datapath = basepath + timeinfo + "/"
-    filenames = glob.glob(datapath + "*" + scan_list[0] + "*")
-    filename = []
-    for filename_aux in filenames:
-        fdatetime = find_date_in_file_name(filename_aux, date_format=fdate_strf)
-        if fdatetime == voltime:
-            filename = [filename_aux]
+    field_names = {}
+    # Use custom name mapping
+    for datatype in datatype_list:
+        if datatype in cfg["DataTypeIDInFiles"][ind_rad]:
+            field_names[cfg["DataTypeIDInFiles"][ind_rad][datatype]] = (
+                get_fieldname_pyart(datatype)
+            )
+        else:
+            field_names[datatype] = get_fieldname_pyart(datatype)
+
+    # find files to merge
+    if 'bucket' in cfg:
+        if not _BOTO3_AVAILABLE:
+            warn('boto3 not installed')
+            return None
+        fname_list, _ = get_scan_files_to_merge_s3(
+            cfg["s3path"], scan_list, None, None, voltime, dataset_list,
+            cfg, path_convention=cfg["path_convention"][ind_rad],
+            master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
+            scan_period=cfg['ScanPeriod'])
+    else:
+        fname_list, _ = get_scan_files_to_merge(
+            basepath, scan_list, None, None, voltime, dataset_list,
+            path_convention=cfg["path_convention"][ind_rad],
+            master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
+            scan_period=cfg['ScanPeriod'])
+
+    if not fname_list:
+        warn('No files found')
+        return None
 
     radar = None
-    if not filename:
-        warn("No file found in " + datapath + "*" + scan_list[0] + "*")
-    else:
-        radar = pyart.io.read(filename[0])
+    if 'bucket' in cfg:
+        s3_client = boto3.client(
+            's3', endpoint_url=cfg['s3_url'], aws_access_key_id=cfg['s3_key'],
+            aws_secret_access_key=cfg['s3_secret_key'], verify=False)
+        daydir = voltime.strftime("%Y-%m-%d")
+        datapath = f'{basepath}{daydir}/'
+        if not os.path.isdir(datapath):
+            os.makedirs(datapath)
+
+
+    for fname in fname_list:
+        if 'bucket' in cfg:
+            fname_aux = f'{datapath}{os.path.basename(fname)}'
+            s3_client.download_file(cfg['bucket'], fname, fname_aux)
+        else:
+            fname_aux = fname
+
+        radar_aux = pyart.io.read(
+            fname, field_names=field_names,
+            include_fields=field_names.values())
+        if radar_aux is None:
+            continue
+        if radar is None:
+            radar = radar_aux
+        else:
+            radar = merge_radars(radar, radar_aux)
+
+    if radar is None:
+        return radar
 
     rmin = None
     rmax = None
@@ -2833,47 +2762,6 @@ def merge_scans_nexrad2(
         azmin = cfg["azmin"][ind_rad]
     if cfg["azmax"] is not None:
         azmax = cfg["azmax"][ind_rad]
-
-    if len(scan_list) == 1:
-        if radar is None:
-            return radar
-
-        return pyart.util.subset_radar(
-            radar,
-            radar.fields.keys(),
-            rng_min=rmin,
-            rng_max=rmax,
-            ele_min=elmin,
-            ele_max=elmax,
-            azi_min=azmin,
-            azi_max=azmax,
-        )
-
-    # merge the elevations into a single radar instance
-    for scan in scan_list[1:]:
-        filenames = glob.glob(datapath + "*" + scan + "*")
-        filename = []
-        for filename_aux in filenames:
-            fdatetime = find_date_in_file_name(filename_aux, date_format=fdate_strf)
-            if fdatetime == voltime:
-                filename = [filename_aux]
-                break
-        if not filename:
-            warn("No file found in " + basepath, timeinfo + "*." + scan)
-        else:
-            radar_aux = pyart.io.read(
-                filename[0], datatype_list, scan, cfg, ind_rad=ind_rad
-            )
-            if radar_aux is None:
-                continue
-
-            if radar is None:
-                radar = radar_aux
-            else:
-                radar = pyart.util.radar_utils.join_radar(radar, radar_aux)
-
-    if radar is None:
-        return radar
 
     return pyart.util.subset_radar(
         radar,
@@ -2943,13 +2831,17 @@ def merge_scans_cfradial(
         if not _BOTO3_AVAILABLE:
             warn('boto3 not installed')
             return None
-        fname_list = get_scan_files_to_merge_s3(
-            basepath, scan_list, radar_name, radar_res, voltime, dataset_list,
-            cfg, path_convention=cfg["path_convention"][ind_rad])
+        fname_list, _ = get_scan_files_to_merge_s3(
+            cfg["s3path"], scan_list, radar_name, radar_res, voltime, dataset_list,
+            cfg, path_convention=cfg["path_convention"][ind_rad],
+            master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
+            scan_period=cfg['ScanPeriod'])
     else:
-        fname_list = get_scan_files_to_merge(
+        fname_list, _ = get_scan_files_to_merge(
             basepath, scan_list, radar_name, radar_res, voltime, dataset_list,
-            path_convention=cfg["path_convention"][ind_rad])
+            path_convention=cfg["path_convention"][ind_rad],
+            master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
+            scan_period=cfg['ScanPeriod'])
 
     if not fname_list:
         warn('No files found')
@@ -2960,9 +2852,7 @@ def merge_scans_cfradial(
         s3_client = boto3.client(
             's3', endpoint_url=cfg['s3_url'], aws_access_key_id=cfg['s3_key'],
             aws_secret_access_key=cfg['s3_secret_key'], verify=False)
-        fpath_strf = dataset_list[0][
-            dataset_list[0].find("D") + 2 : dataset_list[0].find("F") - 2]
-        daydir = voltime.strftime(fpath_strf)
+        daydir = voltime.strftime("%Y-%m-%d")
         datapath = f'{basepath}{daydir}/'
         if not os.path.isdir(datapath):
             os.makedirs(datapath)
@@ -2985,7 +2875,7 @@ def merge_scans_cfradial(
         else:
             radar = merge_radars(radar, radar_aux)
 
-        if 'bucket' in cfg and 'rm_s3_file' in cfg and cfg['rm_s3_file'] == True:
+        if 'bucket' in cfg and 'rm_s3_file' in cfg and cfg['rm_s3_file']:
             os.remove(fname_aux)
 
     if radar is None:
@@ -3074,18 +2964,44 @@ def merge_scans_cfradial2(
             field_names[datatype] = get_fieldname_pyart(datatype)
 
     # find files to merge
-    fname_list = get_scan_files_to_merge(
-        basepath, scan_list, radar_name, radar_res, voltime, dataset_list,
-        path_convention=cfg["path_convention"][ind_rad],
-        master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
-        scan_period=cfg["ScanPeriod"])
+    if 'bucket' in cfg:
+        if not _BOTO3_AVAILABLE:
+            warn('boto3 not installed')
+            return None
+        fname_list, _ = get_scan_files_to_merge_s3(
+            cfg["s3path"], scan_list, radar_name, radar_res, voltime, dataset_list,
+            cfg, path_convention=cfg["path_convention"][ind_rad],
+            master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
+            scan_period=cfg['ScanPeriod'])
+    else:
+        fname_list, _ = get_scan_files_to_merge(
+            basepath, scan_list, radar_name, radar_res, voltime, dataset_list,
+            path_convention=cfg["path_convention"][ind_rad],
+            master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
+            scan_period=cfg['ScanPeriod'])
 
     if not fname_list:
         warn('No files found')
         return None
 
     radar = None
+    if 'bucket' in cfg:
+        s3_client = boto3.client(
+            's3', endpoint_url=cfg['s3_url'], aws_access_key_id=cfg['s3_key'],
+            aws_secret_access_key=cfg['s3_secret_key'], verify=False)
+        daydir = voltime.strftime("%Y-%m-%d")
+        datapath = f'{basepath}{daydir}/'
+        if not os.path.isdir(datapath):
+            os.makedirs(datapath)
+
+
     for fname in fname_list:
+        if 'bucket' in cfg:
+            fname_aux = f'{datapath}{os.path.basename(fname)}'
+            s3_client.download_file(cfg['bucket'], fname, fname_aux)
+        else:
+            fname_aux = fname
+
         radar_aux = pyart.io.read_cfradial2(
             fname, field_names=field_names,
             include_fields=field_names.values())
@@ -3163,29 +3079,48 @@ def merge_scans_skyecho(
     for datatype in datatype_list:
         skyecho_field_names.update(get_datatype_skyecho(datatype))
 
-    radar = None
-
-    fpath_strf = dataset_list[0][
-        dataset_list[0].find("D") + 2 : dataset_list[0].find("F") - 2
-    ]
-    fdate_strf = dataset_list[0][dataset_list[0].find("F") + 2 : -1]
-    datapath = basepath + voltime.strftime(fpath_strf) + "/"
-    filenames = glob.glob(datapath + "*" + scan_list[0] + "*")
-    filename = []
-    time_ref = datetime.datetime.strptime(
-        voltime.strftime("%Y%m%d000000"), "%Y%m%d%H%M%S"
-    )
-    for filename_aux in filenames:
-        fdatetime = find_date_in_file_name(filename_aux, date_format=fdate_strf)
-        if fdatetime >= time_ref:
-            filename = [filename_aux]
-
-    if not filename:
-        warn(f"No file found in {datapath}*{scan_list[0]}* for time ref {time_ref}")
+    # find files to merge
+    if 'bucket' in cfg:
+        if not _BOTO3_AVAILABLE:
+            warn('boto3 not installed')
+            return None
+        fname_list, _ = get_scan_files_to_merge_s3(
+            cfg["s3path"], scan_list, None, None, voltime, dataset_list,
+            cfg, path_convention='SkyEcho')
     else:
-        radar = pyart.aux_io.read_skyecho(
-            filename[0], sweep_end_time=voltime, field_names=skyecho_field_names
-        )
+        fname_list, _ = get_scan_files_to_merge(
+            basepath, scan_list, None, None, voltime, dataset_list,
+            path_convention='SkyEcho')
+
+    if not fname_list:
+        warn('No files found')
+        return None
+
+    radar = None
+    if 'bucket' in cfg:
+        datapath = f'{basepath}'
+        if not os.path.isdir(datapath):
+            os.makedirs(datapath)
+
+    for fname in fname_list:
+        if 'bucket' in cfg:
+            fname_aux = f'{datapath}{os.path.basename(fname)}'
+        else:
+            fname_aux = fname
+
+        radar_aux = pyart.aux_io.read_skyecho(
+            fname_aux, sweep_end_time=voltime,
+            field_names=skyecho_field_names)
+
+        if radar_aux is None:
+            continue
+        if radar is None:
+            radar = radar_aux
+        else:
+            radar = merge_radars(radar, radar_aux)
+
+    if radar is None:
+        return radar
 
     rmin = None
     rmax = None
@@ -3205,9 +3140,6 @@ def merge_scans_skyecho(
         azmin = cfg["azmin"][ind_rad]
     if cfg["azmax"] is not None:
         azmax = cfg["azmax"][ind_rad]
-
-    if radar is None:
-        return radar
 
     return pyart.util.subset_radar(
         radar,
@@ -3262,70 +3194,70 @@ def merge_scans_cf1(
         radar object
 
     """
-
-    field_names = []
+    field_names = {}
+    # Use custom name mapping
     for datatype in datatype_list:
-        field_names.append(get_fieldname_pyart(datatype))
+        if datatype in cfg["DataTypeIDInFiles"][ind_rad]:
+            field_names[cfg["DataTypeIDInFiles"][ind_rad][datatype]] = (
+                get_fieldname_pyart(datatype)
+            )
+        else:
+            field_names[datatype] = get_fieldname_pyart(datatype)
+
+    # find files to merge
+    if 'bucket' in cfg:
+        if not _BOTO3_AVAILABLE:
+            warn('boto3 not installed')
+            return None
+        fname_list, _ = get_scan_files_to_merge_s3(
+            cfg["s3path"], scan_list, radar_name, radar_res, voltime, dataset_list,
+            cfg, path_convention=cfg["path_convention"][ind_rad],
+            master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
+            scan_period=cfg['ScanPeriod'])
+    else:
+        fname_list, _ = get_scan_files_to_merge(
+            basepath, scan_list, radar_name, radar_res, voltime, dataset_list,
+            path_convention=cfg["path_convention"][ind_rad],
+            master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
+            scan_period=cfg['ScanPeriod'])
+
+    if not fname_list:
+        warn('No files found')
+        return None
 
     radar = None
-    dayinfo = voltime.strftime("%y%j")
-    timeinfo = voltime.strftime("%H%M")
-    basename = None
-    if radar_name is not None and radar_res is not None:
-        basename = "M" + radar_res + radar_name + dayinfo
-    if cfg["path_convention"][ind_rad] == "LTE":
-        if basename is None:
-            warn(f'Radar name and Radar res have to be specified '
-                 f'in path convention {cfg["path_convention"][ind_rad]}')
-            return radar
-        yy = dayinfo[0:2]
-        dy = dayinfo[2:]
-        subf = "M" + radar_res + radar_name + yy + "hdf" + dy
-        datapath = basepath + subf + "/"
-        filename = glob.glob(datapath + basename + timeinfo + "*" + scan_list[0] + "*")
-        if not filename:
-            basename = "P" + radar_res + radar_name + dayinfo
-            subf = "P" + radar_res + radar_name + yy + "hdf" + dy
-            datapath = basepath + subf + "/"
-    elif cfg["path_convention"][ind_rad] == "MCH":
-        if basename is None:
-            warn(f'Radar name and Radar res have to be specified '
-                 f'in path convention {cfg["path_convention"][ind_rad]}')
-            return radar
-        datapath = basepath + dayinfo + "/" + basename + "/"
-        filename = glob.glob(datapath + basename + timeinfo + "*" + scan_list[0] + "*")
-        if not filename:
-            basename = "P" + radar_res + radar_name + dayinfo
-            datapath = basepath + dayinfo + "/" + basename + "/"
-    elif cfg["path_convention"][ind_rad] == "ODIM":
-        fpath_strf = dataset_list[0][
-            dataset_list[0].find("D") + 2 : dataset_list[0].find("F") - 2
-        ]
-        fdate_strf = dataset_list[0][dataset_list[0].find("F") + 2 : -1]
-        datapath = basepath + voltime.strftime(fpath_strf) + "/"
-        filenames = glob.glob(datapath + "*" + scan_list[0] + "*")
-        filename = []
-        for filename_aux in filenames:
-            fdatetime = find_date_in_file_name(filename_aux, date_format=fdate_strf)
-            if fdatetime == voltime:
-                filename = [filename_aux]
-    else:
-        if basename is None:
-            warn(f'Radar name and Radar res have to be specified '
-                 f'in path convention {cfg["path_convention"][ind_rad]}')
-            return radar
-        datapath = basepath + "M" + radar_res + radar_name + "/"
-        filename = glob.glob(datapath + basename + timeinfo + "*" + scan_list[0] + "*")
-        if not filename:
-            basename = "P" + radar_res + radar_name + dayinfo
-            datapath = basepath + "P" + radar_res + radar_name + "/"
-            filename = glob.glob(
-                datapath + basename + timeinfo + "*" + scan_list[0] + "*"
-            )
-    if not filename:
-        warn("No file found in " + datapath[0] + basename + timeinfo + "*.*")
-    else:
-        radar = pyart.aux_io.read_cf1(filename[0], field_names=None)
+    if 'bucket' in cfg:
+        s3_client = boto3.client(
+            's3', endpoint_url=cfg['s3_url'], aws_access_key_id=cfg['s3_key'],
+            aws_secret_access_key=cfg['s3_secret_key'], verify=False)
+        daydir = voltime.strftime("%Y-%m-%d")
+        datapath = f'{basepath}{daydir}/'
+        if not os.path.isdir(datapath):
+            os.makedirs(datapath)
+
+    for fname in fname_list:
+        if 'bucket' in cfg:
+            fname_aux = f'{datapath}{os.path.basename(fname)}'
+            s3_client.download_file(cfg['bucket'], fname, fname_aux)
+        else:
+            fname_aux = fname
+
+        radar_aux = pyart.aux_io.read_cf1(
+            fname_aux, field_names=field_names,
+            include_fields=field_names.values())
+
+        if radar_aux is None:
+            continue
+        if radar is None:
+            radar = radar_aux
+        else:
+            radar = merge_radars(radar, radar_aux)
+
+        if 'bucket' in cfg and 'rm_s3_file' in cfg and cfg['rm_s3_file']:
+            os.remove(fname_aux)
+
+    if radar is None:
+        return radar
 
     rmin = None
     rmax = None
@@ -3345,48 +3277,6 @@ def merge_scans_cf1(
         azmin = cfg["azmin"][ind_rad]
     if cfg["azmax"] is not None:
         azmax = cfg["azmax"][ind_rad]
-
-    if len(scan_list) == 1:
-        if radar is None:
-            return radar
-
-        return pyart.util.subset_radar(
-            radar,
-            radar.fields.keys(),
-            rng_min=rmin,
-            rng_max=rmax,
-            ele_min=elmin,
-            ele_max=elmax,
-            azi_min=azmin,
-            azi_max=azmax,
-        )
-
-    # merge the elevations into a single radar instance
-    for scan in scan_list[1:]:
-        if cfg["path_convention"][ind_rad] == "ODIM":
-            filenames = glob.glob(datapath + "*" + scan + "*")
-            filename = []
-            for filename_aux in filenames:
-                fdatetime = find_date_in_file_name(filename_aux, date_format=fdate_strf)
-                if fdatetime == voltime:
-                    filename = [filename_aux]
-                    break
-        else:
-            filename = glob.glob(datapath + basename + timeinfo + "*" + scan + "*")
-        if not filename:
-            warn("No file found in " + datapath + basename + timeinfo + "*." + scan)
-        else:
-            radar_aux = pyart.aux_io.read_cf1(filename[0], field_names=field_names)
-            if radar_aux is None:
-                continue
-
-            if radar is None:
-                radar = radar_aux
-            else:
-                radar = pyart.util.radar_utils.join_radar(radar, radar_aux)
-
-    if radar is None:
-        return radar
 
     return pyart.util.subset_radar(
         radar,
