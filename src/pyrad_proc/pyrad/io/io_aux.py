@@ -2793,7 +2793,7 @@ def get_scan_files_to_merge_s3(basepath, scan_list, radar_name, radar_res,
             for content in response['Contents']:
                 if fnmatch.fnmatch(content['Key'], pattern):
                     fdatetime = find_date_in_file_name(
-                        filename_aux, date_format=fdate_strf)
+                        content['Key'], date_format=fdate_strf)
                     if master_scan_time_tol == 0:
                         if fdatetime == voltime:
                             fname_list.append(content['Key'])
