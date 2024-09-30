@@ -2661,6 +2661,8 @@ def get_scan_files_to_merge_s3(basepath, scan_list, radar_name, radar_res,
         aws_secret_access_key=cfg['s3_secret_key'], verify=False)
     response = s3_client.list_objects_v2(Bucket=cfg['bucket'])
 
+    dayinfo = voltime.strftime("%y%j")
+    timeinfo = voltime.strftime("%H%M")
     for scan in scan_list:
         file_id = 'M'
         if radar_name is not None and radar_res is not None:
@@ -3302,7 +3304,6 @@ def get_file_list_s3(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     pattern = f'{cfg["s3path"]}*{scan}*'
                 else:
                     pattern = f'{cfg["s3path"]}{daydir}/*{scan}*'
-                pattern = f'{datapath}*{scan}*'
                 dayfilelist = []
                 for content in response['Contents']:
                     if fnmatch.fnmatch(content['Key'], pattern):
@@ -3425,11 +3426,11 @@ def get_file_list_s3(datadescriptor, starttimes, endtimes, cfg, scan=None):
             for filename in t_filelist:
                 # we need to download the master file to be able to know the
                 # scan coverage
-                datapath = f'{basepath}'
+                datapath = f'{cfg["datapath"]}'
                 if not os.path.isdir(datapath):
                     os.makedirs(datapath)
                 fname_aux = f'{datapath}{os.path.basename(filename)}'
-                s3_client.download_file(cfg['bucket'], fname, fname_aux)
+                s3_client.download_file(cfg['bucket'], filename, fname_aux)
                 _, tend_sweeps, _, _ = get_sweep_time_coverage(fname_aux)
                 for tend in tend_sweeps:
                     if starttime <= tend <= endtime:
@@ -3444,7 +3445,7 @@ def get_file_list_s3(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     if starttime <= fdatetime <= endtime:
                         if filenamestr not in filelist:
                             filelist.append(filenamestr)
-    
+
         if not filelist:
             if pattern is not None:
                 warn(
