@@ -7,8 +7,8 @@
 
 **Dev branch**
 
-[![Test pyrad base dev](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_base_dev.yml/badge.svg)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_nase_dev.yml)
-[![Test pyrad mch dev](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_mch_dev.yml/badge.svg)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_mch_dev.yml)
+[![Test pyrad base dev](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_base_dev.yml/badge.svg?branch=dev)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_base_dev.yml)
+[![Test pyrad mch dev](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_mch_dev.yml/badge.svg?branch=dev)](https://github.com/MeteoSwiss/pyrad/actions/workflows/pyrad_tests_mch_dev.yml)
 
 
 ---
