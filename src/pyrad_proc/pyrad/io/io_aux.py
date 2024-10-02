@@ -2981,7 +2981,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                         f'M{cfg["RadarRes"][ind_rad]}'
                         f'{cfg["RadarName"][ind_rad]}{dayinfo}')
                     datapath = (
-                        f'{cfg["datapath"]}{dayinfo}/{basename}/')
+                        f'{cfg["datapath"][ind_rad]}{dayinfo}/{basename}/')
 
                     # check that M files exist. if not search P files
                     pattern = f'{datapath}{basename}*{scan}*'
@@ -2991,7 +2991,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                             f'P{cfg["RadarRes"][ind_rad]}'
                             f'{cfg["RadarName"][ind_rad]}{dayinfo}')
                         datapath = (
-                            f'{cfg["datapath"]}{dayinfo}/{basename}/')
+                            f'{cfg["datapath"][ind_rad]}{dayinfo}/{basename}/')
                         dayfilelist = glob.glob(pattern)
                     if not os.path.isdir(datapath):
                         warn("WARNING: Unknown datapath '%s'" % datapath)
@@ -3426,7 +3426,7 @@ def get_file_list_s3(datadescriptor, starttimes, endtimes, cfg, scan=None):
             for filename in t_filelist:
                 # we need to download the master file to be able to know the
                 # scan coverage
-                datapath = f'{cfg["datapath"]}'
+                datapath = f'{cfg["datapath"][ind_rad]}'
                 if not os.path.isdir(datapath):
                     os.makedirs(datapath)
                 fname_aux = f'{datapath}{os.path.basename(filename)}'

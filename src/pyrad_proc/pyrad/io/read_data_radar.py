@@ -2685,12 +2685,7 @@ def merge_scans_nexrad2(
     field_names = {}
     # Use custom name mapping
     for datatype in datatype_list:
-        if datatype in cfg["DataTypeIDInFiles"][ind_rad]:
-            field_names[cfg["DataTypeIDInFiles"][ind_rad][datatype]] = (
-                get_fieldname_pyart(datatype)
-            )
-        else:
-            field_names[datatype] = get_fieldname_pyart(datatype)
+        field_names[datatype] = get_fieldname_pyart(datatype)
 
     # find files to merge
     if 'bucket' in cfg:
