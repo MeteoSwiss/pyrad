@@ -2682,11 +2682,6 @@ def merge_scans_nexrad2(
         radar object
 
     """
-    field_names = {}
-    # Use custom name mapping
-    for datatype in datatype_list:
-        field_names[datatype] = get_fieldname_pyart(datatype)
-
     # find files to merge
     if 'bucket' in cfg:
         if not _BOTO3_AVAILABLE:
@@ -2726,9 +2721,7 @@ def merge_scans_nexrad2(
         else:
             fname_aux = fname
 
-        radar_aux = pyart.io.read(
-            fname, field_names=field_names,
-            include_fields=field_names.values())
+        radar_aux = pyart.io.read(fname)
         if radar_aux is None:
             continue
         if radar is None:
