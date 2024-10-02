@@ -22,6 +22,10 @@ saveimgbasepath       STRING   Base directory for the images to save. The direct
                                If ``saveimg`` is set to 0, this field is not used.
 s3copypath	      STRING   OPTIONAL. Path to an S3 bucket. If provided all generated products will be written there as well using the same data structure. The format must be                                          https://bucket_name.endpoint.domain, for example https://tests.fr-par-1.linodeobjects.com/. The S3 copy procedure will only work if the 
                                environment variables AWS_KEY and AWS_SECRET are defined in the pyrad scope. AWS_KEY contains the S3 bucket AWS key and AWS_SECRET the associated secret.
+s3_url                STRING   OPTIONAL. Url to an S3 bucket containing input radar data. The format must be https://endpoint.domain (e.g. https://eu-central-1.linodeobjects.com/).
+bucket                STRING   OPTIONAL. Name of an S3 bucket containing input radar data. It has to be used together with ``s3_url`` and ``S3path`` to be able to read input radar data from a bucket. The procedure will only work by setting the environment variables S3_IN_KEY and S3_IN_SECRET.
+s3path                STRING   OPTIONAL. Path where to find input radar data in an S3 bucket.
+rm_s3_file            INT      OPTIONAL. If set input radar data files downloaded from and S3 bucket will be removed after reading.
 loadbasepath          STRING   OPTIONAL. Base path of saved data. By default, this field is set to ``saveimgbasepath``.
 loadname              STRING   OPTIONAL. Name of the saved data processing. Used for saved volume loading. By default, this field is set to ``name``.
 dempath               STRING   OPTIONAL. Base directory of the Digital Elevation Model (DEM) files. Basically to load the radar visibility (Optional).
