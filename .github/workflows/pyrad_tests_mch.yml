@@ -49,6 +49,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
           channels: conda-forge
           channel-priority: flexible
+          init-shell: >-
+            bash
           activate-environment: test-environment
 
       - name: Install dependencies

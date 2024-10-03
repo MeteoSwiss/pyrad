@@ -47,6 +47,8 @@ jobs:
           auto-update-conda: true
           python-version: ${{ matrix.python-version }}
           channels: conda-forge
+          init-shell: >-
+            bash
           channel-priority: flexible
           activate-environment: test-environment
 
