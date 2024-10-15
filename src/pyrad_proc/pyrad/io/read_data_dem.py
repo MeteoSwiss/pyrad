@@ -430,9 +430,14 @@ def read_idrisi_data(fname, fill_value=None):
         raster = gdal.Open(fname)
 
         prj = raster.GetProjection()
-        srs = osr.SpatialReference(wkt=prj)
-        projparams = _proj4_str_to_dict(srs.ExportToProj4())
-        if not len(projparams):  # gdal could not read proj
+        try:
+            srs = osr.SpatialReference(wkt=prj)
+            projparams = _proj4_str_to_dict(srs.ExportToProj4())
+        except RuntimeError:    
+            projparams = None
+            pass
+
+        if not projparams: # Case of empty dict
             projparams = None
 
         rasterarray = raster.ReadAsArray()
