@@ -10,7 +10,7 @@ umask 0002
 #module load idl
 . /apps/escha/itt/idl/idl85/inst/idl85/bin/idl_setup.bash
 
-export IDL_OTLDIR=/store/msrad/idl
+export IDL_OTLDIR=/store_new/mch/msrad/idl
 export IDL_STARTUP=$IDL_OTLDIR/im_setup.idl;export IDL_STARTUP
 
 export IDL_DIR=/apps/escha/itt/idl/idl85/inst/idl85/

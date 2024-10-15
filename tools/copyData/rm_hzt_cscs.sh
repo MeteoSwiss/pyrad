@@ -8,7 +8,7 @@
 umask 0002
 
 # Config
-data_destbase=/store/msrad/cosmo/cosmo1/HZT/
+data_destbase=/store_new/mch/msrad/cosmo/cosmo1/HZT/
 while [[ $# -gt 1 ]]
 do
     key="$1"

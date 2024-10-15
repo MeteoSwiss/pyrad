@@ -15,7 +15,7 @@ START_TIME="000001"
 END_TIME="240000"
 time_vec='all'
 
-data_destbase=/store/msrad/radar/rad4alp/rawdata/
+data_destbase=/store_new/mch/msrad/radar/rad4alp/rawdata/
 while [[ $# -gt 1 ]]
 do
     key="$1"

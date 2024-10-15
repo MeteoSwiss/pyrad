@@ -10,10 +10,10 @@ umask 0002
 # Config
 dateCmd="/bin/date"
 
-rawdata_origbase=/store/msrad/radar/swiss/data/
+rawdata_origbase=/store_new/mch/msrad/radar/swiss/data/
 
 # default variables
-data_destbase=/store/msrad/radar/rad4alp/TRT/
+data_destbase=/store_new/mch/msrad/radar/rad4alp/TRT/
 while [[ $# -gt 1 ]]
 do
     key="$1"

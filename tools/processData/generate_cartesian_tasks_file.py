@@ -131,7 +131,7 @@ def main():
     get_data = 1
     rm_data = 1
     prod = 'RZC'
-    data_destbase = '/store/msrad/radar/rad4alp/rawdata/'
+    data_destbase = '/store_new/mch/msrad/radar/rad4alp/rawdata/'
 
     with open(ftasks_name, 'w', newline='') as txtfile:
         for day in datelist:
