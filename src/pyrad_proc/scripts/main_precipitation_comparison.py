@@ -14,9 +14,7 @@ This program compares radar data with a point measurement sensor.
 # License: BSD 3 clause
 
 import datetime
-import atexit
 import glob
-from warnings import warn
 import os
 import argparse
 

@@ -3445,7 +3445,6 @@ def get_file_list_s3(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     if starttime <= fdatetime <= endtime:
                         if filenamestr not in filelist:
                             filelist.append(filenamestr)
-
         if not filelist:
             if pattern is not None:
                 warn(
