@@ -2233,13 +2233,16 @@ def get_sensor_data(date, datatype, cfg):
             datafile = files1[0]
         if len(files2):
             datafile = files2[0]
-        
-        try:
-            _, sensordate, _, _, _, sensorvalue, _, _ = read_smn(datafile)
-        except Exception:
+
+        with open(datafile) as f:
+            num_columns = len(next(f).strip().split(','))
+        if num_columns == 3:
             _, sensordate, sensorvalue = read_smn2(datafile)
-            if sensordate is None:
-                return None, None, None, None
+        else:
+            _, sensordate, _, _, _, sensorvalue, _, _ = read_smn(datafile)
+        
+        if sensordate is None:
+            return None, None, None, None
         label = "RG"
         period = (sensordate[1] - sensordate[0]).total_seconds()
     elif cfg["sensor"] == "rgage_knmi":
