@@ -62,6 +62,7 @@ from ..io.write_data import write_to_s3
 from ..io.io_aux import get_datetime, get_file_list, get_scan_list
 from ..io.io_aux import get_dataset_fields, get_datatype_fields
 from ..io.io_aux import get_new_rainbow_file_name, get_fieldname_pyart
+from ..io.io_aux import get_datatype_from_pyart
 from ..io.io_aux import get_file_list_s3
 from ..io.trajectory import Trajectory
 from ..io.read_data_other import read_last_state, read_proc_periods
@@ -520,7 +521,6 @@ def _process_datasets(
 
     # manual garbage collection after processing each radar volume
     gc.collect()
-
     return dscfg, traj
 
 
@@ -1819,7 +1819,7 @@ def _add_dataset(
         return 0
 
     for field in new_dataset["radar_out"].fields:
-        print("Adding field: {}".format(field))
+        print(f"Adding field: {field} (pyrad abbr: {get_datatype_from_pyart(field)})")
         radar_list[ind_rad].add_field(
             field, new_dataset["radar_out"].fields[field], replace_existing=True
         )

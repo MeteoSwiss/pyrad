@@ -1581,7 +1581,7 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
                 warn("Getting freezing level height from sounding")
                 sounding_code = dscfg["sounding"]
                 t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
-                freezing_level = read_fzl_igra(sounding_code, t0)
+                freezing_level = read_fzl_igra(sounding_code, t0, dscfg=dscfg)
             else:
                 warn(
                     "iso0 or temperature fields or sounding needed to create hydrometeor "
@@ -1738,7 +1738,7 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
         elif "sounding" in dscfg:
             sounding_code = dscfg["sounding"]
             t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
-            freezing_level = read_fzl_igra(sounding_code, t0)
+            freezing_level = read_fzl_igra(sounding_code, t0, dscfg=dscfg)
 
         use_dualpol = dscfg.get("use_dualpol", True)
         use_temperature = dscfg.get("use_temperature", True)

@@ -2811,7 +2811,8 @@ def read_radiosounding_igra(station, dtime):
     https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive/
     doc/igra2-data-format.txt
     """
-
+    warn("Downloading sounding from IGRA database...")
+    
     COLUMNS_SOUNDING = [
         "LVLTYPE1",
         "LVLTYPE2",
@@ -2936,7 +2937,7 @@ def read_radiosounding_igra(station, dtime):
     return all_soundings[closest]
 
 
-def read_fzl_igra(station, dtime):
+def read_fzl_igra(station, dtime, dscfg = None):
     """
     Get an estimation of the freezing level height from the
     Integrated Global Radiosonde Archive (IGRA)
@@ -2946,24 +2947,46 @@ def read_fzl_igra(station, dtime):
             Radiosounding station 5 digits WMO code (e.g., "72776").
         dtime : datetime.datetime
             Datetime object specifying the desired date and time.
-
+        dscfg : dictionary of dictionaries, Optional
+            If provided will try to read the fzl from the pyrad config
+            dictionary instead of fetching it from IGRA
     Returns:
         fzl : float
             Interpolated freezing level height (a.s.l) obtained
             from the nearest in time IGRA sounding
     """
-
+    if dscfg is None:
+        dscfg = {}
+        
+    try:
+        if ((dscfg["global_data"]["latest_sounding_time"] 
+                - dtime).total_seconds() < 3600 * 12): # 12 hours
+            warn("Last downloaded sounding < 12h ago, retrieving from memory")
+            return dscfg["global_data"]["latest_sounding_value"]
+    except (KeyError, TypeError):
+        pass
+    
     sounding = read_radiosounding_igra(station, dtime)
     height = sounding["GPH"]
     temp = sounding["TEMP"]
 
-    if temp[0] <= 0 and temp[0] > -999.9:
-        return 0
+    fzl = 0
+    
+    if temp[0] >= 0:
+        for i in range(1, len(temp)):
+            if height[i] < 0:
+                continue
+            if temp[i] < 0:
+                slope = (temp[i] - temp[i - 1]) / (height[i] - height[i - 1])
+                fzl = -temp[i] / slope + height[i]
+                break
 
-    for i in range(1, len(temp)):
-        if height[i] < 0:
-            continue
-        if temp[i] < 0:
-            slope = (temp[i] - temp[i - 1]) / (height[i] - height[i - 1])
-            fzl = -temp[i] / slope + height[i]
-            return fzl
+    try:
+        dscfg["global_data"]["latest_sounding_time"] = dtime
+        dscfg["global_data"]["latest_sounding_value"] = fzl
+    except (KeyError, TypeError):
+        dscfg["global_data"] = {}
+        dscfg["global_data"]["latest_sounding_time"] = dtime
+        dscfg["global_data"]["latest_sounding_value"] = fzl
+    
+    return fzl
