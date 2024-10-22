@@ -132,7 +132,6 @@ pyrad_to_pyart_keys_dict = {
     "TXv": "transmitted_signal_power_v",
     "SNRh": "signal_to_noise_ratio_hh",
     "SNRv": "signal_to_noise_ratio_vv",
-    "SNR": "signal_to_noise_ratio",
     "CCORh": "clutter_correction_ratio_hh",
     "CCORv": "clutter_correction_ratio_vv",
     "dBm_sun_hit": "sun_hit_power_h",
