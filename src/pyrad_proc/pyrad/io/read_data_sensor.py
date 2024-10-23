@@ -2794,7 +2794,7 @@ def read_radiosounding_wyoming(station, dtime):
 def read_radiosounding_igra(station, dtime):
     """
     Download radiosounding data from  from the Integrated Global Radiosonde Archive
-    (IGRA)
+    (IGRA).
 
     Parameters:
         station : str
@@ -2959,9 +2959,9 @@ def read_fzl_igra(station, dtime, dscfg = None):
         dscfg = {}
         
     try:
-        if ((dscfg["global_data"]["latest_sounding_time"] 
-                - dtime).total_seconds() < 3600 * 12): # 12 hours
-            warn("Last downloaded sounding < 12h ago, retrieving from memory")
+        if not _check_new_sounding(dscfg["global_data"]["latest_sounding_time"]
+                , dtime): 
+            warn("No new sounding available, retrieving latest sounding from memory")
             return dscfg["global_data"]["latest_sounding_value"]
     except (KeyError, TypeError):
         pass
@@ -2990,3 +2990,26 @@ def read_fzl_igra(station, dtime, dscfg = None):
         dscfg["global_data"]["latest_sounding_value"] = fzl
     
     return fzl
+
+def _closest_sounding_time(date: datetime) -> datetime:
+    # Get the hour of the given date
+    hour = date.hour
+    # Find the closest radiosounding time based on the hour
+    if hour >= 18:
+        # Closest to 00 UTC (covers 18:00 - 23:59 and 00:00 - 05:59)
+        return (date.replace(hour=0, minute=0, second=0, microsecond=0) 
+            + datetime.timedelta(days = 1))
+    elif hour <= 6:
+        return date.replace(hour=0, minute=0, second=0, microsecond=0)
+    else:
+        # Closest to 12 UTC (covers 06:00 - 17:59)
+        return date.replace(hour=12, minute=0, second=0, microsecond=0)
+
+def _check_new_sounding(date1: datetime, date2: datetime) -> bool:
+    # Will check whether a new sounding is available
+    
+    # Get the closest radiosounding times for both dates
+    date1_sounding_time = _closest_sounding_time(date1)
+    date2_sounding_time = _closest_sounding_time(date2)
+    # Check if the radiosounding times are different
+    return date1_sounding_time != date2_sounding_time

@@ -537,7 +537,7 @@ def process_refl_from_zdr(procstatus, dscfg, radar_list=None):
     """
     if procstatus != 1:
         return None, None
-
+    
     for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
         if datatype in ("dBZ", "dBuZ", "dBZc", "dBuZc", "dBZv", "dBuZv", "dBZvc", "dBuZvc"):
@@ -574,7 +574,6 @@ def process_refl_from_zdr(procstatus, dscfg, radar_list=None):
         radar, zdr_field=zdr_field, refl_field=refl_field,
         ort_refl_field=ort_refl_field
     )
-
     # prepare for exit
     new_dataset = {"radar_out": deepcopy(radar)}
     new_dataset["radar_out"].fields = dict()
