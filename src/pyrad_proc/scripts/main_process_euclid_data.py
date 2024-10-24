@@ -24,6 +24,12 @@ from pyrad.io import read_meteorage
 from pyrad.util import belongs_roi_indices
 from pyrad.graph import plot_pos, plot_histogram
 
+import os
+import sys
+
+# Force unbuffered output
+sys.stdout.reconfigure(line_buffering=True)
+
 print(__doc__)
 
 

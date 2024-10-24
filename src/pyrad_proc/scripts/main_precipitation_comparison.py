@@ -16,6 +16,9 @@ This program compares radar data with a point measurement sensor.
 import datetime
 import glob
 import os
+# Force unbuffered output
+sys.stdout.reconfigure(line_buffering=True)
+
 import argparse
 
 import numpy as np
