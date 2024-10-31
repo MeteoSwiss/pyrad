@@ -3638,7 +3638,7 @@ def generate_vol_products(dataset, prdcfg):
             labels.extend(["Min", "Max"])
         if len(quantiles):
             labels.extend([f"Q{q}" for q in quantiles])
-        labels.extend("Nsamples", "Nvalid")
+        labels.extend(["Nsamples", "Nvalid"])
         # Generate values
         values = [meanval, medianval, stdval]
         if write_min_max:
