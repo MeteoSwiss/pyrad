@@ -3589,7 +3589,7 @@ def generate_vol_products(dataset, prdcfg):
         azi_max = prdcfg.get("azi_max", 360.0)
         rmin = prdcfg.get("rmin", 0.0)
         rmax = prdcfg.get("rmax", 50.0)
-        write_min_max = prdcfg.get("write_min_max", True)
+        write_min_max = prdcfg.get("write_min_max", False)
         quantiles = prdcfg.get("quantiles", [])
         
         field_data = dataset["radar_out"].fields[field_name]["data"]
