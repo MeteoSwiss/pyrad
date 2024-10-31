@@ -3617,7 +3617,7 @@ def generate_vol_products(dataset, prdcfg):
             minval = np.nanmin(field_data_process)
             maxval = np.nanmax(field_data_process)
         if len(quantiles):
-            quantilesval = np.nanpercentile(field_data_process, quantiles)
+            quantilesvals = np.nanpercentile(field_data_process, quantiles)
             
         stdval = np.nanstd(field_data_process)
         medianval = np.nanmedian(field_data_process)
@@ -3637,12 +3637,12 @@ def generate_vol_products(dataset, prdcfg):
         if write_min_max:
             labels.extend(["Min", "Max"])
         if len(quantiles):
-            labels.extend([f"Q{:q}" for q in quantiles])
+            labels.extend([f"Q{q}" for q in quantiles])
         labels.extend("Nsamples", "Nvalid")
         # Generate values
         values = [meanval, medianval, stdval]
         if write_min_max:
-            values.extend([valmin, valmax])
+            values.extend([minval, maxval])
         if len(quantiles):
             values.extend(quantilesvals)
         
