@@ -8,13 +8,13 @@
 umask 0002
 
 # Config
-cosmobaseraw='/store/msrad/cosmo/TEMP/raw/'
-cosmopathcscs='/store/s83/osm/COSMO-1E/ORDERS/MDR/'
+cosmobaseraw='/store_new/mch/msrad/cosmo/TEMP/raw/'
+cosmopathcscs='/store_new/mch/s83/osm/COSMO-1E/ORDERS/MDR/'
 
 #module load idl
 . /apps/albis/itt/idl/idl84/inst/idl84/bin/idl_setup.bash
 
-export IDL_OTLDIR=/store/msrad/idl
+export IDL_OTLDIR=/store_new/mch/msrad/idl
 export IDL_STARTUP=$IDL_OTLDIR/im_setup.idl;export IDL_STARTUP
 
 export IDL_DIR=/apps/albis/itt/idl/idl84/inst/idl84/

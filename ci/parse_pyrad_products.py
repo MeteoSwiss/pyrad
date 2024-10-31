@@ -14,15 +14,26 @@ def funcpath_to_docpath(funcpath):
 
 def parameters_to_dict(params):
     dic = {}
-    keys = re.findall('([a-zA-Z_]*\\s*:\\s*[a-zA-Z]*)', params)
-    for i in range(len(keys)):
-        idx_now = params.index(keys[i]) + len(keys[i])
-        if i == len(keys) - 1:
-            idx_next = len(params)
+    params = params.split("\n")
+    key = None
+    for line in params:
+        if ":" in line:
+            key = line.strip()
+            dic[key] = ""
         else:
-            idx_next = params.index(keys[i + 1])
+            if key:
+                dic[key] += line.strip() + " "
+    # keys = re.findall('([a-zA-Z_]*\\s*:\\s*[a-zA-Z]*)', params)
+    # for i in range(len(keys)):
+    #     idx_now = params.index(keys[i]) + len(keys[i])
+    #     if i == len(keys) - 1:
+    #         idx_next = len(params)
+    #     else:
+    #         idx_next = params.index(keys[i + 1])
 
-        dic[keys[i].replace(':', '').strip()] = params[idx_now:idx_next]
+    #     dic[keys[i]] = params[idx_now:idx_next]
+    #     if 'quantiles' in keys[i]:
+    #         import pdb; pdb.set_trace()
     return dic
 
 
@@ -56,7 +67,7 @@ def dict_to_restructured_text(yaml_data):
                 
                 for param, paraminfo in params.items():
                     try:
-                        rst_output.append(f'   {param.split()[0]} : *{param.split()[1]}*')
+                        rst_output.append(f'   {param.split()[0]} : *{' '.join(param.split()[1:])}*')
                     except IndexError:
                         rst_output.append(f'   {param}')
                     rst_output.append('       ' + paraminfo)
@@ -110,7 +121,7 @@ def process_file(filepath):
                 descr += line
             if reading_params and product:
                 all_products[function][product]['parameters'] += " " + \
-                    " ".join(line.replace('\n', ' ').split())
+                    line
         if ('prdcfg["type"]' in line or "prdcfg['type']" in line) and '==' in line:
             for product in all_products[function].keys():
                 if product in line:

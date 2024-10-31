@@ -14,10 +14,11 @@ This program compares radar data with a point measurement sensor.
 # License: BSD 3 clause
 
 import datetime
-import atexit
 import glob
-from warnings import warn
 import os
+# Force unbuffered output
+sys.stdout.reconfigure(line_buffering=True)
+
 import argparse
 
 import numpy as np

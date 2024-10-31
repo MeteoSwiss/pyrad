@@ -37,6 +37,10 @@ import datetime
 import argparse
 import atexit
 import os
+import sys
+
+# Force unbuffered output
+sys.stdout.reconfigure(line_buffering=True)
 
 from pyrad.flow import main as pyrad_main
 

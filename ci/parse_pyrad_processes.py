@@ -44,6 +44,8 @@ def dict_to_restructured_text(yaml_data):
                 for ele in value3:
                     rst_output.append('     | ' + ele)
             rst_output.append('')
+            rst_output.append('returns')
+            rst_output.append('   ' + value2['returns'] +'\n')
             # rst_output.append(f"\n\n{value2['parameters']}\n\n")
     return '\n'.join(rst_output)
 
@@ -109,7 +111,7 @@ def process_docstring(docstr):
     returns_dict[header] = list(returns.strip().split('\n'))[1:]
     dic = {'description': " ".join(description.split()),
            'parameters': parse_string_to_dict(attributes),
-           'returns': returns_dict}
+           'returns': returns.strip()}
     return dic
 
 

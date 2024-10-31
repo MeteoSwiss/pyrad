@@ -137,18 +137,18 @@ def main():
     get_data = 1
     rm_data = 1
     ele = '001,002,003'
-    data_destbase = '/store/msrad/radar/rad4alp/raw/'
+    data_destbase = '/store_new/mch/msrad/radar/rad4alp/raw/'
 
     get_cosmo = 0
     rm_cosmo = 0
-    cosmo_destbase = '/store/msrad/cosmo/cosmo1/TEMP/raw1/'
+    cosmo_destbase = '/store_new/mch/msrad/cosmo/cosmo1/TEMP/raw1/'
 
     # hour: hours from run time format 00 to 06
     # if more than one separate by a comma
     get_hzt = 0
     rm_hzt = 0
     hour = '00,01,02'
-    hzt_destbase = '/store/msrad/cosmo/tmp/HZT/'
+    hzt_destbase = '/store_new/mch/msrad/cosmo/tmp/HZT/'
 
     with open(ftasks_name, 'w', newline='') as txtfile:
         for day in datelist:

@@ -45,12 +45,14 @@ jobs:
           repository: MeteoSwiss/pyrad-tests
           path: pyrad-tests
       - name: Setup Miniconda
-        uses: conda-incubator/setup-miniconda@v2.0.0
+        uses: mamba-org/setup-micromamba@v1.9.0
         with:
-          auto-update-conda: true
+          micromamba-version: '2.0.0-0'
           python-version: ${{ matrix.python-version }}
           channels: conda-forge
           channel-priority: flexible
+          init-shell: >-
+            bash
           activate-environment: test-environment
 
       - name: Install dependencies

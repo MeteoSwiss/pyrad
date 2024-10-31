@@ -778,21 +778,36 @@ def generate_vol_products(dataset, prdcfg):
                     If fixed_span is set, the minimum and maximum values of
                     the X-axis. If None, they are obtained from the span of
                     the U component defined in the Py-ART config file
-        'WRITE_MEAN': write statistics about the average of a field within a certain
-            sector (mean, median, stddev, nsamples, nvalid)
+        'WRITE_STATS': write statistics about the average of a field within a certain
+            sector (mean, median, stddev, nsamples, nvalid) and optionally min, max and
+            additional quantiles
             User defined parameters:
                 voltype: name of the pyrad variable to use, it must be available
                     in the dataset
-                ele_min, ele_max: float
-                    Min and max elevation angle defining the sector [deg].
-                    Default 0. and 90.
-                azi_min, azi_max: float
-                    Min and max azimuth angle defining the sector [deg].
-                    Default 0. and 360.
-                rmin, azi_max: rmax
-                    Min and max range defining the sector [km].
-                    Default 0. and 50.
-                
+                ele_min: float
+                    Max elevation angle defining the sector [deg].
+                    Default 0.
+                ele_max: float
+                    Max elevation angle defining the sector [deg].
+                    Default 90.
+                azi_min: float
+                    Min azimuth angle defining the sector [deg].
+                    Default 0.
+                azi_max: float
+                    Max azimuth angle defining the sector [deg].
+                    Default 360.
+                rmin: float
+                    Min range defining the sector [km].
+                    Default 0.
+                rmax: float
+                    Max range defining the sector [km].
+                    Default 50.
+                write_min_max: Bool
+                    If true will also write min and max values within sector
+                quantiles: list of int
+                    Additional quantiles (apart from median) to compute within the sector and
+                    write to file
+
     Parameters
     ----------
     dataset : dict
@@ -3633,7 +3648,10 @@ def generate_vol_products(dataset, prdcfg):
 
         return fname_list
 
-    if prdcfg["type"] == "WRITE_MEAN":
+    if prdcfg["type"] == "WRITE_STATS" or prdcfg["type"] == "WRITE_MEAN":
+        if prdcfg["type"] == "WRITE_MEAN":
+            warn("WRITE_MEAN product is deprecated, please use 'WRITE_STATS' instead")
+            
         field_name = get_fieldname_pyart(prdcfg["voltype"])
         if field_name not in dataset["radar_out"].fields:
             warn(
@@ -3650,7 +3668,9 @@ def generate_vol_products(dataset, prdcfg):
         azi_max = prdcfg.get("azi_max", 360.0)
         rmin = prdcfg.get("rmin", 0.0)
         rmax = prdcfg.get("rmax", 50.0)
-
+        write_min_max = prdcfg.get("write_min_max", False)
+        quantiles = prdcfg.get("quantiles", [])
+        
         field_data = dataset["radar_out"].fields[field_name]["data"]
         el_data = dataset["radar_out"].elevation["data"]
         az_data = dataset["radar_out"].azimuth["data"]
@@ -3666,10 +3686,18 @@ def generate_vol_products(dataset, prdcfg):
         elmin = dataset["radar_out"].fixed_angle["data"][0]
         elmax = dataset["radar_out"].fixed_angle["data"][-1]
 
-        field_data_process = field_data[np.intersect1d(ind_ele, ind_azi), ind_rng]
+        field_data_process = field_data[np.intersect1d(ind_ele, ind_azi), :]
+        field_data_process = field_data_process[:,ind_rng]
+
         countzero = np.size(np.where(field_data_process == 0.0))
 
         meanval = np.nanmean(field_data_process)
+        if write_min_max:
+            minval = np.nanmin(field_data_process)
+            maxval = np.nanmax(field_data_process)
+        if len(quantiles):
+            quantilesvals = np.nanpercentile(field_data_process, quantiles)
+            
         stdval = np.nanstd(field_data_process)
         medianval = np.nanmedian(field_data_process)
         ntotal = np.size(field_data_process)
@@ -3683,12 +3711,28 @@ def generate_vol_products(dataset, prdcfg):
             "  Range     : " + str(rmin) + " - " + str(rmax) + " [m]",
         ]
 
+        # Generate labels
+        labels = ["Mean", "Median", "Stddev"]
+        if write_min_max:
+            labels.extend(["Min", "Max"])
+        if len(quantiles):
+            labels.extend([f"Q{q}" for q in quantiles])
+        labels.extend(["Nsamples", "Nvalid"])
+        # Generate values
+        values = [meanval, medianval, stdval]
+        if write_min_max:
+            values.extend([minval, maxval])
+        if len(quantiles):
+            values.extend(quantilesvals)
+        
+        values.extend([ntotal, nvalid])
+        
         data = {
             "dstype": prdcfg["dstype"],
             "unit": units,
             "time": prdcfg["timeinfo"],
-            "label": ["Mean", "Median", "Stddev", "Nsamples", "Nvalid"],
-            "value": [meanval, medianval, stdval, ntotal, nvalid],
+            "label": labels,
+            "value": values,
         }
 
         savedir = get_save_dir(

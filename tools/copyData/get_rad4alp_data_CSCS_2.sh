@@ -10,8 +10,8 @@ umask 0002
 # Config
 dateCmd="/bin/date"
 
-phdata_origbase=/store/msrad/radar/polarHR/data/
-rawdata_origbase=/store/msrad/radar/swiss/data/
+phdata_origbase=/store_new/mch/msrad/radar/polarHR/data/
+rawdata_origbase=/store_new/mch/msrad/radar/swiss/data/
 
 file_type=M
 
@@ -22,7 +22,7 @@ time_vec='all'
 
 ele_vec='all'
 
-data_destbase=/store/msrad/radar/rad4alp/rawdata/
+data_destbase=/store_new/mch/msrad/radar/rad4alp/rawdata/
 while [[ $# -gt 1 ]]
 do
     key="$1"

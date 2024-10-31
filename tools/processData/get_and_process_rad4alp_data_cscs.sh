@@ -32,24 +32,24 @@
 # --rm_data : if set, remove radar data after processing if data was fetched
 #             from archive. Default 0
 # --data_destbase : rad4alp data destination base path.
-#                   Default /store/msrad/radar/rad4alp/rawdata/
+#                   Default /store_new/mch/msrad/radar/rad4alp/rawdata/
 # --get_cosmo : if set, get COSMO temperature data. Default 1
 # --rm_cosmo : if set, remove COSMO temperature data after processing if data
 #              was fetched from archive. Default 0
 # --cosmo_destbase : COSMO temperature data destination base path.
-#                    Default /store/msrad/cosmo/cosmo1/TEMP/raw1/
+#                    Default /store_new/mch/msrad/cosmo/cosmo1/TEMP/raw1/
 # --get_hzt : if set, get HZT data. Default 0
 # --rm_hzt : if set, remove HZT data after processing if data was fecthed from
 #            archive. Default 0
 # -h|--hour : hour from run of iso0 to retrieved format 00 to 06
 #             if "all" all forecast times will be retrieved
 # --hzt_destbase : HZT data destination base path.
-#                  Default /store/msrad/cosmo/cosmo1/HZT/
+#                  Default /store_new/mch/msrad/cosmo/cosmo1/HZT/
 # --MP_DSET : Parallelize dataset generation. Default 0
 # --MP_PROD : Parallelize product generation. Default 0
 # --MP_PROF : Profile parallelization. Default 0
 umask 0002;
-export PATH="/store/msrad/utils/anaconda3-pyrad/bin/:$PATH"
+export PATH="/store_new/mch/msrad/utils/anaconda3-pyrad/bin/:$PATH"
 
 pyradpath="$HOME/pyrad/src/pyrad_proc/scripts/"
 
@@ -59,15 +59,15 @@ END_TIME="240000"
 
 GET_DATA=1
 RM_DATA=0
-DATA_DESTBASE=/store/msrad/radar/rad4alp/rawdata/
+DATA_DESTBASE=/store_new/mch/msrad/radar/rad4alp/rawdata/
 
 GET_COSMO=1
 RM_COSMO=0
-COSMO_DESTBASE=/store/msrad/cosmo/TEMP/raw/
+COSMO_DESTBASE=/store_new/mch/msrad/cosmo/TEMP/raw/
 
 GET_HZT=0
 RM_HZT=0
-HZT_DESTBASE=/store/msrad/cosmo/HZT/
+HZT_DESTBASE=/store_new/mch/msrad/cosmo/HZT/
 
 info_vec='None'
 cfgpath_vec="$HOME/pyrad/config/processing/"

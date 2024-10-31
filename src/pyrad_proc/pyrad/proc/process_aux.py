@@ -404,6 +404,8 @@ def get_process_func(dataset_type, dsname):
         func_name = "process_l"
     elif dataset_type == "CDR":
         func_name = "process_cdr"
+    elif dataset_type == "REFL_FROM_ZDR":
+        func_name = "process_refl_from_zdr"
     elif dataset_type == "SAN":
         func_name = "process_echo_id"
     elif dataset_type == "BIRDS_ID":

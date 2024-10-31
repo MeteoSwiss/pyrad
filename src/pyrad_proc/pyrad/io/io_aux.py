@@ -22,7 +22,10 @@ Auxiliary functions for reading/writing files
     get_fieldname_icon
     get_field_unit
     get_field_name
+    get_scan_files_to_merge
+    get_scan_files_to_merge_s3
     get_file_list
+    get_file_list_s3
     get_rad4alp_dir
     get_rad4alp_grid_dir
     get_trtfile_list
@@ -48,6 +51,7 @@ import os
 import glob
 import re
 import datetime
+import fnmatch
 
 from warnings import warn
 from copy import deepcopy
@@ -62,6 +66,499 @@ except ImportError:
     warn("Could not get the get_sweep_time_coverage from pyart")
     warn("You are likely using ARM Py-ART and not the MCH fork")
     warn("You will not be able to read skyecho data")
+
+try:
+    import boto3
+
+    _BOTO3_AVAILABLE = True
+except ImportError:
+    warn("boto3 is not installed, data cannot be retrieved from S3 buckets!")
+    _BOTO3_AVAILABLE = False
+
+
+pyrad_to_pyart_keys_dict = {
+    "dBZ": "reflectivity",
+    "dBZ_flag": "reflectivity_flag",
+    "dBZ_MF": "reflectivity",
+    "Zn": "normalized_reflectivity",
+    "Zlin": "linear_reflectivity",
+    "dBuZ": "unfiltered_reflectivity",
+    "dBZc": "corrected_reflectivity",
+    "dBuZc": "corrected_unfiltered_reflectivity",
+    "dBZv": "reflectivity_vv",
+    "dBZvc": "corrected_reflectivity_vv",
+    "dBuZv": "unfiltered_reflectivity_vv",
+    "dBuZvc": "corrected_unfiltered_reflectivity_vv",
+    "dBZhv": "reflectivity_hv",
+    "dBZvh": "reflectivity_vh",
+    "dBZ_bias": "reflectivity_bias",
+    "eta_h": "volumetric_reflectivity",
+    "eta_v": "volumetric_reflectivity_vv",
+    "rcs_h": "radar_cross_section_hh",
+    "rcs_v": "radar_cross_section_vv",
+    "VPRcorr": "vpr_correction",
+    "VPRFEATURES": "vpr_features",
+    "sigma_zh": "sigma_zh",
+    "ZDR": "differential_reflectivity",
+    "ZDRu": "unfiltered_differential_reflectivity",
+    "ZDRc": "corrected_differential_reflectivity",
+    "ZDRuc": "corrected_unfiltered_differential_reflectivity",
+    "ZDR_prec": "differential_reflectivity_in_precipitation",
+    "ZDR_snow": "differential_reflectivity_in_snow",
+    "ZDR_col": "differential_reflectivity_column_height",
+    "LDRhv": "linear_depolarization_ratio_hv",
+    "LDRvh": "linear_depolarization_ratio_vh",
+    "dBm": "signal_power_hh",
+    "dBmv": "signal_power_vv",
+    "Nh": "noisedBZ_hh",
+    "Nv": "noisedBZ_vv",
+    "NdBADUh": "noisedBADU_hh",
+    "NdBADUv": "noisedBADU_vv",
+    "NdBmh": "noisedBm_hh",
+    "NdBmv": "noisedBm_vv",
+    "NADUh": "noiseADU_hh",
+    "NADUv": "noiseADU_vv",
+    "noise_pos_h": "noise_pos_h",
+    "noise_pos_v": "noise_pos_v",
+    "Nclip_h": "noise_clipping_level_hh_dBZ",
+    "Nclip_v": "noise_clipping_level_vv_dBZ",
+    "WBN": "wide_band_noise",
+    "WBNc": "corrected_wide_band_noise",
+    "ST1": "stat_test_lag1",
+    "ST1c": "corrected_stat_test_lag1",
+    "ST2": "stat_test_lag2",
+    "ST2c": "corrected_stat_test_lag2",
+    "TXh": "transmitted_signal_power_h",
+    "TXv": "transmitted_signal_power_v",
+    "SNRh": "signal_to_noise_ratio_hh",
+    "SNRv": "signal_to_noise_ratio_vv",
+    "CCORh": "clutter_correction_ratio_hh",
+    "CCORv": "clutter_correction_ratio_vv",
+    "dBm_sun_hit": "sun_hit_power_h",
+    "dBmv_sun_hit": "sun_hit_power_v",
+    "ZDR_sun_hit": "sun_hit_differential_reflectivity",
+    "dBm_sun_est": "sun_est_power_h",
+    "dBmv_sun_est": "sun_est_power_v",
+    "ZDR_sun_est": "sun_est_differential_reflectivity",
+    "sun_pos_h": "sun_hit_h",
+    "sun_pos_v": "sun_hit_v",
+    "sun_pos_zdr": "sun_hit_zdr",
+    "RhoHV": "cross_correlation_ratio",
+    "RhoHVu": "unfiltered_cross_correlation_ratio",
+    "uRhoHV": "uncorrected_cross_correlation_ratio",
+    "RhoHVc": "corrected_cross_correlation_ratio",
+    "RhoHV_rain": "cross_correlation_ratio_in_rain",
+    "RhoHV_theo": "theoretical_cross_correlation_ratio",
+    "L": "logarithmic_cross_correlation_ratio",
+    "CDR": "circular_depolarization_ratio",
+    "PhiDP": "differential_phase",
+    "uPhiDPu": "uncorrected_unfiltered_differential_phase",
+    "uPhiDP": "uncorrected_differential_phase",
+    "PhiDPc": "corrected_differential_phase",
+    "PhiDP0": "system_differential_phase",
+    "PhiDP0_bin": "first_gate_differential_phase",
+    "KDP": "specific_differential_phase",
+    "uKDP": "uncorrected_specific_differential_phase",
+    "KDPc": "corrected_specific_differential_phase",
+    "MPH": "mean_phase",
+    "MPHc": "corrected_mean_phase",
+    "V": "velocity",
+    "Vv": "velocity_vv",
+    "Vhv": "velocity_hv",
+    "Vvh": "velocity_vh",
+    "Vu": "unfiltered_velocity",
+    "dealV": "dealiased_velocity",
+    "Vc": "corrected_velocity",
+    "dealVc": "dealiased_corrected_velocity",
+    "estV": "retrieved_velocity",
+    "stdV": "retrieved_velocity_std",
+    "diffV": "velocity_difference",
+    "W": "spectrum_width",
+    "Wv": "spectrum_width_vv",
+    "Whv": "spectrum_width_hv",
+    "Wvh": "spectrum_width_vh",
+    "Wu": "unfiltered_spectrum_width",
+    "Wc": "corrected_spectrum_width",
+    "wind_vel_h_az": "azimuthal_horizontal_wind_component",
+    "wind_vel_v": "vertical_wind_component",
+    "wind_vel_h_u": "eastward_wind_component",
+    "wind_vel_h_v": "northward_wind_component",
+    "windshear_v": "vertical_wind_shear",
+    "WIND_SPEED": "wind_speed",
+    "WIND_DIRECTION": "wind_direction",
+    "EDR": "turbulence",
+    "Ah": "specific_attenuation",
+    "Ahc": "corrected_specific_attenuation",
+    "PIA": "path_integrated_attenuation",
+    "PIAc": "corrected_path_integrated_attenuation",
+    "Adp": "specific_differential_attenuation",
+    "Adpc": "corrected_specific_differential_attenuation",
+    "PIDA": "path_integrated_differential_attenuation",
+    "PIDAc": "corrected_path_integrated_differential_attenuation",
+    "TEMP": "temperature",
+    "ISO0": "iso0",
+    "H_ISO0": "height_over_iso0",
+    "H_ISO0c": "corrected_height_over_iso0",
+    "HZT": "iso0_height",
+    "HZTc": "corrected_iso0_height",
+    "icon_index": "icon_index",
+    "hzt_index": "hzt_index",
+    "ml": "melting_layer",
+    "VIS": "visibility",
+    "HGHT": "height",
+    "vis": "visibility",
+    "visibility": "visibility",
+    "visibility_polar": "visibility_polar",
+    "terrain_altitude": "terrain_altitude",
+    "bent_terrain_altitude": "bent_terrain_altitude",
+    "terrain_slope": "terrain_slope",
+    "terrain_aspect": "terrain_aspect",
+    "elevation_angle": "elevation_angle",
+    "min_vis_elevation": "min_vis_elevation",
+    "min_vis_altitude": "min_vis_altitude",
+    "incident_angle": "incident_angle",
+    "sigma_0": "sigma_0",
+    "effective_area": "effective_area",
+    "dBm_clutter": "dBm_clutter",
+    "dBZ_clutter": "dBZ_clutter",
+    "echoID": "radar_echo_id",
+    "CLT": "clutter_exit_code",
+    "occurrence": "occurrence",
+    "freq_occu": "frequency_of_occurrence",
+    "RR": "radar_estimated_rain_rate",
+    "RR_MP": "Marshall_Palmer_radar_estimated_rain_rate",
+    "RR_Z": "radar_reflectivity_estimated_rain_rate",
+    "RR_KDP": "radar_kdp_estimated_rain_rate",
+    "RR_flag": "radar_estimated_rain_rate_flag",
+    "RRc": "corrected_radar_estimated_rain_rate",
+    "Raccu": "rainfall_accumulation",
+    "RaccuMF": "rainfall_accumulation",
+    "QIMF": "signal_quality_index",
+    "QI": "signal_quality_index",
+    "AF": "adjustment_factor",
+    "radar_R_rel": "radar_rainrate_relation",
+    "prec_type": "precipitation_type",
+    "hydro": "radar_echo_classification",
+    "hydroMF": "radar_echo_classification_MF",
+    "hydroc": "corrected_radar_echo_classification",
+    "confidence": "hydroclass_confidence",
+    "entropy": "hydroclass_entropy",
+    "propAG": "proportion_AG",
+    "propCR": "proportion_CR",
+    "propLR": "proportion_LR",
+    "propRP": "proportion_RP",
+    "propRN": "proportion_RN",
+    "propVI": "proportion_VI",
+    "propWS": "proportion_WS",
+    "propMH": "proportion_MH",
+    "propIH": "proportion_IH",
+    "probAG": "probability_AG",
+    "probCR": "probability_CR",
+    "probLR": "probability_LR",
+    "probRP": "probability_RP",
+    "probRN": "probability_RN",
+    "probVI": "probability_VI",
+    "probWS": "probability_WS",
+    "probMH": "probability_MH",
+    "probIH": "probability_IH",
+    "time_avg_flag": "time_avg_flag",
+    "colocated_gates": "colocated_gates",
+    "nsamples": "number_of_samples",
+    "bird_density": "bird_density",
+    "std": "standard_deviation",
+    "sum": "sum",
+    "sum2": "sum_squared",
+    "diff": "fields_difference",
+    "mask": "field_mask",
+    "texture": "field_texture",
+    "ShhADU": "complex_spectra_hh_ADU",
+    "ShhADUu": "unfiltered_complex_spectra_hh_ADU",
+    "SvvADU": "complex_spectra_vv_ADU",
+    "SvvADUu": "unfiltered_complex_spectra_vv_ADU",
+    "sPhhADU": "spectral_power_hh_ADU",
+    "sPhhADUu": "unfiltered_spectral_power_hh_ADU",
+    "sPvvADU": "spectral_power_vv_ADU",
+    "sPvvADUu": "unfiltered_spectral_power_vv_ADU",
+    "sPhhdBADU": "spectral_power_hh_dBADU",
+    "sPhhdBADUu": "unfiltered_spectral_power_hh_dBADU",
+    "sPvvdBADU": "spectral_power_vv_dBADU",
+    "sPvvdBADUu": "unfiltered_spectral_power_vv_dBADU",
+    "sPhhdBm": "spectral_power_hh_dBm",
+    "sPhhdBmu": "unfiltered_spectral_power_hh_dBm",
+    "sPvvdBm": "spectral_power_vv_dBm",
+    "sPvvdBmu": "unfiltered_spectral_power_vv_dBm",
+    "sNh": "spectral_noise_power_hh_dBZ",
+    "sNv": "spectral_noise_power_vv_dBZ",
+    "sNdBADUh": "spectral_noise_power_hh_dBADU",
+    "sNdBADUv": "spectral_noise_power_vv_dBADU",
+    "sNdBmh": "spectral_noise_power_hh_dBm",
+    "sNdBmv": "spectral_noise_power_vv_dBm",
+    "sNADUh": "spectral_noise_power_hh_ADU",
+    "sNADUv": "spectral_noise_power_vv_ADU",
+    "sPhasehh": "spectral_phase_hh",
+    "sPhasehhu": "unfiltered_spectral_phase_hh",
+    "sPhasevv": "spectral_phase_vv",
+    "sPhasevvu": "unfiltered_spectral_phase_vv",
+    "sdBZ": "spectral_reflectivity_hh",
+    "sdBuZ": "unfiltered_spectral_reflectivity_hh",
+    "sdBZv": "spectral_reflectivity_vv",
+    "sdBuZv": "unfiltered_spectral_reflectivity_vv",
+    "sZDR": "spectral_differential_reflectivity",
+    "sZDRu": "unfiltered_spectral_differential_reflectivity",
+    "sPhiDP": "spectral_differential_phase",
+    "sPhiDPu": "unfiltered_spectral_differential_phase",
+    "sRhoHV": "spectral_copolar_correlation_coefficient",
+    "sRhoHVu": "unfiltered_spectral_copolar_correlation_coefficient",
+    "IQhhADU": "IQ_hh_ADU",
+    "IQvvADU": "IQ_vv_ADU",
+    "IQNh": "IQ_noise_power_hh_dBZ",
+    "IQNv": "IQ_noise_power_vv_dBZ",
+    "IQNdBADUh": "IQ_noise_power_hh_dBADU",
+    "IQNdBADUv": "IQ_noise_power_vv_dBADU",
+    "IQNdBmh": "IQ_noise_power_hh_dBm",
+    "IQNdBmv": "IQ_noise_power_vv_dBm",
+    "IQNADUh": "IQ_noise_power_hh_ADU",
+    "IQNADUv": "IQ_noise_power_vv_ADU",
+    "POH": "probability_of_hail",
+    "VIL": "vertically_integrated_liquid",
+    "ETOP15": "echo_top_15dBZ",
+    "ETOP20": "echo_top_20dBZ",
+    "ETOP45": "echo_top_45dBZ",
+    "ETOP50": "echo_top_50dBZ",
+    "MAXECHO": "maximum_echo",
+    "HMAXECHO": "maximum_echo_height",
+    "AZC01": "rainfall_accumulation",
+    "AZC03": "rainfall_accumulation",
+    "AZC06": "rainfall_accumulation",
+    "aZC01": "rainfall_accumulation",
+    "aZC03": "rainfall_accumulation",
+    "aZC06": "rainfall_accumulation",
+    "CPC0005": "radar_estimated_rain_rate",
+    "CPC0060": "rainfall_accumulation",
+    "CPC0180": "rainfall_accumulation",
+    "CPC0360": "rainfall_accumulation",
+    "CPC0720": "rainfall_accumulation",
+    "CPC1440": "rainfall_accumulation",
+    "CPC2880": "rainfall_accumulation",
+    "CPC4320": "rainfall_accumulation",
+    "CPCH0005": "radar_estimated_rain_rate",
+    "CPCH0060": "rainfall_accumulation",
+    "CPCH0180": "rainfall_accumulation",
+    "CPCH0360": "rainfall_accumulation",
+    "CPCH0720": "rainfall_accumulation",
+    "CPCH1440": "rainfall_accumulation",
+    "CPCH2880": "rainfall_accumulation",
+    "CPCH4320": "rainfall_accumulation",
+    "nowpal60_P60": "rainfall_accumulation",
+    "nowpal90_P90": "rainfall_accumulation",
+    "nowpal180_P180": "rainfall_accumulation",
+    "nowpal360_P360": "rainfall_accumulation",
+    "nowpal720_P720": "rainfall_accumulation",
+    "nowpal90_P30": "rainfall_accumulation",
+    "nowpal90_P30_F60": "rainfall_accumulation",
+    "nowpal90_F60": "rainfall_accumulation",
+    "nowpal180_P60": "rainfall_accumulation",
+    "nowpal180_P60_F120": "rainfall_accumulation",
+    "nowpal180_F120": "rainfall_accumulation",
+    "nowpal360_P120": "rainfall_accumulation",
+    "nowpal360_P120_F240": "rainfall_accumulation",
+    "nowpal360_F240": "rainfall_accumulation",
+    "nowpal720_P360": "rainfall_accumulation",
+    "nowpal720_P360_F360": "rainfall_accumulation",
+    "nowpal720_F360": "rainfall_accumulation",
+    "dACC": "rainfall_accumulation",
+    "dACCH": "rainfall_accumulation",
+    "dARC": "rainfall_accumulation",
+    "RZC": "radar_estimated_rain_rate",
+    "R1F": "radar_estimated_rain_rate",
+    "rZC": "radar_estimated_rain_rate",
+    "RZF": "radar_estimated_rain_rate",
+    "dRZC": "radar_estimated_rain_rate",
+    "BZC": "probability_of_hail",
+    "dBZC": "probability_of_hail",
+    "MZC": "maximum_expected_severe_hail_size",
+    "dMZC": "maximum_expected_severe_hail_size",
+    "GZC": "probability_of_hail",
+    "dGZC": "probability_of_hail",
+    "CZC": "maximum_echo",
+    "dCZC": "maximum_echo",
+    "HZC": "maximum_echo_height",
+    "EZC15": "echo_top_15dBz",
+    "EZC20": "echo_top_20dBz",
+    "EZC45": "echo_top_45dBz",
+    "EZC50": "echo_top_50dBz",
+    "dEZC15": "echo_top_15dBz",
+    "dEZC20": "echo_top_20dBz",
+    "dEZC45": "echo_top_45dBz",
+    "dEZC50": "echo_top_50dBz",
+    "LZC": "vertically_integrated_liquid",
+    "dLZC": "vertically_integrated_liquid",
+    "OZC01": "reflectivity",
+    "OZC02": "reflectivity",
+    "OZC03": "reflectivity",
+    "OZC04": "reflectivity",
+    "OZC05": "reflectivity",
+    "OZC06": "reflectivity",
+    "OZC07": "reflectivity",
+    "OZC08": "reflectivity",
+    "OZC09": "reflectivity",
+    "OZC10": "reflectivity",
+    "OZC11": "reflectivity",
+    "OZC12": "reflectivity",
+    "OZC13": "reflectivity",
+    "OZC14": "reflectivity",
+    "OZC15": "reflectivity",
+    "OZC16": "reflectivity",
+    "OZC17": "reflectivity",
+    "OZC18": "reflectivity",
+    "ff": "wind_speed",
+    "dd": "wind_direction",
+    "u": "eastward_wind_component",
+    "v": "northward_wind_component",
+    "w": "vertical_wind_component",
+    "width": "height_resolution",
+    "gap": "gap",
+    "dbz": "bird_reflectivity",
+    "eta": "volumetric_reflectivity",
+    "dens": "bird_density",
+    "n": "number_of_samples_velocity",
+    "n_dbz": "number_of_samples_reflectivity",
+    "sd_vvp": "retrieved_velocity_std",
+    "DBZH": "reflectivity",
+    "n_all": "number_of_samples_velocity_all",
+    "n_dbz_all": "number_of_samples_reflectivity_all",
+    "VOL2BIRD_CLASS": "vol2bird_echo_classification",
+    "VOL2BIRD_WEATHER": "vol2bird_weather",
+    "VOL2BIRD_BACKGROUND": "vol2bird_background",
+    "VOL2BIRD_BIOLOGY": "vol2bird_biology",
+    "wind_vel_rad": "radial_wind_speed",
+    "wind_vel_rad_filtered": "corrected_radial_wind_speed",
+    "wind_vel_rad_ci": "radial_wind_speed_ci",
+    "wind_vel_rad_status": "radial_wind_speed_status",
+    "WD": "doppler_spectrum_width",
+    "WDc": "corrected_doppler_spectrum_width",
+    "WD_err": "doppler_spectrum_mean_error",
+    "atmos_type": "atmospherical_structures_type",
+    "beta_rel": "relative_beta",
+    "beta_abs": "absolute_beta",
+    "CNR": "cnr",
+    "CNRc": "corrected_cnr",
+    "HRV": "HRV",
+    "VIS006": "VIS006",
+    "VIS008": "VIS008",
+    "IR_016": "IR_016",
+    "IR_039": "IR_039",
+    "WV_062": "WV_062",
+    "WV_073": "WV_073",
+    "IR_087": "IR_087",
+    "IR_097": "IR_097",
+    "IR_108": "IR_108",
+    "IR_120": "IR_120",
+    "IR_134": "IR_134",
+    "CTH": "CTH",
+    "HRV_norm": "HRV_norm",
+    "VIS006_norm": "VIS006_norm",
+    "VIS008_norm": "VIS008_norm",
+    "IR_016_norm": "IR_016_norm",
+    "SNR": "signal_to_noise_ratio",
+    "VEL": "VEL",
+    "RMS": "RMS",
+    "LDR": "LDR",
+    "NPK": "NPK",
+    "SNRgc": "SNRgc",
+    "VELgc": "VELgc",
+    "RMSgc": "RMSgc",
+    "LDRgc": "LDRgc",
+    "NPKgc": "NPKgc",
+    "SNRg": "SNRg",
+    "VELg": "VELg",
+    "RMSg": "RMSg",
+    "LDRg": "LDRg",
+    "NPKg": "NPKg",
+    "SNRplank": "SNRplank",
+    "VELplank": "VELplank",
+    "RMSplank": "RMSplank",
+    "LDRplank": "LDRplank",
+    "NPKplank": "NPKplank",
+    "SNRrain": "SNRrain",
+    "VELrain": "VELrain",
+    "RMSrain": "RMSrain",
+    "LDRrain": "LDRrain",
+    "NPKrain": "NPKrain",
+    "SNRcl": "SNRcl",
+    "VELcl": "VELcl",
+    "RMScl": "RMScl",
+    "LDRcl": "LDRcl",
+    "NPKcl": "NPKcl",
+    "SNRice": "SNRice",
+    "VELice": "VELice",
+    "RMSice": "RMSice",
+    "LDRice": "LDRice",
+    "NPKice": "NPKice",
+    "RHO": "RHO",
+    "DPS": "DPS",
+    "LDRnormal": "LDRnormal",
+    "RHOwav": "RHOwav",
+    "DPSwav": "DPSwav",
+    "SKWg": "SKWg",
+    "HSDco": "HSDco",
+    "HSDcx": "HSDcx",
+    "Ze": "Ze",
+    "Zg": "Zg",
+    "Z": "Z",
+    "RRcr": "RR",
+    "LWCcr": "LWC",
+    "TEMPcr": "TEMP",
+    "ISDRco": "ISDRco",
+    "ISDRcx": "ISDRcx",
+    "SNRcx": "SNRcx",
+    "SNRCorFaCo": "SNRCorFaCo",
+    "avgdBZ": "avg_reflectivity",
+    "NdBZ": "npoints_reflectivity",
+    "quant05dBZ": "quant05_reflectivity",
+    "quant10dBZ": "quant10_reflectivity",
+    "quant20dBZ": "quant20_reflectivity",
+    "quant50dBZ": "quant50_reflectivity",
+    "quant80dBZ": "quant80_reflectivity",
+    "quant90dBZ": "quant90_reflectivity",
+    "quant95dBZ": "quant95_reflectivity",
+    "avgRR": "avg_radar_estimated_rain_rate",
+    "NRR": "npoints_radar_estimated_rain_rate",
+    "quant05RR": "quant05_radar_estimated_rain_rate",
+    "quant10RR": "quant10_radar_estimated_rain_rate",
+    "quant20RR": "quant20_radar_estimated_rain_rate",
+    "quant50RR": "quant50_radar_estimated_rain_rate",
+    "quant80RR": "quant80_radar_estimated_rain_rate",
+    "quant90RR": "quant90_radar_estimated_rain_rate",
+    "quant95RR": "quant95_radar_estimated_rain_rate",
+    "avgV": "avg_velocity",
+    "NV": "npoints_velocity",
+    "quant05V": "quant05_velocity",
+    "quant10V": "quant10_velocity",
+    "quant20V": "quant20_velocity",
+    "quant50V": "quant50_velocity",
+    "quant80V": "quant80_velocity",
+    "quant90V": "quant90_velocity",
+    "quant95V": "quant95_velocity",
+    "avgVc": "avg_corrected_velocity",
+    "NVc": "npoints_corrected_velocity",
+    "quant05Vc": "quant05_corrected_velocity",
+    "quant10Vc": "quant10_corrected_velocity",
+    "quant20Vc": "quant20_corrected_velocity",
+    "quant50Vc": "quant50_corrected_velocity",
+    "quant80Vc": "quant80_corrected_velocity",
+    "quant90Vc": "quant90_corrected_velocity",
+    "quant95Vc": "quant95_corrected_velocity",
+    "avgdealV": "avg_dealiased_velocity",
+    "NdealV": "npoints_dealiased_velocity",
+    "quant05dealV": "quant05_dealiased_velocity",
+    "quant10dealV": "quant10_dealiased_velocity",
+    "quant20dealV": "quant20_dealiased_velocity",
+    "quant50dealV": "quant50_dealiased_velocity",
+    "quant80dealV": "quant80_dealiased_velocity",
+    "quant90dealV": "quant90_dealiased_velocity",
+    "quant95dealV": "quant95_dealiased_velocity"
+}
 
 
 def get_rad4alp_prod_fname(datatype):
@@ -1340,1072 +1837,23 @@ def get_datatype_odim(datatype):
 
     return {datatype_odim: field_name}
 
-
+# Function to map datatype to Py-ART field name
 def get_fieldname_pyart(datatype):
     """
-    maps the config file radar data type name into the corresponding rainbow
-    Py-ART field name
-
-    Parameters
-    ----------
-    datatype : str
-        config file radar data type name
-
-    Returns
-    -------
-    field_name : str
-        Py-ART field name
-
+    Maps the config file radar data type name into the corresponding Py-ART field name
     """
-    if datatype == "dBZ":
-        field_name = "reflectivity"
-    elif datatype == "dBZ_flag":
-        field_name = "reflectivity_flag"
-    elif datatype == "dBZ_MF":
-        field_name = "reflectivity"
-    elif datatype == "Zn":
-        field_name = "normalized_reflectivity"
-    elif datatype == "Zlin":
-        field_name = "linear_reflectivity"
-    elif datatype == "dBuZ":
-        field_name = "unfiltered_reflectivity"
-    elif datatype == "dBZc":
-        field_name = "corrected_reflectivity"
-    elif datatype == "dBuZc":
-        field_name = "corrected_unfiltered_reflectivity"
-    elif datatype == "dBZv":
-        field_name = "reflectivity_vv"
-    elif datatype == "dBZvc":
-        field_name = "corrected_reflectivity_vv"
-    elif datatype == "dBuZv":
-        field_name = "unfiltered_reflectivity_vv"
-    elif datatype == "dBuZvc":
-        field_name = "corrected_unfiltered_reflectivity_vv"
-    elif datatype == "dBZhv":
-        field_name = "reflectivity_hv"
-    elif datatype == "dBZvh":
-        field_name = "reflectivity_vh"
-    elif datatype == "dBZ_bias":
-        field_name = "reflectivity_bias"
-    elif datatype == "eta_h":
-        field_name = "volumetric_reflectivity"
-    elif datatype == "eta_v":
-        field_name = "volumetric_reflectivity_vv"
-    elif datatype == "rcs_h":
-        field_name = "radar_cross_section_hh"
-    elif datatype == "rcs_v":
-        field_name = "radar_cross_section_vv"
+    return pyrad_to_pyart_keys_dict.get(datatype)
 
-    elif datatype == "VPRcorr":
-        field_name = "vpr_correction"
-    elif datatype == "VPRFEATURES":
-        field_name = "vpr_features"
-    elif datatype == "sigma_zh":
-        field_name = "sigma_zh"
-
-    elif datatype == "ZDR":
-        field_name = "differential_reflectivity"
-    elif datatype == "ZDRu":
-        field_name = "unfiltered_differential_reflectivity"
-    elif datatype == "ZDRc":
-        field_name = "corrected_differential_reflectivity"
-    elif datatype == "ZDRuc":
-        field_name = "corrected_unfiltered_differential_reflectivity"
-    elif datatype == "ZDR_prec":
-        field_name = "differential_reflectivity_in_precipitation"
-    elif datatype == "ZDR_snow":
-        field_name = "differential_reflectivity_in_snow"
-    elif datatype == "ZDR_col":
-        field_name = "differential_reflectivity_column_height"
-
-    elif datatype == "LDRhv":
-        field_name = "linear_depolarization_ratio_hv"
-    elif datatype == "LDRvh":
-        field_name = "linear_depolarization_ratio_vh"
-
-    elif datatype == "dBm":
-        field_name = "signal_power_hh"
-    elif datatype == "dBmv":
-        field_name = "signal_power_vv"
-
-    elif datatype == "Nh":
-        field_name = "noisedBZ_hh"
-    elif datatype == "Nv":
-        field_name = "noisedBZ_vv"
-    elif datatype == "NdBADUh":
-        field_name = "noisedBADU_hh"
-    elif datatype == "NdBADUv":
-        field_name = "noisedBADU_vv"
-    elif datatype == "NdBmh":
-        field_name = "noisedBm_hh"
-    elif datatype == "NdBmv":
-        field_name = "noisedBm_vv"
-    elif datatype == "NADUh":
-        field_name = "noiseADU_hh"
-    elif datatype == "NADUv":
-        field_name = "noiseADU_vv"
-    elif datatype == "noise_pos_h":
-        field_name = "noise_pos_h"
-    elif datatype == "noise_pos_v":
-        field_name = "noise_pos_v"
-    elif datatype == "Nclip_h":
-        field_name = "noise_clipping_level_hh_dBZ"
-    elif datatype == "Nclip_v":
-        field_name = "noise_clipping_level_vv_dBZ"
-    elif datatype == "WBN":
-        field_name = "wide_band_noise"
-    elif datatype == "WBNc":
-        field_name = "corrected_wide_band_noise"
-    elif datatype == "ST1":
-        field_name = "stat_test_lag1"
-    elif datatype == "ST1c":
-        field_name = "corrected_stat_test_lag1"
-    elif datatype == "ST2":
-        field_name = "stat_test_lag2"
-    elif datatype == "ST2c":
-        field_name = "corrected_stat_test_lag2"
-
-    elif datatype == "TXh":
-        field_name = "transmitted_signal_power_h"
-    elif datatype == "TXv":
-        field_name = "transmitted_signal_power_v"
-
-    elif datatype == "SNRh":
-        field_name = "signal_to_noise_ratio_hh"
-    elif datatype == "SNRv":
-        field_name = "signal_to_noise_ratio_vv"
-    elif datatype == "SNR":
-        field_name = "signal_to_noise_ratio"
-
-    elif datatype == "CCORh":
-        field_name = "clutter_correction_ratio_hh"
-    elif datatype == "CCORv":
-        field_name = "clutter_correction_ratio_vv"
-
-    elif datatype == "dBm_sun_hit":
-        field_name = "sun_hit_power_h"
-    elif datatype == "dBmv_sun_hit":
-        field_name = "sun_hit_power_v"
-    elif datatype == "ZDR_sun_hit":
-        field_name = "sun_hit_differential_reflectivity"
-    elif datatype == "dBm_sun_est":
-        field_name = "sun_est_power_h"
-    elif datatype == "dBmv_sun_est":
-        field_name = "sun_est_power_v"
-    elif datatype == "ZDR_sun_est":
-        field_name = "sun_est_differential_reflectivity"
-    elif datatype == "sun_pos_h":
-        field_name = "sun_hit_h"
-    elif datatype == "sun_pos_v":
-        field_name = "sun_hit_v"
-    elif datatype == "sun_pos_zdr":
-        field_name = "sun_hit_zdr"
-
-    elif datatype == "RhoHV":
-        field_name = "cross_correlation_ratio"
-    elif datatype == "RhoHVu":
-        field_name = "unfiltered_cross_correlation_ratio"
-    elif datatype == "uRhoHV":
-        field_name = "uncorrected_cross_correlation_ratio"
-    elif datatype == "RhoHVc":
-        field_name = "corrected_cross_correlation_ratio"
-    elif datatype == "RhoHV_rain":
-        field_name = "cross_correlation_ratio_in_rain"
-    elif datatype == "RhoHV_theo":
-        field_name = "theoretical_cross_correlation_ratio"
-    elif datatype == "L":
-        field_name = "logarithmic_cross_correlation_ratio"
-    elif datatype == "CDR":
-        field_name = "circular_depolarization_ratio"
-
-    elif datatype == "PhiDP":
-        field_name = "differential_phase"
-    elif datatype == "uPhiDPu":
-        field_name = "uncorrected_unfiltered_differential_phase"
-    elif datatype == "uPhiDP":
-        field_name = "uncorrected_differential_phase"
-    elif datatype == "PhiDPc":
-        field_name = "corrected_differential_phase"
-    elif datatype == "PhiDP0":
-        field_name = "system_differential_phase"
-    elif datatype == "PhiDP0_bin":
-        field_name = "first_gate_differential_phase"
-    elif datatype == "KDP":
-        field_name = "specific_differential_phase"
-    elif datatype == "uKDP":
-        field_name = "uncorrected_specific_differential_phase"
-    elif datatype == "KDPc":
-        field_name = "corrected_specific_differential_phase"
-    elif datatype == "MPH":
-        field_name = "mean_phase"
-    elif datatype == "MPHc":
-        field_name = "corrected_mean_phase"
-
-    elif datatype == "V":
-        field_name = "velocity"
-    elif datatype == "Vv":
-        field_name = "velocity_vv"
-    elif datatype == "Vhv":
-        field_name = "velocity_hv"
-    elif datatype == "Vvh":
-        field_name = "velocity_vh"
-    elif datatype == "Vu":
-        field_name = "unfiltered_velocity"
-    elif datatype == "dealV":
-        field_name = "dealiased_velocity"
-    elif datatype == "Vc":
-        field_name = "corrected_velocity"
-    elif datatype == "dealVc":
-        field_name = "dealiased_corrected_velocity"
-    elif datatype == "estV":
-        field_name = "retrieved_velocity"
-    elif datatype == "stdV":
-        field_name = "retrieved_velocity_std"
-    elif datatype == "diffV":
-        field_name = "velocity_difference"
-
-    elif datatype == "W":
-        field_name = "spectrum_width"
-    elif datatype == "Wv":
-        field_name = "spectrum_width_vv"
-    elif datatype == "Whv":
-        field_name = "spectrum_width_hv"
-    elif datatype == "Wvh":
-        field_name = "spectrum_width_vh"
-    elif datatype == "Wu":
-        field_name = "unfiltered_spectrum_width"
-    elif datatype == "Wc":
-        field_name = "corrected_spectrum_width"
-    elif datatype == "wind_vel_h_az":
-        field_name = "azimuthal_horizontal_wind_component"
-    elif datatype == "wind_vel_v":
-        field_name = "vertical_wind_component"
-    elif datatype == "wind_vel_h_u":
-        field_name = "eastward_wind_component"
-    elif datatype == "wind_vel_h_v":
-        field_name = "northward_wind_component"
-    elif datatype == "windshear_v":
-        field_name = "vertical_wind_shear"
-    elif datatype == "WIND_SPEED":
-        field_name = "wind_speed"
-    elif datatype == "WIND_DIRECTION":
-        field_name = "wind_direction"
-    elif datatype == "EDR":
-        field_name = "turbulence"
-
-    elif datatype == "Ah":
-        field_name = "specific_attenuation"
-    elif datatype == "Ahc":
-        field_name = "corrected_specific_attenuation"
-    elif datatype == "PIA":
-        field_name = "path_integrated_attenuation"
-    elif datatype == "PIAc":
-        field_name = "corrected_path_integrated_attenuation"
-    elif datatype == "Adp":
-        field_name = "specific_differential_attenuation"
-    elif datatype == "Adpc":
-        field_name = "corrected_specific_differential_attenuation"
-    elif datatype == "PIDA":
-        field_name = "path_integrated_differential_attenuation"
-    elif datatype == "PIDAc":
-        field_name = "corrected_path_integrated_differential_attenuation"
-
-    elif datatype == "TEMP":
-        field_name = "temperature"
-    elif datatype == "ISO0":
-        field_name = "iso0"
-    elif datatype == "H_ISO0":
-        field_name = "height_over_iso0"
-    elif datatype == "H_ISO0c":
-        field_name = "corrected_height_over_iso0"
-    elif datatype == "HZT":
-        field_name = "iso0_height"
-    elif datatype == "HZTc":
-        field_name = "corrected_iso0_height"
-    elif datatype == "icon_index":
-        field_name = "icon_index"
-    elif datatype == "hzt_index":
-        field_name = "hzt_index"
-    elif datatype == "ml":
-        field_name = "melting_layer"
-
-    elif datatype == "VIS":
-        field_name = "visibility"
-    elif datatype == "HGHT":
-        field_name = "height"
-    elif datatype == "vis":
-        field_name = "visibility"
-    elif datatype == "visibility":
-        field_name = "visibility"
-    elif datatype == "visibility_polar":
-        field_name = "visibility_polar"
-    elif datatype == "terrain_altitude":
-        field_name = "terrain_altitude"
-    elif datatype == "bent_terrain_altitude":
-        field_name = "bent_terrain_altitude"
-    elif datatype == "terrain_slope":
-        field_name = "terrain_slope"
-    elif datatype == "terrain_aspect":
-        field_name = "terrain_aspect"
-    elif datatype == "elevation_angle":
-        field_name = "elevation_angle"
-    elif datatype == "min_vis_elevation":
-        field_name = "min_vis_elevation"
-    elif datatype == "min_vis_altitude":
-        field_name = "min_vis_altitude"
-    elif datatype == "incident_angle":
-        field_name = "incident_angle"
-    elif datatype == "sigma_0":
-        field_name = "sigma_0"
-    elif datatype == "effective_area":
-        field_name = "effective_area"
-    elif datatype == "dBm_clutter":
-        field_name = "dBm_clutter"
-    elif datatype == "dBZ_clutter":
-        field_name = "dBZ_clutter"
-
-    elif datatype == "echoID":
-        field_name = "radar_echo_id"
-    elif datatype == "CLT":
-        field_name = "clutter_exit_code"
-    elif datatype == "occurrence":
-        field_name = "occurrence"
-    elif datatype == "freq_occu":
-        field_name = "frequency_of_occurrence"
-    elif datatype == "RR":
-        field_name = "radar_estimated_rain_rate"
-    elif datatype == "RR_MP":
-        field_name = "Marshall_Palmer_radar_estimated_rain_rate"
-    elif datatype == "RR_Z":
-        field_name = "radar_reflectivity_estimated_rain_rate"
-    elif datatype == "RR_KDP":
-        field_name = "radar_kdp_estimated_rain_rate"
-    elif datatype == "RR_flag":
-        field_name = "radar_estimated_rain_rate_flag"
-    elif datatype == "RRc":
-        field_name = "corrected_radar_estimated_rain_rate"
-    elif datatype == "Raccu":
-        field_name = "rainfall_accumulation"
-    elif datatype == "RaccuMF":
-        field_name = "rainfall_accumulation"
-    elif datatype == "QIMF":
-        field_name = "signal_quality_index"
-    elif datatype == "QI":
-        field_name = "signal_quality_index"
-    elif datatype == "AF":
-        field_name = "adjustment_factor"
-    elif datatype == "radar_R_rel":
-        field_name = "radar_rainrate_relation"
-
-    elif datatype == "prec_type":
-        field_name = "precipitation_type"
-    elif datatype == "hydro":
-        field_name = "radar_echo_classification"
-    elif datatype == "hydroMF":
-        field_name = "radar_echo_classification_MF"
-    elif datatype == "hydroc":
-        field_name = "corrected_radar_echo_classification"
-    elif datatype == "confidence":
-        field_name = "hydroclass_confidence"
-    elif datatype == "entropy":
-        field_name = "hydroclass_entropy"
-    elif datatype == "propAG":
-        field_name = "proportion_AG"
-    elif datatype == "propCR":
-        field_name = "proportion_CR"
-    elif datatype == "propLR":
-        field_name = "proportion_LR"
-    elif datatype == "propRP":
-        field_name = "proportion_RP"
-    elif datatype == "propRN":
-        field_name = "proportion_RN"
-    elif datatype == "propVI":
-        field_name = "proportion_VI"
-    elif datatype == "propWS":
-        field_name = "proportion_WS"
-    elif datatype == "propMH":
-        field_name = "proportion_MH"
-    elif datatype == "propIH":
-        field_name = "proportion_IH"
-    elif datatype == "probAG":
-        field_name = "probability_AG"
-    elif datatype == "probCR":
-        field_name = "probability_CR"
-    elif datatype == "probLR":
-        field_name = "probability_LR"
-    elif datatype == "probRP":
-        field_name = "probability_RP"
-    elif datatype == "probRN":
-        field_name = "probability_RN"
-    elif datatype == "probVI":
-        field_name = "probability_VI"
-    elif datatype == "probWS":
-        field_name = "probability_WS"
-    elif datatype == "probMH":
-        field_name = "probability_MH"
-    elif datatype == "probIH":
-        field_name = "probability_IH"
-
-    elif datatype == "time_avg_flag":
-        field_name = "time_avg_flag"
-    elif datatype == "colocated_gates":
-        field_name = "colocated_gates"
-    elif datatype == "nsamples":
-        field_name = "number_of_samples"
-    elif datatype == "bird_density":
-        field_name = "bird_density"
-    elif datatype == "std":
-        field_name = "standard_deviation"
-    elif datatype == "sum":
-        field_name = "sum"
-    elif datatype == "sum2":
-        field_name = "sum_squared"
-    elif datatype == "diff":
-        field_name = "fields_difference"
-    elif datatype == "mask":
-        field_name = "field_mask"
-    elif datatype == "texture":
-        field_name = "field_texture"
-
-    # spectral data
-    elif datatype == "ShhADU":
-        field_name = "complex_spectra_hh_ADU"
-    elif datatype == "ShhADUu":
-        field_name = "unfiltered_complex_spectra_hh_ADU"
-    elif datatype == "SvvADU":
-        field_name = "complex_spectra_vv_ADU"
-    elif datatype == "SvvADUu":
-        field_name = "unfiltered_complex_spectra_vv_ADU"
-    elif datatype == "sPhhADU":
-        field_name = "spectral_power_hh_ADU"
-    elif datatype == "sPhhADUu":
-        field_name = "unfiltered_spectral_power_hh_ADU"
-    elif datatype == "sPvvADU":
-        field_name = "spectral_power_vv_ADU"
-    elif datatype == "sPvvADUu":
-        field_name = "unfiltered_spectral_power_vv_ADU"
-    elif datatype == "sPhhdBADU":
-        field_name = "spectral_power_hh_dBADU"
-    elif datatype == "sPhhdBADUu":
-        field_name = "unfiltered_spectral_power_hh_dBADU"
-    elif datatype == "sPvvdBADU":
-        field_name = "spectral_power_vv_dBADU"
-    elif datatype == "sPvvdBADUu":
-        field_name = "unfiltered_spectral_power_vv_dBADU"
-    elif datatype == "sPhhdBm":
-        field_name = "spectral_power_hh_dBm"
-    elif datatype == "sPhhdBmu":
-        field_name = "unfiltered_spectral_power_hh_dBm"
-    elif datatype == "sPvvdBm":
-        field_name = "spectral_power_vv_dBm"
-    elif datatype == "sPvvdBmu":
-        field_name = "unfiltered_spectral_power_vv_dBm"
-    elif datatype == "sNh":
-        field_name = "spectral_noise_power_hh_dBZ"
-    elif datatype == "sNv":
-        field_name = "spectral_noise_power_vv_dBZ"
-    elif datatype == "sNdBADUh":
-        field_name = "spectral_noise_power_hh_dBADU"
-    elif datatype == "sNdBADUv":
-        field_name = "spectral_noise_power_vv_dBADU"
-    elif datatype == "sNdBmh":
-        field_name = "spectral_noise_power_hh_dBm"
-    elif datatype == "sNdBmv":
-        field_name = "spectral_noise_power_vv_dBm"
-    elif datatype == "sNADUh":
-        field_name = "spectral_noise_power_hh_ADU"
-    elif datatype == "sNADUv":
-        field_name = "spectral_noise_power_vv_ADU"
-    elif datatype == "sPhasehh":
-        field_name = "spectral_phase_hh"
-    elif datatype == "sPhasehhu":
-        field_name = "unfiltered_spectral_phase_hh"
-    elif datatype == "sPhasevv":
-        field_name = "spectral_phase_vv"
-    elif datatype == "sPhasevvu":
-        field_name = "unfiltered_spectral_phase_vv"
-
-    elif datatype == "sdBZ":
-        field_name = "spectral_reflectivity_hh"
-    elif datatype == "sdBuZ":
-        field_name = "unfiltered_spectral_reflectivity_hh"
-    elif datatype == "sdBZv":
-        field_name = "spectral_reflectivity_vv"
-    elif datatype == "sdBuZv":
-        field_name = "unfiltered_spectral_reflectivity_vv"
-    elif datatype == "sZDR":
-        field_name = "spectral_differential_reflectivity"
-    elif datatype == "sZDRu":
-        field_name = "unfiltered_spectral_differential_reflectivity"
-    elif datatype == "sPhiDP":
-        field_name = "spectral_differential_phase"
-    elif datatype == "sPhiDPu":
-        field_name = "unfiltered_spectral_differential_phase"
-    elif datatype == "sRhoHV":
-        field_name = "spectral_copolar_correlation_coefficient"
-    elif datatype == "sRhoHVu":
-        field_name = "unfiltered_spectral_copolar_correlation_coefficient"
-
-    # IQ data
-    elif datatype == "IQhhADU":
-        field_name = "IQ_hh_ADU"
-    elif datatype == "IQvvADU":
-        field_name = "IQ_vv_ADU"
-    elif datatype == "IQNh":
-        field_name = "IQ_noise_power_hh_dBZ"
-    elif datatype == "IQNv":
-        field_name = "IQ_noise_power_vv_dBZ"
-    elif datatype == "IQNdBADUh":
-        field_name = "IQ_noise_power_hh_dBADU"
-    elif datatype == "IQNdBADUv":
-        field_name = "IQ_noise_power_vv_dBADU"
-    elif datatype == "IQNdBmh":
-        field_name = "IQ_noise_power_hh_dBm"
-    elif datatype == "IQNdBmv":
-        field_name = "IQ_noise_power_vv_dBm"
-    elif datatype == "IQNADUh":
-        field_name = "IQ_noise_power_hh_ADU"
-    elif datatype == "IQNADUv":
-        field_name = "IQ_noise_power_vv_ADU"
-
-    # rad4alp cartesian products
-    elif datatype == "POH":
-        field_name = "probability_of_hail"
-    elif datatype == "VIL":
-        field_name = "vertically_integrated_liquid"
-    elif datatype == "ETOP15":
-        field_name = "echo_top_15dBZ"
-    elif datatype == "ETOP20":
-        field_name = "echo_top_20dBZ"
-    elif datatype == "ETOP45":
-        field_name = "echo_top_45dBZ"
-    elif datatype == "ETOP50":
-        field_name = "echo_top_50dBZ"
-    elif datatype == "MAXECHO":
-        field_name = "maximum_echo"
-    elif datatype == "HMAXECHO":
-        field_name = "maximum_echo_height"
-
-    # rad4alp cartesian products
-    # rainfall accumulation products
-    elif datatype == "AZC01":
-        field_name = "rainfall_accumulation"
-    elif datatype == "AZC03":
-        field_name = "rainfall_accumulation"
-    elif datatype == "AZC06":
-        field_name = "rainfall_accumulation"
-    elif datatype == "aZC01":
-        field_name = "rainfall_accumulation"
-    elif datatype == "aZC03":
-        field_name = "rainfall_accumulation"
-    elif datatype == "aZC06":
-        field_name = "rainfall_accumulation"
-
-    # CPC
-    elif datatype == "CPC0005":
-        field_name = "radar_estimated_rain_rate"
-    elif datatype == "CPC0060":
-        field_name = "rainfall_accumulation"
-    elif datatype == "CPC0180":
-        field_name = "rainfall_accumulation"
-    elif datatype == "CPC0360":
-        field_name = "rainfall_accumulation"
-    elif datatype == "CPC0720":
-        field_name = "rainfall_accumulation"
-    elif datatype == "CPC1440":
-        field_name = "rainfall_accumulation"
-    elif datatype == "CPC2880":
-        field_name = "rainfall_accumulation"
-    elif datatype == "CPC4320":
-        field_name = "rainfall_accumulation"
-
-    elif datatype == "CPCH0005":
-        field_name = "radar_estimated_rain_rate"
-    elif datatype == "CPCH0060":
-        field_name = "rainfall_accumulation"
-    elif datatype == "CPCH0180":
-        field_name = "rainfall_accumulation"
-    elif datatype == "CPCH0360":
-        field_name = "rainfall_accumulation"
-    elif datatype == "CPCH0720":
-        field_name = "rainfall_accumulation"
-    elif datatype == "CPCH1440":
-        field_name = "rainfall_accumulation"
-    elif datatype == "CPCH2880":
-        field_name = "rainfall_accumulation"
-    elif datatype == "CPCH4320":
-        field_name = "rainfall_accumulation"
-
-    # Nowpal
-    elif datatype == "nowpal60_P60":
-        field_name = "rainfall_accumulation"
-    elif datatype == "nowpal90_P90":
-        field_name = "rainfall_accumulation"
-    elif datatype == "nowpal180_P180":
-        field_name = "rainfall_accumulation"
-    elif datatype == "nowpal360_P360":
-        field_name = "rainfall_accumulation"
-    elif datatype == "nowpal720_P720":
-        field_name = "rainfall_accumulation"
-
-    elif datatype == "nowpal90_P30":
-        field_name = "rainfall_accumulation"
-    elif datatype == "nowpal90_P30_F60":
-        field_name = "rainfall_accumulation"
-    elif datatype == "nowpal90_F60":
-        field_name = "rainfall_accumulation"
-    elif datatype == "nowpal180_P60":
-        field_name = "rainfall_accumulation"
-    elif datatype == "nowpal180_P60_F120":
-        field_name = "rainfall_accumulation"
-    elif datatype == "nowpal180_F120":
-        field_name = "rainfall_accumulation"
-    elif datatype == "nowpal360_P120":
-        field_name = "rainfall_accumulation"
-    elif datatype == "nowpal360_P120_F240":
-        field_name = "rainfall_accumulation"
-    elif datatype == "nowpal360_F240":
-        field_name = "rainfall_accumulation"
-    elif datatype == "nowpal720_P360":
-        field_name = "rainfall_accumulation"
-    elif datatype == "nowpal720_P360_F360":
-        field_name = "rainfall_accumulation"
-    elif datatype == "nowpal720_F360":
-        field_name = "rainfall_accumulation"
-
-    elif datatype == "dACC":
-        field_name = "rainfall_accumulation"
-    elif datatype == "dACCH":
-        field_name = "rainfall_accumulation"
-    elif datatype == "dARC":
-        field_name = "rainfall_accumulation"
-
-    # rainfall rate products
-    elif datatype == "RZC":
-        field_name = "radar_estimated_rain_rate"
-    elif datatype == "R1F":
-        field_name = "radar_estimated_rain_rate"
-    elif datatype == "rZC":
-        field_name = "radar_estimated_rain_rate"
-    elif datatype == "RZF":
-        field_name = "radar_estimated_rain_rate"
-    elif datatype == "dRZC":
-        field_name = "radar_estimated_rain_rate"
-
-    # hail products
-    elif datatype == "BZC":
-        field_name = "probability_of_hail"
-    elif datatype == "dBZC":
-        field_name = "probability_of_hail"
-    elif datatype == "MZC":
-        field_name = "maximum_expected_severe_hail_size"
-    elif datatype == "dMZC":
-        field_name = "maximum_expected_severe_hail_size"
-    elif datatype == "GZC":
-        field_name = "probability_of_hail"
-    elif datatype == "dGZC":
-        field_name = "probability_of_hail"
-
-    # echo tops
-    elif datatype == "CZC":
-        field_name = "maximum_echo"
-    elif datatype == "dCZC":
-        field_name = "maximum_echo"  # Daily max echo
-    elif datatype == "HZC":
-        field_name = "maximum_echo_height"  # Max echo height
-    elif datatype == "EZC15":
-        field_name = "echo_top_15dBz"
-    elif datatype == "EZC20":
-        field_name = "echo_top_20dBz"
-    elif datatype == "EZC45":
-        field_name = "echo_top_45dBz"
-    elif datatype == "EZC50":
-        field_name = "echo_top_50dBz"
-    elif datatype == "dEZC15":
-        field_name = "echo_top_15dBZ"  # Daily echo top
-    elif datatype == "dEZC20":
-        field_name = "echo_top_20dBz"
-    elif datatype == "dEZC45":
-        field_name = "echo_top_45dBz"
-    elif datatype == "dEZC50":
-        field_name = "echo_top_50dBz"
-    elif datatype == "LZC":
-        field_name = "vertically_integrated_liquid"
-    elif datatype == "dLZC":
-        field_name = "vertically_integrated_liquid"
-
-    # reflectivity CAPPI
-    elif datatype == "OZC01":
-        field_name = "reflectivity"
-    elif datatype == "OZC02":
-        field_name = "reflectivity"
-    elif datatype == "OZC03":
-        field_name = "reflectivity"
-    elif datatype == "OZC04":
-        field_name = "reflectivity"
-    elif datatype == "OZC05":
-        field_name = "reflectivity"
-    elif datatype == "OZC06":
-        field_name = "reflectivity"
-    elif datatype == "OZC07":
-        field_name = "reflectivity"
-    elif datatype == "OZC08":
-        field_name = "reflectivity"
-    elif datatype == "OZC09":
-        field_name = "reflectivity"
-    elif datatype == "OZC10":
-        field_name = "reflectivity"
-    elif datatype == "OZC11":
-        field_name = "reflectivity"
-    elif datatype == "OZC12":
-        field_name = "reflectivity"
-    elif datatype == "OZC13":
-        field_name = "reflectivity"
-    elif datatype == "OZC14":
-        field_name = "reflectivity"
-    elif datatype == "OZC15":
-        field_name = "reflectivity"
-    elif datatype == "OZC16":
-        field_name = "reflectivity"
-    elif datatype == "OZC17":
-        field_name = "reflectivity"
-    elif datatype == "OZC18":
-        field_name = "reflectivity"
-
-    # vol2bird field names
-    elif datatype == "ff":
-        field_name = "wind_speed"
-    elif datatype == "dd":
-        field_name = "wind_direction"
-    elif datatype == "u":
-        field_name = "eastward_wind_component"
-    elif datatype == "v":
-        field_name = "northward_wind_component"
-    elif datatype == "w":
-        field_name = "vertical_wind_component"
-    elif datatype == "width":
-        field_name = "height_resolution"
-    elif datatype == "gap":
-        field_name = "gap"
-    elif datatype == "dbz":
-        field_name = "bird_reflectivity"
-    elif datatype == "eta":
-        field_name = "volumetric_reflectivity"
-    elif datatype == "dens":
-        field_name = "bird_density"
-    elif datatype == "n":
-        field_name = "number_of_samples_velocity"
-    elif datatype == "n_dbz":
-        field_name = "number_of_samples_reflectivity"
-    elif datatype == "sd_vvp":
-        field_name = "retrieved_velocity_std"
-    elif datatype == "DBZH":
-        field_name = "reflectivity"
-    elif datatype == "n_all":
-        field_name = "number_of_samples_velocity_all"
-    elif datatype == "n_dbz_all":
-        field_name = "number_of_samples_reflectivity_all"
-    elif datatype == "VOL2BIRD_CLASS":
-        field_name = "vol2bird_echo_classification"
-    elif datatype == "VOL2BIRD_WEATHER":
-        field_name = "vol2bird_weather"
-    elif datatype == "VOL2BIRD_BACKGROUND":
-        field_name = "vol2bird_background"
-    elif datatype == "VOL2BIRD_BIOLOGY":
-        field_name = "vol2bird_biology"
-
-    # wind lidar names
-    elif datatype == "wind_vel_rad":
-        field_name = "radial_wind_speed"
-    elif datatype == "wind_vel_rad_filtered":
-        field_name = "corrected_radial_wind_speed"
-    elif datatype == "wind_vel_rad_ci":
-        field_name = "radial_wind_speed_ci"
-    elif datatype == "wind_vel_rad_status":
-        field_name = "radial_wind_speed_status"
-    elif datatype == "WD":
-        field_name = "doppler_spectrum_width"
-    elif datatype == "WDc":
-        field_name = "corrected_doppler_spectrum_width"
-    elif datatype == "WD_err":
-        field_name = "doppler_spectrum_mean_error"
-    elif datatype == "atmos_type":
-        field_name = "atmospherical_structures_type"
-    elif datatype == "beta_rel":
-        field_name = "relative_beta"
-    elif datatype == "beta_abs":
-        field_name = "absolute_beta"
-    elif datatype == "CNR":
-        field_name = "cnr"
-    elif datatype == "CNRc":
-        field_name = "corrected_cnr"
-
-    # satellite names
-    elif datatype == "HRV":
-        field_name = "HRV"
-    elif datatype == "VIS006":
-        field_name = "VIS006"
-    elif datatype == "VIS008":
-        field_name = "VIS008"
-    elif datatype == "IR_016":
-        field_name = "IR_016"
-
-    elif datatype == "IR_039":
-        field_name = "IR_039"
-    elif datatype == "WV_062":
-        field_name = "WV_062"
-    elif datatype == "WV_073":
-        field_name = "WV_073"
-    elif datatype == "IR_087":
-        field_name = "IR_087"
-    elif datatype == "IR_097":
-        field_name = "IR_097"
-    elif datatype == "IR_108":
-        field_name = "IR_108"
-    elif datatype == "IR_120":
-        field_name = "IR_120"
-    elif datatype == "IR_134":
-        field_name = "IR_134"
-
-    elif datatype == "CTH":
-        field_name = "CTH"
-
-    elif datatype == "HRV_norm":
-        field_name = "HRV_norm"
-    elif datatype == "VIS006_norm":
-        field_name = "VIS006_norm"
-    elif datatype == "VIS008_norm":
-        field_name = "VIS008_norm"
-    elif datatype == "IR_016_norm":
-        field_name = "IR_016_norm"
-
-    # cloud radar names
-    elif datatype == "SNR":
-        field_name = "SNR"
-    elif datatype == "VEL":
-        field_name = "VEL"
-    elif datatype == "RMS":  # Peak width (m/s)
-        field_name = "RMS"
-    elif datatype == "LDR":
-        field_name = "LDR"
-    elif datatype == "NPK":  # Number of peaks
-        field_name = "NPK"
-
-    elif datatype == "SNRgc":
-        field_name = "SNRgc"
-    elif datatype == "VELgc":
-        field_name = "VELgc"
-    elif datatype == "RMSgc":  # Peak width (m/s)
-        field_name = "RMSgc"
-    elif datatype == "LDRgc":
-        field_name = "LDRgc"
-    elif datatype == "NPKgc":  # Number of peaks
-        field_name = "NPKgc"
-
-    elif datatype == "SNRg":
-        field_name = "SNRg"
-    elif datatype == "VELg":
-        field_name = "VELg"
-    elif datatype == "RMSg":
-        field_name = "RMSg"
-    elif datatype == "LDRg":
-        field_name = "LDRg"
-    elif datatype == "NPKg":
-        field_name = "NPKg"
-
-    elif datatype == "SNRplank":
-        field_name = "SNRplank"
-    elif datatype == "VELplank":
-        field_name = "VELplank"
-    elif datatype == "RMSplank":
-        field_name = "RMSplank"
-    elif datatype == "LDRplank":
-        field_name = "LDRplank"
-    elif datatype == "NPKplank":
-        field_name = "NPKplank"
-
-    elif datatype == "SNRrain":
-        field_name = "SNRrain"
-    elif datatype == "VELrain":
-        field_name = "VELrain"
-    elif datatype == "RMSrain":
-        field_name = "RMSrain"
-    elif datatype == "LDRrain":
-        field_name = "LDRrain"
-    elif datatype == "NPKrain":
-        field_name = "NPKrain"
-
-    elif datatype == "SNRcl":
-        field_name = "SNRcl"
-    elif datatype == "VELcl":
-        field_name = "VELcl"
-    elif datatype == "RMScl":
-        field_name = "RMScl"
-    elif datatype == "LDRcl":
-        field_name = "LDRcl"
-    elif datatype == "NPKcl":
-        field_name = "NPKcl"
-
-    elif datatype == "SNRice":
-        field_name = "SNRice"
-    elif datatype == "VELice":
-        field_name = "VELice"
-    elif datatype == "RMSice":
-        field_name = "RMSice"
-    elif datatype == "LDRice":
-        field_name = "LDRice"
-    elif datatype == "NPKice":
-        field_name = "NPKice"
-
-    elif datatype == "RHO":  # Co-cross channel correlation
-        field_name = "RHO"
-    elif datatype == "DPS":  # differential phase
-        field_name = "DPS"
-    elif datatype == "LDRnormal":  # differential phase
-        field_name = "LDRnormal"
-    elif datatype == "RHOwav":  # peak weighted
-        field_name = "RHOwav"
-    elif datatype == "DPSwav":
-        field_name = "DPSwav"
-    elif datatype == "SKWg":
-        field_name = "SKWg"
-
-    elif datatype == "HSDco":  # co-channel HSdiv noise level
-        field_name = "HSDco"
-    elif datatype == "HSDcx":
-        field_name = "HSDcx"
-
-    elif datatype == "Ze":  # equivalent reflectivity factor of hydrometeors
-        field_name = "Ze"
-    elif datatype == "Zg":  # equivalent reflectivity factor of all targets
-        field_name = "Zg"
-    elif datatype == "Z":
-        # radar reflectivity factor of hydrometeors (Mie-corrected)
-        field_name = "Z"
-
-    elif datatype == "RRcr":
-        field_name = "RR"
-    elif datatype == "LWCcr":
-        field_name = "LWC"
-    elif datatype == "TEMPcr":
-        field_name = "TEMP"
-
-    elif datatype == "ISDRco":  # In spectrum dynamic range
-        field_name = "ISDRco"
-    elif datatype == "ISDRcx":
-        field_name = "ISDRcx"
-
-    elif datatype == "SNRcx":
-        field_name = "SNRcx"
-
-    elif datatype == "SNRCorFaCo":
-        # Factor to correct Co-channel SNR based on RX calibration measurement
-        # by noise source
-        field_name = "SNRCorFaCo"
-    elif datatype == "SNRCorFaCo":
-        field_name = "SNRCorFaCo"
-
-    # quantiles and averages
-    elif datatype == "avgdBZ":
-        field_name = "avg_reflectivity"
-    elif datatype == "NdBZ":
-        field_name = "npoints_reflectivity"
-    elif datatype == "quant05dBZ":
-        field_name = "quant05_reflectivity"
-    elif datatype == "quant10dBZ":
-        field_name = "quant10_reflectivity"
-    elif datatype == "quant20dBZ":
-        field_name = "quant20_reflectivity"
-    elif datatype == "quant50dBZ":
-        field_name = "quant50_reflectivity"
-    elif datatype == "quant80dBZ":
-        field_name = "quant80_reflectivity"
-    elif datatype == "quant90dBZ":
-        field_name = "quant90_reflectivity"
-    elif datatype == "quant95dBZ":
-        field_name = "quant95_reflectivity"
-
-    elif datatype == "avgRR":
-        field_name = "avg_radar_estimated_rain_rate"
-    elif datatype == "NRR":
-        field_name = "npoints_radar_estimated_rain_rate"
-    elif datatype == "quant05RR":
-        field_name = "quant05_radar_estimated_rain_rate"
-    elif datatype == "quant10RR":
-        field_name = "quant10_radar_estimated_rain_rate"
-    elif datatype == "quant20RR":
-        field_name = "quant20_radar_estimated_rain_rate"
-    elif datatype == "quant50RR":
-        field_name = "quant50_radar_estimated_rain_rate"
-    elif datatype == "quant80RR":
-        field_name = "quant80_radar_estimated_rain_rate"
-    elif datatype == "quant90RR":
-        field_name = "quant90_radar_estimated_rain_rate"
-    elif datatype == "quant95RR":
-        field_name = "quant95_radar_estimated_rain_rate"
-
-    elif datatype == "avgV":
-        field_name = "avg_velocity"
-    elif datatype == "NV":
-        field_name = "npoints_velocity"
-    elif datatype == "quant05V":
-        field_name = "quant05_velocity"
-    elif datatype == "quant10V":
-        field_name = "quant10_velocity"
-    elif datatype == "quant20V":
-        field_name = "quant20_velocity"
-    elif datatype == "quant50V":
-        field_name = "quant50_velocity"
-    elif datatype == "quant80V":
-        field_name = "quant80_velocity"
-    elif datatype == "quant90V":
-        field_name = "quant90_velocity"
-    elif datatype == "quant95V":
-        field_name = "quant95_velocity"
-
-    elif datatype == "avgVc":
-        field_name = "avg_corrected_velocity"
-    elif datatype == "NVc":
-        field_name = "npoints_corrected_velocity"
-    elif datatype == "quant05Vc":
-        field_name = "quant05_corrected_velocity"
-    elif datatype == "quant10Vc":
-        field_name = "quant10_corrected_velocity"
-    elif datatype == "quant20Vc":
-        field_name = "quant20_corrected_velocity"
-    elif datatype == "quant50Vc":
-        field_name = "quant50_corrected_velocity"
-    elif datatype == "quant80Vc":
-        field_name = "quant80_corrected_velocity"
-    elif datatype == "quant90Vc":
-        field_name = "quant90_corrected_velocity"
-    elif datatype == "quant95Vc":
-        field_name = "quant95_corrected_velocity"
-
-    elif datatype == "avgdealV":
-        field_name = "avg_dealiased_velocity"
-    elif datatype == "NdealV":
-        field_name = "npoints_dealiased_velocity"
-    elif datatype == "quant05dealV":
-        field_name = "quant05_dealiased_velocity"
-    elif datatype == "quant10dealV":
-        field_name = "quant10_dealiased_velocity"
-    elif datatype == "quant20dealV":
-        field_name = "quant20_dealiased_velocity"
-    elif datatype == "quant50dealV":
-        field_name = "quant50_dealiased_velocity"
-    elif datatype == "quant80dealV":
-        field_name = "quant80_dealiased_velocity"
-    elif datatype == "quant90dealV":
-        field_name = "quant90_dealiased_velocity"
-    elif datatype == "quant95dealV":
-        field_name = "quant95_dealiased_velocity"
-    else:
-        raise ValueError("ERROR: Unknown data type " + datatype)
-
-    return field_name
-
-
+# Inverted function to map Py-ART field name back to datatype
+def get_datatype_from_pyart(pyart_name):
+    """
+    Maps the Py-ART field name into the corresponding config file radar data type name
+    """
+    # Reverse the original dictionary to create a new mapping
+    field_to_datatype = {v: k for k, v in pyrad_to_pyart_keys_dict.items()}
+    
+    return field_to_datatype.get(pyart_name)
+    
 def get_fieldname_icon(field_name):
     """
     maps the Py-ART field name into the corresponding ICON variable name
@@ -2435,9 +1883,405 @@ def get_fieldname_icon(field_name):
     return icon_name
 
 
+def get_scan_files_to_merge(basepath, scan_list, radar_name, radar_res,
+                            voltime, dataset_list, path_convention='ODIM',
+                            master_scan_time_tol=0, scan_period=0):
+    """
+    gets the list of files to merge into a single radar object
+
+    Parameters
+    ----------
+    basepath : str
+        base path of radar data
+    scan_list : list
+        list of scans
+    radar_name : str
+        radar name
+    radar_res : str
+        radar resolution type
+    voltime: datetime object
+        reference time of the scan
+    datatype_list : list
+        lists of data types to get
+    dataset_list : list
+        list of datasets. Used to get path
+    path_convention : str
+        The path convention to use. Can be LTE, MCH, ODIM, RADARV, RT
+    master_scan_time_tol : int
+        time tolerance with respect to the master scan time. Can be
+        0 (No tolerance), 1 (time between master scan time and master scan
+        time plus scan period), -1 (time between master scan time and master
+        scan time minus scan period
+    scan_period : int
+        scan period (minutes)
+
+    Returns
+    -------
+    filelist : list of strings
+        list of files to merge. If it could not find them
+        returns an empty list
+    scan_list_aux : list of strings
+        list of scans for which a file was found
+    """
+    fname_list = []
+    scan_list_aux = []
+    dayinfo = voltime.strftime("%y%j")
+    timeinfo = voltime.strftime("%H%M")
+    for scan in scan_list:
+        file_id = 'M'
+        if radar_name is not None and radar_res is not None:
+            basename = f'{file_id}{radar_res}{radar_name}{dayinfo}'
+        if path_convention == "LTE":
+            yy = dayinfo[0:2]
+            dy = dayinfo[2:]
+            subf = f'{file_id}{radar_res}{radar_name}{yy}hdf{dy}'
+            datapath = f'{basepath}{subf}/'
+            pattern = f'{datapath}{basename}{timeinfo}*{scan}*'
+            filename = glob.glob(pattern)
+            if not filename:
+                file_id = 'P'
+                basename = f'{file_id}{radar_res}{radar_name}{dayinfo}'
+                subf = f'{file_id}{radar_res}{radar_name}{yy}hdf{dy}'
+                datapath = f'{basepath}{subf}/'
+                pattern = f'{datapath}{basename}{timeinfo}*{scan}*'
+                filename = glob.glob(pattern)
+        elif path_convention == "MCH":
+            datapath = f'{basepath}{dayinfo}/{basename}/'
+            pattern = f'{datapath}{basename}{timeinfo}*{scan}*'
+            filename = glob.glob(pattern)
+            if not filename:
+                file_id = 'P'
+                basename = f'{file_id}{radar_res}{radar_name}{dayinfo}'
+                datapath = f'{basepath}{dayinfo}/{basename}/'
+                pattern = f'{datapath}{basename}{timeinfo}*{scan}*'
+                filename = glob.glob(pattern)
+        elif path_convention == "ODIM":
+            fpath_strf = dataset_list[0][
+                dataset_list[0].find("D") + 2 : dataset_list[0].find("F") - 2]
+            fdate_strf = dataset_list[0][dataset_list[0].find("F") + 2 : -1]
+            datapath = f'{basepath}{voltime.strftime(fpath_strf)}/'
+            pattern = f'{datapath}*{scan}*'
+            filenames = glob.glob(pattern)
+            filename = []
+            for filename_aux in filenames:
+                fdatetime = find_date_in_file_name(
+                    filename_aux, date_format=fdate_strf)
+                if master_scan_time_tol == 0:
+                    if fdatetime == voltime:
+                        filename = [filename_aux]
+                        break
+                elif master_scan_time_tol == 1:
+                    if (voltime
+                        <= fdatetime
+                        < voltime + datetime.timedelta(minutes=scan_period)):
+                        filename = [filename_aux]
+                        break
+                else:
+                    if (voltime - datetime.timedelta(minutes=scan_period)
+                        < fdatetime
+                        <= voltime):
+                        filename = [filename_aux]
+                        break
+        elif path_convention == 'SkyEcho':
+            fpath_strf = dataset_list[0][
+                dataset_list[0].find("D") + 2 : dataset_list[0].find("F") - 2]
+            fdate_strf = dataset_list[0][dataset_list[0].find("F") + 2 : -1]
+            datapath = f'{basepath}{voltime.strftime(fpath_strf)}/'
+            pattern = f'{datapath}*{scan}*'
+            filenames = glob.glob(pattern)
+            filename = []
+            time_ref = datetime.datetime.strptime(
+                voltime.strftime("%Y%m%d000000"), "%Y%m%d%H%M%S")
+            for filename_aux in filenames:
+                fdatetime = find_date_in_file_name(
+                    filename_aux, date_format=fdate_strf)
+                if fdatetime >= time_ref:
+                    filename = [filename_aux]
+        elif path_convention == "RADARV":
+            fpath_strf = dataset_list[0][
+                dataset_list[0].find("D") + 2 : dataset_list[0].find("F") - 2]
+            fdate_strf = dataset_list[0][dataset_list[0].find("F") + 2 : -1]
+            pattern = f'{basepath}{scan}{voltime.strftime(fpath_strf)}/*'
+            filenames = glob.glob(pattern)
+            filename = []
+            for filename_aux in filenames:
+                fdatetime = find_date_in_file_name(
+                    filename_aux, date_format=fdate_strf)
+                if master_scan_time_tol == 0:
+                    if fdatetime == voltime:
+                        filename = [filename_aux]
+                        break
+                elif master_scan_time_tol == 1:
+                    if (voltime
+                        <= fdatetime
+                        < voltime + datetime.timedelta(minutes=scan_period)):
+                        filename = [filename_aux]
+                        break
+                else:
+                    if (voltime - datetime.timedelta(minutes=scan_period)
+                        < fdatetime
+                        <= voltime):
+                        filename = [filename_aux]
+                        break
+        else:
+            datapath = f'{basepath}{file_id}{radar_res}{radar_name}/'
+            pattern = f'{datapath}{basename}{timeinfo}*{scan}*'
+            filename = glob.glob(pattern)
+            if not filename:
+                file_id = 'P'
+                basename = f'{file_id}{radar_res}{radar_name}{dayinfo}'
+                datapath = f'{basepath}{file_id}{radar_res}{radar_name}/'
+                pattern = f'{datapath}{basename}{timeinfo}*{scan}*'
+                filename = glob.glob(pattern)
+
+        if not filename:
+            warn(f"No file found in {pattern}")
+            continue
+        fname_list.append(filename[0])
+        scan_list_aux.append(scan)
+
+    return fname_list, scan_list_aux
+
+
+def get_scan_files_to_merge_s3(basepath, scan_list, radar_name, radar_res,
+                               voltime, dataset_list, cfg,
+                               path_convention='ODIM', master_scan_time_tol=0,
+                               scan_period=0):
+    """
+    gets the list of files to merge into a single radar object
+
+    Parameters
+    ----------
+    basepath : str
+        base path of radar data
+    scan_list : list
+        list of scans
+    radar_name : str
+        radar name
+    radar_res : str
+        radar resolution type
+    voltime: datetime object
+        reference time of the scan
+    datatype_list : list
+        lists of data types to get
+    dataset_list : list
+        list of datasets. Used to get path
+    cfg : dict
+        configuration dictionary
+    path_convention : str
+        The path convention to use. Can be LTE, MCH, ODIM, RADARV, RT
+    master_scan_time_tol : int
+        time tolerance with respect to the master scan time. Can be
+        0 (No tolerance), 1 (time between master scan time and master scan
+        time plus scan period), -1 (time between master scan time and master
+        scan time minus scan period
+    scan_period : int
+        scan period (minutes)
+
+    Returns
+    -------
+    filelist : list of strings
+        list of files to merge. If it could not find them
+        returns an empty list
+    scan_list_aux : list of strings
+        list of scans for which a file was found
+    """
+    fname_list = []
+    scan_list_aux = []
+    if not _BOTO3_AVAILABLE:
+        warn('boto3 not installed')
+        return fname_list
+
+    s3_client = boto3.client(
+        's3', endpoint_url=cfg['s3_url'], aws_access_key_id=cfg['s3_key'],
+        aws_secret_access_key=cfg['s3_secret_key'], verify=False)
+    response = s3_client.list_objects_v2(Bucket=cfg['bucket'])
+
+    dayinfo = voltime.strftime("%y%j")
+    timeinfo = voltime.strftime("%H%M")
+    for scan in scan_list:
+        file_id = 'M'
+        if radar_name is not None and radar_res is not None:
+            basename = f'{file_id}{radar_res}{radar_name}{dayinfo}'
+        if path_convention == "LTE":
+            yy = dayinfo[0:2]
+            dy = dayinfo[2:]
+            subf = f'{file_id}{radar_res}{radar_name}{yy}hdf{dy}'
+            datapath = f'{basepath}{subf}/'
+            pattern = f'{datapath}{basename}{timeinfo}*{scan}*'
+            found = False
+            for content in response['Contents']:
+                if fnmatch.fnmatch(content['Key'], pattern):
+                    fname_list.append(content['Key'])
+                    scan_list_aux.append(scan)
+                    found = True
+            if not found:
+                file_id = 'P'
+                basename = f'{file_id}{radar_res}{radar_name}{dayinfo}'
+                subf = f'{file_id}{radar_res}{radar_name}{yy}hdf{dy}'
+                datapath = f'{basepath}{subf}/'
+                pattern = f'{datapath}{basename}{timeinfo}*{scan}*'
+                for content in response['Contents']:
+                    if fnmatch.fnmatch(content['Key'], pattern):
+                        fname_list.append(content['Key'])
+                        scan_list_aux.append(scan)
+                        found = True
+            if not found:
+                warn(f'No file found in {pattern}')
+        elif path_convention == "MCH":
+            datapath = f'{basepath}{dayinfo}/{basename}/'
+            pattern = f'{datapath}{basename}{timeinfo}*{scan}*'
+            found = False
+            for content in response['Contents']:
+                if fnmatch.fnmatch(content['Key'], pattern):
+                    fname_list.append(content['Key'])
+                    scan_list_aux.append(scan)
+                    found = True
+            if not found:
+                file_id = 'P'
+                basename = f'{file_id}{radar_res}{radar_name}{dayinfo}'
+                datapath = f'{basepath}{dayinfo}/{basename}/'
+                pattern = f'{datapath}{basename}{timeinfo}*{scan}*'
+                for content in response['Contents']:
+                    if fnmatch.fnmatch(content['Key'], pattern):
+                        fname_list.append(content['Key'])
+                        scan_list_aux.append(scan)
+                        found = True
+            if not found:
+                warn(f'No file found in {pattern}')
+        elif path_convention == "ODIM":
+            fpath_strf = dataset_list[0][
+                dataset_list[0].find("D") + 2 : dataset_list[0].find("F") - 2]
+            fdate_strf = dataset_list[0][dataset_list[0].find("F") + 2 : -1]
+            daydir = voltime.strftime(fpath_strf)
+            if daydir == '':
+                pattern = f'{basepath}*{scan}*'
+            else:
+                pattern = f'{basepath}{daydir}/*{scan}*'
+
+            found = False
+            for content in response['Contents']:
+                if fnmatch.fnmatch(content['Key'], pattern):
+                    fdatetime = find_date_in_file_name(
+                        content['Key'], date_format=fdate_strf)
+                    if master_scan_time_tol == 0:
+                        if fdatetime == voltime:
+                            fname_list.append(content['Key'])
+                            scan_list_aux.append(scan)
+                            found = True
+                            break
+                    elif master_scan_time_tol == 1:
+                        if (voltime
+                            <= fdatetime
+                            < voltime + datetime.timedelta(minutes=scan_period)):
+                            fname_list.append(content['Key'])
+                            scan_list_aux.append(scan)
+                            found = True
+                            break
+                    else:
+                        if (voltime - datetime.timedelta(minutes=scan_period)
+                            < fdatetime
+                            <= voltime):
+                            fname_list.append(content['Key'])
+                            scan_list_aux.append(scan)
+                            found = True
+                            break
+            if not found:
+                warn(f'No file found in {pattern}')
+        elif path_convention == "SkyEcho":
+            fpath_strf = dataset_list[0][
+                dataset_list[0].find("D") + 2 : dataset_list[0].find("F") - 2]
+            fdate_strf = dataset_list[0][dataset_list[0].find("F") + 2 : -1]
+            daydir = voltime.strftime(fpath_strf)
+            if daydir == '':
+                pattern = f'{basepath}*{scan}*'
+            else:
+                pattern = f'{basepath}{daydir}/*{scan}*'
+            time_ref = datetime.datetime.strptime(
+                voltime.strftime("%Y%m%d000000"), "%Y%m%d%H%M%S")
+
+            found = False
+            fname_list_aux = []
+            for content in response['Contents']:
+                if fnmatch.fnmatch(content['Key'], pattern):
+                    fdatetime = find_date_in_file_name(
+                        content['Key'], date_format=fdate_strf)
+                    if fdatetime >= time_ref:
+                        fname_list_aux.append(content['Key'])
+                        found = True
+                        break
+            if not found:
+                warn(f'No file found in {pattern}')
+            else:
+                fname_list.append(fname_list_aux[-1])
+                scan_list_aux.append(scan)
+        elif path_convention == "RADARV":
+            fpath_strf = dataset_list[0][
+                dataset_list[0].find("D") + 2 : dataset_list[0].find("F") - 2]
+            fdate_strf = dataset_list[0][dataset_list[0].find("F") + 2 : -1]
+            daydir = voltime.strftime(fpath_strf)
+            if daydir == '':
+                pattern = f'{basepath}{scan}/*'
+            else:
+                pattern = f'{basepath}{scan}/{daydir}/*'
+
+            found = False
+            for content in response['Contents']:
+                if fnmatch.fnmatch(content['Key'], pattern):
+                    fdatetime = find_date_in_file_name(
+                        content['Key'], date_format=fdate_strf)
+                    if master_scan_time_tol == 0:
+                        if fdatetime == voltime:
+                            fname_list.append(content['Key'])
+                            scan_list_aux.append(scan)
+                            found = True
+                            break
+                    elif master_scan_time_tol == 1:
+                        if (voltime
+                            <= fdatetime
+                            < voltime + datetime.timedelta(minutes=scan_period)):
+                            fname_list.append(content['Key'])
+                            scan_list_aux.append(scan)
+                            found = True
+                            break
+                    else:
+                        if (voltime - datetime.timedelta(minutes=scan_period)
+                            < fdatetime
+                            <= voltime):
+                            fname_list.append(content['Key'])
+                            scan_list_aux.append(scan)
+                            found = True
+                            break
+            if not found:
+                warn(f'No file found in {pattern}')
+        else:
+            datapath = f'{basepath}{file_id}{radar_res}{radar_name}/'
+            pattern = f'{datapath}{basename}{timeinfo}*{scan}*'
+            found = False
+            for content in response['Contents']:
+                if fnmatch.fnmatch(content['Key'], pattern):
+                    fname_list.append(content['Key'])
+                    scan_list_aux.append(scan)
+                    found = True
+            if not found:
+                file_id = 'P'
+                basename = f'{file_id}{radar_res}{radar_name}{dayinfo}'
+                datapath = f'{basepath}{file_id}{radar_res}{radar_name}/'
+                pattern = f'{datapath}{basename}{timeinfo}*{scan}*'
+                for content in response['Contents']:
+                    if fnmatch.fnmatch(content['Key'], pattern):
+                        fname_list.append(content['Key'])
+                        scan_list_aux.append(scan)
+                        found = True
+            if not found:
+                warn(f'No file found in {pattern}')
+
+    return fname_list, scan_list_aux
+
+
 def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
     """
-    gets the list of files with a time period
+    gets the list of files within a time period
 
     Parameters
     ----------
@@ -2548,8 +2392,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                         + "convention, check product config file"
                     )
                 daydir = (starttime + datetime.timedelta(days=i)).strftime(fpath_strf)
-                datapath = cfg["datapath"][ind_rad] + daydir + "/"
-                pattern = datapath + "*" + scan + "*"
+                datapath = f'{cfg["datapath"][ind_rad]}{daydir}/'
+                pattern = f'{datapath}*{scan}*'
                 dayfilelist = glob.glob(pattern)
                 for filename in dayfilelist:
                     t_filelist.append(filename)
@@ -2570,26 +2414,21 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 if cfg["path_convention"][ind_rad] == "MCH":
                     dayinfo = (starttime + datetime.timedelta(days=i)).strftime("%y%j")
                     basename = (
-                        "M"
-                        + cfg["RadarRes"][ind_rad]
-                        + cfg["RadarName"][ind_rad]
-                        + dayinfo
-                    )
-                    datapath = cfg["datapath"][ind_rad] + dayinfo + "/" + basename + "/"
+                        f'M{cfg["RadarRes"][ind_rad]}'
+                        f'{cfg["RadarName"][ind_rad]}{dayinfo}')
+                    datapath = (
+                        f'{cfg["datapath"][ind_rad]}{dayinfo}/{basename}/')
 
                     # check that M files exist. if not search P files
-                    pattern = datapath + basename + "*" + scan + "*"
+                    pattern = f'{datapath}{basename}*{scan}*'
                     dayfilelist = glob.glob(pattern)
                     if not dayfilelist:
                         basename = (
-                            "P"
-                            + cfg["RadarRes"][ind_rad]
-                            + cfg["RadarName"][ind_rad]
-                            + dayinfo
-                        )
+                            f'P{cfg["RadarRes"][ind_rad]}'
+                            f'{cfg["RadarName"][ind_rad]}{dayinfo}')
                         datapath = (
-                            cfg["datapath"][ind_rad] + dayinfo + "/" + basename + "/"
-                        )
+                            f'{cfg["datapath"][ind_rad]}{dayinfo}/{basename}/')
+                        dayfilelist = glob.glob(pattern)
                     if not os.path.isdir(datapath):
                         warn("WARNING: Unknown datapath '%s'" % datapath)
                         continue
@@ -2658,6 +2497,7 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                             + cfg["RadarName"][ind_rad]
                             + "/"
                         )
+                        dayfilelist = glob.glob(pattern)
                     if not os.path.isdir(datapath):
                         warn("WARNING: Unknown datapath '%s'" % datapath)
                         continue
@@ -2834,6 +2674,223 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                         str(starttime), str(endtime)
                     )
                 )
+    return sorted(filelist)
+
+
+def get_file_list_s3(datadescriptor, starttimes, endtimes, cfg, scan=None):
+    """
+    gets the list of files within a time period from an s3 bucket
+
+    Parameters
+    ----------
+    datadescriptor : str
+        radar field type. Format : [radar file type]:[datatype]
+    startimes : array of datetime objects
+        start of time periods
+    endtimes : array of datetime object
+        end of time periods
+    cfg: dictionary of dictionaries
+        configuration info to figure out where the data is
+    scan : str
+        scan name
+
+    Returns
+    -------
+    filelist : list of strings
+        list of files within the time period. If it could not find them
+        returns an empty list
+    """
+    filelist = []
+    if not _BOTO3_AVAILABLE:
+        warn('boto3 not installed')
+        return filelist
+    radarnr, datagroup, datatype, dataset, product = get_datatype_fields(datadescriptor)
+
+    ind_rad = int(radarnr[5:8]) - 1
+    if datatype in ("Nh", "Nv"):
+        datatype = "dBZ"
+
+    s3_client = boto3.client(
+        's3',
+        endpoint_url=cfg['s3_url'],
+        aws_access_key_id=cfg['s3_key'],
+        aws_secret_access_key=cfg['s3_secret_key'],
+        verify=False)
+    response = s3_client.list_objects_v2(Bucket=cfg['bucket'])
+
+    for starttime, endtime in zip(starttimes, endtimes):
+        startdate = starttime.replace(hour=0, minute=0, second=0, microsecond=0)
+        enddate = endtime.replace(hour=0, minute=0, second=0, microsecond=0)
+        ndays = int((enddate - startdate).days) + 1
+        t_filelist = []
+        pattern = None
+        for i in range(ndays):
+            if datagroup == "SKYECHO":
+                try:
+                    fpath_strf = dataset[
+                        dataset.find("D") + 2 : dataset.find("F") - 2]
+                except AttributeError:
+                    warn(
+                        "Unknown directory and/or date "
+                        + "convention, check product config file"
+                    )
+                daydir = (starttime + datetime.timedelta(days=i)).strftime(
+                    fpath_strf)
+                if daydir == '':
+                    pattern = f'{cfg["s3path"]}*{scan}*'
+                else:
+                    pattern = f'{cfg["s3path"]}{daydir}/*{scan}*'
+                dayfilelist = []
+                for content in response['Contents']:
+                    if fnmatch.fnmatch(content['Key'], pattern):
+                        dayfilelist.append(content['Key'])
+
+                for filename in dayfilelist:
+                    t_filelist.append(filename)
+            elif datagroup in (
+                "ODIM",
+                "ODIMBIRDS",
+                "CFRADIAL",
+                "CFRADIAL2",
+                "CF1",
+                "NEXRADII",
+                "GAMIC",
+                "ODIMGRID",
+                "KNMIH5GRID",
+            ):
+                if scan is None:
+                    warn("Unknown scan name")
+                    return []
+                if cfg["path_convention"][ind_rad] == "MCH":
+                    dayinfo = (starttime + datetime.timedelta(days=i)).strftime("%y%j")
+                    basename = (
+                        f'M{cfg["RadarRes"][ind_rad]}'
+                        f'{cfg["RadarName"][ind_rad]}{dayinfo}')
+                    datapath = (
+                        f'{cfg["s3path"]}{dayinfo}/{basename}/')
+
+                    # check that M files exist. if not search P files
+                    pattern = f'{datapath}{basename}*{scan}*'
+                    dayfilelist = []
+                    for content in response['Contents']:
+                        if fnmatch.fnmatch(content['Key'], pattern):
+                            dayfilelist.append(content['Key'])
+                    if not dayfilelist:
+                        basename = (
+                            f'P{cfg["RadarRes"][ind_rad]}'
+                            f'{cfg["RadarName"][ind_rad]}{dayinfo}')
+                        datapath = (
+                            f'{cfg["s3path"]}{dayinfo}/{basename}/')
+                        pattern = f'{datapath}{basename}*{scan}*'
+                        for content in response['Contents']:
+                            if fnmatch.fnmatch(content['Key'], pattern):
+                                dayfilelist.append(content['Key'])
+                elif cfg["path_convention"][ind_rad] == "ODIM":
+                    try:
+                        fpath_strf = dataset[
+                            dataset.find("D") + 2 : dataset.find("F") - 2]
+                    except AttributeError:
+                        warn(
+                            "Unknown ODIM directory and/or date "
+                            + "convention, check product config file"
+                        )
+                    daydir = (starttime + datetime.timedelta(days=i)).strftime(
+                        fpath_strf)
+                    if daydir == '':
+                        pattern = f'{cfg["s3path"]}*{scan}*'
+                    else:
+                        pattern = f'{cfg["s3path"]}{daydir}/*{scan}*'
+
+                    dayfilelist = []
+                    for content in response['Contents']:
+                        if fnmatch.fnmatch(content['Key'], pattern):
+                            dayfilelist.append(content['Key'])
+                elif cfg["path_convention"][ind_rad] == "RADARV":
+                    try:
+                        fpath_strf = dataset[
+                            dataset.find("D") + 2 : dataset.find("F") - 2
+                        ]
+                    except AttributeError:
+                        warn(
+                            "Unknown ODIM directory and/or date "
+                            + "convention, check product config file"
+                        )
+                    daydir = (starttime + datetime.timedelta(days=i)).strftime(
+                        fpath_strf
+                    )
+                    if daydir == '':
+                        pattern = f'{cfg["s3path"]}{scan}/*'
+                    else:
+                        pattern = f'{cfg["s3path"]}{scan}/{daydir}/*'
+
+                    dayfilelist = []
+                    for content in response['Contents']:
+                        if fnmatch.fnmatch(content['Key'], pattern):
+                            dayfilelist.append(content['Key'])
+                else:
+                    dayinfo = (starttime + datetime.timedelta(days=i)).strftime("%y%j")
+                    basename = (
+                        f'M{cfg["RadarRes"][ind_rad]}'
+                        f'{cfg["RadarName"][ind_rad]}{dayinfo}')
+                    datapath = (
+                        f'{cfg["s3path"]}M{cfg["RadarRes"][ind_rad]}'
+                        f'{cfg["RadarName"][ind_rad]}')
+
+                    # check that M files exist. if not search P files
+                    pattern = f'{datapath}{basename}*{scan}*'
+                    dayfilelist = []
+                    for content in response['Contents']:
+                        if fnmatch.fnmatch(content['Key'], pattern):
+                            dayfilelist.append(content['Key'])
+                    if not dayfilelist:
+                        basename = (
+                            f'P{cfg["RadarRes"][ind_rad]}'
+                            f'{cfg["RadarName"][ind_rad]}{dayinfo}')
+                        datapath = (
+                            f'{cfg["s3path"]}P{cfg["RadarRes"][ind_rad]}'
+                            f'{cfg["RadarName"][ind_rad]}')
+                        pattern = f'{datapath}{basename}*{scan}*'
+                        for content in response['Contents']:
+                            if fnmatch.fnmatch(content['Key'], pattern):
+                                dayfilelist.append(content['Key'])
+
+                for filename in dayfilelist:
+                    t_filelist.append(filename)
+
+        if datagroup == "SKYECHO":
+            # Each file contains multiple scans
+            for filename in t_filelist:
+                # we need to download the master file to be able to know the
+                # scan coverage
+                datapath = f'{cfg["datapath"][ind_rad]}'
+                if not os.path.isdir(datapath):
+                    os.makedirs(datapath)
+                fname_aux = f'{datapath}{os.path.basename(filename)}'
+                s3_client.download_file(cfg['bucket'], filename, fname_aux)
+                _, tend_sweeps, _, _ = get_sweep_time_coverage(fname_aux)
+                for tend in tend_sweeps:
+                    if starttime <= tend <= endtime:
+                        filelist.append(
+                            f"{str(filename)}::{tend.strftime('%Y-%m-%dT%H:%M:%S.%f')}"
+                        )
+        else:
+            for filename in t_filelist:
+                filenamestr = str(filename)
+                fdatetime = get_datetime(filenamestr, datadescriptor)
+                if fdatetime is not None:
+                    if starttime <= fdatetime <= endtime:
+                        if filenamestr not in filelist:
+                            filelist.append(filenamestr)
+        if not filelist:
+            if pattern is not None:
+                warn(
+                    "WARNING: No file with pattern {:s} could be found between ".format(
+                        pattern
+                    )
+                    + "starttime {:s} and endtime {:s}".format(
+                        str(starttime), str(endtime)
+                    )
+                 )
     return sorted(filelist)
 
 

@@ -9,7 +9,7 @@ umask 0002
 
 # Config
 dateCmd="/bin/date"
-cosmobaseraw='/store/msrad/cosmo/cosmo1/TEMP/raw1/'
+cosmobaseraw='/store_new/mch/msrad/cosmo/cosmo1/TEMP/raw1/'
 
 while [[ $# -gt 1 ]]
 do

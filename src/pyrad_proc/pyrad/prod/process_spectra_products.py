@@ -44,7 +44,7 @@ def generate_spectra_products(dataset, prdcfg):
             signal.
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
                 along_azi : bool
                     If true the plot is performed along azimuth, otherwise
                     along elevation. Default true
@@ -66,7 +66,7 @@ def generate_spectra_products(dataset, prdcfg):
             making two separate plots for the module and phase of the signal
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
                 azi : float
                     azimuth (deg) of the ray to plot
                 ele : float
@@ -98,7 +98,7 @@ def generate_spectra_products(dataset, prdcfg):
             range-Doppler making two separate plots for the module and phase
             of the signal User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
                 azi : float
                     azimuth (deg) of the ray to plot
                 ele : float
@@ -123,7 +123,12 @@ def generate_spectra_products(dataset, prdcfg):
             the signal
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
+                antenna_coordinates_az_el_r : list of float
+                    azimuth, elevation and range coordinates of the reference point (3 elements)
+                point_coordinates_WGS84_lon_lat_alt : list of float
+                    lon, lat (deg in WGS84 reference) and alt (in m) coordinates of the reference point.
+                    Will be used only if antenna_coordinates_az_el_r is not provided.
                 xaxis_info : str
                     The xaxis type. Can be 'Doppler_velocity' or
                     'Doppler frequency'
@@ -142,7 +147,7 @@ def generate_spectra_products(dataset, prdcfg):
             azimuth or along range
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
                 along_azi : bool
                     If true the plot is performed along azimuth, otherwise
                     along elevation. Default true
@@ -166,7 +171,7 @@ def generate_spectra_products(dataset, prdcfg):
             The real and imaginary parts are plotted separately
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
                 along_azi : bool
                     If true the plot is performed along azimuth, otherwise
                     along elevation. Default true
@@ -189,7 +194,7 @@ def generate_spectra_products(dataset, prdcfg):
             two separate plots for the real and imaginary parts
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
                 azi : float
                     azimuth (deg) of the ray to plot
                 ele : float
@@ -223,7 +228,7 @@ def generate_spectra_products(dataset, prdcfg):
             parts
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
                 azi : float
                     azimuth (deg) of the ray to plot
                 ele : float
@@ -254,7 +259,12 @@ def generate_spectra_products(dataset, prdcfg):
             parts
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
+                antenna_coordinates_az_el_r : list of float
+                    azimuth, elevation and range coordinates of the reference point (3 elements)
+                point_coordinates_WGS84_lon_lat_alt : list of float
+                    lon, lat (deg in WGS84 reference) and alt (in m) coordinates of the reference point.
+                    Will be used only if antenna_coordinates_az_el_r is not provided.
                 xaxis_info : str
                     The xaxis type. Can be 'Doppler_velocity' or
                     'Doppler frequency'
@@ -268,7 +278,7 @@ def generate_spectra_products(dataset, prdcfg):
         'DOPPLER': Plots a Doppler spectrum variable or IQ data variable
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
                 azi : float
                     azimuth (deg) of the ray to plot
                 ele : float
@@ -297,7 +307,7 @@ def generate_spectra_products(dataset, prdcfg):
         'RANGE_DOPPLER': Makes a range-Doppler plot of spectral or IQ data
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
                 azi : float
                     azimuth (deg) of the ray to plot
                 ele : float
@@ -331,7 +341,7 @@ def generate_spectra_products(dataset, prdcfg):
             netcdf file
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
                 physical: Bool
                     If True the data will be saved in physical units (floats).
                     Otherwise it will be quantized and saved as binary
@@ -339,7 +349,12 @@ def generate_spectra_products(dataset, prdcfg):
             point of interest.
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
+                antenna_coordinates_az_el_r : list of float
+                    azimuth, elevation and range coordinates of the reference point (3 elements)
+                point_coordinates_WGS84_lon_lat_alt : list of float
+                    lon, lat (deg in WGS84 reference) and alt (in m) coordinates of the reference point.
+                    Will be used only if antenna_coordinates_az_el_r is not provided.
                 xaxis_info : str
                     The xaxis type. Can be 'Doppler_velocity',
                     'Doppler_frequency' or 'pulse_number'

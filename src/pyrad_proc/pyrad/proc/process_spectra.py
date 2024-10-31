@@ -1766,9 +1766,9 @@ def process_noise_power(procstatus, dscfg, radar_list=None):
     -------
     new_dataset : dict
         dictionary containing the output field
-        "sNADUh" or "sNADUv", or
-        "sNdBmh" or "sNdBmv", or
-        "sNdBAUh" or "sNdBAUv", or
+        "NdBADUh" or "NdBADUv", or
+        "NdBmh" or "NdBmv", or
+        "Nh" or "Nv"
         depending on which input datatype and units were provided
     ind_rad : int
         radar index

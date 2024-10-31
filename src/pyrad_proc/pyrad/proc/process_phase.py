@@ -508,7 +508,7 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
         elif "sounding" in dscfg:
             sounding_code = dscfg["sounding"]
             t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
-            fzl = read_fzl_igra(sounding_code, t0)
+            fzl = read_fzl_igra(sounding_code, t0, dscfg=dscfg)
         else:
             warn("Freezing level height not defined. Using default " + str(fzl) + " m")
             fzl = 2000
@@ -789,7 +789,7 @@ def process_phidp_kdp_lp(procstatus, dscfg, radar_list=None):
         elif "sounding" in dscfg:
             sounding_code = dscfg["sounding"]
             t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
-            fzl = read_fzl_igra(sounding_code, t0)
+            fzl = read_fzl_igra(sounding_code, t0, dscfg=dscfg)
         else:
             fzl = 2000
             warn("Freezing level height not defined. Using default " + str(fzl) + " m")
@@ -1464,7 +1464,7 @@ def process_attenuation(procstatus, dscfg, radar_list=None):
         elif "sounding" in dscfg:
             sounding_code = dscfg["sounding"]
             t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
-            fzl = read_fzl_igra(sounding_code, t0)
+            fzl = read_fzl_igra(sounding_code, t0, dscfg=dscfg)
         else:
             warn("Freezing level height not defined. Using default " + str(fzl) + " m")
             fzl = 2000

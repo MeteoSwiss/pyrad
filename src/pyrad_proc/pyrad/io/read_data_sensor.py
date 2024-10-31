@@ -2233,13 +2233,16 @@ def get_sensor_data(date, datatype, cfg):
             datafile = files1[0]
         if len(files2):
             datafile = files2[0]
-        
-        try:
-            _, sensordate, _, _, _, sensorvalue, _, _ = read_smn(datafile)
-        except Exception:
+
+        with open(datafile) as f:
+            num_columns = len(next(f).strip().split(','))
+        if num_columns == 3:
             _, sensordate, sensorvalue = read_smn2(datafile)
-            if sensordate is None:
-                return None, None, None, None
+        else:
+            _, sensordate, _, _, _, sensorvalue, _, _ = read_smn(datafile)
+        
+        if sensordate is None:
+            return None, None, None, None
         label = "RG"
         period = (sensordate[1] - sensordate[0]).total_seconds()
     elif cfg["sensor"] == "rgage_knmi":
@@ -2791,7 +2794,7 @@ def read_radiosounding_wyoming(station, dtime):
 def read_radiosounding_igra(station, dtime):
     """
     Download radiosounding data from  from the Integrated Global Radiosonde Archive
-    (IGRA)
+    (IGRA).
 
     Parameters:
         station : str
@@ -2808,7 +2811,8 @@ def read_radiosounding_igra(station, dtime):
     https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive/
     doc/igra2-data-format.txt
     """
-
+    warn("Downloading sounding from IGRA database...")
+    
     COLUMNS_SOUNDING = [
         "LVLTYPE1",
         "LVLTYPE2",
@@ -2933,7 +2937,7 @@ def read_radiosounding_igra(station, dtime):
     return all_soundings[closest]
 
 
-def read_fzl_igra(station, dtime):
+def read_fzl_igra(station, dtime, dscfg = None):
     """
     Get an estimation of the freezing level height from the
     Integrated Global Radiosonde Archive (IGRA)
@@ -2943,24 +2947,69 @@ def read_fzl_igra(station, dtime):
             Radiosounding station 5 digits WMO code (e.g., "72776").
         dtime : datetime.datetime
             Datetime object specifying the desired date and time.
-
+        dscfg : dictionary of dictionaries, Optional
+            If provided will try to read the fzl from the pyrad config
+            dictionary instead of fetching it from IGRA
     Returns:
         fzl : float
             Interpolated freezing level height (a.s.l) obtained
             from the nearest in time IGRA sounding
     """
-
+    if dscfg is None:
+        dscfg = {}
+        
+    try:
+        if not _check_new_sounding(dscfg["global_data"]["latest_sounding_time"]
+                , dtime): 
+            warn("No new sounding available, retrieving latest sounding from memory")
+            return dscfg["global_data"]["latest_sounding_value"]
+    except (KeyError, TypeError):
+        pass
+    
     sounding = read_radiosounding_igra(station, dtime)
     height = sounding["GPH"]
     temp = sounding["TEMP"]
 
-    if temp[0] <= 0 and temp[0] > -999.9:
-        return 0
+    fzl = 0
+    
+    if temp[0] >= 0:
+        for i in range(1, len(temp)):
+            if height[i] < 0:
+                continue
+            if temp[i] < 0:
+                slope = (temp[i] - temp[i - 1]) / (height[i] - height[i - 1])
+                fzl = -temp[i] / slope + height[i]
+                break
 
-    for i in range(1, len(temp)):
-        if height[i] < 0:
-            continue
-        if temp[i] < 0:
-            slope = (temp[i] - temp[i - 1]) / (height[i] - height[i - 1])
-            fzl = -temp[i] / slope + height[i]
-            return fzl
+    try:
+        dscfg["global_data"]["latest_sounding_time"] = dtime
+        dscfg["global_data"]["latest_sounding_value"] = fzl
+    except (KeyError, TypeError):
+        dscfg["global_data"] = {}
+        dscfg["global_data"]["latest_sounding_time"] = dtime
+        dscfg["global_data"]["latest_sounding_value"] = fzl
+    
+    return fzl
+
+def _closest_sounding_time(date: datetime) -> datetime:
+    # Get the hour of the given date
+    hour = date.hour
+    # Find the closest radiosounding time based on the hour
+    if hour >= 18:
+        # Closest to 00 UTC (covers 18:00 - 23:59 and 00:00 - 05:59)
+        return (date.replace(hour=0, minute=0, second=0, microsecond=0) 
+            + datetime.timedelta(days = 1))
+    elif hour <= 6:
+        return date.replace(hour=0, minute=0, second=0, microsecond=0)
+    else:
+        # Closest to 12 UTC (covers 06:00 - 17:59)
+        return date.replace(hour=12, minute=0, second=0, microsecond=0)
+
+def _check_new_sounding(date1: datetime, date2: datetime) -> bool:
+    # Will check whether a new sounding is available
+    
+    # Get the closest radiosounding times for both dates
+    date1_sounding_time = _closest_sounding_time(date1)
+    date2_sounding_time = _closest_sounding_time(date2)
+    # Check if the radiosounding times are different
+    return date1_sounding_time != date2_sounding_time

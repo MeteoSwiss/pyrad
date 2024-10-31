@@ -173,7 +173,7 @@ def process_selfconsistency_kdp_phidp(procstatus, dscfg, radar_list=None):
         elif "sounding" in dscfg:
             sounding_code = dscfg["sounding"]
             t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
-            fzl = read_fzl_igra(sounding_code, t0)
+            fzl = read_fzl_igra(sounding_code, t0, dscfg=dscfg)
         else:
             warn("Freezing level height not defined. Using default " + str(fzl) + " m")
             fzl = 2000
@@ -467,7 +467,7 @@ def process_selfconsistency_bias(procstatus, dscfg, radar_list=None):
         elif "sounding" in dscfg:
             sounding_code = dscfg["sounding"]
             t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
-            fzl = read_fzl_igra(sounding_code, t0)
+            fzl = read_fzl_igra(sounding_code, t0, dscfg=dscfg)
         else:
             warn("Freezing level height not defined. Using default " + str(fzl) + " m")
             fzl = 2000
@@ -834,7 +834,7 @@ def process_selfconsistency_bias2(procstatus, dscfg, radar_list=None):
         elif "sounding" in dscfg:
             sounding_code = dscfg["sounding"]
             t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
-            fzl = read_fzl_igra(sounding_code, t0)
+            fzl = read_fzl_igra(sounding_code, t0, dscfg=dscfg)
         else:
             warn("Freezing level height not defined. Using default " + str(fzl) + " m")
             fzl = 2000
@@ -1232,7 +1232,7 @@ def process_rhohv_rain(procstatus, dscfg, radar_list=None):
         elif "sounding" in dscfg:
             sounding_code = dscfg["sounding"]
             t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
-            fzl = read_fzl_igra(sounding_code, t0)
+            fzl = read_fzl_igra(sounding_code, t0, dscfg=dscfg)
         else:
             warn("Freezing level height not defined. Using default " + str(fzl) + " m")
             fzl = 2000
@@ -1428,7 +1428,7 @@ def process_zdr_precip(procstatus, dscfg, radar_list=None):
             elif "sounding" in dscfg:
                 sounding_code = dscfg["sounding"]
                 t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
-                fzl = read_fzl_igra(sounding_code, t0)
+                fzl = read_fzl_igra(sounding_code, t0, dscfg=dscfg)
             else:
                 warn(
                     "Freezing level height not defined. Using default "

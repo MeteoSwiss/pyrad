@@ -12,6 +12,7 @@ Functions for retrieving new moments and products
     process_rcs_pr
     process_rcs
     process_vol_refl
+    process_refl_from_zdr
     process_snr
     process_radial_noise_hs
     process_radial_noise_ivic
@@ -444,7 +445,7 @@ def process_vol_refl(procstatus, dscfg, radar_list=None):
 
         datatype : list of string. Dataset keyword
             The input data types, must contain,
-            "dBZ" or "dBuZ" or "dBZc" or "dBuZc" or "dBZv" or "dBuZv" or "dBuZvc"
+             "dBZ", "dBuZ", "dBZc", "dBuZc", "dBZv", "dBZvc" "dBuZv", or "dBuZvc"
         freq : float. Dataset keyword
             The radar frequency
         kw : float. Dataset keyword
@@ -466,7 +467,7 @@ def process_vol_refl(procstatus, dscfg, radar_list=None):
 
     for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype in ("dBZ", "dBuZ", "dBZc", "dBuZc", "dBZv", "dBuZv", "dBuZvc"):
+        if datatype in ("dBZ", "dBuZ", "dBZc", "dBuZc", "dBZv", "dBuZv", "dBZvc", "dBuZvc"):
             refl_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8]) - 1
@@ -498,6 +499,86 @@ def process_vol_refl(procstatus, dscfg, radar_list=None):
 
     return new_dataset, ind_rad
 
+
+def process_refl_from_zdr(procstatus, dscfg, radar_list=None):
+    """
+    Computes the vertical or horizontal reflectivity from ZDR and the reflectivity
+    at the orthogonal polarization
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration. Accepted Configuration Keywords::
+
+        datatype : list of string. Dataset keyword
+            The input data types, must contain,
+            "ZDR", or "ZDRc", or "ZDRu and 
+            "dBZ", "dBuZ", "dBZc", "dBuZc", "dBZv", "dBZvc" "dBuZv", or "dBuZvc"
+    radar_list : list of Radar objects
+        Optional. list of radar objects
+
+    Returns
+    -------
+    new_dataset : dict
+        dictionary containing the output field:
+        "dBZv" if "ZDR" and "dBZ" were provided
+        "dBZ" if "ZDR" and "dBZv" were provided
+        "dBZvc" if "ZDRc" and "dBZc" were provided
+        "dBZv" if "ZDRc" and "dBZvc" were provided
+        "dBuZ" if "ZDRu" and "dBuZ" were provided
+        "dBuZv" if "ZDRu" and "dBuZv" were provided     
+           
+    ind_rad : int
+        radar index
+
+    """
+    if procstatus != 1:
+        return None, None
+    
+    for datatypedescr in dscfg["datatype"]:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        if datatype in ("dBZ", "dBuZ", "dBZc", "dBuZc", "dBZv", "dBuZv", "dBZvc", "dBuZvc"):
+            refl_field = get_fieldname_pyart(datatype)
+        if datatype in ("ZDR", "uZDR", "ZDRc"):
+            zdr_field = get_fieldname_pyart(datatype)
+            
+    ind_rad = int(radarnr[5:8]) - 1
+    if radar_list[ind_rad] is None:
+        warn("No valid radar")
+        return None, None
+    radar = radar_list[ind_rad]
+
+    if refl_field not in radar.fields:
+        warn("Unable to obtain reflectivity. Missing field " + refl_field)
+        return None, None
+
+    if zdr_field not in radar.fields:
+        warn("Unable to obtain reflectivity. Missing field " + zdr_field)
+        return None, None
+    
+    if refl_field.endswith("_vv"):
+        ort_refl_field = "reflectivity"
+    else:
+        ort_refl_field = "reflectivity_vv"
+ 
+    if "unfiltered" in zdr_field:
+        ort_refl_field = "unfiltered" + ort_refl_field
+   
+    if "corrected" in zdr_field:
+        ort_refl_field = "corrected_" + ort_refl_field
+                    
+    ort_refl_dict = pyart.retrieve.compute_refl_from_zdr(
+        radar, zdr_field=zdr_field, refl_field=refl_field,
+        ort_refl_field=ort_refl_field
+    )
+    # prepare for exit
+    new_dataset = {"radar_out": deepcopy(radar)}
+    new_dataset["radar_out"].fields = dict()
+    new_dataset["radar_out"].add_field(ort_refl_field, ort_refl_dict)
+    return new_dataset, ind_rad
 
 def process_snr(procstatus, dscfg, radar_list=None):
     """

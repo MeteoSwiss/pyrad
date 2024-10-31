@@ -47,7 +47,8 @@ jobs:
       - name: Setup Miniconda
         uses: conda-incubator/setup-miniconda@v2.0.0
         with:
-          auto-update-conda: true
+          init-shell: >-
+            bash
           python-version: ${{ matrix.python-version }}
           channels: conda-forge
           channel-priority: flexible

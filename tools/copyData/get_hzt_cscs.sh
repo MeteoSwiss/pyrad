@@ -10,8 +10,8 @@ umask 0002
 # Config
 dateCmd="/bin/date"
 
-rawdata_origbase=/store/msrad/radar/swiss/data/
-data_destbase=/store/msrad/cosmo/HZT/
+rawdata_origbase=/store_new/mch/msrad/radar/swiss/data/
+data_destbase=/store_new/mch/msrad/cosmo/HZT/
 
 hour_fcst_vec='all'
 hour_run_vec='all'
