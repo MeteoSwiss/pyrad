@@ -116,6 +116,11 @@ def generate_spectra_products(dataset, prdcfg):
             time-Doppler making two separate plots for the module and phase of
             the signal
             User defined parameters:
+                antenna_coordinates_az_el_r : list of float
+                    azimuth, elevation and range coordinates of the reference point (3 elements)
+                point_coordinates_WGS84_lon_lat_alt : list of float
+                    lon, lat (deg in WGS84 reference) and alt (in m) coordinates of the reference point.
+                    Will be used only if antenna_coordinates_az_el_r is not provided.
                 xaxis_info : str
                     The xaxis type. Can be 'Doppler_velocity' or
                     'Doppler frequency'
@@ -237,6 +242,11 @@ def generate_spectra_products(dataset, prdcfg):
             time-Doppler making two separate plots for the real and imaginary
             parts
             User defined parameters:
+                antenna_coordinates_az_el_r : list of float
+                    azimuth, elevation and range coordinates of the reference point (3 elements)
+                point_coordinates_WGS84_lon_lat_alt : list of float
+                    lon, lat (deg in WGS84 reference) and alt (in m) coordinates of the reference point.
+                    Will be used only if antenna_coordinates_az_el_r is not provided.
                 xaxis_info : str
                     The xaxis type. Can be 'Doppler_velocity' or
                     'Doppler frequency'
@@ -314,6 +324,11 @@ def generate_spectra_products(dataset, prdcfg):
         'TIME_DOPPLER': Makes a time-Doppler plot of spectral or IQ data at a
             point of interest.
             User defined parameters:
+                antenna_coordinates_az_el_r : list of float
+                    azimuth, elevation and range coordinates of the reference point (3 elements)
+                point_coordinates_WGS84_lon_lat_alt : list of float
+                    lon, lat (deg in WGS84 reference) and alt (in m) coordinates of the reference point.
+                    Will be used only if antenna_coordinates_az_el_r is not provided.
                 xaxis_info : str
                     The xaxis type. Can be 'Doppler_velocity',
                     'Doppler_frequency' or 'pulse_number'

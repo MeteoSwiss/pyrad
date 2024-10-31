@@ -3607,7 +3607,9 @@ def generate_vol_products(dataset, prdcfg):
         elmin = dataset["radar_out"].fixed_angle["data"][0]
         elmax = dataset["radar_out"].fixed_angle["data"][-1]
 
-        field_data_process = field_data[np.intersect1d(ind_ele, ind_azi), ind_rng]
+        field_data_process = field_data[np.intersect1d(ind_ele, ind_azi), :]
+        field_data_process = field_data_process[:,ind_rng]
+
         countzero = np.size(np.where(field_data_process == 0.0))
 
         meanval = np.nanmean(field_data_process)
