@@ -4062,39 +4062,38 @@ def merge_scans_iq_rad4alp(
 
 def merge_fields_rainbow(basepath, scan_name, voltime, datatype_list):
     """
-    merge Rainbow fields into a single radar object.
+    Merge Rainbow fields into a single radar object.
 
     Parameters
     ----------
     basepath : str
-        name of the base path where to find the data
+        Name of the base path where to find the data.
     scan_name: str
-        name of the scan
+        Name of the scan.
     voltime : datetime object
-        reference time of the scan
+        Reference time of the scan.
     datatype_list : list
-        lists of data types to get
+        Lists of data types to get.
 
     Returns
     -------
     radar : Radar
-        radar object
-
+        Radar object.
     """
-    datapath = basepath + scan_name + voltime.strftime("%Y-%m-%d") + "/"
+    datapath = os.path.join(basepath, scan_name, voltime.strftime("%Y-%m-%d") + "/")
     fdatetime = voltime.strftime("%Y%m%d%H%M%S") + "00"
 
     if (datatype_list[0] != "Nh") and (datatype_list[0] != "Nv"):
-        filename = glob.glob(datapath + fdatetime + datatype_list[0] + ".*")
+        filename = glob.glob(os.path.join(datapath, f"{fdatetime}{datatype_list[0]}.*"))
     elif datatype_list[0] == "Nh":
-        filename = glob.glob(datapath + fdatetime + "dBZ.*")
+        filename = glob.glob(os.path.join(datapath, f"{fdatetime}dBZ.*"))
     else:
-        filename = glob.glob(datapath + fdatetime + "dBZv.*")
+        filename = glob.glob(os.path.join(datapath, f"{fdatetime}dBZv.*"))
 
     # create radar object
     radar = None
     if not filename:
-        warn("No file found in " + datapath + fdatetime + datatype_list[0] + ".*")
+        warn("No file found in " + os.path.join(datapath, f"{fdatetime}{datatype_list[0]}.*"))
     else:
         radar = get_data_rainbow(filename[0], datatype_list[0])
 
@@ -4104,13 +4103,14 @@ def merge_fields_rainbow(basepath, scan_name, voltime, datatype_list):
     # add other fields in the same scan
     for datatype in datatype_list[1:]:
         if datatype not in ("Nh", "Nv"):
-            filename = glob.glob(datapath + fdatetime + datatype + ".*")
+            filename = glob.glob(os.path.join(datapath, f"{fdatetime}{datatype}.*"))
         elif datatype == "Nh":
-            filename = glob.glob(datapath + fdatetime + "dBZ.*")
+            filename = glob.glob(os.path.join(datapath, f"{fdatetime}dBZ.*"))
         else:
-            filename = glob.glob(datapath + fdatetime + "dBZv.*")
+            filename = glob.glob(os.path.join(datapath, f"{fdatetime}dBZv.*"))
+        
         if not filename:
-            warn("No file found in " + datapath + fdatetime + datatype + ".*")
+            warn("No file found in " + os.path.join(datapath, f"{fdatetime}{datatype}.*"))
         else:
             radar_aux = get_data_rainbow(filename[0], datatype)
             if radar_aux is None:
@@ -4130,6 +4130,7 @@ def merge_fields_rainbow(basepath, scan_name, voltime, datatype_list):
                     )
 
     return radar
+
 
 
 def merge_fields_psr_spectra(

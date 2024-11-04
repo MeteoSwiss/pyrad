@@ -11,7 +11,7 @@ name                  STRING   Name of the data processing. This name is used in
                                ``<saveimgbasepath>/<name>/<YYYY-MM-DD>/<datasetname>/<prodname>/<outputname>``
 datapath              STRING   Base directory of the rainbow raw data. This field must have a trailing '/'. The raw data files of a scan can be found using the following file path:
                                ``<datapath>/<scanname>/<YYYY-MM-DD>/<YYYYMMDDHHMMSS00datatype>.<ext>``
-configpath            STRING   Base directory of the configuration files. This directory contains clutter maps, filter coefficients, antenna pattern, and the data processing configuration files.
+configpath            STRING   Absolute base directory of the configuration files. This directory contains clutter maps, filter coefficients, antenna pattern, and the data processing configuration files. If any path within a pyrad config file is provided as a relative path, it will be converted to an absolute path, by prepending it with the path specified with "configpath".
 locationConfigFile    STRING   File name (with full path) of the location configuration file. Described in Section 3.2.
 productConfigFile     STRING   File name (with full path) of the product configuration file. Described in Section 4.
 lastStateFile         STRING   File name (with full path) of the file containing the time of the last processed scan. Used in particular for real-time processing.

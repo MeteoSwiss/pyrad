@@ -3690,7 +3690,6 @@ def generate_vol_products(dataset, prdcfg):
         field_data_process = field_data_process[:,ind_rng]
 
         countzero = np.size(np.where(field_data_process == 0.0))
-
         meanval = np.nanmean(field_data_process)
         if write_min_max:
             minval = np.nanmin(field_data_process)
