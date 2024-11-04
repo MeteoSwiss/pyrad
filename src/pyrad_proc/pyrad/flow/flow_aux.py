@@ -1197,11 +1197,11 @@ def _create_cfg_dict(cfgfile):
         "smnpath"]
     
     for fname in filenames:
-        if type(cfg[fname]) == list:
+        if type(cfg[fname]) is list:
             for val in cfg[fname]:
                 if not os.path.isabs(val):
                     val = os.path.join(cfg['configpath'], val)
-        elif type(cfg[fname]) == str:
+        elif type(cfg[fname]) is str:
             if not os.path.isabs(cfg[fname]):
                 cfg[fname] = os.path.join(cfg['configpath'], cfg[fname])
     
