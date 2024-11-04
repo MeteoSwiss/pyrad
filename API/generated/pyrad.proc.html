@@ -16,17 +16,19 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -35,13 +37,14 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
     <script src="../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
@@ -54,7 +57,8 @@
     <link rel="next" title="pyrad.proc.get_process_func" href="generated/pyrad.proc.get_process_func.html" />
     <link rel="prev" title="pyrad.io.write_vpr_theo_params" href="pyrad.io.write_vpr_theo_params.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/>   
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="2.0.0" />   
   </head>
   
   
@@ -70,19 +74,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../search.html"
       method="get">
@@ -90,7 +83,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -98,8 +90,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -187,29 +179,21 @@
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -234,15 +218,11 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
@@ -261,7 +241,8 @@ document.write(`
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -322,15 +303,11 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -605,6 +582,9 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_fieldname_icon.html">pyrad.io.get_fieldname_icon</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_field_unit.html">pyrad.io.get_field_unit</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_file_list.html">pyrad.io.get_file_list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_file_list_s3.html">pyrad.io.get_file_list_s3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_scan_files_to_merge.html">pyrad.io.get_scan_files_to_merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_scan_files_to_merge_s3.html">pyrad.io.get_scan_files_to_merge_s3</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_rad4alp_dir.html">pyrad.io.get_rad4alp_dir</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_rad4alp_grid_dir.html">pyrad.io.get_rad4alp_grid_dir</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_trtfile_list.html">pyrad.io.get_trtfile_list</a></li>
@@ -667,6 +647,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_fieldname_icon.html">pyrad.io.get_fieldname_icon</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_fieldname_pyart.html">pyrad.io.get_fieldname_pyart</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_file_list.html">pyrad.io.get_file_list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_file_list_s3.html">pyrad.io.get_file_list_s3</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_icon_fields.html">pyrad.io.get_icon_fields</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_iso0_field.html">pyrad.io.get_iso0_field</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_iso0_ref.html">pyrad.io.get_iso0_ref</a></li>
@@ -675,6 +656,8 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_rad4alp_grid_dir.html">pyrad.io.get_rad4alp_grid_dir</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_rad4alp_prod_fname.html">pyrad.io.get_rad4alp_prod_fname</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_save_dir.html">pyrad.io.get_save_dir</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_scan_files_to_merge.html">pyrad.io.get_scan_files_to_merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_scan_files_to_merge_s3.html">pyrad.io.get_scan_files_to_merge_s3</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_sensor_data.html">pyrad.io.get_sensor_data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.get_trtfile_list.html">pyrad.io.get_trtfile_list</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.grib2radar_data.html">pyrad.io.grib2radar_data</a></li>
@@ -912,6 +895,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_snr.html">pyrad.proc.process_snr</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_l.html">pyrad.proc.process_l</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_cdr.html">pyrad.proc.process_cdr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_refl_from_zdr.html">pyrad.proc.process_refl_from_zdr</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_rainrate.html">pyrad.proc.process_rainrate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_rainfall_accumulation.html">pyrad.proc.process_rainfall_accumulation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_vol_refl.html">pyrad.proc.process_vol_refl</a></li>
@@ -1059,6 +1043,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_raw_spectra.html">pyrad.proc.process_raw_spectra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_rcs.html">pyrad.proc.process_rcs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_rcs_pr.html">pyrad.proc.process_rcs_pr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_refl_from_zdr.html">pyrad.proc.process_refl_from_zdr</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_reflectivity.html">pyrad.proc.process_reflectivity</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_reflectivity_iq.html">pyrad.proc.process_reflectivity_iq</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_rhohv.html">pyrad.proc.process_rhohv</a></li>
@@ -1268,8 +1253,6 @@ document.write(`
       
         <div class="header-article-item">
 
-
-
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -1281,7 +1264,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../index.html" class="nav-link">API Reference Manual</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">pyrad.proc</li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pyrad.proc</span></li>
   </ul>
 </nav>
 </div>
@@ -1732,19 +1715,22 @@ document.write(`
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_cdr.html#pyrad.proc.process_cdr" title="pyrad.proc.process_cdr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_cdr</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>Computes approximation of Circular Depolarization Ratio</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_rainrate.html#pyrad.proc.process_rainrate" title="pyrad.proc.process_rainrate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_rainrate</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_refl_from_zdr.html#pyrad.proc.process_refl_from_zdr" title="pyrad.proc.process_refl_from_zdr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_refl_from_zdr</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<td><p>Computes the vertical or horizontal reflectivity from ZDR and the reflectivity at the orthogonal polarization</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_rainrate.html#pyrad.proc.process_rainrate" title="pyrad.proc.process_rainrate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_rainrate</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>Estimates rainfall rate from polarimetric moments</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_rainfall_accumulation.html#pyrad.proc.process_rainfall_accumulation" title="pyrad.proc.process_rainfall_accumulation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_rainfall_accumulation</span></code></a>(procstatus, dscfg)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_rainfall_accumulation.html#pyrad.proc.process_rainfall_accumulation" title="pyrad.proc.process_rainfall_accumulation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_rainfall_accumulation</span></code></a>(procstatus, dscfg)</p></td>
 <td><p>Computes rainfall accumulation fields</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_vol_refl.html#pyrad.proc.process_vol_refl" title="pyrad.proc.process_vol_refl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_vol_refl</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_vol_refl.html#pyrad.proc.process_vol_refl" title="pyrad.proc.process_vol_refl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_vol_refl</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>Computes the volumetric reflectivity eta in 10log10(cm^2 km^-3)</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_bird_density.html#pyrad.proc.process_bird_density" title="pyrad.proc.process_bird_density"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_bird_density</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_bird_density.html#pyrad.proc.process_bird_density" title="pyrad.proc.process_bird_density"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_bird_density</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Computes the bird density from the volumetric reflectivity</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_vpr.html#pyrad.proc.process_vpr" title="pyrad.proc.process_vpr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_vpr</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_vpr.html#pyrad.proc.process_vpr" title="pyrad.proc.process_vpr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_vpr</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>Computes the vertical profile of reflectivity using the Meteo-France operational algorithm</p></td>
 </tr>
 </tbody>
@@ -2221,178 +2207,181 @@ document.write(`
 <tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_rcs_pr.html#pyrad.proc.process_rcs_pr" title="pyrad.proc.process_rcs_pr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_rcs_pr</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>Computes the radar cross-section (assuming a point target) from radar reflectivity by first computing the received power and then the RCS from it.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_reflectivity.html#pyrad.proc.process_reflectivity" title="pyrad.proc.process_reflectivity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_reflectivity</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_refl_from_zdr.html#pyrad.proc.process_refl_from_zdr" title="pyrad.proc.process_refl_from_zdr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_refl_from_zdr</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<td><p>Computes the vertical or horizontal reflectivity from ZDR and the reflectivity at the orthogonal polarization</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_reflectivity.html#pyrad.proc.process_reflectivity" title="pyrad.proc.process_reflectivity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_reflectivity</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Computes reflectivity from the spectral reflectivity</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_reflectivity_iq.html#pyrad.proc.process_reflectivity_iq" title="pyrad.proc.process_reflectivity_iq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_reflectivity_iq</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_reflectivity_iq.html#pyrad.proc.process_reflectivity_iq" title="pyrad.proc.process_reflectivity_iq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_reflectivity_iq</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Computes reflectivity from the IQ data</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_rhohv.html#pyrad.proc.process_rhohv" title="pyrad.proc.process_rhohv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_rhohv</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_rhohv.html#pyrad.proc.process_rhohv" title="pyrad.proc.process_rhohv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_rhohv</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>Computes RhoHV from the complex spectras</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_rhohv_iq.html#pyrad.proc.process_rhohv_iq" title="pyrad.proc.process_rhohv_iq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_rhohv_iq</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_rhohv_iq.html#pyrad.proc.process_rhohv_iq" title="pyrad.proc.process_rhohv_iq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_rhohv_iq</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>Computes RhoHV from the horizontal and vertical IQ data</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_rhohv_rain.html#pyrad.proc.process_rhohv_rain" title="pyrad.proc.process_rhohv_rain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_rhohv_rain</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_rhohv_rain.html#pyrad.proc.process_rhohv_rain" title="pyrad.proc.process_rhohv_rain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_rhohv_rain</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Keeps only suitable data to evaluate the 80 percentile of RhoHV in rain</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_roi.html#pyrad.proc.process_roi" title="pyrad.proc.process_roi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_roi</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_roi.html#pyrad.proc.process_roi" title="pyrad.proc.process_roi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_roi</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>Obtains the radar data at a region of interest defined by a TRT file or by the user.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_roi2.html#pyrad.proc.process_roi2" title="pyrad.proc.process_roi2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_roi2</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_roi2.html#pyrad.proc.process_roi2" title="pyrad.proc.process_roi2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_roi2</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>Obtains the radar data at a region of interest defined by a TRT file or by the user.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_rqvp.html#pyrad.proc.process_rqvp" title="pyrad.proc.process_rqvp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_rqvp</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_rqvp.html#pyrad.proc.process_rqvp" title="pyrad.proc.process_rqvp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_rqvp</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>Computes range defined quasi vertical profiles, by averaging over height levels PPI data.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_save_radar.html#pyrad.proc.process_save_radar" title="pyrad.proc.process_save_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_save_radar</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_save_radar.html#pyrad.proc.process_save_radar" title="pyrad.proc.process_save_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_save_radar</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Dummy function that allows to save the entire radar object</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_selfconsistency_bias.html#pyrad.proc.process_selfconsistency_bias" title="pyrad.proc.process_selfconsistency_bias"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_selfconsistency_bias</span></code></a>(procstatus, dscfg)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_selfconsistency_bias.html#pyrad.proc.process_selfconsistency_bias" title="pyrad.proc.process_selfconsistency_bias"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_selfconsistency_bias</span></code></a>(procstatus, dscfg)</p></td>
 <td><p>Estimates the reflectivity bias by means of the selfconsistency algorithm by Gourley</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_selfconsistency_bias2.html#pyrad.proc.process_selfconsistency_bias2" title="pyrad.proc.process_selfconsistency_bias2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_selfconsistency_bias2</span></code></a>(procstatus, dscfg)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_selfconsistency_bias2.html#pyrad.proc.process_selfconsistency_bias2" title="pyrad.proc.process_selfconsistency_bias2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_selfconsistency_bias2</span></code></a>(procstatus, dscfg)</p></td>
 <td><p>Estimates the reflectivity bias by means of the selfconsistency algorithm by Gourley</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_selfconsistency_kdp_phidp.html#pyrad.proc.process_selfconsistency_kdp_phidp" title="pyrad.proc.process_selfconsistency_kdp_phidp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_selfconsistency_kdp_phidp</span></code></a>(...[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_selfconsistency_kdp_phidp.html#pyrad.proc.process_selfconsistency_kdp_phidp" title="pyrad.proc.process_selfconsistency_kdp_phidp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_selfconsistency_kdp_phidp</span></code></a>(...[, ...])</p></td>
 <td><p>Computes specific differential phase and differential phase in rain using the selfconsistency between Zdr, Zh and KDP</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_signal_power.html#pyrad.proc.process_signal_power" title="pyrad.proc.process_signal_power"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_signal_power</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_signal_power.html#pyrad.proc.process_signal_power" title="pyrad.proc.process_signal_power"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_signal_power</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Computes the signal power in dBm</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_smooth_phidp_double_window.html#pyrad.proc.process_smooth_phidp_double_window" title="pyrad.proc.process_smooth_phidp_double_window"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_smooth_phidp_double_window</span></code></a>(...[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_smooth_phidp_double_window.html#pyrad.proc.process_smooth_phidp_double_window" title="pyrad.proc.process_smooth_phidp_double_window"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_smooth_phidp_double_window</span></code></a>(...[, ...])</p></td>
 <td><p>corrects phidp of the system phase and smoothes it using one window</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_smooth_phidp_single_window.html#pyrad.proc.process_smooth_phidp_single_window" title="pyrad.proc.process_smooth_phidp_single_window"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_smooth_phidp_single_window</span></code></a>(...[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_smooth_phidp_single_window.html#pyrad.proc.process_smooth_phidp_single_window" title="pyrad.proc.process_smooth_phidp_single_window"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_smooth_phidp_single_window</span></code></a>(...[, ...])</p></td>
 <td><p>corrects phidp of the system phase and smoothes it using one window</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_snr.html#pyrad.proc.process_snr" title="pyrad.proc.process_snr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_snr</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_snr.html#pyrad.proc.process_snr" title="pyrad.proc.process_snr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_snr</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>Computes SNR</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_spectra_ang_avg.html#pyrad.proc.process_spectra_ang_avg" title="pyrad.proc.process_spectra_ang_avg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_spectra_ang_avg</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_spectra_ang_avg.html#pyrad.proc.process_spectra_ang_avg" title="pyrad.proc.process_spectra_ang_avg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_spectra_ang_avg</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Function to average the spectra over the rays.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_spectra_point.html#pyrad.proc.process_spectra_point" title="pyrad.proc.process_spectra_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_spectra_point</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_spectra_point.html#pyrad.proc.process_spectra_point" title="pyrad.proc.process_spectra_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_spectra_point</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Obtains the spectra or IQ data at a point location.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_spectral_differential_phase.html#pyrad.proc.process_spectral_differential_phase" title="pyrad.proc.process_spectral_differential_phase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_spectral_differential_phase</span></code></a>(...[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_spectral_differential_phase.html#pyrad.proc.process_spectral_differential_phase" title="pyrad.proc.process_spectral_differential_phase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_spectral_differential_phase</span></code></a>(...[, ...])</p></td>
 <td><p>Computes the spectral differential phase</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_spectral_differential_reflectivity.html#pyrad.proc.process_spectral_differential_reflectivity" title="pyrad.proc.process_spectral_differential_reflectivity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_spectral_differential_reflectivity</span></code></a>(...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_spectral_differential_reflectivity.html#pyrad.proc.process_spectral_differential_reflectivity" title="pyrad.proc.process_spectral_differential_reflectivity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_spectral_differential_reflectivity</span></code></a>(...)</p></td>
 <td><p>Computes spectral differential reflectivity</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_spectral_noise.html#pyrad.proc.process_spectral_noise" title="pyrad.proc.process_spectral_noise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_spectral_noise</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_spectral_noise.html#pyrad.proc.process_spectral_noise" title="pyrad.proc.process_spectral_noise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_spectral_noise</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Computes the spectral noise</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_spectral_phase.html#pyrad.proc.process_spectral_phase" title="pyrad.proc.process_spectral_phase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_spectral_phase</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_spectral_phase.html#pyrad.proc.process_spectral_phase" title="pyrad.proc.process_spectral_phase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_spectral_phase</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Computes the spectral phase</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_spectral_power.html#pyrad.proc.process_spectral_power" title="pyrad.proc.process_spectral_power"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_spectral_power</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_spectral_power.html#pyrad.proc.process_spectral_power" title="pyrad.proc.process_spectral_power"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_spectral_power</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Computes the spectral power</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_spectral_reflectivity.html#pyrad.proc.process_spectral_reflectivity" title="pyrad.proc.process_spectral_reflectivity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_spectral_reflectivity</span></code></a>(procstatus, dscfg)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_spectral_reflectivity.html#pyrad.proc.process_spectral_reflectivity" title="pyrad.proc.process_spectral_reflectivity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_spectral_reflectivity</span></code></a>(procstatus, dscfg)</p></td>
 <td><p>Computes spectral reflectivity</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_spectral_rhohv.html#pyrad.proc.process_spectral_rhohv" title="pyrad.proc.process_spectral_rhohv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_spectral_rhohv</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_spectral_rhohv.html#pyrad.proc.process_spectral_rhohv" title="pyrad.proc.process_spectral_rhohv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_spectral_rhohv</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Computes the spectral RhoHV</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_st1_iq.html#pyrad.proc.process_st1_iq" title="pyrad.proc.process_st1_iq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_st1_iq</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_st1_iq.html#pyrad.proc.process_st1_iq" title="pyrad.proc.process_st1_iq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_st1_iq</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>Computes the statistical test one lag fluctuation from the horizontal or vertical IQ data</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_st2_iq.html#pyrad.proc.process_st2_iq" title="pyrad.proc.process_st2_iq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_st2_iq</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_st2_iq.html#pyrad.proc.process_st2_iq" title="pyrad.proc.process_st2_iq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_st2_iq</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>Computes the statistical test two lag fluctuation from the horizontal or vertical IQ data</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_sun_hits.html#pyrad.proc.process_sun_hits" title="pyrad.proc.process_sun_hits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_sun_hits</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_sun_hits.html#pyrad.proc.process_sun_hits" title="pyrad.proc.process_sun_hits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_sun_hits</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>monitoring of the radar using sun hits</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_sunscan.html#pyrad.proc.process_sunscan" title="pyrad.proc.process_sunscan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_sunscan</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_sunscan.html#pyrad.proc.process_sunscan" title="pyrad.proc.process_sunscan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_sunscan</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>Processing of automatic sun scans for monitoring purposes of the radar system.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_svp.html#pyrad.proc.process_svp" title="pyrad.proc.process_svp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_svp</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_svp.html#pyrad.proc.process_svp" title="pyrad.proc.process_svp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_svp</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>Computes slanted vertical profiles, by averaging over height levels PPI data.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_time_avg.html#pyrad.proc.process_time_avg" title="pyrad.proc.process_time_avg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_time_avg</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_time_avg.html#pyrad.proc.process_time_avg" title="pyrad.proc.process_time_avg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_time_avg</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>computes the temporal mean of a field</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_time_avg_flag.html#pyrad.proc.process_time_avg_flag" title="pyrad.proc.process_time_avg_flag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_time_avg_flag</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_time_avg_flag.html#pyrad.proc.process_time_avg_flag" title="pyrad.proc.process_time_avg_flag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_time_avg_flag</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>computes a flag field describing the conditions of the data used while averaging</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_time_avg_std.html#pyrad.proc.process_time_avg_std" title="pyrad.proc.process_time_avg_std"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_time_avg_std</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_time_avg_std.html#pyrad.proc.process_time_avg_std" title="pyrad.proc.process_time_avg_std"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_time_avg_std</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>computes the average and standard deviation of data.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_time_height.html#pyrad.proc.process_time_height" title="pyrad.proc.process_time_height"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_time_height</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_time_height.html#pyrad.proc.process_time_height" title="pyrad.proc.process_time_height"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_time_height</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Produces time height radar objects at a point of interest defined by latitude and longitude.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_time_stats.html#pyrad.proc.process_time_stats" title="pyrad.proc.process_time_stats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_time_stats</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_time_stats.html#pyrad.proc.process_time_stats" title="pyrad.proc.process_time_stats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_time_stats</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>computes the temporal statistics of a field</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_time_stats2.html#pyrad.proc.process_time_stats2" title="pyrad.proc.process_time_stats2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_time_stats2</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_time_stats2.html#pyrad.proc.process_time_stats2" title="pyrad.proc.process_time_stats2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_time_stats2</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>computes the temporal mean of a field</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_traj_antenna_pattern.html#pyrad.proc.process_traj_antenna_pattern" title="pyrad.proc.process_traj_antenna_pattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_traj_antenna_pattern</span></code></a>(procstatus, dscfg)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_traj_antenna_pattern.html#pyrad.proc.process_traj_antenna_pattern" title="pyrad.proc.process_traj_antenna_pattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_traj_antenna_pattern</span></code></a>(procstatus, dscfg)</p></td>
 <td><p>Process a new array of data volumes considering a plane trajectory.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_traj_atplane.html#pyrad.proc.process_traj_atplane" title="pyrad.proc.process_traj_atplane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_traj_atplane</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_traj_atplane.html#pyrad.proc.process_traj_atplane" title="pyrad.proc.process_traj_atplane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_traj_atplane</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Return time series according to trajectory</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_traj_lightning.html#pyrad.proc.process_traj_lightning" title="pyrad.proc.process_traj_lightning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_traj_lightning</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_traj_lightning.html#pyrad.proc.process_traj_lightning" title="pyrad.proc.process_traj_lightning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_traj_lightning</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Return time series according to lightning trajectory</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_traj_trt.html#pyrad.proc.process_traj_trt" title="pyrad.proc.process_traj_trt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_traj_trt</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_traj_trt.html#pyrad.proc.process_traj_trt" title="pyrad.proc.process_traj_trt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_traj_trt</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Processes data according to TRT trajectory</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_traj_trt_contour.html#pyrad.proc.process_traj_trt_contour" title="pyrad.proc.process_traj_trt_contour"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_traj_trt_contour</span></code></a>(procstatus, dscfg)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_traj_trt_contour.html#pyrad.proc.process_traj_trt_contour" title="pyrad.proc.process_traj_trt_contour"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_traj_trt_contour</span></code></a>(procstatus, dscfg)</p></td>
 <td><p>Gets the TRT cell contour corresponding to each radar volume</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_trajectory.html#pyrad.proc.process_trajectory" title="pyrad.proc.process_trajectory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_trajectory</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_trajectory.html#pyrad.proc.process_trajectory" title="pyrad.proc.process_trajectory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_trajectory</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Return trajectory</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_ts_along_coord.html#pyrad.proc.process_ts_along_coord" title="pyrad.proc.process_ts_along_coord"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_ts_along_coord</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_ts_along_coord.html#pyrad.proc.process_ts_along_coord" title="pyrad.proc.process_ts_along_coord"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_ts_along_coord</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Produces time series along a particular antenna coordinate</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_turbulence.html#pyrad.proc.process_turbulence" title="pyrad.proc.process_turbulence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_turbulence</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_turbulence.html#pyrad.proc.process_turbulence" title="pyrad.proc.process_turbulence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_turbulence</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Computes turbulence from the Doppler spectrum width and reflectivity using the PyTDA package</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_vad.html#pyrad.proc.process_vad" title="pyrad.proc.process_vad"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_vad</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_vad.html#pyrad.proc.process_vad" title="pyrad.proc.process_vad"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_vad</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>Estimates vertical wind profile using the VAD (velocity Azimuth Display) technique</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_visibility.html#pyrad.proc.process_visibility" title="pyrad.proc.process_visibility"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_visibility</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_visibility.html#pyrad.proc.process_visibility" title="pyrad.proc.process_visibility"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_visibility</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Gets the visibility in percentage from the minimum visible elevation.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_vol_refl.html#pyrad.proc.process_vol_refl" title="pyrad.proc.process_vol_refl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_vol_refl</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_vol_refl.html#pyrad.proc.process_vol_refl" title="pyrad.proc.process_vol_refl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_vol_refl</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>Computes the volumetric reflectivity eta in 10log10(cm^2 km^-3)</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_vol_to_grid.html#pyrad.proc.process_vol_to_grid" title="pyrad.proc.process_vol_to_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_vol_to_grid</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_vol_to_grid.html#pyrad.proc.process_vol_to_grid" title="pyrad.proc.process_vol_to_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_vol_to_grid</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Function to convert polar data into a Cartesian grid</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_vpr.html#pyrad.proc.process_vpr" title="pyrad.proc.process_vpr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_vpr</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_vpr.html#pyrad.proc.process_vpr" title="pyrad.proc.process_vpr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_vpr</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>Computes the vertical profile of reflectivity using the Meteo-France operational algorithm</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_vstatus_to_echo_id.html#pyrad.proc.process_vstatus_to_echo_id" title="pyrad.proc.process_vstatus_to_echo_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_vstatus_to_echo_id</span></code></a>(procstatus, dscfg)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_vstatus_to_echo_id.html#pyrad.proc.process_vstatus_to_echo_id" title="pyrad.proc.process_vstatus_to_echo_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_vstatus_to_echo_id</span></code></a>(procstatus, dscfg)</p></td>
 <td><p>Converts velocity status from lidar data into pyrad echo ID</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_wbn_iq.html#pyrad.proc.process_wbn_iq" title="pyrad.proc.process_wbn_iq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_wbn_iq</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_wbn_iq.html#pyrad.proc.process_wbn_iq" title="pyrad.proc.process_wbn_iq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_wbn_iq</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>Computes the wide band noise from the horizontal or vertical IQ data</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_weighted_time_avg.html#pyrad.proc.process_weighted_time_avg" title="pyrad.proc.process_weighted_time_avg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_weighted_time_avg</span></code></a>(procstatus, dscfg)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_weighted_time_avg.html#pyrad.proc.process_weighted_time_avg" title="pyrad.proc.process_weighted_time_avg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_weighted_time_avg</span></code></a>(procstatus, dscfg)</p></td>
 <td><p>computes the temporal mean of a field weighted by the reflectivity</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_wind_vel.html#pyrad.proc.process_wind_vel" title="pyrad.proc.process_wind_vel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_wind_vel</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_wind_vel.html#pyrad.proc.process_wind_vel" title="pyrad.proc.process_wind_vel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_wind_vel</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>Estimates the horizontal or vertical component of the wind from the radial velocity</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_windshear.html#pyrad.proc.process_windshear" title="pyrad.proc.process_windshear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_windshear</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_windshear.html#pyrad.proc.process_windshear" title="pyrad.proc.process_windshear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_windshear</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Estimates the wind shear from the wind velocity</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_windshear_lidar.html#pyrad.proc.process_windshear_lidar" title="pyrad.proc.process_windshear_lidar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_windshear_lidar</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_windshear_lidar.html#pyrad.proc.process_windshear_lidar" title="pyrad.proc.process_windshear_lidar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_windshear_lidar</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Estimates the wind shear from the wind velocity of lidar scans</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_zdr_column.html#pyrad.proc.process_zdr_column" title="pyrad.proc.process_zdr_column"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_zdr_column</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_zdr_column.html#pyrad.proc.process_zdr_column" title="pyrad.proc.process_zdr_column"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_zdr_column</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Detects ZDR columns</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_zdr_precip.html#pyrad.proc.process_zdr_precip" title="pyrad.proc.process_zdr_precip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_zdr_precip</span></code></a>(procstatus, dscfg[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_zdr_precip.html#pyrad.proc.process_zdr_precip" title="pyrad.proc.process_zdr_precip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_zdr_precip</span></code></a>(procstatus, dscfg[, ...])</p></td>
 <td><p>Keeps only suitable data to evaluate the differential reflectivity in moderate rain or precipitation (for vertical scans)</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.proc.process_zdr_snow.html#pyrad.proc.process_zdr_snow" title="pyrad.proc.process_zdr_snow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_zdr_snow</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.proc.process_zdr_snow.html#pyrad.proc.process_zdr_snow" title="pyrad.proc.process_zdr_snow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_zdr_snow</span></code></a>(procstatus, dscfg[, radar_list])</p></td>
 <td><p>Keeps only suitable data to evaluate the differential reflectivity in snow</p></td>
 </tr>
 </tbody>
@@ -2438,7 +2427,8 @@ document.write(`
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -2490,8 +2480,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2501,7 +2491,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     <br/>
   </p>
 </div>
@@ -2514,7 +2504,7 @@ document.write(`
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
 </p></div>
       
     </div>

@@ -1,0 +1,6 @@
+pyrad.io.get\_scan\_files\_to\_merge\_s3
+========================================
+
+.. currentmodule:: pyrad.io
+
+.. autofunction:: get_scan_files_to_merge_s3

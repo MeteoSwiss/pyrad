@@ -15,17 +15,19 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -34,13 +36,14 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
@@ -51,7 +54,8 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/>   
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="2.0.0" />   
   </head>
   
   
@@ -67,19 +71,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../../search.html"
       method="get">
@@ -87,7 +80,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -95,8 +87,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -184,29 +176,21 @@
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -231,15 +215,11 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
@@ -256,7 +236,8 @@ document.write(`
       
         
       
-      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
 
   
@@ -317,15 +298,11 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -369,8 +346,6 @@ document.write(`
       
         <div class="header-article-item">
 
-
-
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -382,7 +357,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">pyrad.prod.p...</li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pyrad.prod.process_spectra_products</span></li>
   </ul>
 </nav>
 </div>
@@ -447,7 +422,7 @@ document.write(`
 <span class="sd">            signal.</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset               in the dataset</span>
+<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
 <span class="sd">                along_azi : bool</span>
 <span class="sd">                    If true the plot is performed along azimuth, otherwise</span>
 <span class="sd">                    along elevation. Default true</span>
@@ -469,7 +444,7 @@ document.write(`
 <span class="sd">            making two separate plots for the module and phase of the signal</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset               in the dataset</span>
+<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
 <span class="sd">                azi : float</span>
 <span class="sd">                    azimuth (deg) of the ray to plot</span>
 <span class="sd">                ele : float</span>
@@ -501,7 +476,7 @@ document.write(`
 <span class="sd">            range-Doppler making two separate plots for the module and phase</span>
 <span class="sd">            of the signal User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset               in the dataset</span>
+<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
 <span class="sd">                azi : float</span>
 <span class="sd">                    azimuth (deg) of the ray to plot</span>
 <span class="sd">                ele : float</span>
@@ -526,7 +501,12 @@ document.write(`
 <span class="sd">            the signal</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset               in the dataset</span>
+<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
+<span class="sd">                antenna_coordinates_az_el_r : list of float</span>
+<span class="sd">                    azimuth, elevation and range coordinates of the reference point (3 elements)</span>
+<span class="sd">                point_coordinates_WGS84_lon_lat_alt : list of float</span>
+<span class="sd">                    lon, lat (deg in WGS84 reference) and alt (in m) coordinates of the reference point.</span>
+<span class="sd">                    Will be used only if antenna_coordinates_az_el_r is not provided.</span>
 <span class="sd">                xaxis_info : str</span>
 <span class="sd">                    The xaxis type. Can be &#39;Doppler_velocity&#39; or</span>
 <span class="sd">                    &#39;Doppler frequency&#39;</span>
@@ -545,7 +525,7 @@ document.write(`
 <span class="sd">            azimuth or along range</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset               in the dataset</span>
+<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
 <span class="sd">                along_azi : bool</span>
 <span class="sd">                    If true the plot is performed along azimuth, otherwise</span>
 <span class="sd">                    along elevation. Default true</span>
@@ -569,7 +549,7 @@ document.write(`
 <span class="sd">            The real and imaginary parts are plotted separately</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset               in the dataset</span>
+<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
 <span class="sd">                along_azi : bool</span>
 <span class="sd">                    If true the plot is performed along azimuth, otherwise</span>
 <span class="sd">                    along elevation. Default true</span>
@@ -592,7 +572,7 @@ document.write(`
 <span class="sd">            two separate plots for the real and imaginary parts</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset               in the dataset</span>
+<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
 <span class="sd">                azi : float</span>
 <span class="sd">                    azimuth (deg) of the ray to plot</span>
 <span class="sd">                ele : float</span>
@@ -626,7 +606,7 @@ document.write(`
 <span class="sd">            parts</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset               in the dataset</span>
+<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
 <span class="sd">                azi : float</span>
 <span class="sd">                    azimuth (deg) of the ray to plot</span>
 <span class="sd">                ele : float</span>
@@ -657,7 +637,12 @@ document.write(`
 <span class="sd">            parts</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset               in the dataset</span>
+<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
+<span class="sd">                antenna_coordinates_az_el_r : list of float</span>
+<span class="sd">                    azimuth, elevation and range coordinates of the reference point (3 elements)</span>
+<span class="sd">                point_coordinates_WGS84_lon_lat_alt : list of float</span>
+<span class="sd">                    lon, lat (deg in WGS84 reference) and alt (in m) coordinates of the reference point.</span>
+<span class="sd">                    Will be used only if antenna_coordinates_az_el_r is not provided.</span>
 <span class="sd">                xaxis_info : str</span>
 <span class="sd">                    The xaxis type. Can be &#39;Doppler_velocity&#39; or</span>
 <span class="sd">                    &#39;Doppler frequency&#39;</span>
@@ -671,7 +656,7 @@ document.write(`
 <span class="sd">        &#39;DOPPLER&#39;: Plots a Doppler spectrum variable or IQ data variable</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset               in the dataset</span>
+<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
 <span class="sd">                azi : float</span>
 <span class="sd">                    azimuth (deg) of the ray to plot</span>
 <span class="sd">                ele : float</span>
@@ -700,7 +685,7 @@ document.write(`
 <span class="sd">        &#39;RANGE_DOPPLER&#39;: Makes a range-Doppler plot of spectral or IQ data</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset               in the dataset</span>
+<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
 <span class="sd">                azi : float</span>
 <span class="sd">                    azimuth (deg) of the ray to plot</span>
 <span class="sd">                ele : float</span>
@@ -734,7 +719,7 @@ document.write(`
 <span class="sd">            netcdf file</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset               in the dataset</span>
+<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
 <span class="sd">                physical: Bool</span>
 <span class="sd">                    If True the data will be saved in physical units (floats).</span>
 <span class="sd">                    Otherwise it will be quantized and saved as binary</span>
@@ -742,7 +727,12 @@ document.write(`
 <span class="sd">            point of interest.</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset               in the dataset</span>
+<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
+<span class="sd">                antenna_coordinates_az_el_r : list of float</span>
+<span class="sd">                    azimuth, elevation and range coordinates of the reference point (3 elements)</span>
+<span class="sd">                point_coordinates_WGS84_lon_lat_alt : list of float</span>
+<span class="sd">                    lon, lat (deg in WGS84 reference) and alt (in m) coordinates of the reference point.</span>
+<span class="sd">                    Will be used only if antenna_coordinates_az_el_r is not provided.</span>
 <span class="sd">                xaxis_info : str</span>
 <span class="sd">                    The xaxis type. Can be &#39;Doppler_velocity&#39;,</span>
 <span class="sd">                    &#39;Doppler_frequency&#39; or &#39;pulse_number&#39;</span>
@@ -2085,8 +2075,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2096,7 +2086,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     <br/>
   </p>
 </div>
@@ -2109,7 +2099,7 @@ document.write(`
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
 </p></div>
       
     </div>

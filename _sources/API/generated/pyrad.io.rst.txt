@@ -60,6 +60,8 @@
     
     get_file_list
     
+    get_file_list_s3
+    
     get_icon_fields
     
     get_iso0_field
@@ -75,6 +77,10 @@
     get_rad4alp_prod_fname
     
     get_save_dir
+    
+    get_scan_files_to_merge
+    
+    get_scan_files_to_merge_s3
     
     get_sensor_data
     

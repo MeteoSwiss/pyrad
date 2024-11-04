@@ -16,17 +16,19 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
@@ -35,13 +37,14 @@
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/pyart-theme.css?v=40b48845" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
     <script src="../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
@@ -54,7 +57,8 @@
     <link rel="next" title="Notebook Gallery" href="../notebook-gallery.html" />
     <link rel="prev" title="List of pyrad input data descriptors" href="list_datadescriptors.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/>   
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="2.0.0" />   
   </head>
   
   
@@ -70,19 +74,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../search.html"
       method="get">
@@ -90,7 +83,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -98,8 +90,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -187,29 +179,21 @@
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -234,15 +218,11 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
@@ -261,7 +241,8 @@ document.write(`
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -322,15 +303,11 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -363,7 +340,6 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="main.html">Main configuration file</a></li>
 <li class="toctree-l1"><a class="reference internal" href="loc.html">Location configuration file</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="prod.html">Product configuration file</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="list_process.html">List of pyrad datasets separated by dataset type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="list_products.html">List of pyrad products separated by dataset type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="list_datadescriptors.html">List of pyrad input data descriptors</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">List of pyrad variables</a></li>
@@ -396,8 +372,6 @@ document.write(`
       
         <div class="header-article-item">
 
-
-
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -412,7 +386,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="prod.html" class="nav-link">Product configuration file</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">List of...</li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">List of pyrad variables</span></li>
   </ul>
 </nav>
 </div>
@@ -997,1471 +971,11 @@ names listed below, you can use the keyword DataTypeIDInFiles in the loc files t
 </section>
 <section id="py-art-to-pyrad">
 <h2>Py-ART to Pyrad<a class="headerlink" href="#py-art-to-pyrad" title="Link to this heading">#</a></h2>
-<div class="pst-scrollable-table-container"><table class="table" id="id2">
-<caption><span class="caption-text">Py-ART to Pyrad mappings</span><a class="headerlink" href="#id2" title="Link to this table">#</a></caption>
-<thead>
-<tr class="row-odd"><th class="head"><p>pyrad_name</p></th>
-<th class="head"><p>field_name_pyart</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>dBZ</p></td>
-<td><p>reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>dBZ_flag</p></td>
-<td><p>reflectivity_flag</p></td>
-</tr>
-<tr class="row-even"><td><p>dBZ_MF</p></td>
-<td><p>reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>Zn</p></td>
-<td><p>normalized_reflectivity</p></td>
-</tr>
-<tr class="row-even"><td><p>Zlin</p></td>
-<td><p>linear_reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>dBuZ</p></td>
-<td><p>unfiltered_reflectivity</p></td>
-</tr>
-<tr class="row-even"><td><p>dBZc</p></td>
-<td><p>corrected_reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>dBuZc</p></td>
-<td><p>corrected_unfiltered_reflectivity</p></td>
-</tr>
-<tr class="row-even"><td><p>dBZv</p></td>
-<td><p>reflectivity_vv</p></td>
-</tr>
-<tr class="row-odd"><td><p>dBZvc</p></td>
-<td><p>corrected_reflectivity_vv</p></td>
-</tr>
-<tr class="row-even"><td><p>dBuZv</p></td>
-<td><p>unfiltered_reflectivity_vv</p></td>
-</tr>
-<tr class="row-odd"><td><p>dBuZvc</p></td>
-<td><p>corrected_unfiltered_reflectivity_vv</p></td>
-</tr>
-<tr class="row-even"><td><p>dBZhv</p></td>
-<td><p>reflectivity_hv</p></td>
-</tr>
-<tr class="row-odd"><td><p>dBZvh</p></td>
-<td><p>reflectivity_vh</p></td>
-</tr>
-<tr class="row-even"><td><p>dBZ_bias</p></td>
-<td><p>reflectivity_bias</p></td>
-</tr>
-<tr class="row-odd"><td><p>eta_h</p></td>
-<td><p>volumetric_reflectivity</p></td>
-</tr>
-<tr class="row-even"><td><p>eta_v</p></td>
-<td><p>volumetric_reflectivity_vv</p></td>
-</tr>
-<tr class="row-odd"><td><p>rcs_h</p></td>
-<td><p>radar_cross_section_hh</p></td>
-</tr>
-<tr class="row-even"><td><p>rcs_v</p></td>
-<td><p>radar_cross_section_vv</p></td>
-</tr>
-<tr class="row-odd"><td><p>VPRcorr</p></td>
-<td><p>vpr_correction</p></td>
-</tr>
-<tr class="row-even"><td><p>VPRFEATURES</p></td>
-<td><p>vpr_features</p></td>
-</tr>
-<tr class="row-odd"><td><p>sigma_zh</p></td>
-<td><p>sigma_zh</p></td>
-</tr>
-<tr class="row-even"><td><p>ZDR</p></td>
-<td><p>differential_reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>ZDRu</p></td>
-<td><p>unfiltered_differential_reflectivity</p></td>
-</tr>
-<tr class="row-even"><td><p>ZDRc</p></td>
-<td><p>corrected_differential_reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>ZDRuc</p></td>
-<td><p>corrected_unfiltered_differential_reflectivity</p></td>
-</tr>
-<tr class="row-even"><td><p>ZDR_prec</p></td>
-<td><p>differential_reflectivity_in_precipitation</p></td>
-</tr>
-<tr class="row-odd"><td><p>ZDR_snow</p></td>
-<td><p>differential_reflectivity_in_snow</p></td>
-</tr>
-<tr class="row-even"><td><p>ZDR_col</p></td>
-<td><p>differential_reflectivity_column_height</p></td>
-</tr>
-<tr class="row-odd"><td><p>LDRhv</p></td>
-<td><p>linear_depolarization_ratio_hv</p></td>
-</tr>
-<tr class="row-even"><td><p>LDRvh</p></td>
-<td><p>linear_depolarization_ratio_vh</p></td>
-</tr>
-<tr class="row-odd"><td><p>dBm</p></td>
-<td><p>signal_power_hh</p></td>
-</tr>
-<tr class="row-even"><td><p>dBmv</p></td>
-<td><p>signal_power_vv</p></td>
-</tr>
-<tr class="row-odd"><td><p>Nh</p></td>
-<td><p>noisedBZ_hh</p></td>
-</tr>
-<tr class="row-even"><td><p>Nv</p></td>
-<td><p>noisedBZ_vv</p></td>
-</tr>
-<tr class="row-odd"><td><p>NdBADUh</p></td>
-<td><p>noisedBADU_hh</p></td>
-</tr>
-<tr class="row-even"><td><p>NdBADUv</p></td>
-<td><p>noisedBADU_vv</p></td>
-</tr>
-<tr class="row-odd"><td><p>NdBmh</p></td>
-<td><p>noisedBm_hh</p></td>
-</tr>
-<tr class="row-even"><td><p>NdBmv</p></td>
-<td><p>noisedBm_vv</p></td>
-</tr>
-<tr class="row-odd"><td><p>NADUh</p></td>
-<td><p>noiseADU_hh</p></td>
-</tr>
-<tr class="row-even"><td><p>NADUv</p></td>
-<td><p>noiseADU_vv</p></td>
-</tr>
-<tr class="row-odd"><td><p>noise_pos_h</p></td>
-<td><p>noise_pos_h</p></td>
-</tr>
-<tr class="row-even"><td><p>noise_pos_v</p></td>
-<td><p>noise_pos_v</p></td>
-</tr>
-<tr class="row-odd"><td><p>Nclip_h</p></td>
-<td><p>noise_clipping_level_hh_dBZ</p></td>
-</tr>
-<tr class="row-even"><td><p>Nclip_v</p></td>
-<td><p>noise_clipping_level_vv_dBZ</p></td>
-</tr>
-<tr class="row-odd"><td><p>WBN</p></td>
-<td><p>wide_band_noise</p></td>
-</tr>
-<tr class="row-even"><td><p>WBNc</p></td>
-<td><p>corrected_wide_band_noise</p></td>
-</tr>
-<tr class="row-odd"><td><p>ST1</p></td>
-<td><p>stat_test_lag1</p></td>
-</tr>
-<tr class="row-even"><td><p>ST1c</p></td>
-<td><p>corrected_stat_test_lag1</p></td>
-</tr>
-<tr class="row-odd"><td><p>ST2</p></td>
-<td><p>stat_test_lag2</p></td>
-</tr>
-<tr class="row-even"><td><p>ST2c</p></td>
-<td><p>corrected_stat_test_lag2</p></td>
-</tr>
-<tr class="row-odd"><td><p>TXh</p></td>
-<td><p>transmitted_signal_power_h</p></td>
-</tr>
-<tr class="row-even"><td><p>TXv</p></td>
-<td><p>transmitted_signal_power_v</p></td>
-</tr>
-<tr class="row-odd"><td><p>SNRh</p></td>
-<td><p>signal_to_noise_ratio_hh</p></td>
-</tr>
-<tr class="row-even"><td><p>SNRv</p></td>
-<td><p>signal_to_noise_ratio_vv</p></td>
-</tr>
-<tr class="row-odd"><td><p>SNR</p></td>
-<td><p>signal_to_noise_ratio</p></td>
-</tr>
-<tr class="row-even"><td><p>CCORh</p></td>
-<td><p>clutter_correction_ratio_hh</p></td>
-</tr>
-<tr class="row-odd"><td><p>CCORv</p></td>
-<td><p>clutter_correction_ratio_vv</p></td>
-</tr>
-<tr class="row-even"><td><p>dBm_sun_hit</p></td>
-<td><p>sun_hit_power_h</p></td>
-</tr>
-<tr class="row-odd"><td><p>dBmv_sun_hit</p></td>
-<td><p>sun_hit_power_v</p></td>
-</tr>
-<tr class="row-even"><td><p>ZDR_sun_hit</p></td>
-<td><p>sun_hit_differential_reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>dBm_sun_est</p></td>
-<td><p>sun_est_power_h</p></td>
-</tr>
-<tr class="row-even"><td><p>dBmv_sun_est</p></td>
-<td><p>sun_est_power_v</p></td>
-</tr>
-<tr class="row-odd"><td><p>ZDR_sun_est</p></td>
-<td><p>sun_est_differential_reflectivity</p></td>
-</tr>
-<tr class="row-even"><td><p>sun_pos_h</p></td>
-<td><p>sun_hit_h</p></td>
-</tr>
-<tr class="row-odd"><td><p>sun_pos_v</p></td>
-<td><p>sun_hit_v</p></td>
-</tr>
-<tr class="row-even"><td><p>sun_pos_zdr</p></td>
-<td><p>sun_hit_zdr</p></td>
-</tr>
-<tr class="row-odd"><td><p>RhoHV</p></td>
-<td><p>cross_correlation_ratio</p></td>
-</tr>
-<tr class="row-even"><td><p>RhoHVu</p></td>
-<td><p>unfiltered_cross_correlation_ratio</p></td>
-</tr>
-<tr class="row-odd"><td><p>uRhoHV</p></td>
-<td><p>uncorrected_cross_correlation_ratio</p></td>
-</tr>
-<tr class="row-even"><td><p>RhoHVc</p></td>
-<td><p>corrected_cross_correlation_ratio</p></td>
-</tr>
-<tr class="row-odd"><td><p>RhoHV_rain</p></td>
-<td><p>cross_correlation_ratio_in_rain</p></td>
-</tr>
-<tr class="row-even"><td><p>RhoHV_theo</p></td>
-<td><p>theoretical_cross_correlation_ratio</p></td>
-</tr>
-<tr class="row-odd"><td><p>L</p></td>
-<td><p>logarithmic_cross_correlation_ratio</p></td>
-</tr>
-<tr class="row-even"><td><p>CDR</p></td>
-<td><p>circular_depolarization_ratio</p></td>
-</tr>
-<tr class="row-odd"><td><p>PhiDP</p></td>
-<td><p>differential_phase</p></td>
-</tr>
-<tr class="row-even"><td><p>uPhiDPu</p></td>
-<td><p>uncorrected_unfiltered_differential_phase</p></td>
-</tr>
-<tr class="row-odd"><td><p>uPhiDP</p></td>
-<td><p>uncorrected_differential_phase</p></td>
-</tr>
-<tr class="row-even"><td><p>PhiDPc</p></td>
-<td><p>corrected_differential_phase</p></td>
-</tr>
-<tr class="row-odd"><td><p>PhiDP0</p></td>
-<td><p>system_differential_phase</p></td>
-</tr>
-<tr class="row-even"><td><p>PhiDP0_bin</p></td>
-<td><p>first_gate_differential_phase</p></td>
-</tr>
-<tr class="row-odd"><td><p>KDP</p></td>
-<td><p>specific_differential_phase</p></td>
-</tr>
-<tr class="row-even"><td><p>uKDP</p></td>
-<td><p>uncorrected_specific_differential_phase</p></td>
-</tr>
-<tr class="row-odd"><td><p>KDPc</p></td>
-<td><p>corrected_specific_differential_phase</p></td>
-</tr>
-<tr class="row-even"><td><p>MPH</p></td>
-<td><p>mean_phase</p></td>
-</tr>
-<tr class="row-odd"><td><p>MPHc</p></td>
-<td><p>corrected_mean_phase</p></td>
-</tr>
-<tr class="row-even"><td><p>V</p></td>
-<td><p>velocity</p></td>
-</tr>
-<tr class="row-odd"><td><p>Vv</p></td>
-<td><p>velocity_vv</p></td>
-</tr>
-<tr class="row-even"><td><p>Vhv</p></td>
-<td><p>velocity_hv</p></td>
-</tr>
-<tr class="row-odd"><td><p>Vvh</p></td>
-<td><p>velocity_vh</p></td>
-</tr>
-<tr class="row-even"><td><p>Vu</p></td>
-<td><p>unfiltered_velocity</p></td>
-</tr>
-<tr class="row-odd"><td><p>dealV</p></td>
-<td><p>dealiased_velocity</p></td>
-</tr>
-<tr class="row-even"><td><p>Vc</p></td>
-<td><p>corrected_velocity</p></td>
-</tr>
-<tr class="row-odd"><td><p>dealVc</p></td>
-<td><p>dealiased_corrected_velocity</p></td>
-</tr>
-<tr class="row-even"><td><p>estV</p></td>
-<td><p>retrieved_velocity</p></td>
-</tr>
-<tr class="row-odd"><td><p>stdV</p></td>
-<td><p>retrieved_velocity_std</p></td>
-</tr>
-<tr class="row-even"><td><p>diffV</p></td>
-<td><p>velocity_difference</p></td>
-</tr>
-<tr class="row-odd"><td><p>W</p></td>
-<td><p>spectrum_width</p></td>
-</tr>
-<tr class="row-even"><td><p>Wv</p></td>
-<td><p>spectrum_width_vv</p></td>
-</tr>
-<tr class="row-odd"><td><p>Whv</p></td>
-<td><p>spectrum_width_hv</p></td>
-</tr>
-<tr class="row-even"><td><p>Wvh</p></td>
-<td><p>spectrum_width_vh</p></td>
-</tr>
-<tr class="row-odd"><td><p>Wu</p></td>
-<td><p>unfiltered_spectrum_width</p></td>
-</tr>
-<tr class="row-even"><td><p>Wc</p></td>
-<td><p>corrected_spectrum_width</p></td>
-</tr>
-<tr class="row-odd"><td><p>wind_vel_h_az</p></td>
-<td><p>azimuthal_horizontal_wind_component</p></td>
-</tr>
-<tr class="row-even"><td><p>wind_vel_v</p></td>
-<td><p>vertical_wind_component</p></td>
-</tr>
-<tr class="row-odd"><td><p>wind_vel_h_u</p></td>
-<td><p>eastward_wind_component</p></td>
-</tr>
-<tr class="row-even"><td><p>wind_vel_h_v</p></td>
-<td><p>northward_wind_component</p></td>
-</tr>
-<tr class="row-odd"><td><p>windshear_v</p></td>
-<td><p>vertical_wind_shear</p></td>
-</tr>
-<tr class="row-even"><td><p>WIND_SPEED</p></td>
-<td><p>wind_speed</p></td>
-</tr>
-<tr class="row-odd"><td><p>WIND_DIRECTION</p></td>
-<td><p>wind_direction</p></td>
-</tr>
-<tr class="row-even"><td><p>EDR</p></td>
-<td><p>turbulence</p></td>
-</tr>
-<tr class="row-odd"><td><p>Ah</p></td>
-<td><p>specific_attenuation</p></td>
-</tr>
-<tr class="row-even"><td><p>Ahc</p></td>
-<td><p>corrected_specific_attenuation</p></td>
-</tr>
-<tr class="row-odd"><td><p>PIA</p></td>
-<td><p>path_integrated_attenuation</p></td>
-</tr>
-<tr class="row-even"><td><p>PIAc</p></td>
-<td><p>corrected_path_integrated_attenuation</p></td>
-</tr>
-<tr class="row-odd"><td><p>Adp</p></td>
-<td><p>specific_differential_attenuation</p></td>
-</tr>
-<tr class="row-even"><td><p>Adpc</p></td>
-<td><p>corrected_specific_differential_attenuation</p></td>
-</tr>
-<tr class="row-odd"><td><p>PIDA</p></td>
-<td><p>path_integrated_differential_attenuation</p></td>
-</tr>
-<tr class="row-even"><td><p>PIDAc</p></td>
-<td><p>corrected_path_integrated_differential_attenuation</p></td>
-</tr>
-<tr class="row-odd"><td><p>TEMP</p></td>
-<td><p>temperature</p></td>
-</tr>
-<tr class="row-even"><td><p>ISO0</p></td>
-<td><p>iso0</p></td>
-</tr>
-<tr class="row-odd"><td><p>H_ISO0</p></td>
-<td><p>height_over_iso0</p></td>
-</tr>
-<tr class="row-even"><td><p>H_ISO0c</p></td>
-<td><p>corrected_height_over_iso0</p></td>
-</tr>
-<tr class="row-odd"><td><p>HZT</p></td>
-<td><p>iso0_height</p></td>
-</tr>
-<tr class="row-even"><td><p>HZTc</p></td>
-<td><p>corrected_iso0_height</p></td>
-</tr>
-<tr class="row-odd"><td><p>icon_index</p></td>
-<td><p>icon_index</p></td>
-</tr>
-<tr class="row-even"><td><p>hzt_index</p></td>
-<td><p>hzt_index</p></td>
-</tr>
-<tr class="row-odd"><td><p>ml</p></td>
-<td><p>melting_layer</p></td>
-</tr>
-<tr class="row-even"><td><p>VIS</p></td>
-<td><p>visibility</p></td>
-</tr>
-<tr class="row-odd"><td><p>HGHT</p></td>
-<td><p>height</p></td>
-</tr>
-<tr class="row-even"><td><p>vis</p></td>
-<td><p>visibility</p></td>
-</tr>
-<tr class="row-odd"><td><p>visibility</p></td>
-<td><p>visibility</p></td>
-</tr>
-<tr class="row-even"><td><p>visibility_polar</p></td>
-<td><p>visibility_polar</p></td>
-</tr>
-<tr class="row-odd"><td><p>terrain_altitude</p></td>
-<td><p>terrain_altitude</p></td>
-</tr>
-<tr class="row-even"><td><p>bent_terrain_altitude</p></td>
-<td><p>bent_terrain_altitude</p></td>
-</tr>
-<tr class="row-odd"><td><p>terrain_slope</p></td>
-<td><p>terrain_slope</p></td>
-</tr>
-<tr class="row-even"><td><p>terrain_aspect</p></td>
-<td><p>terrain_aspect</p></td>
-</tr>
-<tr class="row-odd"><td><p>elevation_angle</p></td>
-<td><p>elevation_angle</p></td>
-</tr>
-<tr class="row-even"><td><p>min_vis_elevation</p></td>
-<td><p>min_vis_elevation</p></td>
-</tr>
-<tr class="row-odd"><td><p>min_vis_altitude</p></td>
-<td><p>min_vis_altitude</p></td>
-</tr>
-<tr class="row-even"><td><p>incident_angle</p></td>
-<td><p>incident_angle</p></td>
-</tr>
-<tr class="row-odd"><td><p>sigma_0</p></td>
-<td><p>sigma_0</p></td>
-</tr>
-<tr class="row-even"><td><p>effective_area</p></td>
-<td><p>effective_area</p></td>
-</tr>
-<tr class="row-odd"><td><p>dBm_clutter</p></td>
-<td><p>dBm_clutter</p></td>
-</tr>
-<tr class="row-even"><td><p>dBZ_clutter</p></td>
-<td><p>dBZ_clutter</p></td>
-</tr>
-<tr class="row-odd"><td><p>echoID</p></td>
-<td><p>radar_echo_id</p></td>
-</tr>
-<tr class="row-even"><td><p>CLT</p></td>
-<td><p>clutter_exit_code</p></td>
-</tr>
-<tr class="row-odd"><td><p>occurrence</p></td>
-<td><p>occurrence</p></td>
-</tr>
-<tr class="row-even"><td><p>freq_occu</p></td>
-<td><p>frequency_of_occurrence</p></td>
-</tr>
-<tr class="row-odd"><td><p>RR</p></td>
-<td><p>radar_estimated_rain_rate</p></td>
-</tr>
-<tr class="row-even"><td><p>RR_MP</p></td>
-<td><p>Marshall_Palmer_radar_estimated_rain_rate</p></td>
-</tr>
-<tr class="row-odd"><td><p>RR_Z</p></td>
-<td><p>radar_reflectivity_estimated_rain_rate</p></td>
-</tr>
-<tr class="row-even"><td><p>RR_KDP</p></td>
-<td><p>radar_kdp_estimated_rain_rate</p></td>
-</tr>
-<tr class="row-odd"><td><p>RR_flag</p></td>
-<td><p>radar_estimated_rain_rate_flag</p></td>
-</tr>
-<tr class="row-even"><td><p>RRc</p></td>
-<td><p>corrected_radar_estimated_rain_rate</p></td>
-</tr>
-<tr class="row-odd"><td><p>Raccu</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-even"><td><p>RaccuMF</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-odd"><td><p>QIMF</p></td>
-<td><p>signal_quality_index</p></td>
-</tr>
-<tr class="row-even"><td><p>QI</p></td>
-<td><p>signal_quality_index</p></td>
-</tr>
-<tr class="row-odd"><td><p>AF</p></td>
-<td><p>adjustment_factor</p></td>
-</tr>
-<tr class="row-even"><td><p>radar_R_rel</p></td>
-<td><p>radar_rainrate_relation</p></td>
-</tr>
-<tr class="row-odd"><td><p>prec_type</p></td>
-<td><p>precipitation_type</p></td>
-</tr>
-<tr class="row-even"><td><p>hydro</p></td>
-<td><p>radar_echo_classification</p></td>
-</tr>
-<tr class="row-odd"><td><p>hydroMF</p></td>
-<td><p>radar_echo_classification_MF</p></td>
-</tr>
-<tr class="row-even"><td><p>hydroc</p></td>
-<td><p>corrected_radar_echo_classification</p></td>
-</tr>
-<tr class="row-odd"><td><p>confidence</p></td>
-<td><p>hydroclass_confidence</p></td>
-</tr>
-<tr class="row-even"><td><p>entropy</p></td>
-<td><p>hydroclass_entropy</p></td>
-</tr>
-<tr class="row-odd"><td><p>propAG</p></td>
-<td><p>proportion_AG</p></td>
-</tr>
-<tr class="row-even"><td><p>propCR</p></td>
-<td><p>proportion_CR</p></td>
-</tr>
-<tr class="row-odd"><td><p>propLR</p></td>
-<td><p>proportion_LR</p></td>
-</tr>
-<tr class="row-even"><td><p>propRP</p></td>
-<td><p>proportion_RP</p></td>
-</tr>
-<tr class="row-odd"><td><p>propRN</p></td>
-<td><p>proportion_RN</p></td>
-</tr>
-<tr class="row-even"><td><p>propVI</p></td>
-<td><p>proportion_VI</p></td>
-</tr>
-<tr class="row-odd"><td><p>propWS</p></td>
-<td><p>proportion_WS</p></td>
-</tr>
-<tr class="row-even"><td><p>propMH</p></td>
-<td><p>proportion_MH</p></td>
-</tr>
-<tr class="row-odd"><td><p>propIH</p></td>
-<td><p>proportion_IH</p></td>
-</tr>
-<tr class="row-even"><td><p>probAG</p></td>
-<td><p>probability_AG</p></td>
-</tr>
-<tr class="row-odd"><td><p>probCR</p></td>
-<td><p>probability_CR</p></td>
-</tr>
-<tr class="row-even"><td><p>probLR</p></td>
-<td><p>probability_LR</p></td>
-</tr>
-<tr class="row-odd"><td><p>probRP</p></td>
-<td><p>probability_RP</p></td>
-</tr>
-<tr class="row-even"><td><p>probRN</p></td>
-<td><p>probability_RN</p></td>
-</tr>
-<tr class="row-odd"><td><p>probVI</p></td>
-<td><p>probability_VI</p></td>
-</tr>
-<tr class="row-even"><td><p>probWS</p></td>
-<td><p>probability_WS</p></td>
-</tr>
-<tr class="row-odd"><td><p>probMH</p></td>
-<td><p>probability_MH</p></td>
-</tr>
-<tr class="row-even"><td><p>probIH</p></td>
-<td><p>probability_IH</p></td>
-</tr>
-<tr class="row-odd"><td><p>time_avg_flag</p></td>
-<td><p>time_avg_flag</p></td>
-</tr>
-<tr class="row-even"><td><p>colocated_gates</p></td>
-<td><p>colocated_gates</p></td>
-</tr>
-<tr class="row-odd"><td><p>nsamples</p></td>
-<td><p>number_of_samples</p></td>
-</tr>
-<tr class="row-even"><td><p>bird_density</p></td>
-<td><p>bird_density</p></td>
-</tr>
-<tr class="row-odd"><td><p>std</p></td>
-<td><p>standard_deviation</p></td>
-</tr>
-<tr class="row-even"><td><p>sum</p></td>
-<td><p>sum</p></td>
-</tr>
-<tr class="row-odd"><td><p>sum2</p></td>
-<td><p>sum_squared</p></td>
-</tr>
-<tr class="row-even"><td><p>diff</p></td>
-<td><p>fields_difference</p></td>
-</tr>
-<tr class="row-odd"><td><p>mask</p></td>
-<td><p>field_mask</p></td>
-</tr>
-<tr class="row-even"><td><p>texture</p></td>
-<td><p>field_texture</p></td>
-</tr>
-<tr class="row-odd"><td><p>ShhADU</p></td>
-<td><p>complex_spectra_hh_ADU</p></td>
-</tr>
-<tr class="row-even"><td><p>ShhADUu</p></td>
-<td><p>unfiltered_complex_spectra_hh_ADU</p></td>
-</tr>
-<tr class="row-odd"><td><p>SvvADU</p></td>
-<td><p>complex_spectra_vv_ADU</p></td>
-</tr>
-<tr class="row-even"><td><p>SvvADUu</p></td>
-<td><p>unfiltered_complex_spectra_vv_ADU</p></td>
-</tr>
-<tr class="row-odd"><td><p>sPhhADU</p></td>
-<td><p>spectral_power_hh_ADU</p></td>
-</tr>
-<tr class="row-even"><td><p>sPhhADUu</p></td>
-<td><p>unfiltered_spectral_power_hh_ADU</p></td>
-</tr>
-<tr class="row-odd"><td><p>sPvvADU</p></td>
-<td><p>spectral_power_vv_ADU</p></td>
-</tr>
-<tr class="row-even"><td><p>sPvvADUu</p></td>
-<td><p>unfiltered_spectral_power_vv_ADU</p></td>
-</tr>
-<tr class="row-odd"><td><p>sPhhdBADU</p></td>
-<td><p>spectral_power_hh_dBADU</p></td>
-</tr>
-<tr class="row-even"><td><p>sPhhdBADUu</p></td>
-<td><p>unfiltered_spectral_power_hh_dBADU</p></td>
-</tr>
-<tr class="row-odd"><td><p>sPvvdBADU</p></td>
-<td><p>spectral_power_vv_dBADU</p></td>
-</tr>
-<tr class="row-even"><td><p>sPvvdBADUu</p></td>
-<td><p>unfiltered_spectral_power_vv_dBADU</p></td>
-</tr>
-<tr class="row-odd"><td><p>sPhhdBm</p></td>
-<td><p>spectral_power_hh_dBm</p></td>
-</tr>
-<tr class="row-even"><td><p>sPhhdBmu</p></td>
-<td><p>unfiltered_spectral_power_hh_dBm</p></td>
-</tr>
-<tr class="row-odd"><td><p>sPvvdBm</p></td>
-<td><p>spectral_power_vv_dBm</p></td>
-</tr>
-<tr class="row-even"><td><p>sPvvdBmu</p></td>
-<td><p>unfiltered_spectral_power_vv_dBm</p></td>
-</tr>
-<tr class="row-odd"><td><p>sNh</p></td>
-<td><p>spectral_noise_power_hh_dBZ</p></td>
-</tr>
-<tr class="row-even"><td><p>sNv</p></td>
-<td><p>spectral_noise_power_vv_dBZ</p></td>
-</tr>
-<tr class="row-odd"><td><p>sNdBADUh</p></td>
-<td><p>spectral_noise_power_hh_dBADU</p></td>
-</tr>
-<tr class="row-even"><td><p>sNdBADUv</p></td>
-<td><p>spectral_noise_power_vv_dBADU</p></td>
-</tr>
-<tr class="row-odd"><td><p>sNdBmh</p></td>
-<td><p>spectral_noise_power_hh_dBm</p></td>
-</tr>
-<tr class="row-even"><td><p>sNdBmv</p></td>
-<td><p>spectral_noise_power_vv_dBm</p></td>
-</tr>
-<tr class="row-odd"><td><p>sNADUh</p></td>
-<td><p>spectral_noise_power_hh_ADU</p></td>
-</tr>
-<tr class="row-even"><td><p>sNADUv</p></td>
-<td><p>spectral_noise_power_vv_ADU</p></td>
-</tr>
-<tr class="row-odd"><td><p>sPhasehh</p></td>
-<td><p>spectral_phase_hh</p></td>
-</tr>
-<tr class="row-even"><td><p>sPhasehhu</p></td>
-<td><p>unfiltered_spectral_phase_hh</p></td>
-</tr>
-<tr class="row-odd"><td><p>sPhasevv</p></td>
-<td><p>spectral_phase_vv</p></td>
-</tr>
-<tr class="row-even"><td><p>sPhasevvu</p></td>
-<td><p>unfiltered_spectral_phase_vv</p></td>
-</tr>
-<tr class="row-odd"><td><p>sdBZ</p></td>
-<td><p>spectral_reflectivity_hh</p></td>
-</tr>
-<tr class="row-even"><td><p>sdBuZ</p></td>
-<td><p>unfiltered_spectral_reflectivity_hh</p></td>
-</tr>
-<tr class="row-odd"><td><p>sdBZv</p></td>
-<td><p>spectral_reflectivity_vv</p></td>
-</tr>
-<tr class="row-even"><td><p>sdBuZv</p></td>
-<td><p>unfiltered_spectral_reflectivity_vv</p></td>
-</tr>
-<tr class="row-odd"><td><p>sZDR</p></td>
-<td><p>spectral_differential_reflectivity</p></td>
-</tr>
-<tr class="row-even"><td><p>sZDRu</p></td>
-<td><p>unfiltered_spectral_differential_reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>sPhiDP</p></td>
-<td><p>spectral_differential_phase</p></td>
-</tr>
-<tr class="row-even"><td><p>sPhiDPu</p></td>
-<td><p>unfiltered_spectral_differential_phase</p></td>
-</tr>
-<tr class="row-odd"><td><p>sRhoHV</p></td>
-<td><p>spectral_copolar_correlation_coefficient</p></td>
-</tr>
-<tr class="row-even"><td><p>sRhoHVu</p></td>
-<td><p>unfiltered_spectral_copolar_correlation_coefficient</p></td>
-</tr>
-<tr class="row-odd"><td><p>IQhhADU</p></td>
-<td><p>IQ_hh_ADU</p></td>
-</tr>
-<tr class="row-even"><td><p>IQvvADU</p></td>
-<td><p>IQ_vv_ADU</p></td>
-</tr>
-<tr class="row-odd"><td><p>IQNh</p></td>
-<td><p>IQ_noise_power_hh_dBZ</p></td>
-</tr>
-<tr class="row-even"><td><p>IQNv</p></td>
-<td><p>IQ_noise_power_vv_dBZ</p></td>
-</tr>
-<tr class="row-odd"><td><p>IQNdBADUh</p></td>
-<td><p>IQ_noise_power_hh_dBADU</p></td>
-</tr>
-<tr class="row-even"><td><p>IQNdBADUv</p></td>
-<td><p>IQ_noise_power_vv_dBADU</p></td>
-</tr>
-<tr class="row-odd"><td><p>IQNdBmh</p></td>
-<td><p>IQ_noise_power_hh_dBm</p></td>
-</tr>
-<tr class="row-even"><td><p>IQNdBmv</p></td>
-<td><p>IQ_noise_power_vv_dBm</p></td>
-</tr>
-<tr class="row-odd"><td><p>IQNADUh</p></td>
-<td><p>IQ_noise_power_hh_ADU</p></td>
-</tr>
-<tr class="row-even"><td><p>IQNADUv</p></td>
-<td><p>IQ_noise_power_vv_ADU</p></td>
-</tr>
-<tr class="row-odd"><td><p>POH</p></td>
-<td><p>probability_of_hail</p></td>
-</tr>
-<tr class="row-even"><td><p>VIL</p></td>
-<td><p>vertically_integrated_liquid</p></td>
-</tr>
-<tr class="row-odd"><td><p>ETOP15</p></td>
-<td><p>echo_top_15dBZ</p></td>
-</tr>
-<tr class="row-even"><td><p>ETOP20</p></td>
-<td><p>echo_top_20dBZ</p></td>
-</tr>
-<tr class="row-odd"><td><p>ETOP45</p></td>
-<td><p>echo_top_45dBZ</p></td>
-</tr>
-<tr class="row-even"><td><p>ETOP50</p></td>
-<td><p>echo_top_50dBZ</p></td>
-</tr>
-<tr class="row-odd"><td><p>MAXECHO</p></td>
-<td><p>maximum_echo</p></td>
-</tr>
-<tr class="row-even"><td><p>HMAXECHO</p></td>
-<td><p>maximum_echo_height</p></td>
-</tr>
-<tr class="row-odd"><td><p>AZC01</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-even"><td><p>AZC03</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-odd"><td><p>AZC06</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-even"><td><p>aZC01</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-odd"><td><p>aZC03</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-even"><td><p>aZC06</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-odd"><td><p>CPC0005</p></td>
-<td><p>radar_estimated_rain_rate</p></td>
-</tr>
-<tr class="row-even"><td><p>CPC0060</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-odd"><td><p>CPC0180</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-even"><td><p>CPC0360</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-odd"><td><p>CPC0720</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-even"><td><p>CPC1440</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-odd"><td><p>CPC2880</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-even"><td><p>CPC4320</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-odd"><td><p>CPCH0005</p></td>
-<td><p>radar_estimated_rain_rate</p></td>
-</tr>
-<tr class="row-even"><td><p>CPCH0060</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-odd"><td><p>CPCH0180</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-even"><td><p>CPCH0360</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-odd"><td><p>CPCH0720</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-even"><td><p>CPCH1440</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-odd"><td><p>CPCH2880</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-even"><td><p>CPCH4320</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-odd"><td><p>nowpal60_P60</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-even"><td><p>nowpal90_P90</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-odd"><td><p>nowpal180_P180</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-even"><td><p>nowpal360_P360</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-odd"><td><p>nowpal720_P720</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-even"><td><p>nowpal90_P30</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-odd"><td><p>nowpal90_P30_F60</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-even"><td><p>nowpal90_F60</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-odd"><td><p>nowpal180_P60</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-even"><td><p>nowpal180_P60_F120</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-odd"><td><p>nowpal180_F120</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-even"><td><p>nowpal360_P120</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-odd"><td><p>nowpal360_P120_F240</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-even"><td><p>nowpal360_F240</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-odd"><td><p>nowpal720_P360</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-even"><td><p>nowpal720_P360_F360</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-odd"><td><p>nowpal720_F360</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-even"><td><p>dACC</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-odd"><td><p>dACCH</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-even"><td><p>dARC</p></td>
-<td><p>rainfall_accumulation</p></td>
-</tr>
-<tr class="row-odd"><td><p>RZC</p></td>
-<td><p>radar_estimated_rain_rate</p></td>
-</tr>
-<tr class="row-even"><td><p>R1F</p></td>
-<td><p>radar_estimated_rain_rate</p></td>
-</tr>
-<tr class="row-odd"><td><p>rZC</p></td>
-<td><p>radar_estimated_rain_rate</p></td>
-</tr>
-<tr class="row-even"><td><p>RZF</p></td>
-<td><p>radar_estimated_rain_rate</p></td>
-</tr>
-<tr class="row-odd"><td><p>dRZC</p></td>
-<td><p>radar_estimated_rain_rate</p></td>
-</tr>
-<tr class="row-even"><td><p>BZC</p></td>
-<td><p>probability_of_hail</p></td>
-</tr>
-<tr class="row-odd"><td><p>dBZC</p></td>
-<td><p>probability_of_hail</p></td>
-</tr>
-<tr class="row-even"><td><p>MZC</p></td>
-<td><p>maximum_expected_severe_hail_size</p></td>
-</tr>
-<tr class="row-odd"><td><p>dMZC</p></td>
-<td><p>maximum_expected_severe_hail_size</p></td>
-</tr>
-<tr class="row-even"><td><p>GZC</p></td>
-<td><p>probability_of_hail</p></td>
-</tr>
-<tr class="row-odd"><td><p>dGZC</p></td>
-<td><p>probability_of_hail</p></td>
-</tr>
-<tr class="row-even"><td><p>CZC</p></td>
-<td><p>maximum_echo</p></td>
-</tr>
-<tr class="row-odd"><td><p>dCZC</p></td>
-<td><p>maximum_echo</p></td>
-</tr>
-<tr class="row-even"><td><p>HZC</p></td>
-<td><p>maximum_echo_height</p></td>
-</tr>
-<tr class="row-odd"><td><p>EZC15</p></td>
-<td><p>echo_top_15dBz</p></td>
-</tr>
-<tr class="row-even"><td><p>EZC20</p></td>
-<td><p>echo_top_20dBz</p></td>
-</tr>
-<tr class="row-odd"><td><p>EZC45</p></td>
-<td><p>echo_top_45dBz</p></td>
-</tr>
-<tr class="row-even"><td><p>EZC50</p></td>
-<td><p>echo_top_50dBz</p></td>
-</tr>
-<tr class="row-odd"><td><p>dEZC15</p></td>
-<td><p>echo_top_15dBZ</p></td>
-</tr>
-<tr class="row-even"><td><p>dEZC20</p></td>
-<td><p>echo_top_20dBz</p></td>
-</tr>
-<tr class="row-odd"><td><p>dEZC45</p></td>
-<td><p>echo_top_45dBz</p></td>
-</tr>
-<tr class="row-even"><td><p>dEZC50</p></td>
-<td><p>echo_top_50dBz</p></td>
-</tr>
-<tr class="row-odd"><td><p>LZC</p></td>
-<td><p>vertically_integrated_liquid</p></td>
-</tr>
-<tr class="row-even"><td><p>dLZC</p></td>
-<td><p>vertically_integrated_liquid</p></td>
-</tr>
-<tr class="row-odd"><td><p>OZC01</p></td>
-<td><p>reflectivity</p></td>
-</tr>
-<tr class="row-even"><td><p>OZC02</p></td>
-<td><p>reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>OZC03</p></td>
-<td><p>reflectivity</p></td>
-</tr>
-<tr class="row-even"><td><p>OZC04</p></td>
-<td><p>reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>OZC05</p></td>
-<td><p>reflectivity</p></td>
-</tr>
-<tr class="row-even"><td><p>OZC06</p></td>
-<td><p>reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>OZC07</p></td>
-<td><p>reflectivity</p></td>
-</tr>
-<tr class="row-even"><td><p>OZC08</p></td>
-<td><p>reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>OZC09</p></td>
-<td><p>reflectivity</p></td>
-</tr>
-<tr class="row-even"><td><p>OZC10</p></td>
-<td><p>reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>OZC11</p></td>
-<td><p>reflectivity</p></td>
-</tr>
-<tr class="row-even"><td><p>OZC12</p></td>
-<td><p>reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>OZC13</p></td>
-<td><p>reflectivity</p></td>
-</tr>
-<tr class="row-even"><td><p>OZC14</p></td>
-<td><p>reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>OZC15</p></td>
-<td><p>reflectivity</p></td>
-</tr>
-<tr class="row-even"><td><p>OZC16</p></td>
-<td><p>reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>OZC17</p></td>
-<td><p>reflectivity</p></td>
-</tr>
-<tr class="row-even"><td><p>OZC18</p></td>
-<td><p>reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>ff</p></td>
-<td><p>wind_speed</p></td>
-</tr>
-<tr class="row-even"><td><p>dd</p></td>
-<td><p>wind_direction</p></td>
-</tr>
-<tr class="row-odd"><td><p>u</p></td>
-<td><p>eastward_wind_component</p></td>
-</tr>
-<tr class="row-even"><td><p>v</p></td>
-<td><p>northward_wind_component</p></td>
-</tr>
-<tr class="row-odd"><td><p>w</p></td>
-<td><p>vertical_wind_component</p></td>
-</tr>
-<tr class="row-even"><td><p>width</p></td>
-<td><p>height_resolution</p></td>
-</tr>
-<tr class="row-odd"><td><p>gap</p></td>
-<td><p>gap</p></td>
-</tr>
-<tr class="row-even"><td><p>dbz</p></td>
-<td><p>bird_reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>eta</p></td>
-<td><p>volumetric_reflectivity</p></td>
-</tr>
-<tr class="row-even"><td><p>dens</p></td>
-<td><p>bird_density</p></td>
-</tr>
-<tr class="row-odd"><td><p>n</p></td>
-<td><p>number_of_samples_velocity</p></td>
-</tr>
-<tr class="row-even"><td><p>n_dbz</p></td>
-<td><p>number_of_samples_reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>sd_vvp</p></td>
-<td><p>retrieved_velocity_std</p></td>
-</tr>
-<tr class="row-even"><td><p>DBZH</p></td>
-<td><p>reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>n_all</p></td>
-<td><p>number_of_samples_velocity_all</p></td>
-</tr>
-<tr class="row-even"><td><p>n_dbz_all</p></td>
-<td><p>number_of_samples_reflectivity_all</p></td>
-</tr>
-<tr class="row-odd"><td><p>VOL2BIRD_CLASS</p></td>
-<td><p>vol2bird_echo_classification</p></td>
-</tr>
-<tr class="row-even"><td><p>VOL2BIRD_WEATHER</p></td>
-<td><p>vol2bird_weather</p></td>
-</tr>
-<tr class="row-odd"><td><p>VOL2BIRD_BACKGROUND</p></td>
-<td><p>vol2bird_background</p></td>
-</tr>
-<tr class="row-even"><td><p>VOL2BIRD_BIOLOGY</p></td>
-<td><p>vol2bird_biology</p></td>
-</tr>
-<tr class="row-odd"><td><p>wind_vel_rad</p></td>
-<td><p>radial_wind_speed</p></td>
-</tr>
-<tr class="row-even"><td><p>wind_vel_rad_filtered</p></td>
-<td><p>corrected_radial_wind_speed</p></td>
-</tr>
-<tr class="row-odd"><td><p>wind_vel_rad_ci</p></td>
-<td><p>radial_wind_speed_ci</p></td>
-</tr>
-<tr class="row-even"><td><p>wind_vel_rad_status</p></td>
-<td><p>radial_wind_speed_status</p></td>
-</tr>
-<tr class="row-odd"><td><p>WD</p></td>
-<td><p>doppler_spectrum_width</p></td>
-</tr>
-<tr class="row-even"><td><p>WDc</p></td>
-<td><p>corrected_doppler_spectrum_width</p></td>
-</tr>
-<tr class="row-odd"><td><p>WD_err</p></td>
-<td><p>doppler_spectrum_mean_error</p></td>
-</tr>
-<tr class="row-even"><td><p>atmos_type</p></td>
-<td><p>atmospherical_structures_type</p></td>
-</tr>
-<tr class="row-odd"><td><p>beta_rel</p></td>
-<td><p>relative_beta</p></td>
-</tr>
-<tr class="row-even"><td><p>beta_abs</p></td>
-<td><p>absolute_beta</p></td>
-</tr>
-<tr class="row-odd"><td><p>CNR</p></td>
-<td><p>cnr</p></td>
-</tr>
-<tr class="row-even"><td><p>CNRc</p></td>
-<td><p>corrected_cnr</p></td>
-</tr>
-<tr class="row-odd"><td><p>HRV</p></td>
-<td><p>HRV</p></td>
-</tr>
-<tr class="row-even"><td><p>VIS006</p></td>
-<td><p>VIS006</p></td>
-</tr>
-<tr class="row-odd"><td><p>VIS008</p></td>
-<td><p>VIS008</p></td>
-</tr>
-<tr class="row-even"><td><p>IR_016</p></td>
-<td><p>IR_016</p></td>
-</tr>
-<tr class="row-odd"><td><p>IR_039</p></td>
-<td><p>IR_039</p></td>
-</tr>
-<tr class="row-even"><td><p>WV_062</p></td>
-<td><p>WV_062</p></td>
-</tr>
-<tr class="row-odd"><td><p>WV_073</p></td>
-<td><p>WV_073</p></td>
-</tr>
-<tr class="row-even"><td><p>IR_087</p></td>
-<td><p>IR_087</p></td>
-</tr>
-<tr class="row-odd"><td><p>IR_097</p></td>
-<td><p>IR_097</p></td>
-</tr>
-<tr class="row-even"><td><p>IR_108</p></td>
-<td><p>IR_108</p></td>
-</tr>
-<tr class="row-odd"><td><p>IR_120</p></td>
-<td><p>IR_120</p></td>
-</tr>
-<tr class="row-even"><td><p>IR_134</p></td>
-<td><p>IR_134</p></td>
-</tr>
-<tr class="row-odd"><td><p>CTH</p></td>
-<td><p>CTH</p></td>
-</tr>
-<tr class="row-even"><td><p>HRV_norm</p></td>
-<td><p>HRV_norm</p></td>
-</tr>
-<tr class="row-odd"><td><p>VIS006_norm</p></td>
-<td><p>VIS006_norm</p></td>
-</tr>
-<tr class="row-even"><td><p>VIS008_norm</p></td>
-<td><p>VIS008_norm</p></td>
-</tr>
-<tr class="row-odd"><td><p>IR_016_norm</p></td>
-<td><p>IR_016_norm</p></td>
-</tr>
-<tr class="row-even"><td><p>SNR</p></td>
-<td><p>signal_to_noise_ratio</p></td>
-</tr>
-<tr class="row-odd"><td><p>VEL</p></td>
-<td><p>VEL</p></td>
-</tr>
-<tr class="row-even"><td><p>RMS</p></td>
-<td><p>RMS</p></td>
-</tr>
-<tr class="row-odd"><td><p>LDR</p></td>
-<td><p>LDR</p></td>
-</tr>
-<tr class="row-even"><td><p>NPK</p></td>
-<td><p>NPK</p></td>
-</tr>
-<tr class="row-odd"><td><p>SNRgc</p></td>
-<td><p>SNRgc</p></td>
-</tr>
-<tr class="row-even"><td><p>VELgc</p></td>
-<td><p>VELgc</p></td>
-</tr>
-<tr class="row-odd"><td><p>RMSgc</p></td>
-<td><p>RMSgc</p></td>
-</tr>
-<tr class="row-even"><td><p>LDRgc</p></td>
-<td><p>LDRgc</p></td>
-</tr>
-<tr class="row-odd"><td><p>NPKgc</p></td>
-<td><p>NPKgc</p></td>
-</tr>
-<tr class="row-even"><td><p>SNRg</p></td>
-<td><p>SNRg</p></td>
-</tr>
-<tr class="row-odd"><td><p>VELg</p></td>
-<td><p>VELg</p></td>
-</tr>
-<tr class="row-even"><td><p>RMSg</p></td>
-<td><p>RMSg</p></td>
-</tr>
-<tr class="row-odd"><td><p>LDRg</p></td>
-<td><p>LDRg</p></td>
-</tr>
-<tr class="row-even"><td><p>NPKg</p></td>
-<td><p>NPKg</p></td>
-</tr>
-<tr class="row-odd"><td><p>SNRplank</p></td>
-<td><p>SNRplank</p></td>
-</tr>
-<tr class="row-even"><td><p>VELplank</p></td>
-<td><p>VELplank</p></td>
-</tr>
-<tr class="row-odd"><td><p>RMSplank</p></td>
-<td><p>RMSplank</p></td>
-</tr>
-<tr class="row-even"><td><p>LDRplank</p></td>
-<td><p>LDRplank</p></td>
-</tr>
-<tr class="row-odd"><td><p>NPKplank</p></td>
-<td><p>NPKplank</p></td>
-</tr>
-<tr class="row-even"><td><p>SNRrain</p></td>
-<td><p>SNRrain</p></td>
-</tr>
-<tr class="row-odd"><td><p>VELrain</p></td>
-<td><p>VELrain</p></td>
-</tr>
-<tr class="row-even"><td><p>RMSrain</p></td>
-<td><p>RMSrain</p></td>
-</tr>
-<tr class="row-odd"><td><p>LDRrain</p></td>
-<td><p>LDRrain</p></td>
-</tr>
-<tr class="row-even"><td><p>NPKrain</p></td>
-<td><p>NPKrain</p></td>
-</tr>
-<tr class="row-odd"><td><p>SNRcl</p></td>
-<td><p>SNRcl</p></td>
-</tr>
-<tr class="row-even"><td><p>VELcl</p></td>
-<td><p>VELcl</p></td>
-</tr>
-<tr class="row-odd"><td><p>RMScl</p></td>
-<td><p>RMScl</p></td>
-</tr>
-<tr class="row-even"><td><p>LDRcl</p></td>
-<td><p>LDRcl</p></td>
-</tr>
-<tr class="row-odd"><td><p>NPKcl</p></td>
-<td><p>NPKcl</p></td>
-</tr>
-<tr class="row-even"><td><p>SNRice</p></td>
-<td><p>SNRice</p></td>
-</tr>
-<tr class="row-odd"><td><p>VELice</p></td>
-<td><p>VELice</p></td>
-</tr>
-<tr class="row-even"><td><p>RMSice</p></td>
-<td><p>RMSice</p></td>
-</tr>
-<tr class="row-odd"><td><p>LDRice</p></td>
-<td><p>LDRice</p></td>
-</tr>
-<tr class="row-even"><td><p>NPKice</p></td>
-<td><p>NPKice</p></td>
-</tr>
-<tr class="row-odd"><td><p>RHO</p></td>
-<td><p>RHO</p></td>
-</tr>
-<tr class="row-even"><td><p>DPS</p></td>
-<td><p>DPS</p></td>
-</tr>
-<tr class="row-odd"><td><p>LDRnormal</p></td>
-<td><p>LDRnormal</p></td>
-</tr>
-<tr class="row-even"><td><p>RHOwav</p></td>
-<td><p>RHOwav</p></td>
-</tr>
-<tr class="row-odd"><td><p>DPSwav</p></td>
-<td><p>DPSwav</p></td>
-</tr>
-<tr class="row-even"><td><p>SKWg</p></td>
-<td><p>SKWg</p></td>
-</tr>
-<tr class="row-odd"><td><p>HSDco</p></td>
-<td><p>HSDco</p></td>
-</tr>
-<tr class="row-even"><td><p>HSDcx</p></td>
-<td><p>HSDcx</p></td>
-</tr>
-<tr class="row-odd"><td><p>Ze</p></td>
-<td><p>Ze</p></td>
-</tr>
-<tr class="row-even"><td><p>Zg</p></td>
-<td><p>Zg</p></td>
-</tr>
-<tr class="row-odd"><td><p>Z</p></td>
-<td><p>Z</p></td>
-</tr>
-<tr class="row-even"><td><p>RRcr</p></td>
-<td><p>RR</p></td>
-</tr>
-<tr class="row-odd"><td><p>LWCcr</p></td>
-<td><p>LWC</p></td>
-</tr>
-<tr class="row-even"><td><p>TEMPcr</p></td>
-<td><p>TEMP</p></td>
-</tr>
-<tr class="row-odd"><td><p>ISDRco</p></td>
-<td><p>ISDRco</p></td>
-</tr>
-<tr class="row-even"><td><p>ISDRcx</p></td>
-<td><p>ISDRcx</p></td>
-</tr>
-<tr class="row-odd"><td><p>SNRcx</p></td>
-<td><p>SNRcx</p></td>
-</tr>
-<tr class="row-even"><td><p>SNRCorFaCo</p></td>
-<td><p>SNRCorFaCo</p></td>
-</tr>
-<tr class="row-odd"><td><p>SNRCorFaCo</p></td>
-<td><p>SNRCorFaCo</p></td>
-</tr>
-<tr class="row-even"><td><p>avgdBZ</p></td>
-<td><p>avg_reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>NdBZ</p></td>
-<td><p>npoints_reflectivity</p></td>
-</tr>
-<tr class="row-even"><td><p>quant05dBZ</p></td>
-<td><p>quant05_reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>quant10dBZ</p></td>
-<td><p>quant10_reflectivity</p></td>
-</tr>
-<tr class="row-even"><td><p>quant20dBZ</p></td>
-<td><p>quant20_reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>quant50dBZ</p></td>
-<td><p>quant50_reflectivity</p></td>
-</tr>
-<tr class="row-even"><td><p>quant80dBZ</p></td>
-<td><p>quant80_reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>quant90dBZ</p></td>
-<td><p>quant90_reflectivity</p></td>
-</tr>
-<tr class="row-even"><td><p>quant95dBZ</p></td>
-<td><p>quant95_reflectivity</p></td>
-</tr>
-<tr class="row-odd"><td><p>avgRR</p></td>
-<td><p>avg_radar_estimated_rain_rate</p></td>
-</tr>
-<tr class="row-even"><td><p>NRR</p></td>
-<td><p>npoints_radar_estimated_rain_rate</p></td>
-</tr>
-<tr class="row-odd"><td><p>quant05RR</p></td>
-<td><p>quant05_radar_estimated_rain_rate</p></td>
-</tr>
-<tr class="row-even"><td><p>quant10RR</p></td>
-<td><p>quant10_radar_estimated_rain_rate</p></td>
-</tr>
-<tr class="row-odd"><td><p>quant20RR</p></td>
-<td><p>quant20_radar_estimated_rain_rate</p></td>
-</tr>
-<tr class="row-even"><td><p>quant50RR</p></td>
-<td><p>quant50_radar_estimated_rain_rate</p></td>
-</tr>
-<tr class="row-odd"><td><p>quant80RR</p></td>
-<td><p>quant80_radar_estimated_rain_rate</p></td>
-</tr>
-<tr class="row-even"><td><p>quant90RR</p></td>
-<td><p>quant90_radar_estimated_rain_rate</p></td>
-</tr>
-<tr class="row-odd"><td><p>quant95RR</p></td>
-<td><p>quant95_radar_estimated_rain_rate</p></td>
-</tr>
-<tr class="row-even"><td><p>avgV</p></td>
-<td><p>avg_velocity</p></td>
-</tr>
-<tr class="row-odd"><td><p>NV</p></td>
-<td><p>npoints_velocity</p></td>
-</tr>
-<tr class="row-even"><td><p>quant05V</p></td>
-<td><p>quant05_velocity</p></td>
-</tr>
-<tr class="row-odd"><td><p>quant10V</p></td>
-<td><p>quant10_velocity</p></td>
-</tr>
-<tr class="row-even"><td><p>quant20V</p></td>
-<td><p>quant20_velocity</p></td>
-</tr>
-<tr class="row-odd"><td><p>quant50V</p></td>
-<td><p>quant50_velocity</p></td>
-</tr>
-<tr class="row-even"><td><p>quant80V</p></td>
-<td><p>quant80_velocity</p></td>
-</tr>
-<tr class="row-odd"><td><p>quant90V</p></td>
-<td><p>quant90_velocity</p></td>
-</tr>
-<tr class="row-even"><td><p>quant95V</p></td>
-<td><p>quant95_velocity</p></td>
-</tr>
-<tr class="row-odd"><td><p>avgVc</p></td>
-<td><p>avg_corrected_velocity</p></td>
-</tr>
-<tr class="row-even"><td><p>NVc</p></td>
-<td><p>npoints_corrected_velocity</p></td>
-</tr>
-<tr class="row-odd"><td><p>quant05Vc</p></td>
-<td><p>quant05_corrected_velocity</p></td>
-</tr>
-<tr class="row-even"><td><p>quant10Vc</p></td>
-<td><p>quant10_corrected_velocity</p></td>
-</tr>
-<tr class="row-odd"><td><p>quant20Vc</p></td>
-<td><p>quant20_corrected_velocity</p></td>
-</tr>
-<tr class="row-even"><td><p>quant50Vc</p></td>
-<td><p>quant50_corrected_velocity</p></td>
-</tr>
-<tr class="row-odd"><td><p>quant80Vc</p></td>
-<td><p>quant80_corrected_velocity</p></td>
-</tr>
-<tr class="row-even"><td><p>quant90Vc</p></td>
-<td><p>quant90_corrected_velocity</p></td>
-</tr>
-<tr class="row-odd"><td><p>quant95Vc</p></td>
-<td><p>quant95_corrected_velocity</p></td>
-</tr>
-<tr class="row-even"><td><p>avgdealV</p></td>
-<td><p>avg_dealiased_velocity</p></td>
-</tr>
-<tr class="row-odd"><td><p>NdealV</p></td>
-<td><p>npoints_dealiased_velocity</p></td>
-</tr>
-<tr class="row-even"><td><p>quant05dealV</p></td>
-<td><p>quant05_dealiased_velocity</p></td>
-</tr>
-<tr class="row-odd"><td><p>quant10dealV</p></td>
-<td><p>quant10_dealiased_velocity</p></td>
-</tr>
-<tr class="row-even"><td><p>quant20dealV</p></td>
-<td><p>quant20_dealiased_velocity</p></td>
-</tr>
-<tr class="row-odd"><td><p>quant50dealV</p></td>
-<td><p>quant50_dealiased_velocity</p></td>
-</tr>
-<tr class="row-even"><td><p>quant80dealV</p></td>
-<td><p>quant80_dealiased_velocity</p></td>
-</tr>
-<tr class="row-odd"><td><p>quant90dealV</p></td>
-<td><p>quant90_dealiased_velocity</p></td>
-</tr>
-<tr class="row-even"><td><p>quant95dealV</p></td>
-<td><p>quant95_dealiased_velocity</p></td>
-</tr>
-</tbody>
-</table>
-</div>
 </section>
 <section id="icon-to-pyrad">
 <h2>ICON to Pyrad<a class="headerlink" href="#icon-to-pyrad" title="Link to this heading">#</a></h2>
-<div class="pst-scrollable-table-container"><table class="table" id="id3">
-<caption><span class="caption-text">ICON to Pyrad mappings</span><a class="headerlink" href="#id3" title="Link to this table">#</a></caption>
+<div class="pst-scrollable-table-container"><table class="table" id="id2">
+<caption><span class="caption-text">ICON to Pyrad mappings</span><a class="headerlink" href="#id2" title="Link to this table">#</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>pyrad_name</p></th>
 <th class="head"><p>icon_name</p></th>
@@ -2486,8 +1000,8 @@ names listed below, you can use the keyword DataTypeIDInFiles in the loc files t
 </section>
 <section id="metranet-swiss-radars-to-pyrad">
 <h2>Metranet (Swiss radars) to Pyrad<a class="headerlink" href="#metranet-swiss-radars-to-pyrad" title="Link to this heading">#</a></h2>
-<div class="pst-scrollable-table-container"><table class="table" id="id4">
-<caption><span class="caption-text">Metranet (Swiss radars) to Pyrad mappings</span><a class="headerlink" href="#id4" title="Link to this table">#</a></caption>
+<div class="pst-scrollable-table-container"><table class="table" id="id3">
+<caption><span class="caption-text">Metranet (Swiss radars) to Pyrad mappings</span><a class="headerlink" href="#id3" title="Link to this table">#</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>pyrad_name</p></th>
 <th class="head"><p>datatype_metranet</p></th>
@@ -2587,7 +1101,8 @@ names listed below, you can use the keyword DataTypeIDInFiles in the loc files t
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -2627,8 +1142,8 @@ names listed below, you can use the keyword DataTypeIDInFiles in the loc files t
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2638,7 +1153,7 @@ names listed below, you can use the keyword DataTypeIDInFiles in the loc files t
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     <br/>
   </p>
 </div>
@@ -2651,7 +1166,7 @@ names listed below, you can use the keyword DataTypeIDInFiles in the loc files t
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
 </p></div>
       
     </div>

@@ -1,0 +1,6 @@
+pyrad.io.get\_file\_list\_s3
+============================
+
+.. currentmodule:: pyrad.io
+
+.. autofunction:: get_file_list_s3
