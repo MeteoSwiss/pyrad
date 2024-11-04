@@ -56,7 +56,6 @@ jobs:
           PYRAD_TESTS_PATH: ${{github.workspace}}/pyrad-tests/
         run: |
           conda install -c conda-forge ${{env.PACKAGES}}
-          pip install wradlib
       - name: Install pyart
         if: matrix.os != 'macos-latest'
         working-directory: ${{github.workspace}}/pyart/
