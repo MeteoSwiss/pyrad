@@ -1145,45 +1145,38 @@ def read_colocated_data_time_avg(fname):
             None,
         )
 
-
 def read_timeseries(fname):
     """
-    Reads a time series contained in a csv file
+    Reads a time series contained in a CSV file.
 
     Parameters
     ----------
     fname : str
-        path of time series file
+        Path of the time series file.
 
     Returns
     -------
-    date , value : tupple
-        A datetime object array containing the time and a numpy masked array
-        containing the value. None otherwise
-
+    date, value : tuple
+        A pandas DatetimeIndex containing the time and a numpy masked array
+        containing the values. Returns (None, None) if file reading fails.
     """
     try:
-        with open(fname, "r", newline="") as csvfile:
-            # first count the lines
-            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
-            nrows = sum(1 for row in reader)
-            value = np.ma.empty(nrows, dtype=float)
+        # Read the CSV, ignoring lines that start with "#"
+        data = pd.read_csv(fname, comment="#")
 
-            # now read the data
-            csvfile.seek(0)
-            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
-            date = list()
-            for i, row in enumerate(reader):
-                date.append(
-                    datetime.datetime.strptime(row["date"][0:19], "%Y-%m-%d %H:%M:%S")
-                )
-                value[i] = float(row["value"])
+        # Parse the 'date' column as datetime
+        data['date'] = pd.to_datetime(data['date'], errors='coerce')
+        
+        # Convert 'value' column to numeric, setting errors='coerce' to replace
+        # non-convertible entries with WNaN, which will be masked later
+        data['value'] = pd.to_numeric(data['value'], errors='coerce')
+        
+        # Mask NaN values in 'value' and convert to a masked array
+        value = np.ma.masked_invalid(data['value'].values)
+        
+        # Return the date and masked value array
+        return data['date'], value
 
-            value = np.ma.masked_values(value, get_fillvalue())
-
-            csvfile.close()
-
-            return date, value
     except EnvironmentError as ee:
         warn(str(ee))
         warn("Unable to read file " + fname)
