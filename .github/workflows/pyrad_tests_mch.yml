@@ -37,27 +37,19 @@ jobs:
         with:
          submodules: recursive
          ref : master
+      # Install dependencies
+      - name: Setup Conda Environment
+        uses: mamba-org/setup-micromamba@v1
+        with:
+          environment-file: ci/environment-ci.yml
+          activate-environment: pyrad-dev
+          cache-downloads: true
+          python-version: ${{ matrix.python-version }}
       - name: Clone pyrad-tests
         uses: actions/checkout@main
         with:
           repository: MeteoSwiss/pyrad-tests
           path: pyrad-tests
-      - name: Setup Miniconda
-        uses: conda-incubator/setup-miniconda@v2.0.0
-        with:
-          auto-update-conda: true
-          python-version: ${{ matrix.python-version }}
-          channels: conda-forge
-          channel-priority: flexible
-          activate-environment: test-environment
-
-      - name: Install dependencies
-        env:
-          PACKAGES: ${{env.MINIMAL_DEPENDENCIES}} ${{env.OPTIONAL_DEPENDENCIES}} ${{env.TEST_DEPENDENCIES}}
-          PYRAD_TESTS_PATH: ${{github.workspace}}/pyrad-tests/
-        run: |
-          conda install -c conda-forge ${{env.PACKAGES}}
-          pip install wradlib
       - name: Install pyart
         if: matrix.os != 'macos-latest'
         working-directory: ${{github.workspace}}/src/pyart/

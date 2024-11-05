@@ -1,4 +1,3 @@
-# %%
 from pathlib import Path
 import inspect
 import re
@@ -44,8 +43,6 @@ def dict_to_restructured_text(yaml_data):
                 for ele in value3:
                     rst_output.append('     | ' + ele)
             rst_output.append('')
-            rst_output.append('returns')
-            rst_output.append('   ' + value2['returns'] +'\n')
             # rst_output.append(f"\n\n{value2['parameters']}\n\n")
     return '\n'.join(rst_output)
 
@@ -111,7 +108,7 @@ def process_docstring(docstr):
     returns_dict[header] = list(returns.strip().split('\n'))[1:]
     dic = {'description': " ".join(description.split()),
            'parameters': parse_string_to_dict(attributes),
-           'returns': returns.strip()}
+           'returns': returns_dict}
     return dic
 
 
@@ -146,6 +143,3 @@ rst_content = dict_to_restructured_text(all_processes)
 fname = Path(OUT_DIRECTORY, 'list_process.rst')
 with open(fname, 'w') as f:
     f.write(rst_content)
-
-
-# %%
