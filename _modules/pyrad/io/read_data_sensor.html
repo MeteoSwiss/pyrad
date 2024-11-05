@@ -2649,7 +2649,7 @@
                                 <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensorid&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.csv*&quot;</span><span class="p">)</span>
         <span class="n">datafile2</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">datapath2</span><span class="p">,</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
                                 <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensorid&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.csv*&quot;</span><span class="p">)</span>
-        
+
         <span class="n">files1</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">datafile1</span><span class="p">)</span>
         <span class="n">files2</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">datafile2</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">files1</span><span class="p">):</span>

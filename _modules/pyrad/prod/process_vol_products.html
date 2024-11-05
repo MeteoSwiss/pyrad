@@ -4068,7 +4068,6 @@
         <span class="n">field_data_process</span> <span class="o">=</span> <span class="n">field_data_process</span><span class="p">[:,</span><span class="n">ind_rng</span><span class="p">]</span>
 
         <span class="n">countzero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">field_data_process</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">))</span>
-
         <span class="n">meanval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">field_data_process</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">write_min_max</span><span class="p">:</span>
             <span class="n">minval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">field_data_process</span><span class="p">)</span>

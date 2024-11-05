@@ -340,6 +340,7 @@
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Main configuration file</a></li>
 <li class="toctree-l1"><a class="reference internal" href="loc.html">Location configuration file</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="prod.html">Product configuration file</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="list_process.html">List of pyrad datasets separated by dataset type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="list_products.html">List of pyrad products separated by dataset type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="list_datadescriptors.html">List of pyrad input data descriptors</a></li>
 <li class="toctree-l2"><a class="reference internal" href="list_variables.html">List of pyrad variables</a></li>
@@ -423,7 +424,7 @@
 </tr>
 <tr class="row-even"><td><p>configpath</p></td>
 <td><p>STRING</p></td>
-<td><p>Base directory of the configuration files. This directory contains clutter maps, filter coefficients, antenna pattern, and the data processing configuration files.</p></td>
+<td><p>Absolute base directory of the configuration files. This directory contains clutter maps, filter coefficients, antenna pattern, and the data processing configuration files. If any path within a pyrad config file is provided as a relative path, it will be converted to an absolute path, by prepending it with the path specified with “configpath”.</p></td>
 </tr>
 <tr class="row-odd"><td><p>locationConfigFile</p></td>
 <td><p>STRING</p></td>

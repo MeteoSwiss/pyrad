@@ -4441,39 +4441,38 @@
 
 <span class="k">def</span> <span class="nf">merge_fields_rainbow</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="n">scan_name</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    merge Rainbow fields into a single radar object.</span>
+<span class="sd">    Merge Rainbow fields into a single radar object.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    basepath : str</span>
-<span class="sd">        name of the base path where to find the data</span>
+<span class="sd">        Name of the base path where to find the data.</span>
 <span class="sd">    scan_name: str</span>
-<span class="sd">        name of the scan</span>
+<span class="sd">        Name of the scan.</span>
 <span class="sd">    voltime : datetime object</span>
-<span class="sd">        reference time of the scan</span>
+<span class="sd">        Reference time of the scan.</span>
 <span class="sd">    datatype_list : list</span>
-<span class="sd">        lists of data types to get</span>
+<span class="sd">        Lists of data types to get.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    radar : Radar</span>
-<span class="sd">        radar object</span>
-
+<span class="sd">        Radar object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">datapath</span> <span class="o">=</span> <span class="n">basepath</span> <span class="o">+</span> <span class="n">scan_name</span> <span class="o">+</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+    <span class="n">datapath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="n">scan_name</span><span class="p">,</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
     <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;00&quot;</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="n">datatype_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Nh&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">datatype_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Nv&quot;</span><span class="p">):</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">datapath</span> <span class="o">+</span> <span class="n">fdatetime</span> <span class="o">+</span> <span class="n">datatype_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.*&quot;</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fdatetime</span><span class="si">}{</span><span class="n">datatype_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">.*&quot;</span><span class="p">))</span>
     <span class="k">elif</span> <span class="n">datatype_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Nh&quot;</span><span class="p">:</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">datapath</span> <span class="o">+</span> <span class="n">fdatetime</span> <span class="o">+</span> <span class="s2">&quot;dBZ.*&quot;</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fdatetime</span><span class="si">}</span><span class="s2">dBZ.*&quot;</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">datapath</span> <span class="o">+</span> <span class="n">fdatetime</span> <span class="o">+</span> <span class="s2">&quot;dBZv.*&quot;</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fdatetime</span><span class="si">}</span><span class="s2">dBZv.*&quot;</span><span class="p">))</span>
 
     <span class="c1"># create radar object</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No file found in &quot;</span> <span class="o">+</span> <span class="n">datapath</span> <span class="o">+</span> <span class="n">fdatetime</span> <span class="o">+</span> <span class="n">datatype_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.*&quot;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No file found in &quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fdatetime</span><span class="si">}{</span><span class="n">datatype_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">.*&quot;</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">radar</span> <span class="o">=</span> <span class="n">get_data_rainbow</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">datatype_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
@@ -4483,13 +4482,14 @@
     <span class="c1"># add other fields in the same scan</span>
     <span class="k">for</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">datatype_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
         <span class="k">if</span> <span class="n">datatype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;Nh&quot;</span><span class="p">,</span> <span class="s2">&quot;Nv&quot;</span><span class="p">):</span>
-            <span class="n">filename</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">datapath</span> <span class="o">+</span> <span class="n">fdatetime</span> <span class="o">+</span> <span class="n">datatype</span> <span class="o">+</span> <span class="s2">&quot;.*&quot;</span><span class="p">)</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fdatetime</span><span class="si">}{</span><span class="n">datatype</span><span class="si">}</span><span class="s2">.*&quot;</span><span class="p">))</span>
         <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s2">&quot;Nh&quot;</span><span class="p">:</span>
-            <span class="n">filename</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">datapath</span> <span class="o">+</span> <span class="n">fdatetime</span> <span class="o">+</span> <span class="s2">&quot;dBZ.*&quot;</span><span class="p">)</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fdatetime</span><span class="si">}</span><span class="s2">dBZ.*&quot;</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">filename</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">datapath</span> <span class="o">+</span> <span class="n">fdatetime</span> <span class="o">+</span> <span class="s2">&quot;dBZv.*&quot;</span><span class="p">)</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fdatetime</span><span class="si">}</span><span class="s2">dBZv.*&quot;</span><span class="p">))</span>
+        
         <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No file found in &quot;</span> <span class="o">+</span> <span class="n">datapath</span> <span class="o">+</span> <span class="n">fdatetime</span> <span class="o">+</span> <span class="n">datatype</span> <span class="o">+</span> <span class="s2">&quot;.*&quot;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No file found in &quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fdatetime</span><span class="si">}{</span><span class="n">datatype</span><span class="si">}</span><span class="s2">.*&quot;</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">get_data_rainbow</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">datatype</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">radar_aux</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -4509,6 +4509,7 @@
                     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">radar</span>
+
 
 
 <span class="k">def</span> <span class="nf">merge_fields_psr_spectra</span><span class="p">(</span>
