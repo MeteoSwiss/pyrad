@@ -2068,7 +2068,7 @@ def write_ts_polar_data(dataset, fname):
     return fname
 
 
-def write_ts_grid_data(dataset, fname, sensorid=None):
+def write_ts_grid_data(dataset, fname):
     """
     writes time series of data
 
@@ -2080,9 +2080,6 @@ def write_ts_grid_data(dataset, fname, sensorid=None):
     fname : str
         file name where to store the data
 
-    sensorid : str
-        Optional, sensor ID if dataset contains multiple sensors
-
     Returns
     -------
     fname : str
@@ -2090,106 +2087,53 @@ def write_ts_grid_data(dataset, fname, sensorid=None):
 
     """
     filelist = glob.glob(fname)
-    if sensorid:
-        sensor_idx = np.where(dataset["point_id"] == sensorid)[0]
-        multiple_sensors = True
-    else:
-        multiple_sensors = False
     if not filelist:
-        with open(fname, "w", newline="") as csvfile:
-            csvfile.write("# Gridded data timeseries data file\n")
+        with open(fname, 'w', newline='') as csvfile:
+            csvfile.write('# Gridded data timeseries data file\n')
             csvfile.write('# Comment lines are preceded by "#"\n')
-            csvfile.write("# Description: \n")
+            csvfile.write('# Description: \n')
+            csvfile.write('# Time series of a gridded data over a ' +
+                          'fixed location.\n')
             csvfile.write(
-                "# Time series of a gridded data over a " + "fixed location.\n"
-            )
+                '# Nominal location [lon, lat, alt]: ' +
+                str(dataset['point_coordinates_WGS84_lon_lat_alt']) + '\n')
             csvfile.write(
-                "# Nominal location [lon, lat, alt]: "
-                + str(dataset["point_coordinates_WGS84_lon_lat_alt"])
-                + "\n"
-            )
+                '# Grid points used [iz, iy, ix]: ' +
+                str(dataset['grid_points_iz_iy_ix']) + '\n')
             csvfile.write(
-                "# Grid points used [iz, iy, ix]: "
-                + str(dataset["grid_points_iz_iy_ix"])
-                + "\n"
-            )
+                '# Data: ' +
+                generate_field_name_str(
+                    dataset['datatype']) +
+                '\n')
+            csvfile.write('# Fill Value: ' + str(get_fillvalue()) + '\n')
             csvfile.write(
-                "# Data: " + generate_field_name_str(dataset["datatype"]) + "\n"
-            )
-            csvfile.write("# Fill Value: " + str(get_fillvalue()) + "\n")
-            csvfile.write(
-                "# Start: " + dataset["time"].strftime("%Y-%m-%d %H:%M:%S UTC") + "\n"
-            )
-            csvfile.write("#\n")
+                '# Start: ' +
+                dataset['time'].strftime('%Y-%m-%d %H:%M:%S UTC') + '\n')
+            csvfile.write('#\n')
 
-            fieldnames = ["date", "lon", "lat", "alt", "value"]
+            fieldnames = ['date', 'lon', 'lat', 'alt', 'value']
             writer = csv.DictWriter(csvfile, fieldnames)
             writer.writeheader()
-            if multiple_sensors:
-                writer.writerow(
-                    {
-                        "date": dataset["time"][sensor_idx][0].strftime(
-                            "%Y-%m-%d %H:%M:%S.%f"
-                        ),
-                        "lon": dataset["used_point_coordinates_WGS84_lon"][sensor_idx][
-                            0
-                        ],
-                        "lat": dataset["used_point_coordinates_WGS84_lat"][sensor_idx][
-                            0
-                        ],
-                        "alt": dataset["used_point_coordinates_WGS84_alt"][sensor_idx][
-                            0
-                        ],
-                        "value": dataset["value"],
-                    }
-                )
-            else:
-                writer.writerow(
-                    {
-                        "date": dataset["time"].strftime("%Y-%m-%d %H:%M:%S.%f"),
-                        "lon": dataset["used_coordinates_WGS84_lon_lat_alt"][0],
-                        "lat": dataset["used_coordinates_WGS84_lon_lat_alt"][1],
-                        "alt": dataset["used_coordinates_WGS84_lon_lat_alt"][2],
-                        "value": dataset["value"],
-                    }
-                )
+            writer.writerow(
+                {'date': dataset['time'].strftime('%Y-%m-%d %H:%M:%S.%f'),
+                 'lon': dataset['used_coordinates_WGS84_lon_lat_alt'][0],
+                 'lat': dataset['used_coordinates_WGS84_lon_lat_alt'][1],
+                 'alt': dataset['used_coordinates_WGS84_lon_lat_alt'][2],
+                 'value': dataset['value']})
             csvfile.close()
     else:
-        with open(fname, "a", newline="") as csvfile:
-            fieldnames = ["date", "lon", "lat", "alt", "value"]
+        with open(fname, 'a', newline='') as csvfile:
+            fieldnames = ['date', 'lon', 'lat', 'alt', 'value']
             writer = csv.DictWriter(csvfile, fieldnames)
-            if multiple_sensors:
-                writer.writerow(
-                    {
-                        "date": dataset["time"][sensor_idx][0].strftime(
-                            "%Y-%m-%d %H:%M:%S.%f"
-                        ),
-                        "lon": dataset["used_point_coordinates_WGS84_lon"][sensor_idx][
-                            0
-                        ],
-                        "lat": dataset["used_point_coordinates_WGS84_lat"][sensor_idx][
-                            0
-                        ],
-                        "alt": dataset["used_point_coordinates_WGS84_alt"][sensor_idx][
-                            0
-                        ],
-                        "value": dataset["value"][sensor_idx][0],
-                    }
-                )
-            else:
-                writer.writerow(
-                    {
-                        "date": dataset["time"].strftime("%Y-%m-%d %H:%M:%S.%f"),
-                        "lon": dataset["used_coordinates_WGS84_lon_lat_alt"][0],
-                        "lat": dataset["used_coordinates_WGS84_lon_lat_alt"][1],
-                        "alt": dataset["used_coordinates_WGS84_lon_lat_alt"][2],
-                        "value": dataset["value"][sensor_idx][0],
-                    }
-                )
+            writer.writerow(
+                {'date': dataset['time'].strftime('%Y-%m-%d %H:%M:%S.%f'),
+                 'lon': dataset['used_coordinates_WGS84_lon_lat_alt'][0],
+                 'lat': dataset['used_coordinates_WGS84_lon_lat_alt'][1],
+                 'alt': dataset['used_coordinates_WGS84_lon_lat_alt'][2],
+                 'value': dataset['value']})
             csvfile.close()
 
     return fname
-
 
 def write_ts_ml(
     dt_ml, ml_top_avg, ml_top_std, thick_avg, thick_std, nrays_valid, nrays_total, fname
