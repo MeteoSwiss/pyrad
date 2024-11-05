@@ -2226,7 +2226,7 @@ def get_sensor_data(date, datatype, cfg):
                                 + "_" + cfg["sensorid"] + ".csv*")
         datafile2 = os.path.join(datapath2, date.strftime("%Y%m%d")
                                 + "_" + cfg["sensorid"] + ".csv*")
-        
+
         files1 = glob.glob(datafile1)
         files2 = glob.glob(datafile2)
         if len(files1):

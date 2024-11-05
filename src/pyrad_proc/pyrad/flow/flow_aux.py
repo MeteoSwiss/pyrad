@@ -1038,6 +1038,15 @@ def _create_cfg_dict(cfgfile):
     try:
         print("- Main config file : {}".format(cfgfile))
         cfg = read_config(cfg["configFile"], cfg=cfg, defaults=DEFAULT_CONFIG["main"])
+        
+        # Convert loc and prod config files to absolute paths if needed
+        filenames = ["locationConfigFile", 
+        "productConfigFile",
+        ]
+        for fname in filenames:
+            if not os.path.isabs(cfg[fname]):
+                cfg[fname] = os.path.join(cfg['configpath'], cfg[fname])
+                
         print("- Location config file : {}".format(cfg["locationConfigFile"]))
         cfg = read_config(
             cfg["locationConfigFile"], cfg=cfg, defaults=DEFAULT_CONFIG["loc"]
@@ -1172,6 +1181,30 @@ def _create_cfg_dict(cfgfile):
         if param in cfg and isinstance(cfg[param], float):
             cfg[param] = [cfg[param]]
 
+    # check whether specified paths are relative or absolute
+    # if relative add configpath to the path
+    filenames = ["locationConfigFile", 
+        "productConfigFile",
+        "datapath",
+        "iconpath",
+        "dempath",
+        "gecsxbasepath",
+        "gecsxname",
+        "loadbasepath",
+        "psrpath",
+        "iqpath",
+        "satpath",
+        "smnpath"]
+    
+    for fname in filenames:
+        if type(cfg[fname]) is list:
+            for val in cfg[fname]:
+                if not os.path.isabs(val):
+                    val = os.path.join(cfg['configpath'], val)
+        elif type(cfg[fname]) is str:
+            if not os.path.isabs(cfg[fname]):
+                cfg[fname] = os.path.join(cfg['configpath'], cfg[fname])
+    
     # if specified in config, convert coordinates to arrays
     if "RadarPosition" in cfg:
         fltarr_list = ["latitude", "longitude", "altitude"]
