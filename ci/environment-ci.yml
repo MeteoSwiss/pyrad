@@ -1,0 +1,39 @@
+name: pyrad-dev
+channels:
+  - conda-forge
+dependencies:
+  - numpy
+  - scipy
+  - matplotlib
+  - gdal
+  - netcdf4
+  - pandas
+  - pytest
+  - wradlib
+  - cartopy
+  - cvxopt
+  - wradlib
+  - xarray<2024.10.0
+  - xradar
+  - metpy
+  - pytest-cov
+  - mda-xdrlib
+  - pytest-mpl
+  - coveralls
+  - flake8
+  - Cython
+  - fsspec
+  - glpk
+  - pygrib
+  - imageio
+  - cftime
+  - setuptools
+  - shapely
+  - ruff
+  - pip
+  - pip:
+    - cibuildwheel
+    - pooch
+    - versioneer
+    - black
+    - git+https://github.com/openradar/open-radar-data
