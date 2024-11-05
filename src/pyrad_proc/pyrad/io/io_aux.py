@@ -583,7 +583,7 @@ def get_rad4alp_prod_fname(datatype):
     # NHC (Hail forecast)
     # NZC (Thunderstorm forecast based on TRT)
 
-    termination = ".8??"
+    termination = ".???"
     # Polar products
     if datatype == "hydro":
         acronym = "YM"
