@@ -5,24 +5,26 @@ import argparse
 """
 This script processes a single CSV file containing meteorological data extracted from Climap
 and organizes the data into a specified directory structure based on date and station identifier
-as is required by prad
+as is required by prad.
 
-For each unique date in the data,
-it creates a file with all records for that date and station in the format "YYYYMMDD_abbr.csv", where 
-"YYYYMMDD" represents the year, month, and day, and "abbr" is the station identifier.
+For each unique date in the data, it creates a file with all records for that date and station in 
+the format "YYYYMMDD_abbr.csv", where "YYYYMMDD" represents the year, month, and day, and "abbr" is 
+the station identifier.
 
-The script takes two command-line arguments: the path to the input CSV file and the output directory. 
+The script takes three command-line arguments:
+1. The path to the input CSV file.
+2. The output directory.
+3. An optional scale factor for adjusting precipitation values, which defaults to 6. 
+
 The output structure is created under the specified output directory in a nested format by year and 
 month (i.e., "/output_dir/YYYYMM/"). Each daily CSV file includes columns "StationID", "DateTime", 
 and "Value", with "StationID" representing the station abbreviation.
 
 ## CSV Input Format
-The input CSV file should have at least the following columns:
+The input CSV file should have the following columns:
     - "abbr": a string representing the station abbreviation.
     - "time": an int64 date and time field in the format "YYYYMMDDHHMM".
-    - "rre150z0": precipitation
-    as well as any additional columns that correspond to climap variables
-    (rre150z0, tre200s0, etc)
+    - "rre150z0": precipitation values.
 
 ## Directory and Filename Structure
 The output directory is organized as follows:
@@ -45,22 +47,21 @@ The output structure would be:
 Each CSV file includes the columns:
     - "StationID": the station abbreviation (e.g., "BRZ").
     - "DateTime": the timestamp (e.g., "202408120000").
-    - "Value": the measurement (e.g., 0.0).
+    - "Value": the measurement (e.g., 0.0), scaled by the specified factor.
 
 ## Functions
-- `process_file(input_csv, output_dir)`: Reads the input CSV file, organizes records by unique date
-  and station identifier, and writes each set of records to a new CSV file under the specified output
-  directory.
+- `process_file(input_csv, output_dir, scale=6)`: Reads the input CSV file, organizes records by unique 
+  date and station identifier, scales the precipitation values by the specified factor, and writes each 
+  set of records to a new CSV file under the specified output directory.
 - `main()`: Parses command-line arguments and calls `process_file` to initiate the file processing.
 
 ## Usage
 Run the script from the command line:
 ```bash
-python process_csv.py input.csv /path/to/output_directory
-
+python process_csv.py input.csv /path/to/output_directory --scale 6
 """
 
-def process_file(input_csv, output_dir):
+def process_file(input_csv, output_dir, scale=6):
     # Read the input CSV file
     df = pd.read_csv(input_csv, dtype={'time': str})
     
@@ -85,7 +86,8 @@ def process_file(input_csv, output_dir):
             
             # Update the column names to match the required output
             station_df.columns = ['StationID', 'DateTime', 'Value']
-            
+            # Multiply by scale
+            station_df['Value'] *= scale
             # Define the output filename YYYYMMDD_abbr.csv
             output_filename = f"{date}_{sid}.csv"
             output_filepath = os.path.join(year_month_dir, output_filename)
@@ -98,12 +100,14 @@ def main():
     parser = argparse.ArgumentParser(description="Process a CSV file and save rows by date and station.")
     parser.add_argument('input_csv', type=str, help='Path to the input CSV file')
     parser.add_argument('output_dir', type=str, help='Path to the output directory')
+    parser.add_argument('-s', '--scale', type=int, default=6,
+                        help='Scales the precipitation rates by a given factor, by default will multiply 10min values by 6 to get mm/h')
     
     # Parse arguments
     args = parser.parse_args()
     
     # Process the file
-    process_file(args.input_csv, args.output_dir)
+    process_file(args.input_csv, args.output_dir, args.scale)
 
 if __name__ == '__main__':
     main()
