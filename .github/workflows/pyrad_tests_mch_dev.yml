@@ -46,21 +46,6 @@ jobs:
           repository: MeteoSwiss/pyart
           path: pyart
           ref: dev
-      - name: Setup Miniconda
-        uses: conda-incubator/setup-miniconda@v2.0.0
-        with:
-          auto-update-conda: true
-          python-version: ${{ matrix.python-version }}
-          channels: conda-forge
-          channel-priority: flexible
-          activate-environment: test-environment
-
-      - name: Install dependencies
-        env:
-          PACKAGES: ${{env.MINIMAL_DEPENDENCIES}} ${{env.OPTIONAL_DEPENDENCIES}} ${{env.TEST_DEPENDENCIES}}
-          PYRAD_TESTS_PATH: ${{github.workspace}}/pyrad-tests/
-        run: |
-          conda install -c conda-forge ${{env.PACKAGES}}
       - name: Install pyart
         if: matrix.os != 'macos-latest'
         working-directory: ${{github.workspace}}/pyart/
