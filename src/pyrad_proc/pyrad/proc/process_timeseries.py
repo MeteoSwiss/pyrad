@@ -150,8 +150,6 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
         warn("Invalid agg_method, use 'nearest', 'nearest_valid', 'average' or 'none'")
         warn("Using 'nearest' instead...")
         agg_method = "nearest"
-        
-    ignore_missing = dscfg.get("ignore_missing", False)
 
     if dscfg["latlon"]:
         lon = dscfg["lon"]
