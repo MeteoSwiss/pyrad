@@ -8730,7 +8730,7 @@
 <div class="line-block">
 <div class="line">interest.</div>
 <div class="line">if False use the altitude at a given radar elevation ele over the</div>
-<div class="line">point of interest.</div>
+<div class="line">point of interest. Default is False.</div>
 </div>
 </div>
 </dd>
@@ -8788,12 +8788,28 @@
 </div>
 </div>
 </dd>
-<dt>single_point<span class="classifier">boolean. Dataset keyword</span></dt><dd><div class="line-block">
-<div class="line">if True only one gate per radar volume is going to be kept.</div>
+<dt>agg_method<span class="classifier">string. Dataset keyword</span></dt><dd><div class="line-block">
+<div class="line">Which aggregation method to use to combine data that is within the</div>
 <div class="line-block">
-<div class="line">Otherwise all gates within the azimuth and elevation tolerance</div>
-<div class="line">are going to be kept. This is useful to extract all data from</div>
-<div class="line">fixed pointing scans. Default True</div>
+<div class="line">tolerance in AziTol, EleTol and RngTol</div>
+<div class="line">‘nearest’ : will only get nearest point to prescribed lon/lat/alt or</div>
+<div class="line-block">
+<div class="line">ele/azi/rng</div>
+</div>
+<div class="line">‘nearest_valid’ : will only get the nearest valid point to prescribed</div>
+<div class="line-block">
+<div class="line">lon/lat/alt or ele/azi/rng (ignore missing values)</div>
+</div>
+<div class="line">‘average’ : will average (while ignore missing values), all values</div>
+<div class="line-block">
+<div class="line">that fall within the tolerance in AziTol, EleTol and RngTol</div>
+</div>
+<div class="line">‘none’ : will not perform any averaging and will get all values that</div>
+<div class="line-block">
+<div class="line">fall within the tolerance in AziTol, EleTol and RngTol, each</div>
+<div class="line">with its individual timestamp</div>
+</div>
+<div class="line">Default is ‘nearest’</div>
 </div>
 </div>
 </dd>
@@ -8810,7 +8826,7 @@
 <div class="line-block">
 <div class="line">interest.</div>
 <div class="line">if False use the altitude at a given radar elevation ele over the</div>
-<div class="line">point of interest.</div>
+<div class="line">point of interest. Default is False.</div>
 </div>
 </div>
 </dd>

@@ -422,11 +422,19 @@
 <span class="sd">        datatype : string. Dataset keyword</span>
 <span class="sd">            The data type where we want to extract the point measurement,</span>
 <span class="sd">            can be any datatype supported by pyrad and available in the data</span>
-<span class="sd">        single_point : boolean. Dataset keyword</span>
-<span class="sd">            if True only one gate per radar volume is going to be kept.</span>
-<span class="sd">            Otherwise all gates within the azimuth and elevation tolerance</span>
-<span class="sd">            are going to be kept. This is useful to extract all data from</span>
-<span class="sd">            fixed pointing scans. Default True</span>
+<span class="sd">        agg_method : string. Dataset keyword</span>
+<span class="sd">            Which aggregation method to use to combine data that is within the</span>
+<span class="sd">            tolerance in AziTol, EleTol and RngTol</span>
+<span class="sd">            &#39;nearest&#39; : will only get nearest point to prescribed lon/lat/alt or</span>
+<span class="sd">                ele/azi/rng</span>
+<span class="sd">            &#39;nearest_valid&#39; : will only get the nearest valid point to prescribed </span>
+<span class="sd">                lon/lat/alt or ele/azi/rng (ignore missing values)</span>
+<span class="sd">            &#39;average&#39; : will average (while ignore missing values), all values</span>
+<span class="sd">                that fall within the tolerance in AziTol, EleTol and RngTol</span>
+<span class="sd">            &#39;none&#39; : will not perform any averaging and will get all values that</span>
+<span class="sd">                fall within the tolerance in AziTol, EleTol and RngTol, each</span>
+<span class="sd">                with its individual timestamp</span>
+<span class="sd">            Default is &#39;nearest&#39;</span>
 <span class="sd">        latlon : boolean. Dataset keyword</span>
 <span class="sd">            if True position is obtained from latitude, longitude information,</span>
 <span class="sd">            otherwise position is obtained from antenna coordinates</span>
@@ -435,7 +443,7 @@
 <span class="sd">            if True the user input altitude is used to determine the point of</span>
 <span class="sd">            interest.</span>
 <span class="sd">            if False use the altitude at a given radar elevation ele over the</span>
-<span class="sd">            point of interest.</span>
+<span class="sd">            point of interest. Default is False.</span>
 <span class="sd">        lon : float. Dataset keyword</span>
 <span class="sd">            the longitude [deg]. Use when latlon is True.</span>
 <span class="sd">        lat : float. Dataset keyword</span>
@@ -514,8 +522,13 @@
     <span class="n">projparams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;lon_0&quot;</span><span class="p">:</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]})</span>
     <span class="n">projparams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;lat_0&quot;</span><span class="p">:</span> <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]})</span>
 
-    <span class="n">single_point</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;single_point&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
     <span class="n">fill_value</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fill_value&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">agg_method</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;agg_method&quot;</span><span class="p">,</span> <span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">agg_method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="s2">&quot;nearest_valid&quot;</span><span class="p">,</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">]:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Invalid agg_method, use &#39;nearest&#39;, &#39;nearest_valid&#39;, &#39;average&#39; or &#39;none&#39;&quot;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Using &#39;nearest&#39; instead...&quot;</span><span class="p">)</span>
+        <span class="n">agg_method</span> <span class="o">=</span> <span class="s2">&quot;nearest&quot;</span>
+
     <span class="k">if</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;latlon&quot;</span><span class="p">]:</span>
         <span class="n">lon</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;lon&quot;</span><span class="p">]</span>
         <span class="n">lat</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;lat&quot;</span><span class="p">]</span>
@@ -597,26 +610,62 @@
         <span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="k">if</span> <span class="n">single_point</span><span class="p">:</span>
+
+    <span class="k">if</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;nearest&quot;</span><span class="p">:</span>
+        <span class="c1"># Get closest gate</span>
         <span class="n">ind_ray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span>
             <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">az</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">el</span><span class="p">)</span>
         <span class="p">)</span>
+        <span class="n">ind_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">r</span><span class="p">))</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray</span><span class="p">,</span> <span class="n">ind_r</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Get all gates that fall within tolerance</span>
         <span class="n">ind_ray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
             <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">d_az</span> <span class="o">&lt;=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;AziTol&quot;</span><span class="p">],</span> <span class="n">d_el</span> <span class="o">&lt;=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;EleTol&quot;</span><span class="p">])</span>
         <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">ind_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">r</span><span class="p">))</span>
+        <span class="n">ind_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">r</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;RngTol&quot;</span><span class="p">]</span> <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
+        <span class="k">if</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;average&quot;</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">ind_ray</span><span class="p">][:,</span><span class="n">ind_r</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">ind_ray</span><span class="p">,</span> <span class="n">ind_r</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;nearest_valid&quot;</span><span class="p">:</span>
+            <span class="n">ind_clo_ray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">az</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">el</span><span class="p">))</span>
+            <span class="n">ind_clo_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">r</span><span class="p">))</span>
+
+            <span class="c1"># We get x,y,z position of closest gate to objective</span>
+            <span class="n">clo_x</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ind_clo_ray</span><span class="p">,</span> <span class="n">ind_clo_r</span><span class="p">]</span>
+            <span class="n">clo_y</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ind_clo_ray</span><span class="p">,</span> <span class="n">ind_clo_r</span><span class="p">]</span>
+            <span class="n">clo_z</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_z</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ind_clo_ray</span><span class="p">,</span> <span class="n">ind_clo_r</span><span class="p">]</span>
+            
+            <span class="c1"># We get the distance from the closest gate to every gate within tolerance</span>
+            <span class="n">dist_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ind_ray</span><span class="p">][:,</span><span class="n">ind_r</span><span class="p">]</span> <span class="o">-</span> <span class="n">clo_x</span><span class="p">)</span>
+            <span class="n">dist_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">gate_y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ind_ray</span><span class="p">][:,</span><span class="n">ind_r</span><span class="p">]</span> <span class="o">-</span> <span class="n">clo_y</span><span class="p">)</span>
+            <span class="n">dist_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">gate_z</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ind_ray</span><span class="p">][:,</span><span class="n">ind_r</span><span class="p">]</span> <span class="o">-</span> <span class="n">clo_z</span><span class="p">)</span>
+            
+            <span class="n">dist_to_clo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dist_x</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">dist_y</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">dist_z</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray</span><span class="p">][:,</span><span class="n">ind_r</span><span class="p">]</span>
+            <span class="c1"># Assign inf distance to invalid gates</span>
+            <span class="n">dist_to_clo</span><span class="p">[</span><span class="n">val</span><span class="o">.</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+            
+            <span class="c1"># Find closest gate which is valid</span>
+            <span class="n">clo_valid_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">dist_to_clo</span><span class="p">),</span> <span class="n">dist_to_clo</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="n">clo_valid_idx</span><span class="p">]</span>
+            <span class="n">ind_ray</span> <span class="o">=</span> <span class="n">ind_ray</span><span class="p">[</span><span class="n">clo_valid_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="n">ind_r</span> <span class="o">=</span> <span class="n">ind_r</span><span class="p">[</span><span class="n">clo_valid_idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+    
     <span class="n">ant_coord</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="n">ind_ray</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
     <span class="n">ant_coord</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray</span><span class="p">]</span>
     <span class="n">ant_coord</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray</span><span class="p">]</span>
     <span class="n">ant_coord</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ind_ray</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="o">+</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_r</span><span class="p">]</span>
 
-    <span class="n">val</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">ind_ray</span><span class="p">,</span> <span class="n">ind_r</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">fill_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">is_masked</span><span class="p">(</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray</span><span class="p">,</span> <span class="n">ind_r</span><span class="p">]</span>
-    <span class="p">):</span>
-        <span class="n">val</span> <span class="o">=</span> <span class="n">fill_value</span>
+    <span class="k">if</span> <span class="n">fill_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> 
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="c1"># val is not masked array</span>
+            <span class="k">pass</span>
 
     <span class="n">time</span> <span class="o">=</span> <span class="n">num2date</span><span class="p">(</span>
         <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;calendar&quot;</span><span class="p">]</span>
@@ -645,7 +694,6 @@
     <span class="n">new_dataset</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;antenna_coordinates_az_el_r&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">r</span><span class="p">]})</span>
     <span class="n">new_dataset</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;used_antenna_coordinates_az_el_r&quot;</span><span class="p">:</span> <span class="n">ant_coord</span><span class="p">})</span>
     <span class="n">new_dataset</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;final&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
-
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
@@ -671,7 +719,7 @@
 <span class="sd">            if True the user input altitude is used to determine the point of</span>
 <span class="sd">            interest.</span>
 <span class="sd">            if False use the altitude at a given radar elevation ele over the</span>
-<span class="sd">            point of interest.</span>
+<span class="sd">            point of interest. Default is False.</span>
 <span class="sd">        coord_fname : string</span>
 <span class="sd">            File name containing the points coordinates</span>
 <span class="sd">        alt_points : float. Dataset keyword</span>

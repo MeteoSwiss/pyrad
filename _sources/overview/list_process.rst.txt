@@ -4328,7 +4328,7 @@ parameters
      | if True the user input altitude is used to determine the point of
      |     interest.
      |     if False use the altitude at a given radar elevation ele over the
-     |     point of interest.
+     |     point of interest. Default is False.
    coord_fname : string
      | File name containing the points coordinates
    alt_points : float. Dataset keyword
@@ -4356,11 +4356,19 @@ parameters
    datatype : string. Dataset keyword
      | The data type where we want to extract the point measurement,
      |     can be any datatype supported by pyrad and available in the data
-   single_point : boolean. Dataset keyword
-     | if True only one gate per radar volume is going to be kept.
-     |     Otherwise all gates within the azimuth and elevation tolerance
-     |     are going to be kept. This is useful to extract all data from
-     |     fixed pointing scans. Default True
+   agg_method : string. Dataset keyword
+     | Which aggregation method to use to combine data that is within the
+     |     tolerance in AziTol, EleTol and RngTol
+     |     'nearest' : will only get nearest point to prescribed lon/lat/alt or
+     |         ele/azi/rng
+     |     'nearest_valid' : will only get the nearest valid point to prescribed 
+     |         lon/lat/alt or ele/azi/rng (ignore missing values)
+     |     'average' : will average (while ignore missing values), all values
+     |         that fall within the tolerance in AziTol, EleTol and RngTol
+     |     'none' : will not perform any averaging and will get all values that
+     |         fall within the tolerance in AziTol, EleTol and RngTol, each
+     |         with its individual timestamp
+     |     Default is 'nearest'
    latlon : boolean. Dataset keyword
      | if True position is obtained from latitude, longitude information,
      |     otherwise position is obtained from antenna coordinates
@@ -4369,7 +4377,7 @@ parameters
      | if True the user input altitude is used to determine the point of
      |     interest.
      |     if False use the altitude at a given radar elevation ele over the
-     |     point of interest.
+     |     point of interest. Default is False.
    lon : float. Dataset keyword
      | the longitude [deg]. Use when latlon is True.
    lat : float. Dataset keyword

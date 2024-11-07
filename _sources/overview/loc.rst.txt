@@ -12,7 +12,7 @@ Name                  Type     Description
 RadarName             STRING   Short version name of a C-band radar (i.e., A, D, L, P) or DX50, MXPol for the X-band radars.
 RadarRes              STRING   rad4alp radar resolution (H or L). Only necessary if rad4alp (swiss C-band) data is processed.
 RadarBeamwidth        FLOAT    Radar antenna beam width [Deg].
-DataTypeIDInFiles     STRUCT   Structure of strings defining the mapping between pyrad names and variable names in input files. If not provided it will be expected that the name in the files are the standard py-ART names (defined in the py-ART config file). An example of such a struct could be:
+DataTypeIDInFiles     STRUCT   Structure of strings defining the mapping between pyrad names and variable names in input files. If not provided it will be expected that the name in the files are the standard py-ART names (defined in the py-ART config file). If you process multiple radars, you can append the index of the radar to DataTypeIDInFiles: DataTypeIDInFiles1, will be used for radar 1, DataTypeIDInFiles2, for radar 2, and so on. If you don't add this index, the same DataTypeIDInFiles struc will be used for all radars.  An example of such a struct could be:
 - dBZ                 STRING   DBZ
 - ZDR                 STRING   ZDR
 - RhoHV               STRING   RHOHV

@@ -2524,7 +2524,7 @@
 
 <div class="viewcode-block" id="write_ts_grid_data">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_ts_grid_data.html#pyrad.io.write_ts_grid_data">[docs]</a>
-<span class="k">def</span> <span class="nf">write_ts_grid_data</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">sensorid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">write_ts_grid_data</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    writes time series of data</span>
 
@@ -2536,9 +2536,6 @@
 <span class="sd">    fname : str</span>
 <span class="sd">        file name where to store the data</span>
 
-<span class="sd">    sensorid : str</span>
-<span class="sd">        Optional, sensor ID if dataset contains multiple sensors</span>
-
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    fname : str</span>
@@ -2546,106 +2543,53 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">filelist</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">sensorid</span><span class="p">:</span>
-        <span class="n">sensor_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;point_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">sensorid</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">multiple_sensors</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">multiple_sensors</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">filelist</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# Gridded data timeseries data file</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;# Gridded data timeseries data file</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
             <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;# Comment lines are preceded by &quot;#&quot;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# Description: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;# Description: </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;# Time series of a gridded data over a &#39;</span> <span class="o">+</span>
+                          <span class="s1">&#39;fixed location.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
             <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-                <span class="s2">&quot;# Time series of a gridded data over a &quot;</span> <span class="o">+</span> <span class="s2">&quot;fixed location.</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
+                <span class="s1">&#39;# Nominal location [lon, lat, alt]: &#39;</span> <span class="o">+</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;point_coordinates_WGS84_lon_lat_alt&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
             <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-                <span class="s2">&quot;# Nominal location [lon, lat, alt]: &quot;</span>
-                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;point_coordinates_WGS84_lon_lat_alt&quot;</span><span class="p">])</span>
-                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
+                <span class="s1">&#39;# Grid points used [iz, iy, ix]: &#39;</span> <span class="o">+</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;grid_points_iz_iy_ix&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
             <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-                <span class="s2">&quot;# Grid points used [iz, iy, ix]: &quot;</span>
-                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;grid_points_iz_iy_ix&quot;</span><span class="p">])</span>
-                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
+                <span class="s1">&#39;# Data: &#39;</span> <span class="o">+</span>
+                <span class="n">generate_field_name_str</span><span class="p">(</span>
+                    <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">])</span> <span class="o">+</span>
+                <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;# Fill Value: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_fillvalue</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
             <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-                <span class="s2">&quot;# Data: &quot;</span> <span class="o">+</span> <span class="n">generate_field_name_str</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# Fill Value: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_fillvalue</span><span class="p">())</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-                <span class="s2">&quot;# Start: &quot;</span> <span class="o">+</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S UTC&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;#</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="s1">&#39;# Start: &#39;</span> <span class="o">+</span>
+                <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S UTC&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;#</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 
-            <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">,</span> <span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;alt&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]</span>
+            <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;alt&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">]</span>
             <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fieldnames</span><span class="p">)</span>
             <span class="n">writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">multiple_sensors</span><span class="p">:</span>
-                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span>
-                    <span class="p">{</span>
-                        <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][</span><span class="n">sensor_idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
-                            <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span>
-                        <span class="p">),</span>
-                        <span class="s2">&quot;lon&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;used_point_coordinates_WGS84_lon&quot;</span><span class="p">][</span><span class="n">sensor_idx</span><span class="p">][</span>
-                            <span class="mi">0</span>
-                        <span class="p">],</span>
-                        <span class="s2">&quot;lat&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;used_point_coordinates_WGS84_lat&quot;</span><span class="p">][</span><span class="n">sensor_idx</span><span class="p">][</span>
-                            <span class="mi">0</span>
-                        <span class="p">],</span>
-                        <span class="s2">&quot;alt&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;used_point_coordinates_WGS84_alt&quot;</span><span class="p">][</span><span class="n">sensor_idx</span><span class="p">][</span>
-                            <span class="mi">0</span>
-                        <span class="p">],</span>
-                        <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
-                    <span class="p">}</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span>
-                    <span class="p">{</span>
-                        <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">),</span>
-                        <span class="s2">&quot;lon&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;used_coordinates_WGS84_lon_lat_alt&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                        <span class="s2">&quot;lat&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;used_coordinates_WGS84_lon_lat_alt&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
-                        <span class="s2">&quot;alt&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;used_coordinates_WGS84_lon_lat_alt&quot;</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
-                        <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
-                    <span class="p">}</span>
-                <span class="p">)</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span>
+                <span class="p">{</span><span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S.</span><span class="si">%f</span><span class="s1">&#39;</span><span class="p">),</span>
+                 <span class="s1">&#39;lon&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;used_coordinates_WGS84_lon_lat_alt&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                 <span class="s1">&#39;lat&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;used_coordinates_WGS84_lon_lat_alt&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                 <span class="s1">&#39;alt&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;used_coordinates_WGS84_lon_lat_alt&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
+                 <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]})</span>
             <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">,</span> <span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;alt&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+            <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;alt&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">]</span>
             <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fieldnames</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">multiple_sensors</span><span class="p">:</span>
-                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span>
-                    <span class="p">{</span>
-                        <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][</span><span class="n">sensor_idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
-                            <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span>
-                        <span class="p">),</span>
-                        <span class="s2">&quot;lon&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;used_point_coordinates_WGS84_lon&quot;</span><span class="p">][</span><span class="n">sensor_idx</span><span class="p">][</span>
-                            <span class="mi">0</span>
-                        <span class="p">],</span>
-                        <span class="s2">&quot;lat&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;used_point_coordinates_WGS84_lat&quot;</span><span class="p">][</span><span class="n">sensor_idx</span><span class="p">][</span>
-                            <span class="mi">0</span>
-                        <span class="p">],</span>
-                        <span class="s2">&quot;alt&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;used_point_coordinates_WGS84_alt&quot;</span><span class="p">][</span><span class="n">sensor_idx</span><span class="p">][</span>
-                            <span class="mi">0</span>
-                        <span class="p">],</span>
-                        <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">][</span><span class="n">sensor_idx</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                    <span class="p">}</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span>
-                    <span class="p">{</span>
-                        <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">),</span>
-                        <span class="s2">&quot;lon&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;used_coordinates_WGS84_lon_lat_alt&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                        <span class="s2">&quot;lat&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;used_coordinates_WGS84_lon_lat_alt&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
-                        <span class="s2">&quot;alt&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;used_coordinates_WGS84_lon_lat_alt&quot;</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
-                        <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">][</span><span class="n">sensor_idx</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                    <span class="p">}</span>
-                <span class="p">)</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span>
+                <span class="p">{</span><span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S.</span><span class="si">%f</span><span class="s1">&#39;</span><span class="p">),</span>
+                 <span class="s1">&#39;lon&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;used_coordinates_WGS84_lon_lat_alt&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                 <span class="s1">&#39;lat&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;used_coordinates_WGS84_lon_lat_alt&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                 <span class="s1">&#39;alt&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;used_coordinates_WGS84_lon_lat_alt&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
+                 <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]})</span>
             <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">fname</span></div>
-
 
 
 <span class="k">def</span> <span class="nf">write_ts_ml</span><span class="p">(</span>
