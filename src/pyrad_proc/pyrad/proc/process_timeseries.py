@@ -44,11 +44,19 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
         datatype : string. Dataset keyword
             The data type where we want to extract the point measurement,
             can be any datatype supported by pyrad and available in the data
-        single_point : boolean. Dataset keyword
-            if True only one gate per radar volume is going to be kept.
-            Otherwise all gates within the azimuth and elevation tolerance
-            are going to be kept. This is useful to extract all data from
-            fixed pointing scans. Default True
+        agg_method : string. Dataset keyword
+            Which aggregation method to use to combine data that is within the
+            tolerance in AziTol, EleTol and RngTol
+            'nearest' : will only get nearest point to prescribed lon/lat/alt or
+                ele/azi/rng
+            'nearest_valid' : will only get the nearest valid point to prescribed 
+                lon/lat/alt or ele/azi/rng (ignore missing values)
+            'average' : will average (while ignore missing values), all values
+                that fall within the tolerance in AziTol, EleTol and RngTol
+            'none' : will not perform any averaging and will get all values that
+                fall within the tolerance in AziTol, EleTol and RngTol, each
+                with its individual timestamp
+            Default is 'nearest'
         latlon : boolean. Dataset keyword
             if True position is obtained from latitude, longitude information,
             otherwise position is obtained from antenna coordinates
@@ -57,7 +65,7 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
             if True the user input altitude is used to determine the point of
             interest.
             if False use the altitude at a given radar elevation ele over the
-            point of interest.
+            point of interest. Default is False.
         lon : float. Dataset keyword
             the longitude [deg]. Use when latlon is True.
         lat : float. Dataset keyword
@@ -136,8 +144,15 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
     projparams.update({"lon_0": radar.longitude["data"]})
     projparams.update({"lat_0": radar.latitude["data"]})
 
-    single_point = dscfg.get("single_point", True)
     fill_value = dscfg.get("fill_value", None)
+    agg_method = dscfg.get("agg_method", "nearest")
+    if agg_method not in ["nearest", "nearest_valid", "average", "none"]:
+        warn("Invalid agg_method, use 'nearest', 'nearest_valid', 'average' or 'none'")
+        warn("Using 'nearest' instead...")
+        agg_method = "nearest"
+        
+    ignore_missing = dscfg.get("ignore_missing", False)
+
     if dscfg["latlon"]:
         lon = dscfg["lon"]
         lat = dscfg["lat"]
@@ -219,26 +234,62 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
         )
         return None, None
 
-    if single_point:
+
+    if agg_method == "nearest":
+        # Get closest gate
         ind_ray = np.argmin(
             np.abs(radar.azimuth["data"] - az) + np.abs(radar.elevation["data"] - el)
         )
+        ind_r = np.argmin(np.abs(radar.range["data"] - r))
+        val = radar.fields[field_name]["data"][ind_ray, ind_r]
     else:
+        # Get all gates that fall within tolerance
         ind_ray = np.where(
             np.logical_and(d_az <= dscfg["AziTol"], d_el <= dscfg["EleTol"])
         )[0]
-    ind_r = np.argmin(np.abs(radar.range["data"] - r))
+        ind_r = np.where(np.abs(radar.range["data"] - r) < dscfg["RngTol"] )[0]
 
+        if agg_method == "average":
+            val = np.nanmean(radar.fields[field_name]["data"].data[ind_ray][:,ind_r])
+        elif agg_method == "none":
+            val = radar.fields[field_name]["data"].data[ind_ray, ind_r]
+        elif agg_method == "nearest_valid":
+            ind_clo_ray = np.argmin(np.abs(radar.azimuth["data"] - az) + np.abs(radar.elevation["data"] - el))
+            ind_clo_r = np.argmin(np.abs(radar.range["data"] - r))
+
+            # We get x,y,z position of closest gate to objective
+            clo_x = radar.gate_x['data'][ind_clo_ray, ind_clo_r]
+            clo_y = radar.gate_y['data'][ind_clo_ray, ind_clo_r]
+            clo_z = radar.gate_z['data'][ind_clo_ray, ind_clo_r]
+            
+            # We get the distance from the closest gate to every gate within tolerance
+            dist_x = np.abs(radar.gate_x['data'][ind_ray][:,ind_r] - clo_x)
+            dist_y = np.abs(radar.gate_y['data'][ind_ray][:,ind_r] - clo_y)
+            dist_z = np.abs(radar.gate_z['data'][ind_ray][:,ind_r] - clo_z)
+            
+            dist_to_clo = np.sqrt(dist_x ** 2 + dist_y ** 2 + dist_z ** 2)
+            val = radar.fields[field_name]["data"][ind_ray][:,ind_r]
+            # Assign inf distance to invalid gates
+            dist_to_clo[val.mask] = np.inf
+            
+            # Find closest gate which is valid
+            clo_valid_idx = np.unravel_index(np.argmin(dist_to_clo), dist_to_clo.shape)
+            val = val[clo_valid_idx]
+            ind_ray = ind_ray[clo_valid_idx[0]]
+            ind_r = ind_r[clo_valid_idx[1]]
+
+    
     ant_coord = np.empty((3, ind_ray.size), np.float32)
     ant_coord[0, :] = radar.azimuth["data"][ind_ray]
     ant_coord[1, :] = radar.elevation["data"][ind_ray]
     ant_coord[2, :] = np.zeros(ind_ray.size) + radar.range["data"][ind_r]
 
-    val = radar.fields[field_name]["data"].data[ind_ray, ind_r]
-    if fill_value is not None and np.ma.is_masked(
-        radar.fields[field_name]["data"][ind_ray, ind_r]
-    ):
-        val = fill_value
+    if fill_value is not None: 
+        try:
+            val = val.filled(fill_value)
+        except AttributeError:
+            # val is not masked array
+            pass
 
     time = num2date(
         radar.time["data"][ind_ray], radar.time["units"], radar.time["calendar"]
@@ -267,7 +318,6 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
     new_dataset.update({"antenna_coordinates_az_el_r": [az, el, r]})
     new_dataset.update({"used_antenna_coordinates_az_el_r": ant_coord})
     new_dataset.update({"final": False})
-
     return new_dataset, ind_rad
 
 
@@ -290,7 +340,7 @@ def process_multiple_points(procstatus, dscfg, radar_list=None):
             if True the user input altitude is used to determine the point of
             interest.
             if False use the altitude at a given radar elevation ele over the
-            point of interest.
+            point of interest. Default is False.
         coord_fname : string
             File name containing the points coordinates
         alt_points : float. Dataset keyword

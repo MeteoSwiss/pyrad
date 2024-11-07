@@ -527,7 +527,7 @@ def plot_ppi_map(
             )
             for rng_ring in rng_rings:
                 display_map.plot_range_ring(rng_ring, ax=ax)
-
+    
     if save_fig:
         for fname in fname_list:
             fig.savefig(fname, dpi=dpi)

@@ -2231,9 +2231,11 @@ def get_sensor_data(date, datatype, cfg):
         files2 = glob.glob(datafile2)
         if len(files1):
             datafile = files1[0]
-        if len(files2):
+        elif len(files2):
             datafile = files2[0]
-
+        else:
+            warn("Could not find any raingauge file with names {datafile1} or {datafile2}")
+            
         with open(datafile) as f:
             num_columns = len(next(f).strip().split(','))
         if num_columns == 3:

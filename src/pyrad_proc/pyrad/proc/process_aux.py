@@ -749,7 +749,7 @@ def process_vol_to_grid(procstatus, dscfg, radar_list=None):
     if radar_list is None:
         warn("ERROR: No valid radar found")
         return None, None
-
+    
     # Process
     field_names_aux = []
     ind_rads_aux = []
