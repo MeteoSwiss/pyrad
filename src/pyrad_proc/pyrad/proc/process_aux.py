@@ -730,7 +730,7 @@ def process_vol_to_grid(procstatus, dscfg, radar_list=None):
         alt0 : float
             Grid origin altitude [masl]. Default is 0
         wfunc : str
-            Weighting function. Default NEAREST
+            Weighting function, available are NEAREST, BARNES, BARNES2 and CRESSMAN. Default NEAREST
     radar_list : list of Radar objects
         Optional. list of radar objects
 
