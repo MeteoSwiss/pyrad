@@ -44,6 +44,7 @@ Functions for reading auxiliary data
 import os
 import glob
 import datetime
+
 import pandas as pd
 import csv
 import xml.etree.ElementTree as et
@@ -934,217 +935,112 @@ def read_colocated_gates(fname):
 
 def read_colocated_data(fname):
     """
-    Reads a csv files containing colocated data
+    Reads a CSV file containing colocated data using pandas.
 
     Parameters
     ----------
     fname : str
-        path of time series file
+        Path of time series file.
 
     Returns
     -------
-    rad1_time, rad1_ray_ind, rad1_rng_ind, rad1_ele, rad1_azi, rad1_rng,
-    rad1_val, rad2_time, rad2_ray_ind, rad2_rng_ind, rad2_ele, rad2_azi,
-    rad2_rng, rad2_val : tupple
-        A tupple with the data read. None otherwise
-
+    tuple
+        A tuple with the data read: 
+        (rad1_time, rad1_ray_ind, rad1_rng_ind, rad1_ele, rad1_azi, rad1_rng,
+        rad1_val, rad2_time, rad2_ray_ind, rad2_rng_ind, rad2_ele, rad2_azi,
+        rad2_rng, rad2_val). Returns None for all if unable to read the file.
     """
     try:
-        with open(fname, "r", newline="") as csvfile:
-            # first count the lines
-            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
-            nrows = sum(1 for row in reader)
-            rad1_time = np.empty(nrows, dtype=datetime.datetime)
-            rad1_ray_ind = np.empty(nrows, dtype=int)
-            rad1_rng_ind = np.empty(nrows, dtype=int)
-            rad1_ele = np.empty(nrows, dtype=float)
-            rad1_azi = np.empty(nrows, dtype=float)
-            rad1_rng = np.empty(nrows, dtype=float)
-            rad1_val = np.empty(nrows, dtype=float)
-            rad2_time = np.empty(nrows, dtype=datetime.datetime)
-            rad2_ray_ind = np.empty(nrows, dtype=int)
-            rad2_rng_ind = np.empty(nrows, dtype=int)
-            rad2_ele = np.empty(nrows, dtype=float)
-            rad2_azi = np.empty(nrows, dtype=float)
-            rad2_rng = np.empty(nrows, dtype=float)
-            rad2_val = np.empty(nrows, dtype=float)
+        # Read the CSV file, skipping lines starting with "#"
+        df = pd.read_csv(fname, comment="#", na_values="--")
 
-            # now read the data
-            csvfile.seek(0)
-            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
-            for i, row in enumerate(reader):
-                rad1_time[i] = datetime.datetime.strptime(
-                    row["rad1_time"], "%Y%m%d%H%M%S"
-                )
-                rad1_ray_ind[i] = int(row["rad1_ray_ind"])
-                rad1_rng_ind[i] = int(row["rad1_rng_ind"])
-                rad1_ele[i] = float(row["rad1_ele"])
-                rad1_azi[i] = float(row["rad1_azi"])
-                rad1_rng[i] = float(row["rad1_rng"])
-                rad1_val[i] = float(row["rad1_val"])
-                rad2_time[i] = datetime.datetime.strptime(
-                    row["rad2_time"], "%Y%m%d%H%M%S"
-                )
-                rad2_ray_ind[i] = int(row["rad2_ray_ind"])
-                rad2_rng_ind[i] = int(row["rad2_rng_ind"])
-                rad2_ele[i] = float(row["rad2_ele"])
-                rad2_azi[i] = float(row["rad2_azi"])
-                rad2_rng[i] = float(row["rad2_rng"])
-                rad2_val[i] = float(row["rad2_val"])
+        # Convert rad1_time and rad2_time to datetime
+        df["rad1_time"] = pd.to_datetime(df["rad1_time"], format="%Y%m%d%H%M%S")
+        df["rad2_time"] = pd.to_datetime(df["rad2_time"], format="%Y%m%d%H%M%S")
 
-            csvfile.close()
+        # Create masked arrays
+        def to_masked_array(column, dtype=None):
+            return np.ma.masked_invalid(df[column].to_numpy(dtype=dtype))
 
-            return (
-                rad1_time,
-                rad1_ray_ind,
-                rad1_rng_ind,
-                rad1_ele,
-                rad1_azi,
-                rad1_rng,
-                rad1_val,
-                rad2_time,
-                rad2_ray_ind,
-                rad2_rng_ind,
-                rad2_ele,
-                rad2_azi,
-                rad2_rng,
-                rad2_val,
-            )
-    except EnvironmentError as ee:
-        warn(str(ee))
-        warn("Unable to read file " + fname)
         return (
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
+            to_masked_array("rad1_time"),
+            to_masked_array("rad1_ray_ind", dtype=int),
+            to_masked_array("rad1_rng_ind", dtype=int),
+            to_masked_array("rad1_ele", dtype=float),
+            to_masked_array("rad1_azi", dtype=float),
+            to_masked_array("rad1_rng", dtype=float),
+            to_masked_array("rad1_val", dtype=float),
+            to_masked_array("rad2_time"),
+            to_masked_array("rad2_ray_ind", dtype=int),
+            to_masked_array("rad2_rng_ind", dtype=int),
+            to_masked_array("rad2_ele", dtype=float),
+            to_masked_array("rad2_azi", dtype=float),
+            to_masked_array("rad2_rng", dtype=float),
+            to_masked_array("rad2_val", dtype=float),
         )
+        
+    except Exception as e:
+        warn(str(e))
+        warn("Unable to read file " + fname)
+        return (None,) * 14
 
 
 def read_colocated_data_time_avg(fname):
     """
-    Reads a csv files containing time averaged colocated data
+    Reads a CSV file containing time-averaged colocated data using pandas.
 
     Parameters
     ----------
     fname : str
-        path of time series file
+        Path of time series file.
 
     Returns
     -------
-    rad1_time, rad1_ray_ind, rad1_rng_ind, rad1_ele , rad1_azi, rad1_rng,
-    rad1_val, rad2_time, rad2_ray_ind, rad2_rng_ind, rad2_ele, rad2_azi,
-    rad2_rng, rad2_val : tupple
-        A tupple with the data read. None otherwise
-
+    tuple
+        A tuple with the data read: 
+        (rad1_time, rad1_ray_ind, rad1_rng_ind, rad1_ele, rad1_azi, rad1_rng,
+        rad1_dBZavg, rad1_PhiDPavg, rad1_Flagavg, rad2_time, rad2_ray_ind, 
+        rad2_rng_ind, rad2_ele, rad2_azi, rad2_rng, rad2_dBZavg, rad2_PhiDPavg, 
+        rad2_Flagavg). Returns None for all if unable to read the file.
     """
     try:
-        with open(fname, "r", newline="") as csvfile:
-            # first count the lines
-            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
-            nrows = sum(1 for row in reader)
-            rad1_time = np.empty(nrows, dtype=datetime.datetime)
-            rad1_ray_ind = np.empty(nrows, dtype=int)
-            rad1_rng_ind = np.empty(nrows, dtype=int)
-            rad1_ele = np.empty(nrows, dtype=float)
-            rad1_azi = np.empty(nrows, dtype=float)
-            rad1_rng = np.empty(nrows, dtype=float)
-            rad1_dBZavg = np.empty(nrows, dtype=float)
-            rad1_PhiDPavg = np.empty(nrows, dtype=float)
-            rad1_Flagavg = np.empty(nrows, dtype=float)
-            rad2_time = np.empty(nrows, dtype=datetime.datetime)
-            rad2_ray_ind = np.empty(nrows, dtype=int)
-            rad2_rng_ind = np.empty(nrows, dtype=int)
-            rad2_ele = np.empty(nrows, dtype=float)
-            rad2_azi = np.empty(nrows, dtype=float)
-            rad2_rng = np.empty(nrows, dtype=float)
-            rad2_dBZavg = np.empty(nrows, dtype=float)
-            rad2_PhiDPavg = np.empty(nrows, dtype=float)
-            rad2_Flagavg = np.empty(nrows, dtype=float)
+        # Read the CSV file, skipping lines starting with "#"
+        df = pd.read_csv(fname, comment="#", na_values="--")
 
-            # now read the data
-            csvfile.seek(0)
-            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
-            for i, row in enumerate(reader):
-                rad1_time[i] = datetime.datetime.strptime(
-                    row["rad1_time"], "%Y%m%d%H%M%S"
-                )
-                rad1_ray_ind[i] = int(row["rad1_ray_ind"])
-                rad1_rng_ind[i] = int(row["rad1_rng_ind"])
-                rad1_ele[i] = float(row["rad1_ele"])
-                rad1_azi[i] = float(row["rad1_azi"])
-                rad1_rng[i] = float(row["rad1_rng"])
-                rad1_dBZavg[i] = float(row["rad1_dBZavg"])
-                rad1_PhiDPavg[i] = float(row["rad1_PhiDPavg"])
-                rad1_Flagavg[i] = float(row["rad1_Flagavg"])
-                rad2_time[i] = datetime.datetime.strptime(
-                    row["rad2_time"], "%Y%m%d%H%M%S"
-                )
-                rad2_ray_ind[i] = int(row["rad2_ray_ind"])
-                rad2_rng_ind[i] = int(row["rad2_rng_ind"])
-                rad2_ele[i] = float(row["rad2_ele"])
-                rad2_azi[i] = float(row["rad2_azi"])
-                rad2_rng[i] = float(row["rad2_rng"])
-                rad2_dBZavg[i] = float(row["rad2_dBZavg"])
-                rad2_PhiDPavg[i] = float(row["rad2_PhiDPavg"])
-                rad2_Flagavg[i] = float(row["rad2_Flagavg"])
+        # Convert rad1_time and rad2_time to datetime
+        df["rad1_time"] = pd.to_datetime(df["rad1_time"], format="%Y%m%d%H%M%S")
+        df["rad2_time"] = pd.to_datetime(df["rad2_time"], format="%Y%m%d%H%M%S")
 
-            csvfile.close()
+        # Create masked arrays
+        def to_masked_array(column, dtype=None):
+            return np.ma.masked_invalid(df[column].to_numpy(dtype=dtype))
 
-            return (
-                rad1_time,
-                rad1_ray_ind,
-                rad1_rng_ind,
-                rad1_ele,
-                rad1_azi,
-                rad1_rng,
-                rad1_dBZavg,
-                rad1_PhiDPavg,
-                rad1_Flagavg,
-                rad2_time,
-                rad2_ray_ind,
-                rad2_rng_ind,
-                rad2_ele,
-                rad2_azi,
-                rad2_rng,
-                rad2_dBZavg,
-                rad2_PhiDPavg,
-                rad2_Flagavg,
-            )
-    except EnvironmentError as ee:
-        warn(str(ee))
-        warn("Unable to read file " + fname)
         return (
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
+            to_masked_array("rad1_time"),
+            to_masked_array("rad1_ray_ind", dtype=int),
+            to_masked_array("rad1_rng_ind", dtype=int),
+            to_masked_array("rad1_ele", dtype=float),
+            to_masked_array("rad1_azi", dtype=float),
+            to_masked_array("rad1_rng", dtype=float),
+            to_masked_array("rad1_dBZavg", dtype=float),
+            to_masked_array("rad1_PhiDPavg", dtype=float),
+            to_masked_array("rad1_Flagavg", dtype=float),
+            to_masked_array("rad2_time"),
+            to_masked_array("rad2_ray_ind", dtype=int),
+            to_masked_array("rad2_rng_ind", dtype=int),
+            to_masked_array("rad2_ele", dtype=float),
+            to_masked_array("rad2_azi", dtype=float),
+            to_masked_array("rad2_rng", dtype=float),
+            to_masked_array("rad2_dBZavg", dtype=float),
+            to_masked_array("rad2_PhiDPavg", dtype=float),
+            to_masked_array("rad2_Flagavg", dtype=float),
         )
-
+        
+    except Exception as e:
+        warn(str(e))
+        warn("Unable to read file " + fname)
+        return (None,) * 18
+    
 def read_timeseries(fname):
     """
     Reads a time series contained in a CSV file.

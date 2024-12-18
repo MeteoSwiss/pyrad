@@ -1807,7 +1807,9 @@ def compute_2d_stats(field1, field2, field_name1, field_name2, step1=None, step2
     quant75bias = np.percentile((field2 - field1).compressed(), 75.0)
     ind_max_val1, ind_max_val2 = np.where(hist_2d == np.ma.amax(hist_2d))
     modebias = bin_centers2[ind_max_val2[0]] - bin_centers1[ind_max_val1[0]]
-    slope, intercep, corr, _, _ = scipy.stats.linregress(field1, y=field2)
+    mask_nan = np.logical_or(field1.mask, field2.mask)
+    slope, intercep, corr, _, _ = scipy.stats.linregress(field1[~mask_nan],
+                                                         y=field2[~mask_nan])
     intercep_slope_1 = np.ma.mean(field2 - field1)
 
     stats = {

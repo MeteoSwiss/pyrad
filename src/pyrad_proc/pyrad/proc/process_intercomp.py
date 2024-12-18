@@ -1694,6 +1694,8 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
             "rad2_azi": [],
             "rad2_rng": [],
             "rad2_val": [],
+            "rad1_name": dscfg["global_data"]["rad1_name"],
+            "rad2_name": dscfg["global_data"]["rad2_name"],
         }
 
         # determine if radar data has to be averaged
@@ -1845,11 +1847,14 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
         return new_dataset, None
 
     if procstatus == 2:
+        tseries_prod = [prod for prod in dscfg['products'] 
+            if 'WRITE_INTERCOMP' in dscfg['products'][prod]['type']][0]
+         
         savedir = get_save_dir(
             dscfg["basepath"],
             dscfg["procname"],
             dscfg["dsname"],
-            dscfg["coloc_data_dir"],
+            tseries_prod,
             timeinfo=dscfg["global_data"]["timeinfo"],
             create_dir=False,
         )
@@ -1862,9 +1867,9 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
             timeinfo=dscfg["global_data"]["timeinfo"],
             timeformat="%Y%m%d",
         )
-
+        
         fname = savedir + fname[0]
-
+        import pdb; pdb.set_trace()
         coloc_data = read_colocated_data(fname)
 
         intercomp_dict = {
@@ -2094,6 +2099,8 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             "rad2_dBZavg": [],
             "rad2_PhiDPavg": [],
             "rad2_Flagavg": [],
+            "rad1_name": dscfg["global_data"]["rad1_name"],
+            "rad2_name": dscfg["global_data"]["rad2_name"],
         }
 
         # determine if radar data has to be averaged
@@ -2324,11 +2331,14 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             warn("Unknown reflectivity type")
             return None, None
 
+        tseries_prod = [prod for prod in dscfg['products'] 
+            if 'WRITE_INTERCOMP' in dscfg['products'][prod]['type']][0]
+        
         savedir = get_save_dir(
             dscfg["basepath"],
             dscfg["procname"],
             dscfg["dsname"],
-            dscfg["coloc_data_dir"],
+            tseries_prod,
             timeinfo=dscfg["global_data"]["timeinfo"],
             create_dir=False,
         )
@@ -2578,7 +2588,6 @@ def process_intercomp_fields(procstatus, dscfg, radar_list=None):
 
     data1 = deepcopy(radar1.fields[field_name_1]["data"])
     data2 = deepcopy(radar2.fields[field_name_2]["data"])
-
     mask1 = np.ma.getmaskarray(data1)
     mask2 = np.ma.getmaskarray(data2)
 
