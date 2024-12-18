@@ -1869,7 +1869,6 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
         )
         
         fname = savedir + fname[0]
-        import pdb; pdb.set_trace()
         coloc_data = read_colocated_data(fname)
 
         intercomp_dict = {
