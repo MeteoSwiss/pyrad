@@ -33,7 +33,7 @@ from ..graph.plots import plot_scatter
 from ..graph.plots_timeseries import plot_intercomp_scores_ts
 
 from ..util.radar_utils import compute_2d_stats
-
+from ..util.stat_utils import parse_math_expression
 
 def generate_intercomp_products(dataset, prdcfg):
     """
@@ -60,6 +60,11 @@ def generate_intercomp_products(dataset, prdcfg):
                     The minimum number of points to consider the statistics
                     valid and therefore use the data point in the plotting.
                     Default 0
+                transform: str
+                    A transform to apply to the data before computing the statistics
+                    and generating the plots. Any mathematical function with argument "x"
+                    is accepted for example "sin(x) + x**2" or "10 * log10(x)"
+                    Default is to use no transform
                 corr_min: float
                     The minimum correlation to consider the statistics
                     valid and therefore use the data point in the plotting.
@@ -76,6 +81,11 @@ def generate_intercomp_products(dataset, prdcfg):
                     Type of scatter plot. Can be a plot for each radar volume
                     (instant) or at the end of the processing period
                     (cumulative). Default is cumulative
+                transform: str
+                    A transform to apply to the data before computing the statistics
+                    and generating the plots. Any mathematical function with argument "x"
+                    is accepted for example "sin(x) + x**2" or "10 * log10(x)"
+                    Default is to use no transform
         'WRITE_INTERCOMP': Writes the instantaneously intercompared data
             (gate positions, values, etc.) in a csv file.
             User defined parameters:
@@ -194,10 +204,11 @@ def generate_intercomp_products(dataset, prdcfg):
             "colocated radar gates" + " \n " + dataset["timeinfo"].strftime(timeformat)
         )
 
+        transform = parse_math_expression(prdcfg.get("transform", "x"))
         step = prdcfg.get("step", None)
         hist_2d, bin_edges1, bin_edges2, stats = compute_2d_stats(
-            np.ma.asarray(dataset["intercomp_dict"]["rad1_val"]),
-            np.ma.asarray(dataset["intercomp_dict"]["rad2_val"]),
+            transform(np.ma.asarray(dataset["intercomp_dict"]["rad1_val"])),
+            transform(np.ma.asarray(dataset["intercomp_dict"]["rad2_val"])),
             field_name,
             field_name,
             step1=step,
@@ -259,13 +270,13 @@ def generate_intercomp_products(dataset, prdcfg):
 
         field_name = get_fieldname_pyart(prdcfg["voltype"])
         step = prdcfg.get("step", None)
-
+        transform = parse_math_expression(prdcfg.get("transform", "x"))
         rad1_name = dataset["intercomp_dict"]["rad1_name"]
         rad2_name = dataset["intercomp_dict"]["rad2_name"]
 
         hist_2d, bin_edges1, bin_edges2, stats = compute_2d_stats(
-            np.ma.asarray(dataset["intercomp_dict"]["rad1_val"]),
-            np.ma.asarray(dataset["intercomp_dict"]["rad2_val"]),
+            transform(np.ma.asarray(dataset["intercomp_dict"]["rad1_val"])),
+            transform(np.ma.asarray(dataset["intercomp_dict"]["rad2_val"])),
             field_name,
             field_name,
             step1=step,
