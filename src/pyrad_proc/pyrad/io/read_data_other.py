@@ -67,7 +67,7 @@ import pyart
 from pyart.config import get_fillvalue, get_metadata
 
 from .io_aux import get_fieldname_pyart, _get_datetime
-
+from .flock_utils import lock_file, unlock_file
 
 def read_centroids_npz(fname):
     """
@@ -1196,103 +1196,49 @@ def read_ml_ts(fname):
 
 def read_monitoring_ts(fname, sort_by_date=False):
     """
-    Reads a monitoring time series contained in a csv file
+    Reads a monitoring time series contained in a CSV file using pandas.
 
     Parameters
     ----------
     fname : str
-        path of time series file
+        Path of time series file
     sort_by_date : bool
-        if True, the read data is sorted by date prior to exit
+        If True, the read data is sorted by date prior to exit
 
     Returns
     -------
-    date , np_t, central_quantile, low_quantile, high_quantile : tupple
+    date, np_t, central_quantile, low_quantile, high_quantile : tuple
         The read data. None otherwise
-
     """
     try:
-        with open(fname, "r", newline="") as csvfile:
-            if FCNTL_AVAIL:
-                while True:
-                    try:
-                        fcntl.flock(csvfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                        break
-                    except OSError as e:
-                        if e.errno == errno.EAGAIN:
-                            time.sleep(0.1)
-                        elif e.errno == errno.EBADF:
-                            warn(
-                                "WARNING: No file locking is possible (NFS mount?), "
-                                + "expect strange issues with multiprocessing..."
-                            )
-                            break
-                        else:
-                            raise
-            else:
-                while True:
-                    try:
-                        # Attempt to acquire an exclusive lock on the file
-                        msvcrt.locking(
-                            os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0
-                        )
-                        break
-                    except OSError as e:
-                        if e.errno == 13:  # Permission denied
-                            time.sleep(0.1)
-                        elif e.errno == 13:  # No such file or directory
-                            warn(
-                                "WARNING: No file locking is possible (NFS mount?), "
-                                + "expect strange issues with multiprocessing..."
-                            )
-                            break
-                        else:
-                            raise
+        with open(fname, "r+") as csvfile:
+            lock_file(csvfile)
 
-            # first count the lines
-            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
-            nrows = sum(1 for row in reader)
-            np_t = np.zeros(nrows, dtype=int)
-            central_quantile = np.ma.empty(nrows, dtype=float)
-            low_quantile = np.ma.empty(nrows, dtype=float)
-            high_quantile = np.ma.empty(nrows, dtype=float)
-            date = np.empty(nrows, dtype=datetime.datetime)
-
-            # now read the data
-            csvfile.seek(0)
-            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
-            for i, row in enumerate(reader):
-                date[i] = datetime.datetime.strptime(row["date"], "%Y%m%d%H%M%S")
-                np_t[i] = int(row["NP"])
-                central_quantile[i] = float(row["central_quantile"])
-                low_quantile[i] = float(row["low_quantile"])
-                high_quantile[i] = float(row["high_quantile"])
-
-            if FCNTL_AVAIL:
-                fcntl.flock(csvfile, fcntl.LOCK_UN)
-            else:
-                msvcrt.locking(
-                    csvfile.fileno(), msvcrt.LK_UNLCK, os.path.getsize(csvfile)
-                )
-
-            csvfile.close()
-
-            central_quantile = np.ma.masked_values(central_quantile, get_fillvalue())
-            low_quantile = np.ma.masked_values(low_quantile, get_fillvalue())
-            high_quantile = np.ma.masked_values(high_quantile, get_fillvalue())
-
+            # Read the CSV file, ignoring comment lines
+            df = pd.read_csv(
+                csvfile, 
+                comment='#', 
+                parse_dates=['date'],
+                date_parser=lambda x: datetime.datetime.strptime(x, "%Y%m%d%H%M%S")
+            )
+            
             if sort_by_date:
-                ind = np.argsort(date)
-                date = date[ind]
-                np_t = np_t[ind]
-                central_quantile = central_quantile[ind]
-                low_quantile = low_quantile[ind]
-                high_quantile = high_quantile[ind]
+                df.sort_values(by='date', inplace=True)
+            
+            df = df.drop_duplicates(subset='date', keep="last")
+            unlock_file(csvfile)
 
-            return date, np_t, central_quantile, low_quantile, high_quantile
-    except EnvironmentError as ee:
-        warn(str(ee))
-        warn("Unable to read file " + fname)
+        date = df['date'].dt.to_pydatetime()
+        np_t = df['NP'].to_numpy(dtype=int)
+        central_quantile = np.ma.masked_values(df['central_quantile'].to_numpy(dtype=float), get_fillvalue())
+        low_quantile = np.ma.masked_values(df['low_quantile'].to_numpy(dtype=float), get_fillvalue())
+        high_quantile = np.ma.masked_values(df['high_quantile'].to_numpy(dtype=float), get_fillvalue())
+
+        return date, np_t, central_quantile, low_quantile, high_quantile
+
+    except Exception as e:
+        warn(str(e))
+        warn(f"Unable to read file {fname}")
         return None, None, None, None, None
 
 
