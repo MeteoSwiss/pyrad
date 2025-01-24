@@ -136,7 +136,7 @@ def generate_monitoring_products(dataset, prdcfg):
                     The reference value. Default 0
                 sort_by_date: Bool
                     If true when reading the csv file containing the
-                    statistics the data is sorted by date. Default False
+                    statistics the data is sorted by date. Default True
                 rewrite: Bool
                     If true the csv file containing the statistics is
                     rewritten
@@ -453,7 +453,7 @@ def generate_monitoring_products(dataset, prdcfg):
 
         quantiles = prdcfg.get("quantiles", np.array([25.0, 50.0, 75.0]))
         ref_value = prdcfg.get("ref_value", 0.0)
-        sort_by_date = prdcfg.get("sort_by_date", False)
+        sort_by_date = prdcfg.get("sort_by_date", True)
         rewrite = prdcfg.get("rewrite", False)
         plot_until_year_end = prdcfg.get("plot_until_year_end", False)
 
@@ -496,7 +496,6 @@ def generate_monitoring_products(dataset, prdcfg):
         date, np_t_vec, cquant_vec, lquant_vec, hquant_vec = read_monitoring_ts(
             csvfname, sort_by_date=sort_by_date
         )
-
         if date is None:
             warn("Unable to plot time series. No valid data")
             return None
