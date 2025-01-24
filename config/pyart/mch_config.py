@@ -2566,8 +2566,8 @@ DEFAULT_METADATA = {
         'standard_name': 'thunderstorm_forecast',
         'long_name': 'TRT Thunderstorm Forecast Ranks',
         'labels': [str(val) for val in range(41)],
-        'ticks': range(41),
-        'boundaries': range(41)},
+        'ticks': list(range(41)),
+        'boundaries': list(range(41))},
     
     maximum_expected_severe_hail_size: {
         'units': 'cm',
