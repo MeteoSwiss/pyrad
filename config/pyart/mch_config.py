@@ -345,6 +345,7 @@ proportion_IH = 'proportion_IH'
 
 # rad4alp products
 probability_of_hail = 'probability_of_hail'
+thunderstorm_forecast = 'thunderstorm_forecast'
 maximum_expected_severe_hail_size = 'maximum_expected_severe_hail_size'
 maximum_echo = 'maximum_echo'
 maximum_echo_height = 'maximum_echo_height'
@@ -708,6 +709,7 @@ DEFAULT_FIELD_NAMES = {
     'melting_layer': melting_layer,
     'melting_layer_height': melting_layer_height,
     'probability_of_hail': probability_of_hail,
+    'thunderstorm_forecast': thunderstorm_forecast,
     'maximum_expected_severe_hail_size': maximum_expected_severe_hail_size,
     'maximum_echo': maximum_echo,
     'maximum_echo_height': maximum_echo_height,
@@ -2559,6 +2561,14 @@ DEFAULT_METADATA = {
         'ticks': [0., 10., 20., 30., 40., 50., 60., 70., 80., 90.],
         'boundaries': [0., 10., 20., 30., 40., 50., 60., 70., 80., 90., 100.]},
 
+    thunderstorm_forecast: {
+        'units': '-',
+        'standard_name': 'thunderstorm_forecast',
+        'long_name': 'TRT Thunderstorm Forecast Ranks',
+        'labels': [str(val) for val in range(41)],
+        'ticks': range(41),
+        'boundaries': range(41)},
+    
     maximum_expected_severe_hail_size: {
         'units': 'cm',
         'standard_name': 'maximum_expected_severe_hail_size',
