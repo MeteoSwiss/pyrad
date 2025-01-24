@@ -112,7 +112,7 @@ def generate_timeseries_products(dataset, prdcfg):
         'PLOT_AND_WRITE': Writes and plots a trajectory time series.
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset 
+                    name of the pyrad variable to use, it must be available in the dataset
                 ymin, ymax: float
                     The minimum and maximum value of the Y-axis. If none it
                     will be obtained from the Py-ART config file.

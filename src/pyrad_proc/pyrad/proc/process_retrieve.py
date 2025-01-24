@@ -228,7 +228,7 @@ def process_rcs_pr(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types, must contain, 
+            The input data types, must contain,
             "dBZ" or "dBuZ" or "dBZc" or "dBuZc" or "dBZv" or "dBuZv" or "dBuZvc"
         AntennaGainH, AntennaGainV : float. Dataset keyword
             The horizontal (vertical) polarization antenna gain [dB]. If None
@@ -266,7 +266,7 @@ def process_rcs_pr(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output field "rcs_h" or "rcs_v" (if vert. refl. were 
+        dictionary containing the output field "rcs_h" or "rcs_v" (if vert. refl. were
         provided)
     ind_rad : int
         radar index
@@ -377,7 +377,7 @@ def process_rcs(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output field "rcs_h" or "rcs_v" (if vert. refl. were 
+        dictionary containing the output field "rcs_h" or "rcs_v" (if vert. refl. were
         provided)
     ind_rad : int
         radar index
@@ -456,7 +456,7 @@ def process_vol_refl(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output field "eta_h" or "eta_v" (if vert. refl. were 
+        dictionary containing the output field "eta_h" or "eta_v" (if vert. refl. were
         provided)
     ind_rad : int
         radar index
@@ -467,7 +467,16 @@ def process_vol_refl(procstatus, dscfg, radar_list=None):
 
     for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype in ("dBZ", "dBuZ", "dBZc", "dBuZc", "dBZv", "dBuZv", "dBZvc", "dBuZvc"):
+        if datatype in (
+            "dBZ",
+            "dBuZ",
+            "dBZc",
+            "dBuZc",
+            "dBZv",
+            "dBuZv",
+            "dBZvc",
+            "dBuZvc",
+        ):
             refl_field = get_fieldname_pyart(datatype)
 
     ind_rad = int(radarnr[5:8]) - 1
@@ -515,7 +524,7 @@ def process_refl_from_zdr(procstatus, dscfg, radar_list=None):
 
         datatype : list of string. Dataset keyword
             The input data types, must contain,
-            "ZDR", or "ZDRc", or "ZDRu and 
+            "ZDR", or "ZDRc", or "ZDRu and
             "dBZ", "dBuZ", "dBZc", "dBuZc", "dBZv", "dBZvc" "dBuZv", or "dBuZvc"
     radar_list : list of Radar objects
         Optional. list of radar objects
@@ -529,22 +538,31 @@ def process_refl_from_zdr(procstatus, dscfg, radar_list=None):
         "dBZvc" if "ZDRc" and "dBZc" were provided
         "dBZv" if "ZDRc" and "dBZvc" were provided
         "dBuZ" if "ZDRu" and "dBuZ" were provided
-        "dBuZv" if "ZDRu" and "dBuZv" were provided     
-           
+        "dBuZv" if "ZDRu" and "dBuZv" were provided
+
     ind_rad : int
         radar index
 
     """
     if procstatus != 1:
         return None, None
-    
+
     for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        if datatype in ("dBZ", "dBuZ", "dBZc", "dBuZc", "dBZv", "dBuZv", "dBZvc", "dBuZvc"):
+        if datatype in (
+            "dBZ",
+            "dBuZ",
+            "dBZc",
+            "dBuZc",
+            "dBZv",
+            "dBuZv",
+            "dBZvc",
+            "dBuZvc",
+        ):
             refl_field = get_fieldname_pyart(datatype)
         if datatype in ("ZDR", "uZDR", "ZDRc"):
             zdr_field = get_fieldname_pyart(datatype)
-            
+
     ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn("No valid radar")
@@ -558,27 +576,27 @@ def process_refl_from_zdr(procstatus, dscfg, radar_list=None):
     if zdr_field not in radar.fields:
         warn("Unable to obtain reflectivity. Missing field " + zdr_field)
         return None, None
-    
+
     if refl_field.endswith("_vv"):
         ort_refl_field = "reflectivity"
     else:
         ort_refl_field = "reflectivity_vv"
- 
+
     if "unfiltered" in zdr_field:
         ort_refl_field = "unfiltered" + ort_refl_field
-   
+
     if "corrected" in zdr_field:
         ort_refl_field = "corrected_" + ort_refl_field
-                    
+
     ort_refl_dict = pyart.retrieve.compute_refl_from_zdr(
-        radar, zdr_field=zdr_field, refl_field=refl_field,
-        ort_refl_field=ort_refl_field
+        radar, zdr_field=zdr_field, refl_field=refl_field, ort_refl_field=ort_refl_field
     )
     # prepare for exit
     new_dataset = {"radar_out": deepcopy(radar)}
     new_dataset["radar_out"].fields = dict()
     new_dataset["radar_out"].add_field(ort_refl_field, ort_refl_dict)
     return new_dataset, ind_rad
+
 
 def process_snr(procstatus, dscfg, radar_list=None):
     """
@@ -604,7 +622,7 @@ def process_snr(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output field "SNRh" or "SNRv" (if vert. 
+        dictionary containing the output field "SNRh" or "SNRv" (if vert.
         refl. were provided)
     ind_rad : int
         radar index
@@ -1324,24 +1342,24 @@ def process_rainrate(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : string. Dataset keyword
-            The input data type, must contain, 
+            The input data type, must contain,
             If RR_METHOD == "Z" or "ZPoly":
                 "dBZ" or "dBZc"
             If RR_METHOD == "KDP":
                 "KDP" or "KDPc"
-            If RR_METHOD == "A":   
+            If RR_METHOD == "A":
                 "Ah" or "Ahc"
             If RR_METHOD == "ZKDP":
                 "dBZ" or "dBZc", and,
                 "KDP" or "KDPc"
             IF RR_METHOD == "ZA":
                 "dBZ" or "dBZc", and,
-                "Ah" or "Ahc"       
+                "Ah" or "Ahc"
             IF RR_METHID == "hydro":
                 "dBZ" or "dBZc", and,
                 "Ah" or "Ahc", and,
                 "hydro"
-           
+
         RR_METHOD : string. Dataset keyword
             The rainfall rate estimation method. One of the following:
             Z, ZPoly, KDP, A, ZKDP, ZA, hydro

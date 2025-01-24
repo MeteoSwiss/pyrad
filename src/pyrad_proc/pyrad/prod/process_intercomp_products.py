@@ -35,6 +35,7 @@ from ..graph.plots_timeseries import plot_intercomp_scores_ts
 from ..util.radar_utils import compute_2d_stats
 from ..util.stat_utils import parse_math_expression
 
+
 def generate_intercomp_products(dataset, prdcfg):
     """
     Generates radar intercomparison products. Accepted product types:
@@ -43,7 +44,7 @@ def generate_intercomp_products(dataset, prdcfg):
             statistics.
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
                 add_date_in_fname: Bool
                     If true adds the year in the csv file containing the
                     statistics. Default False
@@ -73,7 +74,7 @@ def generate_intercomp_products(dataset, prdcfg):
             radar 1 versus the points of radar 2
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
                 step: float
                     The quantization step of the data. If none it will be
                     computed using the Py-ART config file. Default None
@@ -90,12 +91,12 @@ def generate_intercomp_products(dataset, prdcfg):
             (gate positions, values, etc.) in a csv file.
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
         'WRITE_INTERCOMP_TIME_AVG': Writes the time-averaged intercompared
             data (gate positions, values, etc.) in a csv file.
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
 
     Parameters
     ----------
@@ -204,15 +205,18 @@ def generate_intercomp_products(dataset, prdcfg):
             "colocated radar gates" + " \n " + dataset["timeinfo"].strftime(timeformat)
         )
 
-        transform = parse_math_expression(prdcfg.get("transform", "x"))
+        transform_str = prdcfg.get("transform", "x")
+        transform = parse_math_expression(transform_str)
+
         step = prdcfg.get("step", None)
         hist_2d, bin_edges1, bin_edges2, stats = compute_2d_stats(
-            transform(np.ma.asarray(dataset["intercomp_dict"]["rad1_val"])),
-            transform(np.ma.asarray(dataset["intercomp_dict"]["rad2_val"])),
+            np.ma.asarray(dataset["intercomp_dict"]["rad1_val"]),
+            np.ma.asarray(dataset["intercomp_dict"]["rad2_val"]),
             field_name,
             field_name,
             step1=step,
             step2=step,
+            transform=transform,
         )
         if hist_2d is None:
             return None
@@ -244,6 +248,8 @@ def generate_intercomp_products(dataset, prdcfg):
             + "\n"
         )
 
+        if transform_str != "x":
+            field_name = f"{transform_str} of {field_name}"
         plot_scatter(
             bin_edges1,
             bin_edges2,

@@ -59,7 +59,7 @@ from urllib.parse import urlparse
 from warnings import warn
 import smtplib
 from email.message import EmailMessage
-    
+
 from datetime import datetime as dt
 
 import numpy as np
@@ -74,16 +74,19 @@ from .flock_utils import lock_file, unlock_file
 
 try:
     import simplekml
+
     _SIMPLEKML_AVAILABLE = True
 except ImportError:
     _SIMPLEKML_AVAILABLE = False
 
 try:
     import boto3
+
     _BOTO3_AVAILABLE = True
 except ImportError:
     warn("boto3 is not installed, no copy to S3 bucket will be performed!")
     _BOTO3_AVAILABLE = False
+
 
 def write_to_s3(fname, basepath, s3copypath, s3accesspolicy=None):
     """
@@ -2076,52 +2079,62 @@ def write_ts_grid_data(dataset, fname):
     """
     filelist = glob.glob(fname)
     if not filelist:
-        with open(fname, 'w', newline='') as csvfile:
-            csvfile.write('# Gridded data timeseries data file\n')
+        with open(fname, "w", newline="") as csvfile:
+            csvfile.write("# Gridded data timeseries data file\n")
             csvfile.write('# Comment lines are preceded by "#"\n')
-            csvfile.write('# Description: \n')
-            csvfile.write('# Time series of a gridded data over a ' +
-                          'fixed location.\n')
+            csvfile.write("# Description: \n")
             csvfile.write(
-                '# Nominal location [lon, lat, alt]: ' +
-                str(dataset['point_coordinates_WGS84_lon_lat_alt']) + '\n')
+                "# Time series of a gridded data over a " + "fixed location.\n"
+            )
             csvfile.write(
-                '# Grid points used [iz, iy, ix]: ' +
-                str(dataset['grid_points_iz_iy_ix']) + '\n')
+                "# Nominal location [lon, lat, alt]: "
+                + str(dataset["point_coordinates_WGS84_lon_lat_alt"])
+                + "\n"
+            )
             csvfile.write(
-                '# Data: ' +
-                generate_field_name_str(
-                    dataset['datatype']) +
-                '\n')
-            csvfile.write('# Fill Value: ' + str(get_fillvalue()) + '\n')
+                "# Grid points used [iz, iy, ix]: "
+                + str(dataset["grid_points_iz_iy_ix"])
+                + "\n"
+            )
             csvfile.write(
-                '# Start: ' +
-                dataset['time'].strftime('%Y-%m-%d %H:%M:%S UTC') + '\n')
-            csvfile.write('#\n')
+                "# Data: " + generate_field_name_str(dataset["datatype"]) + "\n"
+            )
+            csvfile.write("# Fill Value: " + str(get_fillvalue()) + "\n")
+            csvfile.write(
+                "# Start: " + dataset["time"].strftime("%Y-%m-%d %H:%M:%S UTC") + "\n"
+            )
+            csvfile.write("#\n")
 
-            fieldnames = ['date', 'lon', 'lat', 'alt', 'value']
+            fieldnames = ["date", "lon", "lat", "alt", "value"]
             writer = csv.DictWriter(csvfile, fieldnames)
             writer.writeheader()
             writer.writerow(
-                {'date': dataset['time'].strftime('%Y-%m-%d %H:%M:%S.%f'),
-                 'lon': dataset['used_coordinates_WGS84_lon_lat_alt'][0],
-                 'lat': dataset['used_coordinates_WGS84_lon_lat_alt'][1],
-                 'alt': dataset['used_coordinates_WGS84_lon_lat_alt'][2],
-                 'value': dataset['value']})
+                {
+                    "date": dataset["time"].strftime("%Y-%m-%d %H:%M:%S.%f"),
+                    "lon": dataset["used_coordinates_WGS84_lon_lat_alt"][0],
+                    "lat": dataset["used_coordinates_WGS84_lon_lat_alt"][1],
+                    "alt": dataset["used_coordinates_WGS84_lon_lat_alt"][2],
+                    "value": dataset["value"],
+                }
+            )
             csvfile.close()
     else:
-        with open(fname, 'a', newline='') as csvfile:
-            fieldnames = ['date', 'lon', 'lat', 'alt', 'value']
+        with open(fname, "a", newline="") as csvfile:
+            fieldnames = ["date", "lon", "lat", "alt", "value"]
             writer = csv.DictWriter(csvfile, fieldnames)
             writer.writerow(
-                {'date': dataset['time'].strftime('%Y-%m-%d %H:%M:%S.%f'),
-                 'lon': dataset['used_coordinates_WGS84_lon_lat_alt'][0],
-                 'lat': dataset['used_coordinates_WGS84_lon_lat_alt'][1],
-                 'alt': dataset['used_coordinates_WGS84_lon_lat_alt'][2],
-                 'value': dataset['value']})
+                {
+                    "date": dataset["time"].strftime("%Y-%m-%d %H:%M:%S.%f"),
+                    "lon": dataset["used_coordinates_WGS84_lon_lat_alt"][0],
+                    "lat": dataset["used_coordinates_WGS84_lon_lat_alt"][1],
+                    "alt": dataset["used_coordinates_WGS84_lon_lat_alt"][2],
+                    "value": dataset["value"],
+                }
+            )
             csvfile.close()
 
     return fname
+
 
 def write_ts_ml(
     dt_ml, ml_top_avg, ml_top_std, thick_avg, thick_std, nrays_valid, nrays_total, fname
@@ -2373,11 +2386,19 @@ def write_ts_cum(dataset, fname):
     return fname
 
 
-def write_monitoring_ts(start_time, np_t, values, quantiles, datatype, fname, rewrite=False):
+def write_monitoring_ts(
+    start_time, np_t, values, quantiles, datatype, fname, rewrite=False
+):
     nvalues = np.size(start_time)
-    start_time_aux = np.asarray([start_time]) if nvalues == 1 else np.asarray(start_time)
+    start_time_aux = (
+        np.asarray([start_time]) if nvalues == 1 else np.asarray(start_time)
+    )
     np_t_aux = np.asarray([np_t]) if nvalues == 1 else np_t
-    values_aux = np.asarray([values.filled(get_fillvalue())]) if nvalues == 1 else values.filled(get_fillvalue())
+    values_aux = (
+        np.asarray([values.filled(get_fillvalue())])
+        if nvalues == 1
+        else values.filled(get_fillvalue())
+    )
 
     data = {
         "date": [t.strftime("%Y%m%d%H%M%S") for t in start_time_aux],
@@ -2395,7 +2416,7 @@ def write_monitoring_ts(start_time, np_t, values, quantiles, datatype, fname, re
         if rewrite or not file_exists:
             header = (
                 "# Weather radar monitoring timeseries data file\n"
-                "# Comment lines are preceded by \"#\"\n"
+                '# Comment lines are preceded by "#"\n'
                 "# Description: \n"
                 "# Time series of a monitoring of weather radar data.\n"
                 f"# Quantiles: {quantiles[1]}, {quantiles[0]}, {quantiles[2]} percent.\n"
@@ -2407,14 +2428,14 @@ def write_monitoring_ts(start_time, np_t, values, quantiles, datatype, fname, re
             f.write(header)
             df.to_csv(f, index=False)
         else:
-            header = [line.strip() for line in f if line.startswith('#')]
+            header = [line.strip() for line in f if line.startswith("#")]
             f.seek(0)
-            existing_df = pd.read_csv(f, comment='#')
-            existing_df['date'] =  existing_df['date'].astype(str)
+            existing_df = pd.read_csv(f, comment="#")
+            existing_df["date"] = existing_df["date"].astype(str)
             combined_df = pd.concat([existing_df, df], ignore_index=True)
             combined_df.drop_duplicates(subset=["date"], keep="last", inplace=True)
             f.seek(0)
-            f.write("\n".join(header)+"\n")
+            f.write("\n".join(header) + "\n")
             combined_df.to_csv(f, index=False)
         unlock_file(f)
     return fname

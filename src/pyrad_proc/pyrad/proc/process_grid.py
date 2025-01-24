@@ -1489,7 +1489,7 @@ def process_grid_texture(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing a radar object containing the field 
+        dictionary containing a radar object containing the field
         "texture"
     ind_rad : int
         radar index
@@ -1565,10 +1565,10 @@ def process_grid_mask(procstatus, dscfg, radar_list=None):
         x_dir_ext, y_dir_ext : int
             Number of pixels by which to extend the mask on each side of the
             west-east direction and south-north direction
-        
+
     radar_list : list of Radar objects
         Optional. list of radar objects
-    
+
 
     Returns
     -------

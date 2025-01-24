@@ -97,7 +97,7 @@ def plot_timeseries(
     2018.03.05 -jgr- added x-limit of x axis to avoid unwanted error messages
 
     """
-    tvec = np.array(tvec) # convert  from pandas if needed
+    tvec = np.array(tvec)  # convert  from pandas if needed
     if period > 0:
         for i, data in enumerate(data_list):
             data *= period / 3600.0

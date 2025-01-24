@@ -69,6 +69,7 @@ from pyart.config import get_fillvalue, get_metadata
 from .io_aux import get_fieldname_pyart, _get_datetime
 from .flock_utils import lock_file, unlock_file
 
+
 def read_centroids_npz(fname):
     """
     Reads an npz file containing data used in centroid computation
@@ -945,7 +946,7 @@ def read_colocated_data(fname):
     Returns
     -------
     tuple
-        A tuple with the data read: 
+        A tuple with the data read:
         (rad1_time, rad1_ray_ind, rad1_rng_ind, rad1_ele, rad1_azi, rad1_rng,
         rad1_val, rad2_time, rad2_ray_ind, rad2_rng_ind, rad2_ele, rad2_azi,
         rad2_rng, rad2_val). Returns None for all if unable to read the file.
@@ -978,7 +979,7 @@ def read_colocated_data(fname):
             to_masked_array("rad2_rng", dtype=float),
             to_masked_array("rad2_val", dtype=float),
         )
-        
+
     except Exception as e:
         warn(str(e))
         warn("Unable to read file " + fname)
@@ -997,10 +998,10 @@ def read_colocated_data_time_avg(fname):
     Returns
     -------
     tuple
-        A tuple with the data read: 
+        A tuple with the data read:
         (rad1_time, rad1_ray_ind, rad1_rng_ind, rad1_ele, rad1_azi, rad1_rng,
-        rad1_dBZavg, rad1_PhiDPavg, rad1_Flagavg, rad2_time, rad2_ray_ind, 
-        rad2_rng_ind, rad2_ele, rad2_azi, rad2_rng, rad2_dBZavg, rad2_PhiDPavg, 
+        rad1_dBZavg, rad1_PhiDPavg, rad1_Flagavg, rad2_time, rad2_ray_ind,
+        rad2_rng_ind, rad2_ele, rad2_azi, rad2_rng, rad2_dBZavg, rad2_PhiDPavg,
         rad2_Flagavg). Returns None for all if unable to read the file.
     """
     try:
@@ -1035,12 +1036,13 @@ def read_colocated_data_time_avg(fname):
             to_masked_array("rad2_PhiDPavg", dtype=float),
             to_masked_array("rad2_Flagavg", dtype=float),
         )
-        
+
     except Exception as e:
         warn(str(e))
         warn("Unable to read file " + fname)
         return (None,) * 18
-    
+
+
 def read_timeseries(fname):
     """
     Reads a time series contained in a CSV file.
@@ -1061,17 +1063,17 @@ def read_timeseries(fname):
         data = pd.read_csv(fname, comment="#")
 
         # Parse the 'date' column as datetime
-        data['date'] = pd.to_datetime(data['date'], errors='coerce')
-        
+        data["date"] = pd.to_datetime(data["date"], errors="coerce")
+
         # Convert 'value' column to numeric, setting errors='coerce' to replace
         # non-convertible entries with WNaN, which will be masked later
-        data['value'] = pd.to_numeric(data['value'], errors='coerce')
-        
+        data["value"] = pd.to_numeric(data["value"], errors="coerce")
+
         # Mask NaN values in 'value' and convert to a masked array
-        value = np.ma.masked_invalid(data['value'].values)
-        
+        value = np.ma.masked_invalid(data["value"].values)
+
         # Return the date and masked value array
-        return data['date'], value
+        return data["date"], value
 
     except EnvironmentError as ee:
         warn(str(ee))
@@ -1216,23 +1218,29 @@ def read_monitoring_ts(fname, sort_by_date=False):
 
             # Read the CSV file, ignoring comment lines
             df = pd.read_csv(
-                csvfile, 
-                comment='#', 
-                parse_dates=['date'],
-                date_parser=lambda x: datetime.datetime.strptime(x, "%Y%m%d%H%M%S")
+                csvfile,
+                comment="#",
+                parse_dates=["date"],
+                date_parser=lambda x: datetime.datetime.strptime(x, "%Y%m%d%H%M%S"),
             )
-            
+
             if sort_by_date:
-                df.sort_values(by='date', inplace=True)
-            
-            df = df.drop_duplicates(subset='date', keep="last")
+                df.sort_values(by="date", inplace=True)
+
+            df = df.drop_duplicates(subset="date", keep="last")
             unlock_file(csvfile)
 
-        date = df['date'].dt.to_pydatetime()
-        np_t = df['NP'].to_numpy(dtype=int)
-        central_quantile = np.ma.masked_values(df['central_quantile'].to_numpy(dtype=float), get_fillvalue())
-        low_quantile = np.ma.masked_values(df['low_quantile'].to_numpy(dtype=float), get_fillvalue())
-        high_quantile = np.ma.masked_values(df['high_quantile'].to_numpy(dtype=float), get_fillvalue())
+        date = df["date"].dt.to_pydatetime()
+        np_t = df["NP"].to_numpy(dtype=int)
+        central_quantile = np.ma.masked_values(
+            df["central_quantile"].to_numpy(dtype=float), get_fillvalue()
+        )
+        low_quantile = np.ma.masked_values(
+            df["low_quantile"].to_numpy(dtype=float), get_fillvalue()
+        )
+        high_quantile = np.ma.masked_values(
+            df["high_quantile"].to_numpy(dtype=float), get_fillvalue()
+        )
 
         return date, np_t, central_quantile, low_quantile, high_quantile
 
@@ -1761,17 +1769,17 @@ def read_xls(xls_file):
     ----------
     fname : str
         Full path of the excel file to be read
-    
+
     Returns
     -------
     The excel file as a Pandas dataframe
     """
-    
-    data = pd.read_excel(xls_file, sheet_name  = None)
+
+    data = pd.read_excel(xls_file, sheet_name=None)
     keys = list(data.keys())
     hourly_keys = []
     for k in keys:
-        if 'Data Hourly' in k:
+        if "Data Hourly" in k:
             hourly_keys.append(k)
     out = pd.concat([data[k] for k in hourly_keys])
     return out

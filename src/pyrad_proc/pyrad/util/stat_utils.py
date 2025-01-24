@@ -15,7 +15,7 @@ Miscellaneous functions dealing with statistics
 import numpy as np
 import ast
 import operator as op
-import math
+
 
 def quantiles_weighted(
     values,
@@ -166,6 +166,7 @@ def ratio_bootstrapping(nominator, denominator, nsamples=1000):
         )
     return samples
 
+
 # Supported operators mapped to NumPy operations
 operators = {
     ast.Add: op.add,
@@ -173,21 +174,22 @@ operators = {
     ast.Mult: op.mul,
     ast.Div: op.truediv,
     ast.Pow: op.pow,
-    ast.USub: op.neg
+    ast.USub: op.neg,
 }
 
 # Supported NumPy mathematical functions
 functions = {
-    'sin': np.sin,
-    'cos': np.cos,
-    'tan': np.tan,
-    'exp': np.exp,
-    'sqrt': np.sqrt,
-    'log': np.log,
-    'log10': np.log10,
-    'log2': np.log2,
-    'abs': np.abs
+    "sin": np.sin,
+    "cos": np.cos,
+    "tan": np.tan,
+    "exp": np.exp,
+    "sqrt": np.sqrt,
+    "log": np.log,
+    "log10": np.log10,
+    "log2": np.log2,
+    "abs": np.abs,
 }
+
 
 def parse_math_expression(expr):
     """
@@ -208,10 +210,10 @@ def parse_math_expression(expr):
     Returns
     -------
     function
-        A callable function `f(x)` that evaluates the expression using NumPy. 
+        A callable function `f(x)` that evaluates the expression using NumPy.
         Accepts scalars or NumPy arrays for vectorized operations.
     """
-    
+
     def eval_(node, x):
         if isinstance(node, ast.Constant):  # Numeric literals
             return node.n
@@ -227,7 +229,7 @@ def parse_math_expression(expr):
             else:
                 raise ValueError(f"Unsupported function: {node.func.id}")
         elif isinstance(node, ast.Name):  # Variable (e.g., x)
-            if node.id == 'x':
+            if node.id == "x":
                 return x
             else:
                 raise ValueError(f"Unknown variable: {node.id}")
@@ -248,8 +250,7 @@ def parse_math_expression(expr):
         float or numpy.ndarray
             Result of evaluating the expression at input `x`.
         """
-        parsed_expr = ast.parse(expr, mode='eval').body
+        parsed_expr = ast.parse(expr, mode="eval").body
         return eval_(parsed_expr, x)
 
     return parsed_function
-

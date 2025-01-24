@@ -1712,7 +1712,7 @@ def compute_histogram_sweep(
     return bin_edges, values
 
 
-def get_histogram_bins(field_name, step=None, vmin=None, vmax=None, transform = None):
+def get_histogram_bins(field_name, step=None, vmin=None, vmax=None, transform=None):
     """
     gets the histogram bins. If vmin or vmax are not define the range limits
     of the field as defined in the Py-ART config file are going to be used.
@@ -1750,16 +1750,25 @@ def get_histogram_bins(field_name, step=None, vmin=None, vmax=None, transform = 
     if transform:
         vmin = transform(vmin)
         vmax = transform(vmax)
-        
+
     bins = np.linspace(
         vmin - step / 2.0, vmax + step / 2.0, num=int((vmax - vmin) / step) + 2
     )
-    
+
     return bins
 
 
-def compute_2d_stats(field1, field2, field_name1, field_name2, step1=None, step2=None, 
-                     vmin=None, vmax=None, transform=None):
+def compute_2d_stats(
+    field1,
+    field2,
+    field_name1,
+    field_name2,
+    step1=None,
+    step2=None,
+    vmin=None,
+    vmax=None,
+    transform=None,
+):
     """
     computes a 2D histogram and statistics of the data
 
@@ -1774,7 +1783,7 @@ def compute_2d_stats(field1, field2, field_name1, field_name2, step1=None, step2
     vmin
     transform : func
         A function to use to transform the data prior to computing the stats
-        
+
     Returns
     -------
     hist_2d : array
@@ -1804,10 +1813,15 @@ def compute_2d_stats(field1, field2, field_name1, field_name2, step1=None, step2
     if transform:
         field1 = transform(field1)
         field2 = transform(field2)
-        
+
     hist_2d, bin_edges1, bin_edges2 = compute_2d_hist(
-        field1, field2, field_name1, field_name2, step1=step1, step2=step2,
-        transform = transform
+        field1,
+        field2,
+        field_name1,
+        field_name2,
+        step1=step1,
+        step2=step2,
+        transform=transform,
     )
     step_aux1 = bin_edges1[1] - bin_edges1[0]
     bin_centers1 = bin_edges1[:-1] + step_aux1 / 2.0
@@ -1824,8 +1838,9 @@ def compute_2d_stats(field1, field2, field_name1, field_name2, step1=None, step2
     ind_max_val1, ind_max_val2 = np.where(hist_2d == np.ma.amax(hist_2d))
     modebias = bin_centers2[ind_max_val2[0]] - bin_centers1[ind_max_val1[0]]
     mask_nan = np.logical_or(field1.mask, field2.mask)
-    slope, intercep, corr, _, _ = scipy.stats.linregress(field1[~mask_nan],
-                                                         y=field2[~mask_nan])
+    slope, intercep, corr, _, _ = scipy.stats.linregress(
+        field1[~mask_nan], y=field2[~mask_nan]
+    )
     intercep_slope_1 = np.ma.mean(field2 - field1)
 
     stats = {
@@ -1885,7 +1900,9 @@ def compute_1d_stats(field1, field2):
     return stats
 
 
-def compute_2d_hist(field1, field2, field_name1, field_name2, step1=None, step2=None, transform = None):
+def compute_2d_hist(
+    field1, field2, field_name1, field_name2, step1=None, step2=None, transform=None
+):
     """
     computes a 2D histogram of the data
 
@@ -1908,10 +1925,10 @@ def compute_2d_hist(field1, field2, field_name1, field_name2, step1=None, step2=
         the bin edges along each dimension
 
     """
-    bin_edges1 = get_histogram_bins(field_name1, step=step1, transform = transform)
+    bin_edges1 = get_histogram_bins(field_name1, step=step1, transform=transform)
     step_aux1 = bin_edges1[1] - bin_edges1[0]
     bin_centers1 = bin_edges1[:-1] + step_aux1 / 2.0
-    bin_edges2 = get_histogram_bins(field_name2, step=step2, transform = transform)
+    bin_edges2 = get_histogram_bins(field_name2, step=step2, transform=transform)
     step_aux2 = bin_edges2[1] - bin_edges2[0]
     bin_centers2 = bin_edges2[:-1] + step_aux2 / 2.0
 

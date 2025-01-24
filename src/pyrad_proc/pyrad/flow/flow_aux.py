@@ -1038,15 +1038,16 @@ def _create_cfg_dict(cfgfile):
     try:
         print("- Main config file : {}".format(cfgfile))
         cfg = read_config(cfg["configFile"], cfg=cfg, defaults=DEFAULT_CONFIG["main"])
-        
+
         # Convert loc and prod config files to absolute paths if needed
-        filenames = ["locationConfigFile", 
-        "productConfigFile",
+        filenames = [
+            "locationConfigFile",
+            "productConfigFile",
         ]
         for fname in filenames:
             if not os.path.isabs(cfg[fname]):
-                cfg[fname] = os.path.join(cfg['configpath'], cfg[fname])
-                
+                cfg[fname] = os.path.join(cfg["configpath"], cfg[fname])
+
         print("- Location config file : {}".format(cfg["locationConfigFile"]))
         cfg = read_config(
             cfg["locationConfigFile"], cfg=cfg, defaults=DEFAULT_CONFIG["loc"]
@@ -1183,7 +1184,8 @@ def _create_cfg_dict(cfgfile):
 
     # check whether specified paths are relative or absolute
     # if relative add configpath to the path
-    filenames = ["locationConfigFile", 
+    filenames = [
+        "locationConfigFile",
         "productConfigFile",
         "datapath",
         "iconpath",
@@ -1194,17 +1196,18 @@ def _create_cfg_dict(cfgfile):
         "psrpath",
         "iqpath",
         "satpath",
-        "smnpath"]
-    
+        "smnpath",
+    ]
+
     for fname in filenames:
         if type(cfg[fname]) is list:
             for val in cfg[fname]:
                 if not os.path.isabs(val):
-                    val = os.path.join(cfg['configpath'], val)
+                    val = os.path.join(cfg["configpath"], val)
         elif type(cfg[fname]) is str:
             if not os.path.isabs(cfg[fname]):
-                cfg[fname] = os.path.join(cfg['configpath'], cfg[fname])
-    
+                cfg[fname] = os.path.join(cfg["configpath"], cfg[fname])
+
     # if specified in config, convert coordinates to arrays
     if "RadarPosition" in cfg:
         fltarr_list = ["latitude", "longitude", "altitude"]
@@ -1329,30 +1332,35 @@ def _create_datacfg_dict(cfg):
     datacfg.update({"MFScale": cfg["MFScale"]})
     datacfg.update({"DataTypeIDInFiles": cfg["DataTypeIDInFiles"]})
 
-    #s3 buckets
+    # s3 buckets
     if "bucket" in cfg:
         try:
             datacfg["s3_key"] = os.environ["S3_IN_KEY"]
             datacfg["s3_secret_key"] = os.environ["S3_IN_SECRET"]
         except KeyError:
             warn(
-                'Define environment variables S3_IN_KEY and S3_IN_SECRET'
-                ' to get input data from S3 buckets.')
+                "Define environment variables S3_IN_KEY and S3_IN_SECRET"
+                " to get input data from S3 buckets."
+            )
 
         if "s3path" in cfg:
             datacfg.update({"s3path": cfg["s3path"]})
         else:
-            warn('Unable to read data from s3 bucket. Define s3path')
+            warn("Unable to read data from s3 bucket. Define s3path")
         if "s3_url" in cfg:
             datacfg.update({"s3_url": cfg["s3_url"]})
         else:
-            warn('Unable to read data from s3 bucket. Define s3_url')
+            warn("Unable to read data from s3 bucket. Define s3_url")
 
         if "rm_s3_file" in cfg:
             datacfg.update({"rm_s3_file": cfg["rm_s3_file"]})
 
-        if ('s3path' in datacfg and 's3_url' in datacfg
-                and 's3_key' in datacfg and 's3_secret_key' in datacfg):
+        if (
+            "s3path" in datacfg
+            and "s3_url" in datacfg
+            and "s3_key" in datacfg
+            and "s3_secret_key" in datacfg
+        ):
             datacfg.update({"bucket": cfg["bucket"]})
 
     # Modify size of radar or radar spectra object
@@ -1791,14 +1799,14 @@ def _get_masterfile_list(datatypesdescr, starttimes, endtimes, datacfg, scan_lis
         )
         return [], None, None
 
-    if 'bucket' in datacfg:
+    if "bucket" in datacfg:
         masterfilelist = get_file_list_s3(
-            masterdatatypedescr, starttimes, endtimes, datacfg,
-            scan=masterscan)
+            masterdatatypedescr, starttimes, endtimes, datacfg, scan=masterscan
+        )
     else:
         masterfilelist = get_file_list(
-            masterdatatypedescr, starttimes, endtimes, datacfg,
-            scan=masterscan)
+            masterdatatypedescr, starttimes, endtimes, datacfg, scan=masterscan
+        )
 
     return masterfilelist, masterdatatypedescr, masterscan
 

@@ -73,10 +73,10 @@ def process_time_stats(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the statistic computed on the input field, as well as 
+        dictionary containing the statistic computed on the input field, as well as
         "nsamples", as well as
         "sum2" (sum-squared) if stat in (cov, std), as well as
-        
+
     ind_rad : int
         radar index
 
@@ -438,7 +438,7 @@ def process_time_stats2(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the statistic computed on the input field, as well as 
+        dictionary containing the statistic computed on the input field, as well as
         "nsamples"
 
     ind_rad : int
@@ -699,7 +699,7 @@ def process_time_avg(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the statistic computed on the input field, as well as 
+        dictionary containing the statistic computed on the input field, as well as
         "nsamples"
     ind_rad : int
         radar index
@@ -1060,7 +1060,7 @@ def process_time_avg_flag(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types, must be 
+            The input data types, must be
             "PhiDP" or "PhiDPc" (Optional, for PhiDP flagging), and,
             "echoID" (Optional, for echoID flagging), and,
             "hydro" (Optional, for no rain flagging), and,
@@ -1329,7 +1329,7 @@ def process_colocated_gates(procstatus, dscfg, radar_list=None):
         datatype : list of string. Dataset keyword
             The input data types to use to check colocated gates (one for every radar)
             Any datatype supported by pyrad and available in both radars is accepted.
-            If visibility filtering is desired, the fields 
+            If visibility filtering is desired, the fields
             "visibility" or "visibility_polar" must be specified for both radars.
         h_tol : float. Dataset keyword
             Tolerance in altitude difference between radar gates [m].
@@ -1847,9 +1847,12 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
         return new_dataset, None
 
     if procstatus == 2:
-        tseries_prod = [prod for prod in dscfg['products'] 
-            if 'WRITE_INTERCOMP' in dscfg['products'][prod]['type']][0]
-         
+        tseries_prod = [
+            prod
+            for prod in dscfg["products"]
+            if "WRITE_INTERCOMP" in dscfg["products"][prod]["type"]
+        ][0]
+
         savedir = get_save_dir(
             dscfg["basepath"],
             dscfg["procname"],
@@ -1867,7 +1870,7 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
             timeinfo=dscfg["global_data"]["timeinfo"],
             timeformat="%Y%m%d",
         )
-        
+
         fname = savedir + fname[0]
         coloc_data = read_colocated_data(fname)
 
@@ -1914,7 +1917,7 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
         datatype : list of string. Dataset keyword
             The input data types, must contain
             dBZ" or "dBZc" or "dBuZ" or "dBZv" or "dBZvc" or "dBuZv, and,
-            "PhiDP" or "PhiDPc", and, 
+            "PhiDP" or "PhiDPc", and,
             "time_avg_flag"
             for the two radars
         colocgatespath : string.
@@ -2059,7 +2062,7 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
         ):
             warn("Unable to compare radar time avg fields. " + "Fields missing")
             return None, None
-        
+
         dscfg["global_data"].update({"timeinfo": dscfg["timeinfo"]})
         if not dscfg["initialized"]:
             dscfg["global_data"].update(
@@ -2069,7 +2072,7 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
                 {"rad2_name": dscfg["RadarName"][ind_radar_list[1]]}
             )
             dscfg["initialized"] = 1
-            
+
         refl1 = radar1.fields[rad1_refl_field]["data"]
         refl2 = radar2.fields[rad2_refl_field]["data"]
 
@@ -2330,9 +2333,12 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             warn("Unknown reflectivity type")
             return None, None
 
-        tseries_prod = [prod for prod in dscfg['products'] 
-            if 'WRITE_INTERCOMP' in dscfg['products'][prod]['type']][0]
-        
+        tseries_prod = [
+            prod
+            for prod in dscfg["products"]
+            if "WRITE_INTERCOMP" in dscfg["products"][prod]["type"]
+        ][0]
+
         savedir = get_save_dir(
             dscfg["basepath"],
             dscfg["procname"],

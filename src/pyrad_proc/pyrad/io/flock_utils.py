@@ -1,14 +1,17 @@
 try:
     import fcntl
+
     FCNTL_AVAIL = True
 except ModuleNotFoundError:
     import msvcrt  # For windows
+
     FCNTL_AVAIL = False
 
 import os
 import time
 from warnings import warn
 import errno
+
 
 def lock_file(file):
     if FCNTL_AVAIL:
@@ -47,8 +50,9 @@ def lock_file(file):
                 else:
                     raise
 
+
 def unlock_file(file):
-    if os.name == 'posix':
+    if os.name == "posix":
         fcntl.flock(file, fcntl.LOCK_UN)
     else:
         msvcrt.locking(file.fileno(), msvcrt.LK_UNLCK, 1)

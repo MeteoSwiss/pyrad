@@ -305,7 +305,7 @@ def generate_grid_products(dataset, prdcfg):
                     countours are 10 values linearly distributed from vmin to
                     vmax
         'DDA_MAP':
-            Plots horizontal wind vectors obtained from a DDA analysis on a 2D map. 
+            Plots horizontal wind vectors obtained from a DDA analysis on a 2D map.
             The pyDDA package is required
             User defined parameters:
                 voltype: str
@@ -350,7 +350,7 @@ def generate_grid_products(dataset, prdcfg):
                     name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 level: int
                     The longitude level to plot. The rest of the parameters are
-                    defined by the parameters in 'xsecImageConfig' in the 'loc' 
+                    defined by the parameters in 'xsecImageConfig' in the 'loc'
                     configuration file
                 display_type: str
                     Display method for the wind vectors, can be either
@@ -388,7 +388,7 @@ def generate_grid_products(dataset, prdcfg):
                     name of the pyrad variable to use, it must be available in the dataset               in the dataset
                 level: int
                     The latitude level to plot. The rest of the parameters are
-                    defined by the parameters in 'xsecImageConfig' in the 'loc' 
+                    defined by the parameters in 'xsecImageConfig' in the 'loc'
                     configuration file
                 display_type: str
                     Display method for the wind vectors, can be either

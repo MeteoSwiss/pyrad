@@ -249,7 +249,7 @@ def process_hzt(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output fields corresponding to 
+        dictionary containing the output fields corresponding to
         icon_variables
     ind_rad : int
         radar index

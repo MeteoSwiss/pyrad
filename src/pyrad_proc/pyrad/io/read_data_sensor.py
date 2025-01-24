@@ -2220,12 +2220,15 @@ def get_sensor_data(date, datatype, cfg):
     if cfg["sensor"] == "rgage":
         # Try several file formats
         datapath1 = os.path.join(cfg["smnpath"], date.strftime("%Y%m"))
-        datapath2 = os.path.join(cfg["smnpath"], date.strftime("%Y-%m-%d"), 
-                                cfg["sensorid"])
-        datafile1 = os.path.join(datapath1, date.strftime("%Y%m%d")
-                                + "_" + cfg["sensorid"] + ".csv*")
-        datafile2 = os.path.join(datapath2, date.strftime("%Y%m%d")
-                                + "_" + cfg["sensorid"] + ".csv*")
+        datapath2 = os.path.join(
+            cfg["smnpath"], date.strftime("%Y-%m-%d"), cfg["sensorid"]
+        )
+        datafile1 = os.path.join(
+            datapath1, date.strftime("%Y%m%d") + "_" + cfg["sensorid"] + ".csv*"
+        )
+        datafile2 = os.path.join(
+            datapath2, date.strftime("%Y%m%d") + "_" + cfg["sensorid"] + ".csv*"
+        )
 
         files1 = glob.glob(datafile1)
         files2 = glob.glob(datafile2)
@@ -2234,15 +2237,17 @@ def get_sensor_data(date, datatype, cfg):
         elif len(files2):
             datafile = files2[0]
         else:
-            warn("Could not find any raingauge file with names {datafile1} or {datafile2}")
-            
+            warn(
+                "Could not find any raingauge file with names {datafile1} or {datafile2}"
+            )
+
         with open(datafile) as f:
-            num_columns = len(next(f).strip().split(','))
+            num_columns = len(next(f).strip().split(","))
         if num_columns == 3:
             _, sensordate, sensorvalue = read_smn2(datafile)
         else:
             _, sensordate, _, _, _, sensorvalue, _, _ = read_smn(datafile)
-        
+
         if sensordate is None:
             return None, None, None, None
         label = "RG"
@@ -2336,6 +2341,7 @@ def get_sensor_data(date, datatype, cfg):
 
     return sensordate, sensorvalue, label, period
 
+
 def read_smn(fname):
     """
     Reads SwissMetNet data contained in a csv or gzipped csv file.
@@ -2354,33 +2360,35 @@ def read_smn(fname):
 
     try:
         # Use pandas to read the file (supports .gz files directly)
-        df = pd.read_csv(fname, compression='gzip' if fname.endswith('.gz') else None)
+        df = pd.read_csv(fname, compression="gzip" if fname.endswith(".gz") else None)
 
         # Convert date strings to datetime objects
-        df['DateTime'] = pd.to_datetime(df['DateTime'], format='%Y%m%d%H%M%S')
+        df["DateTime"] = pd.to_datetime(df["DateTime"], format="%Y%m%d%H%M%S")
 
         # Identify columns by searching for keywords (handles cases like AirPressure:degC)
-        air_pressure_col = [col for col in df.columns if 'AirPressure' in col][0]
-        temp_col = [col for col in df.columns if '2mTemperature' in col][0]
-        rh_col = [col for col in df.columns if 'RH' in col][0]
-        precip_col = [col for col in df.columns if 'Precipitation' in col][0]
-        wspeed_col = [col for col in df.columns if 'Windspeed' in col][0]
-        wdir_col = [col for col in df.columns if 'Winddirection' in col][0]
+        air_pressure_col = [col for col in df.columns if "AirPressure" in col][0]
+        temp_col = [col for col in df.columns if "2mTemperature" in col][0]
+        rh_col = [col for col in df.columns if "RH" in col][0]
+        precip_col = [col for col in df.columns if "Precipitation" in col][0]
+        wspeed_col = [col for col in df.columns if "Windspeed" in col][0]
+        wdir_col = [col for col in df.columns if "Winddirection" in col][0]
 
         # Mask invalid data (fill_value)
-        pressure = np.ma.masked_values(df[air_pressure_col].astype('float32'), fill_value)
-        temp = np.ma.masked_values(df[temp_col].astype('float32'), fill_value)
-        rh = np.ma.masked_values(df[rh_col].astype('float32'), fill_value)
-        precip = np.ma.masked_values(df[precip_col].astype('float32'), fill_value)
-        wspeed = np.ma.masked_values(df[wspeed_col].astype('float32'), fill_value)
-        wdir = np.ma.masked_values(df[wdir_col].astype('float32'), fill_value)
+        pressure = np.ma.masked_values(
+            df[air_pressure_col].astype("float32"), fill_value
+        )
+        temp = np.ma.masked_values(df[temp_col].astype("float32"), fill_value)
+        rh = np.ma.masked_values(df[rh_col].astype("float32"), fill_value)
+        precip = np.ma.masked_values(df[precip_col].astype("float32"), fill_value)
+        wspeed = np.ma.masked_values(df[wspeed_col].astype("float32"), fill_value)
+        wdir = np.ma.masked_values(df[wdir_col].astype("float32"), fill_value)
 
         # Convert precip from mm/10min to mm/h
         precip *= 6.0
 
         # Extract smn_id and date
-        smn_id = df['StationID'].astype('float32').values
-        date = df['DateTime'].tolist()
+        smn_id = df["StationID"].astype("float32").values
+        date = df["DateTime"].tolist()
 
         return smn_id, date, pressure, temp, rh, precip, wspeed, wdir
 
@@ -2814,7 +2822,7 @@ def read_radiosounding_igra(station, dtime):
     doc/igra2-data-format.txt
     """
     warn("Downloading sounding from IGRA database...")
-    
+
     COLUMNS_SOUNDING = [
         "LVLTYPE1",
         "LVLTYPE2",
@@ -2939,7 +2947,7 @@ def read_radiosounding_igra(station, dtime):
     return all_soundings[closest]
 
 
-def read_fzl_igra(station, dtime, dscfg = None):
+def read_fzl_igra(station, dtime, dscfg=None):
     """
     Get an estimation of the freezing level height from the
     Integrated Global Radiosonde Archive (IGRA)
@@ -2959,21 +2967,20 @@ def read_fzl_igra(station, dtime, dscfg = None):
     """
     if dscfg is None:
         dscfg = {}
-        
+
     try:
-        if not _check_new_sounding(dscfg["global_data"]["latest_sounding_time"]
-                , dtime): 
+        if not _check_new_sounding(dscfg["global_data"]["latest_sounding_time"], dtime):
             warn("No new sounding available, retrieving latest sounding from memory")
             return dscfg["global_data"]["latest_sounding_value"]
     except (KeyError, TypeError):
         pass
-    
+
     sounding = read_radiosounding_igra(station, dtime)
     height = sounding["GPH"]
     temp = sounding["TEMP"]
 
     fzl = 0
-    
+
     if temp[0] >= 0:
         for i in range(1, len(temp)):
             if height[i] < 0:
@@ -2990,8 +2997,9 @@ def read_fzl_igra(station, dtime, dscfg = None):
         dscfg["global_data"] = {}
         dscfg["global_data"]["latest_sounding_time"] = dtime
         dscfg["global_data"]["latest_sounding_value"] = fzl
-    
+
     return fzl
+
 
 def _closest_sounding_time(date: datetime) -> datetime:
     # Get the hour of the given date
@@ -2999,17 +3007,19 @@ def _closest_sounding_time(date: datetime) -> datetime:
     # Find the closest radiosounding time based on the hour
     if hour >= 18:
         # Closest to 00 UTC (covers 18:00 - 23:59 and 00:00 - 05:59)
-        return (date.replace(hour=0, minute=0, second=0, microsecond=0) 
-            + datetime.timedelta(days = 1))
+        return date.replace(
+            hour=0, minute=0, second=0, microsecond=0
+        ) + datetime.timedelta(days=1)
     elif hour <= 6:
         return date.replace(hour=0, minute=0, second=0, microsecond=0)
     else:
         # Closest to 12 UTC (covers 06:00 - 17:59)
         return date.replace(hour=12, minute=0, second=0, microsecond=0)
 
+
 def _check_new_sounding(date1: datetime, date2: datetime) -> bool:
     # Will check whether a new sounding is available
-    
+
     # Get the closest radiosounding times for both dates
     date1_sounding_time = _closest_sounding_time(date1)
     date2_sounding_time = _closest_sounding_time(date2)

@@ -121,7 +121,7 @@ def process_correct_noise_rhohv(procstatus, dscfg, radar_list=None):
 
         datatype : list of string. Dataset keyword
             The data types used in the correction, it must contain
-            "uRhoHV", and, 
+            "uRhoHV", and,
             "SNRh", and,
             "ZDRc", and,
             "Nh", and,
@@ -231,7 +231,7 @@ def process_gc_monitoring(procstatus, dscfg, radar_list=None):
     -------
     new_dataset : Radar
         radar object containing histogram data with fields corresponding
-        to specified datatypes 
+        to specified datatypes
     ind_rad : int
         radar index
 
@@ -441,7 +441,7 @@ def process_occurrence(procstatus, dscfg, radar_list=None):
         datatype : list of string. Dataset keyword
             The input data types, it must contain
             "echoID" (Optional allows filter_prec),
-            as well as any other fields supported by pyrad
+            as well as any other field supported by pyrad (one field only)
         regular_grid : Boolean. Dataset keyword
             Whether the radar has a Boolean grid or not. Default False
         rmin, rmax : float. Dataset keyword
@@ -462,8 +462,8 @@ def process_occurrence(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        radar object containing frequency of occurence data with fields corresponding
-        to specified datatypes 
+        radar object with fields
+        "occurence", "number_of_samples" and "frequency_of_occurrence"
     ind_rad : int
         radar index
 
@@ -949,7 +949,7 @@ def process_occurrence_period(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output fields "occurence" and 
+        dictionary containing the output fields "occurence" and
         "nsamples"
     ind_rad : int
         radar index

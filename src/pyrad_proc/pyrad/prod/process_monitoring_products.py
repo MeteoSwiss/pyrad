@@ -111,7 +111,7 @@ def generate_monitoring_products(dataset, prdcfg):
             elevation angle.
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
                 anglenr: int
                     The elevation angle number to plot
         'SAVEVOL': Saves the monitoring data in a C/F radar file. The data
@@ -121,7 +121,7 @@ def generate_monitoring_products(dataset, prdcfg):
             radar volume.
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
                 write_data: bool
                     If true the resultant histogram is also saved in a csv
                     file. Default True.
@@ -129,7 +129,7 @@ def generate_monitoring_products(dataset, prdcfg):
             a csv file and plots a time series of those statistics.
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
                 quantiles: list of 3 floats
                     the quantiles to compute. Default 25., 50., 75.
                 ref_value: float
@@ -565,12 +565,12 @@ def generate_monitoring_products(dataset, prdcfg):
 
         # generate alarms if needed
         alarm = prdcfg.get("alarm", False)
-        
+
         if not alarm:
             return figfname_list
 
         output = figfname_list
-        
+
         if "tol_abs" not in prdcfg:
             warn("unable to send alarm. Missing tolerance on target")
             return output

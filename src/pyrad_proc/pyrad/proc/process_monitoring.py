@@ -1521,7 +1521,7 @@ def process_zdr_snow(procstatus, dscfg, radar_list=None):
             "ZDR" or "ZDRc", and,
             "PhiDP" or "PhiDPc", and,
             "uRhoHV" or "RhoHV" or "RhoHVc", and,
-            "hydro", and, 
+            "hydro", and,
             "TEMP" (Optional), and,
             "SNRh" or "SNRv" (Optional, used to filter with SNRmin and SNRmax)
         rmin : float. Dataset keyword

@@ -94,7 +94,7 @@ def process_ifft(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types, must contain, 
+            The input data types, must contain,
             "ShhADU" or "ShhADUu", or,
             "SvvADU" or "SvvADUu", or,
             "sNADUh" or "sNADUv"
@@ -104,9 +104,9 @@ def process_ifft(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output fields 
-        "IQhhADU" if "ShhADU" or "ShhADUu" were provided, 
-        "IQhvvDU" if "SvvADU" or "SvvADUu" were provided, 
+        dictionary containing the output fields
+        "IQhhADU" if "ShhADU" or "ShhADUu" were provided,
+        "IQhvvDU" if "SvvADU" or "SvvADUu" were provided,
         "IQNADUh" if "sNADUh" was provided,
         "IQNADUv" if "sNADUv" was provided.
     ind_rad : int
@@ -591,7 +591,7 @@ def process_filter_0Doppler(procstatus, dscfg, radar_list=None):
 
         datatype : list of string. Dataset keyword
             The input data types, can be any of the spectral fields supported by pyrad
-            
+
         filter_width : float
             The Doppler filter width. Default 0.
         filter_units : str
@@ -674,7 +674,7 @@ def process_filter_srhohv(procstatus, dscfg, radar_list=None):
 
         datatype : list of string. Dataset keyword
             The input data types, must contain
-            "sRhoHV" or "sRhoHVu", 
+            "sRhoHV" or "sRhoHVu",
             as well as any spectral field supported by pyrad
         sRhoHV_threshold : float
             Data with sRhoHV module above this threshold will be filtered.
@@ -936,7 +936,7 @@ def process_spectra_ang_avg(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted configuration keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types, 
+            The input data types,
             any spectral datatype supported by pyrad
         navg : int
             Number of spectra to average. If -1 all spectra will be averaged.
@@ -1061,7 +1061,7 @@ def process_spectral_power(procstatus, dscfg, radar_list=None):
         "sPhhdBADU" or "sPhhdBADUu", or
         "sPvvdBADU" or "sPvvdBADUu", or
         "sPhhAdBm" or "sPhhdBmu", or
-        "sPvvdBm" or "sPvvdBmu", 
+        "sPvvdBm" or "sPvvdBmu",
         depending on which input datatype and units were provided
     ind_rad : int
         radar index
@@ -1146,8 +1146,8 @@ def process_spectral_noise(procstatus, dscfg, radar_list=None):
             "sNdBADUh" or
             "sNdBADUv" or
             "sNdBmh" or
-            "sNdBmv" 
-            depending on which input datatype and units were provided    
+            "sNdBmv"
+            depending on which input datatype and units were provided
     ind_rad : int
         radar index
 
@@ -1219,7 +1219,7 @@ def process_spectral_phase(procstatus, dscfg, radar_list=None):
         "SPhasehhu" if "ShhADUu" was provided as input
         "SPhasevv" if "SvvADU" was provided as input
         "SPhasevvu" if "SvvADUu" was provided as input
-        
+
     ind_rad : int
         radar index
 
@@ -1269,7 +1269,7 @@ def process_spectral_reflectivity(procstatus, dscfg, radar_list=None):
             The input data types, must contain,
             either a combination of signal and noise
             "ShhADU" or "SvvADU" or "ShhADUu" or "SvvADUu", and,
-            "sNADUh" or "sNADUv", or 
+            "sNADUh" or "sNADUv", or
             the power signal
             "sPhhADU" or "sPvvADU" or "sPhhADUu" or "sPvvADUu"
         subtract_noise : Bool
@@ -1366,7 +1366,7 @@ def process_spectral_differential_reflectivity(procstatus, dscfg, radar_list=Non
             The input data types, must contain,
             either a combination of signal and noise
             ("ShhADU" and "SvvADU") or ("ShhADUu" and "SvvADUu"), and,
-            ("sNADUh" and "sNADUv"), or 
+            ("sNADUh" and "sNADUv"), or
             the power signal
             ("sPhhADU" and "sPvvADU") or ("sPhhADUu" and "sPvvADUu")
         subtract_noise : Bool
@@ -1482,7 +1482,7 @@ def process_spectral_differential_phase(procstatus, dscfg, radar_list=None):
     new_dataset : dict
         dictionary containing the output fields
         "sPhiDP" if "ShhADU" and "SvvADU" were provided
-        "sPhiDPu" if "ShhADUu" and "SvvADUu" were provided 
+        "sPhiDPu" if "ShhADUu" and "SvvADUu" were provided
     ind_rad : int
         radar index
 
@@ -1564,7 +1564,7 @@ def process_spectral_rhohv(procstatus, dscfg, radar_list=None):
     new_dataset : dict
         dictionary containing the output fields
         "sRhoHV" if "ShhADU" and "SvvADU" were provided
-        "sRhoHVu" if "ShhADUu" and "SvvADUu" were provided 
+        "sRhoHVu" if "ShhADUu" and "SvvADUu" were provided
     ind_rad : int
         radar index
 
@@ -1631,11 +1631,11 @@ def process_pol_variables(procstatus, dscfg, radar_list=None):
             The input data types, must contain,
             either a combination of signal and noise
             ("ShhADU" and "SvvADU") or ("ShhADUu" and "SvvADUu"), and,
-            ("sNADUh" and "sNADUv"), or 
+            ("sNADUh" and "sNADUv"), or
             the power signal
             ("sPhhADU" and "sPvvADU") or ("sPhhADUu" and "sPvvADUu"), and
             ("sRhoHV" or "sRhoHVu")
-            
+
         subtract_noise : Bool
             If True noise will be subtracted from the signal. Default False
         smooth_window : int or None
@@ -1649,7 +1649,7 @@ def process_pol_variables(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the all outputs fields, that correspond to the 
+        dictionary containing the all outputs fields, that correspond to the
         specified "variables" keyword
     ind_rad : int
         radar index
@@ -2020,11 +2020,11 @@ def process_rhohv(procstatus, dscfg, radar_list=None):
             The input data types, must contain,
             either a combination of signal and noise
             ("ShhADU" and "SvvADU") or ("ShhADUu" and "SvvADUu"), and,
-            ("sNADUh" and "sNADUv"), or 
+            ("sNADUh" and "sNADUv"), or
             the power signal
             ("sPhhADU" and "sPvvADU") or ("sPhhADUu" and "sPvvADUu"), and
-            optionally ("sRhoHV" or "sRhoHVu") 
-            
+            optionally ("sRhoHV" or "sRhoHVu")
+
         subtract_noise : Bool
             If True noise will be subtracted from the signal
     radar_list : list of spectra objects
@@ -2035,7 +2035,7 @@ def process_rhohv(procstatus, dscfg, radar_list=None):
     new_dataset : dict
         dictionary containing the output field "RhoHV"
         or "uRhoHV" depending on the provided datatypes
-        
+
     ind_rad : int
         radar index
 
@@ -2141,7 +2141,7 @@ def process_Doppler_velocity(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output field 
+        dictionary containing the output field
         "V" if "sdBZ" was provided
         "Vv" if "sdBZv" was provided
         "Vu" if "sdBuZ" was provided
@@ -2204,7 +2204,7 @@ def process_Doppler_width(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output field 
+        dictionary containing the output field
         "W" if "sdBZ" was provided
         "Wv" if "sdBZv" was provided
         "Wu" if "sdBuZ" was provided

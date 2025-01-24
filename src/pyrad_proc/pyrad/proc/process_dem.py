@@ -146,7 +146,7 @@ def process_visibility(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output field 
+        dictionary containing the output field
         "visibility"
     ind_rad : int
         radar index
@@ -207,7 +207,7 @@ def process_gecsx(procstatus, dscfg, radar_list=None):
 
         datatype : list of string. Dataset keyword
             arbitrary data type supported by pyrad
-            
+
         range_discretization : float. Dataset keyword
             Range discretization used when computing the Cartesian visibility field
             the larger the better but the slower the processing will be
