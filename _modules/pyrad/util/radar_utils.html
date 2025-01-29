@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,10 +26,10 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -37,10 +37,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -326,9 +326,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -420,15 +425,15 @@
 <span class="sd">    compute_average_vad</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">shapely</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">shapely</span>
 
     <span class="n">_SHAPELY_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
@@ -436,21 +441,21 @@
     <span class="n">_SHAPELY_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
     <span class="n">_PANDAS_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Pandas not available&quot;</span><span class="p">)</span>
     <span class="n">_PANDAS_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">import</span> <span class="nn">pyart</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 
-<span class="kn">from</span> <span class="nn">.stat_utils</span> <span class="kn">import</span> <span class="n">quantiles_weighted</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.stat_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">quantiles_weighted</span>
 
 
 <div class="viewcode-block" id="get_data_along_rng">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.get_data_along_rng.html#pyrad.util.get_data_along_rng">[docs]</a>
-<span class="k">def</span> <span class="nf">get_data_along_rng</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_data_along_rng</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">field_name</span><span class="p">,</span>
     <span class="n">fix_elevations</span><span class="p">,</span>
@@ -472,7 +477,7 @@
 <span class="sd">    fix_elevations, fix_azimuths: list of floats or None</span>
 <span class="sd">        List of elevations, azimuths couples [deg] if one of them is None</span>
 <span class="sd">        all angles corresponding to one of the fixed angles specified will</span>
-<span class="sd">        be gathered</span>
+<span class="sd">        be gatheredfro</span>
 <span class="sd">    ang_tol : float</span>
 <span class="sd">        Tolerance between the nominal angle and the radar angle [deg]</span>
 <span class="sd">    rmin, rmax: float</span>
@@ -620,7 +625,7 @@
 
 <div class="viewcode-block" id="get_data_along_azi">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.get_data_along_azi.html#pyrad.util.get_data_along_azi">[docs]</a>
-<span class="k">def</span> <span class="nf">get_data_along_azi</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_data_along_azi</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">field_name</span><span class="p">,</span>
     <span class="n">fix_ranges</span><span class="p">,</span>
@@ -708,7 +713,7 @@
 
 <div class="viewcode-block" id="get_data_along_ele">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.get_data_along_ele.html#pyrad.util.get_data_along_ele">[docs]</a>
-<span class="k">def</span> <span class="nf">get_data_along_ele</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_data_along_ele</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">field_name</span><span class="p">,</span>
     <span class="n">fix_ranges</span><span class="p">,</span>
@@ -791,7 +796,7 @@
 
 <div class="viewcode-block" id="get_ROI">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.get_ROI.html#pyrad.util.get_ROI">[docs]</a>
-<span class="k">def</span> <span class="nf">get_ROI</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">fieldname</span><span class="p">,</span> <span class="n">sector</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_ROI</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">fieldname</span><span class="p">,</span> <span class="n">sector</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    filter out any data outside the region of interest defined by sector</span>
 
@@ -854,7 +859,7 @@
 
 <div class="viewcode-block" id="rainfall_accumulation">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.rainfall_accumulation.html#pyrad.util.rainfall_accumulation">[docs]</a>
-<span class="k">def</span> <span class="nf">rainfall_accumulation</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rainfall_accumulation</span><span class="p">(</span>
     <span class="n">t_in_vec</span><span class="p">,</span> <span class="n">val_in_vec</span><span class="p">,</span> <span class="n">cum_time</span><span class="o">=</span><span class="mf">3600.0</span><span class="p">,</span> <span class="n">base_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">dropnan</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -917,7 +922,7 @@
 
 <div class="viewcode-block" id="time_series_statistics">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.time_series_statistics.html#pyrad.util.time_series_statistics">[docs]</a>
-<span class="k">def</span> <span class="nf">time_series_statistics</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">time_series_statistics</span><span class="p">(</span>
     <span class="n">t_in_vec</span><span class="p">,</span> <span class="n">val_in_vec</span><span class="p">,</span> <span class="n">avg_time</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span> <span class="n">base_time</span><span class="o">=</span><span class="mi">1800</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="n">dropnan</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -969,7 +974,7 @@
 
 <div class="viewcode-block" id="find_contiguous_times">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.find_contiguous_times.html#pyrad.util.find_contiguous_times">[docs]</a>
-<span class="k">def</span> <span class="nf">find_contiguous_times</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">600</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_contiguous_times</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">600</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given and array of ordered times, find those contiguous according to</span>
 <span class="sd">    a maximum time step</span>
@@ -1021,7 +1026,7 @@
 
 <div class="viewcode-block" id="join_time_series">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.join_time_series.html#pyrad.util.join_time_series">[docs]</a>
-<span class="k">def</span> <span class="nf">join_time_series</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">val1</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">val2</span><span class="p">,</span> <span class="n">dropnan</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">join_time_series</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">val1</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">val2</span><span class="p">,</span> <span class="n">dropnan</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    joins time_series. Only of package pandas is available otherwise returns</span>
 <span class="sd">    None.</span>
@@ -1068,7 +1073,7 @@
 
 <div class="viewcode-block" id="get_range_bins_to_avg">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.get_range_bins_to_avg.html#pyrad.util.get_range_bins_to_avg">[docs]</a>
-<span class="k">def</span> <span class="nf">get_range_bins_to_avg</span><span class="p">(</span><span class="n">rad1_rng</span><span class="p">,</span> <span class="n">rad2_rng</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_range_bins_to_avg</span><span class="p">(</span><span class="n">rad1_rng</span><span class="p">,</span> <span class="n">rad2_rng</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compares the resolution of two radars and determines if and which radar</span>
 <span class="sd">    has to be averaged and the length of the averaging window</span>
@@ -1116,7 +1121,7 @@
 
 <div class="viewcode-block" id="get_cercle_coords">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.get_cercle_coords.html#pyrad.util.get_cercle_coords">[docs]</a>
-<span class="k">def</span> <span class="nf">get_cercle_coords</span><span class="p">(</span><span class="n">x_centre</span><span class="p">,</span> <span class="n">y_centre</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_cercle_coords</span><span class="p">(</span><span class="n">x_centre</span><span class="p">,</span> <span class="n">y_centre</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the points defining a cercle from the position of its centre and the</span>
 <span class="sd">    radius</span>
@@ -1155,7 +1160,7 @@
 
 <div class="viewcode-block" id="get_box_coords">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.get_box_coords.html#pyrad.util.get_box_coords">[docs]</a>
-<span class="k">def</span> <span class="nf">get_box_coords</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_box_coords</span><span class="p">(</span>
     <span class="n">x_point</span><span class="p">,</span>
     <span class="n">y_point</span><span class="p">,</span>
     <span class="n">we_length</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">,</span>
@@ -1222,7 +1227,7 @@
 
 <div class="viewcode-block" id="belongs_roi_indices">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.belongs_roi_indices.html#pyrad.util.belongs_roi_indices">[docs]</a>
-<span class="k">def</span> <span class="nf">belongs_roi_indices</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">roi</span><span class="p">,</span> <span class="n">use_latlon</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">belongs_roi_indices</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">roi</span><span class="p">,</span> <span class="n">use_latlon</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the indices of points that belong to roi in a list of points</span>
 
@@ -1294,7 +1299,7 @@
 
 <div class="viewcode-block" id="find_ray_index">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.find_ray_index.html#pyrad.util.find_ray_index">[docs]</a>
-<span class="k">def</span> <span class="nf">find_ray_index</span><span class="p">(</span><span class="n">ele_vec</span><span class="p">,</span> <span class="n">azi_vec</span><span class="p">,</span> <span class="n">ele</span><span class="p">,</span> <span class="n">azi</span><span class="p">,</span> <span class="n">ele_tol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">azi_tol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">nearest</span><span class="o">=</span><span class="s2">&quot;azi&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_ray_index</span><span class="p">(</span><span class="n">ele_vec</span><span class="p">,</span> <span class="n">azi_vec</span><span class="p">,</span> <span class="n">ele</span><span class="p">,</span> <span class="n">azi</span><span class="p">,</span> <span class="n">ele_tol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">azi_tol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">nearest</span><span class="o">=</span><span class="s2">&quot;azi&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find the ray index corresponding to a particular elevation and azimuth</span>
 
@@ -1339,7 +1344,7 @@
 
 <div class="viewcode-block" id="find_rng_index">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.find_rng_index.html#pyrad.util.find_rng_index">[docs]</a>
-<span class="k">def</span> <span class="nf">find_rng_index</span><span class="p">(</span><span class="n">rng_vec</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">rng_tol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_rng_index</span><span class="p">(</span><span class="n">rng_vec</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">rng_tol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find the range index corresponding to a particular range</span>
 
@@ -1367,7 +1372,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">find_ang_index</span><span class="p">(</span><span class="n">ang_vec</span><span class="p">,</span> <span class="n">ang</span><span class="p">,</span> <span class="n">ang_tol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_ang_index</span><span class="p">(</span><span class="n">ang_vec</span><span class="p">,</span> <span class="n">ang</span><span class="p">,</span> <span class="n">ang_tol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find the angle index corresponding to a particular fixed angle</span>
 
@@ -1396,7 +1401,7 @@
 
 <div class="viewcode-block" id="find_nearest_gate">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.find_nearest_gate.html#pyrad.util.find_nearest_gate">[docs]</a>
-<span class="k">def</span> <span class="nf">find_nearest_gate</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">latlon_tol</span><span class="o">=</span><span class="mf">0.0005</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_nearest_gate</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">latlon_tol</span><span class="o">=</span><span class="mf">0.0005</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find the radar gate closest to a lat,lon point</span>
 
@@ -1462,7 +1467,7 @@
 
 <div class="viewcode-block" id="find_colocated_indexes">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.find_colocated_indexes.html#pyrad.util.find_colocated_indexes">[docs]</a>
-<span class="k">def</span> <span class="nf">find_colocated_indexes</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_colocated_indexes</span><span class="p">(</span>
     <span class="n">radar1</span><span class="p">,</span>
     <span class="n">radar2</span><span class="p">,</span>
     <span class="n">rad1_ele</span><span class="p">,</span>
@@ -1553,7 +1558,7 @@
 
 <div class="viewcode-block" id="time_avg_range">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.time_avg_range.html#pyrad.util.time_avg_range">[docs]</a>
-<span class="k">def</span> <span class="nf">time_avg_range</span><span class="p">(</span><span class="n">timeinfo</span><span class="p">,</span> <span class="n">avg_starttime</span><span class="p">,</span> <span class="n">avg_endtime</span><span class="p">,</span> <span class="n">period</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">time_avg_range</span><span class="p">(</span><span class="n">timeinfo</span><span class="p">,</span> <span class="n">avg_starttime</span><span class="p">,</span> <span class="n">avg_endtime</span><span class="p">,</span> <span class="n">period</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    finds the new start and end time of an averaging</span>
 
@@ -1593,7 +1598,7 @@
 
 <div class="viewcode-block" id="get_closest_solar_flux">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.get_closest_solar_flux.html#pyrad.util.get_closest_solar_flux">[docs]</a>
-<span class="k">def</span> <span class="nf">get_closest_solar_flux</span><span class="p">(</span><span class="n">hit_datetime_list</span><span class="p">,</span> <span class="n">flux_datetime_list</span><span class="p">,</span> <span class="n">flux_value_list</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_closest_solar_flux</span><span class="p">(</span><span class="n">hit_datetime_list</span><span class="p">,</span> <span class="n">flux_datetime_list</span><span class="p">,</span> <span class="n">flux_value_list</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    finds the solar flux measurement closest to the sun hit</span>
 
@@ -1641,7 +1646,7 @@
 
 <div class="viewcode-block" id="get_fixed_rng_data">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.get_fixed_rng_data.html#pyrad.util.get_fixed_rng_data">[docs]</a>
-<span class="k">def</span> <span class="nf">get_fixed_rng_data</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_fixed_rng_data</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">field_names</span><span class="p">,</span>
     <span class="n">fixed_rng</span><span class="p">,</span>
@@ -1823,7 +1828,7 @@
 
 <div class="viewcode-block" id="create_sun_hits_field">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.create_sun_hits_field.html#pyrad.util.create_sun_hits_field">[docs]</a>
-<span class="k">def</span> <span class="nf">create_sun_hits_field</span><span class="p">(</span><span class="n">rad_el</span><span class="p">,</span> <span class="n">rad_az</span><span class="p">,</span> <span class="n">sun_el</span><span class="p">,</span> <span class="n">sun_az</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">imgcfg</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_sun_hits_field</span><span class="p">(</span><span class="n">rad_el</span><span class="p">,</span> <span class="n">rad_az</span><span class="p">,</span> <span class="n">sun_el</span><span class="p">,</span> <span class="n">sun_az</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">imgcfg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    creates a sun hits field from the position and power of the sun hits</span>
 
@@ -1879,7 +1884,7 @@
 
 <div class="viewcode-block" id="create_sun_retrieval_field">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.create_sun_retrieval_field.html#pyrad.util.create_sun_retrieval_field">[docs]</a>
-<span class="k">def</span> <span class="nf">create_sun_retrieval_field</span><span class="p">(</span><span class="n">par</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">imgcfg</span><span class="p">,</span> <span class="n">lant</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_sun_retrieval_field</span><span class="p">(</span><span class="n">par</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">imgcfg</span><span class="p">,</span> <span class="n">lant</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    creates a sun retrieval field from the retrieval parameters</span>
 
@@ -1932,7 +1937,7 @@
 
 <div class="viewcode-block" id="compute_quantiles">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_quantiles.html#pyrad.util.compute_quantiles">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_quantiles</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_quantiles</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    computes quantiles</span>
 
@@ -1977,7 +1982,7 @@
 
 <div class="viewcode-block" id="compute_quantiles_from_hist">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_quantiles_from_hist.html#pyrad.util.compute_quantiles_from_hist">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_quantiles_from_hist</span><span class="p">(</span><span class="n">bin_centers</span><span class="p">,</span> <span class="n">hist</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_quantiles_from_hist</span><span class="p">(</span><span class="n">bin_centers</span><span class="p">,</span> <span class="n">hist</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    computes quantiles from histograms</span>
 
@@ -2030,7 +2035,7 @@
 
 <div class="viewcode-block" id="compute_quantiles_sweep">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_quantiles_sweep.html#pyrad.util.compute_quantiles_sweep">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_quantiles_sweep</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">ray_start</span><span class="p">,</span> <span class="n">ray_end</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_quantiles_sweep</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">ray_start</span><span class="p">,</span> <span class="n">ray_end</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    computes quantiles of a particular sweep</span>
 
@@ -2075,7 +2080,7 @@
 
 <div class="viewcode-block" id="compute_histogram">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_histogram.html#pyrad.util.compute_histogram">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_histogram</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_histogram</span><span class="p">(</span>
     <span class="n">field</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">bin_edges</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2128,7 +2133,7 @@
 
 <div class="viewcode-block" id="compute_histogram_sweep">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_histogram_sweep.html#pyrad.util.compute_histogram_sweep">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_histogram_sweep</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_histogram_sweep</span><span class="p">(</span>
     <span class="n">field</span><span class="p">,</span> <span class="n">ray_start</span><span class="p">,</span> <span class="n">ray_end</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2166,7 +2171,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">get_histogram_bins</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_histogram_bins</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    gets the histogram bins. If vmin or vmax are not define the range limits</span>
 <span class="sd">    of the field as defined in the Py-ART config file are going to be used.</span>
@@ -2179,7 +2184,8 @@
 <span class="sd">        size of bin</span>
 <span class="sd">    vmin, vmax : float</span>
 <span class="sd">        The minimum and maximum value of the histogram</span>
-
+<span class="sd">    transform: func</span>
+<span class="sd">        A function that transforms the resulting histogram bins</span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    bin_edges : float array</span>
@@ -2200,14 +2206,30 @@
         <span class="n">step</span> <span class="o">=</span> <span class="p">(</span><span class="n">vmax</span> <span class="o">-</span> <span class="n">vmin</span><span class="p">)</span> <span class="o">/</span> <span class="mf">50.0</span>
         <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No step has been defined. Default </span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s2"> will be used&quot;</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
+    <span class="k">if</span> <span class="n">transform</span><span class="p">:</span>
+        <span class="n">vmin</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">vmin</span><span class="p">)</span>
+        <span class="n">vmax</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">vmax</span><span class="p">)</span>
+
+    <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
         <span class="n">vmin</span> <span class="o">-</span> <span class="n">step</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">+</span> <span class="n">step</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="nb">int</span><span class="p">((</span><span class="n">vmax</span> <span class="o">-</span> <span class="n">vmin</span><span class="p">)</span> <span class="o">/</span> <span class="n">step</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span>
     <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">bins</span>
 
 
 <div class="viewcode-block" id="compute_2d_stats">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_2d_stats.html#pyrad.util.compute_2d_stats">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_2d_stats</span><span class="p">(</span><span class="n">field1</span><span class="p">,</span> <span class="n">field2</span><span class="p">,</span> <span class="n">field_name1</span><span class="p">,</span> <span class="n">field_name2</span><span class="p">,</span> <span class="n">step1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_2d_stats</span><span class="p">(</span>
+    <span class="n">field1</span><span class="p">,</span>
+    <span class="n">field2</span><span class="p">,</span>
+    <span class="n">field_name1</span><span class="p">,</span>
+    <span class="n">field_name2</span><span class="p">,</span>
+    <span class="n">step1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">step2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    computes a 2D histogram and statistics of the data</span>
 
@@ -2219,6 +2241,9 @@
 <span class="sd">        the name of the fields</span>
 <span class="sd">    step1, step2 : float</span>
 <span class="sd">        size of bin</span>
+<span class="sd">    vmin</span>
+<span class="sd">    transform : func</span>
+<span class="sd">        A function to use to transform the data prior to computing the stats</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -2246,8 +2271,18 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">stats</span>
 
+    <span class="k">if</span> <span class="n">transform</span><span class="p">:</span>
+        <span class="n">field1</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">field1</span><span class="p">)</span>
+        <span class="n">field2</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">field2</span><span class="p">)</span>
+
     <span class="n">hist_2d</span><span class="p">,</span> <span class="n">bin_edges1</span><span class="p">,</span> <span class="n">bin_edges2</span> <span class="o">=</span> <span class="n">compute_2d_hist</span><span class="p">(</span>
-        <span class="n">field1</span><span class="p">,</span> <span class="n">field2</span><span class="p">,</span> <span class="n">field_name1</span><span class="p">,</span> <span class="n">field_name2</span><span class="p">,</span> <span class="n">step1</span><span class="o">=</span><span class="n">step1</span><span class="p">,</span> <span class="n">step2</span><span class="o">=</span><span class="n">step2</span>
+        <span class="n">field1</span><span class="p">,</span>
+        <span class="n">field2</span><span class="p">,</span>
+        <span class="n">field_name1</span><span class="p">,</span>
+        <span class="n">field_name2</span><span class="p">,</span>
+        <span class="n">step1</span><span class="o">=</span><span class="n">step1</span><span class="p">,</span>
+        <span class="n">step2</span><span class="o">=</span><span class="n">step2</span><span class="p">,</span>
+        <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">step_aux1</span> <span class="o">=</span> <span class="n">bin_edges1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">bin_edges1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">bin_centers1</span> <span class="o">=</span> <span class="n">bin_edges1</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">step_aux1</span> <span class="o">/</span> <span class="mf">2.0</span>
@@ -2263,7 +2298,10 @@
     <span class="n">quant75bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">((</span><span class="n">field2</span> <span class="o">-</span> <span class="n">field1</span><span class="p">)</span><span class="o">.</span><span class="n">compressed</span><span class="p">(),</span> <span class="mf">75.0</span><span class="p">)</span>
     <span class="n">ind_max_val1</span><span class="p">,</span> <span class="n">ind_max_val2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hist_2d</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">hist_2d</span><span class="p">))</span>
     <span class="n">modebias</span> <span class="o">=</span> <span class="n">bin_centers2</span><span class="p">[</span><span class="n">ind_max_val2</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">-</span> <span class="n">bin_centers1</span><span class="p">[</span><span class="n">ind_max_val1</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-    <span class="n">slope</span><span class="p">,</span> <span class="n">intercep</span><span class="p">,</span> <span class="n">corr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">linregress</span><span class="p">(</span><span class="n">field1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">field2</span><span class="p">)</span>
+    <span class="n">mask_nan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">field1</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span> <span class="n">field2</span><span class="o">.</span><span class="n">mask</span><span class="p">)</span>
+    <span class="n">slope</span><span class="p">,</span> <span class="n">intercep</span><span class="p">,</span> <span class="n">corr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">linregress</span><span class="p">(</span>
+        <span class="n">field1</span><span class="p">[</span><span class="o">~</span><span class="n">mask_nan</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">field2</span><span class="p">[</span><span class="o">~</span><span class="n">mask_nan</span><span class="p">]</span>
+    <span class="p">)</span>
     <span class="n">intercep_slope_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">field2</span> <span class="o">-</span> <span class="n">field1</span><span class="p">)</span>
 
     <span class="n">stats</span> <span class="o">=</span> <span class="p">{</span>
@@ -2285,7 +2323,7 @@
 
 <div class="viewcode-block" id="compute_1d_stats">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_1d_stats.html#pyrad.util.compute_1d_stats">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_1d_stats</span><span class="p">(</span><span class="n">field1</span><span class="p">,</span> <span class="n">field2</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_1d_stats</span><span class="p">(</span><span class="n">field1</span><span class="p">,</span> <span class="n">field2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    returns statistics of data</span>
 
@@ -2329,7 +2367,9 @@
 
 <div class="viewcode-block" id="compute_2d_hist">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_2d_hist.html#pyrad.util.compute_2d_hist">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_2d_hist</span><span class="p">(</span><span class="n">field1</span><span class="p">,</span> <span class="n">field2</span><span class="p">,</span> <span class="n">field_name1</span><span class="p">,</span> <span class="n">field_name2</span><span class="p">,</span> <span class="n">step1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_2d_hist</span><span class="p">(</span>
+    <span class="n">field1</span><span class="p">,</span> <span class="n">field2</span><span class="p">,</span> <span class="n">field_name1</span><span class="p">,</span> <span class="n">field_name2</span><span class="p">,</span> <span class="n">step1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    computes a 2D histogram of the data</span>
 
@@ -2341,6 +2381,8 @@
 <span class="sd">        field names</span>
 <span class="sd">    step1, step2 : float</span>
 <span class="sd">        size of the bins</span>
+<span class="sd">    transform: func</span>
+<span class="sd">        A function to use to transform the histogram bins</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -2350,10 +2392,10 @@
 <span class="sd">        the bin edges along each dimension</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">bin_edges1</span> <span class="o">=</span> <span class="n">get_histogram_bins</span><span class="p">(</span><span class="n">field_name1</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">step1</span><span class="p">)</span>
+    <span class="n">bin_edges1</span> <span class="o">=</span> <span class="n">get_histogram_bins</span><span class="p">(</span><span class="n">field_name1</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">step1</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">)</span>
     <span class="n">step_aux1</span> <span class="o">=</span> <span class="n">bin_edges1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">bin_edges1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">bin_centers1</span> <span class="o">=</span> <span class="n">bin_edges1</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">step_aux1</span> <span class="o">/</span> <span class="mf">2.0</span>
-    <span class="n">bin_edges2</span> <span class="o">=</span> <span class="n">get_histogram_bins</span><span class="p">(</span><span class="n">field_name2</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">step2</span><span class="p">)</span>
+    <span class="n">bin_edges2</span> <span class="o">=</span> <span class="n">get_histogram_bins</span><span class="p">(</span><span class="n">field_name2</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">step2</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">)</span>
     <span class="n">step_aux2</span> <span class="o">=</span> <span class="n">bin_edges2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">bin_edges2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">bin_centers2</span> <span class="o">=</span> <span class="n">bin_edges2</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">step_aux2</span> <span class="o">/</span> <span class="mf">2.0</span>
 
@@ -2372,7 +2414,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">quantize_field</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">quantize_field</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    quantizes data</span>
 
@@ -2409,7 +2451,7 @@
 
 <div class="viewcode-block" id="compute_profile_stats">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_profile_stats.html#pyrad.util.compute_profile_stats">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_profile_stats</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_profile_stats</span><span class="p">(</span>
     <span class="n">field</span><span class="p">,</span>
     <span class="n">gate_altitude</span><span class="p">,</span>
     <span class="n">h_vec</span><span class="p">,</span>
@@ -2572,7 +2614,7 @@
 
 <div class="viewcode-block" id="project_to_vertical">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.project_to_vertical.html#pyrad.util.project_to_vertical">[docs]</a>
-<span class="k">def</span> <span class="nf">project_to_vertical</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">project_to_vertical</span><span class="p">(</span>
     <span class="n">data_in</span><span class="p">,</span> <span class="n">data_height</span><span class="p">,</span> <span class="n">grid_height</span><span class="p">,</span> <span class="n">interp_kind</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=-</span><span class="mf">9999.0</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2638,7 +2680,7 @@
 
 <div class="viewcode-block" id="compute_average_vad">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_average_vad.html#pyrad.util.compute_average_vad">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_average_vad</span><span class="p">(</span><span class="n">radar_list</span><span class="p">,</span> <span class="n">z_want</span><span class="p">,</span> <span class="n">signs</span><span class="p">,</span> <span class="n">lat0</span><span class="p">,</span> <span class="n">lon0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_average_vad</span><span class="p">(</span><span class="n">radar_list</span><span class="p">,</span> <span class="n">z_want</span><span class="p">,</span> <span class="n">signs</span><span class="p">,</span> <span class="n">lat0</span><span class="p">,</span> <span class="n">lon0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes a profile of horizontal wind by averaging the VAD profiles of</span>
 <span class="sd">    multiple radars</span>
@@ -2751,8 +2793,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2775,7 +2817,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

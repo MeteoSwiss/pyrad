@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,10 +26,10 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -37,10 +37,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -326,9 +326,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -409,19 +414,19 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">netCDF4</span> <span class="kn">import</span> <span class="n">num2date</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">netCDF4</span><span class="w"> </span><span class="kn">import</span> <span class="n">num2date</span>
 
-<span class="kn">import</span> <span class="nn">pyart</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 
-<span class="kn">from</span> <span class="nn">..io.io_aux</span> <span class="kn">import</span> <span class="n">get_datatype_fields</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_datatype_fields</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span>
 
 
 <div class="viewcode-block" id="process_raw_spectra">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_raw_spectra.html#pyrad.proc.process_raw_spectra">[docs]</a>
-<span class="k">def</span> <span class="nf">process_raw_spectra</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_raw_spectra</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dummy function that returns the initial input data set</span>
 
@@ -462,7 +467,7 @@
 
 <div class="viewcode-block" id="process_ifft">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_ifft.html#pyrad.proc.process_ifft">[docs]</a>
-<span class="k">def</span> <span class="nf">process_ifft</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_ifft</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the Doppler spectrum width from the spectral reflectivity</span>
 
@@ -475,7 +480,7 @@
 <span class="sd">        data set configuration. Accepted configuration keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types, must contain, </span>
+<span class="sd">            The input data types, must contain,</span>
 <span class="sd">            &quot;ShhADU&quot; or &quot;ShhADUu&quot;, or,</span>
 <span class="sd">            &quot;SvvADU&quot; or &quot;SvvADUu&quot;, or,</span>
 <span class="sd">            &quot;sNADUh&quot; or &quot;sNADUv&quot;</span>
@@ -485,9 +490,9 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output fields </span>
-<span class="sd">        &quot;IQhhADU&quot; if &quot;ShhADU&quot; or &quot;ShhADUu&quot; were provided, </span>
-<span class="sd">        &quot;IQhvvDU&quot; if &quot;SvvADU&quot; or &quot;SvvADUu&quot; were provided, </span>
+<span class="sd">        dictionary containing the output fields</span>
+<span class="sd">        &quot;IQhhADU&quot; if &quot;ShhADU&quot; or &quot;ShhADUu&quot; were provided,</span>
+<span class="sd">        &quot;IQhvvDU&quot; if &quot;SvvADU&quot; or &quot;SvvADUu&quot; were provided,</span>
 <span class="sd">        &quot;IQNADUh&quot; if &quot;sNADUh&quot; was provided,</span>
 <span class="sd">        &quot;IQNADUv&quot; if &quot;sNADUv&quot; was provided.</span>
 <span class="sd">    ind_rad : int</span>
@@ -560,7 +565,7 @@
 
 <div class="viewcode-block" id="process_spectra_point">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectra_point.html#pyrad.proc.process_spectra_point">[docs]</a>
-<span class="k">def</span> <span class="nf">process_spectra_point</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_spectra_point</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Obtains the spectra or IQ data at a point location.</span>
 
@@ -963,7 +968,7 @@
 
 <div class="viewcode-block" id="process_filter_0Doppler">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_filter_0Doppler.html#pyrad.proc.process_filter_0Doppler">[docs]</a>
-<span class="k">def</span> <span class="nf">process_filter_0Doppler</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_filter_0Doppler</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function to filter the 0-Doppler line bin and neighbours of the</span>
 <span class="sd">    Doppler spectra</span>
@@ -978,7 +983,7 @@
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
 <span class="sd">            The input data types, can be any of the spectral fields supported by pyrad</span>
-<span class="sd">            </span>
+
 <span class="sd">        filter_width : float</span>
 <span class="sd">            The Doppler filter width. Default 0.</span>
 <span class="sd">        filter_units : str</span>
@@ -1050,7 +1055,7 @@
 
 <div class="viewcode-block" id="process_filter_srhohv">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_filter_srhohv.html#pyrad.proc.process_filter_srhohv">[docs]</a>
-<span class="k">def</span> <span class="nf">process_filter_srhohv</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_filter_srhohv</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Filter Doppler spectra as a function of spectral RhoHV</span>
 
@@ -1064,7 +1069,7 @@
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
 <span class="sd">            The input data types, must contain</span>
-<span class="sd">            &quot;sRhoHV&quot; or &quot;sRhoHVu&quot;, </span>
+<span class="sd">            &quot;sRhoHV&quot; or &quot;sRhoHVu&quot;,</span>
 <span class="sd">            as well as any spectral field supported by pyrad</span>
 <span class="sd">        sRhoHV_threshold : float</span>
 <span class="sd">            Data with sRhoHV module above this threshold will be filtered.</span>
@@ -1137,7 +1142,7 @@
 
 <div class="viewcode-block" id="process_filter_spectra_noise">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_filter_spectra_noise.html#pyrad.proc.process_filter_spectra_noise">[docs]</a>
-<span class="k">def</span> <span class="nf">process_filter_spectra_noise</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_filter_spectra_noise</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Filter the noise of the Doppler spectra by clipping any data below</span>
 <span class="sd">    the noise level plus a margin</span>
@@ -1226,7 +1231,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">process_dealias_spectra</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_dealias_spectra</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Performs a dealiasing of spectra data, assuming at most one fold</span>
 
@@ -1316,7 +1321,7 @@
 
 <div class="viewcode-block" id="process_spectra_ang_avg">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectra_ang_avg.html#pyrad.proc.process_spectra_ang_avg">[docs]</a>
-<span class="k">def</span> <span class="nf">process_spectra_ang_avg</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_spectra_ang_avg</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function to average the spectra over the rays. This function is</span>
 <span class="sd">    intended mainly for vertically pointing scans. The function assumes</span>
@@ -1332,7 +1337,7 @@
 <span class="sd">        data set configuration. Accepted configuration keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types, </span>
+<span class="sd">            The input data types,</span>
 <span class="sd">            any spectral datatype supported by pyrad</span>
 <span class="sd">        navg : int</span>
 <span class="sd">            Number of spectra to average. If -1 all spectra will be averaged.</span>
@@ -1425,7 +1430,7 @@
 
 <div class="viewcode-block" id="process_spectral_power">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectral_power.html#pyrad.proc.process_spectral_power">[docs]</a>
-<span class="k">def</span> <span class="nf">process_spectral_power</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_spectral_power</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the spectral power</span>
 
@@ -1460,7 +1465,7 @@
 <span class="sd">        &quot;sPhhdBADU&quot; or &quot;sPhhdBADUu&quot;, or</span>
 <span class="sd">        &quot;sPvvdBADU&quot; or &quot;sPvvdBADUu&quot;, or</span>
 <span class="sd">        &quot;sPhhAdBm&quot; or &quot;sPhhdBmu&quot;, or</span>
-<span class="sd">        &quot;sPvvdBm&quot; or &quot;sPvvdBmu&quot;, </span>
+<span class="sd">        &quot;sPvvdBm&quot; or &quot;sPvvdBmu&quot;,</span>
 <span class="sd">        depending on which input datatype and units were provided</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
@@ -1512,7 +1517,7 @@
 
 <div class="viewcode-block" id="process_spectral_noise">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectral_noise.html#pyrad.proc.process_spectral_noise">[docs]</a>
-<span class="k">def</span> <span class="nf">process_spectral_noise</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_spectral_noise</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the spectral noise</span>
 
@@ -1548,8 +1553,8 @@
 <span class="sd">            &quot;sNdBADUh&quot; or</span>
 <span class="sd">            &quot;sNdBADUv&quot; or</span>
 <span class="sd">            &quot;sNdBmh&quot; or</span>
-<span class="sd">            &quot;sNdBmv&quot; </span>
-<span class="sd">            depending on which input datatype and units were provided    </span>
+<span class="sd">            &quot;sNdBmv&quot;</span>
+<span class="sd">            depending on which input datatype and units were provided</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1598,7 +1603,7 @@
 
 <div class="viewcode-block" id="process_spectral_phase">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectral_phase.html#pyrad.proc.process_spectral_phase">[docs]</a>
-<span class="k">def</span> <span class="nf">process_spectral_phase</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_spectral_phase</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the spectral phase</span>
 
@@ -1624,7 +1629,7 @@
 <span class="sd">        &quot;SPhasehhu&quot; if &quot;ShhADUu&quot; was provided as input</span>
 <span class="sd">        &quot;SPhasevv&quot; if &quot;SvvADU&quot; was provided as input</span>
 <span class="sd">        &quot;SPhasevvu&quot; if &quot;SvvADUu&quot; was provided as input</span>
-<span class="sd">        </span>
+
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1661,7 +1666,7 @@
 
 <div class="viewcode-block" id="process_spectral_reflectivity">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectral_reflectivity.html#pyrad.proc.process_spectral_reflectivity">[docs]</a>
-<span class="k">def</span> <span class="nf">process_spectral_reflectivity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_spectral_reflectivity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes spectral reflectivity</span>
 
@@ -1677,7 +1682,7 @@
 <span class="sd">            The input data types, must contain,</span>
 <span class="sd">            either a combination of signal and noise</span>
 <span class="sd">            &quot;ShhADU&quot; or &quot;SvvADU&quot; or &quot;ShhADUu&quot; or &quot;SvvADUu&quot;, and,</span>
-<span class="sd">            &quot;sNADUh&quot; or &quot;sNADUv&quot;, or </span>
+<span class="sd">            &quot;sNADUh&quot; or &quot;sNADUv&quot;, or</span>
 <span class="sd">            the power signal</span>
 <span class="sd">            &quot;sPhhADU&quot; or &quot;sPvvADU&quot; or &quot;sPhhADUu&quot; or &quot;sPvvADUu&quot;</span>
 <span class="sd">        subtract_noise : Bool</span>
@@ -1761,7 +1766,7 @@
 
 <div class="viewcode-block" id="process_spectral_differential_reflectivity">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectral_differential_reflectivity.html#pyrad.proc.process_spectral_differential_reflectivity">[docs]</a>
-<span class="k">def</span> <span class="nf">process_spectral_differential_reflectivity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_spectral_differential_reflectivity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes spectral differential reflectivity</span>
 
@@ -1777,7 +1782,7 @@
 <span class="sd">            The input data types, must contain,</span>
 <span class="sd">            either a combination of signal and noise</span>
 <span class="sd">            (&quot;ShhADU&quot; and &quot;SvvADU&quot;) or (&quot;ShhADUu&quot; and &quot;SvvADUu&quot;), and,</span>
-<span class="sd">            (&quot;sNADUh&quot; and &quot;sNADUv&quot;), or </span>
+<span class="sd">            (&quot;sNADUh&quot; and &quot;sNADUv&quot;), or</span>
 <span class="sd">            the power signal</span>
 <span class="sd">            (&quot;sPhhADU&quot; and &quot;sPvvADU&quot;) or (&quot;sPhhADUu&quot; and &quot;sPvvADUu&quot;)</span>
 <span class="sd">        subtract_noise : Bool</span>
@@ -1871,7 +1876,7 @@
 
 <div class="viewcode-block" id="process_spectral_differential_phase">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectral_differential_phase.html#pyrad.proc.process_spectral_differential_phase">[docs]</a>
-<span class="k">def</span> <span class="nf">process_spectral_differential_phase</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_spectral_differential_phase</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the spectral differential phase</span>
 
@@ -1896,7 +1901,7 @@
 <span class="sd">    new_dataset : dict</span>
 <span class="sd">        dictionary containing the output fields</span>
 <span class="sd">        &quot;sPhiDP&quot; if &quot;ShhADU&quot; and &quot;SvvADU&quot; were provided</span>
-<span class="sd">        &quot;sPhiDPu&quot; if &quot;ShhADUu&quot; and &quot;SvvADUu&quot; were provided </span>
+<span class="sd">        &quot;sPhiDPu&quot; if &quot;ShhADUu&quot; and &quot;SvvADUu&quot; were provided</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1955,7 +1960,7 @@
 
 <div class="viewcode-block" id="process_spectral_rhohv">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_spectral_rhohv.html#pyrad.proc.process_spectral_rhohv">[docs]</a>
-<span class="k">def</span> <span class="nf">process_spectral_rhohv</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_spectral_rhohv</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the spectral RhoHV</span>
 
@@ -1981,7 +1986,7 @@
 <span class="sd">    new_dataset : dict</span>
 <span class="sd">        dictionary containing the output fields</span>
 <span class="sd">        &quot;sRhoHV&quot; if &quot;ShhADU&quot; and &quot;SvvADU&quot; were provided</span>
-<span class="sd">        &quot;sRhoHVu&quot; if &quot;ShhADUu&quot; and &quot;SvvADUu&quot; were provided </span>
+<span class="sd">        &quot;sRhoHVu&quot; if &quot;ShhADUu&quot; and &quot;SvvADUu&quot; were provided</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -2035,7 +2040,7 @@
 
 <div class="viewcode-block" id="process_pol_variables">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_pol_variables.html#pyrad.proc.process_pol_variables">[docs]</a>
-<span class="k">def</span> <span class="nf">process_pol_variables</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_pol_variables</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the polarimetric variables from the complex spectra</span>
 
@@ -2051,11 +2056,11 @@
 <span class="sd">            The input data types, must contain,</span>
 <span class="sd">            either a combination of signal and noise</span>
 <span class="sd">            (&quot;ShhADU&quot; and &quot;SvvADU&quot;) or (&quot;ShhADUu&quot; and &quot;SvvADUu&quot;), and,</span>
-<span class="sd">            (&quot;sNADUh&quot; and &quot;sNADUv&quot;), or </span>
+<span class="sd">            (&quot;sNADUh&quot; and &quot;sNADUv&quot;), or</span>
 <span class="sd">            the power signal</span>
 <span class="sd">            (&quot;sPhhADU&quot; and &quot;sPvvADU&quot;) or (&quot;sPhhADUu&quot; and &quot;sPvvADUu&quot;), and</span>
 <span class="sd">            (&quot;sRhoHV&quot; or &quot;sRhoHVu&quot;)</span>
-<span class="sd">            </span>
+
 <span class="sd">        subtract_noise : Bool</span>
 <span class="sd">            If True noise will be subtracted from the signal. Default False</span>
 <span class="sd">        smooth_window : int or None</span>
@@ -2069,7 +2074,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the all outputs fields, that correspond to the </span>
+<span class="sd">        dictionary containing the all outputs fields, that correspond to the</span>
 <span class="sd">        specified &quot;variables&quot; keyword</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
@@ -2158,7 +2163,7 @@
 
 <div class="viewcode-block" id="process_noise_power">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_noise_power.html#pyrad.proc.process_noise_power">[docs]</a>
-<span class="k">def</span> <span class="nf">process_noise_power</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_noise_power</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the noise power from the spectra</span>
 
@@ -2240,7 +2245,7 @@
 
 <div class="viewcode-block" id="process_reflectivity">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_reflectivity.html#pyrad.proc.process_reflectivity">[docs]</a>
-<span class="k">def</span> <span class="nf">process_reflectivity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_reflectivity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes reflectivity from the spectral reflectivity</span>
 
@@ -2305,7 +2310,7 @@
 
 <div class="viewcode-block" id="process_differential_reflectivity">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_differential_reflectivity.html#pyrad.proc.process_differential_reflectivity">[docs]</a>
-<span class="k">def</span> <span class="nf">process_differential_reflectivity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_differential_reflectivity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes differential reflectivity from the horizontal and vertical</span>
 <span class="sd">    spectral reflectivity</span>
@@ -2373,7 +2378,7 @@
 
 <div class="viewcode-block" id="process_differential_phase">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_differential_phase.html#pyrad.proc.process_differential_phase">[docs]</a>
-<span class="k">def</span> <span class="nf">process_differential_phase</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_differential_phase</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the differential phase from the spectral differential phase and</span>
 <span class="sd">    the spectral reflectivity</span>
@@ -2439,7 +2444,7 @@
 
 <div class="viewcode-block" id="process_rhohv">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_rhohv.html#pyrad.proc.process_rhohv">[docs]</a>
-<span class="k">def</span> <span class="nf">process_rhohv</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_rhohv</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes RhoHV from the complex spectras</span>
 
@@ -2455,11 +2460,11 @@
 <span class="sd">            The input data types, must contain,</span>
 <span class="sd">            either a combination of signal and noise</span>
 <span class="sd">            (&quot;ShhADU&quot; and &quot;SvvADU&quot;) or (&quot;ShhADUu&quot; and &quot;SvvADUu&quot;), and,</span>
-<span class="sd">            (&quot;sNADUh&quot; and &quot;sNADUv&quot;), or </span>
+<span class="sd">            (&quot;sNADUh&quot; and &quot;sNADUv&quot;), or</span>
 <span class="sd">            the power signal</span>
 <span class="sd">            (&quot;sPhhADU&quot; and &quot;sPvvADU&quot;) or (&quot;sPhhADUu&quot; and &quot;sPvvADUu&quot;), and</span>
-<span class="sd">            optionally (&quot;sRhoHV&quot; or &quot;sRhoHVu&quot;) </span>
-<span class="sd">            </span>
+<span class="sd">            optionally (&quot;sRhoHV&quot; or &quot;sRhoHVu&quot;)</span>
+
 <span class="sd">        subtract_noise : Bool</span>
 <span class="sd">            If True noise will be subtracted from the signal</span>
 <span class="sd">    radar_list : list of spectra objects</span>
@@ -2470,7 +2475,7 @@
 <span class="sd">    new_dataset : dict</span>
 <span class="sd">        dictionary containing the output field &quot;RhoHV&quot;</span>
 <span class="sd">        or &quot;uRhoHV&quot; depending on the provided datatypes</span>
-<span class="sd">        </span>
+
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -2558,7 +2563,7 @@
 
 <div class="viewcode-block" id="process_Doppler_velocity">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_Doppler_velocity.html#pyrad.proc.process_Doppler_velocity">[docs]</a>
-<span class="k">def</span> <span class="nf">process_Doppler_velocity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_Doppler_velocity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the Doppler velocity from the spectral reflectivity</span>
 
@@ -2579,7 +2584,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output field </span>
+<span class="sd">        dictionary containing the output field</span>
 <span class="sd">        &quot;V&quot; if &quot;sdBZ&quot; was provided</span>
 <span class="sd">        &quot;Vv&quot; if &quot;sdBZv&quot; was provided</span>
 <span class="sd">        &quot;Vu&quot; if &quot;sdBuZ&quot; was provided</span>
@@ -2624,7 +2629,7 @@
 
 <div class="viewcode-block" id="process_Doppler_width">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_Doppler_width.html#pyrad.proc.process_Doppler_width">[docs]</a>
-<span class="k">def</span> <span class="nf">process_Doppler_width</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_Doppler_width</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the Doppler spectrum width from the spectral reflectivity</span>
 
@@ -2645,7 +2650,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output field </span>
+<span class="sd">        dictionary containing the output field</span>
 <span class="sd">        &quot;W&quot; if &quot;sdBZ&quot; was provided</span>
 <span class="sd">        &quot;Wv&quot; if &quot;sdBZv&quot; was provided</span>
 <span class="sd">        &quot;Wu&quot; if &quot;sdBuZ&quot; was provided</span>
@@ -2720,8 +2725,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2744,7 +2749,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

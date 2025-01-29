@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,10 +26,10 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -37,10 +37,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -326,9 +326,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -387,32 +392,32 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">netCDF4</span> <span class="kn">import</span> <span class="n">num2date</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">netCDF4</span><span class="w"> </span><span class="kn">import</span> <span class="n">num2date</span>
 
-<span class="kn">from</span> <span class="nn">..io.io_aux</span> <span class="kn">import</span> <span class="n">get_save_dir</span><span class="p">,</span> <span class="n">make_filename</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span>
-<span class="kn">from</span> <span class="nn">..io.io_aux</span> <span class="kn">import</span> <span class="n">generate_field_name_str</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_save_dir</span><span class="p">,</span> <span class="n">make_filename</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_field_name_str</span>
 
-<span class="kn">from</span> <span class="nn">..io.read_data_sensor</span> <span class="kn">import</span> <span class="n">get_sensor_data</span>
-<span class="kn">from</span> <span class="nn">..io.read_data_other</span> <span class="kn">import</span> <span class="n">read_timeseries</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.read_data_sensor</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_sensor_data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.read_data_other</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_timeseries</span>
 
-<span class="kn">from</span> <span class="nn">..io.write_data</span> <span class="kn">import</span> <span class="n">write_ts_polar_data</span><span class="p">,</span> <span class="n">write_ts_cum</span>
-<span class="kn">from</span> <span class="nn">..io.write_data</span> <span class="kn">import</span> <span class="n">write_ts_grid_data</span><span class="p">,</span> <span class="n">write_multiple_points</span>
-<span class="kn">from</span> <span class="nn">..io.write_data</span> <span class="kn">import</span> <span class="n">write_multiple_points_grid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.write_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_ts_polar_data</span><span class="p">,</span> <span class="n">write_ts_cum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.write_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_ts_grid_data</span><span class="p">,</span> <span class="n">write_multiple_points</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.write_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_multiple_points_grid</span>
 
-<span class="kn">from</span> <span class="nn">..graph.plots_timeseries</span> <span class="kn">import</span> <span class="n">plot_timeseries</span><span class="p">,</span> <span class="n">plot_timeseries_comp</span>
-<span class="kn">from</span> <span class="nn">..graph.plots_vol</span> <span class="kn">import</span> <span class="n">plot_cappi</span><span class="p">,</span> <span class="n">plot_traj</span>
-<span class="kn">from</span> <span class="nn">..graph.plots</span> <span class="kn">import</span> <span class="n">plot_scatter_comp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..graph.plots_timeseries</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_timeseries</span><span class="p">,</span> <span class="n">plot_timeseries_comp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..graph.plots_vol</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_cappi</span><span class="p">,</span> <span class="n">plot_traj</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..graph.plots</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_scatter_comp</span>
 
-<span class="kn">from</span> <span class="nn">..util.radar_utils</span> <span class="kn">import</span> <span class="n">rainfall_accumulation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util.radar_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">rainfall_accumulation</span>
 
 
 <div class="viewcode-block" id="generate_timeseries_products">
 <a class="viewcode-back" href="../../../API/generated/pyrad.prod.generate_timeseries_products.html#pyrad.prod.generate_timeseries_products">[docs]</a>
-<span class="k">def</span> <span class="nf">generate_timeseries_products</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_timeseries_products</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates time series products. Accepted product types:</span>
 <span class="sd">        &#39;COMPARE_CUMULATIVE_POINT&#39;: Plots in the same graph 2 time series of</span>
@@ -490,7 +495,7 @@
 <span class="sd">        &#39;PLOT_AND_WRITE&#39;: Writes and plots a trajectory time series.</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset </span>
+<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
 <span class="sd">                ymin, ymax: float</span>
 <span class="sd">                    The minimum and maximum value of the Y-axis. If none it</span>
 <span class="sd">                    will be obtained from the Py-ART config file.</span>
@@ -1425,8 +1430,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1449,7 +1454,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

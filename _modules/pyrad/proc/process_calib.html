@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,10 +26,10 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -37,10 +37,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -326,9 +326,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -394,31 +399,31 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">importlib</span>
 
-<span class="kn">from</span> <span class="nn">netCDF4</span> <span class="kn">import</span> <span class="n">num2date</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">netCDF4</span><span class="w"> </span><span class="kn">import</span> <span class="n">num2date</span>
 
 <span class="k">if</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="s2">&quot;pysolar&quot;</span><span class="p">):</span>
     <span class="n">_PYSOLAR_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">_PYSOLAR_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">import</span> <span class="nn">pyart</span>
-<span class="kn">from</span> <span class="nn">..io.io_aux</span> <span class="kn">import</span> <span class="n">get_datatype_fields</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span>
-<span class="kn">from</span> <span class="nn">..io.read_data_sun</span> <span class="kn">import</span> <span class="n">read_sun_hits_multiple_days</span><span class="p">,</span> <span class="n">read_solar_flux</span>
-<span class="kn">from</span> <span class="nn">..io.read_data_other</span> <span class="kn">import</span> <span class="n">read_excess_gates</span>
-<span class="kn">from</span> <span class="nn">..io.read_data_radar</span> <span class="kn">import</span> <span class="n">interpol_field</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_datatype_fields</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.read_data_sun</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_sun_hits_multiple_days</span><span class="p">,</span> <span class="n">read_solar_flux</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.read_data_other</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_excess_gates</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.read_data_radar</span><span class="w"> </span><span class="kn">import</span> <span class="n">interpol_field</span>
 
-<span class="kn">from</span> <span class="nn">..util.radar_utils</span> <span class="kn">import</span> <span class="n">get_closest_solar_flux</span><span class="p">,</span> <span class="n">get_histogram_bins</span>
-<span class="kn">from</span> <span class="nn">..util.radar_utils</span> <span class="kn">import</span> <span class="n">find_ray_index</span><span class="p">,</span> <span class="n">find_rng_index</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util.radar_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_closest_solar_flux</span><span class="p">,</span> <span class="n">get_histogram_bins</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util.radar_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_ray_index</span><span class="p">,</span> <span class="n">find_rng_index</span>
 
 
 <div class="viewcode-block" id="process_correct_bias">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_correct_bias.html#pyrad.proc.process_correct_bias">[docs]</a>
-<span class="k">def</span> <span class="nf">process_correct_bias</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_correct_bias</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Corrects a bias on the data</span>
 
@@ -487,7 +492,7 @@
 
 <div class="viewcode-block" id="process_correct_noise_rhohv">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_correct_noise_rhohv.html#pyrad.proc.process_correct_noise_rhohv">[docs]</a>
-<span class="k">def</span> <span class="nf">process_correct_noise_rhohv</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_correct_noise_rhohv</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    identifies echoes as 0: No data, 1: Noise, 2: Clutter,</span>
 <span class="sd">    3: Precipitation</span>
@@ -502,7 +507,7 @@
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
 <span class="sd">            The data types used in the correction, it must contain</span>
-<span class="sd">            &quot;uRhoHV&quot;, and, </span>
+<span class="sd">            &quot;uRhoHV&quot;, and,</span>
 <span class="sd">            &quot;SNRh&quot;, and,</span>
 <span class="sd">            &quot;ZDRc&quot;, and,</span>
 <span class="sd">            &quot;Nh&quot;, and,</span>
@@ -574,7 +579,7 @@
 
 <div class="viewcode-block" id="process_gc_monitoring">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_gc_monitoring.html#pyrad.proc.process_gc_monitoring">[docs]</a>
-<span class="k">def</span> <span class="nf">process_gc_monitoring</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_gc_monitoring</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    computes ground clutter monitoring statistics</span>
 
@@ -615,7 +620,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : Radar</span>
 <span class="sd">        radar object containing histogram data with fields corresponding</span>
-<span class="sd">        to specified datatypes </span>
+<span class="sd">        to specified datatypes</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -812,7 +817,7 @@
 
 <div class="viewcode-block" id="process_occurrence">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_occurrence.html#pyrad.proc.process_occurrence">[docs]</a>
-<span class="k">def</span> <span class="nf">process_occurrence</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_occurrence</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    computes the frequency of occurrence of data. It looks only for gates</span>
 <span class="sd">    where data is present.</span>
@@ -828,7 +833,7 @@
 <span class="sd">        datatype : list of string. Dataset keyword</span>
 <span class="sd">            The input data types, it must contain</span>
 <span class="sd">            &quot;echoID&quot; (Optional allows filter_prec),</span>
-<span class="sd">            as well as any other fields supported by pyrad</span>
+<span class="sd">            as well as any other field supported by pyrad (one field only)</span>
 <span class="sd">        regular_grid : Boolean. Dataset keyword</span>
 <span class="sd">            Whether the radar has a Boolean grid or not. Default False</span>
 <span class="sd">        rmin, rmax : float. Dataset keyword</span>
@@ -849,8 +854,8 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        radar object containing frequency of occurence data with fields corresponding</span>
-<span class="sd">        to specified datatypes </span>
+<span class="sd">        radar object with fields</span>
+<span class="sd">        &quot;occurence&quot;, &quot;number_of_samples&quot; and &quot;frequency_of_occurrence&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
@@ -1041,7 +1046,7 @@
 
 <div class="viewcode-block" id="process_time_avg_std">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_time_avg_std.html#pyrad.proc.process_time_avg_std">[docs]</a>
-<span class="k">def</span> <span class="nf">process_time_avg_std</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_time_avg_std</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    computes the average and standard deviation of data. It looks only for</span>
 <span class="sd">    gates where data is present.</span>
@@ -1314,7 +1319,7 @@
 
 <div class="viewcode-block" id="process_occurrence_period">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_occurrence_period.html#pyrad.proc.process_occurrence_period">[docs]</a>
-<span class="k">def</span> <span class="nf">process_occurrence_period</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_occurrence_period</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    computes the frequency of occurrence over a long period of time by adding</span>
 <span class="sd">    together shorter periods</span>
@@ -1342,7 +1347,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output fields &quot;occurence&quot; and </span>
+<span class="sd">        dictionary containing the output fields &quot;occurence&quot; and</span>
 <span class="sd">        &quot;nsamples&quot;</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
@@ -1478,7 +1483,7 @@
 
 <div class="viewcode-block" id="process_sun_hits">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_sun_hits.html#pyrad.proc.process_sun_hits">[docs]</a>
-<span class="k">def</span> <span class="nf">process_sun_hits</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_sun_hits</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    monitoring of the radar using sun hits</span>
 
@@ -2044,7 +2049,7 @@
 
 <div class="viewcode-block" id="process_sunscan">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_sunscan.html#pyrad.proc.process_sunscan">[docs]</a>
-<span class="k">def</span> <span class="nf">process_sunscan</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_sunscan</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Processing of automatic sun scans for monitoring purposes of the radar system.</span>
 
@@ -2951,8 +2956,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2975,7 +2980,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

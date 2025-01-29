@@ -1466,10 +1466,10 @@ PLOT_AND_WRITE_INTERCOMP_TS
 """"""""""""""""""""""""""""""
 description
    Writes statistics of radar intercomparison in a file and plots the time series of the statistics.
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L256>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L273>`_
 parameters
    voltype: : *str*
-       name of the pyrad variable to use, it must be available in the dataset               in the dataset 
+       name of the pyrad variable to use, it must be available in the dataset 
    add_date_in_fname: : *Bool*
        If true adds the year in the csv file containing the statistics. Default False 
    sort_by_date: : *Bool*
@@ -1480,6 +1480,8 @@ parameters
        If true rewrites the csv file containing the statistics. Default False 
    npoints_min: : *int*
        The minimum number of points to consider the statistics valid and therefore use the data point in the plotting. Default 0 
+   transform: : *str*
+       A transform to apply to the data before computing the statistics and generating the plots. Any mathematical function with argument "x" is accepted for example "sin(x) + x**2" or "10 * log10(x)" Default is to use no transform 
    corr_min: : *float*
        The minimum correlation to consider the statistics valid and therefore use the data point in the plotting. Default 0.  
 
@@ -1487,32 +1489,34 @@ PLOT_SCATTER_INTERCOMP
 """"""""""""""""""""""""""""""
 description
    Plots a density plot with the points of radar 1 versus the points of radar 2
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L164>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L175>`_
 parameters
    voltype: : *str*
-       name of the pyrad variable to use, it must be available in the dataset               in the dataset 
+       name of the pyrad variable to use, it must be available in the dataset 
    step: : *float*
        The quantization step of the data. If none it will be computed using the Py-ART config file. Default None 
    scatter_type: : *str*
-       Type of scatter plot. Can be a plot for each radar volume (instant) or at the end of the processing period (cumulative). Default is cumulative  
+       Type of scatter plot. Can be a plot for each radar volume (instant) or at the end of the processing period (cumulative). Default is cumulative 
+   transform: : *str*
+       A transform to apply to the data before computing the statistics and generating the plots. Any mathematical function with argument "x" is accepted for example "sin(x) + x**2" or "10 * log10(x)" Default is to use no transform  
 
 WRITE_INTERCOMP
 """"""""""""""""""""""""""""""
 description
    Writes the instantaneously intercompared data (gate positions, values, etc.) in a csv file.
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L256>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L273>`_
 parameters
    voltype: : *str*
-       name of the pyrad variable to use, it must be available in the dataset               in the dataset  
+       name of the pyrad variable to use, it must be available in the dataset  
 
 WRITE_INTERCOMP_TIME_AVG
 """"""""""""""""""""""""""""""
 description
    Writes the time-averaged intercompared data (gate positions, values, etc.) in a csv file.
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L138>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L149>`_
 parameters
    voltype: : *str*
-       name of the pyrad variable to use, it must be available in the dataset               in the dataset   
+       name of the pyrad variable to use, it must be available in the dataset   
 
 ML
 -----------------------------
@@ -1557,7 +1561,7 @@ CUMUL_VOL_TS
 """"""""""""""""""""""""""""""
 description
    Plots time series of the average of instantaneous quantiles stored in a csv file.
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L702>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L701>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset               in the dataset 
@@ -1597,7 +1601,7 @@ description
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L294>`_
 parameters
    voltype: : *str*
-       name of the pyrad variable to use, it must be available in the dataset               in the dataset 
+       name of the pyrad variable to use, it must be available in the dataset 
    anglenr: : *int*
        The elevation angle number to plot  
 
@@ -1605,7 +1609,7 @@ SAVEVOL
 """"""""""""""""""""""""""""""
 description
    Saves the monitoring data in a C/F radar file. The data field contains histograms of data for each pair of azimuth and elevation angles
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L993>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L992>`_
 
 VOL_HISTOGRAM
 """"""""""""""""""""""""""""""
@@ -1614,7 +1618,7 @@ description
  `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L205>`_
 parameters
    voltype: : *str*
-       name of the pyrad variable to use, it must be available in the dataset               in the dataset 
+       name of the pyrad variable to use, it must be available in the dataset 
    write_data: : *bool*
        If true the resultant histogram is also saved in a csv file. Default True.  
 
@@ -1622,16 +1626,16 @@ VOL_TS
 """"""""""""""""""""""""""""""
 description
    Computes statistics of the gathered data and writes them in a csv file and plots a time series of those statistics.
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L702>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L701>`_
 parameters
    voltype: : *str*
-       name of the pyrad variable to use, it must be available in the dataset               in the dataset 
+       name of the pyrad variable to use, it must be available in the dataset 
    quantiles: : *list of 3 floats*
        the quantiles to compute. Default 25., 50., 75. 
    ref_value: : *float*
        The reference value. Default 0 
    sort_by_date: : *Bool*
-       If true when reading the csv file containing the statistics the data is sorted by date. Default False 
+       If true when reading the csv file containing the statistics the data is sorted by date. Default True 
    rewrite: : *Bool*
        If true the csv file containing the statistics is rewritten 
    add_data_in_fname: : *Bool*

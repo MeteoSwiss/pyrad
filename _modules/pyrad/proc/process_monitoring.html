@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,10 +26,10 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -37,10 +37,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -326,9 +326,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -394,24 +399,24 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">pyart</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 
-<span class="kn">from</span> <span class="nn">..io.io_aux</span> <span class="kn">import</span> <span class="n">get_datatype_fields</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span>
-<span class="kn">from</span> <span class="nn">..io.read_data_other</span> <span class="kn">import</span> <span class="n">read_selfconsistency</span>
-<span class="kn">from</span> <span class="nn">..io.read_data_sensor</span> <span class="kn">import</span> <span class="n">read_fzl_igra</span>
-<span class="kn">from</span> <span class="nn">..io.read_data_radar</span> <span class="kn">import</span> <span class="n">interpol_field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_datatype_fields</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.read_data_other</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_selfconsistency</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.read_data_sensor</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_fzl_igra</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.read_data_radar</span><span class="w"> </span><span class="kn">import</span> <span class="n">interpol_field</span>
 
-<span class="kn">from</span> <span class="nn">..util.radar_utils</span> <span class="kn">import</span> <span class="n">get_histogram_bins</span>
-<span class="kn">from</span> <span class="nn">..util.stat_utils</span> <span class="kn">import</span> <span class="n">ratio_bootstrapping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util.radar_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_histogram_bins</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util.stat_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">ratio_bootstrapping</span>
 
 
 <div class="viewcode-block" id="process_selfconsistency_kdp_phidp">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_selfconsistency_kdp_phidp.html#pyrad.proc.process_selfconsistency_kdp_phidp">[docs]</a>
-<span class="k">def</span> <span class="nf">process_selfconsistency_kdp_phidp</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_selfconsistency_kdp_phidp</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes specific differential phase and differential phase in rain using</span>
 <span class="sd">    the selfconsistency between Zdr, Zh and KDP</span>
@@ -666,7 +671,7 @@
 
 <div class="viewcode-block" id="process_selfconsistency_bias">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_selfconsistency_bias.html#pyrad.proc.process_selfconsistency_bias">[docs]</a>
-<span class="k">def</span> <span class="nf">process_selfconsistency_bias</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_selfconsistency_bias</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates the reflectivity bias by means of the selfconsistency</span>
 <span class="sd">    algorithm by Gourley</span>
@@ -1007,7 +1012,7 @@
 
 <div class="viewcode-block" id="process_selfconsistency_bias2">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_selfconsistency_bias2.html#pyrad.proc.process_selfconsistency_bias2">[docs]</a>
-<span class="k">def</span> <span class="nf">process_selfconsistency_bias2</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_selfconsistency_bias2</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates the reflectivity bias by means of the selfconsistency</span>
 <span class="sd">    algorithm by Gourley</span>
@@ -1418,7 +1423,7 @@
 
 <div class="viewcode-block" id="process_estimate_phidp0">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_estimate_phidp0.html#pyrad.proc.process_estimate_phidp0">[docs]</a>
-<span class="k">def</span> <span class="nf">process_estimate_phidp0</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_estimate_phidp0</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    estimates the system differential phase offset at each ray</span>
 
@@ -1512,7 +1517,7 @@
 
 <div class="viewcode-block" id="process_rhohv_rain">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_rhohv_rain.html#pyrad.proc.process_rhohv_rain">[docs]</a>
-<span class="k">def</span> <span class="nf">process_rhohv_rain</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_rhohv_rain</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Keeps only suitable data to evaluate the 80 percentile of RhoHV in rain</span>
 
@@ -1676,7 +1681,7 @@
 
 <div class="viewcode-block" id="process_zdr_precip">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_zdr_precip.html#pyrad.proc.process_zdr_precip">[docs]</a>
-<span class="k">def</span> <span class="nf">process_zdr_precip</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_zdr_precip</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Keeps only suitable data to evaluate the differential reflectivity in</span>
 <span class="sd">    moderate rain or precipitation (for vertical scans)</span>
@@ -1898,7 +1903,7 @@
 
 <div class="viewcode-block" id="process_zdr_snow">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_zdr_snow.html#pyrad.proc.process_zdr_snow">[docs]</a>
-<span class="k">def</span> <span class="nf">process_zdr_snow</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_zdr_snow</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Keeps only suitable data to evaluate the differential reflectivity in</span>
 <span class="sd">    snow</span>
@@ -1917,7 +1922,7 @@
 <span class="sd">            &quot;ZDR&quot; or &quot;ZDRc&quot;, and,</span>
 <span class="sd">            &quot;PhiDP&quot; or &quot;PhiDPc&quot;, and,</span>
 <span class="sd">            &quot;uRhoHV&quot; or &quot;RhoHV&quot; or &quot;RhoHVc&quot;, and,</span>
-<span class="sd">            &quot;hydro&quot;, and, </span>
+<span class="sd">            &quot;hydro&quot;, and,</span>
 <span class="sd">            &quot;TEMP&quot; (Optional), and,</span>
 <span class="sd">            &quot;SNRh&quot; or &quot;SNRv&quot; (Optional, used to filter with SNRmin and SNRmax)</span>
 <span class="sd">        rmin : float. Dataset keyword</span>
@@ -2077,7 +2082,7 @@
 
 <div class="viewcode-block" id="process_monitoring">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_monitoring.html#pyrad.proc.process_monitoring">[docs]</a>
-<span class="k">def</span> <span class="nf">process_monitoring</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_monitoring</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    computes monitoring statistics</span>
 
@@ -2287,8 +2292,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2311,7 +2316,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

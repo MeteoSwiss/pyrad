@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,10 +26,10 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -37,10 +37,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -326,9 +326,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -417,36 +422,38 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">glob</span>
-<span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">csv</span>
-<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">et</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xml.etree.ElementTree</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">et</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">fcntl</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">fcntl</span>
 
     <span class="n">FCNTL_AVAIL</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">msvcrt</span>  <span class="c1"># For windows</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">msvcrt</span>  <span class="c1"># For windows</span>
 
     <span class="n">FCNTL_AVAIL</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">errno</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">errno</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">pyart</span>
-<span class="kn">from</span> <span class="nn">pyart.config</span> <span class="kn">import</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyart.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
 
-<span class="kn">from</span> <span class="nn">.io_aux</span> <span class="kn">import</span> <span class="n">get_fieldname_pyart</span><span class="p">,</span> <span class="n">_get_datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_fieldname_pyart</span><span class="p">,</span> <span class="n">_get_datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.flock_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">lock_file</span><span class="p">,</span> <span class="n">unlock_file</span>
 
 
 <div class="viewcode-block" id="read_centroids_npz">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_centroids_npz.html#pyrad.io.read_centroids_npz">[docs]</a>
-<span class="k">def</span> <span class="nf">read_centroids_npz</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_centroids_npz</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads an npz file containing data used in centroid computation</span>
 
@@ -473,7 +480,7 @@
 
 <div class="viewcode-block" id="read_centroids">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_centroids.html#pyrad.io.read_centroids">[docs]</a>
-<span class="k">def</span> <span class="nf">read_centroids</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_centroids</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a file containing the centroids for the semi-supervised</span>
 <span class="sd">    classification</span>
@@ -517,7 +524,7 @@
 
 <div class="viewcode-block" id="read_proc_periods">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_proc_periods.html#pyrad.io.read_proc_periods">[docs]</a>
-<span class="k">def</span> <span class="nf">read_proc_periods</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_proc_periods</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a file containing the start and stop times of periods to process</span>
 
@@ -562,7 +569,7 @@
 
 <div class="viewcode-block" id="read_profile_ts">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_profile_ts.html#pyrad.io.read_profile_ts">[docs]</a>
-<span class="k">def</span> <span class="nf">read_profile_ts</span><span class="p">(</span><span class="n">fname_list</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">hres</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label_nr</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">t_res</span><span class="o">=</span><span class="mf">300.0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_profile_ts</span><span class="p">(</span><span class="n">fname_list</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">hres</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label_nr</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">t_res</span><span class="o">=</span><span class="mf">300.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a colection of profile data file and creates a time series</span>
 
@@ -625,7 +632,7 @@
 
 <div class="viewcode-block" id="read_histogram_ts">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_histogram_ts.html#pyrad.io.read_histogram_ts">[docs]</a>
-<span class="k">def</span> <span class="nf">read_histogram_ts</span><span class="p">(</span><span class="n">fname_list</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">t_res</span><span class="o">=</span><span class="mf">300.0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_histogram_ts</span><span class="p">(</span><span class="n">fname_list</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">t_res</span><span class="o">=</span><span class="mf">300.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a colection of histogram data file and creates a time series</span>
 
@@ -685,7 +692,7 @@
 
 <div class="viewcode-block" id="read_quantiles_ts">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_quantiles_ts.html#pyrad.io.read_quantiles_ts">[docs]</a>
-<span class="k">def</span> <span class="nf">read_quantiles_ts</span><span class="p">(</span><span class="n">fname_list</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">qmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">qmax</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">t_res</span><span class="o">=</span><span class="mf">300.0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_quantiles_ts</span><span class="p">(</span><span class="n">fname_list</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">qmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">qmax</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">t_res</span><span class="o">=</span><span class="mf">300.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a colection of quantiles data file and creates a time series</span>
 
@@ -747,7 +754,7 @@
 
 <div class="viewcode-block" id="read_vpr_theo_parameters">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_vpr_theo_parameters.html#pyrad.io.read_vpr_theo_parameters">[docs]</a>
-<span class="k">def</span> <span class="nf">read_vpr_theo_parameters</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_vpr_theo_parameters</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads the parameters defining a theoretical VPR profile from a csv file</span>
 
@@ -779,7 +786,7 @@
 
 <div class="viewcode-block" id="read_rhi_profile">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_rhi_profile.html#pyrad.io.read_rhi_profile">[docs]</a>
-<span class="k">def</span> <span class="nf">read_rhi_profile</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_rhi_profile</span><span class="p">(</span>
     <span class="n">fname</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;50.0-percentile&quot;</span><span class="p">,</span> <span class="s2">&quot;25.0-percentile&quot;</span><span class="p">,</span> <span class="s2">&quot;75.0-percentile&quot;</span><span class="p">]</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -831,7 +838,7 @@
 
 <div class="viewcode-block" id="read_last_state">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_last_state.html#pyrad.io.read_last_state">[docs]</a>
-<span class="k">def</span> <span class="nf">read_last_state</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_last_state</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a file containing the date of acquisition of the last volume</span>
 <span class="sd">    processed</span>
@@ -869,7 +876,7 @@
 
 <div class="viewcode-block" id="read_status">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_status.html#pyrad.io.read_status">[docs]</a>
-<span class="k">def</span> <span class="nf">read_status</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_status</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads rad4alp xml status file.</span>
 
@@ -921,7 +928,7 @@
 
 <div class="viewcode-block" id="read_mch_xml_vad">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_mch_xml_vad.html#pyrad.io.read_mch_xml_vad">[docs]</a>
-<span class="k">def</span> <span class="nf">read_mch_xml_vad</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_mch_xml_vad</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a MeteoSwiss VAD file (VAx xml files)</span>
 
@@ -963,7 +970,7 @@
 
 <div class="viewcode-block" id="read_rad4alp_icon">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_rad4alp_icon.html#pyrad.io.read_rad4alp_icon">[docs]</a>
-<span class="k">def</span> <span class="nf">read_rad4alp_icon</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">ngates</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_rad4alp_icon</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">ngates</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads rad4alp ICON data binary file.</span>
 
@@ -1023,7 +1030,7 @@
 
 <div class="viewcode-block" id="read_rad4alp_vis">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_rad4alp_vis.html#pyrad.io.read_rad4alp_vis">[docs]</a>
-<span class="k">def</span> <span class="nf">read_rad4alp_vis</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">datatype</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_rad4alp_vis</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">datatype</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads rad4alp visibility data binary file.</span>
 
@@ -1104,7 +1111,7 @@
 
 <div class="viewcode-block" id="read_mf_vis">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_mf_vis.html#pyrad.io.read_mf_vis">[docs]</a>
-<span class="k">def</span> <span class="nf">read_mf_vis</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">datatype</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_mf_vis</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">datatype</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads Météo-France visibility data binary file.</span>
 
@@ -1157,7 +1164,7 @@
 
 <div class="viewcode-block" id="read_histogram">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_histogram.html#pyrad.io.read_histogram">[docs]</a>
-<span class="k">def</span> <span class="nf">read_histogram</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_histogram</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a histogram contained in a csv file</span>
 
@@ -1198,7 +1205,7 @@
 
 <div class="viewcode-block" id="read_quantiles">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_quantiles.html#pyrad.io.read_quantiles">[docs]</a>
-<span class="k">def</span> <span class="nf">read_quantiles</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_quantiles</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads quantiles contained in a csv file</span>
 
@@ -1238,7 +1245,7 @@
 
 <div class="viewcode-block" id="read_excess_gates">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_excess_gates.html#pyrad.io.read_excess_gates">[docs]</a>
-<span class="k">def</span> <span class="nf">read_excess_gates</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_excess_gates</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a csv files containing the position of gates exceeding</span>
 <span class="sd">    a given percentile of frequency of occurrence</span>
@@ -1294,7 +1301,7 @@
 
 <div class="viewcode-block" id="read_colocated_gates">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_colocated_gates.html#pyrad.io.read_colocated_gates">[docs]</a>
-<span class="k">def</span> <span class="nf">read_colocated_gates</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_colocated_gates</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a csv files containing the position of colocated gates</span>
 
@@ -1364,223 +1371,119 @@
 
 <div class="viewcode-block" id="read_colocated_data">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_colocated_data.html#pyrad.io.read_colocated_data">[docs]</a>
-<span class="k">def</span> <span class="nf">read_colocated_data</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_colocated_data</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Reads a csv files containing colocated data</span>
+<span class="sd">    Reads a CSV file containing colocated data using pandas.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    fname : str</span>
-<span class="sd">        path of time series file</span>
+<span class="sd">        Path of time series file.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    rad1_time, rad1_ray_ind, rad1_rng_ind, rad1_ele, rad1_azi, rad1_rng,</span>
-<span class="sd">    rad1_val, rad2_time, rad2_ray_ind, rad2_rng_ind, rad2_ele, rad2_azi,</span>
-<span class="sd">    rad2_rng, rad2_val : tupple</span>
-<span class="sd">        A tupple with the data read. None otherwise</span>
-
+<span class="sd">    tuple</span>
+<span class="sd">        A tuple with the data read:</span>
+<span class="sd">        (rad1_time, rad1_ray_ind, rad1_rng_ind, rad1_ele, rad1_azi, rad1_rng,</span>
+<span class="sd">        rad1_val, rad2_time, rad2_ray_ind, rad2_rng_ind, rad2_ele, rad2_azi,</span>
+<span class="sd">        rad2_rng, rad2_val). Returns None for all if unable to read the file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="c1"># first count the lines</span>
-            <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">row</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">csvfile</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">row</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">))</span>
-            <span class="n">nrows</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">)</span>
-            <span class="n">rad1_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span>
-            <span class="n">rad1_ray_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
-            <span class="n">rad1_rng_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
-            <span class="n">rad1_ele</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-            <span class="n">rad1_azi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-            <span class="n">rad1_rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-            <span class="n">rad1_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-            <span class="n">rad2_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span>
-            <span class="n">rad2_ray_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
-            <span class="n">rad2_rng_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
-            <span class="n">rad2_ele</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-            <span class="n">rad2_azi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-            <span class="n">rad2_rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-            <span class="n">rad2_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="c1"># Read the CSV file, skipping lines starting with &quot;#&quot;</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="n">na_values</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
 
-            <span class="c1"># now read the data</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-            <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">row</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">csvfile</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">row</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">reader</span><span class="p">):</span>
-                <span class="n">rad1_time</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
-                    <span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad1_time&quot;</span><span class="p">],</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span>
-                <span class="p">)</span>
-                <span class="n">rad1_ray_ind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad1_ray_ind&quot;</span><span class="p">])</span>
-                <span class="n">rad1_rng_ind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad1_rng_ind&quot;</span><span class="p">])</span>
-                <span class="n">rad1_ele</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad1_ele&quot;</span><span class="p">])</span>
-                <span class="n">rad1_azi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad1_azi&quot;</span><span class="p">])</span>
-                <span class="n">rad1_rng</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad1_rng&quot;</span><span class="p">])</span>
-                <span class="n">rad1_val</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad1_val&quot;</span><span class="p">])</span>
-                <span class="n">rad2_time</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
-                    <span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad2_time&quot;</span><span class="p">],</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span>
-                <span class="p">)</span>
-                <span class="n">rad2_ray_ind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad2_ray_ind&quot;</span><span class="p">])</span>
-                <span class="n">rad2_rng_ind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad2_rng_ind&quot;</span><span class="p">])</span>
-                <span class="n">rad2_ele</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad2_ele&quot;</span><span class="p">])</span>
-                <span class="n">rad2_azi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad2_azi&quot;</span><span class="p">])</span>
-                <span class="n">rad2_rng</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad2_rng&quot;</span><span class="p">])</span>
-                <span class="n">rad2_val</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad2_val&quot;</span><span class="p">])</span>
+        <span class="c1"># Convert rad1_time and rad2_time to datetime</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;rad1_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;rad1_time&quot;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;rad2_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;rad2_time&quot;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span>
 
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="c1"># Create masked arrays</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">to_masked_array</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_invalid</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">))</span>
 
-            <span class="k">return</span> <span class="p">(</span>
-                <span class="n">rad1_time</span><span class="p">,</span>
-                <span class="n">rad1_ray_ind</span><span class="p">,</span>
-                <span class="n">rad1_rng_ind</span><span class="p">,</span>
-                <span class="n">rad1_ele</span><span class="p">,</span>
-                <span class="n">rad1_azi</span><span class="p">,</span>
-                <span class="n">rad1_rng</span><span class="p">,</span>
-                <span class="n">rad1_val</span><span class="p">,</span>
-                <span class="n">rad2_time</span><span class="p">,</span>
-                <span class="n">rad2_ray_ind</span><span class="p">,</span>
-                <span class="n">rad2_rng_ind</span><span class="p">,</span>
-                <span class="n">rad2_ele</span><span class="p">,</span>
-                <span class="n">rad2_azi</span><span class="p">,</span>
-                <span class="n">rad2_rng</span><span class="p">,</span>
-                <span class="n">rad2_val</span><span class="p">,</span>
-            <span class="p">)</span>
-    <span class="k">except</span> <span class="ne">EnvironmentError</span> <span class="k">as</span> <span class="n">ee</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">))</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to read file &quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">(</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-        <span class="p">)</span></div>
-
-
-
-<span class="k">def</span> <span class="nf">read_colocated_data_time_avg</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Reads a csv files containing time averaged colocated data</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    fname : str</span>
-<span class="sd">        path of time series file</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    rad1_time, rad1_ray_ind, rad1_rng_ind, rad1_ele , rad1_azi, rad1_rng,</span>
-<span class="sd">    rad1_val, rad2_time, rad2_ray_ind, rad2_rng_ind, rad2_ele, rad2_azi,</span>
-<span class="sd">    rad2_rng, rad2_val : tupple</span>
-<span class="sd">        A tupple with the data read. None otherwise</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="c1"># first count the lines</span>
-            <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">row</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">csvfile</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">row</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">))</span>
-            <span class="n">nrows</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">)</span>
-            <span class="n">rad1_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span>
-            <span class="n">rad1_ray_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
-            <span class="n">rad1_rng_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
-            <span class="n">rad1_ele</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-            <span class="n">rad1_azi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-            <span class="n">rad1_rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-            <span class="n">rad1_dBZavg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-            <span class="n">rad1_PhiDPavg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-            <span class="n">rad1_Flagavg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-            <span class="n">rad2_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span>
-            <span class="n">rad2_ray_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
-            <span class="n">rad2_rng_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
-            <span class="n">rad2_ele</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-            <span class="n">rad2_azi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-            <span class="n">rad2_rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-            <span class="n">rad2_dBZavg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-            <span class="n">rad2_PhiDPavg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-            <span class="n">rad2_Flagavg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-
-            <span class="c1"># now read the data</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-            <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">row</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">csvfile</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">row</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">reader</span><span class="p">):</span>
-                <span class="n">rad1_time</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
-                    <span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad1_time&quot;</span><span class="p">],</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span>
-                <span class="p">)</span>
-                <span class="n">rad1_ray_ind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad1_ray_ind&quot;</span><span class="p">])</span>
-                <span class="n">rad1_rng_ind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad1_rng_ind&quot;</span><span class="p">])</span>
-                <span class="n">rad1_ele</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad1_ele&quot;</span><span class="p">])</span>
-                <span class="n">rad1_azi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad1_azi&quot;</span><span class="p">])</span>
-                <span class="n">rad1_rng</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad1_rng&quot;</span><span class="p">])</span>
-                <span class="n">rad1_dBZavg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad1_dBZavg&quot;</span><span class="p">])</span>
-                <span class="n">rad1_PhiDPavg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad1_PhiDPavg&quot;</span><span class="p">])</span>
-                <span class="n">rad1_Flagavg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad1_Flagavg&quot;</span><span class="p">])</span>
-                <span class="n">rad2_time</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
-                    <span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad2_time&quot;</span><span class="p">],</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span>
-                <span class="p">)</span>
-                <span class="n">rad2_ray_ind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad2_ray_ind&quot;</span><span class="p">])</span>
-                <span class="n">rad2_rng_ind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad2_rng_ind&quot;</span><span class="p">])</span>
-                <span class="n">rad2_ele</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad2_ele&quot;</span><span class="p">])</span>
-                <span class="n">rad2_azi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad2_azi&quot;</span><span class="p">])</span>
-                <span class="n">rad2_rng</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad2_rng&quot;</span><span class="p">])</span>
-                <span class="n">rad2_dBZavg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad2_dBZavg&quot;</span><span class="p">])</span>
-                <span class="n">rad2_PhiDPavg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad2_PhiDPavg&quot;</span><span class="p">])</span>
-                <span class="n">rad2_Flagavg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rad2_Flagavg&quot;</span><span class="p">])</span>
-
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-            <span class="k">return</span> <span class="p">(</span>
-                <span class="n">rad1_time</span><span class="p">,</span>
-                <span class="n">rad1_ray_ind</span><span class="p">,</span>
-                <span class="n">rad1_rng_ind</span><span class="p">,</span>
-                <span class="n">rad1_ele</span><span class="p">,</span>
-                <span class="n">rad1_azi</span><span class="p">,</span>
-                <span class="n">rad1_rng</span><span class="p">,</span>
-                <span class="n">rad1_dBZavg</span><span class="p">,</span>
-                <span class="n">rad1_PhiDPavg</span><span class="p">,</span>
-                <span class="n">rad1_Flagavg</span><span class="p">,</span>
-                <span class="n">rad2_time</span><span class="p">,</span>
-                <span class="n">rad2_ray_ind</span><span class="p">,</span>
-                <span class="n">rad2_rng_ind</span><span class="p">,</span>
-                <span class="n">rad2_ele</span><span class="p">,</span>
-                <span class="n">rad2_azi</span><span class="p">,</span>
-                <span class="n">rad2_rng</span><span class="p">,</span>
-                <span class="n">rad2_dBZavg</span><span class="p">,</span>
-                <span class="n">rad2_PhiDPavg</span><span class="p">,</span>
-                <span class="n">rad2_Flagavg</span><span class="p">,</span>
-            <span class="p">)</span>
-    <span class="k">except</span> <span class="ne">EnvironmentError</span> <span class="k">as</span> <span class="n">ee</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">))</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to read file &quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">(</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_time&quot;</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_ray_ind&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_rng_ind&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_ele&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_azi&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_rng&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_val&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_time&quot;</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_ray_ind&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_rng_ind&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_ele&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_azi&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_rng&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_val&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
         <span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to read file &quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span> <span class="o">*</span> <span class="mi">14</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">read_colocated_data_time_avg</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads a CSV file containing time-averaged colocated data using pandas.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fname : str</span>
+<span class="sd">        Path of time series file.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        A tuple with the data read:</span>
+<span class="sd">        (rad1_time, rad1_ray_ind, rad1_rng_ind, rad1_ele, rad1_azi, rad1_rng,</span>
+<span class="sd">        rad1_dBZavg, rad1_PhiDPavg, rad1_Flagavg, rad2_time, rad2_ray_ind,</span>
+<span class="sd">        rad2_rng_ind, rad2_ele, rad2_azi, rad2_rng, rad2_dBZavg, rad2_PhiDPavg,</span>
+<span class="sd">        rad2_Flagavg). Returns None for all if unable to read the file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Read the CSV file, skipping lines starting with &quot;#&quot;</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="n">na_values</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Convert rad1_time and rad2_time to datetime</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;rad1_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;rad1_time&quot;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;rad2_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;rad2_time&quot;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Create masked arrays</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">to_masked_array</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_invalid</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_time&quot;</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_ray_ind&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_rng_ind&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_ele&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_azi&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_rng&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_dBZavg&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_PhiDPavg&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_Flagavg&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_time&quot;</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_ray_ind&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_rng_ind&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_ele&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_azi&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_rng&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_dBZavg&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_PhiDPavg&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_Flagavg&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to read file &quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span> <span class="o">*</span> <span class="mi">18</span>
+
 
 <div class="viewcode-block" id="read_timeseries">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_timeseries.html#pyrad.io.read_timeseries">[docs]</a>
-<span class="k">def</span> <span class="nf">read_timeseries</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_timeseries</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a time series contained in a CSV file.</span>
 
@@ -1600,17 +1503,17 @@
         <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
 
         <span class="c1"># Parse the &#39;date&#39; column as datetime</span>
-        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
-        
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
+
         <span class="c1"># Convert &#39;value&#39; column to numeric, setting errors=&#39;coerce&#39; to replace</span>
         <span class="c1"># non-convertible entries with WNaN, which will be masked later</span>
-        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
-        
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
+
         <span class="c1"># Mask NaN values in &#39;value&#39; and convert to a masked array</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_invalid</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-        
+        <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_invalid</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
         <span class="c1"># Return the date and masked value array</span>
-        <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">],</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span> <span class="n">value</span>
 
     <span class="k">except</span> <span class="ne">EnvironmentError</span> <span class="k">as</span> <span class="n">ee</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">))</span>
@@ -1621,7 +1524,7 @@
 
 <div class="viewcode-block" id="read_ts_cum">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_ts_cum.html#pyrad.io.read_ts_cum">[docs]</a>
-<span class="k">def</span> <span class="nf">read_ts_cum</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_ts_cum</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a time series of precipitation accumulation contained in a csv file</span>
 
@@ -1674,7 +1577,7 @@
 
 <div class="viewcode-block" id="read_ml_ts">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_ml_ts.html#pyrad.io.read_ml_ts">[docs]</a>
-<span class="k">def</span> <span class="nf">read_ml_ts</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_ml_ts</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a melting layer time series contained in a csv file</span>
 
@@ -1742,110 +1645,62 @@
 
 <div class="viewcode-block" id="read_monitoring_ts">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_monitoring_ts.html#pyrad.io.read_monitoring_ts">[docs]</a>
-<span class="k">def</span> <span class="nf">read_monitoring_ts</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">sort_by_date</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_monitoring_ts</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">sort_by_date</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Reads a monitoring time series contained in a csv file</span>
+<span class="sd">    Reads a monitoring time series contained in a CSV file using pandas.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    fname : str</span>
-<span class="sd">        path of time series file</span>
+<span class="sd">        Path of time series file</span>
 <span class="sd">    sort_by_date : bool</span>
-<span class="sd">        if True, the read data is sorted by date prior to exit</span>
+<span class="sd">        If True, the read data is sorted by date prior to exit</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    date , np_t, central_quantile, low_quantile, high_quantile : tupple</span>
+<span class="sd">    date, np_t, central_quantile, low_quantile, high_quantile : tuple</span>
 <span class="sd">        The read data. None otherwise</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">FCNTL_AVAIL</span><span class="p">:</span>
-                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_EX</span> <span class="o">|</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_NB</span><span class="p">)</span>
-                        <span class="k">break</span>
-                    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EAGAIN</span><span class="p">:</span>
-                            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
-                        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EBADF</span><span class="p">:</span>
-                            <span class="n">warn</span><span class="p">(</span>
-                                <span class="s2">&quot;WARNING: No file locking is possible (NFS mount?), &quot;</span>
-                                <span class="o">+</span> <span class="s2">&quot;expect strange issues with multiprocessing...&quot;</span>
-                            <span class="p">)</span>
-                            <span class="k">break</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="k">raise</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="c1"># Attempt to acquire an exclusive lock on the file</span>
-                        <span class="n">msvcrt</span><span class="o">.</span><span class="n">locking</span><span class="p">(</span>
-                            <span class="n">os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">O_RDWR</span> <span class="o">|</span> <span class="n">os</span><span class="o">.</span><span class="n">O_CREAT</span><span class="p">),</span> <span class="n">msvcrt</span><span class="o">.</span><span class="n">LK_NBLCK</span><span class="p">,</span> <span class="mi">0</span>
-                        <span class="p">)</span>
-                        <span class="k">break</span>
-                    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>  <span class="c1"># Permission denied</span>
-                            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
-                        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>  <span class="c1"># No such file or directory</span>
-                            <span class="n">warn</span><span class="p">(</span>
-                                <span class="s2">&quot;WARNING: No file locking is possible (NFS mount?), &quot;</span>
-                                <span class="o">+</span> <span class="s2">&quot;expect strange issues with multiprocessing...&quot;</span>
-                            <span class="p">)</span>
-                            <span class="k">break</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="k">raise</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+            <span class="n">lock_file</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
 
-            <span class="c1"># first count the lines</span>
-            <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">row</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">csvfile</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">row</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">))</span>
-            <span class="n">nrows</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">)</span>
-            <span class="n">np_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
-            <span class="n">central_quantile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-            <span class="n">low_quantile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-            <span class="n">high_quantile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-            <span class="n">date</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span>
-
-            <span class="c1"># now read the data</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-            <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">row</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">csvfile</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">row</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">reader</span><span class="p">):</span>
-                <span class="n">date</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span>
-                <span class="n">np_t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;NP&quot;</span><span class="p">])</span>
-                <span class="n">central_quantile</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;central_quantile&quot;</span><span class="p">])</span>
-                <span class="n">low_quantile</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;low_quantile&quot;</span><span class="p">])</span>
-                <span class="n">high_quantile</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;high_quantile&quot;</span><span class="p">])</span>
-
-            <span class="k">if</span> <span class="n">FCNTL_AVAIL</span><span class="p">:</span>
-                <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_UN</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">msvcrt</span><span class="o">.</span><span class="n">locking</span><span class="p">(</span>
-                    <span class="n">csvfile</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="n">msvcrt</span><span class="o">.</span><span class="n">LK_UNLCK</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
-                <span class="p">)</span>
-
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-            <span class="n">central_quantile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">central_quantile</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">())</span>
-            <span class="n">low_quantile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">low_quantile</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">())</span>
-            <span class="n">high_quantile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">high_quantile</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">())</span>
+            <span class="c1"># Read the CSV file, ignoring comment lines</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+                <span class="n">csvfile</span><span class="p">,</span>
+                <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="p">,</span>
+                <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span>
+                <span class="n">date_parser</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">),</span>
+            <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">sort_by_date</span><span class="p">:</span>
-                <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">date</span><span class="p">)</span>
-                <span class="n">date</span> <span class="o">=</span> <span class="n">date</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
-                <span class="n">np_t</span> <span class="o">=</span> <span class="n">np_t</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
-                <span class="n">central_quantile</span> <span class="o">=</span> <span class="n">central_quantile</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
-                <span class="n">low_quantile</span> <span class="o">=</span> <span class="n">low_quantile</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
-                <span class="n">high_quantile</span> <span class="o">=</span> <span class="n">high_quantile</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-            <span class="k">return</span> <span class="n">date</span><span class="p">,</span> <span class="n">np_t</span><span class="p">,</span> <span class="n">central_quantile</span><span class="p">,</span> <span class="n">low_quantile</span><span class="p">,</span> <span class="n">high_quantile</span>
-    <span class="k">except</span> <span class="ne">EnvironmentError</span> <span class="k">as</span> <span class="n">ee</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">))</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to read file &quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s2">&quot;last&quot;</span><span class="p">)</span>
+            <span class="n">unlock_file</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
+
+        <span class="n">date</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">to_pydatetime</span><span class="p">()</span>
+        <span class="n">np_t</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;NP&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">central_quantile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;central_quantile&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span> <span class="n">get_fillvalue</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">low_quantile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;low_quantile&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span> <span class="n">get_fillvalue</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">high_quantile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;high_quantile&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span> <span class="n">get_fillvalue</span><span class="p">()</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">date</span><span class="p">,</span> <span class="n">np_t</span><span class="p">,</span> <span class="n">central_quantile</span><span class="p">,</span> <span class="n">low_quantile</span><span class="p">,</span> <span class="n">high_quantile</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unable to read file </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
 
 
 
-<span class="k">def</span> <span class="nf">read_monitoring_ts_old</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_monitoring_ts_old</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads an old format of the monitoring time series contained in a text file</span>
 
@@ -1899,7 +1754,7 @@
 
 <div class="viewcode-block" id="read_intercomp_scores_ts">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_intercomp_scores_ts.html#pyrad.io.read_intercomp_scores_ts">[docs]</a>
-<span class="k">def</span> <span class="nf">read_intercomp_scores_ts</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">sort_by_date</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_intercomp_scores_ts</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">sort_by_date</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a radar intercomparison scores csv file</span>
 
@@ -2039,7 +1894,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">read_intercomp_scores_ts_old</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_intercomp_scores_ts_old</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a radar intercomparison scores csv file in old format</span>
 
@@ -2141,7 +1996,7 @@
         <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">read_intercomp_scores_ts_old_v0</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">corr_min</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">np_min</span><span class="o">=</span><span class="mi">9</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_intercomp_scores_ts_old_v0</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">corr_min</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">np_min</span><span class="o">=</span><span class="mi">9</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a radar intercomparison scores csv file in the oldest format</span>
 
@@ -2261,7 +2116,7 @@
 
 <div class="viewcode-block" id="read_selfconsistency">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_selfconsistency.html#pyrad.io.read_selfconsistency">[docs]</a>
-<span class="k">def</span> <span class="nf">read_selfconsistency</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_selfconsistency</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a self-consistency table with Zdr, Kdp/Zh columns</span>
 
@@ -2308,7 +2163,7 @@
 
 <div class="viewcode-block" id="read_antenna_pattern">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_antenna_pattern.html#pyrad.io.read_antenna_pattern">[docs]</a>
-<span class="k">def</span> <span class="nf">read_antenna_pattern</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">linear</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">twoway</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_antenna_pattern</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">linear</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">twoway</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read antenna pattern from file</span>
 
@@ -2366,24 +2221,24 @@
 
 
 
-<span class="k">def</span> <span class="nf">read_xls</span><span class="p">(</span><span class="n">xls_file</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_xls</span><span class="p">(</span><span class="n">xls_file</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Reads an excel file such as those used for CPC vlaidation</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    fname : str</span>
 <span class="sd">        Full path of the excel file to be read</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    The excel file as a Pandas dataframe</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    
-    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">xls_file</span><span class="p">,</span> <span class="n">sheet_name</span>  <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">xls_file</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
     <span class="n">hourly_keys</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s1">&#39;Data Hourly&#39;</span> <span class="ow">in</span> <span class="n">k</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;Data Hourly&quot;</span> <span class="ow">in</span> <span class="n">k</span><span class="p">:</span>
             <span class="n">hourly_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">hourly_keys</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">out</span>
@@ -2419,8 +2274,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2443,7 +2298,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

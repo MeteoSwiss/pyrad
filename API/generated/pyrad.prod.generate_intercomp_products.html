@@ -16,8 +16,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -27,10 +27,10 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -38,10 +38,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
@@ -1233,9 +1233,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -1295,7 +1300,7 @@ statistics.
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
-<dt>voltype: str</dt><dd><p>name of the pyrad variable to use, it must be available in the dataset               in the dataset</p>
+<dt>voltype: str</dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
 </dd>
 <dt>add_date_in_fname: Bool</dt><dd><p>If true adds the year in the csv file containing the
 statistics. Default False</p>
@@ -1313,6 +1318,11 @@ Default False</p>
 valid and therefore use the data point in the plotting.
 Default 0</p>
 </dd>
+<dt>transform: str</dt><dd><p>A transform to apply to the data before computing the statistics
+and generating the plots. Any mathematical function with argument “x”
+is accepted for example “sin(x) + x**2” or “10 * log10(x)”
+Default is to use no transform</p>
+</dd>
 <dt>corr_min: float</dt><dd><p>The minimum correlation to consider the statistics
 valid and therefore use the data point in the plotting.
 Default 0.</p>
@@ -1324,7 +1334,7 @@ Default 0.</p>
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
-<dt>voltype: str</dt><dd><p>name of the pyrad variable to use, it must be available in the dataset               in the dataset</p>
+<dt>voltype: str</dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
 </dd>
 <dt>step: float</dt><dd><p>The quantization step of the data. If none it will be
 computed using the Py-ART config file. Default None</p>
@@ -1333,6 +1343,11 @@ computed using the Py-ART config file. Default None</p>
 (instant) or at the end of the processing period
 (cumulative). Default is cumulative</p>
 </dd>
+<dt>transform: str</dt><dd><p>A transform to apply to the data before computing the statistics
+and generating the plots. Any mathematical function with argument “x”
+is accepted for example “sin(x) + x**2” or “10 * log10(x)”
+Default is to use no transform</p>
+</dd>
 </dl>
 </div></blockquote>
 </dd>
@@ -1340,7 +1355,7 @@ computed using the Py-ART config file. Default None</p>
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
-<dt>voltype: str</dt><dd><p>name of the pyrad variable to use, it must be available in the dataset               in the dataset</p>
+<dt>voltype: str</dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -1349,7 +1364,7 @@ User defined parameters:</p>
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
-<dt>voltype: str</dt><dd><p>name of the pyrad variable to use, it must be available in the dataset               in the dataset</p>
+<dt>voltype: str</dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -1427,13 +1442,13 @@ User defined parameters:</p>
   </nav></div>
 
   <div class="sidebar-secondary-item">
-
-  <div class="tocsection sourcelink">
-    <a href="../../_sources/API/generated/pyrad.prod.generate_intercomp_products.rst.txt">
-      <i class="fa-solid fa-file-lines"></i> Show Source
-    </a>
-  </div>
-</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/API/generated/pyrad.prod.generate_intercomp_products.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
 
 </div></div>
               
@@ -1448,8 +1463,8 @@ User defined parameters:</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1472,7 +1487,8 @@ User defined parameters:</p>
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

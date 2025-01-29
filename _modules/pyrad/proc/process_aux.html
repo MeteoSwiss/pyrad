@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,10 +26,10 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -37,10 +37,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -326,9 +326,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -402,41 +407,41 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">time</span>
 
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="kn">import</span> <span class="n">cKDTree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial</span><span class="w"> </span><span class="kn">import</span> <span class="n">cKDTree</span>
 
-<span class="kn">from</span> <span class="nn">pyart.config</span> <span class="kn">import</span> <span class="n">get_metadata</span>
-<span class="kn">from</span> <span class="nn">pyart.core</span> <span class="kn">import</span> <span class="n">Radar</span><span class="p">,</span> <span class="n">geographic_to_cartesian_aeqd</span>
-<span class="kn">from</span> <span class="nn">pyart.core</span> <span class="kn">import</span> <span class="n">cartesian_to_geographic_aeqd</span>
-<span class="kn">from</span> <span class="nn">pyart.map</span> <span class="kn">import</span> <span class="n">grid_from_radars</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyart.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_metadata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyart.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Radar</span><span class="p">,</span> <span class="n">geographic_to_cartesian_aeqd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyart.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">cartesian_to_geographic_aeqd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyart.map</span><span class="w"> </span><span class="kn">import</span> <span class="n">grid_from_radars</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">pyart.util</span> <span class="kn">import</span> <span class="n">compute_directional_stats</span>
-    <span class="kn">from</span> <span class="nn">pyart.util</span> <span class="kn">import</span> <span class="n">compute_azimuthal_average</span>
-    <span class="kn">from</span> <span class="nn">pyart.util</span> <span class="kn">import</span> <span class="n">find_neighbour_gates</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pyart.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_directional_stats</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pyart.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_azimuthal_average</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pyart.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_neighbour_gates</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;ARM version of Py-ART detected, you will not be able to use some products&quot;</span><span class="p">)</span>
     <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Please use Py-ART MCH instead (https://github.com/MeteoSwiss/pyart)&quot;</span><span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">pyart.util</span> <span class="kn">import</span> <span class="n">subset_radar</span>
-<span class="kn">from</span> <span class="nn">..io.io_aux</span> <span class="kn">import</span> <span class="n">get_datatype_fields</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span>
-<span class="kn">from</span> <span class="nn">..io.read_data_sensor</span> <span class="kn">import</span> <span class="n">read_trt_traj_data</span>
-<span class="kn">from</span> <span class="nn">..io.read_data_other</span> <span class="kn">import</span> <span class="n">read_antenna_pattern</span>
-<span class="kn">from</span> <span class="nn">..io.read_data_icon</span> <span class="kn">import</span> <span class="n">_put_radar_in_swiss_coord</span>
-<span class="kn">from</span> <span class="nn">..util.radar_utils</span> <span class="kn">import</span> <span class="n">belongs_roi_indices</span>
-<span class="kn">from</span> <span class="nn">..util.radar_utils</span> <span class="kn">import</span> <span class="n">get_fixed_rng_data</span><span class="p">,</span> <span class="n">get_cercle_coords</span>
-<span class="kn">from</span> <span class="nn">..util.radar_utils</span> <span class="kn">import</span> <span class="n">get_box_coords</span>
-<span class="kn">from</span> <span class="nn">..util.stat_utils</span> <span class="kn">import</span> <span class="n">quantiles_weighted</span>
-<span class="kn">from</span> <span class="nn">..proc.process_traj</span> <span class="kn">import</span> <span class="n">_get_gates_antenna_pattern</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyart.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">subset_radar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_datatype_fields</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.read_data_sensor</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_trt_traj_data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.read_data_other</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_antenna_pattern</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.read_data_icon</span><span class="w"> </span><span class="kn">import</span> <span class="n">_put_radar_in_swiss_coord</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util.radar_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">belongs_roi_indices</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util.radar_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_fixed_rng_data</span><span class="p">,</span> <span class="n">get_cercle_coords</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util.radar_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_box_coords</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util.stat_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">quantiles_weighted</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..proc.process_traj</span><span class="w"> </span><span class="kn">import</span> <span class="n">_get_gates_antenna_pattern</span>
 
 
 <div class="viewcode-block" id="get_process_func">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.get_process_func.html#pyrad.proc.get_process_func">[docs]</a>
-<span class="k">def</span> <span class="nf">get_process_func</span><span class="p">(</span><span class="n">dataset_type</span><span class="p">,</span> <span class="n">dsname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_process_func</span><span class="p">(</span><span class="n">dataset_type</span><span class="p">,</span> <span class="n">dsname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Maps the dataset type into its processing function and data set format</span>
 <span class="sd">    associated.</span>
@@ -575,6 +580,7 @@
 <span class="sd">                &#39;RAW_GRID&#39;: process_raw_grid</span>
 <span class="sd">                &#39;GECSX&#39; : process_gecsx</span>
 <span class="sd">                &#39;GRID&#39;: process_grid</span>
+<span class="sd">                &#39;GRID_STATS&#39;: process_grid_stats</span>
 <span class="sd">                &#39;GRID_FIELDS_DIFF&#39;: process_grid_fields_diff</span>
 <span class="sd">                &#39;GRID_MASK&#39;: process_grid_mask</span>
 <span class="sd">                &#39;GRID_TEXTURE&#39;: process_grid_texture</span>
@@ -1049,7 +1055,7 @@
 
 <div class="viewcode-block" id="process_raw">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_raw.html#pyrad.proc.process_raw">[docs]</a>
-<span class="k">def</span> <span class="nf">process_raw</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_raw</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dummy function that returns the initial input data set</span>
 
@@ -1091,7 +1097,7 @@
 
 <div class="viewcode-block" id="process_vol_to_grid">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_vol_to_grid.html#pyrad.proc.process_vol_to_grid">[docs]</a>
-<span class="k">def</span> <span class="nf">process_vol_to_grid</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_vol_to_grid</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function to convert polar data into a Cartesian grid</span>
 
@@ -1114,7 +1120,7 @@
 <span class="sd">        alt0 : float</span>
 <span class="sd">            Grid origin altitude [masl]. Default is 0</span>
 <span class="sd">        wfunc : str</span>
-<span class="sd">            Weighting function. Default NEAREST</span>
+<span class="sd">            Weighting function, available are NEAREST, BARNES, BARNES2 and CRESSMAN. Default NEAREST</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
 
@@ -1133,7 +1139,7 @@
     <span class="k">if</span> <span class="n">radar_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;ERROR: No valid radar found&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
-    
+
     <span class="c1"># Process</span>
     <span class="n">field_names_aux</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">ind_rads_aux</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1238,7 +1244,7 @@
 
 <div class="viewcode-block" id="process_save_radar">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_save_radar.html#pyrad.proc.process_save_radar">[docs]</a>
-<span class="k">def</span> <span class="nf">process_save_radar</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_save_radar</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dummy function that allows to save the entire radar object</span>
 
@@ -1279,7 +1285,7 @@
 
 <div class="viewcode-block" id="process_fixed_rng">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_fixed_rng.html#pyrad.proc.process_fixed_rng">[docs]</a>
-<span class="k">def</span> <span class="nf">process_fixed_rng</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_fixed_rng</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Obtains radar data at a fixed range</span>
 
@@ -1354,7 +1360,7 @@
 
 <div class="viewcode-block" id="process_fixed_rng_span">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_fixed_rng_span.html#pyrad.proc.process_fixed_rng_span">[docs]</a>
-<span class="k">def</span> <span class="nf">process_fixed_rng_span</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_fixed_rng_span</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    For each azimuth-elevation gets the data within a fixed range span</span>
 <span class="sd">    and computes a user-defined statistic: mean, min, max, mode, median</span>
@@ -1429,7 +1435,7 @@
 
 <div class="viewcode-block" id="process_keep_roi">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_keep_roi.html#pyrad.proc.process_keep_roi">[docs]</a>
-<span class="k">def</span> <span class="nf">process_keep_roi</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_keep_roi</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    keep only data within a region of interest and mask anything else</span>
 
@@ -1731,7 +1737,7 @@
 
 <div class="viewcode-block" id="process_roi">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_roi.html#pyrad.proc.process_roi">[docs]</a>
-<span class="k">def</span> <span class="nf">process_roi</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_roi</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Obtains the radar data at a region of interest defined by a TRT file or</span>
 <span class="sd">    by the user.</span>
@@ -2077,7 +2083,7 @@
 
 <div class="viewcode-block" id="process_roi2">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_roi2.html#pyrad.proc.process_roi2">[docs]</a>
-<span class="k">def</span> <span class="nf">process_roi2</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_roi2</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Obtains the radar data at a region of interest defined by a TRT file or</span>
 <span class="sd">    by the user. More information is kept</span>
@@ -2429,7 +2435,7 @@
 
 <div class="viewcode-block" id="process_azimuthal_average">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_azimuthal_average.html#pyrad.proc.process_azimuthal_average">[docs]</a>
-<span class="k">def</span> <span class="nf">process_azimuthal_average</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_azimuthal_average</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Averages radar data in azimuth obtaining and RHI as a result</span>
 
@@ -2547,7 +2553,7 @@
 
 <div class="viewcode-block" id="process_moving_azimuthal_average">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_moving_azimuthal_average.html#pyrad.proc.process_moving_azimuthal_average">[docs]</a>
-<span class="k">def</span> <span class="nf">process_moving_azimuthal_average</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_moving_azimuthal_average</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Applies a moving azimuthal average to the radar data</span>
 
@@ -2684,7 +2690,7 @@
 
 <div class="viewcode-block" id="process_radar_resampling">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_radar_resampling.html#pyrad.proc.process_radar_resampling">[docs]</a>
-<span class="k">def</span> <span class="nf">process_radar_resampling</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_radar_resampling</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Resamples the radar data to mimic another radar with different geometry</span>
 <span class="sd">    and antenna pattern</span>
@@ -3060,7 +3066,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">_get_values_antenna_pattern</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">tadict</span><span class="p">,</span> <span class="n">field_names</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_values_antenna_pattern</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">tadict</span><span class="p">,</span> <span class="n">field_names</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the values of a synthetic radar</span>
 
@@ -3300,7 +3306,7 @@
     <span class="k">return</span> <span class="n">target_radar</span>
 
 
-<span class="k">def</span> <span class="nf">_create_target_radar</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_target_radar</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">dscfg</span><span class="p">,</span>
     <span class="n">fixed_angle_val</span><span class="p">,</span>
@@ -3487,8 +3493,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -3511,7 +3517,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,10 +26,10 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -37,10 +37,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -326,9 +326,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -426,46 +431,37 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
-<span class="kn">import</span> <span class="nn">glob</span>
-<span class="kn">import</span> <span class="nn">csv</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
-<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlparse</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
-<span class="kn">import</span> <span class="nn">smtplib</span>
-<span class="kn">from</span> <span class="nn">email.message</span> <span class="kn">import</span> <span class="n">EmailMessage</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlparse</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">smtplib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">email.message</span><span class="w"> </span><span class="kn">import</span> <span class="n">EmailMessage</span>
 
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">fcntl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span> <span class="k">as</span> <span class="n">dt</span>
 
-    <span class="n">FCNTL_AVAIL</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">msvcrt</span>  <span class="c1"># For windows</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-    <span class="n">FCNTL_AVAIL</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="kn">import</span> <span class="nn">errno</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span> <span class="k">as</span> <span class="n">dt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyart.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_field_colormap</span><span class="p">,</span> <span class="n">get_field_limits</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyart.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">antenna_to_cartesian</span><span class="p">,</span> <span class="n">cartesian_to_geographic_aeqd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyart.graph.cm</span><span class="w"> </span><span class="kn">import</span> <span class="n">cmap_d</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-
-<span class="kn">from</span> <span class="nn">pyart.config</span> <span class="kn">import</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_field_colormap</span><span class="p">,</span> <span class="n">get_field_limits</span>
-<span class="kn">from</span> <span class="nn">pyart.core</span> <span class="kn">import</span> <span class="n">antenna_to_cartesian</span><span class="p">,</span> <span class="n">cartesian_to_geographic_aeqd</span>
-<span class="kn">from</span> <span class="nn">pyart.graph.cm</span> <span class="kn">import</span> <span class="n">cmap_d</span>
-
-<span class="kn">from</span> <span class="nn">.io_aux</span> <span class="kn">import</span> <span class="n">generate_field_name_str</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_field_name_str</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.flock_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">lock_file</span><span class="p">,</span> <span class="n">unlock_file</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">simplekml</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">simplekml</span>
 
     <span class="n">_SIMPLEKML_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_SIMPLEKML_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">boto3</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">boto3</span>
 
     <span class="n">_BOTO3_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
@@ -473,7 +469,7 @@
     <span class="n">_BOTO3_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 
-<span class="k">def</span> <span class="nf">write_to_s3</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">basepath</span><span class="p">,</span> <span class="n">s3copypath</span><span class="p">,</span> <span class="n">s3accesspolicy</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_to_s3</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">basepath</span><span class="p">,</span> <span class="n">s3copypath</span><span class="p">,</span> <span class="n">s3accesspolicy</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Copies a locally stored product to a S3 bucket</span>
 
@@ -529,7 +525,7 @@
 
 <div class="viewcode-block" id="write_vol_csv">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_vol_csv.html#pyrad.io.write_vol_csv">[docs]</a>
-<span class="k">def</span> <span class="nf">write_vol_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">ignore_masked</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_vol_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">ignore_masked</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates a kml file with the radar volume data</span>
 
@@ -571,7 +567,7 @@
 
 <div class="viewcode-block" id="write_vol_kml">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_vol_kml.html#pyrad.io.write_vol_kml">[docs]</a>
-<span class="k">def</span> <span class="nf">write_vol_kml</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_vol_kml</span><span class="p">(</span>
     <span class="n">fname</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">ignore_masked</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rng_res_km</span><span class="o">=</span><span class="mf">0.24</span><span class="p">,</span> <span class="n">azi_res</span><span class="o">=</span><span class="mf">0.5</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -694,7 +690,7 @@
 
 <div class="viewcode-block" id="write_centroids">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_centroids.html#pyrad.io.write_centroids">[docs]</a>
-<span class="k">def</span> <span class="nf">write_centroids</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">centroids_dict</span><span class="p">,</span> <span class="n">var_names</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_centroids</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">centroids_dict</span><span class="p">,</span> <span class="n">var_names</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    writes the centroids of a semi-supervised hydrometeor classification</span>
 
@@ -736,7 +732,7 @@
 
 <div class="viewcode-block" id="write_proc_periods">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_proc_periods.html#pyrad.io.write_proc_periods">[docs]</a>
-<span class="k">def</span> <span class="nf">write_proc_periods</span><span class="p">(</span><span class="n">start_times</span><span class="p">,</span> <span class="n">end_times</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_proc_periods</span><span class="p">(</span><span class="n">start_times</span><span class="p">,</span> <span class="n">end_times</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    writes an output file containing start and stop times of periods to</span>
 <span class="sd">    process</span>
@@ -773,7 +769,7 @@
 
 <div class="viewcode-block" id="write_fixed_angle">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_fixed_angle.html#pyrad.io.write_fixed_angle">[docs]</a>
-<span class="k">def</span> <span class="nf">write_fixed_angle</span><span class="p">(</span><span class="n">time_data</span><span class="p">,</span> <span class="n">fixed_angle</span><span class="p">,</span> <span class="n">rad_lat</span><span class="p">,</span> <span class="n">rad_lon</span><span class="p">,</span> <span class="n">rad_alt</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_fixed_angle</span><span class="p">(</span><span class="n">time_data</span><span class="p">,</span> <span class="n">fixed_angle</span><span class="p">,</span> <span class="n">rad_lat</span><span class="p">,</span> <span class="n">rad_lon</span><span class="p">,</span> <span class="n">rad_alt</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    writes an output file with the fixed angle data</span>
 
@@ -831,7 +827,7 @@
 
 <div class="viewcode-block" id="write_ts_lightning">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_ts_lightning.html#pyrad.io.write_ts_lightning">[docs]</a>
-<span class="k">def</span> <span class="nf">write_ts_lightning</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_ts_lightning</span><span class="p">(</span>
     <span class="n">flashnr</span><span class="p">,</span>
     <span class="n">time_data</span><span class="p">,</span>
     <span class="n">time_in_flash</span><span class="p">,</span>
@@ -930,7 +926,7 @@
 
 <div class="viewcode-block" id="send_msg">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.send_msg.html#pyrad.io.send_msg">[docs]</a>
-<span class="k">def</span> <span class="nf">send_msg</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">receiver_list</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">send_msg</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">receiver_list</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    sends the content of a text file by email</span>
 
@@ -972,7 +968,7 @@
 
 <div class="viewcode-block" id="write_alarm_msg">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_alarm_msg.html#pyrad.io.write_alarm_msg">[docs]</a>
-<span class="k">def</span> <span class="nf">write_alarm_msg</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_alarm_msg</span><span class="p">(</span>
     <span class="n">radar_name</span><span class="p">,</span>
     <span class="n">param_name_unit</span><span class="p">,</span>
     <span class="n">date_last</span><span class="p">,</span>
@@ -1054,7 +1050,7 @@
 
 <div class="viewcode-block" id="write_last_state">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_last_state.html#pyrad.io.write_last_state">[docs]</a>
-<span class="k">def</span> <span class="nf">write_last_state</span><span class="p">(</span><span class="n">datetime_last</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_last_state</span><span class="p">(</span><span class="n">datetime_last</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    writes SwissMetNet data in format datetime,avg_value, std_value</span>
 
@@ -1085,7 +1081,7 @@
 
 <div class="viewcode-block" id="write_smn">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_smn.html#pyrad.io.write_smn">[docs]</a>
-<span class="k">def</span> <span class="nf">write_smn</span><span class="p">(</span><span class="n">datetime_vec</span><span class="p">,</span> <span class="n">value_avg_vec</span><span class="p">,</span> <span class="n">value_std_vec</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_smn</span><span class="p">(</span><span class="n">datetime_vec</span><span class="p">,</span> <span class="n">value_avg_vec</span><span class="p">,</span> <span class="n">value_std_vec</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    writes SwissMetNet data in format datetime,avg_value, std_value</span>
 
@@ -1125,7 +1121,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">write_timeseries_point</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">dstype</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">timeformat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_timeseries_point</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">dstype</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">timeformat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Write one timesample of a time series to a file</span>
 
@@ -1213,7 +1209,7 @@
 
 <div class="viewcode-block" id="write_trt_info">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_trt_info.html#pyrad.io.write_trt_info">[docs]</a>
-<span class="k">def</span> <span class="nf">write_trt_info</span><span class="p">(</span><span class="n">ids</span><span class="p">,</span> <span class="n">max_rank</span><span class="p">,</span> <span class="n">nscans</span><span class="p">,</span> <span class="n">time_start</span><span class="p">,</span> <span class="n">time_end</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_trt_info</span><span class="p">(</span><span class="n">ids</span><span class="p">,</span> <span class="n">max_rank</span><span class="p">,</span> <span class="n">nscans</span><span class="p">,</span> <span class="n">time_start</span><span class="p">,</span> <span class="n">time_end</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    writes TRT info of the thundertracking</span>
 
@@ -1253,7 +1249,7 @@
 
 <div class="viewcode-block" id="write_trt_cell_data">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_trt_cell_data.html#pyrad.io.write_trt_cell_data">[docs]</a>
-<span class="k">def</span> <span class="nf">write_trt_cell_data</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_trt_cell_data</span><span class="p">(</span>
     <span class="n">traj_ID</span><span class="p">,</span>
     <span class="n">yyyymmddHHMM</span><span class="p">,</span>
     <span class="n">lon</span><span class="p">,</span>
@@ -1391,7 +1387,7 @@
 
 <div class="viewcode-block" id="write_trt_thundertracking_data">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_trt_thundertracking_data.html#pyrad.io.write_trt_thundertracking_data">[docs]</a>
-<span class="k">def</span> <span class="nf">write_trt_thundertracking_data</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_trt_thundertracking_data</span><span class="p">(</span>
     <span class="n">traj_ID</span><span class="p">,</span>
     <span class="n">scan_ordered_time</span><span class="p">,</span>
     <span class="n">scan_time</span><span class="p">,</span>
@@ -1547,7 +1543,7 @@
 
 <div class="viewcode-block" id="write_trt_cell_scores">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_trt_cell_scores.html#pyrad.io.write_trt_cell_scores">[docs]</a>
-<span class="k">def</span> <span class="nf">write_trt_cell_scores</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_trt_cell_scores</span><span class="p">(</span>
     <span class="n">traj_ID</span><span class="p">,</span>
     <span class="n">flash_density_max_time</span><span class="p">,</span>
     <span class="n">flash_density_max_rank</span><span class="p">,</span>
@@ -1625,7 +1621,7 @@
 
 <div class="viewcode-block" id="write_trt_cell_lightning">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_trt_cell_lightning.html#pyrad.io.write_trt_cell_lightning">[docs]</a>
-<span class="k">def</span> <span class="nf">write_trt_cell_lightning</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_trt_cell_lightning</span><span class="p">(</span>
     <span class="n">cell_ID</span><span class="p">,</span>
     <span class="n">cell_time</span><span class="p">,</span>
     <span class="n">lon</span><span class="p">,</span>
@@ -1702,7 +1698,7 @@
 
 <div class="viewcode-block" id="write_trt_rpc">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_trt_rpc.html#pyrad.io.write_trt_rpc">[docs]</a>
-<span class="k">def</span> <span class="nf">write_trt_rpc</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_trt_rpc</span><span class="p">(</span>
     <span class="n">cell_ID</span><span class="p">,</span>
     <span class="n">cell_time</span><span class="p">,</span>
     <span class="n">lon</span><span class="p">,</span>
@@ -1784,7 +1780,7 @@
 
 <div class="viewcode-block" id="write_vpr_theo_params">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_vpr_theo_params.html#pyrad.io.write_vpr_theo_params">[docs]</a>
-<span class="k">def</span> <span class="nf">write_vpr_theo_params</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_vpr_theo_params</span><span class="p">(</span>
     <span class="n">vpr_theo_dict</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;ml_top&quot;</span><span class="p">,</span> <span class="s2">&quot;ml_bottom&quot;</span><span class="p">,</span> <span class="s2">&quot;val_ml_peak&quot;</span><span class="p">,</span> <span class="s2">&quot;val_dr&quot;</span><span class="p">)</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1819,7 +1815,7 @@
 
 <div class="viewcode-block" id="write_vpr_info">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_vpr_info.html#pyrad.io.write_vpr_info">[docs]</a>
-<span class="k">def</span> <span class="nf">write_vpr_info</span><span class="p">(</span><span class="n">vpr_info_dict</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_vpr_info</span><span class="p">(</span><span class="n">vpr_info_dict</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Writes a dictionary containing relevant parameters of the VPR profile</span>
 <span class="sd">    retrieval into a text file</span>
@@ -1850,7 +1846,7 @@
 
 <div class="viewcode-block" id="write_rhi_profile">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_rhi_profile.html#pyrad.io.write_rhi_profile">[docs]</a>
-<span class="k">def</span> <span class="nf">write_rhi_profile</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_rhi_profile</span><span class="p">(</span>
     <span class="n">hvec</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">nvalid_vec</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sector</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1929,7 +1925,7 @@
 
 <div class="viewcode-block" id="write_field_coverage">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_field_coverage.html#pyrad.io.write_field_coverage">[docs]</a>
-<span class="k">def</span> <span class="nf">write_field_coverage</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_field_coverage</span><span class="p">(</span>
     <span class="n">quantiles</span><span class="p">,</span>
     <span class="n">values</span><span class="p">,</span>
     <span class="n">ele_start</span><span class="p">,</span>
@@ -1998,7 +1994,7 @@
 
 <div class="viewcode-block" id="write_cdf">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_cdf.html#pyrad.io.write_cdf">[docs]</a>
-<span class="k">def</span> <span class="nf">write_cdf</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_cdf</span><span class="p">(</span>
     <span class="n">quantiles</span><span class="p">,</span>
     <span class="n">values</span><span class="p">,</span>
     <span class="n">ntot</span><span class="p">,</span>
@@ -2150,7 +2146,7 @@
 
 <div class="viewcode-block" id="write_histogram">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_histogram.html#pyrad.io.write_histogram">[docs]</a>
-<span class="k">def</span> <span class="nf">write_histogram</span><span class="p">(</span><span class="n">bin_edges</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="s2">&quot;undefined&quot;</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_histogram</span><span class="p">(</span><span class="n">bin_edges</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="s2">&quot;undefined&quot;</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    writes a histogram</span>
 
@@ -2209,7 +2205,7 @@
 
 <div class="viewcode-block" id="write_quantiles">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_quantiles.html#pyrad.io.write_quantiles">[docs]</a>
-<span class="k">def</span> <span class="nf">write_quantiles</span><span class="p">(</span><span class="n">quantiles</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="s2">&quot;undefined&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_quantiles</span><span class="p">(</span><span class="n">quantiles</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="s2">&quot;undefined&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    writes quantiles</span>
 
@@ -2255,7 +2251,7 @@
 
 <div class="viewcode-block" id="write_multiple_points">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_multiple_points.html#pyrad.io.write_multiple_points">[docs]</a>
-<span class="k">def</span> <span class="nf">write_multiple_points</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_multiple_points</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    write radar data obtained at multiple points</span>
 
@@ -2339,7 +2335,7 @@
 
 <div class="viewcode-block" id="write_multiple_points_grid">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_multiple_points_grid.html#pyrad.io.write_multiple_points_grid">[docs]</a>
-<span class="k">def</span> <span class="nf">write_multiple_points_grid</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_multiple_points_grid</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    write data obtained at multiple points from a grid</span>
 
@@ -2414,7 +2410,7 @@
 
 <div class="viewcode-block" id="write_ts_polar_data">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_ts_polar_data.html#pyrad.io.write_ts_polar_data">[docs]</a>
-<span class="k">def</span> <span class="nf">write_ts_polar_data</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_ts_polar_data</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    writes time series of data</span>
 
@@ -2524,7 +2520,7 @@
 
 <div class="viewcode-block" id="write_ts_grid_data">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_ts_grid_data.html#pyrad.io.write_ts_grid_data">[docs]</a>
-<span class="k">def</span> <span class="nf">write_ts_grid_data</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_ts_grid_data</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    writes time series of data</span>
 
@@ -2544,55 +2540,65 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">filelist</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">filelist</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;# Gridded data timeseries data file</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# Gridded data timeseries data file</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;# Comment lines are preceded by &quot;#&quot;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;# Description: </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;# Time series of a gridded data over a &#39;</span> <span class="o">+</span>
-                          <span class="s1">&#39;fixed location.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# Description: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-                <span class="s1">&#39;# Nominal location [lon, lat, alt]: &#39;</span> <span class="o">+</span>
-                <span class="nb">str</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;point_coordinates_WGS84_lon_lat_alt&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="s2">&quot;# Time series of a gridded data over a &quot;</span> <span class="o">+</span> <span class="s2">&quot;fixed location.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
             <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-                <span class="s1">&#39;# Grid points used [iz, iy, ix]: &#39;</span> <span class="o">+</span>
-                <span class="nb">str</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;grid_points_iz_iy_ix&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="s2">&quot;# Nominal location [lon, lat, alt]: &quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;point_coordinates_WGS84_lon_lat_alt&quot;</span><span class="p">])</span>
+                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
             <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-                <span class="s1">&#39;# Data: &#39;</span> <span class="o">+</span>
-                <span class="n">generate_field_name_str</span><span class="p">(</span>
-                    <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">])</span> <span class="o">+</span>
-                <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;# Fill Value: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_fillvalue</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="s2">&quot;# Grid points used [iz, iy, ix]: &quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;grid_points_iz_iy_ix&quot;</span><span class="p">])</span>
+                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
             <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-                <span class="s1">&#39;# Start: &#39;</span> <span class="o">+</span>
-                <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S UTC&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;#</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="s2">&quot;# Data: &quot;</span> <span class="o">+</span> <span class="n">generate_field_name_str</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# Fill Value: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_fillvalue</span><span class="p">())</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                <span class="s2">&quot;# Start: &quot;</span> <span class="o">+</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S UTC&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;#</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
-            <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;alt&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">]</span>
+            <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">,</span> <span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;alt&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]</span>
             <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fieldnames</span><span class="p">)</span>
             <span class="n">writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
             <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span>
-                <span class="p">{</span><span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S.</span><span class="si">%f</span><span class="s1">&#39;</span><span class="p">),</span>
-                 <span class="s1">&#39;lon&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;used_coordinates_WGS84_lon_lat_alt&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                 <span class="s1">&#39;lat&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;used_coordinates_WGS84_lon_lat_alt&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
-                 <span class="s1">&#39;alt&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;used_coordinates_WGS84_lon_lat_alt&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
-                 <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]})</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">),</span>
+                    <span class="s2">&quot;lon&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;used_coordinates_WGS84_lon_lat_alt&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="s2">&quot;lat&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;used_coordinates_WGS84_lon_lat_alt&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="s2">&quot;alt&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;used_coordinates_WGS84_lon_lat_alt&quot;</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
             <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;alt&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">]</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+            <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">,</span> <span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;alt&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]</span>
             <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fieldnames</span><span class="p">)</span>
             <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span>
-                <span class="p">{</span><span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S.</span><span class="si">%f</span><span class="s1">&#39;</span><span class="p">),</span>
-                 <span class="s1">&#39;lon&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;used_coordinates_WGS84_lon_lat_alt&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                 <span class="s1">&#39;lat&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;used_coordinates_WGS84_lon_lat_alt&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
-                 <span class="s1">&#39;alt&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;used_coordinates_WGS84_lon_lat_alt&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
-                 <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]})</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">),</span>
+                    <span class="s2">&quot;lon&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;used_coordinates_WGS84_lon_lat_alt&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="s2">&quot;lat&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;used_coordinates_WGS84_lon_lat_alt&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="s2">&quot;alt&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;used_coordinates_WGS84_lon_lat_alt&quot;</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
             <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">fname</span></div>
 
 
-<span class="k">def</span> <span class="nf">write_ts_ml</span><span class="p">(</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">write_ts_ml</span><span class="p">(</span>
     <span class="n">dt_ml</span><span class="p">,</span> <span class="n">ml_top_avg</span><span class="p">,</span> <span class="n">ml_top_std</span><span class="p">,</span> <span class="n">thick_avg</span><span class="p">,</span> <span class="n">thick_std</span><span class="p">,</span> <span class="n">nrays_valid</span><span class="p">,</span> <span class="n">nrays_total</span><span class="p">,</span> <span class="n">fname</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2704,7 +2710,7 @@
 
 <div class="viewcode-block" id="write_ts_stats">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_ts_stats.html#pyrad.io.write_ts_stats">[docs]</a>
-<span class="k">def</span> <span class="nf">write_ts_stats</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_ts_stats</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    writes time series of statistics</span>
 
@@ -2772,7 +2778,7 @@
 
 <div class="viewcode-block" id="write_ts_cum">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_ts_cum.html#pyrad.io.write_ts_cum">[docs]</a>
-<span class="k">def</span> <span class="nf">write_ts_cum</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_ts_cum</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    writes time series accumulation of data</span>
 
@@ -2850,214 +2856,65 @@
 
 <div class="viewcode-block" id="write_monitoring_ts">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_monitoring_ts.html#pyrad.io.write_monitoring_ts">[docs]</a>
-<span class="k">def</span> <span class="nf">write_monitoring_ts</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_monitoring_ts</span><span class="p">(</span>
     <span class="n">start_time</span><span class="p">,</span> <span class="n">np_t</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">rewrite</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    writes time series of data</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    start_time : datetime object or array of date time objects</span>
-<span class="sd">        the time of the monitoring</span>
-<span class="sd">    np_t : int or array of ints</span>
-<span class="sd">        the total number of points</span>
-<span class="sd">    values: float array with 3 elements of array of arrays</span>
-<span class="sd">        the values at certain quantiles</span>
-<span class="sd">    quantiles: float array with 3 elements</span>
-<span class="sd">        the quantiles computed</span>
-<span class="sd">    datatype : str</span>
-<span class="sd">        The data type</span>
-<span class="sd">    fname : str</span>
-<span class="sd">        file name where to store the data</span>
-<span class="sd">    rewrite : bool</span>
-<span class="sd">        if True a new file is created</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    fname : str</span>
-<span class="sd">        the name of the file where data has written</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">nvalues</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">start_time</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">nvalues</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">start_time_aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">start_time</span><span class="p">])</span>
-        <span class="n">np_t_aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">np_t</span><span class="p">])</span>
-        <span class="n">values_aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">values</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="n">get_fillvalue</span><span class="p">())])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">start_time_aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">start_time</span><span class="p">)</span>
-        <span class="n">values_aux</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="n">get_fillvalue</span><span class="p">())</span>
-        <span class="n">np_t_aux</span> <span class="o">=</span> <span class="n">np_t</span>
+    <span class="n">start_time_aux</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">start_time</span><span class="p">])</span> <span class="k">if</span> <span class="n">nvalues</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">start_time</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">np_t_aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">np_t</span><span class="p">])</span> <span class="k">if</span> <span class="n">nvalues</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">np_t</span>
+    <span class="n">values_aux</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">values</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">get_fillvalue</span><span class="p">())])</span>
+        <span class="k">if</span> <span class="n">nvalues</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">else</span> <span class="n">values</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">get_fillvalue</span><span class="p">())</span>
+    <span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">rewrite</span><span class="p">:</span>
-        <span class="n">file_exists</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">filelist</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">filelist</span><span class="p">:</span>
-            <span class="n">file_exists</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">file_exists</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">start_time_aux</span><span class="p">],</span>
+        <span class="s2">&quot;NP&quot;</span><span class="p">:</span> <span class="n">np_t_aux</span><span class="p">,</span>
+        <span class="s2">&quot;central_quantile&quot;</span><span class="p">:</span> <span class="n">values_aux</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="s2">&quot;low_quantile&quot;</span><span class="p">:</span> <span class="n">values_aux</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="s2">&quot;high_quantile&quot;</span><span class="p">:</span> <span class="n">values_aux</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="p">}</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">file_exists</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">FCNTL_AVAIL</span><span class="p">:</span>
-                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_EX</span> <span class="o">|</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_NB</span><span class="p">)</span>
-                        <span class="k">break</span>
-                    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EAGAIN</span><span class="p">:</span>
-                            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
-                        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EBADF</span><span class="p">:</span>
-                            <span class="n">warn</span><span class="p">(</span>
-                                <span class="s2">&quot;WARNING: No file locking is possible (NFS mount?), &quot;</span>
-                                <span class="o">+</span> <span class="s2">&quot;expect strange issues with multiprocessing...&quot;</span>
-                            <span class="p">)</span>
-                            <span class="k">break</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="k">raise</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="c1"># Attempt to acquire an exclusive lock on the file</span>
-                        <span class="n">msvcrt</span><span class="o">.</span><span class="n">locking</span><span class="p">(</span>
-                            <span class="n">os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">O_RDWR</span> <span class="o">|</span> <span class="n">os</span><span class="o">.</span><span class="n">O_CREAT</span><span class="p">),</span> <span class="n">msvcrt</span><span class="o">.</span><span class="n">LK_NBLCK</span><span class="p">,</span> <span class="mi">0</span>
-                        <span class="p">)</span>
-                        <span class="k">break</span>
-                    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>  <span class="c1"># Permission denied</span>
-                            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
-                        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>  <span class="c1"># No such file or directory</span>
-                            <span class="n">warn</span><span class="p">(</span>
-                                <span class="s2">&quot;WARNING: No file locking is possible (NFS mount?), &quot;</span>
-                                <span class="o">+</span> <span class="s2">&quot;expect strange issues with multiprocessing...&quot;</span>
-                            <span class="p">)</span>
-                            <span class="k">break</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="k">raise</span>
+    <span class="n">file_exists</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
 
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r+&quot;</span> <span class="k">if</span> <span class="n">file_exists</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">rewrite</span> <span class="k">else</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">lock_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rewrite</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">file_exists</span><span class="p">:</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="s2">&quot;# Weather radar monitoring timeseries data file</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="s1">&#39;# Comment lines are preceded by &quot;#&quot;</span><span class="se">\n</span><span class="s1">&#39;</span>
-                <span class="o">+</span> <span class="s2">&quot;# Description: </span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;# Time series of a monitoring of weather radar data.</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;# Quantiles: &quot;</span>
-                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">quantiles</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-                <span class="o">+</span> <span class="s2">&quot;, &quot;</span>
-                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">quantiles</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                <span class="o">+</span> <span class="s2">&quot;, &quot;</span>
-                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">quantiles</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-                <span class="o">+</span> <span class="s2">&quot; percent.</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;# Data: &quot;</span>
-                <span class="o">+</span> <span class="n">generate_field_name_str</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;# Fill Value: &quot;</span>
-                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_fillvalue</span><span class="p">())</span>
-                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;# Start: &quot;</span>
-                <span class="o">+</span> <span class="n">start_time_aux</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S UTC&quot;</span><span class="p">)</span>
-                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;#</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s1">&#39;# Comment lines are preceded by &quot;#&quot;</span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="s2">&quot;# Description: </span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;# Time series of a monitoring of weather radar data.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;# Quantiles: </span><span class="si">{</span><span class="n">quantiles</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">quantiles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">quantiles</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2"> percent.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;# Data: </span><span class="si">{</span><span class="n">generate_field_name_str</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;# Fill Value: </span><span class="si">{</span><span class="n">get_fillvalue</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;# Start: </span><span class="si">{</span><span class="n">start_time_aux</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S UTC&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;#</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="p">)</span>
-
-            <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="s2">&quot;date&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;NP&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;central_quantile&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;low_quantile&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;high_quantile&quot;</span><span class="p">,</span>
-            <span class="p">]</span>
-            <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fieldnames</span><span class="p">)</span>
-            <span class="n">writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">np_t_el</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">np_t_aux</span><span class="p">):</span>
-                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span>
-                    <span class="p">{</span>
-                        <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">start_time_aux</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">),</span>
-                        <span class="s2">&quot;NP&quot;</span><span class="p">:</span> <span class="n">np_t_el</span><span class="p">,</span>
-                        <span class="s2">&quot;central_quantile&quot;</span><span class="p">:</span> <span class="n">values_aux</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-                        <span class="s2">&quot;low_quantile&quot;</span><span class="p">:</span> <span class="n">values_aux</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                        <span class="s2">&quot;high_quantile&quot;</span><span class="p">:</span> <span class="n">values_aux</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-                    <span class="p">}</span>
-                <span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">FCNTL_AVAIL</span><span class="p">:</span>
-                <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_UN</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">msvcrt</span><span class="o">.</span><span class="n">locking</span><span class="p">(</span>
-                    <span class="n">csvfile</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="n">msvcrt</span><span class="o">.</span><span class="n">LK_UNLCK</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
-                <span class="p">)</span>
-
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">FCNTL_AVAIL</span><span class="p">:</span>
-                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_EX</span> <span class="o">|</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_NB</span><span class="p">)</span>
-                        <span class="k">break</span>
-                    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EAGAIN</span><span class="p">:</span>
-                            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
-                        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EBADF</span><span class="p">:</span>
-                            <span class="n">warn</span><span class="p">(</span>
-                                <span class="s2">&quot;WARNING: No file locking is possible (NFS mount?), &quot;</span>
-                                <span class="o">+</span> <span class="s2">&quot;expect strange issues with multiprocessing...&quot;</span>
-                            <span class="p">)</span>
-                            <span class="k">break</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="k">raise</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="c1"># Attempt to acquire an exclusive lock on the file</span>
-                        <span class="n">msvcrt</span><span class="o">.</span><span class="n">locking</span><span class="p">(</span>
-                            <span class="n">os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">O_RDWR</span> <span class="o">|</span> <span class="n">os</span><span class="o">.</span><span class="n">O_CREAT</span><span class="p">),</span> <span class="n">msvcrt</span><span class="o">.</span><span class="n">LK_NBLCK</span><span class="p">,</span> <span class="mi">0</span>
-                        <span class="p">)</span>
-                        <span class="k">break</span>
-                    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>  <span class="c1"># Permission denied</span>
-                            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
-                        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>  <span class="c1"># No such file or directory</span>
-                            <span class="n">warn</span><span class="p">(</span>
-                                <span class="s2">&quot;WARNING: No file locking is possible (NFS mount?), &quot;</span>
-                                <span class="o">+</span> <span class="s2">&quot;expect strange issues with multiprocessing...&quot;</span>
-                            <span class="p">)</span>
-                            <span class="k">break</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="k">raise</span>
-
-            <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="s2">&quot;date&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;NP&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;central_quantile&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;low_quantile&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;high_quantile&quot;</span><span class="p">,</span>
-            <span class="p">]</span>
-            <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fieldnames</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">np_t_el</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">np_t_aux</span><span class="p">):</span>
-                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span>
-                    <span class="p">{</span>
-                        <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">start_time_aux</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">),</span>
-                        <span class="s2">&quot;NP&quot;</span><span class="p">:</span> <span class="n">np_t_el</span><span class="p">,</span>
-                        <span class="s2">&quot;central_quantile&quot;</span><span class="p">:</span> <span class="n">values_aux</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-                        <span class="s2">&quot;low_quantile&quot;</span><span class="p">:</span> <span class="n">values_aux</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                        <span class="s2">&quot;high_quantile&quot;</span><span class="p">:</span> <span class="n">values_aux</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-                    <span class="p">}</span>
-                <span class="p">)</span>
-            <span class="k">if</span> <span class="n">FCNTL_AVAIL</span><span class="p">:</span>
-                <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_UN</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">msvcrt</span><span class="o">.</span><span class="n">locking</span><span class="p">(</span>
-                    <span class="n">csvfile</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="n">msvcrt</span><span class="o">.</span><span class="n">LK_UNLCK</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
-                <span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span> <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)]</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">existing_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
+            <span class="n">existing_df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">existing_df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+            <span class="n">combined_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">existing_df</span><span class="p">,</span> <span class="n">df</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">combined_df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span> <span class="n">keep</span><span class="o">=</span><span class="s2">&quot;last&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">header</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">combined_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">unlock_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">fname</span></div>
 
 
 
 <div class="viewcode-block" id="write_excess_gates">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_excess_gates.html#pyrad.io.write_excess_gates">[docs]</a>
-<span class="k">def</span> <span class="nf">write_excess_gates</span><span class="p">(</span><span class="n">excess_dict</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_excess_gates</span><span class="p">(</span><span class="n">excess_dict</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Writes the position and values of gates that have a frequency of</span>
 <span class="sd">    occurrence higher than a particular threshold</span>
@@ -3130,7 +2987,7 @@
 
 <div class="viewcode-block" id="write_intercomp_scores_ts">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_intercomp_scores_ts.html#pyrad.io.write_intercomp_scores_ts">[docs]</a>
-<span class="k">def</span> <span class="nf">write_intercomp_scores_ts</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_intercomp_scores_ts</span><span class="p">(</span>
     <span class="n">start_time</span><span class="p">,</span>
     <span class="n">stats</span><span class="p">,</span>
     <span class="n">field_name</span><span class="p">,</span>
@@ -3202,41 +3059,7 @@
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">file_exists</span><span class="p">:</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">FCNTL_AVAIL</span><span class="p">:</span>
-                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_EX</span> <span class="o">|</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_NB</span><span class="p">)</span>
-                        <span class="k">break</span>
-                    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EAGAIN</span><span class="p">:</span>
-                            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
-                        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EBADF</span><span class="p">:</span>
-                            <span class="n">warn</span><span class="p">(</span>
-                                <span class="s2">&quot;WARNING: No file locking is possible (NFS mount?), &quot;</span>
-                                <span class="o">+</span> <span class="s2">&quot;expect strange issues with multiprocessing...&quot;</span>
-                            <span class="p">)</span>
-                            <span class="k">break</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="k">raise</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="c1"># Attempt to acquire an exclusive lock on the file</span>
-                        <span class="n">msvcrt</span><span class="o">.</span><span class="n">locking</span><span class="p">(</span>
-                            <span class="n">os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">O_RDWR</span> <span class="o">|</span> <span class="n">os</span><span class="o">.</span><span class="n">O_CREAT</span><span class="p">),</span> <span class="n">msvcrt</span><span class="o">.</span><span class="n">LK_NBLCK</span><span class="p">,</span> <span class="mi">0</span>
-                        <span class="p">)</span>
-                        <span class="k">break</span>
-                    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>  <span class="c1"># Permission denied</span>
-                            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
-                        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>  <span class="c1"># No such file or directory</span>
-                            <span class="n">warn</span><span class="p">(</span>
-                                <span class="s2">&quot;WARNING: No file locking is possible (NFS mount?), &quot;</span>
-                                <span class="o">+</span> <span class="s2">&quot;expect strange issues with multiprocessing...&quot;</span>
-                            <span class="p">)</span>
-                            <span class="k">break</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="k">raise</span>
+            <span class="n">lock_file</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
 
             <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
                 <span class="s2">&quot;# Weather radar intercomparison scores timeseries file</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -3296,45 +3119,11 @@
                     <span class="p">}</span>
                 <span class="p">)</span>
 
-            <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_UN</span><span class="p">)</span>
+            <span class="n">unlock_file</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
             <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">FCNTL_AVAIL</span><span class="p">:</span>
-                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_EX</span> <span class="o">|</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_NB</span><span class="p">)</span>
-                        <span class="k">break</span>
-                    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EAGAIN</span><span class="p">:</span>
-                            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
-                        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EBADF</span><span class="p">:</span>
-                            <span class="n">warn</span><span class="p">(</span>
-                                <span class="s2">&quot;WARNING: No file locking is possible (NFS mount?), &quot;</span>
-                                <span class="o">+</span> <span class="s2">&quot;expect strange issues with multiprocessing...&quot;</span>
-                            <span class="p">)</span>
-                            <span class="k">break</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="k">raise</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="c1"># Attempt to acquire an exclusive lock on the file</span>
-                        <span class="n">msvcrt</span><span class="o">.</span><span class="n">locking</span><span class="p">(</span>
-                            <span class="n">os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">O_RDWR</span> <span class="o">|</span> <span class="n">os</span><span class="o">.</span><span class="n">O_CREAT</span><span class="p">),</span> <span class="n">msvcrt</span><span class="o">.</span><span class="n">LK_NBLCK</span><span class="p">,</span> <span class="mi">0</span>
-                        <span class="p">)</span>
-                        <span class="k">break</span>
-                    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>  <span class="c1"># Permission denied</span>
-                            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
-                        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>  <span class="c1"># No such file or directory</span>
-                            <span class="n">warn</span><span class="p">(</span>
-                                <span class="s2">&quot;WARNING: No file locking is possible (NFS mount?), &quot;</span>
-                                <span class="o">+</span> <span class="s2">&quot;expect strange issues with multiprocessing...&quot;</span>
-                            <span class="p">)</span>
-                            <span class="k">break</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="k">raise</span>
+            <span class="n">lock_file</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
 
             <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="s2">&quot;date&quot;</span><span class="p">,</span>
@@ -3368,12 +3157,7 @@
                         <span class="p">),</span>
                     <span class="p">}</span>
                 <span class="p">)</span>
-            <span class="k">if</span> <span class="n">FCNTL_AVAIL</span><span class="p">:</span>
-                <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_UN</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">msvcrt</span><span class="o">.</span><span class="n">locking</span><span class="p">(</span>
-                    <span class="n">csvfile</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="n">msvcrt</span><span class="o">.</span><span class="n">LK_UNLCK</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
-                <span class="p">)</span>
+            <span class="n">unlock_file</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
             <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">fname</span></div>
@@ -3382,7 +3166,7 @@
 
 <div class="viewcode-block" id="write_colocated_gates">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_colocated_gates.html#pyrad.io.write_colocated_gates">[docs]</a>
-<span class="k">def</span> <span class="nf">write_colocated_gates</span><span class="p">(</span><span class="n">coloc_gates</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_colocated_gates</span><span class="p">(</span><span class="n">coloc_gates</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Writes the position of gates colocated with two radars</span>
 
@@ -3442,7 +3226,7 @@
 
 <div class="viewcode-block" id="write_colocated_data">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_colocated_data.html#pyrad.io.write_colocated_data">[docs]</a>
-<span class="k">def</span> <span class="nf">write_colocated_data</span><span class="p">(</span><span class="n">coloc_data</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_colocated_data</span><span class="p">(</span><span class="n">coloc_data</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Writes the data of gates colocated with two radars</span>
 
@@ -3555,7 +3339,7 @@
 
 <div class="viewcode-block" id="write_colocated_data_time_avg">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_colocated_data_time_avg.html#pyrad.io.write_colocated_data_time_avg">[docs]</a>
-<span class="k">def</span> <span class="nf">write_colocated_data_time_avg</span><span class="p">(</span><span class="n">coloc_data</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_colocated_data_time_avg</span><span class="p">(</span><span class="n">coloc_data</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Writes the time averaged data of gates colocated with two radars</span>
 
@@ -3684,7 +3468,7 @@
 
 <div class="viewcode-block" id="write_sun_hits">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_sun_hits.html#pyrad.io.write_sun_hits">[docs]</a>
-<span class="k">def</span> <span class="nf">write_sun_hits</span><span class="p">(</span><span class="n">sun_hits</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_sun_hits</span><span class="p">(</span><span class="n">sun_hits</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Writes sun hits data.</span>
 
@@ -3821,7 +3605,7 @@
 
 <div class="viewcode-block" id="write_sun_retrieval">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_sun_retrieval.html#pyrad.io.write_sun_retrieval">[docs]</a>
-<span class="k">def</span> <span class="nf">write_sun_retrieval</span><span class="p">(</span><span class="n">sun_retrieval</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_sun_retrieval</span><span class="p">(</span><span class="n">sun_retrieval</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Writes sun retrieval data.</span>
 
@@ -4026,8 +3810,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -4050,7 +3834,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

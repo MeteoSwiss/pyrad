@@ -16,8 +16,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -27,10 +27,10 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -38,10 +38,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
@@ -1233,9 +1233,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -1407,7 +1412,7 @@
 <td><p>Reads a csv files containing the position of colocated gates</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_colocated_data.html#pyrad.io.read_colocated_data" title="pyrad.io.read_colocated_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_colocated_data</span></code></a>(fname)</p></td>
-<td><p>Reads a csv files containing colocated data</p></td>
+<td><p>Reads a CSV file containing colocated data using pandas.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_timeseries.html#pyrad.io.read_timeseries" title="pyrad.io.read_timeseries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_timeseries</span></code></a>(fname)</p></td>
 <td><p>Reads a time series contained in a CSV file.</p></td>
@@ -1416,7 +1421,7 @@
 <td><p>Reads a time series of precipitation accumulation contained in a csv file</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_monitoring_ts.html#pyrad.io.read_monitoring_ts" title="pyrad.io.read_monitoring_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_monitoring_ts</span></code></a>(fname[, sort_by_date])</p></td>
-<td><p>Reads a monitoring time series contained in a csv file</p></td>
+<td><p>Reads a monitoring time series contained in a CSV file using pandas.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_intercomp_scores_ts.html#pyrad.io.read_intercomp_scores_ts" title="pyrad.io.read_intercomp_scores_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_intercomp_scores_ts</span></code></a>(fname[, sort_by_date])</p></td>
 <td><p>Reads a radar intercomparison scores csv file</p></td>
@@ -1631,7 +1636,7 @@
 <td><p>writes time series of statistics</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_monitoring_ts.html#pyrad.io.write_monitoring_ts" title="pyrad.io.write_monitoring_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_monitoring_ts</span></code></a>(start_time, np_t, ...[, ...])</p></td>
-<td><p>writes time series of data</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_excess_gates.html#pyrad.io.write_excess_gates" title="pyrad.io.write_excess_gates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_excess_gates</span></code></a>(excess_dict, fname)</p></td>
 <td><p>Writes the position and values of gates that have a frequency of occurrence higher than a particular threshold</p></td>
@@ -1918,7 +1923,7 @@
 <td><p>Reads an npz file containing data used in centroid computation</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_colocated_data.html#pyrad.io.read_colocated_data" title="pyrad.io.read_colocated_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_colocated_data</span></code></a>(fname)</p></td>
-<td><p>Reads a csv files containing colocated data</p></td>
+<td><p>Reads a CSV file containing colocated data using pandas.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_colocated_gates.html#pyrad.io.read_colocated_gates" title="pyrad.io.read_colocated_gates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_colocated_gates</span></code></a>(fname)</p></td>
 <td><p>Reads a csv files containing the position of colocated gates</p></td>
@@ -1999,7 +2004,7 @@
 <td><p>Reads a melting layer time series contained in a csv file</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_monitoring_ts.html#pyrad.io.read_monitoring_ts" title="pyrad.io.read_monitoring_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_monitoring_ts</span></code></a>(fname[, sort_by_date])</p></td>
-<td><p>Reads a monitoring time series contained in a csv file</p></td>
+<td><p>Reads a monitoring time series contained in a CSV file using pandas.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_proc_periods.html#pyrad.io.read_proc_periods" title="pyrad.io.read_proc_periods"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_proc_periods</span></code></a>(fname)</p></td>
 <td><p>Reads a file containing the start and stop times of periods to process</p></td>
@@ -2134,7 +2139,7 @@
 <td><p>writes SwissMetNet data in format datetime,avg_value, std_value</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_monitoring_ts.html#pyrad.io.write_monitoring_ts" title="pyrad.io.write_monitoring_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_monitoring_ts</span></code></a>(start_time, np_t, ...[, ...])</p></td>
-<td><p>writes time series of data</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_multiple_points.html#pyrad.io.write_multiple_points" title="pyrad.io.write_multiple_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_multiple_points</span></code></a>(dataset, fname)</p></td>
 <td><p>write radar data obtained at multiple points</p></td>
@@ -2276,13 +2281,13 @@
   </nav></div>
 
   <div class="sidebar-secondary-item">
-
-  <div class="tocsection sourcelink">
-    <a href="../../_sources/API/generated/pyrad.io.rst.txt">
-      <i class="fa-solid fa-file-lines"></i> Show Source
-    </a>
-  </div>
-</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/API/generated/pyrad.io.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
 
 </div></div>
               
@@ -2297,8 +2302,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2321,7 +2326,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

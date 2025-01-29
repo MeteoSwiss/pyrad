@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,10 +26,10 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -37,10 +37,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -326,9 +326,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -385,25 +390,25 @@
 <span class="sd">    _Radar_Trajectory</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">import</span> <span class="nn">locale</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">locale</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="kn">import</span> <span class="nn">pyart</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 
-<span class="kn">from</span> <span class="nn">..io.read_data_sensor</span> <span class="kn">import</span> <span class="n">read_lightning</span><span class="p">,</span> <span class="n">read_trt_traj_data</span>
-<span class="kn">from</span> <span class="nn">..io.read_data_sensor</span> <span class="kn">import</span> <span class="n">read_trt_thundertracking_traj_data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.read_data_sensor</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_lightning</span><span class="p">,</span> <span class="n">read_trt_traj_data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.read_data_sensor</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_trt_thundertracking_traj_data</span>
 
 
 <div class="viewcode-block" id="Trajectory">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.Trajectory.html#pyrad.io.Trajectory">[docs]</a>
-<span class="k">class</span> <span class="nc">Trajectory</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Trajectory</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class for reading and handling trajectory data from a file.</span>
 <span class="sd">    Attributes</span>
@@ -457,7 +462,7 @@
 <span class="sd">    _get_total_seconds : Get the total time of the trajectory in seconds</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">starttime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">endtime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">trajtype</span><span class="o">=</span><span class="s2">&quot;plane&quot;</span><span class="p">,</span> <span class="n">flashnr</span><span class="o">=</span><span class="mi">0</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -525,7 +530,7 @@
 
 <div class="viewcode-block" id="Trajectory.add_radar">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.Trajectory.add_radar.html#pyrad.io.Trajectory.add_radar">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_radar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radar</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_radar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radar</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add the coordinates (WGS84 longitude, latitude and non WGS84 altitude)</span>
 <span class="sd">        of a radar to the radar_list.</span>
@@ -576,7 +581,7 @@
 
 <div class="viewcode-block" id="Trajectory.calculate_velocities">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.Trajectory.calculate_velocities.html#pyrad.io.Trajectory.calculate_velocities">[docs]</a>
-    <span class="k">def</span> <span class="nf">calculate_velocities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radar</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_velocities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radar</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate velocities.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -615,7 +620,7 @@
 
 <div class="viewcode-block" id="Trajectory.get_samples_in_period">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.Trajectory.get_samples_in_period.html#pyrad.io.Trajectory.get_samples_in_period">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_samples_in_period</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_samples_in_period</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; &quot;</span>
 <span class="sd">        Get indices of samples of the trajectory within given time</span>
 <span class="sd">        period.</span>
@@ -632,7 +637,7 @@
 
 <div class="viewcode-block" id="Trajectory.get_start_time">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.Trajectory.get_start_time.html#pyrad.io.Trajectory.get_start_time">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_start_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_start_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get time of first trajectory sample.</span>
 <span class="sd">        Return</span>
@@ -645,7 +650,7 @@
 
 <div class="viewcode-block" id="Trajectory.get_end_time">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.Trajectory.get_end_time.html#pyrad.io.Trajectory.get_end_time">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_end_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_end_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get time of last trajectory sample.</span>
 <span class="sd">        Return</span>
@@ -656,7 +661,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_convert_traj_to_swissgrid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_convert_traj_to_swissgrid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert trajectory samples from WGS84 to Swiss CH1903 coordinates</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -672,7 +677,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_swiss_grid_done</span> <span class="o">=</span> <span class="kc">True</span>
 
-    <span class="k">def</span> <span class="nf">_read_traj</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_read_traj</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Read trajectory from file</span>
 <span class="sd">        File format</span>
@@ -777,7 +782,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">nsamples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_read_traj_flores</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_read_traj_flores</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Read trajectory from FLORAKO file</span>
 <span class="sd">        File format</span>
@@ -822,7 +827,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">nsamples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_read_traj_lightning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flashnr</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_read_traj_lightning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flashnr</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Read trajectory from lightning file</span>
 <span class="sd">        File format</span>
@@ -889,7 +894,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">nsamples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_read_traj_trt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_read_traj_trt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Read trajectory from TRT file</span>
 <span class="sd">        File format</span>
@@ -1043,13 +1048,13 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">nsamples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_vector</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_get_total_seconds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_total_seconds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return total seconds of timedelta object&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span></div>
 
 
 
-<span class="k">class</span> <span class="nc">_Radar_Trajectory</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_Radar_Trajectory</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class for holding the trajectory data assigned to a radar.</span>
 <span class="sd">    Attributes</span>
@@ -1079,7 +1084,7 @@
 <span class="sd">    assign_velocity_vecs</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">alt</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">alt</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initalize the object.</span>
 <span class="sd">        Parameters</span>
@@ -1112,7 +1117,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">v_el</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">v_az</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">location_is_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">alt</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">location_is_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">alt</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check if the given coordinates are the same.</span>
 <span class="sd">        Parameters</span>
@@ -1136,7 +1141,7 @@
 
         <span class="k">return</span> <span class="kc">True</span>
 
-    <span class="k">def</span> <span class="nf">assign_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">az</span><span class="p">,</span> <span class="n">rr</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">assign_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">az</span><span class="p">,</span> <span class="n">rr</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Assign a trajectory to the radar in polar radar</span>
 <span class="sd">        coordinates.</span>
@@ -1155,7 +1160,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">range_vec</span> <span class="o">=</span> <span class="n">rr</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">traj_assigned</span> <span class="o">=</span> <span class="kc">True</span>
 
-    <span class="k">def</span> <span class="nf">convert_radpos_to_swissgrid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">convert_radpos_to_swissgrid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert the radar location (in WGS84 coordinates) to</span>
 <span class="sd">        swiss CH1903 coordinates.</span>
@@ -1169,7 +1174,7 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_swiss_coords_done</span> <span class="o">=</span> <span class="kc">True</span>
 
-    <span class="k">def</span> <span class="nf">assign_velocity_vecs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v_abs</span><span class="p">,</span> <span class="n">v_r</span><span class="p">,</span> <span class="n">v_el</span><span class="p">,</span> <span class="n">v_az</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">assign_velocity_vecs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v_abs</span><span class="p">,</span> <span class="n">v_r</span><span class="p">,</span> <span class="n">v_el</span><span class="p">,</span> <span class="n">v_az</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Assign velocity vectors to the radar.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1215,8 +1220,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1239,7 +1244,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

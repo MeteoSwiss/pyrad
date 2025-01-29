@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,10 +26,10 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -37,10 +37,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -326,9 +326,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -430,24 +435,24 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">glob</span>
-<span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">import</span> <span class="nn">platform</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">platform</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">RegularGridInterpolator</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.interpolate</span><span class="w"> </span><span class="kn">import</span> <span class="n">RegularGridInterpolator</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">wradlib</span> <span class="k">as</span> <span class="nn">wrl</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">wradlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">wrl</span>
 
     <span class="n">_WRADLIB_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_WRADLIB_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">import</span> <span class="nn">pyart</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 
 <span class="c1"># check existence of METRANET library</span>
 <span class="k">try</span><span class="p">:</span>
@@ -460,29 +465,29 @@
     <span class="n">_METRANETLIB_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">boto3</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">boto3</span>
 
     <span class="n">_BOTO3_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 is not installed, data cannot be retrieved from S3 buckets!&quot;</span><span class="p">)</span>
     <span class="n">_BOTO3_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">from</span> <span class="nn">.read_data_other</span> <span class="kn">import</span> <span class="n">read_status</span><span class="p">,</span> <span class="n">read_rad4alp_icon</span><span class="p">,</span> <span class="n">read_rad4alp_vis</span>
-<span class="kn">from</span> <span class="nn">.read_data_mxpol</span> <span class="kn">import</span> <span class="n">pyrad_MXPOL</span><span class="p">,</span> <span class="n">pyrad_MCH</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.read_data_other</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_status</span><span class="p">,</span> <span class="n">read_rad4alp_icon</span><span class="p">,</span> <span class="n">read_rad4alp_vis</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.read_data_mxpol</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyrad_MXPOL</span><span class="p">,</span> <span class="n">pyrad_MCH</span>
 
-<span class="kn">from</span> <span class="nn">.io_aux</span> <span class="kn">import</span> <span class="n">get_datatype_metranet</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span><span class="p">,</span> <span class="n">get_file_list</span>
-<span class="kn">from</span> <span class="nn">.io_aux</span> <span class="kn">import</span> <span class="n">get_datatype_odim</span><span class="p">,</span> <span class="n">get_datatype_knmi</span><span class="p">,</span> <span class="n">find_date_in_file_name</span>
-<span class="kn">from</span> <span class="nn">.io_aux</span> <span class="kn">import</span> <span class="n">get_datatype_fields</span><span class="p">,</span> <span class="n">get_datetime</span><span class="p">,</span> <span class="n">map_hydro</span><span class="p">,</span> <span class="n">map_Doppler</span>
-<span class="kn">from</span> <span class="nn">.io_aux</span> <span class="kn">import</span> <span class="n">find_icon_file</span><span class="p">,</span> <span class="n">find_rad4alpicon_file</span>
-<span class="kn">from</span> <span class="nn">.io_aux</span> <span class="kn">import</span> <span class="n">find_pyradicon_file</span><span class="p">,</span> <span class="n">get_datatype_skyecho</span>
-<span class="kn">from</span> <span class="nn">.io_aux</span> <span class="kn">import</span> <span class="n">get_rad4alp_prod_fname</span><span class="p">,</span> <span class="n">get_rad4alp_grid_dir</span>
-<span class="kn">from</span> <span class="nn">.io_aux</span> <span class="kn">import</span> <span class="n">get_rad4alp_dir</span><span class="p">,</span> <span class="n">get_scan_files_to_merge</span>
-<span class="kn">from</span> <span class="nn">.io_aux</span> <span class="kn">import</span> <span class="n">get_scan_files_to_merge_s3</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_datatype_metranet</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span><span class="p">,</span> <span class="n">get_file_list</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_datatype_odim</span><span class="p">,</span> <span class="n">get_datatype_knmi</span><span class="p">,</span> <span class="n">find_date_in_file_name</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_datatype_fields</span><span class="p">,</span> <span class="n">get_datetime</span><span class="p">,</span> <span class="n">map_hydro</span><span class="p">,</span> <span class="n">map_Doppler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_icon_file</span><span class="p">,</span> <span class="n">find_rad4alpicon_file</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_pyradicon_file</span><span class="p">,</span> <span class="n">get_datatype_skyecho</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_rad4alp_prod_fname</span><span class="p">,</span> <span class="n">get_rad4alp_grid_dir</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_rad4alp_dir</span><span class="p">,</span> <span class="n">get_scan_files_to_merge</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_scan_files_to_merge_s3</span>
 
 
 <div class="viewcode-block" id="get_data">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.get_data.html#pyrad.io.get_data">[docs]</a>
-<span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">datatypesdescr</span><span class="p">,</span> <span class="n">cfg</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_data</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">datatypesdescr</span><span class="p">,</span> <span class="n">cfg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads pyrad input data.</span>
 
@@ -1803,7 +1808,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">merge_scans_rainbow</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_scans_rainbow</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span> <span class="n">scan_list</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">scan_period</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">radarnr</span><span class="o">=</span><span class="s2">&quot;RADAR001&quot;</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1900,7 +1905,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_scans_psr</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_scans_psr</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span>
     <span class="n">basepath_psr</span><span class="p">,</span>
     <span class="n">scan_list</span><span class="p">,</span>
@@ -1981,7 +1986,7 @@
     <span class="k">return</span> <span class="n">radar</span>
 
 
-<span class="k">def</span> <span class="nf">merge_scans_psr_spectra</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_scans_psr_spectra</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span>
     <span class="n">basepath_psr</span><span class="p">,</span>
     <span class="n">scan_list</span><span class="p">,</span>
@@ -2064,7 +2069,7 @@
     <span class="k">return</span> <span class="n">psr</span>
 
 
-<span class="k">def</span> <span class="nf">merge_scans_dem</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_scans_dem</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span>
     <span class="n">scan_list</span><span class="p">,</span>
     <span class="n">datatype_list</span><span class="p">,</span>
@@ -2128,7 +2133,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_scans_rad4alp</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_scans_rad4alp</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span> <span class="n">scan_list</span><span class="p">,</span> <span class="n">radar_name</span><span class="p">,</span> <span class="n">radar_res</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2184,7 +2189,8 @@
             <span class="k">continue</span>
 
         <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">get_data_rad4alp</span><span class="p">(</span>
-            <span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">scan</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="n">ind_rad</span><span class="p">)</span>
+            <span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">scan</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="n">ind_rad</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">radar_aux</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">continue</span>
@@ -2227,7 +2233,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_scans_odim</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_scans_odim</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span>
     <span class="n">scan_list</span><span class="p">,</span>
     <span class="n">radar_name</span><span class="p">,</span>
@@ -2269,45 +2275,61 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># find files to merge</span>
-    <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;boto3 not installed&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">scan_list_aux</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge_s3</span><span class="p">(</span>
-            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span> <span class="n">scan_list</span><span class="p">,</span> <span class="n">radar_name</span><span class="p">,</span> <span class="n">radar_res</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span>
-            <span class="n">cfg</span><span class="p">,</span> <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
-            <span class="n">master_scan_time_tol</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MasterScanTimeTol&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
-            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;ScanPeriod&#39;</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">fname_list</span><span class="p">,</span> <span class="n">scan_list_aux</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge</span><span class="p">(</span>
-            <span class="n">basepath</span><span class="p">,</span> <span class="n">scan_list</span><span class="p">,</span> <span class="n">radar_name</span><span class="p">,</span> <span class="n">radar_res</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span>
+            <span class="n">scan_list</span><span class="p">,</span>
+            <span class="n">radar_name</span><span class="p">,</span>
+            <span class="n">radar_res</span><span class="p">,</span>
+            <span class="n">voltime</span><span class="p">,</span>
+            <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">cfg</span><span class="p">,</span>
             <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
             <span class="n">master_scan_time_tol</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MasterScanTimeTol&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
-            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;ScanPeriod&#39;</span><span class="p">])</span>
+            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;ScanPeriod&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fname_list</span><span class="p">,</span> <span class="n">scan_list_aux</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge</span><span class="p">(</span>
+            <span class="n">basepath</span><span class="p">,</span>
+            <span class="n">scan_list</span><span class="p">,</span>
+            <span class="n">radar_name</span><span class="p">,</span>
+            <span class="n">radar_res</span><span class="p">,</span>
+            <span class="n">voltime</span><span class="p">,</span>
+            <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
+            <span class="n">master_scan_time_tol</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MasterScanTimeTol&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
+            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;ScanPeriod&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No files found&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No files found&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">radar</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span>
-            <span class="s1">&#39;s3&#39;</span><span class="p">,</span> <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_url&#39;</span><span class="p">],</span> <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_key&#39;</span><span class="p">],</span>
-            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_secret_key&#39;</span><span class="p">],</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="s2">&quot;s3&quot;</span><span class="p">,</span>
+            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_url&quot;</span><span class="p">],</span>
+            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_key&quot;</span><span class="p">],</span>
+            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_secret_key&quot;</span><span class="p">],</span>
+            <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">daydir</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">basepath</span><span class="si">}{</span><span class="n">daydir</span><span class="si">}</span><span class="s1">/&#39;</span>
+        <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basepath</span><span class="si">}{</span><span class="n">daydir</span><span class="si">}</span><span class="s2">/&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">datapath</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fname</span><span class="p">,</span> <span class="n">scan</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fname_list</span><span class="p">,</span> <span class="n">scan_list_aux</span><span class="p">):</span>
-        <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
-            <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
-            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;bucket&#39;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+            <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;bucket&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="n">fname</span>
 
-        <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">get_data_odim</span><span class="p">(</span>
-            <span class="n">fname_aux</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">scan</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="n">ind_rad</span><span class="p">)</span>
+        <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">get_data_odim</span><span class="p">(</span><span class="n">fname_aux</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">scan</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="n">ind_rad</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">radar_aux</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">continue</span>
@@ -2316,7 +2338,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">radar</span> <span class="o">=</span> <span class="n">merge_radars</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">radar_aux</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s1">&#39;rm_s3_file&#39;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;rm_s3_file&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s2">&quot;rm_s3_file&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;rm_s3_file&quot;</span><span class="p">]:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fname_aux</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">radar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2353,7 +2375,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_scans_odimgrid</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_scans_odimgrid</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span> <span class="n">scan_list</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2388,42 +2410,59 @@
         <span class="p">)</span>
 
     <span class="c1"># find files to merge</span>
-    <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;boto3 not installed&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">scan_list_aux</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge_s3</span><span class="p">(</span>
-            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span> <span class="n">scan_list</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span>
-            <span class="n">cfg</span><span class="p">,</span> <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">])</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span>
+            <span class="n">scan_list</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="n">voltime</span><span class="p">,</span>
+            <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">cfg</span><span class="p">,</span>
+            <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">scan_list_aux</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge</span><span class="p">(</span>
-            <span class="n">basepath</span><span class="p">,</span> <span class="n">scan_list</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span>
-            <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">])</span>
+            <span class="n">basepath</span><span class="p">,</span>
+            <span class="n">scan_list</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="n">voltime</span><span class="p">,</span>
+            <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
+        <span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No files found&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No files found&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">grid</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span>
-            <span class="s1">&#39;s3&#39;</span><span class="p">,</span> <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_url&#39;</span><span class="p">],</span> <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_key&#39;</span><span class="p">],</span>
-            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_secret_key&#39;</span><span class="p">],</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="s2">&quot;s3&quot;</span><span class="p">,</span>
+            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_url&quot;</span><span class="p">],</span>
+            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_key&quot;</span><span class="p">],</span>
+            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_secret_key&quot;</span><span class="p">],</span>
+            <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">daydir</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">basepath</span><span class="si">}{</span><span class="n">daydir</span><span class="si">}</span><span class="s1">/&#39;</span>
+        <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basepath</span><span class="si">}{</span><span class="n">daydir</span><span class="si">}</span><span class="s2">/&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">datapath</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
-            <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
-            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;bucket&#39;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+            <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;bucket&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="n">fname</span>
 
         <span class="n">grid_aux</span> <span class="o">=</span> <span class="n">get_data_odimgrid</span><span class="p">(</span>
-            <span class="n">fname_aux</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">mf_scale</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MFScale&quot;</span><span class="p">],</span>
-            <span class="n">ind_rad</span><span class="o">=</span><span class="n">ind_rad</span><span class="p">)</span>
+            <span class="n">fname_aux</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">mf_scale</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MFScale&quot;</span><span class="p">],</span> <span class="n">ind_rad</span><span class="o">=</span><span class="n">ind_rad</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">grid_aux</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">continue</span>
@@ -2433,7 +2472,7 @@
             <span class="k">for</span> <span class="n">prod_field</span> <span class="ow">in</span> <span class="n">grid_aux</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">prod_field</span><span class="p">,</span> <span class="n">grid_aux</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">prod_field</span><span class="p">])</span>
 
-        <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s1">&#39;rm_s3_file&#39;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;rm_s3_file&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s2">&quot;rm_s3_file&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;rm_s3_file&quot;</span><span class="p">]:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fname_aux</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">grid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2470,7 +2509,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_scans_knmih5_grid</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_scans_knmih5_grid</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span> <span class="n">scan_list</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2509,41 +2548,59 @@
         <span class="n">odim_field_names</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_datatype_knmi</span><span class="p">(</span><span class="n">datatype</span><span class="p">))</span>
 
     <span class="c1"># find files to merge</span>
-    <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;boto3 not installed&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">scan_list_aux</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge_s3</span><span class="p">(</span>
-            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span> <span class="n">scan_list</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span>
-            <span class="n">cfg</span><span class="p">,</span> <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">])</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span>
+            <span class="n">scan_list</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="n">voltime</span><span class="p">,</span>
+            <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">cfg</span><span class="p">,</span>
+            <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">scan_list_aux</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge</span><span class="p">(</span>
-            <span class="n">basepath</span><span class="p">,</span> <span class="n">scan_list</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span>
-            <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">])</span>
+            <span class="n">basepath</span><span class="p">,</span>
+            <span class="n">scan_list</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="n">voltime</span><span class="p">,</span>
+            <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
+        <span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No files found&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No files found&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">grid</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span>
-            <span class="s1">&#39;s3&#39;</span><span class="p">,</span> <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_url&#39;</span><span class="p">],</span> <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_key&#39;</span><span class="p">],</span>
-            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_secret_key&#39;</span><span class="p">],</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="s2">&quot;s3&quot;</span><span class="p">,</span>
+            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_url&quot;</span><span class="p">],</span>
+            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_key&quot;</span><span class="p">],</span>
+            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_secret_key&quot;</span><span class="p">],</span>
+            <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">daydir</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">basepath</span><span class="si">}{</span><span class="n">daydir</span><span class="si">}</span><span class="s1">/&#39;</span>
+        <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basepath</span><span class="si">}{</span><span class="n">daydir</span><span class="si">}</span><span class="s2">/&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">datapath</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
-            <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
-            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;bucket&#39;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+            <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;bucket&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="n">fname</span>
 
         <span class="n">grid_aux</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">aux_io</span><span class="o">.</span><span class="n">read_knmi_grid_h5</span><span class="p">(</span>
-            <span class="n">fname_aux</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="n">odim_field_names</span><span class="p">)</span>
+            <span class="n">fname_aux</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="n">odim_field_names</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">grid_aux</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">continue</span>
@@ -2553,7 +2610,7 @@
             <span class="k">for</span> <span class="n">prod_field</span> <span class="ow">in</span> <span class="n">grid_aux</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">prod_field</span><span class="p">,</span> <span class="n">grid_aux</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">prod_field</span><span class="p">])</span>
 
-        <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s1">&#39;rm_s3_file&#39;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;rm_s3_file&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s2">&quot;rm_s3_file&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;rm_s3_file&quot;</span><span class="p">]:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fname_aux</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">grid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2590,7 +2647,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_scans_odimbirds</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_scans_odimbirds</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span>
     <span class="n">scan_list</span><span class="p">,</span>
     <span class="n">radar_name</span><span class="p">,</span>
@@ -2636,45 +2693,63 @@
         <span class="n">field_names_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">datatype</span><span class="p">:</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)})</span>
 
     <span class="c1"># find files to merge</span>
-    <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;boto3 not installed&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">scan_list_aux</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge_s3</span><span class="p">(</span>
-            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span> <span class="n">scan_list</span><span class="p">,</span> <span class="n">radar_name</span><span class="p">,</span> <span class="n">radar_res</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span>
-            <span class="n">cfg</span><span class="p">,</span> <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
-            <span class="n">master_scan_time_tol</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MasterScanTimeTol&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
-            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;ScanPeriod&#39;</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">fname_list</span><span class="p">,</span> <span class="n">scan_list_aux</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge</span><span class="p">(</span>
-            <span class="n">basepath</span><span class="p">,</span> <span class="n">scan_list</span><span class="p">,</span> <span class="n">radar_name</span><span class="p">,</span> <span class="n">radar_res</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span>
+            <span class="n">scan_list</span><span class="p">,</span>
+            <span class="n">radar_name</span><span class="p">,</span>
+            <span class="n">radar_res</span><span class="p">,</span>
+            <span class="n">voltime</span><span class="p">,</span>
+            <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">cfg</span><span class="p">,</span>
             <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
             <span class="n">master_scan_time_tol</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MasterScanTimeTol&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
-            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;ScanPeriod&#39;</span><span class="p">])</span>
+            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;ScanPeriod&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fname_list</span><span class="p">,</span> <span class="n">scan_list_aux</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge</span><span class="p">(</span>
+            <span class="n">basepath</span><span class="p">,</span>
+            <span class="n">scan_list</span><span class="p">,</span>
+            <span class="n">radar_name</span><span class="p">,</span>
+            <span class="n">radar_res</span><span class="p">,</span>
+            <span class="n">voltime</span><span class="p">,</span>
+            <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
+            <span class="n">master_scan_time_tol</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MasterScanTimeTol&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
+            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;ScanPeriod&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No files found&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No files found&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">radar</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span>
-            <span class="s1">&#39;s3&#39;</span><span class="p">,</span> <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_url&#39;</span><span class="p">],</span> <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_key&#39;</span><span class="p">],</span>
-            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_secret_key&#39;</span><span class="p">],</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="s2">&quot;s3&quot;</span><span class="p">,</span>
+            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_url&quot;</span><span class="p">],</span>
+            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_key&quot;</span><span class="p">],</span>
+            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_secret_key&quot;</span><span class="p">],</span>
+            <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">daydir</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">basepath</span><span class="si">}{</span><span class="n">daydir</span><span class="si">}</span><span class="s1">/&#39;</span>
+        <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basepath</span><span class="si">}{</span><span class="n">daydir</span><span class="si">}</span><span class="s2">/&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">datapath</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
-            <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
-            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;bucket&#39;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+            <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;bucket&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="n">fname</span>
 
         <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">aux_io</span><span class="o">.</span><span class="n">read_odim_vp_h5</span><span class="p">(</span>
-            <span class="n">fname_aux</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="n">field_names_dict</span><span class="p">)</span>
+            <span class="n">fname_aux</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="n">field_names_dict</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">radar_aux</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">continue</span>
@@ -2683,7 +2758,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">radar</span> <span class="o">=</span> <span class="n">merge_radars</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">radar_aux</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s1">&#39;rm_s3_file&#39;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;rm_s3_file&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s2">&quot;rm_s3_file&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;rm_s3_file&quot;</span><span class="p">]:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fname_aux</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">radar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2720,7 +2795,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_scans_gamic</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_scans_gamic</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span>
     <span class="n">scan_list</span><span class="p">,</span>
     <span class="n">radar_name</span><span class="p">,</span>
@@ -2762,45 +2837,61 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># find files to merge</span>
-    <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;boto3 not installed&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge_s3</span><span class="p">(</span>
-            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span> <span class="n">scan_list</span><span class="p">,</span> <span class="n">radar_name</span><span class="p">,</span> <span class="n">radar_res</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span>
-            <span class="n">cfg</span><span class="p">,</span> <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
-            <span class="n">master_scan_time_tol</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MasterScanTimeTol&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
-            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;ScanPeriod&#39;</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge</span><span class="p">(</span>
-            <span class="n">basepath</span><span class="p">,</span> <span class="n">scan_list</span><span class="p">,</span> <span class="n">radar_name</span><span class="p">,</span> <span class="n">radar_res</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span>
+            <span class="n">scan_list</span><span class="p">,</span>
+            <span class="n">radar_name</span><span class="p">,</span>
+            <span class="n">radar_res</span><span class="p">,</span>
+            <span class="n">voltime</span><span class="p">,</span>
+            <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">cfg</span><span class="p">,</span>
             <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
             <span class="n">master_scan_time_tol</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MasterScanTimeTol&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
-            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;ScanPeriod&#39;</span><span class="p">])</span>
+            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;ScanPeriod&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge</span><span class="p">(</span>
+            <span class="n">basepath</span><span class="p">,</span>
+            <span class="n">scan_list</span><span class="p">,</span>
+            <span class="n">radar_name</span><span class="p">,</span>
+            <span class="n">radar_res</span><span class="p">,</span>
+            <span class="n">voltime</span><span class="p">,</span>
+            <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
+            <span class="n">master_scan_time_tol</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MasterScanTimeTol&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
+            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;ScanPeriod&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No files found&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No files found&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">radar</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span>
-            <span class="s1">&#39;s3&#39;</span><span class="p">,</span> <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_url&#39;</span><span class="p">],</span> <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_key&#39;</span><span class="p">],</span>
-            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_secret_key&#39;</span><span class="p">],</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="s2">&quot;s3&quot;</span><span class="p">,</span>
+            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_url&quot;</span><span class="p">],</span>
+            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_key&quot;</span><span class="p">],</span>
+            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_secret_key&quot;</span><span class="p">],</span>
+            <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">daydir</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">basepath</span><span class="si">}{</span><span class="n">daydir</span><span class="si">}</span><span class="s1">/&#39;</span>
+        <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basepath</span><span class="si">}{</span><span class="n">daydir</span><span class="si">}</span><span class="s2">/&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">datapath</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
-            <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
-            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;bucket&#39;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+            <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;bucket&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="n">fname</span>
 
-        <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">get_data_gamic</span><span class="p">(</span>
-            <span class="n">fname_aux</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;pulse_width_gamic&quot;</span><span class="p">])</span>
+        <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">get_data_gamic</span><span class="p">(</span><span class="n">fname_aux</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;pulse_width_gamic&quot;</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="n">radar_aux</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">continue</span>
@@ -2809,14 +2900,14 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">radar</span> <span class="o">=</span> <span class="n">merge_radars</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">radar_aux</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s1">&#39;rm_s3_file&#39;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;rm_s3_file&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s2">&quot;rm_s3_file&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;rm_s3_file&quot;</span><span class="p">]:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fname_aux</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">radar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">radar</span>
 
 
-<span class="k">def</span> <span class="nf">merge_scans_mfcfradial</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_scans_mfcfradial</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span> <span class="n">scan_list</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2955,9 +3046,7 @@
             <span class="n">nscans</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">radar_aux</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">for</span> <span class="n">fname</span><span class="p">,</span> <span class="n">scan</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">flist</span><span class="p">,</span> <span class="n">scan_list_aux</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">datatype</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span>
-                    <span class="n">fname</span>
-                <span class="p">):</span>
+                <span class="k">if</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">datatype</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
                     <span class="k">continue</span>
                 <span class="n">radar_aux2</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">radar_aux2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -3026,7 +3115,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_scans_nexrad2</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_scans_nexrad2</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span>
     <span class="n">scan_list</span><span class="p">,</span>
     <span class="n">voltime</span><span class="p">,</span>
@@ -3062,41 +3151,57 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># find files to merge</span>
-    <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;boto3 not installed&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge_s3</span><span class="p">(</span>
-            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span> <span class="n">scan_list</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span>
-            <span class="n">cfg</span><span class="p">,</span> <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
-            <span class="n">master_scan_time_tol</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MasterScanTimeTol&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
-            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;ScanPeriod&#39;</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge</span><span class="p">(</span>
-            <span class="n">basepath</span><span class="p">,</span> <span class="n">scan_list</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span>
+            <span class="n">scan_list</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="n">voltime</span><span class="p">,</span>
+            <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">cfg</span><span class="p">,</span>
             <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
             <span class="n">master_scan_time_tol</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MasterScanTimeTol&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
-            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;ScanPeriod&#39;</span><span class="p">])</span>
+            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;ScanPeriod&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge</span><span class="p">(</span>
+            <span class="n">basepath</span><span class="p">,</span>
+            <span class="n">scan_list</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="n">voltime</span><span class="p">,</span>
+            <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
+            <span class="n">master_scan_time_tol</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MasterScanTimeTol&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
+            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;ScanPeriod&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No files found&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No files found&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">radar</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span>
-            <span class="s1">&#39;s3&#39;</span><span class="p">,</span> <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_url&#39;</span><span class="p">],</span> <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_key&#39;</span><span class="p">],</span>
-            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_secret_key&#39;</span><span class="p">],</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="s2">&quot;s3&quot;</span><span class="p">,</span>
+            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_url&quot;</span><span class="p">],</span>
+            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_key&quot;</span><span class="p">],</span>
+            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_secret_key&quot;</span><span class="p">],</span>
+            <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">daydir</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">basepath</span><span class="si">}{</span><span class="n">daydir</span><span class="si">}</span><span class="s1">/&#39;</span>
+        <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basepath</span><span class="si">}{</span><span class="n">daydir</span><span class="si">}</span><span class="s2">/&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">datapath</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
 
-
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
-            <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
-            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;bucket&#39;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+            <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;bucket&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="n">fname</span>
 
@@ -3142,7 +3247,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_scans_cfradial</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_scans_cfradial</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span>
     <span class="n">scan_list</span><span class="p">,</span>
     <span class="n">radar_name</span><span class="p">,</span>
@@ -3194,46 +3299,63 @@
             <span class="n">field_names</span><span class="p">[</span><span class="n">datatype</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="c1"># find files to merge</span>
-    <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;boto3 not installed&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge_s3</span><span class="p">(</span>
-            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span> <span class="n">scan_list</span><span class="p">,</span> <span class="n">radar_name</span><span class="p">,</span> <span class="n">radar_res</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span>
-            <span class="n">cfg</span><span class="p">,</span> <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
-            <span class="n">master_scan_time_tol</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MasterScanTimeTol&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
-            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;ScanPeriod&#39;</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge</span><span class="p">(</span>
-            <span class="n">basepath</span><span class="p">,</span> <span class="n">scan_list</span><span class="p">,</span> <span class="n">radar_name</span><span class="p">,</span> <span class="n">radar_res</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span>
+            <span class="n">scan_list</span><span class="p">,</span>
+            <span class="n">radar_name</span><span class="p">,</span>
+            <span class="n">radar_res</span><span class="p">,</span>
+            <span class="n">voltime</span><span class="p">,</span>
+            <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">cfg</span><span class="p">,</span>
             <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
             <span class="n">master_scan_time_tol</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MasterScanTimeTol&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
-            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;ScanPeriod&#39;</span><span class="p">])</span>
+            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;ScanPeriod&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge</span><span class="p">(</span>
+            <span class="n">basepath</span><span class="p">,</span>
+            <span class="n">scan_list</span><span class="p">,</span>
+            <span class="n">radar_name</span><span class="p">,</span>
+            <span class="n">radar_res</span><span class="p">,</span>
+            <span class="n">voltime</span><span class="p">,</span>
+            <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
+            <span class="n">master_scan_time_tol</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MasterScanTimeTol&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
+            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;ScanPeriod&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No files found&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No files found&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">radar</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span>
-            <span class="s1">&#39;s3&#39;</span><span class="p">,</span> <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_url&#39;</span><span class="p">],</span> <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_key&#39;</span><span class="p">],</span>
-            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_secret_key&#39;</span><span class="p">],</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="s2">&quot;s3&quot;</span><span class="p">,</span>
+            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_url&quot;</span><span class="p">],</span>
+            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_key&quot;</span><span class="p">],</span>
+            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_secret_key&quot;</span><span class="p">],</span>
+            <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">daydir</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">basepath</span><span class="si">}{</span><span class="n">daydir</span><span class="si">}</span><span class="s1">/&#39;</span>
+        <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basepath</span><span class="si">}{</span><span class="n">daydir</span><span class="si">}</span><span class="s2">/&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">datapath</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
-            <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
-            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;bucket&#39;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+            <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;bucket&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="n">fname</span>
 
         <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial</span><span class="p">(</span>
-            <span class="n">fname_aux</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">,</span>
-            <span class="n">include_fields</span><span class="o">=</span><span class="n">field_names</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="n">fname_aux</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">,</span> <span class="n">include_fields</span><span class="o">=</span><span class="n">field_names</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">radar_aux</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">continue</span>
@@ -3242,7 +3364,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">radar</span> <span class="o">=</span> <span class="n">merge_radars</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">radar_aux</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s1">&#39;rm_s3_file&#39;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;rm_s3_file&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s2">&quot;rm_s3_file&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;rm_s3_file&quot;</span><span class="p">]:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fname_aux</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">radar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -3279,7 +3401,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_scans_cfradial2</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_scans_cfradial2</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span>
     <span class="n">scan_list</span><span class="p">,</span>
     <span class="n">radar_name</span><span class="p">,</span>
@@ -3331,47 +3453,63 @@
             <span class="n">field_names</span><span class="p">[</span><span class="n">datatype</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="c1"># find files to merge</span>
-    <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;boto3 not installed&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge_s3</span><span class="p">(</span>
-            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span> <span class="n">scan_list</span><span class="p">,</span> <span class="n">radar_name</span><span class="p">,</span> <span class="n">radar_res</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span>
-            <span class="n">cfg</span><span class="p">,</span> <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
-            <span class="n">master_scan_time_tol</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MasterScanTimeTol&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
-            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;ScanPeriod&#39;</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge</span><span class="p">(</span>
-            <span class="n">basepath</span><span class="p">,</span> <span class="n">scan_list</span><span class="p">,</span> <span class="n">radar_name</span><span class="p">,</span> <span class="n">radar_res</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span>
+            <span class="n">scan_list</span><span class="p">,</span>
+            <span class="n">radar_name</span><span class="p">,</span>
+            <span class="n">radar_res</span><span class="p">,</span>
+            <span class="n">voltime</span><span class="p">,</span>
+            <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">cfg</span><span class="p">,</span>
             <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
             <span class="n">master_scan_time_tol</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MasterScanTimeTol&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
-            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;ScanPeriod&#39;</span><span class="p">])</span>
+            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;ScanPeriod&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge</span><span class="p">(</span>
+            <span class="n">basepath</span><span class="p">,</span>
+            <span class="n">scan_list</span><span class="p">,</span>
+            <span class="n">radar_name</span><span class="p">,</span>
+            <span class="n">radar_res</span><span class="p">,</span>
+            <span class="n">voltime</span><span class="p">,</span>
+            <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
+            <span class="n">master_scan_time_tol</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MasterScanTimeTol&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
+            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;ScanPeriod&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No files found&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No files found&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">radar</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span>
-            <span class="s1">&#39;s3&#39;</span><span class="p">,</span> <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_url&#39;</span><span class="p">],</span> <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_key&#39;</span><span class="p">],</span>
-            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_secret_key&#39;</span><span class="p">],</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="s2">&quot;s3&quot;</span><span class="p">,</span>
+            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_url&quot;</span><span class="p">],</span>
+            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_key&quot;</span><span class="p">],</span>
+            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_secret_key&quot;</span><span class="p">],</span>
+            <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">daydir</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">basepath</span><span class="si">}{</span><span class="n">daydir</span><span class="si">}</span><span class="s1">/&#39;</span>
+        <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basepath</span><span class="si">}{</span><span class="n">daydir</span><span class="si">}</span><span class="s2">/&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">datapath</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
 
-
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
-            <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
-            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;bucket&#39;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+            <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;bucket&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="n">fname</span>
 
         <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial2</span><span class="p">(</span>
-            <span class="n">fname</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">,</span>
-            <span class="n">include_fields</span><span class="o">=</span><span class="n">field_names</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="n">fname</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">,</span> <span class="n">include_fields</span><span class="o">=</span><span class="n">field_names</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="n">radar_aux</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">continue</span>
         <span class="k">if</span> <span class="n">radar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -3413,7 +3551,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_scans_skyecho</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_scans_skyecho</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span> <span class="n">scan_list</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -3447,37 +3585,50 @@
         <span class="n">skyecho_field_names</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_datatype_skyecho</span><span class="p">(</span><span class="n">datatype</span><span class="p">))</span>
 
     <span class="c1"># find files to merge</span>
-    <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;boto3 not installed&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge_s3</span><span class="p">(</span>
-            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span> <span class="n">scan_list</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span>
-            <span class="n">cfg</span><span class="p">,</span> <span class="n">path_convention</span><span class="o">=</span><span class="s1">&#39;SkyEcho&#39;</span><span class="p">)</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span>
+            <span class="n">scan_list</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="n">voltime</span><span class="p">,</span>
+            <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">cfg</span><span class="p">,</span>
+            <span class="n">path_convention</span><span class="o">=</span><span class="s2">&quot;SkyEcho&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge</span><span class="p">(</span>
-            <span class="n">basepath</span><span class="p">,</span> <span class="n">scan_list</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span>
-            <span class="n">path_convention</span><span class="o">=</span><span class="s1">&#39;SkyEcho&#39;</span><span class="p">)</span>
+            <span class="n">basepath</span><span class="p">,</span>
+            <span class="n">scan_list</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="n">voltime</span><span class="p">,</span>
+            <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">path_convention</span><span class="o">=</span><span class="s2">&quot;SkyEcho&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No files found&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No files found&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">radar</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
-        <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">basepath</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+        <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basepath</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">datapath</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
-            <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+            <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="n">fname</span>
 
         <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">aux_io</span><span class="o">.</span><span class="n">read_skyecho</span><span class="p">(</span>
-            <span class="n">fname_aux</span><span class="p">,</span> <span class="n">sweep_end_time</span><span class="o">=</span><span class="n">voltime</span><span class="p">,</span>
-            <span class="n">field_names</span><span class="o">=</span><span class="n">skyecho_field_names</span><span class="p">)</span>
+            <span class="n">fname_aux</span><span class="p">,</span> <span class="n">sweep_end_time</span><span class="o">=</span><span class="n">voltime</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="n">skyecho_field_names</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">radar_aux</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">continue</span>
@@ -3520,7 +3671,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_scans_cf1</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_scans_cf1</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span>
     <span class="n">scan_list</span><span class="p">,</span>
     <span class="n">radar_name</span><span class="p">,</span>
@@ -3572,46 +3723,63 @@
             <span class="n">field_names</span><span class="p">[</span><span class="n">datatype</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="c1"># find files to merge</span>
-    <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;boto3 not installed&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge_s3</span><span class="p">(</span>
-            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span> <span class="n">scan_list</span><span class="p">,</span> <span class="n">radar_name</span><span class="p">,</span> <span class="n">radar_res</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span>
-            <span class="n">cfg</span><span class="p">,</span> <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
-            <span class="n">master_scan_time_tol</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MasterScanTimeTol&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
-            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;ScanPeriod&#39;</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge</span><span class="p">(</span>
-            <span class="n">basepath</span><span class="p">,</span> <span class="n">scan_list</span><span class="p">,</span> <span class="n">radar_name</span><span class="p">,</span> <span class="n">radar_res</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span>
+            <span class="n">scan_list</span><span class="p">,</span>
+            <span class="n">radar_name</span><span class="p">,</span>
+            <span class="n">radar_res</span><span class="p">,</span>
+            <span class="n">voltime</span><span class="p">,</span>
+            <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">cfg</span><span class="p">,</span>
             <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
             <span class="n">master_scan_time_tol</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MasterScanTimeTol&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
-            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;ScanPeriod&#39;</span><span class="p">])</span>
+            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;ScanPeriod&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge</span><span class="p">(</span>
+            <span class="n">basepath</span><span class="p">,</span>
+            <span class="n">scan_list</span><span class="p">,</span>
+            <span class="n">radar_name</span><span class="p">,</span>
+            <span class="n">radar_res</span><span class="p">,</span>
+            <span class="n">voltime</span><span class="p">,</span>
+            <span class="n">dataset_list</span><span class="p">,</span>
+            <span class="n">path_convention</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
+            <span class="n">master_scan_time_tol</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;MasterScanTimeTol&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
+            <span class="n">scan_period</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;ScanPeriod&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No files found&#39;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No files found&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">radar</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span>
-            <span class="s1">&#39;s3&#39;</span><span class="p">,</span> <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_url&#39;</span><span class="p">],</span> <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_key&#39;</span><span class="p">],</span>
-            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;s3_secret_key&#39;</span><span class="p">],</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="s2">&quot;s3&quot;</span><span class="p">,</span>
+            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_url&quot;</span><span class="p">],</span>
+            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_key&quot;</span><span class="p">],</span>
+            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_secret_key&quot;</span><span class="p">],</span>
+            <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">daydir</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">basepath</span><span class="si">}{</span><span class="n">daydir</span><span class="si">}</span><span class="s1">/&#39;</span>
+        <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basepath</span><span class="si">}{</span><span class="n">daydir</span><span class="si">}</span><span class="s2">/&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">datapath</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
-            <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
-            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;bucket&#39;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+            <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;bucket&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="n">fname</span>
 
         <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">aux_io</span><span class="o">.</span><span class="n">read_cf1</span><span class="p">(</span>
-            <span class="n">fname_aux</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">,</span>
-            <span class="n">include_fields</span><span class="o">=</span><span class="n">field_names</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="n">fname_aux</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">,</span> <span class="n">include_fields</span><span class="o">=</span><span class="n">field_names</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">radar_aux</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">continue</span>
@@ -3620,7 +3788,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">radar</span> <span class="o">=</span> <span class="n">merge_radars</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">radar_aux</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s1">&#39;bucket&#39;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s1">&#39;rm_s3_file&#39;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;rm_s3_file&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s2">&quot;rm_s3_file&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;rm_s3_file&quot;</span><span class="p">]:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fname_aux</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">radar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -3657,7 +3825,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_scans_mxpol</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="n">scan_list</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_scans_mxpol</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="n">scan_list</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    merge MXPOL data.</span>
 
@@ -3759,7 +3927,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_scans_icon</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_scans_icon</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    merge rainbow scans</span>
 
@@ -3831,7 +3999,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_scans_icon_rad4alp</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_scans_icon_rad4alp</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    merge icon rad4alp scans. If data for all the scans cannot be retrieved</span>
 <span class="sd">    returns None</span>
@@ -3927,7 +4095,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_scans_dem_rad4alp</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_scans_dem_rad4alp</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    merge DEM rad4alp scans. If data for all the scans cannot be retrieved</span>
 <span class="sd">    returns None</span>
@@ -4026,7 +4194,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_scans_other_rad4alp</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_scans_other_rad4alp</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    merge other rad4alp polar products not contained in the basic M or P</span>
 <span class="sd">    files, i.e. hydro, dealiased velocity or precip. If data for all the</span>
@@ -4183,7 +4351,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_scans_iq_rad4alp</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_scans_iq_rad4alp</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span>
     <span class="n">basepath_iq</span><span class="p">,</span>
     <span class="n">scan_list</span><span class="p">,</span>
@@ -4439,7 +4607,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_fields_rainbow</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="n">scan_name</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_fields_rainbow</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="n">scan_name</span><span class="p">,</span> <span class="n">voltime</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Merge Rainbow fields into a single radar object.</span>
 
@@ -4472,7 +4640,10 @@
     <span class="c1"># create radar object</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No file found in &quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fdatetime</span><span class="si">}{</span><span class="n">datatype_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">.*&quot;</span><span class="p">))</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;No file found in &quot;</span>
+            <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fdatetime</span><span class="si">}{</span><span class="n">datatype_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">.*&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">radar</span> <span class="o">=</span> <span class="n">get_data_rainbow</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">datatype_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
@@ -4487,9 +4658,11 @@
             <span class="n">filename</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fdatetime</span><span class="si">}</span><span class="s2">dBZ.*&quot;</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">filename</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fdatetime</span><span class="si">}</span><span class="s2">dBZv.*&quot;</span><span class="p">))</span>
-        
+
         <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No file found in &quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fdatetime</span><span class="si">}{</span><span class="n">datatype</span><span class="si">}</span><span class="s2">.*&quot;</span><span class="p">))</span>
+            <span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;No file found in &quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fdatetime</span><span class="si">}{</span><span class="n">datatype</span><span class="si">}</span><span class="s2">.*&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">get_data_rainbow</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">datatype</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">radar_aux</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -4511,8 +4684,7 @@
     <span class="k">return</span> <span class="n">radar</span>
 
 
-
-<span class="k">def</span> <span class="nf">merge_fields_psr_spectra</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_fields_psr_spectra</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span>
     <span class="n">basepath_psr</span><span class="p">,</span>
     <span class="n">scan_name</span><span class="p">,</span>
@@ -4632,7 +4804,7 @@
     <span class="k">return</span> <span class="n">psr</span>
 
 
-<span class="k">def</span> <span class="nf">merge_fields_psr</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_fields_psr</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span>
     <span class="n">basepath_psr</span><span class="p">,</span>
     <span class="n">scan_name</span><span class="p">,</span>
@@ -4743,7 +4915,7 @@
     <span class="k">return</span> <span class="n">radar</span>
 
 
-<span class="k">def</span> <span class="nf">merge_fields_rad4alp_grid</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ftype</span><span class="o">=</span><span class="s2">&quot;METRANET&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_fields_rad4alp_grid</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ftype</span><span class="o">=</span><span class="s2">&quot;METRANET&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    merge rad4alp Cartesian products</span>
 
@@ -4865,7 +5037,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_fields_sat_grid</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_fields_sat_grid</span><span class="p">(</span><span class="n">voltime</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    merge satellite Cartesian products</span>
 
@@ -4939,7 +5111,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_fields_mf_grid</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_fields_mf_grid</span><span class="p">(</span>
     <span class="n">voltime</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">dataset_list</span><span class="p">,</span> <span class="n">scan_list</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ftype</span><span class="o">=</span><span class="s2">&quot;bin&quot;</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -5070,7 +5242,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_fields_pyrad</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_fields_pyrad</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span>
     <span class="n">loadname</span><span class="p">,</span>
     <span class="n">voltime</span><span class="p">,</span>
@@ -5187,7 +5359,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_fields_gecsx</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_fields_gecsx</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span>
     <span class="n">loadname</span><span class="p">,</span>
     <span class="n">datatype_list</span><span class="p">,</span>
@@ -5267,7 +5439,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_fields_pyradicon</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_fields_pyradicon</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span>
     <span class="n">voltime</span><span class="p">,</span>
     <span class="n">datatype_list</span><span class="p">,</span>
@@ -5360,7 +5532,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_fields_pyrad_spectra</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_fields_pyrad_spectra</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span>
     <span class="n">loadname</span><span class="p">,</span>
     <span class="n">voltime</span><span class="p">,</span>
@@ -5476,7 +5648,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_fields_pyradgrid</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_fields_pyradgrid</span><span class="p">(</span>
     <span class="n">basepath</span><span class="p">,</span>
     <span class="n">loadname</span><span class="p">,</span>
     <span class="n">voltime</span><span class="p">,</span>
@@ -5598,7 +5770,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_fields_dem</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="n">scan_name</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_fields_dem</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="n">scan_name</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    merge DEM fields into a single radar object.</span>
 
@@ -5642,7 +5814,7 @@
     <span class="k">return</span> <span class="n">radar</span>
 
 
-<span class="k">def</span> <span class="nf">merge_fields_icon</span><span class="p">(</span><span class="n">filename_list</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_fields_icon</span><span class="p">(</span><span class="n">filename_list</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    merge COSMO fields in Rainbow file format</span>
 
@@ -5680,7 +5852,7 @@
     <span class="k">return</span> <span class="n">radar</span>
 
 
-<span class="k">def</span> <span class="nf">get_data_rainbow</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">datatype</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_data_rainbow</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">datatype</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    gets rainbow radar data</span>
 
@@ -5750,7 +5922,7 @@
     <span class="k">return</span> <span class="n">radar</span>
 
 
-<span class="k">def</span> <span class="nf">get_data_rad4alp</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">scan_name</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_data_rad4alp</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">scan_name</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    gets rad4alp radar data</span>
 
@@ -5877,7 +6049,7 @@
     <span class="k">return</span> <span class="n">radar</span>
 
 
-<span class="k">def</span> <span class="nf">get_data_odim</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">scan_name</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_data_odim</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">scan_name</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    gets ODIM radar data</span>
 
@@ -6070,7 +6242,7 @@
     <span class="k">return</span> <span class="n">radar</span>
 
 
-<span class="k">def</span> <span class="nf">get_data_odimgrid</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">mf_scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_data_odimgrid</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">mf_scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ind_rad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    gets ODIM grid data</span>
 
@@ -6174,7 +6346,7 @@
     <span class="k">return</span> <span class="n">grid</span>
 
 
-<span class="k">def</span> <span class="nf">get_data_gamic</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">pulse_width</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_data_gamic</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">,</span> <span class="n">pulse_width</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    gets GAMIC radar data</span>
 
@@ -6205,7 +6377,7 @@
     <span class="k">return</span> <span class="n">radar</span>
 
 
-<span class="k">def</span> <span class="nf">get_data_mxpol</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_data_mxpol</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">datatype_list</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    gets MXPol radar data</span>
 
@@ -6237,7 +6409,7 @@
 
 <div class="viewcode-block" id="add_field">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.add_field.html#pyrad.io.add_field">[docs]</a>
-<span class="k">def</span> <span class="nf">add_field</span><span class="p">(</span><span class="n">radar_dest</span><span class="p">,</span> <span class="n">radar_orig</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_field</span><span class="p">(</span><span class="n">radar_dest</span><span class="p">,</span> <span class="n">radar_orig</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    adds the fields from orig radar into dest radar. If they are not in the</span>
 <span class="sd">    same grid, interpolates them to dest grid</span>
@@ -6294,7 +6466,7 @@
 
 <div class="viewcode-block" id="interpol_field">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.interpol_field.html#pyrad.io.interpol_field">[docs]</a>
-<span class="k">def</span> <span class="nf">interpol_field</span><span class="p">(</span><span class="n">radar_dest</span><span class="p">,</span> <span class="n">radar_orig</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ang_tol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">interpol_field</span><span class="p">(</span><span class="n">radar_dest</span><span class="p">,</span> <span class="n">radar_orig</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ang_tol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    interpolates field field_name contained in radar_orig to the grid in</span>
 <span class="sd">    radar_dest</span>
@@ -6388,8 +6560,9 @@
                 <span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">warn</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s1">&#39;Scan type of destination radar is </span><span class="si">{</span><span class="n">radar_dest</span><span class="o">.</span><span class="n">scan_type</span><span class="si">}</span><span class="s1">.&#39;</span>
-                    <span class="sa">f</span><span class="s1">&#39; Only ppi and rhi are supported&#39;</span><span class="p">)</span>
+                    <span class="sa">f</span><span class="s2">&quot;Scan type of destination radar is </span><span class="si">{</span><span class="n">radar_dest</span><span class="o">.</span><span class="n">scan_type</span><span class="si">}</span><span class="s2">.&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot; Only ppi and rhi are supported&quot;</span>
+                <span class="p">)</span>
 
             <span class="c1"># Reduce precision to avoid issues with floating numbers</span>
             <span class="n">angle_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">angle_new</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
@@ -6420,7 +6593,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">crop_grid</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">crop_grid</span><span class="p">(</span>
     <span class="n">grid</span><span class="p">,</span>
     <span class="n">lat_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">lat_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -6612,7 +6785,7 @@
     <span class="k">return</span> <span class="n">grid_crop</span>
 
 
-<span class="k">def</span> <span class="nf">merge_radars</span><span class="p">(</span><span class="n">radar1</span><span class="p">,</span> <span class="n">radar2</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_radars</span><span class="p">(</span><span class="n">radar1</span><span class="p">,</span> <span class="n">radar2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Versatile function that merges two radar objects even</span>
 <span class="sd">    if they do not have the same fields</span>
@@ -6666,7 +6839,7 @@
     <span class="k">return</span> <span class="n">radar</span>
 
 
-<span class="k">def</span> <span class="nf">merge_grids</span><span class="p">(</span><span class="n">grid1</span><span class="p">,</span> <span class="n">grid2</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_grids</span><span class="p">(</span><span class="n">grid1</span><span class="p">,</span> <span class="n">grid2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Merges two grids</span>
 
@@ -6847,8 +7020,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -6871,7 +7044,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

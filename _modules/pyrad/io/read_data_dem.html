@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,10 +26,10 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -37,10 +37,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -326,9 +326,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -391,29 +396,29 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">pathlib</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">RegularGridInterpolator</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.interpolate</span><span class="w"> </span><span class="kn">import</span> <span class="n">RegularGridInterpolator</span>
 
 <span class="c1"># check existence of gdal</span>
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">osgeo</span> <span class="kn">import</span> <span class="n">gdal</span><span class="p">,</span> <span class="n">osr</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">osgeo</span><span class="w"> </span><span class="kn">import</span> <span class="n">gdal</span><span class="p">,</span> <span class="n">osr</span>
 
     <span class="n">_GDAL_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">gdal</span>
-        <span class="kn">import</span> <span class="nn">osr</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">gdal</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">osr</span>
 
         <span class="n">_GDAL_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
         <span class="n">_GDAL_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">import</span> <span class="nn">pyart</span>
-<span class="kn">from</span> <span class="nn">pyart.config</span> <span class="kn">import</span> <span class="n">get_metadata</span>
-<span class="kn">from</span> <span class="nn">.read_data_icon</span> <span class="kn">import</span> <span class="n">_put_radar_in_swiss_coord</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyart.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_metadata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.read_data_icon</span><span class="w"> </span><span class="kn">import</span> <span class="n">_put_radar_in_swiss_coord</span>
 
 <span class="c1"># from memory_profiler import profile</span>
 
@@ -422,7 +427,7 @@
 
 <div class="viewcode-block" id="dem2radar_data">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.dem2radar_data.html#pyrad.io.dem2radar_data">[docs]</a>
-<span class="k">def</span> <span class="nf">dem2radar_data</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">dem_data</span><span class="p">,</span> <span class="n">slice_xy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">field_name</span><span class="o">=</span><span class="s2">&quot;visibility&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">dem2radar_data</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">dem_data</span><span class="p">,</span> <span class="n">slice_xy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">field_name</span><span class="o">=</span><span class="s2">&quot;visibility&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    get the DEM value corresponding to each radar gate using nearest</span>
 <span class="sd">    neighbour interpolation</span>
@@ -490,7 +495,7 @@
 <span class="c1"># @profile</span>
 
 
-<span class="k">def</span> <span class="nf">read_dem</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">field_name</span><span class="o">=</span><span class="s2">&quot;terrain_altitude&quot;</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">projparams</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_dem</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">field_name</span><span class="o">=</span><span class="s2">&quot;terrain_altitude&quot;</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">projparams</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generic reader that reads DEM data from any format, will infer the proper</span>
 <span class="sd">    reader from filename extension</span>
@@ -601,7 +606,7 @@
 <span class="c1"># @profile</span>
 
 
-<span class="k">def</span> <span class="nf">read_geotiff_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_geotiff_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads DEM data from a generic geotiff file, unit system is expected to be</span>
 <span class="sd">    in meters!</span>
@@ -690,7 +695,7 @@
 <span class="c1"># @profile</span>
 
 
-<span class="k">def</span> <span class="nf">read_ascii_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_ascii_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads DEM data from an ASCII file in the Swisstopo format, the</span>
 <span class="sd">    unit system is expected to be in meters!</span>
@@ -769,7 +774,7 @@
 
 <div class="viewcode-block" id="read_idrisi_data">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_idrisi_data.html#pyrad.io.read_idrisi_data">[docs]</a>
-<span class="k">def</span> <span class="nf">read_idrisi_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_idrisi_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads DEM data from an IDRISI .rst file</span>
 
@@ -814,11 +819,11 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">srs</span> <span class="o">=</span> <span class="n">osr</span><span class="o">.</span><span class="n">SpatialReference</span><span class="p">(</span><span class="n">wkt</span><span class="o">=</span><span class="n">prj</span><span class="p">)</span>
             <span class="n">projparams</span> <span class="o">=</span> <span class="n">_proj4_str_to_dict</span><span class="p">(</span><span class="n">srs</span><span class="o">.</span><span class="n">ExportToProj4</span><span class="p">())</span>
-        <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>    
+        <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
             <span class="n">projparams</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">pass</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">projparams</span><span class="p">:</span> <span class="c1"># Case of empty dict</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">projparams</span><span class="p">:</span>  <span class="c1"># Case of empty dict</span>
             <span class="n">projparams</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="n">rasterarray</span> <span class="o">=</span> <span class="n">raster</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
@@ -841,7 +846,7 @@
 
 <div class="viewcode-block" id="read_idrisi_metadata">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_idrisi_metadata.html#pyrad.io.read_idrisi_metadata">[docs]</a>
-<span class="k">def</span> <span class="nf">read_idrisi_metadata</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_idrisi_metadata</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads DEM metadata from a IDRISI .rdc file</span>
 
@@ -875,7 +880,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">_prepare_for_interpolation</span><span class="p">(</span><span class="n">x_radar</span><span class="p">,</span> <span class="n">y_radar</span><span class="p">,</span> <span class="n">dem_coord</span><span class="p">,</span> <span class="n">slice_xy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_prepare_for_interpolation</span><span class="p">(</span><span class="n">x_radar</span><span class="p">,</span> <span class="n">y_radar</span><span class="p">,</span> <span class="n">dem_coord</span><span class="p">,</span> <span class="n">slice_xy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    prepares the DEM 2D volume for interpolation:</span>
 <span class="sd">        1. if set slices the DEM data to the area</span>
@@ -954,7 +959,7 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">x_dem</span><span class="p">,</span> <span class="n">y_dem</span><span class="p">,</span> <span class="n">ind_xmin</span><span class="p">,</span> <span class="n">ind_ymin</span><span class="p">,</span> <span class="n">ind_xmax</span><span class="p">,</span> <span class="n">ind_ymax</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_proj4_str_to_dict</span><span class="p">(</span><span class="n">proj4str</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_proj4_str_to_dict</span><span class="p">(</span><span class="n">proj4str</span><span class="p">):</span>
     <span class="c1"># COnverts proj4 string to dict as can be used by part</span>
     <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span>
@@ -963,7 +968,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_get_lv1903_proj4</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_lv1903_proj4</span><span class="p">():</span>
     <span class="c1"># Gets proj4 dict for Swiss LV1903 coordinates</span>
     <span class="k">if</span> <span class="n">_GDAL_AVAILABLE</span><span class="p">:</span>
         <span class="n">lv1903</span> <span class="o">=</span> <span class="n">osr</span><span class="o">.</span><span class="n">SpatialReference</span><span class="p">()</span>
@@ -1021,8 +1026,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1045,7 +1050,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,10 +26,10 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -37,10 +37,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -326,9 +326,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -396,40 +401,40 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">pyart</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">pytda</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pytda</span>
 
     <span class="n">_PYTDA_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_PYTDA_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">pydda</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pydda</span>
 
     <span class="n">_PYDDA_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_PYDDA_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">from</span> <span class="nn">..io.io_aux</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">get_datatype_fields</span><span class="p">,</span>
     <span class="n">get_fieldname_pyart</span><span class="p">,</span>
     <span class="n">convert_pydda_to_pyart_grid</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">..io</span> <span class="kn">import</span> <span class="n">read_radiosounding_igra</span>
-<span class="kn">from</span> <span class="nn">.process_grid</span> <span class="kn">import</span> <span class="n">process_grid</span>
-<span class="kn">from</span> <span class="nn">..util</span> <span class="kn">import</span> <span class="n">compute_average_vad</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_radiosounding_igra</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.process_grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">process_grid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_average_vad</span>
 
 
 <div class="viewcode-block" id="process_turbulence">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_turbulence.html#pyrad.proc.process_turbulence">[docs]</a>
-<span class="k">def</span> <span class="nf">process_turbulence</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_turbulence</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes turbulence from the Doppler spectrum width and reflectivity using</span>
 <span class="sd">    the PyTDA package</span>
@@ -444,7 +449,7 @@
 
 <span class="sd">        datatype : string. Dataset keyword</span>
 <span class="sd">            The input data type, must contain,</span>
-<span class="sd">            &quot;dBuZ&quot; or &quot;dBZ&quot; or &quot;dBZc&quot; or &quot;dBuZv&quot; or &quot;dBZv&quot; or &quot;dBZvc&quot; or &quot;CNRc&quot;, and, </span>
+<span class="sd">            &quot;dBuZ&quot; or &quot;dBZ&quot; or &quot;dBZc&quot; or &quot;dBuZv&quot; or &quot;dBZv&quot; or &quot;dBZvc&quot; or &quot;CNRc&quot;, and,</span>
 <span class="sd">            &quot;W&quot; or &quot;Wv&quot; or &quot;Wu&quot; or &quot;Wvu&quot; or &quot;WD&quot; or &quot;WDc&quot;</span>
 <span class="sd">        radius : float. Dataset keyword</span>
 <span class="sd">            Search radius for calculating Eddy Dissipation Rate (EDR).</span>
@@ -604,7 +609,7 @@
 
 <div class="viewcode-block" id="process_dealias_fourdd">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_dealias_fourdd.html#pyrad.proc.process_dealias_fourdd">[docs]</a>
-<span class="k">def</span> <span class="nf">process_dealias_fourdd</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_dealias_fourdd</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dealiases the Doppler velocity field using the 4DD technique</span>
 <span class="sd">    from Curtis and Houze, 2001</span>
@@ -731,7 +736,7 @@
 
 <div class="viewcode-block" id="process_dealias_region_based">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_dealias_region_based.html#pyrad.proc.process_dealias_region_based">[docs]</a>
-<span class="k">def</span> <span class="nf">process_dealias_region_based</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_dealias_region_based</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dealiases the Doppler velocity field using a region based algorithm</span>
 
@@ -835,7 +840,7 @@
 
 <div class="viewcode-block" id="process_dealias_unwrap_phase">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_dealias_unwrap_phase.html#pyrad.proc.process_dealias_unwrap_phase">[docs]</a>
-<span class="k">def</span> <span class="nf">process_dealias_unwrap_phase</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_dealias_unwrap_phase</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dealiases the Doppler velocity field using multi-dimensional phase</span>
 <span class="sd">    unwrapping</span>
@@ -916,7 +921,7 @@
 
 <div class="viewcode-block" id="process_radial_velocity">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_radial_velocity.html#pyrad.proc.process_radial_velocity">[docs]</a>
-<span class="k">def</span> <span class="nf">process_radial_velocity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_radial_velocity</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates the radial velocity respect to the radar from the wind velocity</span>
 
@@ -1052,7 +1057,7 @@
 
 <div class="viewcode-block" id="process_wind_vel">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_wind_vel.html#pyrad.proc.process_wind_vel">[docs]</a>
-<span class="k">def</span> <span class="nf">process_wind_vel</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_wind_vel</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates the horizontal or vertical component of the wind from the</span>
 <span class="sd">    radial velocity</span>
@@ -1120,7 +1125,7 @@
 
 <div class="viewcode-block" id="process_windshear">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_windshear.html#pyrad.proc.process_windshear">[docs]</a>
-<span class="k">def</span> <span class="nf">process_windshear</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_windshear</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates the wind shear from the wind velocity</span>
 
@@ -1183,7 +1188,7 @@
 
 <div class="viewcode-block" id="process_windshear_lidar">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_windshear_lidar.html#pyrad.proc.process_windshear_lidar">[docs]</a>
-<span class="k">def</span> <span class="nf">process_windshear_lidar</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_windshear_lidar</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates the wind shear from the wind velocity of lidar scans</span>
 
@@ -1247,7 +1252,7 @@
 
 <div class="viewcode-block" id="process_vad">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_vad.html#pyrad.proc.process_vad">[docs]</a>
-<span class="k">def</span> <span class="nf">process_vad</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_vad</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates vertical wind profile using the VAD (velocity Azimuth Display)</span>
 <span class="sd">    technique</span>
@@ -1329,7 +1334,7 @@
 
 <div class="viewcode-block" id="process_dda">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_dda.html#pyrad.proc.process_dda">[docs]</a>
-<span class="k">def</span> <span class="nf">process_dda</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_dda</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates horizontal wind speed and direction with a multi-doppler approach</span>
 <span class="sd">    This method uses the python package pyDDA</span>
@@ -1650,8 +1655,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1674,7 +1679,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

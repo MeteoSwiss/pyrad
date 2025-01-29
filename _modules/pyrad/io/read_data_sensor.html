@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,10 +26,10 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -37,10 +37,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -326,9 +326,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -411,25 +416,25 @@
 <span class="sd">    read_fzl_igra</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">glob</span>
-<span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">import</span> <span class="nn">csv</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span><span class="p">,</span> <span class="n">BytesIO</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">zipfile</span> <span class="kn">import</span> <span class="n">ZipFile</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">io</span><span class="w"> </span><span class="kn">import</span> <span class="n">StringIO</span><span class="p">,</span> <span class="n">BytesIO</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">zipfile</span><span class="w"> </span><span class="kn">import</span> <span class="n">ZipFile</span>
 
-<span class="kn">from</span> <span class="nn">pyart.config</span> <span class="kn">import</span> <span class="n">get_fillvalue</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyart.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_fillvalue</span>
 
 
 <div class="viewcode-block" id="read_windmills_data">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_windmills_data.html#pyrad.io.read_windmills_data">[docs]</a>
-<span class="k">def</span> <span class="nf">read_windmills_data</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_windmills_data</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read the wind mills data csv file</span>
 
@@ -650,7 +655,7 @@
 
 <div class="viewcode-block" id="read_thundertracking_info">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_thundertracking_info.html#pyrad.io.read_thundertracking_info">[docs]</a>
-<span class="k">def</span> <span class="nf">read_thundertracking_info</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_thundertracking_info</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads the TRT info used for thundertracking</span>
 
@@ -710,7 +715,7 @@
 
 <div class="viewcode-block" id="read_trt_info_all">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_trt_info_all.html#pyrad.io.read_trt_info_all">[docs]</a>
-<span class="k">def</span> <span class="nf">read_trt_info_all</span><span class="p">(</span><span class="n">info_path</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_trt_info_all</span><span class="p">(</span><span class="n">info_path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads all the TRT info files</span>
 
@@ -803,7 +808,7 @@
 
 <div class="viewcode-block" id="read_trt_info_all2">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_trt_info_all2.html#pyrad.io.read_trt_info_all2">[docs]</a>
-<span class="k">def</span> <span class="nf">read_trt_info_all2</span><span class="p">(</span><span class="n">info_path</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_trt_info_all2</span><span class="p">(</span><span class="n">info_path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads all the TRT info files</span>
 
@@ -896,7 +901,7 @@
 
 <div class="viewcode-block" id="read_trt_info">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_trt_info.html#pyrad.io.read_trt_info">[docs]</a>
-<span class="k">def</span> <span class="nf">read_trt_info</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_trt_info</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads the TRT info used for thundertracking and contained in a text file.</span>
 
@@ -1009,7 +1014,7 @@
 
 <div class="viewcode-block" id="read_trt_info2">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_trt_info2.html#pyrad.io.read_trt_info2">[docs]</a>
-<span class="k">def</span> <span class="nf">read_trt_info2</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_trt_info2</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads the TRT info used for thundertracking and contained in a text file.</span>
 
@@ -1150,7 +1155,7 @@
 
 <div class="viewcode-block" id="read_trt_scores">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_trt_scores.html#pyrad.io.read_trt_scores">[docs]</a>
-<span class="k">def</span> <span class="nf">read_trt_scores</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_trt_scores</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads the TRT scores contained in a text file. The file has the following</span>
 <span class="sd">    fields:</span>
@@ -1233,7 +1238,7 @@
 
 <div class="viewcode-block" id="read_trt_cell_lightning">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_trt_cell_lightning.html#pyrad.io.read_trt_cell_lightning">[docs]</a>
-<span class="k">def</span> <span class="nf">read_trt_cell_lightning</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_trt_cell_lightning</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads the lightning data of a TRT cell. The file has the following</span>
 <span class="sd">    fields:</span>
@@ -1319,7 +1324,7 @@
 
 <div class="viewcode-block" id="read_trt_data">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_trt_data.html#pyrad.io.read_trt_data">[docs]</a>
-<span class="k">def</span> <span class="nf">read_trt_data</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_trt_data</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads the TRT data contained in a text file. The file has the following</span>
 <span class="sd">    fields:</span>
@@ -1667,7 +1672,7 @@
 
 <div class="viewcode-block" id="read_trt_traj_data">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_trt_traj_data.html#pyrad.io.read_trt_traj_data">[docs]</a>
-<span class="k">def</span> <span class="nf">read_trt_traj_data</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_trt_traj_data</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads the TRT cell data contained in a text file. The file has the</span>
 <span class="sd">    following fields:</span>
@@ -1906,7 +1911,7 @@
 
 <div class="viewcode-block" id="read_trt_thundertracking_traj_data">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_trt_thundertracking_traj_data.html#pyrad.io.read_trt_thundertracking_traj_data">[docs]</a>
-<span class="k">def</span> <span class="nf">read_trt_thundertracking_traj_data</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_trt_thundertracking_traj_data</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads the TRT cell data contained in a text file. The file has the</span>
 <span class="sd">    following fields:</span>
@@ -2172,7 +2177,7 @@
 
 <div class="viewcode-block" id="read_lightning">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_lightning.html#pyrad.io.read_lightning">[docs]</a>
-<span class="k">def</span> <span class="nf">read_lightning</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">filter_data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_lightning</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">filter_data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads lightning data contained in a text file. The file has the following</span>
 <span class="sd">    fields:</span>
@@ -2279,7 +2284,7 @@
 
 <div class="viewcode-block" id="read_meteorage">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_meteorage.html#pyrad.io.read_meteorage">[docs]</a>
-<span class="k">def</span> <span class="nf">read_meteorage</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_meteorage</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads METEORAGE lightning data contained in a text file. The file has the</span>
 <span class="sd">    following fields:</span>
@@ -2415,7 +2420,7 @@
 
 <div class="viewcode-block" id="read_lightning_traj">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_lightning_traj.html#pyrad.io.read_lightning_traj">[docs]</a>
-<span class="k">def</span> <span class="nf">read_lightning_traj</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_lightning_traj</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads lightning trajectory data contained in a csv file. The file has the following</span>
 <span class="sd">    fields:</span>
@@ -2530,7 +2535,7 @@
 
 <div class="viewcode-block" id="read_lightning_all">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_lightning_all.html#pyrad.io.read_lightning_all">[docs]</a>
-<span class="k">def</span> <span class="nf">read_lightning_all</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_lightning_all</span><span class="p">(</span>
     <span class="n">fname</span><span class="p">,</span>
     <span class="n">labels</span><span class="o">=</span><span class="p">[</span>
         <span class="s2">&quot;hydro [-]&quot;</span><span class="p">,</span>
@@ -2619,7 +2624,7 @@
 
 <div class="viewcode-block" id="get_sensor_data">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.get_sensor_data.html#pyrad.io.get_sensor_data">[docs]</a>
-<span class="k">def</span> <span class="nf">get_sensor_data</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">cfg</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_sensor_data</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">cfg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Gets data from a point measurement sensor (rain gauge or disdrometer)</span>
 
@@ -2643,12 +2648,15 @@
     <span class="k">if</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensor&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;rgage&quot;</span><span class="p">:</span>
         <span class="c1"># Try several file formats</span>
         <span class="n">datapath1</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;smnpath&quot;</span><span class="p">],</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m&quot;</span><span class="p">))</span>
-        <span class="n">datapath2</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;smnpath&quot;</span><span class="p">],</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">),</span> 
-                                <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensorid&quot;</span><span class="p">])</span>
-        <span class="n">datafile1</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">datapath1</span><span class="p">,</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
-                                <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensorid&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.csv*&quot;</span><span class="p">)</span>
-        <span class="n">datafile2</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">datapath2</span><span class="p">,</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
-                                <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensorid&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.csv*&quot;</span><span class="p">)</span>
+        <span class="n">datapath2</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;smnpath&quot;</span><span class="p">],</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">),</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensorid&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">datafile1</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">datapath1</span><span class="p">,</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensorid&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.csv*&quot;</span>
+        <span class="p">)</span>
+        <span class="n">datafile2</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">datapath2</span><span class="p">,</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensorid&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.csv*&quot;</span>
+        <span class="p">)</span>
 
         <span class="n">files1</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">datafile1</span><span class="p">)</span>
         <span class="n">files2</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">datafile2</span><span class="p">)</span>
@@ -2657,15 +2665,17 @@
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">files2</span><span class="p">):</span>
             <span class="n">datafile</span> <span class="o">=</span> <span class="n">files2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Could not find any raingauge file with names </span><span class="si">{datafile1}</span><span class="s2"> or </span><span class="si">{datafile2}</span><span class="s2">&quot;</span><span class="p">)</span>
-            
+            <span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Could not find any raingauge file with names </span><span class="si">{datafile1}</span><span class="s2"> or </span><span class="si">{datafile2}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">datafile</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">num_columns</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">))</span>
+            <span class="n">num_columns</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">num_columns</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
             <span class="n">_</span><span class="p">,</span> <span class="n">sensordate</span><span class="p">,</span> <span class="n">sensorvalue</span> <span class="o">=</span> <span class="n">read_smn2</span><span class="p">(</span><span class="n">datafile</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">_</span><span class="p">,</span> <span class="n">sensordate</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">sensorvalue</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">read_smn</span><span class="p">(</span><span class="n">datafile</span><span class="p">)</span>
-        
+
         <span class="k">if</span> <span class="n">sensordate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
         <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;RG&quot;</span>
@@ -2760,9 +2770,10 @@
     <span class="k">return</span> <span class="n">sensordate</span><span class="p">,</span> <span class="n">sensorvalue</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">period</span></div>
 
 
+
 <div class="viewcode-block" id="read_smn">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_smn.html#pyrad.io.read_smn">[docs]</a>
-<span class="k">def</span> <span class="nf">read_smn</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_smn</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads SwissMetNet data contained in a csv or gzipped csv file.</span>
 
@@ -2780,33 +2791,35 @@
 
     <span class="k">try</span><span class="p">:</span>
         <span class="c1"># Use pandas to read the file (supports .gz files directly)</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">compression</span><span class="o">=</span><span class="s1">&#39;gzip&#39;</span> <span class="k">if</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.gz&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">compression</span><span class="o">=</span><span class="s2">&quot;gzip&quot;</span> <span class="k">if</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.gz&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
 
         <span class="c1"># Convert date strings to datetime objects</span>
-        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;DateTime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;DateTime&#39;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S&#39;</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;DateTime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;DateTime&quot;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span>
 
         <span class="c1"># Identify columns by searching for keywords (handles cases like AirPressure:degC)</span>
-        <span class="n">air_pressure_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s1">&#39;AirPressure&#39;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">temp_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s1">&#39;2mTemperature&#39;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">rh_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s1">&#39;RH&#39;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">precip_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s1">&#39;Precipitation&#39;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">wspeed_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s1">&#39;Windspeed&#39;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">wdir_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s1">&#39;Winddirection&#39;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">air_pressure_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">&quot;AirPressure&quot;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">temp_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">&quot;2mTemperature&quot;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">rh_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">&quot;RH&quot;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">precip_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">&quot;Precipitation&quot;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">wspeed_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">&quot;Windspeed&quot;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">wdir_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">&quot;Winddirection&quot;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="c1"># Mask invalid data (fill_value)</span>
-        <span class="n">pressure</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">air_pressure_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span> <span class="n">fill_value</span><span class="p">)</span>
-        <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">temp_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span> <span class="n">fill_value</span><span class="p">)</span>
-        <span class="n">rh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">rh_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span> <span class="n">fill_value</span><span class="p">)</span>
-        <span class="n">precip</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">precip_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span> <span class="n">fill_value</span><span class="p">)</span>
-        <span class="n">wspeed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">wspeed_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span> <span class="n">fill_value</span><span class="p">)</span>
-        <span class="n">wdir</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">wdir_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span> <span class="n">fill_value</span><span class="p">)</span>
+        <span class="n">pressure</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">air_pressure_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">fill_value</span>
+        <span class="p">)</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">temp_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">fill_value</span><span class="p">)</span>
+        <span class="n">rh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">rh_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">fill_value</span><span class="p">)</span>
+        <span class="n">precip</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">precip_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">fill_value</span><span class="p">)</span>
+        <span class="n">wspeed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">wspeed_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">fill_value</span><span class="p">)</span>
+        <span class="n">wdir</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">wdir_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">fill_value</span><span class="p">)</span>
 
         <span class="c1"># Convert precip from mm/10min to mm/h</span>
         <span class="n">precip</span> <span class="o">*=</span> <span class="mf">6.0</span>
 
         <span class="c1"># Extract smn_id and date</span>
-        <span class="n">smn_id</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;StationID&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
-        <span class="n">date</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;DateTime&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">smn_id</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;StationID&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;DateTime&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="n">smn_id</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">rh</span><span class="p">,</span> <span class="n">precip</span><span class="p">,</span> <span class="n">wspeed</span><span class="p">,</span> <span class="n">wdir</span>
 
@@ -2818,7 +2831,7 @@
 
 <div class="viewcode-block" id="read_smn2">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_smn2.html#pyrad.io.read_smn2">[docs]</a>
-<span class="k">def</span> <span class="nf">read_smn2</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_smn2</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads SwissMetNet data contained in a csv file with format</span>
 <span class="sd">    station,time,value</span>
@@ -2858,7 +2871,7 @@
 
 <div class="viewcode-block" id="read_knmi">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_knmi.html#pyrad.io.read_knmi">[docs]</a>
-<span class="k">def</span> <span class="nf">read_knmi</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">col_names</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_knmi</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">col_names</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a file containing precipitation data from sensors retrieved from the</span>
 <span class="sd">    KNMI archive. There is data from Present Weather Sensors (PWS) and rain</span>
@@ -2922,7 +2935,7 @@
 
 <div class="viewcode-block" id="read_coord_sensors">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_coord_sensors.html#pyrad.io.read_coord_sensors">[docs]</a>
-<span class="k">def</span> <span class="nf">read_coord_sensors</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_coord_sensors</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a file containing the coordinates of multiple sensors. File of form</span>
 <span class="sd">    lat,lon,StationID, header is optional</span>
@@ -2961,7 +2974,7 @@
 
 <div class="viewcode-block" id="read_disdro_scattering">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_disdro_scattering.html#pyrad.io.read_disdro_scattering">[docs]</a>
-<span class="k">def</span> <span class="nf">read_disdro_scattering</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_disdro_scattering</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads scattering parameters computed from disdrometer data contained in a</span>
 <span class="sd">    text file</span>
@@ -3103,7 +3116,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">read_disdro</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_disdro</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads scattering parameters computed from disdrometer data contained in a</span>
 <span class="sd">    text file</span>
@@ -3164,7 +3177,7 @@
 
 <div class="viewcode-block" id="read_disdro_parsivel">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_disdro_parsivel.html#pyrad.io.read_disdro_parsivel">[docs]</a>
-<span class="k">def</span> <span class="nf">read_disdro_parsivel</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_disdro_parsivel</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads data collected by a parsivel disdrometer and stored in a csv file</span>
 
@@ -3187,7 +3200,7 @@
 
 <div class="viewcode-block" id="read_radiosounding_wyoming">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_radiosounding_wyoming.html#pyrad.io.read_radiosounding_wyoming">[docs]</a>
-<span class="k">def</span> <span class="nf">read_radiosounding_wyoming</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">dtime</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_radiosounding_wyoming</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">dtime</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Download radiosounding data from the University of Wyoming website.</span>
 
@@ -3240,7 +3253,7 @@
 
 <div class="viewcode-block" id="read_radiosounding_igra">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_radiosounding_igra.html#pyrad.io.read_radiosounding_igra">[docs]</a>
-<span class="k">def</span> <span class="nf">read_radiosounding_igra</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">dtime</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_radiosounding_igra</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">dtime</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Download radiosounding data from  from the Integrated Global Radiosonde Archive</span>
 <span class="sd">    (IGRA).</span>
@@ -3261,7 +3274,7 @@
 <span class="sd">    doc/igra2-data-format.txt</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Downloading sounding from IGRA database...&quot;</span><span class="p">)</span>
-    
+
     <span class="n">COLUMNS_SOUNDING</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s2">&quot;LVLTYPE1&quot;</span><span class="p">,</span>
         <span class="s2">&quot;LVLTYPE2&quot;</span><span class="p">,</span>
@@ -3389,7 +3402,7 @@
 
 <div class="viewcode-block" id="read_fzl_igra">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_fzl_igra.html#pyrad.io.read_fzl_igra">[docs]</a>
-<span class="k">def</span> <span class="nf">read_fzl_igra</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">dtime</span><span class="p">,</span> <span class="n">dscfg</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_fzl_igra</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">dtime</span><span class="p">,</span> <span class="n">dscfg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get an estimation of the freezing level height from the</span>
 <span class="sd">    Integrated Global Radiosonde Archive (IGRA)</span>
@@ -3409,21 +3422,20 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">dscfg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">dscfg</span> <span class="o">=</span> <span class="p">{}</span>
-        
+
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">_check_new_sounding</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;latest_sounding_time&quot;</span><span class="p">]</span>
-                <span class="p">,</span> <span class="n">dtime</span><span class="p">):</span> 
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">_check_new_sounding</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;latest_sounding_time&quot;</span><span class="p">],</span> <span class="n">dtime</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No new sounding available, retrieving latest sounding from memory&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;latest_sounding_value&quot;</span><span class="p">]</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
         <span class="k">pass</span>
-    
+
     <span class="n">sounding</span> <span class="o">=</span> <span class="n">read_radiosounding_igra</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">dtime</span><span class="p">)</span>
     <span class="n">height</span> <span class="o">=</span> <span class="n">sounding</span><span class="p">[</span><span class="s2">&quot;GPH&quot;</span><span class="p">]</span>
     <span class="n">temp</span> <span class="o">=</span> <span class="n">sounding</span><span class="p">[</span><span class="s2">&quot;TEMP&quot;</span><span class="p">]</span>
 
     <span class="n">fzl</span> <span class="o">=</span> <span class="mi">0</span>
-    
+
     <span class="k">if</span> <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">temp</span><span class="p">)):</span>
             <span class="k">if</span> <span class="n">height</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -3440,27 +3452,30 @@
         <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;latest_sounding_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dtime</span>
         <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;latest_sounding_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fzl</span>
-    
+
     <span class="k">return</span> <span class="n">fzl</span></div>
 
 
-<span class="k">def</span> <span class="nf">_closest_sounding_time</span><span class="p">(</span><span class="n">date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="p">:</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_closest_sounding_time</span><span class="p">(</span><span class="n">date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="p">:</span>
     <span class="c1"># Get the hour of the given date</span>
     <span class="n">hour</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">hour</span>
     <span class="c1"># Find the closest radiosounding time based on the hour</span>
     <span class="k">if</span> <span class="n">hour</span> <span class="o">&gt;=</span> <span class="mi">18</span><span class="p">:</span>
         <span class="c1"># Closest to 00 UTC (covers 18:00 - 23:59 and 00:00 - 05:59)</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">hour</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">minute</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">second</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">microsecond</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> 
-            <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span> <span class="o">=</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+            <span class="n">hour</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">minute</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">second</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">microsecond</span><span class="o">=</span><span class="mi">0</span>
+        <span class="p">)</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">hour</span> <span class="o">&lt;=</span> <span class="mi">6</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">hour</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">minute</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">second</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">microsecond</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Closest to 12 UTC (covers 06:00 - 17:59)</span>
         <span class="k">return</span> <span class="n">date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">hour</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">minute</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">second</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">microsecond</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">_check_new_sounding</span><span class="p">(</span><span class="n">date1</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">date2</span><span class="p">:</span> <span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_new_sounding</span><span class="p">(</span><span class="n">date1</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">date2</span><span class="p">:</span> <span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="c1"># Will check whether a new sounding is available</span>
-    
+
     <span class="c1"># Get the closest radiosounding times for both dates</span>
     <span class="n">date1_sounding_time</span> <span class="o">=</span> <span class="n">_closest_sounding_time</span><span class="p">(</span><span class="n">date1</span><span class="p">)</span>
     <span class="n">date2_sounding_time</span> <span class="o">=</span> <span class="n">_closest_sounding_time</span><span class="p">(</span><span class="n">date2</span><span class="p">)</span>
@@ -3498,8 +3513,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -3522,7 +3537,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

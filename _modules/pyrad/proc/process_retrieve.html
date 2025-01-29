@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,10 +26,10 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -37,10 +37,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -326,9 +326,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -402,25 +407,25 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">pyart</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 
-<span class="kn">from</span> <span class="nn">..io.io_aux</span> <span class="kn">import</span> <span class="n">get_datatype_fields</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span>
-<span class="kn">from</span> <span class="nn">..io.io_aux</span> <span class="kn">import</span> <span class="n">get_file_list</span>
-<span class="kn">from</span> <span class="nn">..io.read_data_radar</span> <span class="kn">import</span> <span class="n">interpol_field</span>
-<span class="kn">from</span> <span class="nn">..io.read_data_other</span> <span class="kn">import</span> <span class="n">read_rhi_profile</span><span class="p">,</span> <span class="n">read_vpr_theo_parameters</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_datatype_fields</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_file_list</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.read_data_radar</span><span class="w"> </span><span class="kn">import</span> <span class="n">interpol_field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.read_data_other</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_rhi_profile</span><span class="p">,</span> <span class="n">read_vpr_theo_parameters</span>
 
-<span class="kn">from</span> <span class="nn">..util.radar_utils</span> <span class="kn">import</span> <span class="n">time_avg_range</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util.radar_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">time_avg_range</span>
 
 
 <div class="viewcode-block" id="process_ccor">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_ccor.html#pyrad.proc.process_ccor">[docs]</a>
-<span class="k">def</span> <span class="nf">process_ccor</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_ccor</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the Clutter Correction Ratio, i.e. the ratio between the</span>
 <span class="sd">    signal without Doppler filtering and the signal with Doppler filtering</span>
@@ -488,7 +493,7 @@
 
 <div class="viewcode-block" id="process_signal_power">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_signal_power.html#pyrad.proc.process_signal_power">[docs]</a>
-<span class="k">def</span> <span class="nf">process_signal_power</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_signal_power</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the signal power in dBm</span>
 
@@ -597,7 +602,7 @@
 
 <div class="viewcode-block" id="process_rcs_pr">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_rcs_pr.html#pyrad.proc.process_rcs_pr">[docs]</a>
-<span class="k">def</span> <span class="nf">process_rcs_pr</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_rcs_pr</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the radar cross-section (assuming a point target) from radar</span>
 <span class="sd">    reflectivity by first computing the received power and then the RCS from</span>
@@ -612,7 +617,7 @@
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
-<span class="sd">            The input data types, must contain, </span>
+<span class="sd">            The input data types, must contain,</span>
 <span class="sd">            &quot;dBZ&quot; or &quot;dBuZ&quot; or &quot;dBZc&quot; or &quot;dBuZc&quot; or &quot;dBZv&quot; or &quot;dBuZv&quot; or &quot;dBuZvc&quot;</span>
 <span class="sd">        AntennaGainH, AntennaGainV : float. Dataset keyword</span>
 <span class="sd">            The horizontal (vertical) polarization antenna gain [dB]. If None</span>
@@ -650,7 +655,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output field &quot;rcs_h&quot; or &quot;rcs_v&quot; (if vert. refl. were </span>
+<span class="sd">        dictionary containing the output field &quot;rcs_h&quot; or &quot;rcs_v&quot; (if vert. refl. were</span>
 <span class="sd">        provided)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
@@ -732,7 +737,7 @@
 
 <div class="viewcode-block" id="process_rcs">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_rcs.html#pyrad.proc.process_rcs">[docs]</a>
-<span class="k">def</span> <span class="nf">process_rcs</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_rcs</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the radar cross-section (assuming a point target) from radar</span>
 <span class="sd">    reflectivity.</span>
@@ -764,7 +769,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output field &quot;rcs_h&quot; or &quot;rcs_v&quot; (if vert. refl. were </span>
+<span class="sd">        dictionary containing the output field &quot;rcs_h&quot; or &quot;rcs_v&quot; (if vert. refl. were</span>
 <span class="sd">        provided)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
@@ -821,7 +826,7 @@
 
 <div class="viewcode-block" id="process_vol_refl">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_vol_refl.html#pyrad.proc.process_vol_refl">[docs]</a>
-<span class="k">def</span> <span class="nf">process_vol_refl</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_vol_refl</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the volumetric reflectivity eta in 10log10(cm^2 km^-3)</span>
 
@@ -846,7 +851,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output field &quot;eta_h&quot; or &quot;eta_v&quot; (if vert. refl. were </span>
+<span class="sd">        dictionary containing the output field &quot;eta_h&quot; or &quot;eta_v&quot; (if vert. refl. were</span>
 <span class="sd">        provided)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
@@ -857,7 +862,16 @@
 
     <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;dBZ&quot;</span><span class="p">,</span> <span class="s2">&quot;dBuZ&quot;</span><span class="p">,</span> <span class="s2">&quot;dBZc&quot;</span><span class="p">,</span> <span class="s2">&quot;dBuZc&quot;</span><span class="p">,</span> <span class="s2">&quot;dBZv&quot;</span><span class="p">,</span> <span class="s2">&quot;dBuZv&quot;</span><span class="p">,</span> <span class="s2">&quot;dBZvc&quot;</span><span class="p">,</span> <span class="s2">&quot;dBuZvc&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="s2">&quot;dBZ&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dBuZ&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dBZc&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dBuZc&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dBZv&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dBuZv&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dBZvc&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dBuZvc&quot;</span><span class="p">,</span>
+        <span class="p">):</span>
             <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
@@ -893,7 +907,7 @@
 
 <div class="viewcode-block" id="process_refl_from_zdr">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_refl_from_zdr.html#pyrad.proc.process_refl_from_zdr">[docs]</a>
-<span class="k">def</span> <span class="nf">process_refl_from_zdr</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_refl_from_zdr</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the vertical or horizontal reflectivity from ZDR and the reflectivity</span>
 <span class="sd">    at the orthogonal polarization</span>
@@ -908,7 +922,7 @@
 
 <span class="sd">        datatype : list of string. Dataset keyword</span>
 <span class="sd">            The input data types, must contain,</span>
-<span class="sd">            &quot;ZDR&quot;, or &quot;ZDRc&quot;, or &quot;ZDRu and </span>
+<span class="sd">            &quot;ZDR&quot;, or &quot;ZDRc&quot;, or &quot;ZDRu and</span>
 <span class="sd">            &quot;dBZ&quot;, &quot;dBuZ&quot;, &quot;dBZc&quot;, &quot;dBuZc&quot;, &quot;dBZv&quot;, &quot;dBZvc&quot; &quot;dBuZv&quot;, or &quot;dBuZvc&quot;</span>
 <span class="sd">    radar_list : list of Radar objects</span>
 <span class="sd">        Optional. list of radar objects</span>
@@ -922,22 +936,31 @@
 <span class="sd">        &quot;dBZvc&quot; if &quot;ZDRc&quot; and &quot;dBZc&quot; were provided</span>
 <span class="sd">        &quot;dBZv&quot; if &quot;ZDRc&quot; and &quot;dBZvc&quot; were provided</span>
 <span class="sd">        &quot;dBuZ&quot; if &quot;ZDRu&quot; and &quot;dBuZ&quot; were provided</span>
-<span class="sd">        &quot;dBuZv&quot; if &quot;ZDRu&quot; and &quot;dBuZv&quot; were provided     </span>
-<span class="sd">           </span>
+<span class="sd">        &quot;dBuZv&quot; if &quot;ZDRu&quot; and &quot;dBuZv&quot; were provided</span>
+
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
-    
+
     <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;dBZ&quot;</span><span class="p">,</span> <span class="s2">&quot;dBuZ&quot;</span><span class="p">,</span> <span class="s2">&quot;dBZc&quot;</span><span class="p">,</span> <span class="s2">&quot;dBuZc&quot;</span><span class="p">,</span> <span class="s2">&quot;dBZv&quot;</span><span class="p">,</span> <span class="s2">&quot;dBuZv&quot;</span><span class="p">,</span> <span class="s2">&quot;dBZvc&quot;</span><span class="p">,</span> <span class="s2">&quot;dBuZvc&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="s2">&quot;dBZ&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dBuZ&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dBZc&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dBuZc&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dBZv&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dBuZv&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dBZvc&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dBuZvc&quot;</span><span class="p">,</span>
+        <span class="p">):</span>
             <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;ZDR&quot;</span><span class="p">,</span> <span class="s2">&quot;uZDR&quot;</span><span class="p">,</span> <span class="s2">&quot;ZDRc&quot;</span><span class="p">):</span>
             <span class="n">zdr_field</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-            
+
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid radar&quot;</span><span class="p">)</span>
@@ -951,21 +974,20 @@
     <span class="k">if</span> <span class="n">zdr_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to obtain reflectivity. Missing field &quot;</span> <span class="o">+</span> <span class="n">zdr_field</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
-    
+
     <span class="k">if</span> <span class="n">refl_field</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;_vv&quot;</span><span class="p">):</span>
         <span class="n">ort_refl_field</span> <span class="o">=</span> <span class="s2">&quot;reflectivity&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">ort_refl_field</span> <span class="o">=</span> <span class="s2">&quot;reflectivity_vv&quot;</span>
- 
+
     <span class="k">if</span> <span class="s2">&quot;unfiltered&quot;</span> <span class="ow">in</span> <span class="n">zdr_field</span><span class="p">:</span>
         <span class="n">ort_refl_field</span> <span class="o">=</span> <span class="s2">&quot;unfiltered&quot;</span> <span class="o">+</span> <span class="n">ort_refl_field</span>
-   
+
     <span class="k">if</span> <span class="s2">&quot;corrected&quot;</span> <span class="ow">in</span> <span class="n">zdr_field</span><span class="p">:</span>
         <span class="n">ort_refl_field</span> <span class="o">=</span> <span class="s2">&quot;corrected_&quot;</span> <span class="o">+</span> <span class="n">ort_refl_field</span>
-                    
+
     <span class="n">ort_refl_dict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">compute_refl_from_zdr</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">zdr_field</span><span class="o">=</span><span class="n">zdr_field</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span>
-        <span class="n">ort_refl_field</span><span class="o">=</span><span class="n">ort_refl_field</span>
+        <span class="n">radar</span><span class="p">,</span> <span class="n">zdr_field</span><span class="o">=</span><span class="n">zdr_field</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span> <span class="n">ort_refl_field</span><span class="o">=</span><span class="n">ort_refl_field</span>
     <span class="p">)</span>
     <span class="c1"># prepare for exit</span>
     <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)}</span>
@@ -974,9 +996,10 @@
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
+
 <div class="viewcode-block" id="process_snr">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_snr.html#pyrad.proc.process_snr">[docs]</a>
-<span class="k">def</span> <span class="nf">process_snr</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_snr</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes SNR</span>
 
@@ -1000,7 +1023,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_dataset : dict</span>
-<span class="sd">        dictionary containing the output field &quot;SNRh&quot; or &quot;SNRv&quot; (if vert. </span>
+<span class="sd">        dictionary containing the output field &quot;SNRh&quot; or &quot;SNRv&quot; (if vert.</span>
 <span class="sd">        refl. were provided)</span>
 <span class="sd">    ind_rad : int</span>
 <span class="sd">        radar index</span>
@@ -1048,7 +1071,7 @@
 
 <div class="viewcode-block" id="process_radial_noise_hs">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_radial_noise_hs.html#pyrad.proc.process_radial_noise_hs">[docs]</a>
-<span class="k">def</span> <span class="nf">process_radial_noise_hs</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_radial_noise_hs</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the radial noise from the signal power using the</span>
 <span class="sd">    Hildebrand and Sekhon 1974 method</span>
@@ -1145,7 +1168,7 @@
 
 <div class="viewcode-block" id="process_radial_noise_ivic">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_radial_noise_ivic.html#pyrad.proc.process_radial_noise_ivic">[docs]</a>
-<span class="k">def</span> <span class="nf">process_radial_noise_ivic</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_radial_noise_ivic</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the radial noise from the signal power using the</span>
 <span class="sd">    Ivic 2013 method</span>
@@ -1238,7 +1261,7 @@
 
 <div class="viewcode-block" id="process_l">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_l.html#pyrad.proc.process_l">[docs]</a>
-<span class="k">def</span> <span class="nf">process_l</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_l</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes L parameter (logarithmic cross-correlation ratio)</span>
 
@@ -1296,7 +1319,7 @@
 
 <div class="viewcode-block" id="process_cdr">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_cdr.html#pyrad.proc.process_cdr">[docs]</a>
-<span class="k">def</span> <span class="nf">process_cdr</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_cdr</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes approximation of Circular Depolarization Ratio</span>
 
@@ -1362,7 +1385,7 @@
 
 <div class="viewcode-block" id="process_vpr">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_vpr.html#pyrad.proc.process_vpr">[docs]</a>
-<span class="k">def</span> <span class="nf">process_vpr</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_vpr</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the vertical profile of reflectivity using the Meteo-France</span>
 <span class="sd">    operational algorithm</span>
@@ -1725,7 +1748,7 @@
 
 <div class="viewcode-block" id="process_rainrate">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_rainrate.html#pyrad.proc.process_rainrate">[docs]</a>
-<span class="k">def</span> <span class="nf">process_rainrate</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_rainrate</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates rainfall rate from polarimetric moments</span>
 
@@ -1738,24 +1761,24 @@
 <span class="sd">        data set configuration. Accepted Configuration Keywords::</span>
 
 <span class="sd">        datatype : string. Dataset keyword</span>
-<span class="sd">            The input data type, must contain, </span>
+<span class="sd">            The input data type, must contain,</span>
 <span class="sd">            If RR_METHOD == &quot;Z&quot; or &quot;ZPoly&quot;:</span>
 <span class="sd">                &quot;dBZ&quot; or &quot;dBZc&quot;</span>
 <span class="sd">            If RR_METHOD == &quot;KDP&quot;:</span>
 <span class="sd">                &quot;KDP&quot; or &quot;KDPc&quot;</span>
-<span class="sd">            If RR_METHOD == &quot;A&quot;:   </span>
+<span class="sd">            If RR_METHOD == &quot;A&quot;:</span>
 <span class="sd">                &quot;Ah&quot; or &quot;Ahc&quot;</span>
 <span class="sd">            If RR_METHOD == &quot;ZKDP&quot;:</span>
 <span class="sd">                &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
 <span class="sd">                &quot;KDP&quot; or &quot;KDPc&quot;</span>
 <span class="sd">            IF RR_METHOD == &quot;ZA&quot;:</span>
 <span class="sd">                &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
-<span class="sd">                &quot;Ah&quot; or &quot;Ahc&quot;       </span>
+<span class="sd">                &quot;Ah&quot; or &quot;Ahc&quot;</span>
 <span class="sd">            IF RR_METHID == &quot;hydro&quot;:</span>
 <span class="sd">                &quot;dBZ&quot; or &quot;dBZc&quot;, and,</span>
 <span class="sd">                &quot;Ah&quot; or &quot;Ahc&quot;, and,</span>
 <span class="sd">                &quot;hydro&quot;</span>
-<span class="sd">           </span>
+
 <span class="sd">        RR_METHOD : string. Dataset keyword</span>
 <span class="sd">            The rainfall rate estimation method. One of the following:</span>
 <span class="sd">            Z, ZPoly, KDP, A, ZKDP, ZA, hydro</span>
@@ -2045,7 +2068,7 @@
 
 <div class="viewcode-block" id="process_rainfall_accumulation">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_rainfall_accumulation.html#pyrad.proc.process_rainfall_accumulation">[docs]</a>
-<span class="k">def</span> <span class="nf">process_rainfall_accumulation</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_rainfall_accumulation</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes rainfall accumulation fields</span>
 
@@ -2254,7 +2277,7 @@
 
 <div class="viewcode-block" id="process_bird_density">
 <a class="viewcode-back" href="../../../API/generated/pyrad.proc.process_bird_density.html#pyrad.proc.process_bird_density">[docs]</a>
-<span class="k">def</span> <span class="nf">process_bird_density</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_bird_density</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the bird density from the volumetric reflectivity</span>
 
@@ -2347,8 +2370,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2371,7 +2394,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>
