@@ -1891,12 +1891,12 @@ def merge_scans_odim(
 
     """
     # find files to merge
-    if "bucket" in cfg:
+    if "s3BucketRead" in cfg:
         if not _BOTO3_AVAILABLE:
             warn("boto3 not installed")
             return None
         fname_list, scan_list_aux = get_scan_files_to_merge_s3(
-            cfg["s3path"],
+            cfg["s3PathRead"],
             scan_list,
             radar_name,
             radar_res,
@@ -1925,12 +1925,12 @@ def merge_scans_odim(
         return None
 
     radar = None
-    if "bucket" in cfg:
+    if "s3BucketRead" in cfg:
         s3_client = boto3.client(
             "s3",
-            endpoint_url=cfg["s3_url"],
-            aws_access_key_id=cfg["s3_key"],
-            aws_secret_access_key=cfg["s3_secret_key"],
+            endpoint_url=cfg["s3EndpointRead"],
+            aws_access_key_id=cfg["s3KeyRead"],
+            aws_secret_access_key=cfg["s3SecretRead"],
             verify=False,
         )
         daydir = voltime.strftime("%Y-%m-%d")
@@ -1939,9 +1939,9 @@ def merge_scans_odim(
             os.makedirs(datapath)
 
     for fname, scan in zip(fname_list, scan_list_aux):
-        if "bucket" in cfg:
+        if "s3BucketRead" in cfg:
             fname_aux = f"{datapath}{os.path.basename(fname)}"
-            s3_client.download_file(cfg["bucket"], fname, fname_aux)
+            s3_client.download_file(cfg["s3BucketRead"], fname, fname_aux)
         else:
             fname_aux = fname
 
@@ -1954,7 +1954,7 @@ def merge_scans_odim(
         else:
             radar = merge_radars(radar, radar_aux)
 
-        if "bucket" in cfg and "rm_s3_file" in cfg and cfg["rm_s3_file"]:
+        if "s3BucketRead" in cfg and "rm_s3_file" in cfg and cfg["rm_s3_file"]:
             os.remove(fname_aux)
 
     if radar is None:
@@ -2026,12 +2026,12 @@ def merge_scans_odimgrid(
         )
 
     # find files to merge
-    if "bucket" in cfg:
+    if "s3BucketRead" in cfg:
         if not _BOTO3_AVAILABLE:
             warn("boto3 not installed")
             return None
         fname_list, scan_list_aux = get_scan_files_to_merge_s3(
-            cfg["s3path"],
+            cfg["s3PathRead"],
             scan_list,
             None,
             None,
@@ -2056,12 +2056,12 @@ def merge_scans_odimgrid(
         return None
 
     grid = None
-    if "bucket" in cfg:
+    if "s3BucketRead" in cfg:
         s3_client = boto3.client(
             "s3",
-            endpoint_url=cfg["s3_url"],
-            aws_access_key_id=cfg["s3_key"],
-            aws_secret_access_key=cfg["s3_secret_key"],
+            endpoint_url=cfg["s3EndpointRead"],
+            aws_access_key_id=cfg["s3KeyRead"],
+            aws_secret_access_key=cfg["s3SecretRead"],
             verify=False,
         )
         daydir = voltime.strftime("%Y-%m-%d")
@@ -2070,9 +2070,9 @@ def merge_scans_odimgrid(
             os.makedirs(datapath)
 
     for fname in fname_list:
-        if "bucket" in cfg:
+        if "s3BucketRead" in cfg:
             fname_aux = f"{datapath}{os.path.basename(fname)}"
-            s3_client.download_file(cfg["bucket"], fname, fname_aux)
+            s3_client.download_file(cfg["s3BucketRead"], fname, fname_aux)
         else:
             fname_aux = fname
 
@@ -2088,7 +2088,7 @@ def merge_scans_odimgrid(
             for prod_field in grid_aux.fields.keys():
                 grid.add_field(prod_field, grid_aux.fields[prod_field])
 
-        if "bucket" in cfg and "rm_s3_file" in cfg and cfg["rm_s3_file"]:
+        if "s3BucketRead" in cfg and "rm_s3_file" in cfg and cfg["rm_s3_file"]:
             os.remove(fname_aux)
 
     if grid is None:
@@ -2164,12 +2164,12 @@ def merge_scans_knmih5_grid(
         odim_field_names.update(get_datatype_knmi(datatype))
 
     # find files to merge
-    if "bucket" in cfg:
+    if "s3BucketRead" in cfg:
         if not _BOTO3_AVAILABLE:
             warn("boto3 not installed")
             return None
         fname_list, scan_list_aux = get_scan_files_to_merge_s3(
-            cfg["s3path"],
+            cfg["s3PathRead"],
             scan_list,
             None,
             None,
@@ -2194,12 +2194,12 @@ def merge_scans_knmih5_grid(
         return None
 
     grid = None
-    if "bucket" in cfg:
+    if "s3BucketRead" in cfg:
         s3_client = boto3.client(
             "s3",
-            endpoint_url=cfg["s3_url"],
-            aws_access_key_id=cfg["s3_key"],
-            aws_secret_access_key=cfg["s3_secret_key"],
+            endpoint_url=cfg["s3EndpointRead"],
+            aws_access_key_id=cfg["s3KeyRead"],
+            aws_secret_access_key=cfg["s3SecretRead"],
             verify=False,
         )
         daydir = voltime.strftime("%Y-%m-%d")
@@ -2208,9 +2208,9 @@ def merge_scans_knmih5_grid(
             os.makedirs(datapath)
 
     for fname in fname_list:
-        if "bucket" in cfg:
+        if "s3BucketRead" in cfg:
             fname_aux = f"{datapath}{os.path.basename(fname)}"
-            s3_client.download_file(cfg["bucket"], fname, fname_aux)
+            s3_client.download_file(cfg["s3BucketRead"], fname, fname_aux)
         else:
             fname_aux = fname
 
@@ -2226,7 +2226,7 @@ def merge_scans_knmih5_grid(
             for prod_field in grid_aux.fields.keys():
                 grid.add_field(prod_field, grid_aux.fields[prod_field])
 
-        if "bucket" in cfg and "rm_s3_file" in cfg and cfg["rm_s3_file"]:
+        if "s3BucketRead" in cfg and "rm_s3_file" in cfg and cfg["rm_s3_file"]:
             os.remove(fname_aux)
 
     if grid is None:
@@ -2309,12 +2309,12 @@ def merge_scans_odimbirds(
         field_names_dict.update({datatype: get_fieldname_pyart(datatype)})
 
     # find files to merge
-    if "bucket" in cfg:
+    if "s3BucketRead" in cfg:
         if not _BOTO3_AVAILABLE:
             warn("boto3 not installed")
             return None
         fname_list, scan_list_aux = get_scan_files_to_merge_s3(
-            cfg["s3path"],
+            cfg["s3PathRead"],
             scan_list,
             radar_name,
             radar_res,
@@ -2343,12 +2343,12 @@ def merge_scans_odimbirds(
         return None
 
     radar = None
-    if "bucket" in cfg:
+    if "s3BucketRead" in cfg:
         s3_client = boto3.client(
             "s3",
-            endpoint_url=cfg["s3_url"],
-            aws_access_key_id=cfg["s3_key"],
-            aws_secret_access_key=cfg["s3_secret_key"],
+            endpoint_url=cfg["s3EndpointRead"],
+            aws_access_key_id=cfg["s3KeyRead"],
+            aws_secret_access_key=cfg["s3SecretRead"],
             verify=False,
         )
         daydir = voltime.strftime("%Y-%m-%d")
@@ -2357,9 +2357,9 @@ def merge_scans_odimbirds(
             os.makedirs(datapath)
 
     for fname in fname_list:
-        if "bucket" in cfg:
+        if "s3BucketRead" in cfg:
             fname_aux = f"{datapath}{os.path.basename(fname)}"
-            s3_client.download_file(cfg["bucket"], fname, fname_aux)
+            s3_client.download_file(cfg["s3BucketRead"], fname, fname_aux)
         else:
             fname_aux = fname
 
@@ -2374,7 +2374,7 @@ def merge_scans_odimbirds(
         else:
             radar = merge_radars(radar, radar_aux)
 
-        if "bucket" in cfg and "rm_s3_file" in cfg and cfg["rm_s3_file"]:
+        if "s3BucketRead" in cfg and "rm_s3_file" in cfg and cfg["rm_s3_file"]:
             os.remove(fname_aux)
 
     if radar is None:
@@ -2453,12 +2453,12 @@ def merge_scans_gamic(
 
     """
     # find files to merge
-    if "bucket" in cfg:
+    if "s3BucketRead" in cfg:
         if not _BOTO3_AVAILABLE:
             warn("boto3 not installed")
             return None
         fname_list, _ = get_scan_files_to_merge_s3(
-            cfg["s3path"],
+            cfg["s3PathRead"],
             scan_list,
             radar_name,
             radar_res,
@@ -2487,12 +2487,12 @@ def merge_scans_gamic(
         return None
 
     radar = None
-    if "bucket" in cfg:
+    if "s3BucketRead" in cfg:
         s3_client = boto3.client(
             "s3",
-            endpoint_url=cfg["s3_url"],
-            aws_access_key_id=cfg["s3_key"],
-            aws_secret_access_key=cfg["s3_secret_key"],
+            endpoint_url=cfg["s3EndpointRead"],
+            aws_access_key_id=cfg["s3KeyRead"],
+            aws_secret_access_key=cfg["s3SecretRead"],
             verify=False,
         )
         daydir = voltime.strftime("%Y-%m-%d")
@@ -2501,9 +2501,9 @@ def merge_scans_gamic(
             os.makedirs(datapath)
 
     for fname in fname_list:
-        if "bucket" in cfg:
+        if "s3BucketRead" in cfg:
             fname_aux = f"{datapath}{os.path.basename(fname)}"
-            s3_client.download_file(cfg["bucket"], fname, fname_aux)
+            s3_client.download_file(cfg["s3BucketRead"], fname, fname_aux)
         else:
             fname_aux = fname
 
@@ -2516,7 +2516,7 @@ def merge_scans_gamic(
         else:
             radar = merge_radars(radar, radar_aux)
 
-        if "bucket" in cfg and "rm_s3_file" in cfg and cfg["rm_s3_file"]:
+        if "s3BucketRead" in cfg and "rm_s3_file" in cfg and cfg["rm_s3_file"]:
             os.remove(fname_aux)
 
     if radar is None:
@@ -2570,9 +2570,9 @@ def merge_scans_mfcfradial(
     # Use custom name mapping
     for datatype in datatype_list:
         if datatype in cfg["DataTypeIDInFiles"][ind_rad]:
-            field_names[cfg["DataTypeIDInFiles"][ind_rad][datatype]] = (
-                get_fieldname_pyart(datatype)
-            )
+            field_names[
+                cfg["DataTypeIDInFiles"][ind_rad][datatype]
+            ] = get_fieldname_pyart(datatype)
         else:
             field_names[datatype] = DataTypeIDInFiles_defaults[datatype]
 
@@ -2767,12 +2767,12 @@ def merge_scans_nexrad2(
 
     """
     # find files to merge
-    if "bucket" in cfg:
+    if "s3BucketRead" in cfg:
         if not _BOTO3_AVAILABLE:
             warn("boto3 not installed")
             return None
         fname_list, _ = get_scan_files_to_merge_s3(
-            cfg["s3path"],
+            cfg["s3PathRead"],
             scan_list,
             None,
             None,
@@ -2801,12 +2801,12 @@ def merge_scans_nexrad2(
         return None
 
     radar = None
-    if "bucket" in cfg:
+    if "s3BucketRead" in cfg:
         s3_client = boto3.client(
             "s3",
-            endpoint_url=cfg["s3_url"],
-            aws_access_key_id=cfg["s3_key"],
-            aws_secret_access_key=cfg["s3_secret_key"],
+            endpoint_url=cfg["s3EndpointRead"],
+            aws_access_key_id=cfg["s3KeyRead"],
+            aws_secret_access_key=cfg["s3SecretRead"],
             verify=False,
         )
         daydir = voltime.strftime("%Y-%m-%d")
@@ -2815,9 +2815,9 @@ def merge_scans_nexrad2(
             os.makedirs(datapath)
 
     for fname in fname_list:
-        if "bucket" in cfg:
+        if "s3BucketRead" in cfg:
             fname_aux = f"{datapath}{os.path.basename(fname)}"
-            s3_client.download_file(cfg["bucket"], fname, fname_aux)
+            s3_client.download_file(cfg["s3BucketRead"], fname, fname_aux)
         else:
             fname_aux = fname
 
@@ -2908,19 +2908,19 @@ def merge_scans_cfradial(
     # Use custom name mapping
     for datatype in datatype_list:
         if datatype in cfg["DataTypeIDInFiles"][ind_rad]:
-            field_names[cfg["DataTypeIDInFiles"][ind_rad][datatype]] = (
-                get_fieldname_pyart(datatype)
-            )
+            field_names[
+                cfg["DataTypeIDInFiles"][ind_rad][datatype]
+            ] = get_fieldname_pyart(datatype)
         else:
             field_names[datatype] = get_fieldname_pyart(datatype)
 
     # find files to merge
-    if "bucket" in cfg:
+    if "s3BucketRead" in cfg:
         if not _BOTO3_AVAILABLE:
             warn("boto3 not installed")
             return None
         fname_list, _ = get_scan_files_to_merge_s3(
-            cfg["s3path"],
+            cfg["s3PathRead"],
             scan_list,
             radar_name,
             radar_res,
@@ -2949,12 +2949,12 @@ def merge_scans_cfradial(
         return None
 
     radar = None
-    if "bucket" in cfg:
+    if "s3BucketRead" in cfg:
         s3_client = boto3.client(
             "s3",
-            endpoint_url=cfg["s3_url"],
-            aws_access_key_id=cfg["s3_key"],
-            aws_secret_access_key=cfg["s3_secret_key"],
+            endpoint_url=cfg["s3EndpointRead"],
+            aws_access_key_id=cfg["s3KeyRead"],
+            aws_secret_access_key=cfg["s3SecretRead"],
             verify=False,
         )
         daydir = voltime.strftime("%Y-%m-%d")
@@ -2963,9 +2963,9 @@ def merge_scans_cfradial(
             os.makedirs(datapath)
 
     for fname in fname_list:
-        if "bucket" in cfg:
+        if "s3BucketRead" in cfg:
             fname_aux = f"{datapath}{os.path.basename(fname)}"
-            s3_client.download_file(cfg["bucket"], fname, fname_aux)
+            s3_client.download_file(cfg["s3BucketRead"], fname, fname_aux)
         else:
             fname_aux = fname
 
@@ -2980,7 +2980,7 @@ def merge_scans_cfradial(
         else:
             radar = merge_radars(radar, radar_aux)
 
-        if "bucket" in cfg and "rm_s3_file" in cfg and cfg["rm_s3_file"]:
+        if "s3BucketRead" in cfg and "rm_s3_file" in cfg and cfg["rm_s3_file"]:
             os.remove(fname_aux)
 
     if radar is None:
@@ -3062,19 +3062,19 @@ def merge_scans_cfradial2(
     # Use custom name mapping
     for datatype in datatype_list:
         if datatype in cfg["DataTypeIDInFiles"][ind_rad]:
-            field_names[cfg["DataTypeIDInFiles"][ind_rad][datatype]] = (
-                get_fieldname_pyart(datatype)
-            )
+            field_names[
+                cfg["DataTypeIDInFiles"][ind_rad][datatype]
+            ] = get_fieldname_pyart(datatype)
         else:
             field_names[datatype] = get_fieldname_pyart(datatype)
 
     # find files to merge
-    if "bucket" in cfg:
+    if "s3BucketRead" in cfg:
         if not _BOTO3_AVAILABLE:
             warn("boto3 not installed")
             return None
         fname_list, _ = get_scan_files_to_merge_s3(
-            cfg["s3path"],
+            cfg["s3PathRead"],
             scan_list,
             radar_name,
             radar_res,
@@ -3103,12 +3103,12 @@ def merge_scans_cfradial2(
         return None
 
     radar = None
-    if "bucket" in cfg:
+    if "s3BucketRead" in cfg:
         s3_client = boto3.client(
             "s3",
-            endpoint_url=cfg["s3_url"],
-            aws_access_key_id=cfg["s3_key"],
-            aws_secret_access_key=cfg["s3_secret_key"],
+            endpoint_url=cfg["s3EndpointRead"],
+            aws_access_key_id=cfg["s3KeyRead"],
+            aws_secret_access_key=cfg["s3SecretRead"],
             verify=False,
         )
         daydir = voltime.strftime("%Y-%m-%d")
@@ -3117,9 +3117,9 @@ def merge_scans_cfradial2(
             os.makedirs(datapath)
 
     for fname in fname_list:
-        if "bucket" in cfg:
+        if "s3BucketRead" in cfg:
             fname_aux = f"{datapath}{os.path.basename(fname)}"
-            s3_client.download_file(cfg["bucket"], fname, fname_aux)
+            s3_client.download_file(cfg["s3BucketRead"], fname, fname_aux)
         else:
             fname_aux = fname
 
@@ -3201,12 +3201,12 @@ def merge_scans_skyecho(
         skyecho_field_names.update(get_datatype_skyecho(datatype))
 
     # find files to merge
-    if "bucket" in cfg:
+    if "s3BucketRead" in cfg:
         if not _BOTO3_AVAILABLE:
             warn("boto3 not installed")
             return None
         fname_list, _ = get_scan_files_to_merge_s3(
-            cfg["s3path"],
+            cfg["s3PathRead"],
             scan_list,
             None,
             None,
@@ -3231,13 +3231,13 @@ def merge_scans_skyecho(
         return None
 
     radar = None
-    if "bucket" in cfg:
+    if "s3BucketRead" in cfg:
         datapath = f"{basepath}"
         if not os.path.isdir(datapath):
             os.makedirs(datapath)
 
     for fname in fname_list:
-        if "bucket" in cfg:
+        if "s3BucketRead" in cfg:
             fname_aux = f"{datapath}{os.path.basename(fname)}"
         else:
             fname_aux = fname
@@ -3332,19 +3332,19 @@ def merge_scans_cf1(
     # Use custom name mapping
     for datatype in datatype_list:
         if datatype in cfg["DataTypeIDInFiles"][ind_rad]:
-            field_names[cfg["DataTypeIDInFiles"][ind_rad][datatype]] = (
-                get_fieldname_pyart(datatype)
-            )
+            field_names[
+                cfg["DataTypeIDInFiles"][ind_rad][datatype]
+            ] = get_fieldname_pyart(datatype)
         else:
             field_names[datatype] = get_fieldname_pyart(datatype)
 
     # find files to merge
-    if "bucket" in cfg:
+    if "s3BucketRead" in cfg:
         if not _BOTO3_AVAILABLE:
             warn("boto3 not installed")
             return None
         fname_list, _ = get_scan_files_to_merge_s3(
-            cfg["s3path"],
+            cfg["s3PathRead"],
             scan_list,
             radar_name,
             radar_res,
@@ -3373,12 +3373,12 @@ def merge_scans_cf1(
         return None
 
     radar = None
-    if "bucket" in cfg:
+    if "s3BucketRead" in cfg:
         s3_client = boto3.client(
             "s3",
-            endpoint_url=cfg["s3_url"],
-            aws_access_key_id=cfg["s3_key"],
-            aws_secret_access_key=cfg["s3_secret_key"],
+            endpoint_url=cfg["s3EndpointRead"],
+            aws_access_key_id=cfg["s3KeyRead"],
+            aws_secret_access_key=cfg["s3SecretRead"],
             verify=False,
         )
         daydir = voltime.strftime("%Y-%m-%d")
@@ -3387,9 +3387,9 @@ def merge_scans_cf1(
             os.makedirs(datapath)
 
     for fname in fname_list:
-        if "bucket" in cfg:
+        if "s3BucketRead" in cfg:
             fname_aux = f"{datapath}{os.path.basename(fname)}"
-            s3_client.download_file(cfg["bucket"], fname, fname_aux)
+            s3_client.download_file(cfg["s3BucketRead"], fname, fname_aux)
         else:
             fname_aux = fname
 
@@ -3404,7 +3404,7 @@ def merge_scans_cf1(
         else:
             radar = merge_radars(radar, radar_aux)
 
-        if "bucket" in cfg and "rm_s3_file" in cfg and cfg["rm_s3_file"]:
+        if "s3BucketRead" in cfg and "rm_s3_file" in cfg and cfg["rm_s3_file"]:
             os.remove(fname_aux)
 
     if radar is None:
@@ -5693,9 +5693,9 @@ def get_data_odim(filename, datatype_list, scan_name, cfg, ind_rad=0):
     # Use custom name mapping
     for datatype in datatype_list:
         if datatype in cfg["DataTypeIDInFiles"][ind_rad]:
-            odim_field_names[cfg["DataTypeIDInFiles"][ind_rad][datatype]] = (
-                get_fieldname_pyart(datatype)
-            )
+            odim_field_names[
+                cfg["DataTypeIDInFiles"][ind_rad][datatype]
+            ] = get_fieldname_pyart(datatype)
         else:
             odim_field_names.update(get_datatype_odim(datatype))
 

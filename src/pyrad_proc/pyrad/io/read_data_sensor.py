@@ -523,7 +523,6 @@ def read_trt_info(fname):
 
     """
     try:
-
         with open(fname, "r", newline="") as txtfile:
             # read file contents
             cell_id = np.array([], dtype=int)
@@ -633,7 +632,6 @@ def read_trt_info2(fname):
 
     """
     try:
-
         with open(fname, "r", newline="") as txtfile:
             # read file contents
             cell_id = np.ma.array([], dtype=int)
@@ -2849,9 +2847,9 @@ def read_radiosounding_igra(station, dtime):
     ]
 
     headers = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.5790.102 Safari/537.36"    
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.5790.102 Safari/537.36"
     }
-    
+
     # Start by getting the list of stations
     # URL of the station list
     url = (
@@ -2862,7 +2860,7 @@ def read_radiosounding_igra(station, dtime):
 
     if response.status_code == 200:
         data = StringIO(response.text)
-        stations_ref = pd.read_fwf(url, names=COLUMNS_STATION_LIST)
+        stations_ref = pd.read_fwf(data, names=COLUMNS_STATION_LIST)
     else:
         print("Failed to fetch data:", response.status_code)
         return
@@ -2871,7 +2869,7 @@ def read_radiosounding_igra(station, dtime):
     code = stations_ref["CODE"][stations_ref["CODE"].str.contains(station)].iloc[0]
 
     # Check if specified time is after 2021
-    if dtime > datetime.datetime(2021, 1,1):
+    if dtime > datetime.datetime(2021, 1, 1):
         url2 = (
             "https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive"
             + "/access/data-y2d/"
@@ -2915,13 +2913,15 @@ def read_radiosounding_igra(station, dtime):
         if "#" in line:
             if clo_sound_time_str in line:
                 line_start = i
-    
+
     if not line_start:
-        warn("Could not find a sounding in the IGRA database that corresponds to prescribed time")
-    
-    file_content = file_content[line_start+1:]
+        warn(
+            "Could not find a sounding in the IGRA database that corresponds to prescribed time"
+        )
+
+    file_content = file_content[line_start + 1 :]
     for line in file_content:
-        if line.startswith("#"): # next sounding
+        if line.startswith("#"):  # next sounding
             break
         # Get row
         lvltyp1 = int(line[0])
@@ -2954,15 +2954,14 @@ def read_radiosounding_igra(station, dtime):
                 wspd,
             )
         )
-        
+
     # Convert to pandas DataFrame
-    sounding = pd.DataFrame(
-            sounding, columns=COLUMNS_SOUNDING
-        )
+    sounding = pd.DataFrame(sounding, columns=COLUMNS_SOUNDING)
     # Replace missing values
     sounding.replace([-999.9, -888.8, -8888, -9999], np.nan, inplace=True)
-    
+
     return sounding
+
 
 def read_fzl_igra(station, dtime, dscfg=None):
     """

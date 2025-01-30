@@ -1,0 +1,19 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0  # Use the latest stable version
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.9.3  # Use the latest stable version of ruff-pre-commit
+    hooks:
+      - id: ruff
+        args: ["--fix"]
+        files: "src/pyrad_proc/pyrad"  # Automatically fix issues when possible
+
+  - repo: https://github.com/psf/black
+    rev: 23.1.0
+    hooks:
+      - id: black

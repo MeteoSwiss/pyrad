@@ -1,7 +1,7 @@
 name: Test pyrad base
 env:
   MINIMAL_DEPENDENCIES: Cython numpy cartopy
-  TEST_DEPENDENCIES: pytest imageio pygrib  
+  TEST_DEPENDENCIES: pytest imageio pygrib
 
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
@@ -45,7 +45,7 @@ jobs:
       - name: Clone pyart
         uses: actions/checkout@master
         with:
-          repository: ARM-DOE/pyart 
+          repository: ARM-DOE/pyart
           path: pyart
       - name: Clone pyrad-tests
         uses: actions/checkout@master
@@ -67,6 +67,10 @@ jobs:
           python -c "from pyrad.flow import main"
       - name: Run tests
         env:
-           PYRAD_TESTS_PATH: ${{github.workspace}}/pyrad-tests/
+            S3_SECRET_READ: ${{ secrets.S3_SECRET_READ }}
+            S3_KEY_READ: ${{ secrets.S3_KEY_READ }}
+            S3_SECRET_WRITE: ${{ secrets.S3_SECRET_WRITE }}
+            S3_KEY_WRITE: ${{ secrets.S3_KEY_WRITE }}
+            PYRAD_TESTS_PATH: ${{github.workspace}}/pyrad-tests/
         working-directory: ${{github.workspace}}/pyrad-tests/
         run: pytest "run_tests.py::test_base"

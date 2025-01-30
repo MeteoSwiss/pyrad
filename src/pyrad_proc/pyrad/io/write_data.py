@@ -88,7 +88,7 @@ except ImportError:
     _BOTO3_AVAILABLE = False
 
 
-def write_to_s3(fname, basepath, s3copypath, s3accesspolicy=None):
+def write_to_s3(fname, basepath, s3endpoint, s3bucket, s3path="", s3accesspolicy=None):
     """
     Copies a locally stored product to a S3 bucket
 
@@ -99,10 +99,23 @@ def write_to_s3(fname, basepath, s3copypath, s3accesspolicy=None):
     basepath : str
         basepath of pyrad products as provided with datapath key in
         the main conf file
-    s3copypath : str
-        s3 bucket path, in the format
-        https://bucket_name.endpoint.domain for example
-        https://tests.fr-par-1.linodeobjects.com/
+    s3endpoint : str
+        s3 endpoint URL
+        for example
+        fr-par-1.linodeobjects.com/ or
+        https://eu-central-1.linodeobjects.com/ or
+        https://s3.us-east-1.amazonaws.com/
+        https:// prefix is optional!
+        or
+    s3bucket : str
+        name of the s3 bucket to use to access the data
+        the URL that will be polled is
+        https://s3bucket.s3endpoint
+    s3path : str
+        name of the path where to store the data on the s3 bucket
+        the files will have the following url
+        https://s3bucket.s3endpoint/s3path/filename
+        Optional: default is empty string (place them at the root of the bucket)
     s3accesspolicy : str
         S3 access policy can be either private or public-read
         Default is to use nothing which will inherit the policy of the bucket
@@ -110,36 +123,44 @@ def write_to_s3(fname, basepath, s3copypath, s3accesspolicy=None):
     if not _BOTO3_AVAILABLE:
         warn("boto3 not installed, aborting writing to s3")
         return
-
     try:
-        aws_key = os.environ["AWS_KEY"]
-        aws_secret = os.environ["AWS_SECRET"]
+        aws_key = os.environ["S3_KEY_WRITE"]
+        aws_secret = os.environ["S3_SECRET_WRITE"]
     except KeyError:
-        warn("In order to be able to save to an S3 bucket")
-        warn("you need to define the environment variables AWS_KEY and AWS_SECRET")
+        warn("In order to be able to write to an S3 bucket")
+        warn(
+            "you need to define the environment variables S3_KEY_WRITE and S3_SECRET_WRITE"
+        )
         warn("Saving to S3 failed...")
         return
 
-    bucket = s3copypath.split("//")[1].split(".")[0]
-    endpoint_raw = s3copypath.replace(bucket + ".", "")
-    add_path = endpoint_raw.replace(urlparse(endpoint_raw).netloc, "").split("///")[1]
-    endpoint = endpoint_raw.replace(add_path, "")
-    s3fname = add_path + fname.replace(basepath, "")
+    add_path = s3endpoint.replace(urlparse(s3endpoint).netloc, "").split("///")[1]
+    if not s3endpoint.startswith("https://"):  # add prefix
+        s3endpoint = f"https://{s3endpoint}"
+    endpoint_raw = s3endpoint.replace(add_path, "").replace("https://", "")
+    if s3path:
+        if not s3path.endswith("/"):
+            s3path += "/"
+    else:
+        s3path = ""
+
+    s3fname = s3path + fname.replace(basepath, "")
     if s3fname.startswith("/"):  # Remove leading /
         s3fname = s3fname[1:]
-    linode_obj_config = {
+    s3_client_config = {
         "aws_access_key_id": aws_key,
-        "endpoint_url": endpoint,
+        "endpoint_url": s3endpoint,
         "aws_secret_access_key": aws_secret,
     }
-
-    s3_client = boto3.client("s3", **linode_obj_config, verify=False)
+    s3_client = boto3.client("s3", **s3_client_config, verify=False)
     if s3accesspolicy:
         ExtraArgs = {"ACL": s3accesspolicy}
     else:
         ExtraArgs = None
-    s3_client.upload_file(fname, bucket, s3fname, ExtraArgs=ExtraArgs)
-    print(f"----- copying {fname} to {s3copypath + s3fname}")
+
+    s3copypath = f"https://{s3bucket}.{endpoint_raw}{s3path}{s3fname}"
+    s3_client.upload_file(fname, s3bucket, s3fname, ExtraArgs=ExtraArgs)
+    print(f"----- copying {fname} to {s3copypath}")
 
 
 def write_vol_csv(fname, radar, field_name, ignore_masked=False):
@@ -786,7 +807,6 @@ def write_timeseries_point(fname, data, dstype, text, timeformat=None, timeinfo=
             time_str = datatime.strftime(tformat)
 
         with open(fname, "a", newline="") as csvfile:
-
             for value in data["value"]:
                 time_str = time_str + ", " + ("%.4f" % value)
             csvfile.write(time_str + "\n")
