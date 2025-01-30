@@ -469,7 +469,7 @@
     <span class="n">_BOTO3_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">write_to_s3</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">basepath</span><span class="p">,</span> <span class="n">s3copypath</span><span class="p">,</span> <span class="n">s3accesspolicy</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_to_s3</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">basepath</span><span class="p">,</span> <span class="n">s3endpoint</span><span class="p">,</span> <span class="n">s3bucket</span><span class="p">,</span> <span class="n">s3path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">s3accesspolicy</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Copies a locally stored product to a S3 bucket</span>
 
@@ -480,10 +480,23 @@
 <span class="sd">    basepath : str</span>
 <span class="sd">        basepath of pyrad products as provided with datapath key in</span>
 <span class="sd">        the main conf file</span>
-<span class="sd">    s3copypath : str</span>
-<span class="sd">        s3 bucket path, in the format</span>
-<span class="sd">        https://bucket_name.endpoint.domain for example</span>
-<span class="sd">        https://tests.fr-par-1.linodeobjects.com/</span>
+<span class="sd">    s3endpoint : str</span>
+<span class="sd">        s3 endpoint URL</span>
+<span class="sd">        for example</span>
+<span class="sd">        fr-par-1.linodeobjects.com/ or</span>
+<span class="sd">        https://eu-central-1.linodeobjects.com/ or</span>
+<span class="sd">        https://s3.us-east-1.amazonaws.com/</span>
+<span class="sd">        https:// prefix is optional!</span>
+<span class="sd">        or</span>
+<span class="sd">    s3bucket : str</span>
+<span class="sd">        name of the s3 bucket to use to access the data</span>
+<span class="sd">        the URL that will be polled is</span>
+<span class="sd">        https://s3bucket.s3endpoint</span>
+<span class="sd">    s3path : str</span>
+<span class="sd">        name of the path where to store the data on the s3 bucket</span>
+<span class="sd">        the files will have the following url</span>
+<span class="sd">        https://s3bucket.s3endpoint/s3path/filename</span>
+<span class="sd">        Optional: default is empty string (place them at the root of the bucket)</span>
 <span class="sd">    s3accesspolicy : str</span>
 <span class="sd">        S3 access policy can be either private or public-read</span>
 <span class="sd">        Default is to use nothing which will inherit the policy of the bucket</span>
@@ -491,36 +504,44 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed, aborting writing to s3&quot;</span><span class="p">)</span>
         <span class="k">return</span>
-
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">aws_key</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;AWS_KEY&quot;</span><span class="p">]</span>
-        <span class="n">aws_secret</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;AWS_SECRET&quot;</span><span class="p">]</span>
+        <span class="n">aws_key</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;S3_KEY_WRITE&quot;</span><span class="p">]</span>
+        <span class="n">aws_secret</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;S3_SECRET_WRITE&quot;</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;In order to be able to save to an S3 bucket&quot;</span><span class="p">)</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;you need to define the environment variables AWS_KEY and AWS_SECRET&quot;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;In order to be able to write to an S3 bucket&quot;</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;you need to define the environment variables S3_KEY_WRITE and S3_SECRET_WRITE&quot;</span>
+        <span class="p">)</span>
         <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Saving to S3 failed...&quot;</span><span class="p">)</span>
         <span class="k">return</span>
 
-    <span class="n">bucket</span> <span class="o">=</span> <span class="n">s3copypath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;//&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">endpoint_raw</span> <span class="o">=</span> <span class="n">s3copypath</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">bucket</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="n">add_path</span> <span class="o">=</span> <span class="n">endpoint_raw</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">urlparse</span><span class="p">(</span><span class="n">endpoint_raw</span><span class="p">)</span><span class="o">.</span><span class="n">netloc</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;///&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">endpoint</span> <span class="o">=</span> <span class="n">endpoint_raw</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">add_path</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="n">s3fname</span> <span class="o">=</span> <span class="n">add_path</span> <span class="o">+</span> <span class="n">fname</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">add_path</span> <span class="o">=</span> <span class="n">s3endpoint</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">urlparse</span><span class="p">(</span><span class="n">s3endpoint</span><span class="p">)</span><span class="o">.</span><span class="n">netloc</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;///&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">s3endpoint</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">):</span>  <span class="c1"># add prefix</span>
+        <span class="n">s3endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{</span><span class="n">s3endpoint</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">endpoint_raw</span> <span class="o">=</span> <span class="n">s3endpoint</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">add_path</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">s3path</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">s3path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+            <span class="n">s3path</span> <span class="o">+=</span> <span class="s2">&quot;/&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">s3path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="n">s3fname</span> <span class="o">=</span> <span class="n">s3path</span> <span class="o">+</span> <span class="n">fname</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">s3fname</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>  <span class="c1"># Remove leading /</span>
         <span class="n">s3fname</span> <span class="o">=</span> <span class="n">s3fname</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-    <span class="n">linode_obj_config</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">s3_client_config</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;aws_access_key_id&quot;</span><span class="p">:</span> <span class="n">aws_key</span><span class="p">,</span>
-        <span class="s2">&quot;endpoint_url&quot;</span><span class="p">:</span> <span class="n">endpoint</span><span class="p">,</span>
+        <span class="s2">&quot;endpoint_url&quot;</span><span class="p">:</span> <span class="n">s3endpoint</span><span class="p">,</span>
         <span class="s2">&quot;aws_secret_access_key&quot;</span><span class="p">:</span> <span class="n">aws_secret</span><span class="p">,</span>
     <span class="p">}</span>
-
-    <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span><span class="s2">&quot;s3&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">linode_obj_config</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span><span class="s2">&quot;s3&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">s3_client_config</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">s3accesspolicy</span><span class="p">:</span>
         <span class="n">ExtraArgs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ACL&quot;</span><span class="p">:</span> <span class="n">s3accesspolicy</span><span class="p">}</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">ExtraArgs</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">s3_client</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">bucket</span><span class="p">,</span> <span class="n">s3fname</span><span class="p">,</span> <span class="n">ExtraArgs</span><span class="o">=</span><span class="n">ExtraArgs</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;----- copying </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">s3copypath</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">s3fname</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">s3copypath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{</span><span class="n">s3bucket</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">endpoint_raw</span><span class="si">}{</span><span class="n">s3path</span><span class="si">}{</span><span class="n">s3fname</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">s3_client</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">s3bucket</span><span class="p">,</span> <span class="n">s3fname</span><span class="p">,</span> <span class="n">ExtraArgs</span><span class="o">=</span><span class="n">ExtraArgs</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;----- copying </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">s3copypath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="write_vol_csv">
@@ -1197,7 +1218,6 @@
             <span class="n">time_str</span> <span class="o">=</span> <span class="n">datatime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">tformat</span><span class="p">)</span>
 
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-
             <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]:</span>
                 <span class="n">time_str</span> <span class="o">=</span> <span class="n">time_str</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">value</span><span class="p">)</span>
             <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">time_str</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>

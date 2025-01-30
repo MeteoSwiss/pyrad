@@ -2275,12 +2275,12 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># find files to merge</span>
-    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">scan_list_aux</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge_s3</span><span class="p">(</span>
-            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3PathRead&quot;</span><span class="p">],</span>
             <span class="n">scan_list</span><span class="p">,</span>
             <span class="n">radar_name</span><span class="p">,</span>
             <span class="n">radar_res</span><span class="p">,</span>
@@ -2309,12 +2309,12 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">radar</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span>
             <span class="s2">&quot;s3&quot;</span><span class="p">,</span>
-            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_url&quot;</span><span class="p">],</span>
-            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_key&quot;</span><span class="p">],</span>
-            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_secret_key&quot;</span><span class="p">],</span>
+            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3EndpointRead&quot;</span><span class="p">],</span>
+            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3KeyRead&quot;</span><span class="p">],</span>
+            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3SecretRead&quot;</span><span class="p">],</span>
             <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">daydir</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -2323,9 +2323,9 @@
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fname</span><span class="p">,</span> <span class="n">scan</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fname_list</span><span class="p">,</span> <span class="n">scan_list_aux</span><span class="p">):</span>
-        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;bucket&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
+            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3BucketRead&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="n">fname</span>
 
@@ -2338,7 +2338,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">radar</span> <span class="o">=</span> <span class="n">merge_radars</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">radar_aux</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s2">&quot;rm_s3_file&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;rm_s3_file&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s2">&quot;rm_s3_file&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;rm_s3_file&quot;</span><span class="p">]:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fname_aux</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">radar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2410,12 +2410,12 @@
         <span class="p">)</span>
 
     <span class="c1"># find files to merge</span>
-    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">scan_list_aux</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge_s3</span><span class="p">(</span>
-            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3PathRead&quot;</span><span class="p">],</span>
             <span class="n">scan_list</span><span class="p">,</span>
             <span class="kc">None</span><span class="p">,</span>
             <span class="kc">None</span><span class="p">,</span>
@@ -2440,12 +2440,12 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">grid</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span>
             <span class="s2">&quot;s3&quot;</span><span class="p">,</span>
-            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_url&quot;</span><span class="p">],</span>
-            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_key&quot;</span><span class="p">],</span>
-            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_secret_key&quot;</span><span class="p">],</span>
+            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3EndpointRead&quot;</span><span class="p">],</span>
+            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3KeyRead&quot;</span><span class="p">],</span>
+            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3SecretRead&quot;</span><span class="p">],</span>
             <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">daydir</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -2454,9 +2454,9 @@
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;bucket&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
+            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3BucketRead&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="n">fname</span>
 
@@ -2472,7 +2472,7 @@
             <span class="k">for</span> <span class="n">prod_field</span> <span class="ow">in</span> <span class="n">grid_aux</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">prod_field</span><span class="p">,</span> <span class="n">grid_aux</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">prod_field</span><span class="p">])</span>
 
-        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s2">&quot;rm_s3_file&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;rm_s3_file&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s2">&quot;rm_s3_file&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;rm_s3_file&quot;</span><span class="p">]:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fname_aux</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">grid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2548,12 +2548,12 @@
         <span class="n">odim_field_names</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_datatype_knmi</span><span class="p">(</span><span class="n">datatype</span><span class="p">))</span>
 
     <span class="c1"># find files to merge</span>
-    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">scan_list_aux</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge_s3</span><span class="p">(</span>
-            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3PathRead&quot;</span><span class="p">],</span>
             <span class="n">scan_list</span><span class="p">,</span>
             <span class="kc">None</span><span class="p">,</span>
             <span class="kc">None</span><span class="p">,</span>
@@ -2578,12 +2578,12 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">grid</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span>
             <span class="s2">&quot;s3&quot;</span><span class="p">,</span>
-            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_url&quot;</span><span class="p">],</span>
-            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_key&quot;</span><span class="p">],</span>
-            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_secret_key&quot;</span><span class="p">],</span>
+            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3EndpointRead&quot;</span><span class="p">],</span>
+            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3KeyRead&quot;</span><span class="p">],</span>
+            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3SecretRead&quot;</span><span class="p">],</span>
             <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">daydir</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -2592,9 +2592,9 @@
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;bucket&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
+            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3BucketRead&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="n">fname</span>
 
@@ -2610,7 +2610,7 @@
             <span class="k">for</span> <span class="n">prod_field</span> <span class="ow">in</span> <span class="n">grid_aux</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">prod_field</span><span class="p">,</span> <span class="n">grid_aux</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">prod_field</span><span class="p">])</span>
 
-        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s2">&quot;rm_s3_file&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;rm_s3_file&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s2">&quot;rm_s3_file&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;rm_s3_file&quot;</span><span class="p">]:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fname_aux</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">grid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2693,12 +2693,12 @@
         <span class="n">field_names_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">datatype</span><span class="p">:</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)})</span>
 
     <span class="c1"># find files to merge</span>
-    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">scan_list_aux</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge_s3</span><span class="p">(</span>
-            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3PathRead&quot;</span><span class="p">],</span>
             <span class="n">scan_list</span><span class="p">,</span>
             <span class="n">radar_name</span><span class="p">,</span>
             <span class="n">radar_res</span><span class="p">,</span>
@@ -2727,12 +2727,12 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">radar</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span>
             <span class="s2">&quot;s3&quot;</span><span class="p">,</span>
-            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_url&quot;</span><span class="p">],</span>
-            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_key&quot;</span><span class="p">],</span>
-            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_secret_key&quot;</span><span class="p">],</span>
+            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3EndpointRead&quot;</span><span class="p">],</span>
+            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3KeyRead&quot;</span><span class="p">],</span>
+            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3SecretRead&quot;</span><span class="p">],</span>
             <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">daydir</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -2741,9 +2741,9 @@
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;bucket&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
+            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3BucketRead&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="n">fname</span>
 
@@ -2758,7 +2758,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">radar</span> <span class="o">=</span> <span class="n">merge_radars</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">radar_aux</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s2">&quot;rm_s3_file&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;rm_s3_file&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s2">&quot;rm_s3_file&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;rm_s3_file&quot;</span><span class="p">]:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fname_aux</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">radar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2837,12 +2837,12 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># find files to merge</span>
-    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge_s3</span><span class="p">(</span>
-            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3PathRead&quot;</span><span class="p">],</span>
             <span class="n">scan_list</span><span class="p">,</span>
             <span class="n">radar_name</span><span class="p">,</span>
             <span class="n">radar_res</span><span class="p">,</span>
@@ -2871,12 +2871,12 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">radar</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span>
             <span class="s2">&quot;s3&quot;</span><span class="p">,</span>
-            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_url&quot;</span><span class="p">],</span>
-            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_key&quot;</span><span class="p">],</span>
-            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_secret_key&quot;</span><span class="p">],</span>
+            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3EndpointRead&quot;</span><span class="p">],</span>
+            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3KeyRead&quot;</span><span class="p">],</span>
+            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3SecretRead&quot;</span><span class="p">],</span>
             <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">daydir</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -2885,9 +2885,9 @@
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;bucket&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
+            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3BucketRead&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="n">fname</span>
 
@@ -2900,7 +2900,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">radar</span> <span class="o">=</span> <span class="n">merge_radars</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">radar_aux</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s2">&quot;rm_s3_file&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;rm_s3_file&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s2">&quot;rm_s3_file&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;rm_s3_file&quot;</span><span class="p">]:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fname_aux</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">radar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2954,9 +2954,9 @@
     <span class="c1"># Use custom name mapping</span>
     <span class="k">for</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">datatype_list</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]:</span>
-            <span class="n">field_names</span><span class="p">[</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">][</span><span class="n">datatype</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-            <span class="p">)</span>
+            <span class="n">field_names</span><span class="p">[</span>
+                <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">][</span><span class="n">datatype</span><span class="p">]</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">field_names</span><span class="p">[</span><span class="n">datatype</span><span class="p">]</span> <span class="o">=</span> <span class="n">DataTypeIDInFiles_defaults</span><span class="p">[</span><span class="n">datatype</span><span class="p">]</span>
 
@@ -3151,12 +3151,12 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># find files to merge</span>
-    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge_s3</span><span class="p">(</span>
-            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3PathRead&quot;</span><span class="p">],</span>
             <span class="n">scan_list</span><span class="p">,</span>
             <span class="kc">None</span><span class="p">,</span>
             <span class="kc">None</span><span class="p">,</span>
@@ -3185,12 +3185,12 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">radar</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span>
             <span class="s2">&quot;s3&quot;</span><span class="p">,</span>
-            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_url&quot;</span><span class="p">],</span>
-            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_key&quot;</span><span class="p">],</span>
-            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_secret_key&quot;</span><span class="p">],</span>
+            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3EndpointRead&quot;</span><span class="p">],</span>
+            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3KeyRead&quot;</span><span class="p">],</span>
+            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3SecretRead&quot;</span><span class="p">],</span>
             <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">daydir</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -3199,9 +3199,9 @@
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;bucket&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
+            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3BucketRead&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="n">fname</span>
 
@@ -3292,19 +3292,19 @@
     <span class="c1"># Use custom name mapping</span>
     <span class="k">for</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">datatype_list</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]:</span>
-            <span class="n">field_names</span><span class="p">[</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">][</span><span class="n">datatype</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-            <span class="p">)</span>
+            <span class="n">field_names</span><span class="p">[</span>
+                <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">][</span><span class="n">datatype</span><span class="p">]</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">field_names</span><span class="p">[</span><span class="n">datatype</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="c1"># find files to merge</span>
-    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge_s3</span><span class="p">(</span>
-            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3PathRead&quot;</span><span class="p">],</span>
             <span class="n">scan_list</span><span class="p">,</span>
             <span class="n">radar_name</span><span class="p">,</span>
             <span class="n">radar_res</span><span class="p">,</span>
@@ -3333,12 +3333,12 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">radar</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span>
             <span class="s2">&quot;s3&quot;</span><span class="p">,</span>
-            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_url&quot;</span><span class="p">],</span>
-            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_key&quot;</span><span class="p">],</span>
-            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_secret_key&quot;</span><span class="p">],</span>
+            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3EndpointRead&quot;</span><span class="p">],</span>
+            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3KeyRead&quot;</span><span class="p">],</span>
+            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3SecretRead&quot;</span><span class="p">],</span>
             <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">daydir</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -3347,9 +3347,9 @@
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;bucket&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
+            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3BucketRead&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="n">fname</span>
 
@@ -3364,7 +3364,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">radar</span> <span class="o">=</span> <span class="n">merge_radars</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">radar_aux</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s2">&quot;rm_s3_file&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;rm_s3_file&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s2">&quot;rm_s3_file&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;rm_s3_file&quot;</span><span class="p">]:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fname_aux</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">radar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -3446,19 +3446,19 @@
     <span class="c1"># Use custom name mapping</span>
     <span class="k">for</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">datatype_list</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]:</span>
-            <span class="n">field_names</span><span class="p">[</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">][</span><span class="n">datatype</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-            <span class="p">)</span>
+            <span class="n">field_names</span><span class="p">[</span>
+                <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">][</span><span class="n">datatype</span><span class="p">]</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">field_names</span><span class="p">[</span><span class="n">datatype</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="c1"># find files to merge</span>
-    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge_s3</span><span class="p">(</span>
-            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3PathRead&quot;</span><span class="p">],</span>
             <span class="n">scan_list</span><span class="p">,</span>
             <span class="n">radar_name</span><span class="p">,</span>
             <span class="n">radar_res</span><span class="p">,</span>
@@ -3487,12 +3487,12 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">radar</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span>
             <span class="s2">&quot;s3&quot;</span><span class="p">,</span>
-            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_url&quot;</span><span class="p">],</span>
-            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_key&quot;</span><span class="p">],</span>
-            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_secret_key&quot;</span><span class="p">],</span>
+            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3EndpointRead&quot;</span><span class="p">],</span>
+            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3KeyRead&quot;</span><span class="p">],</span>
+            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3SecretRead&quot;</span><span class="p">],</span>
             <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">daydir</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -3501,9 +3501,9 @@
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;bucket&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
+            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3BucketRead&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="n">fname</span>
 
@@ -3585,12 +3585,12 @@
         <span class="n">skyecho_field_names</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_datatype_skyecho</span><span class="p">(</span><span class="n">datatype</span><span class="p">))</span>
 
     <span class="c1"># find files to merge</span>
-    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge_s3</span><span class="p">(</span>
-            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3PathRead&quot;</span><span class="p">],</span>
             <span class="n">scan_list</span><span class="p">,</span>
             <span class="kc">None</span><span class="p">,</span>
             <span class="kc">None</span><span class="p">,</span>
@@ -3615,13 +3615,13 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">radar</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basepath</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">datapath</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="n">fname</span>
@@ -3716,19 +3716,19 @@
     <span class="c1"># Use custom name mapping</span>
     <span class="k">for</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">datatype_list</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]:</span>
-            <span class="n">field_names</span><span class="p">[</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">][</span><span class="n">datatype</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-            <span class="p">)</span>
+            <span class="n">field_names</span><span class="p">[</span>
+                <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">][</span><span class="n">datatype</span><span class="p">]</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">field_names</span><span class="p">[</span><span class="n">datatype</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
     <span class="c1"># find files to merge</span>
-    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">fname_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_scan_files_to_merge_s3</span><span class="p">(</span>
-            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3path&quot;</span><span class="p">],</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3PathRead&quot;</span><span class="p">],</span>
             <span class="n">scan_list</span><span class="p">,</span>
             <span class="n">radar_name</span><span class="p">,</span>
             <span class="n">radar_res</span><span class="p">,</span>
@@ -3757,12 +3757,12 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">radar</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
         <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span>
             <span class="s2">&quot;s3&quot;</span><span class="p">,</span>
-            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_url&quot;</span><span class="p">],</span>
-            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_key&quot;</span><span class="p">],</span>
-            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3_secret_key&quot;</span><span class="p">],</span>
+            <span class="n">endpoint_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3EndpointRead&quot;</span><span class="p">],</span>
+            <span class="n">aws_access_key_id</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3KeyRead&quot;</span><span class="p">],</span>
+            <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3SecretRead&quot;</span><span class="p">],</span>
             <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">daydir</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -3771,9 +3771,9 @@
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;bucket&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
+            <span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;s3BucketRead&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fname_aux</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fname_aux</span> <span class="o">=</span> <span class="n">fname</span>
 
@@ -3788,7 +3788,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">radar</span> <span class="o">=</span> <span class="n">merge_radars</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">radar_aux</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s2">&quot;bucket&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s2">&quot;rm_s3_file&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;rm_s3_file&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;s3BucketRead&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s2">&quot;rm_s3_file&quot;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;rm_s3_file&quot;</span><span class="p">]:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fname_aux</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">radar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -6077,9 +6077,9 @@
     <span class="c1"># Use custom name mapping</span>
     <span class="k">for</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">datatype_list</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]:</span>
-            <span class="n">odim_field_names</span><span class="p">[</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">][</span><span class="n">datatype</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
-            <span class="p">)</span>
+            <span class="n">odim_field_names</span><span class="p">[</span>
+                <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;DataTypeIDInFiles&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">][</span><span class="n">datatype</span><span class="p">]</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">odim_field_names</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_datatype_odim</span><span class="p">(</span><span class="n">datatype</span><span class="p">))</span>
 
