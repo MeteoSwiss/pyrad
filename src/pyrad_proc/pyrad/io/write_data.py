@@ -55,7 +55,6 @@ import glob
 import csv
 import os
 
-from urllib.parse import urlparse
 from warnings import warn
 import smtplib
 from email.message import EmailMessage
@@ -134,10 +133,9 @@ def write_to_s3(fname, basepath, s3endpoint, s3bucket, s3path="", s3accesspolicy
         warn("Saving to S3 failed...")
         return
 
-    add_path = s3endpoint.replace(urlparse(s3endpoint).netloc, "").split("///")[1]
     if not s3endpoint.startswith("https://"):  # add prefix
         s3endpoint = f"https://{s3endpoint}"
-    endpoint_raw = s3endpoint.replace(add_path, "").replace("https://", "")
+    endpoint_raw = s3endpoint.replace("https://", "")
     if s3path:
         if not s3path.endswith("/"):
             s3path += "/"
