@@ -2818,8 +2818,7 @@ def read_radiosounding_igra(station, dtime):
         'TFLAG', 'RH','DPDP','WDIR','WSPD']
 
     Please see this link for a description of the columns
-    https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive/
-    doc/igra2-data-format.txt
+    https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive/doc/igra2-data-format.txt
     """
     warn("Downloading sounding from IGRA database...")
 
@@ -2849,23 +2848,40 @@ def read_radiosounding_igra(station, dtime):
         "ID",
     ]
 
+    headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.5790.102 Safari/537.36"    
+    }
+    
     # Start by getting the list of stations
     # URL of the station list
     url = (
         "https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive"
         + "/doc/igra2-station-list.txt"
     )
-    stations_ref = pd.read_fwf(url, names=COLUMNS_STATION_LIST)
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        data = StringIO(response.text)
+        stations_ref = pd.read_fwf(url, names=COLUMNS_STATION_LIST)
+    else:
+        print("Failed to fetch data:", response.status_code)
+        return
 
     # get igra code
     code = stations_ref["CODE"][stations_ref["CODE"].str.contains(station)].iloc[0]
 
-    url2 = (
-        "https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive"
-        + "/access/data-y2d/"
-    )
-
-    response = requests.get(url2)
+    # Check if specified time is after 2021
+    if dtime > datetime.datetime(2021, 1,1):
+        url2 = (
+            "https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive"
+            + "/access/data-y2d/"
+        )
+    else:
+        url2 = (
+            "https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive"
+            + "/access/data-por/"
+        )
+    response = requests.get(url2, headers=headers)
     links = re.findall(r'<a\s+(?:[^>]*?\s+)?href="([^"]*)"', response.text)
 
     mylink = [alink for alink in links if code in alink][0]
@@ -2890,62 +2906,63 @@ def read_radiosounding_igra(station, dtime):
         )
         return None
 
+    clo_sound_time = _closest_sounding_time(dtime)
+    clo_sound_time_str = clo_sound_time.strftime("%Y %m %d %H")
     # Now parse file and separate entries by sounding date
-    all_soundings = {}
-    for line in file_content:
+    sounding = []
+    line_start = None
+    for i, line in enumerate(file_content):
         if "#" in line:
-            # New sounding found
-            year, month, day, hour = line.split(" ")[1:5]
-            time_sounding = datetime.datetime(
-                int(year), int(month), int(day), int(hour)
+            if clo_sound_time_str in line:
+                line_start = i
+    
+    if not line_start:
+        warn("Could not find a sounding in the IGRA database that corresponds to prescribed time")
+    
+    file_content = file_content[line_start+1:]
+    for line in file_content:
+        if line.startswith("#"): # next sounding
+            break
+        # Get row
+        lvltyp1 = int(line[0])
+        lvltyp2 = int(line[1])
+        etime = int(line[3:8])
+        press = int(line[9:15])
+        pflag = line[15]
+        gph = int(line[16:21])
+        zflag = line[21]
+        temp = int(line[22:27]) / 10.0
+        tflag = line[27]
+        rh = int(line[28:33]) / 10.0
+        dpdp = int(line[34:39]) / 10.0
+        wdir = int(line[40:45])
+        wspd = int(line[46:51]) / 10.0
+        sounding.append(
+            (
+                lvltyp1,
+                lvltyp2,
+                etime,
+                press,
+                pflag,
+                gph,
+                zflag,
+                temp,
+                tflag,
+                rh,
+                dpdp,
+                wdir,
+                wspd,
             )
-            all_soundings[time_sounding] = []
-        else:
-            # Get row
-            lvltyp1 = int(line[0])
-            lvltyp2 = int(line[1])
-            etime = int(line[3:8])
-            press = int(line[9:15])
-            pflag = line[15]
-            gph = int(line[16:21])
-            zflag = line[21]
-            temp = int(line[22:27]) / 10.0
-            tflag = line[27]
-            rh = int(line[28:33]) / 10.0
-            dpdp = int(line[34:39]) / 10.0
-            wdir = int(line[40:45])
-            wspd = int(line[46:51]) / 10.0
-            all_soundings[time_sounding].append(
-                (
-                    lvltyp1,
-                    lvltyp2,
-                    etime,
-                    press,
-                    pflag,
-                    gph,
-                    zflag,
-                    temp,
-                    tflag,
-                    rh,
-                    dpdp,
-                    wdir,
-                    wspd,
-                )
-            )
-
-    # Convert to pandas DataFrame
-    for date in all_soundings:
-        all_soundings[date] = pd.DataFrame(
-            all_soundings[date], columns=COLUMNS_SOUNDING
         )
-
-    # Find radiosounding closest in time to datetime_obj
-    offsets = [np.abs((dtime - d).total_seconds()) for d in all_soundings.keys()]
-    idx = np.argsort(offsets)
-    closest = list(all_soundings.keys())[idx[0]]
-
-    return all_soundings[closest]
-
+        
+    # Convert to pandas DataFrame
+    sounding = pd.DataFrame(
+            sounding, columns=COLUMNS_SOUNDING
+        )
+    # Replace missing values
+    sounding.replace([-999.9, -888.8, -8888, -9999], np.nan, inplace=True)
+    
+    return sounding
 
 def read_fzl_igra(station, dtime, dscfg=None):
     """
