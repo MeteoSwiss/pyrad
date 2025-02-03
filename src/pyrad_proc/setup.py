@@ -41,22 +41,22 @@ CLASSIFIERS = """\
 """
 
 
-NAME = 'pyrad_mch'
+NAME = "pyrad_mch"
 MAINTAINER = "MeteoSwiss Pyrad Developers"
 MAINTAINER_EMAIL = "daniel.wolfensberger@meteoswiss.ch"
 DESCRIPTION = DOCLINES[0]
 LONG_DESCRIPTION = "\n".join(DOCLINES[2:])
 URL = "https://github.com/MeteoSwiss/pyrad.git"
 DOWNLOAD_URL = "https://github.com/MeteoSwiss/pyrad.git"
-LICENSE = 'BSD'
-CLASSIFIERS = list(filter(None, CLASSIFIERS.split('\n')))
+LICENSE = "BSD"
+CLASSIFIERS = list(filter(None, CLASSIFIERS.split("\n")))
 PLATFORMS = ["Linux"]
 MAJOR = 2
 MINOR = 0
-MICRO = 0
+MICRO = 1
 ISRELEASED = True
-VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
-SCRIPTS = glob.glob('scripts/*')
+VERSION = "%d.%d.%d" % (MAJOR, MINOR, MICRO)
+SCRIPTS = glob.glob("scripts/*")
 COMPILE_DATE_TIME = datetime.utcnow().strftime("%Y-%m-%d %H:%M")
 USERNAME = getpass.getuser()
 
@@ -66,21 +66,20 @@ def git_version():
     def _minimal_ext_cmd(cmd):
         # construct minimal environment
         env = {}
-        for k in ['SYSTEMROOT', 'PATH']:
+        for k in ["SYSTEMROOT", "PATH"]:
             v = os.environ.get(k)
             if v is not None:
                 env[k] = v
         # LANGUAGE is used on win32
-        env['LANGUAGE'] = 'C'
-        env['LANG'] = 'C'
-        env['LC_ALL'] = 'C'
-        out = subprocess.Popen(
-            cmd, stdout=subprocess.PIPE, env=env).communicate()[0]
+        env["LANGUAGE"] = "C"
+        env["LANG"] = "C"
+        env["LC_ALL"] = "C"
+        out = subprocess.Popen(cmd, stdout=subprocess.PIPE, env=env).communicate()[0]
         return out
 
     try:
-        out = _minimal_ext_cmd(['git', 'rev-parse', 'HEAD'])
-        GIT_REVISION = out.strip().decode('ascii')
+        out = _minimal_ext_cmd(["git", "rev-parse", "HEAD"])
+        GIT_REVISION = out.strip().decode("ascii")
     except OSError:
         GIT_REVISION = "Unknown"
 
@@ -89,8 +88,8 @@ def git_version():
 
 # BEFORE importing distutils, remove MANIFEST. distutils doesn't properly
 # update it when the contents of directories change.
-if os.path.exists('MANIFEST'):
-    os.remove('MANIFEST')
+if os.path.exists("MANIFEST"):
+    os.remove("MANIFEST")
 
 # This is a bit hackish: we are setting a global variable so that the main
 # pyrad __init__ can detect if it is being loaded by the setup routine, to
@@ -99,7 +98,7 @@ if os.path.exists('MANIFEST'):
 builtins.__PYRAD_SETUP__ = True
 
 
-def write_version_py(filename='pyrad/version.py'):
+def write_version_py(filename="pyrad/version.py"):
     cnt = """
 # THIS FILE IS GENERATED FROM PYRAD_PROC SETUP.PY
 short_version = '%(version)s'
@@ -116,49 +115,59 @@ if not release:
     # Adding the git rev number needs to be done inside write_version_py(),
     # otherwise the import of pyrad.version messes up the build under Python 3.
     FULLVERSION = VERSION
-    if os.path.exists('../../.git'):
+    if os.path.exists("../../.git"):
         GIT_REVISION = git_version()
-    elif os.path.exists('pyrad/version.py'):
+    elif os.path.exists("pyrad/version.py"):
         # must be a source distribution, use existing version file
         try:
             from pyrad.version import git_revision as GIT_REVISION
         except ImportError:
-            raise ImportError("Unable to import git_revision. Try removing "
-                              "pyrad/version.py and the build directory "
-                              "before building.")
+            raise ImportError(
+                "Unable to import git_revision. Try removing "
+                "pyrad/version.py and the build directory "
+                "before building."
+            )
     else:
         GIT_REVISION = "Unknown"
 
     if not ISRELEASED:
-        FULLVERSION += '.dev+' + GIT_REVISION[:7]
+        FULLVERSION += ".dev+" + GIT_REVISION[:7]
 
-    a = open(filename, 'w')
+    a = open(filename, "w")
     try:
-        a.write(cnt % {'version': VERSION,
-                       'full_version': FULLVERSION,
-                       'git_revision': GIT_REVISION,
-                       'compile_date_time': COMPILE_DATE_TIME,
-                       'username': USERNAME,
-                       'isrelease': str(ISRELEASED)})
+        a.write(
+            cnt
+            % {
+                "version": VERSION,
+                "full_version": FULLVERSION,
+                "git_revision": GIT_REVISION,
+                "compile_date_time": COMPILE_DATE_TIME,
+                "username": USERNAME,
+                "isrelease": str(ISRELEASED),
+            }
+        )
     finally:
         a.close()
 
 
-def configuration(parent_package='', top_path=None):
+def configuration(parent_package="", top_path=None):
     from numpy.distutils.misc_util import Configuration
-    config = Configuration(None, parent_package, top_path)
-    config.set_options(ignore_setup_xxx_py=True,
-                       assume_default_configuration=True,
-                       delegate_options_to_subpackages=True,
-                       quiet=True)
 
-    config.add_subpackage('pyrad')
-    config.add_data_files(('pyrad', '*.txt'))
+    config = Configuration(None, parent_package, top_path)
+    config.set_options(
+        ignore_setup_xxx_py=True,
+        assume_default_configuration=True,
+        delegate_options_to_subpackages=True,
+        quiet=True,
+    )
+
+    config.add_subpackage("pyrad")
+    config.add_data_files(("pyrad", "*.txt"))
 
     return config
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     write_version_py()
     setup(
         name=NAME,
