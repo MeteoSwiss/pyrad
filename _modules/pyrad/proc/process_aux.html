@@ -580,7 +580,6 @@
 <span class="sd">                &#39;RAW_GRID&#39;: process_raw_grid</span>
 <span class="sd">                &#39;GECSX&#39; : process_gecsx</span>
 <span class="sd">                &#39;GRID&#39;: process_grid</span>
-<span class="sd">                &#39;GRID_STATS&#39;: process_grid_stats</span>
 <span class="sd">                &#39;GRID_FIELDS_DIFF&#39;: process_grid_fields_diff</span>
 <span class="sd">                &#39;GRID_MASK&#39;: process_grid_mask</span>
 <span class="sd">                &#39;GRID_TEXTURE&#39;: process_grid_texture</span>
@@ -3134,7 +3133,6 @@
     <span class="k">for</span> <span class="n">sample</span><span class="p">,</span> <span class="p">(</span><span class="n">rad_ind_ray</span><span class="p">,</span> <span class="n">rad_ind_rng</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
         <span class="nb">zip</span><span class="p">(</span><span class="n">rad_ind_rays</span><span class="p">,</span> <span class="n">rad_ind_rngs</span><span class="p">)</span>
     <span class="p">):</span>
-
         <span class="c1"># measure time</span>
         <span class="n">tstart</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
 
