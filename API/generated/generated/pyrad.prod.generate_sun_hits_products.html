@@ -1294,22 +1294,25 @@
 <dt class="sig sig-object py" id="pyrad.prod.generate_sun_hits_products">
 <span class="sig-prename descclassname"><span class="pre">pyrad.prod.</span></span><span class="sig-name descname"><span class="pre">generate_sun_hits_products</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prdcfg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyrad/prod/process_product.html#generate_sun_hits_products"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.prod.generate_sun_hits_products" title="Link to this definition">#</a></dt>
 <dd><dl>
-<dt>generates sun hits products. Accepted product types:</dt><dd><dl>
-<dt>‘PLOT_SUN_HITS’: Plots in a sun-radar azimuth difference-sun-radar</dt><dd><p>elevation difference grid the values of all sun hits obtained
+<dt>generates sun hits products. Accepted product types:</dt><dd><p>All the products of the ‘VOL’ dataset group
+‘PLOT_SUN_HITS’: Plots in a sun-radar azimuth difference-sun-radar</p>
+<blockquote>
+<div><p>elevation difference grid the values of all sun hits obtained
 during the processing period
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
-<dt>voltype: str</dt><dd><p>name of the pyrad variable to use, it must be available in the dataset               in the dataset</p>
+<dt>voltype: str</dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
 </dd>
 </dl>
 </div></blockquote>
-</dd>
+</div></blockquote>
+<dl>
 <dt>‘PLOT_SUN_RETRIEVAL’: Plots in a sun-radar azimuth difference-sun-</dt><dd><p>radar elevation difference grid the retrieved sun pattern
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
-<dt>voltype: str</dt><dd><p>name of the pyrad variable to use, it must be available in the dataset               in the dataset</p>
+<dt>voltype: str</dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -1318,7 +1321,7 @@ User defined parameters:</p>
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
-<dt>voltype: str</dt><dd><p>name of the pyrad variable to use, it must be available in the dataset               in the dataset</p>
+<dt>voltype: str</dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
 </dd>
 <dt>dpi: int</dt><dd><p>The pixel density of the plot. Default 72</p>
 </dd>
@@ -1329,7 +1332,26 @@ User defined parameters:</p>
 </dd>
 <dt>‘PLOT_SUNSCAN’: Plots a constant range radar azimuth-elevation of the</dt><dd><p>sunscan field data</p>
 </dd>
-<dt>‘WRITE_SUN_HITS’: Writes the information concerning possible sun hits</dt><dd><p>in a csv file</p>
+<dt>‘WRITE_SUN_HITS’: Writes the information concerning possible sun hits</dt><dd><p>in a csv file. The written data has the following columns
+“time”,
+“ray”,
+“NPrng”,
+“rad_el”,
+“rad_az”,
+“sun_el”,
+“sun_az”,
+“dBm_sun_hit”,
+“std(dBm_sun_hit)”,
+“NPh”,
+“NPhval”,
+“dBmv_sun_hit”,
+“std(dBmv_sun_hit)”,
+“NPv”,
+“NPvval”,
+“ZDR_sun_hit”,
+“std(ZDR_sun_hit)”,
+“NPzdr”,
+“NPzdrval”</p>
 </dd>
 <dt>‘WRITE_SUN_RETRIEVAL’: Writes the retrieved sun pattern parameters in</dt><dd><p>a csv file.
 User defined parameters:</p>
@@ -1340,9 +1362,22 @@ User defined parameters:</p>
 </dl>
 </div></blockquote>
 </dd>
+<dt>‘WRITE_SUNSCAN’: Writes the sunscan parameters in a csv file. The written data has the following</dt><dd><p>columns
+“sun_az”:             [deg] Azimuth sun position,
+“sun_el”:             [deg] Elevation sun position,
+“noise_pwr”:          [dBm] Noise power”,
+“sun_maxpwr_noise”:   [dBm] sun maximal power sample (including noise),
+“sun_maxpwr_nonoise”: [dBm] sun maximal power sample without noise,
+“sun_maxpwr_fit”:     [dBm] sun maximal fitted power (without noise),
+“sun_maxpwr_toa”:     [dBm] sun maximal power at top of atmosphere,
+“az_offset”:          [deg] Azimuth shift of fitted maxima to sun azimuth,
+“el_offset”:          [deg] Elevation shift of fitted maxima to sun elevation,
+“az_phi3db”:          [deg] Half-power beam width in azimuth,
+“el_phi3db”:          [deg] Half-power beam width in elevation,
+“fit_stddev”:         [dBm] Standard deviation (fit to samples),
+“num_samples”:        [#]   Number of samples used for the sun power fitting</p>
+</dd>
 </dl>
-<p>‘WRITE_SUNSCAN’: Writes the sunscan parameters in a csv file</p>
-<p>All the products of the ‘VOL’ dataset group</p>
 </dd>
 </dl>
 <dl class="field-list simple">

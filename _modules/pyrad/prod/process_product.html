@@ -450,7 +450,7 @@
 <span class="sd">            threshold.</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset               in the dataset</span>
+<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
 <span class="sd">                quant_min: float</span>
 <span class="sd">                    Minimum frequency of occurrence in percentage to keep the</span>
 <span class="sd">                    gate as valid. Default 95.</span>
@@ -756,22 +756,23 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">generate_sun_hits_products</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    generates sun hits products. Accepted product types:</span>
+<span class="sd">        All the products of the &#39;VOL&#39; dataset group</span>
 <span class="sd">        &#39;PLOT_SUN_HITS&#39;: Plots in a sun-radar azimuth difference-sun-radar</span>
 <span class="sd">            elevation difference grid the values of all sun hits obtained</span>
 <span class="sd">            during the processing period</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset               in the dataset</span>
+<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
 <span class="sd">        &#39;PLOT_SUN_RETRIEVAL&#39;: Plots in a sun-radar azimuth difference-sun-</span>
 <span class="sd">            radar elevation difference grid the retrieved sun pattern</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset               in the dataset</span>
+<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
 <span class="sd">        &#39;PLOT_SUN_RETRIEVAL_TS&#39;: Plots time series of the retrieved sun</span>
 <span class="sd">            pattern parameters</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset               in the dataset</span>
+<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
 <span class="sd">                dpi: int</span>
 <span class="sd">                    The pixel density of the plot. Default 72</span>
 <span class="sd">                add_date_in_fname: Bool</span>
@@ -779,15 +780,46 @@
 <span class="sd">        &#39;PLOT_SUNSCAN&#39;: Plots a constant range radar azimuth-elevation of the</span>
 <span class="sd">            sunscan field data</span>
 <span class="sd">        &#39;WRITE_SUN_HITS&#39;: Writes the information concerning possible sun hits</span>
-<span class="sd">            in a csv file</span>
+<span class="sd">            in a csv file. The written data has the following columns</span>
+<span class="sd">            &quot;time&quot;,</span>
+<span class="sd">            &quot;ray&quot;,</span>
+<span class="sd">            &quot;NPrng&quot;,</span>
+<span class="sd">            &quot;rad_el&quot;,</span>
+<span class="sd">            &quot;rad_az&quot;,</span>
+<span class="sd">            &quot;sun_el&quot;,</span>
+<span class="sd">            &quot;sun_az&quot;,</span>
+<span class="sd">            &quot;dBm_sun_hit&quot;,</span>
+<span class="sd">            &quot;std(dBm_sun_hit)&quot;,</span>
+<span class="sd">            &quot;NPh&quot;,</span>
+<span class="sd">            &quot;NPhval&quot;,</span>
+<span class="sd">            &quot;dBmv_sun_hit&quot;,</span>
+<span class="sd">            &quot;std(dBmv_sun_hit)&quot;,</span>
+<span class="sd">            &quot;NPv&quot;,</span>
+<span class="sd">            &quot;NPvval&quot;,</span>
+<span class="sd">            &quot;ZDR_sun_hit&quot;,</span>
+<span class="sd">            &quot;std(ZDR_sun_hit)&quot;,</span>
+<span class="sd">            &quot;NPzdr&quot;,</span>
+<span class="sd">            &quot;NPzdrval&quot;</span>
 <span class="sd">        &#39;WRITE_SUN_RETRIEVAL&#39;: Writes the retrieved sun pattern parameters in</span>
 <span class="sd">            a csv file.</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                add_date_in_fname: Bool</span>
 <span class="sd">                    If true the year is added in the csv file name</span>
-<span class="sd">        &#39;WRITE_SUNSCAN&#39;: Writes the sunscan parameters in a csv file</span>
-
-<span class="sd">        All the products of the &#39;VOL&#39; dataset group</span>
+<span class="sd">        &#39;WRITE_SUNSCAN&#39;: Writes the sunscan parameters in a csv file. The written data has the following</span>
+<span class="sd">            columns</span>
+<span class="sd">            &quot;sun_az&quot;:             [deg] Azimuth sun position,</span>
+<span class="sd">            &quot;sun_el&quot;:             [deg] Elevation sun position,</span>
+<span class="sd">            &quot;noise_pwr&quot;:          [dBm] Noise power&quot;,</span>
+<span class="sd">            &quot;sun_maxpwr_noise&quot;:   [dBm] sun maximal power sample (including noise),</span>
+<span class="sd">            &quot;sun_maxpwr_nonoise&quot;: [dBm] sun maximal power sample without noise,</span>
+<span class="sd">            &quot;sun_maxpwr_fit&quot;:     [dBm] sun maximal fitted power (without noise),</span>
+<span class="sd">            &quot;sun_maxpwr_toa&quot;:     [dBm] sun maximal power at top of atmosphere,</span>
+<span class="sd">            &quot;az_offset&quot;:          [deg] Azimuth shift of fitted maxima to sun azimuth,</span>
+<span class="sd">            &quot;el_offset&quot;:          [deg] Elevation shift of fitted maxima to sun elevation,</span>
+<span class="sd">            &quot;az_phi3db&quot;:          [deg] Half-power beam width in azimuth,</span>
+<span class="sd">            &quot;el_phi3db&quot;:          [deg] Half-power beam width in elevation,</span>
+<span class="sd">            &quot;fit_stddev&quot;:         [dBm] Standard deviation (fit to samples),</span>
+<span class="sd">            &quot;num_samples&quot;:        [#]   Number of samples used for the sun power fitting</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1270,12 +1302,7 @@
 <a class="viewcode-back" href="../../../API/generated/pyrad.prod.generate_qvp_products.html#pyrad.prod.generate_qvp_products">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">generate_qvp_products</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Generates quasi vertical profile-like products. Quasi vertical profiles</span>
-<span class="sd">    come from azimuthal averaging of polarimetric radar data. With the</span>
-<span class="sd">    variable &#39;qvp_type&#39; the user decides if the product has to be generated</span>
-<span class="sd">    at the end of the processing period (&#39;final&#39;) or instantaneously</span>
-<span class="sd">    (&#39;instant&#39;)</span>
-<span class="sd">    Accepted product types:</span>
+<span class="sd">    Generates quasi vertical profile-like products, from azimuthal averaging of polarimetric radar data.  Accepted product types:</span>
 <span class="sd">        All the products of the &#39;VOL&#39; dataset group</span>
 
 <span class="sd">    Parameters</span>
@@ -1500,7 +1527,7 @@
 <span class="sd">        of the VPR profile retrieval into a text file</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                    voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                        in the dataset</span>
+
 <span class="sd">        All the products of the &#39;VOL&#39; dataset group</span>
 
 <span class="sd">    Parameters</span>
