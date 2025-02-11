@@ -1,16 +1,18 @@
 # %%
 from pathlib import Path
-import os 
+import os
 import re
 
 mainpath = Path(__file__).resolve().parent.parent
-prodpath = Path(mainpath, 'src', 'pyrad_proc', 'pyrad', 'prod')
-OUT_DIRECTORY = str(Path(mainpath, 'doc', 'source', 'overview'))
-DOC_PATH = 'https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad'
+prodpath = Path(mainpath, "src", "pyrad_proc", "pyrad", "prod")
+OUT_DIRECTORY = str(Path(mainpath, "doc", "source", "overview"))
+DOC_PATH = "https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad"
+
 
 def funcpath_to_docpath(funcpath):
-    funcpath = funcpath.split('pyrad')[-1]
+    funcpath = funcpath.split("pyrad")[-1]
     return DOC_PATH + funcpath
+
 
 def parameters_to_dict(params):
     dic = {}
@@ -39,95 +41,124 @@ def parameters_to_dict(params):
 
 def dict_to_restructured_text(yaml_data):
     rst_output = []
-    rst_output.append('List of pyrad products separated by dataset type')
-    rst_output.append('=================================================\n')
+    rst_output.append("List of pyrad products separated by dataset type")
+    rst_output.append("=================================================\n")
 
     for datasettype, value in yaml_data.items():
         rst_output.append(f"{datasettype}")
         rst_output.append("-----------------------------")
 
-        if 'all_products' in yaml_data[datasettype]:
+        if "all_products" in yaml_data[datasettype]:
             rst_output.append(".. note::")
-            rst_output.append("   Supports all products of type " + \
-                f"{yaml_data[datasettype]['all_products']}")
-            rst_output.append('')
+            rst_output.append(
+                "   Supports all products of type "
+                + f"{yaml_data[datasettype]['all_products']}"
+            )
+            rst_output.append("")
 
         for product, prodinfo in yaml_data[datasettype].items():
             if type(prodinfo) == str:
                 continue
-            if 'description' not in prodinfo:
+            if "description" not in prodinfo:
                 continue
             rst_output.append(f"{product}")
             rst_output.append('""""""""""""""""""""""""""""""')
-            rst_output.append('description')
-            rst_output.append('   ' + prodinfo['description'] + f'\n `[Source] <{prodinfo["link"]}>`_' )
-            params = parameters_to_dict(prodinfo['parameters'])
+            rst_output.append("description")
+            rst_output.append(
+                "   " + prodinfo["description"] + f'\n `[Source] <{prodinfo["link"]}>`_'
+            )
+            params = parameters_to_dict(prodinfo["parameters"])
             if len(params):
-                rst_output.append('parameters')
-                
+                rst_output.append("parameters")
+
                 for param, paraminfo in params.items():
                     try:
-                        rst_output.append(f'   {param.split()[0]} : *{' '.join(param.split()[1:])}*')
+                        rst_output.append(
+                            f"   {param.split()[0]} : *{" ".join(param.split()[1:])}*"
+                        )
                     except IndexError:
-                        rst_output.append(f'   {param}')
-                    rst_output.append('       ' + paraminfo)
-            rst_output.append('')
+                        rst_output.append(f"   {param}")
+                    rst_output.append("       " + paraminfo)
+            rst_output.append("")
             # rst_output.append(f"\n\n{value2['parameters']}\n\n")
-    return '\n'.join(rst_output)
+    return "\n".join(rst_output)
 
 
 def process_file(filepath):
-    with open(filepath, 'r') as f:
+    with open(filepath, "r") as f:
         content = f.readlines()
     all_products = {}
     started = False
     product = None
-    for i,line in enumerate(content):
-        if 'def generate' in line:
-            function = line.split('def')[1].split('(')[0].strip()
+    for i, line in enumerate(content):
+        if "def generate" in line:
+            if started:
+                # clear buffer
+                try:
+                    all_products[function][product]["description"] = " ".join(
+                        descr.replace("\n", "").split()
+                    )
+                except (KeyError, UnboundLocalError, TypeError):
+                    pass
+
+            function = line.split("def")[1].split("(")[0].strip()
             all_products[function] = {}
             reading_title = False
             reading_params = False
-        if 'Accepted product types:' in line:
+        if "Accepted product types:" in line:
             started = True
             reading_params = False
         if started:
-            if 'All the products of the' in line:
-                all_products_type = line.split('All the products of the ')[1].split()[0]
-                all_products[function]['all_products'] = all_products_type
+            if "All the products of the" in line:
+                all_products_type = line.split("All the products of the ")[1].split()[0]
+                all_products[function]["all_products"] = all_products_type
 
             match = re.findall("^'[A-Z0-9_]*'\\s*:\\d*", line.strip())
-            if 'Parameters' in line: # End of block with product list
+            if "Parameters" in line:  # End of block with product list
                 reading_params = False
+                reading_title = False
             if len(match):
                 reading_params = False
                 reading_title = True
-                if product in all_products[function]:
-                    all_products[function][product]['description'] = " ".join(
-                        descr.replace('\n', '').split())
+                # write description for last product
+                try:
+                    if product in all_products[function]:
+                        all_products[function][product]["description"] = " ".join(
+                            descr.replace("\n", "").split()
+                        )
+                except TypeError:
+                    pass
 
-                product = match[0].replace("'", "").split(':')[0].strip()
-                descr = line.split(':')[1].strip()
+                product = match[0].replace("'", "").split(":")[0].strip()
+                descr = line.split(":")[1].strip()
                 all_products[function][product] = {}
-                all_products[function][product]['parameters'] = ''
+                all_products[function][product]["parameters"] = ""
                 continue
-            if 'User defined parameters' in line:
-                all_products[function][product]['description'] = " ".join(
-                    descr.replace('\n', '').split())
+            if "User defined parameters" in line:
+                all_products[function][product]["description"] = " ".join(
+                    descr.replace("\n", "").split()
+                )
                 reading_params = True
                 reading_title = False
                 continue
             if reading_title:
                 descr += line
             if reading_params and product:
-                all_products[function][product]['parameters'] += " " + \
-                    line
-        if ('prdcfg["type"]' in line or "prdcfg['type']" in line) and '==' in line:
+                all_products[function][product]["parameters"] += " " + line
+        if ('prdcfg["type"]' in line or "prdcfg['type']" in line) and "==" in line:
             for product in all_products[function].keys():
                 if product in line:
-                    all_products[function][product]['link'] = (funcpath_to_docpath(filepath) +
-                        f'#L{i+1}')
+                    all_products[function][product]["link"] = (
+                        funcpath_to_docpath(filepath) + f"#L{i+1}"
+                    )
+
+    if reading_title:
+        all_products[function][product]["description"] = " ".join(
+            descr.replace("\n", "").split()
+        )
+
     return all_products
+
 
 products = {}
 for root, _, files in os.walk(prodpath):
@@ -138,14 +169,14 @@ for root, _, files in os.walk(prodpath):
 
 # Match function names to product types
 mapping_func_to_prodname = {}
-file_path = Path(prodpath, 'product_aux.py')
-with open(file_path, 'r') as f:
+file_path = Path(prodpath, "product_aux.py")
+with open(file_path, "r") as f:
     content = f.readlines()
 for line in content:
     match = re.findall("^'[A-Z0-9_]*'\\s*:\\d*", line.strip())
     if len(match):
-        product = match[0].replace("'", "").split(':')[0]
-        function = line.split(':')[1].strip()
+        product = match[0].replace("'", "").split(":")[0]
+        function = line.split(":")[1].strip()
         mapping_func_to_prodname[function] = product
 
 for k in mapping_func_to_prodname:
@@ -155,6 +186,6 @@ for k in mapping_func_to_prodname:
 
 # Convert dict data to reStructuredText format
 rst_content = dict_to_restructured_text(products)
-fname = Path(OUT_DIRECTORY, 'list_products.rst')
-with open(fname, 'w') as f:
+fname = Path(OUT_DIRECTORY, "list_products.rst")
+with open(fname, "w") as f:
     f.write(rst_content)
