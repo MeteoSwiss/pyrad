@@ -413,8 +413,7 @@ def generate_sun_hits_products(dataset, prdcfg):
             User defined parameters:
                 add_date_in_fname: Bool
                     If true the year is added in the csv file name
-        'WRITE_SUNSCAN': Writes the sunscan parameters in a csv file. The written data has the following
-            columns
+        'WRITE_SUNSCAN': Writes the sunscan parameters in a csv file. The written data has the following columns
             "sun_az":             [deg] Azimuth sun position,
             "sun_el":             [deg] Elevation sun position,
             "noise_pwr":          [dBm] Noise power",
