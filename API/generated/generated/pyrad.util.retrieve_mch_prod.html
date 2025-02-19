@@ -1292,16 +1292,17 @@
 <h1>pyrad.util.retrieve_mch_prod<a class="headerlink" href="#pyrad-util-retrieve-mch-prod" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyrad.util.retrieve_mch_prod">
-<span class="sig-prename descclassname"><span class="pre">pyrad.util.</span></span><span class="sig-name descname"><span class="pre">retrieve_mch_prod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'shell'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sweeps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyrad/util/data_retrieval_utils.html#retrieve_mch_prod"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.util.retrieve_mch_prod" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyrad.util.</span></span><span class="sig-name descname"><span class="pre">retrieve_mch_prod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'shell'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sweeps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hdf5</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyrad/util/data_retrieval_utils.html#retrieve_mch_prod"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.util.retrieve_mch_prod" title="Link to this definition">#</a></dt>
 <dd><p>Retrieves radar data from the CSCS repository for a specified
 time range, unzips them and places them in a specified folder</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>folder_out</strong> (<em>str</em>) – directory where to store the unzipped files</p></li>
 <li><p><strong>start_time</strong> (<em>datetime.datetime instance</em>) – starting time of the time range</p></li>
 <li><p><strong>end_time</strong> (<em>datetime.datetime instance</em>) – end time of the time range</p></li>
 <li><p><strong>product_name</strong> (<em>str</em>) – name of the product, as stored on CSCS, e.g. RZC, CPCH, MZC, BZC…</p></li>
+<li><p><strong>folder_out</strong> (<em>str</em>) – directory where to store the unzipped files, if set to None
+will read the file to memory</p></li>
 <li><p><strong>pattern</strong> (<em>str</em>) – pattern constraint on file names, can be used for products which contain
 multiple filetypes, f.ex CPCH folders contain both rda and gif files,
 if only gifs are wanted : file_type = ‘<a href="#id1"><span class="problematic" id="id2">*</span></a>.gif’</p></li>
@@ -1309,6 +1310,8 @@ if only gifs are wanted : file_type = ‘<a href="#id1"><span class="problematic
 use ‘regex’ for more advanced regex patterns</p></li>
 <li><p><strong>sweeps</strong> (<em>list of int (optional)</em>) – For polar products, specifies which sweeps (elevations) must be
 retrieved, if not specified all available sweeps will be retrieved</p></li>
+<li><p><strong>hdf5</strong> (<em>bool</em>) – If True will retrieve the hdf5 files for the given product (beware
+hdf5 is not available for all products)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
