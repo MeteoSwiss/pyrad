@@ -299,6 +299,9 @@ def get_process_func(dataset_type, dsname):
     elif dataset_type == "GRID_MASK":
         func_name = "process_grid_mask"
         dsformat = "GRID"
+    elif dataset_type == "GRID_STATS":
+        func_name = "process_grid_stats"
+        dsformat = "GRID"
     elif dataset_type == "GRID_TEXTURE":
         func_name = "process_grid_texture"
         dsformat = "GRID"
@@ -2717,7 +2720,6 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
     for sample, (rad_ind_ray, rad_ind_rng) in enumerate(
         zip(rad_ind_rays, rad_ind_rngs)
     ):
-
         # measure time
         tstart = time()
 
