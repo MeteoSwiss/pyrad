@@ -66,7 +66,7 @@ import pandas as pd
 
 from pyart.config import get_fillvalue, get_field_colormap, get_field_limits
 from pyart.core import antenna_to_cartesian, cartesian_to_geographic_aeqd
-from pyart.graph.cm import cmap_d
+from cmweather.cm import cmap_d
 
 from .io_aux import generate_field_name_str
 from .flock_utils import lock_file, unlock_file
