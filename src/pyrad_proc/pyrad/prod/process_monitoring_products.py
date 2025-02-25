@@ -48,7 +48,7 @@ def generate_monitoring_products(dataset, prdcfg):
             are also plot on the same figure
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
                 anglenr: int
                     The elevation angle number to plot
                 quantiles: list of floats
@@ -62,7 +62,7 @@ def generate_monitoring_products(dataset, prdcfg):
             quantiles stored in a csv file.
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
                 quantiles: list of 3 floats
                     the quantiles to compute. Default 25., 50., 75.
                 ref_value: float
