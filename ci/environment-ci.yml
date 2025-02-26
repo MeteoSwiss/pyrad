@@ -14,7 +14,7 @@ dependencies:
   - cvxopt
   - wradlib
   - xarray
-  - boto3
+  - boto3<1.37
   - xradar
   - metpy
   - pytest-cov
