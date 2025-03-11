@@ -18,7 +18,6 @@ Functions for reading data derived from Digital Elevation Models (DEM)
 import pathlib
 from warnings import warn
 import numpy as np
-import pandas as pd
 from scipy.interpolate import RegularGridInterpolator
 
 # check existence of gdal
@@ -343,10 +342,9 @@ def read_ascii_data(fname, fill_value=None):
 
     # read the data
     try:
-
         with open(fname, "r") as file:
             lines = [file.readline().strip().split() for _ in range(6)]
-    
+
         # Parse metadata
         metadata = {
             "columns": int(lines[0][1]),

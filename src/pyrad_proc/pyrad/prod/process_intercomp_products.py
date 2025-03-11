@@ -232,7 +232,6 @@ def generate_intercomp_products(dataset, prdcfg):
                 dataset["intercomp_dict"]["rad1_rng"] >= range_bins[i],
                 dataset["intercomp_dict"]["rad1_rng"] < range_bins[i + 1],
             )
-
             if not np.sum(selection):  # skip if selection empty
                 continue
 
