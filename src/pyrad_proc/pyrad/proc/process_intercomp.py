@@ -2047,6 +2047,8 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
 
         radar1 = radar_list[ind_radar_list[0]]
         radar2 = radar_list[ind_radar_list[1]]
+        
+        dscfg["global_data"].update({"timeinfo": dscfg["timeinfo"]})
 
         if radar1 is None or radar2 is None:
             warn("Unable to inter-compare radars. Missing radar")
@@ -2063,7 +2065,6 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             warn("Unable to compare radar time avg fields. " + "Fields missing")
             return None, None
 
-        dscfg["global_data"].update({"timeinfo": dscfg["timeinfo"]})
         if not dscfg["initialized"]:
             dscfg["global_data"].update(
                 {"rad1_name": dscfg["RadarName"][ind_radar_list[0]]}
@@ -2379,10 +2380,12 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             rad2_phi,
             rad2_flag,
         ) = read_colocated_data_time_avg(fname)
+        
+        if not rad1_time:
+            return None, None
 
         rad1_excess_phi = (rad1_flag % 100).astype(int)
         rad2_excess_phi = (rad2_flag % 100).astype(int)
-
         rad1_clt = (((rad1_flag - rad1_excess_phi) % 10000) / 100).astype(int)
         rad2_clt = (((rad2_flag - rad2_excess_phi) % 10000) / 100).astype(int)
 
