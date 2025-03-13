@@ -236,6 +236,7 @@ terrain_aspect = "terrain_aspect"
 elevation_angle = "elevation_angle"
 visibility = "visibility"
 min_vis_altitude = "min_vis_altitude"
+min_vis_altitude_above_ground = "min_vis_altitude_above_ground"
 min_vis_elevation = "min_vis_elevation"
 incident_angle = "incident_angle"
 effective_area = "effective_area"
@@ -563,6 +564,7 @@ DEFAULT_FIELD_NAMES = {
     "elevation_angle": elevation_angle,
     "visibility": visibility,
     "min_vis_altitude": min_vis_altitude,
+    "min_vis_altitude_above_ground": min_vis_altitude_above_ground,
     "min_vis_elevation": min_vis_elevation,
     "incident_angle": incident_angle,
     "effective_area": effective_area,
