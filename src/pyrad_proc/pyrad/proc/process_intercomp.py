@@ -2371,7 +2371,7 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
         )
 
         fname = savedir + fname[0]
-
+    
         (
             rad1_time,
             rad1_ray_ind,
@@ -2393,7 +2393,7 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             rad2_flag,
         ) = read_colocated_data_time_avg(fname)
         
-        if not rad1_time:
+        if rad1_time is None:
             return None, None
 
         rad1_excess_phi = (rad1_flag % 100).astype(int)
@@ -2446,7 +2446,6 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             "rad2_rng": rad2_rng[ind_val],
             "rad2_val": rad2_dBZ[ind_val],
         }
-
         new_dataset = {
             "intercomp_dict": intercomp_dict,
             "timeinfo": dscfg["global_data"]["timeinfo"],
