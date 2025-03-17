@@ -1646,6 +1646,12 @@ DEFAULT_METADATA = {
         "long_name": "Minimum visible altitude",
         "coordinates": "x y",
     },
+    min_vis_altitude_above_ground: {
+        "units": "meters",
+        "standard_name": "min_vis_altitude_above_ground",
+        "long_name": "Minimum visible altitude above ground",
+        "coordinates": "x y",
+    },
     min_vis_elevation: {
         "units": "degrees",
         "standard_name": "min_vis_elevation",
