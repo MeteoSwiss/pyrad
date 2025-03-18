@@ -298,6 +298,9 @@ def get_process_func(dataset_type, dsname):
     elif dataset_type == "GRID_MASK":
         func_name = "process_grid_mask"
         dsformat = "GRID"
+    elif dataset_type == "GRID_STATS":
+        func_name = "process_grid_stats"
+        dsformat = "GRID"
     elif dataset_type == "GRID_TEXTURE":
         func_name = "process_grid_texture"
         dsformat = "GRID"

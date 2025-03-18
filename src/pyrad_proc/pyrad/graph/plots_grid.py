@@ -122,7 +122,7 @@ def plot_surface(
     max_lat = prdcfg["gridMapImageConfig"].get("latmax", 49.5)
     embellish = prdcfg["gridMapImageConfig"].get("embellish", True)
     colorbar_flag = prdcfg["gridMapImageConfig"].get("colorbar_flag", True)
-    exact_limits = prdcfg["gridMapImageConfig"].get("exact_limits", 0)
+    exact_limits = prdcfg["gridMapImageConfig"].get("exact_limits", True)
 
     if exact_limits:
         lon_lines = np.arange(min_lon, max_lon + lonstep, lonstep)
