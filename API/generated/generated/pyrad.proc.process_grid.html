@@ -54,7 +54,7 @@
     <script src="../../../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="pyrad.proc.process_grid_point" href="pyrad.proc.process_grid_point.html" />
+    <link rel="next" title="pyrad.proc.process_grid_stats" href="pyrad.proc.process_grid_stats.html" />
     <link rel="prev" title="pyrad.proc.process_raw_grid" href="pyrad.proc.process_raw_grid.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -674,6 +674,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.read_centroids.html">pyrad.io.read_centroids</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.read_centroids_npz.html">pyrad.io.read_centroids_npz</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.read_colocated_data.html">pyrad.io.read_colocated_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pyrad.io.read_colocated_data_time_avg.html">pyrad.io.read_colocated_data_time_avg</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.read_colocated_gates.html">pyrad.io.read_colocated_gates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.read_config.html">pyrad.io.read_config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.read_coord_sensors.html">pyrad.io.read_coord_sensors</a></li>
@@ -786,6 +787,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_vol_to_grid.html">pyrad.proc.process_vol_to_grid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_raw_grid.html">pyrad.proc.process_raw_grid</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">pyrad.proc.process_grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_stats.html">pyrad.proc.process_grid_stats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_point.html">pyrad.proc.process_grid_point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_multiple_points.html">pyrad.proc.process_grid_multiple_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_time_stats.html">pyrad.proc.process_grid_time_stats</a></li>
@@ -989,6 +991,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.proc.process_grid_multiple_points.html">pyrad.proc.process_grid_multiple_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.proc.process_grid_point.html">pyrad.proc.process_grid_point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.proc.process_grid_rainfall_accumulation.html">pyrad.proc.process_grid_rainfall_accumulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pyrad.proc.process_grid_stats.html">pyrad.proc.process_grid_stats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.proc.process_grid_texture.html">pyrad.proc.process_grid_texture</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.proc.process_grid_time_stats.html">pyrad.proc.process_grid_time_stats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.proc.process_grid_time_stats2.html">pyrad.proc.process_grid_time_stats2</a></li>
@@ -1320,8 +1323,9 @@
         <span class="n">grid</span> <span class="n">origin</span> <span class="p">[</span><span class="n">m</span> <span class="n">MSL</span><span class="p">]</span>
         <span class="n">Defaults</span> <span class="n">the</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span> <span class="ow">and</span> <span class="n">altitude</span> <span class="n">of</span> <span class="n">the</span> <span class="n">radar</span>
 <span class="n">wfunc</span> <span class="p">:</span> <span class="nb">str</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
-    <span class="n">the</span> <span class="n">weighting</span> <span class="n">function</span> <span class="n">used</span> <span class="n">to</span> <span class="n">combine</span> <span class="n">the</span> <span class="n">radar</span> <span class="n">gates</span> <span class="n">close</span> <span class="n">to</span> <span class="n">a</span>
-    <span class="n">grid</span> <span class="n">point</span><span class="o">.</span> <span class="n">Possible</span> <span class="n">values</span> <span class="n">BARNES</span><span class="p">,</span> <span class="n">BARNES2</span><span class="p">,</span> <span class="n">CRESSMAN</span><span class="p">,</span> <span class="n">NEAREST</span>
+    <span class="n">the</span> <span class="n">weighting</span> <span class="n">function</span> <span class="n">used</span> <span class="n">to</span> <span class="n">compute</span> <span class="n">the</span> <span class="n">weights</span> <span class="n">of</span> <span class="n">the</span> <span class="n">radar</span> <span class="n">gates</span> <span class="n">close</span> <span class="n">to</span> <span class="n">a</span>
+    <span class="n">grid</span> <span class="n">point</span><span class="o">.</span> <span class="n">Possible</span> <span class="n">values</span> <span class="n">BARNES</span><span class="p">,</span> <span class="n">BARNES2</span><span class="p">,</span> <span class="n">CRESSMAN</span><span class="p">,</span> <span class="n">NEAREST</span><span class="p">,</span> <span class="n">GRID</span><span class="o">.</span>
+    <span class="n">GRID</span> <span class="n">will</span> <span class="n">give</span> <span class="n">a</span> <span class="n">weight</span> <span class="n">of</span> <span class="mi">1</span> <span class="n">to</span> <span class="nb">all</span> <span class="n">polar</span> <span class="n">gates</span> <span class="n">which</span> <span class="n">centroids</span> <span class="n">fall</span> <span class="n">within</span> <span class="n">the</span> <span class="n">Cartesian</span> <span class="n">grid</span> <span class="n">cell</span><span class="p">,</span> <span class="mi">0</span> <span class="n">otherwise</span>
     <span class="n">Default</span> <span class="n">NEAREST</span>
 <span class="n">roif_func</span> <span class="p">:</span> <span class="nb">str</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
     <span class="n">the</span> <span class="n">function</span> <span class="n">used</span> <span class="n">to</span> <span class="n">compute</span> <span class="n">the</span> <span class="n">region</span> <span class="n">of</span> <span class="n">interest</span><span class="o">.</span>
@@ -1380,11 +1384,11 @@ datatype</p></li>
       </div>
     </a>
     <a class="right-next"
-       href="pyrad.proc.process_grid_point.html"
+       href="pyrad.proc.process_grid_stats.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">pyrad.proc.process_grid_point</p>
+        <p class="prev-next-title">pyrad.proc.process_grid_stats</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1444,7 +1448,7 @@ datatype</p></li>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     <br/>
   </p>
 </div>

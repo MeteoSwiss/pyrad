@@ -119,6 +119,8 @@
     
     process_grid_rainfall_accumulation
     
+    process_grid_stats
+    
     process_grid_texture
     
     process_grid_time_stats

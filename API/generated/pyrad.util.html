@@ -674,6 +674,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_centroids.html">pyrad.io.read_centroids</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_centroids_npz.html">pyrad.io.read_centroids_npz</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_colocated_data.html">pyrad.io.read_colocated_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_colocated_data_time_avg.html">pyrad.io.read_colocated_data_time_avg</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_colocated_gates.html">pyrad.io.read_colocated_gates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_config.html">pyrad.io.read_config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_coord_sensors.html">pyrad.io.read_coord_sensors</a></li>
@@ -786,6 +787,7 @@
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_vol_to_grid.html">pyrad.proc.process_vol_to_grid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_raw_grid.html">pyrad.proc.process_raw_grid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_grid.html">pyrad.proc.process_grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_grid_stats.html">pyrad.proc.process_grid_stats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_grid_point.html">pyrad.proc.process_grid_point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_grid_multiple_points.html">pyrad.proc.process_grid_multiple_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_grid_time_stats.html">pyrad.proc.process_grid_time_stats</a></li>
@@ -989,6 +991,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_multiple_points.html">pyrad.proc.process_grid_multiple_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_point.html">pyrad.proc.process_grid_point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_rainfall_accumulation.html">pyrad.proc.process_grid_rainfall_accumulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_stats.html">pyrad.proc.process_grid_stats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_texture.html">pyrad.proc.process_grid_texture</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_time_stats.html">pyrad.proc.process_grid_time_stats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_time_stats2.html">pyrad.proc.process_grid_time_stats2</a></li>
@@ -1293,7 +1296,7 @@
 <p>Functions to read and write data and configuration files.</p>
 <section id="radar-utilities">
 <h3>Radar Utilities<a class="headerlink" href="#radar-utilities" title="Link to this heading">#</a></h3>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.time_avg_range.html#pyrad.util.time_avg_range" title="pyrad.util.time_avg_range"><code class="xref py py-obj docutils literal notranslate"><span class="pre">time_avg_range</span></code></a>(timeinfo, avg_starttime, ...)</p></td>
 <td><p>finds the new start and end time of an averaging</p></td>
@@ -1397,7 +1400,7 @@
 </section>
 <section id="statistical-utilities">
 <h3>Statistical Utilities<a class="headerlink" href="#statistical-utilities" title="Link to this heading">#</a></h3>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.quantiles_weighted.html#pyrad.util.quantiles_weighted" title="pyrad.util.quantiles_weighted"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quantiles_weighted</span></code></a>(values[, weight_vector, ...])</p></td>
 <td><p>Given a set of values and weights, compute the weighted quantile(s) and average.</p></td>
@@ -1411,7 +1414,7 @@
 </section>
 <section id="data-retrieval-utilities">
 <h3>Data Retrieval Utilities<a class="headerlink" href="#data-retrieval-utilities" title="Link to this heading">#</a></h3>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.retrieve_hzt_prod.html#pyrad.util.retrieve_hzt_prod" title="pyrad.util.retrieve_hzt_prod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retrieve_hzt_prod</span></code></a>(folder_out, start_time, ...)</p></td>
 <td><p>Retrieves the preprocessed HZT products from the CSCS repository for a specified time range, unzips them and places them in a specified folder</p></td>
@@ -1437,7 +1440,7 @@
 </section>
 </section>
 <p class="rubric">Functions</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.belongs_roi_indices.html#pyrad.util.belongs_roi_indices" title="pyrad.util.belongs_roi_indices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">belongs_roi_indices</span></code></a>(lat, lon, roi[, use_latlon])</p></td>
 <td><p>Get the indices of points that belong to roi in a list of points</p></td>
@@ -1656,7 +1659,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     <br/>
   </p>
 </div>

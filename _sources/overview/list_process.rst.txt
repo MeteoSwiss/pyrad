@@ -3045,8 +3045,9 @@ parameters
      |         grid origin [m MSL]
      |         Defaults the latitude, longitude and altitude of the radar
    wfunc : str. Dataset keyword
-     | the weighting function used to combine the radar gates close to a
-     |     grid point. Possible values BARNES, BARNES2, CRESSMAN, NEAREST
+     | the weighting function used to compute the weights of the radar gates close to a
+     |     grid point. Possible values BARNES, BARNES2, CRESSMAN, NEAREST, GRID.
+     |     GRID will give a weight of 1 to all polar gates which centroids fall within the Cartesian grid cell, 0 otherwise
      |     Default NEAREST
    roif_func : str. Dataset keyword
      | the function used to compute the region of interest.

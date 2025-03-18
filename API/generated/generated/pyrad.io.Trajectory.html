@@ -674,6 +674,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.read_centroids.html">pyrad.io.read_centroids</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.read_centroids_npz.html">pyrad.io.read_centroids_npz</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.read_colocated_data.html">pyrad.io.read_colocated_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pyrad.io.read_colocated_data_time_avg.html">pyrad.io.read_colocated_data_time_avg</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.read_colocated_gates.html">pyrad.io.read_colocated_gates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.read_config.html">pyrad.io.read_config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.read_coord_sensors.html">pyrad.io.read_coord_sensors</a></li>
@@ -786,6 +787,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_vol_to_grid.html">pyrad.proc.process_vol_to_grid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_raw_grid.html">pyrad.proc.process_raw_grid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid.html">pyrad.proc.process_grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_stats.html">pyrad.proc.process_grid_stats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_point.html">pyrad.proc.process_grid_point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_multiple_points.html">pyrad.proc.process_grid_multiple_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_time_stats.html">pyrad.proc.process_grid_time_stats</a></li>
@@ -989,6 +991,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.proc.process_grid_multiple_points.html">pyrad.proc.process_grid_multiple_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.proc.process_grid_point.html">pyrad.proc.process_grid_point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.proc.process_grid_rainfall_accumulation.html">pyrad.proc.process_grid_rainfall_accumulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pyrad.proc.process_grid_stats.html">pyrad.proc.process_grid_stats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.proc.process_grid_texture.html">pyrad.proc.process_grid_texture</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.proc.process_grid_time_stats.html">pyrad.proc.process_grid_time_stats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.proc.process_grid_time_stats2.html">pyrad.proc.process_grid_time_stats2</a></li>
@@ -1292,7 +1295,7 @@
 <h1>pyrad.io.Trajectory<a class="headerlink" href="#pyrad-io-trajectory" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyrad.io.Trajectory">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyrad.io.</span></span><span class="sig-name descname"><span class="pre">Trajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starttime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endtime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'plane'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flashnr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyrad/io/trajectory.html#Trajectory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.io.Trajectory" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyrad.io.</span></span><span class="sig-name descname"><span class="pre">Trajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starttime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endtime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'plane'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flashnr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyrad/io/trajectory.html#Trajectory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.io.Trajectory" title="Link to this definition">#</a></dt>
 <dd><p>A class for reading and handling trajectory data from a file.
 :ivar filename: Path and name of the trajectory definition file
 :vartype filename: str
@@ -1362,7 +1365,7 @@ trajectory. 0 means all flash numbers included</p></li>
 </div></blockquote>
 </dd></dl>
 
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../pyrad.io.Trajectory.add_radar.html#pyrad.io.Trajectory.add_radar" title="pyrad.io.Trajectory.add_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_radar</span></code></a>(radar)</p></td>
 <td><p>Add the coordinates (WGS84 longitude, latitude and non WGS84 altitude) of a radar to the radar_list.</p></td>
@@ -1471,7 +1474,7 @@ trajectory. 0 means all flash numbers included</p></li>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     <br/>
   </p>
 </div>

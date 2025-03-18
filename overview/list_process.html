@@ -6245,9 +6245,10 @@
 </div>
 </dd>
 <dt>wfunc<span class="classifier">str. Dataset keyword</span></dt><dd><div class="line-block">
-<div class="line">the weighting function used to combine the radar gates close to a</div>
+<div class="line">the weighting function used to compute the weights of the radar gates close to a</div>
 <div class="line-block">
-<div class="line">grid point. Possible values BARNES, BARNES2, CRESSMAN, NEAREST</div>
+<div class="line">grid point. Possible values BARNES, BARNES2, CRESSMAN, NEAREST, GRID.</div>
+<div class="line">GRID will give a weight of 1 to all polar gates which centroids fall within the Cartesian grid cell, 0 otherwise</div>
 <div class="line">Default NEAREST</div>
 </div>
 </div>
@@ -9360,7 +9361,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     <br/>
   </p>
 </div>

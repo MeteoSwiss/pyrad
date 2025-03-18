@@ -1642,7 +1642,7 @@ description
  | intercomparison in a file and plots the time series of the 
  | statistics. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L273>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L301>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -1667,7 +1667,7 @@ description
  | Plots a density plot with the points of
  | radar 1 versus the points of radar 2 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L175>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L180>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -1675,6 +1675,8 @@ parameters
        The quantization step of the data. If none it will be computed using the Py-ART config file. Default None 
    scatter_type: : *str*
        Type of scatter plot. Can be a plot for each radar volume (instant) or at the end of the processing period (cumulative). Default is cumulative 
+   range_bins: : *list of floats*
+       Range bins to radar 1 to consider, a different plot will be generated for all range bins.This can be used to differentiate the analysis in different radar ranges. Default is to generate only one figure, regardless of the distance to radar 1. 
    transform: : *str*
        A transform to apply to the data before computing the statistics and generating the plots. Any mathematical function with argument "x" is accepted for example "sin(x) + x**2" or "10 * log10(x)" Default is to use no transform  
 
@@ -1684,7 +1686,7 @@ description
  | Writes the instantaneously intercompared data
  | (gate positions, values, etc.) in a csv file. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L273>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L301>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset  
@@ -1695,7 +1697,7 @@ description
  | Writes the time-averaged intercompared
  | data (gate positions, values, etc.) in a csv file. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L149>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L154>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset   

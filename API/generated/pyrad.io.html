@@ -674,6 +674,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_centroids.html">pyrad.io.read_centroids</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_centroids_npz.html">pyrad.io.read_centroids_npz</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_colocated_data.html">pyrad.io.read_colocated_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_colocated_data_time_avg.html">pyrad.io.read_colocated_data_time_avg</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_colocated_gates.html">pyrad.io.read_colocated_gates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_config.html">pyrad.io.read_config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_coord_sensors.html">pyrad.io.read_coord_sensors</a></li>
@@ -786,6 +787,7 @@
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_vol_to_grid.html">pyrad.proc.process_vol_to_grid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_raw_grid.html">pyrad.proc.process_raw_grid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_grid.html">pyrad.proc.process_grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_grid_stats.html">pyrad.proc.process_grid_stats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_grid_point.html">pyrad.proc.process_grid_point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_grid_multiple_points.html">pyrad.proc.process_grid_multiple_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_grid_time_stats.html">pyrad.proc.process_grid_time_stats</a></li>
@@ -989,6 +991,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_multiple_points.html">pyrad.proc.process_grid_multiple_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_point.html">pyrad.proc.process_grid_point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_rainfall_accumulation.html">pyrad.proc.process_grid_rainfall_accumulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_stats.html">pyrad.proc.process_grid_stats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_texture.html">pyrad.proc.process_grid_texture</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_time_stats.html">pyrad.proc.process_grid_time_stats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_time_stats2.html">pyrad.proc.process_grid_time_stats2</a></li>
@@ -1293,7 +1296,7 @@
 <p>Functions to read and write data and configuration files.</p>
 <section id="reading-configuration-files">
 <h3>Reading configuration files<a class="headerlink" href="#reading-configuration-files" title="Link to this heading">#</a></h3>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_config.html#pyrad.io.read_config" title="pyrad.io.read_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_config</span></code></a>(fname[, cfg, defaults])</p></td>
 <td><p>Read a pyrad config file.</p></td>
@@ -1304,7 +1307,7 @@
 </section>
 <section id="reading-radar-data">
 <h3>Reading radar data<a class="headerlink" href="#reading-radar-data" title="Link to this heading">#</a></h3>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.get_data.html#pyrad.io.get_data" title="pyrad.io.get_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data</span></code></a>(voltime, datatypesdescr, cfg)</p></td>
 <td><p>Reads pyrad input data.</p></td>
@@ -1315,7 +1318,7 @@
 </section>
 <section id="reading-icon-data">
 <h3>Reading icon data<a class="headerlink" href="#reading-icon-data" title="Link to this heading">#</a></h3>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.icon2radar_data.html#pyrad.io.icon2radar_data" title="pyrad.io.icon2radar_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">icon2radar_data</span></code></a>(radar, icon_coord, icon_data)</p></td>
 <td><p>get the icon value corresponding to each radar gate using nearest neighbour interpolation</p></td>
@@ -1365,7 +1368,7 @@
 </section>
 <section id="reading-dem-data">
 <h3>Reading DEM data<a class="headerlink" href="#reading-dem-data" title="Link to this heading">#</a></h3>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.dem2radar_data.html#pyrad.io.dem2radar_data" title="pyrad.io.dem2radar_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dem2radar_data</span></code></a>(radar, dem_data[, slice_xy, ...])</p></td>
 <td><p>get the DEM value corresponding to each radar gate using nearest neighbour interpolation</p></td>
@@ -1382,7 +1385,7 @@
 </section>
 <section id="reading-other-data">
 <h3>Reading other data<a class="headerlink" href="#reading-other-data" title="Link to this heading">#</a></h3>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_centroids_npz.html#pyrad.io.read_centroids_npz" title="pyrad.io.read_centroids_npz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_centroids_npz</span></code></a>(fname)</p></td>
 <td><p>Reads an npz file containing data used in centroid computation</p></td>
@@ -1549,7 +1552,7 @@
 </section>
 <section id="writing-data">
 <h3>Writing data<a class="headerlink" href="#writing-data" title="Link to this heading">#</a></h3>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_vol_csv.html#pyrad.io.write_vol_csv" title="pyrad.io.write_vol_csv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_vol_csv</span></code></a>(fname, radar, field_name[, ...])</p></td>
 <td><p>Creates a kml file with the radar volume data</p></td>
@@ -1668,7 +1671,7 @@
 </section>
 <section id="auxiliary-functions">
 <h3>Auxiliary functions<a class="headerlink" href="#auxiliary-functions" title="Link to this heading">#</a></h3>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.get_rad4alp_prod_fname.html#pyrad.io.get_rad4alp_prod_fname" title="pyrad.io.get_rad4alp_prod_fname"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_rad4alp_prod_fname</span></code></a>(datatype)</p></td>
 <td><p>Given a datatype find the corresponding start and termination of the METRANET product file name</p></td>
@@ -1757,7 +1760,7 @@
 </section>
 <section id="trajectory">
 <h3>Trajectory<a class="headerlink" href="#trajectory" title="Link to this heading">#</a></h3>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.Trajectory.html#pyrad.io.Trajectory" title="pyrad.io.Trajectory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Trajectory</span></code></a>(filename[, starttime, endtime, ...])</p></td>
 <td><p>A class for reading and handling trajectory data from a file. :ivar filename: Path and name of the trajectory definition file :vartype filename: str :ivar starttime: Start time of trajectory processing. :vartype starttime: datetime :ivar endtime: End time of trajectory processing. :vartype endtime: datetime :ivar trajtype: :vartype trajtype: str :ivar Type of trajectory. Can be 'plane' or 'lightning': :ivar time_vector: Array containing the trajectory time samples :vartype time_vector: Array of datetime objects :ivar wgs84_lat_deg: WGS84 latitude samples in deg :vartype wgs84_lat_deg: Array of floats :ivar wgs84_lon_deg: WGS84 longitude samples in deg :vartype wgs84_lon_deg: Array of floats :ivar wgs84_alt_m: WGS84 altitude samples in m :vartype wgs84_alt_m: Array of floats :ivar nsamples: :vartype nsamples: int :ivar Number of samples in the trajectory: :ivar _swiss_grid_done: Indicates that convertion to Swiss coordinates has been performed :vartype _swiss_grid_done: Bool :ivar swiss_chy, swiss_chx, swiss_chh: Swiss coordinates in m :vartype swiss_chy, swiss_chx, swiss_chh: Array of floats :ivar radar_list: List of radars for which trajectories are going to be computed :vartype radar_list: list :ivar flashnr: For 'lightning' only. Number of flash for which trajectory data                is going to be computed. If 0 all all flashes are going to be                considered. :vartype flashnr: int :ivar time_in_flash: For 'lightning' only. Time within flash (sec) :vartype time_in_flash: array of floats :ivar flashnr_vec: For 'lightning' only. Flash number of each data sample :vartype flashnr_vec: array of ints :ivar dBm: For 'lightning' only. Lightning power (dBm) :vartype dBm: array of floats :ivar Methods: :ivar --------: :ivar add_radar: :vartype add_radar: Add a radar :ivar calculate_velocities: :vartype calculate_velocities: Computes velocities :ivar get_start_time: :vartype get_start_time: Return time of first trajectory sample :ivar get_end_time: :vartype get_end_time: Return time of last trajectory sample :ivar get_samples_in_period: :vartype get_samples_in_period: Get indices of samples within period :ivar _convert_traj_to_swissgrid: :vartype _convert_traj_to_swissgrid: convert data from WGS84 to Swiss coordinates :ivar _read_traj: :vartype _read_traj: Read plane trajectory from file :ivar _read_traj_flores: :vartype _read_traj_flores: Read FLORAKO plane trajectory from file :ivar _read_traj_trt: :vartype _read_traj_trt: Read TRT trajectory from file :ivar _read_traj_lightning: :vartype _read_traj_lightning: Read lightning trajectory from file :ivar _get_total_seconds: :vartype _get_total_seconds: Get the total time of the trajectory in seconds.</p></td>
@@ -1768,7 +1771,7 @@
 </section>
 <section id="timeseries">
 <h3>TimeSeries<a class="headerlink" href="#timeseries" title="Link to this heading">#</a></h3>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.TimeSeries.html#pyrad.io.TimeSeries" title="pyrad.io.TimeSeries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TimeSeries</span></code></a>(desc[, timevec, timeformat, ...])</p></td>
 <td><p>Holding timeseries data and metadata.</p></td>
@@ -1779,7 +1782,7 @@
 </section>
 </section>
 <p class="rubric">Classes</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.TimeSeries.html#pyrad.io.TimeSeries" title="pyrad.io.TimeSeries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TimeSeries</span></code></a>(desc[, timevec, timeformat, ...])</p></td>
 <td><p>Holding timeseries data and metadata.</p></td>
@@ -1791,7 +1794,7 @@
 </table>
 </div>
 <p class="rubric">Functions</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.add_field.html#pyrad.io.add_field" title="pyrad.io.add_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_field</span></code></a>(radar_dest, radar_orig)</p></td>
 <td><p>adds the fields from orig radar into dest radar.</p></td>
@@ -1925,289 +1928,292 @@
 <tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_colocated_data.html#pyrad.io.read_colocated_data" title="pyrad.io.read_colocated_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_colocated_data</span></code></a>(fname)</p></td>
 <td><p>Reads a CSV file containing colocated data using pandas.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_colocated_gates.html#pyrad.io.read_colocated_gates" title="pyrad.io.read_colocated_gates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_colocated_gates</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_colocated_data_time_avg.html#pyrad.io.read_colocated_data_time_avg" title="pyrad.io.read_colocated_data_time_avg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_colocated_data_time_avg</span></code></a>(fname)</p></td>
+<td><p>Reads a CSV file containing time-averaged colocated data using pandas.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_colocated_gates.html#pyrad.io.read_colocated_gates" title="pyrad.io.read_colocated_gates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_colocated_gates</span></code></a>(fname)</p></td>
 <td><p>Reads a csv files containing the position of colocated gates</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_config.html#pyrad.io.read_config" title="pyrad.io.read_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_config</span></code></a>(fname[, cfg, defaults])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_config.html#pyrad.io.read_config" title="pyrad.io.read_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_config</span></code></a>(fname[, cfg, defaults])</p></td>
 <td><p>Read a pyrad config file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_coord_sensors.html#pyrad.io.read_coord_sensors" title="pyrad.io.read_coord_sensors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_coord_sensors</span></code></a>(fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_coord_sensors.html#pyrad.io.read_coord_sensors" title="pyrad.io.read_coord_sensors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_coord_sensors</span></code></a>(fname)</p></td>
 <td><p>Reads a file containing the coordinates of multiple sensors.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_disdro_parsivel.html#pyrad.io.read_disdro_parsivel" title="pyrad.io.read_disdro_parsivel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_disdro_parsivel</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_disdro_parsivel.html#pyrad.io.read_disdro_parsivel" title="pyrad.io.read_disdro_parsivel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_disdro_parsivel</span></code></a>(fname)</p></td>
 <td><p>Reads data collected by a parsivel disdrometer and stored in a csv file</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_disdro_scattering.html#pyrad.io.read_disdro_scattering" title="pyrad.io.read_disdro_scattering"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_disdro_scattering</span></code></a>(fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_disdro_scattering.html#pyrad.io.read_disdro_scattering" title="pyrad.io.read_disdro_scattering"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_disdro_scattering</span></code></a>(fname)</p></td>
 <td><p>Reads scattering parameters computed from disdrometer data contained in a text file</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_excess_gates.html#pyrad.io.read_excess_gates" title="pyrad.io.read_excess_gates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_excess_gates</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_excess_gates.html#pyrad.io.read_excess_gates" title="pyrad.io.read_excess_gates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_excess_gates</span></code></a>(fname)</p></td>
 <td><p>Reads a csv files containing the position of gates exceeding a given percentile of frequency of occurrence</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_fzl_igra.html#pyrad.io.read_fzl_igra" title="pyrad.io.read_fzl_igra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_fzl_igra</span></code></a>(station, dtime[, dscfg])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_fzl_igra.html#pyrad.io.read_fzl_igra" title="pyrad.io.read_fzl_igra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_fzl_igra</span></code></a>(station, dtime[, dscfg])</p></td>
 <td><p>Get an estimation of the freezing level height from the Integrated Global Radiosonde Archive (IGRA)</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_histogram.html#pyrad.io.read_histogram" title="pyrad.io.read_histogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_histogram</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_histogram.html#pyrad.io.read_histogram" title="pyrad.io.read_histogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_histogram</span></code></a>(fname)</p></td>
 <td><p>Reads a histogram contained in a csv file</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_histogram_ts.html#pyrad.io.read_histogram_ts" title="pyrad.io.read_histogram_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_histogram_ts</span></code></a>(fname_list, datatype[, t_res])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_histogram_ts.html#pyrad.io.read_histogram_ts" title="pyrad.io.read_histogram_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_histogram_ts</span></code></a>(fname_list, datatype[, t_res])</p></td>
 <td><p>Reads a colection of histogram data file and creates a time series</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_hzt_data.html#pyrad.io.read_hzt_data" title="pyrad.io.read_hzt_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_hzt_data</span></code></a>(fname[, chy0, chx0, read_lib])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_hzt_data.html#pyrad.io.read_hzt_data" title="pyrad.io.read_hzt_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_hzt_data</span></code></a>(fname[, chy0, chx0, read_lib])</p></td>
 <td><p>Reads iso-0 degree data from an HZT file</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_icon_coord.html#pyrad.io.read_icon_coord" title="pyrad.io.read_icon_coord"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_icon_coord</span></code></a>(fname[, zmin])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_icon_coord.html#pyrad.io.read_icon_coord" title="pyrad.io.read_icon_coord"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_icon_coord</span></code></a>(fname[, zmin])</p></td>
 <td><p>Reads icon coordinates from a netcdf file</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_icon_data.html#pyrad.io.read_icon_data" title="pyrad.io.read_icon_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_icon_data</span></code></a>(fname[, field_names, celsius])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_icon_data.html#pyrad.io.read_icon_data" title="pyrad.io.read_icon_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_icon_data</span></code></a>(fname[, field_names, celsius])</p></td>
 <td><p>Reads icon data from a netcdf file</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_idrisi_data.html#pyrad.io.read_idrisi_data" title="pyrad.io.read_idrisi_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_idrisi_data</span></code></a>(fname[, fill_value])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_idrisi_data.html#pyrad.io.read_idrisi_data" title="pyrad.io.read_idrisi_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_idrisi_data</span></code></a>(fname[, fill_value])</p></td>
 <td><p>Reads DEM data from an IDRISI .rst file</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_idrisi_metadata.html#pyrad.io.read_idrisi_metadata" title="pyrad.io.read_idrisi_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_idrisi_metadata</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_idrisi_metadata.html#pyrad.io.read_idrisi_metadata" title="pyrad.io.read_idrisi_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_idrisi_metadata</span></code></a>(fname)</p></td>
 <td><p>Reads DEM metadata from a IDRISI .rdc file</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_intercomp_scores_ts.html#pyrad.io.read_intercomp_scores_ts" title="pyrad.io.read_intercomp_scores_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_intercomp_scores_ts</span></code></a>(fname[, sort_by_date])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_intercomp_scores_ts.html#pyrad.io.read_intercomp_scores_ts" title="pyrad.io.read_intercomp_scores_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_intercomp_scores_ts</span></code></a>(fname[, sort_by_date])</p></td>
 <td><p>Reads a radar intercomparison scores csv file</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_iso0_grib_data.html#pyrad.io.read_iso0_grib_data" title="pyrad.io.read_iso0_grib_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_iso0_grib_data</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_iso0_grib_data.html#pyrad.io.read_iso0_grib_data" title="pyrad.io.read_iso0_grib_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_iso0_grib_data</span></code></a>(fname)</p></td>
 <td><p>Reads a 2D field of iso-0 degree data from a MF NWP in GRIB format</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_iso0_mf_data.html#pyrad.io.read_iso0_mf_data" title="pyrad.io.read_iso0_mf_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_iso0_mf_data</span></code></a>(fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_iso0_mf_data.html#pyrad.io.read_iso0_mf_data" title="pyrad.io.read_iso0_mf_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_iso0_mf_data</span></code></a>(fname)</p></td>
 <td><p>Reads iso-0 degree data from a MF NWP in text format</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_knmi.html#pyrad.io.read_knmi" title="pyrad.io.read_knmi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_knmi</span></code></a>(fname[, col_names])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_knmi.html#pyrad.io.read_knmi" title="pyrad.io.read_knmi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_knmi</span></code></a>(fname[, col_names])</p></td>
 <td><p>Reads a file containing precipitation data from sensors retrieved from the KNMI archive.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_last_state.html#pyrad.io.read_last_state" title="pyrad.io.read_last_state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_last_state</span></code></a>(fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_last_state.html#pyrad.io.read_last_state" title="pyrad.io.read_last_state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_last_state</span></code></a>(fname)</p></td>
 <td><p>Reads a file containing the date of acquisition of the last volume processed</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_lightning.html#pyrad.io.read_lightning" title="pyrad.io.read_lightning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_lightning</span></code></a>(fname[, filter_data])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_lightning.html#pyrad.io.read_lightning" title="pyrad.io.read_lightning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_lightning</span></code></a>(fname[, filter_data])</p></td>
 <td><p>Reads lightning data contained in a text file. The file has the following fields:     flashnr: (0 is for noise)     UTC seconds of the day     Time within flash (in seconds)     Latitude (decimal degrees)     Longitude (decimal degrees)     Altitude (m MSL)     Power (dBm).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_lightning_all.html#pyrad.io.read_lightning_all" title="pyrad.io.read_lightning_all"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_lightning_all</span></code></a>(fname[, labels])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_lightning_all.html#pyrad.io.read_lightning_all" title="pyrad.io.read_lightning_all"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_lightning_all</span></code></a>(fname[, labels])</p></td>
 <td><p>Reads a file containing lightning data and co-located polarimetric data. fields:     flashnr     time data     Time within flash (in seconds)     Latitude (decimal degrees)     Longitude (decimal degrees)     Altitude (m MSL)     Power (dBm)     Polarimetric values at flash position.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_lightning_traj.html#pyrad.io.read_lightning_traj" title="pyrad.io.read_lightning_traj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_lightning_traj</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_lightning_traj.html#pyrad.io.read_lightning_traj" title="pyrad.io.read_lightning_traj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_lightning_traj</span></code></a>(fname)</p></td>
 <td><p>Reads lightning trajectory data contained in a csv file. The file has the following fields:     Date     UTC [seconds since midnight]     # Flash     Flash Power (dBm)     Value at flash     Mean value in a 3x3x3 polar box     Min value in a 3x3x3 polar box     Max value in a 3x3x3 polar box     # valid values in the polar box.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_mch_xml_vad.html#pyrad.io.read_mch_xml_vad" title="pyrad.io.read_mch_xml_vad"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_mch_xml_vad</span></code></a>(voltime, cfg[, ind_rad])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_mch_xml_vad.html#pyrad.io.read_mch_xml_vad" title="pyrad.io.read_mch_xml_vad"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_mch_xml_vad</span></code></a>(voltime, cfg[, ind_rad])</p></td>
 <td><p>Reads a MeteoSwiss VAD file (VAx xml files)</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_meteorage.html#pyrad.io.read_meteorage" title="pyrad.io.read_meteorage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_meteorage</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_meteorage.html#pyrad.io.read_meteorage" title="pyrad.io.read_meteorage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_meteorage</span></code></a>(fname)</p></td>
 <td><p>Reads METEORAGE lightning data contained in a text file. The file has the following fields:     date: date + time + time zone     lon: longitude [degree]     lat: latitude [degree]     intens: amplitude [kilo amperes]     ns: number of strokes of the flash     mode: kind of localization [0,15]     intra: 1 = intra-cloud , 0 = cloud-to-ground     ax: length of the semi-major axis of the ellipse [km]     ki2: standard deviation on the localization computation (Ki^2)     ecc: eccentricity (major-axis / minor-axis)     incl: ellipse inclination (angle with respect to the North, +90° is         East) [degrees]     sind: stroke index within the flash.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_mf_vis.html#pyrad.io.read_mf_vis" title="pyrad.io.read_mf_vis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_mf_vis</span></code></a>(fname, datatype)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_mf_vis.html#pyrad.io.read_mf_vis" title="pyrad.io.read_mf_vis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_mf_vis</span></code></a>(fname, datatype)</p></td>
 <td><p>Reads Météo-France visibility data binary file.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_ml_ts.html#pyrad.io.read_ml_ts" title="pyrad.io.read_ml_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_ml_ts</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_ml_ts.html#pyrad.io.read_ml_ts" title="pyrad.io.read_ml_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_ml_ts</span></code></a>(fname)</p></td>
 <td><p>Reads a melting layer time series contained in a csv file</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_monitoring_ts.html#pyrad.io.read_monitoring_ts" title="pyrad.io.read_monitoring_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_monitoring_ts</span></code></a>(fname[, sort_by_date])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_monitoring_ts.html#pyrad.io.read_monitoring_ts" title="pyrad.io.read_monitoring_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_monitoring_ts</span></code></a>(fname[, sort_by_date])</p></td>
 <td><p>Reads a monitoring time series contained in a CSV file using pandas.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_proc_periods.html#pyrad.io.read_proc_periods" title="pyrad.io.read_proc_periods"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_proc_periods</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_proc_periods.html#pyrad.io.read_proc_periods" title="pyrad.io.read_proc_periods"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_proc_periods</span></code></a>(fname)</p></td>
 <td><p>Reads a file containing the start and stop times of periods to process</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_profile_ts.html#pyrad.io.read_profile_ts" title="pyrad.io.read_profile_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_profile_ts</span></code></a>(fname_list, labels[, hres, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_profile_ts.html#pyrad.io.read_profile_ts" title="pyrad.io.read_profile_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_profile_ts</span></code></a>(fname_list, labels[, hres, ...])</p></td>
 <td><p>Reads a colection of profile data file and creates a time series</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_quantiles.html#pyrad.io.read_quantiles" title="pyrad.io.read_quantiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_quantiles</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_quantiles.html#pyrad.io.read_quantiles" title="pyrad.io.read_quantiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_quantiles</span></code></a>(fname)</p></td>
 <td><p>Reads quantiles contained in a csv file</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_quantiles_ts.html#pyrad.io.read_quantiles_ts" title="pyrad.io.read_quantiles_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_quantiles_ts</span></code></a>(fname_list[, step, qmin, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_quantiles_ts.html#pyrad.io.read_quantiles_ts" title="pyrad.io.read_quantiles_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_quantiles_ts</span></code></a>(fname_list[, step, qmin, ...])</p></td>
 <td><p>Reads a colection of quantiles data file and creates a time series</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_rad4alp_icon.html#pyrad.io.read_rad4alp_icon" title="pyrad.io.read_rad4alp_icon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_rad4alp_icon</span></code></a>(fname, datatype[, ngates])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_rad4alp_icon.html#pyrad.io.read_rad4alp_icon" title="pyrad.io.read_rad4alp_icon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_rad4alp_icon</span></code></a>(fname, datatype[, ngates])</p></td>
 <td><p>Reads rad4alp ICON data binary file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_rad4alp_vis.html#pyrad.io.read_rad4alp_vis" title="pyrad.io.read_rad4alp_vis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_rad4alp_vis</span></code></a>(fname, datatype)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_rad4alp_vis.html#pyrad.io.read_rad4alp_vis" title="pyrad.io.read_rad4alp_vis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_rad4alp_vis</span></code></a>(fname, datatype)</p></td>
 <td><p>Reads rad4alp visibility data binary file.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_radiosounding_igra.html#pyrad.io.read_radiosounding_igra" title="pyrad.io.read_radiosounding_igra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_radiosounding_igra</span></code></a>(station, dtime)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_radiosounding_igra.html#pyrad.io.read_radiosounding_igra" title="pyrad.io.read_radiosounding_igra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_radiosounding_igra</span></code></a>(station, dtime)</p></td>
 <td><p>Download radiosounding data from  from the Integrated Global Radiosonde Archive (IGRA).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_radiosounding_wyoming.html#pyrad.io.read_radiosounding_wyoming" title="pyrad.io.read_radiosounding_wyoming"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_radiosounding_wyoming</span></code></a>(station, dtime)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_radiosounding_wyoming.html#pyrad.io.read_radiosounding_wyoming" title="pyrad.io.read_radiosounding_wyoming"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_radiosounding_wyoming</span></code></a>(station, dtime)</p></td>
 <td><p>Download radiosounding data from the University of Wyoming website.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_rhi_profile.html#pyrad.io.read_rhi_profile" title="pyrad.io.read_rhi_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_rhi_profile</span></code></a>(fname[, labels])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_rhi_profile.html#pyrad.io.read_rhi_profile" title="pyrad.io.read_rhi_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_rhi_profile</span></code></a>(fname[, labels])</p></td>
 <td><p>Reads a monitoring time series contained in a csv file</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_selfconsistency.html#pyrad.io.read_selfconsistency" title="pyrad.io.read_selfconsistency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_selfconsistency</span></code></a>(fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_selfconsistency.html#pyrad.io.read_selfconsistency" title="pyrad.io.read_selfconsistency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_selfconsistency</span></code></a>(fname)</p></td>
 <td><p>Reads a self-consistency table with Zdr, Kdp/Zh columns</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_smn.html#pyrad.io.read_smn" title="pyrad.io.read_smn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_smn</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_smn.html#pyrad.io.read_smn" title="pyrad.io.read_smn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_smn</span></code></a>(fname)</p></td>
 <td><p>Reads SwissMetNet data contained in a csv or gzipped csv file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_smn2.html#pyrad.io.read_smn2" title="pyrad.io.read_smn2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_smn2</span></code></a>(fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_smn2.html#pyrad.io.read_smn2" title="pyrad.io.read_smn2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_smn2</span></code></a>(fname)</p></td>
 <td><p>Reads SwissMetNet data contained in a csv file with format station,time,value</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_solar_flux.html#pyrad.io.read_solar_flux" title="pyrad.io.read_solar_flux"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_solar_flux</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_solar_flux.html#pyrad.io.read_solar_flux" title="pyrad.io.read_solar_flux"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_solar_flux</span></code></a>(fname)</p></td>
 <td><p>Reads solar flux data from the DRAO observatory in Canada</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_status.html#pyrad.io.read_status" title="pyrad.io.read_status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_status</span></code></a>(voltime, cfg[, ind_rad])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_status.html#pyrad.io.read_status" title="pyrad.io.read_status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_status</span></code></a>(voltime, cfg[, ind_rad])</p></td>
 <td><p>Reads rad4alp xml status file.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_sun_hits.html#pyrad.io.read_sun_hits" title="pyrad.io.read_sun_hits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_sun_hits</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_sun_hits.html#pyrad.io.read_sun_hits" title="pyrad.io.read_sun_hits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_sun_hits</span></code></a>(fname)</p></td>
 <td><p>Reads sun hits data contained in a csv file</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_sun_hits_multiple_days.html#pyrad.io.read_sun_hits_multiple_days" title="pyrad.io.read_sun_hits_multiple_days"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_sun_hits_multiple_days</span></code></a>(cfg, time_ref[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_sun_hits_multiple_days.html#pyrad.io.read_sun_hits_multiple_days" title="pyrad.io.read_sun_hits_multiple_days"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_sun_hits_multiple_days</span></code></a>(cfg, time_ref[, ...])</p></td>
 <td><p>Reads sun hits data from multiple file sources</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_sun_retrieval.html#pyrad.io.read_sun_retrieval" title="pyrad.io.read_sun_retrieval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_sun_retrieval</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_sun_retrieval.html#pyrad.io.read_sun_retrieval" title="pyrad.io.read_sun_retrieval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_sun_retrieval</span></code></a>(fname)</p></td>
 <td><p>Reads sun retrieval data contained in a csv file</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_thundertracking_info.html#pyrad.io.read_thundertracking_info" title="pyrad.io.read_thundertracking_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_thundertracking_info</span></code></a>(fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_thundertracking_info.html#pyrad.io.read_thundertracking_info" title="pyrad.io.read_thundertracking_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_thundertracking_info</span></code></a>(fname)</p></td>
 <td><p>Reads the TRT info used for thundertracking</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_timeseries.html#pyrad.io.read_timeseries" title="pyrad.io.read_timeseries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_timeseries</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_timeseries.html#pyrad.io.read_timeseries" title="pyrad.io.read_timeseries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_timeseries</span></code></a>(fname)</p></td>
 <td><p>Reads a time series contained in a CSV file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_trt_cell_lightning.html#pyrad.io.read_trt_cell_lightning" title="pyrad.io.read_trt_cell_lightning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_trt_cell_lightning</span></code></a>(fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_trt_cell_lightning.html#pyrad.io.read_trt_cell_lightning" title="pyrad.io.read_trt_cell_lightning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_trt_cell_lightning</span></code></a>(fname)</p></td>
 <td><p>Reads the lightning data of a TRT cell. The file has the following fields:     traj_ID     yyyymmddHHMM     lon     lat     area     RANKr     nflashes     flash_dens.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_trt_data.html#pyrad.io.read_trt_data" title="pyrad.io.read_trt_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_trt_data</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_trt_data.html#pyrad.io.read_trt_data" title="pyrad.io.read_trt_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_trt_data</span></code></a>(fname)</p></td>
 <td><p>Reads the TRT data contained in a text file. The file has the following fields:     traj_ID     yyyymmddHHMM.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_trt_info.html#pyrad.io.read_trt_info" title="pyrad.io.read_trt_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_trt_info</span></code></a>(fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_trt_info.html#pyrad.io.read_trt_info" title="pyrad.io.read_trt_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_trt_info</span></code></a>(fname)</p></td>
 <td><p>Reads the TRT info used for thundertracking and contained in a text file.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_trt_info2.html#pyrad.io.read_trt_info2" title="pyrad.io.read_trt_info2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_trt_info2</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_trt_info2.html#pyrad.io.read_trt_info2" title="pyrad.io.read_trt_info2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_trt_info2</span></code></a>(fname)</p></td>
 <td><p>Reads the TRT info used for thundertracking and contained in a text file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_trt_info_all.html#pyrad.io.read_trt_info_all" title="pyrad.io.read_trt_info_all"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_trt_info_all</span></code></a>(info_path)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_trt_info_all.html#pyrad.io.read_trt_info_all" title="pyrad.io.read_trt_info_all"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_trt_info_all</span></code></a>(info_path)</p></td>
 <td><p>Reads all the TRT info files</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_trt_info_all2.html#pyrad.io.read_trt_info_all2" title="pyrad.io.read_trt_info_all2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_trt_info_all2</span></code></a>(info_path)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_trt_info_all2.html#pyrad.io.read_trt_info_all2" title="pyrad.io.read_trt_info_all2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_trt_info_all2</span></code></a>(info_path)</p></td>
 <td><p>Reads all the TRT info files</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_trt_scores.html#pyrad.io.read_trt_scores" title="pyrad.io.read_trt_scores"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_trt_scores</span></code></a>(fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_trt_scores.html#pyrad.io.read_trt_scores" title="pyrad.io.read_trt_scores"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_trt_scores</span></code></a>(fname)</p></td>
 <td><p>Reads the TRT scores contained in a text file. The file has the following fields:     traj ID     max flash density time     max flash density rank     max flash density     max rank time     max rank.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_trt_thundertracking_traj_data.html#pyrad.io.read_trt_thundertracking_traj_data" title="pyrad.io.read_trt_thundertracking_traj_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_trt_thundertracking_traj_data</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_trt_thundertracking_traj_data.html#pyrad.io.read_trt_thundertracking_traj_data" title="pyrad.io.read_trt_thundertracking_traj_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_trt_thundertracking_traj_data</span></code></a>(fname)</p></td>
 <td><p>Reads the TRT cell data contained in a text file. The file has the following fields:     traj_ID     scan_ordered_time     scan_time     azi     rng     yyyymmddHHMM.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_trt_traj_data.html#pyrad.io.read_trt_traj_data" title="pyrad.io.read_trt_traj_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_trt_traj_data</span></code></a>(fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_trt_traj_data.html#pyrad.io.read_trt_traj_data" title="pyrad.io.read_trt_traj_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_trt_traj_data</span></code></a>(fname)</p></td>
 <td><p>Reads the TRT cell data contained in a text file. The file has the following fields:     traj_ID     yyyymmddHHMM.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_ts_cum.html#pyrad.io.read_ts_cum" title="pyrad.io.read_ts_cum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_ts_cum</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_ts_cum.html#pyrad.io.read_ts_cum" title="pyrad.io.read_ts_cum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_ts_cum</span></code></a>(fname)</p></td>
 <td><p>Reads a time series of precipitation accumulation contained in a csv file</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_vpr_theo_parameters.html#pyrad.io.read_vpr_theo_parameters" title="pyrad.io.read_vpr_theo_parameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_vpr_theo_parameters</span></code></a>(fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_vpr_theo_parameters.html#pyrad.io.read_vpr_theo_parameters" title="pyrad.io.read_vpr_theo_parameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_vpr_theo_parameters</span></code></a>(fname)</p></td>
 <td><p>Reads the parameters defining a theoretical VPR profile from a csv file</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_windmills_data.html#pyrad.io.read_windmills_data" title="pyrad.io.read_windmills_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_windmills_data</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_windmills_data.html#pyrad.io.read_windmills_data" title="pyrad.io.read_windmills_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_windmills_data</span></code></a>(fname)</p></td>
 <td><p>Read the wind mills data csv file</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.send_msg.html#pyrad.io.send_msg" title="pyrad.io.send_msg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">send_msg</span></code></a>(sender, receiver_list, subject, fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.send_msg.html#pyrad.io.send_msg" title="pyrad.io.send_msg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">send_msg</span></code></a>(sender, receiver_list, subject, fname)</p></td>
 <td><p>sends the content of a text file by email</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_alarm_msg.html#pyrad.io.write_alarm_msg" title="pyrad.io.write_alarm_msg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_alarm_msg</span></code></a>(radar_name, param_name_unit, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_alarm_msg.html#pyrad.io.write_alarm_msg" title="pyrad.io.write_alarm_msg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_alarm_msg</span></code></a>(radar_name, param_name_unit, ...)</p></td>
 <td><p>writes an alarm file</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_cdf.html#pyrad.io.write_cdf" title="pyrad.io.write_cdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_cdf</span></code></a>(quantiles, values, ntot, nnan, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_cdf.html#pyrad.io.write_cdf" title="pyrad.io.write_cdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_cdf</span></code></a>(quantiles, values, ntot, nnan, ...)</p></td>
 <td><p>writes a cumulative distribution function</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_centroids.html#pyrad.io.write_centroids" title="pyrad.io.write_centroids"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_centroids</span></code></a>(fname, centroids_dict, var_names)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_centroids.html#pyrad.io.write_centroids" title="pyrad.io.write_centroids"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_centroids</span></code></a>(fname, centroids_dict, var_names)</p></td>
 <td><p>writes the centroids of a semi-supervised hydrometeor classification</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_colocated_data.html#pyrad.io.write_colocated_data" title="pyrad.io.write_colocated_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_colocated_data</span></code></a>(coloc_data, fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_colocated_data.html#pyrad.io.write_colocated_data" title="pyrad.io.write_colocated_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_colocated_data</span></code></a>(coloc_data, fname)</p></td>
 <td><p>Writes the data of gates colocated with two radars</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_colocated_data_time_avg.html#pyrad.io.write_colocated_data_time_avg" title="pyrad.io.write_colocated_data_time_avg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_colocated_data_time_avg</span></code></a>(coloc_data, fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_colocated_data_time_avg.html#pyrad.io.write_colocated_data_time_avg" title="pyrad.io.write_colocated_data_time_avg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_colocated_data_time_avg</span></code></a>(coloc_data, fname)</p></td>
 <td><p>Writes the time averaged data of gates colocated with two radars</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_colocated_gates.html#pyrad.io.write_colocated_gates" title="pyrad.io.write_colocated_gates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_colocated_gates</span></code></a>(coloc_gates, fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_colocated_gates.html#pyrad.io.write_colocated_gates" title="pyrad.io.write_colocated_gates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_colocated_gates</span></code></a>(coloc_gates, fname)</p></td>
 <td><p>Writes the position of gates colocated with two radars</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_excess_gates.html#pyrad.io.write_excess_gates" title="pyrad.io.write_excess_gates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_excess_gates</span></code></a>(excess_dict, fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_excess_gates.html#pyrad.io.write_excess_gates" title="pyrad.io.write_excess_gates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_excess_gates</span></code></a>(excess_dict, fname)</p></td>
 <td><p>Writes the position and values of gates that have a frequency of occurrence higher than a particular threshold</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_field_coverage.html#pyrad.io.write_field_coverage" title="pyrad.io.write_field_coverage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_field_coverage</span></code></a>(quantiles, values, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_field_coverage.html#pyrad.io.write_field_coverage" title="pyrad.io.write_field_coverage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_field_coverage</span></code></a>(quantiles, values, ...)</p></td>
 <td><p>writes the quantiles of the coverage on a particular sector</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_fixed_angle.html#pyrad.io.write_fixed_angle" title="pyrad.io.write_fixed_angle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_fixed_angle</span></code></a>(time_data, fixed_angle, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_fixed_angle.html#pyrad.io.write_fixed_angle" title="pyrad.io.write_fixed_angle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_fixed_angle</span></code></a>(time_data, fixed_angle, ...)</p></td>
 <td><p>writes an output file with the fixed angle data</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_histogram.html#pyrad.io.write_histogram" title="pyrad.io.write_histogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_histogram</span></code></a>(bin_edges, values, fname[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_histogram.html#pyrad.io.write_histogram" title="pyrad.io.write_histogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_histogram</span></code></a>(bin_edges, values, fname[, ...])</p></td>
 <td><p>writes a histogram</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_intercomp_scores_ts.html#pyrad.io.write_intercomp_scores_ts" title="pyrad.io.write_intercomp_scores_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_intercomp_scores_ts</span></code></a>(start_time, stats, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_intercomp_scores_ts.html#pyrad.io.write_intercomp_scores_ts" title="pyrad.io.write_intercomp_scores_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_intercomp_scores_ts</span></code></a>(start_time, stats, ...)</p></td>
 <td><p>writes time series of radar intercomparison scores</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_last_state.html#pyrad.io.write_last_state" title="pyrad.io.write_last_state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_last_state</span></code></a>(datetime_last, fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_last_state.html#pyrad.io.write_last_state" title="pyrad.io.write_last_state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_last_state</span></code></a>(datetime_last, fname)</p></td>
 <td><p>writes SwissMetNet data in format datetime,avg_value, std_value</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_monitoring_ts.html#pyrad.io.write_monitoring_ts" title="pyrad.io.write_monitoring_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_monitoring_ts</span></code></a>(start_time, np_t, ...[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_monitoring_ts.html#pyrad.io.write_monitoring_ts" title="pyrad.io.write_monitoring_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_monitoring_ts</span></code></a>(start_time, np_t, ...[, ...])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_multiple_points.html#pyrad.io.write_multiple_points" title="pyrad.io.write_multiple_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_multiple_points</span></code></a>(dataset, fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_multiple_points.html#pyrad.io.write_multiple_points" title="pyrad.io.write_multiple_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_multiple_points</span></code></a>(dataset, fname)</p></td>
 <td><p>write radar data obtained at multiple points</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_multiple_points_grid.html#pyrad.io.write_multiple_points_grid" title="pyrad.io.write_multiple_points_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_multiple_points_grid</span></code></a>(dataset, fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_multiple_points_grid.html#pyrad.io.write_multiple_points_grid" title="pyrad.io.write_multiple_points_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_multiple_points_grid</span></code></a>(dataset, fname)</p></td>
 <td><p>write data obtained at multiple points from a grid</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_proc_periods.html#pyrad.io.write_proc_periods" title="pyrad.io.write_proc_periods"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_proc_periods</span></code></a>(start_times, end_times, fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_proc_periods.html#pyrad.io.write_proc_periods" title="pyrad.io.write_proc_periods"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_proc_periods</span></code></a>(start_times, end_times, fname)</p></td>
 <td><p>writes an output file containing start and stop times of periods to process</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_quantiles.html#pyrad.io.write_quantiles" title="pyrad.io.write_quantiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_quantiles</span></code></a>(quantiles, values, fname[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_quantiles.html#pyrad.io.write_quantiles" title="pyrad.io.write_quantiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_quantiles</span></code></a>(quantiles, values, fname[, ...])</p></td>
 <td><p>writes quantiles</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_rhi_profile.html#pyrad.io.write_rhi_profile" title="pyrad.io.write_rhi_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_rhi_profile</span></code></a>(hvec, data, nvalid_vec, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_rhi_profile.html#pyrad.io.write_rhi_profile" title="pyrad.io.write_rhi_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_rhi_profile</span></code></a>(hvec, data, nvalid_vec, ...)</p></td>
 <td><p>writes the values of an RHI profile in a text file</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_smn.html#pyrad.io.write_smn" title="pyrad.io.write_smn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_smn</span></code></a>(datetime_vec, value_avg_vec, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_smn.html#pyrad.io.write_smn" title="pyrad.io.write_smn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_smn</span></code></a>(datetime_vec, value_avg_vec, ...)</p></td>
 <td><p>writes SwissMetNet data in format datetime,avg_value, std_value</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_sun_hits.html#pyrad.io.write_sun_hits" title="pyrad.io.write_sun_hits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_sun_hits</span></code></a>(sun_hits, fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_sun_hits.html#pyrad.io.write_sun_hits" title="pyrad.io.write_sun_hits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_sun_hits</span></code></a>(sun_hits, fname)</p></td>
 <td><p>Writes sun hits data.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_sun_retrieval.html#pyrad.io.write_sun_retrieval" title="pyrad.io.write_sun_retrieval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_sun_retrieval</span></code></a>(sun_retrieval, fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_sun_retrieval.html#pyrad.io.write_sun_retrieval" title="pyrad.io.write_sun_retrieval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_sun_retrieval</span></code></a>(sun_retrieval, fname)</p></td>
 <td><p>Writes sun retrieval data.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_trt_cell_data.html#pyrad.io.write_trt_cell_data" title="pyrad.io.write_trt_cell_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_trt_cell_data</span></code></a>(traj_ID, yyyymmddHHMM, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_trt_cell_data.html#pyrad.io.write_trt_cell_data" title="pyrad.io.write_trt_cell_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_trt_cell_data</span></code></a>(traj_ID, yyyymmddHHMM, ...)</p></td>
 <td><p>writes TRT cell data</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_trt_cell_lightning.html#pyrad.io.write_trt_cell_lightning" title="pyrad.io.write_trt_cell_lightning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_trt_cell_lightning</span></code></a>(cell_ID, cell_time, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_trt_cell_lightning.html#pyrad.io.write_trt_cell_lightning" title="pyrad.io.write_trt_cell_lightning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_trt_cell_lightning</span></code></a>(cell_ID, cell_time, ...)</p></td>
 <td><p>writes the lightning data for each TRT cell</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_trt_cell_scores.html#pyrad.io.write_trt_cell_scores" title="pyrad.io.write_trt_cell_scores"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_trt_cell_scores</span></code></a>(traj_ID, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_trt_cell_scores.html#pyrad.io.write_trt_cell_scores" title="pyrad.io.write_trt_cell_scores"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_trt_cell_scores</span></code></a>(traj_ID, ...)</p></td>
 <td><p>writes TRT cells scores</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_trt_info.html#pyrad.io.write_trt_info" title="pyrad.io.write_trt_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_trt_info</span></code></a>(ids, max_rank, nscans, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_trt_info.html#pyrad.io.write_trt_info" title="pyrad.io.write_trt_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_trt_info</span></code></a>(ids, max_rank, nscans, ...)</p></td>
 <td><p>writes TRT info of the thundertracking</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_trt_rpc.html#pyrad.io.write_trt_rpc" title="pyrad.io.write_trt_rpc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_trt_rpc</span></code></a>(cell_ID, cell_time, lon, lat, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_trt_rpc.html#pyrad.io.write_trt_rpc" title="pyrad.io.write_trt_rpc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_trt_rpc</span></code></a>(cell_ID, cell_time, lon, lat, ...)</p></td>
 <td><p>writes the rimed particles column data for a TRT cell</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_trt_thundertracking_data.html#pyrad.io.write_trt_thundertracking_data" title="pyrad.io.write_trt_thundertracking_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_trt_thundertracking_data</span></code></a>(traj_ID, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_trt_thundertracking_data.html#pyrad.io.write_trt_thundertracking_data" title="pyrad.io.write_trt_thundertracking_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_trt_thundertracking_data</span></code></a>(traj_ID, ...)</p></td>
 <td><p>writes TRT cell data of the thundertracking scan</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_ts_cum.html#pyrad.io.write_ts_cum" title="pyrad.io.write_ts_cum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_ts_cum</span></code></a>(dataset, fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_ts_cum.html#pyrad.io.write_ts_cum" title="pyrad.io.write_ts_cum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_ts_cum</span></code></a>(dataset, fname)</p></td>
 <td><p>writes time series accumulation of data</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_ts_grid_data.html#pyrad.io.write_ts_grid_data" title="pyrad.io.write_ts_grid_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_ts_grid_data</span></code></a>(dataset, fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_ts_grid_data.html#pyrad.io.write_ts_grid_data" title="pyrad.io.write_ts_grid_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_ts_grid_data</span></code></a>(dataset, fname)</p></td>
 <td><p>writes time series of data</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_ts_lightning.html#pyrad.io.write_ts_lightning" title="pyrad.io.write_ts_lightning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_ts_lightning</span></code></a>(flashnr, time_data, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_ts_lightning.html#pyrad.io.write_ts_lightning" title="pyrad.io.write_ts_lightning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_ts_lightning</span></code></a>(flashnr, time_data, ...)</p></td>
 <td><p>writes the LMA sources data and the value of the colocated polarimetric variables</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_ts_polar_data.html#pyrad.io.write_ts_polar_data" title="pyrad.io.write_ts_polar_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_ts_polar_data</span></code></a>(dataset, fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_ts_polar_data.html#pyrad.io.write_ts_polar_data" title="pyrad.io.write_ts_polar_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_ts_polar_data</span></code></a>(dataset, fname)</p></td>
 <td><p>writes time series of data</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_ts_stats.html#pyrad.io.write_ts_stats" title="pyrad.io.write_ts_stats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_ts_stats</span></code></a>(dt, value, fname[, stat])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_ts_stats.html#pyrad.io.write_ts_stats" title="pyrad.io.write_ts_stats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_ts_stats</span></code></a>(dt, value, fname[, stat])</p></td>
 <td><p>writes time series of statistics</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_vol_csv.html#pyrad.io.write_vol_csv" title="pyrad.io.write_vol_csv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_vol_csv</span></code></a>(fname, radar, field_name[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_vol_csv.html#pyrad.io.write_vol_csv" title="pyrad.io.write_vol_csv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_vol_csv</span></code></a>(fname, radar, field_name[, ...])</p></td>
 <td><p>Creates a kml file with the radar volume data</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_vol_kml.html#pyrad.io.write_vol_kml" title="pyrad.io.write_vol_kml"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_vol_kml</span></code></a>(fname, radar, field_name[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_vol_kml.html#pyrad.io.write_vol_kml" title="pyrad.io.write_vol_kml"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_vol_kml</span></code></a>(fname, radar, field_name[, ...])</p></td>
 <td><p>Creates a kml file with the radar volume data</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_vpr_info.html#pyrad.io.write_vpr_info" title="pyrad.io.write_vpr_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_vpr_info</span></code></a>(vpr_info_dict, fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_vpr_info.html#pyrad.io.write_vpr_info" title="pyrad.io.write_vpr_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_vpr_info</span></code></a>(vpr_info_dict, fname)</p></td>
 <td><p>Writes a dictionary containing relevant parameters of the VPR profile retrieval into a text file</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.write_vpr_theo_params.html#pyrad.io.write_vpr_theo_params" title="pyrad.io.write_vpr_theo_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_vpr_theo_params</span></code></a>(vpr_theo_dict, fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.write_vpr_theo_params.html#pyrad.io.write_vpr_theo_params" title="pyrad.io.write_vpr_theo_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_vpr_theo_params</span></code></a>(vpr_theo_dict, fname)</p></td>
 <td><p>writes the parameters defining a theoretical VPR profile into a csv file</p></td>
 </tr>
 </tbody>
@@ -2313,7 +2319,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     <br/>
   </p>
 </div>

@@ -674,6 +674,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.read_centroids.html">pyrad.io.read_centroids</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.read_centroids_npz.html">pyrad.io.read_centroids_npz</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.read_colocated_data.html">pyrad.io.read_colocated_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pyrad.io.read_colocated_data_time_avg.html">pyrad.io.read_colocated_data_time_avg</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.read_colocated_gates.html">pyrad.io.read_colocated_gates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.read_config.html">pyrad.io.read_config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.io.read_coord_sensors.html">pyrad.io.read_coord_sensors</a></li>
@@ -786,6 +787,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_vol_to_grid.html">pyrad.proc.process_vol_to_grid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_raw_grid.html">pyrad.proc.process_raw_grid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid.html">pyrad.proc.process_grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_stats.html">pyrad.proc.process_grid_stats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_point.html">pyrad.proc.process_grid_point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_multiple_points.html">pyrad.proc.process_grid_multiple_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_grid_time_stats.html">pyrad.proc.process_grid_time_stats</a></li>
@@ -989,6 +991,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.proc.process_grid_multiple_points.html">pyrad.proc.process_grid_multiple_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.proc.process_grid_point.html">pyrad.proc.process_grid_point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.proc.process_grid_rainfall_accumulation.html">pyrad.proc.process_grid_rainfall_accumulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pyrad.proc.process_grid_stats.html">pyrad.proc.process_grid_stats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.proc.process_grid_texture.html">pyrad.proc.process_grid_texture</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.proc.process_grid_time_stats.html">pyrad.proc.process_grid_time_stats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pyrad.proc.process_grid_time_stats2.html">pyrad.proc.process_grid_time_stats2</a></li>
@@ -1292,7 +1295,7 @@
 <h1>pyrad.io.TimeSeries<a class="headerlink" href="#pyrad-io-timeseries" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyrad.io.TimeSeries">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyrad.io.</span></span><span class="sig-name descname"><span class="pre">TimeSeries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">desc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timevec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeformat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxlength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datatype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyrad/io/timeseries.html#TimeSeries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.io.TimeSeries" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyrad.io.</span></span><span class="sig-name descname"><span class="pre">TimeSeries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">desc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timevec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeformat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxlength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datatype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyrad/io/timeseries.html#TimeSeries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.io.TimeSeries" title="Link to this definition">#</a></dt>
 <dd><p>Holding timeseries data and metadata.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables<span class="colon">:</span></dt>
@@ -1323,7 +1326,7 @@
 </dl>
 </dd></dl>
 
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../pyrad.io.TimeSeries.add_dataseries.html#pyrad.io.TimeSeries.add_dataseries" title="pyrad.io.TimeSeries.add_dataseries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_dataseries</span></code></a>(label, unit_name, unit[, ...])</p></td>
 <td><p>Add a new data series to the timeseries object.</p></td>
@@ -1432,7 +1435,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     <br/>
   </p>
 </div>

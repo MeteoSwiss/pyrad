@@ -114,6 +114,8 @@
     
     read_colocated_data
     
+    read_colocated_data_time_avg
+    
     read_colocated_gates
     
     read_config
