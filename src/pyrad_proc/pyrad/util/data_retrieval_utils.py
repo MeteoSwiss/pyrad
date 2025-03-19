@@ -30,7 +30,7 @@ OFFSET_CCS4 = [297, -100]
 if ("lom" in socket.gethostname()) or ("meteoswiss" in socket.gethostname()):
     FOLDER_RADAR = "/srn/data/"
     FOLDER_ISO0 = "/srn/data/HZT/"
-elif "balfrin" in socket.gethostname():
+elif "balfrin" in socket.gethostname() or "nid" in socket.gethostname():
     FOLDER_DATABASE = "/store_new/mch/msrad/radar/radar_database/"
     FOLDER_RADAR = "/store_new/mch//msrad/radar/swiss/data/"
     FOLDER_RADARH = "/store_new/mch//msrad/radar/polarHR/data/"
