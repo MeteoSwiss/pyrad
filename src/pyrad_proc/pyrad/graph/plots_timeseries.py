@@ -534,7 +534,6 @@ def plot_intercomp_scores_ts(
     for fname in fname_list:
         fig.savefig(fname, dpi=dpi)
     plt.close(fig)
-
     return fname_list
 
 

@@ -344,7 +344,9 @@ def process_gc_monitoring(procstatus, dscfg, radar_list=None):
         radar_aux.range["data"] = bin_centers
         radar_aux.ngates = nbins
         radar_aux.nrays = 1
-
+        radar_aux.sweep_end_ray_index["data"] *= 0
+        radar_aux.sweep_start_ray_index["data"] *= 0
+        
         field_dict = pyart.config.get_metadata(field_name)
         field_dict["data"] = np.ma.zeros((1, nbins), dtype=int)
 
@@ -410,7 +412,6 @@ def process_gc_monitoring(procstatus, dscfg, radar_list=None):
         dataset.update({"hist_obj": radar_aux})
         dataset.update({"hist_type": "instant"})
         dataset.update({"timeinfo": start_time})
-
         return dataset, ind_rad
 
     if procstatus == 2:

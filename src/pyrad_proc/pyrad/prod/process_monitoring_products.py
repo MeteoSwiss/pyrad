@@ -45,7 +45,8 @@ def generate_monitoring_products(dataset, prdcfg):
         'ANGULAR_DENSITY': For a specified elevation angle, plots a 2D
             histogram with the azimuth angle in the X-axis and the data values
             in the Y-axis. The reference values and the user defined quantiles
-            are also plot on the same figure
+            are also plot on the same figure.
+            This product is not compatible with the GC_MONITORING dataset!
             User defined parameters:
                 voltype: str
                     name of the pyrad variable to use, it must be available in the dataset
