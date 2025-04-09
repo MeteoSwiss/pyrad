@@ -1196,21 +1196,27 @@ def read_ml_ts(fname):
         return None, None, None, None, None, None, None
 
 
-def read_monitoring_ts(fname, sort_by_date=False):
+def read_monitoring_ts(quantiles, fname, sort_by_date=False):
     """
     Reads a monitoring time series contained in a CSV file using pandas.
 
     Parameters
     ----------
+    quantiles : 1D ndarray
+        The computed quantiles.
     fname : str
-        Path of time series file
+        Path of time series file.
     sort_by_date : bool
-        If True, the read data is sorted by date prior to exit
+        If True, the read data is sorted by date prior to exit.
 
     Returns
     -------
-    date, np_t, central_quantile, low_quantile, high_quantile : tuple
-        The read data. None otherwise
+    date, np_t, quantile_data, geometric_mean_dB, linear_mean_dB : tuple
+        - date: Array of timestamps.
+        - np_t: Array of NP values.
+        - quantile_data: Dictionary with quantile values, where keys are quantile names.
+        - geometric_mean_dB: Mean reflectivity in dB.
+        - linear_mean_dB: Mean reflectivity computed in linear units and converted back to dB.
     """
     try:
         with open(fname, "r+") as csvfile:
@@ -1230,19 +1236,30 @@ def read_monitoring_ts(fname, sort_by_date=False):
             df = df.drop_duplicates(subset="date", keep="last")
             unlock_file(csvfile)
 
+        # Extract date and NP values
         date = df["date"].dt.to_pydatetime()
         np_t = df["NP"].to_numpy(dtype=int)
-        central_quantile = np.ma.masked_values(
-            df["central_quantile"].to_numpy(dtype=float), get_fillvalue()
+
+        # Extract all quantile values dynamically
+        quantile_data = {}
+        for q in quantiles:
+            column_name = f"quantile_{q}"
+            if column_name in df.columns:
+                quantile_data[q] = np.ma.masked_values(
+                    df[column_name].to_numpy(dtype=float), get_fillvalue()
+                )
+
+        # Read mean values
+        geometric_mean_dB = (
+            np.ma.masked_values(df["geometric_mean_dB"].to_numpy(dtype=float), get_fillvalue())
+            if "geometric_mean_dB" in df.columns else np.ma.masked
         )
-        low_quantile = np.ma.masked_values(
-            df["low_quantile"].to_numpy(dtype=float), get_fillvalue()
-        )
-        high_quantile = np.ma.masked_values(
-            df["high_quantile"].to_numpy(dtype=float), get_fillvalue()
+        linear_mean_dB = (
+            np.ma.masked_values(df["linear_mean_dB"].to_numpy(dtype=float), get_fillvalue())
+            if "linear_mean_dB" in df.columns else np.ma.masked
         )
 
-        return date, np_t, central_quantile, low_quantile, high_quantile
+        return date, np_t, quantile_data, geometric_mean_dB, linear_mean_dB
 
     except Exception as e:
         warn(str(e))

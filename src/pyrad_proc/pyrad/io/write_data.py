@@ -2405,7 +2405,7 @@ def write_ts_cum(dataset, fname):
 
 
 def write_monitoring_ts(
-    start_time, np_t, values, quantiles, datatype, fname, rewrite=False
+    start_time, np_t, values, quantiles, mean_list, datatype, fname, rewrite=False
 ):
     nvalues = np.size(start_time)
     start_time_aux = (
@@ -2421,10 +2421,12 @@ def write_monitoring_ts(
     data = {
         "date": [t.strftime("%Y%m%d%H%M%S") for t in start_time_aux],
         "NP": np_t_aux,
-        "central_quantile": values_aux[:, 1],
-        "low_quantile": values_aux[:, 0],
-        "high_quantile": values_aux[:, 2],
+        "geometric_mean_dB": mean_list[0],
+        "linear_mean_dB": mean_list[1]
     }
+    for i, q in enumerate(quantiles):
+        data[f"quantile_{q}"] = values_aux[:, i]
+
     df = pd.DataFrame(data)
 
     file_exists = os.path.exists(fname)
@@ -2437,7 +2439,7 @@ def write_monitoring_ts(
                 '# Comment lines are preceded by "#"\n'
                 "# Description: \n"
                 "# Time series of a monitoring of weather radar data.\n"
-                f"# Quantiles: {quantiles[1]}, {quantiles[0]}, {quantiles[2]} percent.\n"
+                f"# Quantiles: {', '.join(map(str, quantiles))} percent.\n"
                 f"# Data: {generate_field_name_str(datatype)}\n"
                 f"# Fill Value: {get_fillvalue()}\n"
                 f"# Start: {start_time_aux[0].strftime('%Y-%m-%d %H:%M:%S UTC')}\n"

@@ -236,7 +236,8 @@ terrain_aspect = "terrain_aspect"
 elevation_angle = "elevation_angle"
 visibility = "visibility"
 min_vis_altitude = "min_vis_altitude"
-min_vis_altitude_above_ground = "min_vis_altitude_above_ground"
+min_vis_height_above_ground = "min_vis_height_above_ground"
+min_rad_vis_height_above_ground = "min_rad_vis_height_above_ground"
 min_vis_elevation = "min_vis_elevation"
 incident_angle = "incident_angle"
 effective_area = "effective_area"
@@ -564,7 +565,8 @@ DEFAULT_FIELD_NAMES = {
     "elevation_angle": elevation_angle,
     "visibility": visibility,
     "min_vis_altitude": min_vis_altitude,
-    "min_vis_altitude_above_ground": min_vis_altitude_above_ground,
+    "min_vis_height_above_ground": min_vis_height_above_ground,
+    "min_rad_vis_height_above_ground": min_rad_vis_height_above_ground,
     "min_vis_elevation": min_vis_elevation,
     "incident_angle": incident_angle,
     "effective_area": effective_area,
@@ -1644,6 +1646,18 @@ DEFAULT_METADATA = {
         "units": "meters",
         "standard_name": "min_vis_altitude",
         "long_name": "Minimum visible altitude",
+        "coordinates": "x y",
+    },
+    min_vis_height_above_ground: {
+        "units": "meters",
+        "standard_name": "min_vis_height_above_ground",
+        "long_name": "Minimum visible height above ground",
+        "coordinates": "x y",
+    },
+    min_rad_vis_height_above_ground: {
+        "units": "meters",
+        "standard_name": "min_rad_vis_height_above_ground",
+        "long_name": "Minimum radar visible height above ground",
         "coordinates": "x y",
     },
     min_vis_elevation: {
