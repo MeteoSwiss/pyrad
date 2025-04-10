@@ -31,7 +31,6 @@ from .plots_aux import get_colobar_label, get_field_name, get_norm
 import pyart
 import matplotlib.pyplot as plt
 from warnings import warn
-from copy import deepcopy
 
 import numpy as np
 
@@ -406,7 +405,7 @@ def plot_density(
             hist_obj.range["data"], field[ray, :], quantiles=quantiles
         )
         az_percentiles[ray, :] = values_ray
-    
+
     # Compute overall sweep quantiles
     _, values_sweep = compute_quantiles_from_hist(
         hist_obj.range["data"], np.ma.sum(field, axis=0), quantiles=quantiles
@@ -467,12 +466,24 @@ def plot_density(
 
     # Generate colormap for quantiles
     quantile_colors = plt.cm.viridis_r(np.linspace(0, 1, len(quantiles)))
-    
+
     # Plot all quantiles
     for i, q in enumerate(quantiles):
-        ax.plot(ang, np.zeros(len(ang)) + values_sweep[i], color=quantile_colors[i], linestyle='--', label=f"{q:.1f}th quantile")
-        ax.plot(ang, az_percentiles[:, i], color=quantile_colors[i], linestyle='-', label=f"{q:.1f}th quantile")
-    
+        ax.plot(
+            ang,
+            np.zeros(len(ang)) + values_sweep[i],
+            color=quantile_colors[i],
+            linestyle="--",
+            label=f"{q:.1f}th quantile",
+        )
+        ax.plot(
+            ang,
+            az_percentiles[:, i],
+            color=quantile_colors[i],
+            linestyle="-",
+            label=f"{q:.1f}th quantile",
+        )
+
     # ax.autoscale(enable=True, axis='both', tight=True)
 
     ax.set_xlabel(labelx)
