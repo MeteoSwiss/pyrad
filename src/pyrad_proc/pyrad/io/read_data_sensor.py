@@ -36,6 +36,7 @@ Functions for reading data from other sensors
 """
 
 import os
+import gzip
 import glob
 import datetime
 import csv
@@ -2238,9 +2239,13 @@ def get_sensor_data(date, datatype, cfg):
             warn(
                 "Could not find any raingauge file with names {datafile1} or {datafile2}"
             )
-
-        with open(datafile) as f:
-            num_columns = len(next(f).strip().split(","))
+        if datafile.endswith('.gz'):
+            with gzip.open(datafile,'rt') as f:
+                num_columns = len(next(f).strip().split(","))
+        else:
+            with open(datafile) as f:
+                num_columns = len(next(f).strip().split(","))
+                
         if num_columns == 3:
             _, sensordate, sensorvalue = read_smn2(datafile)
         else:
