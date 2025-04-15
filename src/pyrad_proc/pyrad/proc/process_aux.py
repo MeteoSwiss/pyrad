@@ -197,6 +197,7 @@ def get_process_func(dataset_type, dsname):
                 'RAW_GRID': process_raw_grid
                 'GECSX' : process_gecsx
                 'GRID': process_grid
+                'GRID_STATS': process_grid_stats
                 'GRID_FIELDS_DIFF': process_grid_fields_diff
                 'GRID_MASK': process_grid_mask
                 'GRID_TEXTURE': process_grid_texture
@@ -297,6 +298,9 @@ def get_process_func(dataset_type, dsname):
         dsformat = "GRID"
     elif dataset_type == "GRID_MASK":
         func_name = "process_grid_mask"
+        dsformat = "GRID"
+    elif dataset_type == "GRID_STATS":
+        func_name = "process_grid_stats"
         dsformat = "GRID"
     elif dataset_type == "GRID_TEXTURE":
         func_name = "process_grid_texture"
@@ -730,7 +734,7 @@ def process_vol_to_grid(procstatus, dscfg, radar_list=None):
         alt0 : float
             Grid origin altitude [masl]. Default is 0
         wfunc : str
-            Weighting function. Default NEAREST
+            Weighting function, available are NEAREST, BARNES, BARNES2 and CRESSMAN. Default NEAREST
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -749,7 +753,7 @@ def process_vol_to_grid(procstatus, dscfg, radar_list=None):
     if radar_list is None:
         warn("ERROR: No valid radar found")
         return None, None
-    
+
     # Process
     field_names_aux = []
     ind_rads_aux = []
@@ -2716,7 +2720,6 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
     for sample, (rad_ind_ray, rad_ind_rng) in enumerate(
         zip(rad_ind_rays, rad_ind_rngs)
     ):
-
         # measure time
         tstart = time()
 

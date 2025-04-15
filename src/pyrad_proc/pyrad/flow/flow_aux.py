@@ -1000,16 +1000,24 @@ def _generate_prod(dataset, cfg, prdname, prdfunc, dsname, voltime, runinfo=None
         filenames = prdfunc(dataset, prdcfg)
         if isinstance(filenames, str):  # convert to list if needed
             filenames = [filenames]
-        if "s3copypath" in prdcfg and filenames is not None:  # copy to S3
-            s3AccessPolicy = (
-                prdcfg["s3AccessPolicy"] if "s3AccessPolicy" in prdcfg else None
-            )
+        if (
+            "s3BucketWrite" in prdcfg
+            and "s3EndpointWrite" in prdcfg
+            and filenames is not None
+        ):  # copy to S3
+            s3AccessPolicy = prdcfg.get("s3AccessPolicy", None)
+            s3path = prdcfg.get("s3PathWrite", None)
             for fname in filenames:
                 if (
                     prdcfg["basepath"] in fname
                 ):  # only products saved to standard basepath
                     write_to_s3(
-                        fname, prdcfg["basepath"], prdcfg["s3copypath"], s3AccessPolicy
+                        fname,
+                        prdcfg["basepath"],
+                        prdcfg["s3EndpointWrite"],
+                        prdcfg["s3BucketWrite"],
+                        s3path,
+                        s3AccessPolicy,
                     )
         return False
     except Exception as inst:
@@ -1038,15 +1046,16 @@ def _create_cfg_dict(cfgfile):
     try:
         print("- Main config file : {}".format(cfgfile))
         cfg = read_config(cfg["configFile"], cfg=cfg, defaults=DEFAULT_CONFIG["main"])
-        
+
         # Convert loc and prod config files to absolute paths if needed
-        filenames = ["locationConfigFile", 
-        "productConfigFile",
+        filenames = [
+            "locationConfigFile",
+            "productConfigFile",
         ]
         for fname in filenames:
             if not os.path.isabs(cfg[fname]):
-                cfg[fname] = os.path.join(cfg['configpath'], cfg[fname])
-                
+                cfg[fname] = os.path.join(cfg["configpath"], cfg[fname])
+
         print("- Location config file : {}".format(cfg["locationConfigFile"]))
         cfg = read_config(
             cfg["locationConfigFile"], cfg=cfg, defaults=DEFAULT_CONFIG["loc"]
@@ -1183,7 +1192,8 @@ def _create_cfg_dict(cfgfile):
 
     # check whether specified paths are relative or absolute
     # if relative add configpath to the path
-    filenames = ["locationConfigFile", 
+    filenames = [
+        "locationConfigFile",
         "productConfigFile",
         "datapath",
         "iconpath",
@@ -1194,17 +1204,18 @@ def _create_cfg_dict(cfgfile):
         "psrpath",
         "iqpath",
         "satpath",
-        "smnpath"]
-    
+        "smnpath",
+    ]
+
     for fname in filenames:
         if type(cfg[fname]) is list:
             for val in cfg[fname]:
                 if not os.path.isabs(val):
-                    val = os.path.join(cfg['configpath'], val)
+                    val = os.path.join(cfg["configpath"], val)
         elif type(cfg[fname]) is str:
             if not os.path.isabs(cfg[fname]):
-                cfg[fname] = os.path.join(cfg['configpath'], cfg[fname])
-    
+                cfg[fname] = os.path.join(cfg["configpath"], cfg[fname])
+
     # if specified in config, convert coordinates to arrays
     if "RadarPosition" in cfg:
         fltarr_list = ["latitude", "longitude", "altitude"]
@@ -1217,6 +1228,9 @@ def _create_cfg_dict(cfgfile):
     # keyword to force the use of MF scale in ODIM data
     if "MFScale" not in cfg:
         cfg.update({"MFScale": 0})
+
+    if not cfg["datapath"]:  # empty datapath in case of s3 reading
+        cfg["datapath"] = ["" for rad in range(cfg["NumRadars"])]
 
     # parameters necessary to read correctly MF grid binary files
     if "BinFileParams" not in cfg:
@@ -1329,31 +1343,36 @@ def _create_datacfg_dict(cfg):
     datacfg.update({"MFScale": cfg["MFScale"]})
     datacfg.update({"DataTypeIDInFiles": cfg["DataTypeIDInFiles"]})
 
-    #s3 buckets
-    if "bucket" in cfg:
+    # s3 buckets
+    if "s3BucketRead" in cfg:
         try:
-            datacfg["s3_key"] = os.environ["S3_IN_KEY"]
-            datacfg["s3_secret_key"] = os.environ["S3_IN_SECRET"]
+            datacfg["s3KeyRead"] = os.environ["S3_KEY_READ"]
+            datacfg["s3SecretRead"] = os.environ["S3_SECRET_READ"]
         except KeyError:
             warn(
-                'Define environment variables S3_IN_KEY and S3_IN_SECRET'
-                ' to get input data from S3 buckets.')
+                "Define environment variables S3_KEY_READ and S3_SECRET_READ"
+                " to get input data from S3 buckets."
+            )
 
-        if "s3path" in cfg:
-            datacfg.update({"s3path": cfg["s3path"]})
+        if "s3PathRead" in cfg:
+            datacfg.update({"s3PathRead": cfg["s3PathRead"]})
         else:
-            warn('Unable to read data from s3 bucket. Define s3path')
-        if "s3_url" in cfg:
-            datacfg.update({"s3_url": cfg["s3_url"]})
+            warn("Unable to read data from s3 bucket. Define s3PathRead")
+        if "s3EndpointRead" in cfg:
+            datacfg.update({"s3EndpointRead": cfg["s3EndpointRead"]})
         else:
-            warn('Unable to read data from s3 bucket. Define s3_url')
+            warn("Unable to read data from s3 bucket. Define s3EndpointRead")
 
         if "rm_s3_file" in cfg:
             datacfg.update({"rm_s3_file": cfg["rm_s3_file"]})
 
-        if ('s3path' in datacfg and 's3_url' in datacfg
-                and 's3_key' in datacfg and 's3_secret_key' in datacfg):
-            datacfg.update({"bucket": cfg["bucket"]})
+        if (
+            "s3PathRead" in datacfg
+            and "s3EndpointRead" in datacfg
+            and "s3KeyRead" in datacfg
+            and "s3SecretRead" in datacfg
+        ):
+            datacfg.update({"s3BucketRead": cfg["s3BucketRead"]})
 
     # Modify size of radar or radar spectra object
     datacfg.update({"elmin": cfg.get("elmin", None)})
@@ -1574,11 +1593,14 @@ def _create_prdcfg_dict(cfg, dataset, product, voltime, runinfo=None):
     prdcfg.update({"imgformat": cfg["imgformat"]})
     prdcfg.update({"RadarName": cfg["RadarName"]})
 
-    if "s3copypath" in cfg:
-        prdcfg.update({"s3copypath": cfg["s3copypath"]})
+    if "s3EndpointWrite" in cfg:
+        prdcfg.update({"s3EndpointWrite": cfg["s3EndpointWrite"]})
+    if "s3BucketWrite" in cfg:
+        prdcfg.update({"s3BucketWrite": cfg["s3BucketWrite"]})
+    if "s3PathWrite" in cfg:
+        prdcfg.update({"s3PathWrite": cfg["s3PathWrite"]})
     if "s3AccessPolicy" in cfg:
         prdcfg.update({"s3AccessPolicy": cfg["s3AccessPolicy"]})
-
     if "RadarBeamwidth" in cfg:
         prdcfg.update({"RadarBeamwidth": cfg["RadarBeamwidth"]})
     if "ppiImageConfig" in cfg:
@@ -1633,9 +1655,13 @@ def _get_datatype_list(cfg, radarnr="RADAR001"):
         if "datatype" not in cfg[dataset]:
             continue
         if isinstance(cfg[dataset]["datatype"], str):
-            (radarnr_descr, datagroup, datatype_aux, dataset_save, product_save) = (
-                get_datatype_fields(cfg[dataset]["datatype"])
-            )
+            (
+                radarnr_descr,
+                datagroup,
+                datatype_aux,
+                dataset_save,
+                product_save,
+            ) = get_datatype_fields(cfg[dataset]["datatype"])
             if datagroup != "PROC" and radarnr_descr == radarnr:
                 if (dataset_save is None) and (product_save is None):
                     datatypesdescr.add(
@@ -1659,9 +1685,13 @@ def _get_datatype_list(cfg, radarnr="RADAR001"):
                     )
         else:
             for datatype in cfg[dataset]["datatype"]:
-                (radarnr_descr, datagroup, datatype_aux, dataset_save, product_save) = (
-                    get_datatype_fields(datatype)
-                )
+                (
+                    radarnr_descr,
+                    datagroup,
+                    datatype_aux,
+                    dataset_save,
+                    product_save,
+                ) = get_datatype_fields(datatype)
                 if datagroup != "PROC" and radarnr_descr == radarnr:
                     if dataset_save is None and product_save is None:
                         datatypesdescr.add(
@@ -1791,14 +1821,14 @@ def _get_masterfile_list(datatypesdescr, starttimes, endtimes, datacfg, scan_lis
         )
         return [], None, None
 
-    if 'bucket' in datacfg:
+    if "s3BucketRead" in datacfg:
         masterfilelist = get_file_list_s3(
-            masterdatatypedescr, starttimes, endtimes, datacfg,
-            scan=masterscan)
+            masterdatatypedescr, starttimes, endtimes, datacfg, scan=masterscan
+        )
     else:
         masterfilelist = get_file_list(
-            masterdatatypedescr, starttimes, endtimes, datacfg,
-            scan=masterscan)
+            masterdatatypedescr, starttimes, endtimes, datacfg, scan=masterscan
+        )
 
     return masterfilelist, masterdatatypedescr, masterscan
 

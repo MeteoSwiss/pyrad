@@ -65,8 +65,8 @@ def process_echo_id(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types, must be 
-            "dBZ" or "dBuZ", and, 
+            The input data types, must be
+            "dBZ" or "dBuZ", and,
             "ZDR" or "ZDRu", and,
             "RhoHV" or "uRhoHV", and,
             "PhiDP" or "uPhiDP"
@@ -184,8 +184,8 @@ def process_birds_id(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types, must be 
-            "dBZ" or "dBuZ", and, 
+            The input data types, must be
+            "dBZ" or "dBuZ", and,
             "ZDR" or "ZDRu", and,
             "RhoHV" or "uRhoHV"
     radar_list : list of Radar objects
@@ -217,7 +217,7 @@ def process_birds_id(procstatus, dscfg, radar_list=None):
             rhv_field = get_fieldname_pyart(datatype)
         if datatype == "uRhoHV":
             rhv_field = get_fieldname_pyart(datatype)
-            
+
     ind_rad = int(radarnr[5:8]) - 1
     if radar_list[ind_rad] is None:
         warn("No valid radar")
@@ -552,7 +552,7 @@ def process_echo_filter(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types, must be 
+            The input data types, must be
             "echoID" at minimum, as well as any other fields
             that will be echo filtered (e.g. dBZ, ZDR)
         echo_type : int or list of ints
@@ -648,8 +648,8 @@ def process_cdf(procstatus, dscfg, radar_list=None):
         data set configuration. Accepted Configuration Keywords::
 
         datatype : list of string. Dataset keyword
-            The input data types, must be 
-            "echoID" (if not provided, no clutter filtering is possible), and, 
+            The input data types, must be
+            "echoID" (if not provided, no clutter filtering is possible), and,
             "hydro" (if not provided, no hydro filtering is possible), and,
             "VIS" (if not provided no blocked gate filtering is possible), and,
             any other field that will be used to compute CDF
@@ -1610,22 +1610,25 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
         if iso0_field is not None:
             temp_ref = "height_over_iso0"
 
-        if (
-            (refl_field not in radar.fields)
-        ):
-            warn("Unable to create hydrometeor classification field. " + "Missing dBZ field")
+        if refl_field not in radar.fields:
+            warn(
+                "Unable to create hydrometeor classification field. "
+                + "Missing dBZ field"
+            )
             return None, None
-        if (
-            (rhv_field not in radar.fields)
-        ):
-            warn("Unable to create hydrometeor classification field. " + "Missing RhoHV field")
+        if rhv_field not in radar.fields:
+            warn(
+                "Unable to create hydrometeor classification field. "
+                + "Missing RhoHV field"
+            )
             return None, None
-        if (
-            (kdp_field not in radar.fields)
-        ):
-            warn("Unable to create hydrometeor classification field. " + "Missing KDP field")
+        if kdp_field not in radar.fields:
+            warn(
+                "Unable to create hydrometeor classification field. "
+                + "Missing KDP field"
+            )
             return None, None
-       
+
         # user defined parameters
         centroids_file = dscfg.get("centroids_file", None)
         compute_entropy = dscfg.get("compute_entropy", False)
@@ -2253,7 +2256,7 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
         datatype : list of string. Dataset keyword
             The input data types, must contain
             "dBZ" or "dBZc", and,
-            "ZDR" or "ZDRc", and, 
+            "ZDR" or "ZDRc", and,
             "RhoHV" or "RhoHVc", and,
             "TEMP" or "H_ISO0" (optional)
     radar_list : list of Radar objects
@@ -2736,7 +2739,7 @@ def process_zdr_column(procstatus, dscfg, radar_list=None):
             The input data types, must contain,
             "ZDR" or "ZDRc", and,
             "RhoHV" or "RhoHVc", and,
-            "TEMP" or "H_ISO0" 
+            "TEMP" or "H_ISO0"
     radar_list : list of Radar objects
         Optional. list of radar objects
 

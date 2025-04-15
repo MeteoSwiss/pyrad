@@ -55,21 +55,10 @@ import glob
 import csv
 import os
 
-from urllib.parse import urlparse
 from warnings import warn
 import smtplib
 from email.message import EmailMessage
 
-try:
-    import fcntl
-
-    FCNTL_AVAIL = True
-except ModuleNotFoundError:
-    import msvcrt  # For windows
-
-    FCNTL_AVAIL = False
-import errno
-import time
 from datetime import datetime as dt
 
 import numpy as np
@@ -77,9 +66,10 @@ import pandas as pd
 
 from pyart.config import get_fillvalue, get_field_colormap, get_field_limits
 from pyart.core import antenna_to_cartesian, cartesian_to_geographic_aeqd
-from pyart.graph.cm import cmap_d
+from cmweather.cm import cmap_d
 
 from .io_aux import generate_field_name_str
+from .flock_utils import lock_file, unlock_file
 
 try:
     import simplekml
@@ -97,7 +87,7 @@ except ImportError:
     _BOTO3_AVAILABLE = False
 
 
-def write_to_s3(fname, basepath, s3copypath, s3accesspolicy=None):
+def write_to_s3(fname, basepath, s3endpoint, s3bucket, s3path="", s3accesspolicy=None):
     """
     Copies a locally stored product to a S3 bucket
 
@@ -108,10 +98,23 @@ def write_to_s3(fname, basepath, s3copypath, s3accesspolicy=None):
     basepath : str
         basepath of pyrad products as provided with datapath key in
         the main conf file
-    s3copypath : str
-        s3 bucket path, in the format
-        https://bucket_name.endpoint.domain for example
-        https://tests.fr-par-1.linodeobjects.com/
+    s3endpoint : str
+        s3 endpoint URL
+        for example
+        fr-par-1.linodeobjects.com/ or
+        https://eu-central-1.linodeobjects.com/ or
+        https://s3.us-east-1.amazonaws.com/
+        https:// prefix is optional!
+        or
+    s3bucket : str
+        name of the s3 bucket to use to access the data
+        the URL that will be polled is
+        https://s3bucket.s3endpoint
+    s3path : str
+        name of the path where to store the data on the s3 bucket
+        the files will have the following url
+        https://s3bucket.s3endpoint/s3path/filename
+        Optional: default is empty string (place them at the root of the bucket)
     s3accesspolicy : str
         S3 access policy can be either private or public-read
         Default is to use nothing which will inherit the policy of the bucket
@@ -119,36 +122,43 @@ def write_to_s3(fname, basepath, s3copypath, s3accesspolicy=None):
     if not _BOTO3_AVAILABLE:
         warn("boto3 not installed, aborting writing to s3")
         return
-
     try:
-        aws_key = os.environ["AWS_KEY"]
-        aws_secret = os.environ["AWS_SECRET"]
+        aws_key = os.environ["S3_KEY_WRITE"]
+        aws_secret = os.environ["S3_SECRET_WRITE"]
     except KeyError:
-        warn("In order to be able to save to an S3 bucket")
-        warn("you need to define the environment variables AWS_KEY and AWS_SECRET")
+        warn("In order to be able to write to an S3 bucket")
+        warn(
+            "you need to define the environment variables S3_KEY_WRITE and S3_SECRET_WRITE"
+        )
         warn("Saving to S3 failed...")
         return
 
-    bucket = s3copypath.split("//")[1].split(".")[0]
-    endpoint_raw = s3copypath.replace(bucket + ".", "")
-    add_path = endpoint_raw.replace(urlparse(endpoint_raw).netloc, "").split("///")[1]
-    endpoint = endpoint_raw.replace(add_path, "")
-    s3fname = add_path + fname.replace(basepath, "")
+    if not s3endpoint.startswith("https://"):  # add prefix
+        s3endpoint = f"https://{s3endpoint}"
+    endpoint_raw = s3endpoint.replace("https://", "")
+    if s3path:
+        if not s3path.endswith("/"):
+            s3path += "/"
+    else:
+        s3path = ""
+
+    s3fname = s3path + fname.replace(basepath, "")
     if s3fname.startswith("/"):  # Remove leading /
         s3fname = s3fname[1:]
-    linode_obj_config = {
+    s3_client_config = {
         "aws_access_key_id": aws_key,
-        "endpoint_url": endpoint,
+        "endpoint_url": s3endpoint,
         "aws_secret_access_key": aws_secret,
     }
-
-    s3_client = boto3.client("s3", **linode_obj_config, verify=False)
+    s3_client = boto3.client("s3", **s3_client_config, verify=False)
     if s3accesspolicy:
         ExtraArgs = {"ACL": s3accesspolicy}
     else:
         ExtraArgs = None
-    s3_client.upload_file(fname, bucket, s3fname, ExtraArgs=ExtraArgs)
-    print(f"----- copying {fname} to {s3copypath + s3fname}")
+
+    s3copypath = f"https://{s3bucket}.{endpoint_raw}{s3path}{s3fname}"
+    s3_client.upload_file(fname, s3bucket, s3fname, ExtraArgs=ExtraArgs)
+    print(f"----- copying {fname} to {s3copypath}")
 
 
 def write_vol_csv(fname, radar, field_name, ignore_masked=False):
@@ -795,7 +805,6 @@ def write_timeseries_point(fname, data, dstype, text, timeformat=None, timeinfo=
             time_str = datatime.strftime(tformat)
 
         with open(fname, "a", newline="") as csvfile:
-
             for value in data["value"]:
                 time_str = time_str + ", " + ("%.4f" % value)
             csvfile.write(time_str + "\n")
@@ -2088,52 +2097,62 @@ def write_ts_grid_data(dataset, fname):
     """
     filelist = glob.glob(fname)
     if not filelist:
-        with open(fname, 'w', newline='') as csvfile:
-            csvfile.write('# Gridded data timeseries data file\n')
+        with open(fname, "w", newline="") as csvfile:
+            csvfile.write("# Gridded data timeseries data file\n")
             csvfile.write('# Comment lines are preceded by "#"\n')
-            csvfile.write('# Description: \n')
-            csvfile.write('# Time series of a gridded data over a ' +
-                          'fixed location.\n')
+            csvfile.write("# Description: \n")
             csvfile.write(
-                '# Nominal location [lon, lat, alt]: ' +
-                str(dataset['point_coordinates_WGS84_lon_lat_alt']) + '\n')
+                "# Time series of a gridded data over a " + "fixed location.\n"
+            )
             csvfile.write(
-                '# Grid points used [iz, iy, ix]: ' +
-                str(dataset['grid_points_iz_iy_ix']) + '\n')
+                "# Nominal location [lon, lat, alt]: "
+                + str(dataset["point_coordinates_WGS84_lon_lat_alt"])
+                + "\n"
+            )
             csvfile.write(
-                '# Data: ' +
-                generate_field_name_str(
-                    dataset['datatype']) +
-                '\n')
-            csvfile.write('# Fill Value: ' + str(get_fillvalue()) + '\n')
+                "# Grid points used [iz, iy, ix]: "
+                + str(dataset["grid_points_iz_iy_ix"])
+                + "\n"
+            )
             csvfile.write(
-                '# Start: ' +
-                dataset['time'].strftime('%Y-%m-%d %H:%M:%S UTC') + '\n')
-            csvfile.write('#\n')
+                "# Data: " + generate_field_name_str(dataset["datatype"]) + "\n"
+            )
+            csvfile.write("# Fill Value: " + str(get_fillvalue()) + "\n")
+            csvfile.write(
+                "# Start: " + dataset["time"].strftime("%Y-%m-%d %H:%M:%S UTC") + "\n"
+            )
+            csvfile.write("#\n")
 
-            fieldnames = ['date', 'lon', 'lat', 'alt', 'value']
+            fieldnames = ["date", "lon", "lat", "alt", "value"]
             writer = csv.DictWriter(csvfile, fieldnames)
             writer.writeheader()
             writer.writerow(
-                {'date': dataset['time'].strftime('%Y-%m-%d %H:%M:%S.%f'),
-                 'lon': dataset['used_coordinates_WGS84_lon_lat_alt'][0],
-                 'lat': dataset['used_coordinates_WGS84_lon_lat_alt'][1],
-                 'alt': dataset['used_coordinates_WGS84_lon_lat_alt'][2],
-                 'value': dataset['value']})
+                {
+                    "date": dataset["time"].strftime("%Y-%m-%d %H:%M:%S.%f"),
+                    "lon": dataset["used_coordinates_WGS84_lon_lat_alt"][0],
+                    "lat": dataset["used_coordinates_WGS84_lon_lat_alt"][1],
+                    "alt": dataset["used_coordinates_WGS84_lon_lat_alt"][2],
+                    "value": dataset["value"],
+                }
+            )
             csvfile.close()
     else:
-        with open(fname, 'a', newline='') as csvfile:
-            fieldnames = ['date', 'lon', 'lat', 'alt', 'value']
+        with open(fname, "a", newline="") as csvfile:
+            fieldnames = ["date", "lon", "lat", "alt", "value"]
             writer = csv.DictWriter(csvfile, fieldnames)
             writer.writerow(
-                {'date': dataset['time'].strftime('%Y-%m-%d %H:%M:%S.%f'),
-                 'lon': dataset['used_coordinates_WGS84_lon_lat_alt'][0],
-                 'lat': dataset['used_coordinates_WGS84_lon_lat_alt'][1],
-                 'alt': dataset['used_coordinates_WGS84_lon_lat_alt'][2],
-                 'value': dataset['value']})
+                {
+                    "date": dataset["time"].strftime("%Y-%m-%d %H:%M:%S.%f"),
+                    "lon": dataset["used_coordinates_WGS84_lon_lat_alt"][0],
+                    "lat": dataset["used_coordinates_WGS84_lon_lat_alt"][1],
+                    "alt": dataset["used_coordinates_WGS84_lon_lat_alt"][2],
+                    "value": dataset["value"],
+                }
+            )
             csvfile.close()
 
     return fname
+
 
 def write_ts_ml(
     dt_ml, ml_top_avg, ml_top_std, thick_avg, thick_std, nrays_valid, nrays_total, fname
@@ -2386,206 +2405,59 @@ def write_ts_cum(dataset, fname):
 
 
 def write_monitoring_ts(
-    start_time, np_t, values, quantiles, datatype, fname, rewrite=False
+    start_time, np_t, values, quantiles, mean_list, datatype, fname, rewrite=False
 ):
-    """
-    writes time series of data
-
-    Parameters
-    ----------
-    start_time : datetime object or array of date time objects
-        the time of the monitoring
-    np_t : int or array of ints
-        the total number of points
-    values: float array with 3 elements of array of arrays
-        the values at certain quantiles
-    quantiles: float array with 3 elements
-        the quantiles computed
-    datatype : str
-        The data type
-    fname : str
-        file name where to store the data
-    rewrite : bool
-        if True a new file is created
-
-    Returns
-    -------
-    fname : str
-        the name of the file where data has written
-
-    """
     nvalues = np.size(start_time)
-    if nvalues == 1:
-        start_time_aux = np.asarray([start_time])
-        np_t_aux = np.asarray([np_t])
-        values_aux = np.asarray([values.filled(fill_value=get_fillvalue())])
-    else:
-        start_time_aux = np.asarray(start_time)
-        values_aux = values.filled(fill_value=get_fillvalue())
-        np_t_aux = np_t
+    start_time_aux = (
+        np.asarray([start_time]) if nvalues == 1 else np.asarray(start_time)
+    )
+    np_t_aux = np.asarray([np_t]) if nvalues == 1 else np_t
+    values_aux = (
+        np.asarray([values.filled(get_fillvalue())])
+        if nvalues == 1
+        else values.filled(get_fillvalue())
+    )
 
-    if rewrite:
-        file_exists = False
-    else:
-        filelist = glob.glob(fname)
-        if not filelist:
-            file_exists = False
-        else:
-            file_exists = True
+    data = {
+        "date": [t.strftime("%Y%m%d%H%M%S") for t in start_time_aux],
+        "NP": np_t_aux,
+        "geometric_mean_dB": mean_list[0],
+        "linear_mean_dB": mean_list[1]
+    }
+    for i, q in enumerate(quantiles):
+        data[f"quantile_{q}"] = values_aux[:, i]
 
-    if not file_exists:
-        with open(fname, "w", newline="") as csvfile:
-            if FCNTL_AVAIL:
-                while True:
-                    try:
-                        fcntl.flock(csvfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                        break
-                    except OSError as e:
-                        if e.errno == errno.EAGAIN:
-                            time.sleep(0.1)
-                        elif e.errno == errno.EBADF:
-                            warn(
-                                "WARNING: No file locking is possible (NFS mount?), "
-                                + "expect strange issues with multiprocessing..."
-                            )
-                            break
-                        else:
-                            raise
-            else:
-                while True:
-                    try:
-                        # Attempt to acquire an exclusive lock on the file
-                        msvcrt.locking(
-                            os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0
-                        )
-                        break
-                    except OSError as e:
-                        if e.errno == 13:  # Permission denied
-                            time.sleep(0.1)
-                        elif e.errno == 13:  # No such file or directory
-                            warn(
-                                "WARNING: No file locking is possible (NFS mount?), "
-                                + "expect strange issues with multiprocessing..."
-                            )
-                            break
-                        else:
-                            raise
+    df = pd.DataFrame(data)
 
-            csvfile.write(
+    file_exists = os.path.exists(fname)
+
+    with open(fname, "r+" if file_exists and not rewrite else "w") as f:
+        lock_file(f)
+        if rewrite or not file_exists:
+            header = (
                 "# Weather radar monitoring timeseries data file\n"
-                + '# Comment lines are preceded by "#"\n'
-                + "# Description: \n"
-                + "# Time series of a monitoring of weather radar data.\n"
-                + "# Quantiles: "
-                + str(quantiles[1])
-                + ", "
-                + str(quantiles[0])
-                + ", "
-                + str(quantiles[2])
-                + " percent.\n"
-                + "# Data: "
-                + generate_field_name_str(datatype)
-                + "\n"
-                + "# Fill Value: "
-                + str(get_fillvalue())
-                + "\n"
-                + "# Start: "
-                + start_time_aux[0].strftime("%Y-%m-%d %H:%M:%S UTC")
-                + "\n"
-                + "#\n"
+                '# Comment lines are preceded by "#"\n'
+                "# Description: \n"
+                "# Time series of a monitoring of weather radar data.\n"
+                f"# Quantiles: {', '.join(map(str, quantiles))} percent.\n"
+                f"# Data: {generate_field_name_str(datatype)}\n"
+                f"# Fill Value: {get_fillvalue()}\n"
+                f"# Start: {start_time_aux[0].strftime('%Y-%m-%d %H:%M:%S UTC')}\n"
+                "#\n"
             )
-
-            fieldnames = [
-                "date",
-                "NP",
-                "central_quantile",
-                "low_quantile",
-                "high_quantile",
-            ]
-            writer = csv.DictWriter(csvfile, fieldnames)
-            writer.writeheader()
-            for i, np_t_el in enumerate(np_t_aux):
-                writer.writerow(
-                    {
-                        "date": start_time_aux[i].strftime("%Y%m%d%H%M%S"),
-                        "NP": np_t_el,
-                        "central_quantile": values_aux[i, 1],
-                        "low_quantile": values_aux[i, 0],
-                        "high_quantile": values_aux[i, 2],
-                    }
-                )
-
-            if FCNTL_AVAIL:
-                fcntl.flock(csvfile, fcntl.LOCK_UN)
-            else:
-                msvcrt.locking(
-                    csvfile.fileno(), msvcrt.LK_UNLCK, os.path.getsize(csvfile)
-                )
-
-            csvfile.close()
-    else:
-        with open(fname, "a", newline="") as csvfile:
-            if FCNTL_AVAIL:
-                while True:
-                    try:
-                        fcntl.flock(csvfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                        break
-                    except OSError as e:
-                        if e.errno == errno.EAGAIN:
-                            time.sleep(0.1)
-                        elif e.errno == errno.EBADF:
-                            warn(
-                                "WARNING: No file locking is possible (NFS mount?), "
-                                + "expect strange issues with multiprocessing..."
-                            )
-                            break
-                        else:
-                            raise
-            else:
-                while True:
-                    try:
-                        # Attempt to acquire an exclusive lock on the file
-                        msvcrt.locking(
-                            os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0
-                        )
-                        break
-                    except OSError as e:
-                        if e.errno == 13:  # Permission denied
-                            time.sleep(0.1)
-                        elif e.errno == 13:  # No such file or directory
-                            warn(
-                                "WARNING: No file locking is possible (NFS mount?), "
-                                + "expect strange issues with multiprocessing..."
-                            )
-                            break
-                        else:
-                            raise
-
-            fieldnames = [
-                "date",
-                "NP",
-                "central_quantile",
-                "low_quantile",
-                "high_quantile",
-            ]
-            writer = csv.DictWriter(csvfile, fieldnames)
-            for i, np_t_el in enumerate(np_t_aux):
-                writer.writerow(
-                    {
-                        "date": start_time_aux[i].strftime("%Y%m%d%H%M%S"),
-                        "NP": np_t_el,
-                        "central_quantile": values_aux[i, 1],
-                        "low_quantile": values_aux[i, 0],
-                        "high_quantile": values_aux[i, 2],
-                    }
-                )
-            if FCNTL_AVAIL:
-                fcntl.flock(csvfile, fcntl.LOCK_UN)
-            else:
-                msvcrt.locking(
-                    csvfile.fileno(), msvcrt.LK_UNLCK, os.path.getsize(csvfile)
-                )
-            csvfile.close()
+            f.write(header)
+            df.to_csv(f, index=False)
+        else:
+            header = [line.strip() for line in f if line.startswith("#")]
+            f.seek(0)
+            existing_df = pd.read_csv(f, comment="#")
+            existing_df["date"] = existing_df["date"].astype(str)
+            combined_df = pd.concat([existing_df, df], ignore_index=True)
+            combined_df.drop_duplicates(subset=["date"], keep="last", inplace=True)
+            f.seek(0)
+            f.write("\n".join(header) + "\n")
+            combined_df.to_csv(f, index=False)
+        unlock_file(f)
     return fname
 
 
@@ -2731,41 +2603,7 @@ def write_intercomp_scores_ts(
 
     if not file_exists:
         with open(fname, "w", newline="") as csvfile:
-            if FCNTL_AVAIL:
-                while True:
-                    try:
-                        fcntl.flock(csvfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                        break
-                    except OSError as e:
-                        if e.errno == errno.EAGAIN:
-                            time.sleep(0.1)
-                        elif e.errno == errno.EBADF:
-                            warn(
-                                "WARNING: No file locking is possible (NFS mount?), "
-                                + "expect strange issues with multiprocessing..."
-                            )
-                            break
-                        else:
-                            raise
-            else:
-                while True:
-                    try:
-                        # Attempt to acquire an exclusive lock on the file
-                        msvcrt.locking(
-                            os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0
-                        )
-                        break
-                    except OSError as e:
-                        if e.errno == 13:  # Permission denied
-                            time.sleep(0.1)
-                        elif e.errno == 13:  # No such file or directory
-                            warn(
-                                "WARNING: No file locking is possible (NFS mount?), "
-                                + "expect strange issues with multiprocessing..."
-                            )
-                            break
-                        else:
-                            raise
+            lock_file(csvfile)
 
             csvfile.write(
                 "# Weather radar intercomparison scores timeseries file\n"
@@ -2825,45 +2663,11 @@ def write_intercomp_scores_ts(
                     }
                 )
 
-            fcntl.flock(csvfile, fcntl.LOCK_UN)
+            unlock_file(csvfile)
             csvfile.close()
     else:
         with open(fname, "a", newline="") as csvfile:
-            if FCNTL_AVAIL:
-                while True:
-                    try:
-                        fcntl.flock(csvfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                        break
-                    except OSError as e:
-                        if e.errno == errno.EAGAIN:
-                            time.sleep(0.1)
-                        elif e.errno == errno.EBADF:
-                            warn(
-                                "WARNING: No file locking is possible (NFS mount?), "
-                                + "expect strange issues with multiprocessing..."
-                            )
-                            break
-                        else:
-                            raise
-            else:
-                while True:
-                    try:
-                        # Attempt to acquire an exclusive lock on the file
-                        msvcrt.locking(
-                            os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0
-                        )
-                        break
-                    except OSError as e:
-                        if e.errno == 13:  # Permission denied
-                            time.sleep(0.1)
-                        elif e.errno == 13:  # No such file or directory
-                            warn(
-                                "WARNING: No file locking is possible (NFS mount?), "
-                                + "expect strange issues with multiprocessing..."
-                            )
-                            break
-                        else:
-                            raise
+            lock_file(csvfile)
 
             fieldnames = [
                 "date",
@@ -2897,12 +2701,7 @@ def write_intercomp_scores_ts(
                         ),
                     }
                 )
-            if FCNTL_AVAIL:
-                fcntl.flock(csvfile, fcntl.LOCK_UN)
-            else:
-                msvcrt.locking(
-                    csvfile.fileno(), msvcrt.LK_UNLCK, os.path.getsize(csvfile)
-                )
+            unlock_file(csvfile)
             csvfile.close()
 
     return fname

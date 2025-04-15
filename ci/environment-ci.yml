@@ -13,7 +13,8 @@ dependencies:
   - cartopy
   - cvxopt
   - wradlib
-  - xarray<2024.10.0
+  - xarray
+  - boto3<1.37
   - xradar
   - metpy
   - pytest-cov

@@ -66,7 +66,7 @@ def process_turbulence(procstatus, dscfg, radar_list=None):
 
         datatype : string. Dataset keyword
             The input data type, must contain,
-            "dBuZ" or "dBZ" or "dBZc" or "dBuZv" or "dBZv" or "dBZvc" or "CNRc", and, 
+            "dBuZ" or "dBZ" or "dBZc" or "dBuZv" or "dBZv" or "dBZvc" or "CNRc", and,
             "W" or "Wv" or "Wu" or "Wvu" or "WD" or "WDc"
         radius : float. Dataset keyword
             Search radius for calculating Eddy Dissipation Rate (EDR).

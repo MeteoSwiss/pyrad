@@ -13,6 +13,8 @@ Miscellaneous functions dealing with statistics
 """
 
 import numpy as np
+import ast
+import operator as op
 
 
 def quantiles_weighted(
@@ -163,3 +165,92 @@ def ratio_bootstrapping(nominator, denominator, nsamples=1000):
             denominator[ind_sample]
         )
     return samples
+
+
+# Supported operators mapped to NumPy operations
+operators = {
+    ast.Add: op.add,
+    ast.Sub: op.sub,
+    ast.Mult: op.mul,
+    ast.Div: op.truediv,
+    ast.Pow: op.pow,
+    ast.USub: op.neg,
+}
+
+# Supported NumPy mathematical functions
+functions = {
+    "sin": np.sin,
+    "cos": np.cos,
+    "tan": np.tan,
+    "exp": np.exp,
+    "sqrt": np.sqrt,
+    "log": np.log,
+    "log10": np.log10,
+    "log2": np.log2,
+    "abs": np.abs,
+}
+
+
+def parse_math_expression(expr):
+    """
+    Parses a mathematical expression into a vectorized NumPy-compatible function.
+
+    Supports element-wise operations on both scalars and NumPy arrays.
+
+    Supported operations:
+        - Basic arithmetic: +, -, *, /, **
+        - Unary negation: -x
+        - Mathematical functions: sin, cos, tan, exp, sqrt, log, abs
+
+    Parameters
+    ----------
+    expr : str
+        A string representing the mathematical expression (e.g., `"sin(x) + x**2"`).
+
+    Returns
+    -------
+    function
+        A callable function `f(x)` that evaluates the expression using NumPy.
+        Accepts scalars or NumPy arrays for vectorized operations.
+    """
+
+    def eval_(node, x):
+        if isinstance(node, ast.Constant):  # Numeric literals
+            return node.n
+        elif isinstance(node, ast.BinOp):  # Binary operations (e.g., +, -, *, **)
+            return operators[type(node.op)](eval_(node.left, x), eval_(node.right, x))
+        elif isinstance(node, ast.UnaryOp):  # Unary operations (e.g., -x)
+            return operators[type(node.op)](eval_(node.operand, x))
+        elif isinstance(node, ast.Call):  # Function calls (e.g., sin(x))
+            func = functions.get(node.func.id)
+            if func:
+                args = [eval_(arg, x) for arg in node.args]
+                return func(*args)
+            else:
+                raise ValueError(f"Unsupported function: {node.func.id}")
+        elif isinstance(node, ast.Name):  # Variable (e.g., x)
+            if node.id == "x":
+                return x
+            else:
+                raise ValueError(f"Unknown variable: {node.id}")
+        else:
+            raise TypeError(f"Unsupported operation: {node}")
+
+    def parsed_function(x):
+        """
+        Evaluates the parsed expression using scalar or array inputs.
+
+        Parameters
+        ----------
+        x : float, int, or numpy.ndarray
+            Input value(s) to substitute for 'x' in the expression.
+
+        Returns
+        -------
+        float or numpy.ndarray
+            Result of evaluating the expression at input `x`.
+        """
+        parsed_expr = ast.parse(expr, mode="eval").body
+        return eval_(parsed_expr, x)
+
+    return parsed_function

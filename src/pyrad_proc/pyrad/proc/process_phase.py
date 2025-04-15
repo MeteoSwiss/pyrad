@@ -641,7 +641,7 @@ def process_phidp_kdp_lp(procstatus, dscfg, radar_list=None):
             The input data types, must contain,
             "dBZ" or "dBZc", and,
             "PhiDP" or "PhiDPc" or "uPhiDP", and,
-            "RhoHV" or "RhoHVc", (Optional, used when min_rhv is specified) and, 
+            "RhoHV" or "RhoHVc", (Optional, used when min_rhv is specified) and,
             "SNRh" (Optional, used when min_snr is specified), and
             "TEMP" or "H_ISO0" (Optional)
         fzl : float. Dataset keyword

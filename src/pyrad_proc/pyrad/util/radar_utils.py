@@ -29,6 +29,7 @@ Miscellaneous functions dealing with radar data
     get_fixed_rng_data
     create_sun_hits_field
     create_sun_retrieval_field
+    compute_mean_reflectivity_from_hist
     compute_quantiles
     compute_quantiles_from_hist
     compute_quantiles_sweep
@@ -94,7 +95,7 @@ def get_data_along_rng(
     fix_elevations, fix_azimuths: list of floats or None
         List of elevations, azimuths couples [deg] if one of them is None
         all angles corresponding to one of the fixed angles specified will
-        be gathered
+        be gatheredfro
     ang_tol : float
         Tolerance between the nominal angle and the radar angle [deg]
     rmin, rmax: float
@@ -1490,6 +1491,47 @@ def create_sun_retrieval_field(par, field_name, imgcfg, lant=0.0):
 
     return field
 
+def compute_mean_reflectivity_from_hist(bin_centers, hist):
+    """
+    Computes the mean reflectivity in both dB and linear units.
+
+    Parameters
+    ----------
+    bin_centers : ndarray 1D
+        The bin centers (in dB).
+    hist : ndarray 1D
+        The histogram values.
+
+    Returns
+    -------
+    geometric_mean_db : float
+        Mean reflectivity in dB.
+    linear_mean_db : float
+        Mean reflectivity computed in linear units and converted back to dB.
+    """
+    # Check if all elements in histogram are masked values
+    mask = np.ma.getmaskarray(hist)
+    if mask.all() or np.ma.sum(hist) < 10:
+        return np.ma.masked, np.ma.masked  # Return masked means
+
+    np_t = np.ma.sum(hist)
+
+    # Compute mean in dB
+    geometric_mean_db = np.ma.sum(bin_centers * hist) / np_t
+
+    # Convert bin centers to linear scale
+    bin_centers_lin = 10 ** (bin_centers / 10)
+
+    # Compute mean in linear scale
+    mean_lin = np.ma.sum(bin_centers_lin * hist) / np_t
+
+    # Convert mean back to dB
+    linear_mean_db = 10 * np.log10(mean_lin)
+
+    mean_list = [geometric_mean_db, linear_mean_db]
+
+    return mean_list
+    
 
 def compute_quantiles(field, quantiles=None):
     """
@@ -1712,7 +1754,7 @@ def compute_histogram_sweep(
     return bin_edges, values
 
 
-def get_histogram_bins(field_name, step=None, vmin=None, vmax=None):
+def get_histogram_bins(field_name, step=None, vmin=None, vmax=None, transform=None):
     """
     gets the histogram bins. If vmin or vmax are not define the range limits
     of the field as defined in the Py-ART config file are going to be used.
@@ -1725,7 +1767,8 @@ def get_histogram_bins(field_name, step=None, vmin=None, vmax=None):
         size of bin
     vmin, vmax : float
         The minimum and maximum value of the histogram
-
+    transform: func
+        A function that transforms the resulting histogram bins
     Returns
     -------
     bin_edges : float array
@@ -1746,12 +1789,28 @@ def get_histogram_bins(field_name, step=None, vmin=None, vmax=None):
         step = (vmax - vmin) / 50.0
         warn(f"No step has been defined. Default {step} will be used")
 
-    return np.linspace(
+    if transform:
+        vmin = transform(vmin)
+        vmax = transform(vmax)
+
+    bins = np.linspace(
         vmin - step / 2.0, vmax + step / 2.0, num=int((vmax - vmin) / step) + 2
     )
 
+    return bins
 
-def compute_2d_stats(field1, field2, field_name1, field_name2, step1=None, step2=None):
+
+def compute_2d_stats(
+    field1,
+    field2,
+    field_name1,
+    field_name2,
+    step1=None,
+    step2=None,
+    vmin=None,
+    vmax=None,
+    transform=None,
+):
     """
     computes a 2D histogram and statistics of the data
 
@@ -1763,6 +1822,9 @@ def compute_2d_stats(field1, field2, field_name1, field_name2, step1=None, step2
         the name of the fields
     step1, step2 : float
         size of bin
+    vmin
+    transform : func
+        A function to use to transform the data prior to computing the stats
 
     Returns
     -------
@@ -1790,8 +1852,18 @@ def compute_2d_stats(field1, field2, field_name1, field_name2, step1=None, step2
         }
         return None, None, None, stats
 
+    if transform:
+        field1 = transform(field1)
+        field2 = transform(field2)
+
     hist_2d, bin_edges1, bin_edges2 = compute_2d_hist(
-        field1, field2, field_name1, field_name2, step1=step1, step2=step2
+        field1,
+        field2,
+        field_name1,
+        field_name2,
+        step1=step1,
+        step2=step2,
+        transform=transform,
     )
     step_aux1 = bin_edges1[1] - bin_edges1[0]
     bin_centers1 = bin_edges1[:-1] + step_aux1 / 2.0
@@ -1807,7 +1879,10 @@ def compute_2d_stats(field1, field2, field_name1, field_name2, step1=None, step2
     quant75bias = np.percentile((field2 - field1).compressed(), 75.0)
     ind_max_val1, ind_max_val2 = np.where(hist_2d == np.ma.amax(hist_2d))
     modebias = bin_centers2[ind_max_val2[0]] - bin_centers1[ind_max_val1[0]]
-    slope, intercep, corr, _, _ = scipy.stats.linregress(field1, y=field2)
+    mask_nan = np.logical_or(field1.mask, field2.mask)
+    slope, intercep, corr, _, _ = scipy.stats.linregress(
+        field1[~mask_nan], y=field2[~mask_nan]
+    )
     intercep_slope_1 = np.ma.mean(field2 - field1)
 
     stats = {
@@ -1867,7 +1942,9 @@ def compute_1d_stats(field1, field2):
     return stats
 
 
-def compute_2d_hist(field1, field2, field_name1, field_name2, step1=None, step2=None):
+def compute_2d_hist(
+    field1, field2, field_name1, field_name2, step1=None, step2=None, transform=None
+):
     """
     computes a 2D histogram of the data
 
@@ -1879,6 +1956,8 @@ def compute_2d_hist(field1, field2, field_name1, field_name2, step1=None, step2=
         field names
     step1, step2 : float
         size of the bins
+    transform: func
+        A function to use to transform the histogram bins
 
     Returns
     -------
@@ -1888,10 +1967,10 @@ def compute_2d_hist(field1, field2, field_name1, field_name2, step1=None, step2=
         the bin edges along each dimension
 
     """
-    bin_edges1 = get_histogram_bins(field_name1, step=step1)
+    bin_edges1 = get_histogram_bins(field_name1, step=step1, transform=transform)
     step_aux1 = bin_edges1[1] - bin_edges1[0]
     bin_centers1 = bin_edges1[:-1] + step_aux1 / 2.0
-    bin_edges2 = get_histogram_bins(field_name2, step=step2)
+    bin_edges2 = get_histogram_bins(field_name2, step=step2, transform=transform)
     step_aux2 = bin_edges2[1] - bin_edges2[0]
     bin_centers2 = bin_edges2[:-1] + step_aux2 / 2.0
 

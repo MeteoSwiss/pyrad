@@ -108,8 +108,9 @@ def process_grid(procstatus, dscfg, radar_list=None):
                 grid origin [m MSL]
                 Defaults the latitude, longitude and altitude of the radar
         wfunc : str. Dataset keyword
-            the weighting function used to combine the radar gates close to a
-            grid point. Possible values BARNES, BARNES2, CRESSMAN, NEAREST
+            the weighting function used to compute the weights of the radar gates close to a
+            grid point. Possible values BARNES, BARNES2, CRESSMAN, NEAREST, GRID.
+            GRID will give a weight of 1 to all polar gates which centroids fall within the Cartesian grid cell, 0 otherwise
             Default NEAREST
         roif_func : str. Dataset keyword
             the function used to compute the region of interest.
@@ -273,7 +274,7 @@ def process_grid(procstatus, dscfg, radar_list=None):
     # cartesian mapping
     grid = pyart.map.grid_from_radars(
         (radar,),
-        gridding_algo="map_to_grid",
+        gridding_algo="map_gates_to_grid",
         weighting_function=wfunc,
         roi_func=roi_func,
         h_factor=1.0,
@@ -602,6 +603,244 @@ def process_grid_multiple_points(procstatus, dscfg, radar_list=None):
     return new_dataset, ind_rad
 
 
+def process_grid_stats(procstatus, dscfg, radar_list=None):
+    """
+    computes spatial statistics of a field within a Cartesian grid.
+    the statistic is computed at every Cartesian grid cell using all the polar
+    gates that fall within the region of interest of this grid cell.
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration. Accepted Configuration Keywords::
+
+        datatype : list of string. Dataset keyword
+            The input data types, can be any datatype supported by pyrad
+        gridconfig : dictionary. Dataset keyword
+            Dictionary containing some or all of this keywords:
+            xmin, xmax, ymin, ymax, zmin, zmax : floats
+                minimum and maximum horizontal distance from grid origin [km]
+                and minimum and maximum vertical distance from grid origin [m]
+                Defaults -40, 40, -40, 40, 0., 10000.
+            latmin, latmax, lonmin, lonmax : floats
+                minimum and maximum latitude and longitude [deg], if specified
+                xmin, xmax, ymin, ymax, latorig, lonorig will be ignored
+            hres, vres : floats
+                horizontal and vertical grid resolution [m]
+                Defaults are 1000. for hres and (zmax - zmin + 1) for vres
+                which ensures that there is only one single grid cell in the
+                vertical dimension (extending from zmin to zmax)
+            latorig, lonorig, altorig : floats
+                latitude and longitude of grid origin [deg] and altitude of
+                grid origin [m MSL]
+                Defaults the latitude, longitude and altitude of the radar
+        wfunc : str. Dataset keyword
+            the weighting function used to compute the weights of the radar gates close to a
+            grid point. Possible values BARNES, BARNES2, CRESSMAN, NEAREST, GRID.
+            GRID will give a weight of 1 to all polar gates which centroids fall within the Cartesian grid cell, 0 otherwise
+            Default GRID
+        roif_func : str. Dataset keyword
+            the function used to compute the region of interest.
+            Possible values: dist_beam, constant
+        roi : float. Dataset keyword
+            the (minimum) radius of the region of interest in m. Default half
+            the largest resolution
+        beamwidth : float. Dataset keyword
+            the radar antenna beamwidth [deg]. If None that of the key
+            radar_beam_width_h in attribute instrument_parameters of the radar
+            object will be used. If the key or the attribute are not present
+            a default 1 deg value will be used
+        beam_spacing : float. Dataset keyword
+            the beam spacing, i.e. the ray angle resolution [deg]. If None,
+            that of the attribute ray_angle_res of the radar object will be
+            used. If the attribute is None a default 1 deg value will be used
+        statistic : string. Dataset Keyworrd
+            Statistic to compute: Can be mean, std, min, max, and QXX (where XX is a 2 number digit, for example Q25)
+            Default mean
+        weighted : bool. Dataset Keyword
+            Whether to weigh the statistics by the weights of the polar gates for every Cartesian grid cell.
+            if wfunc == GRID, this keyword is ignored.
+            Default False
+    radar_list : list of Radar objects
+        Optional. list of radar objects
+
+    Returns
+    -------
+    new_dataset : dict
+        dictionary containing the output fields corresponding to datatypes
+    ind_rad : int
+        radar index
+
+    """
+
+    if procstatus != 1:
+        return None, None
+
+    field_names_aux = []
+    for datatypedescr in dscfg["datatype"]:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        field_names_aux.append(get_fieldname_pyart(datatype))
+
+    ind_rad = int(radarnr[5:8]) - 1
+    if (radar_list is None) or (radar_list[ind_rad] is None):
+        warn("ERROR: No valid radar")
+        return None, None
+    radar = radar_list[ind_rad]
+
+    # keep only fields present in radar object
+    field_names = []
+    nfields_available = 0
+    for field_name in field_names_aux:
+        if field_name not in radar.fields:
+            warn("Field name " + field_name + " not available in radar object")
+            continue
+        field_names.append(field_name)
+        nfields_available += 1
+
+    if nfields_available == 0:
+        warn("Fields not available in radar data")
+        return None, None
+
+    # default parameters
+    xmin = -40.0
+    xmax = 40.0
+    ymin = -40.0
+    ymax = 40.0
+    zmin = 0.0
+    zmax = 10000.0
+    hres = 1000.0
+    vres = None
+    lonmin = None
+    lonmax = None
+    latmin = None
+    latmax = None
+
+    lat = float(radar.latitude["data"][0])
+    lon = float(radar.longitude["data"][0])
+    alt = float(radar.altitude["data"][0])
+
+    if "gridConfig" in dscfg:
+        if "latmin" in dscfg["gridConfig"]:
+            latmin = dscfg["gridConfig"]["latmin"]
+        if "latmax" in dscfg["gridConfig"]:
+            latmax = dscfg["gridConfig"]["latmax"]
+        if "lonmin" in dscfg["gridConfig"]:
+            lonmin = dscfg["gridConfig"]["lonmin"]
+        if "lonmax" in dscfg["gridConfig"]:
+            lonmax = dscfg["gridConfig"]["lonmax"]
+        if "xmin" in dscfg["gridConfig"]:
+            xmin = dscfg["gridConfig"]["xmin"]
+        if "xmax" in dscfg["gridConfig"]:
+            xmax = dscfg["gridConfig"]["xmax"]
+        if "ymin" in dscfg["gridConfig"]:
+            ymin = dscfg["gridConfig"]["ymin"]
+        if "ymax" in dscfg["gridConfig"]:
+            ymax = dscfg["gridConfig"]["ymax"]
+        if "zmin" in dscfg["gridConfig"]:
+            zmin = dscfg["gridConfig"]["zmin"]
+        if "zmax" in dscfg["gridConfig"]:
+            zmax = dscfg["gridConfig"]["zmax"]
+        if "hres" in dscfg["gridConfig"]:
+            hres = dscfg["gridConfig"]["hres"]
+        if "vres" in dscfg["gridConfig"]:
+            vres = dscfg["gridConfig"]["vres"]
+        if "altorig" in dscfg["gridConfig"]:
+            alt = dscfg["gridConfig"]["altorig"]
+
+    if (
+        latmin is not None
+        and latmax is not None
+        and lonmin is not None
+        and lonmax is not None
+    ):
+        warn("Specified lat/lon limits")
+        warn(
+            "xmin, xmax, ymin, ymax, latorig and lonorig parameters\n"
+            + "will be ignored"
+        )
+        # get xmin, xmax, ymin, ymax from lon/lat
+        gatelat = radar.gate_latitude["data"]
+        gatelon = radar.gate_longitude["data"]
+        mask1 = np.logical_and(gatelat > latmin, gatelat <= latmax)
+        mask2 = np.logical_and(gatelon > lonmin, gatelon <= lonmax)
+        mask = np.logical_and(mask1, mask2)
+        xmin = np.min(radar.gate_x["data"][mask]) / 1000.0
+        xmax = np.max(radar.gate_x["data"][mask]) / 1000.0
+        ymin = np.min(radar.gate_y["data"][mask]) / 1000.0
+        ymax = np.max(radar.gate_y["data"][mask]) / 1000.0
+    else:
+        if "latorig" in dscfg["gridConfig"]:
+            lat = dscfg["gridConfig"]["latorig"]
+        if "lonorig" in dscfg["gridConfig"]:
+            lon = dscfg["gridConfig"]["lonorig"]
+
+    if vres is None:
+        vres = (zmax - zmin) + 1  # this ensures that nz = 1
+
+    wfunc = dscfg.get("wfunc", "GRID")
+    roi_func = dscfg.get("roi_func", "dist_beam")
+    statistic = dscfg.get("statistic", "mean")
+    weighted = dscfg.get("weighted", 0)
+
+    # number of grid points in cappi
+    nz = int((zmax - zmin) / vres) + 1
+    ny = int((ymax - ymin) * 1000.0 / hres) + 1
+    nx = int((xmax - xmin) * 1000.0 / hres) + 1
+
+    min_radius = dscfg.get("roi", np.max([vres, hres]) / 2.0)
+    # parameters to determine the gates to use for each grid point
+    beamwidth = dscfg.get("beamwidth", None)
+    beam_spacing = dscfg.get("beam_spacing", None)
+
+    if beamwidth is None:
+        if (
+            radar.instrument_parameters is not None
+            and "radar_beam_width_h" in radar.instrument_parameters
+        ):
+            beamwidth = radar.instrument_parameters["radar_beam_width_h"]["data"][0]
+        else:
+            warn("Unknown radar beamwidth. Default 1 deg will be used")
+            beamwidth = 1
+
+    if beam_spacing is None:
+        if radar.ray_angle_res is not None:
+            beam_spacing = radar.ray_angle_res["data"][0]
+        else:
+            warn("Unknown beam spacing. Default 1 deg will be used")
+            beam_spacing = 1
+
+    # cartesian mapping
+    grid = pyart.map.gridstats_from_radar(
+        (radar,),
+        gridding_algo="map_gates_to_grid",
+        weighting_function=wfunc,
+        roi_func=roi_func,
+        h_factor=1.0,
+        nb=beamwidth,
+        bsp=beam_spacing,
+        min_radius=min_radius,
+        constant_roi=min_radius,
+        grid_shape=(nz, ny, nx),
+        grid_limits=(
+            (zmin, zmax),
+            (ymin * 1000.0, ymax * 1000.0),
+            (xmin * 1000.0, xmax * 1000.0),
+        ),
+        grid_origin=(lat, lon),
+        grid_origin_alt=alt,
+        fields=field_names,
+        statistic=statistic,
+        weighted=weighted,
+    )
+
+    new_dataset = {"radar_out": grid}
+
+    return new_dataset, ind_rad
+
+
 def process_grid_time_stats(procstatus, dscfg, radar_list=None):
     """
     computes the temporal statistics of a field
@@ -729,13 +968,14 @@ def process_grid_time_stats(procstatus, dscfg, radar_list=None):
         if "grid_out" not in dscfg["global_data"]:
             if period != -1:
                 # get start and stop times of new grid object
-                (dscfg["global_data"]["starttime"], dscfg["global_data"]["endtime"]) = (
-                    time_avg_range(
-                        dscfg["timeinfo"],
-                        dscfg["global_data"]["starttime"],
-                        dscfg["global_data"]["endtime"],
-                        period,
-                    )
+                (
+                    dscfg["global_data"]["starttime"],
+                    dscfg["global_data"]["endtime"],
+                ) = time_avg_range(
+                    dscfg["timeinfo"],
+                    dscfg["global_data"]["starttime"],
+                    dscfg["global_data"]["endtime"],
+                    period,
                 )
 
                 # check if volume time older than starttime
@@ -748,7 +988,6 @@ def process_grid_time_stats(procstatus, dscfg, radar_list=None):
 
         # still accumulating: add field_dict to global field_dict
         if period == -1 or dscfg["timeinfo"] < dscfg["global_data"]["endtime"]:
-
             if period == -1:
                 dscfg["global_data"]["endtime"] = dscfg["timeinfo"]
 
@@ -785,36 +1024,36 @@ def process_grid_time_stats(procstatus, dscfg, radar_list=None):
                     ] += (field_dict["data"][valid_sum] * field_dict["data"][valid_sum])
 
             elif stat == "max":
-                dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
-                    np.maximum(
-                        dscfg["global_data"]["grid_out"]
-                        .fields[field_name]["data"]
-                        .filled(fill_value=-1.0e300),
-                        field_dict["data"].filled(fill_value=-1.0e300),
-                    )
+                dscfg["global_data"]["grid_out"].fields[field_name][
+                    "data"
+                ] = np.maximum(
+                    dscfg["global_data"]["grid_out"]
+                    .fields[field_name]["data"]
+                    .filled(fill_value=-1.0e300),
+                    field_dict["data"].filled(fill_value=-1.0e300),
                 )
 
-                dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
-                    np.ma.masked_values(
-                        dscfg["global_data"]["grid_out"].fields[field_name]["data"],
-                        -1.0e300,
-                    )
+                dscfg["global_data"]["grid_out"].fields[field_name][
+                    "data"
+                ] = np.ma.masked_values(
+                    dscfg["global_data"]["grid_out"].fields[field_name]["data"],
+                    -1.0e300,
                 )
             elif stat == "min":
-                dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
-                    np.minimum(
-                        dscfg["global_data"]["grid_out"]
-                        .fields[field_name]["data"]
-                        .filled(fill_value=1.0e300),
-                        field_dict["data"].filled(fill_value=1.0e300),
-                    )
+                dscfg["global_data"]["grid_out"].fields[field_name][
+                    "data"
+                ] = np.minimum(
+                    dscfg["global_data"]["grid_out"]
+                    .fields[field_name]["data"]
+                    .filled(fill_value=1.0e300),
+                    field_dict["data"].filled(fill_value=1.0e300),
                 )
 
-                dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
-                    np.ma.masked_values(
-                        dscfg["global_data"]["grid_out"].fields[field_name]["data"],
-                        1.0e300,
-                    )
+                dscfg["global_data"]["grid_out"].fields[field_name][
+                    "data"
+                ] = np.ma.masked_values(
+                    dscfg["global_data"]["grid_out"].fields[field_name]["data"],
+                    1.0e300,
                 )
 
             return None, None
@@ -829,9 +1068,9 @@ def process_grid_time_stats(procstatus, dscfg, radar_list=None):
 
             if stat == "mean":
                 if lin_trans:
-                    dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
-                        10.0 * np.ma.log10(field_mean)
-                    )
+                    dscfg["global_data"]["grid_out"].fields[field_name][
+                        "data"
+                    ] = 10.0 * np.ma.log10(field_mean)
                 else:
                     dscfg["global_data"]["grid_out"].fields[field_name][
                         "data"
@@ -847,18 +1086,18 @@ def process_grid_time_stats(procstatus, dscfg, radar_list=None):
 
                 if stat == "std":
                     if lin_trans:
-                        dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
-                            10.0 * np.ma.log10(field_std)
-                        )
+                        dscfg["global_data"]["grid_out"].fields[field_name][
+                            "data"
+                        ] = 10.0 * np.ma.log10(field_std)
                     else:
                         dscfg["global_data"]["grid_out"].fields[field_name][
                             "data"
                         ] = field_std
                 else:
                     if lin_trans:
-                        dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
-                            10.0 * np.ma.log10(field_std / field_mean)
-                        )
+                        dscfg["global_data"]["grid_out"].fields[field_name][
+                            "data"
+                        ] = 10.0 * np.ma.log10(field_std / field_mean)
                     else:
                         dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
                             field_std / field_mean
@@ -876,13 +1115,14 @@ def process_grid_time_stats(procstatus, dscfg, radar_list=None):
         dscfg["global_data"].pop("grid_out", None)
 
         # get start and stop times of new grid object
-        dscfg["global_data"]["starttime"], dscfg["global_data"]["endtime"] = (
-            time_avg_range(
-                dscfg["timeinfo"],
-                dscfg["global_data"]["starttime"],
-                dscfg["global_data"]["endtime"],
-                period,
-            )
+        (
+            dscfg["global_data"]["starttime"],
+            dscfg["global_data"]["endtime"],
+        ) = time_avg_range(
+            dscfg["timeinfo"],
+            dscfg["global_data"]["starttime"],
+            dscfg["global_data"]["endtime"],
+            period,
         )
 
         # check if volume time older than starttime
@@ -906,9 +1146,9 @@ def process_grid_time_stats(procstatus, dscfg, radar_list=None):
 
             if stat == "mean":
                 if lin_trans:
-                    dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
-                        10.0 * np.ma.log10(field_mean)
-                    )
+                    dscfg["global_data"]["grid_out"].fields[field_name][
+                        "data"
+                    ] = 10.0 * np.ma.log10(field_mean)
                 else:
                     dscfg["global_data"]["grid_out"].fields[field_name][
                         "data"
@@ -924,9 +1164,9 @@ def process_grid_time_stats(procstatus, dscfg, radar_list=None):
                 )
                 if stat == "std":
                     if lin_trans:
-                        dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
-                            10.0 * np.ma.log10(field_std)
-                        )
+                        dscfg["global_data"]["grid_out"].fields[field_name][
+                            "data"
+                        ] = 10.0 * np.ma.log10(field_std)
                     else:
                         dscfg["global_data"]["grid_out"].fields[field_name][
                             "data"
@@ -1055,13 +1295,14 @@ def process_grid_time_stats2(procstatus, dscfg, radar_list=None):
         if "grid_out" not in dscfg["global_data"]:
             if period != -1:
                 # get start and stop times of new grid object
-                (dscfg["global_data"]["starttime"], dscfg["global_data"]["endtime"]) = (
-                    time_avg_range(
-                        dscfg["timeinfo"],
-                        dscfg["global_data"]["starttime"],
-                        dscfg["global_data"]["endtime"],
-                        period,
-                    )
+                (
+                    dscfg["global_data"]["starttime"],
+                    dscfg["global_data"]["endtime"],
+                ) = time_avg_range(
+                    dscfg["timeinfo"],
+                    dscfg["global_data"]["starttime"],
+                    dscfg["global_data"]["endtime"],
+                    period,
                 )
 
                 # check if volume time older than starttime
@@ -1088,7 +1329,6 @@ def process_grid_time_stats2(procstatus, dscfg, radar_list=None):
 
         # still accumulating: add field_dict to global field_dict
         if period == -1 or dscfg["timeinfo"] < dscfg["global_data"]["endtime"]:
-
             if period == -1:
                 dscfg["global_data"]["endtime"] = dscfg["timeinfo"]
 
@@ -1116,18 +1356,18 @@ def process_grid_time_stats2(procstatus, dscfg, radar_list=None):
                 axis=0,
                 nan_policy="omit",
             )
-            dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
-                np.ma.masked_invalid(np.squeeze(mode_data, axis=0))
-            )
+            dscfg["global_data"]["grid_out"].fields[field_name][
+                "data"
+            ] = np.ma.masked_invalid(np.squeeze(mode_data, axis=0))
         elif "percentile" in stat:
             percent_data = np.nanpercentile(
                 dscfg["global_data"]["field_data"].filled(fill_value=np.nan),
                 percentile,
                 axis=0,
             )
-            dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
-                np.ma.masked_invalid(percent_data)
-            )
+            dscfg["global_data"]["grid_out"].fields[field_name][
+                "data"
+            ] = np.ma.masked_invalid(percent_data)
 
         new_dataset = {
             "radar_out": deepcopy(dscfg["global_data"]["grid_out"]),
@@ -1141,13 +1381,14 @@ def process_grid_time_stats2(procstatus, dscfg, radar_list=None):
         dscfg["global_data"].pop("grid_out", None)
 
         # get start and stop times of new grid object
-        dscfg["global_data"]["starttime"], dscfg["global_data"]["endtime"] = (
-            time_avg_range(
-                dscfg["timeinfo"],
-                dscfg["global_data"]["starttime"],
-                dscfg["global_data"]["endtime"],
-                period,
-            )
+        (
+            dscfg["global_data"]["starttime"],
+            dscfg["global_data"]["endtime"],
+        ) = time_avg_range(
+            dscfg["timeinfo"],
+            dscfg["global_data"]["starttime"],
+            dscfg["global_data"]["endtime"],
+            period,
         )
 
         # check if volume time older than starttime
@@ -1173,18 +1414,18 @@ def process_grid_time_stats2(procstatus, dscfg, radar_list=None):
                 axis=0,
                 nan_policy="omit",
             )
-            dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
-                np.ma.masked_invalid(np.squeeze(mode_data, axis=0))
-            )
+            dscfg["global_data"]["grid_out"].fields[field_name][
+                "data"
+            ] = np.ma.masked_invalid(np.squeeze(mode_data, axis=0))
         elif "percentile" in stat:
             percent_data = np.nanpercentile(
                 dscfg["global_data"]["field_data"].filled(fill_value=np.nan),
                 percentile,
                 axis=0,
             )
-            dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
-                np.ma.masked_invalid(percent_data)
-            )
+            dscfg["global_data"]["grid_out"].fields[field_name][
+                "data"
+            ] = np.ma.masked_invalid(percent_data)
 
         new_dataset = {
             "radar_out": deepcopy(dscfg["global_data"]["grid_out"]),
@@ -1298,13 +1539,14 @@ def process_grid_rainfall_accumulation(procstatus, dscfg, radar_list=None):
         if "grid_out" not in dscfg["global_data"]:
             if period != -1:
                 # get start and stop times of new grid object
-                (dscfg["global_data"]["starttime"], dscfg["global_data"]["endtime"]) = (
-                    time_avg_range(
-                        dscfg["timeinfo"],
-                        dscfg["global_data"]["starttime"],
-                        dscfg["global_data"]["endtime"],
-                        period,
-                    )
+                (
+                    dscfg["global_data"]["starttime"],
+                    dscfg["global_data"]["endtime"],
+                ) = time_avg_range(
+                    dscfg["timeinfo"],
+                    dscfg["global_data"]["starttime"],
+                    dscfg["global_data"]["endtime"],
+                    period,
                 )
 
                 # check if volume time older than starttime
@@ -1325,7 +1567,6 @@ def process_grid_rainfall_accumulation(procstatus, dscfg, radar_list=None):
 
         # still accumulating: add field_dict to global field_dict
         if period == -1 or dscfg["timeinfo"] < dscfg["global_data"]["endtime"]:
-
             if period == -1:
                 dscfg["global_data"]["endtime"] = dscfg["timeinfo"]
 
@@ -1337,9 +1578,9 @@ def process_grid_rainfall_accumulation(procstatus, dscfg, radar_list=None):
                 np.logical_not(np.ma.getmaskarray(field_dict["data"])),
             )
 
-            dscfg["global_data"]["grid_out"].fields[field_name]["data"][masked_sum] = (
-                field_dict["data"][masked_sum]
-            )
+            dscfg["global_data"]["grid_out"].fields[field_name]["data"][
+                masked_sum
+            ] = field_dict["data"][masked_sum]
 
             dscfg["global_data"]["grid_out"].fields[field_name]["data"][
                 valid_sum
@@ -1361,13 +1602,14 @@ def process_grid_rainfall_accumulation(procstatus, dscfg, radar_list=None):
         dscfg["global_data"].pop("grid_out", None)
 
         # get start and stop times of new grid object
-        dscfg["global_data"]["starttime"], dscfg["global_data"]["endtime"] = (
-            time_avg_range(
-                dscfg["timeinfo"],
-                dscfg["global_data"]["starttime"],
-                dscfg["global_data"]["endtime"],
-                period,
-            )
+        (
+            dscfg["global_data"]["starttime"],
+            dscfg["global_data"]["endtime"],
+        ) = time_avg_range(
+            dscfg["timeinfo"],
+            dscfg["global_data"]["starttime"],
+            dscfg["global_data"]["endtime"],
+            period,
         )
 
         # check if volume time older than starttime
@@ -1489,7 +1731,7 @@ def process_grid_texture(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing a radar object containing the field 
+        dictionary containing a radar object containing the field
         "texture"
     ind_rad : int
         radar index
@@ -1565,10 +1807,10 @@ def process_grid_mask(procstatus, dscfg, radar_list=None):
         x_dir_ext, y_dir_ext : int
             Number of pixels by which to extend the mask on each side of the
             west-east direction and south-north direction
-        
+
     radar_list : list of Radar objects
         Optional. list of radar objects
-    
+
 
     Returns
     -------

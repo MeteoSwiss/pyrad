@@ -32,6 +32,7 @@ from ..graph.plots import plot_histogram2, plot_density
 from ..graph.plots_timeseries import plot_monitoring_ts
 from ..graph.plots_aux import get_colobar_label, get_field_name
 
+from ..util.radar_utils import compute_mean_reflectivity_from_hist
 from ..util.radar_utils import compute_quantiles_from_hist
 
 
@@ -45,10 +46,11 @@ def generate_monitoring_products(dataset, prdcfg):
         'ANGULAR_DENSITY': For a specified elevation angle, plots a 2D
             histogram with the azimuth angle in the X-axis and the data values
             in the Y-axis. The reference values and the user defined quantiles
-            are also plot on the same figure
+            are also plot on the same figure.
+            This product is not compatible with the GC_MONITORING dataset!
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
                 anglenr: int
                     The elevation angle number to plot
                 quantiles: list of floats
@@ -62,8 +64,8 @@ def generate_monitoring_products(dataset, prdcfg):
             quantiles stored in a csv file.
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
-                quantiles: list of 3 floats
+                    name of the pyrad variable to use, it must be available in the dataset
+                quantiles: list of floats
                     the quantiles to compute. Default 25., 50., 75.
                 ref_value: float
                     The reference value. Default 0
@@ -111,7 +113,7 @@ def generate_monitoring_products(dataset, prdcfg):
             elevation angle.
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
                 anglenr: int
                     The elevation angle number to plot
         'SAVEVOL': Saves the monitoring data in a C/F radar file. The data
@@ -121,7 +123,7 @@ def generate_monitoring_products(dataset, prdcfg):
             radar volume.
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
+                    name of the pyrad variable to use, it must be available in the dataset
                 write_data: bool
                     If true the resultant histogram is also saved in a csv
                     file. Default True.
@@ -129,14 +131,14 @@ def generate_monitoring_products(dataset, prdcfg):
             a csv file and plots a time series of those statistics.
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset               in the dataset
-                quantiles: list of 3 floats
+                    name of the pyrad variable to use, it must be available in the dataset
+                quantiles: list of floats
                     the quantiles to compute. Default 25., 50., 75.
                 ref_value: float
                     The reference value. Default 0
                 sort_by_date: Bool
                     If true when reading the csv file containing the
-                    statistics the data is sorted by date. Default False
+                    statistics the data is sorted by date. Default True
                 rewrite: Bool
                     If true the csv file containing the statistics is
                     rewritten
@@ -410,7 +412,7 @@ def generate_monitoring_products(dataset, prdcfg):
         ref_value = prdcfg.get("ref_value", 0.0)
         vmin = prdcfg.get("vmin", None)
         vmax = prdcfg.get("vmax", None)
-
+        
         plot_density(
             hist_obj,
             hist_type,
@@ -453,7 +455,7 @@ def generate_monitoring_products(dataset, prdcfg):
 
         quantiles = prdcfg.get("quantiles", np.array([25.0, 50.0, 75.0]))
         ref_value = prdcfg.get("ref_value", 0.0)
-        sort_by_date = prdcfg.get("sort_by_date", False)
+        sort_by_date = prdcfg.get("sort_by_date", True)
         rewrite = prdcfg.get("rewrite", False)
         plot_until_year_end = prdcfg.get("plot_until_year_end", False)
 
@@ -477,6 +479,11 @@ def generate_monitoring_products(dataset, prdcfg):
 
         csvfname = savedir + csvfname
 
+        mean_list = compute_mean_reflectivity_from_hist(
+            hist_obj.range["data"],
+            np.ma.sum(hist_obj.fields[field_name]["data"], axis=0),
+        )
+
         quantiles, values = compute_quantiles_from_hist(
             hist_obj.range["data"],
             np.ma.sum(hist_obj.fields[field_name]["data"], axis=0),
@@ -487,27 +494,29 @@ def generate_monitoring_products(dataset, prdcfg):
         np_t = np.ma.sum(hist_obj.fields[field_name]["data"], dtype=int)
         if np.ma.getmaskarray(np_t):
             np_t = 0
-
+        
         write_monitoring_ts(
-            start_time, np_t, values, quantiles, prdcfg["voltype"], csvfname
+            start_time, np_t, values, quantiles, mean_list, prdcfg["voltype"], csvfname
         )
         print("saved CSV file: " + csvfname)
 
-        date, np_t_vec, cquant_vec, lquant_vec, hquant_vec = read_monitoring_ts(
-            csvfname, sort_by_date=sort_by_date
+        date, np_t_vec, quantile_data_vec, geometric_mean_dB_vec, linear_mean_dB_vec = read_monitoring_ts(
+            quantiles, csvfname, sort_by_date=sort_by_date
         )
-
         if date is None:
             warn("Unable to plot time series. No valid data")
             return None
 
         if rewrite:
-            val_vec = np.ma.asarray([lquant_vec, cquant_vec, hquant_vec]).T
+            quantile_values = [quantile_data_vec[q] for q in quantiles]
+            # Construct val_vec: First row = geometric_mean_dB, Second row = linear_mean_dB, followed by all quantiles
+            val_vec = np.ma.vstack([geometric_mean_dB_vec, linear_mean_dB_vec] + quantile_values).T
             write_monitoring_ts(
                 date,
                 np_t_vec,
                 val_vec,
                 quantiles,
+                mean_list,
                 prdcfg["voltype"],
                 csvfname,
                 rewrite=True,
@@ -545,12 +554,14 @@ def generate_monitoring_products(dataset, prdcfg):
         vmin = prdcfg.get("vmin", None)
         vmax = prdcfg.get("vmax", None)
 
+        quantile_values = [quantile_data_vec[q] for q in quantiles]
+        # Construct val_vec: First row = geometric_mean_dB, Second row = linear_mean_dB, followed by all quantiles
+        val_vec = np.ma.vstack([geometric_mean_dB_vec, linear_mean_dB_vec] + quantile_values).T    
         plot_monitoring_ts(
             date,
             np_t_vec,
-            cquant_vec,
-            lquant_vec,
-            hquant_vec,
+            val_vec,
+            quantiles,
             field_name,
             figfname_list,
             ref_value=ref_value,
@@ -566,12 +577,12 @@ def generate_monitoring_products(dataset, prdcfg):
 
         # generate alarms if needed
         alarm = prdcfg.get("alarm", False)
-        
+
         if not alarm:
             return figfname_list
 
         output = figfname_list
-        
+
         if "tol_abs" not in prdcfg:
             warn("unable to send alarm. Missing tolerance on target")
             return output
@@ -601,7 +612,7 @@ def generate_monitoring_products(dataset, prdcfg):
         receiver_list = prdcfg["receiver_list"]
 
         np_last = np_t_vec[-1]
-        value_last = cquant_vec[-1]
+        value_last = val_vec[-1,0]
 
         if np_last < np_min:
             warn("No valid data on day " + date[-1].strftime("%d-%m-%Y"))
@@ -621,7 +632,7 @@ def generate_monitoring_products(dataset, prdcfg):
             abs_exceeded = True
 
         # compute trend and check if last value exceeds it
-        mask = np.ma.getmaskarray(cquant_vec)
+        mask = np.ma.getmaskarray(val_vec[:,0])
         ind = np.where(np.logical_and(np.logical_not(mask), np_t_vec >= np_min))[0]
         nvalid = len(ind)
         if nvalid <= nevents_min:
@@ -630,7 +641,7 @@ def generate_monitoring_products(dataset, prdcfg):
             value_trend = np.ma.masked
         else:
             np_trend_vec = np_t_vec[ind][-(nevents_min + 1) : -1]
-            data_trend_vec = cquant_vec[ind][-(nevents_min + 1) : -1]
+            data_trend_vec = val_vec[ind,0][-(nevents_min + 1) : -1]
 
             np_trend = np.sum(np_trend_vec)
             value_trend = np.sum(data_trend_vec * np_trend_vec) / np_trend
@@ -741,18 +752,14 @@ def generate_monitoring_products(dataset, prdcfg):
 
         csvfname = savedir + csvfname
 
-        date, np_t_vec, cquant_vec, lquant_vec, hquant_vec = read_monitoring_ts(
-            csvfname
+        date, np_t_vec, quantile_data_vec, geometric_mean_dB_vec, linear_mean_dB_vec = read_monitoring_ts(
+            quantiles, csvfname
         )
 
         if date is None:
             warn("Unable to plot time series. No valid data")
             return None
 
-        cquant = np.ma.average(cquant_vec, weights=np_t_vec)
-        lquant = np.ma.average(lquant_vec, weights=np_t_vec)
-        hquant = np.ma.average(hquant_vec, weights=np_t_vec)
-        values = np.ma.asarray([lquant, cquant, hquant])
         start_time = date[0]
         np_t = np.ma.sum(np_t_vec, dtype=int)
         if np.ma.getmaskarray(np_t):
@@ -786,12 +793,12 @@ def generate_monitoring_products(dataset, prdcfg):
         csvfname = savedir + csvfname
 
         write_monitoring_ts(
-            start_time, np_t, values, quantiles, prdcfg["voltype"], csvfname
+            start_time, np_t, values, quantiles, mean_list, prdcfg["voltype"], csvfname
         )
         print("saved CSV file: " + csvfname)
 
-        date, np_t_vec, cquant_vec, lquant_vec, hquant_vec = read_monitoring_ts(
-            csvfname, sort_by_date=sort_by_date
+        date, np_t_vec, quantile_data_vec, geometric_mean_dB_vec, linear_mean_dB_vec = read_monitoring_ts(
+            quantiles, csvfname, sort_by_date=sort_by_date
         )
 
         if date is None:
@@ -799,7 +806,9 @@ def generate_monitoring_products(dataset, prdcfg):
             return None
 
         if rewrite:
-            val_vec = np.ma.asarray([lquant_vec, cquant_vec, hquant_vec]).T
+            quantile_values = [quantile_data_vec[q] for q in quantiles]
+            # Construct val_vec: First row = geometric_mean_dB, Second row = linear_mean_dB, followed by all quantiles
+            val_vec = np.ma.vstack([geometric_mean_dB_vec, linear_mean_dB_vec] + quantile_values).T
             write_monitoring_ts(
                 date,
                 np_t_vec,
@@ -838,12 +847,12 @@ def generate_monitoring_products(dataset, prdcfg):
         vmin = prdcfg.get("vmin", None)
         vmax = prdcfg.get("vmax", None)
 
+        val_vec = np.ma.vstack([geometric_mean_dB_vec, linear_mean_dB_vec] + quantile_values).T
         plot_monitoring_ts(
             date,
             np_t_vec,
-            cquant_vec,
-            lquant_vec,
-            hquant_vec,
+            val_vec,
+            quantiles,
             field_name,
             figfname_list,
             ref_value=ref_value,
@@ -892,7 +901,7 @@ def generate_monitoring_products(dataset, prdcfg):
         receiver_list = prdcfg["receiver_list"]
 
         np_last = np_t_vec[-1]
-        value_last = cquant_vec[-1]
+        value_last = val_vec[-1,0]
 
         if np_last < np_min:
             warn("No valid data on day " + date[-1].strftime("%d-%m-%Y"))
@@ -912,7 +921,7 @@ def generate_monitoring_products(dataset, prdcfg):
             abs_exceeded = True
 
         # compute trend and check if last value exceeds it
-        mask = np.ma.getmaskarray(cquant_vec)
+        mask = np.ma.getmaskarray(val_vec[:,0])
         ind = np.where(np.logical_and(np.logical_not(mask), np_t_vec >= np_min))[0]
         nvalid = len(ind)
         if nvalid <= nevents_min:
@@ -921,7 +930,7 @@ def generate_monitoring_products(dataset, prdcfg):
             value_trend = np.ma.masked
         else:
             np_trend_vec = np_t_vec[ind][-(nevents_min + 1) : -1]
-            data_trend_vec = cquant_vec[ind][-(nevents_min + 1) : -1]
+            data_trend_vec = val_vec[ind,0][-(nevents_min + 1) : -1]
 
             np_trend = np.sum(np_trend_vec)
             value_trend = np.sum(data_trend_vec * np_trend_vec) / np_trend

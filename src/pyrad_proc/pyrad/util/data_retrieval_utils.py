@@ -22,6 +22,7 @@ import subprocess
 import fnmatch
 import re
 import pandas as pd  # function used in retrieve_hzt_prod
+from io import BytesIO
 
 # MeteoSwiss constants
 OFFSET_CCS4 = [297, -100]
@@ -29,12 +30,13 @@ OFFSET_CCS4 = [297, -100]
 if ("lom" in socket.gethostname()) or ("meteoswiss" in socket.gethostname()):
     FOLDER_RADAR = "/srn/data/"
     FOLDER_ISO0 = "/srn/data/HZT/"
-elif "tsa" or "balfrin" in socket.gethostname():
-    FOLDER_DATABASE = "/store/msrad/radar/radar_database/"
-    FOLDER_RADAR = "/store/msrad/radar/swiss/data/"
-    FOLDER_RADARH = "/store/msrad/radar/polarHR/data/"
-    FOLDER_CPCCV = "/store/msrad/radar/cpc_validation/daily/"
-    FOLDER_ISO0 = "/store/msrad/radar/swiss/data/"
+elif "balfrin" in socket.gethostname() or "nid" in socket.gethostname():
+    FOLDER_DATABASE = "/store_new/mch/msrad/radar/radar_database/"
+    FOLDER_RADAR = "/store_new/mch//msrad/radar/swiss/data/"
+    FOLDER_RADARH = "/store_new/mch//msrad/radar/polarHR/data/"
+    FOLDER_CPCCV = "/store_new/mch//msrad/radar/cpc_validation/daily/"
+    FOLDER_ISO0 = "/store_new/mch//msrad/radar/swiss/data/"
+    FOLDER_RADAR_HDF5 = "/store_new/mch/msrad/radar/swiss/data/hdf5/"
 
 
 def _make_timezone_aware(dt, tz=datetime.timezone.utc):
@@ -323,13 +325,14 @@ def _retrieve_hzt_prod_daily(folder_out, start_time, end_time, pattern_type="she
 
 
 def retrieve_mch_prod(
-    folder_out,
     start_time,
     end_time,
     product_name,
+    folder_out=None,
     pattern=None,
     pattern_type="shell",
     sweeps=None,
+    hdf5=False,
 ):
     """Retrieves radar data from the CSCS repository for a specified
     time range, unzips them and places them in a specified folder
@@ -337,14 +340,15 @@ def retrieve_mch_prod(
     Parameters
     ----------
 
-    folder_out: str
-        directory where to store the unzipped files
     start_time : datetime.datetime instance
         starting time of the time range
     end_time : datetime.datetime instance
         end time of the time range
     product_name: str
         name of the product, as stored on CSCS, e.g. RZC, CPCH, MZC, BZC...
+    folder_out: str
+        directory where to store the unzipped files, if set to None
+        will read the file to memory
     pattern: str
         pattern constraint on file names, can be used for products which contain
         multiple filetypes, f.ex CPCH folders contain both rda and gif files,
@@ -355,31 +359,32 @@ def retrieve_mch_prod(
     sweeps: list of int (optional)
         For polar products, specifies which sweeps (elevations) must be
         retrieved, if not specified all available sweeps will be retrieved
+    hdf5: bool
+        If True will retrieve the hdf5 files for the given product (beware
+        hdf5 is not available for all products)
 
     Returns
     -------
     A list containing all the filepaths of the retrieved files
 
     """
-    start_time = _make_timezone_aware(start_time)
-    end_time = _make_timezone_aware(end_time)
 
     if product_name == "ZZW" or product_name == "ZZP":  # no vpr for PPM and WEI
         product_name = "ZZA"
 
-    if product_name == "CPC":
-        folder_out = folder_out + "/CPC"
-    if product_name == "CPCH":
-        folder_out = folder_out + "/CPCH"
-
-    if not os.path.exists(folder_out):
-        os.makedirs(folder_out)
+    if folder_out:
+        if not os.path.exists(folder_out):
+            os.makedirs(folder_out)
+        if product_name == "CPC":
+            folder_out = os.path.join(folder_out, "CPC")
+        if product_name == "CPCH":
+            folder_out = os.path.join(folder_out, "CPCH")
 
     # Check if times are aware or naive
     if start_time.tzinfo is None:
-        start_time.replace(tzinfo=datetime.timezone.utc)
+        start_time = start_time.replace(tzinfo=datetime.timezone.utc)
     if end_time.tzinfo is None:
-        end_time.replace(tzinfo=datetime.timezone.utc)
+        end_time = end_time.replace(tzinfo=datetime.timezone.utc)
 
     dt = datetime.timedelta(minutes=5)
     delta = end_time - start_time
@@ -415,13 +420,14 @@ def retrieve_mch_prod(
                 tzinfo=datetime.timezone.utc,
             )
         files = _retrieve_prod_daily(
-            folder_out,
             start_time,
             end_time,
             product_name,
+            folder_out,
             pattern,
             pattern_type,
             sweeps,
+            hdf5,
         )
 
         all_files.extend(files)
@@ -502,95 +508,96 @@ def retrieve_mch_prod_RT(
 
 
 def _retrieve_prod_daily(
-    folder_out,
     start_time,
     end_time,
     product_name,
+    folder_out=None,
     pattern=None,
     pattern_type="shell",
     sweeps=None,
+    hdf5=False,
 ):
-    """This is a version that works only for a given day (i.e. start and end
-    time on the same day)
-    """
-    start_time = _make_timezone_aware(start_time)
-    end_time = _make_timezone_aware(end_time)
+    """Retrieve radar product files for a given day, with an option to store them in RAM."""
 
-    if product_name[0:2] == "MH":
-        folder_radar = FOLDER_RADARH
+    if hdf5:
+        folder_radar = FOLDER_RADAR_HDF5
     else:
-        folder_radar = FOLDER_RADAR
-
-    folder_out += "/"
+        folder_radar = FOLDER_RADARH if product_name[:2] == "MH" else FOLDER_RADAR
 
     suffix = str(start_time.year)[-2:] + str(start_time.timetuple().tm_yday).zfill(3)
-    folder_in = folder_radar + str(start_time.year) + "/" + suffix + "/"
+    folder_in = os.path.join(folder_radar, str(start_time.year), suffix)
     name_zipfile = product_name + suffix + ".zip"
 
-    # Get list of files in zipfile
-    zipp = zipfile.ZipFile(folder_in + name_zipfile)
-    content_zip = np.array(zipp.namelist())
+    # Open the zip file
+    with zipfile.ZipFile(os.path.join(folder_in, name_zipfile), "r") as zipp:
+        content_zip = np.array(zipp.namelist())
 
-    if pattern is not None:
-        if pattern_type == "shell":
-            content_zip = [
-                c for c in content_zip if fnmatch.fnmatch(os.path.basename(c), pattern)
-            ]
-        elif pattern_type == "regex":
-            content_zip = [
-                c
+        # Filter files based on pattern if provided
+        if pattern:
+            if pattern_type == "shell":
+                content_zip = [
+                    c
+                    for c in content_zip
+                    if fnmatch.fnmatch(os.path.basename(c), pattern)
+                ]
+            elif pattern_type == "regex":
+                content_zip = [
+                    c for c in content_zip if re.match(pattern, os.path.basename(c))
+                ]
+            else:
+                raise ValueError(
+                    'Unknown pattern_type, must be either "shell" or "regex".'
+                )
+
+        content_zip = np.array(content_zip)
+
+        # Extract timestamps from filenames
+        times_zip = np.array(
+            [
+                datetime.datetime.strptime(c[3:12], "%y%j%H%M").replace(
+                    tzinfo=datetime.timezone.utc
+                )
                 for c in content_zip
-                if re.match(pattern, os.path.basename(c)) is not None
             ]
-        else:
-            raise ValueError('Unknown pattern_type, must be either "shell" or "regex".')
-
-    content_zip = np.array(content_zip)
-
-    times_zip = np.array(
-        [
-            datetime.datetime.strptime(c[3:12], "%y%j%H%M").replace(
-                tzinfo=datetime.timezone.utc
-            )
-            for c in content_zip
-        ]
-    )
-
-    # Get a list of all files to retrieve
-    conditions = np.array(
-        [np.logical_and(t >= start_time, t <= end_time) for t in times_zip]
-    )
-
-    # Filter on sweeps:
-    if sweeps is not None:
-        sweeps_zip = np.array([int(c[-3:]) for c in content_zip])
-        # Get a list of all files to retrieve
-        conditions_sweep = np.array([s in sweeps for s in sweeps_zip])
-        conditions = np.logical_and(conditions, conditions_sweep)
-
-    if not np.any(conditions):
-        msg = """
-        No file was found corresponding to this format, verify pattern and product_name
-        """
-        raise ValueError(msg)
-
-    # Create string to retrieve files over unzip
-    files_to_retrieve = " ".join(content_zip[conditions])
-
-    # Check if files are already unzipped (saves time if they already exist)
-    for fi in content_zip[conditions]:
-        if os.path.exists(folder_out + fi):
-            files_to_retrieve = files_to_retrieve.replace(fi, "")
-
-    # Only unzip if at least one file does not exist
-    if len(files_to_retrieve.strip()) > 0:
-        cmd = 'unzip -j -o -qq "{:s}" {:s} -d {:s}'.format(
-            folder_in + name_zipfile, files_to_retrieve, folder_out
         )
-        subprocess.call(cmd, shell=True)
 
-    files = sorted(np.array([folder_out + c for c in content_zip[conditions]]))
-    return files
+        # Filter files based on the given time range
+        conditions = np.array([start_time <= t <= end_time for t in times_zip])
+
+        # Further filter based on sweeps if provided
+        if sweeps is not None:
+            sweeps_zip = np.array([int(c[-3:]) for c in content_zip])
+            conditions_sweep = np.array([s in sweeps for s in sweeps_zip])
+            conditions = np.logical_and(conditions, conditions_sweep)
+
+        if not np.any(conditions):
+            raise ValueError(
+                "No file was found corresponding to this format, verify pattern and product_name"
+            )
+
+        selected_files = content_zip[conditions]
+        if not folder_out:
+            # Load selected files into memory as dictionary {filename: file_content}
+            files_in_memory = [
+                BytesIO(zipp.read(file_name)) for file_name in selected_files
+            ]
+            return files_in_memory
+        else:
+            # Prepare files for extraction
+            files_to_retrieve = " ".join(selected_files)
+
+            # Check if files are already unzipped (skip those that exist)
+            for fi in selected_files:
+                if os.path.exists(folder_out + fi):
+                    files_to_retrieve = files_to_retrieve.replace(fi, "")
+
+            # Unzip only if needed
+            if len(files_to_retrieve.strip()) > 0:
+                cmd = f'unzip -j -o -qq "{os.path.join(folder_in, name_zipfile)}" {files_to_retrieve} -d {folder_out}'
+                subprocess.call(cmd, shell=True)
+
+            files = sorted([folder_out + c for c in selected_files])
+            return files
 
 
 def retrieve_CPCCV(time, stations):

@@ -370,14 +370,19 @@ def plot_ppi_map(
     max_lon = prdcfg["ppiMapImageConfig"].get("lonmax", 12.5)
     min_lat = prdcfg["ppiMapImageConfig"].get("latmin", 43.5)
     max_lat = prdcfg["ppiMapImageConfig"].get("latmax", 49.5)
+    exact_limits = prdcfg["ppiMapImageConfig"].get("exact_limits", True)
     resolution = prdcfg["ppiMapImageConfig"].get("mapres", "110m")
     if resolution not in ("110m", "50m", "10m"):
         warn("Unknown map resolution: " + resolution)
         resolution = "110m"
     background_zoom = prdcfg["ppiMapImageConfig"].get("background_zoom", 8)
 
-    lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon) + 1, lonstep)
-    lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat) + 1, latstep)
+    if exact_limits:
+        lon_lines = np.arange(min_lon, max_lon + lonstep, lonstep)
+        lat_lines = np.arange(min_lat, max_lat + latstep, latstep)
+    else:
+        lon_lines = np.arange(np.floor(min_lon), np.ceil(max_lon) + 1, lonstep)
+        lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat) + 1, latstep)
 
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
 
@@ -527,7 +532,7 @@ def plot_ppi_map(
             )
             for rng_ring in rng_rings:
                 display_map.plot_range_ring(rng_ring, ax=ax)
-    
+
     if save_fig:
         for fname in fname_list:
             fig.savefig(fname, dpi=dpi)

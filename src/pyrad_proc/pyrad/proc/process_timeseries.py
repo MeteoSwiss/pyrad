@@ -49,7 +49,7 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
             tolerance in AziTol, EleTol and RngTol
             'nearest' : will only get nearest point to prescribed lon/lat/alt or
                 ele/azi/rng
-            'nearest_valid' : will only get the nearest valid point to prescribed 
+            'nearest_valid' : will only get the nearest valid point to prescribed
                 lon/lat/alt or ele/azi/rng (ignore missing values)
             'average' : will average (while ignore missing values), all values
                 that fall within the tolerance in AziTol, EleTol and RngTol
@@ -232,7 +232,6 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
         )
         return None, None
 
-
     if agg_method == "nearest":
         # Get closest gate
         ind_ray = np.argmin(
@@ -245,44 +244,46 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
         ind_ray = np.where(
             np.logical_and(d_az <= dscfg["AziTol"], d_el <= dscfg["EleTol"])
         )[0]
-        ind_r = np.where(np.abs(radar.range["data"] - r) < dscfg["RngTol"] )[0]
+        ind_r = np.where(np.abs(radar.range["data"] - r) < dscfg["RngTol"])[0]
 
         if agg_method == "average":
-            val = np.nanmean(radar.fields[field_name]["data"].data[ind_ray][:,ind_r])
+            val = np.nanmean(radar.fields[field_name]["data"].data[ind_ray][:, ind_r])
         elif agg_method == "none":
             val = radar.fields[field_name]["data"].data[ind_ray, ind_r]
         elif agg_method == "nearest_valid":
-            ind_clo_ray = np.argmin(np.abs(radar.azimuth["data"] - az) + np.abs(radar.elevation["data"] - el))
+            ind_clo_ray = np.argmin(
+                np.abs(radar.azimuth["data"] - az)
+                + np.abs(radar.elevation["data"] - el)
+            )
             ind_clo_r = np.argmin(np.abs(radar.range["data"] - r))
 
             # We get x,y,z position of closest gate to objective
-            clo_x = radar.gate_x['data'][ind_clo_ray, ind_clo_r]
-            clo_y = radar.gate_y['data'][ind_clo_ray, ind_clo_r]
-            clo_z = radar.gate_z['data'][ind_clo_ray, ind_clo_r]
-            
+            clo_x = radar.gate_x["data"][ind_clo_ray, ind_clo_r]
+            clo_y = radar.gate_y["data"][ind_clo_ray, ind_clo_r]
+            clo_z = radar.gate_z["data"][ind_clo_ray, ind_clo_r]
+
             # We get the distance from the closest gate to every gate within tolerance
-            dist_x = np.abs(radar.gate_x['data'][ind_ray][:,ind_r] - clo_x)
-            dist_y = np.abs(radar.gate_y['data'][ind_ray][:,ind_r] - clo_y)
-            dist_z = np.abs(radar.gate_z['data'][ind_ray][:,ind_r] - clo_z)
-            
-            dist_to_clo = np.sqrt(dist_x ** 2 + dist_y ** 2 + dist_z ** 2)
-            val = radar.fields[field_name]["data"][ind_ray][:,ind_r]
+            dist_x = np.abs(radar.gate_x["data"][ind_ray][:, ind_r] - clo_x)
+            dist_y = np.abs(radar.gate_y["data"][ind_ray][:, ind_r] - clo_y)
+            dist_z = np.abs(radar.gate_z["data"][ind_ray][:, ind_r] - clo_z)
+
+            dist_to_clo = np.sqrt(dist_x**2 + dist_y**2 + dist_z**2)
+            val = radar.fields[field_name]["data"][ind_ray][:, ind_r]
             # Assign inf distance to invalid gates
             dist_to_clo[val.mask] = np.inf
-            
+
             # Find closest gate which is valid
             clo_valid_idx = np.unravel_index(np.argmin(dist_to_clo), dist_to_clo.shape)
             val = val[clo_valid_idx]
             ind_ray = ind_ray[clo_valid_idx[0]]
             ind_r = ind_r[clo_valid_idx[1]]
 
-    
     ant_coord = np.empty((3, ind_ray.size), np.float32)
     ant_coord[0, :] = radar.azimuth["data"][ind_ray]
     ant_coord[1, :] = radar.elevation["data"][ind_ray]
     ant_coord[2, :] = np.zeros(ind_ray.size) + radar.range["data"][ind_r]
 
-    if fill_value is not None: 
+    if fill_value is not None:
         try:
             val = val.filled(fill_value)
         except AttributeError:

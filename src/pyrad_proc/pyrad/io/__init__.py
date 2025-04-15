@@ -234,6 +234,7 @@ from .read_data_other import read_timeseries, read_monitoring_ts, read_ts_cum  #
 from .read_data_other import read_intercomp_scores_ts, read_quantiles  # noqa
 from .read_data_other import read_selfconsistency, read_colocated_gates  # noqa
 from .read_data_other import read_colocated_data, read_antenna_pattern  # noqa
+from .read_data_other import read_colocated_data_time_avg  # noqa
 from .read_data_other import read_last_state, read_rhi_profile, read_centroids  # noqa
 from .read_data_other import read_excess_gates, read_histogram  # noqa
 from .read_data_other import read_profile_ts, read_histogram_ts  # noqa
@@ -253,7 +254,10 @@ from .read_data_sensor import read_trt_info2, read_trt_info_all2  # noqa
 from .read_data_sensor import read_trt_thundertracking_traj_data  # noqa
 from .read_data_sensor import read_coord_sensors, read_disdro_parsivel  # noqa
 from .read_data_sensor import read_knmi  # noqa
-from .read_data_sensor import read_radiosounding_wyoming, read_radiosounding_igra #noqa
+from .read_data_sensor import (  # noqa
+    read_radiosounding_wyoming,
+    read_radiosounding_igra,
+)
 from .read_data_sensor import read_fzl_igra  # noqa
 
 from .read_data_sun import read_sun_hits_multiple_days, read_sun_hits  # noqa

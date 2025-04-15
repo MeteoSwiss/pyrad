@@ -187,7 +187,7 @@ def process_reflectivity_iq(procstatus, dscfg, radar_list=None):
     new_dataset : dict
         dictionary containing the output field
         "dBZ" if "IQhhADU" and "IQNADUh" are specified
-        "dBZv" if "IQvvADU" and "IQNADUv" are specified 
+        "dBZv" if "IQvvADU" and "IQNADUv" are specified
     ind_rad : int
         radar index
 
@@ -254,7 +254,7 @@ def process_st1_iq(procstatus, dscfg, radar_list=None):
 
         datatype : list of string. Dataset keyword
             The input data types, must contain
-            "IQhhADU" or "IQvvADU" 
+            "IQhhADU" or "IQvvADU"
     radar_list : list of spectra objects
         Optional. list of spectra objects
 
@@ -311,7 +311,7 @@ def process_st2_iq(procstatus, dscfg, radar_list=None):
 
         datatype : list of string. Dataset keyword
             The input data types, must contain
-            "IQhhADU" or "IQvvADU" 
+            "IQhhADU" or "IQvvADU"
     radar_list : list of spectra objects
         Optional. list of spectra objects
 
@@ -367,7 +367,7 @@ def process_wbn_iq(procstatus, dscfg, radar_list=None):
 
         datatype : list of string. Dataset keyword
             The input data types, must contain
-            "IQhhADU" or "IQvvADU" 
+            "IQhhADU" or "IQvvADU"
     radar_list : list of spectra objects
         Optional. list of spectra objects
 
@@ -503,7 +503,7 @@ def process_mean_phase_iq(procstatus, dscfg, radar_list=None):
 
         datatype : list of string. Dataset keyword
             The input data types, must contain
-            "IQhhADU" or "IQvvADU" 
+            "IQhhADU" or "IQvvADU"
     radar_list : list of spectra objects
         Optional. list of spectra objects
 
@@ -559,7 +559,7 @@ def process_differential_phase_iq(procstatus, dscfg, radar_list=None):
 
         datatype : list of string. Dataset keyword
             The input data types, must contain
-            "IQhhADU" and "IQvvADU" 
+            "IQhhADU" and "IQvvADU"
         phase_offset : float. Dataset keyword
             The system differential phase offset to remove
     radar_list : list of spectra objects
@@ -714,7 +714,7 @@ def process_Doppler_velocity_iq(procstatus, dscfg, radar_list=None):
     Returns
     -------
     new_dataset : dict
-        dictionary containing the output field "V" 
+        dictionary containing the output field "V"
         (if IQhhADU was provided) or "Vv" (if IQvvADU was provided)
     ind_rad : int
         radar index

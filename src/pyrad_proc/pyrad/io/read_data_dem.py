@@ -18,7 +18,6 @@ Functions for reading data derived from Digital Elevation Models (DEM)
 import pathlib
 from warnings import warn
 import numpy as np
-import pandas as pd
 from scipy.interpolate import RegularGridInterpolator
 
 # check existence of gdal
@@ -343,39 +342,33 @@ def read_ascii_data(fname, fill_value=None):
 
     # read the data
     try:
-        asciidata = pd.read_csv(fname, header=None)
+        with open(fname, "r") as file:
+            lines = [file.readline().strip().split() for _ in range(6)]
 
-        metadata = {}
-        metadata["columns"] = int(asciidata.iloc[0][0].split(" ")[1])
-        metadata["rows"] = int(asciidata.iloc[1][0].split(" ")[1])
-        metadata["min. X"] = float(asciidata.iloc[2][0].split(" ")[1])
-        metadata["min. Y"] = float(asciidata.iloc[3][0].split(" ")[1])
-        metadata["resolution"] = float(asciidata.iloc[4][0].split(" ")[1])
-        metadata["flag value"] = float(asciidata.iloc[5][0].split(" ")[1])
-        metadata["max. X"] = (
-            metadata["min. X"] + metadata["resolution"] * metadata["columns"]
-        )
-        metadata["max. Y"] = (
-            metadata["min. Y"] + metadata["resolution"] * metadata["rows"]
-        )
-        metadata["value units"] = "m"
+        # Parse metadata
+        metadata = {
+            "columns": int(lines[0][1]),
+            "rows": int(lines[1][1]),
+            "min. X": float(lines[2][1]),
+            "min. Y": float(lines[3][1]),
+            "resolution": float(lines[4][1]),
+            "flag value": float(lines[5][1]),
+            "max. X": float(lines[2][1]) + float(lines[4][1]) * int(lines[0][1]),
+            "max. Y": float(lines[3][1]) + float(lines[4][1]) * int(lines[1][1]),
+            "value units": "m",
+        }
 
-        if not fill_value:
+        # Set fill value if not provided
+        if fill_value is None:
             fill_value = metadata["flag value"]
 
-        raster_array = pd.read_csv(fname, skiprows=6, header=None, sep=" ")
-        raster_array = np.array(raster_array)
-        raster_array = raster_array[np.isfinite(raster_array)]
-        raster_array = np.reshape(raster_array, (metadata["rows"], metadata["columns"]))
+        # Read raster data, skipping first 6 lines
+        raster_array = np.loadtxt(fname, skiprows=6)
+
+        # Mask NODATA values
         raster_array = np.ma.masked_equal(raster_array, fill_value)
 
-        rasterarray = pd.read_csv(fname, skiprows=6, header=None, sep=" ")
-        rasterarray = np.array(rasterarray)
-        rasterarray = rasterarray[np.isfinite(rasterarray)]
-        rasterarray = np.reshape(rasterarray, (metadata["rows"], metadata["columns"]))
-        rasterarray = np.ma.masked_equal(rasterarray, fill_value)
-
-        dem = {"metadata": metadata, "data": rasterarray}
+        dem = {"metadata": metadata, "data": raster_array}
 
         return dem
 
@@ -433,11 +426,11 @@ def read_idrisi_data(fname, fill_value=None):
         try:
             srs = osr.SpatialReference(wkt=prj)
             projparams = _proj4_str_to_dict(srs.ExportToProj4())
-        except RuntimeError:    
+        except RuntimeError:
             projparams = None
             pass
 
-        if not projparams: # Case of empty dict
+        if not projparams:  # Case of empty dict
             projparams = None
 
         rasterarray = raster.ReadAsArray()

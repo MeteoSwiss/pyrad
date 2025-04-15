@@ -34,6 +34,7 @@ Gridded data functions
 
     process_raw_grid
     process_grid
+    process_grid_stats
     process_grid_point
     process_grid_multiple_points
     process_grid_time_stats
@@ -273,7 +274,11 @@ from .process_aux import process_radar_resampling, process_vol_to_grid  # noqa
 from .process_aux import process_moving_azimuthal_average  # noqa
 
 from .process_grid import process_grid, process_raw_grid, process_grid_point  # noqa
-from .process_grid import process_grid_time_stats, process_grid_time_stats2  # noqa
+from .process_grid import (  # noqa
+    process_grid_time_stats,
+    process_grid_time_stats2,
+    process_grid_stats,
+)
 from .process_grid import process_grid_fields_diff, process_grid_mask  # noqa
 from .process_grid import process_normalize_luminosity, process_pixel_filter  # noqa
 from .process_grid import process_grid_texture, process_grid_multiple_points  # noqa
@@ -353,7 +358,12 @@ from .process_monitoring import process_selfconsistency_bias2  # noqa
 from .process_monitoring import process_monitoring  # noqa
 
 from .process_retrieve import process_signal_power, process_snr, process_ccor  # noqa
-from .process_retrieve import process_l, process_cdr, process_bird_density, process_refl_from_zdr  # noqa
+from .process_retrieve import (  # noqa
+    process_l,
+    process_cdr,
+    process_bird_density,
+    process_refl_from_zdr,
+)
 from .process_retrieve import process_rainrate, process_vol_refl, process_rcs  # noqa
 from .process_retrieve import process_rcs_pr, process_rainfall_accumulation  # noqa
 from .process_retrieve import process_radial_noise_hs, process_vpr  # noqa

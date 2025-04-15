@@ -579,7 +579,7 @@ def generate_vol_products(dataset, prdcfg):
                     the data quantization step. If none it will be obtained
                     from the Py-ART configuration file
                 write_data: Bool
-                    If true the histogram data is written in a csv file 
+                    If true the histogram data is written in a csv file
         'SAVEALL': Saves radar volume data including all or a list of user-
             defined fields in a C/F radial or ODIM file
             User defined parameters:
@@ -3651,7 +3651,7 @@ def generate_vol_products(dataset, prdcfg):
     if prdcfg["type"] == "WRITE_STATS" or prdcfg["type"] == "WRITE_MEAN":
         if prdcfg["type"] == "WRITE_MEAN":
             warn("WRITE_MEAN product is deprecated, please use 'WRITE_STATS' instead")
-            
+
         field_name = get_fieldname_pyart(prdcfg["voltype"])
         if field_name not in dataset["radar_out"].fields:
             warn(
@@ -3670,7 +3670,7 @@ def generate_vol_products(dataset, prdcfg):
         rmax = prdcfg.get("rmax", 50.0)
         write_min_max = prdcfg.get("write_min_max", False)
         quantiles = prdcfg.get("quantiles", [])
-        
+
         field_data = dataset["radar_out"].fields[field_name]["data"]
         el_data = dataset["radar_out"].elevation["data"]
         az_data = dataset["radar_out"].azimuth["data"]
@@ -3687,7 +3687,7 @@ def generate_vol_products(dataset, prdcfg):
         elmax = dataset["radar_out"].fixed_angle["data"][-1]
 
         field_data_process = field_data[np.intersect1d(ind_ele, ind_azi), :]
-        field_data_process = field_data_process[:,ind_rng]
+        field_data_process = field_data_process[:, ind_rng]
 
         countzero = np.size(np.where(field_data_process == 0.0))
         meanval = np.nanmean(field_data_process)
@@ -3696,7 +3696,7 @@ def generate_vol_products(dataset, prdcfg):
             maxval = np.nanmax(field_data_process)
         if len(quantiles):
             quantilesvals = np.nanpercentile(field_data_process, quantiles)
-            
+
         stdval = np.nanstd(field_data_process)
         medianval = np.nanmedian(field_data_process)
         ntotal = np.size(field_data_process)
@@ -3723,9 +3723,9 @@ def generate_vol_products(dataset, prdcfg):
             values.extend([minval, maxval])
         if len(quantiles):
             values.extend(quantilesvals)
-        
+
         values.extend([ntotal, nvalid])
-        
+
         data = {
             "dstype": prdcfg["dstype"],
             "unit": units,

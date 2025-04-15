@@ -6,7 +6,7 @@ on:
     branches: [ dev ]
   pull_request:
     branches: [ dev ]
-          
+
 jobs:
   unit_tests:
     name: Unit Tests (${{ matrix.python-version }}, ${{ matrix.os }})
@@ -65,12 +65,11 @@ jobs:
           # Insert tmate session here
       - name: Run tests
         env:
-           PYRAD_TESTS_PATH: ${{github.workspace}}/pyrad-tests/
-           PSRLIB_PATH: ${{github.workspace}}/src/libDX50/lib/
-           PYART_CONFIG: ${{github.workspace}}/config/pyart/mch_config.py
+            PYRAD_TESTS_PATH: ${{github.workspace}}/pyrad-tests/
+            PSRLIB_PATH: ${{github.workspace}}/src/libDX50/lib/
+            PYART_CONFIG: ${{github.workspace}}/config/pyart/mch_config.py
         working-directory: ${{github.workspace}}/pyrad-tests//
         run: pytest "run_tests.py::test_mch"
       - name: tmate session if tests fail
         if:  ${{ github.event_name == 'workflow_dispatch' && failure() }}
         uses: mxschmitt/action-tmate@v3
-        
