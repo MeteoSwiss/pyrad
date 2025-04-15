@@ -797,7 +797,7 @@ def get_data(voltime, datatypesdescr, cfg):
 
     # add rainbow ray data from psr files
     if ndatatypes_psr > 0:
-        radar = merge_scans_psr(
+        radar_aux = merge_scans_psr(
             cfg["datapath"][ind_rad],
             cfg["psrpath"][ind_rad],
             cfg["ScanList"][ind_rad],
@@ -807,7 +807,8 @@ def get_data(voltime, datatypesdescr, cfg):
             cfg,
             radarnr=radarnr,
         )
-
+        radar = add_field(radar, radar_aux)
+        
     # add other radar spectra object files
     if ndatatypes_netcdfspectra > 0:
         radar_aux = merge_fields_pyrad_spectra(
@@ -4192,7 +4193,6 @@ def merge_fields_psr_spectra(
 
     """
     psr = None
-
     # Find reference file
     datapath = basepath + scan_name + voltime.strftime("%Y-%m-%d") + "/"
     fdatetime = voltime.strftime("%Y%m%d%H%M%S") + "00"
@@ -4249,7 +4249,6 @@ def merge_fields_psr_spectra(
                     "Unable to add field '" + field_name + "' to radar spectra "
                     "object: (%s)" % str(ee)
                 )
-
     return psr
 
 

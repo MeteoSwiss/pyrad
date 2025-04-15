@@ -1292,7 +1292,7 @@ def process_spectral_reflectivity(procstatus, dscfg, radar_list=None):
         radar index
 
     """
-
+    
     if procstatus != 1:
         return None, None
     noise_field = None
@@ -1320,7 +1320,6 @@ def process_spectral_reflectivity(procstatus, dscfg, radar_list=None):
     compute_power = True
     if pwr_field is not None:
         compute_power = False
-
     if compute_power and signal_field not in psr.fields:
         warn("Unable to obtain spectral reflectivity. Missing field " + signal_field)
         return None, None
