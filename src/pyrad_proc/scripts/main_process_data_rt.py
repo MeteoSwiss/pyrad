@@ -148,7 +148,7 @@ def main():
                 endtime=proc_endtime,
                 proc_period=args.proc_period,
                 proc_finish=args.proc_finish,
-                hide_warning=args.hide_warnings,
+                hide_warnings=args.hide_warnings,
             )
         except Exception:
             traceback.print_exc()
