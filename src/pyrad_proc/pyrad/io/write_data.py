@@ -87,7 +87,15 @@ except ImportError:
     _BOTO3_AVAILABLE = False
 
 
-def write_to_s3(fname, basepath, s3endpoint, s3bucket, s3path="", s3accesspolicy=None):
+def write_to_s3(
+    fname,
+    basepath,
+    s3endpoint,
+    s3bucket,
+    s3path="",
+    s3accesspolicy=None,
+    s3splitext=False,
+):
     """
     Copies a locally stored product to a S3 bucket
 
@@ -118,6 +126,10 @@ def write_to_s3(fname, basepath, s3endpoint, s3bucket, s3path="", s3accesspolicy
     s3accesspolicy : str
         S3 access policy can be either private or public-read
         Default is to use nothing which will inherit the policy of the bucket
+    s3splitext: bool
+        If True, the extension will be added before the filename in the s3 name
+        For example folderA/folderB/folderC/out.csv will become folderA/folderB/folderC/csv/out.csv
+        on the S3.
     """
     if not _BOTO3_AVAILABLE:
         warn("boto3 not installed, aborting writing to s3")
@@ -142,7 +154,12 @@ def write_to_s3(fname, basepath, s3endpoint, s3bucket, s3path="", s3accesspolicy
     else:
         s3path = ""
 
-    s3fname = s3path + fname.replace(basepath, "")
+    if s3splitext:
+        ext = os.path.splitext(fname)[1][1:]
+        fname_bis = os.path.join(os.path.dirname(fname), ext, os.path.basename(fname))
+    else:
+        fname_bis = fname
+    s3fname = s3path + fname_bis.replace(basepath, "")
     if s3fname.startswith("/"):  # Remove leading /
         s3fname = s3fname[1:]
     s3_client_config = {
@@ -155,7 +172,6 @@ def write_to_s3(fname, basepath, s3endpoint, s3bucket, s3path="", s3accesspolicy
         ExtraArgs = {"ACL": s3accesspolicy}
     else:
         ExtraArgs = None
-
     s3copypath = f"https://{s3bucket}.{endpoint_raw}{s3path}{s3fname}"
     s3_client.upload_file(fname, s3bucket, s3fname, ExtraArgs=ExtraArgs)
     print(f"----- copying {fname} to {s3copypath}")
@@ -2422,7 +2438,7 @@ def write_monitoring_ts(
         "date": [t.strftime("%Y%m%d%H%M%S") for t in start_time_aux],
         "NP": np_t_aux,
         "geometric_mean_dB": mean_list[0],
-        "linear_mean_dB": mean_list[1]
+        "linear_mean_dB": mean_list[1],
     }
     for i, q in enumerate(quantiles):
         data[f"quantile_{q}"] = values_aux[:, i]
