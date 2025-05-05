@@ -1626,6 +1626,7 @@ def plot_scatter_comp(
     fig=None,
     save_fig=True,
     point_format="bx",
+    write_stats = True
 ):
     """
     plots the scatter between two time series
@@ -1659,7 +1660,9 @@ def plot_scatter_comp(
         returns the handle to the figure
     point_format : str
         format of the scatter point
-
+    write_stats : bool
+            If set to True will write the RMSE and bias on the plot. Default is true.
+        
     Returns
     -------
     fname_list : list of str
@@ -1699,6 +1702,22 @@ def plot_scatter_comp(
         ax.autoscale(False)
         ax.plot(value1, value2, point_format)
 
+    if write_stats:
+        for txt in ax.texts:
+            txt.remove()
+        rmse = np.sqrt(np.nanmean((value1 - value2) ** 2))
+        bias = np.nanmean(value1 - value2)
+
+        ax.text(
+            0.01,
+            0.98,
+            f"RMSE={rmse:2.2f}\n Bias (r-g)={bias:2.2f}",
+            horizontalalignment="left",
+            verticalalignment="top",
+            transform=ax.transAxes,
+        )
+        
+        
     if save_fig:
         for fname in fname_list:
             fig.savefig(fname, dpi=dpi)
