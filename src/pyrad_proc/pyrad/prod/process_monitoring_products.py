@@ -412,7 +412,7 @@ def generate_monitoring_products(dataset, prdcfg):
         ref_value = prdcfg.get("ref_value", 0.0)
         vmin = prdcfg.get("vmin", None)
         vmax = prdcfg.get("vmax", None)
-        
+
         plot_density(
             hist_obj,
             hist_type,
@@ -494,15 +494,19 @@ def generate_monitoring_products(dataset, prdcfg):
         np_t = np.ma.sum(hist_obj.fields[field_name]["data"], dtype=int)
         if np.ma.getmaskarray(np_t):
             np_t = 0
-        
+
         write_monitoring_ts(
             start_time, np_t, values, quantiles, mean_list, prdcfg["voltype"], csvfname
         )
         print("saved CSV file: " + csvfname)
 
-        date, np_t_vec, quantile_data_vec, geometric_mean_dB_vec, linear_mean_dB_vec = read_monitoring_ts(
-            quantiles, csvfname, sort_by_date=sort_by_date
-        )
+        (
+            date,
+            np_t_vec,
+            quantile_data_vec,
+            geometric_mean_dB_vec,
+            linear_mean_dB_vec,
+        ) = read_monitoring_ts(quantiles, csvfname, sort_by_date=sort_by_date)
         if date is None:
             warn("Unable to plot time series. No valid data")
             return None
@@ -510,7 +514,9 @@ def generate_monitoring_products(dataset, prdcfg):
         if rewrite:
             quantile_values = [quantile_data_vec[q] for q in quantiles]
             # Construct val_vec: First row = geometric_mean_dB, Second row = linear_mean_dB, followed by all quantiles
-            val_vec = np.ma.vstack([geometric_mean_dB_vec, linear_mean_dB_vec] + quantile_values).T
+            val_vec = np.ma.vstack(
+                [geometric_mean_dB_vec, linear_mean_dB_vec] + quantile_values
+            ).T
             write_monitoring_ts(
                 date,
                 np_t_vec,
@@ -556,7 +562,9 @@ def generate_monitoring_products(dataset, prdcfg):
 
         quantile_values = [quantile_data_vec[q] for q in quantiles]
         # Construct val_vec: First row = geometric_mean_dB, Second row = linear_mean_dB, followed by all quantiles
-        val_vec = np.ma.vstack([geometric_mean_dB_vec, linear_mean_dB_vec] + quantile_values).T    
+        val_vec = np.ma.vstack(
+            [geometric_mean_dB_vec, linear_mean_dB_vec] + quantile_values
+        ).T
         plot_monitoring_ts(
             date,
             np_t_vec,
@@ -574,6 +582,8 @@ def generate_monitoring_products(dataset, prdcfg):
             plot_until_year_end=plot_until_year_end,
         )
         print("----- save to " + " ".join(figfname_list))
+
+        figfname_list.append(csvfname)
 
         # generate alarms if needed
         alarm = prdcfg.get("alarm", False)
@@ -612,7 +622,7 @@ def generate_monitoring_products(dataset, prdcfg):
         receiver_list = prdcfg["receiver_list"]
 
         np_last = np_t_vec[-1]
-        value_last = val_vec[-1,0]
+        value_last = val_vec[-1, 0]
 
         if np_last < np_min:
             warn("No valid data on day " + date[-1].strftime("%d-%m-%Y"))
@@ -632,7 +642,7 @@ def generate_monitoring_products(dataset, prdcfg):
             abs_exceeded = True
 
         # compute trend and check if last value exceeds it
-        mask = np.ma.getmaskarray(val_vec[:,0])
+        mask = np.ma.getmaskarray(val_vec[:, 0])
         ind = np.where(np.logical_and(np.logical_not(mask), np_t_vec >= np_min))[0]
         nvalid = len(ind)
         if nvalid <= nevents_min:
@@ -641,7 +651,7 @@ def generate_monitoring_products(dataset, prdcfg):
             value_trend = np.ma.masked
         else:
             np_trend_vec = np_t_vec[ind][-(nevents_min + 1) : -1]
-            data_trend_vec = val_vec[ind,0][-(nevents_min + 1) : -1]
+            data_trend_vec = val_vec[ind, 0][-(nevents_min + 1) : -1]
 
             np_trend = np.sum(np_trend_vec)
             value_trend = np.sum(data_trend_vec * np_trend_vec) / np_trend
@@ -752,9 +762,13 @@ def generate_monitoring_products(dataset, prdcfg):
 
         csvfname = savedir + csvfname
 
-        date, np_t_vec, quantile_data_vec, geometric_mean_dB_vec, linear_mean_dB_vec = read_monitoring_ts(
-            quantiles, csvfname
-        )
+        (
+            date,
+            np_t_vec,
+            quantile_data_vec,
+            geometric_mean_dB_vec,
+            linear_mean_dB_vec,
+        ) = read_monitoring_ts(quantiles, csvfname)
 
         if date is None:
             warn("Unable to plot time series. No valid data")
@@ -797,9 +811,13 @@ def generate_monitoring_products(dataset, prdcfg):
         )
         print("saved CSV file: " + csvfname)
 
-        date, np_t_vec, quantile_data_vec, geometric_mean_dB_vec, linear_mean_dB_vec = read_monitoring_ts(
-            quantiles, csvfname, sort_by_date=sort_by_date
-        )
+        (
+            date,
+            np_t_vec,
+            quantile_data_vec,
+            geometric_mean_dB_vec,
+            linear_mean_dB_vec,
+        ) = read_monitoring_ts(quantiles, csvfname, sort_by_date=sort_by_date)
 
         if date is None:
             warn("Unable to plot time series. No valid data")
@@ -808,7 +826,9 @@ def generate_monitoring_products(dataset, prdcfg):
         if rewrite:
             quantile_values = [quantile_data_vec[q] for q in quantiles]
             # Construct val_vec: First row = geometric_mean_dB, Second row = linear_mean_dB, followed by all quantiles
-            val_vec = np.ma.vstack([geometric_mean_dB_vec, linear_mean_dB_vec] + quantile_values).T
+            val_vec = np.ma.vstack(
+                [geometric_mean_dB_vec, linear_mean_dB_vec] + quantile_values
+            ).T
             write_monitoring_ts(
                 date,
                 np_t_vec,
@@ -847,7 +867,9 @@ def generate_monitoring_products(dataset, prdcfg):
         vmin = prdcfg.get("vmin", None)
         vmax = prdcfg.get("vmax", None)
 
-        val_vec = np.ma.vstack([geometric_mean_dB_vec, linear_mean_dB_vec] + quantile_values).T
+        val_vec = np.ma.vstack(
+            [geometric_mean_dB_vec, linear_mean_dB_vec] + quantile_values
+        ).T
         plot_monitoring_ts(
             date,
             np_t_vec,
@@ -871,6 +893,7 @@ def generate_monitoring_products(dataset, prdcfg):
         if not alarm:
             return figfname_list
 
+        figfname_list.append(csvfname)
         output = figfname_list
         if "tol_abs" not in prdcfg:
             warn("unable to send alarm. Missing tolerance on target")
@@ -901,7 +924,7 @@ def generate_monitoring_products(dataset, prdcfg):
         receiver_list = prdcfg["receiver_list"]
 
         np_last = np_t_vec[-1]
-        value_last = val_vec[-1,0]
+        value_last = val_vec[-1, 0]
 
         if np_last < np_min:
             warn("No valid data on day " + date[-1].strftime("%d-%m-%Y"))
@@ -921,7 +944,7 @@ def generate_monitoring_products(dataset, prdcfg):
             abs_exceeded = True
 
         # compute trend and check if last value exceeds it
-        mask = np.ma.getmaskarray(val_vec[:,0])
+        mask = np.ma.getmaskarray(val_vec[:, 0])
         ind = np.where(np.logical_and(np.logical_not(mask), np_t_vec >= np_min))[0]
         nvalid = len(ind)
         if nvalid <= nevents_min:
@@ -930,7 +953,7 @@ def generate_monitoring_products(dataset, prdcfg):
             value_trend = np.ma.masked
         else:
             np_trend_vec = np_t_vec[ind][-(nevents_min + 1) : -1]
-            data_trend_vec = val_vec[ind,0][-(nevents_min + 1) : -1]
+            data_trend_vec = val_vec[ind, 0][-(nevents_min + 1) : -1]
 
             np_trend = np.sum(np_trend_vec)
             value_trend = np.sum(data_trend_vec * np_trend_vec) / np_trend
@@ -1038,4 +1061,4 @@ def generate_monitoring_products(dataset, prdcfg):
         return fname
 
     warn(" Unsupported product type: " + prdcfg["type"])
-    return None
+    return [fname]
