@@ -163,7 +163,6 @@ def plot_timeseries_comp(
     ymin=None,
     ymax=None,
     dpi=72,
-    write_stats=True,
 ):
     """
     plots 2 time series in the same graph
@@ -195,8 +194,6 @@ def plot_timeseries_comp(
         dots per inch
     ymin, ymax : float
         The limits of the Y-axis. None will keep the default limit.
-    write_stats: bool
-        If set to True will write the RMSE and bias on the plot. Default is true.
 
     Returns
     -------
@@ -229,19 +226,6 @@ def plot_timeseries_comp(
 
     ax.set_ylim(bottom=ymin, top=ymax)
     ax.set_xlim([date2[0], date2[-1]])
-
-    if write_stats:
-        rmse = np.sqrt(np.nanmean(value1 - value2) ** 2)
-        bias = np.nanmean(value1 - value2)
-
-        ax.text(
-            0.01,
-            0.98,
-            f"RMSE={rmse:2.2f}, Bias (r-g)={bias:2.2f}",
-            horizontalalignment="center",
-            verticalalignment="center",
-            transform=ax.transAxes,
-        )
 
     # rotates and right aligns the x labels, and moves the bottom of the
     # axes up to make room for them

@@ -1626,7 +1626,7 @@ def plot_scatter_comp(
     fig=None,
     save_fig=True,
     point_format="bx",
-    write_stats = True
+    write_stats=True,
 ):
     """
     plots the scatter between two time series
@@ -1661,8 +1661,8 @@ def plot_scatter_comp(
     point_format : str
         format of the scatter point
     write_stats : bool
-            If set to True will write the RMSE and bias on the plot. Default is true.
-        
+        If set to True will write the RMSE and bias on the plot. Default is true.
+
     Returns
     -------
     fname_list : list of str
@@ -1716,8 +1716,7 @@ def plot_scatter_comp(
             verticalalignment="top",
             transform=ax.transAxes,
         )
-        
-        
+
     if save_fig:
         for fname in fname_list:
             fig.savefig(fname, dpi=dpi)
