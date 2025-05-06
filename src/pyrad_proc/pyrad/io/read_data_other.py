@@ -1069,9 +1069,10 @@ def read_timeseries(fname):
         # Drop duplicate timestamps
         df = df.drop_duplicates(subset='date')
 
+        masked_values = pd.to_numeric(df['value'], errors='coerce')
         # Mask fill values
         fill_val = get_fillvalue()
-        masked_values = np.ma.masked_values(df['value'].to_numpy(), fill_val)
+        masked_values = np.ma.masked_values(masked_values.to_numpy(), fill_val)
 
         return df['date'].tolist(), masked_values
 
