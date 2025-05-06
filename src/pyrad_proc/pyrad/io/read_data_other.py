@@ -1045,42 +1045,41 @@ def read_colocated_data_time_avg(fname):
 
 def read_timeseries(fname):
     """
-    Reads a time series contained in a CSV file.
+    Reads a time series contained in a CSV file using pandas.
 
     Parameters
     ----------
     fname : str
-        Path of the time series file.
+        Path of time series file
 
     Returns
     -------
     date, value : tuple
-        A pandas DatetimeIndex containing the time and a numpy masked array
-        containing the values. Returns (None, None) if file reading fails.
+        A list of datetime objects and a numpy masked array of values.
     """
     try:
-        # Read the CSV, ignoring lines that start with "#"
-        data = pd.read_csv(fname, comment="#")
+        # Read CSV while skipping commented lines
+        df = pd.read_csv(
+            fname,
+            comment='#',
+            parse_dates=['date'],
+            usecols=['date', 'value']
+        )
 
-        # Parse the 'date' column as datetime
-        data["date"] = pd.to_datetime(data["date"], errors="coerce")
+        # Drop duplicate timestamps
+        df = df.drop_duplicates(subset='date')
 
-        # Convert 'value' column to numeric, setting errors='coerce' to replace
-        # non-convertible entries with WNaN, which will be masked later
-        data["value"] = pd.to_numeric(data["value"], errors="coerce")
+        # Mask fill values
+        fill_val = get_fillvalue()
+        masked_values = np.ma.masked_values(df['value'].to_numpy(), fill_val)
 
-        # Mask NaN values in 'value' and convert to a masked array
-        value = np.ma.masked_invalid(data["value"].values)
+        return df['date'].tolist(), masked_values
 
-        # Return the date and masked value array
-        return data["date"], value
-
-    except EnvironmentError as ee:
-        warn(str(ee))
-        warn("Unable to read file " + fname)
+    except Exception as e:
+        warn(str(e))
+        warn('Unable to read file ' + fname)
         return None, None
-
-
+    
 def read_ts_cum(fname):
     """
     Reads a time series of precipitation accumulation contained in a csv file
