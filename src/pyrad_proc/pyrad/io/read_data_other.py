@@ -1045,42 +1045,42 @@ def read_colocated_data_time_avg(fname):
 
 def read_timeseries(fname):
     """
-    Reads a time series contained in a CSV file.
+    Reads a time series contained in a CSV file using pandas.
 
     Parameters
     ----------
     fname : str
-        Path of the time series file.
+        Path of time series file
 
     Returns
     -------
     date, value : tuple
-        A pandas DatetimeIndex containing the time and a numpy masked array
-        containing the values. Returns (None, None) if file reading fails.
+        A list of datetime objects and a numpy masked array of values.
     """
     try:
-        # Read the CSV, ignoring lines that start with "#"
-        data = pd.read_csv(fname, comment="#")
+        # Read CSV while skipping commented lines
+        df = pd.read_csv(
+            fname,
+            comment='#',
+            parse_dates=['date'],
+            usecols=['date', 'value']
+        )
 
-        # Parse the 'date' column as datetime
-        data["date"] = pd.to_datetime(data["date"], errors="coerce")
+        # Drop duplicate timestamps
+        df = df.drop_duplicates(subset='date')
 
-        # Convert 'value' column to numeric, setting errors='coerce' to replace
-        # non-convertible entries with WNaN, which will be masked later
-        data["value"] = pd.to_numeric(data["value"], errors="coerce")
+        masked_values = pd.to_numeric(df['value'], errors='coerce')
+        # Mask fill values
+        fill_val = get_fillvalue()
+        masked_values = np.ma.masked_values(masked_values.to_numpy(), fill_val)
 
-        # Mask NaN values in 'value' and convert to a masked array
-        value = np.ma.masked_invalid(data["value"].values)
+        return df['date'].tolist(), masked_values
 
-        # Return the date and masked value array
-        return data["date"], value
-
-    except EnvironmentError as ee:
-        warn(str(ee))
-        warn("Unable to read file " + fname)
+    except Exception as e:
+        warn(str(e))
+        warn('Unable to read file ' + fname)
         return None, None
-
-
+    
 def read_ts_cum(fname):
     """
     Reads a time series of precipitation accumulation contained in a csv file
@@ -1196,21 +1196,27 @@ def read_ml_ts(fname):
         return None, None, None, None, None, None, None
 
 
-def read_monitoring_ts(fname, sort_by_date=False):
+def read_monitoring_ts(quantiles, fname, sort_by_date=False):
     """
     Reads a monitoring time series contained in a CSV file using pandas.
 
     Parameters
     ----------
+    quantiles : 1D ndarray
+        The computed quantiles.
     fname : str
-        Path of time series file
+        Path of time series file.
     sort_by_date : bool
-        If True, the read data is sorted by date prior to exit
+        If True, the read data is sorted by date prior to exit.
 
     Returns
     -------
-    date, np_t, central_quantile, low_quantile, high_quantile : tuple
-        The read data. None otherwise
+    date, np_t, quantile_data, geometric_mean_dB, linear_mean_dB : tuple
+        - date: Array of timestamps.
+        - np_t: Array of NP values.
+        - quantile_data: Dictionary with quantile values, where keys are quantile names.
+        - geometric_mean_dB: Mean reflectivity in dB.
+        - linear_mean_dB: Mean reflectivity computed in linear units and converted back to dB.
     """
     try:
         with open(fname, "r+") as csvfile:
@@ -1230,19 +1236,30 @@ def read_monitoring_ts(fname, sort_by_date=False):
             df = df.drop_duplicates(subset="date", keep="last")
             unlock_file(csvfile)
 
+        # Extract date and NP values
         date = df["date"].dt.to_pydatetime()
         np_t = df["NP"].to_numpy(dtype=int)
-        central_quantile = np.ma.masked_values(
-            df["central_quantile"].to_numpy(dtype=float), get_fillvalue()
+
+        # Extract all quantile values dynamically
+        quantile_data = {}
+        for q in quantiles:
+            column_name = f"quantile_{q}"
+            if column_name in df.columns:
+                quantile_data[q] = np.ma.masked_values(
+                    df[column_name].to_numpy(dtype=float), get_fillvalue()
+                )
+
+        # Read mean values
+        geometric_mean_dB = (
+            np.ma.masked_values(df["geometric_mean_dB"].to_numpy(dtype=float), get_fillvalue())
+            if "geometric_mean_dB" in df.columns else np.ma.masked
         )
-        low_quantile = np.ma.masked_values(
-            df["low_quantile"].to_numpy(dtype=float), get_fillvalue()
-        )
-        high_quantile = np.ma.masked_values(
-            df["high_quantile"].to_numpy(dtype=float), get_fillvalue()
+        linear_mean_dB = (
+            np.ma.masked_values(df["linear_mean_dB"].to_numpy(dtype=float), get_fillvalue())
+            if "linear_mean_dB" in df.columns else np.ma.masked
         )
 
-        return date, np_t, central_quantile, low_quantile, high_quantile
+        return date, np_t, quantile_data, geometric_mean_dB, linear_mean_dB
 
     except Exception as e:
         warn(str(e))

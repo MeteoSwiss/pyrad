@@ -1007,6 +1007,15 @@ def _generate_prod(dataset, cfg, prdname, prdfunc, dsname, voltime, runinfo=None
         ):  # copy to S3
             s3AccessPolicy = prdcfg.get("s3AccessPolicy", None)
             s3path = prdcfg.get("s3PathWrite", None)
+            s3splitext = bool(prdcfg.get("s3SplitExtensionWrite", 0))
+            if s3splitext:
+                nextensions = set([os.path.splitext(f)[1] for f in filenames])
+            else:
+                nextensions = 1
+            
+            if nextensions == 1:
+                s3splitext = False
+                
             for fname in filenames:
                 if (
                     prdcfg["basepath"] in fname
@@ -1018,6 +1027,7 @@ def _generate_prod(dataset, cfg, prdname, prdfunc, dsname, voltime, runinfo=None
                         prdcfg["s3BucketWrite"],
                         s3path,
                         s3AccessPolicy,
+                        s3splitext
                     )
         return False
     except Exception as inst:
@@ -1599,6 +1609,8 @@ def _create_prdcfg_dict(cfg, dataset, product, voltime, runinfo=None):
         prdcfg.update({"s3BucketWrite": cfg["s3BucketWrite"]})
     if "s3PathWrite" in cfg:
         prdcfg.update({"s3PathWrite": cfg["s3PathWrite"]})
+    if "s3SplitExtensionWrite" in cfg:
+        prdcfg.update({"s3SplitExtensionWrite": cfg["s3SplitExtensionWrite"]})
     if "s3AccessPolicy" in cfg:
         prdcfg.update({"s3AccessPolicy": cfg["s3AccessPolicy"]})
     if "RadarBeamwidth" in cfg:

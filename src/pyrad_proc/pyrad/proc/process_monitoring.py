@@ -1817,7 +1817,6 @@ def process_monitoring(procstatus, dscfg, radar_list=None):
 
         radar_hist.add_field(field_name, field_dict)
         start_time = pyart.graph.common.generate_radar_time_begin(radar_hist)
-
         # keep histogram in Memory or add to existing histogram
         if dscfg["initialized"] == 0:
             dscfg["global_data"] = {"hist_obj": radar_hist, "timeinfo": start_time}

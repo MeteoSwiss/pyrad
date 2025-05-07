@@ -189,7 +189,6 @@ def generate_timeseries_products(dataset, prdcfg):
         prdsavedir = prdcfg["prdsavedir"]
 
     if prdcfg["type"] == "WRITE_MULTIPLE_POINTS":
-
         savedir = get_save_dir(
             prdcfg["basepath"],
             prdcfg["procname"],
@@ -213,7 +212,6 @@ def generate_timeseries_products(dataset, prdcfg):
         return csvfname
 
     if prdcfg["type"] == "WRITE_MULTIPLE_POINTS_GRID":
-
         savedir = get_save_dir(
             prdcfg["basepath"],
             prdcfg["procname"],
@@ -336,6 +334,7 @@ def generate_timeseries_products(dataset, prdcfg):
         )
         print("----- save to " + " ".join(figfname_list))
 
+        figfname_list.append(csvfname)
         return figfname_list
 
     if prdcfg["type"] == "PLOT_CUMULATIVE_POINT":
@@ -552,6 +551,7 @@ def generate_timeseries_products(dataset, prdcfg):
         )
         print("----- save to " + " ".join(figfname_list))
 
+        figfname_list.append(csvfname)
         return figfname_list
 
     if prdcfg["type"] == "COMPARE_CUMULATIVE_POINT":
@@ -673,6 +673,7 @@ def generate_timeseries_products(dataset, prdcfg):
         )
         print("----- save to " + " ".join(figfname_list))
 
+        figfname_list.append(csvfname)
         return figfname_list
 
     if prdcfg["type"] == "COMPARE_TIME_AVG":
@@ -765,7 +766,7 @@ def generate_timeseries_products(dataset, prdcfg):
             timeinfo=radardate[0],
         )
 
-        fname = make_filename(
+        csvfname = make_filename(
             str(cum_time) + "s_acc_ts_comp",
             prdcfg["dstype"],
             dataset["datatype"],
@@ -775,7 +776,7 @@ def generate_timeseries_products(dataset, prdcfg):
             timeformat="%Y%m%d",
         )[0]
 
-        fname = savedir + fname
+        csvfname = savedir + csvfname
 
         new_dataset = deepcopy(dataset)
         new_dataset.update(
@@ -790,9 +791,9 @@ def generate_timeseries_products(dataset, prdcfg):
         )
         new_dataset.update(prdcfg)
 
-        write_ts_cum(new_dataset, fname)
+        write_ts_cum(new_dataset, csvfname)
 
-        print("saved CSV file: " + fname)
+        print("saved CSV file: " + csvfname)
 
         figfname_list = make_filename(
             str(cum_time) + "s_acc_ts_comp",
@@ -828,7 +829,7 @@ def generate_timeseries_products(dataset, prdcfg):
         )
 
         print("----- save to " + " ".join(figfname_list))
-
+        figfname_list.append(csvfname)
         return figfname_list
 
     # ================================================================
@@ -858,7 +859,7 @@ def generate_timeseries_products(dataset, prdcfg):
         )
 
         dstype_str = prdcfg["dstype"].lower().replace("_", "")
-        fname = make_filename(
+        csvfname = make_filename(
             "ts",
             dstype_str,
             ts.datatype,
@@ -867,11 +868,12 @@ def generate_timeseries_products(dataset, prdcfg):
             timeinfo=timeinfo,
             timeformat="%Y%m%d%H%M%S",
             runinfo=prdcfg["runinfo"],
-        )
+        )[0]
+        csvfname = savedir + csvfname
 
-        ts.write(savedir + fname[0])
+        ts.write(csvfname)
 
-        fname = make_filename(
+        figfname_list = make_filename(
             "ts",
             dstype_str,
             ts.datatype,
@@ -881,13 +883,16 @@ def generate_timeseries_products(dataset, prdcfg):
             timeformat="%Y%m%d%H%M%S",
             runinfo=prdcfg["runinfo"],
         )
+        for i, figfname in enumerate(figfname_list):
+            figfname_list[i] = savedir + figfname
 
         ymin = prdcfg.get("ymin", None)
         ymax = prdcfg.get("ymax", None)
 
-        ts.plot(savedir + fname[0], ymin=ymin, ymax=ymax)
+        ts.plot(figfname_list[0], ymin=ymin, ymax=ymax)
 
-        return None
+        figfname_list.append(csvfname)
+        return figfname_list
 
     if prdcfg["type"] == "PLOT_HIST":
         if not dataset["final"]:
@@ -916,7 +921,7 @@ def generate_timeseries_products(dataset, prdcfg):
 
         dstype_str = prdcfg["dstype"].lower().replace("_", "")
 
-        fname = make_filename(
+        figfname_list = make_filename(
             "hist",
             dstype_str,
             ts.datatype,
@@ -926,12 +931,14 @@ def generate_timeseries_products(dataset, prdcfg):
             timeformat="%Y%m%d%H%M%S",
             runinfo=prdcfg["runinfo"],
         )
+        for i, figfname in enumerate(figfname_list):
+            figfname_list[i] = savedir + figfname
 
         step = prdcfg.get("step", None)
 
-        ts.plot_hist(savedir + fname[0], step=step)
+        ts.plot_hist(figfname_list[0], step=step)
 
-        return None
+        return figfname_list
 
     if prdcfg["type"] == "TRAJ_CAPPI_IMAGE":
         if dataset["final"]:
@@ -965,7 +972,7 @@ def generate_timeseries_products(dataset, prdcfg):
         else:
             prdtype = "cappi"
 
-        fname_list = make_filename(
+        figfname_list = make_filename(
             prdtype,
             prdcfg["dstype"],
             prdcfg["voltype"],
@@ -975,15 +982,15 @@ def generate_timeseries_products(dataset, prdcfg):
             runinfo=prdcfg["runinfo"],
         )
 
-        for i, fname in enumerate(fname_list):
-            fname_list[i] = savedir + fname
+        for i, fname in enumerate(figfname_list):
+            figfname_list[i] = savedir + fname
 
         fig, ax = plot_cappi(
             dataset["radar"],
             field_name,
             prdcfg["altitude"],
             prdcfg,
-            fname_list,
+            figfname_list,
             save_fig=False,
         )
 
@@ -993,13 +1000,13 @@ def generate_timeseries_products(dataset, prdcfg):
             t_start, dataset["radar"].time["units"], dataset["radar"].time["calendar"]
         )
 
-        fname_list = plot_traj(
+        figfname_list = plot_traj(
             dataset["rng_traj"],
             dataset["azi_traj"],
             dataset["ele_traj"],
             dataset["time_traj"],
             prdcfg,
-            fname_list,
+            figfname_list,
             rad_alt=dataset["radar"].altitude["data"],
             rad_tstart=dt_start,
             ax=ax,
@@ -1007,9 +1014,9 @@ def generate_timeseries_products(dataset, prdcfg):
             save_fig=True,
         )
 
-        print("----- saved to " + " ".join(fname_list))
+        print("----- saved to " + " ".join(figfname_list))
 
-        return None
+        return figfname_list
 
     # ================================================================
     warn(" Unsupported product type: " + prdcfg["type"])

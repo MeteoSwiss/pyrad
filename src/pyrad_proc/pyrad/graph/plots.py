@@ -31,7 +31,6 @@ from .plots_aux import get_colobar_label, get_field_name, get_norm
 import pyart
 import matplotlib.pyplot as plt
 from warnings import warn
-from copy import deepcopy
 
 import numpy as np
 
@@ -399,20 +398,16 @@ def plot_density(
         ang_step = ang[1] - ang[0]
         labelx = "ray number"
 
-    # compute percentiles of the histogram
-    az_percentile_ref = np.ma.masked_all(len(ang))
-    az_percentile_low = deepcopy(az_percentile_ref)
-    az_percentile_high = deepcopy(az_percentile_ref)
+    # Compute quantiles for each ray
+    az_percentiles = np.ma.masked_all((len(ang), len(quantiles)))
     for ray in range(len(ang)):
-        quantiles, values_ray = compute_quantiles_from_hist(
+        _, values_ray = compute_quantiles_from_hist(
             hist_obj.range["data"], field[ray, :], quantiles=quantiles
         )
+        az_percentiles[ray, :] = values_ray
 
-        az_percentile_low[ray] = values_ray[0]
-        az_percentile_ref[ray] = values_ray[1]
-        az_percentile_high[ray] = values_ray[2]
-
-    quantiles, values_sweep = compute_quantiles_from_hist(
+    # Compute overall sweep quantiles
+    _, values_sweep = compute_quantiles_from_hist(
         hist_obj.range["data"], np.ma.sum(field, axis=0), quantiles=quantiles
     )
 
@@ -469,14 +464,25 @@ def plot_density(
     # plot reference
     ax.plot(ang, np.zeros(len(ang)) + ref_value, "k--")
 
-    # plot quantiles
-    ax.plot(ang, np.zeros(len(ang)) + values_sweep[1], "r")
-    ax.plot(ang, np.zeros(len(ang)) + values_sweep[0], "r--")
-    ax.plot(ang, np.zeros(len(ang)) + values_sweep[2], "r--")
+    # Generate colormap for quantiles
+    quantile_colors = plt.cm.viridis_r(np.linspace(0, 1, len(quantiles)))
 
-    ax.plot(ang, az_percentile_ref, "k")
-    ax.plot(ang, az_percentile_low, "k--")
-    ax.plot(ang, az_percentile_high, "k--")
+    # Plot all quantiles
+    for i, q in enumerate(quantiles):
+        ax.plot(
+            ang,
+            np.zeros(len(ang)) + values_sweep[i],
+            color=quantile_colors[i],
+            linestyle="--",
+            label=f"{q:.1f}th quantile",
+        )
+        ax.plot(
+            ang,
+            az_percentiles[:, i],
+            color=quantile_colors[i],
+            linestyle="-",
+            label=f"{q:.1f}th quantile",
+        )
 
     # ax.autoscale(enable=True, axis='both', tight=True)
 
@@ -487,33 +493,12 @@ def plot_density(
     cb = fig.colorbar(cax)
     cb.set_label(label)
 
-    val_quant0_str = "--"
-    if values_sweep[0] is not np.ma.masked:
-        val_quant0_str = "{:.3f}".format(values_sweep[0])
-    val_quant1_str = "--"
-    if values_sweep[1] is not np.ma.masked:
-        val_quant1_str = "{:.3f}".format(values_sweep[1])
-    val_quant2_str = "--"
-    if values_sweep[2] is not np.ma.masked:
-        val_quant2_str = "{:.3f}".format(values_sweep[2])
-
-    metadata = (
-        "npoints: "
-        + str(np.ma.sum(field))
-        + "\n"
-        + str(quantiles[1])
-        + " quant: "
-        + val_quant1_str
-        + "\n"
-        + str(quantiles[0])
-        + " quant: "
-        + val_quant0_str
-        + "\n"
-        + str(quantiles[2])
-        + " quant: "
-        + val_quant2_str
-        + "\n"
-    )
+    metadata = "npoints: " + str(np.ma.sum(field)) + "\n"
+    for i, quant in enumerate(quantiles):
+        val_quant_str = "--"
+        if values_sweep[i] is not np.ma.masked:
+            val_quant_str = f"{values_sweep[i]:.3f}"
+        metadata += f"{quant} quant: {val_quant_str}\n"
 
     ax.text(
         0.05,
@@ -1641,6 +1626,7 @@ def plot_scatter_comp(
     fig=None,
     save_fig=True,
     point_format="bx",
+    write_stats=True,
 ):
     """
     plots the scatter between two time series
@@ -1674,6 +1660,8 @@ def plot_scatter_comp(
         returns the handle to the figure
     point_format : str
         format of the scatter point
+    write_stats : bool
+        If set to True will write the RMSE and bias on the plot. Default is true.
 
     Returns
     -------
@@ -1713,6 +1701,21 @@ def plot_scatter_comp(
     else:
         ax.autoscale(False)
         ax.plot(value1, value2, point_format)
+
+    if write_stats:
+        for txt in ax.texts:
+            txt.remove()
+        rmse = np.sqrt(np.nanmean((value1 - value2) ** 2))
+        bias = np.nanmean(value1 - value2)
+
+        ax.text(
+            0.01,
+            0.98,
+            f"RMSE={rmse:2.2f}\n Bias (r-g)={bias:2.2f}",
+            horizontalalignment="left",
+            verticalalignment="top",
+            transform=ax.transAxes,
+        )
 
     if save_fig:
         for fname in fname_list:

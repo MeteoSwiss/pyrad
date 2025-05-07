@@ -244,9 +244,8 @@ def plot_timeseries_comp(
 def plot_monitoring_ts(
     date,
     np_t,
-    cquant,
-    lquant,
-    hquant,
+    val_mean_and_quant,
+    quantiles,
     field_name,
     fname_list,
     ref_value=None,
@@ -260,110 +259,132 @@ def plot_monitoring_ts(
     plot_until_year_end=False,
 ):
     """
-    plots a time series of monitoring data
+    Plots a time series of monitoring data.
 
     Parameters
     ----------
     date : datetime object
-        time of the time series
+        Time of the time series.
     np_t : int array
-        number of points
-    cquant, lquant, hquant : float array
-        values of the central, low and high quantiles
+        Number of points.
+    val_mean_and_quant : float array
+        Values of the mean in dB, mean in dB computed from linear units,
+        followed by all quantiles.
+    quantiles : 1D ndarray
+        The computed quantiles.
     field_name : str
-        name of the field
+        Name of the field.
     fname_list : list of str
-        list of names of the files where to store the plot
-    ref_value : float
-        the reference value
-    vmin, vmax : float
-        The limits of the y axis
-    np_min : int
-        minimum number of points to consider the sample plotable
-    labelx : str
-        The label of the X axis
-    labely : str
-        The label of the Y axis
-    titl : str
-        The figure title
-    dpi : int
-        dots per inch
-    plot_until_year_end : bool
-        if true will always set the maximum xtick to the end of the year
+        List of filenames where to store the plot.
+    ref_value : float, optional
+        The reference value.
+    vmin, vmax : float, optional
+        Limits of the y-axis.
+    np_min : int, optional
+        Minimum number of points to consider the sample plottable.
+    labelx : str, optional
+        Label for the X-axis.
+    labely : str, optional
+        Label for the Y-axis.
+    titl : str, optional
+        The figure title.
+    dpi : int, optional
+        Dots per inch.
+    plot_until_year_end : bool, optional
+        If True, sets the maximum x-tick to the end of the year.
+
     Returns
     -------
     fname_list : list of str
-        list of names of the created plots
-
+        List of filenames of the created plots.
     """
+
+    # Get default Py-ART field limits
     vmin_pyart, vmax_pyart = pyart.config.get_field_limits(field_name)
     if vmin is None:
         vmin = vmin_pyart
     if vmax is None:
         vmax = vmax_pyart
 
-    # plot only valid data (but keep first and last date)
-    date2 = np.array(date)
-    isvalid = np.logical_not(np.ma.getmaskarray(cquant))
+    date = np.array(date)
+
+    # Separate mean values and quantiles from val_mean_and_quant
+    geometric_mean_dB = val_mean_and_quant[:, 0]
+    linear_mean_dB = val_mean_and_quant[:, 1]
+    quantile_values = val_mean_and_quant[:, 2:]
+
+    # Define colors for plotting
+    quantile_colors = plt.cm.viridis_r(np.linspace(0, 1, len(quantiles)))
+
+    # Determine valid data points
+    isvalid = np.logical_not(np.ma.getmaskarray(geometric_mean_dB))
     if np_min > 0:
         has_np = np_t > np_min
         isvalid = np.logical_and(isvalid, has_np)
 
-    cquant_plt = cquant[isvalid]
-    lquant_plt = lquant[isvalid]
-    hquant_plt = hquant[isvalid]
-    date_plt = date2[isvalid]
-    if not isvalid[0]:
-        cquant_plt = np.ma.append(np.ma.masked, cquant_plt)
-        lquant_plt = np.ma.append(np.ma.masked, lquant_plt)
-        hquant_plt = np.ma.append(np.ma.masked, hquant_plt)
-        date_plt = np.ma.append(date2[0], date_plt)
-    if not isvalid[-1]:
-        cquant_plt = np.ma.append(cquant_plt, np.ma.masked)
-        lquant_plt = np.ma.append(lquant_plt, np.ma.masked)
-        hquant_plt = np.ma.append(hquant_plt, np.ma.masked)
-        date_plt = np.ma.append(date_plt, date2[-1])
+    date_plt = date[isvalid]
+    mean_dB_plt = geometric_mean_dB[isvalid]
+    mean_dB_from_lin_plt = linear_mean_dB[isvalid]
+    quantile_values_plt = quantile_values[isvalid]
 
     fig = plt.figure(figsize=[15, 13], dpi=dpi)
 
     ax = fig.add_subplot(2, 1, 1)
-    ax.plot(date_plt, cquant_plt, "x-")
-    ax.plot(date_plt, lquant_plt, "rx-")
-    ax.plot(date_plt, hquant_plt, "rx-")
+
+    # Plot means
+    ax.plot(date_plt, mean_dB_plt, "rx--", label="Geometric mean")
+    ax.plot(date_plt, mean_dB_from_lin_plt, "bx--", label="Linear mean")
+
+    # Plot all quantiles dynamically
+    for i, q in enumerate(quantiles):
+        ax.plot(
+            date_plt,
+            quantile_values_plt[:, i],
+            "x-",
+            color=quantile_colors[i],
+            label=f"Q{q}",
+        )
+
+    # Plot reference value if provided
     if ref_value is not None:
-        ax.plot(date_plt, np.zeros(len(date_plt)) + ref_value, "k--")
+        ax.axhline(ref_value, color="k", linestyle="--", label="Reference")
+
     ax.set_ylabel(labely)
     ax.set_title(titl)
     ax.set_ylim([vmin, vmax])
+    ax.grid(True)
+    ax.legend(loc="best")
+
+    # Adjust x-axis limits
     if plot_until_year_end:
         t0 = date_plt[0]
         tend = datetime.datetime(year=t0.year, month=12, day=31, hour=23, minute=59)
         ax.set_xlim([t0, tend])
     else:
-        # tight x axis
         ax.autoscale(enable=True, axis="x", tight=True)
+        ax.set_xlim([date_plt[0], date_plt[-1]])
 
-    ax.grid(True)
-
+    # Second subplot for NP values
     ax = fig.add_subplot(2, 1, 2)
-    ax.plot(date, np_t, "x-")
+    ax.plot(date, np_t, "x-", label="Number of Samples")
 
     if np_min is not None:
-        ax.plot(date, np.zeros(len(date)) + np_min, "k--")
+        ax.axhline(np_min, color="k", linestyle="--", label=f"Min NP ({np_min})")
 
     if plot_until_year_end:
         ax.set_xlim([t0, tend])
     else:
-        # tight x axis
         ax.autoscale(enable=True, axis="x", tight=True)
+        ax.set_xlim([date_plt[0], date_plt[-1]])
 
     ax.set_ylabel("Number of Samples")
     ax.set_xlabel(labelx)
-
-    # rotates and right aligns the x labels, and moves the bottom of the
-    # axes up to make room for them
+    ax.legend(loc="best")
     fig.autofmt_xdate()
 
+    plt.tight_layout()
+
+    # Save figure
     for fname in fname_list:
         fig.savefig(fname, dpi=dpi)
     plt.close(fig)
@@ -534,7 +555,6 @@ def plot_intercomp_scores_ts(
     for fname in fname_list:
         fig.savefig(fname, dpi=dpi)
     plt.close(fig)
-
     return fname_list
 
 

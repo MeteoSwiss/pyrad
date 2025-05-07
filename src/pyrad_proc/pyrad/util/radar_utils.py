@@ -29,6 +29,7 @@ Miscellaneous functions dealing with radar data
     get_fixed_rng_data
     create_sun_hits_field
     create_sun_retrieval_field
+    compute_mean_reflectivity_from_hist
     compute_quantiles
     compute_quantiles_from_hist
     compute_quantiles_sweep
@@ -1490,6 +1491,47 @@ def create_sun_retrieval_field(par, field_name, imgcfg, lant=0.0):
 
     return field
 
+def compute_mean_reflectivity_from_hist(bin_centers, hist):
+    """
+    Computes the mean reflectivity in both dB and linear units.
+
+    Parameters
+    ----------
+    bin_centers : ndarray 1D
+        The bin centers (in dB).
+    hist : ndarray 1D
+        The histogram values.
+
+    Returns
+    -------
+    geometric_mean_db : float
+        Mean reflectivity in dB.
+    linear_mean_db : float
+        Mean reflectivity computed in linear units and converted back to dB.
+    """
+    # Check if all elements in histogram are masked values
+    mask = np.ma.getmaskarray(hist)
+    if mask.all() or np.ma.sum(hist) < 10:
+        return np.ma.masked, np.ma.masked  # Return masked means
+
+    np_t = np.ma.sum(hist)
+
+    # Compute mean in dB
+    geometric_mean_db = np.ma.sum(bin_centers * hist) / np_t
+
+    # Convert bin centers to linear scale
+    bin_centers_lin = 10 ** (bin_centers / 10)
+
+    # Compute mean in linear scale
+    mean_lin = np.ma.sum(bin_centers_lin * hist) / np_t
+
+    # Convert mean back to dB
+    linear_mean_db = 10 * np.log10(mean_lin)
+
+    mean_list = [geometric_mean_db, linear_mean_db]
+
+    return mean_list
+    
 
 def compute_quantiles(field, quantiles=None):
     """
