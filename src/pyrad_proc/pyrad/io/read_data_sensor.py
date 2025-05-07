@@ -41,11 +41,11 @@ import glob
 import json
 import datetime
 import csv
+import pandas as pd
 from warnings import warn
 from copy import deepcopy
 import re
 from io import StringIO, BytesIO
-import pandas as pd
 import requests
 import numpy as np
 from zipfile import ZipFile
@@ -972,8 +972,8 @@ def read_trt_data(fname):
 
     Returns
     -------
-    A dict containing the read values in a list for every key. Lists are empty
-    if trt file could not be read.
+    A dict containing the read values in a numpy array for every key. If the file could
+    not be read only None will be returned.
 
     """
     try:
@@ -986,6 +986,20 @@ def read_trt_data(fname):
                     dict_trt = {key: [] for key in all_trt_keys}
                 for key in all_trt_keys:
                     dict_trt[key].append(feat["properties"][key])
+
+        # Use pandas to map string to float/int
+        df = pd.DataFrame(dict_trt)
+        for col in df.columns:
+            try:
+                df[col] = pd.to_numeric(df[col])
+            except ValueError:
+                continue
+
+        # convert back to dict
+        dict_trt = df.to_dict(orient="list")
+        for key in dict_trt:
+            dict_trt[key] = np.array(dict_trt[key])
+
         return dict_trt
 
     except EnvironmentError as ee:
