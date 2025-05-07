@@ -1,4 +1,4 @@
-pyrad_name,field_name_pyart
+pyrad_name,pyart_name
 dBZ,reflectivity
 dBZ_flag,reflectivity_flag
 dBZ_MF,reflectivity
@@ -54,7 +54,6 @@ TXh,transmitted_signal_power_h
 TXv,transmitted_signal_power_v
 SNRh,signal_to_noise_ratio_hh
 SNRv,signal_to_noise_ratio_vv
-SNR,signal_to_noise_ratio
 CCORh,clutter_correction_ratio_hh
 CCORv,clutter_correction_ratio_vv
 dBm_sun_hit,sun_hit_power_h
@@ -139,6 +138,8 @@ terrain_aspect,terrain_aspect
 elevation_angle,elevation_angle
 min_vis_elevation,min_vis_elevation
 min_vis_altitude,min_vis_altitude
+min_vis_height_above_ground,min_vis_height_above_ground
+min_rad_vis_height_above_ground,min_rad_vis_height_above_ground
 incident_angle,incident_angle
 sigma_0,sigma_0
 effective_area,effective_area
@@ -310,7 +311,7 @@ EZC15,echo_top_15dBz
 EZC20,echo_top_20dBz
 EZC45,echo_top_45dBz
 EZC50,echo_top_50dBz
-dEZC15,echo_top_15dBZ
+dEZC15,echo_top_15dBz
 dEZC20,echo_top_20dBz
 dEZC45,echo_top_45dBz
 dEZC50,echo_top_50dBz
@@ -435,7 +436,6 @@ TEMPcr,TEMP
 ISDRco,ISDRco
 ISDRcx,ISDRcx
 SNRcx,SNRcx
-SNRCorFaCo,SNRCorFaCo
 SNRCorFaCo,SNRCorFaCo
 avgdBZ,avg_reflectivity
 NdBZ,npoints_reflectivity
