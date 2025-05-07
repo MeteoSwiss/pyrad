@@ -1488,43 +1488,43 @@
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_timeseries.html#pyrad.io.read_timeseries">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">read_timeseries</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Reads a time series contained in a CSV file.</span>
+<span class="sd">    Reads a time series contained in a CSV file using pandas.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    fname : str</span>
-<span class="sd">        Path of the time series file.</span>
+<span class="sd">        Path of time series file</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    date, value : tuple</span>
-<span class="sd">        A pandas DatetimeIndex containing the time and a numpy masked array</span>
-<span class="sd">        containing the values. Returns (None, None) if file reading fails.</span>
+<span class="sd">        A list of datetime objects and a numpy masked array of values.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="c1"># Read the CSV, ignoring lines that start with &quot;#&quot;</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
+        <span class="c1"># Read CSV while skipping commented lines</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+            <span class="n">fname</span><span class="p">,</span>
+            <span class="n">comment</span><span class="o">=</span><span class="s1">&#39;#&#39;</span><span class="p">,</span>
+            <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">],</span>
+            <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">]</span>
+        <span class="p">)</span>
 
-        <span class="c1"># Parse the &#39;date&#39; column as datetime</span>
-        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
+        <span class="c1"># Drop duplicate timestamps</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s1">&#39;date&#39;</span><span class="p">)</span>
 
-        <span class="c1"># Convert &#39;value&#39; column to numeric, setting errors=&#39;coerce&#39; to replace</span>
-        <span class="c1"># non-convertible entries with WNaN, which will be masked later</span>
-        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
+        <span class="n">masked_values</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+        <span class="c1"># Mask fill values</span>
+        <span class="n">fill_val</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
+        <span class="n">masked_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">masked_values</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">fill_val</span><span class="p">)</span>
 
-        <span class="c1"># Mask NaN values in &#39;value&#39; and convert to a masked array</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_invalid</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">masked_values</span>
 
-        <span class="c1"># Return the date and masked value array</span>
-        <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span> <span class="n">value</span>
-
-    <span class="k">except</span> <span class="ne">EnvironmentError</span> <span class="k">as</span> <span class="n">ee</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">))</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to read file &quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to read file &#39;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
 
-
-
+    
 <div class="viewcode-block" id="read_ts_cum">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_ts_cum.html#pyrad.io.read_ts_cum">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">read_ts_cum</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
@@ -1648,21 +1648,27 @@
 
 <div class="viewcode-block" id="read_monitoring_ts">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_monitoring_ts.html#pyrad.io.read_monitoring_ts">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">read_monitoring_ts</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">sort_by_date</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_monitoring_ts</span><span class="p">(</span><span class="n">quantiles</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">sort_by_date</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a monitoring time series contained in a CSV file using pandas.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+<span class="sd">    quantiles : 1D ndarray</span>
+<span class="sd">        The computed quantiles.</span>
 <span class="sd">    fname : str</span>
-<span class="sd">        Path of time series file</span>
+<span class="sd">        Path of time series file.</span>
 <span class="sd">    sort_by_date : bool</span>
-<span class="sd">        If True, the read data is sorted by date prior to exit</span>
+<span class="sd">        If True, the read data is sorted by date prior to exit.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    date, np_t, central_quantile, low_quantile, high_quantile : tuple</span>
-<span class="sd">        The read data. None otherwise</span>
+<span class="sd">    date, np_t, quantile_data, geometric_mean_dB, linear_mean_dB : tuple</span>
+<span class="sd">        - date: Array of timestamps.</span>
+<span class="sd">        - np_t: Array of NP values.</span>
+<span class="sd">        - quantile_data: Dictionary with quantile values, where keys are quantile names.</span>
+<span class="sd">        - geometric_mean_dB: Mean reflectivity in dB.</span>
+<span class="sd">        - linear_mean_dB: Mean reflectivity computed in linear units and converted back to dB.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
@@ -1682,19 +1688,30 @@
             <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s2">&quot;last&quot;</span><span class="p">)</span>
             <span class="n">unlock_file</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
 
+        <span class="c1"># Extract date and NP values</span>
         <span class="n">date</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">to_pydatetime</span><span class="p">()</span>
         <span class="n">np_t</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;NP&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
-        <span class="n">central_quantile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span>
-            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;central_quantile&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span> <span class="n">get_fillvalue</span><span class="p">()</span>
+
+        <span class="c1"># Extract all quantile values dynamically</span>
+        <span class="n">quantile_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantiles</span><span class="p">:</span>
+            <span class="n">column_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;quantile_</span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">if</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">quantile_data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span>
+                    <span class="n">df</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span> <span class="n">get_fillvalue</span><span class="p">()</span>
+                <span class="p">)</span>
+
+        <span class="c1"># Read mean values</span>
+        <span class="n">geometric_mean_dB</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;geometric_mean_dB&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span> <span class="n">get_fillvalue</span><span class="p">())</span>
+            <span class="k">if</span> <span class="s2">&quot;geometric_mean_dB&quot;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
         <span class="p">)</span>
-        <span class="n">low_quantile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span>
-            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;low_quantile&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span> <span class="n">get_fillvalue</span><span class="p">()</span>
-        <span class="p">)</span>
-        <span class="n">high_quantile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span>
-            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;high_quantile&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span> <span class="n">get_fillvalue</span><span class="p">()</span>
+        <span class="n">linear_mean_dB</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;linear_mean_dB&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span> <span class="n">get_fillvalue</span><span class="p">())</span>
+            <span class="k">if</span> <span class="s2">&quot;linear_mean_dB&quot;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
         <span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">date</span><span class="p">,</span> <span class="n">np_t</span><span class="p">,</span> <span class="n">central_quantile</span><span class="p">,</span> <span class="n">low_quantile</span><span class="p">,</span> <span class="n">high_quantile</span>
+        <span class="k">return</span> <span class="n">date</span><span class="p">,</span> <span class="n">np_t</span><span class="p">,</span> <span class="n">quantile_data</span><span class="p">,</span> <span class="n">geometric_mean_dB</span><span class="p">,</span> <span class="n">linear_mean_dB</span>
 
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>

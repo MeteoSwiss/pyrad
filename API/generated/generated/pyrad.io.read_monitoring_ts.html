@@ -1295,17 +1295,26 @@
 <h1>pyrad.io.read_monitoring_ts<a class="headerlink" href="#pyrad-io-read-monitoring-ts" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyrad.io.read_monitoring_ts">
-<span class="sig-prename descclassname"><span class="pre">pyrad.io.</span></span><span class="sig-name descname"><span class="pre">read_monitoring_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyrad/io/read_data_other.html#read_monitoring_ts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.io.read_monitoring_ts" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyrad.io.</span></span><span class="sig-name descname"><span class="pre">read_monitoring_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quantiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyrad/io/read_data_other.html#read_monitoring_ts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.io.read_monitoring_ts" title="Link to this definition">#</a></dt>
 <dd><p>Reads a monitoring time series contained in a CSV file using pandas.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fname</strong> (<em>str</em>) – Path of time series file</p></li>
-<li><p><strong>sort_by_date</strong> (<em>bool</em>) – If True, the read data is sorted by date prior to exit</p></li>
+<li><p><strong>quantiles</strong> (<em>1D ndarray</em>) – The computed quantiles.</p></li>
+<li><p><strong>fname</strong> (<em>str</em>) – Path of time series file.</p></li>
+<li><p><strong>sort_by_date</strong> (<em>bool</em>) – If True, the read data is sorted by date prior to exit.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>date, np_t, central_quantile, low_quantile, high_quantile</strong> (<em>tuple</em>) – The read data. None otherwise</p>
+<dd class="field-even"><p><p><strong>date, np_t, quantile_data, geometric_mean_dB, linear_mean_dB</strong> (<em>tuple</em>) –</p>
+<ul class="simple">
+<li><p>date: Array of timestamps.</p></li>
+<li><p>np_t: Array of NP values.</p></li>
+<li><p>quantile_data: Dictionary with quantile values, where keys are quantile names.</p></li>
+<li><p>geometric_mean_dB: Mean reflectivity in dB.</p></li>
+<li><p>linear_mean_dB: Mean reflectivity computed in linear units and converted back to dB.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>

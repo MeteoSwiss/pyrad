@@ -1180,7 +1180,7 @@
 
     <span class="c1"># add rainbow ray data from psr files</span>
     <span class="k">if</span> <span class="n">ndatatypes_psr</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">radar</span> <span class="o">=</span> <span class="n">merge_scans_psr</span><span class="p">(</span>
+        <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">merge_scans_psr</span><span class="p">(</span>
             <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;datapath&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
             <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;psrpath&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
             <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;ScanList&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span>
@@ -1190,7 +1190,8 @@
             <span class="n">cfg</span><span class="p">,</span>
             <span class="n">radarnr</span><span class="o">=</span><span class="n">radarnr</span><span class="p">,</span>
         <span class="p">)</span>
-
+        <span class="n">radar</span> <span class="o">=</span> <span class="n">add_field</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">radar_aux</span><span class="p">)</span>
+        
     <span class="c1"># add other radar spectra object files</span>
     <span class="k">if</span> <span class="n">ndatatypes_netcdfspectra</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">merge_fields_pyrad_spectra</span><span class="p">(</span>
@@ -4743,7 +4744,6 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">psr</span> <span class="o">=</span> <span class="kc">None</span>
-
     <span class="c1"># Find reference file</span>
     <span class="n">datapath</span> <span class="o">=</span> <span class="n">basepath</span> <span class="o">+</span> <span class="n">scan_name</span> <span class="o">+</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
     <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;00&quot;</span>
@@ -4800,7 +4800,6 @@
                     <span class="s2">&quot;Unable to add field &#39;&quot;</span> <span class="o">+</span> <span class="n">field_name</span> <span class="o">+</span> <span class="s2">&quot;&#39; to radar spectra &quot;</span>
                     <span class="s2">&quot;object: (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">)</span>
                 <span class="p">)</span>
-
     <span class="k">return</span> <span class="n">psr</span>
 
 

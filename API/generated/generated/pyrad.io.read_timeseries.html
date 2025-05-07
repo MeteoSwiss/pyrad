@@ -1296,14 +1296,13 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pyrad.io.read_timeseries">
 <span class="sig-prename descclassname"><span class="pre">pyrad.io.</span></span><span class="sig-name descname"><span class="pre">read_timeseries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyrad/io/read_data_other.html#read_timeseries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.io.read_timeseries" title="Link to this definition">#</a></dt>
-<dd><p>Reads a time series contained in a CSV file.</p>
+<dd><p>Reads a time series contained in a CSV file using pandas.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>fname</strong> (<em>str</em>) – Path of the time series file.</p>
+<dd class="field-odd"><p><strong>fname</strong> (<em>str</em>) – Path of time series file</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>date, value</strong> (<em>tuple</em>) – A pandas DatetimeIndex containing the time and a numpy masked array
-containing the values. Returns (None, None) if file reading fails.</p>
+<dd class="field-even"><p><strong>date, value</strong> (<em>tuple</em>) – A list of datetime objects and a numpy masked array of values.</p>
 </dd>
 </dl>
 </dd></dl>

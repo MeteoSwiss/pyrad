@@ -633,9 +633,8 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">plot_monitoring_ts</span><span class="p">(</span>
     <span class="n">date</span><span class="p">,</span>
     <span class="n">np_t</span><span class="p">,</span>
-    <span class="n">cquant</span><span class="p">,</span>
-    <span class="n">lquant</span><span class="p">,</span>
-    <span class="n">hquant</span><span class="p">,</span>
+    <span class="n">val_mean_and_quant</span><span class="p">,</span>
+    <span class="n">quantiles</span><span class="p">,</span>
     <span class="n">field_name</span><span class="p">,</span>
     <span class="n">fname_list</span><span class="p">,</span>
     <span class="n">ref_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -649,110 +648,132 @@
     <span class="n">plot_until_year_end</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    plots a time series of monitoring data</span>
+<span class="sd">    Plots a time series of monitoring data.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    date : datetime object</span>
-<span class="sd">        time of the time series</span>
+<span class="sd">        Time of the time series.</span>
 <span class="sd">    np_t : int array</span>
-<span class="sd">        number of points</span>
-<span class="sd">    cquant, lquant, hquant : float array</span>
-<span class="sd">        values of the central, low and high quantiles</span>
+<span class="sd">        Number of points.</span>
+<span class="sd">    val_mean_and_quant : float array</span>
+<span class="sd">        Values of the mean in dB, mean in dB computed from linear units,</span>
+<span class="sd">        followed by all quantiles.</span>
+<span class="sd">    quantiles : 1D ndarray</span>
+<span class="sd">        The computed quantiles.</span>
 <span class="sd">    field_name : str</span>
-<span class="sd">        name of the field</span>
+<span class="sd">        Name of the field.</span>
 <span class="sd">    fname_list : list of str</span>
-<span class="sd">        list of names of the files where to store the plot</span>
-<span class="sd">    ref_value : float</span>
-<span class="sd">        the reference value</span>
-<span class="sd">    vmin, vmax : float</span>
-<span class="sd">        The limits of the y axis</span>
-<span class="sd">    np_min : int</span>
-<span class="sd">        minimum number of points to consider the sample plotable</span>
-<span class="sd">    labelx : str</span>
-<span class="sd">        The label of the X axis</span>
-<span class="sd">    labely : str</span>
-<span class="sd">        The label of the Y axis</span>
-<span class="sd">    titl : str</span>
-<span class="sd">        The figure title</span>
-<span class="sd">    dpi : int</span>
-<span class="sd">        dots per inch</span>
-<span class="sd">    plot_until_year_end : bool</span>
-<span class="sd">        if true will always set the maximum xtick to the end of the year</span>
+<span class="sd">        List of filenames where to store the plot.</span>
+<span class="sd">    ref_value : float, optional</span>
+<span class="sd">        The reference value.</span>
+<span class="sd">    vmin, vmax : float, optional</span>
+<span class="sd">        Limits of the y-axis.</span>
+<span class="sd">    np_min : int, optional</span>
+<span class="sd">        Minimum number of points to consider the sample plottable.</span>
+<span class="sd">    labelx : str, optional</span>
+<span class="sd">        Label for the X-axis.</span>
+<span class="sd">    labely : str, optional</span>
+<span class="sd">        Label for the Y-axis.</span>
+<span class="sd">    titl : str, optional</span>
+<span class="sd">        The figure title.</span>
+<span class="sd">    dpi : int, optional</span>
+<span class="sd">        Dots per inch.</span>
+<span class="sd">    plot_until_year_end : bool, optional</span>
+<span class="sd">        If True, sets the maximum x-tick to the end of the year.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    fname_list : list of str</span>
-<span class="sd">        list of names of the created plots</span>
-
+<span class="sd">        List of filenames of the created plots.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Get default Py-ART field limits</span>
     <span class="n">vmin_pyart</span><span class="p">,</span> <span class="n">vmax_pyart</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_field_limits</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">vmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">vmin</span> <span class="o">=</span> <span class="n">vmin_pyart</span>
     <span class="k">if</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">vmax</span> <span class="o">=</span> <span class="n">vmax_pyart</span>
 
-    <span class="c1"># plot only valid data (but keep first and last date)</span>
-    <span class="n">date2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">date</span><span class="p">)</span>
-    <span class="n">isvalid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">cquant</span><span class="p">))</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">date</span><span class="p">)</span>
+
+    <span class="c1"># Separate mean values and quantiles from val_mean_and_quant</span>
+    <span class="n">geometric_mean_dB</span> <span class="o">=</span> <span class="n">val_mean_and_quant</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">linear_mean_dB</span> <span class="o">=</span> <span class="n">val_mean_and_quant</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">quantile_values</span> <span class="o">=</span> <span class="n">val_mean_and_quant</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">:]</span>
+
+    <span class="c1"># Define colors for plotting</span>
+    <span class="n">quantile_colors</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">viridis_r</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">quantiles</span><span class="p">)))</span>
+
+    <span class="c1"># Determine valid data points</span>
+    <span class="n">isvalid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">geometric_mean_dB</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">np_min</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">has_np</span> <span class="o">=</span> <span class="n">np_t</span> <span class="o">&gt;</span> <span class="n">np_min</span>
         <span class="n">isvalid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">isvalid</span><span class="p">,</span> <span class="n">has_np</span><span class="p">)</span>
 
-    <span class="n">cquant_plt</span> <span class="o">=</span> <span class="n">cquant</span><span class="p">[</span><span class="n">isvalid</span><span class="p">]</span>
-    <span class="n">lquant_plt</span> <span class="o">=</span> <span class="n">lquant</span><span class="p">[</span><span class="n">isvalid</span><span class="p">]</span>
-    <span class="n">hquant_plt</span> <span class="o">=</span> <span class="n">hquant</span><span class="p">[</span><span class="n">isvalid</span><span class="p">]</span>
-    <span class="n">date_plt</span> <span class="o">=</span> <span class="n">date2</span><span class="p">[</span><span class="n">isvalid</span><span class="p">]</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">isvalid</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-        <span class="n">cquant_plt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span><span class="p">,</span> <span class="n">cquant_plt</span><span class="p">)</span>
-        <span class="n">lquant_plt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span><span class="p">,</span> <span class="n">lquant_plt</span><span class="p">)</span>
-        <span class="n">hquant_plt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span><span class="p">,</span> <span class="n">hquant_plt</span><span class="p">)</span>
-        <span class="n">date_plt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">date2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">date_plt</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">isvalid</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
-        <span class="n">cquant_plt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cquant_plt</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span><span class="p">)</span>
-        <span class="n">lquant_plt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lquant_plt</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span><span class="p">)</span>
-        <span class="n">hquant_plt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hquant_plt</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span><span class="p">)</span>
-        <span class="n">date_plt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">date_plt</span><span class="p">,</span> <span class="n">date2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">date_plt</span> <span class="o">=</span> <span class="n">date</span><span class="p">[</span><span class="n">isvalid</span><span class="p">]</span>
+    <span class="n">mean_dB_plt</span> <span class="o">=</span> <span class="n">geometric_mean_dB</span><span class="p">[</span><span class="n">isvalid</span><span class="p">]</span>
+    <span class="n">mean_dB_from_lin_plt</span> <span class="o">=</span> <span class="n">linear_mean_dB</span><span class="p">[</span><span class="n">isvalid</span><span class="p">]</span>
+    <span class="n">quantile_values_plt</span> <span class="o">=</span> <span class="n">quantile_values</span><span class="p">[</span><span class="n">isvalid</span><span class="p">]</span>
 
     <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">13</span><span class="p">],</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
 
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">date_plt</span><span class="p">,</span> <span class="n">cquant_plt</span><span class="p">,</span> <span class="s2">&quot;x-&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">date_plt</span><span class="p">,</span> <span class="n">lquant_plt</span><span class="p">,</span> <span class="s2">&quot;rx-&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">date_plt</span><span class="p">,</span> <span class="n">hquant_plt</span><span class="p">,</span> <span class="s2">&quot;rx-&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Plot means</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">date_plt</span><span class="p">,</span> <span class="n">mean_dB_plt</span><span class="p">,</span> <span class="s2">&quot;rx--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Geometric mean&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">date_plt</span><span class="p">,</span> <span class="n">mean_dB_from_lin_plt</span><span class="p">,</span> <span class="s2">&quot;bx--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Linear mean&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Plot all quantiles dynamically</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">quantiles</span><span class="p">):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="n">date_plt</span><span class="p">,</span>
+            <span class="n">quantile_values_plt</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span>
+            <span class="s2">&quot;x-&quot;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">quantile_colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Q</span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Plot reference value if provided</span>
     <span class="k">if</span> <span class="n">ref_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">date_plt</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">date_plt</span><span class="p">))</span> <span class="o">+</span> <span class="n">ref_value</span><span class="p">,</span> <span class="s2">&quot;k--&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">ref_value</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Reference&quot;</span><span class="p">)</span>
+
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">labely</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">titl</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Adjust x-axis limits</span>
     <span class="k">if</span> <span class="n">plot_until_year_end</span><span class="p">:</span>
         <span class="n">t0</span> <span class="o">=</span> <span class="n">date_plt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">tend</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">t0</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="mi">31</span><span class="p">,</span> <span class="n">hour</span><span class="o">=</span><span class="mi">23</span><span class="p">,</span> <span class="n">minute</span><span class="o">=</span><span class="mi">59</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="n">t0</span><span class="p">,</span> <span class="n">tend</span><span class="p">])</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># tight x axis</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">autoscale</span><span class="p">(</span><span class="n">enable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">tight</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="n">date_plt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">date_plt</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-
+    <span class="c1"># Second subplot for NP values</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">np_t</span><span class="p">,</span> <span class="s2">&quot;x-&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">np_t</span><span class="p">,</span> <span class="s2">&quot;x-&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Number of Samples&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">np_min</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">date</span><span class="p">))</span> <span class="o">+</span> <span class="n">np_min</span><span class="p">,</span> <span class="s2">&quot;k--&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">np_min</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Min NP (</span><span class="si">{</span><span class="n">np_min</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">plot_until_year_end</span><span class="p">:</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="n">t0</span><span class="p">,</span> <span class="n">tend</span><span class="p">])</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># tight x axis</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">autoscale</span><span class="p">(</span><span class="n">enable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">tight</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="n">date_plt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">date_plt</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Number of Samples&quot;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">labelx</span><span class="p">)</span>
-
-    <span class="c1"># rotates and right aligns the x labels, and moves the bottom of the</span>
-    <span class="c1"># axes up to make room for them</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">)</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">autofmt_xdate</span><span class="p">()</span>
 
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+    <span class="c1"># Save figure</span>
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
@@ -926,7 +947,6 @@
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
-
     <span class="k">return</span> <span class="n">fname_list</span></div>
 
 

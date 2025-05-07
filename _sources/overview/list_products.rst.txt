@@ -1736,9 +1736,10 @@ description
  | For a specified elevation angle, plots a 2D
  | histogram with the azimuth angle in the X-axis and the data values 
  | in the Y-axis. The reference values and the user defined quantiles 
- | are also plot on the same figure 
+ | are also plot on the same figure. 
+ | This product is not compatible with the GC_MONITORING dataset! 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L369>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L371>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -1757,11 +1758,11 @@ description
  | Plots time series of the average of instantaneous
  | quantiles stored in a csv file. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L701>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L723>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
-   quantiles: : *list of 3 floats*
+   quantiles: : *list of floats*
        the quantiles to compute. Default 25., 50., 75. 
    ref_value: : *float*
        The reference value. Default 0 
@@ -1796,7 +1797,7 @@ description
  | Plots a histogram of data at a particular
  | elevation angle. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L294>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L296>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -1810,7 +1811,7 @@ description
  | field contains histograms of data for each pair of azimuth and 
  | elevation angles 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L992>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L1025>`_
 
 VOL_HISTOGRAM
 """"""""""""""""""""""""""""""
@@ -1818,7 +1819,7 @@ description
  | Plots a histogram of data collected from all the
  | radar volume. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L205>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L207>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -1831,11 +1832,11 @@ description
  | Computes statistics of the gathered data and writes them in
  | a csv file and plots a time series of those statistics. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L701>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L723>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
-   quantiles: : *list of 3 floats*
+   quantiles: : *list of floats*
        the quantiles to compute. Default 25., 50., 75. 
    ref_value: : *float*
        The reference value. Default 0 
@@ -2052,7 +2053,7 @@ description
  | the other is from a co-located instrument (rain gauge or 
  | disdrometer) 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L438>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L437>`_
 parameters
    dpi: : *int*
        The pixel density of the plot. Default 72 
@@ -2075,7 +2076,7 @@ description
  | Creates a scatter plot of average radar data
  | versus average sensor data. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L678>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L679>`_
 parameters
    dpi: : *int*
        The pixel density of the plot. Default 72 
@@ -2099,7 +2100,7 @@ PLOT_AND_WRITE
 description
  | Writes and plots a trajectory time series.
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L835>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L836>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -2112,7 +2113,7 @@ description
  | Plots and writes a time series of radar data
  | at a particular point 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L239>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L237>`_
 parameters
    dpi: : *int*
        The pixel density of the plot. Default 72 
@@ -2125,7 +2126,7 @@ description
  | Plots a time series of radar data
  | accumulation at a particular point. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L341>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L340>`_
 parameters
    dpi: : *int*
        The pixel density of the plot. Default 72 
@@ -2140,7 +2141,7 @@ description
  | plots and writes a histogram of all the data gathered
  | during the trajectory processing 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L892>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L897>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -2153,7 +2154,7 @@ description
  | Creates a CAPPI image with the trajectory position
  | overplot on it. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L936>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L943>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -2172,7 +2173,7 @@ description
  | Writes a csv file containing data from
  | multiple points obtained from a radar object 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L215>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L214>`_
 
 TRAJ_ONLY
 -----------------------------

@@ -1295,28 +1295,30 @@
 <h1>pyrad.graph.plot_monitoring_ts<a class="headerlink" href="#pyrad-graph-plot-monitoring-ts" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyrad.graph.plot_monitoring_ts">
-<span class="sig-prename descclassname"><span class="pre">pyrad.graph.</span></span><span class="sig-name descname"><span class="pre">plot_monitoring_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">np_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cquant</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lquant</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hquant</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">np_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Time</span> <span class="pre">[UTC]'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labely</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Value'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Time</span> <span class="pre">Series'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">72</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_until_year_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyrad/graph/plots_timeseries.html#plot_monitoring_ts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.graph.plot_monitoring_ts" title="Link to this definition">#</a></dt>
-<dd><p>plots a time series of monitoring data</p>
+<span class="sig-prename descclassname"><span class="pre">pyrad.graph.</span></span><span class="sig-name descname"><span class="pre">plot_monitoring_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">np_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_mean_and_quant</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">np_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Time</span> <span class="pre">[UTC]'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labely</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Value'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Time</span> <span class="pre">Series'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">72</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_until_year_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyrad/graph/plots_timeseries.html#plot_monitoring_ts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.graph.plot_monitoring_ts" title="Link to this definition">#</a></dt>
+<dd><p>Plots a time series of monitoring data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>date</strong> (<em>datetime object</em>) – time of the time series</p></li>
-<li><p><strong>np_t</strong> (<em>int array</em>) – number of points</p></li>
-<li><p><strong>cquant, lquant, hquant</strong> (<em>float array</em>) – values of the central, low and high quantiles</p></li>
-<li><p><strong>field_name</strong> (<em>str</em>) – name of the field</p></li>
-<li><p><strong>fname_list</strong> (<em>list of str</em>) – list of names of the files where to store the plot</p></li>
-<li><p><strong>ref_value</strong> (<em>float</em>) – the reference value</p></li>
-<li><p><strong>vmin, vmax</strong> (<em>float</em>) – The limits of the y axis</p></li>
-<li><p><strong>np_min</strong> (<em>int</em>) – minimum number of points to consider the sample plotable</p></li>
-<li><p><strong>labelx</strong> (<em>str</em>) – The label of the X axis</p></li>
-<li><p><strong>labely</strong> (<em>str</em>) – The label of the Y axis</p></li>
-<li><p><strong>titl</strong> (<em>str</em>) – The figure title</p></li>
-<li><p><strong>dpi</strong> (<em>int</em>) – dots per inch</p></li>
-<li><p><strong>plot_until_year_end</strong> (<em>bool</em>) – if true will always set the maximum xtick to the end of the year</p></li>
+<li><p><strong>date</strong> (<em>datetime object</em>) – Time of the time series.</p></li>
+<li><p><strong>np_t</strong> (<em>int array</em>) – Number of points.</p></li>
+<li><p><strong>val_mean_and_quant</strong> (<em>float array</em>) – Values of the mean in dB, mean in dB computed from linear units,
+followed by all quantiles.</p></li>
+<li><p><strong>quantiles</strong> (<em>1D ndarray</em>) – The computed quantiles.</p></li>
+<li><p><strong>field_name</strong> (<em>str</em>) – Name of the field.</p></li>
+<li><p><strong>fname_list</strong> (<em>list of str</em>) – List of filenames where to store the plot.</p></li>
+<li><p><strong>ref_value</strong> (<em>float, optional</em>) – The reference value.</p></li>
+<li><p><strong>vmin, vmax</strong> (<em>float, optional</em>) – Limits of the y-axis.</p></li>
+<li><p><strong>np_min</strong> (<em>int, optional</em>) – Minimum number of points to consider the sample plottable.</p></li>
+<li><p><strong>labelx</strong> (<em>str, optional</em>) – Label for the X-axis.</p></li>
+<li><p><strong>labely</strong> (<em>str, optional</em>) – Label for the Y-axis.</p></li>
+<li><p><strong>titl</strong> (<em>str, optional</em>) – The figure title.</p></li>
+<li><p><strong>dpi</strong> (<em>int, optional</em>) – Dots per inch.</p></li>
+<li><p><strong>plot_until_year_end</strong> (<em>bool, optional</em>) – If True, sets the maximum x-tick to the end of the year.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>fname_list</strong> (<em>list of str</em>) – list of names of the created plots</p>
+<dd class="field-even"><p><strong>fname_list</strong> (<em>list of str</em>) – List of filenames of the created plots.</p>
 </dd>
 </dl>
 </dd></dl>

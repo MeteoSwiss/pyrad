@@ -572,7 +572,6 @@
         <span class="n">prdsavedir</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;prdsavedir&quot;</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;WRITE_MULTIPLE_POINTS&quot;</span><span class="p">:</span>
-
         <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">],</span>
@@ -596,7 +595,6 @@
         <span class="k">return</span> <span class="n">csvfname</span>
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;WRITE_MULTIPLE_POINTS_GRID&quot;</span><span class="p">:</span>
-
         <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">],</span>
@@ -719,6 +717,7 @@
         <span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- save to &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">figfname_list</span><span class="p">))</span>
 
+        <span class="n">figfname_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">csvfname</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">figfname_list</span>
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PLOT_CUMULATIVE_POINT&quot;</span><span class="p">:</span>
@@ -935,6 +934,7 @@
         <span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- save to &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">figfname_list</span><span class="p">))</span>
 
+        <span class="n">figfname_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">csvfname</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">figfname_list</span>
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;COMPARE_CUMULATIVE_POINT&quot;</span><span class="p">:</span>
@@ -1056,6 +1056,7 @@
         <span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- save to &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">figfname_list</span><span class="p">))</span>
 
+        <span class="n">figfname_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">csvfname</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">figfname_list</span>
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;COMPARE_TIME_AVG&quot;</span><span class="p">:</span>
@@ -1148,7 +1149,7 @@
             <span class="n">timeinfo</span><span class="o">=</span><span class="n">radardate</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
         <span class="p">)</span>
 
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
+        <span class="n">csvfname</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
             <span class="nb">str</span><span class="p">(</span><span class="n">cum_time</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;s_acc_ts_comp&quot;</span><span class="p">,</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
             <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">],</span>
@@ -1158,7 +1159,7 @@
             <span class="n">timeformat</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span>
+        <span class="n">csvfname</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">csvfname</span>
 
         <span class="n">new_dataset</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
         <span class="n">new_dataset</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
@@ -1173,9 +1174,9 @@
         <span class="p">)</span>
         <span class="n">new_dataset</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">)</span>
 
-        <span class="n">write_ts_cum</span><span class="p">(</span><span class="n">new_dataset</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+        <span class="n">write_ts_cum</span><span class="p">(</span><span class="n">new_dataset</span><span class="p">,</span> <span class="n">csvfname</span><span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;saved CSV file: &quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;saved CSV file: &quot;</span> <span class="o">+</span> <span class="n">csvfname</span><span class="p">)</span>
 
         <span class="n">figfname_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
             <span class="nb">str</span><span class="p">(</span><span class="n">cum_time</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;s_acc_ts_comp&quot;</span><span class="p">,</span>
@@ -1211,7 +1212,7 @@
         <span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- save to &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">figfname_list</span><span class="p">))</span>
-
+        <span class="n">figfname_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">csvfname</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">figfname_list</span>
 
     <span class="c1"># ================================================================</span>
@@ -1241,7 +1242,7 @@
         <span class="p">)</span>
 
         <span class="n">dstype_str</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
+        <span class="n">csvfname</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
             <span class="s2">&quot;ts&quot;</span><span class="p">,</span>
             <span class="n">dstype_str</span><span class="p">,</span>
             <span class="n">ts</span><span class="o">.</span><span class="n">datatype</span><span class="p">,</span>
@@ -1250,11 +1251,12 @@
             <span class="n">timeinfo</span><span class="o">=</span><span class="n">timeinfo</span><span class="p">,</span>
             <span class="n">timeformat</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">,</span>
             <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;runinfo&quot;</span><span class="p">],</span>
-        <span class="p">)</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">csvfname</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">csvfname</span>
 
-        <span class="n">ts</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">ts</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">csvfname</span><span class="p">)</span>
 
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
+        <span class="n">figfname_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
             <span class="s2">&quot;ts&quot;</span><span class="p">,</span>
             <span class="n">dstype_str</span><span class="p">,</span>
             <span class="n">ts</span><span class="o">.</span><span class="n">datatype</span><span class="p">,</span>
@@ -1264,13 +1266,16 @@
             <span class="n">timeformat</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">,</span>
             <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;runinfo&quot;</span><span class="p">],</span>
         <span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">figfname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">figfname_list</span><span class="p">):</span>
+            <span class="n">figfname_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">figfname</span>
 
         <span class="n">ymin</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ymin&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">ymax</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ymax&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-        <span class="n">ts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ymin</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">ymax</span><span class="p">)</span>
+        <span class="n">ts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figfname_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ymin</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">ymax</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">figfname_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">csvfname</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">figfname_list</span>
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PLOT_HIST&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;final&quot;</span><span class="p">]:</span>
@@ -1299,7 +1304,7 @@
 
         <span class="n">dstype_str</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
 
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
+        <span class="n">figfname_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
             <span class="s2">&quot;hist&quot;</span><span class="p">,</span>
             <span class="n">dstype_str</span><span class="p">,</span>
             <span class="n">ts</span><span class="o">.</span><span class="n">datatype</span><span class="p">,</span>
@@ -1309,12 +1314,14 @@
             <span class="n">timeformat</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">,</span>
             <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;runinfo&quot;</span><span class="p">],</span>
         <span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">figfname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">figfname_list</span><span class="p">):</span>
+            <span class="n">figfname_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">figfname</span>
 
         <span class="n">step</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;step&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-        <span class="n">ts</span><span class="o">.</span><span class="n">plot_hist</span><span class="p">(</span><span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">)</span>
+        <span class="n">ts</span><span class="o">.</span><span class="n">plot_hist</span><span class="p">(</span><span class="n">figfname_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">figfname_list</span>
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;TRAJ_CAPPI_IMAGE&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;final&quot;</span><span class="p">]:</span>
@@ -1348,7 +1355,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">prdtype</span> <span class="o">=</span> <span class="s2">&quot;cappi&quot;</span>
 
-        <span class="n">fname_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
+        <span class="n">figfname_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
             <span class="n">prdtype</span><span class="p">,</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
@@ -1358,15 +1365,15 @@
             <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;runinfo&quot;</span><span class="p">],</span>
         <span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fname_list</span><span class="p">):</span>
-            <span class="n">fname_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">figfname_list</span><span class="p">):</span>
+            <span class="n">figfname_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span>
 
         <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_cappi</span><span class="p">(</span>
             <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar&quot;</span><span class="p">],</span>
             <span class="n">field_name</span><span class="p">,</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;altitude&quot;</span><span class="p">],</span>
             <span class="n">prdcfg</span><span class="p">,</span>
-            <span class="n">fname_list</span><span class="p">,</span>
+            <span class="n">figfname_list</span><span class="p">,</span>
             <span class="n">save_fig</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -1376,13 +1383,13 @@
             <span class="n">t_start</span><span class="p">,</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">],</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;calendar&quot;</span><span class="p">]</span>
         <span class="p">)</span>
 
-        <span class="n">fname_list</span> <span class="o">=</span> <span class="n">plot_traj</span><span class="p">(</span>
+        <span class="n">figfname_list</span> <span class="o">=</span> <span class="n">plot_traj</span><span class="p">(</span>
             <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;rng_traj&quot;</span><span class="p">],</span>
             <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;azi_traj&quot;</span><span class="p">],</span>
             <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;ele_traj&quot;</span><span class="p">],</span>
             <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;time_traj&quot;</span><span class="p">],</span>
             <span class="n">prdcfg</span><span class="p">,</span>
-            <span class="n">fname_list</span><span class="p">,</span>
+            <span class="n">figfname_list</span><span class="p">,</span>
             <span class="n">rad_alt</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
             <span class="n">rad_tstart</span><span class="o">=</span><span class="n">dt_start</span><span class="p">,</span>
             <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
@@ -1390,9 +1397,9 @@
             <span class="n">save_fig</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- saved to &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fname_list</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- saved to &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">figfname_list</span><span class="p">))</span>
 
-        <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">figfname_list</span>
 
     <span class="c1"># ================================================================</span>
     <span class="n">warn</span><span class="p">(</span><span class="s2">&quot; Unsupported product type: &quot;</span> <span class="o">+</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">])</span>

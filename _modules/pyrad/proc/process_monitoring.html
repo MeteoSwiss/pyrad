@@ -2221,7 +2221,6 @@
 
         <span class="n">radar_hist</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">field_dict</span><span class="p">)</span>
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">generate_radar_time_begin</span><span class="p">(</span><span class="n">radar_hist</span><span class="p">)</span>
-
         <span class="c1"># keep histogram in Memory or add to existing histogram</span>
         <span class="k">if</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;hist_obj&quot;</span><span class="p">:</span> <span class="n">radar_hist</span><span class="p">,</span> <span class="s2">&quot;timeinfo&quot;</span><span class="p">:</span> <span class="n">start_time</span><span class="p">}</span>

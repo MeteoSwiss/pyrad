@@ -413,6 +413,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">..graph.plots_timeseries</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_monitoring_ts</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..graph.plots_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_colobar_label</span><span class="p">,</span> <span class="n">get_field_name</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util.radar_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_mean_reflectivity_from_hist</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..util.radar_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_quantiles_from_hist</span>
 
 
@@ -428,7 +429,8 @@
 <span class="sd">        &#39;ANGULAR_DENSITY&#39;: For a specified elevation angle, plots a 2D</span>
 <span class="sd">            histogram with the azimuth angle in the X-axis and the data values</span>
 <span class="sd">            in the Y-axis. The reference values and the user defined quantiles</span>
-<span class="sd">            are also plot on the same figure</span>
+<span class="sd">            are also plot on the same figure.</span>
+<span class="sd">            This product is not compatible with the GC_MONITORING dataset!</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
 <span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
@@ -446,7 +448,7 @@
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
 <span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
-<span class="sd">                quantiles: list of 3 floats</span>
+<span class="sd">                quantiles: list of floats</span>
 <span class="sd">                    the quantiles to compute. Default 25., 50., 75.</span>
 <span class="sd">                ref_value: float</span>
 <span class="sd">                    The reference value. Default 0</span>
@@ -513,7 +515,7 @@
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
 <span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
-<span class="sd">                quantiles: list of 3 floats</span>
+<span class="sd">                quantiles: list of floats</span>
 <span class="sd">                    the quantiles to compute. Default 25., 50., 75.</span>
 <span class="sd">                ref_value: float</span>
 <span class="sd">                    The reference value. Default 0</span>
@@ -860,6 +862,11 @@
 
         <span class="n">csvfname</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">csvfname</span>
 
+        <span class="n">mean_list</span> <span class="o">=</span> <span class="n">compute_mean_reflectivity_from_hist</span><span class="p">(</span>
+            <span class="n">hist_obj</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+        <span class="p">)</span>
+
         <span class="n">quantiles</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="n">compute_quantiles_from_hist</span><span class="p">(</span>
             <span class="n">hist_obj</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
             <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">hist_obj</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
@@ -872,24 +879,33 @@
             <span class="n">np_t</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="n">write_monitoring_ts</span><span class="p">(</span>
-            <span class="n">start_time</span><span class="p">,</span> <span class="n">np_t</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span> <span class="n">csvfname</span>
+            <span class="n">start_time</span><span class="p">,</span> <span class="n">np_t</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">,</span> <span class="n">mean_list</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span> <span class="n">csvfname</span>
         <span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;saved CSV file: &quot;</span> <span class="o">+</span> <span class="n">csvfname</span><span class="p">)</span>
 
-        <span class="n">date</span><span class="p">,</span> <span class="n">np_t_vec</span><span class="p">,</span> <span class="n">cquant_vec</span><span class="p">,</span> <span class="n">lquant_vec</span><span class="p">,</span> <span class="n">hquant_vec</span> <span class="o">=</span> <span class="n">read_monitoring_ts</span><span class="p">(</span>
-            <span class="n">csvfname</span><span class="p">,</span> <span class="n">sort_by_date</span><span class="o">=</span><span class="n">sort_by_date</span>
-        <span class="p">)</span>
+        <span class="p">(</span>
+            <span class="n">date</span><span class="p">,</span>
+            <span class="n">np_t_vec</span><span class="p">,</span>
+            <span class="n">quantile_data_vec</span><span class="p">,</span>
+            <span class="n">geometric_mean_dB_vec</span><span class="p">,</span>
+            <span class="n">linear_mean_dB_vec</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">read_monitoring_ts</span><span class="p">(</span><span class="n">quantiles</span><span class="p">,</span> <span class="n">csvfname</span><span class="p">,</span> <span class="n">sort_by_date</span><span class="o">=</span><span class="n">sort_by_date</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to plot time series. No valid data&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="n">rewrite</span><span class="p">:</span>
-            <span class="n">val_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">lquant_vec</span><span class="p">,</span> <span class="n">cquant_vec</span><span class="p">,</span> <span class="n">hquant_vec</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+            <span class="n">quantile_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">quantile_data_vec</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantiles</span><span class="p">]</span>
+            <span class="c1"># Construct val_vec: First row = geometric_mean_dB, Second row = linear_mean_dB, followed by all quantiles</span>
+            <span class="n">val_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">geometric_mean_dB_vec</span><span class="p">,</span> <span class="n">linear_mean_dB_vec</span><span class="p">]</span> <span class="o">+</span> <span class="n">quantile_values</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">T</span>
             <span class="n">write_monitoring_ts</span><span class="p">(</span>
                 <span class="n">date</span><span class="p">,</span>
                 <span class="n">np_t_vec</span><span class="p">,</span>
                 <span class="n">val_vec</span><span class="p">,</span>
                 <span class="n">quantiles</span><span class="p">,</span>
+                <span class="n">mean_list</span><span class="p">,</span>
                 <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
                 <span class="n">csvfname</span><span class="p">,</span>
                 <span class="n">rewrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -927,12 +943,16 @@
         <span class="n">vmin</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmin&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">vmax</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmax&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
+        <span class="n">quantile_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">quantile_data_vec</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantiles</span><span class="p">]</span>
+        <span class="c1"># Construct val_vec: First row = geometric_mean_dB, Second row = linear_mean_dB, followed by all quantiles</span>
+        <span class="n">val_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">geometric_mean_dB_vec</span><span class="p">,</span> <span class="n">linear_mean_dB_vec</span><span class="p">]</span> <span class="o">+</span> <span class="n">quantile_values</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">T</span>
         <span class="n">plot_monitoring_ts</span><span class="p">(</span>
             <span class="n">date</span><span class="p">,</span>
             <span class="n">np_t_vec</span><span class="p">,</span>
-            <span class="n">cquant_vec</span><span class="p">,</span>
-            <span class="n">lquant_vec</span><span class="p">,</span>
-            <span class="n">hquant_vec</span><span class="p">,</span>
+            <span class="n">val_vec</span><span class="p">,</span>
+            <span class="n">quantiles</span><span class="p">,</span>
             <span class="n">field_name</span><span class="p">,</span>
             <span class="n">figfname_list</span><span class="p">,</span>
             <span class="n">ref_value</span><span class="o">=</span><span class="n">ref_value</span><span class="p">,</span>
@@ -945,6 +965,8 @@
             <span class="n">plot_until_year_end</span><span class="o">=</span><span class="n">plot_until_year_end</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- save to &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">figfname_list</span><span class="p">))</span>
+
+        <span class="n">figfname_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">csvfname</span><span class="p">)</span>
 
         <span class="c1"># generate alarms if needed</span>
         <span class="n">alarm</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;alarm&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
@@ -983,7 +1005,7 @@
         <span class="n">receiver_list</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;receiver_list&quot;</span><span class="p">]</span>
 
         <span class="n">np_last</span> <span class="o">=</span> <span class="n">np_t_vec</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">value_last</span> <span class="o">=</span> <span class="n">cquant_vec</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">value_last</span> <span class="o">=</span> <span class="n">val_vec</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">np_last</span> <span class="o">&lt;</span> <span class="n">np_min</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid data on day &quot;</span> <span class="o">+</span> <span class="n">date</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%m-%Y&quot;</span><span class="p">))</span>
@@ -1003,7 +1025,7 @@
             <span class="n">abs_exceeded</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="c1"># compute trend and check if last value exceeds it</span>
-        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">cquant_vec</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">val_vec</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
         <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">mask</span><span class="p">),</span> <span class="n">np_t_vec</span> <span class="o">&gt;=</span> <span class="n">np_min</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">nvalid</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">nvalid</span> <span class="o">&lt;=</span> <span class="n">nevents_min</span><span class="p">:</span>
@@ -1012,7 +1034,7 @@
             <span class="n">value_trend</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">np_trend_vec</span> <span class="o">=</span> <span class="n">np_t_vec</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="o">-</span><span class="p">(</span><span class="n">nevents_min</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">data_trend_vec</span> <span class="o">=</span> <span class="n">cquant_vec</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="o">-</span><span class="p">(</span><span class="n">nevents_min</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">data_trend_vec</span> <span class="o">=</span> <span class="n">val_vec</span><span class="p">[</span><span class="n">ind</span><span class="p">,</span> <span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="p">(</span><span class="n">nevents_min</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
             <span class="n">np_trend</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np_trend_vec</span><span class="p">)</span>
             <span class="n">value_trend</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data_trend_vec</span> <span class="o">*</span> <span class="n">np_trend_vec</span><span class="p">)</span> <span class="o">/</span> <span class="n">np_trend</span>
@@ -1123,18 +1145,18 @@
 
         <span class="n">csvfname</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">csvfname</span>
 
-        <span class="n">date</span><span class="p">,</span> <span class="n">np_t_vec</span><span class="p">,</span> <span class="n">cquant_vec</span><span class="p">,</span> <span class="n">lquant_vec</span><span class="p">,</span> <span class="n">hquant_vec</span> <span class="o">=</span> <span class="n">read_monitoring_ts</span><span class="p">(</span>
-            <span class="n">csvfname</span>
-        <span class="p">)</span>
+        <span class="p">(</span>
+            <span class="n">date</span><span class="p">,</span>
+            <span class="n">np_t_vec</span><span class="p">,</span>
+            <span class="n">quantile_data_vec</span><span class="p">,</span>
+            <span class="n">geometric_mean_dB_vec</span><span class="p">,</span>
+            <span class="n">linear_mean_dB_vec</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">read_monitoring_ts</span><span class="p">(</span><span class="n">quantiles</span><span class="p">,</span> <span class="n">csvfname</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to plot time series. No valid data&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="n">cquant</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">cquant_vec</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">np_t_vec</span><span class="p">)</span>
-        <span class="n">lquant</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">lquant_vec</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">np_t_vec</span><span class="p">)</span>
-        <span class="n">hquant</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">hquant_vec</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">np_t_vec</span><span class="p">)</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">lquant</span><span class="p">,</span> <span class="n">cquant</span><span class="p">,</span> <span class="n">hquant</span><span class="p">])</span>
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">date</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">np_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np_t_vec</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">np_t</span><span class="p">):</span>
@@ -1168,20 +1190,28 @@
         <span class="n">csvfname</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">csvfname</span>
 
         <span class="n">write_monitoring_ts</span><span class="p">(</span>
-            <span class="n">start_time</span><span class="p">,</span> <span class="n">np_t</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span> <span class="n">csvfname</span>
+            <span class="n">start_time</span><span class="p">,</span> <span class="n">np_t</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">,</span> <span class="n">mean_list</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span> <span class="n">csvfname</span>
         <span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;saved CSV file: &quot;</span> <span class="o">+</span> <span class="n">csvfname</span><span class="p">)</span>
 
-        <span class="n">date</span><span class="p">,</span> <span class="n">np_t_vec</span><span class="p">,</span> <span class="n">cquant_vec</span><span class="p">,</span> <span class="n">lquant_vec</span><span class="p">,</span> <span class="n">hquant_vec</span> <span class="o">=</span> <span class="n">read_monitoring_ts</span><span class="p">(</span>
-            <span class="n">csvfname</span><span class="p">,</span> <span class="n">sort_by_date</span><span class="o">=</span><span class="n">sort_by_date</span>
-        <span class="p">)</span>
+        <span class="p">(</span>
+            <span class="n">date</span><span class="p">,</span>
+            <span class="n">np_t_vec</span><span class="p">,</span>
+            <span class="n">quantile_data_vec</span><span class="p">,</span>
+            <span class="n">geometric_mean_dB_vec</span><span class="p">,</span>
+            <span class="n">linear_mean_dB_vec</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">read_monitoring_ts</span><span class="p">(</span><span class="n">quantiles</span><span class="p">,</span> <span class="n">csvfname</span><span class="p">,</span> <span class="n">sort_by_date</span><span class="o">=</span><span class="n">sort_by_date</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to plot time series. No valid data&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="n">rewrite</span><span class="p">:</span>
-            <span class="n">val_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">lquant_vec</span><span class="p">,</span> <span class="n">cquant_vec</span><span class="p">,</span> <span class="n">hquant_vec</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+            <span class="n">quantile_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">quantile_data_vec</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantiles</span><span class="p">]</span>
+            <span class="c1"># Construct val_vec: First row = geometric_mean_dB, Second row = linear_mean_dB, followed by all quantiles</span>
+            <span class="n">val_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">geometric_mean_dB_vec</span><span class="p">,</span> <span class="n">linear_mean_dB_vec</span><span class="p">]</span> <span class="o">+</span> <span class="n">quantile_values</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">T</span>
             <span class="n">write_monitoring_ts</span><span class="p">(</span>
                 <span class="n">date</span><span class="p">,</span>
                 <span class="n">np_t_vec</span><span class="p">,</span>
@@ -1220,12 +1250,14 @@
         <span class="n">vmin</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmin&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">vmax</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmax&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
+        <span class="n">val_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">geometric_mean_dB_vec</span><span class="p">,</span> <span class="n">linear_mean_dB_vec</span><span class="p">]</span> <span class="o">+</span> <span class="n">quantile_values</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">T</span>
         <span class="n">plot_monitoring_ts</span><span class="p">(</span>
             <span class="n">date</span><span class="p">,</span>
             <span class="n">np_t_vec</span><span class="p">,</span>
-            <span class="n">cquant_vec</span><span class="p">,</span>
-            <span class="n">lquant_vec</span><span class="p">,</span>
-            <span class="n">hquant_vec</span><span class="p">,</span>
+            <span class="n">val_vec</span><span class="p">,</span>
+            <span class="n">quantiles</span><span class="p">,</span>
             <span class="n">field_name</span><span class="p">,</span>
             <span class="n">figfname_list</span><span class="p">,</span>
             <span class="n">ref_value</span><span class="o">=</span><span class="n">ref_value</span><span class="p">,</span>
@@ -1244,6 +1276,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">alarm</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">figfname_list</span>
 
+        <span class="n">figfname_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">csvfname</span><span class="p">)</span>
         <span class="n">output</span> <span class="o">=</span> <span class="n">figfname_list</span>
         <span class="k">if</span> <span class="s2">&quot;tol_abs&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;unable to send alarm. Missing tolerance on target&quot;</span><span class="p">)</span>
@@ -1274,7 +1307,7 @@
         <span class="n">receiver_list</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;receiver_list&quot;</span><span class="p">]</span>
 
         <span class="n">np_last</span> <span class="o">=</span> <span class="n">np_t_vec</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">value_last</span> <span class="o">=</span> <span class="n">cquant_vec</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">value_last</span> <span class="o">=</span> <span class="n">val_vec</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">np_last</span> <span class="o">&lt;</span> <span class="n">np_min</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No valid data on day &quot;</span> <span class="o">+</span> <span class="n">date</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%m-%Y&quot;</span><span class="p">))</span>
@@ -1294,7 +1327,7 @@
             <span class="n">abs_exceeded</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="c1"># compute trend and check if last value exceeds it</span>
-        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">cquant_vec</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">val_vec</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
         <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">mask</span><span class="p">),</span> <span class="n">np_t_vec</span> <span class="o">&gt;=</span> <span class="n">np_min</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">nvalid</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">nvalid</span> <span class="o">&lt;=</span> <span class="n">nevents_min</span><span class="p">:</span>
@@ -1303,7 +1336,7 @@
             <span class="n">value_trend</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">np_trend_vec</span> <span class="o">=</span> <span class="n">np_t_vec</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="o">-</span><span class="p">(</span><span class="n">nevents_min</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">data_trend_vec</span> <span class="o">=</span> <span class="n">cquant_vec</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="o">-</span><span class="p">(</span><span class="n">nevents_min</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">data_trend_vec</span> <span class="o">=</span> <span class="n">val_vec</span><span class="p">[</span><span class="n">ind</span><span class="p">,</span> <span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="p">(</span><span class="n">nevents_min</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
             <span class="n">np_trend</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np_trend_vec</span><span class="p">)</span>
             <span class="n">value_trend</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data_trend_vec</span> <span class="o">*</span> <span class="n">np_trend_vec</span><span class="p">)</span> <span class="o">/</span> <span class="n">np_trend</span>
@@ -1411,7 +1444,7 @@
         <span class="k">return</span> <span class="n">fname</span>
 
     <span class="n">warn</span><span class="p">(</span><span class="s2">&quot; Unsupported product type: &quot;</span> <span class="o">+</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">])</span>
-    <span class="k">return</span> <span class="kc">None</span></div>
+    <span class="k">return</span> <span class="p">[</span><span class="n">fname</span><span class="p">]</span></div>
 
 </pre></div>
 <div class="section ablog__blog_comments">

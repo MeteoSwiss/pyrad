@@ -733,7 +733,9 @@
         <span class="n">radar_aux</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bin_centers</span>
         <span class="n">radar_aux</span><span class="o">.</span><span class="n">ngates</span> <span class="o">=</span> <span class="n">nbins</span>
         <span class="n">radar_aux</span><span class="o">.</span><span class="n">nrays</span> <span class="o">=</span> <span class="mi">1</span>
-
+        <span class="n">radar_aux</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">0</span>
+        <span class="n">radar_aux</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">0</span>
+        
         <span class="n">field_dict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
         <span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">nbins</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 
@@ -799,7 +801,6 @@
         <span class="n">dataset</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;hist_obj&quot;</span><span class="p">:</span> <span class="n">radar_aux</span><span class="p">})</span>
         <span class="n">dataset</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;hist_type&quot;</span><span class="p">:</span> <span class="s2">&quot;instant&quot;</span><span class="p">})</span>
         <span class="n">dataset</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">:</span> <span class="n">start_time</span><span class="p">})</span>
-
         <span class="k">return</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">ind_rad</span>
 
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>

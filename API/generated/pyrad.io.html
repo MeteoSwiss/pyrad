@@ -1418,12 +1418,12 @@
 <td><p>Reads a CSV file containing colocated data using pandas.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_timeseries.html#pyrad.io.read_timeseries" title="pyrad.io.read_timeseries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_timeseries</span></code></a>(fname)</p></td>
-<td><p>Reads a time series contained in a CSV file.</p></td>
+<td><p>Reads a time series contained in a CSV file using pandas.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_ts_cum.html#pyrad.io.read_ts_cum" title="pyrad.io.read_ts_cum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_ts_cum</span></code></a>(fname)</p></td>
 <td><p>Reads a time series of precipitation accumulation contained in a csv file</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_monitoring_ts.html#pyrad.io.read_monitoring_ts" title="pyrad.io.read_monitoring_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_monitoring_ts</span></code></a>(fname[, sort_by_date])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_monitoring_ts.html#pyrad.io.read_monitoring_ts" title="pyrad.io.read_monitoring_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_monitoring_ts</span></code></a>(quantiles, fname[, ...])</p></td>
 <td><p>Reads a monitoring time series contained in a CSV file using pandas.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_intercomp_scores_ts.html#pyrad.io.read_intercomp_scores_ts" title="pyrad.io.read_intercomp_scores_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_intercomp_scores_ts</span></code></a>(fname[, sort_by_date])</p></td>
@@ -2009,7 +2009,7 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_ml_ts.html#pyrad.io.read_ml_ts" title="pyrad.io.read_ml_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_ml_ts</span></code></a>(fname)</p></td>
 <td><p>Reads a melting layer time series contained in a csv file</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_monitoring_ts.html#pyrad.io.read_monitoring_ts" title="pyrad.io.read_monitoring_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_monitoring_ts</span></code></a>(fname[, sort_by_date])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_monitoring_ts.html#pyrad.io.read_monitoring_ts" title="pyrad.io.read_monitoring_ts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_monitoring_ts</span></code></a>(quantiles, fname[, ...])</p></td>
 <td><p>Reads a monitoring time series contained in a CSV file using pandas.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_proc_periods.html#pyrad.io.read_proc_periods" title="pyrad.io.read_proc_periods"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_proc_periods</span></code></a>(fname)</p></td>
@@ -2067,7 +2067,7 @@
 <td><p>Reads the TRT info used for thundertracking</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.io.read_timeseries.html#pyrad.io.read_timeseries" title="pyrad.io.read_timeseries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_timeseries</span></code></a>(fname)</p></td>
-<td><p>Reads a time series contained in a CSV file.</p></td>
+<td><p>Reads a time series contained in a CSV file using pandas.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyrad.io.read_trt_cell_lightning.html#pyrad.io.read_trt_cell_lightning" title="pyrad.io.read_trt_cell_lightning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_trt_cell_lightning</span></code></a>(fname)</p></td>
 <td><p>Reads the lightning data of a TRT cell. The file has the following fields:     traj_ID     yyyymmddHHMM     lon     lat     area     RANKr     nflashes     flash_dens.</p></td>

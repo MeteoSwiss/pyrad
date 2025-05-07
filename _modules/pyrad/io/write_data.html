@@ -468,7 +468,15 @@
     <span class="n">_BOTO3_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">write_to_s3</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">basepath</span><span class="p">,</span> <span class="n">s3endpoint</span><span class="p">,</span> <span class="n">s3bucket</span><span class="p">,</span> <span class="n">s3path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">s3accesspolicy</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_to_s3</span><span class="p">(</span>
+    <span class="n">fname</span><span class="p">,</span>
+    <span class="n">basepath</span><span class="p">,</span>
+    <span class="n">s3endpoint</span><span class="p">,</span>
+    <span class="n">s3bucket</span><span class="p">,</span>
+    <span class="n">s3path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">s3accesspolicy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">s3splitext</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Copies a locally stored product to a S3 bucket</span>
 
@@ -499,6 +507,10 @@
 <span class="sd">    s3accesspolicy : str</span>
 <span class="sd">        S3 access policy can be either private or public-read</span>
 <span class="sd">        Default is to use nothing which will inherit the policy of the bucket</span>
+<span class="sd">    s3splitext: bool</span>
+<span class="sd">        If True, the extension will be added before the filename in the s3 name</span>
+<span class="sd">        For example folderA/folderB/folderC/out.csv will become folderA/folderB/folderC/csv/out.csv</span>
+<span class="sd">        on the S3.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed, aborting writing to s3&quot;</span><span class="p">)</span>
@@ -523,7 +535,12 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">s3path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-    <span class="n">s3fname</span> <span class="o">=</span> <span class="n">s3path</span> <span class="o">+</span> <span class="n">fname</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">s3splitext</span><span class="p">:</span>
+        <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">fname</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="n">fname_bis</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fname</span><span class="p">),</span> <span class="n">ext</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fname_bis</span> <span class="o">=</span> <span class="n">fname</span>
+    <span class="n">s3fname</span> <span class="o">=</span> <span class="n">s3path</span> <span class="o">+</span> <span class="n">fname_bis</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">s3fname</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>  <span class="c1"># Remove leading /</span>
         <span class="n">s3fname</span> <span class="o">=</span> <span class="n">s3fname</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
     <span class="n">s3_client_config</span> <span class="o">=</span> <span class="p">{</span>
@@ -536,7 +553,6 @@
         <span class="n">ExtraArgs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ACL&quot;</span><span class="p">:</span> <span class="n">s3accesspolicy</span><span class="p">}</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">ExtraArgs</span> <span class="o">=</span> <span class="kc">None</span>
-
     <span class="n">s3copypath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{</span><span class="n">s3bucket</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">endpoint_raw</span><span class="si">}{</span><span class="n">s3path</span><span class="si">}{</span><span class="n">s3fname</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="n">s3_client</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">s3bucket</span><span class="p">,</span> <span class="n">s3fname</span><span class="p">,</span> <span class="n">ExtraArgs</span><span class="o">=</span><span class="n">ExtraArgs</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;----- copying </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">s3copypath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -2875,7 +2891,7 @@
 <div class="viewcode-block" id="write_monitoring_ts">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_monitoring_ts.html#pyrad.io.write_monitoring_ts">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">write_monitoring_ts</span><span class="p">(</span>
-    <span class="n">start_time</span><span class="p">,</span> <span class="n">np_t</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">rewrite</span><span class="o">=</span><span class="kc">False</span>
+    <span class="n">start_time</span><span class="p">,</span> <span class="n">np_t</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">,</span> <span class="n">mean_list</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">rewrite</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">):</span>
     <span class="n">nvalues</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">start_time</span><span class="p">)</span>
     <span class="n">start_time_aux</span> <span class="o">=</span> <span class="p">(</span>
@@ -2891,10 +2907,12 @@
     <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">start_time_aux</span><span class="p">],</span>
         <span class="s2">&quot;NP&quot;</span><span class="p">:</span> <span class="n">np_t_aux</span><span class="p">,</span>
-        <span class="s2">&quot;central_quantile&quot;</span><span class="p">:</span> <span class="n">values_aux</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
-        <span class="s2">&quot;low_quantile&quot;</span><span class="p">:</span> <span class="n">values_aux</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
-        <span class="s2">&quot;high_quantile&quot;</span><span class="p">:</span> <span class="n">values_aux</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span>
+        <span class="s2">&quot;geometric_mean_dB&quot;</span><span class="p">:</span> <span class="n">mean_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="s2">&quot;linear_mean_dB&quot;</span><span class="p">:</span> <span class="n">mean_list</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
     <span class="p">}</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">quantiles</span><span class="p">):</span>
+        <span class="n">data</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;quantile_</span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">values_aux</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span>
+
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
     <span class="n">file_exists</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
@@ -2907,7 +2925,7 @@
                 <span class="s1">&#39;# Comment lines are preceded by &quot;#&quot;</span><span class="se">\n</span><span class="s1">&#39;</span>
                 <span class="s2">&quot;# Description: </span><span class="se">\n</span><span class="s2">&quot;</span>
                 <span class="s2">&quot;# Time series of a monitoring of weather radar data.</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;# Quantiles: </span><span class="si">{</span><span class="n">quantiles</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">quantiles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">quantiles</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2"> percent.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;# Quantiles: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="w"> </span><span class="n">quantiles</span><span class="p">))</span><span class="si">}</span><span class="s2"> percent.</span><span class="se">\n</span><span class="s2">&quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;# Data: </span><span class="si">{</span><span class="n">generate_field_name_str</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;# Fill Value: </span><span class="si">{</span><span class="n">get_fillvalue</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;# Start: </span><span class="si">{</span><span class="n">start_time_aux</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S UTC&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>

@@ -411,7 +411,7 @@
 <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;lom&quot;</span> <span class="ow">in</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">())</span> <span class="ow">or</span> <span class="p">(</span><span class="s2">&quot;meteoswiss&quot;</span> <span class="ow">in</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">()):</span>
     <span class="n">FOLDER_RADAR</span> <span class="o">=</span> <span class="s2">&quot;/srn/data/&quot;</span>
     <span class="n">FOLDER_ISO0</span> <span class="o">=</span> <span class="s2">&quot;/srn/data/HZT/&quot;</span>
-<span class="k">elif</span> <span class="s2">&quot;balfrin&quot;</span> <span class="ow">in</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">():</span>
+<span class="k">elif</span> <span class="s2">&quot;balfrin&quot;</span> <span class="ow">in</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;nid&quot;</span> <span class="ow">in</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">():</span>
     <span class="n">FOLDER_DATABASE</span> <span class="o">=</span> <span class="s2">&quot;/store_new/mch/msrad/radar/radar_database/&quot;</span>
     <span class="n">FOLDER_RADAR</span> <span class="o">=</span> <span class="s2">&quot;/store_new/mch//msrad/radar/swiss/data/&quot;</span>
     <span class="n">FOLDER_RADARH</span> <span class="o">=</span> <span class="s2">&quot;/store_new/mch//msrad/radar/polarHR/data/&quot;</span>

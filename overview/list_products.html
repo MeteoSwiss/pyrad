@@ -2695,10 +2695,11 @@
 <div class="line">For a specified elevation angle, plots a 2D</div>
 <div class="line">histogram with the azimuth angle in the X-axis and the data values</div>
 <div class="line">in the Y-axis. The reference values and the user defined quantiles</div>
-<div class="line">are also plot on the same figure</div>
+<div class="line">are also plot on the same figure.</div>
+<div class="line">This product is not compatible with the GC_MONITORING dataset!</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L369">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L371">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -2723,12 +2724,12 @@
 <div class="line">quantiles stored in a csv file.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L701">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L723">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
 </dd>
-<dt>quantiles:<span class="classifier"><em>list of 3 floats</em></span></dt><dd><p>the quantiles to compute. Default 25., 50., 75.</p>
+<dt>quantiles:<span class="classifier"><em>list of floats</em></span></dt><dd><p>the quantiles to compute. Default 25., 50., 75.</p>
 </dd>
 <dt>ref_value:<span class="classifier"><em>float</em></span></dt><dd><p>The reference value. Default 0</p>
 </dd>
@@ -2768,7 +2769,7 @@
 <div class="line">elevation angle.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L294">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L296">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -2788,7 +2789,7 @@
 <div class="line">elevation angles</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L992">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L1025">[Source]</a></p>
 </dd>
 </dl>
 </section>
@@ -2800,7 +2801,7 @@
 <div class="line">radar volume.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L205">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L207">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -2819,12 +2820,12 @@
 <div class="line">a csv file and plots a time series of those statistics.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L701">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_monitoring_products.py#L723">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
 </dd>
-<dt>quantiles:<span class="classifier"><em>list of 3 floats</em></span></dt><dd><p>the quantiles to compute. Default 25., 50., 75.</p>
+<dt>quantiles:<span class="classifier"><em>list of floats</em></span></dt><dd><p>the quantiles to compute. Default 25., 50., 75.</p>
 </dd>
 <dt>ref_value:<span class="classifier"><em>float</em></span></dt><dd><p>The reference value. Default 0</p>
 </dd>
@@ -3110,7 +3111,7 @@
 <div class="line">disdrometer)</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L438">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L437">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>dpi:<span class="classifier"><em>int</em></span></dt><dd><p>The pixel density of the plot. Default 72</p>
@@ -3139,7 +3140,7 @@
 <div class="line">versus average sensor data.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L678">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L679">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>dpi:<span class="classifier"><em>int</em></span></dt><dd><p>The pixel density of the plot. Default 72</p>
@@ -3169,7 +3170,7 @@
 <div class="line">Writes and plots a trajectory time series.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L835">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L836">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -3188,7 +3189,7 @@
 <div class="line">at a particular point</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L239">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L237">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>dpi:<span class="classifier"><em>int</em></span></dt><dd><p>The pixel density of the plot. Default 72</p>
@@ -3207,7 +3208,7 @@
 <div class="line">accumulation at a particular point.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L341">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L340">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>dpi:<span class="classifier"><em>int</em></span></dt><dd><p>The pixel density of the plot. Default 72</p>
@@ -3228,7 +3229,7 @@
 <div class="line">during the trajectory processing</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L892">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L897">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -3247,7 +3248,7 @@
 <div class="line">overplot on it.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L936">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L943">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -3272,7 +3273,7 @@
 <div class="line">multiple points obtained from a radar object</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L215">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L214">[Source]</a></p>
 </dd>
 </dl>
 </section>

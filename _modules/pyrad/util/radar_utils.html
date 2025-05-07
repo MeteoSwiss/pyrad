@@ -410,6 +410,7 @@
 <span class="sd">    get_fixed_rng_data</span>
 <span class="sd">    create_sun_hits_field</span>
 <span class="sd">    create_sun_retrieval_field</span>
+<span class="sd">    compute_mean_reflectivity_from_hist</span>
 <span class="sd">    compute_quantiles</span>
 <span class="sd">    compute_quantiles_from_hist</span>
 <span class="sd">    compute_quantiles_sweep</span>
@@ -1934,6 +1935,47 @@
     <span class="k">return</span> <span class="n">field</span></div>
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_mean_reflectivity_from_hist</span><span class="p">(</span><span class="n">bin_centers</span><span class="p">,</span> <span class="n">hist</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes the mean reflectivity in both dB and linear units.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    bin_centers : ndarray 1D</span>
+<span class="sd">        The bin centers (in dB).</span>
+<span class="sd">    hist : ndarray 1D</span>
+<span class="sd">        The histogram values.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    geometric_mean_db : float</span>
+<span class="sd">        Mean reflectivity in dB.</span>
+<span class="sd">    linear_mean_db : float</span>
+<span class="sd">        Mean reflectivity computed in linear units and converted back to dB.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check if all elements in histogram are masked values</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">hist</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">hist</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>  <span class="c1"># Return masked means</span>
+
+    <span class="n">np_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">hist</span><span class="p">)</span>
+
+    <span class="c1"># Compute mean in dB</span>
+    <span class="n">geometric_mean_db</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">bin_centers</span> <span class="o">*</span> <span class="n">hist</span><span class="p">)</span> <span class="o">/</span> <span class="n">np_t</span>
+
+    <span class="c1"># Convert bin centers to linear scale</span>
+    <span class="n">bin_centers_lin</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="n">bin_centers</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+
+    <span class="c1"># Compute mean in linear scale</span>
+    <span class="n">mean_lin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">bin_centers_lin</span> <span class="o">*</span> <span class="n">hist</span><span class="p">)</span> <span class="o">/</span> <span class="n">np_t</span>
+
+    <span class="c1"># Convert mean back to dB</span>
+    <span class="n">linear_mean_db</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">mean_lin</span><span class="p">)</span>
+
+    <span class="n">mean_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">geometric_mean_db</span><span class="p">,</span> <span class="n">linear_mean_db</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">mean_list</span>
+    
 
 <div class="viewcode-block" id="compute_quantiles">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_quantiles.html#pyrad.util.compute_quantiles">[docs]</a>
