@@ -1296,7 +1296,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pyrad.io.read_trt_data">
 <span class="sig-prename descclassname"><span class="pre">pyrad.io.</span></span><span class="sig-name descname"><span class="pre">read_trt_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyrad/io/read_data_sensor.html#read_trt_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.io.read_trt_data" title="Link to this definition">#</a></dt>
-<dd><p>Reads the TRT data contained in a text file. The file has the following
+<dd><p>Reads the TRT data contained in a trt.json file. The file has the following
 fields:</p>
 <blockquote>
 <div><p>traj_ID
@@ -1340,7 +1340,11 @@ Dvel_y [km/h]</p>
 <dd class="field-odd"><p><strong>fname</strong> (<em>str</em>) – path of the TRT data file</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>A tupple containing the read values. None otherwise</em></p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>A dict containing the read values in a list for every key. Lists are empty</em></p></li>
+<li><p><em>if trt file could not be read.</em></p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
