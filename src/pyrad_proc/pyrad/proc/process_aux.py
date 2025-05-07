@@ -197,7 +197,6 @@ def get_process_func(dataset_type, dsname):
                 'RAW_GRID': process_raw_grid
                 'GECSX' : process_gecsx
                 'GRID': process_grid
-                'GRID_STATS': process_grid_stats
                 'GRID_FIELDS_DIFF': process_grid_fields_diff
                 'GRID_MASK': process_grid_mask
                 'GRID_TEXTURE': process_grid_texture

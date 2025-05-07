@@ -10,7 +10,7 @@ on:
 
 permissions:
    contents: write
-   
+
 # This job installs dependencies, build the website, and pushes it to `gh-pages`
 jobs:
   deploy-website:
@@ -43,7 +43,7 @@ jobs:
       - name: Run mapping codes
         working-directory: ${{github.workspace}}/ci/
         run: |
-          set -e
+          set -euxo pipefail
           bash run_all.sh
       - name: Check mapping Code Result
         run: |

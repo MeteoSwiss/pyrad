@@ -65,7 +65,9 @@ def dict_to_restructured_text(yaml_data):
             rst_output.append('""""""""""""""""""""""""""""""')
             rst_output.append("description")
             rst_output.append(
-                "   " + prodinfo["description"] + f'\n `[Source] <{prodinfo["link"]}>`_'
+                " | "
+                + prodinfo["description"].replace("###", "\n |")
+                + f'\n `[Source] <{prodinfo["link"]}>`_'
             )
             params = parameters_to_dict(prodinfo["parameters"])
             if len(params):
@@ -96,7 +98,7 @@ def process_file(filepath):
                 # clear buffer
                 try:
                     all_products[function][product]["description"] = " ".join(
-                        descr.replace("\n", "").split()
+                        descr.split()
                     )
                 except (KeyError, UnboundLocalError, TypeError):
                     pass
@@ -124,25 +126,23 @@ def process_file(filepath):
                 try:
                     if product in all_products[function]:
                         all_products[function][product]["description"] = " ".join(
-                            descr.replace("\n", "").split()
+                            descr.split()
                         )
                 except TypeError:
                     pass
 
                 product = match[0].replace("'", "").split(":")[0].strip()
-                descr = line.split(":")[1].strip()
+                descr = line.split(":")[1].strip() + "###"
                 all_products[function][product] = {}
                 all_products[function][product]["parameters"] = ""
                 continue
             if "User defined parameters" in line:
-                all_products[function][product]["description"] = " ".join(
-                    descr.replace("\n", "").split()
-                )
+                all_products[function][product]["description"] = " ".join(descr.split())
                 reading_params = True
                 reading_title = False
                 continue
             if reading_title:
-                descr += line
+                descr += line + "###"
             if reading_params and product:
                 all_products[function][product]["parameters"] += " " + line
         if ('prdcfg["type"]' in line or "prdcfg['type']" in line) and "==" in line:
@@ -153,9 +153,7 @@ def process_file(filepath):
                     )
 
     if reading_title:
-        all_products[function][product]["description"] = " ".join(
-            descr.replace("\n", "").split()
-        )
+        all_products[function][product]["description"] = " ".join(descr.split())
 
     return all_products
 

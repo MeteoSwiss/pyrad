@@ -364,6 +364,7 @@ def generate_icon_to_radar_products(dataset, prdcfg):
 def generate_sun_hits_products(dataset, prdcfg):
     """
     generates sun hits products. Accepted product types:
+        All the products of the 'VOL' dataset group
         'PLOT_SUN_HITS': Plots in a sun-radar azimuth difference-sun-radar
             elevation difference grid the values of all sun hits obtained
             during the processing period
@@ -387,15 +388,45 @@ def generate_sun_hits_products(dataset, prdcfg):
         'PLOT_SUNSCAN': Plots a constant range radar azimuth-elevation of the
             sunscan field data
         'WRITE_SUN_HITS': Writes the information concerning possible sun hits
-            in a csv file
+            in a csv file. The written data has the following columns
+            "time",
+            "ray",
+            "NPrng",
+            "rad_el",
+            "rad_az",
+            "sun_el",
+            "sun_az",
+            "dBm_sun_hit",
+            "std(dBm_sun_hit)",
+            "NPh",
+            "NPhval",
+            "dBmv_sun_hit",
+            "std(dBmv_sun_hit)",
+            "NPv",
+            "NPvval",
+            "ZDR_sun_hit",
+            "std(ZDR_sun_hit)",
+            "NPzdr",
+            "NPzdrval"
         'WRITE_SUN_RETRIEVAL': Writes the retrieved sun pattern parameters in
             a csv file.
             User defined parameters:
                 add_date_in_fname: Bool
                     If true the year is added in the csv file name
-        'WRITE_SUNSCAN': Writes the sunscan parameters in a csv file
-
-        All the products of the 'VOL' dataset group
+        'WRITE_SUNSCAN': Writes the sunscan parameters in a csv file. The written data has the following columns
+            "sun_az":             [deg] Azimuth sun position,
+            "sun_el":             [deg] Elevation sun position,
+            "noise_pwr":          [dBm] Noise power",
+            "sun_maxpwr_noise":   [dBm] sun maximal power sample (including noise),
+            "sun_maxpwr_nonoise": [dBm] sun maximal power sample without noise,
+            "sun_maxpwr_fit":     [dBm] sun maximal fitted power (without noise),
+            "sun_maxpwr_toa":     [dBm] sun maximal power at top of atmosphere,
+            "az_offset":          [deg] Azimuth shift of fitted maxima to sun azimuth,
+            "el_offset":          [deg] Elevation shift of fitted maxima to sun elevation,
+            "az_phi3db":          [deg] Half-power beam width in azimuth,
+            "el_phi3db":          [deg] Half-power beam width in elevation,
+            "fit_stddev":         [dBm] Standard deviation (fit to samples),
+            "num_samples":        [#]   Number of samples used for the sun power fitting
 
     Parameters
     ----------
@@ -875,12 +906,7 @@ def generate_sun_hits_products(dataset, prdcfg):
 
 def generate_qvp_products(dataset, prdcfg):
     """
-    Generates quasi vertical profile-like products. Quasi vertical profiles
-    come from azimuthal averaging of polarimetric radar data. With the
-    variable 'qvp_type' the user decides if the product has to be generated
-    at the end of the processing period ('final') or instantaneously
-    ('instant')
-    Accepted product types:
+    Generates quasi vertical profile-like products, from azimuthal averaging of polarimetric radar data.  Accepted product types:
         All the products of the 'VOL' dataset group
 
     Parameters
@@ -1101,7 +1127,7 @@ def generate_vpr_products(dataset, prdcfg):
         of the VPR profile retrieval into a text file
             User defined parameters:
                     voltype: name of the pyrad variable to use, it must be available
-                        in the dataset
+
         All the products of the 'VOL' dataset group
 
     Parameters
