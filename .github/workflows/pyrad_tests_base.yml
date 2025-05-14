@@ -75,3 +75,7 @@ jobs:
             PYRAD_TESTS_PATH: ${{github.workspace}}/pyrad-tests/
         working-directory: ${{github.workspace}}/pyrad-tests/
         run: pytest "run_tests.py::test_base"
+      - name: tmate session if tests fail
+        if:  ${{ github.event_name == 'workflow_dispatch' && failure() }}
+        uses: mxschmitt/action-tmate@v3
+        
