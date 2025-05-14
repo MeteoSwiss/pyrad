@@ -76,6 +76,6 @@ jobs:
         working-directory: ${{github.workspace}}/pyrad-tests/
         run: pytest "run_tests.py::test_base"
       - name: tmate session if tests fail
-        if:  ${{ github.event_name == 'workflow_dispatch' && failure() }}
+        if:  ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
         
