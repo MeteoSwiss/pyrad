@@ -1394,7 +1394,7 @@ def _create_datacfg_dict(cfg):
         ):
             datacfg.update({"s3BucketRead": cfg["s3BucketRead"]})
         datacfg.update({"s3Verify": cfg.get("s3Verify", True)})
-        datacfg.update({"s3Certificates": cfg.get("s3Certificates", True)})
+        datacfg.update({"s3Certificates": cfg.get("s3Certificates", "")})
 
     # Modify size of radar or radar spectra object
     datacfg.update({"elmin": cfg.get("elmin", None)})
