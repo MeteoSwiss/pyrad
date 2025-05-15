@@ -111,6 +111,7 @@ def _open_s3_client(cfg):
         s3verify = cfg["s3Verify"]
 
     s3_client = boto3.client(
+        "s3",
         endpoint_url=cfg["s3EndpointRead"],
         aws_access_key_id=cfg["s3KeyRead"],
         aws_secret_access_key=cfg["s3SecretRead"],
