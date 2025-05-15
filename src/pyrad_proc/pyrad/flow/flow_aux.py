@@ -77,6 +77,11 @@ except ImportError:
 
 PROFILE_LEVEL = 0
 
+# These two env variables need to be defined to avoid MissingContentLength error in boto3
+# don't know why at the moment
+os.environ["AWS_REQUEST_CHECKSUM_CALCULATION"] = "when_required"
+os.environ["AWS_RESPONSE_CHECKSUM_VALIDATION"] = "when_required"
+
 
 def profiler(level=1):
     """
@@ -1012,10 +1017,10 @@ def _generate_prod(dataset, cfg, prdname, prdfunc, dsname, voltime, runinfo=None
                 nextensions = set([os.path.splitext(f)[1] for f in filenames])
             else:
                 nextensions = 1
-            
+
             if nextensions == 1:
                 s3splitext = False
-                
+
             for fname in filenames:
                 if (
                     prdcfg["basepath"] in fname
@@ -1027,7 +1032,7 @@ def _generate_prod(dataset, cfg, prdname, prdfunc, dsname, voltime, runinfo=None
                         prdcfg["s3BucketWrite"],
                         s3path,
                         s3AccessPolicy,
-                        s3splitext
+                        s3splitext,
                     )
         return False
     except Exception as inst:
