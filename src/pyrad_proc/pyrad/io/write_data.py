@@ -95,6 +95,8 @@ def write_to_s3(
     s3path="",
     s3accesspolicy=None,
     s3splitext=False,
+    s3verify=True,
+    s3certificates="",
 ):
     """
     Copies a locally stored product to a S3 bucket
@@ -130,6 +132,12 @@ def write_to_s3(
         If True, the extension will be added before the filename in the s3 name
         For example folderA/folderB/folderC/out.csv will become folderA/folderB/folderC/csv/out.csv
         on the S3.
+    s3verify: bool
+        If False, ssl verification will be disabled when writing data to S3. Beware this can
+        be dangerous
+    s3certificates: str
+        Path of the certificates used for ssl verification. Only required if
+        you use custom certificates.
     """
     if not _BOTO3_AVAILABLE:
         warn("boto3 not installed, aborting writing to s3")
@@ -167,7 +175,10 @@ def write_to_s3(
         "endpoint_url": s3endpoint,
         "aws_secret_access_key": aws_secret,
     }
-    s3_client = boto3.client("s3", **s3_client_config, verify=False)
+    if len(s3certificates):
+        s3verify = s3certificates
+
+    s3_client = boto3.client("s3", **s3_client_config, verify=s3verify)
     if s3accesspolicy:
         ExtraArgs = {"ACL": s3accesspolicy}
     else:

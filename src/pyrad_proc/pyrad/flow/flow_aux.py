@@ -36,6 +36,7 @@ import traceback
 import os
 from datetime import datetime
 from datetime import timedelta
+from datetime import UTC
 import inspect
 import gc
 
@@ -286,7 +287,7 @@ def _get_times_and_traj(
     if starttimes is None and last_state_file is not None:
         filename = glob.glob(last_state_file)
         if not filename:
-            nowtime = datetime.utcnow()
+            nowtime = datetime.datetime.now(UTC)
             starttimes = np.array(
                 [
                     (nowtime - timedelta(days=1)).replace(
@@ -302,7 +303,7 @@ def _get_times_and_traj(
         else:
             starttime = read_last_state(last_state_file)
             if starttime is None:
-                nowtime = datetime.utcnow()
+                nowtime = datetime.datetime.now(UTC)
                 starttimes = np.array(
                     [
                         (nowtime - timedelta(days=1)).replace(
@@ -319,7 +320,7 @@ def _get_times_and_traj(
                 starttimes = np.array([starttime])
 
     if endtimes is None:
-        endtimes = np.array([datetime.utcnow()])
+        endtimes = np.array([datetime.datetime.now(UTC)])
         warn(
             "End Time not defined. Set as {}".format(
                 endtimes[0].strftime("%Y-%m-%d %H:%M:%S")
@@ -683,7 +684,7 @@ def _wait_for_files(nowtime, datacfg, datatype_list, last_processed=None):
     found_all = False
     currenttime = deepcopy(nowtime)
     while currenttime <= wait_time or not found_all:
-        currenttime = datetime.utcnow()
+        currenttime = datetime.now(UTC)
         # for offline testing
         # currenttime = currenttime.replace(
         #    year=nowtime.year, month=nowtime.month, day=nowtime.day)
@@ -762,7 +763,7 @@ def _wait_for_rainbow_datatypes(rainbow_files, period=30):
         True if all files were present. False otherwise
 
     """
-    currenttime = datetime.utcnow()
+    currenttime = datetime.now(UTC)
     # for offline testing
     # currenttime = currenttime.replace(
     #     year=2017, month=6, day=14)
@@ -770,7 +771,7 @@ def _wait_for_rainbow_datatypes(rainbow_files, period=30):
 
     wait_time = currenttime + timedelta(seconds=period)
     while currenttime <= wait_time:
-        currenttime = datetime.utcnow()
+        currenttime = datetime.now(UTC)
         # for offline testing
         # currenttime = currenttime.replace(
         #    year=2017, month=6, day=14)
@@ -1013,6 +1014,8 @@ def _generate_prod(dataset, cfg, prdname, prdfunc, dsname, voltime, runinfo=None
             s3AccessPolicy = prdcfg.get("s3AccessPolicy", None)
             s3path = prdcfg.get("s3PathWrite", None)
             s3splitext = bool(prdcfg.get("s3SplitExtensionWrite", 0))
+            s3verify = bool(prdcfg.get("s3Verify", 1))
+            s3certificates = prdcfg.get("s3Certificates", "")
             if s3splitext:
                 nextensions = set([os.path.splitext(f)[1] for f in filenames])
             else:
@@ -1033,6 +1036,8 @@ def _generate_prod(dataset, cfg, prdname, prdfunc, dsname, voltime, runinfo=None
                         s3path,
                         s3AccessPolicy,
                         s3splitext,
+                        s3verify,
+                        s3certificates,
                     )
         return False
     except Exception as inst:
@@ -1388,6 +1393,8 @@ def _create_datacfg_dict(cfg):
             and "s3SecretRead" in datacfg
         ):
             datacfg.update({"s3BucketRead": cfg["s3BucketRead"]})
+        datacfg.update({"s3Verify": cfg.get("s3Verify", True)})
+        datacfg.update({"s3Certicates": cfg.get("s3Certicates", True)})
 
     # Modify size of radar or radar spectra object
     datacfg.update({"elmin": cfg.get("elmin", None)})
@@ -1618,6 +1625,10 @@ def _create_prdcfg_dict(cfg, dataset, product, voltime, runinfo=None):
         prdcfg.update({"s3SplitExtensionWrite": cfg["s3SplitExtensionWrite"]})
     if "s3AccessPolicy" in cfg:
         prdcfg.update({"s3AccessPolicy": cfg["s3AccessPolicy"]})
+    if "s3Verify" in cfg:
+        prdcfg.update({"s3Verify": cfg["s3Verify"]})
+    if "s3Certificates" in cfg:
+        prdcfg.update({"s3Certificates": cfg["s3Certificates"]})
     if "RadarBeamwidth" in cfg:
         prdcfg.update({"RadarBeamwidth": cfg["RadarBeamwidth"]})
     if "ppiImageConfig" in cfg:

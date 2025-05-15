@@ -104,6 +104,21 @@ from .io_aux import get_rad4alp_dir, get_scan_files_to_merge
 from .io_aux import get_scan_files_to_merge_s3
 
 
+def _open_s3_client(cfg):
+    if len(cfg["s3certicates"]):
+        s3verify = cfg["s3Certicates"]
+    else:
+        s3verify = cfg["s3Verify"]
+
+    s3_client = boto3.client(
+        endpoint_url=cfg["s3EndpointRead"],
+        aws_access_key_id=cfg["s3KeyRead"],
+        aws_secret_access_key=cfg["s3SecretRead"],
+        verify=s3verify,
+    )
+    return s3_client
+
+
 def get_data(voltime, datatypesdescr, cfg):
     """
     Reads pyrad input data.
@@ -808,7 +823,7 @@ def get_data(voltime, datatypesdescr, cfg):
             radarnr=radarnr,
         )
         radar = add_field(radar, radar_aux)
-        
+
     # add other radar spectra object files
     if ndatatypes_netcdfspectra > 0:
         radar_aux = merge_fields_pyrad_spectra(
@@ -1927,13 +1942,7 @@ def merge_scans_odim(
 
     radar = None
     if "s3BucketRead" in cfg:
-        s3_client = boto3.client(
-            "s3",
-            endpoint_url=cfg["s3EndpointRead"],
-            aws_access_key_id=cfg["s3KeyRead"],
-            aws_secret_access_key=cfg["s3SecretRead"],
-            verify=False,
-        )
+        s3_client = _open_s3_client(cfg)
         daydir = voltime.strftime("%Y-%m-%d")
         datapath = f"{basepath}{daydir}/"
         if not os.path.isdir(datapath):
@@ -2058,13 +2067,7 @@ def merge_scans_odimgrid(
 
     grid = None
     if "s3BucketRead" in cfg:
-        s3_client = boto3.client(
-            "s3",
-            endpoint_url=cfg["s3EndpointRead"],
-            aws_access_key_id=cfg["s3KeyRead"],
-            aws_secret_access_key=cfg["s3SecretRead"],
-            verify=False,
-        )
+        s3_client = _open_s3_client(cfg)
         daydir = voltime.strftime("%Y-%m-%d")
         datapath = f"{basepath}{daydir}/"
         if not os.path.isdir(datapath):
@@ -2196,13 +2199,7 @@ def merge_scans_knmih5_grid(
 
     grid = None
     if "s3BucketRead" in cfg:
-        s3_client = boto3.client(
-            "s3",
-            endpoint_url=cfg["s3EndpointRead"],
-            aws_access_key_id=cfg["s3KeyRead"],
-            aws_secret_access_key=cfg["s3SecretRead"],
-            verify=False,
-        )
+        s3_client = _open_s3_client(cfg)
         daydir = voltime.strftime("%Y-%m-%d")
         datapath = f"{basepath}{daydir}/"
         if not os.path.isdir(datapath):
@@ -2345,13 +2342,7 @@ def merge_scans_odimbirds(
 
     radar = None
     if "s3BucketRead" in cfg:
-        s3_client = boto3.client(
-            "s3",
-            endpoint_url=cfg["s3EndpointRead"],
-            aws_access_key_id=cfg["s3KeyRead"],
-            aws_secret_access_key=cfg["s3SecretRead"],
-            verify=False,
-        )
+        s3_client = _open_s3_client(cfg)
         daydir = voltime.strftime("%Y-%m-%d")
         datapath = f"{basepath}{daydir}/"
         if not os.path.isdir(datapath):
@@ -2489,13 +2480,7 @@ def merge_scans_gamic(
 
     radar = None
     if "s3BucketRead" in cfg:
-        s3_client = boto3.client(
-            "s3",
-            endpoint_url=cfg["s3EndpointRead"],
-            aws_access_key_id=cfg["s3KeyRead"],
-            aws_secret_access_key=cfg["s3SecretRead"],
-            verify=False,
-        )
+        s3_client = _open_s3_client(cfg)
         daydir = voltime.strftime("%Y-%m-%d")
         datapath = f"{basepath}{daydir}/"
         if not os.path.isdir(datapath):
@@ -2803,13 +2788,7 @@ def merge_scans_nexrad2(
 
     radar = None
     if "s3BucketRead" in cfg:
-        s3_client = boto3.client(
-            "s3",
-            endpoint_url=cfg["s3EndpointRead"],
-            aws_access_key_id=cfg["s3KeyRead"],
-            aws_secret_access_key=cfg["s3SecretRead"],
-            verify=False,
-        )
+        s3_client = _open_s3_client(cfg)
         daydir = voltime.strftime("%Y-%m-%d")
         datapath = f"{basepath}{daydir}/"
         if not os.path.isdir(datapath):
@@ -2951,13 +2930,7 @@ def merge_scans_cfradial(
 
     radar = None
     if "s3BucketRead" in cfg:
-        s3_client = boto3.client(
-            "s3",
-            endpoint_url=cfg["s3EndpointRead"],
-            aws_access_key_id=cfg["s3KeyRead"],
-            aws_secret_access_key=cfg["s3SecretRead"],
-            verify=False,
-        )
+        s3_client = _open_s3_client(cfg)
         daydir = voltime.strftime("%Y-%m-%d")
         datapath = f"{basepath}{daydir}/"
         if not os.path.isdir(datapath):
@@ -3105,13 +3078,7 @@ def merge_scans_cfradial2(
 
     radar = None
     if "s3BucketRead" in cfg:
-        s3_client = boto3.client(
-            "s3",
-            endpoint_url=cfg["s3EndpointRead"],
-            aws_access_key_id=cfg["s3KeyRead"],
-            aws_secret_access_key=cfg["s3SecretRead"],
-            verify=False,
-        )
+        s3_client = _open_s3_client(cfg)
         daydir = voltime.strftime("%Y-%m-%d")
         datapath = f"{basepath}{daydir}/"
         if not os.path.isdir(datapath):
@@ -3375,13 +3342,7 @@ def merge_scans_cf1(
 
     radar = None
     if "s3BucketRead" in cfg:
-        s3_client = boto3.client(
-            "s3",
-            endpoint_url=cfg["s3EndpointRead"],
-            aws_access_key_id=cfg["s3KeyRead"],
-            aws_secret_access_key=cfg["s3SecretRead"],
-            verify=False,
-        )
+        s3_client = _open_s3_client(cfg)
         daydir = voltime.strftime("%Y-%m-%d")
         datapath = f"{basepath}{daydir}/"
         if not os.path.isdir(datapath):

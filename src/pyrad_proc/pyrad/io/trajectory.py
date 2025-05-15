@@ -271,10 +271,12 @@ class Trajectory:
         if self._swiss_grid_done:
             return
 
-        (self.swiss_chy, self.swiss_chx, self.swiss_chh) = (
-            pyart.core.wgs84_to_swissCH1903(
-                self.wgs84_lon_deg, self.wgs84_lat_deg, self.wgs84_alt_m
-            )
+        (
+            self.swiss_chy,
+            self.swiss_chx,
+            self.swiss_chh,
+        ) = pyart.core.wgs84_to_swissCH1903(
+            self.wgs84_lon_deg, self.wgs84_lat_deg, self.wgs84_alt_m
         )
 
         self._swiss_grid_done = True
@@ -349,7 +351,7 @@ class Trajectory:
                 try:
                     sday = datetime.datetime.strptime(mm.group(1), "%d-%b-%Y")
                 except Exception as ee:
-                    print(datetime.datetime.utcnow().strftime("%d-%b-%Y"))
+                    print(datetime.datetime.now(datetime.UTC).strftime("%d-%b-%Y"))
                     raise Exception(
                         f"ERROR: Format error in traj file '{self.filename}' "
                         f"on line '{line}' ({str(ee)})"
@@ -474,7 +476,6 @@ class Trajectory:
             dBm = dBm[flashnr_vec_aux == flashnr]
 
         for i, dBm_val in enumerate(dBm):
-
             if not recording_started:
                 if time[i] < self.starttime:
                     continue

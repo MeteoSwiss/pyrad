@@ -84,34 +84,48 @@ print(__doc__)
 
 
 def main():
-    """
-    """
+    """ """
 
     # parse the arguments
-    parser = argparse.ArgumentParser(
-        description='Entry to Pyrad processing framework')
+    parser = argparse.ArgumentParser(description="Entry to Pyrad processing framework")
 
     # positional arguments
     parser.add_argument(
-        'proc_cfgfile', type=str, help='name of main configuration file')
+        "proc_cfgfile", type=str, help="name of main configuration file"
+    )
 
     # keyword arguments
     parser.add_argument(
-        '--starttime', type=str, default=None,
-        help=('starting time of the data to be processed. ' +
-              'Format ''YYYYMMDDhhmmss'''))
+        "--starttime",
+        type=str,
+        default=None,
+        help=(
+            "starting time of the data to be processed. " + "Format "
+            "YYYYMMDDhhmmss"
+            ""
+        ),
+    )
     parser.add_argument(
-        '--endtime', type=str, default=None,
-        help='end time of the data to be processed. Format ''YYYYMMDDhhmmss''')
+        "--endtime",
+        type=str,
+        default=None,
+        help="end time of the data to be processed. Format " "YYYYMMDDhhmmss" "",
+    )
     parser.add_argument(
-        '--cfgpath', type=str,
-        default=os.path.expanduser('~') + '/pyrad/config/processing/',
-        help='configuration file path')
-    parser.add_argument("-i", "--infostr", type=str,
-                        help="Information string about the actual data "
-                        "processing (e.g. 'RUN57'). This string is added "
-                        "to the filenames of the product files.",
-                        default="")
+        "--cfgpath",
+        type=str,
+        default=os.path.expanduser("~") + "/pyrad/config/processing/",
+        help="configuration file path",
+    )
+    parser.add_argument(
+        "-i",
+        "--infostr",
+        type=str,
+        help="Information string about the actual data "
+        "processing (e.g. 'RUN57'). This string is added "
+        "to the filenames of the product files.",
+        default="",
+    )
     parser.add_argument(
         "-g",
         "--gatherplots",
@@ -120,41 +134,47 @@ def main():
         "in the output folder as defined by saveimgbasepath "
         "in the main config file, and will copy all generated "
         "figures in this folder (for convenience)",
-        default=1)
+        default=1,
+    )
     args = parser.parse_args()
 
-    print("====== PYRAD data processing started: %s" %
-          datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"))
-    atexit.register(_print_end_msg,
-                    "====== PYRAD data processing finished: ")
+    print(
+        "====== PYRAD data processing started: %s"
+        % datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+    )
+    atexit.register(_print_end_msg, "====== PYRAD data processing finished: ")
 
-    print('config path: ' + args.cfgpath)
-    print('config file: ' + args.proc_cfgfile)
+    print("config path: " + args.cfgpath)
+    print("config file: " + args.proc_cfgfile)
     if args.starttime is not None:
-        print('start time: ' + args.starttime)
+        print("start time: " + args.starttime)
     else:
-        print('start time not defined by user')
+        print("start time not defined by user")
     if args.endtime is not None:
-        print('end time: ' + args.endtime)
+        print("end time: " + args.endtime)
     else:
-        print('end time not defined by user')
+        print("end time not defined by user")
 
     proc_starttime = None
     if args.starttime is not None:
-        proc_starttime = datetime.datetime.strptime(
-            args.starttime, '%Y%m%d%H%M%S')
+        proc_starttime = datetime.datetime.strptime(args.starttime, "%Y%m%d%H%M%S")
     proc_endtime = None
     if args.endtime is not None:
-        proc_endtime = datetime.datetime.strptime(args.endtime, '%Y%m%d%H%M%S')
+        proc_endtime = datetime.datetime.strptime(args.endtime, "%Y%m%d%H%M%S")
     cfgfile_proc = args.cfgpath + args.proc_cfgfile
     gatherplots = args.gatherplots
-    if args.infostr == 'None':
-        infostr = ''
+    if args.infostr == "None":
+        infostr = ""
     else:
         infostr = args.infostr
 
-    main_gecsx(cfgfile_proc, starttime=proc_starttime, endtime=proc_endtime,
-               infostr=infostr, gather_plots=gatherplots)
+    main_gecsx(
+        cfgfile_proc,
+        starttime=proc_starttime,
+        endtime=proc_endtime,
+        infostr=infostr,
+        gather_plots=gatherplots,
+    )
 
 
 def _print_end_msg(text):
@@ -171,7 +191,7 @@ def _print_end_msg(text):
     Nothing
 
     """
-    print(text + datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"))
+    print(text + datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S"))
 
 
 # ---------------------------------------------------------
