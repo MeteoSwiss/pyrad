@@ -105,8 +105,8 @@ from .io_aux import get_scan_files_to_merge_s3
 
 
 def _open_s3_client(cfg):
-    if len(cfg["s3certicates"]):
-        s3verify = cfg["s3Certicates"]
+    if len(cfg["s3Certificates"]):
+        s3verify = cfg["s3Certificates"]
     else:
         s3verify = cfg["s3Verify"]
 
