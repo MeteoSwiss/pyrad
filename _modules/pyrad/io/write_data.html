@@ -476,6 +476,8 @@
     <span class="n">s3path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">s3accesspolicy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">s3splitext</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">s3verify</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">s3certificates</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Copies a locally stored product to a S3 bucket</span>
@@ -511,6 +513,12 @@
 <span class="sd">        If True, the extension will be added before the filename in the s3 name</span>
 <span class="sd">        For example folderA/folderB/folderC/out.csv will become folderA/folderB/folderC/csv/out.csv</span>
 <span class="sd">        on the S3.</span>
+<span class="sd">    s3verify: bool</span>
+<span class="sd">        If False, ssl verification will be disabled when writing data to S3. Beware this can</span>
+<span class="sd">        be dangerous</span>
+<span class="sd">    s3certificates: str</span>
+<span class="sd">        Path of the certificates used for ssl verification. Only required if</span>
+<span class="sd">        you use custom certificates.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_BOTO3_AVAILABLE</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 not installed, aborting writing to s3&quot;</span><span class="p">)</span>
@@ -548,7 +556,10 @@
         <span class="s2">&quot;endpoint_url&quot;</span><span class="p">:</span> <span class="n">s3endpoint</span><span class="p">,</span>
         <span class="s2">&quot;aws_secret_access_key&quot;</span><span class="p">:</span> <span class="n">aws_secret</span><span class="p">,</span>
     <span class="p">}</span>
-    <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span><span class="s2">&quot;s3&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">s3_client_config</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s3certificates</span><span class="p">):</span>
+        <span class="n">s3verify</span> <span class="o">=</span> <span class="n">s3certificates</span>
+
+    <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span><span class="s2">&quot;s3&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">s3_client_config</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="n">s3verify</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">s3accesspolicy</span><span class="p">:</span>
         <span class="n">ExtraArgs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ACL&quot;</span><span class="p">:</span> <span class="n">s3accesspolicy</span><span class="p">}</span>
     <span class="k">else</span><span class="p">:</span>

@@ -669,10 +669,12 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_swiss_grid_done</span><span class="p">:</span>
             <span class="k">return</span>
 
-        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swiss_chy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chh</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">wgs84_to_swissCH1903</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lon_deg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lat_deg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span>
-            <span class="p">)</span>
+        <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chy</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chx</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chh</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">wgs84_to_swissCH1903</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lon_deg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_lat_deg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wgs84_alt_m</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_swiss_grid_done</span> <span class="o">=</span> <span class="kc">True</span>
@@ -747,7 +749,7 @@
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">sday</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">mm</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%b-%Y&quot;</span><span class="p">)</span>
                 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ee</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%b-%Y&quot;</span><span class="p">))</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">UTC</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%b-%Y&quot;</span><span class="p">))</span>
                     <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;ERROR: Format error in traj file &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39; &quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;on line &#39;</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&#39; (</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>
@@ -872,7 +874,6 @@
             <span class="n">dBm</span> <span class="o">=</span> <span class="n">dBm</span><span class="p">[</span><span class="n">flashnr_vec_aux</span> <span class="o">==</span> <span class="n">flashnr</span><span class="p">]</span>
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dBm_val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dBm</span><span class="p">):</span>
-
             <span class="k">if</span> <span class="ow">not</span> <span class="n">recording_started</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">time</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">starttime</span><span class="p">:</span>
                     <span class="k">continue</span>
