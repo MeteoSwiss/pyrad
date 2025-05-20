@@ -29,7 +29,7 @@ def main():
     """
     print(
         "====== Movie maker started: %s"
-        % datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+        % datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
     )
     atexit.register(_print_end_msg, "====== Movie maker finished: ")
 
@@ -149,7 +149,10 @@ def _print_end_msg(text):
     Nothing
 
     """
-    print(text + datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S"))
+    print(
+        text
+        + datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+    )
 
 
 # ---------------------------------------------------------

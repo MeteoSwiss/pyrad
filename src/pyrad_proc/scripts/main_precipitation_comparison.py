@@ -87,7 +87,7 @@ def main():
 
     print(
         "====== precipitation comparison started: %s"
-        % datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+        % datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
     )
 
     for fpath in fpaths:
@@ -221,7 +221,10 @@ def main():
 
 def _print_end_msg(text):
     """Prints end message."""
-    print(text + datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S"))
+    print(
+        text
+        + datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+    )
 
 
 # ---------------------------------------------------------
