@@ -351,7 +351,11 @@ class Trajectory:
                 try:
                     sday = datetime.datetime.strptime(mm.group(1), "%d-%b-%Y")
                 except Exception as ee:
-                    print(datetime.datetime.now(datetime.UTC).strftime("%d-%b-%Y"))
+                    print(
+                        datetime.datetime.now(datetime.timezone.utc).strftime(
+                            "%d-%b-%Y"
+                        )
+                    )
                     raise Exception(
                         f"ERROR: Format error in traj file '{self.filename}' "
                         f"on line '{line}' ({str(ee)})"
