@@ -36,7 +36,7 @@ import traceback
 import os
 from datetime import datetime
 from datetime import timedelta
-from datetime import UTC
+from datetime import timezone
 import inspect
 import gc
 
@@ -287,7 +287,7 @@ def _get_times_and_traj(
     if starttimes is None and last_state_file is not None:
         filename = glob.glob(last_state_file)
         if not filename:
-            nowtime = datetime.datetime.now(UTC)
+            nowtime = datetime.datetime.now(timezone.utc)
             starttimes = np.array(
                 [
                     (nowtime - timedelta(days=1)).replace(
@@ -303,7 +303,7 @@ def _get_times_and_traj(
         else:
             starttime = read_last_state(last_state_file)
             if starttime is None:
-                nowtime = datetime.datetime.now(UTC)
+                nowtime = datetime.datetime.now(timezone.utc)
                 starttimes = np.array(
                     [
                         (nowtime - timedelta(days=1)).replace(
@@ -320,7 +320,7 @@ def _get_times_and_traj(
                 starttimes = np.array([starttime])
 
     if endtimes is None:
-        endtimes = np.array([datetime.datetime.now(UTC)])
+        endtimes = np.array([datetime.datetime.now(timezone.utc)])
         warn(
             "End Time not defined. Set as {}".format(
                 endtimes[0].strftime("%Y-%m-%d %H:%M:%S")
@@ -684,7 +684,7 @@ def _wait_for_files(nowtime, datacfg, datatype_list, last_processed=None):
     found_all = False
     currenttime = deepcopy(nowtime)
     while currenttime <= wait_time or not found_all:
-        currenttime = datetime.now(UTC)
+        currenttime = datetime.now(timezone.utc)
         # for offline testing
         # currenttime = currenttime.replace(
         #    year=nowtime.year, month=nowtime.month, day=nowtime.day)
@@ -763,7 +763,7 @@ def _wait_for_rainbow_datatypes(rainbow_files, period=30):
         True if all files were present. False otherwise
 
     """
-    currenttime = datetime.now(UTC)
+    currenttime = datetime.now(timezone.utc)
     # for offline testing
     # currenttime = currenttime.replace(
     #     year=2017, month=6, day=14)
@@ -771,7 +771,7 @@ def _wait_for_rainbow_datatypes(rainbow_files, period=30):
 
     wait_time = currenttime + timedelta(seconds=period)
     while currenttime <= wait_time:
-        currenttime = datetime.now(UTC)
+        currenttime = datetime.now(timezone.utc)
         # for offline testing
         # currenttime = currenttime.replace(
         #    year=2017, month=6, day=14)
