@@ -747,14 +747,14 @@ def generate_timeseries_products(dataset, prdcfg):
         )
 
         # find common time stamps
-        ind = np.where(np.in1d(radardate_cum, sensordate_cum))[0]
+        ind = np.where(np.isin(radardate_cum, sensordate_cum))[0]
         if ind.size == 0:
             warn("No sensor data for radar data time stamps")
         radardate_cum2 = radardate_cum[ind]
         radarvalue_cum2 = radarvalue_cum[ind]
         np_radar_cum2 = np_radar_cum[ind]
 
-        ind = np.where(np.in1d(sensordate_cum, radardate_cum2))[0]
+        ind = np.where(np.isin(sensordate_cum, radardate_cum2))[0]
         sensorvalue_cum2 = sensorvalue_cum[ind]
         np_sensor_cum2 = np_sensor_cum[ind]
 

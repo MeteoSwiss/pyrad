@@ -562,7 +562,7 @@ def time_series_statistics(
     df_in = pd.DataFrame(data=val_in_vec, index=pd.DatetimeIndex(t_in_vec))
     df_out = getattr(
         df_in.resample(
-            str(avg_time) + "S", closed="right", label="right", offset=base_time
+            str(avg_time) + "s", closed="right", label="right", offset=base_time
         ),
         method,
     )()
