@@ -1984,7 +1984,7 @@ def get_sensor_data(date, datatype, cfg):
             datafile = files2[0]
         else:
             warn(
-                "Could not find any raingauge file with names {datafile1} or {datafile2}"
+                f"Could not find any raingauge file with names {datafile1} or {datafile2}"
             )
         if datafile.endswith(".gz"):
             with gzip.open(datafile, "rt") as f:
