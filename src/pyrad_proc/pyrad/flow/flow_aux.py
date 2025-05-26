@@ -83,6 +83,17 @@ PROFILE_LEVEL = 0
 os.environ["AWS_REQUEST_CHECKSUM_CALCULATION"] = "when_required"
 os.environ["AWS_RESPONSE_CHECKSUM_VALIDATION"] = "when_required"
 
+# Check s3 write possibility
+S3_WRITE_POSSIBLE = False
+try:
+    S3_KEY_WRITE = os.environ["S3_KEY_WRITE"]
+    S3_SECRET_WRITE = os.environ["S3_SECRET_WRITE"]
+    S3_WRITE_POSSIBLE = True
+except KeyError:
+    warn("In order to be able to write to an S3 bucket " +
+         "you need to define the environment variables S3_KEY_WRITE and S3_SECRET_WRITE  \n" + 
+         "Saving to S3 disabled...")
+    
 
 def profiler(level=1):
     """
@@ -1026,13 +1037,15 @@ def _generate_prod(dataset, cfg, prdname, prdfunc, dsname, voltime, runinfo=None
 
             for fname in filenames:
                 if (
-                    prdcfg["basepath"] in fname
+                    prdcfg["basepath"] in fname and S3_WRITE_POSSIBLE
                 ):  # only products saved to standard basepath
                     write_to_s3(
                         fname,
                         prdcfg["basepath"],
                         prdcfg["s3EndpointWrite"],
                         prdcfg["s3BucketWrite"],
+                        S3_KEY_WRITE,
+                        S3_SECRET_WRITE,
                         s3path,
                         s3AccessPolicy,
                         s3splitext,
