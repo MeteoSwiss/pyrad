@@ -839,7 +839,6 @@ def _get_radars_data(master_voltime, datatypesdescr_list, datacfg, num_radars=1)
             datacfg,
             scan_list=datacfg["ScanList"],
         )
-
         nfiles_ref = len(filelist_ref)
         if nfiles_ref == 0:
             str1 = (

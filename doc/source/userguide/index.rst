@@ -10,5 +10,6 @@ We have a collection of installation, and contribution instructions listed below
    about
    installation
    usage
+   debugging
    contributing
    shortcourses
