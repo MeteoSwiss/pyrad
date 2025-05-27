@@ -27,3 +27,17 @@ def warn(message, use_debug=True):
         print(f"\033[91mException triggered from {trace[idx_warn]}\033[0m")
         parent_frame = inspect.currentframe().f_back
         pdb.Pdb().set_trace(parent_frame)
+
+
+def custom_excepthook(exc_type, exc_value, exc_traceback):
+    # Print the exception
+    traceback.print_exception(exc_type, exc_value, exc_traceback)
+
+    # If the environment variable is set, enter debugger
+    if os.environ.get("PYRAD_DEBUG", False):
+        print("\nStarting pdb due to unhandled exception...\n")
+        pdb.post_mortem(exc_traceback)
+
+
+def enable_debug_on_error():
+    sys.excepthook = custom_excepthook

@@ -3,6 +3,7 @@ Pyrad: The Python Radar Toolkit
 =====================================
 
 """
+import os
 
 # Detect if we're being called as part of Pyrad's setup procedure
 try:
@@ -27,6 +28,11 @@ else:
     from . import prod  # noqa
     from . import util  # noqa
     from . import flow  # noqa
+
+    if os.environ:
+        from .util import enable_debug_on_error
+
+        enable_debug_on_error()
 
     # root level functions
     # non at the moment

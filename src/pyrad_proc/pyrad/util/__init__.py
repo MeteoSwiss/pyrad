@@ -88,7 +88,7 @@ from .radar_utils import get_box_coords, compute_profile_stats  # noqa
 from .radar_utils import compute_average_vad  # noqa
 
 from .stat_utils import quantiles_weighted, ratio_bootstrapping  # noqa
-from .debug_utils import warn  # noqa
+from .debug_utils import warn, enable_debug_on_error  # noqa
 
 from .data_retrieval_utils import retrieve_hzt_prod  # noqa
 from .data_retrieval_utils import retrieve_hzt_RT  # noqa
