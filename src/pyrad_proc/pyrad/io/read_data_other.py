@@ -48,7 +48,7 @@ import datetime
 import pandas as pd
 import csv
 import xml.etree.ElementTree as et
-from warnings import warn
+from ..util import warn
 
 try:
     import fcntl
@@ -1060,27 +1060,25 @@ def read_timeseries(fname):
     try:
         # Read CSV while skipping commented lines
         df = pd.read_csv(
-            fname,
-            comment='#',
-            parse_dates=['date'],
-            usecols=['date', 'value']
+            fname, comment="#", parse_dates=["date"], usecols=["date", "value"]
         )
 
         # Drop duplicate timestamps
-        df = df.drop_duplicates(subset='date')
+        df = df.drop_duplicates(subset="date")
 
-        masked_values = pd.to_numeric(df['value'], errors='coerce')
+        masked_values = pd.to_numeric(df["value"], errors="coerce")
         # Mask fill values
         fill_val = get_fillvalue()
         masked_values = np.ma.masked_values(masked_values.to_numpy(), fill_val)
 
-        return df['date'].tolist(), masked_values
+        return df["date"].tolist(), masked_values
 
     except Exception as e:
         warn(str(e))
-        warn('Unable to read file ' + fname)
+        warn("Unable to read file " + fname)
         return None, None
-    
+
+
 def read_ts_cum(fname):
     """
     Reads a time series of precipitation accumulation contained in a csv file
@@ -1251,12 +1249,18 @@ def read_monitoring_ts(quantiles, fname, sort_by_date=False):
 
         # Read mean values
         geometric_mean_dB = (
-            np.ma.masked_values(df["geometric_mean_dB"].to_numpy(dtype=float), get_fillvalue())
-            if "geometric_mean_dB" in df.columns else np.ma.masked
+            np.ma.masked_values(
+                df["geometric_mean_dB"].to_numpy(dtype=float), get_fillvalue()
+            )
+            if "geometric_mean_dB" in df.columns
+            else np.ma.masked
         )
         linear_mean_dB = (
-            np.ma.masked_values(df["linear_mean_dB"].to_numpy(dtype=float), get_fillvalue())
-            if "linear_mean_dB" in df.columns else np.ma.masked
+            np.ma.masked_values(
+                df["linear_mean_dB"].to_numpy(dtype=float), get_fillvalue()
+            )
+            if "linear_mean_dB" in df.columns
+            else np.ma.masked
         )
 
         return date, np_t, quantile_data, geometric_mean_dB, linear_mean_dB

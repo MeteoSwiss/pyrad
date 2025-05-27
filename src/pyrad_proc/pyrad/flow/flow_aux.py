@@ -31,7 +31,7 @@ Auxiliary functions to control the Pyrad data processing flow
 
 from __future__ import print_function
 import sys
-from warnings import warn
+from ..util import warn
 import traceback
 import os
 from datetime import datetime
@@ -52,7 +52,7 @@ try:
 
     _MPROFILE_AVAILABLE = True
 except ImportError:
-    warn("Memory profiler not available")
+    warn("Memory profiler not available", use_debug=False)
     _MPROFILE_AVAILABLE = False
 
 from pyrad import proc
@@ -74,7 +74,7 @@ from ..prod.product_aux import get_prodgen_func
 try:
     import dask
 except ImportError:
-    warn("dask not available: The processing will not be parallelized")
+    warn("dask not available: The processing will not be parallelized", use_debug=False)
 
 PROFILE_LEVEL = 0
 
@@ -90,10 +90,12 @@ try:
     S3_SECRET_WRITE = os.environ["S3_SECRET_WRITE"]
     S3_WRITE_POSSIBLE = True
 except KeyError:
-    warn("In order to be able to write to an S3 bucket " +
-         "you need to define the environment variables S3_KEY_WRITE and S3_SECRET_WRITE  \n" + 
-         "Saving to S3 disabled...")
-    
+    warn(
+        "In order to be able to write to an S3 bucket "
+        + "you need to define the environment variables S3_KEY_WRITE and S3_SECRET_WRITE  \n"
+        + "Saving to S3 disabled..."
+    )
+
 
 def profiler(level=1):
     """

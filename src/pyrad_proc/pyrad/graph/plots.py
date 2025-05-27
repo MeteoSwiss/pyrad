@@ -30,7 +30,7 @@ from ..util.radar_utils import compute_quantiles_from_hist
 from .plots_aux import get_colobar_label, get_field_name, get_norm
 import pyart
 import matplotlib.pyplot as plt
-from warnings import warn
+from ..util import warn
 
 import numpy as np
 

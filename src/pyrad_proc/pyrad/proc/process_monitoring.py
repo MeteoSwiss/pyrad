@@ -19,7 +19,7 @@ Functions for monitoring of the polarimetric variables
 """
 
 from copy import deepcopy
-from warnings import warn
+from ..util import warn
 import numpy as np
 
 import pyart
@@ -1778,19 +1778,19 @@ def process_monitoring(procstatus, dscfg, radar_list=None):
                     ] = radar.fields[field_name]["data"][
                         ind_start_old : ind_start_old + nrays_sweep, :
                     ]
-                    radar_aux.azimuth["data"][ind_start_new : ind_end_new + 1] = (
-                        radar.azimuth["data"][
-                            ind_start_old : ind_start_old + nrays_sweep
-                        ]
-                    )
-                    radar_aux.elevation["data"][ind_start_new : ind_end_new + 1] = (
-                        radar.elevation["data"][
-                            ind_start_old : ind_start_old + nrays_sweep
-                        ]
-                    )
-                    radar_aux.time["data"][ind_start_new : ind_end_new + 1] = (
-                        radar.time["data"][ind_start_old : ind_start_old + nrays_sweep]
-                    )
+                    radar_aux.azimuth["data"][
+                        ind_start_new : ind_end_new + 1
+                    ] = radar.azimuth["data"][
+                        ind_start_old : ind_start_old + nrays_sweep
+                    ]
+                    radar_aux.elevation["data"][
+                        ind_start_new : ind_end_new + 1
+                    ] = radar.elevation["data"][
+                        ind_start_old : ind_start_old + nrays_sweep
+                    ]
+                    radar_aux.time["data"][
+                        ind_start_new : ind_end_new + 1
+                    ] = radar.time["data"][ind_start_old : ind_start_old + nrays_sweep]
 
         radar_hist = deepcopy(radar_aux)
         radar_hist.fields = dict()

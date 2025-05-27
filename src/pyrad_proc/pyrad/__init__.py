@@ -16,22 +16,6 @@ if __PYRAD_SETUP__:
     _sys.stderr.write("Running from Pyrad source directory.\n")
     del _sys
 else:
-
-    # Make sure that deprecation warnings get printed by default
-    import warnings as _warnings
-
-    _warnings.simplefilter("always", DeprecationWarning)
-
-
-    ORANGE = "\033[38;5;208m"
-    RESET = "\033[0m"
-
-    def orange_warning_format(message, category, filename, lineno, file=None, line=None):
-        print(f"{ORANGE}{category.__name__}:{message}\n{RESET}")
-
-
-    _warnings.showwarning = orange_warning_format
-
     # print out helpful message if build fails or importing from source tree
     # fvj built not checked for the moment
     # from . import __check_build

@@ -24,7 +24,7 @@ the product generation functions.
     TargetRadar
 """
 
-from warnings import warn
+from ..util import warn
 import gc
 from copy import deepcopy
 

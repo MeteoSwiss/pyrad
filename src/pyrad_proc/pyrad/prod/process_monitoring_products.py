@@ -12,7 +12,7 @@ Functions for obtaining Pyrad products from monitoring datasets
 """
 
 from copy import deepcopy
-from warnings import warn
+from ..util import warn
 import os
 
 import numpy as np

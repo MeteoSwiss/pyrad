@@ -47,7 +47,7 @@ import sys
 sys.stdout.reconfigure(line_buffering=True)
 
 import traceback
-from warnings import warn
+from pyrad.util import warn
 
 from pyrad.flow.flow_control import main_cosmo_rt
 

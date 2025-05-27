@@ -24,7 +24,7 @@ import sys
 sys.stdout.reconfigure(line_buffering=True)
 
 import glob
-from warnings import warn
+from pyrad.util import warn
 
 import numpy as np
 

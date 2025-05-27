@@ -17,7 +17,7 @@ Functions to plot data in a Cartesian grid format
     plot_dda_slice
 """
 
-from warnings import warn
+from ..util import warn
 from copy import deepcopy
 
 import numpy as np

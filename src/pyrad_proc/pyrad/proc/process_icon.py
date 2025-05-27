@@ -20,7 +20,7 @@ Functions to manage icon data
 """
 
 from copy import deepcopy
-from warnings import warn
+from ..util import warn
 import glob
 import os
 

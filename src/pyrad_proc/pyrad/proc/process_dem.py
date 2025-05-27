@@ -14,7 +14,7 @@ Functions to manage DEM data
 """
 
 from copy import deepcopy
-from warnings import warn
+from ..util import warn
 
 import numpy as np
 

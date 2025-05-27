@@ -55,7 +55,7 @@ import glob
 import csv
 import os
 
-from warnings import warn
+from ..util import warn
 import smtplib
 from email.message import EmailMessage
 
@@ -83,7 +83,10 @@ try:
 
     _BOTO3_AVAILABLE = True
 except ImportError:
-    warn("boto3 is not installed, no copy to S3 bucket will be performed!")
+    warn(
+        "boto3 is not installed, no copy to S3 bucket will be performed!",
+        use_debug=False,
+    )
     _BOTO3_AVAILABLE = False
 
 
@@ -92,7 +95,7 @@ def write_to_s3(
     basepath,
     s3endpoint,
     s3bucket,
-    s3key, 
+    s3key,
     s3secret,
     s3path="",
     s3accesspolicy=None,

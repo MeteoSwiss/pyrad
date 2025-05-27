@@ -16,7 +16,7 @@ Functions for reading data derived from Digital Elevation Models (DEM)
 """
 
 import pathlib
-from warnings import warn
+from ..util import warn
 import numpy as np
 from scipy.interpolate import RegularGridInterpolator
 

@@ -19,7 +19,7 @@ Functions for monitoring data quality and correct bias and noise effects
 """
 
 from copy import deepcopy
-from warnings import warn
+from ..util import warn
 import numpy as np
 import importlib
 
@@ -248,9 +248,16 @@ def process_gc_monitoring(procstatus, dscfg, radar_list=None):
     if procstatus == 0:
         savedir = dscfg["excessgatespath"]
         fname = dscfg["excessgates_fname"]
-        ray_ind, rng_ind, ele, azi, rng, nsamples, occurrence, freq_occu = (
-            read_excess_gates(savedir + fname)
-        )
+        (
+            ray_ind,
+            rng_ind,
+            ele,
+            azi,
+            rng,
+            nsamples,
+            occurrence,
+            freq_occu,
+        ) = read_excess_gates(savedir + fname)
 
         dscfg["global_data"] = {
             "ray_ind": ray_ind,
@@ -346,7 +353,7 @@ def process_gc_monitoring(procstatus, dscfg, radar_list=None):
         radar_aux.nrays = 1
         radar_aux.sweep_end_ray_index["data"] *= 0
         radar_aux.sweep_start_ray_index["data"] *= 0
-        
+
         field_dict = pyart.config.get_metadata(field_name)
         field_dict["data"] = np.ma.zeros((1, nbins), dtype=int)
 
@@ -1407,7 +1414,6 @@ def process_sun_hits(procstatus, dscfg, radar_list=None):
         sf_ref = np.ma.asarray(np.ma.masked)
         ref_time = None
         if "wavelen" in dscfg["global_data"]:
-
             flx_dt, flx_val = read_solar_flux(dscfg["solarfluxpath"] + "fluxtable.txt")
 
             if flx_dt is not None:
@@ -2056,7 +2062,6 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
     sf_ref = np.ma.asarray(np.ma.masked)
     ref_time = None
     if "wavelen" in dscfg["global_data"]:
-
         flx_dt, flx_val = read_solar_flux(dscfg["solarfluxpath"] + "fluxtable.txt")
 
         if flx_dt is not None:
@@ -2238,7 +2243,6 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
             sf_ref = np.ma.asarray(np.ma.masked)
             ref_time = None
             if "wavelen" in dscfg["global_data"]:
-
                 flx_dt, flx_val = read_solar_flux(
                     dscfg["solarfluxpath"] + "fluxtable.txt"
                 )

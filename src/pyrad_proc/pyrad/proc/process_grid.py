@@ -23,7 +23,7 @@ Functions to processes gridded data.
 """
 
 from copy import deepcopy
-from warnings import warn
+from ..util import warn
 import datetime
 import numpy as np
 import scipy

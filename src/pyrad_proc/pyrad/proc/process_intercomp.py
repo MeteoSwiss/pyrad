@@ -21,7 +21,7 @@ Functions used in the inter-comparison between radars
 """
 
 from copy import deepcopy
-from warnings import warn
+from ..util import warn
 import datetime
 import numpy as np
 import scipy
@@ -2056,7 +2056,7 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
 
         radar1 = radar_list[ind_radar_list[0]]
         radar2 = radar_list[ind_radar_list[1]]
-        
+
         dscfg["global_data"].update({"timeinfo": dscfg["timeinfo"]})
 
         if radar1 is None or radar2 is None:
@@ -2371,7 +2371,7 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
         )
 
         fname = savedir + fname[0]
-    
+
         (
             rad1_time,
             rad1_ray_ind,
@@ -2392,7 +2392,7 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             rad2_phi,
             rad2_flag,
         ) = read_colocated_data_time_avg(fname)
-        
+
         if rad1_time is None:
             return None, None
 

@@ -137,9 +137,7 @@ def main():
                 np_radar = np.append(np_radar, np_radar_aux)
                 val_sensor = np.ma.append(val_sensor, sensor_value_aux)
                 np_sensor = np.append(np_sensor, np_sensor_aux)
-            import pdb
 
-            pdb.set_trace()
             # filter out undesired data
             ind = np.where(
                 np.logical_and(

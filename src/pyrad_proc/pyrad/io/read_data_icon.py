@@ -19,7 +19,7 @@ Functions for reading icon data
 
 """
 
-from warnings import warn
+from ..util import warn
 import numpy as np
 from scipy.interpolate import NearestNDInterpolator
 from scipy.spatial import cKDTree
@@ -167,10 +167,18 @@ def icon2radar_coord(radar, icon_coord, slice_xy=True, slice_z=False, field_name
 
     x_radar, y_radar, z_radar = _put_radar_in_swiss_coord(radar)
 
-    (x_icon, y_icon, z_icon, ind_xmin, ind_ymin, ind_zmin, ind_xmax, ind_ymax, _) = (
-        _prepare_for_interpolation(
-            x_radar, y_radar, z_radar, icon_coord, slice_xy=slice_xy, slice_z=slice_z
-        )
+    (
+        x_icon,
+        y_icon,
+        z_icon,
+        ind_xmin,
+        ind_ymin,
+        ind_zmin,
+        ind_xmax,
+        ind_ymax,
+        _,
+    ) = _prepare_for_interpolation(
+        x_radar, y_radar, z_radar, icon_coord, slice_xy=slice_xy, slice_z=slice_z
     )
 
     print("Generating tree")

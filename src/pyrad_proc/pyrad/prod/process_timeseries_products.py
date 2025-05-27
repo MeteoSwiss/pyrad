@@ -12,7 +12,7 @@ Functions for obtaining Pyrad products from a time series datasets
 """
 
 from copy import deepcopy
-from warnings import warn
+from ..util import warn
 
 import numpy as np
 from netCDF4 import num2date

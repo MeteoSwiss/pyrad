@@ -15,7 +15,7 @@ Functions for reading iso-0 data from MétéoFrance models
 
 """
 
-from warnings import warn
+from ..util import warn
 import datetime
 import numpy as np
 from scipy.interpolate import interp1d
@@ -280,7 +280,6 @@ def read_iso0_mf_data(fname):
     """
     try:
         with open(fname, "r") as iso0file:
-
             run_time = []
             fcst_time = []
             npoints_iso0 = []

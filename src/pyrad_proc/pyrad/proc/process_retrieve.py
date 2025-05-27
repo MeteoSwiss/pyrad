@@ -28,7 +28,7 @@ Functions for retrieving new moments and products
 
 import datetime
 from copy import deepcopy
-from warnings import warn
+from ..util import warn
 
 import numpy as np
 
@@ -1237,84 +1237,92 @@ def process_vpr(procstatus, dscfg, radar_list=None):
     corr_field = "vpr_correction"
 
     if spatialised:
-        refl_corr, vpr_corr, vpr_theo_dict, radar_rhi, vpr_info = (
-            pyart.correct.correct_vpr_spatialised(
-                radar,
-                nvalid_min=nvalid_min,
-                angle_min=angle_min,
-                angle_max=angle_max,
-                ml_thickness_min=ml_thickness_min,
-                ml_thickness_max=ml_thickness_max,
-                ml_thickness_step=ml_thickness_step,
-                iso0_max=iso0_max,
-                ml_top_diff_max=ml_top_diff_max,
-                ml_top_step=ml_top_step,
-                ml_peak_min=ml_peak_min,
-                ml_peak_max=ml_peak_max,
-                ml_peak_step=ml_peak_step,
-                dr_min=dr_min,
-                dr_max=dr_max,
-                dr_step=dr_step,
-                dr_default=dr_default,
-                dr_alt=dr_alt,
-                h_max=h_max,
-                h_corr_max=h_corr_max,
-                h_res=h_res,
-                max_weight=max_weight,
-                rmin_obs=rmin_obs,
-                rmax_obs=rmax_obs,
-                iso0=iso0,
-                correct_iso0=correct_iso0,
-                weight_mem=weight_mem,
-                vpr_theo_dict_mem=vpr_theo_dict_mem,
-                radar_mem_list=radar_mem_list,
-                refl_field=refl_field,
-                corr_refl_field=corr_refl_field,
-                corr_field=corr_field,
-                temp_field=temp_field,
-                iso0_field=iso0_field,
-                temp_ref=temp_ref,
-            )
+        (
+            refl_corr,
+            vpr_corr,
+            vpr_theo_dict,
+            radar_rhi,
+            vpr_info,
+        ) = pyart.correct.correct_vpr_spatialised(
+            radar,
+            nvalid_min=nvalid_min,
+            angle_min=angle_min,
+            angle_max=angle_max,
+            ml_thickness_min=ml_thickness_min,
+            ml_thickness_max=ml_thickness_max,
+            ml_thickness_step=ml_thickness_step,
+            iso0_max=iso0_max,
+            ml_top_diff_max=ml_top_diff_max,
+            ml_top_step=ml_top_step,
+            ml_peak_min=ml_peak_min,
+            ml_peak_max=ml_peak_max,
+            ml_peak_step=ml_peak_step,
+            dr_min=dr_min,
+            dr_max=dr_max,
+            dr_step=dr_step,
+            dr_default=dr_default,
+            dr_alt=dr_alt,
+            h_max=h_max,
+            h_corr_max=h_corr_max,
+            h_res=h_res,
+            max_weight=max_weight,
+            rmin_obs=rmin_obs,
+            rmax_obs=rmax_obs,
+            iso0=iso0,
+            correct_iso0=correct_iso0,
+            weight_mem=weight_mem,
+            vpr_theo_dict_mem=vpr_theo_dict_mem,
+            radar_mem_list=radar_mem_list,
+            refl_field=refl_field,
+            corr_refl_field=corr_refl_field,
+            corr_field=corr_field,
+            temp_field=temp_field,
+            iso0_field=iso0_field,
+            temp_ref=temp_ref,
         )
     else:
-        refl_corr, vpr_corr, vpr_theo_dict, radar_rhi, vpr_info = (
-            pyart.correct.correct_vpr(
-                radar,
-                nvalid_min=nvalid_min,
-                angle_min=angle_min,
-                angle_max=angle_max,
-                ml_thickness_min=ml_thickness_min,
-                ml_thickness_max=ml_thickness_max,
-                ml_thickness_step=ml_thickness_step,
-                iso0_max=iso0_max,
-                ml_top_diff_max=ml_top_diff_max,
-                ml_top_step=ml_top_step,
-                ml_peak_min=ml_peak_min,
-                ml_peak_max=ml_peak_max,
-                ml_peak_step=ml_peak_step,
-                dr_min=dr_min,
-                dr_max=dr_max,
-                dr_step=dr_step,
-                dr_default=dr_default,
-                dr_alt=dr_alt,
-                h_max=h_max,
-                h_corr_max=h_corr_max,
-                h_res=h_res,
-                max_weight=max_weight,
-                rmin_obs=rmin_obs,
-                rmax_obs=rmax_obs,
-                iso0=iso0,
-                filter_params=filter_params,
-                weight_mem=weight_mem,
-                vpr_theo_dict_mem=vpr_theo_dict_mem,
-                radar_mem_list=radar_mem_list,
-                refl_field=refl_field,
-                corr_refl_field=corr_refl_field,
-                corr_field=corr_field,
-                temp_field=temp_field,
-                iso0_field=iso0_field,
-                temp_ref=temp_ref,
-            )
+        (
+            refl_corr,
+            vpr_corr,
+            vpr_theo_dict,
+            radar_rhi,
+            vpr_info,
+        ) = pyart.correct.correct_vpr(
+            radar,
+            nvalid_min=nvalid_min,
+            angle_min=angle_min,
+            angle_max=angle_max,
+            ml_thickness_min=ml_thickness_min,
+            ml_thickness_max=ml_thickness_max,
+            ml_thickness_step=ml_thickness_step,
+            iso0_max=iso0_max,
+            ml_top_diff_max=ml_top_diff_max,
+            ml_top_step=ml_top_step,
+            ml_peak_min=ml_peak_min,
+            ml_peak_max=ml_peak_max,
+            ml_peak_step=ml_peak_step,
+            dr_min=dr_min,
+            dr_max=dr_max,
+            dr_step=dr_step,
+            dr_default=dr_default,
+            dr_alt=dr_alt,
+            h_max=h_max,
+            h_corr_max=h_corr_max,
+            h_res=h_res,
+            max_weight=max_weight,
+            rmin_obs=rmin_obs,
+            rmax_obs=rmax_obs,
+            iso0=iso0,
+            filter_params=filter_params,
+            weight_mem=weight_mem,
+            vpr_theo_dict_mem=vpr_theo_dict_mem,
+            radar_mem_list=radar_mem_list,
+            refl_field=refl_field,
+            corr_refl_field=corr_refl_field,
+            corr_field=corr_field,
+            temp_field=temp_field,
+            iso0_field=iso0_field,
+            temp_ref=temp_ref,
         )
 
     # prepare for exit
@@ -1758,13 +1766,14 @@ def process_rainfall_accumulation(procstatus, dscfg, radar_list=None):
         if "radar_out" not in dscfg["global_data"]:
             if period != -1:
                 # get start and stop times of new radar object
-                (dscfg["global_data"]["starttime"], dscfg["global_data"]["endtime"]) = (
-                    time_avg_range(
-                        dscfg["timeinfo"],
-                        dscfg["global_data"]["starttime"],
-                        dscfg["global_data"]["endtime"],
-                        period,
-                    )
+                (
+                    dscfg["global_data"]["starttime"],
+                    dscfg["global_data"]["endtime"],
+                ) = time_avg_range(
+                    dscfg["timeinfo"],
+                    dscfg["global_data"]["starttime"],
+                    dscfg["global_data"]["endtime"],
+                    period,
                 )
 
                 # check if volume time older than starttime
@@ -1777,7 +1786,6 @@ def process_rainfall_accumulation(procstatus, dscfg, radar_list=None):
 
         # still accumulating: add field to global field
         if period == -1 or dscfg["timeinfo"] < dscfg["global_data"]["endtime"]:
-
             if period == -1:
                 dscfg["global_data"]["endtime"] = dscfg["timeinfo"]
 
@@ -1822,13 +1830,14 @@ def process_rainfall_accumulation(procstatus, dscfg, radar_list=None):
         dscfg["global_data"].pop("radar_out", None)
 
         # get start and stop times of new radar object
-        dscfg["global_data"]["starttime"], dscfg["global_data"]["endtime"] = (
-            time_avg_range(
-                dscfg["timeinfo"],
-                dscfg["global_data"]["starttime"],
-                dscfg["global_data"]["endtime"],
-                period,
-            )
+        (
+            dscfg["global_data"]["starttime"],
+            dscfg["global_data"]["endtime"],
+        ) = time_avg_range(
+            dscfg["timeinfo"],
+            dscfg["global_data"]["starttime"],
+            dscfg["global_data"]["endtime"],
+            period,
         )
 
         # check if volume time older than starttime

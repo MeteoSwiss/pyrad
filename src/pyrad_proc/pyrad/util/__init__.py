@@ -12,7 +12,7 @@ Radar Utilities
 
 .. autosummary::
     :toctree: generated/
-    
+
     time_avg_range
     get_closest_solar_flux
     create_sun_hits_field
@@ -51,7 +51,7 @@ Statistical Utilities
 
 .. autosummary::
     :toctree: generated/
-    
+
     quantiles_weighted
     ratio_bootstrapping
 
@@ -60,7 +60,7 @@ Data Retrieval Utilities
 
 .. autosummary::
     :toctree: generated/
-    
+
     retrieve_hzt_prod
     retrieve_hzt_RT
     retrieve_mch_prod
@@ -88,6 +88,7 @@ from .radar_utils import get_box_coords, compute_profile_stats  # noqa
 from .radar_utils import compute_average_vad  # noqa
 
 from .stat_utils import quantiles_weighted, ratio_bootstrapping  # noqa
+from .debug_utils import warn  # noqa
 
 from .data_retrieval_utils import retrieve_hzt_prod  # noqa
 from .data_retrieval_utils import retrieve_hzt_RT  # noqa

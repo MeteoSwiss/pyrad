@@ -20,7 +20,7 @@ Functions for obtaining Pyrad products from the datasets
 
 import matplotlib.pyplot as plt
 from copy import deepcopy
-from warnings import warn
+from ..util import warn
 import os
 
 import numpy as np

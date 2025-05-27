@@ -58,7 +58,7 @@ import glob
 import datetime
 import platform
 import os
-from warnings import warn
+from ..util import warn
 from copy import deepcopy
 
 import numpy as np
@@ -88,7 +88,10 @@ try:
 
     _BOTO3_AVAILABLE = True
 except ImportError:
-    warn("boto3 is not installed, data cannot be retrieved from S3 buckets!")
+    warn(
+        "boto3 is not installed, data cannot be retrieved from S3 buckets!",
+        use_debug=False,
+    )
     _BOTO3_AVAILABLE = False
 
 from .read_data_other import read_status, read_rad4alp_icon, read_rad4alp_vis

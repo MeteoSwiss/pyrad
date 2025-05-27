@@ -16,7 +16,7 @@ functions to control the Pyrad data processing flow
 
 from __future__ import print_function
 import warnings
-from warnings import warn
+from ..util import warn
 import traceback
 import os
 from datetime import datetime
@@ -53,7 +53,7 @@ try:
 
     _DASK_AVAILABLE = True
 except ImportError:
-    warn("dask not available: The processing will not be parallelized")
+    warn("dask not available: The processing will not be parallelized", use_debug=False)
     _DASK_AVAILABLE = False
 
 
