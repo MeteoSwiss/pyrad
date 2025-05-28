@@ -118,6 +118,9 @@ RSL_PATH
     Path to the RSL library which is used by some routines of Py-ART. Please be aware that this library is deprecated, and the Py-ART is currently
     working on an alternative.
 
+PYRAD_DEBUG
+    If you set the value of this environment variable to 1, the pdb debugger will be automatically started if any exception or warning is triggered during the execution of pyrad
+
 A good way to avoid redefining these environment variables everytime you want to use Pyrad/Py-ART, is to define them in your .bashrc file.
 
 
@@ -155,14 +158,14 @@ From the source
 Getting the code
 """""""""""""""""""""""""
 
-To get a copy of the Pyrad superproject simply place yourself in the  desired working directory (It is strongly recommended to use your $HOME in order to be able to use 
+To get a copy of the Pyrad superproject simply place yourself in the  desired working directory (It is strongly recommended to use your $HOME in order to be able to use
 some of the Pyrad tools) and type::
 
-        git clone --recursive https://github.com/MeteoSwiss/pyrad.git 
+        git clone --recursive https://github.com/MeteoSwiss/pyrad.git
 
 The recursive keyword fetches automatically all the submodules depending on the main superproject.
 
-Regular users should use the “master” branches of both Pyrad and Py-ART. To check that you use 
+Regular users should use the “master” branches of both Pyrad and Py-ART. To check that you use
 the “master” branch of Pyrad place yourself in the root directory of the project and type::
         git branch
 
@@ -170,10 +173,10 @@ And eventually::
 
         git checkout master
 
-And to check that you use the “master” branch of Py-ART go to the directory src/pyart and repeat the 
+And to check that you use the “master” branch of Py-ART go to the directory src/pyart and repeat the
 procedure above
 
-MeteoSwiss developers should use instead the “dev” branch for both Pyrad and Py-ART. PyTDA only 
+MeteoSwiss developers should use instead the “dev” branch for both Pyrad and Py-ART. PyTDA only
 has a master branch.
 
 Compilation
@@ -185,19 +188,17 @@ For the initial compilation of the software activate the conda environment, i.e.
 Then go to pyrad/src and execute::
         make_all.sh
 
-This command takes care of compiling, Py-ART, PyTDA and Pyrad. To compile them separately you 
+This command takes care of compiling, Py-ART, PyTDA and Pyrad. To compile them separately you
 can use the scripts make_pyart.sh, make_pytda.sh and make_pyrad.sh or compile them separately by moving to all subdirectory of pyrad/src and run::
 
-        python -m pip install . 
+        python -m pip install .
 
 
-Py-ART has a default config file called default_config.py located in folder pyart. If you would like to 
-work with a different config file you have to specify the location in the variable PYART_CONFIG in 
-your conda environment file. 
+Py-ART has a default config file called default_config.py located in folder pyart. If you would like to
+work with a different config file you have to specify the location in the variable PYART_CONFIG in
+your conda environment file.
 
 For example::
         export PYART_CONFIG= [Pyrad_path]/config/pyart/mch_config.py
 
 The Pyrad library has its own config file in the aforementioned path
-
-
