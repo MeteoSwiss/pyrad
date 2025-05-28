@@ -1223,7 +1223,7 @@ def _create_cfg_dict(cfgfile):
             cfg[param] = [cfg[param]]
 
     # Convert the following ints to int arrays
-    intarr_list = ["MasterScanTimeTol", "ScanPeriod"]
+    intarr_list = ["MasterScanTimeTol"]
     for param in intarr_list:
         if param in cfg and isinstance(cfg[param], int):
             cfg[param] = [cfg[param]]
