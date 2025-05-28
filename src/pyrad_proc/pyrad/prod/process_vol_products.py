@@ -12,7 +12,7 @@ Functions for obtaining Pyrad products from a radar volume dataset
 """
 
 from copy import deepcopy
-from warnings import warn
+from ..util import warn
 import os
 
 import numpy as np

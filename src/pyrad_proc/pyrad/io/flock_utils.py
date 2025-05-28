@@ -9,7 +9,7 @@ except ModuleNotFoundError:
 
 import os
 import time
-from warnings import warn
+from ..util import warn
 import errno
 
 

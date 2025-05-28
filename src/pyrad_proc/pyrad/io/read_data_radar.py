@@ -58,7 +58,7 @@ import glob
 import datetime
 import platform
 import os
-from warnings import warn
+from ..util import warn
 from copy import deepcopy
 
 import numpy as np
@@ -88,7 +88,10 @@ try:
 
     _BOTO3_AVAILABLE = True
 except ImportError:
-    warn("boto3 is not installed, data cannot be retrieved from S3 buckets!")
+    warn(
+        "boto3 is not installed, data cannot be retrieved from S3 buckets!",
+        use_debug=False,
+    )
     _BOTO3_AVAILABLE = False
 
 from .read_data_other import read_status, read_rad4alp_icon, read_rad4alp_vis
@@ -818,7 +821,7 @@ def get_data(voltime, datatypesdescr, cfg):
             cfg["psrpath"][ind_rad],
             cfg["ScanList"][ind_rad],
             voltime,
-            cfg["ScanPeriod"],
+            cfg["ScanPeriod"][ind_rad],
             datatype_psr,
             cfg,
             radarnr=radarnr,
@@ -1922,7 +1925,7 @@ def merge_scans_odim(
             cfg,
             path_convention=cfg["path_convention"][ind_rad],
             master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
-            scan_period=cfg["ScanPeriod"],
+            scan_period=cfg["ScanPeriod"][ind_rad],
         )
     else:
         fname_list, scan_list_aux = get_scan_files_to_merge(
@@ -1934,7 +1937,7 @@ def merge_scans_odim(
             dataset_list,
             path_convention=cfg["path_convention"][ind_rad],
             master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
-            scan_period=cfg["ScanPeriod"],
+            scan_period=cfg["ScanPeriod"][ind_rad],
         )
 
     if not fname_list:
@@ -2322,7 +2325,7 @@ def merge_scans_odimbirds(
             cfg,
             path_convention=cfg["path_convention"][ind_rad],
             master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
-            scan_period=cfg["ScanPeriod"],
+            scan_period=cfg["ScanPeriod"][ind_rad],
         )
     else:
         fname_list, scan_list_aux = get_scan_files_to_merge(
@@ -2334,7 +2337,7 @@ def merge_scans_odimbirds(
             dataset_list,
             path_convention=cfg["path_convention"][ind_rad],
             master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
-            scan_period=cfg["ScanPeriod"],
+            scan_period=cfg["ScanPeriod"][ind_rad],
         )
 
     if not fname_list:
@@ -2460,7 +2463,7 @@ def merge_scans_gamic(
             cfg,
             path_convention=cfg["path_convention"][ind_rad],
             master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
-            scan_period=cfg["ScanPeriod"],
+            scan_period=cfg["ScanPeriod"][ind_rad],
         )
     else:
         fname_list, _ = get_scan_files_to_merge(
@@ -2472,7 +2475,7 @@ def merge_scans_gamic(
             dataset_list,
             path_convention=cfg["path_convention"][ind_rad],
             master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
-            scan_period=cfg["ScanPeriod"],
+            scan_period=cfg["ScanPeriod"][ind_rad],
         )
 
     if not fname_list:
@@ -2606,14 +2609,15 @@ def merge_scans_mfcfradial(
                     if (
                         voltime
                         <= fdatetime
-                        < voltime + datetime.timedelta(minutes=cfg["ScanPeriod"])
+                        < voltime
+                        + datetime.timedelta(minutes=cfg["ScanPeriod"][ind_rad])
                     ):
                         filename = [filename_aux]
                         print(os.path.basename(filename[0]))
                         break
                 else:
                     if (
-                        voltime - datetime.timedelta(minutes=cfg["ScanPeriod"])
+                        voltime - datetime.timedelta(minutes=cfg["ScanPeriod"][ind_rad])
                         < fdatetime
                         <= voltime
                     ):
@@ -2768,7 +2772,7 @@ def merge_scans_nexrad2(
             cfg,
             path_convention=cfg["path_convention"][ind_rad],
             master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
-            scan_period=cfg["ScanPeriod"],
+            scan_period=cfg["ScanPeriod"][ind_rad],
         )
     else:
         fname_list, _ = get_scan_files_to_merge(
@@ -2780,7 +2784,7 @@ def merge_scans_nexrad2(
             dataset_list,
             path_convention=cfg["path_convention"][ind_rad],
             master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
-            scan_period=cfg["ScanPeriod"],
+            scan_period=cfg["ScanPeriod"][ind_rad],
         )
 
     if not fname_list:
@@ -2910,7 +2914,7 @@ def merge_scans_cfradial(
             cfg,
             path_convention=cfg["path_convention"][ind_rad],
             master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
-            scan_period=cfg["ScanPeriod"],
+            scan_period=cfg["ScanPeriod"][ind_rad],
         )
     else:
         fname_list, _ = get_scan_files_to_merge(
@@ -2922,7 +2926,7 @@ def merge_scans_cfradial(
             dataset_list,
             path_convention=cfg["path_convention"][ind_rad],
             master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
-            scan_period=cfg["ScanPeriod"],
+            scan_period=cfg["ScanPeriod"][ind_rad],
         )
 
     if not fname_list:
@@ -3058,7 +3062,7 @@ def merge_scans_cfradial2(
             cfg,
             path_convention=cfg["path_convention"][ind_rad],
             master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
-            scan_period=cfg["ScanPeriod"],
+            scan_period=cfg["ScanPeriod"][ind_rad],
         )
     else:
         fname_list, _ = get_scan_files_to_merge(
@@ -3070,7 +3074,7 @@ def merge_scans_cfradial2(
             dataset_list,
             path_convention=cfg["path_convention"][ind_rad],
             master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
-            scan_period=cfg["ScanPeriod"],
+            scan_period=cfg["ScanPeriod"][ind_rad],
         )
 
     if not fname_list:
@@ -3322,7 +3326,7 @@ def merge_scans_cf1(
             cfg,
             path_convention=cfg["path_convention"][ind_rad],
             master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
-            scan_period=cfg["ScanPeriod"],
+            scan_period=cfg["ScanPeriod"][ind_rad],
         )
     else:
         fname_list, _ = get_scan_files_to_merge(
@@ -3334,7 +3338,7 @@ def merge_scans_cf1(
             dataset_list,
             path_convention=cfg["path_convention"][ind_rad],
             master_scan_time_tol=cfg["MasterScanTimeTol"][ind_rad],
-            scan_period=cfg["ScanPeriod"],
+            scan_period=cfg["ScanPeriod"][ind_rad],
         )
 
     if not fname_list:

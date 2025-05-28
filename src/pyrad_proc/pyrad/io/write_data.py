@@ -55,7 +55,7 @@ import glob
 import csv
 import os
 
-from warnings import warn
+from ..util import warn
 import smtplib
 from email.message import EmailMessage
 
@@ -83,7 +83,10 @@ try:
 
     _BOTO3_AVAILABLE = True
 except ImportError:
-    warn("boto3 is not installed, no copy to S3 bucket will be performed!")
+    warn(
+        "boto3 is not installed, no copy to S3 bucket will be performed!",
+        use_debug=False,
+    )
     _BOTO3_AVAILABLE = False
 
 
@@ -92,6 +95,8 @@ def write_to_s3(
     basepath,
     s3endpoint,
     s3bucket,
+    s3key,
+    s3secret,
     s3path="",
     s3accesspolicy=None,
     s3splitext=False,
@@ -120,6 +125,10 @@ def write_to_s3(
         name of the s3 bucket to use to access the data
         the URL that will be polled is
         https://s3bucket.s3endpoint
+    s3key: str
+        AWS API access key for the specified bucket
+    s3secret: str
+        AWS API secret for the corresponding s3key
     s3path : str
         name of the path where to store the data on the s3 bucket
         the files will have the following url
@@ -142,16 +151,6 @@ def write_to_s3(
     if not _BOTO3_AVAILABLE:
         warn("boto3 not installed, aborting writing to s3")
         return
-    try:
-        aws_key = os.environ["S3_KEY_WRITE"]
-        aws_secret = os.environ["S3_SECRET_WRITE"]
-    except KeyError:
-        warn("In order to be able to write to an S3 bucket")
-        warn(
-            "you need to define the environment variables S3_KEY_WRITE and S3_SECRET_WRITE"
-        )
-        warn("Saving to S3 failed...")
-        return
 
     if not s3endpoint.startswith("https://"):  # add prefix
         s3endpoint = f"https://{s3endpoint}"
@@ -171,9 +170,9 @@ def write_to_s3(
     if s3fname.startswith("/"):  # Remove leading /
         s3fname = s3fname[1:]
     s3_client_config = {
-        "aws_access_key_id": aws_key,
+        "aws_access_key_id": s3key,
         "endpoint_url": s3endpoint,
-        "aws_secret_access_key": aws_secret,
+        "aws_secret_access_key": s3secret,
     }
     if len(s3certificates):
         s3verify = s3certificates

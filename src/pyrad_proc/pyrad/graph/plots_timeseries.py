@@ -19,7 +19,7 @@ Functions to plot Pyrad datasets
 import pyart
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-from warnings import warn
+from ..util import warn
 
 import numpy as np
 import datetime

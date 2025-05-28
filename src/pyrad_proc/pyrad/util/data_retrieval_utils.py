@@ -319,7 +319,9 @@ def _retrieve_hzt_prod_daily(folder_out, start_time, end_time, pattern_type="she
         )
         subprocess.call(cmd, shell=True)
 
-    files = sorted(np.array([folder_out + c for c in content_filt[conditions]]))
+    files = sorted(
+        np.array([os.path.join(folder_out, c) for c in content_filt[conditions]])
+    )
 
     return files
 
@@ -588,7 +590,7 @@ def _retrieve_prod_daily(
 
             # Check if files are already unzipped (skip those that exist)
             for fi in selected_files:
-                if os.path.exists(folder_out + fi):
+                if os.path.exists(os.path.join(folder_out, fi)):
                     files_to_retrieve = files_to_retrieve.replace(fi, "")
 
             # Unzip only if needed
@@ -596,7 +598,7 @@ def _retrieve_prod_daily(
                 cmd = f'unzip -j -o -qq "{os.path.join(folder_in, name_zipfile)}" {files_to_retrieve} -d {folder_out}'
                 subprocess.call(cmd, shell=True)
 
-            files = sorted([folder_out + c for c in selected_files])
+            files = sorted([os.path.join(folder_out, c) for c in selected_files])
             return files
 
 

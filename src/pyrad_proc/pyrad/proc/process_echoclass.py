@@ -29,7 +29,7 @@ Functions for echo classification and filtering
 """
 
 from copy import deepcopy
-from warnings import warn
+from ..util import warn
 
 import sys
 import os
@@ -798,7 +798,6 @@ def process_gatefilter(procstatus, dscfg, radar_list=None):
     is_invalid = gatefilter.gate_excluded == 1
 
     for field_name in radar.fields.keys():
-
         radar_field = deepcopy(radar.fields[field_name])
         radar_field["data"] = np.ma.masked_where(is_invalid, radar_field["data"])
 
@@ -2185,33 +2184,36 @@ def process_centroids(procstatus, dscfg, radar_list=None):
     use_median = dscfg.get("use_median", True)
     allow_label_duplicates = dscfg.get("allow_label_duplicates", True)
 
-    (labeled_data, labels, medoids_dict, final_medoids_dict) = (
-        pyart.retrieve.compute_centroids(
-            fm_sample,
-            weight=weight,
-            var_names=var_names,
-            hydro_names=hydro_names,
-            nsamples_iter=nsamples_iter,
-            external_iterations=external_iterations,
-            internal_iterations=internal_iterations,
-            alpha=alpha,
-            cv_approach=cv_approach,
-            num_samples_arr=num_samples_arr,
-            n_samples_syn=n_samples_syn,
-            nmedoids_min=nmedoids_min,
-            acceptance_threshold=acceptance_threshold,
-            band=dscfg["global_data"]["band"],
-            relh_slope=relh_slope,
-            parallelized=parallelized,
-            sample_data=sample_data,
-            kmax_iter=kmax_iter,
-            nsamples_small=nsamples_small,
-            sampling_size_clara=sampling_size_clara,
-            niter_clara=niter_clara,
-            keep_labeled_data=keep_labeled_data,
-            use_median=use_median,
-            allow_label_duplicates=allow_label_duplicates,
-        )
+    (
+        labeled_data,
+        labels,
+        medoids_dict,
+        final_medoids_dict,
+    ) = pyart.retrieve.compute_centroids(
+        fm_sample,
+        weight=weight,
+        var_names=var_names,
+        hydro_names=hydro_names,
+        nsamples_iter=nsamples_iter,
+        external_iterations=external_iterations,
+        internal_iterations=internal_iterations,
+        alpha=alpha,
+        cv_approach=cv_approach,
+        num_samples_arr=num_samples_arr,
+        n_samples_syn=n_samples_syn,
+        nmedoids_min=nmedoids_min,
+        acceptance_threshold=acceptance_threshold,
+        band=dscfg["global_data"]["band"],
+        relh_slope=relh_slope,
+        parallelized=parallelized,
+        sample_data=sample_data,
+        kmax_iter=kmax_iter,
+        nsamples_small=nsamples_small,
+        sampling_size_clara=sampling_size_clara,
+        niter_clara=niter_clara,
+        keep_labeled_data=keep_labeled_data,
+        use_median=use_median,
+        allow_label_duplicates=allow_label_duplicates,
     )
 
     if not medoids_dict:
@@ -2278,7 +2280,6 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
         raise Exception(str1.format(dscfg["dsname"]))
 
     if dscfg["ML_METHOD"] == "GIANGRANDE":
-
         temp_ref = None
         temp_field = None
         iso0_field = None
@@ -2365,84 +2366,90 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
 
         if not dscfg["initialized"]:
             # initialize dataset
-            ml_obj, ml_dict, iso0_dict, ml_global = (
-                pyart.retrieve.melting_layer_giangrande(
-                    radar,
-                    nVol=nVol,
-                    maxh=maxh,
-                    hres=hres,
-                    rmin=rmin,
-                    elmin=elmin,
-                    elmax=elmax,
-                    rhomin=rhomin,
-                    rhomax=rhomax,
-                    zhmin=zhmin,
-                    hwindow=hwindow,
-                    mlzhmin=mlzhmin,
-                    mlzhmax=mlzhmax,
-                    mlzdrmin=mlzdrmin,
-                    mlzdrmax=mlzdrmax,
-                    htol=htol,
-                    ml_bottom_diff_max=ml_bottom_diff_max,
-                    time_accu_max=time_accu_max,
-                    nml_points_min=nml_points_min,
-                    wlength=wlength,
-                    percentile_bottom=percentile_bottom,
-                    percentile_top=percentile_top,
-                    interpol=interpol,
-                    time_nodata_allowed=time_nodata_allowed,
-                    refl_field=refl_field,
-                    zdr_field=zdr_field,
-                    rhv_field=rhv_field,
-                    temp_field=temp_field,
-                    iso0_field=iso0_field,
-                    ml_field="melting_layer",
-                    ml_pos_field="melting_layer_height",
-                    temp_ref=temp_ref,
-                    get_iso0=get_iso0,
-                    ml_global=None,
-                )
+            (
+                ml_obj,
+                ml_dict,
+                iso0_dict,
+                ml_global,
+            ) = pyart.retrieve.melting_layer_giangrande(
+                radar,
+                nVol=nVol,
+                maxh=maxh,
+                hres=hres,
+                rmin=rmin,
+                elmin=elmin,
+                elmax=elmax,
+                rhomin=rhomin,
+                rhomax=rhomax,
+                zhmin=zhmin,
+                hwindow=hwindow,
+                mlzhmin=mlzhmin,
+                mlzhmax=mlzhmax,
+                mlzdrmin=mlzdrmin,
+                mlzdrmax=mlzdrmax,
+                htol=htol,
+                ml_bottom_diff_max=ml_bottom_diff_max,
+                time_accu_max=time_accu_max,
+                nml_points_min=nml_points_min,
+                wlength=wlength,
+                percentile_bottom=percentile_bottom,
+                percentile_top=percentile_top,
+                interpol=interpol,
+                time_nodata_allowed=time_nodata_allowed,
+                refl_field=refl_field,
+                zdr_field=zdr_field,
+                rhv_field=rhv_field,
+                temp_field=temp_field,
+                iso0_field=iso0_field,
+                ml_field="melting_layer",
+                ml_pos_field="melting_layer_height",
+                temp_ref=temp_ref,
+                get_iso0=get_iso0,
+                ml_global=None,
             )
             dscfg["initialized"] = True
         else:
             # use previous detection
-            ml_obj, ml_dict, iso0_dict, ml_global = (
-                pyart.retrieve.melting_layer_giangrande(
-                    radar,
-                    nVol=nVol,
-                    maxh=maxh,
-                    hres=hres,
-                    rmin=rmin,
-                    elmin=elmin,
-                    elmax=elmax,
-                    rhomin=rhomin,
-                    rhomax=rhomax,
-                    zhmin=zhmin,
-                    hwindow=hwindow,
-                    mlzhmin=mlzhmin,
-                    mlzhmax=mlzhmax,
-                    mlzdrmin=mlzdrmin,
-                    mlzdrmax=mlzdrmax,
-                    htol=htol,
-                    ml_bottom_diff_max=ml_bottom_diff_max,
-                    time_accu_max=time_accu_max,
-                    nml_points_min=nml_points_min,
-                    wlength=wlength,
-                    percentile_bottom=percentile_bottom,
-                    percentile_top=percentile_top,
-                    interpol=interpol,
-                    time_nodata_allowed=time_nodata_allowed,
-                    refl_field=refl_field,
-                    zdr_field=zdr_field,
-                    rhv_field=rhv_field,
-                    temp_field=temp_field,
-                    iso0_field=iso0_field,
-                    ml_field="melting_layer",
-                    ml_pos_field="melting_layer_height",
-                    temp_ref=temp_ref,
-                    get_iso0=get_iso0,
-                    ml_global=dscfg["global_data"],
-                )
+            (
+                ml_obj,
+                ml_dict,
+                iso0_dict,
+                ml_global,
+            ) = pyart.retrieve.melting_layer_giangrande(
+                radar,
+                nVol=nVol,
+                maxh=maxh,
+                hres=hres,
+                rmin=rmin,
+                elmin=elmin,
+                elmax=elmax,
+                rhomin=rhomin,
+                rhomax=rhomax,
+                zhmin=zhmin,
+                hwindow=hwindow,
+                mlzhmin=mlzhmin,
+                mlzhmax=mlzhmax,
+                mlzdrmin=mlzdrmin,
+                mlzdrmax=mlzdrmax,
+                htol=htol,
+                ml_bottom_diff_max=ml_bottom_diff_max,
+                time_accu_max=time_accu_max,
+                nml_points_min=nml_points_min,
+                wlength=wlength,
+                percentile_bottom=percentile_bottom,
+                percentile_top=percentile_top,
+                interpol=interpol,
+                time_nodata_allowed=time_nodata_allowed,
+                refl_field=refl_field,
+                zdr_field=zdr_field,
+                rhv_field=rhv_field,
+                temp_field=temp_field,
+                iso0_field=iso0_field,
+                ml_field="melting_layer",
+                ml_pos_field="melting_layer_height",
+                temp_ref=temp_ref,
+                get_iso0=get_iso0,
+                ml_global=dscfg["global_data"],
             )
 
         # update global stack

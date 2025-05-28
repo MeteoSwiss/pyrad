@@ -15,7 +15,7 @@ Functions for reading HZT data
 
 """
 
-from warnings import warn
+from ..util import warn
 import datetime
 import platform
 import numpy as np

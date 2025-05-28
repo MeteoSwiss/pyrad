@@ -13,7 +13,7 @@ import sys
 import re
 import datetime
 import locale
-from warnings import warn
+from ..util import warn
 from copy import deepcopy
 
 import numpy as np

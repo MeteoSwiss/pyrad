@@ -38,7 +38,7 @@ from .plots_aux import generate_fixed_rng_span_title
 from .plots_aux import get_colobar_label, get_norm, generate_fixed_rng_title
 import pyart
 import matplotlib.pyplot as plt
-from warnings import warn
+from ..util import warn
 from copy import deepcopy
 
 import numpy as np
@@ -59,7 +59,7 @@ try:
 
     _SHAPELY_AVAILABLE = True
 except ImportError:
-    warn("shapely not available")
+    warn("shapely not available", use_debug=False)
     _SHAPELY_AVAILABLE = False
 
 # Test whether ARM or MCH fork of pyart

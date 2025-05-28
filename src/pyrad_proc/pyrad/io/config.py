@@ -19,7 +19,7 @@ Functions for reading pyrad config files
 
 import os
 import numpy as np
-from warnings import warn
+from ..util import warn
 
 _defaults_loc = {
     "ppiImageConfig": {

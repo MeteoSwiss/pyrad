@@ -42,7 +42,7 @@ import json
 import datetime
 import csv
 import pandas as pd
-from warnings import warn
+from ..util import warn
 from copy import deepcopy
 import re
 from io import StringIO, BytesIO
@@ -50,7 +50,13 @@ import requests
 import numpy as np
 from zipfile import ZipFile
 
+# Suppress only the InsecureRequestWarning
+import urllib3
+from urllib3.exceptions import InsecureRequestWarning
+
 from pyart.config import get_fillvalue
+
+urllib3.disable_warnings(InsecureRequestWarning)
 
 
 def read_windmills_data(fname):
@@ -1984,7 +1990,7 @@ def get_sensor_data(date, datatype, cfg):
             datafile = files2[0]
         else:
             warn(
-                "Could not find any raingauge file with names {datafile1} or {datafile2}"
+                f"Could not find any raingauge file with names {datafile1} or {datafile2}"
             )
         if datafile.endswith(".gz"):
             with gzip.open(datafile, "rt") as f:
@@ -2528,7 +2534,14 @@ def read_radiosounding_wyoming(station, dtime):
         "STNM": station,
     }
 
-    response = requests.get(base_url, params=query_params, verify=False)
+    try:
+        # Try a quick HEAD request to test SSL verification
+        requests.head(base_url, timeout=5)
+        verify_setting = True
+    except requests.exceptions.SSLError:
+        verify_setting = False
+
+    response = requests.get(base_url, params=query_params, verify=verify_setting)
 
     if response.status_code != 200:
         return None
@@ -2608,7 +2621,15 @@ def read_radiosounding_igra(station, dtime):
         "https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive"
         + "/doc/igra2-station-list.txt"
     )
-    response = requests.get(url, headers=headers)
+
+    try:
+        # Try a quick HEAD request to test SSL verification
+        requests.head(url, timeout=5)
+        verify_setting = True
+    except requests.exceptions.SSLError:
+        verify_setting = False
+
+    response = requests.get(url, headers=headers, verify=verify_setting)
 
     if response.status_code == 200:
         data = StringIO(response.text)
@@ -2631,14 +2652,14 @@ def read_radiosounding_igra(station, dtime):
             "https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive"
             + "/access/data-por/"
         )
-    response = requests.get(url2, headers=headers)
+    response = requests.get(url2, headers=headers, verify=verify_setting)
     links = re.findall(r'<a\s+(?:[^>]*?\s+)?href="([^"]*)"', response.text)
 
     mylink = [alink for alink in links if code in alink][0]
 
     url = url2 + mylink
     # Send a GET request to the URL
-    response = requests.get(url)
+    response = requests.get(url, verify=verify_setting)
 
     # Check if the request was successful (status code 200)
     if response.status_code == 200:
@@ -2656,15 +2677,19 @@ def read_radiosounding_igra(station, dtime):
         )
         return None
 
-    clo_sound_time = _closest_sounding_time(dtime)
-    clo_sound_time_str = clo_sound_time.strftime("%Y %m %d %H")
     # Now parse file and separate entries by sounding date
     sounding = []
-    line_start = None
+    line_starts = []
+    line_dates = []
     for i, line in enumerate(file_content):
         if "#" in line:
-            if clo_sound_time_str in line:
-                line_start = i
+            year, month, day, hour = map(int, line.split()[1:5])
+            dt = datetime.datetime(year, month, day, hour)
+            line_dates.append(dt)
+            line_starts.append(i)
+    line_dates = np.array(line_dates)
+    idx_clo = np.argmin(np.abs(line_dates - dtime))
+    line_start = line_starts[idx_clo]
 
     if not line_start:
         warn(

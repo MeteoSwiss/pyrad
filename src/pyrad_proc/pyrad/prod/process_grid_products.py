@@ -13,7 +13,7 @@ Functions for obtaining Pyrad products from gridded datasets
 
 """
 
-from warnings import warn
+from ..util import warn
 from copy import deepcopy
 
 import numpy as np

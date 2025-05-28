@@ -53,7 +53,7 @@ import re
 import datetime
 import fnmatch
 
-from warnings import warn
+from ..util import warn
 from copy import deepcopy
 import numpy as np
 import pyart
@@ -63,16 +63,21 @@ from pyart.config import get_metadata
 try:
     from pyart.aux_io import get_sweep_time_coverage
 except ImportError:
-    warn("Could not get the get_sweep_time_coverage from pyart")
-    warn("You are likely using ARM Py-ART and not the MCH fork")
-    warn("You will not be able to read skyecho data")
+    message = """Could not get the get_sweep_time_coverage from pyart
+You are likely using ARM Py-ART and not the MCH fork
+You will not be able to read skyecho data
+"""
+    warn(message, use_debug=False)
 
 try:
     import boto3
 
     _BOTO3_AVAILABLE = True
 except ImportError:
-    warn("boto3 is not installed, data cannot be retrieved from S3 buckets!")
+    warn(
+        "boto3 is not installed, data cannot be retrieved from S3 buckets!",
+        use_debug=False,
+    )
     _BOTO3_AVAILABLE = False
 
 
@@ -1991,7 +1996,7 @@ def get_scan_files_to_merge(
                     ):
                         filename = [filename_aux]
                         break
-                else:
+                elif master_scan_time_tol == -1:
                     if (
                         voltime - datetime.timedelta(minutes=scan_period)
                         < fdatetime

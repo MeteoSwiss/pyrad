@@ -11,7 +11,7 @@ Functions for obtaining Pyrad products from the datasets
 
 """
 
-from warnings import warn
+from ..util import warn
 
 from ..io.io_aux import get_save_dir, make_filename
 from ..io.timeseries import TimeSeries
@@ -48,7 +48,6 @@ def generate_traj_product(traj, prdcfg):
         dssavedir = prdcfg["dssavename"]
 
     if prdcfg["type"] == "TRAJ_PLOT":
-
         timeinfo = traj.time_vector[0]
 
         savedir = get_save_dir(
@@ -119,7 +118,6 @@ def generate_traj_product(traj, prdcfg):
         return None
 
     if prdcfg["type"] == "TRAJ_TEXT":
-
         timeinfo = traj.time_vector[0]
 
         savedir = get_save_dir(

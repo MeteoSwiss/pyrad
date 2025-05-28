@@ -34,7 +34,7 @@ Functions to processes spectral data.
 """
 
 from copy import deepcopy
-from warnings import warn
+from ..util import warn
 import numpy as np
 from netCDF4 import num2date
 
@@ -492,9 +492,9 @@ def process_spectra_point(procstatus, dscfg, radar_list=None):
                 poi_data_aux = np.ma.masked_all(
                     (psr_poi.nrays, 1, psr.npulses_max), dtype=dtype
                 )
-                poi_data_aux[: psr_poi.nrays - nrays, :, 0 : psr_poi.npulses_max] = (
-                    psr_poi.fields[field_name]["data"]
-                )
+                poi_data_aux[
+                    : psr_poi.nrays - nrays, :, 0 : psr_poi.npulses_max
+                ] = psr_poi.fields[field_name]["data"]
                 poi_data_aux[psr_poi.nrays - nrays :, :, :] = poi_data
                 psr_poi.fields[field_name]["data"] = poi_data_aux
 
@@ -523,9 +523,9 @@ def process_spectra_point(procstatus, dscfg, radar_list=None):
                 )
             else:
                 Doppler_aux = np.ma.masked_all((psr_poi.nrays, psr.npulses_max))
-                Doppler_aux[: psr_poi.nrays - nrays, 0 : psr_poi.npulses_max] = (
-                    psr_poi.Doppler_velocity["data"]
-                )
+                Doppler_aux[
+                    : psr_poi.nrays - nrays, 0 : psr_poi.npulses_max
+                ] = psr_poi.Doppler_velocity["data"]
                 Doppler_aux[psr_poi.nrays - nrays :, :] = Doppler_data
                 psr_poi.Doppler_velocity["data"] = Doppler_aux
 
@@ -551,9 +551,9 @@ def process_spectra_point(procstatus, dscfg, radar_list=None):
                 )
             else:
                 Doppler_aux = np.ma.masked_all((psr_poi.nrays, psr.npulses_max))
-                Doppler_aux[0 : psr_poi.nrays - nrays, 0 : psr_poi.npulses_max] = (
-                    psr_poi.Doppler_frequency["data"]
-                )
+                Doppler_aux[
+                    0 : psr_poi.nrays - nrays, 0 : psr_poi.npulses_max
+                ] = psr_poi.Doppler_frequency["data"]
                 Doppler_aux[psr_poi.nrays - nrays :, :] = Doppler_data
                 psr_poi.Doppler_frequency["data"] = Doppler_aux
 

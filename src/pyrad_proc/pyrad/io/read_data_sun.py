@@ -15,7 +15,7 @@ Functions for reading data used in sun monitoring
 
 import datetime
 import csv
-from warnings import warn
+from ..util import warn
 
 import numpy as np
 

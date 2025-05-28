@@ -3,6 +3,7 @@ Pyrad: The Python Radar Toolkit
 =====================================
 
 """
+import os
 
 # Detect if we're being called as part of Pyrad's setup procedure
 try:
@@ -16,12 +17,6 @@ if __PYRAD_SETUP__:
     _sys.stderr.write("Running from Pyrad source directory.\n")
     del _sys
 else:
-
-    # Make sure that deprecation warnings get printed by default
-    import warnings as _warnings
-
-    _warnings.simplefilter("always", DeprecationWarning)
-
     # print out helpful message if build fails or importing from source tree
     # fvj built not checked for the moment
     # from . import __check_build
@@ -33,6 +28,11 @@ else:
     from . import prod  # noqa
     from . import util  # noqa
     from . import flow  # noqa
+
+    if os.environ:
+        from .util import enable_debug_on_error
+
+        enable_debug_on_error()
 
     # root level functions
     # non at the moment

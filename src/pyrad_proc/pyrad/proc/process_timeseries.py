@@ -19,7 +19,7 @@ Functions to obtain time series of radar data
 """
 
 import datetime
-from warnings import warn
+from ..util import warn
 import numpy as np
 from netCDF4 import num2date
 

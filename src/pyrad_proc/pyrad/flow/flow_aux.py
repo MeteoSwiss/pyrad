@@ -31,7 +31,7 @@ Auxiliary functions to control the Pyrad data processing flow
 
 from __future__ import print_function
 import sys
-from warnings import warn
+from ..util import warn
 import traceback
 import os
 from datetime import datetime
@@ -52,11 +52,10 @@ try:
 
     _MPROFILE_AVAILABLE = True
 except ImportError:
-    warn("Memory profiler not available")
+    warn("Memory profiler not available", use_debug=False)
     _MPROFILE_AVAILABLE = False
 
 from pyrad import proc
-
 from ..io.config import read_config, DEFAULT_CONFIG
 from ..io.read_data_radar import get_data
 from ..io.write_data import write_to_s3
@@ -74,7 +73,7 @@ from ..prod.product_aux import get_prodgen_func
 try:
     import dask
 except ImportError:
-    warn("dask not available: The processing will not be parallelized")
+    warn("dask not available: The processing will not be parallelized", use_debug=False)
 
 PROFILE_LEVEL = 0
 
@@ -82,6 +81,19 @@ PROFILE_LEVEL = 0
 # don't know why at the moment
 os.environ["AWS_REQUEST_CHECKSUM_CALCULATION"] = "when_required"
 os.environ["AWS_RESPONSE_CHECKSUM_VALIDATION"] = "when_required"
+
+# Check s3 write possibility
+S3_WRITE_POSSIBLE = False
+try:
+    S3_KEY_WRITE = os.environ["S3_KEY_WRITE"]
+    S3_SECRET_WRITE = os.environ["S3_SECRET_WRITE"]
+    S3_WRITE_POSSIBLE = True
+except KeyError:
+    warn(
+        "In order to be able to write to an S3 bucket "
+        + "you need to define the environment variables S3_KEY_WRITE and S3_SECRET_WRITE  \n"
+        + "Saving to S3 disabled..."
+    )
 
 
 def profiler(level=1):
@@ -826,7 +838,6 @@ def _get_radars_data(master_voltime, datatypesdescr_list, datacfg, num_radars=1)
             datacfg,
             scan_list=datacfg["ScanList"],
         )
-
         nfiles_ref = len(filelist_ref)
         if nfiles_ref == 0:
             str1 = (
@@ -1026,13 +1037,15 @@ def _generate_prod(dataset, cfg, prdname, prdfunc, dsname, voltime, runinfo=None
 
             for fname in filenames:
                 if (
-                    prdcfg["basepath"] in fname
+                    prdcfg["basepath"] in fname and S3_WRITE_POSSIBLE
                 ):  # only products saved to standard basepath
                     write_to_s3(
                         fname,
                         prdcfg["basepath"],
                         prdcfg["s3EndpointWrite"],
                         prdcfg["s3BucketWrite"],
+                        S3_KEY_WRITE,
+                        S3_SECRET_WRITE,
                         s3path,
                         s3AccessPolicy,
                         s3splitext,
@@ -1204,10 +1217,15 @@ def _create_cfg_dict(cfgfile):
         "mosotti_factor",
         "refcorr",
         "AzimTol",
-        "MasterScanTimeTol",
     ]
     for param in fltarr_list:
         if param in cfg and isinstance(cfg[param], float):
+            cfg[param] = [cfg[param]]
+
+    # Convert the following ints to int arrays
+    intarr_list = ["MasterScanTimeTol", "ScanPeriod"]
+    for param in intarr_list:
+        if param in cfg and isinstance(cfg[param], int):
             cfg[param] = [cfg[param]]
 
     # check whether specified paths are relative or absolute

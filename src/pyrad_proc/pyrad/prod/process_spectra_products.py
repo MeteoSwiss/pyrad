@@ -11,7 +11,7 @@ Functions for obtaining Pyrad products from spectra datasets
 
 """
 
-from warnings import warn
+from ..util import warn
 from copy import deepcopy
 
 import numpy as np

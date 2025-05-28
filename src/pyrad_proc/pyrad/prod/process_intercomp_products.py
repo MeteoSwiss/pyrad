@@ -14,7 +14,7 @@ intercomparison process
 
 """
 
-from warnings import warn
+from ..util import warn
 
 import numpy as np
 

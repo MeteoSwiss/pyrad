@@ -25,7 +25,7 @@ import sys
 sys.stdout.reconfigure(line_buffering=True)
 
 import glob
-from warnings import warn
+from pyrad.util import warn
 
 from pyrad.flow.flow_control import main as pyrad_main
 from pyrad.io import get_fieldname_pyart

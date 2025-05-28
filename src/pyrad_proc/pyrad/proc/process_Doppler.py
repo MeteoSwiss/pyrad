@@ -21,7 +21,7 @@ Functions for processing Doppler related parameters
 """
 
 from copy import deepcopy
-from warnings import warn
+from ..util import warn
 import numpy as np
 
 import pyart
@@ -895,20 +895,25 @@ def process_vad(procstatus, dscfg, radar_list=None):
     azi_spacing_max = dscfg.get("azi_spacing_max", 45.0)
     vel_diff_max = dscfg.get("vel_diff_max", 10.0)
 
-    (u_vel_dict, v_vel_dict, w_vel_dict, vel_est_dict, vel_std_dict, vel_diff_dict) = (
-        pyart.retrieve.est_wind_profile(
-            radar,
-            npoints_min=npoints_min,
-            azi_spacing_max=azi_spacing_max,
-            vel_diff_max=vel_diff_max,
-            rad_vel_field=vel_field,
-            u_vel_field="eastward_wind_component",
-            v_vel_field="northward_wind_component",
-            w_vel_field="vertical_wind_component",
-            vel_est_field="retrieved_velocity",
-            vel_std_field="retrieved_velocity_std",
-            vel_diff_field="velocity_difference",
-        )
+    (
+        u_vel_dict,
+        v_vel_dict,
+        w_vel_dict,
+        vel_est_dict,
+        vel_std_dict,
+        vel_diff_dict,
+    ) = pyart.retrieve.est_wind_profile(
+        radar,
+        npoints_min=npoints_min,
+        azi_spacing_max=azi_spacing_max,
+        vel_diff_max=vel_diff_max,
+        rad_vel_field=vel_field,
+        u_vel_field="eastward_wind_component",
+        v_vel_field="northward_wind_component",
+        w_vel_field="vertical_wind_component",
+        vel_est_field="retrieved_velocity",
+        vel_std_field="retrieved_velocity_std",
+        vel_diff_field="velocity_difference",
     )
 
     # prepare for exit

@@ -45,19 +45,20 @@ Miscellaneous functions dealing with radar data
     compute_average_vad
 """
 
-from warnings import warn
 from copy import deepcopy
 import datetime
 
 import numpy as np
 import scipy
 
+from .debug_utils import warn
+
 try:
     import shapely
 
     _SHAPELY_AVAILABLE = True
 except ImportError:
-    warn("shapely not available")
+    warn("shapely not available", use_debug=False)
     _SHAPELY_AVAILABLE = False
 
 try:
@@ -65,7 +66,7 @@ try:
 
     _PANDAS_AVAILABLE = True
 except ImportError:
-    warn("Pandas not available")
+    warn("Pandas not available", use_debug=False)
     _PANDAS_AVAILABLE = False
 
 import pyart
@@ -562,7 +563,7 @@ def time_series_statistics(
     df_in = pd.DataFrame(data=val_in_vec, index=pd.DatetimeIndex(t_in_vec))
     df_out = getattr(
         df_in.resample(
-            str(avg_time) + "S", closed="right", label="right", offset=base_time
+            str(avg_time) + "s", closed="right", label="right", offset=base_time
         ),
         method,
     )()
@@ -1491,6 +1492,7 @@ def create_sun_retrieval_field(par, field_name, imgcfg, lant=0.0):
 
     return field
 
+
 def compute_mean_reflectivity_from_hist(bin_centers, hist):
     """
     Computes the mean reflectivity in both dB and linear units.
@@ -1531,7 +1533,7 @@ def compute_mean_reflectivity_from_hist(bin_centers, hist):
     mean_list = [geometric_mean_db, linear_mean_db]
 
     return mean_list
-    
+
 
 def compute_quantiles(field, quantiles=None):
     """

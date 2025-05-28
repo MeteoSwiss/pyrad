@@ -24,7 +24,7 @@ Functions to processes IQ data.
 """
 
 from copy import deepcopy
-from warnings import warn
+from ..util import warn
 
 import pyart
 
