@@ -434,7 +434,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">fnmatch</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
@@ -444,16 +444,21 @@
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">pyart.aux_io</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_sweep_time_coverage</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Could not get the get_sweep_time_coverage from pyart&quot;</span><span class="p">)</span>
-    <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;You are likely using ARM Py-ART and not the MCH fork&quot;</span><span class="p">)</span>
-    <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;You will not be able to read skyecho data&quot;</span><span class="p">)</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Could not get the get_sweep_time_coverage from pyart</span>
+<span class="s2">You are likely using ARM Py-ART and not the MCH fork</span>
+<span class="s2">You will not be able to read skyecho data</span>
+<span class="s2">&quot;&quot;&quot;</span>
+    <span class="n">warn</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">use_debug</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">boto3</span>
 
     <span class="n">_BOTO3_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;boto3 is not installed, data cannot be retrieved from S3 buckets!&quot;</span><span class="p">)</span>
+    <span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;boto3 is not installed, data cannot be retrieved from S3 buckets!&quot;</span><span class="p">,</span>
+        <span class="n">use_debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">_BOTO3_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 
@@ -2404,7 +2409,7 @@
                     <span class="p">):</span>
                         <span class="n">filename</span> <span class="o">=</span> <span class="p">[</span><span class="n">filename_aux</span><span class="p">]</span>
                         <span class="k">break</span>
-                <span class="k">else</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">master_scan_time_tol</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
                     <span class="k">if</span> <span class="p">(</span>
                         <span class="n">voltime</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="n">scan_period</span><span class="p">)</span>
                         <span class="o">&lt;</span> <span class="n">fdatetime</span>

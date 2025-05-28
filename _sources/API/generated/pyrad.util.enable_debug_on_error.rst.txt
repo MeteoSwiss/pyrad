@@ -1,0 +1,6 @@
+pyrad.util.enable\_debug\_on\_error
+===================================
+
+.. currentmodule:: pyrad.util
+
+.. autofunction:: enable_debug_on_error

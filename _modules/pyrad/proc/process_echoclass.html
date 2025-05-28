@@ -410,7 +410,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
@@ -1205,7 +1205,6 @@
     <span class="n">is_invalid</span> <span class="o">=</span> <span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span> <span class="o">==</span> <span class="mi">1</span>
 
     <span class="k">for</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-
         <span class="n">radar_field</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">])</span>
         <span class="n">radar_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">is_invalid</span><span class="p">,</span> <span class="n">radar_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
 
@@ -2616,33 +2615,36 @@
     <span class="n">use_median</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;use_median&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
     <span class="n">allow_label_duplicates</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;allow_label_duplicates&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
-    <span class="p">(</span><span class="n">labeled_data</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">medoids_dict</span><span class="p">,</span> <span class="n">final_medoids_dict</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">compute_centroids</span><span class="p">(</span>
-            <span class="n">fm_sample</span><span class="p">,</span>
-            <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span>
-            <span class="n">var_names</span><span class="o">=</span><span class="n">var_names</span><span class="p">,</span>
-            <span class="n">hydro_names</span><span class="o">=</span><span class="n">hydro_names</span><span class="p">,</span>
-            <span class="n">nsamples_iter</span><span class="o">=</span><span class="n">nsamples_iter</span><span class="p">,</span>
-            <span class="n">external_iterations</span><span class="o">=</span><span class="n">external_iterations</span><span class="p">,</span>
-            <span class="n">internal_iterations</span><span class="o">=</span><span class="n">internal_iterations</span><span class="p">,</span>
-            <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
-            <span class="n">cv_approach</span><span class="o">=</span><span class="n">cv_approach</span><span class="p">,</span>
-            <span class="n">num_samples_arr</span><span class="o">=</span><span class="n">num_samples_arr</span><span class="p">,</span>
-            <span class="n">n_samples_syn</span><span class="o">=</span><span class="n">n_samples_syn</span><span class="p">,</span>
-            <span class="n">nmedoids_min</span><span class="o">=</span><span class="n">nmedoids_min</span><span class="p">,</span>
-            <span class="n">acceptance_threshold</span><span class="o">=</span><span class="n">acceptance_threshold</span><span class="p">,</span>
-            <span class="n">band</span><span class="o">=</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;band&quot;</span><span class="p">],</span>
-            <span class="n">relh_slope</span><span class="o">=</span><span class="n">relh_slope</span><span class="p">,</span>
-            <span class="n">parallelized</span><span class="o">=</span><span class="n">parallelized</span><span class="p">,</span>
-            <span class="n">sample_data</span><span class="o">=</span><span class="n">sample_data</span><span class="p">,</span>
-            <span class="n">kmax_iter</span><span class="o">=</span><span class="n">kmax_iter</span><span class="p">,</span>
-            <span class="n">nsamples_small</span><span class="o">=</span><span class="n">nsamples_small</span><span class="p">,</span>
-            <span class="n">sampling_size_clara</span><span class="o">=</span><span class="n">sampling_size_clara</span><span class="p">,</span>
-            <span class="n">niter_clara</span><span class="o">=</span><span class="n">niter_clara</span><span class="p">,</span>
-            <span class="n">keep_labeled_data</span><span class="o">=</span><span class="n">keep_labeled_data</span><span class="p">,</span>
-            <span class="n">use_median</span><span class="o">=</span><span class="n">use_median</span><span class="p">,</span>
-            <span class="n">allow_label_duplicates</span><span class="o">=</span><span class="n">allow_label_duplicates</span><span class="p">,</span>
-        <span class="p">)</span>
+    <span class="p">(</span>
+        <span class="n">labeled_data</span><span class="p">,</span>
+        <span class="n">labels</span><span class="p">,</span>
+        <span class="n">medoids_dict</span><span class="p">,</span>
+        <span class="n">final_medoids_dict</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">compute_centroids</span><span class="p">(</span>
+        <span class="n">fm_sample</span><span class="p">,</span>
+        <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span>
+        <span class="n">var_names</span><span class="o">=</span><span class="n">var_names</span><span class="p">,</span>
+        <span class="n">hydro_names</span><span class="o">=</span><span class="n">hydro_names</span><span class="p">,</span>
+        <span class="n">nsamples_iter</span><span class="o">=</span><span class="n">nsamples_iter</span><span class="p">,</span>
+        <span class="n">external_iterations</span><span class="o">=</span><span class="n">external_iterations</span><span class="p">,</span>
+        <span class="n">internal_iterations</span><span class="o">=</span><span class="n">internal_iterations</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+        <span class="n">cv_approach</span><span class="o">=</span><span class="n">cv_approach</span><span class="p">,</span>
+        <span class="n">num_samples_arr</span><span class="o">=</span><span class="n">num_samples_arr</span><span class="p">,</span>
+        <span class="n">n_samples_syn</span><span class="o">=</span><span class="n">n_samples_syn</span><span class="p">,</span>
+        <span class="n">nmedoids_min</span><span class="o">=</span><span class="n">nmedoids_min</span><span class="p">,</span>
+        <span class="n">acceptance_threshold</span><span class="o">=</span><span class="n">acceptance_threshold</span><span class="p">,</span>
+        <span class="n">band</span><span class="o">=</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;band&quot;</span><span class="p">],</span>
+        <span class="n">relh_slope</span><span class="o">=</span><span class="n">relh_slope</span><span class="p">,</span>
+        <span class="n">parallelized</span><span class="o">=</span><span class="n">parallelized</span><span class="p">,</span>
+        <span class="n">sample_data</span><span class="o">=</span><span class="n">sample_data</span><span class="p">,</span>
+        <span class="n">kmax_iter</span><span class="o">=</span><span class="n">kmax_iter</span><span class="p">,</span>
+        <span class="n">nsamples_small</span><span class="o">=</span><span class="n">nsamples_small</span><span class="p">,</span>
+        <span class="n">sampling_size_clara</span><span class="o">=</span><span class="n">sampling_size_clara</span><span class="p">,</span>
+        <span class="n">niter_clara</span><span class="o">=</span><span class="n">niter_clara</span><span class="p">,</span>
+        <span class="n">keep_labeled_data</span><span class="o">=</span><span class="n">keep_labeled_data</span><span class="p">,</span>
+        <span class="n">use_median</span><span class="o">=</span><span class="n">use_median</span><span class="p">,</span>
+        <span class="n">allow_label_duplicates</span><span class="o">=</span><span class="n">allow_label_duplicates</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">medoids_dict</span><span class="p">:</span>
@@ -2712,7 +2714,6 @@
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">str1</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;dsname&quot;</span><span class="p">]))</span>
 
     <span class="k">if</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;ML_METHOD&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;GIANGRANDE&quot;</span><span class="p">:</span>
-
         <span class="n">temp_ref</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">temp_field</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">iso0_field</span> <span class="o">=</span> <span class="kc">None</span>
@@ -2799,84 +2800,90 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]:</span>
             <span class="c1"># initialize dataset</span>
-            <span class="n">ml_obj</span><span class="p">,</span> <span class="n">ml_dict</span><span class="p">,</span> <span class="n">iso0_dict</span><span class="p">,</span> <span class="n">ml_global</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">melting_layer_giangrande</span><span class="p">(</span>
-                    <span class="n">radar</span><span class="p">,</span>
-                    <span class="n">nVol</span><span class="o">=</span><span class="n">nVol</span><span class="p">,</span>
-                    <span class="n">maxh</span><span class="o">=</span><span class="n">maxh</span><span class="p">,</span>
-                    <span class="n">hres</span><span class="o">=</span><span class="n">hres</span><span class="p">,</span>
-                    <span class="n">rmin</span><span class="o">=</span><span class="n">rmin</span><span class="p">,</span>
-                    <span class="n">elmin</span><span class="o">=</span><span class="n">elmin</span><span class="p">,</span>
-                    <span class="n">elmax</span><span class="o">=</span><span class="n">elmax</span><span class="p">,</span>
-                    <span class="n">rhomin</span><span class="o">=</span><span class="n">rhomin</span><span class="p">,</span>
-                    <span class="n">rhomax</span><span class="o">=</span><span class="n">rhomax</span><span class="p">,</span>
-                    <span class="n">zhmin</span><span class="o">=</span><span class="n">zhmin</span><span class="p">,</span>
-                    <span class="n">hwindow</span><span class="o">=</span><span class="n">hwindow</span><span class="p">,</span>
-                    <span class="n">mlzhmin</span><span class="o">=</span><span class="n">mlzhmin</span><span class="p">,</span>
-                    <span class="n">mlzhmax</span><span class="o">=</span><span class="n">mlzhmax</span><span class="p">,</span>
-                    <span class="n">mlzdrmin</span><span class="o">=</span><span class="n">mlzdrmin</span><span class="p">,</span>
-                    <span class="n">mlzdrmax</span><span class="o">=</span><span class="n">mlzdrmax</span><span class="p">,</span>
-                    <span class="n">htol</span><span class="o">=</span><span class="n">htol</span><span class="p">,</span>
-                    <span class="n">ml_bottom_diff_max</span><span class="o">=</span><span class="n">ml_bottom_diff_max</span><span class="p">,</span>
-                    <span class="n">time_accu_max</span><span class="o">=</span><span class="n">time_accu_max</span><span class="p">,</span>
-                    <span class="n">nml_points_min</span><span class="o">=</span><span class="n">nml_points_min</span><span class="p">,</span>
-                    <span class="n">wlength</span><span class="o">=</span><span class="n">wlength</span><span class="p">,</span>
-                    <span class="n">percentile_bottom</span><span class="o">=</span><span class="n">percentile_bottom</span><span class="p">,</span>
-                    <span class="n">percentile_top</span><span class="o">=</span><span class="n">percentile_top</span><span class="p">,</span>
-                    <span class="n">interpol</span><span class="o">=</span><span class="n">interpol</span><span class="p">,</span>
-                    <span class="n">time_nodata_allowed</span><span class="o">=</span><span class="n">time_nodata_allowed</span><span class="p">,</span>
-                    <span class="n">refl_field</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span>
-                    <span class="n">zdr_field</span><span class="o">=</span><span class="n">zdr_field</span><span class="p">,</span>
-                    <span class="n">rhv_field</span><span class="o">=</span><span class="n">rhv_field</span><span class="p">,</span>
-                    <span class="n">temp_field</span><span class="o">=</span><span class="n">temp_field</span><span class="p">,</span>
-                    <span class="n">iso0_field</span><span class="o">=</span><span class="n">iso0_field</span><span class="p">,</span>
-                    <span class="n">ml_field</span><span class="o">=</span><span class="s2">&quot;melting_layer&quot;</span><span class="p">,</span>
-                    <span class="n">ml_pos_field</span><span class="o">=</span><span class="s2">&quot;melting_layer_height&quot;</span><span class="p">,</span>
-                    <span class="n">temp_ref</span><span class="o">=</span><span class="n">temp_ref</span><span class="p">,</span>
-                    <span class="n">get_iso0</span><span class="o">=</span><span class="n">get_iso0</span><span class="p">,</span>
-                    <span class="n">ml_global</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                <span class="p">)</span>
+            <span class="p">(</span>
+                <span class="n">ml_obj</span><span class="p">,</span>
+                <span class="n">ml_dict</span><span class="p">,</span>
+                <span class="n">iso0_dict</span><span class="p">,</span>
+                <span class="n">ml_global</span><span class="p">,</span>
+            <span class="p">)</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">melting_layer_giangrande</span><span class="p">(</span>
+                <span class="n">radar</span><span class="p">,</span>
+                <span class="n">nVol</span><span class="o">=</span><span class="n">nVol</span><span class="p">,</span>
+                <span class="n">maxh</span><span class="o">=</span><span class="n">maxh</span><span class="p">,</span>
+                <span class="n">hres</span><span class="o">=</span><span class="n">hres</span><span class="p">,</span>
+                <span class="n">rmin</span><span class="o">=</span><span class="n">rmin</span><span class="p">,</span>
+                <span class="n">elmin</span><span class="o">=</span><span class="n">elmin</span><span class="p">,</span>
+                <span class="n">elmax</span><span class="o">=</span><span class="n">elmax</span><span class="p">,</span>
+                <span class="n">rhomin</span><span class="o">=</span><span class="n">rhomin</span><span class="p">,</span>
+                <span class="n">rhomax</span><span class="o">=</span><span class="n">rhomax</span><span class="p">,</span>
+                <span class="n">zhmin</span><span class="o">=</span><span class="n">zhmin</span><span class="p">,</span>
+                <span class="n">hwindow</span><span class="o">=</span><span class="n">hwindow</span><span class="p">,</span>
+                <span class="n">mlzhmin</span><span class="o">=</span><span class="n">mlzhmin</span><span class="p">,</span>
+                <span class="n">mlzhmax</span><span class="o">=</span><span class="n">mlzhmax</span><span class="p">,</span>
+                <span class="n">mlzdrmin</span><span class="o">=</span><span class="n">mlzdrmin</span><span class="p">,</span>
+                <span class="n">mlzdrmax</span><span class="o">=</span><span class="n">mlzdrmax</span><span class="p">,</span>
+                <span class="n">htol</span><span class="o">=</span><span class="n">htol</span><span class="p">,</span>
+                <span class="n">ml_bottom_diff_max</span><span class="o">=</span><span class="n">ml_bottom_diff_max</span><span class="p">,</span>
+                <span class="n">time_accu_max</span><span class="o">=</span><span class="n">time_accu_max</span><span class="p">,</span>
+                <span class="n">nml_points_min</span><span class="o">=</span><span class="n">nml_points_min</span><span class="p">,</span>
+                <span class="n">wlength</span><span class="o">=</span><span class="n">wlength</span><span class="p">,</span>
+                <span class="n">percentile_bottom</span><span class="o">=</span><span class="n">percentile_bottom</span><span class="p">,</span>
+                <span class="n">percentile_top</span><span class="o">=</span><span class="n">percentile_top</span><span class="p">,</span>
+                <span class="n">interpol</span><span class="o">=</span><span class="n">interpol</span><span class="p">,</span>
+                <span class="n">time_nodata_allowed</span><span class="o">=</span><span class="n">time_nodata_allowed</span><span class="p">,</span>
+                <span class="n">refl_field</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span>
+                <span class="n">zdr_field</span><span class="o">=</span><span class="n">zdr_field</span><span class="p">,</span>
+                <span class="n">rhv_field</span><span class="o">=</span><span class="n">rhv_field</span><span class="p">,</span>
+                <span class="n">temp_field</span><span class="o">=</span><span class="n">temp_field</span><span class="p">,</span>
+                <span class="n">iso0_field</span><span class="o">=</span><span class="n">iso0_field</span><span class="p">,</span>
+                <span class="n">ml_field</span><span class="o">=</span><span class="s2">&quot;melting_layer&quot;</span><span class="p">,</span>
+                <span class="n">ml_pos_field</span><span class="o">=</span><span class="s2">&quot;melting_layer_height&quot;</span><span class="p">,</span>
+                <span class="n">temp_ref</span><span class="o">=</span><span class="n">temp_ref</span><span class="p">,</span>
+                <span class="n">get_iso0</span><span class="o">=</span><span class="n">get_iso0</span><span class="p">,</span>
+                <span class="n">ml_global</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># use previous detection</span>
-            <span class="n">ml_obj</span><span class="p">,</span> <span class="n">ml_dict</span><span class="p">,</span> <span class="n">iso0_dict</span><span class="p">,</span> <span class="n">ml_global</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">melting_layer_giangrande</span><span class="p">(</span>
-                    <span class="n">radar</span><span class="p">,</span>
-                    <span class="n">nVol</span><span class="o">=</span><span class="n">nVol</span><span class="p">,</span>
-                    <span class="n">maxh</span><span class="o">=</span><span class="n">maxh</span><span class="p">,</span>
-                    <span class="n">hres</span><span class="o">=</span><span class="n">hres</span><span class="p">,</span>
-                    <span class="n">rmin</span><span class="o">=</span><span class="n">rmin</span><span class="p">,</span>
-                    <span class="n">elmin</span><span class="o">=</span><span class="n">elmin</span><span class="p">,</span>
-                    <span class="n">elmax</span><span class="o">=</span><span class="n">elmax</span><span class="p">,</span>
-                    <span class="n">rhomin</span><span class="o">=</span><span class="n">rhomin</span><span class="p">,</span>
-                    <span class="n">rhomax</span><span class="o">=</span><span class="n">rhomax</span><span class="p">,</span>
-                    <span class="n">zhmin</span><span class="o">=</span><span class="n">zhmin</span><span class="p">,</span>
-                    <span class="n">hwindow</span><span class="o">=</span><span class="n">hwindow</span><span class="p">,</span>
-                    <span class="n">mlzhmin</span><span class="o">=</span><span class="n">mlzhmin</span><span class="p">,</span>
-                    <span class="n">mlzhmax</span><span class="o">=</span><span class="n">mlzhmax</span><span class="p">,</span>
-                    <span class="n">mlzdrmin</span><span class="o">=</span><span class="n">mlzdrmin</span><span class="p">,</span>
-                    <span class="n">mlzdrmax</span><span class="o">=</span><span class="n">mlzdrmax</span><span class="p">,</span>
-                    <span class="n">htol</span><span class="o">=</span><span class="n">htol</span><span class="p">,</span>
-                    <span class="n">ml_bottom_diff_max</span><span class="o">=</span><span class="n">ml_bottom_diff_max</span><span class="p">,</span>
-                    <span class="n">time_accu_max</span><span class="o">=</span><span class="n">time_accu_max</span><span class="p">,</span>
-                    <span class="n">nml_points_min</span><span class="o">=</span><span class="n">nml_points_min</span><span class="p">,</span>
-                    <span class="n">wlength</span><span class="o">=</span><span class="n">wlength</span><span class="p">,</span>
-                    <span class="n">percentile_bottom</span><span class="o">=</span><span class="n">percentile_bottom</span><span class="p">,</span>
-                    <span class="n">percentile_top</span><span class="o">=</span><span class="n">percentile_top</span><span class="p">,</span>
-                    <span class="n">interpol</span><span class="o">=</span><span class="n">interpol</span><span class="p">,</span>
-                    <span class="n">time_nodata_allowed</span><span class="o">=</span><span class="n">time_nodata_allowed</span><span class="p">,</span>
-                    <span class="n">refl_field</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span>
-                    <span class="n">zdr_field</span><span class="o">=</span><span class="n">zdr_field</span><span class="p">,</span>
-                    <span class="n">rhv_field</span><span class="o">=</span><span class="n">rhv_field</span><span class="p">,</span>
-                    <span class="n">temp_field</span><span class="o">=</span><span class="n">temp_field</span><span class="p">,</span>
-                    <span class="n">iso0_field</span><span class="o">=</span><span class="n">iso0_field</span><span class="p">,</span>
-                    <span class="n">ml_field</span><span class="o">=</span><span class="s2">&quot;melting_layer&quot;</span><span class="p">,</span>
-                    <span class="n">ml_pos_field</span><span class="o">=</span><span class="s2">&quot;melting_layer_height&quot;</span><span class="p">,</span>
-                    <span class="n">temp_ref</span><span class="o">=</span><span class="n">temp_ref</span><span class="p">,</span>
-                    <span class="n">get_iso0</span><span class="o">=</span><span class="n">get_iso0</span><span class="p">,</span>
-                    <span class="n">ml_global</span><span class="o">=</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">],</span>
-                <span class="p">)</span>
+            <span class="p">(</span>
+                <span class="n">ml_obj</span><span class="p">,</span>
+                <span class="n">ml_dict</span><span class="p">,</span>
+                <span class="n">iso0_dict</span><span class="p">,</span>
+                <span class="n">ml_global</span><span class="p">,</span>
+            <span class="p">)</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">melting_layer_giangrande</span><span class="p">(</span>
+                <span class="n">radar</span><span class="p">,</span>
+                <span class="n">nVol</span><span class="o">=</span><span class="n">nVol</span><span class="p">,</span>
+                <span class="n">maxh</span><span class="o">=</span><span class="n">maxh</span><span class="p">,</span>
+                <span class="n">hres</span><span class="o">=</span><span class="n">hres</span><span class="p">,</span>
+                <span class="n">rmin</span><span class="o">=</span><span class="n">rmin</span><span class="p">,</span>
+                <span class="n">elmin</span><span class="o">=</span><span class="n">elmin</span><span class="p">,</span>
+                <span class="n">elmax</span><span class="o">=</span><span class="n">elmax</span><span class="p">,</span>
+                <span class="n">rhomin</span><span class="o">=</span><span class="n">rhomin</span><span class="p">,</span>
+                <span class="n">rhomax</span><span class="o">=</span><span class="n">rhomax</span><span class="p">,</span>
+                <span class="n">zhmin</span><span class="o">=</span><span class="n">zhmin</span><span class="p">,</span>
+                <span class="n">hwindow</span><span class="o">=</span><span class="n">hwindow</span><span class="p">,</span>
+                <span class="n">mlzhmin</span><span class="o">=</span><span class="n">mlzhmin</span><span class="p">,</span>
+                <span class="n">mlzhmax</span><span class="o">=</span><span class="n">mlzhmax</span><span class="p">,</span>
+                <span class="n">mlzdrmin</span><span class="o">=</span><span class="n">mlzdrmin</span><span class="p">,</span>
+                <span class="n">mlzdrmax</span><span class="o">=</span><span class="n">mlzdrmax</span><span class="p">,</span>
+                <span class="n">htol</span><span class="o">=</span><span class="n">htol</span><span class="p">,</span>
+                <span class="n">ml_bottom_diff_max</span><span class="o">=</span><span class="n">ml_bottom_diff_max</span><span class="p">,</span>
+                <span class="n">time_accu_max</span><span class="o">=</span><span class="n">time_accu_max</span><span class="p">,</span>
+                <span class="n">nml_points_min</span><span class="o">=</span><span class="n">nml_points_min</span><span class="p">,</span>
+                <span class="n">wlength</span><span class="o">=</span><span class="n">wlength</span><span class="p">,</span>
+                <span class="n">percentile_bottom</span><span class="o">=</span><span class="n">percentile_bottom</span><span class="p">,</span>
+                <span class="n">percentile_top</span><span class="o">=</span><span class="n">percentile_top</span><span class="p">,</span>
+                <span class="n">interpol</span><span class="o">=</span><span class="n">interpol</span><span class="p">,</span>
+                <span class="n">time_nodata_allowed</span><span class="o">=</span><span class="n">time_nodata_allowed</span><span class="p">,</span>
+                <span class="n">refl_field</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span>
+                <span class="n">zdr_field</span><span class="o">=</span><span class="n">zdr_field</span><span class="p">,</span>
+                <span class="n">rhv_field</span><span class="o">=</span><span class="n">rhv_field</span><span class="p">,</span>
+                <span class="n">temp_field</span><span class="o">=</span><span class="n">temp_field</span><span class="p">,</span>
+                <span class="n">iso0_field</span><span class="o">=</span><span class="n">iso0_field</span><span class="p">,</span>
+                <span class="n">ml_field</span><span class="o">=</span><span class="s2">&quot;melting_layer&quot;</span><span class="p">,</span>
+                <span class="n">ml_pos_field</span><span class="o">=</span><span class="s2">&quot;melting_layer_height&quot;</span><span class="p">,</span>
+                <span class="n">temp_ref</span><span class="o">=</span><span class="n">temp_ref</span><span class="p">,</span>
+                <span class="n">get_iso0</span><span class="o">=</span><span class="n">get_iso0</span><span class="p">,</span>
+                <span class="n">ml_global</span><span class="o">=</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">],</span>
             <span class="p">)</span>
 
         <span class="c1"># update global stack</span>

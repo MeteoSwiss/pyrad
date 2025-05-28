@@ -1200,6 +1200,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pyrad.util.compute_quantiles_sweep.html">pyrad.util.compute_quantiles_sweep</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.util.create_sun_hits_field.html">pyrad.util.create_sun_hits_field</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.util.create_sun_retrieval_field.html">pyrad.util.create_sun_retrieval_field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.enable_debug_on_error.html">pyrad.util.enable_debug_on_error</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.util.find_colocated_indexes.html">pyrad.util.find_colocated_indexes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.util.find_contiguous_times.html">pyrad.util.find_contiguous_times</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.util.find_nearest_gate.html">pyrad.util.find_nearest_gate</a></li>
@@ -1227,6 +1228,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pyrad.util.retrieve_mch_prod_RT.html">pyrad.util.retrieve_mch_prod_RT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.util.time_avg_range.html">pyrad.util.time_avg_range</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.util.time_series_statistics.html">pyrad.util.time_series_statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.util.warn.html">pyrad.util.warn</a></li>
 </ul>
 </details></li>
 </ul>
@@ -1481,86 +1483,92 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.create_sun_retrieval_field.html#pyrad.util.create_sun_retrieval_field" title="pyrad.util.create_sun_retrieval_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_sun_retrieval_field</span></code></a>(par, field_name, ...)</p></td>
 <td><p>creates a sun retrieval field from the retrieval parameters</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.find_colocated_indexes.html#pyrad.util.find_colocated_indexes" title="pyrad.util.find_colocated_indexes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_colocated_indexes</span></code></a>(radar1, radar2, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.enable_debug_on_error.html#pyrad.util.enable_debug_on_error" title="pyrad.util.enable_debug_on_error"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enable_debug_on_error</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.find_colocated_indexes.html#pyrad.util.find_colocated_indexes" title="pyrad.util.find_colocated_indexes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_colocated_indexes</span></code></a>(radar1, radar2, ...)</p></td>
 <td><p>Given the theoretical elevation, azimuth and range of the co-located gates of two radars and a given tolerance returns the indices of the gates for the current radars</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.find_contiguous_times.html#pyrad.util.find_contiguous_times" title="pyrad.util.find_contiguous_times"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_contiguous_times</span></code></a>(times[, step])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.find_contiguous_times.html#pyrad.util.find_contiguous_times" title="pyrad.util.find_contiguous_times"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_contiguous_times</span></code></a>(times[, step])</p></td>
 <td><p>Given and array of ordered times, find those contiguous according to a maximum time step</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.find_nearest_gate.html#pyrad.util.find_nearest_gate" title="pyrad.util.find_nearest_gate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_nearest_gate</span></code></a>(radar, lat, lon[, latlon_tol])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.find_nearest_gate.html#pyrad.util.find_nearest_gate" title="pyrad.util.find_nearest_gate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_nearest_gate</span></code></a>(radar, lat, lon[, latlon_tol])</p></td>
 <td><p>Find the radar gate closest to a lat,lon point</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.find_ray_index.html#pyrad.util.find_ray_index" title="pyrad.util.find_ray_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_ray_index</span></code></a>(ele_vec, azi_vec, ele, azi[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.find_ray_index.html#pyrad.util.find_ray_index" title="pyrad.util.find_ray_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_ray_index</span></code></a>(ele_vec, azi_vec, ele, azi[, ...])</p></td>
 <td><p>Find the ray index corresponding to a particular elevation and azimuth</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.find_rng_index.html#pyrad.util.find_rng_index" title="pyrad.util.find_rng_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_rng_index</span></code></a>(rng_vec, rng[, rng_tol])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.find_rng_index.html#pyrad.util.find_rng_index" title="pyrad.util.find_rng_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_rng_index</span></code></a>(rng_vec, rng[, rng_tol])</p></td>
 <td><p>Find the range index corresponding to a particular range</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.get_ROI.html#pyrad.util.get_ROI" title="pyrad.util.get_ROI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_ROI</span></code></a>(radar, fieldname, sector)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.get_ROI.html#pyrad.util.get_ROI" title="pyrad.util.get_ROI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_ROI</span></code></a>(radar, fieldname, sector)</p></td>
 <td><p>filter out any data outside the region of interest defined by sector</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.get_box_coords.html#pyrad.util.get_box_coords" title="pyrad.util.get_box_coords"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_box_coords</span></code></a>(x_point, y_point[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.get_box_coords.html#pyrad.util.get_box_coords" title="pyrad.util.get_box_coords"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_box_coords</span></code></a>(x_point, y_point[, ...])</p></td>
 <td><p>Get the points defining a rectangle from the position of its centre and the radius</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.get_cercle_coords.html#pyrad.util.get_cercle_coords" title="pyrad.util.get_cercle_coords"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_cercle_coords</span></code></a>(x_centre, y_centre[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.get_cercle_coords.html#pyrad.util.get_cercle_coords" title="pyrad.util.get_cercle_coords"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_cercle_coords</span></code></a>(x_centre, y_centre[, ...])</p></td>
 <td><p>Get the points defining a cercle from the position of its centre and the radius</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.get_closest_solar_flux.html#pyrad.util.get_closest_solar_flux" title="pyrad.util.get_closest_solar_flux"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_closest_solar_flux</span></code></a>(hit_datetime_list, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.get_closest_solar_flux.html#pyrad.util.get_closest_solar_flux" title="pyrad.util.get_closest_solar_flux"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_closest_solar_flux</span></code></a>(hit_datetime_list, ...)</p></td>
 <td><p>finds the solar flux measurement closest to the sun hit</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.get_data_along_azi.html#pyrad.util.get_data_along_azi" title="pyrad.util.get_data_along_azi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data_along_azi</span></code></a>(radar, field_name, ...[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.get_data_along_azi.html#pyrad.util.get_data_along_azi" title="pyrad.util.get_data_along_azi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data_along_azi</span></code></a>(radar, field_name, ...[, ...])</p></td>
 <td><p>Get data at particular (ranges, elevations)</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.get_data_along_ele.html#pyrad.util.get_data_along_ele" title="pyrad.util.get_data_along_ele"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data_along_ele</span></code></a>(radar, field_name, ...[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.get_data_along_ele.html#pyrad.util.get_data_along_ele" title="pyrad.util.get_data_along_ele"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data_along_ele</span></code></a>(radar, field_name, ...[, ...])</p></td>
 <td><p>Get data at particular (ranges, azimuths)</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.get_data_along_rng.html#pyrad.util.get_data_along_rng" title="pyrad.util.get_data_along_rng"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data_along_rng</span></code></a>(radar, field_name, ...[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.get_data_along_rng.html#pyrad.util.get_data_along_rng" title="pyrad.util.get_data_along_rng"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data_along_rng</span></code></a>(radar, field_name, ...[, ...])</p></td>
 <td><p>Get data at particular (azimuths, elevations)</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.get_fixed_rng_data.html#pyrad.util.get_fixed_rng_data" title="pyrad.util.get_fixed_rng_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_fixed_rng_data</span></code></a>(radar, field_names, fixed_rng)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.get_fixed_rng_data.html#pyrad.util.get_fixed_rng_data" title="pyrad.util.get_fixed_rng_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_fixed_rng_data</span></code></a>(radar, field_names, fixed_rng)</p></td>
 <td><p>Creates a 2D-grid with (azi, ele) data at a fixed range</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.get_range_bins_to_avg.html#pyrad.util.get_range_bins_to_avg" title="pyrad.util.get_range_bins_to_avg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_range_bins_to_avg</span></code></a>(rad1_rng, rad2_rng)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.get_range_bins_to_avg.html#pyrad.util.get_range_bins_to_avg" title="pyrad.util.get_range_bins_to_avg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_range_bins_to_avg</span></code></a>(rad1_rng, rad2_rng)</p></td>
 <td><p>Compares the resolution of two radars and determines if and which radar has to be averaged and the length of the averaging window</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.join_time_series.html#pyrad.util.join_time_series" title="pyrad.util.join_time_series"><code class="xref py py-obj docutils literal notranslate"><span class="pre">join_time_series</span></code></a>(t1, val1, t2, val2[, dropnan])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.join_time_series.html#pyrad.util.join_time_series" title="pyrad.util.join_time_series"><code class="xref py py-obj docutils literal notranslate"><span class="pre">join_time_series</span></code></a>(t1, val1, t2, val2[, dropnan])</p></td>
 <td><p>joins time_series.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.project_to_vertical.html#pyrad.util.project_to_vertical" title="pyrad.util.project_to_vertical"><code class="xref py py-obj docutils literal notranslate"><span class="pre">project_to_vertical</span></code></a>(data_in, data_height, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.project_to_vertical.html#pyrad.util.project_to_vertical" title="pyrad.util.project_to_vertical"><code class="xref py py-obj docutils literal notranslate"><span class="pre">project_to_vertical</span></code></a>(data_in, data_height, ...)</p></td>
 <td><p>Projects radar data to a regular vertical grid</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.quantiles_weighted.html#pyrad.util.quantiles_weighted" title="pyrad.util.quantiles_weighted"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quantiles_weighted</span></code></a>(values[, weight_vector, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.quantiles_weighted.html#pyrad.util.quantiles_weighted" title="pyrad.util.quantiles_weighted"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quantiles_weighted</span></code></a>(values[, weight_vector, ...])</p></td>
 <td><p>Given a set of values and weights, compute the weighted quantile(s) and average.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.rainfall_accumulation.html#pyrad.util.rainfall_accumulation" title="pyrad.util.rainfall_accumulation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rainfall_accumulation</span></code></a>(t_in_vec, val_in_vec)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.rainfall_accumulation.html#pyrad.util.rainfall_accumulation" title="pyrad.util.rainfall_accumulation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rainfall_accumulation</span></code></a>(t_in_vec, val_in_vec)</p></td>
 <td><p>Computes the rainfall accumulation of a time series over a given period</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.ratio_bootstrapping.html#pyrad.util.ratio_bootstrapping" title="pyrad.util.ratio_bootstrapping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ratio_bootstrapping</span></code></a>(nominator, denominator)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.ratio_bootstrapping.html#pyrad.util.ratio_bootstrapping" title="pyrad.util.ratio_bootstrapping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ratio_bootstrapping</span></code></a>(nominator, denominator)</p></td>
 <td><p>Computes a set of samples obtained as sum(nominator)/sum(denominator) where the nominator and the denominator are randomly sampled with replacement.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.retrieve_AQC_XLS.html#pyrad.util.retrieve_AQC_XLS" title="pyrad.util.retrieve_AQC_XLS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retrieve_AQC_XLS</span></code></a>(time, stations)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.retrieve_AQC_XLS.html#pyrad.util.retrieve_AQC_XLS" title="pyrad.util.retrieve_AQC_XLS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retrieve_AQC_XLS</span></code></a>(time, stations)</p></td>
 <td><p>Retrieves cross-validation CPC data for a set of stations from the xls files prepared by Yanni</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.retrieve_CPCCV.html#pyrad.util.retrieve_CPCCV" title="pyrad.util.retrieve_CPCCV"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retrieve_CPCCV</span></code></a>(time, stations)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.retrieve_CPCCV.html#pyrad.util.retrieve_CPCCV" title="pyrad.util.retrieve_CPCCV"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retrieve_CPCCV</span></code></a>(time, stations)</p></td>
 <td><p>Retrieves cross-validation CPC data for a set of stations from the xls files prepared by Yanni</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.retrieve_hzt_RT.html#pyrad.util.retrieve_hzt_RT" title="pyrad.util.retrieve_hzt_RT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retrieve_hzt_RT</span></code></a>(tstep)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.retrieve_hzt_RT.html#pyrad.util.retrieve_hzt_RT" title="pyrad.util.retrieve_hzt_RT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retrieve_hzt_RT</span></code></a>(tstep)</p></td>
 <td><p>Retrieves the preprocessed HZT products</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.retrieve_hzt_prod.html#pyrad.util.retrieve_hzt_prod" title="pyrad.util.retrieve_hzt_prod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retrieve_hzt_prod</span></code></a>(folder_out, start_time, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.retrieve_hzt_prod.html#pyrad.util.retrieve_hzt_prod" title="pyrad.util.retrieve_hzt_prod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retrieve_hzt_prod</span></code></a>(folder_out, start_time, ...)</p></td>
 <td><p>Retrieves the preprocessed HZT products from the CSCS repository for a specified time range, unzips them and places them in a specified folder</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.retrieve_mch_prod.html#pyrad.util.retrieve_mch_prod" title="pyrad.util.retrieve_mch_prod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retrieve_mch_prod</span></code></a>(start_time, end_time, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.retrieve_mch_prod.html#pyrad.util.retrieve_mch_prod" title="pyrad.util.retrieve_mch_prod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retrieve_mch_prod</span></code></a>(start_time, end_time, ...)</p></td>
 <td><p>Retrieves radar data from the CSCS repository for a specified time range, unzips them and places them in a specified folder</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.retrieve_mch_prod_RT.html#pyrad.util.retrieve_mch_prod_RT" title="pyrad.util.retrieve_mch_prod_RT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retrieve_mch_prod_RT</span></code></a>(time, product_name[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.retrieve_mch_prod_RT.html#pyrad.util.retrieve_mch_prod_RT" title="pyrad.util.retrieve_mch_prod_RT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retrieve_mch_prod_RT</span></code></a>(time, product_name[, ...])</p></td>
 <td><p>Adapted function from rainforest.common.retrieve_data</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.time_avg_range.html#pyrad.util.time_avg_range" title="pyrad.util.time_avg_range"><code class="xref py py-obj docutils literal notranslate"><span class="pre">time_avg_range</span></code></a>(timeinfo, avg_starttime, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.time_avg_range.html#pyrad.util.time_avg_range" title="pyrad.util.time_avg_range"><code class="xref py py-obj docutils literal notranslate"><span class="pre">time_avg_range</span></code></a>(timeinfo, avg_starttime, ...)</p></td>
 <td><p>finds the new start and end time of an averaging</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.time_series_statistics.html#pyrad.util.time_series_statistics" title="pyrad.util.time_series_statistics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">time_series_statistics</span></code></a>(t_in_vec, val_in_vec)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyrad.util.time_series_statistics.html#pyrad.util.time_series_statistics" title="pyrad.util.time_series_statistics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">time_series_statistics</span></code></a>(t_in_vec, val_in_vec)</p></td>
 <td><p>Computes statistics over a time-averaged series.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pyrad.util.warn.html#pyrad.util.warn" title="pyrad.util.warn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">warn</span></code></a>(message[, use_debug])</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>

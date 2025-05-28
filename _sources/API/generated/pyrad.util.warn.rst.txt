@@ -1,0 +1,6 @@
+pyrad.util.warn
+===============
+
+.. currentmodule:: pyrad.util
+
+.. autofunction:: warn

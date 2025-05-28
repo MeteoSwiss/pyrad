@@ -415,7 +415,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">netCDF4</span><span class="w"> </span><span class="kn">import</span> <span class="n">num2date</span>
 
@@ -881,9 +881,9 @@
                 <span class="n">poi_data_aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_all</span><span class="p">(</span>
                     <span class="p">(</span><span class="n">psr_poi</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">psr</span><span class="o">.</span><span class="n">npulses_max</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span>
                 <span class="p">)</span>
-                <span class="n">poi_data_aux</span><span class="p">[:</span> <span class="n">psr_poi</span><span class="o">.</span><span class="n">nrays</span> <span class="o">-</span> <span class="n">nrays</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">0</span> <span class="p">:</span> <span class="n">psr_poi</span><span class="o">.</span><span class="n">npulses_max</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">psr_poi</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-                <span class="p">)</span>
+                <span class="n">poi_data_aux</span><span class="p">[</span>
+                    <span class="p">:</span> <span class="n">psr_poi</span><span class="o">.</span><span class="n">nrays</span> <span class="o">-</span> <span class="n">nrays</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">0</span> <span class="p">:</span> <span class="n">psr_poi</span><span class="o">.</span><span class="n">npulses_max</span>
+                <span class="p">]</span> <span class="o">=</span> <span class="n">psr_poi</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
                 <span class="n">poi_data_aux</span><span class="p">[</span><span class="n">psr_poi</span><span class="o">.</span><span class="n">nrays</span> <span class="o">-</span> <span class="n">nrays</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">poi_data</span>
                 <span class="n">psr_poi</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">poi_data_aux</span>
 
@@ -912,9 +912,9 @@
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">Doppler_aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_all</span><span class="p">((</span><span class="n">psr_poi</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="n">psr</span><span class="o">.</span><span class="n">npulses_max</span><span class="p">))</span>
-                <span class="n">Doppler_aux</span><span class="p">[:</span> <span class="n">psr_poi</span><span class="o">.</span><span class="n">nrays</span> <span class="o">-</span> <span class="n">nrays</span><span class="p">,</span> <span class="mi">0</span> <span class="p">:</span> <span class="n">psr_poi</span><span class="o">.</span><span class="n">npulses_max</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">psr_poi</span><span class="o">.</span><span class="n">Doppler_velocity</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-                <span class="p">)</span>
+                <span class="n">Doppler_aux</span><span class="p">[</span>
+                    <span class="p">:</span> <span class="n">psr_poi</span><span class="o">.</span><span class="n">nrays</span> <span class="o">-</span> <span class="n">nrays</span><span class="p">,</span> <span class="mi">0</span> <span class="p">:</span> <span class="n">psr_poi</span><span class="o">.</span><span class="n">npulses_max</span>
+                <span class="p">]</span> <span class="o">=</span> <span class="n">psr_poi</span><span class="o">.</span><span class="n">Doppler_velocity</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
                 <span class="n">Doppler_aux</span><span class="p">[</span><span class="n">psr_poi</span><span class="o">.</span><span class="n">nrays</span> <span class="o">-</span> <span class="n">nrays</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">Doppler_data</span>
                 <span class="n">psr_poi</span><span class="o">.</span><span class="n">Doppler_velocity</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Doppler_aux</span>
 
@@ -940,9 +940,9 @@
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">Doppler_aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_all</span><span class="p">((</span><span class="n">psr_poi</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="n">psr</span><span class="o">.</span><span class="n">npulses_max</span><span class="p">))</span>
-                <span class="n">Doppler_aux</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">psr_poi</span><span class="o">.</span><span class="n">nrays</span> <span class="o">-</span> <span class="n">nrays</span><span class="p">,</span> <span class="mi">0</span> <span class="p">:</span> <span class="n">psr_poi</span><span class="o">.</span><span class="n">npulses_max</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">psr_poi</span><span class="o">.</span><span class="n">Doppler_frequency</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-                <span class="p">)</span>
+                <span class="n">Doppler_aux</span><span class="p">[</span>
+                    <span class="mi">0</span> <span class="p">:</span> <span class="n">psr_poi</span><span class="o">.</span><span class="n">nrays</span> <span class="o">-</span> <span class="n">nrays</span><span class="p">,</span> <span class="mi">0</span> <span class="p">:</span> <span class="n">psr_poi</span><span class="o">.</span><span class="n">npulses_max</span>
+                <span class="p">]</span> <span class="o">=</span> <span class="n">psr_poi</span><span class="o">.</span><span class="n">Doppler_frequency</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
                 <span class="n">Doppler_aux</span><span class="p">[</span><span class="n">psr_poi</span><span class="o">.</span><span class="n">nrays</span> <span class="o">-</span> <span class="n">nrays</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">Doppler_data</span>
                 <span class="n">psr_poi</span><span class="o">.</span><span class="n">Doppler_frequency</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Doppler_aux</span>
 

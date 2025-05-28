@@ -41,6 +41,8 @@
     
     create_sun_retrieval_field
     
+    enable_debug_on_error
+    
     find_colocated_indexes
     
     find_contiguous_times
@@ -94,5 +96,7 @@
     time_avg_range
     
     time_series_statistics
+    
+    warn
     
 

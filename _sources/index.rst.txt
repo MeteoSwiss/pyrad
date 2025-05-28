@@ -72,6 +72,7 @@ The core of Pyrad is based on Py-ART. Py-ART was originally developed in the con
 
 * J. Figueras i Ventura, M. Lainer, Z. Schauwecker, J. Grazioli, U. Germann, (2020). Pyrad: A Real-Time Weather Radar Data Processing Framework Based on Py-ART. Journal of Open Research Software, 8(1), p.28. DOI: http://doi.org/10.5334/jors.330
 
+
 Disclaimer
 =============
 

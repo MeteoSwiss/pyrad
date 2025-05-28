@@ -55,7 +55,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Short courses" href="shortcourses.html" />
-    <link rel="prev" title="Using Pyrad" href="usage.html" /> 
+    <link rel="prev" title="Debugging" href="debugging.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="2.0.3" />   
@@ -340,6 +340,7 @@
 <li class="toctree-l1"><a class="reference internal" href="about.html">What is Pyrad?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Using Pyrad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debugging.html">Debugging</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Contributing to Pyrad</a></li>
 <li class="toctree-l1"><a class="reference internal" href="shortcourses.html">Short courses</a></li>
 </ul>
@@ -405,6 +406,16 @@
 <h1>Contributing to Pyrad<a class="headerlink" href="#contributing-to-pyrad" title="Link to this heading">#</a></h1>
 <p>Pyrad is an open project and all contributions are welcome.</p>
 <p>Please check our <a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/additional_doc/pyrad_user_manual.pdf">User manual</a> to get started!</p>
+<section id="code-quality">
+<h2>Code quality<a class="headerlink" href="#code-quality" title="Link to this heading">#</a></h2>
+<p>The code of pyrad is quality-checked with <a class="reference external" href="https://docs.astral.sh/ruff/">ruff</a> (PEP8) and <a class="reference external" href="https://github.com/psf/black">black</a> (code formatting).
+Any code that does not follow these guidelines will make the CI of the commit or PR fail. The best way to avoid this is to install pre-commit hooks that will run ruff and black for every local commit you make.</p>
+<p>To install the pre-commit hooks simply go to the root directory or your pyrad repository (the one with the .git directory) and run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pre</span><span class="o">-</span><span class="n">commit</span>
+<span class="n">pre</span><span class="o">-</span><span class="n">commit</span> <span class="n">install</span>
+</pre></div>
+</div>
+</section>
 </section>
 
 <div class="section ablog__blog_comments">
@@ -421,12 +432,12 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="usage.html"
+       href="debugging.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Using Pyrad</p>
+        <p class="prev-next-title">Debugging</p>
       </div>
     </a>
     <a class="right-next"
@@ -448,6 +459,18 @@
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-quality">Code quality</a></li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
   <div role="note" aria-label="source link">

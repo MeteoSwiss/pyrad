@@ -393,7 +393,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">netCDF4</span><span class="w"> </span><span class="kn">import</span> <span class="n">num2date</span>
@@ -1130,14 +1130,14 @@
         <span class="p">)</span>
 
         <span class="c1"># find common time stamps</span>
-        <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">radardate_cum</span><span class="p">,</span> <span class="n">sensordate_cum</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">radardate_cum</span><span class="p">,</span> <span class="n">sensordate_cum</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">ind</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No sensor data for radar data time stamps&quot;</span><span class="p">)</span>
         <span class="n">radardate_cum2</span> <span class="o">=</span> <span class="n">radardate_cum</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
         <span class="n">radarvalue_cum2</span> <span class="o">=</span> <span class="n">radarvalue_cum</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
         <span class="n">np_radar_cum2</span> <span class="o">=</span> <span class="n">np_radar_cum</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
 
-        <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">sensordate_cum</span><span class="p">,</span> <span class="n">radardate_cum2</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">sensordate_cum</span><span class="p">,</span> <span class="n">radardate_cum2</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">sensorvalue_cum2</span> <span class="o">=</span> <span class="n">sensorvalue_cum</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
         <span class="n">np_sensor_cum2</span> <span class="o">=</span> <span class="n">np_sensor_cum</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
 

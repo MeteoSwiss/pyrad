@@ -400,7 +400,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">importlib</span>
 
@@ -637,9 +637,16 @@
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">savedir</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;excessgatespath&quot;</span><span class="p">]</span>
         <span class="n">fname</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;excessgates_fname&quot;</span><span class="p">]</span>
-        <span class="n">ray_ind</span><span class="p">,</span> <span class="n">rng_ind</span><span class="p">,</span> <span class="n">ele</span><span class="p">,</span> <span class="n">azi</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">nsamples</span><span class="p">,</span> <span class="n">occurrence</span><span class="p">,</span> <span class="n">freq_occu</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">read_excess_gates</span><span class="p">(</span><span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="p">(</span>
+            <span class="n">ray_ind</span><span class="p">,</span>
+            <span class="n">rng_ind</span><span class="p">,</span>
+            <span class="n">ele</span><span class="p">,</span>
+            <span class="n">azi</span><span class="p">,</span>
+            <span class="n">rng</span><span class="p">,</span>
+            <span class="n">nsamples</span><span class="p">,</span>
+            <span class="n">occurrence</span><span class="p">,</span>
+            <span class="n">freq_occu</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">read_excess_gates</span><span class="p">(</span><span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
 
         <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;ray_ind&quot;</span><span class="p">:</span> <span class="n">ray_ind</span><span class="p">,</span>
@@ -735,7 +742,7 @@
         <span class="n">radar_aux</span><span class="o">.</span><span class="n">nrays</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">radar_aux</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">0</span>
         <span class="n">radar_aux</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">0</span>
-        
+
         <span class="n">field_dict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
         <span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">nbins</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 
@@ -1808,7 +1815,6 @@
         <span class="n">sf_ref</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span><span class="p">)</span>
         <span class="n">ref_time</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="s2">&quot;wavelen&quot;</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]:</span>
-
             <span class="n">flx_dt</span><span class="p">,</span> <span class="n">flx_val</span> <span class="o">=</span> <span class="n">read_solar_flux</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;solarfluxpath&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;fluxtable.txt&quot;</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">flx_dt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -2460,7 +2466,6 @@
     <span class="n">sf_ref</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span><span class="p">)</span>
     <span class="n">ref_time</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="s2">&quot;wavelen&quot;</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]:</span>
-
         <span class="n">flx_dt</span><span class="p">,</span> <span class="n">flx_val</span> <span class="o">=</span> <span class="n">read_solar_flux</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;solarfluxpath&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;fluxtable.txt&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">flx_dt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -2642,7 +2647,6 @@
             <span class="n">sf_ref</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span><span class="p">)</span>
             <span class="n">ref_time</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">if</span> <span class="s2">&quot;wavelen&quot;</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]:</span>
-
                 <span class="n">flx_dt</span><span class="p">,</span> <span class="n">flx_val</span> <span class="o">=</span> <span class="n">read_solar_flux</span><span class="p">(</span>
                     <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;solarfluxpath&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;fluxtable.txt&quot;</span>
                 <span class="p">)</span>

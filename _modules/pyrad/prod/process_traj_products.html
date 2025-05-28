@@ -392,7 +392,7 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..io.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_save_dir</span><span class="p">,</span> <span class="n">make_filename</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..io.timeseries</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>
@@ -431,7 +431,6 @@
         <span class="n">dssavedir</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dssavename&quot;</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;TRAJ_PLOT&quot;</span><span class="p">:</span>
-
         <span class="n">timeinfo</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
@@ -502,7 +501,6 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;TRAJ_TEXT&quot;</span><span class="p">:</span>
-
         <span class="n">timeinfo</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">time_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>

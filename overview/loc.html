@@ -412,6 +412,11 @@ location of a radar (type of scans we want to measure, radar name, etc ). The lo
 weather radar (its position) itself, is instead usually read from the radar metadata directly and
 it is not necessarily defined in this file. The fields are described in the table below.</p>
 <div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 10.0%" />
+<col style="width: 70.0%" />
+</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Name</p></th>
 <th class="head"><p>Type</p></th>
@@ -433,68 +438,33 @@ it is not necessarily defined in this file. The fields are described in the tabl
 </tr>
 <tr class="row-odd"><td><p>DataTypeIDInFiles</p></td>
 <td><p>STRUCT</p></td>
-<td><p>Structure of strings defining the mapping between pyrad names and variable names in input files. If not provided it will be expected that the name in the files are the standard py-ART names (defined in the py-ART config file). If you process multiple radars, you can append the index of the radar to DataTypeIDInFiles: DataTypeIDInFiles1, will be used for radar 1, DataTypeIDInFiles2, for radar 2, and so on. If you don’t add this index, the same DataTypeIDInFiles struc will be used for all radars.  An example of such a struct could be:</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>dBZ</p></li>
+<td><p>Structure of strings defining the mapping between pyrad names and variable names in input files. If not provided it will be expected that the name in the files are the standard py-ART names (defined in the py-ART config file). If you process multiple radars, you can append the index of the radar to DataTypeIDInFiles: DataTypeIDInFiles1, will be used for radar 1, DataTypeIDInFiles2, for radar 2, and so on. If you don’t add this index, the same DataTypeIDInFiles struc will be used for all radars. An example of such a struct could be:</p>
+<ul class="simple">
+<li><p>dBZ: DBZ</p></li>
+<li><p>ZDR: ZDR</p></li>
+<li><p>RhoHV: RHOHV</p></li>
+<li><p>PhiDP: PHIDP</p></li>
+<li><p>KDP: KDP</p></li>
+<li><p>V: VEL</p></li>
+<li><p>W: WIDTH</p></li>
 </ul>
 </td>
-<td><p>STRING</p></td>
-<td><p>DBZ</p></td>
 </tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>ZDR</p></li>
-</ul>
-</td>
-<td><p>STRING</p></td>
-<td><p>ZDR</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>RhoHV</p></li>
-</ul>
-</td>
-<td><p>STRING</p></td>
-<td><p>RHOHV</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>PhiDP</p></li>
-</ul>
-</td>
-<td><p>STRING</p></td>
-<td><p>PHIDP</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>KDP</p></li>
-</ul>
-</td>
-<td><p>STRING</p></td>
-<td><p>KDP</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>V</p></li>
-</ul>
-</td>
-<td><p>STRING</p></td>
-<td><p>VEL</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>W</p></li>
-</ul>
-</td>
-<td><p>STRING</p></td>
-<td><p>WIDTH</p></td>
-</tr>
-<tr class="row-odd"><td><p>AntennaGaindB</p></td>
+<tr class="row-even"><td><p>AntennaGaindB</p></td>
 <td><p>FLOAT</p></td>
 <td><p>Antenna gain [dB].</p></td>
 </tr>
-<tr class="row-even"><td><p>ScanList</p></td>
+<tr class="row-odd"><td><p>ScanList</p></td>
 <td><p>STRARR</p></td>
 <td><p>A list with the scans used for this data processing. Note that the first scan in this list is used as master scan. The master scan must be the first (temporal) scan of the corresponding rainbow task. In case of composite volumes the master scan is usually a PPI and the following are RHIs. If the radar processed is MCH C-band the scan list consists of the radar elevation (i.e., from 001 to 020). All scan names must have a trailing ‘/’ except if rad4alp data is processed.</p></td>
 </tr>
-<tr class="row-odd"><td><p>ScanPeriod</p></td>
+<tr class="row-even"><td><p>ScanPeriod</p></td>
 <td><p>FLOAT</p></td>
 <td><p>Repetition period of each scan in minutes.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MasterScanTimeTol</p></td>
+<td><p>INT</p></td>
+<td><p>Add a tolerance to the scan times when creating radar volumes. If set to 1 will consider all scans which timestamp falls within T0 to T0 + ScanPeriod as belonging to the same volume. If set to -1 will consider all scans which timestamp falls within T0 - ScanPeriod to T0 as belonging to the same volume. T0 = timestamp of masterscan. Default is 0 (= no tolerance)</p></td>
 </tr>
 <tr class="row-even"><td><p>Azimtol</p></td>
 <td><p>FLOAT</p></td>
@@ -538,456 +508,31 @@ it is not necessarily defined in this file. The fields are described in the tabl
 </tr>
 <tr class="row-even"><td><p>ppiImageConfig</p></td>
 <td><p>STRUCT</p></td>
-<td><p>Structure defining the PPI image generating (PPI_IMAGE or PSEUDOPPI_IMAGE products). The following 6 fields are described below:</p></td>
+<td><p>Structure defining the PPI image generating (PPI_IMAGE or PSEUDOPPI_IMAGE products).</p></td>
 </tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>xsize</p></li>
-</ul>
-</td>
-<td><p>INT</p></td>
-<td><p>Number of horizontal pixels of the picture (without frame).</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>ysize</p></li>
-</ul>
-</td>
-<td><p>INT</p></td>
-<td><p>Number of vertical pixels of the picture (without frame).</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>xmin</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Distance of the left image boundary to the radar in km.</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>xmax</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Distance of the right image boundary to the radar in km.</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>ymin</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Distance of the lower image boundary to the radar in km.</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>ymax</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Distance of the upper image boundary to the radar in km.</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>dpi</p></li>
-</ul>
-</td>
-<td><p>INT</p></td>
-<td><p>Resolution of the image in dots per inch.</p></td>
-</tr>
-<tr class="row-even"><td><p>rhiImageConfig</p></td>
+<tr class="row-odd"><td><p>rhiImageConfig</p></td>
 <td><p>STRUCT</p></td>
-<td><p>Structure defining the RHI image generating (RHI_IMAGE or PSEUDORHI_IMAGE products). The following 6 fields are described below:</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>xsize</p></li>
-</ul>
-</td>
-<td><p>INT</p></td>
-<td><p>Number of horizontal pixels of the picture (without frame).</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>ysize</p></li>
-</ul>
-</td>
-<td><p>INT</p></td>
-<td><p>Number of vertical pixels of the picture (without frame).</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>xmin</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Distance of the left image boundary to the radar in km.</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>xmax</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Distance of the right image boundary to the radar in km.</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>ymin</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Distance of the lower image boundary (vertical direction) to the radar in km.</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>ymax</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Distance of the upper image boundary (vertical direction) to the radar in km.</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>dpi</p></li>
-</ul>
-</td>
-<td><p>INT</p></td>
-<td><p>Resolution of the image in dots per inch.</p></td>
+<td><p>Structure defining the RHI image generating (RHI_IMAGE or PSEUDORHI_IMAGE products).</p></td>
 </tr>
 <tr class="row-even"><td><p>ppiMapImageConfig</p></td>
 <td><p>STRUCT</p></td>
-<td><p>Structure defining the PPI image overlaid on a map (PPI_MAP product). The following 9 fields are described below:</p></td>
+<td><p>Structure defining the PPI image overlaid on a map (PPI_MAP product).</p></td>
 </tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>rngRing</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Distance between range rings (0 means no range ring) [km].</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>xsize</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Image size (inches) [inch].</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>ysize</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Image size (inches) [inch].</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>lonmin</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Minimum WGS84 longitude [°].</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>lonmax</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Maximum WGS84 longitude [°].</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>latmin</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Minimum WGS84 latitude [°].</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>latmax</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Maximum WGS84 latitude [°].</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>latstep</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Step in latitude [°] used in the map gridlines.</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>lonstep</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Step in longitude [°] used in the map gridlines.</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>exact_limits</p></li>
-</ul>
-</td>
-<td><p>INT</p></td>
-<td><p>If set to 1 will use exactly the user-specified latmin/latmax, lonmin/lonmax, if set to 0 will round them to the nearest integer.</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>mapres</p></li>
-</ul>
-</td>
-<td><p>STRING</p></td>
-<td><p>Map resolution. Accepted strings are: “10m”, “50m”, “110m”.</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>maps</p></li>
-</ul>
-</td>
-<td><p>STRARR</p></td>
-<td><dl class="simple">
-<dt>String array of possible maps to overplot. Accepted entries include: relief, countries, provinces,</dt><dd><p>urban_areas, roads, railroads, coastline, lakes, lakes_europe, rivers, rivers_europe.</p>
-</dd>
-</dl>
-</td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>dpi</p></li>
-</ul>
-</td>
-<td><p>INT</p></td>
-<td><p>Resolution of the image in dots per inch.</p></td>
-</tr>
-<tr class="row-even"><td><p>gridMapImageConfig</p></td>
+<tr class="row-odd"><td><p>gridMapImageConfig</p></td>
 <td><p>STRUCT</p></td>
 <td><p>Structure defining the display of gridded data overlaid on a map (SURFACE_IMAGE product).</p></td>
 </tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>xsize</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Image size (inches) [inch].</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>ysize</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Image size (inches) [inch].</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>lonmin</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Minimum WGS84 longitude [°].</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>lonmax</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Maximum WGS84 longitude [°].</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>latmin</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Minimum WGS84 latitude [°].</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>latmax</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Maximum WGS84 latitude [°].</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>latstep</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Step in latitude [°] used in the map gridlines.</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>lonstep</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Step in longitude [°] used in the map gridlines.</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>exact_limits</p></li>
-</ul>
-</td>
-<td><p>INT</p></td>
-<td><p>If set to 1 will use exactly the user-specified latmin/latmax, lonmin/lonmax, if set to 0 will round them to the nearest integer.</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>mapres</p></li>
-</ul>
-</td>
-<td><p>STRING</p></td>
-<td><p>Map resolution. Accepted strings are: “10m”, “50m”, “110m”.</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>maps</p></li>
-</ul>
-</td>
-<td><p>STRARR</p></td>
-<td><p>String array of possible maps to overplot. Accepted entries include: relief, countries, provinces,
-urban_areas, roads, railroads, coastline, lakes, lakes_europe, rivers, rivers_europe</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>dpi</p></li>
-</ul>
-</td>
-<td><p>INT</p></td>
-<td><p>Resolution of the image in dots per inch.</p></td>
-</tr>
-<tr class="row-odd"><td><p>xsecImageConfig</p></td>
+<tr class="row-even"><td><p>xsecImageConfig</p></td>
 <td><p>STRUCT</p></td>
-<td><p>Structure defining the cross-section images generated from gridded data (CROSS_SECTION, LATITUDE_SLICE and LONGITUDE_SLICE products)</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>xsize</p></li>
-</ul>
-</td>
-<td><p>INT</p></td>
-<td><p>Number of horizontal pixels of the picture (without frame).</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>ysize</p></li>
-</ul>
-</td>
-<td><p>INT</p></td>
-<td><p>Number of vertical pixels of the picture (without frame).</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>xmin</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Distance of the left image boundary to the radar in km.</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>xmax</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Distance of the right image boundary to the radar in km.</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>ymin</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Distance of the lower image boundary (vertical direction) to the radar in km.</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>ymax</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Distance of the upper image boundary (vertical direction) to the radar in km.</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>dpi</p></li>
-</ul>
-</td>
-<td><p>INT</p></td>
-<td><p>Resolution of the image in dots per inch.</p></td>
+<td><p>Structure defining the cross-section images generated from gridded data (CROSS_SECTION, LATITUDE_SLICE and LONGITUDE_SLICE products).</p></td>
 </tr>
 <tr class="row-odd"><td><p>spectraImageConfig</p></td>
 <td><p>STRUCT</p></td>
-<td><p>Structure defining the Doppler spectral plots:</p></td>
+<td><p>Structure defining the Doppler spectral plots.</p></td>
 </tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>xsize</p></li>
-</ul>
-</td>
-<td><p>INT</p></td>
-<td><p>Number of horizontal pixels of the picture (without frame).</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>ysize</p></li>
-</ul>
-</td>
-<td><p>INT</p></td>
-<td><p>Number of vertical pixels of the picture (without frame).</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>ymin</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Minimum range above radar [km]</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>ymax</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Maximum range above radar [km]</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>velmin</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Minimum Doppler velocity that should be displayed.</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>velmax</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Maximum Doppler velocity that should be displayed.</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>dpi</p></li>
-</ul>
-</td>
-<td></td>
-<td><p>INT      Resolution of the image in dots per inch.</p></td>
-</tr>
-<tr class="row-odd"><td><p>sunhitsImageConfig</p></td>
+<tr class="row-even"><td><p>sunhitsImageConfig</p></td>
 <td><p>STRUCT</p></td>
-<td><p>Structure defining the sun hits image. The following 6 fields are described below:</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>xsize</p></li>
-</ul>
-</td>
-<td><p>INT</p></td>
-<td><p>Number of horizontal pixels of the picture (without frame).</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>ysize</p></li>
-</ul>
-</td>
-<td><p>INT</p></td>
-<td><p>Number of vertical pixels of the picture (without frame).</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>xmin</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Minimum azimuth angle difference (between sun and radar).</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>xmax</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Maximum azimuth angle difference (between sun and radar).</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>ymin</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Minimum elevation angle difference (between sun and radar).</p></td>
-</tr>
-<tr class="row-odd"><td><ul class="simple">
-<li><p>ymax</p></li>
-</ul>
-</td>
-<td><p>FLOAT</p></td>
-<td><p>Maximum azimuth angle difference (between sun and radar).</p></td>
-</tr>
-<tr class="row-even"><td><ul class="simple">
-<li><p>dpi</p></li>
-</ul>
-</td>
-<td></td>
-<td><p>INT      Resolution of the image in dots per inch.</p></td>
+<td><p>Structure defining the sun hits image.</p></td>
 </tr>
 <tr class="row-odd"><td><p>azPatternFile</p></td>
 <td><p>STRING</p></td>

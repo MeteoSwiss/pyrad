@@ -397,7 +397,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.interpolate</span><span class="w"> </span><span class="kn">import</span> <span class="n">RegularGridInterpolator</span>
 
@@ -576,7 +576,8 @@
     <span class="k">if</span> <span class="n">projparams</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;WARNING: No proj could be read from file and no projparams were provided, &quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;assuming the projection is CH1903.&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;assuming the projection is CH1903.&quot;</span><span class="p">,</span>
+            <span class="n">use_debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">projparams</span> <span class="o">=</span> <span class="n">_get_lv1903_proj4</span><span class="p">()</span>
 

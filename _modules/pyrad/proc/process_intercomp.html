@@ -402,7 +402,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span>
@@ -2460,7 +2460,7 @@
 
         <span class="n">radar1</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
         <span class="n">radar2</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_radar_list</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-        
+
         <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">:</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]})</span>
 
         <span class="k">if</span> <span class="n">radar1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">radar2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2775,7 +2775,7 @@
         <span class="p">)</span>
 
         <span class="n">fname</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    
+
         <span class="p">(</span>
             <span class="n">rad1_time</span><span class="p">,</span>
             <span class="n">rad1_ray_ind</span><span class="p">,</span>
@@ -2796,7 +2796,7 @@
             <span class="n">rad2_phi</span><span class="p">,</span>
             <span class="n">rad2_flag</span><span class="p">,</span>
         <span class="p">)</span> <span class="o">=</span> <span class="n">read_colocated_data_time_avg</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
-        
+
         <span class="k">if</span> <span class="n">rad1_time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 

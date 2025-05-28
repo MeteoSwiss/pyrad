@@ -426,19 +426,20 @@
 <span class="sd">    compute_average_vad</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">.debug_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">shapely</span>
 
     <span class="n">_SHAPELY_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;shapely not available&quot;</span><span class="p">)</span>
+    <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;shapely not available&quot;</span><span class="p">,</span> <span class="n">use_debug</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">_SHAPELY_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="k">try</span><span class="p">:</span>
@@ -446,7 +447,7 @@
 
     <span class="n">_PANDAS_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Pandas not available&quot;</span><span class="p">)</span>
+    <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Pandas not available&quot;</span><span class="p">,</span> <span class="n">use_debug</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">_PANDAS_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
@@ -960,7 +961,7 @@
     <span class="n">df_in</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">val_in_vec</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">(</span><span class="n">t_in_vec</span><span class="p">))</span>
     <span class="n">df_out</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
         <span class="n">df_in</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span>
-            <span class="nb">str</span><span class="p">(</span><span class="n">avg_time</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="n">closed</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">base_time</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">avg_time</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">closed</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">base_time</span>
         <span class="p">),</span>
         <span class="n">method</span><span class="p">,</span>
     <span class="p">)()</span>
@@ -1935,6 +1936,7 @@
     <span class="k">return</span> <span class="n">field</span></div>
 
 
+
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_mean_reflectivity_from_hist</span><span class="p">(</span><span class="n">bin_centers</span><span class="p">,</span> <span class="n">hist</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the mean reflectivity in both dB and linear units.</span>
@@ -1975,7 +1977,7 @@
     <span class="n">mean_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">geometric_mean_db</span><span class="p">,</span> <span class="n">linear_mean_db</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">mean_list</span>
-    
+
 
 <div class="viewcode-block" id="compute_quantiles">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_quantiles.html#pyrad.util.compute_quantiles">[docs]</a>

@@ -409,7 +409,7 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
@@ -1653,84 +1653,92 @@
     <span class="n">corr_field</span> <span class="o">=</span> <span class="s2">&quot;vpr_correction&quot;</span>
 
     <span class="k">if</span> <span class="n">spatialised</span><span class="p">:</span>
-        <span class="n">refl_corr</span><span class="p">,</span> <span class="n">vpr_corr</span><span class="p">,</span> <span class="n">vpr_theo_dict</span><span class="p">,</span> <span class="n">radar_rhi</span><span class="p">,</span> <span class="n">vpr_info</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">correct_vpr_spatialised</span><span class="p">(</span>
-                <span class="n">radar</span><span class="p">,</span>
-                <span class="n">nvalid_min</span><span class="o">=</span><span class="n">nvalid_min</span><span class="p">,</span>
-                <span class="n">angle_min</span><span class="o">=</span><span class="n">angle_min</span><span class="p">,</span>
-                <span class="n">angle_max</span><span class="o">=</span><span class="n">angle_max</span><span class="p">,</span>
-                <span class="n">ml_thickness_min</span><span class="o">=</span><span class="n">ml_thickness_min</span><span class="p">,</span>
-                <span class="n">ml_thickness_max</span><span class="o">=</span><span class="n">ml_thickness_max</span><span class="p">,</span>
-                <span class="n">ml_thickness_step</span><span class="o">=</span><span class="n">ml_thickness_step</span><span class="p">,</span>
-                <span class="n">iso0_max</span><span class="o">=</span><span class="n">iso0_max</span><span class="p">,</span>
-                <span class="n">ml_top_diff_max</span><span class="o">=</span><span class="n">ml_top_diff_max</span><span class="p">,</span>
-                <span class="n">ml_top_step</span><span class="o">=</span><span class="n">ml_top_step</span><span class="p">,</span>
-                <span class="n">ml_peak_min</span><span class="o">=</span><span class="n">ml_peak_min</span><span class="p">,</span>
-                <span class="n">ml_peak_max</span><span class="o">=</span><span class="n">ml_peak_max</span><span class="p">,</span>
-                <span class="n">ml_peak_step</span><span class="o">=</span><span class="n">ml_peak_step</span><span class="p">,</span>
-                <span class="n">dr_min</span><span class="o">=</span><span class="n">dr_min</span><span class="p">,</span>
-                <span class="n">dr_max</span><span class="o">=</span><span class="n">dr_max</span><span class="p">,</span>
-                <span class="n">dr_step</span><span class="o">=</span><span class="n">dr_step</span><span class="p">,</span>
-                <span class="n">dr_default</span><span class="o">=</span><span class="n">dr_default</span><span class="p">,</span>
-                <span class="n">dr_alt</span><span class="o">=</span><span class="n">dr_alt</span><span class="p">,</span>
-                <span class="n">h_max</span><span class="o">=</span><span class="n">h_max</span><span class="p">,</span>
-                <span class="n">h_corr_max</span><span class="o">=</span><span class="n">h_corr_max</span><span class="p">,</span>
-                <span class="n">h_res</span><span class="o">=</span><span class="n">h_res</span><span class="p">,</span>
-                <span class="n">max_weight</span><span class="o">=</span><span class="n">max_weight</span><span class="p">,</span>
-                <span class="n">rmin_obs</span><span class="o">=</span><span class="n">rmin_obs</span><span class="p">,</span>
-                <span class="n">rmax_obs</span><span class="o">=</span><span class="n">rmax_obs</span><span class="p">,</span>
-                <span class="n">iso0</span><span class="o">=</span><span class="n">iso0</span><span class="p">,</span>
-                <span class="n">correct_iso0</span><span class="o">=</span><span class="n">correct_iso0</span><span class="p">,</span>
-                <span class="n">weight_mem</span><span class="o">=</span><span class="n">weight_mem</span><span class="p">,</span>
-                <span class="n">vpr_theo_dict_mem</span><span class="o">=</span><span class="n">vpr_theo_dict_mem</span><span class="p">,</span>
-                <span class="n">radar_mem_list</span><span class="o">=</span><span class="n">radar_mem_list</span><span class="p">,</span>
-                <span class="n">refl_field</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span>
-                <span class="n">corr_refl_field</span><span class="o">=</span><span class="n">corr_refl_field</span><span class="p">,</span>
-                <span class="n">corr_field</span><span class="o">=</span><span class="n">corr_field</span><span class="p">,</span>
-                <span class="n">temp_field</span><span class="o">=</span><span class="n">temp_field</span><span class="p">,</span>
-                <span class="n">iso0_field</span><span class="o">=</span><span class="n">iso0_field</span><span class="p">,</span>
-                <span class="n">temp_ref</span><span class="o">=</span><span class="n">temp_ref</span><span class="p">,</span>
-            <span class="p">)</span>
+        <span class="p">(</span>
+            <span class="n">refl_corr</span><span class="p">,</span>
+            <span class="n">vpr_corr</span><span class="p">,</span>
+            <span class="n">vpr_theo_dict</span><span class="p">,</span>
+            <span class="n">radar_rhi</span><span class="p">,</span>
+            <span class="n">vpr_info</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">correct_vpr_spatialised</span><span class="p">(</span>
+            <span class="n">radar</span><span class="p">,</span>
+            <span class="n">nvalid_min</span><span class="o">=</span><span class="n">nvalid_min</span><span class="p">,</span>
+            <span class="n">angle_min</span><span class="o">=</span><span class="n">angle_min</span><span class="p">,</span>
+            <span class="n">angle_max</span><span class="o">=</span><span class="n">angle_max</span><span class="p">,</span>
+            <span class="n">ml_thickness_min</span><span class="o">=</span><span class="n">ml_thickness_min</span><span class="p">,</span>
+            <span class="n">ml_thickness_max</span><span class="o">=</span><span class="n">ml_thickness_max</span><span class="p">,</span>
+            <span class="n">ml_thickness_step</span><span class="o">=</span><span class="n">ml_thickness_step</span><span class="p">,</span>
+            <span class="n">iso0_max</span><span class="o">=</span><span class="n">iso0_max</span><span class="p">,</span>
+            <span class="n">ml_top_diff_max</span><span class="o">=</span><span class="n">ml_top_diff_max</span><span class="p">,</span>
+            <span class="n">ml_top_step</span><span class="o">=</span><span class="n">ml_top_step</span><span class="p">,</span>
+            <span class="n">ml_peak_min</span><span class="o">=</span><span class="n">ml_peak_min</span><span class="p">,</span>
+            <span class="n">ml_peak_max</span><span class="o">=</span><span class="n">ml_peak_max</span><span class="p">,</span>
+            <span class="n">ml_peak_step</span><span class="o">=</span><span class="n">ml_peak_step</span><span class="p">,</span>
+            <span class="n">dr_min</span><span class="o">=</span><span class="n">dr_min</span><span class="p">,</span>
+            <span class="n">dr_max</span><span class="o">=</span><span class="n">dr_max</span><span class="p">,</span>
+            <span class="n">dr_step</span><span class="o">=</span><span class="n">dr_step</span><span class="p">,</span>
+            <span class="n">dr_default</span><span class="o">=</span><span class="n">dr_default</span><span class="p">,</span>
+            <span class="n">dr_alt</span><span class="o">=</span><span class="n">dr_alt</span><span class="p">,</span>
+            <span class="n">h_max</span><span class="o">=</span><span class="n">h_max</span><span class="p">,</span>
+            <span class="n">h_corr_max</span><span class="o">=</span><span class="n">h_corr_max</span><span class="p">,</span>
+            <span class="n">h_res</span><span class="o">=</span><span class="n">h_res</span><span class="p">,</span>
+            <span class="n">max_weight</span><span class="o">=</span><span class="n">max_weight</span><span class="p">,</span>
+            <span class="n">rmin_obs</span><span class="o">=</span><span class="n">rmin_obs</span><span class="p">,</span>
+            <span class="n">rmax_obs</span><span class="o">=</span><span class="n">rmax_obs</span><span class="p">,</span>
+            <span class="n">iso0</span><span class="o">=</span><span class="n">iso0</span><span class="p">,</span>
+            <span class="n">correct_iso0</span><span class="o">=</span><span class="n">correct_iso0</span><span class="p">,</span>
+            <span class="n">weight_mem</span><span class="o">=</span><span class="n">weight_mem</span><span class="p">,</span>
+            <span class="n">vpr_theo_dict_mem</span><span class="o">=</span><span class="n">vpr_theo_dict_mem</span><span class="p">,</span>
+            <span class="n">radar_mem_list</span><span class="o">=</span><span class="n">radar_mem_list</span><span class="p">,</span>
+            <span class="n">refl_field</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span>
+            <span class="n">corr_refl_field</span><span class="o">=</span><span class="n">corr_refl_field</span><span class="p">,</span>
+            <span class="n">corr_field</span><span class="o">=</span><span class="n">corr_field</span><span class="p">,</span>
+            <span class="n">temp_field</span><span class="o">=</span><span class="n">temp_field</span><span class="p">,</span>
+            <span class="n">iso0_field</span><span class="o">=</span><span class="n">iso0_field</span><span class="p">,</span>
+            <span class="n">temp_ref</span><span class="o">=</span><span class="n">temp_ref</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">refl_corr</span><span class="p">,</span> <span class="n">vpr_corr</span><span class="p">,</span> <span class="n">vpr_theo_dict</span><span class="p">,</span> <span class="n">radar_rhi</span><span class="p">,</span> <span class="n">vpr_info</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">correct_vpr</span><span class="p">(</span>
-                <span class="n">radar</span><span class="p">,</span>
-                <span class="n">nvalid_min</span><span class="o">=</span><span class="n">nvalid_min</span><span class="p">,</span>
-                <span class="n">angle_min</span><span class="o">=</span><span class="n">angle_min</span><span class="p">,</span>
-                <span class="n">angle_max</span><span class="o">=</span><span class="n">angle_max</span><span class="p">,</span>
-                <span class="n">ml_thickness_min</span><span class="o">=</span><span class="n">ml_thickness_min</span><span class="p">,</span>
-                <span class="n">ml_thickness_max</span><span class="o">=</span><span class="n">ml_thickness_max</span><span class="p">,</span>
-                <span class="n">ml_thickness_step</span><span class="o">=</span><span class="n">ml_thickness_step</span><span class="p">,</span>
-                <span class="n">iso0_max</span><span class="o">=</span><span class="n">iso0_max</span><span class="p">,</span>
-                <span class="n">ml_top_diff_max</span><span class="o">=</span><span class="n">ml_top_diff_max</span><span class="p">,</span>
-                <span class="n">ml_top_step</span><span class="o">=</span><span class="n">ml_top_step</span><span class="p">,</span>
-                <span class="n">ml_peak_min</span><span class="o">=</span><span class="n">ml_peak_min</span><span class="p">,</span>
-                <span class="n">ml_peak_max</span><span class="o">=</span><span class="n">ml_peak_max</span><span class="p">,</span>
-                <span class="n">ml_peak_step</span><span class="o">=</span><span class="n">ml_peak_step</span><span class="p">,</span>
-                <span class="n">dr_min</span><span class="o">=</span><span class="n">dr_min</span><span class="p">,</span>
-                <span class="n">dr_max</span><span class="o">=</span><span class="n">dr_max</span><span class="p">,</span>
-                <span class="n">dr_step</span><span class="o">=</span><span class="n">dr_step</span><span class="p">,</span>
-                <span class="n">dr_default</span><span class="o">=</span><span class="n">dr_default</span><span class="p">,</span>
-                <span class="n">dr_alt</span><span class="o">=</span><span class="n">dr_alt</span><span class="p">,</span>
-                <span class="n">h_max</span><span class="o">=</span><span class="n">h_max</span><span class="p">,</span>
-                <span class="n">h_corr_max</span><span class="o">=</span><span class="n">h_corr_max</span><span class="p">,</span>
-                <span class="n">h_res</span><span class="o">=</span><span class="n">h_res</span><span class="p">,</span>
-                <span class="n">max_weight</span><span class="o">=</span><span class="n">max_weight</span><span class="p">,</span>
-                <span class="n">rmin_obs</span><span class="o">=</span><span class="n">rmin_obs</span><span class="p">,</span>
-                <span class="n">rmax_obs</span><span class="o">=</span><span class="n">rmax_obs</span><span class="p">,</span>
-                <span class="n">iso0</span><span class="o">=</span><span class="n">iso0</span><span class="p">,</span>
-                <span class="n">filter_params</span><span class="o">=</span><span class="n">filter_params</span><span class="p">,</span>
-                <span class="n">weight_mem</span><span class="o">=</span><span class="n">weight_mem</span><span class="p">,</span>
-                <span class="n">vpr_theo_dict_mem</span><span class="o">=</span><span class="n">vpr_theo_dict_mem</span><span class="p">,</span>
-                <span class="n">radar_mem_list</span><span class="o">=</span><span class="n">radar_mem_list</span><span class="p">,</span>
-                <span class="n">refl_field</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span>
-                <span class="n">corr_refl_field</span><span class="o">=</span><span class="n">corr_refl_field</span><span class="p">,</span>
-                <span class="n">corr_field</span><span class="o">=</span><span class="n">corr_field</span><span class="p">,</span>
-                <span class="n">temp_field</span><span class="o">=</span><span class="n">temp_field</span><span class="p">,</span>
-                <span class="n">iso0_field</span><span class="o">=</span><span class="n">iso0_field</span><span class="p">,</span>
-                <span class="n">temp_ref</span><span class="o">=</span><span class="n">temp_ref</span><span class="p">,</span>
-            <span class="p">)</span>
+        <span class="p">(</span>
+            <span class="n">refl_corr</span><span class="p">,</span>
+            <span class="n">vpr_corr</span><span class="p">,</span>
+            <span class="n">vpr_theo_dict</span><span class="p">,</span>
+            <span class="n">radar_rhi</span><span class="p">,</span>
+            <span class="n">vpr_info</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">correct_vpr</span><span class="p">(</span>
+            <span class="n">radar</span><span class="p">,</span>
+            <span class="n">nvalid_min</span><span class="o">=</span><span class="n">nvalid_min</span><span class="p">,</span>
+            <span class="n">angle_min</span><span class="o">=</span><span class="n">angle_min</span><span class="p">,</span>
+            <span class="n">angle_max</span><span class="o">=</span><span class="n">angle_max</span><span class="p">,</span>
+            <span class="n">ml_thickness_min</span><span class="o">=</span><span class="n">ml_thickness_min</span><span class="p">,</span>
+            <span class="n">ml_thickness_max</span><span class="o">=</span><span class="n">ml_thickness_max</span><span class="p">,</span>
+            <span class="n">ml_thickness_step</span><span class="o">=</span><span class="n">ml_thickness_step</span><span class="p">,</span>
+            <span class="n">iso0_max</span><span class="o">=</span><span class="n">iso0_max</span><span class="p">,</span>
+            <span class="n">ml_top_diff_max</span><span class="o">=</span><span class="n">ml_top_diff_max</span><span class="p">,</span>
+            <span class="n">ml_top_step</span><span class="o">=</span><span class="n">ml_top_step</span><span class="p">,</span>
+            <span class="n">ml_peak_min</span><span class="o">=</span><span class="n">ml_peak_min</span><span class="p">,</span>
+            <span class="n">ml_peak_max</span><span class="o">=</span><span class="n">ml_peak_max</span><span class="p">,</span>
+            <span class="n">ml_peak_step</span><span class="o">=</span><span class="n">ml_peak_step</span><span class="p">,</span>
+            <span class="n">dr_min</span><span class="o">=</span><span class="n">dr_min</span><span class="p">,</span>
+            <span class="n">dr_max</span><span class="o">=</span><span class="n">dr_max</span><span class="p">,</span>
+            <span class="n">dr_step</span><span class="o">=</span><span class="n">dr_step</span><span class="p">,</span>
+            <span class="n">dr_default</span><span class="o">=</span><span class="n">dr_default</span><span class="p">,</span>
+            <span class="n">dr_alt</span><span class="o">=</span><span class="n">dr_alt</span><span class="p">,</span>
+            <span class="n">h_max</span><span class="o">=</span><span class="n">h_max</span><span class="p">,</span>
+            <span class="n">h_corr_max</span><span class="o">=</span><span class="n">h_corr_max</span><span class="p">,</span>
+            <span class="n">h_res</span><span class="o">=</span><span class="n">h_res</span><span class="p">,</span>
+            <span class="n">max_weight</span><span class="o">=</span><span class="n">max_weight</span><span class="p">,</span>
+            <span class="n">rmin_obs</span><span class="o">=</span><span class="n">rmin_obs</span><span class="p">,</span>
+            <span class="n">rmax_obs</span><span class="o">=</span><span class="n">rmax_obs</span><span class="p">,</span>
+            <span class="n">iso0</span><span class="o">=</span><span class="n">iso0</span><span class="p">,</span>
+            <span class="n">filter_params</span><span class="o">=</span><span class="n">filter_params</span><span class="p">,</span>
+            <span class="n">weight_mem</span><span class="o">=</span><span class="n">weight_mem</span><span class="p">,</span>
+            <span class="n">vpr_theo_dict_mem</span><span class="o">=</span><span class="n">vpr_theo_dict_mem</span><span class="p">,</span>
+            <span class="n">radar_mem_list</span><span class="o">=</span><span class="n">radar_mem_list</span><span class="p">,</span>
+            <span class="n">refl_field</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span>
+            <span class="n">corr_refl_field</span><span class="o">=</span><span class="n">corr_refl_field</span><span class="p">,</span>
+            <span class="n">corr_field</span><span class="o">=</span><span class="n">corr_field</span><span class="p">,</span>
+            <span class="n">temp_field</span><span class="o">=</span><span class="n">temp_field</span><span class="p">,</span>
+            <span class="n">iso0_field</span><span class="o">=</span><span class="n">iso0_field</span><span class="p">,</span>
+            <span class="n">temp_ref</span><span class="o">=</span><span class="n">temp_ref</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="c1"># prepare for exit</span>
@@ -2180,13 +2188,14 @@
         <span class="k">if</span> <span class="s2">&quot;radar_out&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="n">period</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
                 <span class="c1"># get start and stop times of new radar object</span>
-                <span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;starttime&quot;</span><span class="p">],</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;endtime&quot;</span><span class="p">])</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">time_avg_range</span><span class="p">(</span>
-                        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
-                        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;starttime&quot;</span><span class="p">],</span>
-                        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;endtime&quot;</span><span class="p">],</span>
-                        <span class="n">period</span><span class="p">,</span>
-                    <span class="p">)</span>
+                <span class="p">(</span>
+                    <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;starttime&quot;</span><span class="p">],</span>
+                    <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;endtime&quot;</span><span class="p">],</span>
+                <span class="p">)</span> <span class="o">=</span> <span class="n">time_avg_range</span><span class="p">(</span>
+                    <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
+                    <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;starttime&quot;</span><span class="p">],</span>
+                    <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;endtime&quot;</span><span class="p">],</span>
+                    <span class="n">period</span><span class="p">,</span>
                 <span class="p">)</span>
 
                 <span class="c1"># check if volume time older than starttime</span>
@@ -2199,7 +2208,6 @@
 
         <span class="c1"># still accumulating: add field to global field</span>
         <span class="k">if</span> <span class="n">period</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;endtime&quot;</span><span class="p">]:</span>
-
             <span class="k">if</span> <span class="n">period</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
                 <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;endtime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]</span>
 
@@ -2244,13 +2252,14 @@
         <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;radar_out&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
         <span class="c1"># get start and stop times of new radar object</span>
-        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;starttime&quot;</span><span class="p">],</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;endtime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">time_avg_range</span><span class="p">(</span>
-                <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
-                <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;starttime&quot;</span><span class="p">],</span>
-                <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;endtime&quot;</span><span class="p">],</span>
-                <span class="n">period</span><span class="p">,</span>
-            <span class="p">)</span>
+        <span class="p">(</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;starttime&quot;</span><span class="p">],</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;endtime&quot;</span><span class="p">],</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">time_avg_range</span><span class="p">(</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;starttime&quot;</span><span class="p">],</span>
+            <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;endtime&quot;</span><span class="p">],</span>
+            <span class="n">period</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># check if volume time older than starttime</span>

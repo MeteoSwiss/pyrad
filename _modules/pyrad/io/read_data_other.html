@@ -429,7 +429,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">xml.etree.ElementTree</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">et</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">fcntl</span>
@@ -1503,28 +1503,26 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="c1"># Read CSV while skipping commented lines</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
-            <span class="n">fname</span><span class="p">,</span>
-            <span class="n">comment</span><span class="o">=</span><span class="s1">&#39;#&#39;</span><span class="p">,</span>
-            <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">],</span>
-            <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">]</span>
+            <span class="n">fname</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span> <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]</span>
         <span class="p">)</span>
 
         <span class="c1"># Drop duplicate timestamps</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s1">&#39;date&#39;</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s2">&quot;date&quot;</span><span class="p">)</span>
 
-        <span class="n">masked_values</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+        <span class="n">masked_values</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
         <span class="c1"># Mask fill values</span>
         <span class="n">fill_val</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
         <span class="n">masked_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">masked_values</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">fill_val</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">masked_values</span>
+        <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">masked_values</span>
 
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to read file &#39;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to read file &quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
 
-    
+
+
 <div class="viewcode-block" id="read_ts_cum">
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.read_ts_cum.html#pyrad.io.read_ts_cum">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">read_ts_cum</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
@@ -1703,12 +1701,18 @@
 
         <span class="c1"># Read mean values</span>
         <span class="n">geometric_mean_dB</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;geometric_mean_dB&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span> <span class="n">get_fillvalue</span><span class="p">())</span>
-            <span class="k">if</span> <span class="s2">&quot;geometric_mean_dB&quot;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span>
+                <span class="n">df</span><span class="p">[</span><span class="s2">&quot;geometric_mean_dB&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span> <span class="n">get_fillvalue</span><span class="p">()</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;geometric_mean_dB&quot;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+            <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
         <span class="p">)</span>
         <span class="n">linear_mean_dB</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;linear_mean_dB&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span> <span class="n">get_fillvalue</span><span class="p">())</span>
-            <span class="k">if</span> <span class="s2">&quot;linear_mean_dB&quot;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span>
+                <span class="n">df</span><span class="p">[</span><span class="s2">&quot;linear_mean_dB&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span> <span class="n">get_fillvalue</span><span class="p">()</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;linear_mean_dB&quot;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+            <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
         <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">date</span><span class="p">,</span> <span class="n">np_t</span><span class="p">,</span> <span class="n">quantile_data</span><span class="p">,</span> <span class="n">geometric_mean_dB</span><span class="p">,</span> <span class="n">linear_mean_dB</span>

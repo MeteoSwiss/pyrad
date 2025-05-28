@@ -2183,7 +2183,7 @@ description
  | Plots the trajectory on a lat-lon map with the altitude
  | color coded 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_traj_products.py#L173>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_traj_products.py#L171>`_
 
 TRAJ_PLOT
 """"""""""""""""""""""""""""""
