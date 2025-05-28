@@ -1996,7 +1996,7 @@ def get_scan_files_to_merge(
                     ):
                         filename = [filename_aux]
                         break
-                else:
+                elif master_scan_time_tol == -1:
                     if (
                         voltime - datetime.timedelta(minutes=scan_period)
                         < fdatetime

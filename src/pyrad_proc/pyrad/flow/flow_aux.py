@@ -56,7 +56,6 @@ except ImportError:
     _MPROFILE_AVAILABLE = False
 
 from pyrad import proc
-
 from ..io.config import read_config, DEFAULT_CONFIG
 from ..io.read_data_radar import get_data
 from ..io.write_data import write_to_s3
@@ -1218,10 +1217,15 @@ def _create_cfg_dict(cfgfile):
         "mosotti_factor",
         "refcorr",
         "AzimTol",
-        "MasterScanTimeTol",
     ]
     for param in fltarr_list:
         if param in cfg and isinstance(cfg[param], float):
+            cfg[param] = [cfg[param]]
+
+    # Convert the following ints to int arrays
+    intarr_list = ["MasterScanTimeTol", "ScanPeriod"]
+    for param in intarr_list:
+        if param in cfg and isinstance(cfg[param], int):
             cfg[param] = [cfg[param]]
 
     # check whether specified paths are relative or absolute

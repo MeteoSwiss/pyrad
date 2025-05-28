@@ -192,7 +192,8 @@ def read_dem(fname, field_name="terrain_altitude", fill_value=None, projparams=N
     if projparams is None:
         warn(
             "WARNING: No proj could be read from file and no projparams were provided, "
-            + "assuming the projection is CH1903."
+            + "assuming the projection is CH1903.",
+            use_debug=False,
         )
         projparams = _get_lv1903_proj4()
 
