@@ -151,8 +151,8 @@ def read_dem(fname, field_name="terrain_altitude", fill_value=None, projparams=N
         dem = read_idrisi_data(fname, fill_value)
     else:
         warn(
-            "WARNING: unable to read file %s, extension must be .tif .tiff .gtif, "
-            + ".asc .dem .txt .rst".format()
+            f"WARNING: unable to read file {fname}, extension must be .tif .tiff .gtif, "
+            + ".asc .dem .txt .rst"
         )
         return None
 
