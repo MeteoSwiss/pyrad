@@ -42,7 +42,7 @@ from ..util import warn
 from copy import deepcopy
 
 import numpy as np
-
+import os
 
 from netCDF4 import num2date
 
@@ -397,6 +397,7 @@ def plot_ppi_map(
     alpha = prdcfg["ppiMapImageConfig"].get("alpha", 1)
     exact_limits = prdcfg["ppiMapImageConfig"].get("exact_limits", True)
     resolution = prdcfg["ppiMapImageConfig"].get("mapres", "110m")
+    maps_list = prdcfg["gridMapImageConfig"].get("maps", [])
     if resolution not in ("110m", "50m", "10m"):
         warn("Unknown map resolution: " + resolution)
         resolution = "110m"
@@ -417,10 +418,7 @@ def plot_ppi_map(
     # Use different transparency and zorder if plotting over OTM or hillshade
     zorder = 1
     if "maps" in prdcfg["ppiMapImageConfig"]:
-        if (
-            "relief" in prdcfg["ppiMapImageConfig"]["maps"]
-            or "OTM" in prdcfg["ppiMapImageConfig"]["maps"]
-        ):
+        if "relief" in maps_list or "OTM" in maps_list:
             zorder = 2
 
     if _PYARTMCH_AVAILABLE:
@@ -469,22 +467,28 @@ def plot_ppi_map(
             zorder=zorder,
         )
     ax = display_map.ax
+
     if "maps" in prdcfg["ppiMapImageConfig"]:
-        if (
-            "relief" in prdcfg["ppiMapImageConfig"]["maps"]
-            and "OTM" in prdcfg["ppiMapImageConfig"]["maps"]
-        ):
+        if "relief" in maps_list and "OTM" in maps_list:
             warn(
                 "Plotting both 'relief' and 'OTM' is not supported, choosing only relief",
                 use_debug=False,
             )
-            prdcfg["ppiMapImageConfig"]["maps"].remove("OTM")
+            maps_list.remove("OTM")
 
-        if "relief" in prdcfg["ppiMapImageConfig"]["maps"]:
-            tiler = ShadedReliefESRI()
-        if "OTM" in prdcfg["ppiMapImageConfig"]["maps"]:
-            tiler = OTM()
-        for cartomap in prdcfg["ppiMapImageConfig"]["maps"]:
+        if "relief" in maps_list or "OTM" in maps_list:
+            # Check cache dir
+            if "PYRAD_CACHE" in os.environ:
+                cache_dir = os.environ["PYRAD_CACHE"]
+            else:
+                cache_dir = os.path.join(os.path.expanduser("~"), "pyrad_cache")
+            if not os.path.exists(cache_dir):
+                os.makedirs(cache_dir)
+        if "relief" in maps_list:
+            tiler = ShadedReliefESRI(cache=cache_dir)
+        if "OTM" in maps_list:
+            tiler = OTM(cache=cache_dir)
+        for cartomap in maps_list:
             if cartomap == "relief" or cartomap == "OTM":
                 ax.add_image(tiler, background_zoom)
             elif cartomap == "countries":
@@ -2192,8 +2196,16 @@ def plot_roi_contour(
         lat_lines = np.arange(np.floor(min_lat), np.ceil(max_lat) + 1, latstep)
         limits = [min_lon, max_lon, min_lat, max_lat]
 
+        # Check cache dir
+        if "PYRAD_CACHE" in os.environ:
+            cache_dir = os.environ["PYRAD_CACHE"]
+        else:
+            cache_dir = os.path.join(os.path.expanduser("~"), "pyrad_cache")
+        if not os.path.exists(cache_dir):
+            os.makedirs(cache_dir)
+
         # get background map instance
-        terrain = ShadedReliefESRI()
+        terrain = ShadedReliefESRI(cache=cache_dir)
         projection = cartopy.crs.PlateCarree()
 
         fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
