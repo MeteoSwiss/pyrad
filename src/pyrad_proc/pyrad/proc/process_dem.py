@@ -233,11 +233,16 @@ def process_gecsx(procstatus, dscfg, radar_list=None):
             1: Oversampling is done. The factor N is automatically calculated
             such that 2*dx/N < pulse length
             2 or larger: Oversampling is done with this value as N
+        min_radar_elevation : float. Dataset keyword
+            Minimum scanning elevation supported by the radar system. If provided
+            it will add the field min_rad_vis_height_above_ground_field to the output.
+            It contains the minimum visible height above ground  given the constraint
+            on minimum scanning elevation.
         sigma0_method : string. Dataset keyword
             Which estimation method to use, either 'Gabella' or 'Delrieu'
         clip : int. Dataset keyword
             If set to true, the provided DEM will be clipped to the extent
-            of the polar radar domain. Increases computation speed a lot but
+            of the polar radar domain. Decreases computation speed a lot but
             Cartesian output fields will be available only over radar domain
 
     radar_list : list of Radar objects
@@ -338,11 +343,11 @@ def process_gecsx(procstatus, dscfg, radar_list=None):
     mosotti_kw = dscfg.get("mosotti_factor", 0.9644)[0]
     sigma0_method = dscfg.get("sigma0_method", "Gabella")
     raster_oversampling = dscfg.get("raster_oversampling", 1)
+    min_radar_elevation = dscfg.get("min_radar_elevation", None)
     verbose = dscfg.get("verbose", 1)
     clip = dscfg.get("clip", 1)
     daz = dscfg.get("az_discretization", 0.2)
     dr = dscfg.get("range_discretization", 100)
-
     gecsx_grid, gecsx_radar = pyart.retrieve.gecsx(
         radar,
         radar_specs,
@@ -355,6 +360,7 @@ def process_gecsx(procstatus, dscfg, radar_list=None):
         atm_att=atm_att,
         mosotti_kw=mosotti_kw,
         raster_oversampling=raster_oversampling,
+        min_radar_elevation=min_radar_elevation,
         sigma0_method=sigma0_method,
         clip=clip,
         return_pyart_objects=True,

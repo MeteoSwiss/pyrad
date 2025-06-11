@@ -172,7 +172,7 @@ def plot_range_Doppler(
     fig.tight_layout()
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -326,7 +326,7 @@ def plot_angle_Doppler(
     fig.tight_layout()
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -466,7 +466,7 @@ def plot_time_Doppler(
     fig.tight_layout()
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -571,7 +571,7 @@ def plot_Doppler(
     fig.tight_layout()
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -725,7 +725,7 @@ def plot_complex_range_Doppler(
     plt.subplots_adjust(top=0.8)
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -896,7 +896,7 @@ def plot_complex_angle_Doppler(
     plt.subplots_adjust(top=0.8)
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -1050,7 +1050,7 @@ def plot_complex_time_Doppler(
     plt.subplots_adjust(top=0.8)
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -1218,7 +1218,7 @@ def plot_amp_phase_range_Doppler(
     plt.subplots_adjust(top=0.8)
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -1412,7 +1412,7 @@ def plot_amp_phase_angle_Doppler(
     plt.subplots_adjust(top=0.8)
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -1589,7 +1589,7 @@ def plot_amp_phase_time_Doppler(
     plt.subplots_adjust(top=0.8)
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -1714,7 +1714,7 @@ def plot_complex_Doppler(
     plt.subplots_adjust(top=0.8)
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -1839,7 +1839,7 @@ def plot_amp_phase_Doppler(
     plt.subplots_adjust(top=0.8)
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list

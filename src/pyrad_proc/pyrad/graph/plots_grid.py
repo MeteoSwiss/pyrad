@@ -353,7 +353,7 @@ def plot_surface(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list
@@ -461,7 +461,7 @@ def plot_surface_raw(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list
@@ -667,7 +667,7 @@ def plot_surface_contour(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list
@@ -735,7 +735,7 @@ def plot_latitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
     ax.set_ylim([ymin, ymax])
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
 
@@ -799,7 +799,7 @@ def plot_longitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
     ax.set_ylim([ymin, ymax])
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
 
@@ -864,7 +864,7 @@ def plot_cross_section(grid, field_name, coord1, coord2, prdcfg, fname_list):
     #    [prdcfg['xsecImageConfig']['ymin'], prdcfg['xsecImageConfig']['ymax']])
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
 
@@ -1151,7 +1151,7 @@ def plot_dda_map(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list
@@ -1420,7 +1420,7 @@ def plot_dda_slice(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list

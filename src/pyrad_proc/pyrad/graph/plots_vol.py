@@ -48,7 +48,31 @@ from netCDF4 import num2date
 
 try:
     import cartopy
-    from cartopy.io.img_tiles import Stamen
+    from cartopy.io.img_tiles import GoogleTiles
+
+    # Define ESRI terrain tiles
+    class ShadedReliefESRI(GoogleTiles):
+        def __init__(self):
+            super().__init__(self, cache=True)
+            self.desired_tile_form = "RGB"
+
+        # shaded relief
+        def _image_url(self, tile):
+            x, y, z = tile
+            return (
+                f"https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/"
+                f"World_Hillshade/MapServer/tile/{z}/{y}/{x}"
+            )
+
+    class OTM(GoogleTiles):
+        def __init__(self):
+            super().__init__(self, cache=True)
+            self.desired_tile_form = "RGB"
+
+        # OpenTopoMap
+        def _image_url(self, tile):
+            x, y, z = tile
+            return f"https://a.tile.opentopomap.org/{z}/{x}/{y}.png"
 
     _CARTOPY_AVAILABLE = True
 except ImportError:
@@ -154,7 +178,7 @@ def plot_ray(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list
@@ -274,7 +298,7 @@ def plot_ppi(
 
         if save_fig:
             for fname in fname_list:
-                fig.savefig(fname, dpi=dpi)
+                fig.savefig(fname, dpi=dpi, bbox_inches="tight")
             plt.close(fig)
 
             return fname_list
@@ -370,6 +394,7 @@ def plot_ppi_map(
     max_lon = prdcfg["ppiMapImageConfig"].get("lonmax", 12.5)
     min_lat = prdcfg["ppiMapImageConfig"].get("latmin", 43.5)
     max_lat = prdcfg["ppiMapImageConfig"].get("latmax", 49.5)
+    alpha = prdcfg["ppiMapImageConfig"].get("alpha", 1)
     exact_limits = prdcfg["ppiMapImageConfig"].get("exact_limits", True)
     resolution = prdcfg["ppiMapImageConfig"].get("mapres", "110m")
     if resolution not in ("110m", "50m", "10m"):
@@ -388,6 +413,16 @@ def plot_ppi_map(
 
     projection = cartopy.crs.PlateCarree()
     display_map = pyart.graph.RadarMapDisplay(radar)
+
+    # Use different transparency and zorder if plotting over OTM or hillshade
+    zorder = 1
+    if "maps" in prdcfg["ppiMapImageConfig"]:
+        if (
+            "relief" in prdcfg["ppiMapImageConfig"]["maps"]
+            or "OTM" in prdcfg["ppiMapImageConfig"]["maps"]
+        ):
+            zorder = 2
+
     if _PYARTMCH_AVAILABLE:
         display_map.plot_ppi_map(
             field_name,
@@ -408,7 +443,8 @@ def plot_ppi_map(
             fig=fig,
             embellish=False,
             colorbar_flag=True,
-            alpha=1,
+            alpha=alpha,
+            zorder=zorder,
         )
     else:
         display_map.plot_ppi_map(
@@ -429,26 +465,29 @@ def plot_ppi_map(
             fig=fig,
             embellish=False,
             colorbar_flag=True,
-            alpha=1,
+            alpha=alpha,
+            zorder=zorder,
         )
     ax = display_map.ax
     if "maps" in prdcfg["ppiMapImageConfig"]:
-        if "relief" in prdcfg["ppiMapImageConfig"]["maps"]:
-            tiler = Stamen("terrain-background")
-            projection = tiler.crs
-            fig.delaxes(ax)
-            ax = fig.add_subplot(111, projection=projection)
+        if (
+            "relief" in prdcfg["ppiMapImageConfig"]["maps"]
+            and "OTM" in prdcfg["ppiMapImageConfig"]["maps"]
+        ):
             warn(
-                "The projection of the image is set to that of the "
-                + "background map, i.e. "
-                + str(projection),
-                UserWarning,
+                "Plotting both 'relief' and 'OTM' is not supported, choosing only relief",
+                use_debug=False,
             )
+            prdcfg["ppiMapImageConfig"]["maps"].remove("OTM")
 
+        if "relief" in prdcfg["ppiMapImageConfig"]["maps"]:
+            tiler = ShadedReliefESRI()
+        if "OTM" in prdcfg["ppiMapImageConfig"]["maps"]:
+            tiler = OTM()
         for cartomap in prdcfg["ppiMapImageConfig"]["maps"]:
-            if cartomap == "relief":
+            if cartomap == "relief" or cartomap == "OTM":
                 ax.add_image(tiler, background_zoom)
-            if cartomap == "countries":
+            elif cartomap == "countries":
                 # add countries
                 countries = cartopy.feature.NaturalEarthFeature(
                     category="cultural",
@@ -522,7 +561,6 @@ def plot_ppi_map(
                     + resolution
                     + " not available"
                 )
-
     if "rngRing" in prdcfg["ppiMapImageConfig"]:
         if prdcfg["ppiMapImageConfig"]["rngRing"] > 0:
             rng_rings = np.arange(
@@ -535,7 +573,7 @@ def plot_ppi_map(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list
@@ -644,7 +682,7 @@ def plot_rhi(
 
         if save_fig:
             for fname in fname_list:
-                fig.savefig(fname, dpi=dpi)
+                fig.savefig(fname, dpi=dpi, bbox_inches="tight")
             plt.close(fig)
 
             return fname_list
@@ -832,7 +870,7 @@ def plot_bscope(
     fig.tight_layout()
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -1594,7 +1632,7 @@ def plot_cappi(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list
@@ -1710,7 +1748,7 @@ def plot_xsection(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list
@@ -1852,7 +1890,7 @@ def plot_traj(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list
@@ -1966,7 +2004,7 @@ def plot_rhi_contour(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list
@@ -2076,7 +2114,7 @@ def plot_ppi_contour(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list
@@ -2155,15 +2193,15 @@ def plot_roi_contour(
         limits = [min_lon, max_lon, min_lat, max_lat]
 
         # get background map instance
-        stamen_terrain = Stamen("terrain-background")
+        terrain = ShadedReliefESRI()
         projection = cartopy.crs.PlateCarree()
 
         fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
 
         # draw background
-        ax = fig.add_subplot(111, projection=stamen_terrain.crs)
+        ax = fig.add_subplot(111, projection=terrain.crs)
         ax.set_extent(limits, crs=projection)
-        ax.add_image(stamen_terrain, background_zoom)
+        ax.add_image(terrain, background_zoom)
 
         # add countries
         countries = cartopy.feature.NaturalEarthFeature(
@@ -2220,7 +2258,7 @@ def plot_roi_contour(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list
@@ -2305,7 +2343,7 @@ def plot_rhi_profile(
     ax.grid()
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -2398,7 +2436,7 @@ def plot_along_coord(
         ax.legend(loc="best")
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -2476,7 +2514,7 @@ def plot_field_coverage(
         ax.legend(loc="best")
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
