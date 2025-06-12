@@ -151,8 +151,8 @@ def read_dem(fname, field_name="terrain_altitude", fill_value=None, projparams=N
         dem = read_idrisi_data(fname, fill_value)
     else:
         warn(
-            "WARNING: unable to read file %s, extension must be .tif .tiff .gtif, "
-            + ".asc .dem .txt .rst".format()
+            f"WARNING: unable to read file {fname}, extension must be .tif .tiff .gtif, "
+            + ".asc .dem .txt .rst"
         )
         return None
 
@@ -291,7 +291,10 @@ def read_geotiff_data(fname, fill_value=None):
         metadata["max. Y"] = (
             metadata["min. Y"] + metadata["resolution"] * metadata["rows"]
         )
-        metadata["flag value"] = raster.GetRasterBand(1).GetNoDataValue()
+        if raster.GetRasterBand(1).GetNoDataValue():
+            metadata["flag value"] = raster.GetRasterBand(1).GetNoDataValue()
+        else:
+            metadata["flag value"] = np.nan
 
         if not fill_value:
             fill_value = metadata["flag value"]

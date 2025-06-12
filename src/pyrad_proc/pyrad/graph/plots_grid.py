@@ -21,7 +21,7 @@ from ..util import warn
 from copy import deepcopy
 
 import numpy as np
-
+import os
 import matplotlib.pyplot as plt
 
 import pyart
@@ -30,11 +30,36 @@ from .plots_aux import get_norm
 
 try:
     import cartopy
-    from cartopy.io.img_tiles import Stamen
+    from cartopy.io.img_tiles import GoogleTiles
+
+    # Define ESRI terrain tiles
+    class ShadedReliefESRI(GoogleTiles):
+        def __init__(self, cache):
+            super().__init__(self, cache=cache)
+            self.desired_tile_form = "RGB"
+
+        # shaded relief
+        def _image_url(self, tile):
+            x, y, z = tile
+            return (
+                f"https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/"
+                f"World_Hillshade/MapServer/tile/{z}/{y}/{x}"
+            )
+
+    class OTM(GoogleTiles):
+        def __init__(self, cache):
+            super().__init__(self, cache=cache)
+            self.desired_tile_form = "RGB"
+
+        # OpenTopoMap
+        def _image_url(self, tile):
+            x, y, z = tile
+            return f"https://a.tile.opentopomap.org/{z}/{x}/{y}.png"
 
     _CARTOPY_AVAILABLE = True
 except ImportError:
     _CARTOPY_AVAILABLE = False
+
 
 try:
     import pydda
@@ -121,6 +146,7 @@ def plot_surface(
     min_lat = prdcfg["gridMapImageConfig"].get("latmin", 43.5)
     max_lat = prdcfg["gridMapImageConfig"].get("latmax", 49.5)
     embellish = prdcfg["gridMapImageConfig"].get("embellish", True)
+    alpha = prdcfg["gridMapImageConfig"].get("alpha", 1)
     colorbar_flag = prdcfg["gridMapImageConfig"].get("colorbar_flag", True)
     exact_limits = prdcfg["gridMapImageConfig"].get("exact_limits", True)
 
@@ -260,23 +286,30 @@ def plot_surface(
             )
 
     if embellish:
-        ax = plt.gca()
-        if "relief" in maps_list:
-            tiler = Stamen("terrain-background")
-            projection = tiler.crs
-            fig.delaxes(ax)
-            ax = fig.add_subplot(111, projection=projection)
+        if "relief" in maps_list and "OTM" in maps_list:
             warn(
-                "The projection of the image is set to that of the "
-                + "background map, i.e. "
-                + str(projection),
-                UserWarning,
+                "Plotting both 'relief' and 'OTM' is not supported, choosing only relief",
+                use_debug=False,
             )
+            maps_list.remove("OTM")
 
+        if "relief" in maps_list or "OTM" in maps_list:
+            # Check cache dir
+            if "PYRAD_CACHE" in os.environ:
+                cache_dir = os.environ["PYRAD_CACHE"]
+            else:
+                cache_dir = os.path.join(os.path.expanduser("~"), "pyrad_cache")
+            if not os.path.exists(cache_dir):
+                os.makedirs(cache_dir)
+        if "relief" in maps_list:
+            tiler = ShadedReliefESRI(cache=cache_dir)
+        if "OTM" in maps_list:
+            tiler = OTM(cache=cache_dir)
+        ax = plt.gca()
         for cartomap in maps_list:
-            if cartomap == "relief":
+            if cartomap == "relief" or cartomap == "OTM":
                 ax.add_image(tiler, background_zoom)
-            if cartomap == "countries":
+            elif cartomap == "countries":
                 # add countries
                 countries = cartopy.feature.NaturalEarthFeature(
                     category="cultural",
@@ -353,7 +386,7 @@ def plot_surface(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list
@@ -461,7 +494,7 @@ def plot_surface_raw(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list
@@ -667,7 +700,7 @@ def plot_surface_contour(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list
@@ -735,7 +768,7 @@ def plot_latitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
     ax.set_ylim([ymin, ymax])
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
 
@@ -799,7 +832,7 @@ def plot_longitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
     ax.set_ylim([ymin, ymax])
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
 
@@ -864,7 +897,7 @@ def plot_cross_section(grid, field_name, coord1, coord2, prdcfg, fname_list):
     #    [prdcfg['xsecImageConfig']['ymin'], prdcfg['xsecImageConfig']['ymax']])
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
 
@@ -1151,7 +1184,7 @@ def plot_dda_map(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list
@@ -1420,7 +1453,7 @@ def plot_dda_slice(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list

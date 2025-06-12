@@ -141,7 +141,7 @@ def plot_timeseries(
     fig.tight_layout()
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -235,7 +235,7 @@ def plot_timeseries_comp(
     fig.tight_layout()
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -386,7 +386,7 @@ def plot_monitoring_ts(
 
     # Save figure
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -553,7 +553,7 @@ def plot_intercomp_scores_ts(
     fig.autofmt_xdate()
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
     return fname_list
 
@@ -653,7 +653,7 @@ def plot_ml_ts(
     fig.autofmt_xdate()
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -855,7 +855,7 @@ def plot_sun_retrieval_ts(
     fig.autofmt_xdate()
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list

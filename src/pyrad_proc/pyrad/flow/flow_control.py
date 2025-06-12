@@ -21,6 +21,7 @@ import traceback
 import os
 from datetime import datetime
 from datetime import timedelta
+from datetime import timezone
 import gc
 import subprocess
 import queue
@@ -308,7 +309,7 @@ def main(
             bokeh_plot,
             filename=(
                 profile_path
-                + datetime.utcnow().strftime("%Y%m%d%H%M%S")
+                + datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
                 + "_profile.png"
             ),
         )
@@ -376,7 +377,7 @@ def main_rt(
 
     # The processing will be allowed to run for a limited period
     if proc_finish is not None:
-        startime_proc = datetime.utcnow()
+        startime_proc = datetime.now(timezone.utc)
         # for offline testing
         # startime_proc = startime_proc.replace(
         #     year=endtime.year, month=endtime.month, day=endtime.day)
@@ -455,7 +456,7 @@ def main_rt(
             except queue.Empty:
                 pass
 
-        nowtime = datetime.utcnow()
+        nowtime = datetime.now(timezone.utc)
         # for offline testing
         # nowtime = nowtime.replace(
         #     year=endtime.year, month=endtime.month, day=endtime.day)
@@ -548,7 +549,7 @@ def main_rt(
 
             gc.collect()
 
-        nowtime_new = datetime.utcnow()
+        nowtime_new = datetime.now(timezone.utc)
         # for offline testing
         # nowtime_new = nowtime_new.replace(
         #     year=endtime.year, month=endtime.month, day=endtime.day)
@@ -742,7 +743,7 @@ def main_cosmo_rt(
 
     # The processing will be allowed to run for a limited period
     if proc_finish is not None:
-        startime_proc = datetime.utcnow()
+        startime_proc = datetime.now(timezone.utc)
         # for offline testing
         # startime_proc = startime_proc.replace(
         #     year=endtime.year, month=endtime.month, day=endtime.day)
@@ -821,7 +822,7 @@ def main_cosmo_rt(
             except queue.Empty:
                 pass
 
-        nowtime = datetime.utcnow()
+        nowtime = datetime.now(timezone.utc)
         # for offline testing
         # nowtime = nowtime.replace(
         #     year=endtime.year, month=endtime.month, day=endtime.day)
@@ -905,7 +906,7 @@ def main_cosmo_rt(
 
             gc.collect()
 
-        nowtime_new = datetime.utcnow()
+        nowtime_new = datetime.now(timezone.utc)
         # for offline testing
         # nowtime_new = nowtime_new.replace(
         #     year=endtime.year, month=endtime.month, day=endtime.day)
@@ -978,10 +979,10 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="", gather_plots=T
     datacfg = _create_datacfg_dict(cfg)
 
     if starttime is None:
-        starttime = datetime.now()
+        starttime = datetime.now(timezone.utc)
         endtime = starttime
     if endtime is None:
-        endtime = datetime.now()
+        endtime = datetime.now(timezone.utc)
 
     if infostr:
         print("- Info string : {}".format(infostr))

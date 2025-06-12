@@ -152,7 +152,7 @@ def plot_pos(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list
@@ -323,7 +323,7 @@ def plot_pos_map(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list
@@ -513,7 +513,7 @@ def plot_density(
     ax.grid()
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -633,7 +633,7 @@ def plot_scatter(
     fig.tight_layout()
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -728,7 +728,7 @@ def plot_centroids(
     fig.tight_layout()
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -784,7 +784,7 @@ def plot_quantiles(
     ax.grid()
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -845,7 +845,7 @@ def plot_histogram(
     fig.tight_layout()
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -927,7 +927,7 @@ def plot_histogram2(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list
@@ -1016,7 +1016,7 @@ def plot_antenna_pattern(
     fig.tight_layout()
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -1081,7 +1081,7 @@ def plot_selfconsistency(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list
@@ -1719,7 +1719,7 @@ def plot_scatter_comp(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list
@@ -1799,7 +1799,7 @@ def plot_sun_hits(field, field_name, fname_list, prdcfg):
     fig.tight_layout()
 
     for fname in fname_list:
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     return fname_list
@@ -1916,7 +1916,7 @@ def _plot_sunscan(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list
@@ -2028,7 +2028,7 @@ def _plot_time_range(
 
     if save_fig:
         for fname in fname_list:
-            fig.savefig(fname, dpi=dpi)
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
 
         return fname_list

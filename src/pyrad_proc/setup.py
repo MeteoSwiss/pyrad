@@ -13,6 +13,7 @@ import subprocess
 import glob
 import builtins
 from datetime import datetime
+from datetime import timezone
 import getpass
 from setuptools import setup, find_packages
 
@@ -57,7 +58,7 @@ MICRO = 3
 ISRELEASED = True
 VERSION = "%d.%d.%d" % (MAJOR, MINOR, MICRO)
 SCRIPTS = glob.glob("scripts/*")
-COMPILE_DATE_TIME = datetime.utcnow().strftime("%Y-%m-%d %H:%M")
+COMPILE_DATE_TIME = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
 USERNAME = getpass.getuser()
 
 
